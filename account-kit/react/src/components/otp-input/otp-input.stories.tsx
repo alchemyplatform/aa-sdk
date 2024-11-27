@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from "@storybook/react";
-import { initialValue, OTPInput, type OTPCodeType } from "./otp-input.jsx";
+import { initialOTPValue, OTPInput, type OTPCodeType } from "./otp-input.jsx";
 import { userEvent, within, expect, waitFor } from "@storybook/test";
 import { useState } from "react";
 
@@ -8,11 +8,11 @@ const meta: Meta<typeof OTPInput> = {
   component: OTPInput,
   title: "OTPInput",
   render: (args) => {
-    const [value, setValue] = useState<OTPCodeType>(initialValue);
+    const [value, setValue] = useState<OTPCodeType>(initialOTPValue);
     const [errorText, setErrorText] = useState<string>("");
     const handleReset = () => {
       setErrorText("");
-      setValue(initialValue);
+      setValue(initialOTPValue);
     };
     return (
       <OTPInput

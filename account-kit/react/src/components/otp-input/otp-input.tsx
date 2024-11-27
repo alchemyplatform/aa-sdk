@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ls } from "../../strings.js";
 
 export type OTPCodeType = [string, string, string, string, string, string];
-export const initialValue: OTPCodeType = ["", "", "", "", "", ""];
+export const initialOTPValue: OTPCodeType = ["", "", "", "", "", ""];
 const OTP_LENGTH = 6;
 type OTPInputProps = {
   errorText?: string;
@@ -11,12 +11,13 @@ type OTPInputProps = {
   setErrorText: React.Dispatch<React.SetStateAction<string>>;
   disabled?: boolean;
   handleReset: () => void;
+  className?: string;
 };
 
-const isOTPCodeType = (arg: string[]): arg is OTPCodeType => {
+export const isOTPCodeType = (arg: string[]): arg is OTPCodeType => {
   return (
     Array.isArray(arg) &&
-    arg.every((item: string) => typeof item === "string") &&
+    arg.every((item: string) => typeof item === "string" && item !== "") &&
     arg.length === OTP_LENGTH
   );
 };
@@ -28,6 +29,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   disabled,
   setErrorText,
   handleReset,
+  className,
 }) => {
   const [autoComplete, setAutoComplete] = useState<string>("");
   const [activeElement, setActiveElement] = useState<number | null>(0);
@@ -121,7 +123,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className={`flex flex-col gap-2 items-center ${className}`}>
       {/* Input for autocomplete, visibility hidden */}
       <input
         className="invisible h-0 w-0 p-[0] m-[-1px]"
@@ -133,9 +135,9 @@ export const OTPInput: React.FC<OTPInputProps> = ({
         onClick={handleReset}
       />
       <div className="flex gap-2.5">
-        {initialValue.map((_, i) => (
+        {initialOTPValue.map((_, i) => (
           <input
-            className={`border w-8 bg-bg-surface-default h-10 rounded text-center focus:outline-active ${
+            className={`border w-8 bg-bg-surface-default h-10 text-fg-primary rounded text-center focus:outline-active ${
               !!errorText && "border-fg-critical"
             }`}
             ref={(el) => (refs.current[i] = el)}

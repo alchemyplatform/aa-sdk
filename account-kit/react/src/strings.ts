@@ -33,6 +33,12 @@ const STRINGS = {
     completingEmail: {
       body: "Your email verification is almost complete. Please wait a few seconds for this to screen to update.",
     },
+    loadingOtp: {
+      title: "Enter verification code",
+      body: "We sent a verification code to",
+      notReceived: "Didn't receive code?",
+      resend: "Resend",
+    },
     loadingPasskey: {
       title: "Continue with passkey",
       body: "Follow the prompt to verify your passkey.",
