@@ -31,7 +31,7 @@ const STRINGS = {
       resent: "Done!",
     },
     completingEmail: {
-      body: "Your email verification is almost complete. Please wait a few seconds for this to screen to update.",
+      body: "Completing login. Please wait a few seconds for this to screen to update.",
     },
     loadingPasskey: {
       title: "Continue with passkey",
