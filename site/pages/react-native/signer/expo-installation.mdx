@@ -1,0 +1,83 @@
+---
+title: React Native Signer Expo Installation
+description: Setup the React Native Signer Package in your Expo Project
+---
+
+:::warning
+To use the signer, your project has to have the new architecture enabled. Refer to the [Expo Documentation](https://docs.expo.dev/guides/new-architecture/) for more information.
+It is recommended to be on the latest Expo SDK version (version 52 or newer) to ensure compatibility.
+:::
+
+:::info
+This package is not supported on Expo Go. If your app is currently running on Expo Go, you would have to create a development build to use the signer. Check out [Expo Development Builds](https://docs.expo.dev/develop/development-builds/create-a-build/) for more information.
+:::
+
+# Setting up the React Native Signer in an Expo Project
+
+This guide assumes you have an existing Expo project, running on the [new architecure](https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here) and have already followed the steps in the [configuration guide](/react-native/signer/configuration-guide) to properly configure your Account Kit project.
+
+To create a new Expo project, please refer to the [Expo Installation Guide](https://docs.expo.dev/get-started/create-a-project/).
+
+## Install the React Native Signer Package
+
+To install the React Native Signer package, run the following command:
+
+:::code-group
+
+```bash [npm]
+npm install @account-kit/react-native-signer
+```
+
+```bash [yarn]
+yarn add @account-kit/react-native-signer
+```
+
+:::
+
+## Add Supporting Dependencies
+
+To ensure the signer works properly, you'll need to add the following dependencies to your project:
+
+:::code-group
+
+```bash [npm]
+npm install @account-kit/signer react-native-mmkv zustand abitype
+```
+
+```bash [yarn]
+yarn add @account-kit/signer react-native-mmkv zustand abitype
+```
+
+:::
+
+## Ensure Deep Linking is properly configured
+
+To ensure your app can handle deep links properly, you'll need to setup your app scheme.
+
+Depending on if your app uses `expo-router`, `react-navigation`, or some other navigation library, you'll need to configure deep linking accordingly.
+
+Here are some useful links for some common navigation libraries:
+
+-   [Expo Router](https://docs.expo.dev/linking/into-your-app/)
+-   [React Navigation](https://reactnavigation.org/docs/deep-linking/)
+
+## Run an Expo Prebuild
+
+Run an Expo prebuild to ensure all the necessary native modules are properly generated for your project:
+
+```bash
+npx expo prebuild --platform android
+```
+
+:::info
+Remember the package is only supported on Android at this time.
+Running the prebuild command for iOS would result in an error.
+:::
+
+## Run your app
+
+Now you should be able to run your app and use the signer as intended.
+
+```bash
+npx expo run:android
+```

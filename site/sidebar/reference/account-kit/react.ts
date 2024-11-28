@@ -153,7 +153,34 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     items: [
       {
         text: "React Native",
-        link: "/resources/react-native",
+        items: [
+          {
+            text: "Overview",
+            link: "/react-native/overview",
+          },
+          {
+            text: "Getting Started",
+            link: "/react-native/getting-started",
+          },
+          {
+            text: "React Native Signer",
+            items: [
+              {
+                text: "Overview",
+                link: "/react-native/signer/overview",
+              },
+              {
+                text: "Configuration Guide",
+                link: "/react-native/signer/configuration-guide",
+              },
+              {
+                text: "Expo Installation",
+                link: "/react-native/signer/expo-installation",
+              },
+            ],
+          },
+        ],
+        collapsed: true,
       },
       {
         text: "Third Party",

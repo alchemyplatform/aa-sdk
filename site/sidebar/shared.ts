@@ -5,7 +5,7 @@ import { reactGuides } from "./react.js";
 import { signerSidebar } from "./signer.js";
 import { smartContractsSidebar } from "./smart-contracts.js";
 import { thirdPartySidebar } from "./third-party.js";
-import { reactNativeSidebar } from "./react-native.js";
+import { reactNativeSidebar } from "./react-native/index.js";
 
 export const concepts: SidebarItem = {
 	text: "Concepts",
