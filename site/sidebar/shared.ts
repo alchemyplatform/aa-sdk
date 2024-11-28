@@ -8,82 +8,82 @@ import { thirdPartySidebar } from "./third-party.js";
 import { reactNativeSidebar } from "./react-native/index.js";
 
 export const concepts: SidebarItem = {
-	text: "Concepts",
-	collapsed: true,
-	items: [
-		{
-			text: "Intro to Account Kit",
-			link: "/concepts/intro-to-account-kit",
-		},
-		{
-			text: "Smart Contract Account",
-			link: "/concepts/smart-contract-account",
-		},
-		{
-			text: "Smart Account Client",
-			link: "/concepts/smart-account-client",
-		},
-		{
-			text: "Bundler Client",
-			link: "/concepts/bundler-client",
-		},
-		{
-			text: "Smart Account Signer",
-			link: "/concepts/smart-account-signer",
-		},
-		{
-			text: "Middleware",
-			link: "/concepts/middleware",
-		},
-	],
+  text: "Concepts",
+  collapsed: true,
+  items: [
+    {
+      text: "Intro to Account Kit",
+      link: "/concepts/intro-to-account-kit",
+    },
+    {
+      text: "Smart Contract Account",
+      link: "/concepts/smart-contract-account",
+    },
+    {
+      text: "Smart Account Client",
+      link: "/concepts/smart-account-client",
+    },
+    {
+      text: "Bundler Client",
+      link: "/concepts/bundler-client",
+    },
+    {
+      text: "Smart Account Signer",
+      link: "/concepts/smart-account-signer",
+    },
+    {
+      text: "Middleware",
+      link: "/concepts/middleware",
+    },
+  ],
 };
 
 export const resources: SidebarItem = {
-	text: "Resources",
-	items: [
-		{ text: "React Native", items: reactNativeSidebar, collapsed: true },
-		{
-			text: "Third Party",
-			items: thirdPartySidebar,
-			collapsed: true,
-		},
-		{ text: "Terms", link: "/resources/terms" },
-		{ text: "Types", link: "/resources/types" },
-		{ text: "FAQs", link: "/resources/faqs" },
-		{ text: "Contact us", link: "/resources/contact-us" },
-	],
+  text: "Resources",
+  items: [
+    { text: "React Native", items: reactNativeSidebar, collapsed: true },
+    {
+      text: "Third Party",
+      items: thirdPartySidebar,
+      collapsed: true,
+    },
+    { text: "Terms", link: "/resources/terms" },
+    { text: "Types", link: "/resources/types" },
+    { text: "FAQs", link: "/resources/faqs" },
+    { text: "Contact us", link: "/resources/contact-us" },
+  ],
 };
 
 export const guides: (
-	section?: "react" | "core" | "infra" | "signer" | "contracts"
+  section?: "react" | "core" | "infra" | "signer" | "contracts"
 ) => SidebarItem[] = (section) => [
-	{
-		text: "React",
-		items: reactGuides,
-		collapsed: section !== "react",
-	},
-	{
-		text: "Other JS Frameworks",
-		items: coreSidebar,
-		collapsed: section !== "core",
-	},
-	{
-		text: "Infra",
-		items: infraSidebar,
-		collapsed: section !== "infra",
-	},
-	{
-		text: "Signer",
-		items: signerSidebar,
-		collapsed: section !== "signer",
-	},
-	{
-		text: "Smart Contracts",
-		items: smartContractsSidebar,
-		collapsed: section !== "contracts",
-	},
+  {
+    text: "React",
+    items: reactGuides,
+    collapsed: section !== "react",
+  },
+  {
+    text: "Other JS Frameworks",
+    items: coreSidebar,
+    collapsed: section !== "core",
+  },
+  {
+    text: "Infra",
+    items: infraSidebar,
+    collapsed: section !== "infra",
+  },
+  {
+    text: "Signer",
+    items: signerSidebar,
+    collapsed: section !== "signer",
+  },
+  {
+    text: "Smart Contracts",
+    items: smartContractsSidebar,
+    collapsed: section !== "contracts",
+  },
 ];
 
 export const sharedSidebar: (
-	section?: "react" | "core" | "infra" | "signer" | "contracts"
+  section?: "react" | "core" | "infra" | "signer" | "contracts"
 ) => SidebarItem[] = (section) => [...guides(section), resources];

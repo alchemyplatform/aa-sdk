@@ -1,7 +1,7 @@
 ---
 title: Frequently Asked Questions
 description: Learn how to get started with Alchemy's Account Kit, a vertically
-    integrated stack for building apps that support ERC-4337 and ERC-6900.
+  integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Frequently asked questions
@@ -48,10 +48,10 @@ Yes! The optional salt value on Light Account enables the ability to have multip
 
 You can call `upgradeToAndCall` on the Simple Account with these params:
 
--   `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
-    -   For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
--   `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner on the account, usually the same owner as what the account used as Simple Account.
-    -   In solidity (foundry) you can use abi.encodeCall and in viem you can use [encodeFunctionData](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount)
+- `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
+  - For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
+- `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner on the account, usually the same owner as what the account used as Simple Account.
+  - In solidity (foundry) you can use abi.encodeCall and in viem you can use [encodeFunctionData](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount)
 
 It is very important that the `initialize` step is encoded correctly to ensure the account does not get into a risky state where someone else could call initialize on it with one's signer and take control of your account. You can call `owner()` on the account after the upgrade to ensure it is assigned correctly.
 

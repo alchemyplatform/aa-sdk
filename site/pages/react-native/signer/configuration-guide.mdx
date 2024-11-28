@@ -27,9 +27,9 @@ Only the Email Auth method is supported for the React Native Signer at this time
     <br />
     a. Apply the config to your app from step 1
     <img
-    	src="/images/getting-started/apply-config-to-app.png"
-    	alt="apply your the config to the app from the first step"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/apply-config-to-app.png"
+      alt="apply your the config to the app from the first step"
+      style={{ width: "50%" }}
     />
     <br />
     b. Enable authentication methods you want to support.
@@ -39,25 +39,25 @@ Only the Email Auth method is supported for the React Native Signer at this time
 
     To use email auth, toggle on email.
 
-    -   To use email auth in your React Native app, your app needs to be set up to handle deep links that can be served via http or https.
-    -   In production scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links) on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app) on iOS to gracefully handle deep links.
-    -   For testing, simply setting up a simple server on [http://localhost:3000](http://localhost:3000/) or any other server you control which redirects an incoming request to your app scheme is the easiest way to get started.
-        a sample implementation of this can be found the `example` folder of the `React Native Signer` repo.
-    -   The http or https url you set up in the previous step would need to be added as the **Redirect URL** in the Account Kit Dashboard.
-    -   This is the url that the user will be redirected to when they click the magic link in the email.
-    -   Optionally stylize ✨ the email with your brand color and logo!
+    - To use email auth in your React Native app, your app needs to be set up to handle deep links that can be served via http or https.
+    - In production scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links) on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app) on iOS to gracefully handle deep links.
+    - For testing, simply setting up a simple server on [http://localhost:3000](http://localhost:3000/) or any other server you control which redirects an incoming request to your app scheme is the easiest way to get started.
+      a sample implementation of this can be found the `example` folder of the `React Native Signer` repo.
+    - The http or https url you set up in the previous step would need to be added as the **Redirect URL** in the Account Kit Dashboard.
+    - This is the url that the user will be redirected to when they click the magic link in the email.
+    - Optionally stylize ✨ the email with your brand color and logo!
 
     <br />
     <img
-    	src="/images/getting-started/email-auth-setup.png"
-    	alt="configure email auth"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/email-auth-setup.png"
+      alt="configure email auth"
+      style={{ width: "50%" }}
     />
     <br />
 
 3.  Create the config and copy the **API Key**
     <img
-    	src="/images/getting-started/get-api-key.png"
-    	alt="how to copy the api key"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/get-api-key.png"
+      alt="how to copy the api key"
+      style={{ width: "50%" }}
     />
