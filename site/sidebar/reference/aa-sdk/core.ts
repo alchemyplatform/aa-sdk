@@ -494,6 +494,10 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
                 text: "Expo Installation",
                 link: "/react-native/signer/expo-installation",
               },
+              {
+                text: "Bare React Native Installation",
+                link: "/react-native/signer/bare-installation",
+              },
             ],
           },
         ],
