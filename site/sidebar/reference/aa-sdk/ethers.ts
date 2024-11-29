@@ -125,6 +125,10 @@ export const aaSdkEthersReferenceSidebar: SidebarItem[] = [
                 text: "Authenticating Users",
                 link: "/react-native/signer/authenticating-users",
               },
+              {
+                text: "Bare React Native Installation",
+                link: "/react-native/signer/bare-installation",
+              },
             ],
           },
         ],
