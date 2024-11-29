@@ -17,4 +17,9 @@ export const reactNativeSignerSidebar: SidebarItem[] = [
     text: "Bare React Native Installation",
     link: "/react-native/signer/bare-installation",
   },
+
+  {
+    text: "Using the Signer",
+    link: "/react-native/signer/using-the-signer",
+  },
 ];
