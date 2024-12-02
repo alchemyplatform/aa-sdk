@@ -86,23 +86,6 @@ export function UserConnectionDetails({
           </span>
         </div>
       </div>
-      {/* Signer */}
-      <div className="flex flex-row justify-between items-center mt-[17px]">
-        <a
-          target="_blank"
-          href="https://accountkit.alchemy.com/concepts/smart-account-signer"
-          className="flex justify-center items-center"
-        >
-          <span className="text-md md:text-sm text-fg-secondary mr-1">
-            Signer
-          </span>
-          <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
-            <ExternalLinkIcon className="stroke-fg-secondary" />
-          </div>
-        </a>
-
-        <UserAddressLink address={signerAddress} />
-      </div>
 
       {/* Logout */}
 
