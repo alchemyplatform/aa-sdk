@@ -1,0 +1,9 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "prepare": {
+      "dependsOn": ["^build"],
+      "outputs": ["android/generate/**", "ios/generated/**", "lib/**"]
+    }
+  }
+}

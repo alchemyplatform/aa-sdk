@@ -7,7 +7,10 @@ jobs:
     name: Enforce PR Title Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+          submodules: "recursive"
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -33,6 +36,7 @@ jobs:
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
+          submodules: "recursive"
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -94,3 +98,60 @@ jobs:
 
       - name: Unit Test
         run: yarn test:ci
+  
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+    - name: "Checkout files"
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: "0"
+        submodules: "recursive"
+    
+    - name: Setup Node
+      uses: ./.github/actions/setup-node
+
+    - name: Check turborepo cache for Android
+      run: |
+        TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:android --dry=json | sed '1,2d;$d')).tasks.find(t => t.task === 'build:android').cache.status")
+
+        if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
+          echo "turbo_cache_hit=1" >> $GITHUB_ENV
+        fi
+
+    - name: Install JDK
+      if: env.turbo_cache_hit != 1
+      uses: actions/setup-java@v3
+      with:
+        distribution: "zulu"
+        java-version: "17"
+
+    - name: Finalize Android SDK
+      if: env.turbo_cache_hit != 1
+      run: |
+        /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
+
+    - name: Cache Gradle
+      if: env.turbo_cache_hit != 1
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/wrapper
+          ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    
+    - name: Build RN Library
+      run: yarn prepare
+
+    - name: Build example for Android
+      env:
+        JAVA_OPTS: "-XX:MaxHeapSize=6g"
+      run: |
+        yarn turbo run build:android
+
