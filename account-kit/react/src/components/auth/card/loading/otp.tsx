@@ -76,3 +76,7 @@ export const LoadingOtp = () => {
     </div>
   );
 };
+
+export const CompletingOtp = () => {
+  return <div>CompletingOTP</div>;
+};

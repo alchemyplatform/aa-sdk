@@ -35,6 +35,7 @@ import {
   type ErrorInfo,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
+import type { SessionManagerEvents } from "./session/types";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -46,6 +47,7 @@ type AlchemySignerStore = {
   user: User | null;
   status: AlchemySignerStatus;
   error: ErrorInfo | null;
+  otpId?: string;
   isNewUser?: boolean;
 };
 
@@ -238,6 +240,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return this.authenticateWithOauth(params);
           case "oauthReturn":
             return this.handleOauthReturn(params);
+          case "otp":
+            return this.authenticateWithOtp(params);
           default:
             assertNever(type, `Unknown auth type: ${type}`);
         }
@@ -295,6 +299,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         });
         break;
       case "oauthReturn":
+        break;
+      case "otp":
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: { authType: "otp" },
+        });
         break;
       default:
         assertNever(type, `Unknown auth type: ${type}`);
@@ -673,11 +683,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ): Promise<User> => {
     if ("email" in params) {
       const existingUser = await this.getUser(params.email);
-      const expirationSeconds = Math.floor(
-        this.sessionManager.expirationTimeMs / 1000
-      );
+      const expirationSeconds = this.getExpirationSeconds();
 
-      const { orgId } = existingUser
+      const { orgId, otpId } = existingUser
         ? await this.inner.initEmailAuth({
             email: params.email,
             expirationSeconds,
@@ -693,6 +701,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       this.sessionManager.setTemporarySession({ orgId });
       this.store.setState({
         status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+        otpId,
         error: null,
       });
 
@@ -774,15 +783,38 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ): Promise<User> => {
     const params: OauthParams = {
       ...args,
-      expirationSeconds: Math.floor(
-        this.sessionManager.expirationTimeMs / 1000
-      ),
+      expirationSeconds: this.getExpirationSeconds(),
     };
     if (params.mode === "redirect") {
       return this.inner.oauthWithRedirect(params);
     } else {
       return this.inner.oauthWithPopup(params);
     }
+  };
+
+  private authenticateWithOtp = async (
+    args: Extract<AuthParams, { type: "otp" }>
+  ): Promise<User> => {
+    const orgId = this.sessionManager.getTemporarySession()?.orgId;
+    const { otpId } = this.store.getState();
+    if (!orgId) {
+      throw new Error("orgId not found in session");
+    }
+    if (!otpId) {
+      throw new Error("otpId not found in session");
+    }
+    const { bundle } = await this.inner.submitOtpCode({
+      orgId,
+      otpId,
+      otpCode: args.otpCode,
+      expirationSeconds: this.getExpirationSeconds(),
+    });
+    return await this.inner.completeAuthWithBundle({
+      bundle,
+      orgId,
+      connectedEventName: "connectedOtp",
+      authenticatingType: "otp",
+    });
   };
 
   private handleOauthReturn = ({
@@ -804,30 +836,39 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return user;
   };
 
+  private getExpirationSeconds = () =>
+    Math.floor(this.sessionManager.expirationTimeMs / 1000);
+
   private registerListeners = () => {
-    this.sessionManager.on("connected", (session) => {
-      this.store.setState({
-        user: session.user,
-        status: AlchemySignerStatus.CONNECTED,
-        error: null,
-      });
-    });
+    // Declare listeners in an object to typecheck that every event type is
+    // handled.
+    const listeners: SessionManagerEvents = {
+      connected: (session) => {
+        this.store.setState({
+          user: session.user,
+          status: AlchemySignerStatus.CONNECTED,
+          error: null,
+        });
+      },
+      disconnected: () => {
+        this.store.setState({
+          user: null,
+          status: AlchemySignerStatus.DISCONNECTED,
+        });
+      },
+      initialized: () => {
+        this.store.setState((state) => ({
+          status: state.user
+            ? AlchemySignerStatus.CONNECTED
+            : AlchemySignerStatus.DISCONNECTED,
+          ...(state.user ? { error: null } : undefined),
+        }));
+      },
+    };
 
-    this.sessionManager.on("disconnected", () => {
-      this.store.setState({
-        user: null,
-        status: AlchemySignerStatus.DISCONNECTED,
-      });
-    });
-
-    this.sessionManager.on("initialized", () => {
-      this.store.setState((state) => ({
-        status: state.user
-          ? AlchemySignerStatus.CONNECTED
-          : AlchemySignerStatus.DISCONNECTED,
-        ...(state.user ? { error: null } : undefined),
-      }));
-    });
+    for (const [event, listener] of Object.entries(listeners)) {
+      this.sessionManager.on(event as keyof SessionManagerEvents, listener);
+    }
 
     this.inner.on("authenticating", ({ type }) => {
       const status = (() => {
@@ -838,6 +879,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return AlchemySignerStatus.AUTHENTICATING_PASSKEY;
           case "oauth":
             return AlchemySignerStatus.AUTHENTICATING_OAUTH;
+          case "otp":
+          case "otpVerify":
+            return AlchemySignerStatus.AWAITING_OTP_AUTH;
           default:
             assertNever(type, "unhandled authenticating type");
         }

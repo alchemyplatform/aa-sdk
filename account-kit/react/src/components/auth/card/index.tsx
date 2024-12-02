@@ -74,6 +74,7 @@ export const AuthCardContent = ({
     return [
       "email_verify",
       "passkey_verify",
+      "otp_verify",
       "passkey_create",
       "pick_eoa",
       "wallet_connect",
@@ -86,8 +87,10 @@ export const AuthCardContent = ({
     switch (authStep.type) {
       case "email_verify":
       case "passkey_verify":
+      case "otp_verify":
       case "passkey_create":
       case "oauth_completing":
+      case "otp_completing":
         disconnect(config); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
