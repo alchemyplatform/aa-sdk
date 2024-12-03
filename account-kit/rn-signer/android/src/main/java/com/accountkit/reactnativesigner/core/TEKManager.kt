@@ -1,6 +1,7 @@
-package com.accountkit.reactnativesigner
+package com.accountkit.reactnativesigner.core
 
 import android.content.SharedPreferences
+import com.accountkit.reactnativesigner.core.errors.NoTEKException
 import com.google.crypto.tink.InsecureSecretKeyAccess
 import com.google.crypto.tink.KeyTemplate
 import com.google.crypto.tink.KeysetHandle
@@ -31,7 +32,7 @@ class HpkeTEKManager(private val sharedPreferences: SharedPreferences) {
         // val decryptedKey = hybridDecrypt.decrypt(ciphertext, "turnkey_hpke".toByteArray())
         // the hybridDecrypt.decrypt that google exposes doesn't allow us to pass in
         // the aad that's needed to complete decryption
-        val keyHandle = getKeysetHandle() ?: throw IllegalStateException("No TEK found!")
+        val keyHandle = getKeysetHandle() ?: throw NoTEKException()
 
         val recipient = HpkeContext.createRecipientContext(
             encapsulatePublicKey,
