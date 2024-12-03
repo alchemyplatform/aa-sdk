@@ -1,4 +1,4 @@
-package com.accountkit.reactnativesigner
+package com.accountkit.reactnativesigner.core
 
 import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.InsecureSecretKeyAccess
