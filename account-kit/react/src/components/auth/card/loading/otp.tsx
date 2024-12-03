@@ -6,8 +6,8 @@ import {
   type OTPCodeType,
   initialOTPValue,
   isOTPCodeType,
-} from "../../../otp-input/otp-input.jsx";
-import { Spinner } from "../../../../icons/spinner.jsx";
+} from "../../../otp-input/otp-input.js";
+import { Spinner } from "../../../../icons/spinner.js";
 import { useAuthContext } from "../../context.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
@@ -15,33 +15,20 @@ import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 export const LoadingOtp = () => {
   const { authStep } = useAuthContext("otp_verify");
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const { setAuthStep } = useAuthContext();
-
-  const { authenticate } = useAuthenticate({
-    onError: (error: any) => {
-      console.error(error);
-      // Assumption is that the error is an invalid OTP, should we have a specific error for incorrect OTP and one to throw error component?
-      setErrorText(error.message);
-    },
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
-    },
-  });
-
   const resetOTP = () => {
     setOtpCode(initialOTPValue);
     setErrorText("");
   };
 
-  const handleReset = () => {
-    resetOTP();
-    // TODO: add resend logic to resend email
-  };
-
   useEffect(() => {
     if (isOTPCodeType(otpCode)) {
-      authenticate({ type: "otp", otpCode: otpCode.join("") });
+      setAuthStep({
+        type: "otp_completing",
+        email: authStep.email,
+        otp: otpCode.join(""),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otpCode]);
@@ -62,7 +49,7 @@ export const LoadingOtp = () => {
       <p className="text-fg-secondary text-center text-sm mb-1">
         {ls.loadingOtp.body}
       </p>
-      <p className="text-fg-primary text-center text-sm font-medium mb-5 ">
+      <p className="text-fg-primary text-center text-sm font-medium mb-5">
         {authStep.email}
       </p>
       <OTPInput
@@ -71,17 +58,7 @@ export const LoadingOtp = () => {
         setErrorText={setErrorText}
         errorText={errorText}
         handleReset={resetOTP}
-        className="mb-7"
       />
-      <p className="text-fg-tertiary text-center text-sm mb-5">
-        {ls.loadingOtp.notReceived}
-        <button
-          className="ml-1 text-btn-primary underline"
-          onClick={handleReset}
-        >
-          {ls.loadingOtp.resend}
-        </button>
-      </p>
     </div>
   );
 };
@@ -89,19 +66,25 @@ export const LoadingOtp = () => {
 export const CompletingOtp = () => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext("otp_completing");
+  const { authenticate } = useAuthenticate({
+    onError: (error: any) => {
+      console.error(error);
+      const { email } = authStep;
+      setAuthStep({ type: "otp_verify", email, error });
+    },
+    onSuccess: () => {
+      if (isConnected && authStep.createPasskeyAfter) {
+        setAuthStep({ type: "passkey_create" });
+      } else if (isConnected) {
+        setAuthStep({ type: "complete" });
+      }
+    },
+  });
 
   useEffect(() => {
-    if (isConnected && authStep.createPasskeyAfter) {
-      setAuthStep({ type: "passkey_create" });
-    } else if (isConnected) {
-      setAuthStep({ type: "complete" });
-    }
-  }, [authStep.createPasskeyAfter, isConnected, setAuthStep]);
-
-  if (authStep.error) {
-    const { email } = authStep;
-    setAuthStep({ type: "otp_verify", email, error: authStep.error });
-  }
+    authenticate({ type: "otp", otpCode: authStep.otp });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center ">

@@ -21,6 +21,7 @@ export type AuthStep =
       type: "otp_completing";
       email: string;
       createPasskeyAfter?: boolean;
+      otp: string;
       error?: Error;
     }
   | { type: "initial"; error?: Error }
