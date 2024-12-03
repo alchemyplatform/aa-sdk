@@ -71,4 +71,4 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
         shell: bash
-        run: yarn install --force && yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
