@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const meta: Meta<typeof OTPInput> = {
   component: OTPInput,
-  title: "OTPInput",
+  title: "OTP/OTPInput",
   render: (args) => {
     const [value, setValue] = useState<OTPCodeType>(initialOTPValue);
     const [errorText, setErrorText] = useState<string>("");

@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect } from "react";
 import { useAuthContext } from "../../context.js";
+
 import { LoadingOtp } from "./otp.js";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof LoadingOtp> = {
-  title: "LoadingOTP",
+  title: "OTP/LoadingOTP",
   component: LoadingOtp,
-
   parameters: {},
   render: () => {
     const { authStep, setAuthStep } = useAuthContext();

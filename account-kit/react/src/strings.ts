@@ -39,6 +39,10 @@ const STRINGS = {
       notReceived: "Didn't receive code?",
       resend: "Resend",
     },
+    completingOtp: {
+      title: "Verifying...",
+      body: "It may take a moment to complete authentication.",
+    },
     loadingPasskey: {
       title: "Continue with passkey",
       body: "Follow the prompt to verify your passkey.",
