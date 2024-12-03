@@ -35,7 +35,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "generate": "npx tsx ../plugingen/src/cli.ts generate && yarn _lint:generated 1> /dev/null",
+    "generate": "tsx ../plugingen/src/cli.ts generate && yarn _lint:generated 1> /dev/null",
     "_lint:generated": "dotenv -e ../../.env -- eslint . --fix --config ../../.eslintrc --ignore-path ../../.prettierignore && prettier --write --ignore-path ../../.prettierignore .",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",

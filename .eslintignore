@@ -9,3 +9,8 @@ site/.vitepress/cache/**/*
 /examples/ui-demo/.next/*
 
 **/.turbo/*
+account-kit/rn-signer/lib/*
+**/android/generated/*
+**/ios/generated/*
+**/build/*
+**/.cxx/*

@@ -2,3 +2,7 @@
 site/**/*/reference/**/*.mdx linguist-generated
 site/sidebar/**/*.ts linguist-generated
 account-kit/smart-contracts/src/msca/plugins/**/plugin.ts linguist-generated
+
+*.pbxproj -text
+# specific for windows script files
+*.bat text eol=crlf
