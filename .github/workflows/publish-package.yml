@@ -39,17 +39,15 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout files"
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
-
-      - name: Set up foundry
-        uses: foundry-rs/foundry-toolchain@v1
-
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+          
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Set Github User Details
         run: |
@@ -62,6 +60,8 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Build all packages
+        env:
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
         run: yarn build:libs
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
@@ -69,4 +69,5 @@ jobs:
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
         run: yarn install --force && yarn lerna publish --conventional-commits --no-private --yes --no-verify-access

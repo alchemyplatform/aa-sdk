@@ -1,6 +1,10 @@
 {
   "extends": ["//"],
   "tasks": {
+    "build": {
+      "dependsOn": ["build:android"],
+      "outputs": ["../android/build/**"]
+    },
     "build:android": {
       "dependsOn": ["^build"],
       "env": ["ANDROID_HOME", "ORG_GRADLE_PROJECT_newArchEnabled"],
@@ -16,7 +20,7 @@
         "!example/android/build",
         "!example/android/app/build"
       ],
-      "outputs": []
+      "outputs": ["../android/build/**"]
     },
     "build:ios": {
       "dependsOn": ["^build"],

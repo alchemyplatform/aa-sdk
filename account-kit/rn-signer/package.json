@@ -39,7 +39,7 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc",
-    "build:rn": "bob build && yarn typecheck && yarn turbo run build:android",
+    "build": "yarn typecheck",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build"
   },
