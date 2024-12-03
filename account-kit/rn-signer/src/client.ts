@@ -10,6 +10,7 @@ import {
   type GetWebAuthnAttestationResult,
   type OauthConfig,
   type OauthParams,
+  type OtpParams,
   type SignupResponse,
   type User,
 } from "@account-kit/signer";
@@ -34,6 +35,13 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       rootOrgId: rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830",
       connection,
     });
+  }
+  // TODO: implement OTP
+  override async submitOtpCode(
+    args: Omit<OtpParams, "targetPublicKey">
+  ): Promise<{ bundle: string }> {
+    console.log("submitOtpCode", args);
+    throw new Error("Method not implemented.");
   }
 
   override async createAccount(
