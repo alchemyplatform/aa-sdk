@@ -254,19 +254,30 @@ export class SessionManager {
     );
 
     // sync local state if persisted state has changed from another tab
-    window.addEventListener("focus", () => {
-      const oldSession = this.store.getState().session;
-      this.store.persist.rehydrate();
-      const newSession = this.store.getState().session;
+    // only do this in the browser
+    // Add a try catch to prevent potential crashes in non-browser environments
+    try {
       if (
-        (oldSession?.expirationDateMs ?? 0) < Date.now() ||
-        oldSession?.user.orgId !== newSession?.user.orgId ||
-        oldSession?.user.userId !== newSession?.user.userId
+        typeof window !== "undefined" &&
+        typeof window.addEventListener !== "undefined"
       ) {
-        // Initialize if the user has changed.
-        this.initialize();
+        window.addEventListener("focus", () => {
+          const oldSession = this.store.getState().session;
+          this.store.persist.rehydrate();
+          const newSession = this.store.getState().session;
+          if (
+            (oldSession?.expirationDateMs ?? 0) < Date.now() ||
+            oldSession?.user.orgId !== newSession?.user.orgId ||
+            oldSession?.user.userId !== newSession?.user.userId
+          ) {
+            // Initialize if the user has changed.
+            this.initialize();
+          }
+        });
       }
-    });
+    } catch (e) {
+      console.error("Error registering event listeners", e);
+    }
   };
 
   private registerSessionExpirationHandler = (session: Session) => {

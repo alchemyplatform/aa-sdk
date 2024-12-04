@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.5.1",
+  "version": "4.6.0",
   "description": "React components and hooks for using Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -35,7 +35,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prebuild": "npx tsx ./inject-version.ts",
+    "prebuild": "tsx ./inject-version.ts",
     "dev": "storybook dev",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
@@ -66,10 +66,10 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@account-kit/core": "^4.5.1",
-    "@account-kit/infra": "^4.5.1",
-    "@account-kit/logging": "^4.5.1",
-    "@account-kit/signer": "^4.5.1",
+    "@account-kit/core": "^4.6.0",
+    "@account-kit/infra": "^4.6.0",
+    "@account-kit/logging": "^4.6.0",
+    "@account-kit/signer": "^4.6.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
     "@wagmi/connectors": "^5.1.15",

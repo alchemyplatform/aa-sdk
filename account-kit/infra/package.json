@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/infra",
-  "version": "4.5.1",
+  "version": "4.6.0",
   "description": "adapters for @aa-sdk/core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prebuild": "npx tsx ./inject-version.ts",
+    "prebuild": "tsx ./inject-version.ts",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
@@ -44,8 +44,8 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.5.1",
-    "@account-kit/logging": "^4.5.1",
+    "@aa-sdk/core": "^4.6.0",
+    "@account-kit/logging": "^4.6.0",
     "eventemitter3": "^5.0.1",
     "zod": "^3.22.4"
   },
