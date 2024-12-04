@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Bug Fixes
+
+- refactor connection error ([#1156](https://github.com/alchemyplatform/aa-sdk/issues/1156)) ([83ea665](https://github.com/alchemyplatform/aa-sdk/commit/83ea665514f49131565441f1b43e4e6e5b0fd68c))
+- update darkmode wordmark ([#1169](https://github.com/alchemyplatform/aa-sdk/issues/1169)) ([0459359](https://github.com/alchemyplatform/aa-sdk/commit/04593594636cc771481ca75704ecddbcda355687))
+- update email completing string to be more generic ([#1173](https://github.com/alchemyplatform/aa-sdk/issues/1173)) ([18d0827](https://github.com/alchemyplatform/aa-sdk/commit/18d082798ab6c83417d2a2f155f4f7c655e1e6a4))
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+- **ui-demo:** Add Google Analytics tag to layout ([#1174](https://github.com/alchemyplatform/aa-sdk/issues/1174)) ([af02c01](https://github.com/alchemyplatform/aa-sdk/commit/af02c0160be92c4146f6fff482b4d790a07fb2f8))
+
 ## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
 
 ### Bug Fixes

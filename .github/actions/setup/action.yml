@@ -5,6 +5,11 @@ inputs:
     description: 'Node.js version'
     required: false
     default: '22'
+  use-android-cache:
+    description: "Cache JDK, Gradle, etc for android build"
+    required: false
+    type: boolean
+    default: true
 
 runs:
   using: 'composite'
@@ -39,6 +44,7 @@ runs:
     
     # Android setup
     - name: Check turborepo cache for Android
+      if: inputs.use-android-cache == true
       shell: bash
       run: |
         TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:android --dry=json | sed '1,2d;$d')).tasks.find(t => t.task === 'build:android').cache.status")
@@ -67,6 +73,6 @@ runs:
         path: |
           ~/.gradle/wrapper
           ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('account-kit/rn-signer/example/android/gradle/wrapper/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-

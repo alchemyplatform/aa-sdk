@@ -48,6 +48,9 @@ jobs:
           
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          # skip android cache for this because it's not working with the publish step below
+          use-android-cache: false
 
       - name: Set Github User Details
         run: |
@@ -59,15 +62,11 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      - name: Build all packages
-        env:
-          JAVA_OPTS: "-XX:MaxHeapSize=6g"
-        run: yarn build:libs
-
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
-        run: yarn install --force && yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
+        shell: bash
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
