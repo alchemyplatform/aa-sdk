@@ -12,7 +12,7 @@
       "account-kit/*",
       "templates/*",
       "examples/*",
-      "account-kit/rn-signer/example",
+      "account-kit/rn-signer/examples/rn-bare",
       "site",
       "doc-gen",
       ".vitest"

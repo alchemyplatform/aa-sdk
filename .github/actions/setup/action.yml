@@ -73,6 +73,6 @@ runs:
         path: |
           ~/.gradle/wrapper
           ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('account-kit/rn-signer/example/android/gradle/wrapper/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('account-kit/rn-signer/examples/rn-bare/android/gradle/wrapper/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
