@@ -40,7 +40,7 @@
     "test": "jest",
     "typecheck": "tsc",
     "build": "yarn typecheck",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "clean": "del-cli android/build examples/rn-bare/android/build examples/rn-bare/android/app/build examples/rn-bare/ios/build lib",
     "prepare": "bob build"
   },
   "keywords": [
@@ -97,7 +97,7 @@
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
+      "<rootDir>/examples/rn-bare/node_modules",
       "<rootDir>/lib/"
     ]
   },

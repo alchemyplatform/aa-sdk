@@ -87,9 +87,11 @@ android.iml
 # Cocoapods
 #
 example/ios/Pods
+examples/rn-bare/ios/Pods
 
 # Ruby
 example/vendor/
+examples/rn-bare/vendor/
 
 # node.js
 #
