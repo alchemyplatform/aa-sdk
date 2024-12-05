@@ -1,3 +1,8 @@
+---
+title: Using within React Native applications
+description: A guide on integrating Account Kit within a React Native application
+---
+
 ## Getting Started
 
 ### Upgrade to the latest Beta version of Expo
@@ -48,10 +53,10 @@ const config = getDefaultConfig(__dirname);
 // The following code ensures we have the necessary
 // shims for crypto built into our project
 config.resolver.extraNodeModules = {
-  ...config.resolver.extraNodeModules,
-  ...require("node-libs-react-native"),
-  crypto: require.resolve("crypto-browserify"),
-  stream: require.resolve("stream-browserify"),
+	...config.resolver.extraNodeModules,
+	...require("node-libs-react-native"),
+	crypto: require.resolve("crypto-browserify"),
+	stream: require.resolve("stream-browserify"),
 };
 
 module.exports = config;
