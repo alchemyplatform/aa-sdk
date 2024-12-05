@@ -99,22 +99,31 @@ export const aaSdkEthersReferenceSidebar: SidebarItem[] = [
           },
           {
             text: "Getting Started",
-            link: "/react-native/getting-started",
+            items: [
+              {
+                text: "Getting started on Expo",
+                link: "/react-native/getting-started/getting-started-expo",
+              },
+              {
+                text: "Getting started on Bare React Native",
+                link: "/react-native/getting-started/getting-started-rn-bare",
+              },
+            ],
           },
           {
-            text: "React Native Signer",
+            text: "Using the Signer",
             items: [
               {
                 text: "Overview",
                 link: "/react-native/signer/overview",
               },
               {
-                text: "Configuration Guide",
-                link: "/react-native/signer/configuration-guide",
+                text: "Setup",
+                link: "/react-native/signer/setup-guide",
               },
               {
-                text: "Expo Installation",
-                link: "/react-native/signer/expo-installation",
+                text: "Authenticating Users",
+                link: "/react-native/signer/authenticating-users",
               },
             ],
           },

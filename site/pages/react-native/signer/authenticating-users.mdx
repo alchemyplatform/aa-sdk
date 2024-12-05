@@ -1,0 +1,122 @@
+---
+title: Authenticating Users with the React Native Signer
+description: Learn how to authenticate users with the React Native Signer
+---
+
+# Authenticating Users
+
+This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+
+## Create a Signer Instance
+
+```tsx
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+const signer = new RNAlchemySigner({
+  client: { connection: { apiKey: API_KEY } },
+});
+```
+
+## Authenticate a User
+
+Next, you'll need to authenticate your user before you can use the Signer as an owner on the account
+
+:::info
+At the time of writing, the React Native Signer only supports Email at the moment.
+:::
+
+### Send an Email Magic Link to a User
+
+To send an email magic link to a user, you can use the `signer.authenticate()` method.
+
+```tsx
+signer
+  .authenticate({ email: "user@example.com", type: "email" })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+### Authenticate User via Deep Link
+
+When a user clicks on the magic link in their email, it should deep link to your app if this has been setup correctly.
+
+A `bundle` parameter present in the deep link url will be used to authenticate the user and save the user's session.
+
+Here's an example of what this might look like:
+
+:::code-group
+
+```tsx [example.tsx]
+import { useEffect, useState } from "react";
+import { Linking } from "react-native";
+import { User } from "@account-kit/signer";
+
+import { signer } from "./signer";
+
+const App = () => {
+	const [user, setUser] = useState<User | null>(null);
+
+	// Make an authentication request to a user's email
+	const performAuthRequest = async () => {
+		const user = await signer.authenticate({ email: "user@example.com", type: "email" });
+	};
+
+	// Authenticate a user using a bundle returned from a deep link
+	const handleUserAuth = async ({ bundle }: { bundle: string }) => {
+		const user = await signer.authenticate({ bundle, type: "email" });
+
+		return user;
+	};
+
+	// Handle incoming deep links and authenticate the user
+	const handleIncomingURL = (event: { url: string }) => {
+		const regex = /[?&]([^=#]+)=([^&#]*)/g;
+
+		let params: Record<string, string> = {};
+		let match: RegExpExecArray | null;
+
+		while ((match = regex.exec(event.url))) {
+			if (match[1] && match[2]) {
+				params[match[1]] = match[2];
+			}
+		}
+
+		if (!params.bundle) {
+			return;
+		}
+
+		handleUserAuth({
+			bundle: params.bundle ?? "",
+		})
+			.then((user) => {
+				setUser(user);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
+	// Create a subscription to handle incoming deep links
+	useEffect(() => {
+		const subscription = Linking.addEventListener("url", handleIncomingURL);
+
+		return () => subscription.remove();
+	}, []);
+
+
+
+	return ...;
+};
+
+```
+
+```tsx [signer.ts]
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+export const signer = new RNAlchemySigner({
+  client: { connection: { apiKey: API_KEY } },
+});
+```
+
+:::

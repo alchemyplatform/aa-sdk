@@ -6,11 +6,11 @@ export const reactNativeSignerSidebar: SidebarItem[] = [
     link: "/react-native/signer/overview",
   },
   {
-    text: "Configuration Guide",
-    link: "/react-native/signer/configuration-guide",
+    text: "Setup",
+    link: "/react-native/signer/setup-guide",
   },
   {
-    text: "Expo Installation",
-    link: "/react-native/signer/expo-installation",
+    text: "Authenticating Users",
+    link: "/react-native/signer/authenticating-users",
   },
 ];
