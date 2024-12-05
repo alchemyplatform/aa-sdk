@@ -7,6 +7,10 @@ description: Learn how to authenticate users with the Account Kit Core package
 
 Most methods on the Smart Account Client and Smart Contract Account require some user context. This context (eg. the `SignerAddress`) is only available once you've authenticated the user. This guide will walk you through how to authenticate users using the `@account-kit/core` package.
 
+:::info
+At the time of writing, the React Native Signer only supports Email magic link.
+:::
+
 ## Create your config
 
 Before you can authenticate a user, you'll need to create a static config object. This is outlined in the [Core Quickstart](/core/quickstart).
@@ -24,21 +28,21 @@ import { getSigner } from "@account-kit/core";
 const signer = getSigner(config);
 
 if (!signer) {
-  // this can happen if your rendering this on the server
-  // the signer instance is only available on the client
-  throw new Error("Signer not found");
+	// this can happen if your rendering this on the server
+	// the signer instance is only available on the client
+	throw new Error("Signer not found");
 }
 
 // authenticate the user with email
 await signer.authenticate({
-  type: "email",
-  email: "user@email.com",
+	type: "email",
+	email: "user@email.com",
 });
 
 // once the user has clicked on the email and been redirected back to your site
 const bundle = new URLSearchParams(window.location.search).get("bundle");
 if (!bundle) {
-  throw new Error("No bundle found in URL");
+	throw new Error("No bundle found in URL");
 }
 
 await signer.authenticate({ type: "email", bundle });
@@ -63,25 +67,25 @@ import { getSigner } from "@account-kit/core";
 const signer = getSigner(config);
 
 if (!signer) {
-  // this can happen if your rendering this on the server
-  // the signer instance is only available on the client
-  throw new Error("Signer not found");
+	// this can happen if your rendering this on the server
+	// the signer instance is only available on the client
+	throw new Error("Signer not found");
 }
 
 // authenticate the user with a social login provider
 await signer.authenticate({
-  // redirect login flow
-  type: "oauth",
-  authProviderId: "google",
-  mode: "redirect",
-  redirectUrl: "/", // After logging in, redirect to the index page
+	// redirect login flow
+	type: "oauth",
+	authProviderId: "google",
+	mode: "redirect",
+	redirectUrl: "/", // After logging in, redirect to the index page
 });
 
 await signer.authenticate({
-  // popup login flow
-  type: "oauth",
-  authProviderId: "google",
-  mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
+	// popup login flow
+	type: "oauth",
+	authProviderId: "google",
+	mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
 });
 ```
 
@@ -108,14 +112,14 @@ import { getSigner } from "@account-kit/core";
 const signer = getSigner(config);
 
 if (!signer) {
-  // this can happen if your rendering this on the server
-  // the signer instance is only available on the client
-  throw new Error("Signer not found");
+	// this can happen if your rendering this on the server
+	// the signer instance is only available on the client
+	throw new Error("Signer not found");
 }
 
 await signer.authenticate({
-  type: "passkey",
-  email: "name@mail.com",
+	type: "passkey",
+	email: "name@mail.com",
 });
 ```
 
@@ -138,14 +142,14 @@ import { getSigner } from "@account-kit/core";
 const signer = getSigner(config);
 
 if (!signer) {
-  // this can happen if your rendering this on the server
-  // the signer instance is only available on the client
-  throw new Error("Signer not found");
+	// this can happen if your rendering this on the server
+	// the signer instance is only available on the client
+	throw new Error("Signer not found");
 }
 
 await signer.authenticate({
-  type: "passkey",
-  createNew: false,
+	type: "passkey",
+	createNew: false,
 });
 ```
 
