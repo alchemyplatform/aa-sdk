@@ -10,6 +10,12 @@ Once your users have been [authenticated](/react/getting-started), you can start
 Sending user operations is really easy, since all you have to do is use the [`useSendUserOperation`](/reference/account-kit/react/hooks/useSendUserOperation) hook.
 If you want to sponsor the gas for a user, see our [guide](/react/sponsor-gas).
 
+## Handling EOA Connections
+
+If your application uses an Externally Owned Account (EOA) connection, you don't need to specify a Smart Contract Account (SCA) client explicitly. Simply pass undefined as the client parameter, or use a standard SCA client if one is available. The SDK will automatically detect and handle the EOA connection when applicable.
+
+The SDK abstracts routing between User Operations (UOs) and traditional transactions (TXNs). When no Smart Contract Account (SCA) client is provided, or if an EOA connection is detected, transactions will default to using the EOA.
+
 ## Single user operation
 
 :::tip
