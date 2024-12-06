@@ -4,16 +4,16 @@ description: A guide on integrating Account Kit within a Bare React Native appli
 ---
 
 :::warning
-To use Account Kit in your React Native application, ensure you are on React Native version 0.74 or higher.
+To use Account Kit in your React Native application, ensure you are on React Native version 0.76 or higher.
 :::
 
-## Getting Started
+## Getting Started on a Bare React Native project
 
 We would go through the steps to get your environment setup for using Account Kit within a Bare React Native application.
 
 ### Prerequisites
 
-To use Account Kit in your React Native project, ensure your project is setup with React Native version 0.74 or higher.
+To use Account Kit in your React Native project, ensure your project is setup with React Native version 0.76 or higher.
 
 Please follow the [React Native Upgrade Guide](https://reactnative.dev/docs/upgrading) if you need to upgrade your project.
 
@@ -45,16 +45,16 @@ const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 const defaultConfig = getDefaultConfig(__dirname);
 
 const extraNodeModules = {
-  ...defaultConfig.resolver.extraNodeModules,
-  ...require("node-libs-react-native"),
-  crypto: require.resolve("crypto-browserify"),
-  stream: require.resolve("stream-browserify"),
+	...defaultConfig.resolver.extraNodeModules,
+	...require("node-libs-react-native"),
+	crypto: require.resolve("crypto-browserify"),
+	stream: require.resolve("stream-browserify"),
 };
 
 const config = {
-  resolver: {
-    extraNodeModules,
-  },
+	resolver: {
+		extraNodeModules,
+	},
 };
 
 module.exports = mergeConfig(defaultConfig, config);
@@ -78,11 +78,11 @@ That's it! Now you can install the packages you want from Account Kit and start 
 :::code-group
 
 ```bash [npm]
-npm install -s @account-kit/smart-contracts @aa-sdk/core
+npm install -s @account-kit/smart-contracts @account-kit/infra
 ```
 
 ```bash [yarn]
-yarn add @account-kit/smart-contracts @aa-sdk/core
+yarn add @account-kit/smart-contracts @account-kit/infra
 ```
 
 :::

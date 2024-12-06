@@ -4,16 +4,16 @@ description: A guide on integrating Account Kit within a React Native Expo appli
 ---
 
 :::warning
-To use Account Kit in your React Native application, ensure you are on React Native version 0.74 or higher.
+To use Account Kit in your React Native application, ensure you are on React Native version 0.76 or higher.
 :::
 
-## Getting Started
+## Getting Started on an Expo project
 
 We would go through the steps to get your environment setup for using Account Kit within a React Native application on Expo.
 
 ### Upgrade to the latest version of Expo
 
-The first thing we need to do is make sure we're on the latest version of Expo (SDK 52 or later). The reason for this is that we need React Native version 0.74 or higher because it has `TextEncoder` natively supported.
+The first thing we need to do is make sure we're on the latest version of Expo (SDK 52 or later). The reason for this is that we need React Native version 0.76 or higher because it has `TextEncoder` natively supported.
 
 For more information on upgrading an Expo project, check out the [Expo documentation](https://docs.expo.dev/workflow/upgrading-expo-sdk-walkthrough/).
 
@@ -67,10 +67,10 @@ const config = getDefaultConfig(__dirname);
 // The following code ensures we have the necessary
 // shims for crypto built into our project
 config.resolver.extraNodeModules = {
-  ...config.resolver.extraNodeModules,
-  ...require("node-libs-react-native"),
-  crypto: require.resolve("crypto-browserify"),
-  stream: require.resolve("stream-browserify"),
+	...config.resolver.extraNodeModules,
+	...require("node-libs-react-native"),
+	crypto: require.resolve("crypto-browserify"),
+	stream: require.resolve("stream-browserify"),
 };
 
 module.exports = config;
@@ -98,11 +98,11 @@ That's it! Now you can install the packages you want from Account Kit and start 
 :::code-group
 
 ```bash [npm]
-npm install -s @account-kit/smart-contracts @aa-sdk/core
+npm install -s @account-kit/smart-contracts @account-kit/infra
 ```
 
 ```bash [yarn]
-yarn add @account-kit/smart-contracts @aa-sdk/core
+yarn add @account-kit/smart-contracts @account-kit/infra
 ```
 
 :::
@@ -117,8 +117,8 @@ CAUTION: The React Native Signer package is currently in Alpha and is only suppo
 
 There are a few things to note before using the Signer package in your Expo project:
 
-- The Signer package is incompatible with Expo Go and as a result, you'd need to use a Development Build. Check the [Expo Development Builds documentation](https://docs.expo.dev/develop/development-builds/introduction/) for more information.
-- The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your Expo project, check their [documentation](https://docs.expo.dev/guides/new-architecture/).
+-   The Signer package is incompatible with Expo Go and as a result, you'd need to use a Development Build. Check the [Expo Development Builds documentation](https://docs.expo.dev/develop/development-builds/introduction/) for more information.
+-   The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your Expo project, check their [documentation](https://docs.expo.dev/guides/new-architecture/).
 
 Once the prerequisites are met, you can install the Signer package using the following command:
 
