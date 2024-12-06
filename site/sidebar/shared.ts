@@ -5,12 +5,16 @@ import { reactGuides } from "./react.js";
 import { signerSidebar } from "./signer.js";
 import { smartContractsSidebar } from "./smart-contracts.js";
 import { thirdPartySidebar } from "./third-party.js";
+import { reactNativeSidebar } from "./react-native/index.js";
 
 export const concepts: SidebarItem = {
   text: "Concepts",
   collapsed: true,
   items: [
-    { text: "Intro to Account Kit", link: "/concepts/intro-to-account-kit" },
+    {
+      text: "Intro to Account Kit",
+      link: "/concepts/intro-to-account-kit",
+    },
     {
       text: "Smart Contract Account",
       link: "/concepts/smart-contract-account",
@@ -37,7 +41,7 @@ export const concepts: SidebarItem = {
 export const resources: SidebarItem = {
   text: "Resources",
   items: [
-    { text: "React Native", link: "/resources/react-native" },
+    { text: "React Native", items: reactNativeSidebar, collapsed: true },
     {
       text: "Third Party",
       items: thirdPartySidebar,
