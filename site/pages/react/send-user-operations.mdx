@@ -10,12 +10,6 @@ Once your users have been [authenticated](/react/getting-started), you can start
 Sending user operations is really easy, since all you have to do is use the [`useSendUserOperation`](/reference/account-kit/react/hooks/useSendUserOperation) hook.
 If you want to sponsor the gas for a user, see our [guide](/react/sponsor-gas).
 
-## Handling EOA Connections
-
-If your application uses an Externally Owned Account (EOA) connection, you don't need to specify a Smart Contract Account (SCA) client explicitly. Simply pass undefined as the client parameter, or use a standard SCA client if one is available. The SDK will automatically detect and handle the EOA connection when applicable.
-
-The SDK abstracts routing between User Operations (UOs) and traditional transactions (TXNs). When no Smart Contract Account (SCA) client is provided, or if an EOA connection is detected, transactions will default to using the EOA.
-
 ## Single user operation
 
 :::tip
@@ -110,6 +104,60 @@ export default function MyOpSenderComponent() {
                 value: 0n,
               },
             ],
+          })
+        }
+        disabled={isSendingUserOperation}
+      >
+        {isSendingUserOperation ? "Sending..." : "Send UO"}
+      </button>
+    </div>
+  );
+}
+```
+
+## Handling EOA Connections
+
+If your application uses an Externally Owned Account (EOA) connection, you don't need to specify a Smart Contract Account (SCA) client explicitly. Simply pass undefined as the client parameter, or use a standard SCA client if one is available. The SDK will automatically detect and handle the EOA connection when applicable.
+
+The SDK abstracts routing between User Operations (UOs) and traditional transactions (TXNs). When no Smart Contract Account (SCA) client is provided, or if an EOA connection is detected, transactions will default to using the EOA.
+
+In the example below we have enabled EOAs to login. `useSendUserOperation` will automatically detect the EOA connection and send the transaction and return the transaction hash.
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseSendUserOperationResult,
+  useSendUserOperation,
+  useSmartAccountClient,
+} from "@account-kit/react";
+
+export default function MyOpSenderComponent() {
+  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    uo: {
+      target: "0x...",
+      data: "0x...",
+      value: 0n,
+    },
+    // optional parameter that will wait for the transaction to be mined before returning
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      // [optional] Do something with the hash and request
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
+  });
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          sendUserOperation({
+            uo: {
+              target: "0xTARGET_ADDRESS",
+              data: "0x",
+              value: 0n,
+            },
           })
         }
         disabled={isSendingUserOperation}
