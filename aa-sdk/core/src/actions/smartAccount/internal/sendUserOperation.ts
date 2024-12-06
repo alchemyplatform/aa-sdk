@@ -50,6 +50,16 @@ export async function _sendUserOperation<
     overrides,
   });
 
+  if (
+    request.signature.startsWith(
+      // TODO: put this in a constant
+      "0x00000000000000000000000000000000000000000000000001ff00"
+    ) &&
+    account.signAuthorization
+  ) {
+    request.authorizationTuple = await account.signAuthorization();
+  }
+
   return {
     hash: await client.sendRawUserOperation(request, entryPoint.address),
     request,

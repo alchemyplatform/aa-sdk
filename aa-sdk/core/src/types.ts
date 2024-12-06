@@ -5,6 +5,7 @@ import {
   type StateOverride,
   type TransactionReceipt,
 } from "viem";
+import type { Authorization } from "viem/experimental";
 import type { z } from "zod";
 import type {
   UserOperationFeeOptionsFieldSchema,
@@ -205,11 +206,11 @@ export interface UserOperationRequest_v7 {
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export type UserOperationRequest<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
-> = TEntryPointVersion extends "0.6.0"
+> = (TEntryPointVersion extends "0.6.0"
   ? UserOperationRequest_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationRequest_v7
-  : never;
+  : never) & { authorizationTuple?: Authorization };
 
 // [!endregion UserOperationRequest]
 
