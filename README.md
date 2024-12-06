@@ -6,7 +6,7 @@ This repo contains all of the packages that make up Account Kit as well as the c
 
 ## @account-kit/\*
 
-Account Kit packages are all prefixed with `@account-kit` are are broken down into the following packages:
+Account Kit packages are all prefixed with `@account-kit` are broken down into the following packages:
 
 1. [`@account-kit/react`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/react)
 1. [`@account-kit/core`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/core)
