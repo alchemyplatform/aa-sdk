@@ -13,7 +13,7 @@ This guide assumes you have already followed the [Setup Guide](/react-native/sig
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const signer = new RNAlchemySigner({
-  client: { connection: { apiKey: API_KEY } },
+	client: { connection: { apiKey: API_KEY } },
 });
 ```
 
@@ -31,10 +31,10 @@ To send an email magic link to a user, you can use the `signer.authenticate()` m
 
 ```tsx
 signer
-  .authenticate({ email: "user@example.com", type: "email" })
-  .catch((error) => {
-    console.error(error);
-  });
+	.authenticate({ email: "user@example.com", type: "email" })
+	.catch((error) => {
+		console.error(error);
+	});
 ```
 
 ### Authenticate User via Deep Link
@@ -45,21 +45,27 @@ A `bundle` parameter present in the deep link url will be used to authenticate t
 
 Here's an example of what this might look like:
 
-:::code-group
-
 ```tsx [example.tsx] twoslash
 import { useEffect, useState } from "react";
 import { Linking } from "react-native";
 import { User } from "@account-kit/signer";
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
-import { signer } from "./signer";
+const API_KEY = "your-api-key";
+
+const signer = new RNAlchemySigner({
+	client: { connection: { apiKey: API_KEY } },
+});
 
 const App = () => {
 	const [user, setUser] = useState<User | null>(null);
 
 	// Make an authentication request to a user's email
 	const performAuthRequest = async () => {
-		const user = await signer.authenticate({ email: "user@example.com", type: "email" });
+		const user = await signer.authenticate({
+			email: "user@example.com",
+			type: "email",
+		});
 	};
 
 	// Authenticate a user using a bundle returned from a deep link
@@ -104,19 +110,6 @@ const App = () => {
 		return () => subscription.remove();
 	}, []);
 
-
-
-	return ...;
+	return null;
 };
-
 ```
-
-```tsx [signer.ts] twoslash
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-
-export const signer = new RNAlchemySigner({
-  client: { connection: { apiKey: API_KEY } },
-});
-```
-
-:::
