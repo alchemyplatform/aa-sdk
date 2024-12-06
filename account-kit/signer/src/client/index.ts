@@ -18,6 +18,7 @@ import type {
   ExportWalletParams,
   OauthConfig,
   OauthParams,
+  OtpParams,
   User,
 } from "./types.js";
 
@@ -138,7 +139,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override createAccount = async (params: CreateAccountParams) => {
     if (params.type === "email") {
-      this.eventEmitter.emit("authenticating", { type: "email" });
+      this.eventEmitter.emit("authenticating", { type: "otp" });
       const { email, expirationSeconds } = params;
       const publicKey = await this.initIframeStamper();
 
@@ -205,7 +206,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override initEmailAuth = async (
     params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
-    this.eventEmitter.emit("authenticating", { type: "email" });
+    this.eventEmitter.emit("authenticating", { type: "otp" });
     const { email, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
 
@@ -216,7 +217,44 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       redirectParams: params.redirectParams?.toString(),
     });
   };
-
+  /**
+   * Authenticates using an OTP code which was previously received via email.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.submitOtpCode({
+   *   orgId: "user-org-id",
+   *   bundle: "bundle-from-email",
+   *   otpId: "opt-returned-from-initEmailAuth",
+   *   otpCode: "otp-code-from-email",
+   * });
+   * ```
+   *
+   * @param {Omit<OtpParams, "targetPublicKey">} args The parameters for the OTP request, excluding the target public key.
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle.
+   */
+  public override async submitOtpCode(
+    args: Omit<OtpParams, "targetPublicKey">
+  ): Promise<{ bundle: string }> {
+    this.eventEmitter.emit("authenticating", { type: "otpVerify" });
+    const targetPublicKey = await this.initIframeStamper();
+    const { credentialBundle } = await this.request("/v1/otp", {
+      ...args,
+      targetPublicKey,
+    });
+    return { bundle: credentialBundle };
+  }
   /**
    * Completes auth for the user by injecting a credential bundle and retrieving
    * the user information based on the provided organization ID. Emits events
