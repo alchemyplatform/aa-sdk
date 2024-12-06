@@ -13,6 +13,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
+import type { Authorization } from "viem/experimental";
 import { createBundlerClient } from "../client/bundlerClient.js";
 import type {
   EntryPointDef,
@@ -124,6 +125,7 @@ export type SmartContractAccount<
   getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
+  signAuthorization?: () => Promise<Authorization<number, true>>;
 };
 // [!endregion SmartContractAccount]
 
@@ -154,7 +156,10 @@ export type ToSmartContractAccountParams<
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
-} & Omit<CustomSource, "signTransaction" | "address">;
+} & Omit<
+  CustomSource,
+  "signTransaction" | "address" | "experimental_signAuthorization"
+>;
 // [!endregion ToSmartContractAccountParams]
 
 /**
