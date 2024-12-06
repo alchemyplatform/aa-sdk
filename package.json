@@ -37,7 +37,7 @@
     "postgenerate": "yarn lint:write",
     "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive && patch-package",
-    "build": "yarn build:libs",
+    "build": "yarn build:libs --filter='!@account-kit/react-native-signer' --filter='!@account-kit/react-native-signer-example'",
     "postbuild": "yarn lint:write",
     "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*'",
     "build:demo": "turbo run build --filter=ui-demo",
