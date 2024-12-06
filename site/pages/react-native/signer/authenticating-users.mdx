@@ -13,7 +13,7 @@ This guide assumes you have already followed the [Setup Guide](/react-native/sig
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const signer = new RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
+  client: { connection: { apiKey: API_KEY } },
 });
 ```
 
@@ -31,10 +31,10 @@ To send an email magic link to a user, you can use the `signer.authenticate()` m
 
 ```tsx
 signer
-	.authenticate({ email: "user@example.com", type: "email" })
-	.catch((error) => {
-		console.error(error);
-	});
+  .authenticate({ email: "user@example.com", type: "email" })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 ### Authenticate User via Deep Link
@@ -115,7 +115,7 @@ const App = () => {
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 export const signer = new RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
+  client: { connection: { apiKey: API_KEY } },
 });
 ```
 

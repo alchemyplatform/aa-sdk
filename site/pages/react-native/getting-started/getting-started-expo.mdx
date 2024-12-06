@@ -67,10 +67,10 @@ const config = getDefaultConfig(__dirname);
 // The following code ensures we have the necessary
 // shims for crypto built into our project
 config.resolver.extraNodeModules = {
-	...config.resolver.extraNodeModules,
-	...require("node-libs-react-native"),
-	crypto: require.resolve("crypto-browserify"),
-	stream: require.resolve("stream-browserify"),
+  ...config.resolver.extraNodeModules,
+  ...require("node-libs-react-native"),
+  crypto: require.resolve("crypto-browserify"),
+  stream: require.resolve("stream-browserify"),
 };
 
 module.exports = config;
@@ -117,8 +117,8 @@ CAUTION: The React Native Signer package is currently in Alpha and is only suppo
 
 There are a few things to note before using the Signer package in your Expo project:
 
--   The Signer package is incompatible with Expo Go and as a result, you'd need to use a Development Build. Check the [Expo Development Builds documentation](https://docs.expo.dev/develop/development-builds/introduction/) for more information.
--   The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your Expo project, check their [documentation](https://docs.expo.dev/guides/new-architecture/).
+- The Signer package is incompatible with Expo Go and as a result, you'd need to use a Development Build. Check the [Expo Development Builds documentation](https://docs.expo.dev/develop/development-builds/introduction/) for more information.
+- The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your Expo project, check their [documentation](https://docs.expo.dev/guides/new-architecture/).
 
 Once the prerequisites are met, you can install the Signer package using the following command:
 
