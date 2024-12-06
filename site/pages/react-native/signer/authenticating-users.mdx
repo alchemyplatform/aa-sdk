@@ -13,7 +13,7 @@ This guide assumes you have already followed the [Setup Guide](/react-native/sig
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const signer = new RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
+  client: { connection: { apiKey: API_KEY } },
 });
 ```
 
@@ -31,10 +31,10 @@ To send an email magic link to a user, you can use the `signer.authenticate()` m
 
 ```tsx
 signer
-	.authenticate({ email: "user@example.com", type: "email" })
-	.catch((error) => {
-		console.error(error);
-	});
+  .authenticate({ email: "user@example.com", type: "email" })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 ### Authenticate User via Deep Link
@@ -54,62 +54,62 @@ import { RNAlchemySigner } from "@account-kit/react-native-signer";
 const API_KEY = "your-api-key";
 
 const signer = new RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
+  client: { connection: { apiKey: API_KEY } },
 });
 
 const App = () => {
-	const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-	// Make an authentication request to a user's email
-	const performAuthRequest = async () => {
-		const user = await signer.authenticate({
-			email: "user@example.com",
-			type: "email",
-		});
-	};
+  // Make an authentication request to a user's email
+  const performAuthRequest = async () => {
+    const user = await signer.authenticate({
+      email: "user@example.com",
+      type: "email",
+    });
+  };
 
-	// Authenticate a user using a bundle returned from a deep link
-	const handleUserAuth = async ({ bundle }: { bundle: string }) => {
-		const user = await signer.authenticate({ bundle, type: "email" });
+  // Authenticate a user using a bundle returned from a deep link
+  const handleUserAuth = async ({ bundle }: { bundle: string }) => {
+    const user = await signer.authenticate({ bundle, type: "email" });
 
-		return user;
-	};
+    return user;
+  };
 
-	// Handle incoming deep links and authenticate the user
-	const handleIncomingURL = (event: { url: string }) => {
-		const regex = /[?&]([^=#]+)=([^&#]*)/g;
+  // Handle incoming deep links and authenticate the user
+  const handleIncomingURL = (event: { url: string }) => {
+    const regex = /[?&]([^=#]+)=([^&#]*)/g;
 
-		let params: Record<string, string> = {};
-		let match: RegExpExecArray | null;
+    let params: Record<string, string> = {};
+    let match: RegExpExecArray | null;
 
-		while ((match = regex.exec(event.url))) {
-			if (match[1] && match[2]) {
-				params[match[1]] = match[2];
-			}
-		}
+    while ((match = regex.exec(event.url))) {
+      if (match[1] && match[2]) {
+        params[match[1]] = match[2];
+      }
+    }
 
-		if (!params.bundle) {
-			return;
-		}
+    if (!params.bundle) {
+      return;
+    }
 
-		handleUserAuth({
-			bundle: params.bundle ?? "",
-		})
-			.then((user) => {
-				setUser(user);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	};
+    handleUserAuth({
+      bundle: params.bundle ?? "",
+    })
+      .then((user) => {
+        setUser(user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-	// Create a subscription to handle incoming deep links
-	useEffect(() => {
-		const subscription = Linking.addEventListener("url", handleIncomingURL);
+  // Create a subscription to handle incoming deep links
+  useEffect(() => {
+    const subscription = Linking.addEventListener("url", handleIncomingURL);
 
-		return () => subscription.remove();
-	}, []);
+    return () => subscription.remove();
+  }, []);
 
-	return null;
+  return null;
 };
 ```
