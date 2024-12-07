@@ -5,6 +5,7 @@ import { IncompatibleClientError } from "../../errors/client.js";
 import { FailedToFindTransactionError } from "../../errors/transaction.js";
 import { Logger } from "../../logger.js";
 import type { WaitForUserOperationTxParameters } from "./types.js";
+import {_waitForUserOperationTransaction} from "./internal/waitForUserOperation";
 
 /**
  * Waits for a user operation transaction to be confirmed by checking the receipt periodically until it is found or a maximum number of retries is reached.
@@ -37,46 +38,13 @@ export const waitForUserOperationTransaction: <
   client: Client<TTransport, TChain, any>,
   args: WaitForUserOperationTxParameters
 ) => Promise<Hex> = async (client, args) => {
-  if (!isBaseSmartAccountClient(client)) {
-    throw new IncompatibleClientError(
-      "BaseSmartAccountClient",
-      "waitForUserOperationTransaction",
-      client
-    );
+
+  const receipt =  _waitForUserOperationTransaction(client, args);
+  if (receipt) {
+    return getTransaction(client, {
+      hash: (await receipt).receipt.transactionHash,
+    }).then((x) => x.hash);
   }
 
-  const {
-    hash,
-    retries = {
-      maxRetries: client.txMaxRetries,
-      intervalMs: client.txRetryIntervalMs,
-      multiplier: client.txRetryMultiplier,
-    },
-  } = args;
-
-  for (let i = 0; i < retries.maxRetries; i++) {
-    const txRetryIntervalWithJitterMs =
-      retries.intervalMs * Math.pow(retries.multiplier, i) +
-      Math.random() * 100;
-
-    await new Promise((resolve) =>
-      setTimeout(resolve, txRetryIntervalWithJitterMs)
-    );
-
-    const receipt = await client
-      .getUserOperationReceipt(hash as `0x${string}`)
-      .catch((e) => {
-        Logger.error(
-          `[SmartAccountProvider] waitForUserOperationTransaction error fetching receipt for ${hash}: ${e}`
-        );
-      });
-
-    if (receipt) {
-      return getTransaction(client, {
-        hash: receipt.receipt.transactionHash,
-      }).then((x) => x.hash);
-    }
-  }
-
-  throw new FailedToFindTransactionError(hash);
+  throw new FailedToFindTransactionError(args.hash);
 };
