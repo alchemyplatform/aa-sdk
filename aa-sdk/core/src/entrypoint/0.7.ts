@@ -65,7 +65,7 @@ const packUserOperation = (request: UserOperationRequest<"0.7.0">): Hex => {
       { type: "bytes32" },
     ],
     [
-      request.sender as Address,
+      request.sender,
       hexToBigInt(request.nonce),
       keccak256(initCode),
       keccak256(request.callData),
