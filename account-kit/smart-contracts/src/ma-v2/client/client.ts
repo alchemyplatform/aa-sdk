@@ -36,7 +36,7 @@ export function createSMAV2AccountClient<
  * @example
  * ```ts
  * import { http } from "viem";
- * import { createSMAV2SignerAccountClient } from "@account-kit/smart-contracts";
+ * import { createSMAV2AccountClient } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "@account-kit/infra";
  *
@@ -49,7 +49,7 @@ export function createSMAV2AccountClient<
  *
  * const transport = http(RPC_URL);
  *
- * const SMAV2SignerAccountClient = await createSMAV2SignerAccountClient({di
+ * const SMAV2SignerAccountClient = await createSMAV2AccountClient({
  *  chain,
  *  signer,
  *  transport,
