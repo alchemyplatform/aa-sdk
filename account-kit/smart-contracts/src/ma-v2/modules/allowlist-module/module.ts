@@ -1,7 +1,7 @@
 import { encodeAbiParameters, type Address, type Hex } from "viem";
 import { allowlistModuleAbi } from "./abis/allowlistModuleAbi.js";
 
-export const allowlistModule = {
+export const AllowlistModule = {
   abi: allowlistModuleAbi,
   encodeOnInstallData: (args: {
     entityId: number;

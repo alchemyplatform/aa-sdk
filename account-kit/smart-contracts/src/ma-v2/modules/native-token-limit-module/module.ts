@@ -1,7 +1,7 @@
 import { encodeAbiParameters, type Hex } from "viem";
 import { nativeTokenLimitModuleAbi } from "./abis/nativeTokenLimitModuleAbi.js";
 
-export const nativeTokenLimitModule = {
+export const NativeTokenLimitModule = {
   abi: nativeTokenLimitModuleAbi,
   encodeOnInstallData: (args: {
     entityId: number;
