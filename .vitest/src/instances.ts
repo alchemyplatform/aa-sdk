@@ -10,6 +10,17 @@ import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
 import { paymasterTransport } from "./paymaster/transport";
 
+export const local070InstanceOptSep = defineInstance({
+  chain: localhost,
+  forkBlockNumber: 21153995,
+  forkUrl:
+    process.env.VITEST_OPT_SEPOLIA_FORK_URL ??
+    "https://opt-sepolia-rpc.publicnode.com",
+  entryPointVersion: "0.7.0",
+  anvilPort: 8345,
+  bundlerPort: 8445,
+});
+
 export const local060Instance = defineInstance({
   chain: localhost,
   forkBlockNumber: 6381303,
