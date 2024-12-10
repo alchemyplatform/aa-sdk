@@ -6,6 +6,7 @@ import { CompletingOAuth } from "./loading/oauth.js";
 import { LoadingPasskeyAuth } from "./loading/passkey.js";
 import { MainAuthContent } from "./main.js";
 import { PasskeyAdded } from "./passkey-added.js";
+import { CompletingOtp, LoadingOtp } from "./loading/otp.js";
 
 export const Step = () => {
   const { authStep } = useAuthContext();
@@ -14,10 +15,14 @@ export const Step = () => {
       return <LoadingEmail />;
     case "passkey_verify":
       return <LoadingPasskeyAuth />;
+    case "otp_verify":
+      return <LoadingOtp />;
     case "email_completing":
       return <CompletingEmailAuth />;
     case "oauth_completing":
       return <CompletingOAuth />;
+    case "otp_completing":
+      return <CompletingOtp />;
     case "passkey_create":
       return <AddPasskey />;
     case "passkey_create_success":

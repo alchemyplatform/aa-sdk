@@ -53,10 +53,19 @@ export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
   expirationSeconds?: number;
 };
 
+export type OtpParams = {
+  orgId: string;
+  otpId: string;
+  otpCode: string;
+  targetPublicKey: string;
+  expirationSeconds?: number;
+};
+
 export type SignupResponse = {
   orgId: string;
   userId?: string;
   address?: Address;
+  otpId?: string;
 };
 
 export type OauthConfig = {
@@ -107,6 +116,7 @@ export type SignerEndpoints = [
     Body: Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string };
     Response: {
       orgId: string;
+      otpId?: string;
     };
   },
   {
@@ -133,11 +143,16 @@ export type SignerEndpoints = [
       nonce: string;
     };
     Response: OauthConfig;
+  },
+  {
+    Route: "/v1/otp";
+    Body: OtpParams;
+    Response: { credentialBundle: string };
   }
 ];
 
 export type AuthenticatingEventMetadata = {
-  type: "email" | "passkey" | "oauth";
+  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify";
 };
 
 export type AlchemySignerClientEvents = {
@@ -147,6 +162,7 @@ export type AlchemySignerClientEvents = {
   connectedEmail(user: User, bundle: string): void;
   connectedPasskey(user: User): void;
   connectedOauth(user: User, bundle: string): void;
+  connectedOtp(user: User, bundle: string): void;
   disconnected(): void;
 };
 

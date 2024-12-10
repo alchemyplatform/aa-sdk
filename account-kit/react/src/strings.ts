@@ -33,6 +33,16 @@ const STRINGS = {
     completingEmail: {
       body: "Completing login. Please wait a few seconds for this to screen to update.",
     },
+    loadingOtp: {
+      title: "Enter verification code",
+      body: "We sent a verification code to",
+      notReceived: "Didn't receive code?",
+      resend: "Resend",
+    },
+    completingOtp: {
+      title: "Verifying...",
+      body: "It may take a moment to complete authentication.",
+    },
     loadingPasskey: {
       title: "Continue with passkey",
       body: "Follow the prompt to verify your passkey.",
@@ -83,6 +93,9 @@ const STRINGS = {
             tryAgainCTA: "Try again",
           },
         },
+      },
+      otp: {
+        invalid: "The code you entered is incorrect",
       },
     },
     oauthContactSupport: {
