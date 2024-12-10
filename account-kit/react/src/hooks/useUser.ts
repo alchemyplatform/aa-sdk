@@ -39,7 +39,7 @@ export const useUser = (): UseUserResult => {
   const eoaUser = useMemo(() => {
     if (account.status !== "connected" && account.status !== "reconnecting") {
       return null;
-    } else if (account.status == "reconnecting") {
+    } else if (account.status === "reconnecting") {
       //return user info for "reconnecting" status
       return {
         address: account.address,
