@@ -1,97 +1,99 @@
 import { useEffect, useState } from "react";
-import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
-import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
+import {
+  OTPInput,
+  type OTPCodeType,
+  initialOTPValue,
+  isOTPCodeType,
+} from "../../../otp-input/otp-input.js";
+import { Spinner } from "../../../../icons/spinner.js";
 import { useAuthContext } from "../../context.js";
-import { DemoInput } from "./demoInput.js";
-import { Button } from "../../../button.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
-import { ConnectionError } from "../error/connection-error.js";
-import { ConnectionFailed } from "../../../../icons/connectionFailed.jsx";
+import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingOtp = () => {
   const { authStep } = useAuthContext("otp_verify");
-  const [otpCode, setOtpCode] = useState("");
+  const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
+  const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const { setAuthStep } = useAuthContext();
+  const resetOTP = () => {
+    setOtpCode(initialOTPValue);
+    setErrorText("");
+  };
 
-  const { authenticate } = useAuthenticate({
-    onMutate: () => {
-      setAuthStep({ type: "otp_completing", email: authStep.email });
-    },
-    onError: (error: any) => {
-      console.error(error);
-      setAuthStep({ type: "otp_completing", email: authStep.email, error });
-    },
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
-    },
-  });
+  useEffect(() => {
+    if (isOTPCodeType(otpCode)) {
+      setAuthStep({
+        type: "otp_completing",
+        email: authStep.email,
+        otp: otpCode.join(""),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otpCode]);
 
   return (
-    <div className="flex flex-col gap-5 items-center">
-      <div className="flex flex-col items-center justify-center h-12 w-12">
-        <EmailIllustration height="48" width="48" className="animate-pulse" />
+    <div className="flex flex-col items-center">
+      <div className="relative h-12 w-12 mb-5">
+        <Spinner className="absolute" />
+        <EmailIllustration
+          height="32"
+          width="32"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        />
       </div>
-
-      <h3 className="font-semibold text-lg">{ls.loadingEmail.title}</h3>
-      <DemoInput
-        value={otpCode}
-        onChange={(event) => setOtpCode(event.currentTarget.value)}
-      />
-      <Button
-        onClick={() => {
-          authenticate({ type: "otp", otpCode });
-        }}
-      >
-        Enter code
-      </Button>
-      <p className="text-fg-secondary text-center text-sm">
-        We sent a code to
-        <br />
-        <span className="font-medium">{authStep.email}</span>
+      <h3 className="text-fg-primary font-semibold text-lg mb-2">
+        {ls.loadingOtp.title}
+      </h3>
+      <p className="text-fg-secondary text-center text-sm mb-1">
+        {ls.loadingOtp.body}
       </p>
+      <p className="text-fg-primary text-center text-sm font-medium mb-5">
+        {authStep.email}
+      </p>
+      <OTPInput
+        value={otpCode}
+        setValue={setOtpCode}
+        setErrorText={setErrorText}
+        errorText={errorText}
+        handleReset={resetOTP}
+      />
     </div>
   );
 };
 
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const CompletingOtpAuth = () => {
+export const CompletingOtp = () => {
   const { isConnected } = useSignerStatus();
-  const { authenticate } = useAuthenticate();
   const { setAuthStep, authStep } = useAuthContext("otp_completing");
+  const { authenticate } = useAuthenticate({
+    onError: (error: any) => {
+      console.error(error);
+      const { email } = authStep;
+      setAuthStep({ type: "otp_verify", email, error });
+    },
+    onSuccess: () => {
+      if (isConnected && authStep.createPasskeyAfter) {
+        setAuthStep({ type: "passkey_create" });
+      } else if (isConnected) {
+        setAuthStep({ type: "complete" });
+      }
+    },
+  });
 
   useEffect(() => {
-    if (isConnected && authStep.createPasskeyAfter) {
-      setAuthStep({ type: "passkey_create" });
-    } else if (isConnected) {
-      setAuthStep({ type: "complete" });
-    }
-  }, [authStep.createPasskeyAfter, isConnected, setAuthStep]);
-
-  if (authStep.error) {
-    return (
-      <ConnectionError
-        headerText={ls.error.connection.otpTitle}
-        bodyText={ls.error.connection.otpBody}
-        icon={<ConnectionFailed />}
-        handleTryAgain={() => {
-          const { email } = authStep;
-          setAuthStep({ type: "otp_verify", email });
-          authenticate({ type: "email", email, emailMode: "otp" });
-        }}
-        handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
-      />
-    );
-  }
+    authenticate({ type: "otp", otpCode: authStep.otp });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div className="flex flex-col gap-5 items-center">
-      <div className="flex flex-col items-center justify-center h-12 w-12">
+    <div className="flex flex-col items-center justify-center ">
+      <div className="flex flex-col items-center justify-center h-12 w-12 mb-5">
         <Spinner />
       </div>
-
+      <h2 className="text-fg-primary font-semibold text-lg mb-2">
+        {ls.completingOtp.title}
+      </h2>
       <p className="text-fg-secondary text-center text-sm">
         {ls.completingOtp.body}
       </p>

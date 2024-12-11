@@ -30,11 +30,18 @@ const STRINGS = {
       resend: "Resend",
       resent: "Done!",
     },
+    loadingOtp: {
+      title: "Enter verification code",
+      body: "We sent a verification code to",
+      notReceived: "Didn't receive code?",
+      resend: "Resend",
+    },
     completingEmail: {
-      body: "Your email verification is almost complete. Please wait a few seconds for this screen to update.",
+      body: "Completing login. Please wait a few seconds for this to screen to update.",
     },
     completingOtp: {
-      body: "Your code verification is almost complete. Please wait a few seconds for this screen to update.",
+      title: "Verifying...",
+      body: "It may take a moment to complete authentication.",
     },
     loadingPasskey: {
       title: "Continue with passkey",
@@ -88,6 +95,9 @@ const STRINGS = {
             tryAgainCTA: "Try again",
           },
         },
+      },
+      otp: {
+        invalid: "The code you entered is incorrect",
       },
     },
     oauthContactSupport: {

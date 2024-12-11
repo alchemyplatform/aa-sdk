@@ -75,6 +75,7 @@ export const AuthCardContent = ({
       "email_verify",
       "otp_verify",
       "passkey_verify",
+      "otp_verify",
       "passkey_create",
       "pick_eoa",
       "wallet_connect",
@@ -88,6 +89,7 @@ export const AuthCardContent = ({
       case "email_verify":
       case "otp_verify":
       case "passkey_verify":
+      case "otp_verify":
       case "passkey_create":
       case "oauth_completing":
       case "otp_completing":

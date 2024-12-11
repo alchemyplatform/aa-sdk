@@ -3,10 +3,10 @@ import { AddPasskey } from "./add-passkey.js";
 import { EoaConnectCard, EoaPickCard, WalletConnectCard } from "./eoa.js";
 import { CompletingEmailAuth, LoadingEmail } from "./loading/email.js";
 import { CompletingOAuth } from "./loading/oauth.js";
-import { CompletingOtpAuth, LoadingOtp } from "./loading/otp.js";
 import { LoadingPasskeyAuth } from "./loading/passkey.js";
 import { MainAuthContent } from "./main.js";
 import { PasskeyAdded } from "./passkey-added.js";
+import { CompletingOtp, LoadingOtp } from "./loading/otp.js";
 
 export const Step = () => {
   const { authStep } = useAuthContext();
@@ -22,7 +22,7 @@ export const Step = () => {
     case "oauth_completing":
       return <CompletingOAuth />;
     case "otp_completing":
-      return <CompletingOtpAuth />;
+      return <CompletingOtp />;
     case "passkey_create":
       return <AddPasskey />;
     case "passkey_create_success":

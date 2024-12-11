@@ -6,7 +6,7 @@ import type { AuthType } from "./types";
 
 export type AuthStep =
   | { type: "email_verify"; email: string }
-  | { type: "otp_verify"; email: string }
+  | { type: "otp_verify"; email: string; error?: Error }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
@@ -21,6 +21,7 @@ export type AuthStep =
       type: "otp_completing";
       email: string;
       createPasskeyAfter?: boolean;
+      otp: string;
       error?: Error;
     }
   | { type: "initial"; error?: Error }

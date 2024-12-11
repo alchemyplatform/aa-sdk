@@ -47,10 +47,11 @@
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.2.8",
-    "@storybook/addon-interactions": "^8.2.8",
+    "@storybook/addon-interactions": "^8.4.4",
     "@storybook/core-server": "^8.2.8",
     "@storybook/jest": "^0.2.3",
     "@storybook/react-vite": "^8.2.8",
+    "@storybook/test": "^8.4.4",
     "@storybook/test-runner": "^0.13.0",
     "@storybook/testing-library": "^0.2.2",
     "@tanstack/react-query": "^5.28.9",
