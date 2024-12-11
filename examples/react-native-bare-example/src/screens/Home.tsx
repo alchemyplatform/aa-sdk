@@ -1,6 +1,11 @@
 import React, {useCallback} from 'react';
 
 import {RNAlchemySigner} from '@account-kit/react-native-signer';
+import {
+  LightAccount,
+  createLightAccountAlchemyClient,
+} from '@account-kit/smart-contracts';
+import {alchemy, sepolia} from '@account-kit/infra';
 import type {User} from '@account-kit/signer';
 import {useEffect, useState} from 'react';
 import {
@@ -20,6 +25,8 @@ const signer = new RNAlchemySigner({
 export default function HomeScreen() {
   const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
+  const [account, setAccount] = useState<LightAccount | null>(null);
+  const [signerAddress, setSignerAddress] = useState<string | null>(null);
 
   const handleUserAuth = ({bundle}: {bundle: string}) => {
     signer
@@ -64,6 +71,22 @@ export default function HomeScreen() {
     return () => subscription.remove();
   }, [handleIncomingURL]);
 
+  useEffect(() => {
+    if (user) {
+      createLightAccountAlchemyClient({
+        signer,
+        chain: sepolia,
+        transport: alchemy({apiKey: API_KEY!}),
+      }).then(client => {
+        setAccount(client.account);
+      });
+
+      signer.getAddress().then(address => {
+        setSignerAddress(address);
+      });
+    }
+  }, [user]);
+
   return (
     <View style={styles.container}>
       {!user ? (
@@ -90,6 +113,10 @@ export default function HomeScreen() {
           </Text>
           <Text style={styles.userText}>OrgId: {user.orgId}</Text>
           <Text style={styles.userText}>Address: {user.address}</Text>
+          <Text style={styles.userText}>
+            Light Account Address: {account?.address}
+          </Text>
+          <Text style={styles.userText}>Signer Address: {signerAddress}</Text>
 
           <TouchableOpacity
             style={styles.button}
