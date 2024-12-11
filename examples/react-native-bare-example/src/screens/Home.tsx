@@ -47,9 +47,6 @@ export default function HomeScreen() {
       return;
     }
 
-    console.log('bundle', params.bundle);
-    console.log('orgId', params.orgId);
-
     handleUserAuth({
       bundle: params.bundle ?? '',
     });
