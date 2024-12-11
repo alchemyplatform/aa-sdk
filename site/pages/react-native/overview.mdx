@@ -1,0 +1,37 @@
+import { ExpoIcon } from "../../components/icons/ExpoIcon";
+import { ReactNativeIcon } from "../../components/icons/ReactNativeIcon";
+import { TileButton } from "../../components/TileButton";
+
+---
+
+title: Using within React Native applications
+description: A guide on integrating Account Kit within a React Native application
+
+---
+
+# Using within React Native applications
+
+We've built a simple example using expo [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). This guide assumes you're using Expo, but the same principles should apply to a bare React Native app as well.
+
+:::warning
+The Alchemy Signer is currently in Alpha and only supported on Android devices. To get started using the Alchemy Signer in your React Native app, refer to the [React Native Signer](/react-native/signer/overview) documentation. For 3rd party signer support in React Native, refer to your signer provider's documentation.
+:::
+
+## Getting Started
+
+Whether you're using Expo or a bare React Native app, follow our guides to get started with using Account Kit in your project.
+
+<div className="flex flex-row gap-4">
+  <TileButton
+    icon={<ExpoIcon width={24} height={24} />}
+    title="Expo"
+    description="Get started with using Account Kit in your Expo project"
+    href="/react-native/getting-started/getting-started-expo"
+  />
+  <TileButton
+    icon={<ReactNativeIcon width={24} height={24} />}
+    title="Bare React Native"
+    description="Get started with using Account Kit in your bare React Native project"
+    href="/react-native/getting-started/getting-started-rn-bare"
+  />
+</div>
