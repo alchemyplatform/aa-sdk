@@ -153,11 +153,13 @@ export const EoaPickCard = () => {
   const { connectors, connect } = useConnectEOA();
   const { setAuthStep } = useAuthContext("pick_eoa");
 
+  const uniqueConnectorIds: { [key: string]: boolean } = {};
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
   const connectorButtons = connectors
-    .filter((x) => x.type !== WALLET_CONNECT)
+    .filter((x) => x.type !== WALLET_CONNECT && !uniqueConnectorIds[x.id])
     .map((connector) => {
+        uniqueConnectorIds[connector.id] = true;
       return (
         <Button
           className="justify-start"
