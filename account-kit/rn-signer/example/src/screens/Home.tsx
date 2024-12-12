@@ -78,7 +78,7 @@ export default function HomeScreen() {
             style={styles.button}
             onPress={() => {
               signer
-                .authenticate({ email, type: "email", mode: "magicLink" })
+                .authenticate({ email, type: "email", emailMode: "magicLink" })
                 .catch(console.error);
             }}
           >
