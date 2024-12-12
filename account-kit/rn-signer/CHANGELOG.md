@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+### Bug Fixes
+
+- rn stamper was returning stamp instead of response ([#1201](https://github.com/alchemyplatform/aa-sdk/issues/1201)) ([70a18df](https://github.com/alchemyplatform/aa-sdk/commit/70a18dfc2a5a751e3e08830673d0d293bbca05e2))
+
 # [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
 
 ### Features
