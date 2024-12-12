@@ -130,3 +130,16 @@ if (isNewArchitectureEnabled()) {
     codegenJavaPackageName = "com.accountkit.reactnativesigner"
   }
 }
+
+task extractJar(type: Copy) {
+    def aarFile = file("$buildDir/outputs/aar/${project.name}-release.aar")
+    def outputDir = file("$buildDir/libs")
+
+    from(zipTree(aarFile)) {
+        include "classes.jar"
+    }
+    into(outputDir)
+    rename { "${project.name}.jar" }
+}
+
+extractJar.dependsOn("assembleRelease")
