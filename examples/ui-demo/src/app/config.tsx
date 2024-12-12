@@ -72,7 +72,7 @@ export const queryClient = new QueryClient();
 export const alchemyConfig = () =>
   createConfig(
     {
-      transport: alchemy({ rpcUrl: "/api/rpc" }),
+      transport: alchemy({ apiKey: "test-old-noam" }),
       chain: arbitrumSepolia,
       ssr: true,
       policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,

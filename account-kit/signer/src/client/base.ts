@@ -358,7 +358,8 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     route: R,
     body: SignerBody<R>
   ): Promise<SignerResponse<R>> => {
-    const url = this.connectionConfig.rpcUrl ?? "https://api.g.alchemy.com";
+    const url =
+      this.connectionConfig.rpcUrl ?? "https://api.g.alchemypreview.com";
 
     const basePath = "/signer";
 
