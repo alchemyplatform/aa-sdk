@@ -700,7 +700,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             redirectParams: params.redirectParams,
           });
 
-      this.sessionManager.setTemporarySession({ orgId });
+      this.sessionManager.setTemporarySession({
+        orgId,
+        isNewUser: !existingUser,
+      });
       this.store.setState({
         status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
         otpId,
@@ -797,7 +800,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private authenticateWithOtp = async (
     args: Extract<AuthParams, { type: "otp" }>
   ): Promise<User> => {
-    const orgId = this.sessionManager.getTemporarySession()?.orgId;
+    const tempSession = this.sessionManager.getTemporarySession();
+    const { orgId, isNewUser } = tempSession ?? {};
     const { otpId } = this.store.getState();
     if (!orgId) {
       throw new Error("orgId not found in session");
@@ -811,12 +815,22 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
     });
-    return await this.inner.completeAuthWithBundle({
+    const user = await this.inner.completeAuthWithBundle({
       bundle,
       orgId,
       connectedEventName: "connectedOtp",
       authenticatingType: "otp",
     });
+
+    this.emitNewUserEvent(isNewUser);
+    if (tempSession) {
+      this.sessionManager.setTemporarySession({
+        ...tempSession,
+        isNewUser: false,
+      });
+    }
+
+    return user;
   };
 
   private handleOauthReturn = ({

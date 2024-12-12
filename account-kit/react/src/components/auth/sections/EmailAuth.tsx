@@ -19,6 +19,7 @@ type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailAuth = memo(
   ({
+    emailMode = "otp",
     hideButton = false,
     buttonLabel = ls.login.email.button,
     placeholder = ls.login.email.placeholder,
@@ -56,7 +57,7 @@ export const EmailAuth = memo(
           await authenticateAsync({
             type: "email",
             email,
-            emailMode: "otp",
+            emailMode,
             redirectParams,
           });
         } catch (e) {

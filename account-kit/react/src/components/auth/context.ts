@@ -10,17 +10,15 @@ export type AuthStep =
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
-  | { type: "email_completing"; createPasskeyAfter?: boolean }
+  | { type: "email_completing" }
   | {
       type: "oauth_completing";
       config: Extract<AuthType, { type: "social" }>;
-      createPasskeyAfter?: boolean;
       error?: Error;
     }
   | {
       type: "otp_completing";
       email: string;
-      createPasskeyAfter?: boolean;
       otp: string;
       error?: Error;
     }

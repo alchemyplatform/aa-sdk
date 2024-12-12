@@ -11,7 +11,7 @@ export type AuthParams =
   | {
       type: "email";
       email: string;
-      emailMode: "magicLink" | "otp";
+      emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }

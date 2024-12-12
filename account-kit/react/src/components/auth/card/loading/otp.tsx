@@ -13,14 +13,28 @@ import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
 export const LoadingOtp = () => {
-  const { authStep } = useAuthContext("otp_verify");
+  const { isConnected } = useSignerStatus();
+  const { authStep, setAuthStep } = useAuthContext("otp_verify");
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
-  const [errorText, setErrorText] = useState(authStep.error?.message || "");
-  const { setAuthStep } = useAuthContext();
+  const [errorText, setErrorText] = useState(
+    getUserErrorMessage(authStep.error)
+  );
   const resetOTP = () => {
     setOtpCode(initialOTPValue);
     setErrorText("");
   };
+  const { authenticate } = useAuthenticate({
+    onError: (error: any) => {
+      console.error(error);
+      const { email } = authStep;
+      setAuthStep({ type: "otp_verify", email, error });
+    },
+    onSuccess: () => {
+      if (isConnected) {
+        setAuthStep({ type: "complete" });
+      }
+    },
+  });
 
   useEffect(() => {
     if (isOTPCodeType(otpCode)) {
@@ -32,6 +46,19 @@ export const LoadingOtp = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otpCode]);
+
+  const setValue = (otpCode: OTPCodeType) => {
+    setOtpCode(otpCode);
+    if (isOTPCodeType(otpCode)) {
+      const otp = otpCode.join("");
+      setAuthStep({
+        type: "otp_completing",
+        email: authStep.email,
+        otp,
+      });
+      authenticate({ type: "otp", otpCode: otp });
+    }
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -54,7 +81,7 @@ export const LoadingOtp = () => {
       </p>
       <OTPInput
         value={otpCode}
-        setValue={setOtpCode}
+        setValue={setValue}
         setErrorText={setErrorText}
         errorText={errorText}
         handleReset={resetOTP}
@@ -64,28 +91,6 @@ export const LoadingOtp = () => {
 };
 
 export const CompletingOtp = () => {
-  const { isConnected } = useSignerStatus();
-  const { setAuthStep, authStep } = useAuthContext("otp_completing");
-  const { authenticate } = useAuthenticate({
-    onError: (error: any) => {
-      console.error(error);
-      const { email } = authStep;
-      setAuthStep({ type: "otp_verify", email, error });
-    },
-    onSuccess: () => {
-      if (isConnected && authStep.createPasskeyAfter) {
-        setAuthStep({ type: "passkey_create" });
-      } else if (isConnected) {
-        setAuthStep({ type: "complete" });
-      }
-    },
-  });
-
-  useEffect(() => {
-    authenticate({ type: "otp", otpCode: authStep.otp });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="flex flex-col items-center justify-center ">
       <div className="flex flex-col items-center justify-center h-12 w-12 mb-5">
@@ -100,3 +105,20 @@ export const CompletingOtp = () => {
     </div>
   );
 };
+
+function getUserErrorMessage(error: Error | undefined): string {
+  if (!error) {
+    return "";
+  }
+  // Errors from Alchemy have a JSON message.
+  try {
+    const message = JSON.parse(error.message).error;
+    if (message === "invalid OTP code") {
+      return ls.error.otp.invalid;
+    }
+    return message;
+  } catch (e) {
+    // Ignore
+  }
+  return error.message;
+}

@@ -7,8 +7,8 @@ const OTP_LENGTH = 6;
 type OTPInputProps = {
   errorText?: string;
   value: OTPCodeType;
-  setValue: React.Dispatch<React.SetStateAction<OTPCodeType>>;
-  setErrorText: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (otp: OTPCodeType) => void;
+  setErrorText: (error: string) => void;
   disabled?: boolean;
   handleReset: () => void;
   className?: string;
@@ -90,7 +90,10 @@ export const OTPInput: React.FC<OTPInputProps> = ({
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pasteData = e.clipboardData.getData("text/plain").split("");
+    const pasteData = e.clipboardData
+      .getData("text/plain")
+      .split("")
+      .slice(0, OTP_LENGTH);
     if (isOTPCodeType(pasteData)) {
       setValue(pasteData);
     } else {
