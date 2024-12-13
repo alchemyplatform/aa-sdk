@@ -6,26 +6,22 @@ import type {
 } from "@aa-sdk/core";
 import {
   createBundlerClient,
+  getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
 } from "@aa-sdk/core";
 import {
   concatHex,
   encodeFunctionData,
-  getContract,
-  maxUint32,
-  toHex,
   type Address,
   type Chain,
   type Hex,
   type Transport,
-  hexToBigInt,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { addresses } from "../utils.js";
 import { standardExecutor } from "../../msca/account/standardExecutor.js";
-import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
-import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
+import { multiOwnerMessageSigner } from "../../msca/plugins/multi-owner/signer.js"; // TODO: swap for MA v2 signer
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
@@ -35,27 +31,25 @@ export type SMAV2Account<
 
 export type CreateSMAV2AccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.7.0" = "0.7.0"
 > = Pick<
-  ToSmartContractAccountParams<"SMAV2Account", TTransport, Chain, "0.7.0">,
-  "transport" | "chain" | "accountAddress"
+  ToSmartContractAccountParams<
+    "SMAV2Account",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain"
 > & {
   signer: TSigner;
   salt?: bigint;
   factoryAddress?: Address;
   initCode?: Hex;
   initialOwner?: Address;
-  entryPoint?: EntryPointDef<"0.7.0", Chain>;
-} & (
-    | {
-        isGlobalValidation: boolean;
-        entityId: bigint;
-      }
-    | {
-        isGlobalValidation: never;
-        entityId: never;
-      }
-  );
+  accountAddress?: Address;
+  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+};
 
 export async function createSMAV2Account<
   TTransport extends Transport = Transport,
@@ -77,13 +71,7 @@ export async function createSMAV2Account(
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
-    isGlobalValidation = true,
-    entityId = 0n,
   } = config;
-
-  if (entityId >= maxUint32) {
-    throw new InvalidEntityIdError(entityId);
-  }
 
   const client = createBundlerClient({
     transport,
@@ -96,54 +84,44 @@ export async function createSMAV2Account(
     }
 
     // If an initial owner is not provided, use the signer's address
-    const ownerAddress = initialOwner ?? (await signer.getAddress());
+    const ownerAddress = initialOwner || (await signer.getAddress());
 
     return concatHex([
       factoryAddress,
       encodeFunctionData({
         abi: accountFactoryAbi,
-        functionName: "createSemiModularAccount",
-        args: [ownerAddress, salt],
+        functionName: "createAccount",
+        args: [ownerAddress, salt, DEFAULT_OWNER_ENTITY_ID],
       }),
     ]);
   };
+
+  const _accountAddress = await getAccountAddress({
+    client,
+    entryPoint,
+    accountAddress,
+    getAccountInitCode,
+  });
 
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
     entryPoint,
-    accountAddress,
+    accountAddress: _accountAddress,
     source: `SMAV2Account`,
     getAccountInitCode,
     ...standardExecutor,
-    ...singleSignerMessageSigner(signer),
-  });
-
-  // TODO: add deferred action flag
-  const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
-    const nonceKeySuffix: Hex = `${toHex(entityId, { size: 4 })}${
-      isGlobalValidation ? "01" : "00"
-    }`;
-
-    if (nonceKey && toHex(nonceKey, { size: 5 }) !== nonceKeySuffix) {
-      throw new InvalidNonceKeyError(nonceKey, hexToBigInt(nonceKeySuffix));
-    }
-
-    const entryPointContract = getContract({
-      address: entryPoint.address,
-      abi: entryPoint.abi,
+    ...multiOwnerMessageSigner(
+      // TODO: temp
       client,
-    });
-
-    return entryPointContract.read.getNonce([
-      baseAccount.address,
-      nonceKey ?? hexToBigInt(nonceKeySuffix),
-    ]) as Promise<bigint>;
-  };
+      addresses.accountFactory,
+      () => signer,
+      addresses.accountFactory
+    ),
+  });
 
   return {
     ...baseAccount,
-    getAccountNonce,
     getSigner: () => signer,
   };
 }
