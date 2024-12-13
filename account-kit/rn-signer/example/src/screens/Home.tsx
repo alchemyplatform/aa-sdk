@@ -3,14 +3,21 @@ import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
-  View,
+  Linking,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
-  Linking,
   TouchableOpacity,
+  View,
 } from "react-native";
 import Config from "react-native-config";
+
+const oldFetch = global.fetch;
+
+global.fetch = async (url, options) => {
+  console.log(url, options);
+  return oldFetch(url, options);
+};
 
 export default function HomeScreen() {
   const [email, setEmail] = useState<string>("");
@@ -70,7 +77,7 @@ export default function HomeScreen() {
             style={styles.textInput}
             placeholderTextColor="gray"
             placeholder="enter your email"
-            onChangeText={setEmail}
+            onChangeText={(text) => setEmail(text.toLowerCase())}
             value={email}
           />
           {/* TODO: implement OTP */}
