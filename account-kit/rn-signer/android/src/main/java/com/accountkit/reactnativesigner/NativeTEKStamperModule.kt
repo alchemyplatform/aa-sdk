@@ -54,7 +54,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
                 "stampHeaderValue",
                 stamp.stampHeaderValue
             )
-            return promise.resolve(stamp)
+            return promise.resolve(response)
         } catch (e: Exception) {
             promise.reject(e)
         }

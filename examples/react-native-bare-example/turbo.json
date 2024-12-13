@@ -1,0 +1,40 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["build:android"],
+      "outputs": ["../android/build/**"]
+    },
+    "build:android": {
+      "dependsOn": ["^build"],
+      "env": ["ANDROID_HOME", "ORG_GRADLE_PROJECT_newArchEnabled"],
+      "inputs": [
+        "package.json",
+        "android",
+        "!android/build",
+        "src/*.ts",
+        "src/*.tsx",
+        "!android/.gradle",
+        "!android/build",
+        "!android/app/build"
+      ],
+      "outputs": ["../android/build/**"]
+    },
+    "build:ios": {
+      "dependsOn": ["^build"],
+      "env": ["RCT_NEW_ARCH_ENABLED"],
+      "inputs": [
+        "package.json",
+        "*.podspec",
+        "ios",
+        "src/*.ts",
+        "src/*.tsx",
+        "package.json",
+        "ios",
+        "!ios/build",
+        "!ios/Pods"
+      ],
+      "outputs": []
+    }
+  }
+}
