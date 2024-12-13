@@ -69,7 +69,12 @@ export type OauthRedirectConfig =
   | { mode: "redirect"; redirectUrl: string }
   | { mode: "popup"; redirectUrl?: never };
 
-export type KnownAuthProvider = "google" | "apple" | "facebook" | "auth0";
+export type KnownAuthProvider =
+  | "google"
+  | "apple"
+  | "facebook"
+  | "auth0"
+  | "discord";
 
 export type OauthMode = "redirect" | "popup";
 

@@ -21,6 +21,7 @@ const DEFAULT_SCOPE_AND_CLAIMS: Record<KnownAuthProvider, ScopeAndClaims> = {
   apple: { scope: "openid email" },
   facebook: { scope: "openid email" },
   auth0: { scope: "openid email" },
+  discord: { scope: "openid email" },
 };
 
 /**
