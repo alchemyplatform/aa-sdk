@@ -31,6 +31,16 @@ export const OAuth = memo(({ ...config }: Props) => {
           Apple
         </Button>
       );
+    case "discord":
+      return (
+        <Button
+          variant="social"
+          icon={<div>Discord</div>}
+          onClick={authenticate}
+        >
+          Discord
+        </Button>
+      );
     case "auth0":
       return (
         <Button

@@ -51,6 +51,7 @@ export const DEFAULT_CONFIG: Config = {
       facebook: true,
       auth0: false,
       apple: false,
+      discord: true,
       // TO DO: extend for BYO auth provider
     },
   },
@@ -91,6 +92,7 @@ export const alchemyConfig = () =>
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },
             { type: "social", authProviderId: "facebook", mode: "popup" },
+            { type: "social", authProviderId: "discord", mode: "popup" },
           ],
         ],
         addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
