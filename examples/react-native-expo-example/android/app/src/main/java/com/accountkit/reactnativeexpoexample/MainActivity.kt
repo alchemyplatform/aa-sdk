@@ -1,4 +1,4 @@
-package com.iyklazer.reactnativeexpoexample
+package com.accountkit.reactnativeexpoexample
 
 import android.os.Build
 import android.os.Bundle

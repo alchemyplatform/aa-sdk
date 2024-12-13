@@ -1,4 +1,4 @@
-package com.iyklazer.reactnativeexpoexample
+package com.accountkit.reactnativeexpoexample
 
 import android.app.Application
 import android.content.res.Configuration
