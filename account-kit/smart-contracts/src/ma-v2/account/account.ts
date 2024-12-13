@@ -13,6 +13,7 @@ import {
 import {
   concatHex,
   encodeFunctionData,
+  getContract,
   type Address,
   type Chain,
   type Hex,
@@ -49,6 +50,8 @@ export type CreateSMAV2AccountParams<
   initialOwner?: Address;
   accountAddress?: Address;
   entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+  isGlobalValidation?: boolean;
+  entityId?: bigint;
 };
 
 export async function createSMAV2Account<
@@ -71,7 +74,13 @@ export async function createSMAV2Account(
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
+    isGlobalValidation = true,
+    entityId = 0n,
   } = config;
+
+  if (entityId >= 2n ** 32n) {
+    throw new Error("Entity ID must be less than uint32.max");
+  }
 
   const client = createBundlerClient({
     transport,
@@ -120,8 +129,36 @@ export async function createSMAV2Account(
     ),
   });
 
+  // TODO: add deferred action flag
+  const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
+    // uint32 entityId + (bytes1 options) makes a uint40
+    const nonceKeySuffix: bigint =
+      entityId * 256n + (isGlobalValidation ? 1n : 0n);
+
+    if (nonceKey) {
+      // comparing the end 40 bytes to suffix
+      if (nonceKey % 2n ** 40n !== nonceKeySuffix) {
+        throw new Error("Invalid nonceKey");
+      }
+    } else {
+      nonceKey = nonceKeySuffix;
+    }
+
+    const entryPointContract = getContract({
+      address: entryPoint.address,
+      abi: entryPoint.abi,
+      client,
+    });
+
+    return entryPointContract.read.getNonce([
+      accountAddress,
+      nonceKey,
+    ]) as Promise<bigint>;
+  };
+
   return {
     ...baseAccount,
+    getAccountNonce,
     getSigner: () => signer,
   };
 }
