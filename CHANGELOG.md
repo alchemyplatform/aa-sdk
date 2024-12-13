@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+### Bug Fixes
+
+- correctly align protected by copy ([#1186](https://github.com/alchemyplatform/aa-sdk/issues/1186)) ([63be696](https://github.com/alchemyplatform/aa-sdk/commit/63be696199882b42fbad7eb7fa22aa823984c225))
+- rn stamper was returning stamp instead of response ([#1201](https://github.com/alchemyplatform/aa-sdk/issues/1201)) ([70a18df](https://github.com/alchemyplatform/aa-sdk/commit/70a18dfc2a5a751e3e08830673d0d293bbca05e2))
+
+### Features
+
+- add react-native usage docs ([#1181](https://github.com/alchemyplatform/aa-sdk/issues/1181)) ([fb3e73b](https://github.com/alchemyplatform/aa-sdk/commit/fb3e73b184231bb731e838e9fb5cced719772e32))
+
 # [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
 
 ### Bug Fixes
