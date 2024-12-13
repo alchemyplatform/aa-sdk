@@ -17,6 +17,9 @@ config.resolver.nodeModulesPaths = [
 	path.resolve(monorepoRoot, "node_modules"),
 ];
 
+// Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
+config.resolver.disableHierarchicalLookup = true;
+
 config.resolver.extraNodeModules = {
 	...config.resolver.extraNodeModules,
 	...require("node-libs-react-native"),
