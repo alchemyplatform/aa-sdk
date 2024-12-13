@@ -22,7 +22,7 @@ import {
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { addresses } from "../utils.js";
 import { standardExecutor } from "../../msca/account/standardExecutor.js";
-import { multiOwnerMessageSigner } from "../../msca/plugins/multi-owner/signer.js"; // TODO: swap for MA v2 signer
+import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
@@ -120,13 +120,7 @@ export async function createSMAV2Account(
     source: `SMAV2Account`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multiOwnerMessageSigner(
-      // TODO: temp
-      client,
-      addresses.accountFactory,
-      () => signer,
-      addresses.accountFactory
-    ),
+    ...singleSignerMessageSigner(signer),
   });
 
   // TODO: add deferred action flag
@@ -151,7 +145,7 @@ export async function createSMAV2Account(
     });
 
     return entryPointContract.read.getNonce([
-      accountAddress,
+      _accountAddress,
       nonceKey,
     ]) as Promise<bigint>;
   };
