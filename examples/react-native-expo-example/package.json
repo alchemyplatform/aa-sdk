@@ -30,13 +30,13 @@
 		"@types/react": "~18.3.12",
 		"typescript": "^5.3.3"
 	},
+	"resolutions": {
+		"react": "18.3.1",
+		"react-native": "0.76.5"
+	},
 	"private": true,
 	"workspaces": {
 		"nohoist": [
-			"**/react",
-			"**/react/**",
-			"**/react-native",
-			"**/react-native/**",
 			"**/expo",
 			"**/expo/**",
 			"**/expo-router",

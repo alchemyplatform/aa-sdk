@@ -24,6 +24,4 @@ config.resolver.extraNodeModules = {
 	stream: require.resolve("stream-browserify"),
 };
 
-config.resolver.disableHierarchicalLookup = true;
-
 module.exports = config;
