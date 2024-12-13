@@ -5,6 +5,7 @@ import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
 import { FacebookIcon } from "../icons/facebook";
 import { GoogleIcon } from "../icons/google";
+import { DiscordLogo } from "../icons/discord";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
@@ -143,8 +144,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                 />
                 <OAuthMethod
                   active={auth.oAuthMethods.discord}
-                  icon={<div>Discord</div>}
-                  // icon={<FacebookLogo />}
+                  icon={<DiscordLogo />}
                   onClick={setAddDiscordAuth}
                 />
                 <ExternalLink
