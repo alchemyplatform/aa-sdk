@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+### Bug Fixes
+
+- correctly align protected by copy ([#1186](https://github.com/alchemyplatform/aa-sdk/issues/1186)) ([63be696](https://github.com/alchemyplatform/aa-sdk/commit/63be696199882b42fbad7eb7fa22aa823984c225))
+
 # [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
 
 ### Bug Fixes
