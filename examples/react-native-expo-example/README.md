@@ -71,7 +71,7 @@ import "react-native-get-random-values";
 6. Install [Account Kit](https://accountkit.alchemy.com) Packages. At this point you're ready to use the aa-sdk in your project.
 
 ```bash
-yarn add viem @account-kit/react-native-signer @account-kit/signer @account-kit/smart-contracts @account-kit/infra
+yarn add @account-kit/react-native-signer @account-kit/signer @account-kit/smart-contracts @account-kit/infra
 ```
 
 7. Add a redirect server to handle the auth request. This is needed to redirect users back to the app after clicking the auth magic link in their email.
