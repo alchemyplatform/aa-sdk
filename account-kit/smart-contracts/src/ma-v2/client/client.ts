@@ -23,7 +23,7 @@ export type CreateSMAV2AccountClientParams<
     "transport" | "account" | "chain"
   >;
 
-export function createSMAV2SignerAccountClient<
+export function createSMAV2AccountClient<
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
@@ -59,15 +59,15 @@ export function createSMAV2SignerAccountClient<
  * @param {CreateSMAV2AccountClientParams} config The configuration parameters required to create the MAv2 account client
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance
  */
-export async function createSMAV2SignerAccountClient({
+export async function createSMAV2AccountClient({
   ...config
 }: CreateSMAV2AccountClientParams): Promise<SmartAccountClient> {
-  const maV2SignerAccount = await createSMAV2Account({
+  const maV2Account = await createSMAV2Account({
     ...config,
   });
 
   return createSmartAccountClient({
     ...config,
-    account: maV2SignerAccount,
+    account: maV2Account,
   });
 }
