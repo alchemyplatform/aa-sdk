@@ -70,9 +70,9 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const result = await provider.installValidation({
+    let result = await provider.installValidation({
       validationConfig: {
-        address: addresses.singleSignerValidationModule,
+        moduleAddress: addresses.singleSignerValidationModule,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -91,11 +91,17 @@ describe("MA v2 Tests", async () => {
 
     const startingAddressBalance = await getTargetBalance();
 
-    // connect session key
-    provider.signer = sessionKey;
-    provider.entityId = 1n;
+    // connect session key and send tx with session key
+    let sessionKeyClient = await createSMAV2AccountClient({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      entityId: 1n,
+      isGlobalValidation: true,
+    });
 
-    const result2 = await provider.sendUserOperation({
+    result = await sessionKeyClient.sendUserOperation({
       uo: {
         target: target,
         value: sendAmount,
@@ -103,14 +109,14 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    txnHash = provider.waitForUserOperationTransaction(result);
+    txnHash = sessionKeyClient.waitForUserOperationTransaction(result);
     await expect(txnHash).resolves.not.toThrowError();
-
     await expect(await getTargetBalance()).toEqual(
       startingAddressBalance + sendAmount
     );
   });
 
+<<<<<<< HEAD
   it("adds a session key with no permissions", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
@@ -169,6 +175,8 @@ describe("MA v2 Tests", async () => {
     );
   });
 
+=======
+>>>>>>> 9e5c594d (feat: add uninstall validation, tests)
   it("uninstalls a session key", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
@@ -181,9 +189,13 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
+<<<<<<< HEAD
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
           provider.chain
         ),
+=======
+        moduleAddress: addresses.singleSignerValidationModule,
+>>>>>>> 9e5c594d (feat: add uninstall validation, tests)
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -201,9 +213,13 @@ describe("MA v2 Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
 
     result = await provider.uninstallValidation({
+<<<<<<< HEAD
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
         provider.chain
       ),
+=======
+      moduleAddress: addresses.singleSignerValidationModule,
+>>>>>>> 9e5c594d (feat: add uninstall validation, tests)
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -220,6 +236,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
+<<<<<<< HEAD
       entityId: 1,
       isGlobalValidation: true,
     });
@@ -233,6 +250,21 @@ describe("MA v2 Tests", async () => {
         },
       })
     ).rejects.toThrowError();
+=======
+      entityId: 1n,
+      isGlobalValidation: true,
+    });
+
+    result = sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await expect(result).rejects.toThrowError();
+>>>>>>> 9e5c594d (feat: add uninstall validation, tests)
   });
 
   const givenConnectedProvider = async ({

@@ -26,5 +26,5 @@ export function serializeHookConfig(config: HookConfig): Hex {
 }
 
 export function serializeModuleEntity(config: ModuleEntity): Hex {
-  return concatHex([config.address, toHex(config.entityId, { size: 4 })]);
+  return concatHex([config.moduleAddress, toHex(config.entityId, { size: 4 })]);
 }

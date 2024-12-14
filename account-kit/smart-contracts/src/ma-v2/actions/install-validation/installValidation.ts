@@ -24,6 +24,7 @@ import type { HookConfig, ValidationConfig } from "../common/types.js";
 import {
   serializeValidationConfig,
   serializeHookConfig,
+  serializeModuleEntity,
 } from "../common/utils.js";
 
 export type InstallValidationParams<
@@ -118,39 +119,40 @@ export const installValidationActions: <
   },
 
   uninstallValidation: async ({
-    // moduleAddress, entityId, uninstallData, hookUninstallDatas,
+    moduleAddress,
+    entityId,
+    uninstallData,
+    hookUninstallDatas,
     account = client.account,
     overrides,
   }) => {
-    // if (!account) {
-    //   throw new AccountNotFoundError();
-    // }
+    if (!account) {
+      throw new AccountNotFoundError();
+    }
 
-    // if (!isSmartAccountClient(client)) {
-    //   throw new IncompatibleClientError(
-    //     "SmartAccountClient",
-    //     "uninstallValidation",
-    //     client
-    //   );
-    // }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "uninstallValidation",
+        client
+      );
+    }
 
-    // const { moduleAddress, entityId, uninstallData, hookUninstallDatas } = args;
-
-    // const callData = encodeFunctionData({
-    //   abi: semiModularAccountBytecodeAbi,
-    //   functionName: "uninstallValidation",
-    //   args: [
-    //     serializeModuleEntity({
-    //       moduleAddress,
-    //       entityId,
-    //     }),
-    //     uninstallData,
-    //     hookUninstallDatas,
-    //   ],
-    // });
+    const callData = encodeFunctionData({
+      abi: semiModularAccountBytecodeAbi,
+      functionName: "uninstallValidation",
+      args: [
+        serializeModuleEntity({
+          moduleAddress,
+          entityId,
+        }),
+        uninstallData,
+        hookUninstallDatas,
+      ],
+    });
 
     return client.sendUserOperation({
-      uo: "0x",
+      uo: callData,
       account,
       overrides,
     });
