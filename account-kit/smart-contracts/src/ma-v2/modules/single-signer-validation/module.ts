@@ -1,6 +1,6 @@
 import { encodeAbiParameters, type Address, type Hex } from "viem";
 
-import { singleSignerValidationModuleAbi } from "./abis/singleSignerValidationModule.js";
+import { singleSignerValidationModuleAbi } from "./abis/singleSignerValidationModuleAbi.js";
 
 const addresses = {
   default: "0xEa3a0b544d517f6Ed3Dc2186C74D869c702C376e",
