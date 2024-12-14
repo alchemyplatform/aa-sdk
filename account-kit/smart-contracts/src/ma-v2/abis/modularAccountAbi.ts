@@ -1,4 +1,4 @@
-export const smaV2Abi = [
+export const modularAccountAbi = [
   {
     type: "constructor",
     inputs: [
@@ -246,24 +246,6 @@ export const smaV2Abi = [
   },
   {
     type: "function",
-    name: "getFallbackSignerData",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "",
-        type: "bool",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "getValidationData",
     inputs: [
       {
@@ -302,6 +284,34 @@ export const smaV2Abi = [
       },
     ],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "initializeWithValidation",
+    inputs: [
+      {
+        name: "validationConfig",
+        type: "bytes25",
+        internalType: "ValidationConfig",
+      },
+      {
+        name: "selectors",
+        type: "bytes4[]",
+        internalType: "bytes4[]",
+      },
+      {
+        name: "installData",
+        type: "bytes",
+        internalType: "bytes",
+      },
+      {
+        name: "hooks",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -716,24 +726,6 @@ export const smaV2Abi = [
   },
   {
     type: "function",
-    name: "updateFallbackSignerData",
-    inputs: [
-      {
-        name: "fallbackSigner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "isDisabled",
-        type: "bool",
-        internalType: "bool",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "upgradeToAndCall",
     inputs: [
       {
@@ -984,25 +976,6 @@ export const smaV2Abi = [
   },
   {
     type: "event",
-    name: "FallbackSignerUpdated",
-    inputs: [
-      {
-        name: "newFallbackSigner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "isDisabled",
-        type: "bool",
-        indexed: false,
-        internalType: "bool",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
     name: "Initialized",
     inputs: [
       {
@@ -1104,21 +1077,6 @@ export const smaV2Abi = [
   },
   {
     type: "error",
-    name: "FallbackSignerDisabled",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "FallbackSignerMismatch",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "FallbackValidationInstallationNotAllowed",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "InterfaceNotSupported",
     inputs: [
       {
@@ -1131,11 +1089,6 @@ export const smaV2Abi = [
   {
     type: "error",
     name: "InvalidInitialization",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "InvalidSignatureType",
     inputs: [],
   },
   {

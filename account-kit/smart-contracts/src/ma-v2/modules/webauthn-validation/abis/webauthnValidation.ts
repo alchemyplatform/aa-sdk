@@ -1,4 +1,4 @@
-export const MAV2FactoryAbi = [
+export const webauthnValidationModuleAbi = [
   {
     type: "constructor",
     inputs: [
@@ -13,17 +13,7 @@ export const MAV2FactoryAbi = [
         internalType: "contract ModularAccount",
       },
       {
-        name: "_semiModularImpl",
-        type: "address",
-        internalType: "contract SemiModularAccountBytecode",
-      },
-      {
-        name: "_singleSignerValidationModule",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "_webAuthnValidationModule",
+        name: "_webauthnValidationModule",
         type: "address",
         internalType: "address",
       },
@@ -63,32 +53,6 @@ export const MAV2FactoryAbi = [
   },
   {
     type: "function",
-    name: "SEMI_MODULAR_ACCOUNT_IMPL",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract SemiModularAccountBytecode",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "SINGLE_SIGNER_VALIDATION_MODULE",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "WEBAUTHN_VALIDATION_MODULE",
     inputs: [],
     outputs: [
@@ -99,13 +63,6 @@ export const MAV2FactoryAbi = [
       },
     ],
     stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "acceptOwnership",
-    inputs: [],
-    outputs: [],
-    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -123,59 +80,6 @@ export const MAV2FactoryAbi = [
   {
     type: "function",
     name: "createAccount",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract ModularAccount",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "createSemiModularAccount",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract SemiModularAccountBytecode",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "createWebAuthnAccount",
     inputs: [
       {
         name: "ownerX",
@@ -212,59 +116,6 @@ export const MAV2FactoryAbi = [
     name: "getAddress",
     inputs: [
       {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getAddressSemiModular",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getAddressWebAuthn",
-    inputs: [
-      {
         name: "ownerX",
         type: "uint256",
         internalType: "uint256",
@@ -297,35 +148,6 @@ export const MAV2FactoryAbi = [
   {
     type: "function",
     name: "getSalt",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes32",
-        internalType: "bytes32",
-      },
-    ],
-    stateMutability: "pure",
-  },
-  {
-    type: "function",
-    name: "getSaltWebAuthn",
     inputs: [
       {
         name: "ownerX",
@@ -372,23 +194,10 @@ export const MAV2FactoryAbi = [
   },
   {
     type: "function",
-    name: "pendingOwner",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "renounceOwnership",
     inputs: [],
     outputs: [],
-    stateMutability: "view",
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -457,35 +266,22 @@ export const MAV2FactoryAbi = [
         internalType: "address",
       },
       {
-        name: "owner",
-        type: "address",
+        name: "ownerX",
+        type: "uint256",
         indexed: true,
-        internalType: "address",
+        internalType: "uint256",
+      },
+      {
+        name: "ownerY",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
       },
       {
         name: "salt",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "OwnershipTransferStarted",
-    inputs: [
-      {
-        name: "previousOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "newOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
       },
     ],
     anonymous: false,
@@ -505,62 +301,6 @@ export const MAV2FactoryAbi = [
         type: "address",
         indexed: true,
         internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "SemiModularAccountDeployed",
-    inputs: [
-      {
-        name: "account",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "owner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "WebAuthnModularAccountDeployed",
-    inputs: [
-      {
-        name: "account",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "ownerX",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
-        name: "ownerY",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
       },
     ],
     anonymous: false,
@@ -590,11 +330,6 @@ export const MAV2FactoryAbi = [
   {
     type: "error",
     name: "FailedInnerCall",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "InvalidAction",
     inputs: [],
   },
   {

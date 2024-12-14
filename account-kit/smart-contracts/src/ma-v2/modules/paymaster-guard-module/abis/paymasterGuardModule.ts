@@ -1,4 +1,4 @@
-export const singleSignerValidationAbi = [
+export const paymasterGuardModuleAbi = [
   {
     type: "function",
     name: "moduleId",
@@ -40,31 +40,7 @@ export const singleSignerValidationAbi = [
   },
   {
     type: "function",
-    name: "replaySafeHash",
-    inputs: [
-      {
-        name: "account",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "hash",
-        type: "bytes32",
-        internalType: "bytes32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes32",
-        internalType: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "signers",
+    name: "paymasters",
     inputs: [
       {
         name: "entityId",
@@ -79,7 +55,7 @@ export const singleSignerValidationAbi = [
     ],
     outputs: [
       {
-        name: "",
+        name: "paymaster",
         type: "address",
         internalType: "address",
       },
@@ -88,57 +64,15 @@ export const singleSignerValidationAbi = [
   },
   {
     type: "function",
-    name: "supportsInterface",
+    name: "preRuntimeValidationHook",
     inputs: [
-      {
-        name: "interfaceId",
-        type: "bytes4",
-        internalType: "bytes4",
-      },
-    ],
-    outputs: [
       {
         name: "",
-        type: "bool",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "transferSigner",
-    inputs: [
-      {
-        name: "entityId",
         type: "uint32",
         internalType: "uint32",
       },
       {
-        name: "newSigner",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "validateRuntime",
-    inputs: [
-      {
-        name: "account",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-      {
-        name: "sender",
+        name: "",
         type: "address",
         internalType: "address",
       },
@@ -163,15 +97,10 @@ export const singleSignerValidationAbi = [
   },
   {
     type: "function",
-    name: "validateSignature",
+    name: "preSignatureValidationHook",
     inputs: [
       {
-        name: "account",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "entityId",
+        name: "",
         type: "uint32",
         internalType: "uint32",
       },
@@ -181,28 +110,22 @@ export const singleSignerValidationAbi = [
         internalType: "address",
       },
       {
-        name: "digest",
+        name: "",
         type: "bytes32",
         internalType: "bytes32",
       },
       {
-        name: "signature",
+        name: "",
         type: "bytes",
         internalType: "bytes",
       },
     ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes4",
-        internalType: "bytes4",
-      },
-    ],
-    stateMutability: "view",
+    outputs: [],
+    stateMutability: "pure",
   },
   {
     type: "function",
-    name: "validateUserOp",
+    name: "preUserOpValidationHook",
     inputs: [
       {
         name: "entityId",
@@ -262,7 +185,7 @@ export const singleSignerValidationAbi = [
         ],
       },
       {
-        name: "userOpHash",
+        name: "",
         type: "bytes32",
         internalType: "bytes32",
       },
@@ -277,44 +200,32 @@ export const singleSignerValidationAbi = [
     stateMutability: "view",
   },
   {
-    type: "event",
-    name: "SignerTransferred",
+    type: "function",
+    name: "supportsInterface",
     inputs: [
       {
-        name: "account",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        indexed: true,
-        internalType: "uint32",
-      },
-      {
-        name: "newSigner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "previousSigner",
-        type: "address",
-        indexed: false,
-        internalType: "address",
+        name: "interfaceId",
+        type: "bytes4",
+        internalType: "bytes4",
       },
     ],
-    anonymous: true,
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
   },
   {
     type: "error",
-    name: "InvalidSignatureType",
+    name: "BadPaymasterSpecified",
     inputs: [],
   },
   {
     type: "error",
-    name: "NotAuthorized",
+    name: "InvalidPaymaster",
     inputs: [],
   },
   {
