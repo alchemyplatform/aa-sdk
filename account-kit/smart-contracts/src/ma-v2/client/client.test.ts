@@ -10,7 +10,11 @@ import { accounts } from "~test/constants.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070InstanceOptSep;
-  const client = instance.getClient().extend(publicActions);
+  let client: ReturnType<typeof instance.getClient>;
+
+  beforeAll(async () => {
+    client = instance.getClient().extend(publicActions);
+  });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner
