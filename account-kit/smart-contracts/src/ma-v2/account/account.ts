@@ -46,9 +46,16 @@ export type CreateSMAV2AccountParams<
   initCode?: Hex;
   initialOwner?: Address;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
-  isGlobalValidation?: boolean;
-  entityId?: bigint;
-};
+} & (
+    | {
+        isGlobalValidation: boolean;
+        entityId: bigint;
+      }
+    | {
+        isGlobalValidation: never;
+        entityId: never;
+      }
+  );
 
 export async function createSMAV2Account<
   TTransport extends Transport = Transport,
@@ -95,8 +102,8 @@ export async function createSMAV2Account(
       factoryAddress,
       encodeFunctionData({
         abi: accountFactoryAbi,
-        functionName: "createAccount",
-        args: [ownerAddress, salt, DEFAULT_OWNER_ENTITY_ID],
+        functionName: "createSemiModularAccount",
+        args: [ownerAddress, salt],
       }),
     ]);
   };
