@@ -6,7 +6,6 @@ import type {
 } from "@aa-sdk/core";
 import {
   createBundlerClient,
-  getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
 } from "@aa-sdk/core";
@@ -36,24 +35,17 @@ export type SMAV2Account<
 
 export type CreateSMAV2AccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.7.0" = "0.7.0"
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
-  ToSmartContractAccountParams<
-    "SMAV2Account",
-    TTransport,
-    Chain,
-    TEntryPointVersion
-  >,
-  "transport" | "chain"
+  ToSmartContractAccountParams<"SMAV2Account", TTransport, Chain, "0.7.0">,
+  "transport" | "chain" | "accountAddress"
 > & {
   signer: TSigner;
   salt?: bigint;
   factoryAddress?: Address;
   initCode?: Hex;
   initialOwner?: Address;
-  accountAddress?: Address;
-  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+  entryPoint?: EntryPointDef<"0.7.0", Chain>;
   isGlobalValidation?: boolean;
   entityId?: bigint;
 };
