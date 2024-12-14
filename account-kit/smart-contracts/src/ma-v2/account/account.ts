@@ -97,7 +97,7 @@ export async function createSMAV2Account(
     }
 
     // If an initial owner is not provided, use the signer's address
-    const ownerAddress = initialOwner || (await signer.getAddress());
+    const ownerAddress = initialOwner ?? (await signer.getAddress());
 
     return concatHex([
       factoryAddress,
@@ -109,18 +109,11 @@ export async function createSMAV2Account(
     ]);
   };
 
-  const _accountAddress = await getAccountAddress({
-    client,
-    entryPoint,
-    accountAddress,
-    getAccountInitCode,
-  });
-
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
     entryPoint,
-    accountAddress: _accountAddress,
+    accountAddress,
     source: `SMAV2Account`,
     getAccountInitCode,
     ...standardExecutor,
@@ -144,7 +137,7 @@ export async function createSMAV2Account(
     });
 
     return entryPointContract.read.getNonce([
-      _accountAddress,
+      baseAccount.address,
       nonceKey ?? hexToBigInt(nonceKeySuffix),
     ]) as Promise<bigint>;
   };
