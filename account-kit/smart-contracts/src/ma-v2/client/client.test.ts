@@ -72,9 +72,9 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const result = await provider.installValidation({
+    let result = await provider.installValidation({
       validationConfig: {
-        address: addresses.singleSignerValidationModule,
+        moduleAddress: addresses.singleSignerValidationModule,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -93,11 +93,17 @@ describe("MA v2 Tests", async () => {
 
     const startingAddressBalance = await getTargetBalance();
 
-    // connect session key
-    provider.signer = sessionKey;
-    provider.entityId = 1n;
+    // connect session key and send tx with session key
+    let sessionKeyClient = await createSMAV2AccountClient({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      entityId: 1n,
+      isGlobalValidation: true,
+    });
 
-    const result2 = await provider.sendUserOperation({
+    result = await sessionKeyClient.sendUserOperation({
       uo: {
         target: target,
         value: sendAmount,
@@ -105,22 +111,86 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    txnHash = provider.waitForUserOperationTransaction(result);
+    txnHash = sessionKeyClient.waitForUserOperationTransaction(result);
     await expect(txnHash).resolves.not.toThrowError();
-
     await expect(await getTargetBalance()).toEqual(
       startingAddressBalance + sendAmount
     );
   });
 
+  it("uninstalls a session key", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    let result = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: addresses.singleSignerValidationModule,
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    let txnHash = provider.waitForUserOperationTransaction(result);
+    await expect(txnHash).resolves.not.toThrowError();
+
+    result = await provider.uninstallValidation({
+      moduleAddress: addresses.singleSignerValidationModule,
+      entityId: 1,
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+        entityId: 1,
+      }),
+      hookUninstallDatas: [],
+    });
+
+    txnHash = provider.waitForUserOperationTransaction(result);
+    await expect(txnHash).resolves.not.toThrowError();
+
+    // connect session key and send tx with session key
+    let sessionKeyClient = await createSMAV2AccountClient({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      entityId: 1n,
+      isGlobalValidation: true,
+    });
+
+    result = sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await expect(result).rejects.toThrowError();
+  });
+
   const givenConnectedProvider = async ({
     signer,
+    accountAddress,
   }: {
     signer: SmartAccountSigner;
+    accountAddress?: `0x${string}`;
   }) =>
     createSMAV2AccountClient({
       chain: instance.chain,
       signer,
+      accountAddress,
       transport: custom(instance.getClient()),
     });
 });
