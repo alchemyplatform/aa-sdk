@@ -14,15 +14,19 @@ import {
   concatHex,
   encodeFunctionData,
   getContract,
+  maxUint32,
+  toHex,
   type Address,
   type Chain,
   type Hex,
   type Transport,
+  hexToBigInt,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { addresses } from "../utils.js";
 import { standardExecutor } from "../../msca/account/standardExecutor.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
+import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
@@ -78,8 +82,8 @@ export async function createSMAV2Account(
     entityId = 0n,
   } = config;
 
-  if (entityId >= 2n ** 32n) {
-    throw new Error("Entity ID must be less than uint32.max");
+  if (entityId >= maxUint32) {
+    throw new InvalidEntityIdError(entityId);
   }
 
   const client = createBundlerClient({
@@ -125,17 +129,12 @@ export async function createSMAV2Account(
 
   // TODO: add deferred action flag
   const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
-    // uint32 entityId + (bytes1 options) makes a uint40
-    const nonceKeySuffix: bigint =
-      entityId * 256n + (isGlobalValidation ? 1n : 0n);
+    const nonceKeySuffix: Hex = `${toHex(entityId, { size: 4 })}${
+      isGlobalValidation ? "01" : "00"
+    }`;
 
-    if (nonceKey) {
-      // comparing the end 40 bytes to suffix
-      if (nonceKey % 2n ** 40n !== nonceKeySuffix) {
-        throw new Error("Invalid nonceKey");
-      }
-    } else {
-      nonceKey = nonceKeySuffix;
+    if (nonceKey && toHex(nonceKey, { size: 5 }) !== nonceKeySuffix) {
+      throw new InvalidNonceKeyError(nonceKey, hexToBigInt(nonceKeySuffix));
     }
 
     const entryPointContract = getContract({
@@ -146,7 +145,7 @@ export async function createSMAV2Account(
 
     return entryPointContract.read.getNonce([
       _accountAddress,
-      nonceKey,
+      nonceKey ?? hexToBigInt(nonceKeySuffix),
     ]) as Promise<bigint>;
   };
 
