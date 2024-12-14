@@ -1,12 +1,12 @@
 import type { Address, Hex } from "viem";
 
 export type ModuleEntity = {
-  moduleAddress: Address;
+  address: Address;
   entityId: number;
 };
 
 export type ValidationConfig = {
-  moduleAddress: Address;
+  address: Address;
   entityId: number; // uint32
   isGlobal: boolean;
   isSignatureValidation: boolean;

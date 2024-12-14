@@ -4,9 +4,10 @@ import { createSMAV2AccountClient, type SMAV2AccountClient } from "./client.js";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
-import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { installValidationActions } from "../actions/install-validation/installValidation.js";
+import { addresses } from "../utils.js";
+import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
+import type { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -28,10 +29,11 @@ describe("MA v2 Tests", async () => {
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
-  const getTargetBalance = async (): Promise<bigint> =>
-    client.getBalance({
+  const getTargetBalance = async (): Promise<number> => {
+    return client.getBalance({
       address: target,
     });
+  };
 
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
@@ -53,7 +55,58 @@ describe("MA v2 Tests", async () => {
 
     await provider.waitForUserOperationTransaction(result);
 
-    await expect(getTargetBalance()).resolves.toEqual(
+    await expect(await getTargetBalance()).toEqual(
+      startingAddressBalance + sendAmount
+    );
+  });
+
+  it("adds a session key with no permissions", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const result = await provider.installValidation({
+      validationConfig: {
+        address: addresses.singleSignerValidationModule,
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    let txnHash = provider.waitForUserOperationTransaction(result);
+    await expect(txnHash).resolves.not.toThrowError();
+
+    const startingAddressBalance = await getTargetBalance();
+
+    // connect session key
+    provider.signer = sessionKey;
+    provider.entityId = 1n;
+
+    const result2 = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    txnHash = provider.waitForUserOperationTransaction(result);
+    await expect(txnHash).resolves.not.toThrowError();
+
+    await expect(await getTargetBalance()).toEqual(
       startingAddressBalance + sendAmount
     );
   });

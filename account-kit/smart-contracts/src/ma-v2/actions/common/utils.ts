@@ -1,6 +1,5 @@
 import { type Hex, toHex, concatHex } from "viem";
 import type { ValidationConfig, HookConfig, ModuleEntity } from "./types";
-import { HookType } from "./types.js";
 
 export function serializeValidationConfig(config: ValidationConfig): Hex {
   const isUserOpValidationBit = config.isUserOpValidation ? 1 : 0;
@@ -15,18 +14,17 @@ export function serializeValidationConfig(config: ValidationConfig): Hex {
 }
 
 export function serializeHookConfig(config: HookConfig): Hex {
-  const hookTypeBit = config.hookType === HookType.VALIDATION ? 1 : 0;
-  const hasPostHooksBit = config.hasPostHooks ? 2 : 0;
-  const hasPreHooksBit = config.hasPreHooks ? 4 : 0;
   return concatHex([
     config.address,
     toHex(config.entityId, { size: 4 }),
-    toHex(hookTypeBit + hasPostHooksBit + hasPreHooksBit, {
+    config.hookType,
+    // hasPostHook is stored in the first bit, hasPreHook in the second bit
+    toHex((config.hasPostHooks ? 1 : 0) + (config.hasPreHooks ? 2 : 0), {
       size: 1,
     }),
   ]);
 }
 
 export function serializeModuleEntity(config: ModuleEntity): Hex {
-  return concatHex([config.moduleAddress, toHex(config.entityId, { size: 4 })]);
+  return concatHex([config.address, toHex(config.entityId, { size: 4 })]);
 }
