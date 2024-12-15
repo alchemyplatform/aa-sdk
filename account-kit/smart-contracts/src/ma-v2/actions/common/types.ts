@@ -5,10 +5,16 @@ export type ModuleEntity = {
   entityId: number;
 };
 
+export type ValidationFlags = {
+  isGlobal: boolean;
+  isSignatureValidation: boolean;
+  isUserOpValidation: boolean;
+};
+
 export type ValidationConfig = {
   address: Address;
   entityId: number; // uint8
-  validationFlags: number; // uint32
+  validationFlags: ValidationFlags; // uint32
 };
 
 export enum HookType {
@@ -26,9 +32,7 @@ export type HookConfig = {
 
 // maps to type ValidationStorage in MAv2 implementation
 export type ValidationData = {
-  isGlobal: boolean; // validation flag
-  isSignatureValidation: boolean; // validation flag
-  isUserOpValidation: boolean;
+  validationFlags: ValidationFlags;
   validationHooks: HookConfig[];
   executionHooks: Hex[];
   selectors: Hex[];
