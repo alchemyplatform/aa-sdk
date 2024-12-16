@@ -5,7 +5,7 @@ import { useAuthContext, type AuthStep } from "../../context.js";
 import { Button } from "../../../button.js";
 
 type EmailNotReceivedDisclaimerProps = {
-  authStep: Extract<AuthStep, { type: "email_verify" }>;
+  authStep: Extract<AuthStep, { type: "email_verify" | "otp_verify" }>;
 };
 export const EmailNotReceivedDisclaimer = ({
   authStep,
@@ -40,6 +40,7 @@ export const EmailNotReceivedDisclaimer = ({
           authenticate({
             type: "email",
             email: authStep.email,
+            emailMode: authStep.type === "email_verify" ? "magicLink" : "otp",
           });
           setEmailResent(true);
         }}
