@@ -238,4 +238,4 @@ export const paymasterGuardModuleAbi = [
     name: "UnexpectedDataPassed",
     inputs: [],
   },
-];
+] as const;

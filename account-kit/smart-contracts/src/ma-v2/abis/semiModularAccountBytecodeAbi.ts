@@ -1285,4 +1285,4 @@ export const semiModularAccountBytecodeAbi = [
     name: "ValidationSignatureSegmentMissing",
     inputs: [],
   },
-];
+] as const;

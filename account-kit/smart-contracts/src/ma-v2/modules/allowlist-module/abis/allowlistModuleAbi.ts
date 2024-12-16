@@ -712,4 +712,4 @@ export const allowlistModuleAbi = [
     name: "UnexpectedDataPassed",
     inputs: [],
   },
-];
+] as const;

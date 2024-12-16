@@ -292,4 +292,4 @@ export const timeRangeModuleAbi = [
     name: "UnexpectedDataPassed",
     inputs: [],
   },
-];
+] as const;
