@@ -400,4 +400,4 @@ export const nativeTokenLimitModuleAbi = [
     name: "UnexpectedDataPassed",
     inputs: [],
   },
-];
+] as const;

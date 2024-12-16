@@ -1238,4 +1238,4 @@ export const modularAccountAbi = [
     name: "ValidationSignatureSegmentMissing",
     inputs: [],
   },
-];
+] as const;
