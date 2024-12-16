@@ -31,6 +31,11 @@ await signer.authenticate({
   email: "user@mail.com",
 });
 
+// Instead of the above code, you can add some params to include in the email
+const redirectParams = new URLSearchParams();
+redirectParams.set("myParam", "someValue");
+signer.authenticate({ type: "email", email: "user@mail.com", redirectParams });
+
 // later once the user has clicked the link
 const url = new URL(window.location.href);
 const bundle = url.searchParams.get("bundle");
