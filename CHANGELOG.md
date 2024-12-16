@@ -3,6 +3,107 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+### Bug Fixes
+
+- correctly align protected by copy ([#1186](https://github.com/alchemyplatform/aa-sdk/issues/1186)) ([63be696](https://github.com/alchemyplatform/aa-sdk/commit/63be696199882b42fbad7eb7fa22aa823984c225))
+- rn stamper was returning stamp instead of response ([#1201](https://github.com/alchemyplatform/aa-sdk/issues/1201)) ([70a18df](https://github.com/alchemyplatform/aa-sdk/commit/70a18dfc2a5a751e3e08830673d0d293bbca05e2))
+
+### Features
+
+- add react-native usage docs ([#1181](https://github.com/alchemyplatform/aa-sdk/issues/1181)) ([fb3e73b](https://github.com/alchemyplatform/aa-sdk/commit/fb3e73b184231bb731e838e9fb5cced719772e32))
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Bug Fixes
+
+- refactor connection error ([#1156](https://github.com/alchemyplatform/aa-sdk/issues/1156)) ([83ea665](https://github.com/alchemyplatform/aa-sdk/commit/83ea665514f49131565441f1b43e4e6e5b0fd68c))
+- update darkmode wordmark ([#1169](https://github.com/alchemyplatform/aa-sdk/issues/1169)) ([0459359](https://github.com/alchemyplatform/aa-sdk/commit/04593594636cc771481ca75704ecddbcda355687))
+- update email completing string to be more generic ([#1173](https://github.com/alchemyplatform/aa-sdk/issues/1173)) ([18d0827](https://github.com/alchemyplatform/aa-sdk/commit/18d082798ab6c83417d2a2f155f4f7c655e1e6a4))
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+- **ui-demo:** Add Google Analytics tag to layout ([#1174](https://github.com/alchemyplatform/aa-sdk/issues/1174)) ([af02c01](https://github.com/alchemyplatform/aa-sdk/commit/af02c0160be92c4146f6fff482b4d790a07fb2f8))
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+### Bug Fixes
+
+- changing protected by to powered by alchemy footer ([#1164](https://github.com/alchemyplatform/aa-sdk/issues/1164)) ([7c08a66](https://github.com/alchemyplatform/aa-sdk/commit/7c08a66b718aefce80629824d58893898c757b41))
+- oauth working, email still broken ([#1170](https://github.com/alchemyplatform/aa-sdk/issues/1170)) ([196905d](https://github.com/alchemyplatform/aa-sdk/commit/196905d4abbfd07ccb83e38484bab6eb0ea0d502))
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+### Bug Fixes
+
+- **wc:** wc connection should persist across refreshes ([#1162](https://github.com/alchemyplatform/aa-sdk/issues/1162)) ([a22f3d9](https://github.com/alchemyplatform/aa-sdk/commit/a22f3d92e5daaee46c6da7fe6a51488ea70f334f))
+
+### Features
+
+- oauth add passkey after signup (popup flow) ([#1151](https://github.com/alchemyplatform/aa-sdk/issues/1151)) ([844a481](https://github.com/alchemyplatform/aa-sdk/commit/844a48123ce8d74a877f23ccbf10d367a9a9551b))
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- add check to ensure WC indexedDB store had been previously initialized on disconnect ([#1149](https://github.com/alchemyplatform/aa-sdk/issues/1149)) ([4377920](https://github.com/alchemyplatform/aa-sdk/commit/43779201f64e559e47e3f4e0f97670a13d520edf))
+- don't show error view when cancelling oauth ([#1087](https://github.com/alchemyplatform/aa-sdk/issues/1087)) ([e1fddd8](https://github.com/alchemyplatform/aa-sdk/commit/e1fddd8a4e7818bc163efceda15d95ee9d6a37c3))
+- **signer:** passkey sessions were being wiped by oauth prep ([#1154](https://github.com/alchemyplatform/aa-sdk/issues/1154)) ([9f0543f](https://github.com/alchemyplatform/aa-sdk/commit/9f0543f0dc3a6a67c725921389778873923ead6c))
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Bug Fixes
+
+- add passkey link ([#1148](https://github.com/alchemyplatform/aa-sdk/issues/1148)) ([aa3ebf9](https://github.com/alchemyplatform/aa-sdk/commit/aa3ebf9f22800de690402db91c3da9c019bdaa59))
+- throw error if no auth providers found ([#1143](https://github.com/alchemyplatform/aa-sdk/issues/1143)) ([aef02e1](https://github.com/alchemyplatform/aa-sdk/commit/aef02e19fd476b187e350111805132e99965829d))
+- update hex codes for toggle ([#1125](https://github.com/alchemyplatform/aa-sdk/issues/1125)) ([16c51ae](https://github.com/alchemyplatform/aa-sdk/commit/16c51ae14437c61b183a6729fa0bd74909caadff))
+
+### Features
+
+- add exit animation to mobile dialog drawer ([#1108](https://github.com/alchemyplatform/aa-sdk/issues/1108)) ([afa37ea](https://github.com/alchemyplatform/aa-sdk/commit/afa37ea15bc5f911b405af5b82ebcc747359ef69))
+- add unichain mainnet ([#1136](https://github.com/alchemyplatform/aa-sdk/issues/1136)) ([de9ba7c](https://github.com/alchemyplatform/aa-sdk/commit/de9ba7c6e6c37a0be9b10af78927ba0cf2841cac))
+- change auth card navigation sizes on mobile ([#1122](https://github.com/alchemyplatform/aa-sdk/issues/1122)) ([eae2877](https://github.com/alchemyplatform/aa-sdk/commit/eae28776b55fe7cb436edba9b462ff195ad9a238))
+- oauth add passkey after signup (redirect flow) ([#1140](https://github.com/alchemyplatform/aa-sdk/issues/1140)) ([6d5e229](https://github.com/alchemyplatform/aa-sdk/commit/6d5e229e24402344b214df9689ca18d8f5954922))
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+### Bug Fixes
+
+- bigint multiply was sometimes generating floats ([#1135](https://github.com/alchemyplatform/aa-sdk/issues/1135)) ([217443f](https://github.com/alchemyplatform/aa-sdk/commit/217443f33a46e99e1712dcf368a582d4dc3ac2ef))
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+### Bug Fixes
+
+- button nav size ([#1114](https://github.com/alchemyplatform/aa-sdk/issues/1114)) ([2ddd4fc](https://github.com/alchemyplatform/aa-sdk/commit/2ddd4fc11e311610707365bdb0ccf19d9c301e24))
+- define process.env for storybook ([#1116](https://github.com/alchemyplatform/aa-sdk/issues/1116)) ([509827a](https://github.com/alchemyplatform/aa-sdk/commit/509827a77ed7c5e0a6284fa37526f66202ba9904))
+- **logging:** check process is defined ([#1124](https://github.com/alchemyplatform/aa-sdk/issues/1124)) ([337c012](https://github.com/alchemyplatform/aa-sdk/commit/337c01264c7479328dc8f9e75a231f7493c9c22d))
+- minor a11y enhancements ([#1110](https://github.com/alchemyplatform/aa-sdk/issues/1110)) ([41af20e](https://github.com/alchemyplatform/aa-sdk/commit/41af20e17dbf73950529c3c62ca2b524144c67e4))
+- passkey icon is now using brand color ([#1123](https://github.com/alchemyplatform/aa-sdk/issues/1123)) ([a3238ec](https://github.com/alchemyplatform/aa-sdk/commit/a3238ecf5d1f4a8d402377444d773376bffd5f58))
+- repair pt on maincard ([#1117](https://github.com/alchemyplatform/aa-sdk/issues/1117)) ([711bed5](https://github.com/alchemyplatform/aa-sdk/commit/711bed54c7f7990162ab031eb91f40ab4ac3aac9))
+- show Oauth errors in from UI components ([#1118](https://github.com/alchemyplatform/aa-sdk/issues/1118)) ([8331372](https://github.com/alchemyplatform/aa-sdk/commit/833137251afad161f1fd982f6062160232b8340c))
+
+### Features
+
+- added dev:build script to improve dev experience ([#1120](https://github.com/alchemyplatform/aa-sdk/issues/1120)) ([0f024e7](https://github.com/alchemyplatform/aa-sdk/commit/0f024e75876c82addf8a389658b42dadc36ecefe))
+- allow email to be toggled ([#1121](https://github.com/alchemyplatform/aa-sdk/issues/1121)) ([1ed988c](https://github.com/alchemyplatform/aa-sdk/commit/1ed988c4e76dd04a8db8d7d6cd2b68b46f122bf8))
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Bug Fixes
+
+- facebook logo ([#1113](https://github.com/alchemyplatform/aa-sdk/issues/1113)) ([da8f0f5](https://github.com/alchemyplatform/aa-sdk/commit/da8f0f5e3ba3c116270c295173aa0b3b05979c90))
+- new responsive design ([#1104](https://github.com/alchemyplatform/aa-sdk/issues/1104)) ([061ba2a](https://github.com/alchemyplatform/aa-sdk/commit/061ba2a5e1f68c64229234a64a3c66d643e7d7ac))
+- **signer:** expire sessions on focus and on timer after init ([#1112](https://github.com/alchemyplatform/aa-sdk/issues/1112)) ([8f28aa4](https://github.com/alchemyplatform/aa-sdk/commit/8f28aa43381d9850682244b4f705d56659f73e56))
+
+### Features
+
+- add custom error messages for chainId errors ([#1101](https://github.com/alchemyplatform/aa-sdk/issues/1101)) ([150525a](https://github.com/alchemyplatform/aa-sdk/commit/150525a9245d26029105509de51c175b61d6e4ab))
+- add akui to common class names ([#1107](https://github.com/alchemyplatform/aa-sdk/issues/1107)) ([86e4dfb](https://github.com/alchemyplatform/aa-sdk/commit/86e4dfb6068761606d7aac611c935b6ee18281db))
+- **networks:** add new networks ([#1106](https://github.com/alchemyplatform/aa-sdk/issues/1106)) ([569862f](https://github.com/alchemyplatform/aa-sdk/commit/569862f6b9bdca68bc73362e1438de31c691a5f2))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 ### Bug Fixes

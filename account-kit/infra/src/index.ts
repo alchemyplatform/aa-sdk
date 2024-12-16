@@ -35,6 +35,7 @@ export {
   opbnbTestnet,
   soneiumMinato,
   soneiumMainnet,
+  unichainMainnet,
   unichainSepolia,
   inkSepolia,
 } from "./chains.js";

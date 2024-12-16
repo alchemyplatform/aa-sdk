@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+### Features
+
+- oauth add passkey after signup (popup flow) ([#1151](https://github.com/alchemyplatform/aa-sdk/issues/1151)) ([844a481](https://github.com/alchemyplatform/aa-sdk/commit/844a48123ce8d74a877f23ccbf10d367a9a9551b))
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- **signer:** passkey sessions were being wiped by oauth prep ([#1154](https://github.com/alchemyplatform/aa-sdk/issues/1154)) ([9f0543f](https://github.com/alchemyplatform/aa-sdk/commit/9f0543f0dc3a6a67c725921389778873923ead6c))
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Bug Fixes
+
+- throw error if no auth providers found ([#1143](https://github.com/alchemyplatform/aa-sdk/issues/1143)) ([aef02e1](https://github.com/alchemyplatform/aa-sdk/commit/aef02e19fd476b187e350111805132e99965829d))
+
+### Features
+
+- oauth add passkey after signup (redirect flow) ([#1140](https://github.com/alchemyplatform/aa-sdk/issues/1140)) ([6d5e229](https://github.com/alchemyplatform/aa-sdk/commit/6d5e229e24402344b214df9689ca18d8f5954922))
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Bug Fixes
+
+- **signer:** expire sessions on focus and on timer after init ([#1112](https://github.com/alchemyplatform/aa-sdk/issues/1112)) ([8f28aa4](https://github.com/alchemyplatform/aa-sdk/commit/8f28aa43381d9850682244b4f705d56659f73e56))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 **Note:** Version bump only for package @account-kit/signer

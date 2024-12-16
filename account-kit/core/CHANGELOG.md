@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+### Bug Fixes
+
+- **wc:** wc connection should persist across refreshes ([#1162](https://github.com/alchemyplatform/aa-sdk/issues/1162)) ([a22f3d9](https://github.com/alchemyplatform/aa-sdk/commit/a22f3d92e5daaee46c6da7fe6a51488ea70f334f))
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- add check to ensure WC indexedDB store had been previously initialized on disconnect ([#1149](https://github.com/alchemyplatform/aa-sdk/issues/1149)) ([4377920](https://github.com/alchemyplatform/aa-sdk/commit/43779201f64e559e47e3f4e0f97670a13d520edf))
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- oauth add passkey after signup (redirect flow) ([#1140](https://github.com/alchemyplatform/aa-sdk/issues/1140)) ([6d5e229](https://github.com/alchemyplatform/aa-sdk/commit/6d5e229e24402344b214df9689ca18d8f5954922))
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Features
+
+- add custom error messages for chainId errors ([#1101](https://github.com/alchemyplatform/aa-sdk/issues/1101)) ([150525a](https://github.com/alchemyplatform/aa-sdk/commit/150525a9245d26029105509de51c175b61d6e4ab))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 **Note:** Version bump only for package @account-kit/core

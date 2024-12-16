@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
-import { FacebookLogo } from "../icons/facebook";
+import { FacebookIcon } from "../icons/facebook";
 import { GoogleIcon } from "../icons/google";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
@@ -10,6 +11,7 @@ import { SocialIcon } from "../icons/social";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
+import { links } from "@/utils/links";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { auth, setAuth } = useConfigStore(({ auth, setAuth }) => ({
@@ -17,13 +19,29 @@ export const Authentication = ({ className }: { className?: string }) => {
     setAuth,
   }));
 
+  const setEmailAuth = (active: boolean) => {
+    setAuth({ showEmail: active });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "email", enabled: active },
+    });
+  };
+
   const setPasskeysActive = (active: boolean) => {
     setAuth({ showPasskey: active });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "passkeys", enabled: active },
+    });
   };
 
   const setAddPasskeyOnSignup = (active: boolean) => {
     setAuth({
       addPasskey: active,
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "add_passkey_on_signup", enabled: active },
     });
   };
 
@@ -31,11 +49,19 @@ export const Authentication = ({ className }: { className?: string }) => {
     setAuth({
       showExternalWallets: active,
     });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "external_wallets", enabled: active },
+    });
   };
 
   const setOAuthActive = (active: boolean) => {
     setAuth({
       showOAuth: active,
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "oauth", enabled: active },
     });
   };
 
@@ -46,6 +72,10 @@ export const Authentication = ({ className }: { className?: string }) => {
         google: !auth.oAuthMethods.google,
       },
     });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "oauth_google", enabled: !auth.oAuthMethods.google },
+    });
   };
 
   const setAddFacebookAuth = () => {
@@ -53,6 +83,13 @@ export const Authentication = ({ className }: { className?: string }) => {
       oAuthMethods: {
         ...auth.oAuthMethods,
         facebook: !auth.oAuthMethods.facebook,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_facebook",
+        enabled: !auth.oAuthMethods.facebook,
       },
     });
   };
@@ -70,7 +107,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             icon={<MailIcon />}
             name="Email"
             active={auth.showEmail}
-            disabled
+            setActive={setEmailAuth}
           />
           <AuthMethod
             icon={<SocialIcon />}
@@ -85,12 +122,15 @@ export const Authentication = ({ className }: { className?: string }) => {
                 />
                 <OAuthMethod
                   active={auth.oAuthMethods.facebook}
-                  icon={<FacebookLogo />}
+                  icon={<FacebookIcon />}
                   onClick={setAddFacebookAuth}
                 />
                 <ExternalLink
-                  href="https://accountkit.alchemy.com/signer/authentication/auth0"
-                  className=" btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
+                  href={links.auth0}
+                  onClick={() => {
+                    Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
+                  }}
+                  className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
                 >
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Custom
@@ -117,7 +157,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
-                  <ExternalLink href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?">
+                  <ExternalLink href={links.passkey}>
                     <p className=" block lg:hidden font-normal text-sm text-secondary-foreground underline">
                       Add passkey after sign up
                     </p>
@@ -189,13 +229,15 @@ const AuthMethod = ({
         <div className={cn("flex shrink-0", iconClassName)}>{icon}</div>
         <div className="ml-2 flex-1 flex flex-col gap-3">
           <div className="flex flex-1 min-w-full flex-row justify-between items-center">
-            <p
+            <label
               className={cn("font-medium text-sm", unavailable && "opacity-50")}
+              htmlFor={`${name}-auth-method`}
             >
               {name}
-            </p>
+            </label>
             {!unavailable && (
               <Switch
+                id={`${name}-auth-method`}
                 disabled={disabled}
                 checked={active}
                 onCheckedChange={setActive}

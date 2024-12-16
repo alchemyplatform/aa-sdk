@@ -33,7 +33,11 @@ export const useUser = (): UseUserResult => {
     () => getUser(config) ?? null
   );
   const eoaUser = useMemo(() => {
-    if (account.status !== "connected") {
+    if (account.status !== "connected" && account.status !== "reconnecting") {
+      return null;
+    }
+
+    if (!account.address) {
       return null;
     }
 

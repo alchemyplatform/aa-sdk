@@ -7,10 +7,15 @@ jobs:
     name: Enforce PR Title Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
 
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Use commitlint to check PR title
         env:
@@ -26,14 +31,18 @@ jobs:
     env:
       REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout files"
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
+          submodules: "recursive"
 
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Build eslint plugin
         run: |
@@ -54,12 +63,20 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       API_KEY: ${{ secrets.API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout files"
+        uses: actions/checkout@v3
         with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
+
+      - name: Setup
+        uses: ./.github/actions/setup
 
       # using your own fork url avoids getting rate limited by the public api
       # later we'll look at deploying everything we need directly to anvil so
@@ -67,9 +84,6 @@ jobs:
       - name: Conditionally set fork url
         if: ${{ env.API_KEY != '' }}
         run: echo "VITEST_SEPOLIA_FORK_URL=https://eth-sepolia.g.alchemy.com/v2/${{ env.API_KEY }}" >> $GITHUB_ENV
-          
-      - name: Set up foundry
-        uses: foundry-rs/foundry-toolchain@v1
 
       - name: Set up Rundler
         uses: jaxxstorm/action-install-gh-release@v1.12.0
@@ -79,18 +93,12 @@ jobs:
           tag: v0.2.2
           cache: enable
 
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
-
-      - name: Build
-        uses: nick-fields/retry@v3
+      - name: Build Libraries
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          # it's ok to run the dev build here because the site gets built in vercel for each branch
-          command: yarn build:dev
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+        run: yarn build:libs
 
       - name: Unit Test
         run: yarn test:ci
+

@@ -28,6 +28,10 @@ jobs:
   build_and_test_deploy:
     name: Build and Publish
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     # Needed for Publishing
     permissions:
@@ -35,17 +39,18 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout files"
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
-
-      - name: Set up foundry
-        uses: foundry-rs/foundry-toolchain@v1
-
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+          
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          # skip android cache for this because it's not working with the publish step below
+          use-android-cache: false
 
       - name: Set Github User Details
         run: |
@@ -57,13 +62,11 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      - name: Build all packages
-        run: yarn build:dev
-
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: yarn install --force && yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+        shell: bash
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access

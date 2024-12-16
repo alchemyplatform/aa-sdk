@@ -10,9 +10,10 @@
     "lint:write": "prettier --no-ignore --write ./src"
   },
   "dependencies": {
-    "@account-kit/core": "^4.0.0-beta.0",
-    "@account-kit/infra": "^4.0.0-beta.0",
-    "@account-kit/react": "^4.0.0-beta.0",
+    "@account-kit/core": "^4.2.0",
+    "@account-kit/infra": "^4.2.0",
+    "@account-kit/logging": "^4.2.0",
+    "@account-kit/react": "^4.2.0",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-switch": "^1.0.3",

@@ -3,6 +3,7 @@ import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { z } from "zod";
+import { OAuthProvidersError } from "../errors.js";
 import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
 import type { AuthParams, OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -303,6 +304,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     await this.initWebauthnStamper(user);
     if (user) {
       this.user = user;
+      this.eventEmitter.emit("connectedPasskey", user);
       return user;
     }
 
@@ -461,6 +463,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       "_blank",
       "popup,width=500,height=600"
     );
+    const eventEmitter = this.eventEmitter;
     return new Promise((resolve, reject) => {
       const handleMessage = (event: MessageEvent) => {
         if (!event.data) {
@@ -470,6 +473,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
+          alchemyIsSignup: isSignup,
           alchemyError,
         } = event.data;
         if (bundle && orgId && idToken) {
@@ -481,7 +485,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             connectedEventName: "connectedOauth",
             idToken,
             authenticatingType: "oauth",
-          }).then(resolve, reject);
+          }).then((user) => {
+            if (isSignup) {
+              eventEmitter.emit("newUserSignup");
+            }
+
+            resolve(user);
+          }, reject);
         } else if (alchemyError) {
           cleanup();
           popup?.close();
@@ -518,6 +528,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     } = args;
     const { codeChallenge, requestKey, authProviders } =
       await this.getOauthConfigForMode(mode);
+    if (!authProviders) {
+      throw new OAuthProvidersError();
+    }
     const authProvider = authProviders.find(
       (provider) =>
         provider.id === authProviderId &&
@@ -661,7 +674,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
+    const currentStamper = this.turnkeyClient.stamper;
     const publicKey = await this.initIframeStamper();
+
+    // swap the stamper back in case the user logged in with a different stamper (passkeys)
+    this.setStamper(currentStamper);
     const nonce = getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };

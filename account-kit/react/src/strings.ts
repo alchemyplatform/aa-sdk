@@ -31,7 +31,7 @@ const STRINGS = {
       resent: "Done!",
     },
     completingEmail: {
-      body: "Your email verification is almost complete. Please wait a few seconds for this to screen to update.",
+      body: "Completing login. Please wait a few seconds for this to screen to update.",
     },
     loadingPasskey: {
       title: "Continue with passkey",
@@ -39,8 +39,8 @@ const STRINGS = {
       supportText: "Having trouble?",
       supportLink: "Contact support",
     },
-    poweredBy: {
-      title: "powered by",
+    protectedBy: {
+      title: "protected by",
     },
     error: {
       general: {
@@ -61,6 +61,28 @@ const STRINGS = {
       cta: {
         tryAgain: "Try again",
         useAnotherMethod: "Use another method",
+        skip: "Skip",
+      },
+      customErrorMessages: {
+        eoa: {
+          walletConnect: {
+            chainIdNotFound: {
+              heading: "The connected wallet does not support this network",
+              body: "The wallet connection failed.",
+              tryAgainCTA: "Try again with a different wallet",
+            },
+            walletConnectParamsNotFound: {
+              heading: "Couldn't connect to WalletConnect",
+              body: "The WalletConnect configuration is missing or incorrect.",
+              tryAgainCTA: "Try again",
+            },
+          },
+          default: {
+            heading: "Couldn't connect to ",
+            body: "The wallet's connection failed or was canceled.",
+            tryAgainCTA: "Try again",
+          },
+        },
       },
     },
     oauthContactSupport: {

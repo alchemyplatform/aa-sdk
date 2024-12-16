@@ -55,7 +55,9 @@ const config = {
         },
         // Demo app colors, not themable at this time
         "demo-bg-toggle-active": "#020617",
-        "demo-bg-toggle-inactive": "#94A3B8",
+        "demo-bg-toggle-inactive": "rgba(103, 106, 117, .4)",
+        "demo-bg-toggle-disabled": "#A3A6B1",
+        "demo-fg-toggle-icon": "#6E717C",
         "demo-bg": "#FFFFFF",
         "demo-text-invert": "#FBFDFF",
         "demo-nav-bg": "rgba(255, 255, 255, 0.5)",
@@ -100,7 +102,7 @@ const config = {
         "ui-loading-light": "ui-loading-light 0.8s 0ms ease-out infinite both",
       },
       backgroundImage: {
-        "bg-main": "url('/images/bg-main.png')",
+        "bg-main": "url('/images/bg-main.webp')",
       },
     },
   },

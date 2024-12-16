@@ -8,8 +8,8 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
-import { useTheme } from "@/state/useTheme";
 import { useState } from "react";
 
 const ILLUSTRATION_STYLE_OPTIONS = [
@@ -43,7 +43,13 @@ export function IllustrationStyleOptions() {
                 ? "bg-demo-surface-secondary font-semibold"
                 : "border-gray-300"
             )}
-            onClick={() => setIllustrationStyle(value)}
+            onClick={() => {
+              setIllustrationStyle(value);
+              Metrics.trackEvent({
+                name: "branding_illustration_style_changed",
+                data: { variant: value },
+              });
+            }}
           >
             <IllustrationStyle
               className="text-fg-accent-brand"
@@ -60,15 +66,13 @@ export function IllustrationStyleOptions() {
 }
 
 const IllustrationStyleSelectMenu = () => {
-  const theme = useTheme();
-  const { illustrationStyle, setIllustrationStyle, primaryColor } =
-    useConfigStore(
-      ({ ui: { illustrationStyle, primaryColor }, setIllustrationStyle }) => ({
-        illustrationStyle,
-        setIllustrationStyle,
-        primaryColor,
-      })
-    );
+  const { illustrationStyle, setIllustrationStyle } = useConfigStore(
+    ({ ui: { illustrationStyle, primaryColor }, setIllustrationStyle }) => ({
+      illustrationStyle,
+      setIllustrationStyle,
+      primaryColor,
+    })
+  );
 
   type IllustrationStyle = typeof illustrationStyle;
   const [selected, setSelected] =

@@ -8,6 +8,7 @@ import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
 
+import { Metrics } from "@/metrics";
 import { CornerRadiusOptions } from "./components/CornerRadiusOptions";
 import { IllustrationStyleOptions } from "./components/IllustrationStyleOptions";
 
@@ -38,22 +39,36 @@ export function Styling({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-4 w-full border-b border-border pb-5">
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm text-secondary-foreground">Theme</p>
+          <label
+            className="font-medium text-sm text-secondary-foreground"
+            htmlFor="theme-switch"
+          >
+            Theme
+          </label>
           <ThemeSwitch
+            id="theme-switch"
             checked={theme === "dark"}
             onCheckedChange={onSwitchTheme}
           />
         </div>
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm text-secondary-foreground">Color</p>
+          <label
+            className="font-medium text-sm text-secondary-foreground"
+            htmlFor="color-picker"
+          >
+            Color
+          </label>
           <ColorPicker theme={theme} />
         </div>
         <div className="flex flex-row justify-between grow items-center">
           <div>
-            <p className="font-medium text-sm text-secondary-foreground">
+            <label
+              className="font-medium text-sm text-secondary-foreground"
+              htmlFor="logo-upload"
+            >
               Logo{" "}
               <span className="text-fg-tertiary font-normal">(optional)</span>
-            </p>
+            </label>
             <p className="text-fg-tertiary font-normal text-xs">
               {logo?.fileName ? (
                 <span className="truncate block max-w-[200px]">
@@ -96,7 +111,10 @@ export function Styling({ className }: { className?: string }) {
           id="support-url"
           value={supportUrl}
           onChange={(e) => setSupportUrl(e.target.value)}
-          onBlur={(e) => setSupportUrl(e.target.value)}
+          onBlur={(e) => {
+            setSupportUrl(e.target.value);
+            Metrics.trackEvent({ name: "branding_support_url_added" });
+          }}
           className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
           placeholder="website, telegram, or email"
         />
@@ -114,6 +132,11 @@ function LearnMore() {
         Customize every pixel with{" "}
         <ExternalLink
           className="font-semibold text-btn-primary"
+          onClick={() =>
+            Metrics.trackEvent({
+              name: "customize_css_clicked",
+            })
+          }
           href="https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6"
         >
           CSS

@@ -1,5 +1,6 @@
 "use client";
 
+import { disconnect } from "@account-kit/core";
 import {
   useCallback,
   useEffect,
@@ -7,16 +8,15 @@ import {
   useRef,
   type PropsWithChildren,
 } from "react";
+import { useAlchemyAccountContext } from "../../../context.js";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
-import { useSigner } from "../../../hooks/useSigner.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
-
 export type AuthCardProps = {
   className?: string;
 };
@@ -57,10 +57,9 @@ export const AuthCardContent = ({
   showClose?: boolean;
 }) => {
   const { openAuthModal, closeAuthModal } = useAuthModal();
-  const { status, isAuthenticating } = useSignerStatus();
+  const { status, isAuthenticating, isConnected } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
-
-  const signer = useSigner();
+  const { config } = useAlchemyAccountContext();
 
   const didGoBack = useRef(false);
 
@@ -89,7 +88,7 @@ export const AuthCardContent = ({
       case "passkey_verify":
       case "passkey_create":
       case "oauth_completing":
-        signer?.disconnect(); // Terminate any inflight authentication
+        disconnect(config); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
         break;
@@ -103,11 +102,13 @@ export const AuthCardContent = ({
       default:
         console.warn("Unhandled back action for auth step", authStep);
     }
-  }, [authStep, setAuthStep, signer]);
+  }, [authStep, setAuthStep, config]);
 
   const onClose = useCallback(() => {
-    // Terminate any inflight authentication
-    signer?.disconnect();
+    if (!isConnected) {
+      // Terminate any inflight authentication
+      disconnect(config);
+    }
 
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
@@ -115,7 +116,7 @@ export const AuthCardContent = ({
       setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [authStep.type, closeAuthModal, setAuthStep, signer]);
+  }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
 
   useEffect(() => {
     if (authStep.type === "complete") {
@@ -124,11 +125,6 @@ export const AuthCardContent = ({
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
-    } else if (!didGoBack.current && isAuthenticating) {
-      setAuthStep({
-        type: "email_completing",
-        createPasskeyAfter: addPasskeyOnSignup,
-      });
     }
   }, [
     authStep,
@@ -139,25 +135,26 @@ export const AuthCardContent = ({
     openAuthModal,
     closeAuthModal,
     addPasskeyOnSignup,
+    isConnected,
   ]);
 
   return (
     <div className="flex flex-col relative">
       {/* Wrapper container that sizes its height dynamically */}
       <DynamicHeight>
+        {(canGoBack || showClose) && (
+          <Navigation
+            showClose={showClose}
+            showBack={canGoBack}
+            onBack={onBack}
+            onClose={onClose}
+          />
+        )}
         <div
-          className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
+          className={`max-h-[60vh] overflow-auto relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
             className ?? ""
           }`}
         >
-          {(canGoBack || showClose) && (
-            <Navigation
-              showClose={showClose}
-              showBack={canGoBack}
-              onBack={onBack}
-              onClose={onClose}
-            />
-          )}
           <Step />
         </div>
         <Footer authStep={authStep} />

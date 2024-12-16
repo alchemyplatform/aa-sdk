@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- add unichain mainnet ([#1136](https://github.com/alchemyplatform/aa-sdk/issues/1136)) ([de9ba7c](https://github.com/alchemyplatform/aa-sdk/commit/de9ba7c6e6c37a0be9b10af78927ba0cf2841cac))
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Features
+
+- **networks:** add new networks ([#1106](https://github.com/alchemyplatform/aa-sdk/issues/1106)) ([569862f](https://github.com/alchemyplatform/aa-sdk/commit/569862f6b9bdca68bc73362e1438de31c691a5f2))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 ### Bug Fixes

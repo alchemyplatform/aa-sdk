@@ -1,3 +1,4 @@
+import { ConnectionFailed } from "../../../../icons/connectionFailed.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { ls } from "../../../../strings.js";
 import { useAuthContext } from "../../context.js";
@@ -11,7 +12,9 @@ export const LoadingPasskeyAuth = () => {
   if (authStep.error) {
     return (
       <ConnectionError
-        connectionType="passkey"
+        headerText={ls.error.connection.passkeyTitle}
+        bodyText={ls.error.connection.passkeyBody}
+        icon={<ConnectionFailed />}
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
       />
@@ -41,7 +44,7 @@ export const LoadingPasskeyAuth = () => {
         </div> */}
       </div>
       <button
-        className="btn btn-secondary w-full mt-5"
+        className="akui-btn akui-btn-secondary w-full mt-5"
         onClick={() => setAuthStep({ type: "initial" })}
       >
         Cancel

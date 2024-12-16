@@ -45,6 +45,7 @@ export class SessionManager {
   private eventEmitter: EventEmitter<SessionManagerEvents>;
   readonly expirationTimeMs: number;
   private store: Store;
+  private clearSessionHandle: NodeJS.Timeout | null = null;
 
   constructor(params: SessionManagerParams) {
     const {
@@ -95,6 +96,7 @@ export class SessionManager {
             orgId: existingSession.user.orgId,
             authenticatingType: existingSession.type,
             connectedEventName,
+            idToken: existingSession.user.idToken,
           })
           .catch((e) => {
             console.warn("Failed to load user from session", e);
@@ -125,6 +127,10 @@ export class SessionManager {
 
   public clearSession = () => {
     this.store.setState({ session: null });
+
+    if (this.clearSessionHandle) {
+      clearTimeout(this.clearSessionHandle);
+    }
   };
 
   public setTemporarySession = (session: { orgId: string }) => {
@@ -170,24 +176,28 @@ export class SessionManager {
      * We should revisit this later
      */
     if (session.expirationDateMs < Date.now()) {
-      this.store.setState({ session: null });
+      this.clearSession();
       return null;
     }
+
+    this.registerSessionExpirationHandler(session);
 
     return session;
   };
 
   private setSession = (
-    session:
+    session_:
       | Omit<Extract<Session, { type: "email" | "oauth" }>, "expirationDateMs">
       | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
   ) => {
-    this.store.setState({
-      session: {
-        ...session,
-        expirationDateMs: Date.now() + this.expirationTimeMs,
-      },
-    });
+    const session = {
+      ...session_,
+      expirationDateMs: Date.now() + this.expirationTimeMs,
+    };
+
+    this.registerSessionExpirationHandler(session);
+
+    this.store.setState({ session });
   };
 
   public initialize() {
@@ -244,18 +254,40 @@ export class SessionManager {
     );
 
     // sync local state if persisted state has changed from another tab
-    window.addEventListener("focus", () => {
-      const oldSession = this.store.getState().session;
-      this.store.persist.rehydrate();
-      const newSession = this.store.getState().session;
+    // only do this in the browser
+    // Add a try catch to prevent potential crashes in non-browser environments
+    try {
       if (
-        oldSession?.user.orgId !== newSession?.user.orgId ||
-        oldSession?.user.userId !== newSession?.user.userId
+        typeof window !== "undefined" &&
+        typeof window.addEventListener !== "undefined"
       ) {
-        // Initialize if the user has changed.
-        this.initialize();
+        window.addEventListener("focus", () => {
+          const oldSession = this.store.getState().session;
+          this.store.persist.rehydrate();
+          const newSession = this.store.getState().session;
+          if (
+            (oldSession?.expirationDateMs ?? 0) < Date.now() ||
+            oldSession?.user.orgId !== newSession?.user.orgId ||
+            oldSession?.user.userId !== newSession?.user.userId
+          ) {
+            // Initialize if the user has changed.
+            this.initialize();
+          }
+        });
       }
-    });
+    } catch (e) {
+      console.error("Error registering event listeners", e);
+    }
+  };
+
+  private registerSessionExpirationHandler = (session: Session) => {
+    if (this.clearSessionHandle) {
+      clearTimeout(this.clearSessionHandle);
+    }
+
+    this.clearSessionHandle = setTimeout(() => {
+      this.clearSession();
+    }, Math.min(session.expirationDateMs - Date.now(), Math.pow(2, 31) - 1));
   };
 
   private setSessionWithUserAndBundle = ({

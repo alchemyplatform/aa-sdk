@@ -3,18 +3,15 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useRef,
   type PropsWithChildren,
 } from "react";
 import { create, useStore, type StoreApi } from "zustand";
 import { useShallow } from "zustand/react/shallow";
-import { IS_SIGNUP_QP } from "../components/constants.js";
 import type {
   AlchemyAccountsUIConfig,
   AuthIllustrationStyle,
 } from "../types.js";
-import { useSignerStatus } from "./useSignerStatus.js";
 
 type AlchemyAccountsUIConfigWithDefaults = Omit<
   Required<AlchemyAccountsUIConfig>,
@@ -96,30 +93,10 @@ export function UiConfigProvider({
   children,
   initialConfig,
 }: PropsWithChildren<{ initialConfig?: AlchemyAccountsUIConfig }>) {
-  const { isConnected } = useSignerStatus();
   const storeRef = useRef<StoreApi<UiConfigStore>>();
   if (!storeRef.current) {
     storeRef.current = createUiConfigStore(initialConfig);
   }
-
-  const { setModalOpen, addPasskeyOnSignup } = useStore(
-    storeRef.current,
-    useShallow(({ setModalOpen, auth }) => ({
-      setModalOpen,
-      addPasskeyOnSignup: auth?.addPasskeyOnSignup,
-    }))
-  );
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (
-      isConnected &&
-      addPasskeyOnSignup &&
-      urlParams.get(IS_SIGNUP_QP) === "true"
-    ) {
-      setModalOpen(true);
-    }
-  }, [addPasskeyOnSignup, isConnected, setModalOpen]);
 
   return (
     <UiConfigContext.Provider value={storeRef.current}>

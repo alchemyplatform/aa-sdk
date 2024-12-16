@@ -39,7 +39,7 @@ export const CardContent = ({
       </div>
       {secondaryButton && (
         <button
-          className="btn btn-secondary w-full"
+          className="akui-btn akui-btn-secondary w-full"
           onClick={secondaryButton.onClick}
         >
           {secondaryButton.title}
