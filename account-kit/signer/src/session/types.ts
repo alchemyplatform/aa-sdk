@@ -2,7 +2,7 @@ import type { User } from "../client/types";
 
 export type Session =
   | {
-      type: "email" | "oauth";
+      type: "email" | "oauth" | "otp";
       bundle: string;
       expirationDateMs: number;
       user: User;

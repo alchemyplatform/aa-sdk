@@ -10,6 +10,7 @@ import {
   type GetWebAuthnAttestationResult,
   type OauthConfig,
   type OauthParams,
+  type OtpParams,
   type SignupResponse,
   type User,
 } from "@account-kit/signer";
@@ -35,6 +36,13 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       connection,
     });
   }
+  // TODO: implement OTP
+  override async submitOtpCode(
+    args: Omit<OtpParams, "targetPublicKey">
+  ): Promise<{ bundle: string }> {
+    console.log("submitOtpCode", args);
+    throw new Error("Method not implemented.");
+  }
 
   override async createAccount(
     params: CreateAccountParams
@@ -49,6 +57,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const response = await this.request("/v1/signup", {
       email,
+      emailMode: "magicLink",
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
@@ -65,6 +74,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     return this.request("/v1/auth", {
       email: params.email,
+      emailMode: "magicLink",
       targetPublicKey,
     });
   }

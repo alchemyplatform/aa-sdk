@@ -15,6 +15,7 @@ import type {
   GetWebAuthnAttestationResult,
   OauthConfig,
   OauthParams,
+  OtpParams,
   SignerBody,
   SignerResponse,
   SignerRoutes,
@@ -126,7 +127,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string }>;
+  ): Promise<{ orgId: string; otpId?: string }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;
@@ -143,6 +144,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract oauthWithPopup(
     args: Extract<OauthParams, { mode: "popup" }>
   ): Promise<User>;
+
+  public abstract submitOtpCode(
+    args: Omit<OtpParams, "targetPublicKey">
+  ): Promise<{ bundle: string }>;
 
   public abstract disconnect(): Promise<void>;
 
