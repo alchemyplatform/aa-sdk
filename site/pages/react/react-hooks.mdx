@@ -41,6 +41,40 @@ export default function MyLoginPage() {
 }
 ```
 
+### Email authentication with redirect params
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+// This examples uses email authentication
+// you can also use passkeys if the user has one created
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+  const [email, setEmail] = React.useState("");
+
+  const handleAuthenticate = () => {
+    const redirectParams = new URLSearchParams();
+    redirectParams.set("myParam", "someValue");
+    authenticate({ type: "email", email, redirectParams });
+  };
+
+  return (
+    <div>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={handleAuthenticate}>Login</button>
+    </div>
+  );
+}
+```
+
 ### Social Login
 
 You can allow uers to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
