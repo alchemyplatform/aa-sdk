@@ -635,4 +635,4 @@ export const accountFactoryAbi = [
     name: "TransferFailed",
     inputs: [],
   },
-];
+] as const;
