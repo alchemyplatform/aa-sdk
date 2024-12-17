@@ -9,6 +9,7 @@ import {
   createBundlerClient,
   getEntryPoint,
   toSmartContractAccount,
+  getAccountAddress,
   InvalidEntityIdError,
   InvalidNonceKeyError,
   getAccountAddress,

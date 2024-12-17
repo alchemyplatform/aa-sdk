@@ -117,3 +117,19 @@ export class EntityIdOverrideError extends BaseError {
     );
   }
 }
+
+/**
+ * Error class denoting that the provided entity id is invalid because it's overriding the native entity id.
+ */
+export class EntityIdOverrideError extends BaseError {
+  override name = "InvalidNonceKeyError";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
+   */
+  constructor() {
+    super(
+      `Installing entityId of 0 overrides the owner's entity id in the account`
+    );
+  }
+}
