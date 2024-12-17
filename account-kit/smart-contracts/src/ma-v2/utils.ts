@@ -27,92 +27,28 @@ export const packSignature = ({
   return concat(["0xFF", "0x00", validationSignature]);
 };
 
-export const getDefaultMAV2FactoryAddress = (chain: Chain): Address => {
-  switch (chain.id) {
-    // TODO: case mekong.id:
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-    case mainnet.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    default:
-      return "0x00000000000017c61b5bEe81050EC8eFc9c6fecd";
-  }
-};
-
-export const getDefaultSMAV2BytecodeAddress = (chain: Chain): Address => {
-  switch (chain.id) {
-    // TODO: case mekong.id:
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-    case mainnet.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    default:
-      return "0x000000000000c5A9089039570Dd36455b5C07383";
-  }
-};
-
-export const getDefaultSMAV2StorageAddress = (chain: Chain): Address => {
-  switch (chain.id) {
-    // TODO: case mekong.id:
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-    case mainnet.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    default:
-      return "0x0000000000006E2f9d80CaEc0Da6500f005EB25A";
-  }
-};
-
-export const getDefaultSMAV27702Address = (chain: Chain): Address => {
-  switch (chain.id) {
-    // TODO: case mekong.id:
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-    case mainnet.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    default:
-      return "0x69007702764179f14F51cdce752f4f775d74E139";
-  }
-};
-
-export const getDefaultMAV2Address = (chain: Chain): Address => {
-  switch (chain.id) {
-    // TODO: case mekong.id:
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-    case mainnet.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    default:
-      return "0x00000000000002377B26b1EdA7b0BC371C60DD4f";
-  }
+export const addresses = {
+  allowlistModule:
+    "0xe768abEe3ad779Be1318388fC5D6A6fCf658011B" as `0x${string}`,
+  nativeTokenLimitModule:
+    "0xbFD077C53ec21f91699cF2DBab5324ea608b4eF0" as `0x${string}`,
+  paymasterGuardModule:
+    "0x97018B224C969A1992076293f15482FB9982A271" as `0x${string}`,
+  singleSignerValidationModule:
+    "0x2a42a36ee6DC9E8f75d2f8B5ef621EE8F2bD3156" as `0x${string}`,
+  timeRangeModule:
+    "0x335a66470B5052DD9F540bD64ca6b7dE205F6f0B" as `0x${string}`,
+  webauthnValidationModule:
+    "0x52bB58A05659F2fF4bDb57E602824859De11119A" as `0x${string}`,
+  executionInstallDelegate:
+    "0x8Bf909fEb66EBcC4725f04E70F319791Ec9d9628" as `0x${string}`,
+  modularAccountImpl:
+    "0x7219030794F2937ff4A322B7CE9a58C070aF08C5" as `0x${string}`,
+  semiModularAccountBytecodeImpl:
+    "0xc6176BeF7E32224238ef3A2Ee3F9BaCfA801Cc95" as `0x${string}`,
+  semiModularAccountStorageOnlyImpl:
+    "0x8bD01f353058513fE5968C80585dc0792f56961b" as `0x${string}`,
+  accountFactory: "0x52fd2B39bd2a2c411371514114f9a1b3F9Ba3a64" as `0x${string}`,
+  accountFactoryOwner:
+    "0xDdF32240B4ca3184De7EC8f0D5Aba27dEc8B7A5C" as `0x${string}`,
 };
