@@ -8,6 +8,7 @@ import {
   createBundlerClient,
   getEntryPoint,
   toSmartContractAccount,
+  getAccountAddress,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -49,11 +50,11 @@ export type CreateSMAV2AccountParams<
 } & (
     | {
         isGlobalValidation: boolean;
-        entityId: bigint;
+        entityId: number;
       }
     | {
-        isGlobalValidation: never;
-        entityId: never;
+        isGlobalValidation?: never;
+        entityId?: never;
       }
   );
 
@@ -78,10 +79,10 @@ export async function createSMAV2Account(
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     isGlobalValidation = true,
-    entityId = 0n,
+    entityId = 0,
   } = config;
 
-  if (entityId >= maxUint32) {
+  if (entityId >= Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
   }
 
@@ -119,6 +120,13 @@ export async function createSMAV2Account(
     ...singleSignerMessageSigner(signer),
   });
 
+  const accountAddress_ = await getAccountAddress({
+    client,
+    entryPoint,
+    accountAddress,
+    getAccountInitCode,
+  });
+
   // TODO: add deferred action flag
   const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
     const nonceKeySuffix: Hex = `${toHex(entityId, { size: 4 })}${
@@ -136,7 +144,7 @@ export async function createSMAV2Account(
     });
 
     return entryPointContract.read.getNonce([
-      baseAccount.address,
+      accountAddress_,
       nonceKey ?? hexToBigInt(nonceKeySuffix),
     ]) as Promise<bigint>;
   };
