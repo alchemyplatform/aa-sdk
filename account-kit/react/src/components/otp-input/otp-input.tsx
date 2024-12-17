@@ -140,7 +140,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
       <div className="flex gap-2.5">
         {initialOTPValue.map((_, i) => (
           <input
-            className={`border w-8 bg-bg-surface-default h-10 text-fg-primary rounded text-center focus:outline-active ${
+            className={`border w-8 bg-bg-surface-default h-10 text-fg-primary rounded text-center focus:outline-none focus:border-active ${
               !!errorText && "border-fg-critical"
             }`}
             ref={(el) => (refs.current[i] = el)}
