@@ -12,6 +12,10 @@ import {
   type SMAV2Account,
 } from "../account/semiModularAccountV2.js";
 
+export type SMAV2AccountClient<
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = SmartAccountClient<Transport, Chain, SMAV2Account<TSigner>>;
+
 export type CreateSMAV2AccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
@@ -27,7 +31,7 @@ export function createSMAV2AccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   args: CreateSMAV2AccountClientParams<Transport, TChain, TSigner>
-): Promise<SmartAccountClient<CustomTransport, Chain, SMAV2Account<TSigner>>>;
+): Promise<SMAV2AccountClient<TSigner>>;
 
 /**
  * Creates a MAv2 account client using the provided configuration parameters.
@@ -60,7 +64,7 @@ export function createSMAV2AccountClient<
  */
 export async function createSMAV2AccountClient({
   ...config
-}: CreateSMAV2AccountClientParams): Promise<SmartAccountClient> {
+}: CreateSMAV2AccountClientParams): Promise<SMAV2AccountClient> {
   const maV2Account = await createSMAV2Account({
     ...config,
   });

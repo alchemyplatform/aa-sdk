@@ -3,22 +3,19 @@ import {
   IncompatibleClientError,
   isSmartAccountClient,
   EntityIdOverrideError,
-  type GetAccountParameter,
   type GetEntryPointFromAccount,
   type SendUserOperationResult,
-  type SmartContractAccount,
-  type SmartAccountClient,
   type UserOperationOverridesParameter,
+  type SmartAccountSigner,
 } from "@aa-sdk/core";
 import {
+  encodeFunctionData,
+  concatHex,
   type Address,
   type Hex,
   type Chain,
   type Transport,
-  encodeFunctionData,
-  concatHex,
 } from "viem";
-
 import { semiModularAccountBytecodeAbi } from "../../abis/semiModularAccountBytecodeAbi.js";
 import type { HookConfig, ValidationConfig } from "../common/types.js";
 import {
@@ -26,11 +23,12 @@ import {
   serializeHookConfig,
   serializeModuleEntity,
 } from "../common/utils.js";
+import type { SMAV2Account } from "../../account/semiModularAccountV2.js";
+import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+import { type SMAV2AccountClient } from "../../client/client.js";
 
 export type InstallValidationParams<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   validationConfig: ValidationConfig;
   selectors: Hex[];
@@ -39,41 +37,39 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-} & UserOperationOverridesParameter<GetEntryPointFromAccount<TAccount>> &
-  GetAccountParameter<TAccount>;
+  account?: SMAV2Account<TSigner> | undefined;
+} & UserOperationOverridesParameter<
+  GetEntryPointFromAccount<SMAV2Account<TSigner>>
+>;
 
 export type UninstallValidationParams<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   moduleAddress: Address;
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-} & UserOperationOverridesParameter<GetEntryPointFromAccount<TAccount>> &
-  GetAccountParameter<TAccount>;
+  account?: SMAV2Account<TSigner> | undefined;
+} & UserOperationOverridesParameter<
+  GetEntryPointFromAccount<SMAV2Account<TSigner>>
+>;
 
 export type InstallValidationActions<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   installValidation: (
-    args: InstallValidationParams<TAccount>
+    args: InstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
   uninstallValidation: (
-    args: UninstallValidationParams<TAccount>
+    args: UninstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
 };
 
 export const installValidationActions: <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount = SmartContractAccount
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => InstallValidationActions<TAccount> = (client) => ({
+  client: SMAV2AccountClient<TSigner>
+) => InstallValidationActions<TSigner> = (client) => ({
   installValidation: async ({
     validationConfig,
     selectors,
@@ -94,22 +90,24 @@ export const installValidationActions: <
       );
     }
 
-    if (validationConfig.entityId === 0) {
+    if (validationConfig.entityId === DEFAULT_OWNER_ENTITY_ID) {
       throw new EntityIdOverrideError();
     }
 
-    const callData = encodeFunctionData({
-      abi: semiModularAccountBytecodeAbi,
-      functionName: "installValidation",
-      args: [
-        serializeValidationConfig(validationConfig),
-        selectors,
-        installData,
-        hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
-          concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
-        ),
-      ],
-    });
+    const callData = await account.encodeCallData(
+      encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: "installValidation",
+        args: [
+          serializeValidationConfig(validationConfig),
+          selectors,
+          installData,
+          hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
+            concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
+          ),
+        ],
+      })
+    );
 
     return client.sendUserOperation({
       uo: callData,
@@ -138,18 +136,20 @@ export const installValidationActions: <
       );
     }
 
-    const callData = encodeFunctionData({
-      abi: semiModularAccountBytecodeAbi,
-      functionName: "uninstallValidation",
-      args: [
-        serializeModuleEntity({
-          moduleAddress,
-          entityId,
-        }),
-        uninstallData,
-        hookUninstallDatas,
-      ],
-    });
+    const callData = await account.encodeCallData(
+      encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: "uninstallValidation",
+        args: [
+          serializeModuleEntity({
+            moduleAddress,
+            entityId,
+          }),
+          uninstallData,
+          hookUninstallDatas,
+        ],
+      })
+    );
 
     return client.sendUserOperation({
       uo: callData,
