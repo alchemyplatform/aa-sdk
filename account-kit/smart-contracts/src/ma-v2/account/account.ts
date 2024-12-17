@@ -8,6 +8,7 @@ import {
   createBundlerClient,
   getEntryPoint,
   toSmartContractAccount,
+  getAccountAddress,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -119,6 +120,13 @@ export async function createSMAV2Account(
     ...singleSignerMessageSigner(signer),
   });
 
+  const accountAddress_ = await getAccountAddress({
+    client,
+    entryPoint,
+    accountAddress,
+    getAccountInitCode,
+  });
+
   // TODO: add deferred action flag
   const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
     const nonceKeySuffix: Hex = `${toHex(entityId, { size: 4 })}${
@@ -136,7 +144,7 @@ export async function createSMAV2Account(
     });
 
     return entryPointContract.read.getNonce([
-      baseAccount.address,
+      accountAddress_,
       nonceKey ?? hexToBigInt(nonceKeySuffix),
     ]) as Promise<bigint>;
   };

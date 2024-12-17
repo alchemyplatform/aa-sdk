@@ -4,12 +4,12 @@ import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
 
 import { createSMAV2AccountClient } from "./client.js";
 
-import { local070InstanceOptSep } from "~test/instances.js";
+import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 
 describe("MA v2 Tests", async () => {
-  const instance = local070InstanceOptSep;
+  const instance = local070Instance;
   let client: ReturnType<typeof instance.getClient>;
 
   beforeAll(async () => {
