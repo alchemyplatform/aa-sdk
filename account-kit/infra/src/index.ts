@@ -37,6 +37,7 @@ export {
   soneiumMainnet,
   unichainMainnet,
   unichainSepolia,
+  inkMainnet,
   inkSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
