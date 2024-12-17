@@ -15,28 +15,26 @@ export const packSignature = ({
 
 export const addresses = {
   allowlistModule:
-    "0xE46ca4a98c485caEE2Abb6ef5116292B8c78a868" as `0x${string}`,
+    "0xe768abEe3ad779Be1318388fC5D6A6fCf658011B" as `0x${string}`,
   nativeTokenLimitModule:
-    "0xEa6a05306315196f2A7CA2ec7eEA45290bae00A0" as `0x${string}`,
+    "0xbFD077C53ec21f91699cF2DBab5324ea608b4eF0" as `0x${string}`,
   paymasterGuardModule:
-    "0x976D01aF75D128cae526B5328AC268ac83D607f4" as `0x${string}`,
+    "0x97018B224C969A1992076293f15482FB9982A271" as `0x${string}`,
   singleSignerValidationModule:
-    "0xF56716aE104545BdAf012e14e4640beb52727479" as `0x${string}`,
+    "0x2a42a36ee6DC9E8f75d2f8B5ef621EE8F2bD3156" as `0x${string}`,
   timeRangeModule:
-    "0x6FD0a9765a86788126a55aD5a483029a484F996C" as `0x${string}`,
+    "0x335a66470B5052DD9F540bD64ca6b7dE205F6f0B" as `0x${string}`,
   webauthnValidationModule:
-    "0xCf3423F8EB9EE215560802D03a48cDD44f85bD28" as `0x${string}`,
+    "0x52bB58A05659F2fF4bDb57E602824859De11119A" as `0x${string}`,
   executionInstallDelegate:
     "0x8Bf909fEb66EBcC4725f04E70F319791Ec9d9628" as `0x${string}`,
   modularAccountImpl:
-    "0x99090abd2700E24Cc70E3c486A89F7af876fFA33" as `0x${string}`,
+    "0x7219030794F2937ff4A322B7CE9a58C070aF08C5" as `0x${string}`,
   semiModularAccountBytecodeImpl:
-    "0xDCBb5d4639428B18703801f7Cd7230add729E4b0" as `0x${string}`,
+    "0xc6176BeF7E32224238ef3A2Ee3F9BaCfA801Cc95" as `0x${string}`,
   semiModularAccountStorageOnlyImpl:
-    "0x563ea43Ba0CD9150466B054Ce47FB0Fb45B234E2" as `0x${string}`,
-  accountFactory: "0xA5FC7aDc6d2c838443dF5bb826152c58b918f2c8" as `0x${string}`,
+    "0x8bD01f353058513fE5968C80585dc0792f56961b" as `0x${string}`,
+  accountFactory: "0x52fd2B39bd2a2c411371514114f9a1b3F9Ba3a64" as `0x${string}`,
   accountFactoryOwner:
-    "0x3BD786ac7Dec96eF9d06ebbCFa4e0E0947A2c303" as `0x${string}`,
+    "0xDdF32240B4ca3184De7EC8f0D5Aba27dEc8B7A5C" as `0x${string}`,
 };
-
-export const tempChainId = 11155420;
