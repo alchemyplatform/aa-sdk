@@ -19,6 +19,7 @@ import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { HookType } from "../actions/common/types.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
+import { allowlistModule } from "../modules/allowlist-module/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -471,6 +472,82 @@ describe("MA v2 Tests", async () => {
     await expect(
       provider.waitForUserOperationTransaction(uninstallResult)
     ).rejects.toThrowError();
+  });
+
+  it("installs allowlist module, then uninstalls", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookInstallData = allowlistModule.encodeOnInstallData({
+      entityId: 1,
+      inputs: [
+        {
+          target,
+          hasSelectorAllowlist: false,
+          hasERC20SpendLimit: false,
+          erc20SpendLimit: 0n,
+          selectors: [],
+        },
+      ],
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: addresses.allowlistModule,
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    const hookUninstallData = allowlistModule.encodeOnUninstallData({
+      entityId: 0,
+      inputs: [
+        {
+          target,
+          hasSelectorAllowlist: false,
+          hasERC20SpendLimit: false,
+          erc20SpendLimit: 0n,
+          selectors: [],
+        },
+      ],
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
