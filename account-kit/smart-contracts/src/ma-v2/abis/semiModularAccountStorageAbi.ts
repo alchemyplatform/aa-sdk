@@ -1298,4 +1298,4 @@ export const semiModularAccountStorageAbi = [
     name: "ValidationSignatureSegmentMissing",
     inputs: [],
   },
-];
+] as const;

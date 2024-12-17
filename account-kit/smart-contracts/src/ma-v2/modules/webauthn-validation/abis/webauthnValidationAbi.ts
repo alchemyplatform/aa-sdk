@@ -370,4 +370,4 @@ export const webauthnValidationModuleAbi = [
     name: "TransferFailed",
     inputs: [],
   },
-];
+] as const;
