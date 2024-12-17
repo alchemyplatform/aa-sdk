@@ -2,7 +2,7 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
-  EntityIdOverrideError,
+  // EntityIdOverrideError,
   type GetEntryPointFromAccount,
   type SendUserOperationResult,
   type UserOperationOverridesParameter,
@@ -20,7 +20,7 @@ import {
 
 import { type SMAV2AccountClient } from "../../client/client.js";
 import { type SMAV2Account } from "../../account/semiModularAccountV2.js";
-import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+// import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner
