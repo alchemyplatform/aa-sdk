@@ -8,6 +8,7 @@ import { type Chain, type CustomTransport, type Transport } from "viem";
 
 import {
   createSMAV2Account,
+  type CalldataEncoder,
   type CreateSMAV2AccountParams,
   type SMAV2Account,
 } from "../account/semiModularAccountV2.js";
@@ -24,10 +25,13 @@ export type CreateSMAV2AccountClientParams<
 
 export function createSMAV2AccountClient<
   TChain extends Chain = Chain,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TCalldataEncoder extends CalldataEncoder = CalldataEncoder
 >(
   args: CreateSMAV2AccountClientParams<Transport, TChain, TSigner>
-): Promise<SmartAccountClient<CustomTransport, Chain, SMAV2Account<TSigner>>>;
+): Promise<
+  SmartAccountClient<CustomTransport, Chain, SMAV2Account> & TCalldataEncoder
+>;
 
 /**
  * Creates a MAv2 account client using the provided configuration parameters.
@@ -60,13 +64,20 @@ export function createSMAV2AccountClient<
  */
 export async function createSMAV2AccountClient({
   ...config
-}: CreateSMAV2AccountClientParams): Promise<SmartAccountClient> {
+}: CreateSMAV2AccountClientParams): Promise<
+  SmartAccountClient & CalldataEncoder
+> {
   const maV2Account = await createSMAV2Account({
     ...config,
   });
 
-  return createSmartAccountClient({
+  const client = createSmartAccountClient({
     ...config,
     account: maV2Account,
   });
+
+  return {
+    ...client,
+    encodeCallData: maV2Account.encodeCallData,
+  };
 }

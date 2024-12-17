@@ -1,6 +1,10 @@
 import { custom, parseEther, publicActions } from "viem";
 
-import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import {
+  LocalAccountSigner,
+  type SmartAccountSigner,
+  type SmartAccountClient,
+} from "@aa-sdk/core";
 
 import { createSMAV2AccountClient } from "./client.js";
 
@@ -10,6 +14,7 @@ import { accounts } from "~test/constants.js";
 import { installValidationActions } from "../actions/install-validation/installValidation.js";
 import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
+import { type CalldataEncoder } from "../account/semiModularAccountV2.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -192,7 +197,7 @@ describe("MA v2 Tests", async () => {
   }: {
     signer: SmartAccountSigner;
     accountAddress?: `0x${string}`;
-  }) =>
+  }): Promise<SmartAccountClient & CalldataEncoder> =>
     createSMAV2AccountClient({
       chain: instance.chain,
       signer,
