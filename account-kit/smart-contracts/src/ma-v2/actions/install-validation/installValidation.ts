@@ -6,9 +6,9 @@ import {
   type GetAccountParameter,
   type GetEntryPointFromAccount,
   type SendUserOperationResult,
-  type SmartContractAccount,
   type SmartAccountClient,
   type UserOperationOverridesParameter,
+  type SmartContractAccount,
 } from "@aa-sdk/core";
 import {
   type Address,
@@ -26,6 +26,7 @@ import {
   serializeHookConfig,
   serializeModuleEntity,
 } from "../common/utils.js";
+import type { CalldataEncoder } from "../../account/semiModularAccountV2.js";
 
 export type InstallValidationParams<
   TAccount extends SmartContractAccount | undefined =
@@ -72,7 +73,7 @@ export const installValidationActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount = SmartContractAccount
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: SmartAccountClient<TTransport, TChain, TAccount> & CalldataEncoder
 ) => InstallValidationActions<TAccount> = (client) => ({
   installValidation: async ({
     validationConfig,
@@ -98,18 +99,22 @@ export const installValidationActions: <
       throw new EntityIdOverrideError();
     }
 
-    const callData = encodeFunctionData({
-      abi: semiModularAccountBytecodeAbi,
-      functionName: "installValidation",
-      args: [
-        serializeValidationConfig(validationConfig),
-        selectors,
-        installData,
-        hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
-          concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
-        ),
-      ],
-    });
+    const { encodeCallData } = client;
+
+    const callData = await encodeCallData(
+      encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: "installValidation",
+        args: [
+          serializeValidationConfig(validationConfig),
+          selectors,
+          installData,
+          hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
+            concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
+          ),
+        ],
+      })
+    );
 
     return client.sendUserOperation({
       uo: callData,
@@ -138,18 +143,22 @@ export const installValidationActions: <
       );
     }
 
-    const callData = encodeFunctionData({
-      abi: semiModularAccountBytecodeAbi,
-      functionName: "uninstallValidation",
-      args: [
-        serializeModuleEntity({
-          moduleAddress,
-          entityId,
-        }),
-        uninstallData,
-        hookUninstallDatas,
-      ],
-    });
+    const { encodeCallData } = client;
+
+    const callData = await encodeCallData(
+      encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: "uninstallValidation",
+        args: [
+          serializeModuleEntity({
+            moduleAddress,
+            entityId,
+          }),
+          uninstallData,
+          hookUninstallDatas,
+        ],
+      })
+    );
 
     return client.sendUserOperation({
       uo: callData,

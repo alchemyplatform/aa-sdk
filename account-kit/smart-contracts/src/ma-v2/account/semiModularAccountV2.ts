@@ -25,6 +25,8 @@ import {
   type Chain,
   type Hex,
   type Transport,
+  hexToBigInt,
+  zeroAddress,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import {
@@ -32,8 +34,11 @@ import {
   DEFAULT_OWNER_ENTITY_ID,
 } from "../utils.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
+import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../actions/common/utils.js";
+
+const executeUserOpSelector: Hex = "0x8DD7712F";
 
 const executeUserOpSelector: Hex = "0x8DD7712F";
 
@@ -66,15 +71,38 @@ export type ValidationDataParams =
       entityId: number;
     };
 
+export type CalldataEncoder = {
+  encodeCallData: (callData: Hex) => Promise<Hex>;
+};
+
+export type ExecutionDataView = {
+  module: Address;
+  skipRuntimeValidation: boolean;
+  allowGlobalValidation: boolean;
+  executionHooks: readonly Hex[];
+};
+
+export type ValidationDataView = {
+  validationHooks: readonly Hex[];
+  executionHooks: readonly Hex[];
+  selectors: readonly Hex[];
+  validationFlags: number;
+};
+
+export type ValidationDataParams = {
+  validationModuleAddress?: Address;
+  entityId?: number;
+};
+
 export type SMAV2Account<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TCalldataEncoder extends CalldataEncoder = CalldataEncoder
 > = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0"> &
-  SignerEntity & {
+  TCalldataEncoder & {
     getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
     getValidationData: (
       args: ValidationDataParams
     ) => Promise<ValidationDataView>;
-    encodeCallData: (callData: Hex) => Promise<Hex>;
   };
 
 export type CreateSMAV2AccountParams<
@@ -227,12 +255,7 @@ export async function createSMAV2Account(
 
   const getExecutionData = async (selector: Hex) => {
     if (!(await baseAccount.isAccountDeployed())) {
-      return {
-        module: zeroAddress,
-        skipRuntimeValidation: false,
-        allowGlobalValidation: false,
-        executionHooks: [],
-      };
+      return {} as ExecutionDataView;
     }
 
     return await accountContract.read.getExecutionData([selector]);
@@ -240,12 +263,7 @@ export async function createSMAV2Account(
 
   const getValidationData = async (args: ValidationDataParams) => {
     if (!(await baseAccount.isAccountDeployed())) {
-      return {
-        validationHooks: [],
-        executionHooks: [],
-        selectors: [],
-        validationFlags: 0,
-      };
+      return {} as ValidationDataView;
     }
 
     const { validationModuleAddress, entityId } = args;
@@ -262,19 +280,52 @@ export async function createSMAV2Account(
       entityId: Number(entityId),
     });
 
-    return validationData.executionHooks.length
-      ? concatHex([executeUserOpSelector, callData])
-      : callData;
+    const numHooks = validationData?.executionHooks?.length ?? 0;
+
+    return numHooks ? concatHex([executeUserOpSelector, callData]) : callData;
   };
+
+  const encodeExecute: (tx: AccountOp) => Promise<Hex> = async ({
+    target,
+    data,
+    value,
+  }) => {
+    let callData = encodeFunctionData({
+      abi: modularAccountAbi,
+      functionName: "execute",
+      args: [target, value ?? 0n, data],
+    });
+
+    callData = (await baseAccount.isAccountDeployed())
+      ? await encodeCallData(callData)
+      : callData;
+
+    return callData;
+  };
+
+  const encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex> = async (txs) =>
+    encodeCallData(
+      encodeFunctionData({
+        abi: modularAccountAbi,
+        functionName: "executeBatch",
+        args: [
+          txs.map((tx) => ({
+            target: tx.target,
+            data: tx.data,
+            value: tx.value ?? 0n,
+          })),
+        ],
+      })
+    );
 
   return {
     ...baseAccount,
     getAccountNonce,
     getSigner: () => signer,
-    isGlobalValidation,
-    entityId,
     getExecutionData,
     getValidationData,
+    encodeExecute,
+    encodeBatchExecute,
     encodeCallData,
   };
 }
