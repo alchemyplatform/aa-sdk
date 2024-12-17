@@ -436,6 +436,24 @@ export const beraChainBartio: Chain = defineChain({
   },
 });
 
+export const inkMainnet: Chain = defineChain({
+  id: 57073,
+  name: "Ink Mainnet",
+  network: "Ink Mainnet",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://ink-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://ink-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://ink-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const inkSepolia: Chain = defineChain({
   id: 763373,
   name: "Ink Sepolia",
