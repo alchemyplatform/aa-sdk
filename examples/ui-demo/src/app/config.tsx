@@ -86,7 +86,7 @@ export const alchemyConfig = () =>
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
       auth: {
         sections: [
-          [{ type: "email" }],
+          [{ type: "email", emailMode: "otp" }],
           [
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },

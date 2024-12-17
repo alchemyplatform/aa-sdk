@@ -73,11 +73,12 @@ export default function HomeScreen() {
             onChangeText={setEmail}
             value={email}
           />
+          {/* TODO: implement OTP */}
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
               signer
-                .authenticate({ email, type: "email" })
+                .authenticate({ email, type: "email", emailMode: "magicLink" })
                 .catch(console.error);
             }}
           >
