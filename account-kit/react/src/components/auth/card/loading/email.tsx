@@ -39,15 +39,13 @@ export const LoadingEmail = () => {
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const CompletingEmailAuth = () => {
   const { isConnected } = useSignerStatus();
-  const { setAuthStep, authStep } = useAuthContext("email_completing");
+  const { setAuthStep } = useAuthContext("email_completing");
 
   useEffect(() => {
-    if (isConnected && authStep.createPasskeyAfter) {
-      setAuthStep({ type: "passkey_create" });
-    } else if (isConnected) {
+    if (isConnected) {
       setAuthStep({ type: "complete" });
     }
-  }, [authStep.createPasskeyAfter, isConnected, setAuthStep]);
+  }, [isConnected, setAuthStep]);
 
   return (
     <div className="flex flex-col gap-5 items-center">

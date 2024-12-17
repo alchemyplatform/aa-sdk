@@ -6,7 +6,12 @@ export type SignerEventsSchema = [
     EventName: "signer_authnticate";
     EventData:
       | {
-          authType: "email" | "passkey_anon" | "passkey_email" | "oauthReturn";
+          authType:
+            | "email"
+            | "passkey_anon"
+            | "passkey_email"
+            | "otp"
+            | "oauthReturn";
           provider?: never;
         }
       | { authType: "oauth"; provider: string };
