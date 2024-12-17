@@ -364,6 +364,24 @@ export const soneiumMinato: Chain = defineChain({
   },
 });
 
+export const soneiumMainnet: Chain = defineChain({
+  id: 1868,
+  name: "Soneium Mainnet",
+  network: "Soneium Mainnet",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://soneium-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://soneium-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://soneium-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const opbnbTestnet: Chain = defineChain({
   id: 5611,
   name: "OPBNB Testnet",
@@ -414,6 +432,24 @@ export const beraChainBartio: Chain = defineChain({
     },
     alchemy: {
       http: ["https://berachain-bartio.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const inkSepolia: Chain = defineChain({
+  id: 763373,
+  name: "Ink Sepolia",
+  network: "Ink Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://ink-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://ink-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://ink-sepolia.g.alchemy.com/v2"],
     },
   },
 });
