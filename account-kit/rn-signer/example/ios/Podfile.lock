@@ -1,5 +1,6 @@
 PODS:
   - account-kit-react-native-signer (4.6.1):
+    - Base58Swift
     - DoubleConversion
     - glog
     - hermes-engine
@@ -20,6 +21,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - Base58Swift (2.1.10):
+    - BigInt (~> 5.0.0)
+  - BigInt (5.0.0)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.76.1)
@@ -1765,6 +1769,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Base58Swift
+    - BigInt
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1909,7 +1915,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  account-kit-react-native-signer: 16f64a638f61da471cdec38f074806fcb2554c75
+  account-kit-react-native-signer: 8a37c3b60e7e86509e39d8e6553e55af921956ee
+  Base58Swift: 53d551f0b33d9478fa63b3445e453a772d6b31a7
+  BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   FBLazyVector: 7075bb12898bc3998fd60f4b7ca422496cc2cdf7
@@ -1980,6 +1988,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: db69236006b8b1c6d55ab453390c882306cbf219
 
-PODFILE CHECKSUM: c1ec8299501bd9412bc7c7197f50a43141904a61
+PODFILE CHECKSUM: 4ca7e735ec18111c6c45ba928821c65bc53d9fe8
 
 COCOAPODS: 1.15.2

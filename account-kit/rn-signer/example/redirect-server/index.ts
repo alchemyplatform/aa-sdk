@@ -1,5 +1,5 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 
 dotenv.config();
 
@@ -11,6 +11,7 @@ app.get("/", (req, res) => {
   const bundle = req.query.bundle;
   const orgId = req.query.orgId;
 
+  console.log("redirecting");
   res.redirect(`${appScheme}://home?bundle=${bundle}&orgId=${orgId}`);
 });
 
