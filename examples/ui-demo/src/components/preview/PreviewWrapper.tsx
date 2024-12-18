@@ -6,6 +6,9 @@ import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
 import { MintCard } from "../mint-card/MintCard";
 import { useState, useEffect } from "react";
+import { WalletTypes } from "@/app/config";
+import { Wrapper7702 } from "../shared/7702/Wrapper";
+import { useConfigStore } from "@/state";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   return (
@@ -27,6 +30,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   );
 }
 const RenderContent = () => {
+  const { walletType } = useConfigStore();
   const user = useUser();
   const { authStep } = useAuthContext();
   const [showAuthCard, setShowAuthCard] = useState(() => !user);
@@ -71,9 +75,8 @@ const RenderContent = () => {
     );
   }
 
-  return (
-    <div>
-      <MintCard />
-    </div>
-  );
+  if (walletType === WalletTypes.smart) {
+    return <MintCard />;
+  }
+  return <Wrapper7702 />;
 };
