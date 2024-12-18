@@ -31,19 +31,12 @@ export const default7702UserOpSigner: ClientMiddlewareFn = async (
   // TODO: this isn't the cleanest because now the account implementation HAS to know that it needs to return an impl address
   // even if the account is not deployed
   const implAddress = await account.getImplementationAddress();
-  if (
-    code ===
-    "0x00000000000000000000000000000000000000000000000001ff00" +
-      implAddress.slice(2)
-  ) {
+  if (code === "0xef0100" + implAddress.slice(2)) {
     return uo;
   }
 
   return {
     ...uo,
-    // TODO: put this in a constant
-    signature:
-      "0x00000000000000000000000000000000000000000000000001ff00" +
-      (await uo.signature).slice(2),
+    authorizationTuple: await account.signAuthorization(),
   };
 };
