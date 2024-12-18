@@ -8,7 +8,6 @@ import {
   createBundlerClient,
   getEntryPoint,
   toSmartContractAccount,
-  getAccountAddress,
 } from "@aa-sdk/core";
 import {
   concatHex,
