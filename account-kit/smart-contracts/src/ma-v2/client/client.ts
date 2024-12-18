@@ -9,12 +9,13 @@ import {
   type SendUserOperationResult,
 } from "@aa-sdk/core";
 import {
-  type Address,
   type Chain,
   type CustomTransport,
-  type Hex,
   type Transport,
+  type Hex,
+  type Address,
 } from "viem";
+import { concatHex, encodeFunctionData } from "viem";
 
 import {
   createSMAV2Account,
@@ -30,9 +31,14 @@ import {
   serializeModuleEntity,
 } from "../actions/common/utils.js";
 
-export type SMAV2AccountClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartAccountClient<Transport, Chain, SMAV2Account<TSigner>>;
+import type { HookConfig, ValidationConfig } from "../actions/common/types.js";
+import {
+  serializeValidationConfig,
+  serializeHookConfig,
+  serializeModuleEntity,
+} from "../actions/common/utils.js";
+
+import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 
 export type CreateSMAV2AccountClientParams<
   TTransport extends Transport = Transport,
@@ -77,7 +83,8 @@ export function createSMAV2AccountClient<
 >(
   args: CreateSMAV2AccountClientParams<Transport, TChain, TSigner>
 ): Promise<
-  SmartAccountClient<CustomTransport, Chain, SMAV2Account> & TCalldataEncoder
+  SmartAccountClient<CustomTransport, Chain, SMAV2Account> &
+    InstallValidationActions
 >;
 
 /**
@@ -112,7 +119,7 @@ export function createSMAV2AccountClient<
 export async function createSMAV2AccountClient({
   ...config
 }: CreateSMAV2AccountClientParams): Promise<
-  SmartAccountClient & CalldataEncoder
+  SmartAccountClient & InstallValidationActions
 > {
   const maV2Account = await createSMAV2Account({
     ...config,
@@ -123,8 +130,71 @@ export async function createSMAV2AccountClient({
     account: maV2Account,
   });
 
+  const installValidation = async ({
+    validationConfig,
+    selectors,
+    installData,
+    hooks,
+    overrides,
+  }: InstallValidationParams) => {
+    if (validationConfig.entityId === 0) {
+      throw new EntityIdOverrideError();
+    }
+
+    const callData = await maV2Account.encodeCallData(
+      encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: "installValidation",
+        args: [
+          serializeValidationConfig(validationConfig),
+          selectors,
+          installData,
+          hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
+            concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
+          ),
+        ],
+      })
+    );
+
+    return client.sendUserOperation({
+      uo: callData,
+      ...maV2Account,
+      overrides,
+    });
+  };
+
+  const uninstallValidation = async ({
+    moduleAddress,
+    entityId,
+    uninstallData,
+    hookUninstallDatas,
+    overrides,
+  }: UninstallValidationParams) => {
+    const callData = await maV2Account.encodeCallData(
+      encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: "uninstallValidation",
+        args: [
+          serializeModuleEntity({
+            moduleAddress,
+            entityId,
+          }),
+          uninstallData,
+          hookUninstallDatas,
+        ],
+      })
+    );
+
+    return client.sendUserOperation({
+      uo: callData,
+      ...maV2Account,
+      overrides,
+    });
+  };
+
   return {
     ...client,
-    encodeCallData: maV2Account.encodeCallData,
+    installValidation,
+    uninstallValidation,
   };
 }

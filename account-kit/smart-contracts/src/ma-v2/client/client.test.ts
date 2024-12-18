@@ -4,17 +4,19 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
   type SmartAccountClient,
+  erc7677Middleware,
 } from "@aa-sdk/core";
 
-import { createSMAV2AccountClient } from "./client.js";
+import {
+  createSMAV2AccountClient,
+  type InstallValidationActions,
+} from "./client.js";
 
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { installValidationActions } from "../actions/install-validation/installValidation.js";
 import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
-import { type CalldataEncoder } from "../account/semiModularAccountV2.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -67,9 +69,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("adds a session key with no permissions", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -125,9 +125,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("uninstalls a session key", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
