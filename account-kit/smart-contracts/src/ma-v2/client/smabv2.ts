@@ -10,7 +10,6 @@ import { type Chain, type Transport } from "viem";
 import {
   createSMAV2Account,
   type CreateSMAV2AccountParams,
-  type MAV2Account,
 } from "../account/semiModularAccountV2.js";
 import {
   createAlchemySmartAccountClient,
@@ -19,6 +18,9 @@ import {
   type AlchemyTransport,
 } from "@account-kit/infra";
 import type { LightAccount } from "../../light-account/accounts/account.js";
+
+import type { MAV2Account } from "../account/common/modularAccountV2Base.js";
+
 export type SMAV2AccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TChain extends Chain = Chain,
