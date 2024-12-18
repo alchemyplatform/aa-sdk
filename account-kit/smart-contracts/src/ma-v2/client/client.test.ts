@@ -1,10 +1,4 @@
-import {
-  custom,
-  getContract,
-  parseEther,
-  publicActions,
-  zeroAddress,
-} from "viem";
+import { custom, parseEther, publicActions, zeroAddress } from "viem";
 
 import {
   LocalAccountSigner,
@@ -29,7 +23,6 @@ import { SingleSignerValidationModule } from "../modules/single-signer-validatio
 import { allowlistModule } from "../modules/allowlist-module/module.js";
 import { HookType } from "../actions/common/types.js";
 import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
-import { nativeTokenLimitModuleAbi } from "../modules/native-token-limit-module/abis/nativeTokenLimitModuleAbi.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
