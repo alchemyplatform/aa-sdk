@@ -18,6 +18,7 @@ import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { allowlistModule } from "../modules/allowlist-module/module.js";
 import { HookType } from "../actions/common/types.js";
+import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -264,6 +265,105 @@ describe("MA v2 Tests", async () => {
     await expect(
       provider.waitForUserOperationTransaction(uninstallResult)
     ).resolves.not.toThrowError();
+  });
+
+  it.only("installs native token limit module, then uninstalls", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const spendLimit = parseEther("0.1"); // 0.1 ETH limit
+    const hookInstallData = nativeTokenLimitModule.encodeOnInstallData({
+      entityId: 1,
+      spendLimit,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        // TODO: Make this a constant "FALLBACK_VALIDATION_CONFIG or something"
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: addresses.nativeTokenLimitModule,
+            entityId: 0,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // Try to send more than the limit - should fail
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.2"), // Try to send 0.2 ETH, above the 0.1 limit
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
+    // Try to send less than the limit - should succeed
+    const sendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: parseEther("0.05"), // Send 0.05 ETH, below the 0.1 limit
+        data: "0x",
+      },
+    });
+
+    // await expect(
+    //   provider.waitForUserOperationTransaction(sendResult)
+    // ).resolves.not.toThrowError();
+
+    // // Now uninstall the module
+    // const hookUninstallData = nativeTokenLimitModule.encodeOnUninstallData({
+    //   entityId: 0,
+    // });
+
+    // const uninstallResult = await provider.uninstallValidation({
+    //   moduleAddress: zeroAddress,
+    //   entityId: 0,
+    //   uninstallData: "0x",
+    //   hookUninstallDatas: [hookUninstallData],
+    // });
+
+    // await expect(
+    //   provider.waitForUserOperationTransaction(uninstallResult)
+    // ).resolves.not.toThrowError();
+
+    // // After uninstall, should be able to send more than the previous limit
+    // const finalSendResult = await provider.sendUserOperation({
+    //   uo: {
+    //     target: target,
+    //     value: parseEther("0.2"), // Now we can send 0.2 ETH
+    //     data: "0x",
+    //   },
+    // });
+
+    // await expect(
+    //   provider.waitForUserOperationTransaction(finalSendResult)
+    // ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
