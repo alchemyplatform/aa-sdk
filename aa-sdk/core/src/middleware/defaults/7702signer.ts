@@ -23,6 +23,7 @@ export const default7702UserOpSigner: ClientMiddlewareFn = async (
   }
 
   if (!account.signAuthorization) {
+    console.log("account does not support signAuthorization");
     return uo;
   }
 
@@ -30,20 +31,17 @@ export const default7702UserOpSigner: ClientMiddlewareFn = async (
     (await params.client.getCode({ address: account.address })) ?? "0x";
   // TODO: this isn't the cleanest because now the account implementation HAS to know that it needs to return an impl address
   // even if the account is not deployed
+
   const implAddress = await account.getImplementationAddress();
-  if (
-    code ===
-    "0x00000000000000000000000000000000000000000000000001ff00" +
-      implAddress.slice(2)
-  ) {
+  if (code === "0xef0100" + implAddress.slice(2)) {
+    console.log("account is already 7702 delegated to a smart account");
     return uo;
   }
 
+  console.log("signing 7702 authorization");
+
   return {
     ...uo,
-    // TODO: put this in a constant
-    signature:
-      "0x00000000000000000000000000000000000000000000000001ff00" +
-      (await uo.signature).slice(2),
+    authorizationTuple: await account.signAuthorization(),
   };
 };

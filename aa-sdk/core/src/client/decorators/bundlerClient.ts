@@ -63,7 +63,10 @@ export type BundlerActions = {
   estimateUserOperationGas<
     TEntryPointVersion extends EntryPointVersion = EntryPointVersion
   >(
-    request: UserOperationRequest<TEntryPointVersion>,
+    request: Extract<
+      UserOperationRequest<TEntryPointVersion>,
+      { authorizationContract?: Address }
+    >,
     entryPoint: Address,
     stateOverride?: StateOverride
   ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
