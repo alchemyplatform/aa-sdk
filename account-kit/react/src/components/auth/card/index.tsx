@@ -90,7 +90,6 @@ export const AuthCardContent = ({
       case "otp_verify":
       case "passkey_create":
       case "oauth_completing":
-      case "otp_completing":
         disconnect(config); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
