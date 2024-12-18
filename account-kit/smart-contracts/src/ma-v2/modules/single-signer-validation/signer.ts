@@ -41,7 +41,7 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
       });
     },
 
-    signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
+    signUserOperationHash: (uoHash: Hex): Promise<Hex> => {
       return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
         packSignature({
           // orderedHookData: [],
