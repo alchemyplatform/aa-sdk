@@ -56,7 +56,7 @@ describe("MA v2 Tests", async () => {
 
     await provider.waitForUserOperationTransaction(result);
 
-    await expect(await getTargetBalance()).toEqual(
+    await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
   });
@@ -114,7 +114,7 @@ describe("MA v2 Tests", async () => {
 
     txnHash = sessionKeyClient.waitForUserOperationTransaction(result);
     await expect(txnHash).resolves.not.toThrowError();
-    await expect(await getTargetBalance()).toEqual(
+    await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
   });
