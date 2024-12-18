@@ -11,23 +11,24 @@ import {
 
 import Config from "react-native-config";
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
-export default function MagicLinkAuthScreen() {
+
+const signer = RNAlchemySigner({
+  client: { connection: { apiKey: Config.API_KEY! } },
+});
+
+export default function OTPAuthScreen() {
   const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
-
-  const signer = RNAlchemySigner({
-    client: { connection: { apiKey: Config.API_KEY! } },
-  });
 
   const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 
   const [otpCode, setOtpCode] = useState<string>("");
 
-  const handleUserAuth = ({ otpCode }: { otpCode: string }) => {
+  const handleUserAuth = ({ code }: { code: string }) => {
     setAwaitingOtp(false);
     signer
       .authenticate({
-        otpCode: otpCode,
+        otpCode: code,
         type: "otp",
       })
       .then((res) => {
@@ -55,7 +56,7 @@ export default function MagicLinkAuthScreen() {
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handleUserAuth({ otpCode })}
+            onPress={() => handleUserAuth({ code: otpCode })}
           >
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
