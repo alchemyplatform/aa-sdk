@@ -63,9 +63,9 @@ export class InvalidEntityIdError extends BaseError {
   /**
    * Initializes a new instance of the error message with a default message indicating that the entity id is invalid because it's too large.
    *
-   * @param {bigint} entityId the invalid entityId used
+   * @param {number} entityId the invalid entityId used
    */
-  constructor(entityId: bigint) {
+  constructor(entityId: number) {
     super(`Entity ID used is ${entityId}, but must be less than uint32.max`);
   }
 }

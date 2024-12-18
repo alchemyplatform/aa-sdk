@@ -23,7 +23,7 @@ import {
   hexToBigInt,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
-import { addresses } from "../utils.js";
+import { getDefaultMAV2FactoryAddress } from "../utils.js";
 import { standardExecutor } from "../../msca/account/standardExecutor.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
 import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
@@ -50,11 +50,11 @@ export type CreateSMAV2AccountParams<
 } & (
     | {
         isGlobalValidation: boolean;
-        entityId: bigint;
+        entityId: number;
       }
     | {
-        isGlobalValidation: never;
-        entityId: never;
+        isGlobalValidation?: never;
+        entityId?: never;
       }
   );
 
@@ -73,16 +73,16 @@ export async function createSMAV2Account(
     chain,
     signer,
     salt = 0n,
-    factoryAddress = addresses.accountFactory,
+    factoryAddress = getDefaultMAV2FactoryAddress(chain),
     initCode,
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     isGlobalValidation = true,
-    entityId = 0n,
+    entityId = 0,
   } = config;
 
-  if (entityId >= maxUint32) {
+  if (entityId >= Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
   }
 

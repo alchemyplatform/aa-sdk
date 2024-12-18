@@ -8,12 +8,13 @@ import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { installValidationActions } from "../actions/install-validation/installValidation.js";
-import { addresses } from "../utils.js";
+import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
-  let client: ReturnType<typeof instance.getClient>;
+  let client: ReturnType<typeof instance.getClient> &
+    ReturnType<typeof publicActions>;
 
   beforeAll(async () => {
     client = instance.getClient().extend(publicActions);
@@ -30,11 +31,10 @@ describe("MA v2 Tests", async () => {
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
-  const getTargetBalance = async (): Promise<number> => {
-    return client.getBalance({
+  const getTargetBalance = async (): Promise<bigint> =>
+    client.getBalance({
       address: target,
     });
-  };
 
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
@@ -74,7 +74,9 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: addresses.singleSignerValidationModule,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -99,7 +101,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1n,
+      entityId: 1,
       isGlobalValidation: true,
     });
 
@@ -130,7 +132,9 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: addresses.singleSignerValidationModule,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -148,7 +152,9 @@ describe("MA v2 Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
 
     result = await provider.uninstallValidation({
-      moduleAddress: addresses.singleSignerValidationModule,
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -165,19 +171,19 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1n,
+      entityId: 1,
       isGlobalValidation: true,
     });
 
-    result = sessionKeyClient.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount,
-        data: "0x",
-      },
-    });
-
-    await expect(result).rejects.toThrowError();
+    await expect(
+      sessionKeyClient.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
   });
 
   const givenConnectedProvider = async ({
