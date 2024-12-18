@@ -1,21 +1,35 @@
 /* eslint-disable import/extensions */
 import { createStaticNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Text } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import HomeScreen from "./screens/Home";
+import OtpAuthScreen from "./screens/otp-auth";
+import MagicLinkAuthScreen from "./screens/magic-link-auth";
 
 const linking = {
   enabled: "auto" as const /* Automatically generate paths for all screens */,
   prefixes: ["rn-signer-demo://"],
 };
 
-const RootStack = createNativeStackNavigator({
-  initialRouteName: "Home",
+const RootStack = createBottomTabNavigator({
+  initialRouteName: "MagicLinkAuth",
   screens: {
-    Home: {
-      screen: HomeScreen,
-      linking: { path: "home" },
+    MagicLinkAuth: {
+      screen: MagicLinkAuthScreen,
+      linking: { path: "magic-link-auth" },
+      options: {
+        tabBarLabel: "Magic Link",
+        tabBarIcon: () => <Text>🪄</Text>,
+      },
+    },
+    OtpAuth: {
+      screen: OtpAuthScreen,
+      linking: { path: "otp-auth" },
+      options: {
+        tabBarLabel: "OTP",
+        tabBarIcon: () => <Text>🔑</Text>,
+      },
     },
   },
 });
