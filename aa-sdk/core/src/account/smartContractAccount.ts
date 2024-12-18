@@ -125,7 +125,7 @@ export type SmartContractAccount<
   getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
-  signAuthorization?: () => Promise<Authorization<number, true>>;
+  signAuthorization?: () => Promise<Authorization<number, true> | undefined>;
 };
 // [!endregion SmartContractAccount]
 

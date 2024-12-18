@@ -5,6 +5,7 @@ import type {
   TypedData,
   TypedDataDefinition,
 } from "viem";
+import type { Authorization } from "viem/experimental";
 
 // [!region SmartAccountAuthenticator]
 /**
@@ -42,5 +43,9 @@ export interface SmartAccountSigner<Inner = any> {
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => Promise<Hex>;
+
+  signAuthorization?: (
+    unsignedAuthorization: Authorization<number, false>
+  ) => Promise<Authorization<number, true>> | undefined;
 }
 // [!endregion SmartAccountSigner]
