@@ -7,20 +7,23 @@ import {
 import { type Chain, type Transport } from "viem";
 
 import {
-  createSMAV2Account,
-  type CreateSMAV2AccountParams,
-  type MAV2Account,
-} from "../account/semiModularAccountV2.js";
+  createSMA7702Account,
+  type CreateSMA7702AccountParams,
+} from "../account/semiModularAccount7702.js";
 
-export type SMAV2AccountClient<
+import { default7702UserOpSigner } from "@aa-sdk/core";
+
+import type { MAV2Account } from "../account/common/modularAccountV2Base.js";
+
+export type SMA7702AccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartAccountClient<Transport, Chain, MAV2Account<TSigner>>;
 
-export type CreateSMAV2AccountClientParams<
+export type CreateSMA7702AccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = CreateSMAV2AccountParams<TTransport, TSigner> &
+> = CreateSMA7702AccountParams<TTransport, TSigner> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
@@ -30,8 +33,8 @@ export function createSMAV2AccountClient<
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateSMAV2AccountClientParams<Transport, TChain, TSigner>
-): Promise<SMAV2AccountClient<TSigner>>;
+  args: CreateSMA7702AccountClientParams<Transport, TChain, TSigner>
+): Promise<SMA7702AccountClient<TSigner>>;
 
 /**
  * Creates a SMAv2 account client using the provided configuration parameters.
@@ -63,12 +66,13 @@ export function createSMAV2AccountClient<
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance
  */
 export async function createSMAV2AccountClient(
-  config: CreateSMAV2AccountClientParams
+  config: CreateSMA7702AccountClientParams
 ): Promise<SmartAccountClient> {
-  const smaV2Account = await createSMAV2Account(config);
+  const smaV2Account = await createSMA7702Account(config);
 
   return createSmartAccountClient({
     ...config,
     account: smaV2Account,
+    signUserOperation: default7702UserOpSigner,
   });
 }

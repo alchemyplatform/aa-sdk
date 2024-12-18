@@ -24,8 +24,8 @@ import {
   serializeModuleEntity,
 } from "../common/utils.js";
 
-import { type SMAV2AccountClient } from "../../client/client.js";
-import { type MAV2Account } from "../../account/semiModularAccountV2.js";
+import { type SMAV2AccountClient } from "../../client/smabv2.js";
+import { type MAV2Account } from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<

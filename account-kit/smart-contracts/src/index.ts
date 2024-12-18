@@ -141,8 +141,8 @@ export {
 export type * from "./ma-v2/actions/install-validation/installValidation.js";
 export { installValidationActions } from "./ma-v2/actions/install-validation/installValidation.js";
 
-export type * from "./ma-v2/client/client.js";
-export { createSMAV2AccountClient } from "./ma-v2/client/client.js";
+export type * from "./ma-v2/client/smabv2.js";
+export { createSMAV2AccountClient } from "./ma-v2/client/smabv2.js";
 
 export {
   getDefaultAllowlistModuleAddress,
