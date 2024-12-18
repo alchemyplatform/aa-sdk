@@ -17,13 +17,6 @@ export type AuthStep =
       createPasskeyAfter?: boolean;
       error?: Error;
     }
-  | {
-      type: "otp_completing";
-      email: string;
-      createPasskeyAfter?: boolean;
-      otp: string;
-      error?: Error;
-    }
   | { type: "initial"; error?: Error }
   | { type: "complete" }
   | { type: "eoa_connect"; connector: Connector; error?: Error }
