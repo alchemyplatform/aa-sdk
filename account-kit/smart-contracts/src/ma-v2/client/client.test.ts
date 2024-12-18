@@ -12,6 +12,8 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
 } from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { installValidationActions } from "../actions/install-validation/installValidation.js";
@@ -20,6 +22,7 @@ import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.j
 import { HookType } from "../actions/common/types.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { allowlistModule } from "../modules/allowlist-module/module.js";
+import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -475,9 +478,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("installs allowlist module, then uninstalls", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -548,6 +549,83 @@ describe("MA v2 Tests", async () => {
     await expect(
       provider.waitForUserOperationTransaction(uninstallResult)
     ).resolves.not.toThrowError();
+  });
+
+  it.only("installs native token limit module, then uninstalls", async () => {
+    let provider = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const spendLimit = parseEther("0.1"); // 0.1 ETH limit
+
+    // Let's verify the module's limit is set correctly after installation
+    const hookInstallData = nativeTokenLimitModule.encodeOnInstallData({
+      entityId: 0,
+      spendLimit,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            entityId: 0,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+        {
+          hookConfig: {
+            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            entityId: 0,
+            hookType: HookType.EXECUTION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // Try to send less than the limit - should pass
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.05"), // below the 0.1 limit
+          data: "0x",
+        },
+      })
+    ).resolves.not.toThrowError();
+
+    // Try to send more than the limit - should fail
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.05"), // passing the 0.1 limit considering gas
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
   });
 
   const givenConnectedProvider = async ({
