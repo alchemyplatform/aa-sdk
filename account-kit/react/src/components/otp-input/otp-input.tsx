@@ -7,8 +7,8 @@ const OTP_LENGTH = 6;
 type OTPInputProps = {
   errorText?: string;
   value: OTPCodeType;
-  setValue: (otp: OTPCodeType) => void;
-  setErrorText: (error: string) => void;
+  setValue: (otpCode: OTPCodeType) => void;
+  setErrorText: React.Dispatch<React.SetStateAction<string>>;
   disabled?: boolean;
   handleReset: () => void;
   className?: string;

@@ -16,12 +16,6 @@ export type AuthStep =
       config: Extract<AuthType, { type: "social" }>;
       error?: Error;
     }
-  | {
-      type: "otp_completing";
-      email: string;
-      otp: string;
-      error?: Error;
-    }
   | { type: "initial"; error?: Error }
   | { type: "complete" }
   | { type: "eoa_connect"; connector: Connector; error?: Error }
