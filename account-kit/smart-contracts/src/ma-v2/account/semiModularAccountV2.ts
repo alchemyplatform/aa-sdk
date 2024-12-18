@@ -8,7 +8,6 @@ import {
   createBundlerClient,
   getEntryPoint,
   toSmartContractAccount,
-  getAccountAddress,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -23,7 +22,7 @@ import {
   hexToBigInt,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
-import { addresses } from "../utils.js";
+import { getDefaultMAV2FactoryAddress } from "../utils.js";
 import { standardExecutor } from "../../msca/account/standardExecutor.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
 import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
@@ -73,7 +72,7 @@ export async function createSMAV2Account(
     chain,
     signer,
     salt = 0n,
-    factoryAddress = addresses.accountFactory,
+    factoryAddress = getDefaultMAV2FactoryAddress(chain),
     initCode,
     initialOwner,
     accountAddress,
@@ -120,13 +119,6 @@ export async function createSMAV2Account(
     ...singleSignerMessageSigner(signer),
   });
 
-  const accountAddress_ = await getAccountAddress({
-    client,
-    entryPoint,
-    accountAddress,
-    getAccountInitCode,
-  });
-
   // TODO: add deferred action flag
   const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
     const nonceKeySuffix: Hex = `${toHex(entityId, { size: 4 })}${
@@ -144,7 +136,7 @@ export async function createSMAV2Account(
     });
 
     return entryPointContract.read.getNonce([
-      accountAddress_,
+      baseAccount.address,
       nonceKey ?? hexToBigInt(nonceKeySuffix),
     ]) as Promise<bigint>;
   };
