@@ -20,6 +20,10 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
+import { Configuration } from "@/components/configuration/Configuration";
+import { Wrapper7702 } from "@/components/shared/7702/Wrapper";
+import { useConfigStore } from "@/state";
+import { WalletTypes } from "./config";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -36,6 +40,7 @@ export default function Home() {
   const user = useUser();
   const theme = useTheme();
   const isEOAUser = user?.type === "eoa";
+  const { walletType } = useConfigStore();
 
   return (
     <main
@@ -47,6 +52,7 @@ export default function Home() {
       >
         <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+            <Configuration />
             <Authentication />
             <Styling />
           </div>
@@ -128,21 +134,44 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 p-6 pt-24 overflow-auto scrollbar-none lg:hidden">
-          {!user && <MobileSplashPage />}
-          {isEOAUser && (
-            <div className="flex flex-1 flex-col">
-              <div className="border-border border radius-2 px-6 py-6  bg-bg-surface-default">
-                <RenderUserConnectionAvatar />
-                <div className="pt-6 max-w-96 mx-auto">
-                  <EOAPostLoginContents />
-                  <EOAPostLoginActions />
-                </div>
-              </div>
-            </div>
-          )}
-          {user && !isEOAUser && <MintCard />}
+          <RenderContent
+            user={!!user}
+            isEOAUser={isEOAUser}
+            isSmartWallet={walletType === WalletTypes.smart}
+          />
         </div>
       </div>
     </main>
   );
 }
+
+const RenderContent = ({
+  user,
+  isEOAUser,
+  isSmartWallet,
+}: {
+  user: boolean;
+  isEOAUser: boolean;
+  isSmartWallet: boolean;
+}) => {
+  if (!user) {
+    return <MobileSplashPage />;
+  }
+  if (isEOAUser) {
+    return (
+      <div className="flex flex-1 flex-col">
+        <div className="border-border border radius-2 px-6 py-6  bg-bg-surface-default">
+          <RenderUserConnectionAvatar />
+          <div className="pt-6 max-w-96 mx-auto">
+            <EOAPostLoginContents />
+            <EOAPostLoginActions />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (isSmartWallet) {
+    return <MintCard />;
+  }
+  return <Wrapper7702 />;
+};
