@@ -551,7 +551,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it.only("installs native token limit module, then uninstalls", async () => {
+  it("installs native token limit module, then uninstalls", async () => {
     let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
