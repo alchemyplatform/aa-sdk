@@ -10,7 +10,7 @@ import {
   createSMAV2Account,
   type CreateSMAV2AccountParams,
   type SMAV2Account,
-} from "../account/account.js";
+} from "../account/semiModularAccountV2.js";
 
 export type CreateSMAV2AccountClientParams<
   TTransport extends Transport = Transport,
