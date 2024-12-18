@@ -5,6 +5,7 @@ import { useTheme } from "@/state/useTheme";
 import { AuthCard, useUser } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { MintCard } from "../shared/mint-card/MintCard";
+import { Debug7702Button } from "../shared/7702/Debug7702Button";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const theme = useTheme();
@@ -54,5 +55,10 @@ const RenderContent = () => {
     );
   }
 
-  return <MintCard />;
+  return (
+    <div>
+      <MintCard />
+      <Debug7702Button />
+    </div>
+  );
 };
