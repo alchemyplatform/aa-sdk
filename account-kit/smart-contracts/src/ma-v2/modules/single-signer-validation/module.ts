@@ -7,21 +7,19 @@ export const SingleSignerValidationModule = {
   abi: singleSignerValidationModuleAbi,
   encodeOnInstallData: (args: { entityId: number; signer: Address }): Hex => {
     const { entityId, signer } = args;
-
     return encodeAbiParameters(
       [
         {
           type: "uint32",
-          value: entityId,
         },
         {
           type: "address",
-          value: signer,
         },
       ],
       [entityId, signer]
     );
   },
+
   encodeOnUninstallData: (args: { entityId: number }): Hex => {
     const { entityId } = args;
 
@@ -29,7 +27,6 @@ export const SingleSignerValidationModule = {
       [
         {
           type: "uint32",
-          value: entityId,
         },
       ],
       [entityId]

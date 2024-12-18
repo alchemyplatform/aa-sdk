@@ -131,7 +131,7 @@ export async function createSMAV2AccountClient({
     overrides,
   }: InstallValidationParams) => {
     if (validationConfig.entityId === 0) {
-      throw new EntityIdOverrideError();
+      // throw new EntityIdOverrideError();
     }
 
     const callData = await maV2Account.encodeCallData(
