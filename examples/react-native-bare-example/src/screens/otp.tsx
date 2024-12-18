@@ -39,10 +39,7 @@ export default function OTPAuthScreen() {
         otpCode: code,
         type: 'otp',
       })
-      .then(res => {
-        console.log('res', res);
-        setUser(res);
-      })
+      .then(setUser)
       .catch(console.error);
   };
 
