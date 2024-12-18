@@ -1,4 +1,4 @@
-import { custom, parseEther, publicActions } from "viem";
+import { custom, parseEther, publicActions, zeroAddress } from "viem";
 
 import {
   LocalAccountSigner,
@@ -14,8 +14,15 @@ import {
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
+import {
+  getDefaultSingleSignerValidationModuleAddress,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
+} from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
+import { allowlistModule } from "../modules/allowlist-module/module.js";
+import { HookType } from "../actions/common/types.js";
+import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -182,6 +189,157 @@ describe("MA v2 Tests", async () => {
         uo: {
           target: target,
           value: sendAmount,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+  });
+
+  it("installs allowlist module, then uninstalls", async () => {
+    let provider = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookInstallData = allowlistModule.encodeOnInstallData({
+      entityId: 1,
+      inputs: [
+        {
+          target,
+          hasSelectorAllowlist: false,
+          hasERC20SpendLimit: false,
+          erc20SpendLimit: 0n,
+          selectors: [],
+        },
+      ],
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: addresses.allowlistModule,
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    const hookUninstallData = allowlistModule.encodeOnUninstallData({
+      entityId: 0,
+      inputs: [
+        {
+          target,
+          hasSelectorAllowlist: false,
+          hasERC20SpendLimit: false,
+          erc20SpendLimit: 0n,
+          selectors: [],
+        },
+      ],
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+  });
+
+  it("installs native token limit module, then uninstalls", async () => {
+    let provider = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const spendLimit = parseEther("0.1"); // 0.1 ETH limit
+
+    // Let's verify the module's limit is set correctly after installation
+    const hookInstallData = nativeTokenLimitModule.encodeOnInstallData({
+      entityId: 0,
+      spendLimit,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            entityId: 0,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+        {
+          hookConfig: {
+            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            entityId: 0,
+            hookType: HookType.EXECUTION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // Try to send less than the limit - should pass
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.05"), // below the 0.1 limit
+          data: "0x",
+        },
+      })
+    ).resolves.not.toThrowError();
+
+    // Try to send more than the limit - should fail
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.05"), // passing the 0.1 limit considering gas
           data: "0x",
         },
       })
