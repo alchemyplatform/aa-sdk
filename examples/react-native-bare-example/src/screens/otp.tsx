@@ -1,11 +1,4 @@
-import React, {useCallback} from 'react';
-
-import {RNAlchemySigner} from '@account-kit/react-native-signer';
-import {
-  LightAccount,
-  createLightAccountAlchemyClient,
-} from '@account-kit/smart-contracts';
-import {alchemy, sepolia} from '@account-kit/infra';
+import React from 'react';
 import type {User} from '@account-kit/signer';
 import {useEffect, useState} from 'react';
 import {
@@ -13,63 +6,50 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Linking,
   TouchableOpacity,
 } from 'react-native';
-import {API_KEY} from '@env';
 
-const signer = new RNAlchemySigner({
+import {API_KEY} from '@env';
+import {RNAlchemySigner} from '@account-kit/react-native-signer';
+import {
+  createLightAccountAlchemyClient,
+  LightAccount,
+} from '@account-kit/smart-contracts';
+import {alchemy} from '@account-kit/infra';
+import {sepolia} from '@account-kit/infra';
+
+const signer = RNAlchemySigner({
   client: {connection: {apiKey: API_KEY!}},
 });
 
-export default function HomeScreen() {
+export default function OTPAuthScreen() {
   const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
   const [account, setAccount] = useState<LightAccount | null>(null);
   const [signerAddress, setSignerAddress] = useState<string | null>(null);
 
-  const handleUserAuth = ({bundle}: {bundle: string}) => {
+  const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
+
+  const [otpCode, setOtpCode] = useState<string>('');
+
+  const handleUserAuth = ({code}: {code: string}) => {
+    setAwaitingOtp(false);
     signer
       .authenticate({
-        bundle,
-        type: 'email',
+        otpCode: code,
+        type: 'otp',
       })
-      .then(setUser)
+      .then(res => {
+        console.log('res', res);
+        setUser(res);
+      })
       .catch(console.error);
   };
-
-  const handleIncomingURL = useCallback((event: {url: string}) => {
-    const regex = /[?&]([^=#]+)=([^&#]*)/g;
-
-    let params: Record<string, string> = {};
-    let match: RegExpExecArray | null;
-
-    while ((match = regex.exec(event.url))) {
-      if (match[1] && match[2]) {
-        params[match[1]] = match[2];
-      }
-    }
-
-    if (!params.bundle || !params.orgId) {
-      return;
-    }
-
-    handleUserAuth({
-      bundle: params.bundle ?? '',
-    });
-  }, []);
 
   useEffect(() => {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
   }, []);
-
-  // Add listener for incoming links
-  useEffect(() => {
-    const subscription = Linking.addEventListener('url', handleIncomingURL);
-
-    return () => subscription.remove();
-  }, [handleIncomingURL]);
 
   useEffect(() => {
     if (user) {
@@ -89,7 +69,22 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {!user ? (
+      {awaitingOtp ? (
+        <>
+          <TextInput
+            style={styles.textInput}
+            placeholderTextColor="gray"
+            placeholder="enter your OTP code"
+            onChangeText={setOtpCode}
+            value={otpCode}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleUserAuth({code: otpCode})}>
+            <Text style={styles.buttonText}>Sign in</Text>
+          </TouchableOpacity>
+        </>
+      ) : !user ? (
         <>
           <TextInput
             style={styles.textInput}
@@ -101,7 +96,14 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              signer.authenticate({email, type: 'email'}).catch(console.error);
+              signer
+                .authenticate({
+                  email,
+                  type: 'email',
+                  emailMode: 'otp',
+                })
+                .catch(console.error);
+              setAwaitingOtp(true);
             }}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
