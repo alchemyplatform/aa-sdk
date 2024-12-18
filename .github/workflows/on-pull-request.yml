@@ -92,6 +92,10 @@ jobs:
           platform: linux
           tag: v0.2.2
           cache: enable
+      
+      - name: Debug print df
+        run: df -h
+        shell: bash
 
       - name: Build Libraries
         env:
