@@ -71,7 +71,7 @@ export class InvalidEntityIdError extends BaseError {
 }
 
 /**
- * Error class denoting that the provided entity id is invalid because it's too large.
+ * Error class denoting that the nonce key is invalid because its too large.
  */
 export class InvalidNonceKeyError extends BaseError {
   override name = "InvalidNonceKeyError";
@@ -80,12 +80,9 @@ export class InvalidNonceKeyError extends BaseError {
    * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
    *
    * @param {bigint} nonceKey the invalid nonceKey used
-   * @param {bigint} nonceKeySuffix the expected nonceKeySuffix that must be contained in nonceKey
    */
-  constructor(nonceKey: bigint, nonceKeySuffix: bigint) {
-    super(
-      `Nonce key used is ${nonceKey}, but must contain the nonce key suffix of: ${nonceKeySuffix}`
-    );
+  constructor(nonceKey: bigint) {
+    super(`Nonce key is ${nonceKey} but has to be less than 2**152`);
   }
 }
 

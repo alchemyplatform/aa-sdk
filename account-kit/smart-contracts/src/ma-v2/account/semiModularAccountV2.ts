@@ -16,12 +16,11 @@ import {
   encodeFunctionData,
   getContract,
   maxUint32,
-  toHex,
+  maxUint152,
   type Address,
   type Chain,
   type Hex,
   type Transport,
-  hexToBigInt,
   zeroAddress,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
@@ -118,7 +117,7 @@ export async function createSMAV2Account(
     entityId = 0,
   } = config;
 
-  if (entityId >= Number(maxUint32)) {
+  if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
   }
 
@@ -165,12 +164,8 @@ export async function createSMAV2Account(
 
   // TODO: add deferred action flag
   const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
-    const nonceKeySuffix: Hex = `${toHex(entityId, { size: 4 })}${
-      isGlobalValidation ? "01" : "00"
-    }`;
-
-    if (nonceKey && toHex(nonceKey, { size: 5 }) !== nonceKeySuffix) {
-      throw new InvalidNonceKeyError(nonceKey, hexToBigInt(nonceKeySuffix));
+    if (nonceKey && nonceKey > maxUint152) {
+      throw new InvalidNonceKeyError(nonceKey);
     }
 
     const entryPointContract = getContract({
@@ -179,9 +174,14 @@ export async function createSMAV2Account(
       client,
     });
 
+    const fullNonceKey: bigint =
+      (nonceKey ? nonceKey << 40n : 0n) +
+      BigInt(entityId << 8) +
+      (isGlobalValidation ? 1n : 0n);
+
     return entryPointContract.read.getNonce([
-      accountAddress_,
-      nonceKey ?? hexToBigInt(nonceKeySuffix),
+      baseAccount.address,
+      fullNonceKey,
     ]) as Promise<bigint>;
   };
 

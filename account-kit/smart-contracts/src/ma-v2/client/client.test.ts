@@ -67,8 +67,7 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    const txnHash1 = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash1).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     await expect(await getTargetBalance()).toEqual(
       startingAddressBalance + sendAmount
