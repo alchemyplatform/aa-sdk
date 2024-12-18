@@ -18,6 +18,7 @@ config.watchFolders = [workspaceRoot, projectRoot];
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'node_modules'),
+  path.resolve(workspaceRoot, 'account-kit/rn-signer/node_modules'),
 ];
 // Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
