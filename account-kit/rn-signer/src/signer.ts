@@ -19,8 +19,14 @@ const RNAlchemySignerParamsSchema = z
 
 export type RNAlchemySignerParams = z.input<typeof RNAlchemySignerParamsSchema>;
 
-export class RNAlchemySigner extends BaseAlchemySigner<RNSignerClient> {
-  constructor(params: RNAlchemySignerParams) {
+class RNAlchemySignerSingleton extends BaseAlchemySigner<RNSignerClient> {
+  private static instance: BaseAlchemySigner<RNSignerClient>;
+
+  private constructor(params: RNAlchemySignerParams) {
+    if (!!RNAlchemySignerSingleton.instance) {
+      return RNAlchemySignerSingleton.instance;
+    }
+
     const { sessionConfig, ...params_ } =
       RNAlchemySignerParamsSchema.parse(params);
 
@@ -36,4 +42,17 @@ export class RNAlchemySigner extends BaseAlchemySigner<RNSignerClient> {
       sessionConfig,
     });
   }
+
+  public static getInstance(params: RNAlchemySignerParams) {
+    if (!this.instance) {
+      this.instance = new RNAlchemySignerSingleton(params);
+    }
+    return this.instance;
+  }
+}
+
+export function RNAlchemySigner(params: RNAlchemySignerParams) {
+  const instance = RNAlchemySignerSingleton.getInstance(params);
+
+  return instance;
 }
