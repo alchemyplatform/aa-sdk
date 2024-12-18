@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { ls } from "../../../../strings.js";
 import {
@@ -14,14 +14,15 @@ import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
 export const LoadingOtp = () => {
   const { isConnected } = useSignerStatus();
-  const { authStep, setAuthStep } = useAuthContext("otp_verify");
+  const { authStep } = useAuthContext("otp_verify");
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
-  const [errorText, setErrorText] = useState(
-    getUserErrorMessage(authStep.error)
-  );
-  const resetOTP = () => {
+  const [errorText, setErrorText] = useState(authStep.error?.message || "");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const { setAuthStep } = useAuthContext();
+  const resetOTP = (errorText = "") => {
     setOtpCode(initialOTPValue);
-    setErrorText("");
+    setErrorText(errorText);
+    setIsDisabled(false);
   };
   const { authenticate } = useAuthenticate({
     onError: (error: any) => {
@@ -36,26 +37,11 @@ export const LoadingOtp = () => {
     },
   });
 
-  useEffect(() => {
-    if (isOTPCodeType(otpCode)) {
-      setAuthStep({
-        type: "otp_completing",
-        email: authStep.email,
-        otp: otpCode.join(""),
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otpCode]);
-
   const setValue = (otpCode: OTPCodeType) => {
     setOtpCode(otpCode);
     if (isOTPCodeType(otpCode)) {
+      setIsDisabled(true);
       const otp = otpCode.join("");
-      setAuthStep({
-        type: "otp_completing",
-        email: authStep.email,
-        otp,
-      });
       authenticate({ type: "otp", otpCode: otp });
     }
   };
@@ -80,6 +66,7 @@ export const LoadingOtp = () => {
         {authStep.email}
       </p>
       <OTPInput
+        disabled={isDisabled}
         value={otpCode}
         setValue={setValue}
         setErrorText={setErrorText}
@@ -90,35 +77,40 @@ export const LoadingOtp = () => {
   );
 };
 
-export const CompletingOtp = () => {
-  return (
-    <div className="flex flex-col items-center justify-center ">
-      <div className="flex flex-col items-center justify-center h-12 w-12 mb-5">
-        <Spinner />
-      </div>
-      <h2 className="text-fg-primary font-semibold text-lg mb-2">
-        {ls.completingOtp.title}
-      </h2>
-      <p className="text-fg-secondary text-center text-sm">
-        {ls.completingOtp.body}
-      </p>
-    </div>
-  );
-};
+// export const CompletingOtp = () => {
+//   const { isConnected } = useSignerStatus();
+//   const { setAuthStep, authStep } = useAuthContext("otp_completing");
+//   const { authenticate } = useAuthenticate({
+//     onError: (error: any) => {
+//       console.error(error);
+//       const { email } = authStep;
+//       setAuthStep({ type: "otp_verify", email, error });
+//     },
+//     onSuccess: () => {
+//       if (isConnected && authStep.createPasskeyAfter) {
+//         setAuthStep({ type: "passkey_create" });
+//       } else if (isConnected) {
+//         setAuthStep({ type: "complete" });
+//       }
+//     },
+//   });
 
-function getUserErrorMessage(error: Error | undefined): string {
-  if (!error) {
-    return "";
-  }
-  // Errors from Alchemy have a JSON message.
-  try {
-    const message = JSON.parse(error.message).error;
-    if (message === "invalid OTP code") {
-      return ls.error.otp.invalid;
-    }
-    return message;
-  } catch (e) {
-    // Ignore
-  }
-  return error.message;
-}
+//   useEffect(() => {
+//     authenticate({ type: "otp", otpCode: authStep.otp });
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
+
+//   return (
+//     <div className="flex flex-col items-center justify-center ">
+//       <div className="flex flex-col items-center justify-center h-12 w-12 mb-5">
+//         <Spinner />
+//       </div>
+//       <h2 className="text-fg-primary font-semibold text-lg mb-2">
+//         {ls.completingOtp.title}
+//       </h2>
+//       <p className="text-fg-secondary text-center text-sm">
+//         {ls.completingOtp.body}
+//       </p>
+//     </div>
+//   );
+// };
