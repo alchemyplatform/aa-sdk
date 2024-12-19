@@ -15,8 +15,7 @@ import {
 	createLightAccountAlchemyClient,
 	LightAccount,
 } from "@account-kit/smart-contracts";
-import { sepolia } from "@account-kit/infra";
-import { alchemy } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 const signer = RNAlchemySigner({
 	client: { connection: { apiKey: API_KEY! } },
