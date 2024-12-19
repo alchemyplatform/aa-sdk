@@ -42,7 +42,7 @@ const WalletTypeSwitch = forwardRef<
             checked ? unselectedStyles : selectedStyles
           } font-semibold`}
         >
-          7702 Smart Account
+          Hybrid account (7702)
         </p>
       </div>
     </div>

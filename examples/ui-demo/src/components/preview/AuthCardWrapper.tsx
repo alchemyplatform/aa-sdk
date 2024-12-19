@@ -5,6 +5,9 @@ import { useTheme } from "@/state/useTheme";
 import { AuthCard, useUser } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { Wrapper7702 } from "../shared/7702/Wrapper";
+import { useConfigStore } from "@/state";
+import { WalletTypes } from "@/app/config";
+import { MintCard } from "../shared/mint-card/MintCard";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const theme = useTheme();
@@ -25,6 +28,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
 }
 
 const RenderContent = () => {
+  const { walletType } = useConfigStore();
   const user = useUser();
   const hasUser = !!user;
 
@@ -53,6 +57,6 @@ const RenderContent = () => {
       </div>
     );
   }
-  return <Wrapper7702 />;
-  // return <MintCard />;
+
+  return walletType === WalletTypes.smart ? <MintCard /> : <Wrapper7702 />;
 };
