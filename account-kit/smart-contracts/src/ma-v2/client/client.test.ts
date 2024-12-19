@@ -23,7 +23,6 @@ import { SingleSignerValidationModule } from "../modules/single-signer-validatio
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { HookType } from "../actions/common/types.js";
-import { installValidationActions } from "../../../dist/esm/src/ma-v2/actions/install-validation/installValidation.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 
 describe("MA v2 Tests", async () => {
@@ -198,10 +197,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
-
+    let provider = await givenConnectedProvider({ signer });
     await setBalance(client, {
       address: provider.getAddress(),
       value: parseEther("2"),
@@ -263,9 +259,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it.only("installs time range module, verifies use of valid time range then uninstalls module", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -275,7 +269,7 @@ describe("MA v2 Tests", async () => {
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
       entityId: 1,
       validUntil: 100,
-      validAfter: 100,
+      validAfter: 50,
     });
 
     const installResult = await provider.installValidation({
