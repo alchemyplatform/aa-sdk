@@ -4,6 +4,7 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
   type SmartAccountClient,
+  erc7677Middleware,
 } from "@aa-sdk/core";
 
 import {
@@ -23,7 +24,6 @@ import { SingleSignerValidationModule } from "../modules/single-signer-validatio
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { HookType } from "../actions/common/types.js";
-import { TimeRangeModule } from "../modules/time-range-module/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -197,7 +197,8 @@ describe("MA v2 Tests", async () => {
   });
 
   it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
-    let provider = await givenConnectedProvider({ signer });
+    let provider = await givenConnectedProvider({ signer, usePaymaster: true });
+
     await setBalance(client, {
       address: provider.getAddress(),
       value: parseEther("2"),
@@ -206,14 +207,14 @@ describe("MA v2 Tests", async () => {
     const paymaster = paymaster070.getPaymasterStubData();
 
     const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
-      entityId: 1,
+      entityId: 0,
       paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
     });
 
     const installResult = await provider.installValidation({
       validationConfig: {
         moduleAddress: zeroAddress,
-        entityId: 1,
+        entityId: 0,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
@@ -239,15 +240,26 @@ describe("MA v2 Tests", async () => {
       provider.waitForUserOperationTransaction(installResult)
     ).resolves.not.toThrowError();
 
-    // TO DO: verify if paymaster is valid
+    // happy path: with correct paymaster
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    // verify if correct paymaster is used
+    const txnHash1 = provider.waitForUserOperationTransaction(result);
+    await expect(txnHash1).resolves.not.toThrowError();
 
     const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
-      entityId: 1,
+      entityId: 0,
     });
 
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: zeroAddress,
-      entityId: 1,
+      entityId: 0,
       uninstallData: "0x",
       hookUninstallDatas: [hookUninstallData],
     });
@@ -258,24 +270,25 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it.only("installs time range module, verifies use of valid time range then uninstalls module", async () => {
-    let provider = await givenConnectedProvider({ signer });
+  it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
+    let provider = await givenConnectedProvider({ signer, usePaymaster: true });
 
     await setBalance(client, {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
 
-    const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 1,
-      validUntil: 100,
-      validAfter: 50,
+    const paymaster = paymaster070.getPaymasterStubData();
+
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 0,
+      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
     });
 
     const installResult = await provider.installValidation({
       validationConfig: {
         moduleAddress: zeroAddress,
-        entityId: 1,
+        entityId: 0,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
@@ -285,7 +298,7 @@ describe("MA v2 Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
             entityId: 0, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -301,15 +314,31 @@ describe("MA v2 Tests", async () => {
       provider.waitForUserOperationTransaction(installResult)
     ).resolves.not.toThrowError();
 
-    // TO DO: verify if time module works
-
-    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 1,
+    // sad path: with wrong paymaster
+    let providerNoPaymaster = await givenConnectedProvider({
+      signer,
+      usePaymaster: false,
     });
 
+    // TO DO: verify if correct paymaster is used
+    await expect(
+      providerNoPaymaster.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    console.log("paymaster" in paymaster ? paymaster.paymaster : "0x0");
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: zeroAddress,
-      entityId: 1,
+      entityId: 0,
       uninstallData: "0x",
       hookUninstallDatas: [hookUninstallData],
     });
@@ -323,14 +352,17 @@ describe("MA v2 Tests", async () => {
   const givenConnectedProvider = async ({
     signer,
     accountAddress,
+    usePaymaster = false,
   }: {
     signer: SmartAccountSigner;
     accountAddress?: `0x${string}`;
+    usePaymaster?: boolean;
   }): Promise<SmartAccountClient & InstallValidationActions> =>
     createSMAV2AccountClient({
       chain: instance.chain,
       signer,
       accountAddress,
       transport: custom(instance.getClient()),
+      ...(usePaymaster ? erc7677Middleware() : {}),
     });
 });
