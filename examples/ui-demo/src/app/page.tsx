@@ -20,6 +20,7 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
+import { Configuration } from "@/components/configuration/Configuration";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -47,6 +48,7 @@ export default function Home() {
       >
         <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+            <Configuration />
             <Authentication />
             <Styling />
           </div>
