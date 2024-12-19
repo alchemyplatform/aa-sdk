@@ -8,13 +8,13 @@ import {
   isOTPCodeType,
 } from "../../../otp-input/otp-input.js";
 import { Spinner } from "../../../../icons/spinner.js";
-import { AuthStepStatus, useAuthContext } from "../../context.js";
+import { AuthStepStatus, AuthStepType, useAuthContext } from "../../context.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
 export const LoadingOtp = () => {
   const { isConnected } = useSignerStatus();
-  const { authStep } = useAuthContext("otp_verify");
+  const { authStep } = useAuthContext(AuthStepType.otp_verify);
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const [titleText, setTitleText] = useState(ls.loadingOtp.title);
@@ -39,7 +39,7 @@ export const LoadingOtp = () => {
         setAuthStep({ ...authStep, status: AuthStepStatus.success });
         setTitleText(ls.loadingOtp.verified);
         setTimeout(() => {
-          setAuthStep({ type: "complete" });
+          setAuthStep({ type: AuthStepType.complete });
         }, 3000);
       }
     },

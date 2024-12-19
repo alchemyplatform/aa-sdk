@@ -1,12 +1,12 @@
 import { ConnectionFailed } from "../../../../icons/connectionFailed.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { ls } from "../../../../strings.js";
-import { useAuthContext } from "../../context.js";
+import { AuthStepType, useAuthContext } from "../../context.js";
 import { usePasskeyVerify } from "../../hooks/usePasskeyVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 
 export const LoadingPasskeyAuth = () => {
-  const { setAuthStep, authStep } = useAuthContext("passkey_verify");
+  const { setAuthStep, authStep } = useAuthContext(AuthStepType.passkey_verify);
   const { authenticate } = usePasskeyVerify();
 
   if (authStep.error) {
@@ -16,7 +16,9 @@ export const LoadingPasskeyAuth = () => {
         bodyText={ls.error.connection.passkeyBody}
         icon={<ConnectionFailed />}
         handleTryAgain={authenticate}
-        handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
+        handleUseAnotherMethod={() =>
+          setAuthStep({ type: AuthStepType.initial })
+        }
       />
     );
   }
@@ -45,7 +47,7 @@ export const LoadingPasskeyAuth = () => {
       </div>
       <button
         className="akui-btn akui-btn-secondary w-full mt-5"
-        onClick={() => setAuthStep({ type: "initial" })}
+        onClick={() => setAuthStep({ type: AuthStepType.initial })}
       >
         Cancel
       </button>

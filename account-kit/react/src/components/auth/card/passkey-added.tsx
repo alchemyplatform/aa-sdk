@@ -1,12 +1,12 @@
 import { AddedPasskeyIllustration } from "../../../icons/illustrations/added-passkey.js";
-import { useAuthContext } from "../context.js";
+import { AuthStepType, useAuthContext } from "../context.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export function PasskeyAdded() {
   const { setAuthStep } = useAuthContext();
 
   setTimeout(() => {
-    setAuthStep({ type: "complete" });
+    setAuthStep({ type: AuthStepType.complete });
   }, 5000);
 
   return (
