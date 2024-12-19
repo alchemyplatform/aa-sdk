@@ -10,7 +10,7 @@ import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
-import { useAuthContext } from "../context.js";
+import { AuthStepType, useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
@@ -28,15 +28,15 @@ export const EmailAuth = memo(
     const { authenticateAsync, isPending } = useAuthenticate({
       onMutate: async (params) => {
         if ("email" in params) {
-          setAuthStep({ type: "otp_verify", email: params.email });
+          setAuthStep({ type: AuthStepType.otp_verify, email: params.email });
         }
       },
       onSuccess: () => {
-        setAuthStep({ type: "complete" });
+        setAuthStep({ type: AuthStepType.complete });
       },
       onError: (error) => {
         console.error(error);
-        setAuthStep({ type: "initial", error });
+        setAuthStep({ type: AuthStepType.initial, error });
       },
     });
 
@@ -62,7 +62,7 @@ export const EmailAuth = memo(
         } catch (e) {
           const error = e instanceof Error ? e : new Error("An Unknown error");
 
-          setAuthStep({ type: "initial", error });
+          setAuthStep({ type: AuthStepType.initial, error });
         }
       },
       validatorAdapter: zodValidator(),
