@@ -20,12 +20,14 @@ export const Wrapper7702 = () => {
     <div className="flex gap-6">
       <MintCard7702
         isLoading={isLoadingMint || isLoadingTransactions}
+        isDisabled={isLoadingTransactions}
         status={status}
         nftTransfered={nftTransfered}
         handleCollectNFT={handleCollectNFT}
         uri={uri}
       />
       <TransactionsCard
+        isDisabled={isLoadingMint}
         isLoading={isLoadingTransactions}
         transactions={transactions}
         handleTransactions={handleTransactions}
