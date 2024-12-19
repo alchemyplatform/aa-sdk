@@ -6,16 +6,18 @@ import { TransactionType } from "./useTransaction";
 
 export const TransactionsCard = ({
   isLoading,
+  isDisabled,
   transactions,
   handleTransactions,
 }: {
   isLoading: boolean;
+  isDisabled?: boolean;
   transactions: TransactionType[];
   handleTransactions: () => void;
 }) => {
-  const [isFiring, setIsFiring] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
   const handleClick = () => {
-    setIsFiring(true);
+    setHasClicked(true);
     handleTransactions();
   };
   return (
@@ -37,7 +39,7 @@ export const TransactionsCard = ({
       <h3 className="text-fg-primary text-xl font-semibold">
         Recurring transactions
       </h3>
-      {!isFiring ? (
+      {!hasClicked ? (
         <p className="text-fg-primary text-sm">
           Set up a dollar-cost average order by creating a session key with
           permission to buy ETH every 10 seconds.
@@ -46,8 +48,16 @@ export const TransactionsCard = ({
         <Transactions transactions={transactions} />
       )}
 
-      <Button className="mt-auto" onClick={handleClick} disabled={isLoading}>
-        Create session key
+      <Button
+        className="mt-auto"
+        onClick={handleClick}
+        disabled={isLoading || isDisabled}
+      >
+        {!hasClicked
+          ? "Create session key"
+          : isLoading
+          ? "Creating session key..."
+          : "Restart session key"}
       </Button>
     </div>
   );

@@ -11,17 +11,17 @@ const initialState: TransactionType[] = [
   {
     state: "initial",
     description: "Bought 1 ETH for 4,000 USDC",
-    externalLink: "",
+    externalLink: "www.alchemy.com",
   },
   {
     state: "initial",
     description: "Bought 1 ETH for 3,500 USDC",
-    externalLink: "",
+    externalLink: "www.alchemy.com",
   },
   {
     state: "initial",
     description: "Bought 1 ETH for 4,200 USDC",
-    externalLink: "",
+    externalLink: "www.alchemy.com",
   },
 ];
 
@@ -56,17 +56,17 @@ export const useTransactions = () => {
       {
         state: "initial",
         description: "Bought 1 ETH for 4,000 USDC",
-        externalLink: "",
+        externalLink: "www.alchemy.com",
       },
       {
         state: "initial",
         description: "Bought 1 ETH for 3,500 USDC",
-        externalLink: "",
+        externalLink: "www.alchemy.com",
       },
       {
         state: "initial",
         description: "Bought 1 ETH for 4,200 USDC",
-        externalLink: "",
+        externalLink: "www.alchemy.com",
       },
     ]);
     for (let i = 0; i < transactions.length; i++) {

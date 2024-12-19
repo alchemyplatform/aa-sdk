@@ -27,7 +27,7 @@ const Transaction = ({
 }: TransactionType & { className?: string }) => {
   const getText = () => {
     if (state === "initial") {
-      return "";
+      return "...";
     }
     if (state === "initiating") {
       return "Initiating buy...";
