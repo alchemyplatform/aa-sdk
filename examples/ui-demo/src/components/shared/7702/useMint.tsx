@@ -27,21 +27,22 @@ export const useMint = () => {
       gas: "success",
       signing: "success",
     }));
-    setToast({
-      type: "success",
-      text: (
-        <>
-          <span className={"inline-block lg:hidden"}>
-            {`You've collected your NFT!`}
-          </span>
-          <span className={"hidden lg:inline-block"}>
-            {`You've successfully collected your NFT! Refresh to mint
-                          again.`}
-          </span>
-        </>
-      ),
-      open: true,
-    });
+    // Current design does not have a success toast, leaving commented to implement later.
+    // setToast({
+    //   type: "success",
+    //   text: (
+    //     <>
+    //       <span className={"inline-block lg:hidden"}>
+    //         {`You've collected your NFT!`}
+    //       </span>
+    //       <span className={"hidden lg:inline-block"}>
+    //         {`You've successfully collected your NFT! Refresh to mint
+    //                       again.`}
+    //       </span>
+    //     </>
+    //   ),
+    //   open: true,
+    // });
   };
 
   const handleError = (error: Error) => {
@@ -67,7 +68,7 @@ export const useMint = () => {
     },
     enabled: !!client && !!client?.readContract,
   });
-  const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
+  const { sendUserOperation } = useSendUserOperation({
     client,
     waitForTxn: true,
     onError: handleError,

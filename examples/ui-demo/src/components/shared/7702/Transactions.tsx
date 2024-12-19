@@ -39,16 +39,24 @@ const Transaction = ({
   };
 
   return (
-    <div className={`flex ${className}`}>
-      <div className="w-4 h-4 mr-2">
-        {state === "complete" ? (
-          <CheckCircleFilledIcon className=" h-4 w-4 fill-demo-surface-success" />
-        ) : (
-          <LoadingIcon className="h-4 w-4" />
-        )}
+    <div className={`flex justify-between ${className} mb-4`}>
+      <div className="flex items-center">
+        <div className="w-4 h-4 mr-2">
+          {state === "complete" ? (
+            <CheckCircleFilledIcon className=" h-4 w-4 fill-demo-surface-success" />
+          ) : (
+            <LoadingIcon className="h-4 w-4" />
+          )}
+        </div>
+        <p className="text-sm text-fg-secondary">{getText()}</p>
       </div>
-      <p className="text-sm text-fg-secondary">{getText()}</p>
-      {externalLink && <ExternalLinkIcon className="w-4 h-4 ml-2" />}
+      {externalLink && state === "complete" && (
+        <a href={externalLink} target="_blank" rel="noreferrer">
+          <div className="w-4 h-4">
+            <ExternalLinkIcon className="stroke-fg-secondary" />
+          </div>
+        </a>
+      )}
     </div>
   );
 };
