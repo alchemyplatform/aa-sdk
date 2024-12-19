@@ -166,7 +166,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
             onInput={focusNextElement}
             onKeyDown={handleKeydown}
             key={i}
-            disabled={disabled}
+            disabled={disabled || isVerified}
             value={value[i]}
             aria-invalid={!!errorText}
           />
