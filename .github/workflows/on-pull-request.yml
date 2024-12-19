@@ -92,10 +92,6 @@ jobs:
           platform: linux
           tag: v0.2.2
           cache: enable
-      
-      - name: Debug print df
-        run: df -h
-        shell: bash
 
       - name: Free disk space before build
         run: |
