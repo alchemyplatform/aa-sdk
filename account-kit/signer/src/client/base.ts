@@ -146,6 +146,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   ): Promise<User>;
 
   public abstract disconnect(): Promise<void>;
+
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
   ): Promise<{ bundle: string }>;

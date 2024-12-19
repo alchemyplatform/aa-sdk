@@ -28,6 +28,7 @@ export type CreateAccountParams =
   | {
       type: "email";
       email: string;
+      emailMode?: EmailType;
       expirationSeconds?: number;
       redirectParams?: URLSearchParams;
     }
@@ -42,8 +43,11 @@ export type CreateAccountParams =
       creationOpts?: CredentialCreationOptionOverrides;
     };
 
+export type EmailType = "magicLink" | "otp";
+
 export type EmailAuthParams = {
   email: string;
+  emailMode?: EmailType;
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;

@@ -25,12 +25,7 @@ export const CompletingOAuth = () => {
     } else if (oauthWasCancelled) {
       setAuthStep({ type: AuthStepType.initial });
     }
-  }, [
-    authStep.createPasskeyAfter,
-    isConnected,
-    oauthWasCancelled,
-    setAuthStep,
-  ]);
+  }, [isConnected, oauthWasCancelled, setAuthStep]);
 
   if (authStep.error && !oauthWasCancelled) {
     return (

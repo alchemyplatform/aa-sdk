@@ -63,7 +63,7 @@ export const EmailNotReceivedDisclaimer = ({
           authenticate({
             type: "email",
             email: authStep.email,
-            mode:
+            emailMode:
               authStep.type === AuthStepType.email_verify ? "magicLink" : "otp",
           });
           setEmailResent(true);

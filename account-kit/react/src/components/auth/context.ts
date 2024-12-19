@@ -36,11 +36,10 @@ export type AuthStep =
   | { type: AuthStepType.passkey_verify; error?: Error }
   | { type: AuthStepType.passkey_create; error?: Error }
   | { type: AuthStepType.passkey_create_success }
-  | { type: AuthStepType.email_completing; createPasskeyAfter?: boolean }
+  | { type: AuthStepType.email_completing }
   | {
       type: AuthStepType.oauth_completing;
       config: Extract<AuthType, { type: "social" }>;
-      createPasskeyAfter?: boolean;
       error?: Error;
     }
   | { type: AuthStepType.initial; error?: Error }

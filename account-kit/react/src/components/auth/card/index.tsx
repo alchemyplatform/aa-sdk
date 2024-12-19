@@ -73,8 +73,8 @@ export const AuthCardContent = ({
   const canGoBack = useMemo(() => {
     return [
       AuthStepType.email_verify,
-      AuthStepType.passkey_verify,
       AuthStepType.otp_verify,
+      AuthStepType.passkey_verify,
       AuthStepType.passkey_create,
       AuthStepType.pick_eoa,
       AuthStepType.wallet_connect,
@@ -86,8 +86,8 @@ export const AuthCardContent = ({
   const onBack = useCallback(() => {
     switch (authStep.type) {
       case AuthStepType.email_verify:
-      case AuthStepType.passkey_verify:
       case AuthStepType.otp_verify:
+      case AuthStepType.passkey_verify:
       case AuthStepType.passkey_create:
       case AuthStepType.oauth_completing:
         disconnect(config); // Terminate any inflight authentication

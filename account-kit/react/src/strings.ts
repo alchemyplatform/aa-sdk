@@ -30,16 +30,16 @@ const STRINGS = {
       resend: "Resend",
       resent: "Done!",
     },
-    completingEmail: {
-      body: "Completing login. Please wait a few seconds for this to screen to update.",
-    },
     loadingOtp: {
       title: "Enter verification code",
       body: "We sent a verification code to",
-      verifying: "Verifying...",
-      verified: "Verified!",
       notReceived: "Didn't receive code?",
       resend: "Resend",
+      verifying: "Verifying...",
+      verified: "Verified!",
+    },
+    completingEmail: {
+      body: "Completing login. Please wait a few seconds for this to screen to update.",
     },
     completingOtp: {
       title: "Verifying...",
@@ -65,6 +65,8 @@ const STRINGS = {
           "Passkey request timed out or canceled by the agent. You may have to use another method to register a passkey for your account.",
         oauthTitle: "Couldn't connect to ",
         oauthBody: "The connection failed or canceled",
+        otpTitle: "Connection failed",
+        otpBody: "The code could not be verified",
         walletTitle: "Couldn't connect to ",
         walletBody: "The wallet’s connection failed or canceled",
         timedOutTitle: "Connection timed out",

@@ -43,6 +43,8 @@ type Store = Mutate<
   [["zustand/subscribeWithSelector", never], ["zustand/persist", SessionState]]
 >;
 
+type TemporarySession = { orgId: string; isNewUser?: boolean };
+
 export class SessionManager {
   private sessionKey: string;
   private client: BaseSignerClient;
@@ -144,7 +146,7 @@ export class SessionManager {
     }
   };
 
-  public setTemporarySession = (session: { orgId: string }) => {
+  public setTemporarySession = (session: TemporarySession) => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     localStorage.setItem(
       `${this.sessionKey}:temporary`,
@@ -152,7 +154,7 @@ export class SessionManager {
     );
   };
 
-  public getTemporarySession = (): { orgId: string } | null => {
+  public getTemporarySession = (): TemporarySession | null => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     const sessionStr = localStorage.getItem(`${this.sessionKey}:temporary`);
 
