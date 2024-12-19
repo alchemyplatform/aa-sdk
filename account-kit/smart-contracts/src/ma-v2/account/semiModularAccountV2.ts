@@ -30,44 +30,25 @@ import { singleSignerMessageSigner } from "../modules/single-signer-validation/s
 import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../actions/common/utils.js";
+import type {
+  ExecutionDataView,
+  ValidationDataParams,
+  ValidationDataView,
+} from "../../../dist/esm/src/ma-v2/account/semiModularAccountV2.js";
 
 const executeUserOpSelector: Hex = "0x8DD7712F";
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
-export type CalldataEncoder = {
-  encodeCallData: (callData: Hex) => Promise<Hex>;
-};
-
-export type ExecutionDataView = {
-  module: Address;
-  skipRuntimeValidation: boolean;
-  allowGlobalValidation: boolean;
-  executionHooks: readonly Hex[];
-};
-
-export type ValidationDataView = {
-  validationHooks: readonly Hex[];
-  executionHooks: readonly Hex[];
-  selectors: readonly Hex[];
-  validationFlags: number;
-};
-
-export type ValidationDataParams = {
-  validationModuleAddress?: Address;
-  entityId?: number;
+export type SignerEntity = {
+  isGlobalValidation: boolean;
+  entityId: number;
 };
 
 export type SMAV2Account<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TCalldataEncoder extends CalldataEncoder = CalldataEncoder
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0"> &
-  TCalldataEncoder & {
-    getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
-    getValidationData: (
-      args: ValidationDataParams
-    ) => Promise<ValidationDataView>;
-  };
+  SignerEntity;
 
 export type CreateSMAV2AccountParams<
   TTransport extends Transport = Transport,
@@ -83,10 +64,7 @@ export type CreateSMAV2AccountParams<
   initialOwner?: Address;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
 } & (
-    | {
-        isGlobalValidation: boolean;
-        entityId: number;
-      }
+    | SignerEntity
     | {
         isGlobalValidation?: never;
         entityId?: never;
@@ -260,10 +238,7 @@ export async function createSMAV2Account(
     ...baseAccount,
     getAccountNonce,
     getSigner: () => signer,
-    getExecutionData,
-    getValidationData,
-    encodeExecute,
-    encodeBatchExecute,
-    encodeCallData,
+    isGlobalValidation,
+    entityId,
   };
 }
