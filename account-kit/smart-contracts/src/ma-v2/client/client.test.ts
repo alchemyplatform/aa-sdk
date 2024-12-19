@@ -21,9 +21,7 @@ import {
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
-import { addresses } from "../../../dist/esm/src/ma-v2/utils.js";
 import { HookType } from "../actions/common/types.js";
-import { installValidationActions } from "../../../dist/esm/src/ma-v2/actions/install-validation/installValidation.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -197,9 +195,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
