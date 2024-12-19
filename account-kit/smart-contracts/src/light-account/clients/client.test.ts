@@ -4,12 +4,21 @@ import {
   erc7677Middleware,
   LocalAccountSigner,
   type BatchUserOperationCallData,
+  type SmartAccountClient,
   type SmartAccountSigner,
   type UserOperationCallData,
   type UserOperationOverrides,
   type UserOperationStruct,
 } from "@aa-sdk/core";
-import { custom, parseEther, type Address, publicActions } from "viem";
+import {
+  custom,
+  parseEther,
+  type Address,
+  publicActions,
+  type Chain,
+  type Client,
+  type CustomTransport,
+} from "viem";
 import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
@@ -21,6 +30,15 @@ import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { createLightAccountClient } from "./client.js";
+import {
+  alchemy,
+  polygonMumbai,
+  alchemyEnhancedApiActions,
+  type AlchemyTransport,
+  type AlchemySmartAccountClient,
+  type AlchemyEnhancedApis,
+} from "@account-kit/infra";
+import { Alchemy, Network } from "alchemy-sdk";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
@@ -387,4 +405,76 @@ describe("Light Account Tests", () => {
       chain: instance.chain,
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
+
+  const givenAlchemyConnectedProvider = async ({
+    signer,
+    chain,
+  }: {
+    signer: SmartAccountSigner;
+    chain: Chain;
+  }) =>
+    createLightAccountClient({
+      transport: alchemy({
+        jwt: "test",
+      }),
+      chain,
+      signer,
+      accountAddress: "0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84",
+    });
+  it("Should have some alchemy specific types", async () => {
+    const alchemy = new Alchemy({
+      network: Network.MATIC_MUMBAI,
+      apiKey: "test",
+    });
+    const chain = polygonMumbai;
+
+    const provider = (
+      await givenAlchemyConnectedProvider({ signer, chain })
+    ).extend(alchemyEnhancedApiActions(alchemy));
+
+    assertType<Client<AlchemyTransport>>(provider);
+    assertType<AlchemySmartAccountClient>(provider);
+    assertType<SmartAccountClient>(provider);
+    assertType<AlchemyEnhancedApis>(provider);
+    assertType<AlchemyEnhancedApis>(
+      // @ts-expect-error
+      await givenAlchemyConnectedProvider({ signer, chain })
+    );
+    // @ts-expect-error
+    assertType<Client<CustomTransport>>(provider);
+  });
+  it("Should have some non-alchemy specific types", async () => {
+    const chain = polygonMumbai;
+
+    const signer: SmartAccountSigner = new LocalAccountSigner(
+      accounts.fundedAccountOwner
+    );
+    const provider = await givenConnectedProvider({
+      signer,
+      version: "v1.0.1",
+    });
+
+    assertType<SmartAccountClient>(provider);
+    assertType<Client<CustomTransport>>(provider);
+    assertType<AlchemyEnhancedApis>(
+      // @ts-expect-error
+      await givenAlchemyConnectedProvider({ signer, chain })
+    );
+    // @ts-expect-error
+    assertType<Client<AlchemyTransport>>(provider);
+    // @ts-expect-error
+    assertType<AlchemySmartAccountClient>(provider);
+    // @ts-expect-error
+    assertType<AlchemyEnhancedApis>(provider);
+
+    expect(() => {
+      const alchemy = new Alchemy({
+        network: Network.MATIC_MUMBAI,
+        apiKey: "test",
+      });
+
+      // @ts-expect-error
+      provider.extend(alchemyEnhancedApiActions(alchemy));
+    }).not.toBeFalsy();
+  });
 });
