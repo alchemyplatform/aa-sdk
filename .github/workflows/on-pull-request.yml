@@ -5,7 +5,7 @@ on:
 jobs:
   enforce_title:
     name: Enforce PR Title Format
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
   
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       pull-requests: write 
@@ -61,7 +61,7 @@ jobs:
 
   build_and_lint_and_test:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       API_KEY: ${{ secrets.API_KEY }}
@@ -96,6 +96,19 @@ jobs:
       - name: Debug print df
         run: df -h
         shell: bash
+
+      - name: Free disk space before build
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          sudo rm -rf /usr/local/.ghcup
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf /usr/local/lib/android/sdk/ndk
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo apt-get clean
+          echo "Disk space after cleanup:"
+          df -h
 
       - name: Build Libraries
         env:
