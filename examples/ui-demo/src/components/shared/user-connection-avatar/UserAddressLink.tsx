@@ -1,25 +1,46 @@
 import truncateAddress from "@/utils/truncate-address";
-import { useConnection } from "@account-kit/react";
-import { useMemo } from "react";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipArrow,
+} from "@radix-ui/react-tooltip";
+import { useState } from "react";
 
 export const UserAddressLink = ({ address }: { address: string | null }) => {
-  const connection = useConnection();
+  const [showCopied, setShowCopied] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const truncatedAddress = truncateAddress(address ?? "");
-  const addressBlockExplorerUrl = useMemo(() => {
-    if (!address || !connection.chain.blockExplorers) {
-      return null;
-    }
 
-    return `${connection.chain.blockExplorers?.default.url}/address/${address}`;
-  }, [address, connection]);
+  const handleClick = async () => {
+    if (!address) return;
+    await navigator.clipboard.writeText(address);
+    setShowCopied(true);
+    setIsOpen(true);
+    setTimeout(() => setShowCopied(false), 2000);
+  };
 
   return (
-    <a
-      target="_blank"
-      className="text-fg-primary underline text-md md:text-sm"
-      href={addressBlockExplorerUrl ?? "#"}
-    >
-      {truncatedAddress}
-    </a>
+    <TooltipProvider>
+      <Tooltip open={isOpen} onOpenChange={setIsOpen}>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleClick}
+            className="text-fg-primary underline text-md md:text-sm"
+          >
+            {truncatedAddress}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent
+          align="start"
+          alignOffset={-16}
+          className="bg-foreground text-background px-3 py-2 rounded-md"
+        >
+          <TooltipArrow />
+          <p className="text-xs">{showCopied ? "Copied!" : address}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
