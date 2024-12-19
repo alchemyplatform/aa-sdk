@@ -12,6 +12,8 @@ import {
   sepolia,
 } from "@account-kit/infra";
 
+export const DEFAULT_OWNER_ENTITY_ID = 0;
+
 export type PackSignatureParams = {
   // orderedHookData: HookData[];
   validationSignature: Hex;
