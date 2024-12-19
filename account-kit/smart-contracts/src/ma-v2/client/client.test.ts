@@ -535,7 +535,7 @@ describe("MA v2 Tests", async () => {
           value: 0n,
           data: "0x",
         },
-      }) //)
+      })
     ).resolves.not.toThrowError();
 
     // This should revert as we're calling an address separate fom the allowlisted target.
@@ -585,7 +585,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it("installs native token limit module, then uninstalls", async () => {
+  it("installs native token limit module, uses, then uninstalls", async () => {
     let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
@@ -593,7 +593,7 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const spendLimit = parseEther("0.1"); // 0.1 ETH limit
+    const spendLimit = parseEther("0.5");
 
     // Let's verify the module's limit is set correctly after installation
     const hookInstallData = nativeTokenLimitModule.encodeOnInstallData({
@@ -630,7 +630,7 @@ describe("MA v2 Tests", async () => {
             hasPreHooks: true,
             hasPostHooks: false,
           },
-          initData: hookInstallData,
+          initData: "0x",
         },
       ],
     });
@@ -644,7 +644,7 @@ describe("MA v2 Tests", async () => {
       provider.sendUserOperation({
         uo: {
           target: target,
-          value: parseEther("0.05"), // below the 0.1 limit
+          value: parseEther("0.05"), // below the 0.5 limit
           data: "0x",
         },
       })
@@ -655,11 +655,37 @@ describe("MA v2 Tests", async () => {
       provider.sendUserOperation({
         uo: {
           target: target,
-          value: parseEther("0.05"), // passing the 0.1 limit considering gas
+          value: parseEther("0.6"), // passing the 0.5 limit
           data: "0x",
         },
       })
     ).rejects.toThrowError();
+
+    const hookUninstallData = nativeTokenLimitModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData, "0x"],
+    });
+
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+
+    // Sending over the limit should now pass
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.6"),
+          data: "0x",
+        },
+      })
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
