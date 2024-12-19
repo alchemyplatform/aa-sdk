@@ -28,9 +28,15 @@ import { InvalidEntityIdError, InvalidNonceKeyError } from "@aa-sdk/core";
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
+export type SignerEntity = {
+  isGlobalValidation: boolean;
+  entityId: number;
+};
+
 export type SMAV2Account<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0">;
+> = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0"> &
+  SignerEntity;
 
 export type CreateSMAV2AccountParams<
   TTransport extends Transport = Transport,
@@ -46,10 +52,7 @@ export type CreateSMAV2AccountParams<
   initialOwner?: Address;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
 } & (
-    | {
-        isGlobalValidation: boolean;
-        entityId: number;
-      }
+    | SignerEntity
     | {
         isGlobalValidation?: never;
         entityId?: never;
@@ -145,5 +148,7 @@ export async function createSMAV2Account(
     ...baseAccount,
     getAccountNonce,
     getSigner: () => signer,
+    isGlobalValidation,
+    entityId,
   };
 }
