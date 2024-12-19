@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect } from "react";
-import { useAuthContext } from "../../context.js";
+import { AuthStepType, useAuthContext } from "../../context.js";
 
 import { LoadingOtp } from "./otp.js";
 import type { Meta, StoryObj } from "@storybook/react";
@@ -12,9 +12,9 @@ const meta: Meta<typeof LoadingOtp> = {
   render: () => {
     const { authStep, setAuthStep } = useAuthContext();
     useEffect(() => {
-      setAuthStep({ type: "otp_verify", email: "test@alchemy.com" });
+      setAuthStep({ type: AuthStepType.otp_verify, email: "test@alchemy.com" });
     }, [setAuthStep]);
-    if (authStep.type === "otp_verify") {
+    if (authStep.type === AuthStepType.otp_verify) {
       return <LoadingOtp />;
     }
 
