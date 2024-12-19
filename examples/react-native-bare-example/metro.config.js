@@ -14,11 +14,16 @@ config.watchFolders = [workspaceRoot, projectRoot];
 
 // config.watchFolders = [projectRoot, ...Object.values(monorepoPackages)];
 
-// Let Metro know where to resolve packages and in what order
+// Add all the React Native node_modules paths
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'account-kit/rn-signer/node_modules'),
+  path.resolve(workspaceRoot, 'account-kit/rn-signer/example/node_modules'),
+  path.resolve(
+    workspaceRoot,
+    'examples/react-native-expo-example/node_modules',
+  ),
 ];
 // Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
