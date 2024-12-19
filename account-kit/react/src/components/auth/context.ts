@@ -4,9 +4,36 @@ import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 import type { AuthType } from "./types";
 
+export enum AuthStepType {
+  email_verify = "email_verify",
+  otp_verify = "otp_verify",
+  passkey_verify = "passkey_verify",
+  passkey_create = "passkey_create",
+  passkey_create_success = "passkey_create_success",
+  email_completing = "email_completing",
+  oauth_completing = "oauth_completing",
+  initial = "initial",
+  complete = "complete",
+  eoa_connect = "eoa_connect",
+  wallet_connect = "wallet_connect",
+  pick_eoa = "pick_eoa",
+  social = "social",
+}
+
+export enum AuthStepStatus {
+  success = "success",
+  error = "error",
+  verifying = "verifying",
+}
+
 export type AuthStep =
   | { type: "email_verify"; email: string }
-  | { type: "otp_verify"; email: string; error?: Error }
+  | {
+      type: "otp_verify";
+      email: string;
+      error?: Error;
+      status?: AuthStepStatus | null;
+    }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
