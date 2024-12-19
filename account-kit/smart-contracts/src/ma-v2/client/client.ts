@@ -14,6 +14,7 @@ import {
   type Transport,
   type Hex,
   type Address,
+  zeroAddress,
 } from "viem";
 import { concatHex, encodeFunctionData } from "viem";
 
@@ -130,7 +131,10 @@ export async function createSMAV2AccountClient({
     hooks,
     overrides,
   }: InstallValidationParams) => {
-    if (validationConfig.entityId === 0) {
+    if (
+      validationConfig.entityId === 0 &&
+      validationConfig.moduleAddress !== zeroAddress
+    ) {
       throw new EntityIdOverrideError();
     }
 
