@@ -5,7 +5,7 @@ import { useUiConfig } from "../../hooks/useUiConfig.js";
 import { useSignerStatus } from "../../index.js";
 import { Dialog } from "../dialog/dialog.js";
 import { AuthCardContent } from "./card/index.js";
-import { useAuthContext } from "./context.js";
+import { AuthStepType, useAuthContext } from "./context.js";
 
 export const AuthModal = () => {
   const { isConnected } = useSignerStatus();
@@ -23,14 +23,15 @@ export const AuthModal = () => {
     if (addPasskeyOnSignup) {
       openAuthModal();
       setAuthStep({
-        type: "passkey_create",
+        type: AuthStepType.passkey_create,
       });
     }
   }, [addPasskeyOnSignup, openAuthModal, setAuthStep]);
   useNewUserSignup(
     handleSignup,
     isConnected &&
-      (authStep.type === "complete" || authStep.type === "initial") &&
+      (authStep.type === AuthStepType.complete ||
+        authStep.type === AuthStepType.initial) &&
       !isOpen
   );
 

@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { ls } from "../../../../strings.js";
-import { useAuthContext, type AuthStep } from "../../context.js";
+import {
+  AuthStepStatus,
+  AuthStepType,
+  useAuthContext,
+  type AuthStep,
+} from "../../context.js";
 import { Button } from "../../../button.js";
 
 type EmailNotReceivedDisclaimerProps = {
-  authStep: Extract<AuthStep, { type: "email_verify" | "otp_verify" }>;
+  authStep: Extract<
+    AuthStep,
+    { type: AuthStepType.email_verify | AuthStepType.otp_verify }
+  >;
 };
 export const EmailNotReceivedDisclaimer = ({
   authStep,
@@ -14,9 +22,17 @@ export const EmailNotReceivedDisclaimer = ({
   const [emailResent, setEmailResent] = useState(false);
   const { authenticate } = useAuthenticate({
     onSuccess: () => {
-      setAuthStep({ type: "complete" });
+      setAuthStep({ type: AuthStepType.complete });
     },
   });
+
+  const isOTPVerifying = useMemo(() => {
+    return (
+      authStep.type === AuthStepType.otp_verify &&
+      (authStep.status === AuthStepStatus.verifying ||
+        authStep.status === AuthStepStatus.success)
+    );
+  }, [authStep]);
 
   useEffect(() => {
     if (emailResent) {
@@ -29,13 +45,20 @@ export const EmailNotReceivedDisclaimer = ({
 
   return (
     <div className="flex flex-row gap-2 justify-center mb-2">
-      <span className="text-fg-tertiary text-xs">
+      <span
+        className={`${
+          isOTPVerifying ? "text-fg-disabled" : "text-fg-tertiary"
+        } text-xs`}
+      >
         {ls.loadingEmail.emailNotReceived}
       </span>
       <Button
         variant="link"
-        className="text-xs font-normal underline"
-        disabled={emailResent}
+        className={`text-xs font-normal underline ${
+          isOTPVerifying ? "text-fg-disabled" : "text-btn-primary"
+        }`}
+        style={isOTPVerifying ? { opacity: 1 } : {}}
+        disabled={emailResent || isOTPVerifying}
         onClick={() => {
           authenticate({
             type: "email",

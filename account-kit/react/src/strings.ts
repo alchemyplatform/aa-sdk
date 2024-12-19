@@ -33,6 +33,8 @@ const STRINGS = {
     loadingOtp: {
       title: "Enter verification code",
       body: "We sent a verification code to",
+      verifying: "Verifying...",
+      verified: "Verified!",
       notReceived: "Didn't receive code?",
       resend: "Resend",
     },
