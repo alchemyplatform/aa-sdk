@@ -1,6 +1,7 @@
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
 import { MintStatus } from "./MintCard7702";
+import { loadingState } from "./Transactions";
 
 export const MintStages = ({ status }: { status: MintStatus }) => {
   return (
@@ -26,7 +27,7 @@ const Stage = ({
   description,
   className,
 }: {
-  icon: "loading" | "success" | "initial";
+  icon: loadingState;
   description: string | JSX.Element;
   className?: string;
 }) => {
@@ -38,7 +39,7 @@ const Stage = ({
   );
 };
 
-const getMintIcon = (icon: "loading" | "success" | "initial") => {
+export const getMintIcon = (icon: loadingState) => {
   switch (icon) {
     case "loading":
     case "initial":
