@@ -8,7 +8,35 @@ description: Learn how to enable a user to export their private key with the Alc
 
 The Alchemy Signer allows you to export a user's private key, allowing them a right to exit at any time. It is considered a best practice to allow your users to export their private key, as it gives them full control over their account. The private key export method does not rely on Alchemy's infrastructure, so even if Alchemy is down, a user can still export their private key.
 
-## Usage
+## Using [useExportAccount](/reference/account-kit/react/hooks/useExportAccount)
+
+A hook use to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
+
+### Import
+
+```ts
+import { useExportAccount } from "@account-kit/react";
+```
+
+### Usage
+
+```ts
+import { useExportAccount } from "@account-kit/react";
+
+const {
+  exportAccount,
+  isExported,
+  isExporting,
+  error,
+  ExportAccountComponent,
+} = useExportAccount({
+  params: {
+    iframeContainerId: "my-iframe-container",
+  },
+});
+```
+
+## Using the signer
 
 To add export private key functionality to your app, you can use the `exportPrivateKey` method on the signer.
 
