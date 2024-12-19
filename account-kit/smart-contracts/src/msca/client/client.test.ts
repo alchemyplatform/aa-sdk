@@ -165,6 +165,64 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     `);
   }, 100000);
 
+  it("should update ownership successfully", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer2,
+      owners,
+    });
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("1000"),
+    });
+    const signer3 = LocalAccountSigner.mnemonicToAccountSigner(
+      MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
+      { accountIndex: 2 }
+    );
+
+    // Deploy account and update owners. Remove signer1 and add signer3.
+    let result = await provider.updateOwners({
+      args: [[await signer3.getAddress()], [await signer1.getAddress()]],
+    });
+    await provider.waitForUserOperationTransaction(result);
+
+    let newOwnerAddresses = await provider.readOwners({
+      pluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
+    });
+    expect(newOwnerAddresses).not.toContain(await signer1.getAddress());
+    expect(newOwnerAddresses).toHaveLength(2);
+    expect(newOwnerAddresses).toEqual(
+      expect.arrayContaining([
+        await signer2.getAddress(),
+        await signer3.getAddress(),
+      ])
+    );
+
+    // Update owners again. This time, remove signer3 and add signer1.
+    result = await provider.updateOwners({
+      args: [[await signer1.getAddress()], [await signer3.getAddress()]],
+      overrides: {
+        maxFeePerGas: 1_851_972_078n * 2n,
+        maxPriorityFeePerGas: 1_000_000_000n * 2n,
+        callGasLimit: 43_960n * 2n,
+        verificationGasLimit: 92_326n * 2n,
+        preVerificationGas: 46_248n * 2n,
+      },
+    });
+    await provider.waitForUserOperationTransaction(result);
+
+    newOwnerAddresses = await provider.readOwners({
+      pluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
+    });
+    expect(newOwnerAddresses).not.toContain(await signer3.getAddress());
+    expect(newOwnerAddresses).toHaveLength(2);
+    expect(newOwnerAddresses).toEqual(
+      expect.arrayContaining([
+        await signer1.getAddress(),
+        await signer2.getAddress(),
+      ])
+    );
+  }, 100000);
+
   const givenConnectedProvider = ({
     signer,
     accountAddress,
