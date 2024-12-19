@@ -17,7 +17,6 @@ export enum AuthStepType {
   eoa_connect = "eoa_connect",
   wallet_connect = "wallet_connect",
   pick_eoa = "pick_eoa",
-  social = "social",
 }
 
 export enum AuthStepStatus {
@@ -27,28 +26,28 @@ export enum AuthStepStatus {
 }
 
 export type AuthStep =
-  | { type: "email_verify"; email: string }
+  | { type: AuthStepType.email_verify; email: string }
   | {
-      type: "otp_verify";
+      type: AuthStepType.otp_verify;
       email: string;
       error?: Error;
       status?: AuthStepStatus | null;
     }
-  | { type: "passkey_verify"; error?: Error }
-  | { type: "passkey_create"; error?: Error }
-  | { type: "passkey_create_success" }
-  | { type: "email_completing"; createPasskeyAfter?: boolean }
+  | { type: AuthStepType.passkey_verify; error?: Error }
+  | { type: AuthStepType.passkey_create; error?: Error }
+  | { type: AuthStepType.passkey_create_success }
+  | { type: AuthStepType.email_completing; createPasskeyAfter?: boolean }
   | {
-      type: "oauth_completing";
+      type: AuthStepType.oauth_completing;
       config: Extract<AuthType, { type: "social" }>;
       createPasskeyAfter?: boolean;
       error?: Error;
     }
-  | { type: "initial"; error?: Error }
-  | { type: "complete" }
-  | { type: "eoa_connect"; connector: Connector; error?: Error }
-  | { type: "wallet_connect"; error?: Error }
-  | { type: "pick_eoa" };
+  | { type: AuthStepType.initial; error?: Error }
+  | { type: AuthStepType.complete }
+  | { type: AuthStepType.eoa_connect; connector: Connector; error?: Error }
+  | { type: AuthStepType.wallet_connect; error?: Error }
+  | { type: AuthStepType.pick_eoa };
 
 type AuthContextType<
   TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined

@@ -7,7 +7,7 @@ import {
 import { ReactLogger } from "../../../metrics.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
-import { useAuthContext } from "../context.js";
+import { AuthStepType, useAuthContext } from "../context.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { ConnectionFailed as PasskeyConnectionFailed } from "../../../icons/connectionFailed.js";
 
@@ -25,18 +25,18 @@ const BENEFITS = [
 ];
 
 export const AddPasskey = () => {
-  const { setAuthStep, authStep } = useAuthContext("passkey_create");
+  const { setAuthStep, authStep } = useAuthContext(AuthStepType.passkey_create);
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
       ReactLogger.trackEvent({
         name: "add_passkey_on_signup_success",
       });
 
-      setAuthStep({ type: "passkey_create_success" });
+      setAuthStep({ type: AuthStepType.passkey_create_success });
     },
     onError: () => {
       setAuthStep({
-        type: "passkey_create",
+        type: AuthStepType.passkey_create,
         error: new Error("Failed to add passkey"),
       });
     },
@@ -50,7 +50,7 @@ export const AddPasskey = () => {
         icon={<PasskeyConnectionFailed />}
         shouldDisconnect={false}
         handleTryAgain={addPasskey}
-        handleSkip={() => setAuthStep({ type: "complete" })}
+        handleSkip={() => setAuthStep({ type: AuthStepType.complete })}
       />
     );
   }
@@ -91,7 +91,7 @@ export const AddPasskey = () => {
             ReactLogger.trackEvent({
               name: "add_passkey_on_signup_skip",
             });
-            setAuthStep({ type: "complete" });
+            setAuthStep({ type: AuthStepType.complete });
           }}
           disabled={isAddingPasskey}
         >
