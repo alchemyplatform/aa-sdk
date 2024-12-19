@@ -18,11 +18,11 @@ import {
 } from "react-native";
 import { API_KEY } from "@env";
 
-const signer = new RNAlchemySigner({
+const signer = RNAlchemySigner({
 	client: { connection: { apiKey: API_KEY } },
 });
 
-export default function HomeScreen() {
+export default function MagicLinkAuthScreen() {
 	const [email, setEmail] = useState<string>("");
 	const [user, setUser] = useState<User | null>(null);
 	const [account, setAccount] = useState<LightAccount | null>(null);
