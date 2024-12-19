@@ -48,10 +48,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "workspaces": {
-    "nohoist": [
-      "**"
-    ]
   }
 }

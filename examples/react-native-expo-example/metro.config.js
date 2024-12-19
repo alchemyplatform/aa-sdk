@@ -16,6 +16,8 @@ config.resolver.nodeModulesPaths = [
 	path.resolve(projectRoot, "node_modules"),
 	path.resolve(monorepoRoot, "node_modules"),
 	path.resolve(monorepoRoot, "account-kit/rn-signer/node_modules"),
+	path.resolve(monorepoRoot, "account-kit/rn-signer/example/node_modules"),
+	path.resolve(monorepoRoot, "examples/react-native-bare-example/node_modules"),
 ];
 
 // Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`

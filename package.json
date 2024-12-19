@@ -25,7 +25,7 @@
       "**/react-native-test-app",
       "**/react-native-test-app/**",
       "**/react-native-config",
-      "**react-native-config/**"
+      "**/react-native-config/**"
     ]
   },
   "resolutions": {

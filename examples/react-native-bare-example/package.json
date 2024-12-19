@@ -53,13 +53,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "workspaces": {
-    "nohoist": [
-      "**/react",
-      "**/react/**",
-      "**/react-native",
-      "**/react-native/**"
-    ]
   }
 }
