@@ -1,4 +1,4 @@
-import { custom, parseEther, publicActions } from "viem";
+import { custom, parseEther, publicActions, zeroAddress } from "viem";
 
 import {
   LocalAccountSigner,
@@ -14,8 +14,16 @@ import {
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
+import {
+  getDefaultPaymasterGuardModuleAddress,
+  getDefaultSingleSignerValidationModuleAddress,
+} from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
+import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
+import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { addresses } from "../../../dist/esm/src/ma-v2/utils.js";
+import { HookType } from "../actions/common/types.js";
+import { installValidationActions } from "../../../dist/esm/src/ma-v2/actions/install-validation/installValidation.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -186,6 +194,71 @@ describe("MA v2 Tests", async () => {
         },
       })
     ).rejects.toThrowError();
+  });
+
+  it.only("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const paymaster = paymaster070.getPaymasterStubData();
+
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 1,
+      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // TO DO: verify if paymaster is valid
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 1,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 1,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
