@@ -476,8 +476,8 @@ describe("MA v2 Tests", async () => {
       provider.waitForUserOperationTransaction(uninstallResult)
     ).rejects.toThrowError();
   });
-
-  it("installs allowlist module, then uninstalls", async () => {
+  
+  it("installs allowlist module, uses, then uninstalls", async () => {
     let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
@@ -486,7 +486,7 @@ describe("MA v2 Tests", async () => {
     });
 
     const hookInstallData = allowlistModule.encodeOnInstallData({
-      entityId: 1,
+      entityId: 0,
       inputs: [
         {
           target,
@@ -511,7 +511,7 @@ describe("MA v2 Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: addresses.allowlistModule,
+            address: getDefaultAllowlistModuleAddress(provider.chain),
             entityId: 0, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -525,6 +525,29 @@ describe("MA v2 Tests", async () => {
     await expect(
       provider.waitForUserOperationTransaction(installResult)
     ).resolves.not.toThrowError();
+
+    // Test that the allowlist is active.
+    // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: 0n,
+          data: "0x",
+        },
+      }) //)
+    ).resolves.not.toThrowError();
+
+    // This should revert as we're calling an address separate fom the allowlisted target.
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
 
     const hookUninstallData = allowlistModule.encodeOnUninstallData({
       entityId: 0,
@@ -548,6 +571,17 @@ describe("MA v2 Tests", async () => {
 
     await expect(
       provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+
+    // Post-uninstallation, we should now be able to call into any address successfully.
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      })
     ).resolves.not.toThrowError();
   });
 
