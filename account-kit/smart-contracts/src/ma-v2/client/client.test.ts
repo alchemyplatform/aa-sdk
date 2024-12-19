@@ -196,7 +196,7 @@ describe("MA v2 Tests", async () => {
     ).rejects.toThrowError();
   });
 
-  it.only("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
+  it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
