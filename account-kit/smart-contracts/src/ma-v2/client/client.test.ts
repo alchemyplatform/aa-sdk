@@ -269,6 +269,85 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
+  it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
+    let provider = await givenConnectedProvider({ signer, usePaymaster: true });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const paymaster = paymaster070.getPaymasterStubData();
+
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 0,
+      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // sad path: with wrong paymaster
+    let providerNoPaymaster = await givenConnectedProvider({
+      signer,
+      usePaymaster: false,
+    });
+
+    // TO DO: verify if correct paymaster is used
+    await expect(
+      providerNoPaymaster.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    console.log("paymaster" in paymaster ? paymaster.paymaster : "0x0");
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+  });
+
   const givenConnectedProvider = async ({
     signer,
     accountAddress,
