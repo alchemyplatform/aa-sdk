@@ -92,9 +92,9 @@ describe("tailwind utils test", () => {
               "light": "#475569",
             },
             "fg-success": {
-      +       "dark": "#86EFAC",
-      +       "light": "#16A34A",
-      +     },
+              "dark": "#86EFAC",
+              "light": "#16A34A",
+            },
             "fg-tertiary": {
               "dark": "#94A3B8",
               "light": "#94A3B8",
