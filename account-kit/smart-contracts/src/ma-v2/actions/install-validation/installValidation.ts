@@ -8,14 +8,8 @@ import {
   type UserOperationOverridesParameter,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import {
-  encodeFunctionData,
-  concatHex,
-  type Address,
-  type Hex,
-  type Chain,
-  type Transport,
-} from "viem";
+import { type Address, type Hex, encodeFunctionData, concatHex } from "viem";
+
 import { semiModularAccountBytecodeAbi } from "../../abis/semiModularAccountBytecodeAbi.js";
 import type { HookConfig, ValidationConfig } from "../common/types.js";
 import {
@@ -23,9 +17,10 @@ import {
   serializeHookConfig,
   serializeModuleEntity,
 } from "../common/utils.js";
-import type { SMAV2Account } from "../../account/semiModularAccountV2.js";
-import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+
 import { type SMAV2AccountClient } from "../../client/client.js";
+import { type SMAV2Account } from "../../account/semiModularAccountV2.js";
+import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -94,7 +89,9 @@ export const installValidationActions: <
       throw new EntityIdOverrideError();
     }
 
-    const callData = await account.encodeCallData(
+    const { encodeCallData } = account;
+
+    const callData = await encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "installValidation",
@@ -136,7 +133,9 @@ export const installValidationActions: <
       );
     }
 
-    const callData = await account.encodeCallData(
+    const { encodeCallData } = account;
+
+    const callData = await encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "uninstallValidation",

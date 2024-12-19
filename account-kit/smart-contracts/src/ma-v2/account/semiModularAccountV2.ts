@@ -151,19 +151,14 @@ export async function createSMAV2Account(
     target,
     data,
     value,
-  }) => {
-    let callData = encodeFunctionData({
-      abi: modularAccountAbi,
-      functionName: "execute",
-      args: [target, value ?? 0n, data],
-    });
-
-    callData = (await baseAccount.isAccountDeployed())
-      ? await encodeCallData(callData)
-      : callData;
-
-    return callData;
-  };
+  }) =>
+    await encodeCallData(
+      encodeFunctionData({
+        abi: modularAccountAbi,
+        functionName: "execute",
+        args: [target, value ?? 0n, data],
+      })
+    );
 
   const encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex> = async (txs) =>
     await encodeCallData(

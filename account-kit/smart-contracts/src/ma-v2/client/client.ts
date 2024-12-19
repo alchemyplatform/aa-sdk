@@ -4,7 +4,7 @@ import {
   type SmartAccountSigner,
   type SmartAccountClientConfig,
 } from "@aa-sdk/core";
-import { type Chain, type CustomTransport, type Transport } from "viem";
+import { type Chain, type Transport } from "viem";
 
 import {
   createSMAV2Account,
