@@ -27,7 +27,7 @@ export const MintCard7702 = ({
 }) => {
   return (
     <div
-      className="bg-bg-surface-default rounded-lg p-6 w-[278px] h-[430px] flex flex-col"
+      className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col"
       style={{
         boxShadow:
           "0px 50px 50px 0px rgba(0, 0, 0, 0.09), 0px 12px 27px 0px rgba(0, 0, 0, 0.10)",
@@ -35,15 +35,14 @@ export const MintCard7702 = ({
     >
       {uri ? (
         <div className="relative flex flex-col items-center">
-          <div className="relative w-full h-[170px] overflow-hidden mb-4 rounded-xl">
-            <Image
-              src={uri}
-              alt="An NFT"
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
-          </div>
+          <Image
+            className="mb-4 rounded-xl object-cover h-[222px] w-[326px]"
+            width={326}
+            height={222}
+            src={uri}
+            alt="An NFT"
+            priority
+          />
         </div>
       ) : (
         <div className="flex justify-center items-center h-[170px]">
@@ -57,7 +56,7 @@ export const MintCard7702 = ({
       </div>
       {!nftTransfered ? (
         <>
-          <p className="text-fg-primary text-sm">
+          <p className="text-fg-primary text-sm mb-3">
             Sponsor gas and sign in the background for a one-click transaction
             experience.
           </p>

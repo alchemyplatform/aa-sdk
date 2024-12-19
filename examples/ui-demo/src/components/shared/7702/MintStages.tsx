@@ -32,7 +32,7 @@ const Stage = ({
   className?: string;
 }) => {
   return (
-    <div className={`flex ${className}`}>
+    <div className={`flex mb-4 items-center ${className}`}>
       <div className="w-4 h-4 mr-2">{getMintIcon(icon)}</div>
       <p className="text-sm text-fg-secondary">{description}</p>
     </div>

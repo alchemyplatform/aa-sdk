@@ -22,21 +22,24 @@ export const TransactionsCard = ({
   };
   return (
     <div
-      className="bg-bg-surface-default rounded-lg p-6 w-[278px] h-[430px] flex flex-col"
+      className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col"
       style={{
         boxShadow:
           "0px 50px 50px 0px rgba(0, 0, 0, 0.09), 0px 12px 27px 0px rgba(0, 0, 0, 0.10)",
       }}
     >
       <div
-        className="rounded-xl w-full h-[170px] mb-3 flex justify-center items-center"
+        className="rounded-xl h-[222px] w-full mb-4 flex justify-center items-center relative"
         style={{
           background: `rgba(54, 63, 249, 0.05)`,
         }}
       >
+        <p className="absolute top-5 right-5 px-2 py-1 font-semibold rounded-md text-xs text-[#7c3AED] bg-[#F3F3FF]">
+          New!
+        </p>
         <Key />
       </div>
-      <h3 className="text-fg-primary text-xl font-semibold">
+      <h3 className="text-fg-primary text-xl font-semibold mb-3">
         Recurring transactions
       </h3>
       {!hasClicked ? (
