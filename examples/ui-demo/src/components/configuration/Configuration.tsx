@@ -9,14 +9,7 @@ import { useConfigStore } from "@/state";
 import { WalletTypes } from "@/app/config";
 
 export const Configuration = ({ className }: { className?: string }) => {
-  const { setWalletType, walletType } = useConfigStore(
-    ({ walletType, setWalletType }) => {
-      return {
-        walletType,
-        setWalletType,
-      };
-    }
-  );
+  const { setWalletType, walletType } = useConfigStore();
   // const [walletType, setWalletType] = useState(WalletTypes.smart);
 
   const onSwitchWalletType = () => {
@@ -46,7 +39,7 @@ export const Configuration = ({ className }: { className?: string }) => {
       />
       <p className="text-active text-xs font-medium pt-3">
         Sentence describing all of the value props fo 7702 and educating the
-        user. Curious about what this means?
+        user. Curious about what this means?{" "}
         <ExternalLink className="text-[#363FF9]" href="https://google.com">
           Learn more.
         </ExternalLink>
