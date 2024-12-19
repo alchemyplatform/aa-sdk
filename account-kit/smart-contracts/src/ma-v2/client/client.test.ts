@@ -1,19 +1,34 @@
-import { custom, parseEther, publicActions } from "viem";
+import { custom, parseEther, publicActions, zeroAddress } from "viem";
 
-import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import {
+  LocalAccountSigner,
+  type SmartAccountSigner,
+  type SmartAccountClient,
+} from "@aa-sdk/core";
 
-import { createSMAV2AccountClient } from "./client.js";
+import {
+  createSMAV2AccountClient,
+  type InstallValidationActions,
+} from "./client.js";
 
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { installValidationActions } from "../actions/install-validation/installValidation.js";
-import { addresses } from "../utils.js";
+import {
+  getDefaultPaymasterGuardModuleAddress,
+  getDefaultSingleSignerValidationModuleAddress,
+} from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
+import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
+import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { addresses } from "../../../dist/esm/src/ma-v2/utils.js";
+import { HookType } from "../actions/common/types.js";
+import { installValidationActions } from "../../../dist/esm/src/ma-v2/actions/install-validation/installValidation.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
-  let client: ReturnType<typeof instance.getClient>;
+  let client: ReturnType<typeof instance.getClient> &
+    ReturnType<typeof publicActions>;
 
   beforeAll(async () => {
     client = instance.getClient().extend(publicActions);
@@ -30,11 +45,10 @@ describe("MA v2 Tests", async () => {
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
-  const getTargetBalance = async (): Promise<number> => {
-    return client.getBalance({
+  const getTargetBalance = async (): Promise<bigint> =>
+    client.getBalance({
       address: target,
     });
-  };
 
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
@@ -63,9 +77,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("adds a session key with no permissions", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -74,7 +86,9 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: addresses.singleSignerValidationModule,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -99,7 +113,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1n,
+      entityId: 1,
       isGlobalValidation: true,
     });
 
@@ -119,9 +133,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("uninstalls a session key", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(
-      installValidationActions
-    );
+    let provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -130,7 +142,9 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: addresses.singleSignerValidationModule,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -148,7 +162,9 @@ describe("MA v2 Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
 
     result = await provider.uninstallValidation({
-      moduleAddress: addresses.singleSignerValidationModule,
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -165,19 +181,84 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1n,
+      entityId: 1,
       isGlobalValidation: true,
     });
 
-    result = sessionKeyClient.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount,
-        data: "0x",
-      },
+    await expect(
+      sessionKeyClient.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+  });
+
+  it.only("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
     });
 
-    await expect(result).rejects.toThrowError();
+    const paymaster = paymaster070.getPaymasterStubData();
+
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 1,
+      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // TO DO: verify if paymaster is valid
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 1,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 1,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
@@ -186,7 +267,7 @@ describe("MA v2 Tests", async () => {
   }: {
     signer: SmartAccountSigner;
     accountAddress?: `0x${string}`;
-  }) =>
+  }): Promise<SmartAccountClient & InstallValidationActions> =>
     createSMAV2AccountClient({
       chain: instance.chain,
       signer,
