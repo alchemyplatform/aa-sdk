@@ -12,11 +12,11 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
 
    - Use the Node version specified in `package.json` (currently 18.16.0). Run `node -v` to check your version.
    - Build the project with `yarn build`.
-   - Run existing tests using `yarn test` to ensure everything is working correctly.
+   - Run existing tests using `yarn test` & `yarn test:typecheck` to ensure everything is working correctly.
 
 4. **Make Changes**: Now, you can start making changes to the packages or docs. When updating or adding new functionality, update or add a new doc in `site/packages/*` corresponding to the package you have worked on to document the changes.
 
-5. **Re-verify Tests**: After making your changes, re-run `yarn test` to ensure all tests still pass.
+5. **Re-verify Tests**: After making your changes, re-run `yarn test` & `yarn test:typecheck` to ensure all tests still pass.
 
 6. **Code Formatting**:
 

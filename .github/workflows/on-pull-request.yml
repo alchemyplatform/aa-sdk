@@ -102,3 +102,6 @@ jobs:
       - name: Unit Test
         run: yarn test:ci
 
+      - name: Typecheck Test
+        run: yarn test:typecheck
+
