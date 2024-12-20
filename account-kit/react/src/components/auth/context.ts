@@ -4,9 +4,20 @@ import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 import type { AuthType } from "./types";
 
+export enum AuthStepStatus {
+  success = "success",
+  error = "error",
+  verifying = "verifying",
+}
+
 export type AuthStep =
   | { type: "email_verify"; email: string }
-  | { type: "otp_verify"; email: string; error?: Error }
+  | {
+      type: "otp_verify";
+      email: string;
+      error?: Error;
+      status?: AuthStepStatus | null;
+    }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
@@ -14,12 +25,6 @@ export type AuthStep =
   | {
       type: "oauth_completing";
       config: Extract<AuthType, { type: "social" }>;
-      error?: Error;
-    }
-  | {
-      type: "otp_completing";
-      email: string;
-      otp: string;
       error?: Error;
     }
   | { type: "initial"; error?: Error }

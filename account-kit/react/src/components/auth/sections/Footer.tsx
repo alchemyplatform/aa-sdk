@@ -23,7 +23,6 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "oauth_completing":
       return <OAuthContactSupport />;
     case "email_completing":
-    case "otp_completing":
     case "passkey_create_success":
     case "eoa_connect":
     case "pick_eoa":
