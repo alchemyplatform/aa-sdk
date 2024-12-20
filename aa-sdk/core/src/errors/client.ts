@@ -92,7 +92,7 @@ export class InvalidNonceKeyError extends BaseError {
  * Error class denoting that the provided entity id is invalid because it's overriding the native entity id.
  */
 export class EntityIdOverrideError extends BaseError {
-  override name = "InvalidNonceKeyError";
+  override name = "EntityIdOverrideError";
 
   /**
    * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
