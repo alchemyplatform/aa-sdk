@@ -517,7 +517,7 @@ describe("MA v2 Tests", async () => {
             entityId: 0, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
-            hasPostHooks: true,
+            hasPostHooks: false,
           },
           initData: hookInstallData,
         },
