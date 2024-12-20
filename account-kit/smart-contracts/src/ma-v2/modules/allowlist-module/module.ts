@@ -1,19 +1,7 @@
 import { encodeAbiParameters, type Address, type Hex } from "viem";
-
 import { allowlistModuleAbi } from "./abis/allowlistModuleAbi.js";
 
-const addresses: Record<number | "default", Address> = {
-  default: "0xE46ca4a98c485caEE2Abb6ef5116292B8c78a868",
-};
-
-const meta = {
-  name: "AllowlistModule",
-  version: "alpha.1",
-  addresses,
-};
-
 export const allowlistModule = {
-  meta,
   abi: allowlistModuleAbi,
   encodeOnInstallData: (args: {
     entityId: number;
