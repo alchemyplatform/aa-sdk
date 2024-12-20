@@ -14,6 +14,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "initial":
       return <RegistrationDisclaimer />;
     case "email_verify":
+    case "otp_verify":
       return <EmailNotReceivedDisclaimer authStep={authStep} />;
     case "passkey_create":
     case "wallet_connect":
@@ -22,6 +23,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "oauth_completing":
       return <OAuthContactSupport />;
     case "email_completing":
+    case "otp_completing":
     case "passkey_create_success":
     case "eoa_connect":
     case "pick_eoa":

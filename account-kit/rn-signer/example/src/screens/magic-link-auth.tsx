@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
@@ -10,14 +9,17 @@ import {
   Linking,
   TouchableOpacity,
 } from "react-native";
-import Config from "react-native-config";
 
-export default function HomeScreen() {
-  const [email, setEmail] = useState<string>("");
-  const [user, setUser] = useState<User | null>(null);
-  const signer = new RNAlchemySigner({
+import Config from "react-native-config";
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+export default function MagicLinkAuthScreen() {
+  const signer = RNAlchemySigner({
     client: { connection: { apiKey: Config.API_KEY! } },
   });
+
+  const [email, setEmail] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null);
 
   const handleUserAuth = ({ bundle }: { bundle: string }) => {
     signer
@@ -73,11 +75,16 @@ export default function HomeScreen() {
             onChangeText={setEmail}
             value={email}
           />
+
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
               signer
-                .authenticate({ email, type: "email" })
+                .authenticate({
+                  email,
+                  type: "email",
+                  emailMode: "magicLink",
+                })
                 .catch(console.error);
             }}
           >

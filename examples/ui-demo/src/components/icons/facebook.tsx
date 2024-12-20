@@ -1,40 +1,27 @@
 import { SVGProps } from "react";
 
-export const FacebookLogo = ({
-  ...props
-}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement> & { size?: number }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={24}
-    height={24}
-    fill="none"
-    {...props}
-  >
-    <g clipPath="url(#a)">
-      <path
-        fill="url(#b)"
-        d="M10.02 23.88C4.32 22.86 0 17.94 0 12 0 5.4 5.4 0 12 0s12 5.4 12 12c0 5.94-4.32 10.86-10.02 11.88l-.66-.54h-2.64l-.66.54Z"
-      />
-      <path
-        fill="#fff"
-        d="m16.68 15.36.54-3.36h-3.18V9.66c0-.96.36-1.68 1.8-1.68h1.56V4.92c-.84-.12-1.8-.24-2.64-.24-2.76 0-4.68 1.68-4.68 4.68V12h-3v3.36h3v8.46a11.048 11.048 0 0 0 3.96 0v-8.46h2.64Z"
-      />
-    </g>
-    <defs>
-      <linearGradient
-        id="b"
-        x1={12.001}
-        x2={12.001}
-        y1={23.165}
-        y2={-0.004}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#0062E0" />
-        <stop offset={1} stopColor="#19AFFF" />
-      </linearGradient>
-      <clipPath id="a">
-        <path fill="#fff" d="M0 0h24v24H0z" />
-      </clipPath>
-    </defs>
-  </svg>
-);
+export const FacebookIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
+  return (
+    <svg
+      width="21"
+      height="20"
+      viewBox="0 0 21 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g>
+        <path
+          d="M8.85 19.9C4.1 19.05 0.5 14.95 0.5 10C0.5 4.5 5 0 10.5 0C16 0 20.5 4.5 20.5 10C20.5 14.95 16.9 19.05 12.15 19.9L11.6 19.45H9.4L8.85 19.9Z"
+          fill="#0062E0"
+        />
+        <path
+          d="M14.4004 12.7999L14.8504 9.9999H12.2004V8.0499C12.2004 7.2499 12.5004 6.6499 13.7004 6.6499H15.0004V4.0999C14.3004 3.9999 13.5004 3.8999 12.8004 3.8999C10.5004 3.8999 8.90039 5.2999 8.90039 7.7999V9.9999H6.40039V12.7999H8.90039V19.8499C9.45039 19.9499 10.0004 19.9999 10.5504 19.9999C11.1004 19.9999 11.6504 19.9499 12.2004 19.8499V12.7999H14.4004Z"
+          fill="white"
+        />
+      </g>
+    </svg>
+  );
+};

@@ -10,6 +10,7 @@ import {
   type GetWebAuthnAttestationResult,
   type OauthConfig,
   type OauthParams,
+  type OtpParams,
   type SignupResponse,
   type User,
 } from "@account-kit/signer";
@@ -36,6 +37,20 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     });
   }
 
+  override async submitOtpCode(
+    args: Omit<OtpParams, "targetPublicKey">
+  ): Promise<{ bundle: string }> {
+    this.eventEmitter.emit("authenticating", { type: "otpVerify" });
+    const publicKey = await this.stamper.init();
+
+    const { credentialBundle } = await this.request("/v1/otp", {
+      ...args,
+      targetPublicKey: publicKey,
+    });
+
+    return { bundle: credentialBundle };
+  }
+
   override async createAccount(
     params: CreateAccountParams
   ): Promise<SignupResponse> {
@@ -49,6 +64,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const response = await this.request("/v1/signup", {
       email,
+      emailMode: params.emailMode,
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
@@ -63,10 +79,13 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.eventEmitter.emit("authenticating", { type: "email" });
     let targetPublicKey = await this.stamper.init();
 
-    return this.request("/v1/auth", {
+    const response = await this.request("/v1/auth", {
       email: params.email,
+      emailMode: params.emailMode,
       targetPublicKey,
     });
+
+    return response;
   }
 
   override async completeAuthWithBundle(params: {
@@ -76,7 +95,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
   }): Promise<User> {
-    if (params.authenticatingType !== "email") {
+    if (
+      params.authenticatingType !== "email" &&
+      params.authenticatingType !== "otp"
+    ) {
       throw new Error("Unsupported authenticating type");
     }
 
