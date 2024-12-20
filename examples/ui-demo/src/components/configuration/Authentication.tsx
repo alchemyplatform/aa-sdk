@@ -5,6 +5,7 @@ import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
 import { FacebookIcon } from "../icons/facebook";
 import { GoogleIcon } from "../icons/google";
+import { DiscordIcon } from "../icons/discord";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
@@ -94,6 +95,22 @@ export const Authentication = ({ className }: { className?: string }) => {
     });
   };
 
+  const setAddDiscordAuth = () => {
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        discord: !auth.oAuthMethods.discord,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_discord",
+        enabled: !auth.oAuthMethods.discord,
+      },
+    });
+  };
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-row gap-2 items-center">
@@ -124,6 +141,11 @@ export const Authentication = ({ className }: { className?: string }) => {
                   active={auth.oAuthMethods.facebook}
                   icon={<FacebookIcon />}
                   onClick={setAddFacebookAuth}
+                />
+                <OAuthMethod
+                  active={auth.oAuthMethods.discord}
+                  icon={<DiscordIcon />}
+                  onClick={setAddDiscordAuth}
                 />
                 <ExternalLink
                   href={links.auth0}

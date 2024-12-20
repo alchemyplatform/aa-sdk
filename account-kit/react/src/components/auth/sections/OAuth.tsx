@@ -1,5 +1,10 @@
 import { memo } from "react";
-import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
+import {
+  AppleIcon,
+  FacebookIcon,
+  GoogleIcon,
+  DiscordIcon,
+} from "../../../icons/auth-icons/index.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
 import { useOAuthVerify } from "../hooks/useOAuthVerify.js";
@@ -29,6 +34,12 @@ export const OAuth = memo(({ ...config }: Props) => {
       return (
         <Button variant="social" icon={<AppleIcon />} onClick={authenticate}>
           Apple
+        </Button>
+      );
+    case "discord":
+      return (
+        <Button variant="social" icon={<DiscordIcon />} onClick={authenticate}>
+          Discord
         </Button>
       );
     case "auth0":
