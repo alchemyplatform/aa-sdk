@@ -24,6 +24,7 @@ import { SingleSignerValidationModule } from "../modules/single-signer-validatio
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { HookType } from "../actions/common/types.js";
+import { TimeRangeModule } from "../modules/time-range-module/module.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -335,7 +336,68 @@ describe("MA v2 Tests", async () => {
       entityId: 0,
     });
 
-    console.log("paymaster" in paymaster ? paymaster.paymaster : "0x0");
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+  });
+
+  it.only("installs time range module, verifies use of valid time range then uninstalls module", async () => {
+    let provider = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookInstallData = TimeRangeModule.encodeOnInstallData({
+      entityId: 0,
+      validUntil: 100,
+      validAfter: 50,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await expect(
+      provider.waitForUserOperationTransaction(installResult)
+    ).resolves.not.toThrowError();
+
+    // TO DO: verify if time module works
+
+    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: zeroAddress,
       entityId: 0,
