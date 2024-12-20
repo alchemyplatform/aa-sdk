@@ -33,12 +33,36 @@ export default function MyLoginPage() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <button onClick={() => authenticate({ type: "email", email })}>
+      <button
+        onClick={() => authenticate({ type: "email", email, emailMode: "otp" })}
+      >
         Login
       </button>
     </div>
   );
 }
+
+// Then send the OTP
+
+export default function MyOTPInputPage() {
+  const { authenticate, isPending } = useAuthenticate();
+  const [otpCode, setOTPCode] = React.useState("");
+
+  return (
+    <div>
+      <input
+        value={otpCode}
+        onChange={(e) => setOTPCode(e.target.value)}
+      />
+      <button
+        onClick={() => authenticate({ type: "otp", otpCode });}
+      >
+        Submit
+      </button>
+    </div>
+  );
+}
+
 ```
 
 ### Social Login
