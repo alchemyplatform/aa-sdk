@@ -478,3 +478,21 @@ export const arbitrumNova: Chain = {
     ...vabn.rpcUrls,
   },
 };
+
+export const mekong: Chain = defineChain({
+  id: 7078815900,
+  name: "Mekong Pectra Devnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.mekong.ethpandaops.io"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://explorer.mekong.ethpandaops.io",
+    },
+  },
+  testnet: true,
+});
