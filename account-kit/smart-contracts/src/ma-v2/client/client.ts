@@ -4,13 +4,17 @@ import {
   type SmartAccountSigner,
   type SmartAccountClientConfig,
 } from "@aa-sdk/core";
-import { type Chain, type CustomTransport, type Transport } from "viem";
+import { type Chain, type Transport } from "viem";
 
 import {
   createSMAV2Account,
   type CreateSMAV2AccountParams,
   type SMAV2Account,
 } from "../account/semiModularAccountV2.js";
+
+export type SMAV2AccountClient<
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = SmartAccountClient<Transport, Chain, SMAV2Account<TSigner>>;
 
 export type CreateSMAV2AccountClientParams<
   TTransport extends Transport = Transport,
@@ -27,7 +31,7 @@ export function createSMAV2AccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   args: CreateSMAV2AccountClientParams<Transport, TChain, TSigner>
-): Promise<SmartAccountClient<CustomTransport, Chain, SMAV2Account<TSigner>>>;
+): Promise<SMAV2AccountClient<TSigner>>;
 
 /**
  * Creates a MAv2 account client using the provided configuration parameters.
