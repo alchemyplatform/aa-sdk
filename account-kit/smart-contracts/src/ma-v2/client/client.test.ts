@@ -100,8 +100,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1,
-      isGlobalValidation: true,
+      signerEntity: { entityId: 1, isGlobalValidation: true },
     });
 
     result = await sessionKeyClient.sendUserOperation({
@@ -170,8 +169,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1,
-      isGlobalValidation: true,
+      signerEntity: { entityId: 1, isGlobalValidation: true },
     });
 
     await expect(
