@@ -8,6 +8,7 @@ import { GoogleIcon } from "../icons/google";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
+import { TwitterIcon } from "../icons/twitter";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
@@ -18,7 +19,6 @@ export const Authentication = ({ className }: { className?: string }) => {
     auth,
     setAuth,
   }));
-
   const setEmailAuth = (active: boolean) => {
     setAuth({ showEmail: active });
     Metrics.trackEvent({
@@ -94,6 +94,22 @@ export const Authentication = ({ className }: { className?: string }) => {
     });
   };
 
+  const setAddTwitterAuth = () => {
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        twitter: !auth.oAuthMethods.twitter,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_twitter",
+        enabled: !auth.oAuthMethods.twitter,
+      },
+    });
+  };
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-row gap-2 items-center">
@@ -124,6 +140,11 @@ export const Authentication = ({ className }: { className?: string }) => {
                   active={auth.oAuthMethods.facebook}
                   icon={<FacebookIcon />}
                   onClick={setAddFacebookAuth}
+                />
+                <OAuthMethod
+                  active={auth.oAuthMethods.twitter}
+                  icon={<TwitterIcon />}
+                  onClick={setAddTwitterAuth}
                 />
                 <ExternalLink
                   href={links.auth0}
