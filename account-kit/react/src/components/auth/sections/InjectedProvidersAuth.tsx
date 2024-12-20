@@ -1,6 +1,6 @@
 import { WalletIcon } from "../../../icons/wallet.js";
 import { Button } from "../../button.js";
-import { AuthStepType, useAuthContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 
 export const ExternalWalletsAuth = () => {
   const { setAuthStep } = useAuthContext();
@@ -9,7 +9,7 @@ export const ExternalWalletsAuth = () => {
     <Button
       variant="social"
       icon={<WalletIcon />}
-      onClick={() => setAuthStep({ type: AuthStepType.pick_eoa })}
+      onClick={() => setAuthStep({ type: "pick_eoa" })}
     >
       Continue with a wallet
     </Button>

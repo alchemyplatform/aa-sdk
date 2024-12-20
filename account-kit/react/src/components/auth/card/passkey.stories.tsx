@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { http, HttpResponse } from "msw";
 import { useEffect } from "react";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
-import { AuthStepType, useAuthContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 import { AuthCard } from "./index.jsx";
 
@@ -44,7 +44,7 @@ const PasskeyStory = (props: any) => {
 
   const { setAuthStep } = useAuthContext();
   useEffect(() => {
-    setAuthStep({ type: AuthStepType.passkey_create });
+    setAuthStep({ type: "passkey_create" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

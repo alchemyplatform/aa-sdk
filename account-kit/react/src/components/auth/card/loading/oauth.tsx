@@ -6,24 +6,22 @@ import {
   OAuthConnectionFailed,
 } from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
-import { AuthStepType, useAuthContext } from "../../context.js";
+import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 import { ls } from "../../../../strings.js";
 
 export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
-  const { setAuthStep, authStep } = useAuthContext(
-    AuthStepType.oauth_completing
-  );
+  const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
   const oauthWasCancelled = authStep.error instanceof OauthCancelledError;
 
   useEffect(() => {
     if (isConnected) {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: "complete" });
     } else if (oauthWasCancelled) {
-      setAuthStep({ type: AuthStepType.initial });
+      setAuthStep({ type: "initial" });
     }
   }, [isConnected, oauthWasCancelled, setAuthStep]);
 
@@ -35,9 +33,7 @@ export const CompletingOAuth = () => {
         )}`}
         bodyText={ls.error.connection.oauthBody}
         handleTryAgain={authenticate}
-        handleUseAnotherMethod={() =>
-          setAuthStep({ type: AuthStepType.initial })
-        }
+        handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
         icon={
           <OAuthConnectionFailed provider={authStep.config.authProviderId} />
         }

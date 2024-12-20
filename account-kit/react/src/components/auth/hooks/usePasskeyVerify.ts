@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
-import { AuthStepType, useAuthContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 
 export type UsePasskeyVerifyReturnType = {
   authenticate: () => void;
@@ -18,13 +18,13 @@ export const usePasskeyVerify = (): UsePasskeyVerifyReturnType => {
   const { setAuthStep } = useAuthContext();
   const { authenticate: authenticate_, isPending } = useAuthenticate({
     onMutate: () => {
-      setAuthStep({ type: AuthStepType.passkey_verify });
+      setAuthStep({ type: "passkey_verify" });
     },
     onError: (err) => {
-      setAuthStep({ type: AuthStepType.passkey_verify, error: err });
+      setAuthStep({ type: "passkey_verify", error: err });
     },
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: "complete" });
     },
   });
 

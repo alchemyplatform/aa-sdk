@@ -3,17 +3,13 @@ import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { ls } from "../../../../strings.js";
 import {
   AuthStepStatus,
-  AuthStepType,
   useAuthContext,
   type AuthStep,
 } from "../../context.js";
 import { Button } from "../../../button.js";
 
 type EmailNotReceivedDisclaimerProps = {
-  authStep: Extract<
-    AuthStep,
-    { type: AuthStepType.email_verify | AuthStepType.otp_verify }
-  >;
+  authStep: Extract<AuthStep, { type: "email_verify" | "otp_verify" }>;
 };
 export const EmailNotReceivedDisclaimer = ({
   authStep,
@@ -22,13 +18,13 @@ export const EmailNotReceivedDisclaimer = ({
   const [emailResent, setEmailResent] = useState(false);
   const { authenticate } = useAuthenticate({
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: "complete" });
     },
   });
 
   const isOTPVerifying = useMemo(() => {
     return (
-      authStep.type === AuthStepType.otp_verify &&
+      authStep.type === "otp_verify" &&
       (authStep.status === AuthStepStatus.verifying ||
         authStep.status === AuthStepStatus.success)
     );

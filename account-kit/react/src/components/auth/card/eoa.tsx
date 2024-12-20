@@ -4,7 +4,7 @@ import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
-import { AuthStepType, useAuthContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
 import { CardContent } from "./content.js";
@@ -14,7 +14,7 @@ import { WalletIcon } from "./error/icons/wallet-icon.js";
 export const WALLET_CONNECT = "walletConnect";
 
 export const EoaConnectCard = () => {
-  const { setAuthStep, authStep } = useAuthContext(AuthStepType.eoa_connect);
+  const { setAuthStep, authStep } = useAuthContext("eoa_connect");
   const { connect } = useConnectEOA();
   const { chain } = useChain();
 
@@ -31,7 +31,7 @@ export const EoaConnectCard = () => {
         tryAgainCTA={errorMessage.tryAgainCTA}
         handleTryAgain={() => {
           setAuthStep({
-            type: AuthStepType.eoa_connect,
+            type: "eoa_connect",
             connector: authStep.connector,
           });
 
@@ -41,9 +41,7 @@ export const EoaConnectCard = () => {
             chainId: chain.id,
           });
         }}
-        handleUseAnotherMethod={() =>
-          setAuthStep({ type: AuthStepType.pick_eoa })
-        }
+        handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
     );
   }
@@ -71,7 +69,7 @@ export const EoaConnectCard = () => {
       secondaryButton={{
         title: "Cancel",
         onClick: async () => {
-          setAuthStep({ type: AuthStepType.initial });
+          setAuthStep({ type: "initial" });
         },
       }}
     />
@@ -79,7 +77,7 @@ export const EoaConnectCard = () => {
 };
 
 export const WalletConnectCard = () => {
-  const { setAuthStep, authStep } = useAuthContext(AuthStepType.wallet_connect);
+  const { setAuthStep, authStep } = useAuthContext("wallet_connect");
   const { walletConnectParams } = useWalletConnectAuthConfig();
   const { chain } = useChain();
 
@@ -91,7 +89,7 @@ export const WalletConnectCard = () => {
 
   if (!walletConnectConnector) {
     setAuthStep({
-      type: AuthStepType.wallet_connect,
+      type: "wallet_connect",
       error: new Error("WalletConnect params not found"),
     });
 
@@ -108,16 +106,14 @@ export const WalletConnectCard = () => {
         tryAgainCTA={errorMessage.tryAgainCTA}
         icon={<WalletIcon connector={WALLET_CONNECT} />}
         handleTryAgain={() => {
-          setAuthStep({ type: AuthStepType.wallet_connect });
+          setAuthStep({ type: "wallet_connect" });
           // Re-try wallet connect's connection...
           connect({
             connector: walletConnectConnector,
             chainId: chain.id,
           });
         }}
-        handleUseAnotherMethod={() =>
-          setAuthStep({ type: AuthStepType.pick_eoa })
-        }
+        handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
     );
   }
@@ -145,7 +141,7 @@ export const WalletConnectCard = () => {
         title: "Cancel",
         onClick: async () => {
           // Ensure to stop all inflight requests
-          setAuthStep({ type: AuthStepType.initial });
+          setAuthStep({ type: "initial" });
         },
       }}
     />
@@ -155,7 +151,7 @@ export const WalletConnectCard = () => {
 export const EoaPickCard = () => {
   const { chain } = useChain();
   const { connectors, connect } = useConnectEOA();
-  const { setAuthStep } = useAuthContext(AuthStepType.pick_eoa);
+  const { setAuthStep } = useAuthContext("pick_eoa");
 
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
@@ -207,7 +203,7 @@ export const EoaPickCard = () => {
                   // If walletConnectConnector is not found, set the error and return
                   if (!walletConnectConnector) {
                     return setAuthStep({
-                      type: AuthStepType.wallet_connect,
+                      type: "wallet_connect",
                       error: new Error("WalletConnect params not found"),
                     });
                   }

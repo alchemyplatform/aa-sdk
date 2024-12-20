@@ -1,7 +1,7 @@
 "use client";
 import { useCallback } from "react";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
-import { AuthStepType, useAuthContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 
 export type UseOAuthVerifyReturnType = {
@@ -20,19 +20,19 @@ export const useOAuthVerify = ({
     onMutate: () => {
       setAuthStep({
         config,
-        type: AuthStepType.oauth_completing,
+        type: "oauth_completing",
       });
     },
     onError: (err) => {
       console.error(err);
       setAuthStep({
-        type: AuthStepType.oauth_completing,
+        type: "oauth_completing",
         config,
         error: err,
       });
     },
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: "complete" });
     },
   });
 

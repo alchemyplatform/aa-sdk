@@ -14,7 +14,7 @@ import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { Navigation } from "../../navigation.js";
-import { AuthStepType, useAuthContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
 export type AuthCardProps = {
@@ -72,34 +72,34 @@ export const AuthCardContent = ({
 
   const canGoBack = useMemo(() => {
     return [
-      AuthStepType.email_verify,
-      AuthStepType.otp_verify,
-      AuthStepType.passkey_verify,
-      AuthStepType.passkey_create,
-      AuthStepType.pick_eoa,
-      AuthStepType.wallet_connect,
-      AuthStepType.eoa_connect,
-      AuthStepType.oauth_completing,
+      "email_verify",
+      "otp_verify",
+      "passkey_verify",
+      "passkey_create",
+      "pick_eoa",
+      "wallet_connect",
+      "eoa_connect",
+      "oauth_completing",
     ].includes(authStep.type);
   }, [authStep]);
 
   const onBack = useCallback(() => {
     switch (authStep.type) {
-      case AuthStepType.email_verify:
-      case AuthStepType.otp_verify:
-      case AuthStepType.passkey_verify:
-      case AuthStepType.passkey_create:
-      case AuthStepType.oauth_completing:
+      case "email_verify":
+      case "otp_verify":
+      case "passkey_verify":
+      case "passkey_create":
+      case "oauth_completing":
         disconnect(config); // Terminate any inflight authentication
         didGoBack.current = true;
-        setAuthStep({ type: AuthStepType.initial });
+        setAuthStep({ type: "initial" });
         break;
-      case AuthStepType.wallet_connect:
-      case AuthStepType.eoa_connect:
-        setAuthStep({ type: AuthStepType.pick_eoa });
+      case "wallet_connect":
+      case "eoa_connect":
+        setAuthStep({ type: "pick_eoa" });
         break;
-      case AuthStepType.pick_eoa:
-        setAuthStep({ type: AuthStepType.initial });
+      case "pick_eoa":
+        setAuthStep({ type: "initial" });
         break;
       default:
         console.warn("Unhandled back action for auth step", authStep);
@@ -112,20 +112,20 @@ export const AuthCardContent = ({
       disconnect(config);
     }
 
-    if (authStep.type === AuthStepType.passkey_create) {
-      setAuthStep({ type: AuthStepType.complete });
+    if (authStep.type === "passkey_create") {
+      setAuthStep({ type: "complete" });
     } else {
-      setAuthStep({ type: AuthStepType.initial });
+      setAuthStep({ type: "initial" });
     }
     closeAuthModal();
   }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
 
   useEffect(() => {
-    if (authStep.type === AuthStepType.complete) {
+    if (authStep.type === "complete") {
       didGoBack.current = false;
       closeAuthModal();
       onAuthSuccess?.();
-    } else if (authStep.type !== AuthStepType.initial) {
+    } else if (authStep.type !== "initial") {
       didGoBack.current = false;
     }
   }, [
