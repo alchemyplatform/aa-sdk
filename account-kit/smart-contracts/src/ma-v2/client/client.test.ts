@@ -1,12 +1,22 @@
-import { custom, parseEther, publicActions } from "viem";
-import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
-import { createSMAV2AccountClient, type SMAV2AccountClient } from "./client.js";
+import { custom, parseEther, publicActions, zeroAddress } from "viem";
+import {
+  erc7677Middleware,
+  LocalAccountSigner,
+  type SmartAccountSigner,
+} from "@aa-sdk/core";
+import { createSMAV2AccountClient } from "./client.js";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { getDefaultSingleSignerValidationModuleAddress } from "../modules/utils.js";
+import {
+  getDefaultPaymasterGuardModuleAddress,
+  getDefaultSingleSignerValidationModuleAddress,
+} from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { installValidationActions } from "../actions/install-validation/installValidation.js";
+import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
+import { HookType } from "../actions/common/types.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -180,17 +190,177 @@ describe("MA v2 Tests", async () => {
     ).rejects.toThrowError();
   });
 
+  it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+        usePaymaster: true,
+      })
+    ).extend(installValidationActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const paymaster = paymaster070.getPaymasterStubData();
+
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 0,
+      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // happy path: send a UO with correct paymaster
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    // verify if correct paymaster is used
+    const txnHash1 = provider.waitForUserOperationTransaction(result);
+    await expect(txnHash1).resolves.not.toThrowError();
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+  });
+
+  it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+        usePaymaster: true,
+      })
+    ).extend(installValidationActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const paymaster = paymaster070.getPaymasterStubData();
+
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 0,
+      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // sad path: send UO with no paymaster
+    let providerNoPaymaster = await givenConnectedProvider({
+      signer,
+      usePaymaster: false,
+    });
+
+    await expect(
+      providerNoPaymaster.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+  });
+
   const givenConnectedProvider = async ({
     signer,
     accountAddress,
+    usePaymaster = false,
   }: {
     signer: SmartAccountSigner;
     accountAddress?: `0x${string}`;
+    usePaymaster?: boolean;
   }) =>
     createSMAV2AccountClient({
       chain: instance.chain,
       signer,
       accountAddress,
       transport: custom(instance.getClient()),
+      ...(usePaymaster ? erc7677Middleware() : {}),
     });
 });
