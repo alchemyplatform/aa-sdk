@@ -12,6 +12,7 @@ type OTPInputProps = {
   disabled?: boolean;
   handleReset: () => void;
   className?: string;
+  isVerified?: boolean;
 };
 
 export const isOTPCodeType = (arg: string[]): arg is OTPCodeType => {
@@ -30,6 +31,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   setErrorText,
   handleReset,
   className,
+  isVerified,
 }) => {
   const [autoComplete, setAutoComplete] = useState<string>("");
   const [activeElement, setActiveElement] = useState<number | null>(0);
@@ -140,9 +142,17 @@ export const OTPInput: React.FC<OTPInputProps> = ({
       <div className="flex gap-2.5">
         {initialOTPValue.map((_, i) => (
           <input
-            className={`border w-8 bg-bg-surface-default h-10 text-fg-primary rounded text-center focus:outline-none focus:border-active ${
-              !!errorText && "border-fg-critical"
-            }`}
+            className={`
+              border w-8 h-10 rounded text-center 
+              focus:outline-none focus:border-active 
+              ${!disabled && "bg-bg-surface-default text-fg-primary"}
+              ${!!errorText && "border-fg-critical"} 
+              ${isVerified && "border-fg-success"}
+              ${
+                disabled &&
+                "border-fg-disabled bg-bg-surface-inset text-fg-disabled"
+              }
+            `}
             ref={(el) => (refs.current[i] = el)}
             tabIndex={i + 1}
             type="text"
