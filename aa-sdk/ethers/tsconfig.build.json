@@ -5,6 +5,7 @@
     "**/*/__tests__",
     "**/*/*.e2e.test.ts",
     "**/*/*.test.ts",
+    "**/*/*.test-d.ts",
     "vitest.config.ts"
   ],
   "include": ["src"],

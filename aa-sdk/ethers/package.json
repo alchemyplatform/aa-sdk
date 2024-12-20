@@ -17,6 +17,7 @@
     "!.env",
     "!dist/**/*.tsbuildinfo",
     "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
     "!src/__tests__/**/*"
   ],
   "exports": {
