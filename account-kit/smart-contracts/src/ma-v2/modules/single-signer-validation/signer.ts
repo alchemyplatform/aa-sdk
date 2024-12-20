@@ -24,7 +24,7 @@ import { packSignature } from "../../utils.js";
  * const messageSigner = singleSignerMessageSigner(signer, chain);
  * ```
  *
- * @param {TSigner} signer the signer to use for signing operations
+ * @param {SmartAccountSigner} signer the signer to use for signing operations
  * @returns {object} an object with methods for signing operations and managing signatures
  */
 export const singleSignerMessageSigner = (signer: SmartAccountSigner) => {
