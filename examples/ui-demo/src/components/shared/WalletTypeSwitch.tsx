@@ -26,21 +26,21 @@ const WalletTypeSwitch = forwardRef<
         "pointer-events-none block h-full w-2/4 rounded-[7px] bg-background ring-0 transition-transform data-[state=checked]:translate-x-[100%] data-[state=unchecked]:translate-x-[0%] border border-active"
       )}
     ></Thumb>
-    <div className="absolute flex text-sm items-center inset-1 z-10 justify-between bg-transparent">
-      <div className="flex items-center data-[state=unchecked]:font-medium justify-center gap-1 flex-1 basis-0">
+    <div className="absolute flex text-sm items-center z-10 justify-between bg-transparent w-full">
+      <div className="flex items-center justify-center flex-1 basis-0">
         <p
           className={`${
             checked ? selectedStyles : unselectedStyles
-          } font-semibold`}
+          } font-normal`}
         >
           Smart account
         </p>
       </div>
-      <div className="flex items-center justify-center gap-1 flex-1 basis-0">
+      <div className="flex items-center justify-center flex-1 basis-0">
         <p
           className={`${
             checked ? unselectedStyles : selectedStyles
-          } font-semibold`}
+          } font-normal`}
         >
           Hybrid account (7702)
         </p>

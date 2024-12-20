@@ -37,10 +37,13 @@ export const Configuration = ({ className }: { className?: string }) => {
         checked={walletType === WalletTypes.hybrid7702}
         onCheckedChange={onSwitchWalletType}
       />
-      <p className="text-active text-xs font-medium pt-3">
+      <p className="text-active text-xs font-normal pt-3">
         Sentence describing all of the value props fo 7702 and educating the
-        user. Curious about what this means?{" "}
-        <ExternalLink className="text-[#363FF9]" href="https://google.com">
+        user. Curious about what this means?
+        <ExternalLink
+          className="text-[#363FF9] whitespace-nowrap"
+          href="https://google.com"
+        >
           Learn more.
         </ExternalLink>
       </p>
