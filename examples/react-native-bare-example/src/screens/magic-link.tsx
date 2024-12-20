@@ -101,7 +101,9 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              signer.authenticate({email, type: 'email'}).catch(console.error);
+              signer
+                .authenticate({email, type: 'email', emailMode: 'magicLink'})
+                .catch(console.error);
             }}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
