@@ -1,6 +1,6 @@
 import { JSX, SVGProps } from "react";
 
-export const DiscordLogo = ({
+export const DiscordIcon = ({
   fill,
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
