@@ -58,12 +58,10 @@ export function createSMAV2AccountClient<
  * @param {CreateSMAV2AccountClientParams} config The configuration parameters required to create the MAv2 account client
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance
  */
-export async function createSMAV2AccountClient({
-  ...config
-}: CreateSMAV2AccountClientParams): Promise<SmartAccountClient> {
-  const maV2Account = await createSMAV2Account({
-    ...config,
-  });
+export async function createSMAV2AccountClient(
+  config: CreateSMAV2AccountClientParams
+): Promise<SmartAccountClient> {
+  const maV2Account = await createSMAV2Account(config);
 
   return createSmartAccountClient({
     ...config,
