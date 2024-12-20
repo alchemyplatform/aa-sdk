@@ -35,8 +35,9 @@ export type SignerEntity = {
 
 export type SMAV2Account<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0"> &
-  SignerEntity;
+> = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0"> & {
+  signerEntity: SignerEntity;
+};
 
 export type CreateSMAV2AccountParams<
   TTransport extends Transport = Transport,
@@ -51,13 +52,8 @@ export type CreateSMAV2AccountParams<
   initCode?: Hex;
   initialOwner?: Address;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
-} & (
-    | SignerEntity
-    | {
-        isGlobalValidation?: never;
-        entityId?: never;
-      }
-  );
+  signerEntity?: SignerEntity;
+};
 
 export async function createSMAV2Account<
   TTransport extends Transport = Transport,
@@ -79,9 +75,13 @@ export async function createSMAV2Account(
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
-    isGlobalValidation = true,
-    entityId = 0,
+    signerEntity = {
+      isGlobalValidation: true,
+      entityId: DEFAULT_OWNER_ENTITY_ID,
+    },
   } = config;
+
+  const { isGlobalValidation, entityId } = signerEntity;
 
   if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
@@ -148,7 +148,6 @@ export async function createSMAV2Account(
     ...baseAccount,
     getAccountNonce,
     getSigner: () => signer,
-    isGlobalValidation,
-    entityId,
+    signerEntity,
   };
 }

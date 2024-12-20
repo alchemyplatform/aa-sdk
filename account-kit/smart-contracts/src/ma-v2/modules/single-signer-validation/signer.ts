@@ -27,9 +27,7 @@ import { packSignature } from "../../utils.js";
  * @param {TSigner} signer the signer to use for signing operations
  * @returns {object} an object with methods for signing operations and managing signatures
  */
-export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
-  signer: TSigner
-) => {
+export const singleSignerMessageSigner = (signer: SmartAccountSigner) => {
   return {
     getDummySignature: (): Hex => {
       const dummyEcdsaSignature =

@@ -66,7 +66,9 @@ export class InvalidEntityIdError extends BaseError {
    * @param {number} entityId the invalid entityId used
    */
   constructor(entityId: number) {
-    super(`Entity ID used is ${entityId}, but must be less than uint32.max`);
+    super(
+      `Entity ID used is ${entityId}, but must be less than or equal to uint32.max`
+    );
   }
 }
 
