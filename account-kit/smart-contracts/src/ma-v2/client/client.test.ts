@@ -530,14 +530,15 @@ describe("MA v2 Tests", async () => {
 
     // Test that the allowlist is active.
     // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
+    const sendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
     await expect(
-      provider.sendUserOperation({
-        uo: {
-          target: target,
-          value: 0n,
-          data: "0x",
-        },
-      })
+      provider.waitForUserOperationTransaction(sendResult)
     ).resolves.not.toThrowError();
 
     // This should revert as we're calling an address separate fom the allowlisted target.
@@ -576,14 +577,15 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
 
     // Post-uninstallation, we should now be able to call into any address successfully.
+    const postUninstallSendResult = await provider.sendUserOperation({
+      uo: {
+        target: zeroAddress,
+        value: 0n,
+        data: "0x",
+      },
+    });
     await expect(
-      provider.sendUserOperation({
-        uo: {
-          target: zeroAddress,
-          value: 0n,
-          data: "0x",
-        },
-      })
+      provider.waitForUserOperationTransaction(postUninstallSendResult)
     ).resolves.not.toThrowError();
   });
 
@@ -644,50 +646,54 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
 
     // Try to send less than the limit - should pass
-    // await expect(
-    //   provider.sendUserOperation({
-    //     uo: {
-    //       target: target,
-    //       value: parseEther("0.05"), // below the 0.5 limit
-    //       data: "0x",
-    //     },
-    //   })
-    // ).resolves.not.toThrowError();
+    const passingSendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: parseEther("0.05"), // below the 0.5 limit
+        data: "0x",
+      },
+    });
+    await expect(
+      provider.waitForUserOperationTransaction(passingSendResult)
+    ).resolves.not.toThrowError();
 
     // Try to send more than the limit - should fail
-    // await expect(
-    //   provider.sendUserOperation({
-    //     uo: {
-    //       target: target,
-    //       value: parseEther("0.6"), // passing the 0.5 limit
-    //       data: "0x",
-    //     },
-    //   })
-    // ).rejects.toThrowError();
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.6"), // passing the 0.5 limit
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
 
-    // const hookUninstallData = nativeTokenLimitModule.encodeOnUninstallData({
-    //   entityId: 0,
-    // });
+    const hookUninstallData = nativeTokenLimitModule.encodeOnUninstallData({
+      entityId: 0,
+    });
 
-    // const uninstallResult = await provider.uninstallValidation({
-    //   moduleAddress: zeroAddress,
-    //   entityId: 0,
-    //   uninstallData: "0x",
-    //   hookUninstallDatas: [hookUninstallData, "0x"],
-    // });
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData, "0x"],
+    });
 
-    // await expect(provider.waitForUserOperationTransaction(uninstallResult)).resolves.not.toThrowError();
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
 
     // Sending over the limit should now pass
-    // await expect(
-    //   provider.sendUserOperation({
-    //     uo: {
-    //       target: target,
-    //       value: parseEther("0.6"),
-    //       data: "0x",
-    //     },
-    //   })
-    // ).resolves.not.toThrowError();
+    const postUninstallSendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: parseEther("0.6"),
+        data: "0x",
+      },
+    });
+    await expect(
+      provider.waitForUserOperationTransaction(postUninstallSendResult)
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
