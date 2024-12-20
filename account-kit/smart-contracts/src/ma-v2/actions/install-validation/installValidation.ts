@@ -85,9 +85,10 @@ export const installValidationActions: <
       );
     }
 
-    if (validationConfig.entityId === DEFAULT_OWNER_ENTITY_ID) {
-      throw new EntityIdOverrideError();
-    }
+    // TO DO: handle installing on fallback validation (entityId == 0) with non-zero address
+    // if (validationConfig.entityId === DEFAULT_OWNER_ENTITY_ID) {
+    //   throw new EntityIdOverrideError();
+    // }
 
     const { encodeCallData } = account;
 
