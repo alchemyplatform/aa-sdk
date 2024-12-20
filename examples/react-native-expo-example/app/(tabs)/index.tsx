@@ -110,7 +110,11 @@ export default function MagicLinkAuthScreen() {
 								onPress={() => {
 									setAuthRequestSent(true);
 									signer
-										.authenticate({ email, type: "email" })
+										.authenticate({
+											email,
+											type: "email",
+											emailMode: "magicLink",
+										})
 										.catch(console.error);
 								}}
 							>
