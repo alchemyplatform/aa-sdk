@@ -13,7 +13,7 @@ Tailwind CSS is a required dependency for using Alchemy Account Kit UI component
 
 ### Email authentication
 
-```tsx twoslash
+````tsx twoslash
 import React from "react";
 import {
   type UseAuthenticateResult,
@@ -33,47 +33,35 @@ export default function MyLoginPage() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <button onClick={() => authenticate({ type: "email", email })}>
+      <button
+        onClick={() => authenticate({ type: "email", email, emailMode: "otp" })}
+      >
         Login
       </button>
     </div>
   );
 }
-```
 
-### Email authentication with redirect params
+// Then send the OTP
 
-```tsx twoslash
-import React from "react";
-import {
-  type UseAuthenticateResult,
-  useAuthenticate,
-} from "@account-kit/react";
-
-// This examples uses email authentication
-// you can also use passkeys if the user has one created
-export default function MyLoginPage() {
+export default function MyOTPInputPage() {
   const { authenticate, isPending } = useAuthenticate();
-  const [email, setEmail] = React.useState("");
-
-  const handleAuthenticate = () => {
-    const redirectParams = new URLSearchParams();
-    redirectParams.set("myParam", "someValue");
-    authenticate({ type: "email", email, redirectParams });
-  };
+  const [otpCode, setOTPCode] = React.useState("");
 
   return (
     <div>
       <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={otpCode}
+        onChange={(e) => setOTPCode(e.target.value)}
       />
-      <button onClick={handleAuthenticate}>Login</button>
+      <button
+        onClick={() => authenticate({ type: "otp", otpCode });}
+      >
+        Submit
+      </button>
     </div>
   );
 }
-```
 
 ### Social Login
 
@@ -122,7 +110,7 @@ export default function MyLoginPage() {
     </div>
   );
 }
-```
+````
 
 To use your own auth provider, follow the instructions on how to do so with [Auth0](https://accountkit.alchemy.com/signer/authentication/auth0)
 
