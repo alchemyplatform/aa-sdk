@@ -3,7 +3,7 @@ import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
-import { FacebookLogo } from "../icons/facebook";
+import { FacebookIcon } from "../icons/facebook";
 import { GoogleIcon } from "../icons/google";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
@@ -122,7 +122,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                 />
                 <OAuthMethod
                   active={auth.oAuthMethods.facebook}
-                  icon={<FacebookLogo />}
+                  icon={<FacebookIcon />}
                   onClick={setAddFacebookAuth}
                 />
                 <ExternalLink

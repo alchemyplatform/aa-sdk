@@ -10,7 +10,7 @@ export type UsePasskeyVerifyReturnType = {
 /**
  * Internal UI component hook used to complete passkey verification.
  *
- * This is used to login with a passkey, not create a new passkey
+ * This is used to log in with a passkey, not create a new passkey
  *
  * @returns {UsePasskeyVerifyReturnType} an authenticate function to do passkey verification and a boolean indicating if the operation is pending
  */

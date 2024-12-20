@@ -7,7 +7,11 @@ import {
 } from "zustand/middleware";
 import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
 import type { BaseSignerClient } from "../client/base";
-import type { User } from "../client/types";
+import type {
+  AlchemySignerClientEvent,
+  AlchemySignerClientEvents,
+  User,
+} from "../client/types";
 import { assertNever } from "../utils/typeAssertions.js";
 import type { Session, SessionManagerEvents } from "./types";
 
@@ -38,6 +42,8 @@ type Store = Mutate<
   StoreApi<SessionState>,
   [["zustand/subscribeWithSelector", never], ["zustand/persist", SessionState]]
 >;
+
+type TemporarySession = { orgId: string; isNewUser?: boolean };
 
 export class SessionManager {
   private sessionKey: string;
@@ -85,11 +91,18 @@ export class SessionManager {
 
     switch (existingSession.type) {
       case "email":
-      case "oauth": {
-        const connectedEventName =
-          existingSession.type === "email"
-            ? "connectedEmail"
-            : "connectedOauth";
+      case "oauth":
+      case "otp": {
+        const connectedEventName = (() => {
+          switch (existingSession.type) {
+            case "email":
+              return "connectedEmail";
+            case "oauth":
+              return "connectedOauth";
+            case "otp":
+              return "connectedOtp";
+          }
+        })();
         const result = await this.client
           .completeAuthWithBundle({
             bundle: existingSession.bundle,
@@ -133,7 +146,7 @@ export class SessionManager {
     }
   };
 
-  public setTemporarySession = (session: { orgId: string }) => {
+  public setTemporarySession = (session: TemporarySession) => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     localStorage.setItem(
       `${this.sessionKey}:temporary`,
@@ -141,7 +154,7 @@ export class SessionManager {
     );
   };
 
-  public getTemporarySession = (): { orgId: string } | null => {
+  public getTemporarySession = (): TemporarySession | null => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     const sessionStr = localStorage.getItem(`${this.sessionKey}:temporary`);
 
@@ -187,7 +200,10 @@ export class SessionManager {
 
   private setSession = (
     session_:
-      | Omit<Extract<Session, { type: "email" | "oauth" }>, "expirationDateMs">
+      | Omit<
+          Extract<Session, { type: "email" | "oauth" | "otp" }>,
+          "expirationDateMs"
+        >
       | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
   ) => {
     const session = {
@@ -230,28 +246,45 @@ export class SessionManager {
       }
     );
 
-    this.client.on("disconnected", () => this.clearSession());
+    // Helper type to ensure that a listener is either defined or explicitly
+    // omitted for every event type.
+    type Listeners = {
+      [K in keyof AlchemySignerClientEvents]:
+        | AlchemySignerClientEvents[K]
+        | undefined;
+    };
 
-    this.client.on("connectedEmail", (user, bundle) =>
-      this.setSessionWithUserAndBundle({ type: "email", user, bundle })
-    );
+    const listeners: Listeners = {
+      connected: undefined,
+      newUserSignup: undefined,
+      authenticating: undefined,
+      connectedEmail: (user, bundle) =>
+        this.setSessionWithUserAndBundle({ type: "email", user, bundle }),
+      connectedPasskey: (user) => {
+        const existingSession = this.getSession();
+        if (
+          existingSession != null &&
+          existingSession.type === "passkey" &&
+          existingSession.user.userId === user.userId
+        ) {
+          return;
+        }
 
-    this.client.on("connectedPasskey", (user) => {
-      const existingSession = this.getSession();
-      if (
-        existingSession != null &&
-        existingSession.type === "passkey" &&
-        existingSession.user.userId === user.userId
-      ) {
-        return;
+        this.setSession({ type: "passkey", user });
+      },
+      connectedOauth: (user, bundle) =>
+        this.setSessionWithUserAndBundle({ type: "oauth", user, bundle }),
+      connectedOtp: (user, bundle) => {
+        this.setSessionWithUserAndBundle({ type: "otp", user, bundle });
+      },
+      disconnected: () => this.clearSession(),
+    };
+
+    for (const [event, listener] of Object.entries(listeners)) {
+      if (listener) {
+        this.client.on(event as AlchemySignerClientEvent, listener);
       }
-
-      this.setSession({ type: "passkey", user });
-    });
-
-    this.client.on("connectedOauth", (user, bundle) =>
-      this.setSessionWithUserAndBundle({ type: "oauth", user, bundle })
-    );
+    }
 
     // sync local state if persisted state has changed from another tab
     // only do this in the browser
@@ -295,7 +328,7 @@ export class SessionManager {
     user,
     bundle,
   }: {
-    type: "email" | "oauth";
+    type: "email" | "oauth" | "otp";
     user: User;
     bundle: string;
   }) => {
