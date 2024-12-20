@@ -102,8 +102,7 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    let txnHash = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     const startingAddressBalance = await getTargetBalance();
 
@@ -124,8 +123,8 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    txnHash = sessionKeyClient.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await sessionKeyClient.waitForUserOperationTransaction(result);
+
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
@@ -159,8 +158,7 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    let txnHash = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     result = await provider.uninstallValidation({
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
@@ -173,8 +171,7 @@ describe("MA v2 Tests", async () => {
       hookUninstallDatas: [],
     });
 
-    txnHash = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     // connect session key and send tx with session key
     let sessionKeyClient = await createSMAV2AccountClient({
@@ -524,9 +521,7 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    await expect(
-      provider.waitForUserOperationTransaction(installResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(installResult);
 
     // Test that the allowlist is active.
     // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
@@ -537,9 +532,8 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
-    await expect(
-      provider.waitForUserOperationTransaction(sendResult)
-    ).resolves.not.toThrowError();
+
+    await provider.waitForUserOperationTransaction(sendResult);
 
     // This should revert as we're calling an address separate fom the allowlisted target.
     await expect(
@@ -572,9 +566,7 @@ describe("MA v2 Tests", async () => {
       hookUninstallDatas: [hookUninstallData],
     });
 
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(uninstallResult);
 
     // Post-uninstallation, we should now be able to call into any address successfully.
     const postUninstallSendResult = await provider.sendUserOperation({
@@ -584,9 +576,8 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
-    await expect(
-      provider.waitForUserOperationTransaction(postUninstallSendResult)
-    ).resolves.not.toThrowError();
+
+    await provider.waitForUserOperationTransaction(postUninstallSendResult);
   });
 
   it("installs native token limit module, uses, then uninstalls", async () => {
@@ -641,9 +632,7 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    await expect(
-      provider.waitForUserOperationTransaction(installResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(installResult);
 
     // Try to send less than the limit - should pass
     const passingSendResult = await provider.sendUserOperation({
@@ -653,9 +642,7 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
-    await expect(
-      provider.waitForUserOperationTransaction(passingSendResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(passingSendResult);
 
     // Try to send more than the limit - should fail
     await expect(
@@ -679,9 +666,7 @@ describe("MA v2 Tests", async () => {
       hookUninstallDatas: [hookUninstallData, "0x"],
     });
 
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(uninstallResult);
 
     // Sending over the limit should now pass
     const postUninstallSendResult = await provider.sendUserOperation({
@@ -691,9 +676,7 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
-    await expect(
-      provider.waitForUserOperationTransaction(postUninstallSendResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(postUninstallSendResult);
   });
 
   const givenConnectedProvider = async ({
