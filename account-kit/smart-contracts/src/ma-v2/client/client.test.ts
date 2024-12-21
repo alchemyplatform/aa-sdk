@@ -24,6 +24,7 @@ import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { allowlistModule } from "../modules/allowlist-module/module.js";
 import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 
+// TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
   let client: ReturnType<typeof instance.getClient> &
@@ -350,130 +351,6 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it("installs time range module, then uninstalls module within valid time range", async () => {
-    let provider = (
-      await givenConnectedProvider({
-        signer,
-      })
-    ).extend(installValidationActions);
-
-    await setBalance(client, {
-      address: provider.getAddress(),
-      value: parseEther("2"),
-    });
-
-    const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 0,
-      validAfter: 0,
-      validUntil: 10000000000,
-    });
-
-    const installResult = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: "0x",
-      hooks: [
-        {
-          hookConfig: {
-            address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 0, // uint32
-            hookType: HookType.VALIDATION,
-            hasPreHooks: true,
-            hasPostHooks: true,
-          },
-          initData: hookInstallData,
-        },
-      ],
-    });
-
-    // verify hook installtion succeeded
-    await provider.waitForUserOperationTransaction(installResult);
-
-    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 0,
-    });
-
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 0,
-      uninstallData: "0x",
-      hookUninstallDatas: [hookUninstallData],
-    });
-
-    // verify uninstall
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).resolves.not.toThrowError();
-  });
-
-  it("installs time range module, then uninstalls module outside valid time range", async () => {
-    let provider = (
-      await givenConnectedProvider({
-        signer,
-      })
-    ).extend(installValidationActions);
-
-    await setBalance(client, {
-      address: provider.getAddress(),
-      value: parseEther("2"),
-    });
-
-    const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 0,
-      validAfter: 0,
-      validUntil: 1,
-    });
-
-    const installResult = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: "0x",
-      hooks: [
-        {
-          hookConfig: {
-            address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 0, // uint32
-            hookType: HookType.VALIDATION,
-            hasPreHooks: true,
-            hasPostHooks: true,
-          },
-          initData: hookInstallData,
-        },
-      ],
-    });
-
-    // verify hook installtion succeeded
-    await provider.waitForUserOperationTransaction(installResult);
-
-    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 0,
-    });
-
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 0,
-      uninstallData: "0x",
-      hookUninstallDatas: [hookUninstallData],
-    });
-
-    // uninstall should fail
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).rejects.toThrowError();
-  });
-  
   it("installs allowlist module, uses, then uninstalls", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
@@ -677,6 +554,130 @@ describe("MA v2 Tests", async () => {
       },
     });
     await provider.waitForUserOperationTransaction(postUninstallSendResult);
+  });
+
+  it("installs time range module, then uninstalls module within valid time range", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+      })
+    ).extend(installValidationActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookInstallData = TimeRangeModule.encodeOnInstallData({
+      entityId: 0,
+      validAfter: 0,
+      validUntil: 10000000000,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installtion succeeded
+    await provider.waitForUserOperationTransaction(installResult);
+
+    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
+  });
+
+  it("installs time range module, then uninstalls module outside valid time range", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+      })
+    ).extend(installValidationActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookInstallData = TimeRangeModule.encodeOnInstallData({
+      entityId: 0,
+      validAfter: 0,
+      validUntil: 1,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: true,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installation succeeded
+    await provider.waitForUserOperationTransaction(installResult);
+
+    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // uninstall should fail
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).rejects.toThrowError();
   });
 
   const givenConnectedProvider = async ({
