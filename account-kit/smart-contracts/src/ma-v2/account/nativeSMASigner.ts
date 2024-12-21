@@ -2,7 +2,6 @@ import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
   hashMessage,
   hashTypedData,
-  concatHex,
   type Hex,
   type SignableMessage,
   type TypedData,
@@ -10,20 +9,19 @@ import {
   type Chain,
   type Address,
 } from "viem";
-import { getDefaultSingleSignerValidationModuleAddress } from "../utils.js";
 
-import { packUOSignature, pack1271Signature } from "../../utils.js";
+import { packUOSignature, pack1271Signature } from "../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
- * @example 
- 
+ * @example
  * ```ts
  * import { singleSignerMessageSigner } from "@account-kit/smart-contracts";
+ 
  * import { LocalAccountSigner } from "@aa-sdk/core";
  *
  * const MNEMONIC = "...":
- * 
+ *
  * const account = createSMAV2Account({ config });
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
@@ -37,7 +35,7 @@ import { packUOSignature, pack1271Signature } from "../../utils.js";
  * @param {number} entityId the entity id of the signing validation
  * @returns {object} an object with methods for signing operations and managing signatures
  */
-export const singleSignerMessageSigner = (
+export const nativeSMASigner = (
   signer: SmartAccountSigner,
   chain: Chain,
   accountAddress: Address,
@@ -65,15 +63,13 @@ export const singleSignerMessageSigner = (
 
     // we apply the expected 1271 packing here since the account contract will expect it
     async signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
-      const hash = await hashMessage(message);
+      const hash = hashMessage(message);
 
       return pack1271Signature({
         validationSignature: await signer.signTypedData({
           domain: {
             chainId: Number(chain.id),
-            verifyingContract:
-              getDefaultSingleSignerValidationModuleAddress(chain),
-            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
+            verifyingContract: accountAddress,
           },
           types: {
             ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
@@ -100,26 +96,22 @@ export const singleSignerMessageSigner = (
         typedDataDefinition?.primaryType === "DeferredAction" &&
         typedDataDefinition?.domain?.verifyingContract === accountAddress;
 
-      const validationSignature = await signer.signTypedData({
-        domain: {
-          chainId: Number(chain.id),
-          verifyingContract:
-            getDefaultSingleSignerValidationModuleAddress(chain),
-          salt: accountAddress,
-        },
-        types: {
-          ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-        },
-        message: {
-          hash: await hashTypedData(typedDataDefinition),
-        },
-        primaryType: "ReplaySafeHash",
-      });
-
       return isDeferredAction
-        ? validationSignature
+        ? signer.signTypedData(typedDataDefinition)
         : pack1271Signature({
-            validationSignature,
+            validationSignature: await signer.signTypedData({
+              domain: {
+                chainId: Number(chain.id),
+                verifyingContract: accountAddress,
+              },
+              types: {
+                ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
+              },
+              message: {
+                hash: await hashTypedData(typedDataDefinition),
+              },
+              primaryType: "ReplaySafeHash",
+            }),
             entityId,
           });
     },
