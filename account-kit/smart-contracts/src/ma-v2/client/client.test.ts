@@ -1,9 +1,16 @@
-import { custom, parseEther, publicActions, zeroAddress } from "viem";
 import {
   erc7677Middleware,
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
+import {
+  custom,
+  parseEther,
+  publicActions,
+  zeroAddress,
+  getContract,
+  hashMessage,
+} from "viem";
 import { createSMAV2AccountClient } from "./client.js";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
@@ -23,12 +30,15 @@ import { HookType } from "../actions/common/types.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { allowlistModule } from "../modules/allowlist-module/module.js";
 import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
+import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions>;
+
+  const isValidSigSuccess = "0x1626ba7e";
 
   beforeAll(async () => {
     client = instance.getClient().extend(publicActions);
@@ -73,6 +83,67 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
+  });
+
+  it("successfully sign + validate a message, for native and single signer validation", async () => {
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    // UO deploys the account to test 1271 against
+    const result = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(result);
+
+    const message = "testmessage";
+
+    let signature = await provider.signMessage({ message });
+
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
+
+    // connect session key and send tx with session key
+    let sessionKeyClient = await createSMAV2AccountClient({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+    });
+
+    signature = await sessionKeyClient.signMessage({ message });
+
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
   });
 
   it("adds a session key with no permissions", async () => {

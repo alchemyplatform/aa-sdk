@@ -1,4 +1,4 @@
-import { concat, type Hex, type Chain, type Address } from "viem";
+import { concat, toHex, type Hex, type Chain, type Address } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -14,17 +14,37 @@ import {
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
-export type PackSignatureParams = {
+export type PackUOSignatureParams = {
   // orderedHookData: HookData[];
   validationSignature: Hex;
 };
 
-// Signature packing utility
-export const packSignature = ({
-  // orderedHookData, TO DO: integrate in next iteration of MAv2 sdk
+// TODO: direct call validation 1271
+export type Pack1271SignatureParams = {
+  validationSignature: Hex;
+  entityId: number;
+};
+
+// Signature packing utility for user operations
+export const packUOSignature = ({
+  // orderedHookData, TODO: integrate in next iteration of MAv2 sdk
   validationSignature,
-}: PackSignatureParams): Hex => {
+}: PackUOSignatureParams): Hex => {
   return concat(["0xFF", "0x00", validationSignature]);
+};
+
+// Signature packing utility for 1271 signatures
+export const pack1271Signature = ({
+  validationSignature,
+  entityId,
+}: Pack1271SignatureParams): Hex => {
+  return concat([
+    "0x00",
+    toHex(entityId, { size: 4 }),
+    "0xFF",
+    "0x00", // EOA type signature
+    validationSignature,
+  ]);
 };
 
 export const getDefaultMAV2FactoryAddress = (chain: Chain): Address => {

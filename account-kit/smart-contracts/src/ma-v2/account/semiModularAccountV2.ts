@@ -11,6 +11,7 @@ import {
   toSmartContractAccount,
   InvalidEntityIdError,
   InvalidNonceKeyError,
+  getAccountAddress,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -30,6 +31,7 @@ import {
   DEFAULT_OWNER_ENTITY_ID,
 } from "../utils.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
+import { nativeSMASigner } from "./nativeSMASigner.js";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../actions/common/utils.js";
 
@@ -174,16 +176,25 @@ export async function createSMAV2Account(
       })
     );
 
+  const _accountAddress = await getAccountAddress({
+    client,
+    entryPoint,
+    accountAddress,
+    getAccountInitCode,
+  });
+
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
     entryPoint,
-    accountAddress,
+    accountAddress: _accountAddress,
     source: `SMAV2Account`,
     encodeExecute,
     encodeBatchExecute,
     getAccountInitCode,
-    ...singleSignerMessageSigner(signer),
+    ...(entityId === DEFAULT_OWNER_ENTITY_ID
+      ? nativeSMASigner(signer, chain, _accountAddress, entityId)
+      : singleSignerMessageSigner(signer, chain, _accountAddress, entityId)),
   });
 
   // TODO: add deferred action flag
@@ -204,13 +215,13 @@ export async function createSMAV2Account(
       (isGlobalValidation ? 1n : 0n);
 
     return entryPointContract.read.getNonce([
-      baseAccount.address,
+      _accountAddress,
       fullNonceKey,
     ]) as Promise<bigint>;
   };
 
   const accountContract = getContract({
-    address: baseAccount.address,
+    address: _accountAddress,
     abi: modularAccountAbi,
     client,
   });
