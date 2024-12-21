@@ -73,6 +73,9 @@ export {
   ChainNotFoundError,
   IncompatibleClientError,
   InvalidRpcUrlError,
+  InvalidEntityIdError,
+  InvalidNonceKeyError,
+  EntityIdOverrideError,
 } from "./errors/client.js";
 export {
   EntryPointNotFoundError,
