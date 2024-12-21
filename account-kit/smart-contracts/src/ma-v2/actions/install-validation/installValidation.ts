@@ -2,13 +2,19 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
-  // EntityIdOverrideError,
+  EntityIdOverrideError,
   type GetEntryPointFromAccount,
   type SendUserOperationResult,
   type UserOperationOverridesParameter,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { type Address, type Hex, encodeFunctionData, concatHex } from "viem";
+import {
+  type Address,
+  type Hex,
+  encodeFunctionData,
+  concatHex,
+  zeroAddress,
+} from "viem";
 
 import { semiModularAccountBytecodeAbi } from "../../abis/semiModularAccountBytecodeAbi.js";
 import type { HookConfig, ValidationConfig } from "../common/types.js";
@@ -20,7 +26,7 @@ import {
 
 import { type SMAV2AccountClient } from "../../client/client.js";
 import { type SMAV2Account } from "../../account/semiModularAccountV2.js";
-// import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -85,10 +91,13 @@ export const installValidationActions: <
       );
     }
 
-    // TO DO: handle installing on fallback validation (entityId == 0) with non-zero address
-    // if (validationConfig.entityId === DEFAULT_OWNER_ENTITY_ID) {
-    //   throw new EntityIdOverrideError();
-    // }
+    // an entityId of zero is only allowed if we're installing or uninstalling hooks on the fallback validation
+    if (
+      validationConfig.entityId === DEFAULT_OWNER_ENTITY_ID &&
+      validationConfig.moduleAddress !== zeroAddress
+    ) {
+      throw new EntityIdOverrideError();
+    }
 
     const { encodeCallData } = account;
 
