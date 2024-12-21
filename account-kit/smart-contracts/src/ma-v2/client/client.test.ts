@@ -90,6 +90,11 @@ describe("MA v2 Tests", async () => {
       installValidationActions
     );
 
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
     const accountContract = getContract({
       address: provider.getAddress(),
       abi: semiModularAccountBytecodeAbi,
@@ -131,8 +136,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      entityId: 1,
-      isGlobalValidation: true,
+      signerEntity: { entityId: 1, isGlobalValidation: true },
     });
 
     signature = await sessionKeyClient.signMessage({ message });
