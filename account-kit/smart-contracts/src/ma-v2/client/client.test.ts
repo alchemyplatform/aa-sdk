@@ -12,6 +12,8 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
 } from "../modules/utils.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { installValidationActions } from "../actions/install-validation/installValidation.js";
@@ -19,7 +21,10 @@ import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { HookType } from "../actions/common/types.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
+import { allowlistModule } from "../modules/allowlist-module/module.js";
+import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 
+// TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
   let client: ReturnType<typeof instance.getClient> &
@@ -98,8 +103,7 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    let txnHash = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     const startingAddressBalance = await getTargetBalance();
 
@@ -120,8 +124,8 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    txnHash = sessionKeyClient.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await sessionKeyClient.waitForUserOperationTransaction(result);
+
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
@@ -155,8 +159,7 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    let txnHash = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     result = await provider.uninstallValidation({
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
@@ -169,8 +172,7 @@ describe("MA v2 Tests", async () => {
       hookUninstallDatas: [],
     });
 
-    txnHash = provider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(result);
 
     // connect session key and send tx with session key
     let sessionKeyClient = await createSMAV2AccountClient({
@@ -349,6 +351,211 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
+  it("installs allowlist module, uses, then uninstalls", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookInstallData = allowlistModule.encodeOnInstallData({
+      entityId: 0,
+      inputs: [
+        {
+          target,
+          hasSelectorAllowlist: false,
+          hasERC20SpendLimit: false,
+          erc20SpendLimit: 0n,
+          selectors: [],
+        },
+      ],
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultAllowlistModuleAddress(provider.chain),
+            entityId: 0, // uint32
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // Test that the allowlist is active.
+    // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
+    const sendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider.waitForUserOperationTransaction(sendResult);
+
+    // This should revert as we're calling an address separate fom the allowlisted target.
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
+    const hookUninstallData = allowlistModule.encodeOnUninstallData({
+      entityId: 0,
+      inputs: [
+        {
+          target,
+          hasSelectorAllowlist: false,
+          hasERC20SpendLimit: false,
+          erc20SpendLimit: 0n,
+          selectors: [],
+        },
+      ],
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    await provider.waitForUserOperationTransaction(uninstallResult);
+
+    // Post-uninstallation, we should now be able to call into any address successfully.
+    const postUninstallSendResult = await provider.sendUserOperation({
+      uo: {
+        target: zeroAddress,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider.waitForUserOperationTransaction(postUninstallSendResult);
+  });
+
+  it("installs native token limit module, uses, then uninstalls", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const spendLimit = parseEther("0.5");
+
+    // Let's verify the module's limit is set correctly after installation
+    const hookInstallData = nativeTokenLimitModule.encodeOnInstallData({
+      entityId: 0,
+      spendLimit,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: zeroAddress,
+        entityId: 0,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: "0x",
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            entityId: 0,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+        {
+          hookConfig: {
+            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            entityId: 0,
+            hookType: HookType.EXECUTION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: "0x",
+        },
+      ],
+    });
+
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // Try to send less than the limit - should pass
+    const passingSendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: parseEther("0.05"), // below the 0.5 limit
+        data: "0x",
+      },
+    });
+    await provider.waitForUserOperationTransaction(passingSendResult);
+
+    // Try to send more than the limit - should fail
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: parseEther("0.6"), // passing the 0.5 limit
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
+    const hookUninstallData = nativeTokenLimitModule.encodeOnUninstallData({
+      entityId: 0,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: zeroAddress,
+      entityId: 0,
+      uninstallData: "0x",
+      hookUninstallDatas: [hookUninstallData, "0x"],
+    });
+
+    await provider.waitForUserOperationTransaction(uninstallResult);
+
+    // Sending over the limit should now pass
+    const postUninstallSendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: parseEther("0.6"),
+        data: "0x",
+      },
+    });
+    await provider.waitForUserOperationTransaction(postUninstallSendResult);
+  });
+
   it("installs time range module, then uninstalls module within valid time range", async () => {
     let provider = (
       await givenConnectedProvider({
@@ -453,7 +660,7 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    // verify hook installtion succeeded
+    // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
