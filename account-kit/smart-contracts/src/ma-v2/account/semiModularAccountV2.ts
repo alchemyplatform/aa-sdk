@@ -66,9 +66,9 @@ export type ValidationDataParams =
       entityId: number;
     };
 
-export type SMAV2Account<
+export type MAV2Account<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"SMAV2Account", TSigner, "0.7.0"> & {
+> = SmartContractAccountWithSigner<"MAV2Account", TSigner, "0.7.0"> & {
   signerEntity: SignerEntity;
   getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
   getValidationData: (
@@ -81,7 +81,7 @@ export type CreateSMAV2AccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
-  ToSmartContractAccountParams<"SMAV2Account", TTransport, Chain, "0.7.0">,
+  ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
   "transport" | "chain" | "accountAddress"
 > & {
   signer: TSigner;
@@ -98,11 +98,11 @@ export async function createSMAV2Account<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   config: CreateSMAV2AccountParams<TTransport, TSigner>
-): Promise<SMAV2Account<TSigner>>;
+): Promise<MAV2Account<TSigner>>;
 
 export async function createSMAV2Account(
   config: CreateSMAV2AccountParams
-): Promise<SMAV2Account> {
+): Promise<MAV2Account> {
   const {
     transport,
     chain,
@@ -113,13 +113,12 @@ export async function createSMAV2Account(
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
-    signerEntity = {
-      isGlobalValidation: true,
-      entityId: DEFAULT_OWNER_ENTITY_ID,
-    },
+    signerEntity = {},
+    signerEntity: {
+      isGlobalValidation = true,
+      entityId = DEFAULT_OWNER_ENTITY_ID,
+    } = {},
   } = config;
-
-  const { isGlobalValidation, entityId } = signerEntity;
 
   if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
@@ -188,18 +187,18 @@ export async function createSMAV2Account(
     chain,
     entryPoint,
     accountAddress: _accountAddress,
-    source: `SMAV2Account`,
+    source: `MAV2Account`,
     encodeExecute,
     encodeBatchExecute,
     getAccountInitCode,
     ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, _accountAddress, entityId)
+      ? nativeSMASigner(signer, chain, _accountAddress)
       : singleSignerMessageSigner(signer, chain, _accountAddress, entityId)),
   });
 
   // TODO: add deferred action flag
-  const getAccountNonce = async (nonceKey?: bigint): Promise<bigint> => {
-    if (nonceKey && nonceKey > maxUint152) {
+  const getAccountNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
+    if (nonceKey > maxUint152) {
       throw new InvalidNonceKeyError(nonceKey);
     }
 
@@ -210,9 +209,8 @@ export async function createSMAV2Account(
     });
 
     const fullNonceKey: bigint =
-      (nonceKey ? nonceKey << 40n : 0n) +
-      BigInt(entityId << 8) +
-      (isGlobalValidation ? 1n : 0n);
+      nonceKey <<
+      (40n + BigInt(entityId << 8) + (isGlobalValidation ? 1n : 0n));
 
     return entryPointContract.read.getNonce([
       _accountAddress,

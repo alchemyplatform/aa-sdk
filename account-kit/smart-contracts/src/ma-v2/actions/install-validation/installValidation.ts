@@ -25,7 +25,7 @@ import {
 } from "../common/utils.js";
 
 import { type SMAV2AccountClient } from "../../client/client.js";
-import { type SMAV2Account } from "../../account/semiModularAccountV2.js";
+import { type MAV2Account } from "../../account/semiModularAccountV2.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
@@ -38,9 +38,9 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-  account?: SMAV2Account<TSigner> | undefined;
+  account?: MAV2Account<TSigner> | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<SMAV2Account<TSigner>>
+  GetEntryPointFromAccount<MAV2Account<TSigner>>
 >;
 
 export type UninstallValidationParams<
@@ -50,9 +50,9 @@ export type UninstallValidationParams<
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-  account?: SMAV2Account<TSigner> | undefined;
+  account?: MAV2Account<TSigner> | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<SMAV2Account<TSigner>>
+  GetEntryPointFromAccount<MAV2Account<TSigner>>
 >;
 
 export type InstallValidationActions<

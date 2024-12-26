@@ -28,7 +28,7 @@ import { packUOSignature, pack1271Signature } from "../../utils.js";
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
  *
- * const messageSigner = singleSignerMessageSigner(signer, chain);
+ * const messageSigner = singleSignerMessageSigner(signer, chain, account.address, account.signerEntity.entityId);
  * ```
  *
  * @param {SmartAccountSigner} signer Signer to use for signing operations
