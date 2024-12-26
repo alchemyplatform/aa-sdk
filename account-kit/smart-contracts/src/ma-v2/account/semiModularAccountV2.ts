@@ -113,7 +113,10 @@ export async function createSMAV2Account(
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
-    signerEntity = {},
+    signerEntity = {
+      isGlobalValidation: true,
+      entityId: DEFAULT_OWNER_ENTITY_ID,
+    },
     signerEntity: {
       isGlobalValidation = true,
       entityId = DEFAULT_OWNER_ENTITY_ID,
