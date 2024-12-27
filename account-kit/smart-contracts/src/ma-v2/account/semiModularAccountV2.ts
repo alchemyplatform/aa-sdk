@@ -212,8 +212,9 @@ export async function createSMAV2Account(
     });
 
     const fullNonceKey: bigint =
-      nonceKey <<
-      (40n + BigInt(entityId << 8) + (isGlobalValidation ? 1n : 0n));
+      (nonceKey << 40n) +
+      BigInt(entityId << 8) +
+      (isGlobalValidation ? 1n : 0n);
 
     return entryPointContract.read.getNonce([
       _accountAddress,
