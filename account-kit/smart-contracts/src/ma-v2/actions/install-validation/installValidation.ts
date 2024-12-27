@@ -66,6 +66,50 @@ export type InstallValidationActions<
   ) => Promise<SendUserOperationResult>;
 };
 
+/**
+ * Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
+ *
+ * @example
+ * ```ts
+ * import { createSMAV2AccountClient, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
+ * import { Address } from "viem";
+ *
+ * const client = (await createSMAV2AccountClient({ ... })).extend(installValidationActions);
+ * const sessionKeyAddress: Address = "0x1234";
+ * const sessionKeyEntityId: number = 1;
+ *
+ * await client.installValidation({
+ *   validationConfig: {
+ *     moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+ *       client.chain
+ *     ),
+ *     entityId: sessionKeyEntityId,
+ *     isGlobal: true,
+ *     isSignatureValidation: false,
+ *     isUserOpValidation: true,
+ *   },
+ *   selectors: [],
+ *   installData: SingleSignerValidationModule.encodeOnInstallData({
+ *     entityId: sessionKeyEntityId,
+ *     signer: sessionKeyAddress,
+ *   }),
+ *   hooks: [],
+ * });
+ *
+ * await client.uninstallValidation({
+ *   moduleAddress: sessionKeyAddress,
+ *   entityId: sessionKeyEntityId,
+ *   uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+ *     entityId: sessionKeyEntityId,
+ *   }),
+ *   hookUninstallDatas: [],
+ * });
+ *
+ * ```
+ *
+ * @param {object} client - The client instance which provides account and sendUserOperation functionality.
+ * @returns {object} - An object containing two methods, `installValidation` and `uninstallValidation`.
+ */
 export const installValidationActions: <
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(

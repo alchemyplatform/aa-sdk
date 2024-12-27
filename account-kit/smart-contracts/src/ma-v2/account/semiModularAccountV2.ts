@@ -100,6 +100,13 @@ export async function createSMAV2Account<
   config: CreateSMAV2AccountParams<TTransport, TSigner>
 ): Promise<MAV2Account<TSigner>>;
 
+/**
+ * Creates an SMAV2 account using defined parameters including chain, signer, salt, factory address, and more.
+ * Handles account initialization code, nonce generation, transaction encoding, and more to construct a modular account with optional validation hooks.
+ *
+ * @param {CreateSMAV2AccountParams} config Configuration parameters for creating an SMAV2 account. Includes chain details, signer, salt, factory address, and more.
+ * @returns {Promise<MAV2Account>} A promise that resolves to an `MAV2Account` providing methods for nonce retrieval, transaction execution, and more.
+ */
 export async function createSMAV2Account(
   config: CreateSMAV2AccountParams
 ): Promise<MAV2Account> {

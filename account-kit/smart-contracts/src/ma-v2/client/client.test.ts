@@ -12,26 +12,26 @@ import {
   hashMessage,
   hashTypedData,
 } from "viem";
-import { createSMAV2AccountClient } from "./client.js";
-import { local070Instance } from "~test/instances.js";
-import { setBalance } from "viem/actions";
-import { accounts } from "~test/constants.js";
+import { HookType } from "../actions/common/types.js";
 import {
+  createSMAV2AccountClient,
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
   getDefaultAllowlistModuleAddress,
   getDefaultNativeTokenLimitModuleAddress,
-} from "../modules/utils.js";
-import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
-import { installValidationActions } from "../actions/install-validation/installValidation.js";
+  installValidationActions,
+  SingleSignerValidationModule,
+  PaymasterGuardModule,
+  TimeRangeModule,
+  AllowlistModule,
+  NativeTokenLimitModule,
+  semiModularAccountBytecodeAbi,
+} from "@account-kit/smart-contracts";
+import { local070Instance } from "~test/instances.js";
+import { setBalance } from "viem/actions";
+import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
-import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
-import { HookType } from "../actions/common/types.js";
-import { TimeRangeModule } from "../modules/time-range-module/module.js";
-import { allowlistModule } from "../modules/allowlist-module/module.js";
-import { nativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
-import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
@@ -525,7 +525,7 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const hookInstallData = allowlistModule.encodeOnInstallData({
+    const hookInstallData = AllowlistModule.encodeOnInstallData({
       entityId: 0,
       inputs: [
         {
@@ -587,7 +587,7 @@ describe("MA v2 Tests", async () => {
       })
     ).rejects.toThrowError();
 
-    const hookUninstallData = allowlistModule.encodeOnUninstallData({
+    const hookUninstallData = AllowlistModule.encodeOnUninstallData({
       entityId: 0,
       inputs: [
         {
@@ -634,7 +634,7 @@ describe("MA v2 Tests", async () => {
     const spendLimit = parseEther("0.5");
 
     // Let's verify the module's limit is set correctly after installation
-    const hookInstallData = nativeTokenLimitModule.encodeOnInstallData({
+    const hookInstallData = NativeTokenLimitModule.encodeOnInstallData({
       entityId: 0,
       spendLimit,
     });
@@ -696,7 +696,7 @@ describe("MA v2 Tests", async () => {
       })
     ).rejects.toThrowError();
 
-    const hookUninstallData = nativeTokenLimitModule.encodeOnUninstallData({
+    const hookUninstallData = NativeTokenLimitModule.encodeOnUninstallData({
       entityId: 0,
     });
 
