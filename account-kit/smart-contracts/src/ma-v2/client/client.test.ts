@@ -10,6 +10,7 @@ import {
   zeroAddress,
   getContract,
   hashMessage,
+  hashTypedData,
 } from "viem";
 import { createSMAV2AccountClient } from "./client.js";
 import { local070Instance } from "~test/instances.js";
@@ -130,7 +131,7 @@ describe("MA v2 Tests", async () => {
       accountContract.read.isValidSignature([hashMessage(message), signature])
     ).resolves.toEqual(isValidSigSuccess);
 
-    // connect session key and send tx with session key
+    // connect session key
     let sessionKeyClient = await createSMAV2AccountClient({
       chain: instance.chain,
       signer: sessionKey,
@@ -143,6 +144,98 @@ describe("MA v2 Tests", async () => {
 
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
+  });
+
+  it("successfully sign + validate typed data messages, for native and single signer validation", async () => {
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    // UO deploys the account to test 1271 against
+    const result = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(result);
+
+    const typedData = {
+      domain: {
+        name: "Ether Mail",
+        version: "1",
+        chainId: 1,
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+      },
+      types: {
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallet", type: "address" },
+        ],
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person" },
+          { name: "contents", type: "string" },
+        ],
+      },
+      primaryType: "Mail",
+      message: {
+        from: {
+          name: "Cow",
+          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        },
+        to: {
+          name: "Bob",
+          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
+        contents: "Hello, Bob!",
+      },
+    };
+
+    const hashedMessageTypedData = hashTypedData(typedData);
+    let signature = await provider.signTypedData({ typedData });
+
+    await expect(
+      accountContract.read.isValidSignature([hashedMessageTypedData, signature])
+    ).resolves.toEqual(isValidSigSuccess);
+
+    // connect session key
+    let sessionKeyClient = await createSMAV2AccountClient({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+    });
+
+    signature = await sessionKeyClient.signTypedData({ typedData });
+
+    await expect(
+      accountContract.read.isValidSignature([hashedMessageTypedData, signature])
     ).resolves.toEqual(isValidSigSuccess);
   });
 

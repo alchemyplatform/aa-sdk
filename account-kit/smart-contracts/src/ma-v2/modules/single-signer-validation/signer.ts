@@ -105,7 +105,7 @@ export const singleSignerMessageSigner = (
           chainId: Number(chain.id),
           verifyingContract:
             getDefaultSingleSignerValidationModuleAddress(chain),
-          salt: accountAddress,
+          salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
         },
         types: {
           ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
