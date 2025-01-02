@@ -104,7 +104,17 @@ export const accountKitInfraReferenceSidebar: SidebarItem[] = [
               },
               {
                 text: "Authenticating Users",
-                link: "/react-native/signer/authenticating-users",
+                items: [
+                  {
+                    text: "Authenticating Users via Magic Link",
+                    link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
+                  },
+                  {
+                    text: "Authenticating Users via One-Time Password (OTP)",
+                    link: "/react-native/signer/authenticating-users/authenticating-with-otp",
+                  },
+                ],
+                collapsed: true,
               },
             ],
           },
