@@ -100,6 +100,6 @@ export class EntityIdOverrideError extends BaseError {
    * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
    */
   constructor() {
-    super(`EntityId of 0 is used by the owner and cannot be used`);
+    super(`EntityId of 0 is reserved for the owner and cannot be used`);
   }
 }

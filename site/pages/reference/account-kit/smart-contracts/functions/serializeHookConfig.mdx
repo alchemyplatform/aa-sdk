@@ -24,8 +24,8 @@ import { Address } from "viem";
 const moduleAddress: Address = "0x1234";
 const entityId: number = 1234;
 const hookType: HookType = HookType.Validation;
-const hasPostHooks: boolean = true;
-const hasPreHooks: boolean = false;
+const hasPostHooks: boolean = false;
+const hasPreHooks: boolean = true;
 
 const hookConfigHex = serializeHookConfig({
 moduleAddress,

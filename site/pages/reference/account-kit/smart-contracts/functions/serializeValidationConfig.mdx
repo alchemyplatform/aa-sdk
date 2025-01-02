@@ -18,7 +18,7 @@ import { serializeValidationConfig } from "@account-kit/smart-contracts";
 ## Usage
 
 ```ts
-import { type HookType, serializeValidationConfig } from "@account-kit/smart-contracts";
+import { serializeValidationConfig } from "@account-kit/smart-contracts";
 import { Address } from "viem";
 
 const moduleAddress: Address = "0x1234";
@@ -27,7 +27,7 @@ const isGlobal: boolean = true;
 const isSignatureValidation: boolean = false;
 const isUserOpValidation: boolean = true;
 
-const hookConfigHex = serializeHookConfig({
+const validationConfigHex = serializeValidationConfig({
 moduleAddress,
 entityId
 isGlobal,
