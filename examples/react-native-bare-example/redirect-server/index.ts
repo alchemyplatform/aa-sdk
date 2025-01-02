@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
   const bundle = req.query.bundle;
   const orgId = req.query.orgId;
 
-  res.redirect(`${appScheme}://home?bundle=${bundle}&orgId=${orgId}`);
+  res.redirect(`${appScheme}://magic-link?bundle=${bundle}&orgId=${orgId}`);
 });
 
 app.listen(port, () => {
