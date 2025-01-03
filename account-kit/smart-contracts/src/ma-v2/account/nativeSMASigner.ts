@@ -10,13 +10,17 @@ import {
   type Address,
 } from "viem";
 
-import { packUOSignature, pack1271Signature } from "../utils.js";
+import {
+  packUOSignature,
+  pack1271Signature,
+  DEFAULT_OWNER_ENTITY_ID,
+} from "../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
  * @example
  * ```ts
- * import { singleSignerMessageSigner } from "@account-kit/smart-contracts";
+ * import { nativeSMASigner } from "@account-kit/smart-contracts";
  
  * import { LocalAccountSigner } from "@aa-sdk/core";
  *
@@ -26,20 +30,18 @@ import { packUOSignature, pack1271Signature } from "../utils.js";
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
  *
- * const messageSigner = singleSignerMessageSigner(signer, chain);
+ * const messageSigner = nativeSMASigner(signer, chain, account.address);
  * ```
  *
  * @param {SmartAccountSigner} signer Signer to use for signing operations
  * @param {Chain} chain Chain object for the signer
  * @param {Address} accountAddress address of the smart account using this signer
- * @param {number} entityId the entity id of the signing validation
  * @returns {object} an object with methods for signing operations and managing signatures
  */
 export const nativeSMASigner = (
   signer: SmartAccountSigner,
   chain: Chain,
-  accountAddress: Address,
-  entityId: number
+  accountAddress: Address
 ) => {
   return {
     getDummySignature: (): Hex => {
@@ -79,7 +81,7 @@ export const nativeSMASigner = (
           },
           primaryType: "ReplaySafeHash",
         }),
-        entityId,
+        entityId: DEFAULT_OWNER_ENTITY_ID,
       });
     },
 
@@ -112,7 +114,7 @@ export const nativeSMASigner = (
               },
               primaryType: "ReplaySafeHash",
             }),
-            entityId,
+            entityId: DEFAULT_OWNER_ENTITY_ID,
           });
     },
   };

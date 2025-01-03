@@ -28,7 +28,7 @@ import { packUOSignature, pack1271Signature } from "../../utils.js";
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
  *
- * const messageSigner = singleSignerMessageSigner(signer, chain);
+ * const messageSigner = singleSignerMessageSigner(signer, chain, account.address, account.signerEntity.entityId);
  * ```
  *
  * @param {SmartAccountSigner} signer Signer to use for signing operations
@@ -105,7 +105,7 @@ export const singleSignerMessageSigner = (
           chainId: Number(chain.id),
           verifyingContract:
             getDefaultSingleSignerValidationModuleAddress(chain),
-          salt: accountAddress,
+          salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
         },
         types: {
           ReplaySafeHash: [{ name: "hash", type: "bytes32" }],

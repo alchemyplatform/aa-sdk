@@ -84,7 +84,9 @@ export class InvalidNonceKeyError extends BaseError {
    * @param {bigint} nonceKey the invalid nonceKey used
    */
   constructor(nonceKey: bigint) {
-    super(`Nonce key is ${nonceKey} but has to be less than 2**152`);
+    super(
+      `Nonce key is ${nonceKey} but has to be less than or equal to 2**152`
+    );
   }
 }
 
@@ -98,8 +100,6 @@ export class EntityIdOverrideError extends BaseError {
    * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
    */
   constructor() {
-    super(
-      `Installing entityId of 0 overrides the owner's entity id in the account`
-    );
+    super(`EntityId of 0 is reserved for the owner and cannot be used`);
   }
 }

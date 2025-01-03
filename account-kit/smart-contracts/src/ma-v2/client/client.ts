@@ -9,12 +9,12 @@ import { type Chain, type Transport } from "viem";
 import {
   createSMAV2Account,
   type CreateSMAV2AccountParams,
-  type SMAV2Account,
+  type MAV2Account,
 } from "../account/semiModularAccountV2.js";
 
 export type SMAV2AccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartAccountClient<Transport, Chain, SMAV2Account<TSigner>>;
+> = SmartAccountClient<Transport, Chain, MAV2Account<TSigner>>;
 
 export type CreateSMAV2AccountClientParams<
   TTransport extends Transport = Transport,
@@ -34,7 +34,7 @@ export function createSMAV2AccountClient<
 ): Promise<SMAV2AccountClient<TSigner>>;
 
 /**
- * Creates a MAv2 account client using the provided configuration parameters.
+ * Creates a SMAv2 account client using the provided configuration parameters.
  *
  * @example
  * ```ts
@@ -65,10 +65,10 @@ export function createSMAV2AccountClient<
 export async function createSMAV2AccountClient(
   config: CreateSMAV2AccountClientParams
 ): Promise<SmartAccountClient> {
-  const maV2Account = await createSMAV2Account(config);
+  const smaV2Account = await createSMAV2Account(config);
 
   return createSmartAccountClient({
     ...config,
-    account: maV2Account,
+    account: smaV2Account,
   });
 }
