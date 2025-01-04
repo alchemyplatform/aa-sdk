@@ -22,6 +22,7 @@ export interface AccountKitTheme {
     "fg-disabled": ColorVariantRecord;
     "fg-accent-brand": ColorVariantRecord;
     "fg-critical": ColorVariantRecord;
+    "fg-success": ColorVariantRecord;
 
     // surface colors
     "bg-surface-default": ColorVariantRecord;

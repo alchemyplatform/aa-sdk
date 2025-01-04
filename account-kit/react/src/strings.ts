@@ -35,6 +35,8 @@ const STRINGS = {
       body: "We sent a verification code to",
       notReceived: "Didn't receive code?",
       resend: "Resend",
+      verifying: "Verifying...",
+      verified: "Verified!",
     },
     completingEmail: {
       body: "Completing login. Please wait a few seconds for this to screen to update.",
