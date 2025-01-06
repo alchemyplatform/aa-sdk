@@ -23,7 +23,7 @@ export const local060Instance = defineInstance({
 
 export const local070Instance = defineInstance({
   chain: localhost,
-  forkBlockNumber: 6381303,
+  forkBlockNumber: 7303015,
   forkUrl:
     process.env.VITEST_SEPOLIA_FORK_URL ??
     "https://ethereum-sepolia-rpc.publicnode.com",
