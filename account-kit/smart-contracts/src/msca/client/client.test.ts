@@ -170,6 +170,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       signer: signer1,
       owners,
       usePaymaster: true,
+      salt: 1n, // different salt to avoid shared state with the other tests
     });
 
     const implementationAddressPreDeploy =
@@ -208,16 +209,19 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     accountAddress,
     owners,
     usePaymaster = false,
+    salt = 0n,
   }: {
     signer: SmartAccountSigner;
     owners: Address[];
     usePaymaster?: boolean;
     accountAddress?: Address;
+    salt?: bigint;
   }) =>
     createMultiOwnerModularAccountClient({
       signer,
       accountAddress,
       owners,
+      salt,
       transport: custom(instance.getClient()),
       chain: instance.chain,
       ...(usePaymaster ? erc7677Middleware() : {}),
