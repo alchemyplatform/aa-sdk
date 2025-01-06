@@ -1,40 +1,45 @@
-/* eslint-disable import/extensions */
-import type { User } from "@account-kit/signer";
-import { useEffect, useState } from "react";
+import React from 'react';
+import type {User} from '@account-kit/signer';
+import {useEffect, useState} from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
-import Config from "react-native-config";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
+import {API_KEY} from '@env';
+import {RNAlchemySigner} from '@account-kit/react-native-signer';
+import {
+  createLightAccountAlchemyClient,
+  LightAccount,
+} from '@account-kit/smart-contracts';
+import {alchemy} from '@account-kit/infra';
+import {sepolia} from '@account-kit/infra';
 
 const signer = RNAlchemySigner({
-  client: { connection: { apiKey: Config.API_KEY! } },
+  client: {connection: {apiKey: API_KEY!}},
 });
 
 export default function OTPAuthScreen() {
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
+  const [account, setAccount] = useState<LightAccount | null>(null);
+  const [signerAddress, setSignerAddress] = useState<string | null>(null);
 
   const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 
-  const [otpCode, setOtpCode] = useState<string>("");
+  const [otpCode, setOtpCode] = useState<string>('');
 
-  const handleUserAuth = ({ code }: { code: string }) => {
+  const handleUserAuth = ({code}: {code: string}) => {
     setAwaitingOtp(false);
     signer
       .authenticate({
         otpCode: code,
-        type: "otp",
+        type: 'otp',
       })
-      .then((res) => {
-        console.log("res", res);
-        setUser(res);
-      })
+      .then(setUser)
       .catch(console.error);
   };
 
@@ -42,6 +47,22 @@ export default function OTPAuthScreen() {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      createLightAccountAlchemyClient({
+        signer,
+        chain: sepolia,
+        transport: alchemy({apiKey: API_KEY!}),
+      }).then(client => {
+        setAccount(client.account);
+      });
+
+      signer.getAddress().then(address => {
+        setSignerAddress(address);
+      });
+    }
+  }, [user]);
 
   return (
     <View style={styles.container}>
@@ -56,8 +77,7 @@ export default function OTPAuthScreen() {
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handleUserAuth({ code: otpCode })}
-          >
+            onPress={() => handleUserAuth({code: otpCode})}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
         </>
@@ -76,13 +96,12 @@ export default function OTPAuthScreen() {
               signer
                 .authenticate({
                   email,
-                  type: "email",
-                  emailMode: "otp",
+                  type: 'email',
+                  emailMode: 'otp',
                 })
                 .catch(console.error);
               setAwaitingOtp(true);
-            }}
-          >
+            }}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
         </>
@@ -93,11 +112,14 @@ export default function OTPAuthScreen() {
           </Text>
           <Text style={styles.userText}>OrgId: {user.orgId}</Text>
           <Text style={styles.userText}>Address: {user.address}</Text>
+          <Text style={styles.userText}>
+            Light Account Address: {account?.address}
+          </Text>
+          <Text style={styles.userText}>Signer Address: {signerAddress}</Text>
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => signer.disconnect().then(() => setUser(null))}
-          >
+            onPress={() => signer.disconnect().then(() => setUser(null))}>
             <Text style={styles.buttonText}>Sign out</Text>
           </TouchableOpacity>
         </>
@@ -109,18 +131,18 @@ export default function OTPAuthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFFFF",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFF',
     paddingHorizontal: 20,
   },
   textInput: {
-    width: "100%",
+    width: '100%',
     height: 40,
-    borderColor: "gray",
+    borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 10,
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: 'rgba(0,0,0,0.05)',
     marginTop: 20,
     marginBottom: 10,
   },
@@ -133,16 +155,16 @@ const styles = StyleSheet.create({
     width: 200,
     padding: 10,
     height: 50,
-    backgroundColor: "rgb(147, 197, 253)",
+    backgroundColor: 'rgb(147, 197, 253)',
     borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 20,
   },
   buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   userText: {
     marginBottom: 10,
