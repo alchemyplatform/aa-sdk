@@ -3,6 +3,7 @@
   "compilerOptions": {
     "paths": {
       "@account-kit/smart-contracts": ["./src/index.ts"],
+      "@account-kit/smart-contracts/experimental": ["./src/ma-v2/index.ts"],
       "~test/*": ["../../.vitest/src/*"]
     }
   }
