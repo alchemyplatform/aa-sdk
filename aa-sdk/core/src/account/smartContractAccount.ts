@@ -1,7 +1,6 @@
 import {
   getContract,
   hexToBytes,
-  trim,
   type Address,
   type Chain,
   type CustomSource,
@@ -483,7 +482,9 @@ export async function toSmartContractAccount(
       );
     }
 
-    return trim(storage);
+    // The storage slot contains a full bytes32, but we want only the last 20 bytes.
+    // So, slice off the leading `0x` and the first 12 bytes (24 characters), leaving the last 20 bytes, then prefix with `0x`.
+    return `0x${storage.slice(26)}`;
   };
 
   if (entryPoint.version !== "0.6.0" && entryPoint.version !== "0.7.0") {
