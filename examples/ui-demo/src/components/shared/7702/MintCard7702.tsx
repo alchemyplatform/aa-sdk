@@ -45,7 +45,7 @@ export const MintCard7702 = ({
           />
         </div>
       ) : (
-        <div className="flex justify-center items-center h-[170px]">
+        <div className="flex justify-center items-center h-[222px] w-full mb-4">
           <LoadingIcon />
         </div>
       )}
