@@ -80,7 +80,12 @@ jobs:
           sudo swapoff -a
           sudo rm -f /swapfile
           sudo apt clean
-          docker rmi $(docker image ls -aq)
+          images=$(docker image ls -aq)
+          if [ -n "$images" ]; then
+            docker rmi $images
+          else
+            echo "No images to remove."
+          fi
           df -h
 
       - name: Setup
