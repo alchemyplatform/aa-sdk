@@ -7510,9 +7510,9 @@
     type-fest "^2.19.0"
 
 "@storybook/csf@^0.1.11":
-  version "0.1.12"
-  resolved "https://registry.npmjs.org/@storybook/csf/-/csf-0.1.12.tgz#1dcfa0f398a69b834c563884b5f747db3d5a81df"
-  integrity sha512-9/exVhabisyIVL0VxTCxo01Tdm8wefIXKXfltAPTSr8cbLn5JAxGQ6QV3mjdecLGEOucfoVhAKtJfVHxEK1iqw==
+  version "0.1.13"
+  resolved "https://registry.npmjs.org/@storybook/csf/-/csf-0.1.13.tgz#c8a9bea2ae518a3d9700546748fa30a8b07f7f80"
+  integrity sha512-7xOOwCLGB3ebM87eemep89MYRFTko+D8qE7EdAAq74lgdqRR5cOUtYWJLjO2dLtP94nqoOdHJo6MdLLKzg412Q==
   dependencies:
     type-fest "^2.19.0"
 
