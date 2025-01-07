@@ -74,7 +74,11 @@ class TEKStamper(context: Context) {
     
 
 
-    private val sharedPreferences = getSharedPreferences(masterKey, context)
+    private val sharedPreferences = try {
+        getSharedPreferences(masterKey, context)
+    } catch(e: Exception) {
+        e.printStackTrace()
+    }
 
     private val tekManager = HpkeTEKManager(sharedPreferences)
 
