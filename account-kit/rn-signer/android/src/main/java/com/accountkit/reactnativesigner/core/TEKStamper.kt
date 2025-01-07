@@ -20,6 +20,8 @@ import java.nio.ByteBuffer
 import java.security.KeyFactory
 import java.security.Security
 import java.security.Signature
+import java.security.KeyStore
+import java.security.KeyStoreException
 
 @Serializable
 data class ApiStamp(val publicKey: String, val scheme: String, val signature: String)
@@ -28,6 +30,7 @@ data class Stamp(val stampHeaderName: String, val stampHeaderValue: String)
 
 private const val BUNDLE_PRIVATE_KEY = "BUNDLE_PRIVATE_KEY"
 private const val BUNDLE_PUBLIC_KEY = "BUNDLE_PUBLIC_KEY"
+private const val MASTER_KEY_ALIAS = "tek_master_key"
 private const val ENCRYPTED_SHARED_PREFERENCES_FILENAME = "tek_stamper_shared_prefs"
 
 class TEKStamper(context: Context) {
@@ -38,17 +41,6 @@ class TEKStamper(context: Context) {
     //
     // we should explore the best practices on how to do this once we reach a phase of further
     // cleanup
-    private val masterKey =
-        try{
-            MasterKey.Builder(context.applicationContext)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            // requires that the phone be unlocked
-            .setUserAuthenticationRequired(false)
-            .build()
-        } catch(e: Exception){
-            // Throw Error if we can't create the Master Key
-            throw RuntimeException("Failed to create MasterKey: ${e.message}", e)
-        }
 
     /**
      * We are using EncryptedSharedPreferences to store 2 pieces of data
@@ -74,26 +66,34 @@ class TEKStamper(context: Context) {
     
 
 
-    private val sharedPreferences = try {
-        getSharedPreferences(masterKey, context)
-    } catch(e: Exception) {
-        e.printStackTrace()
-    }
+    
+    
 
-    private val tekManager = HpkeTEKManager(sharedPreferences)
-
+    private lateinit var tekManager: HpkeTEKManager
+    private lateinit var sharedPreferences: SharedPreferences
+     
     init {
-        TinkConfig.register()
+        try { 
+            TinkConfig.register()
 
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME).javaClass !=
-            BouncyCastleProvider::class.java
-        ) {
-            Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
-        }
+            val masterKey = createMasterKey(context)
 
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(BouncyCastleProvider())
+            sharedPreferences = getSharedPreferences(masterKey, context)
+            tekManager = HpkeTEKManager(sharedPreferences)
+
+            if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME).javaClass !=
+                BouncyCastleProvider::class.java
+            ) {
+                Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
+            }
+
+            if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+                Security.addProvider(BouncyCastleProvider())
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
         }
+        
     }
 
     fun init(): String {
@@ -214,6 +214,19 @@ class TEKStamper(context: Context) {
         )
     }
 
+    private fun createMasterKey(context: Context): MasterKey {
+        try {
+         return MasterKey.Builder(context.applicationContext, MASTER_KEY_ALIAS)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            // requires that the phone be unlocked
+            .setUserAuthenticationRequired(false)
+            .build()
+        } catch(createMasterKeyException: Exception) {
+            createMasterKeyException.printStackTrace()
+            throw RuntimeException("Error creating master key")
+        }
+    }
+
 
     private fun getSharedPreferences(masterKey: MasterKey, context: Context): SharedPreferences {
         var encryptedSharedPreferences: SharedPreferences
@@ -221,18 +234,29 @@ class TEKStamper(context: Context) {
         try {
             // Attempt to create or load the EncryptedSharedPreferences file
             encryptedSharedPreferences = createSharedPreferences(masterKey, context)
-        } catch(e: Exception){
+        } catch(e: Exception) {
             // Log the Exception
             e.printStackTrace()
-    
-            // Delete the existing EncryptedSharedPreferences file.
-            try{
+
+            // Delete the existing master key and EncryptedSharedPreferences
+            try {
+                // first delete the MasterKey
+                try{
+                    val keyStore = KeyStore.getInstance("AndroidKeyStore")
+                    keyStore.load(null)
+                    keyStore.deleteEntry(MASTER_KEY_ALIAS)
+                } catch(deleteMasterKeyException: Exception){
+                    throw RuntimeException("Unable to delete masterKey", deleteMasterKeyException)
+                }
+
+                // create a new MasterKey
+                val newMasterKey = createMasterKey(context)
                 context.getSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME, Context.MODE_PRIVATE).edit().clear().apply()
                 context.deleteSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME)
     
-                // Attempt to recreate a new EncryptedSharedPreferences file
+                // attempt to recreate a new EncryptedSharedPreferences file
                 encryptedSharedPreferences = try {
-                    createSharedPreferences(masterKey, context)
+                    createSharedPreferences(newMasterKey, context)
                 } catch(retryException: Exception) {
                     // Log the exception
                     retryException.printStackTrace()
