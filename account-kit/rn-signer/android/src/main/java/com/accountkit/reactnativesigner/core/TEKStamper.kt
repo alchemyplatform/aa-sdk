@@ -76,9 +76,7 @@ class TEKStamper(context: Context) {
         try { 
             TinkConfig.register()
 
-            val masterKey = createMasterKey(context)
-
-            sharedPreferences = getSharedPreferences(masterKey, context)
+            sharedPreferences = getSharedPreferences(context)
             tekManager = HpkeTEKManager(sharedPreferences)
 
             if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME).javaClass !=
@@ -228,11 +226,11 @@ class TEKStamper(context: Context) {
     }
 
 
-    private fun getSharedPreferences(masterKey: MasterKey, context: Context): SharedPreferences {
+    private fun getSharedPreferences(context: Context): SharedPreferences {
         var encryptedSharedPreferences: SharedPreferences
-
         try {
             // Attempt to create or load the EncryptedSharedPreferences file
+            val masterKey = createMasterKey(context)
             encryptedSharedPreferences = createSharedPreferences(masterKey, context)
         } catch(e: Exception) {
             // Log the Exception
