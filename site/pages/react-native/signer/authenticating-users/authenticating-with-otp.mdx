@@ -1,0 +1,112 @@
+---
+title: Authenticating Users via One-Time Password (OTP)
+description: Learn how to authenticate users via a one-time password (OTP), sent to their email
+---
+
+# Authenticating Users via OTP
+
+This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+
+:::info
+For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
+
+- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
+- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+
+:::
+
+## Create a Signer Instance
+
+```tsx
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+const signer = RNAlchemySigner({
+  client: { connection: { apiKey: API_KEY } },
+});
+```
+
+## Authenticate a User
+
+Next, you'll need to authenticate your user before you can use the Signer as an owner on the account
+
+### Send a One-Time Password (OTP) to a User
+
+To send an OTP to a user's email, use the `signer.authenticate()` method with the `emailMode` set to `otp`.
+
+```tsx
+signer
+  .authenticate({
+    email: "user@example.com",
+    type: "email",
+    emailMode: "otp",
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+### Prompt the User to enter the One-Time Password to complete authentication
+
+The user will receive an email with a one-time password (OTP) to enter into your app.
+
+Provide a means for the user to enter the OTP into your app and then call the `signer.authenticate()` method using the `otpCode` parameter to complete the authentication process.
+
+Here's an example of what this might look like:
+
+```tsx [example.tsx] twoslash
+import React, { useEffect, useState } from "react";
+import { Linking, View, Text, TextInput, Button } from "react-native";
+import { User } from "@account-kit/signer";
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+const API_KEY = "your-api-key";
+
+const signer = RNAlchemySigner({
+  client: { connection: { apiKey: API_KEY } },
+});
+
+const App = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [otpCode, setOtpCode] = useState<string>("");
+
+  useEffect(() => {
+    // For example purposes only. Make the performAuthRequest() call on mount
+    performAuthRequest().catch((error) => {
+      console.error(error);
+    });
+  }, []);
+
+  // Make an authentication request to a user's email
+  const performAuthRequest = async () => {
+    const user = await signer.authenticate({
+      email: "user@example.com",
+      type: "email",
+      emailMode: "otp",
+    });
+  };
+
+  // Authenticate a user using a bundle returned from a deep link
+  const handleUserAuth = async ({ otpCode }: { otpCode: string }) => {
+    const user = await signer.authenticate({ otpCode, type: "otp" }); //<-- Pass the user's OTP code to the authenticate method using `otp` as the type value
+
+    return user;
+  };
+
+  return (
+    <View>
+      <Text>Enter OTP</Text>
+      <TextInput
+        value={otpCode}
+        onChangeText={setOtpCode}
+        placeholder="Enter OTP"
+      />
+      <Button
+        title="Authenticate"
+        onPress={() => handleUserAuth({ otpCode })}
+      />
+
+      {/* ... Rest of your app */}
+    </View>
+  );
+};
+```
