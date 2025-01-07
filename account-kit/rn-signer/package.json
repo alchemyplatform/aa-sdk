@@ -1,6 +1,7 @@
 {
   "name": "@account-kit/react-native-signer",
   "version": "4.7.0",
+  "author": "Alchemy",
   "description": "React Native compatible Account Kit signer",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",

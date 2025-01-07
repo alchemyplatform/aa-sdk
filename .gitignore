@@ -125,3 +125,7 @@ lib/
 **/ios/generated
 **/android/generated
 
+Pods
+
+vendor
+
