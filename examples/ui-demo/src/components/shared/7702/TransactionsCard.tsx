@@ -21,13 +21,7 @@ export const TransactionsCard = ({
     handleTransactions();
   };
   return (
-    <div
-      className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col"
-      style={{
-        boxShadow:
-          "0px 50px 50px 0px rgba(0, 0, 0, 0.09), 0px 12px 27px 0px rgba(0, 0, 0, 0.10)",
-      }}
-    >
+    <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-none lg:shadow-smallCard mb-5 lg:mb-0">
       <div
         className="rounded-xl h-[222px] w-full mb-4 flex justify-center items-center relative"
         style={{
