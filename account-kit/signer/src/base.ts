@@ -537,6 +537,34 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     }
   );
 
+  /**
+   * Signs an EIP-7702 Authorization and then returns the authorization with the signature.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const tx = await signer.signAuthorization({
+   *  contractAddress: "0x1234",
+   *  chainId: 1,
+   *  nonce: 0,
+   * });
+   * ```
+   *
+   * @param {Authorization<number, false>} unsignedAuthorization the authorization to be signed
+   * @returns {Promise<Authorization<number, true>> | undefined} a promise that resolves to the authorization with the signature
+   */
   signAuthorization: (
     unsignedAuthorization: Authorization<number, false>
   ) => Promise<Authorization<number, true>> | undefined = SignerLogger.profiled(
