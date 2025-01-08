@@ -224,6 +224,7 @@ class TEKStamper(context: Context) {
         try {
             // Attempt to create or load the EncryptedSharedPreferences file
             val masterKey = createMasterKey(context)
+            
             return createSharedPreferences(masterKey, context)
         } catch(e: Exception) {
             // Log the Exception
@@ -248,6 +249,7 @@ class TEKStamper(context: Context) {
             val newMasterKey = createMasterKey(context)
             context.getSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME, Context.MODE_PRIVATE).edit().clear().apply()
             context.deleteSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME)
+
             return createSharedPreferences(newMasterKey, context)
         } catch(retryException: Exception) {
             throw RuntimeException("Couldn't create the required shared preferences file. Ensure you are properly authentcated on this device.", retryException)
