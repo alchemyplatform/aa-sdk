@@ -67,6 +67,21 @@ runs:
       run: |
         /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
+    - name: Clear Linux specific files
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        images=$(docker image ls -aq)
+        if [ -n "$images" ]; then
+          docker rmi $images
+        else
+          echo "No images to remove."
+        fi
+        df -h
+
     # similarly, I'm not seeing this cache ever get used
     # - name: Cache Gradle
     #   if: env.turbo_cache_hit != 1
