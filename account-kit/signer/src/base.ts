@@ -36,6 +36,7 @@ import {
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
 import type { SessionManagerEvents } from "./session/types";
+import { hashAuthorization, type Authorization } from "viem/experimental";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -49,6 +50,12 @@ type AlchemySignerStore = {
   error: ErrorInfo | null;
   otpId?: string;
   isNewUser?: boolean;
+};
+
+type UnpackedSignature = {
+  r: `0x${string}`;
+  s: `0x${string}`;
+  v: bigint;
 };
 
 type InternalStore = Mutate<
@@ -524,15 +531,35 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         keccak256(serializedTx)
       );
 
-      const signature = {
-        r: takeBytes(signatureHex, { count: 32 }),
-        s: takeBytes(signatureHex, { count: 32, offset: 32 }),
-        v: BigInt(takeBytes(signatureHex, { count: 1, offset: 64 })),
-      };
+      const signature = this.unpackSignRawMessageBytes(signatureHex);
 
       return serializeFn(tx, signature);
     }
   );
+
+  signAuthorization: (
+    unsignedAuthorization: Authorization<number, false>
+  ) => Promise<Authorization<number, true>> | undefined = SignerLogger.profiled(
+    "BaseAlchemySigner.signAuthorization",
+    async (unsignedAuthorization) => {
+      const hashedAuthorization = hashAuthorization(unsignedAuthorization);
+      const hashedAuthorizationHex = await this.inner.signRawMessage(
+        hashedAuthorization
+      );
+      const signature = this.unpackSignRawMessageBytes(hashedAuthorizationHex);
+      return { ...unsignedAuthorization, ...signature };
+    }
+  );
+
+  private unpackSignRawMessageBytes = (
+    hex: `0x${string}`
+  ): UnpackedSignature => {
+    return {
+      r: takeBytes(hex, { count: 32 }),
+      s: takeBytes(hex, { count: 32, offset: 32 }),
+      v: BigInt(takeBytes(hex, { count: 1, offset: 64 })),
+    };
+  };
 
   /**
    * Unauthenticated call to look up a user's organizationId by email
