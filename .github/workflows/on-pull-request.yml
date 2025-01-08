@@ -75,19 +75,6 @@ jobs:
           fetch-depth: "0"
           submodules: "recursive"
 
-      - name: free disk space
-        run: |
-          sudo swapoff -a
-          sudo rm -f /swapfile
-          sudo apt clean
-          images=$(docker image ls -aq)
-          if [ -n "$images" ]; then
-            docker rmi $images
-          else
-            echo "No images to remove."
-          fi
-          df -h
-
       - name: Setup
         uses: ./.github/actions/setup
 
@@ -114,4 +101,33 @@ jobs:
 
       - name: Unit Test
         run: yarn test:ci
+    
+  build_ios:
+    name: Build iOS
+    runs-on: macos-14
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
 
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install cocoapods
+        working-directory: account-kit/rn-signer/example/ios
+        run: |
+          pod install
+        env:
+          NO_FLIPPER: 1
+      
+      - name: Build example for iOS
+        run: |
+          yarn turbo run build:ios
