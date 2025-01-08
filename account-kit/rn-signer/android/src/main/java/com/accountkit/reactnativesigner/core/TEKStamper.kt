@@ -89,7 +89,7 @@ class TEKStamper(context: Context) {
                 Security.addProvider(BouncyCastleProvider())
             }
         } catch (e: Exception){
-            e.printStackTrace()
+            throw RuntimeException("Error creating master key", e)
         }
         
     }
@@ -216,56 +216,45 @@ class TEKStamper(context: Context) {
         try {
          return MasterKey.Builder(context.applicationContext, MASTER_KEY_ALIAS)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            // requires that the phone be unlocked
             .setUserAuthenticationRequired(false)
             .build()
         } catch(createMasterKeyException: Exception) {
-            createMasterKeyException.printStackTrace()
-            throw RuntimeException("Error creating master key")
+            throw RuntimeException("Error creating master key", createMasterKeyException)
         }
     }
 
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
-        var encryptedSharedPreferences: SharedPreferences
         try {
             // Attempt to create or load the EncryptedSharedPreferences file
             val masterKey = createMasterKey(context)
-            encryptedSharedPreferences = createSharedPreferences(masterKey, context)
+            return createSharedPreferences(masterKey, context)
         } catch(e: Exception) {
             // Log the Exception
             e.printStackTrace()
-
-            // Delete the existing master key and EncryptedSharedPreferences
-            try {
-                // first delete the MasterKey
-                try{
-                    val keyStore = KeyStore.getInstance("AndroidKeyStore")
-                    keyStore.load(null)
-                    keyStore.deleteEntry(MASTER_KEY_ALIAS)
-                } catch(deleteMasterKeyException: Exception){
-                    throw RuntimeException("Unable to delete masterKey", deleteMasterKeyException)
-                }
-
-                // create a new MasterKey
-                val newMasterKey = createMasterKey(context)
-                context.getSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME, Context.MODE_PRIVATE).edit().clear().apply()
-                context.deleteSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME)
-    
-                // attempt to recreate a new EncryptedSharedPreferences file
-                encryptedSharedPreferences = try {
-                    createSharedPreferences(newMasterKey, context)
-                } catch(retryException: Exception) {
-                    // Log the exception
-                    retryException.printStackTrace()
-                    throw RuntimeException("Couldn't create the required shared preferences file. Ensure you are properly authentcated on this device.")
-                }
-            } catch(cleanupException: Exception) {
-                cleanupException.printStackTrace()
-                throw RuntimeException("An error occured while re-creating your credentials. This could indicate an issue with your local credentials.")
-            }
         }
-        
-      return encryptedSharedPreferences
+
+        // An error occured creating or retrieving the Shared Preferences file.
+        // Delete the existing master key and EncryptedSharedPreferences
+
+        // first delete the MasterKey
+        try {
+            val keyStore = KeyStore.getInstance("AndroidKeyStore")
+            keyStore.load(null)
+            keyStore.deleteEntry(MASTER_KEY_ALIAS)
+        } catch (e: Exception) {
+            throw RuntimeException("An error occured deleting the Master Key", e)
+        }
+
+        // attempt to recreate a new EncryptedSharedPreferences file
+        try {
+            // Create a new MasterKey
+            val newMasterKey = createMasterKey(context)
+            context.getSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME, Context.MODE_PRIVATE).edit().clear().apply()
+            context.deleteSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILENAME)
+            return createSharedPreferences(newMasterKey, context)
+        } catch(retryException: Exception) {
+            throw RuntimeException("Couldn't create the required shared preferences file. Ensure you are properly authentcated on this device.", retryException)
+        }
     }
 }
