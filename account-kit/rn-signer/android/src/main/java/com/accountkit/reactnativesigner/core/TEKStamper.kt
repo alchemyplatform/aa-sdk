@@ -239,8 +239,8 @@ class TEKStamper(context: Context) {
             val keyStore = KeyStore.getInstance("AndroidKeyStore")
             keyStore.load(null)
             keyStore.deleteEntry(MASTER_KEY_ALIAS)
-        } catch (e: Exception) {
-            throw RuntimeException("An error occured deleting the Master Key", e)
+        } catch (keyStoreDeletionException: Exception) {
+            throw RuntimeException("An error occured deleting the Master Key", keyStoreDeletionException)
         }
 
         // attempt to recreate a new EncryptedSharedPreferences file
@@ -252,7 +252,7 @@ class TEKStamper(context: Context) {
 
             return createSharedPreferences(newMasterKey, context)
         } catch(retryException: Exception) {
-            throw RuntimeException("Couldn't create the required shared preferences file. Ensure you are properly authentcated on this device.", retryException)
+            throw RuntimeException("Couldn't create the required shared preferences file. Ensure you are properly authenticated on this device.", retryException)
         }
     }
 }
