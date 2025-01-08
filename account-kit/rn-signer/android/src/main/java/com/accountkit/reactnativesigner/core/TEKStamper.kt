@@ -213,14 +213,10 @@ class TEKStamper(context: Context) {
     }
 
     private fun createMasterKey(context: Context): MasterKey {
-        try {
          return MasterKey.Builder(context.applicationContext, MASTER_KEY_ALIAS)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .setUserAuthenticationRequired(false)
             .build()
-        } catch(createMasterKeyException: Exception) {
-            throw RuntimeException("Error creating master key", createMasterKeyException)
-        }
     }
 
 
