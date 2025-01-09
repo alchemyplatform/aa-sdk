@@ -571,10 +571,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
       const hashedAuthorization = hashAuthorization(unsignedAuthorization);
-      const hashedAuthorizationHex = await this.inner.signRawMessage(
+      const signedAuthorizationHex = await this.inner.signRawMessage(
         hashedAuthorization
       );
-      const signature = this.unpackSignRawMessageBytes(hashedAuthorizationHex);
+      const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
       return { ...unsignedAuthorization, ...signature };
     }
   );
