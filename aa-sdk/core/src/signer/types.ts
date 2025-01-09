@@ -46,6 +46,6 @@ export interface SmartAccountSigner<Inner = any> {
 
   signAuthorization?: (
     unsignedAuthorization: Authorization<number, false>
-  ) => Promise<Authorization<number, true>> | undefined;
+  ) => Promise<Authorization<number, true>>;
 }
 // [!endregion SmartAccountSigner]
