@@ -326,7 +326,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - add missing react-remove-scroll dep ([#804](https://github.com/alchemyplatform/aa-sdk/issues/804)) ([09d9217](https://github.com/alchemyplatform/aa-sdk/commit/09d92176dfa480ef9b9d9e76299a244c48e8bc6f))
-- add use client to a bunch of hooks that was misisng it ([#829](https://github.com/alchemyplatform/aa-sdk/issues/829)) ([9be5834](https://github.com/alchemyplatform/aa-sdk/commit/9be583400cdcdd766048b30788185dc56a895ee2))
+- add use client to a bunch of hooks that was missing it ([#829](https://github.com/alchemyplatform/aa-sdk/issues/829)) ([9be5834](https://github.com/alchemyplatform/aa-sdk/commit/9be583400cdcdd766048b30788185dc56a895ee2))
 - await instance reset ([#919](https://github.com/alchemyplatform/aa-sdk/issues/919)) ([10d5a95](https://github.com/alchemyplatform/aa-sdk/commit/10d5a9526423382b3c520fe2533b4416f5867b11))
 - **core:** initial state parsing and disconnect logic ([#842](https://github.com/alchemyplatform/aa-sdk/issues/842)) ([d3e80ad](https://github.com/alchemyplatform/aa-sdk/commit/d3e80ad7ad8f3469a40bc741595719c57374e8b9))
 - **core:** the reconnect method was causing an infinite loop ([#808](https://github.com/alchemyplatform/aa-sdk/issues/808)) ([0d094e8](https://github.com/alchemyplatform/aa-sdk/commit/0d094e870c1a0ceb5f8d1c862f4109e32de46097))
