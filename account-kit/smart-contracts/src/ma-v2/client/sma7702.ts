@@ -11,7 +11,7 @@ import {
   type CreateSMA7702AccountParams,
 } from "../account/semiModularAccount7702.js";
 
-import { default7702UserOpSigner } from "@aa-sdk/core";
+import { default7702UserOpSigner, default7702GasEstimator } from "@aa-sdk/core";
 
 import type { MAV2Account } from "../account/common/modularAccountV2Base.js";
 
@@ -72,6 +72,7 @@ export async function createSMA7702AccountClient(
 
   return createSmartAccountClient({
     account: smaV2Account,
+    gasEstimator: default7702GasEstimator,
     signUserOperation: default7702UserOpSigner,
     ...config,
   });

@@ -17,9 +17,9 @@ import { LocalAccountSigner, type BundlerClient } from "@aa-sdk/core";
 
 import { alchemyFeeEstimator, type AlchemyTransport } from "@account-kit/infra";
 
-import { createSMA7702AccountClient } from "@account-kit/smart-contracts";
+import { createSMA7702AccountClient } from "@account-kit/smart-contracts/experimental";
 
-import { mekong, splitMekongTransport } from "./transportSetup";
+import { mekong } from "./transportSetup";
 
 export const send7702UO = async (
   client: PublicClient & BundlerClient,
