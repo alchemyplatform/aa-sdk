@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+### Bug Fixes
+
+- correctly trim implementation address ([#1261](https://github.com/alchemyplatform/aa-sdk/issues/1261)) ([5dae940](https://github.com/alchemyplatform/aa-sdk/commit/5dae940eee1c776b54804a9aac8d46fe51e89d19))
+- lost changes from other PRs ([#1259](https://github.com/alchemyplatform/aa-sdk/issues/1259)) ([6546664](https://github.com/alchemyplatform/aa-sdk/commit/6546664887a45e8b25745a3cac539cde9473e4bf))
+- maybe fix ci memory issue ([#1258](https://github.com/alchemyplatform/aa-sdk/issues/1258)) ([d92513e](https://github.com/alchemyplatform/aa-sdk/commit/d92513e2a5cf82c6857d9184ccb81c45d6ea799e))
+- skip docker rmi if no images ([#1262](https://github.com/alchemyplatform/aa-sdk/issues/1262)) ([833fb8e](https://github.com/alchemyplatform/aa-sdk/commit/833fb8e485ba170073110814f510ca52db074ed0))
+
+### Features
+
+- add expo example ([#1204](https://github.com/alchemyplatform/aa-sdk/issues/1204)) ([bccb6e7](https://github.com/alchemyplatform/aa-sdk/commit/bccb6e7172fed90a24b5a875502cef3d0f660a8b))
+- add expo otp example ([#1243](https://github.com/alchemyplatform/aa-sdk/issues/1243)) ([30d6443](https://github.com/alchemyplatform/aa-sdk/commit/30d6443af790055f66b5d8bb0676b51f72f61b3e))
+- add ink mainnet ([#1225](https://github.com/alchemyplatform/aa-sdk/issues/1225)) ([0a6606e](https://github.com/alchemyplatform/aa-sdk/commit/0a6606e6a447f08406aa84308795118eda950531))
+- add mekong devnet support ([#1239](https://github.com/alchemyplatform/aa-sdk/issues/1239)) ([baad28a](https://github.com/alchemyplatform/aa-sdk/commit/baad28a6b1df36f66eae1fb723bbcfdc61592a51))
+- add otp and magic link example updates to the documentation ([#1247](https://github.com/alchemyplatform/aa-sdk/issues/1247)) ([1624def](https://github.com/alchemyplatform/aa-sdk/commit/1624defcd72b74b2272bff5ea40db93bc5cd4117))
+- add OTP authentication capabilities to RN Signer ([#1231](https://github.com/alchemyplatform/aa-sdk/issues/1231)) ([6ebfca5](https://github.com/alchemyplatform/aa-sdk/commit/6ebfca58a7ef617d0915661171038daa0b497068))
+- add otp example to bare rn app ([#1235](https://github.com/alchemyplatform/aa-sdk/issues/1235)) ([dbf4db9](https://github.com/alchemyplatform/aa-sdk/commit/dbf4db90b58220b184db388f43b2b2bded54d873))
+- basic ma v2 sdk integrations ([#1220](https://github.com/alchemyplatform/aa-sdk/issues/1220)) ([e513d84](https://github.com/alchemyplatform/aa-sdk/commit/e513d84406acb9dcc72d30a12dce4fbd15adeab8)), closes [#1221](https://github.com/alchemyplatform/aa-sdk/issues/1221) [#1223](https://github.com/alchemyplatform/aa-sdk/issues/1223) [#1232](https://github.com/alchemyplatform/aa-sdk/issues/1232) [#1233](https://github.com/alchemyplatform/aa-sdk/issues/1233) [#1246](https://github.com/alchemyplatform/aa-sdk/issues/1246)
+- **chains:** add ink and soneium mainnet ([#1215](https://github.com/alchemyplatform/aa-sdk/issues/1215)) ([de83640](https://github.com/alchemyplatform/aa-sdk/commit/de83640936bfa43f04fa274efda5a968afc4d773))
+- **rn:** add iOS support ([#1210](https://github.com/alchemyplatform/aa-sdk/issues/1210)) ([2e3892c](https://github.com/alchemyplatform/aa-sdk/commit/2e3892cac57c517cb93d0349297feedd2ca07dfb))
+- **rn:** implement RN iOS stamper ([#1213](https://github.com/alchemyplatform/aa-sdk/issues/1213)) ([f9e3e91](https://github.com/alchemyplatform/aa-sdk/commit/f9e3e912700c35456ecdf97fa68bd1beb182f0bf))
+- update build workflow to delete unnecessary files before building ([#1240](https://github.com/alchemyplatform/aa-sdk/issues/1240)) ([d0b0924](https://github.com/alchemyplatform/aa-sdk/commit/d0b092425b09365a6acb0cb0cb798975577750d0))
+
 # [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
 
 ### Bug Fixes
