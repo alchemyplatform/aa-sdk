@@ -567,7 +567,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   signAuthorization: (
     unsignedAuthorization: Authorization<number, false>
-  ) => Promise<Authorization<number, true>> | undefined = SignerLogger.profiled(
+  ) => Promise<Authorization<number, true>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
       const hashedAuthorization = hashAuthorization(unsignedAuthorization);
