@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-import { env } from "../../../../../env.mjs";
-
 export async function POST(
   req: Request,
   { params }: { params: { routes: string[] } }
@@ -14,7 +12,7 @@ export async function POST(
   });
 
   const res = await fetch(
-    "https://rpc.mekong.ethpandaops.io" + `/${params.routes.join("/")}`,
+    `https://rpc.mekong.ethpandaops.io/${params.routes.join("/")}`,
     {
       method: "POST",
       body,

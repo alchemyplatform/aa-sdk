@@ -8,7 +8,7 @@ import {
   toSmartContractAccount,
   EntityIdOverrideError,
 } from "@aa-sdk/core";
-import { type Chain, type Hex, type Transport } from "viem";
+import { type Chain, type Hex, type Transport, type Address } from "viem";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
 import { nativeSMASigner } from "./nativeSMASigner.js";
@@ -99,10 +99,15 @@ export async function createSMA7702Account(
       : singleSignerMessageSigner(signer, chain, _accountAddress, entityId)),
   });
 
+  const implementation: Address = "0x69007702764179f14F51cdce752f4f775d74E139";
+
+  const getImplementationAddress = async () => implementation;
+
   return {
     ...baseAccount,
     ...baseFunctions,
     getSigner: () => signer,
     signerEntity,
+    getImplementationAddress,
   };
 }

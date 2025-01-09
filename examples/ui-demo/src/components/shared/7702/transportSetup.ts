@@ -1,6 +1,5 @@
-import { split } from "@aa-sdk/core";
 import type { Chain } from "viem";
-import { defineChain, http } from "viem";
+import { defineChain } from "viem";
 import { alchemy } from "@account-kit/infra";
 
 export const mekong: Chain = defineChain({

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { env } from "../../../../env.mjs";
-
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const headers: Record<string, string> = {};
