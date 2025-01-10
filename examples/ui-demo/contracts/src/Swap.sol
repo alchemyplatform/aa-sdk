@@ -12,7 +12,7 @@ contract Swap {
         usdc.mint(address(this), type(uint160).max);
 
         weth = new ERC20Mintable("DemoWETH", "WETH");
-        usdc.mint(address(this), type(uint160).max);
+        weth.mint(address(this), type(uint160).max);
     }
 
     function mint(uint amount1, uint amount2) external {
