@@ -101,6 +101,9 @@ jobs:
 
       - name: Unit Test
         run: yarn test:ci
+        
+      - name: Typecheck Test
+        run: yarn test:typecheck
     
   build_ios:
     name: Build iOS
@@ -131,3 +134,4 @@ jobs:
       - name: Build example for iOS
         run: |
           yarn turbo run build:ios
+
