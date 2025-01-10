@@ -16,6 +16,7 @@ import { createSMAV2AccountClient } from "@account-kit/smart-contracts/experimen
 ```
 
 ## Usage
+
 ```ts
 import {
   createSMAV2AccountClient,
@@ -45,14 +46,14 @@ const rpcTransport = http(
 const GAS_POLICY_ID = ""; // TO DO: replace with your gas policy ID!
 
 const accountClient = (
-    await createSMAV2AccountClient({
-      transport: alchemyTransport,
-      chain: polygonAmoy,
-      signer: ownerSigner,
-      feeEstimator: alchemyFeeEstimator(alchemyTransport),
-      ...alchemyGasManagerMiddleware(GAS_POLICY_ID),
-    })
-  ).extend(installValidationActions);
+  await createSMAV2AccountClient({
+    transport: alchemyTransport,
+    chain: polygonAmoy,
+    signer: ownerSigner,
+    feeEstimator: alchemyFeeEstimator(alchemyTransport),
+    ...alchemyGasManagerMiddleware(GAS_POLICY_ID),
+  })
+).extend(installValidationActions);
 ```
 
 ## Parameters
