@@ -12,6 +12,23 @@ Handles account initialization code, nonce generation, transaction encoding, and
 ## Import
 
 ```ts
+import { createSMAV2AccountClient } from "@account-kit/smart-contracts/experimental";
+```
+
+## Parameters
+
+### config
+
+`CreateSMAV2AccountParams`
+Configuration parameters for creating an SMAV2 account. Includes chain details, signer, salt, factory address, and more.
+
+## Returns
+
+`Promise<MAV2Account>`
+A promise that resolves to an `MAV2Account` providing methods for nonce retrieval, transaction execution, and more.
+
+## Example
+```ts
 import {
   createSMAV2AccountClient,
   installValidationActions,
@@ -49,15 +66,3 @@ const accountClient = (
     })
   ).extend(installValidationActions);
 ```
-
-## Parameters
-
-### config
-
-`CreateSMAV2AccountParams`
-Configuration parameters for creating an SMAV2 account. Includes chain details, signer, salt, factory address, and more.
-
-## Returns
-
-`Promise<MAV2Account>`
-A promise that resolves to an `MAV2Account` providing methods for nonce retrieval, transaction execution, and more.
