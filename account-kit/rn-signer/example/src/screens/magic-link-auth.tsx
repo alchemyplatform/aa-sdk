@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Linking,
   StyleSheet,
@@ -20,48 +20,54 @@ export default function MagicLinkAuthScreen() {
   const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
 
-  const handleUserAuth = ({ bundle }: { bundle: string }) => {
-    signer
-      .authenticate({
-        bundle,
-        type: "email",
-      })
-      .then(setUser)
-      .catch(console.error);
-  };
+  const handleUserAuth = useCallback(
+    ({ bundle }: { bundle: string }) => {
+      signer
+        .authenticate({
+          bundle,
+          type: "email",
+        })
+        .then(setUser)
+        .catch(console.error);
+    },
+    [signer]
+  );
 
-  const handleIncomingURL = (event: { url: string }) => {
-    const regex = /[?&]([^=#]+)=([^&#]*)/g;
+  const handleIncomingURL = useCallback(
+    (event: { url: string }) => {
+      const regex = /[?&]([^=#]+)=([^&#]*)/g;
 
-    let params: Record<string, string> = {};
-    let match: RegExpExecArray | null;
+      let params: Record<string, string> = {};
+      let match: RegExpExecArray | null;
 
-    while ((match = regex.exec(event.url))) {
-      if (match[1] && match[2]) {
-        params[match[1]] = match[2];
+      while ((match = regex.exec(event.url))) {
+        if (match[1] && match[2]) {
+          params[match[1]] = match[2];
+        }
       }
-    }
 
-    if (!params.bundle || !params.orgId) {
-      return;
-    }
+      if (!params.bundle || !params.orgId) {
+        return;
+      }
 
-    handleUserAuth({
-      bundle: params.bundle ?? "",
-    });
-  };
+      handleUserAuth({
+        bundle: params.bundle ?? "",
+      });
+    },
+    [handleUserAuth]
+  );
 
   useEffect(() => {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
-  }, []);
+  }, [signer]);
 
   // Add listener for incoming links
   useEffect(() => {
     const subscription = Linking.addEventListener("url", handleIncomingURL);
 
     return () => subscription.remove();
-  }, []);
+  }, [handleIncomingURL]);
 
   return (
     <View style={styles.container}>
