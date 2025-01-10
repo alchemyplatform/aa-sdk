@@ -7,8 +7,13 @@ import Config from "react-native-config";
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const signer = RNAlchemySigner({
-  client: { connection: { apiKey: Config.API_KEY! } },
+  client: {
+    connection: { apiKey: Config.API_KEY! },
+    appScheme: "rn-signer-demo",
+  },
 });
+
+console.log("API KEY: ", Config.API_KEY);
 
 export default function OTPAuthScreen() {
   const [user, setUser] = useState<User | null>(null);
@@ -16,6 +21,7 @@ export default function OTPAuthScreen() {
   useEffect(() => {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
+    signer.preparePopupOauth();
   }, []);
 
   return (
@@ -28,8 +34,9 @@ export default function OTPAuthScreen() {
               signer
                 .authenticate({
                   type: "oauth",
-                  mode: "popup",
+                  mode: "redirect",
                   authProviderId: "google",
+                  redirectUrl: "rn-signer-demo:///",
                 })
                 .catch(console.error);
             }}

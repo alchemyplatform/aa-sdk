@@ -13,7 +13,10 @@ import Config from "react-native-config";
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const signer = RNAlchemySigner({
-  client: { connection: { apiKey: Config.API_KEY! } },
+  client: {
+    connection: { apiKey: Config.API_KEY! },
+    appScheme: "rn-signer-demo",
+  },
 });
 
 export default function OTPAuthScreen() {

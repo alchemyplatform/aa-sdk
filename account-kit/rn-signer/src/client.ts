@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import "./utils/mmkv-localstorage-polyfill";
+import "./utils/buffer-polyfill";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
@@ -10,6 +11,7 @@ import {
   type GetWebAuthnAttestationResult,
   type KnownAuthProvider,
   type OauthConfig,
+  type OauthMode,
   type OauthParams,
   type OtpParams,
   type SignupResponse,
@@ -21,7 +23,7 @@ import { z } from "zod";
 import { getDefaultScopeAndClaims, getOauthNonce } from "./oauth";
 import { base64UrlEncode } from "./utils/base64UrlEncode";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
-import { Alert, Linking } from "react-native";
+import { Alert } from "react-native";
 
 type OauthState = {
   authProviderId: string;
@@ -40,6 +42,7 @@ export const RNSignerClientParamsSchema = z.object({
     .string()
     .optional()
     .default("https://signer.alchemy.com/callback"),
+  appScheme: z.string().optional(),
 });
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
@@ -48,8 +51,11 @@ export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
+  appScheme: string;
+  private appDeeplink: string;
+
   constructor(params: RNSignerClientParams) {
-    const { connection, rootOrgId, oauthCallbackUrl } =
+    const { connection, rootOrgId, oauthCallbackUrl, appScheme } =
       RNSignerClientParamsSchema.parse(params);
 
     super({
@@ -58,11 +64,15 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       connection,
     });
 
+    this.appScheme = appScheme ?? "";
+
+    this.appDeeplink = `${this.appScheme}://`;
+
     this.oauthCallbackUrl = oauthCallbackUrl;
   }
 
   override async submitOtpCode(
-    args: Omit<OtpParams, "targetPublicKey">,
+    args: Omit<OtpParams, "targetPublicKey">
   ): Promise<{ bundle: string }> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const publicKey = await this.stamper.init();
@@ -76,7 +86,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   override async createAccount(
-    params: CreateAccountParams,
+    params: CreateAccountParams
   ): Promise<SignupResponse> {
     if (params.type !== "email") {
       throw new Error("Only email account creation is supported");
@@ -98,7 +108,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   override async initEmailAuth(
-    params: Omit<EmailAuthParams, "targetPublicKey">,
+    params: Omit<EmailAuthParams, "targetPublicKey">
   ): Promise<{ orgId: string }> {
     this.eventEmitter.emit("authenticating", { type: "email" });
     let targetPublicKey = await this.stamper.init();
@@ -140,25 +150,40 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
   }
-  override oauthWithRedirect(
-    _args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<never> {
-    throw new Error("Method not implemented.");
-  }
+  override oauthWithRedirect = async (
+    _args: Extract<OauthParams, { mode: "redirect" }>
+  ): Promise<never> => {
+    try {
+      const providerUrl = await this.getOauthProviderUrl(_args);
+
+      if (await InAppBrowser.isAvailable()) {
+        const res = await InAppBrowser.openAuth(providerUrl, this.appDeeplink);
+
+        Alert.alert(JSON.stringify(res));
+      }
+      return new Promise((_, reject) =>
+        setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000)
+      );
+    } catch (e) {
+      console.error("Error performing OAuth Operation", e);
+      throw new Error("Error performing OAuth Operation");
+    }
+  };
   override oauthWithPopup = async (
-    _args: Extract<OauthParams, { mode: "popup" }>,
+    _args: Extract<OauthParams, { mode: "popup" }>
   ): Promise<User> => {
     try {
       const providerUrl = await this.getOauthProviderUrl(_args);
 
       if (await InAppBrowser.isAvailable()) {
-        const res = await InAppBrowser.open(providerUrl, {});
+        const res = await InAppBrowser.openAuth(providerUrl, this.appDeeplink);
 
         Alert.alert(JSON.stringify(res));
       }
 
       return {} as User;
     } catch (e) {
+      console.error("Error performing OAuth Operation", e);
       throw new Error("Error performing OAuth Operation");
     }
   };
@@ -177,7 +202,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   protected override getWebAuthnAttestation(
     _options: CredentialCreationOptions,
-    _userDetails?: { username: string },
+    _userDetails?: { username: string }
   ): Promise<GetWebAuthnAttestationResult> {
     throw new Error("Method not implemented.");
   }
@@ -190,10 +215,13 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       scope: providedScope,
       claims: providedClaims,
       expirationSeconds,
+      redirectUrl,
+      mode,
     } = args;
 
-    const { codeChallenge, requestKey, authProviders } =
-      await this.getOauthConfig();
+    const res = await this.getOauthConfigForMode("popup");
+
+    const { codeChallenge, requestKey, authProviders } = res;
 
     if (!authProviders) {
       throw new OAuthProvidersError();
@@ -202,7 +230,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const authProvider = authProviders.find(
       (provider) =>
         provider.id === authProviderId &&
-        !!provider.isCustomProvider === !!isCustomProvider,
+        !!provider.isCustomProvider === !!isCustomProvider
     );
 
     if (!authProvider) {
@@ -221,11 +249,11 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       }
 
       const scopeAndClaims = getDefaultScopeAndClaims(
-        authProviderId as KnownAuthProvider,
+        authProviderId as KnownAuthProvider
       );
       if (!scopeAndClaims) {
         throw new Error(
-          `Default scope not known for provider ${authProviderId}`,
+          `Default scope not known for provider ${authProviderId}`
         );
       }
       ({ scope, claims } = scopeAndClaims);
@@ -234,22 +262,21 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const turnkeyPublicKey = await this.stamper.init();
     const nonce = getOauthNonce(turnkeyPublicKey);
 
-    const appDeepLink = (await Linking.getInitialURL()) ?? undefined;
-
     const stateObject: OauthState = {
       authProviderId,
       isCustomProvider,
       requestKey,
       turnkeyPublicKey,
       expirationSeconds,
-      redirectUrl: undefined, // We only use the 'Popup' mode in RN
-      openerOrigin: appDeepLink,
+      redirectUrl: mode === "redirect" ? redirectUrl : undefined, // We only use the 'Popup' mode in RN
+      openerOrigin: mode === "popup" ? this.appDeeplink : undefined,
     };
 
     const state = base64UrlEncode(
-      new TextEncoder().encode(JSON.stringify(stateObject)).buffer,
+      new TextEncoder().encode(JSON.stringify(stateObject)).buffer
     );
     const authUrl = new URL(authEndpoint);
+
     const params: Record<string, string> = {
       redirect_uri: this.oauthCallbackUrl,
       response_type: "code",
@@ -267,16 +294,37 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     if (auth0Connection) {
       params.connection = auth0Connection;
     }
-    authUrl.search = new URLSearchParams(params).toString();
-    return authUrl.toString();
+
+    Object.keys(params).forEach((param) => {
+      params[param] && authUrl.searchParams.append(param, params[param]);
+    });
+
+    const [urlPath, searchParams] = authUrl.href.split("?");
+
+    // Ensure to prevent potential trailing backslashes.
+    return `${urlPath?.replace(/\/$/, "")}?${searchParams}`;
   };
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
+    const currentStamper = this.turnkeyClient.stamper;
+    const publicKey = await this.stamper.init();
+
+    // swap the stamper back in case the user logged in with a different stamper (passkeys)
+    this.setStamper(currentStamper);
+    const nonce = getOauthNonce(publicKey);
+    return this.request("/v1/prepare-oauth", { nonce });
+  };
+
+  private getOauthConfigForMode = async (
+    mode: OauthMode
+  ): Promise<OauthConfig> => {
     if (this.oauthConfig) {
       return this.oauthConfig;
+    } else if (mode === "redirect") {
+      return this.initOauth();
     } else {
       throw new Error(
-        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login",
+        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"
       );
     }
   };
