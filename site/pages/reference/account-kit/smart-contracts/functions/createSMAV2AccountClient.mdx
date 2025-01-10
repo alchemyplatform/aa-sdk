@@ -16,27 +16,43 @@ import { createSMAV2AccountClient } from "@account-kit/smart-contracts";
 ```
 
 ## Usage
-
 ```ts
-import { http } from "viem";
-import { createSMAV2AccountClient } from "@account-kit/smart-contracts";
+import {
+  createSMAV2AccountClient,
+  installValidationActions,
+} from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
-import { sepolia } from "@account-kit/infra";
+import { Address, Hex, http, parseEther } from "viem";
+import {
+  alchemy,
+  alchemyFeeEstimator,
+  alchemyGasManagerMiddleware,
+  createAlchemySmartAccountClient,
+  polygonAmoy,
+} from "@account-kit/infra";
 
-const MNEMONIC = "...";
-const RPC_URL = "...";
+const OWNER_PRIVATE_KEY = "0x" as Hex; // TO DO: replace with your private key!
 
-const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+const ownerSigner =
+  LocalAccountSigner.privateKeyToAccountSigner(OWNER_PRIVATE_KEY);
 
-const chain = sepolia;
+const ALCHEMY_API_KEY = ""; // TO DO: replace with your Alchemy API key!
 
-const transport = http(RPC_URL);
+const rpcTransport = http(
+  `https://polygon-amoy.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+);
 
-const SMAV2SignerAccountClient = await createSMAV2AccountClient({
-  chain,
-  signer,
-  transport,
-});
+const GAS_POLICY_ID = ""; // TO DO: replace with your gas policy ID!
+
+const accountClient = (
+    await createSMAV2AccountClient({
+      transport: alchemyTransport,
+      chain: polygonAmoy,
+      signer: ownerSigner,
+      feeEstimator: alchemyFeeEstimator(alchemyTransport),
+      ...alchemyGasManagerMiddleware(GAS_POLICY_ID),
+    })
+  ).extend(installValidationActions);
 ```
 
 ## Parameters
