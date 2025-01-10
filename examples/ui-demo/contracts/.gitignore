@@ -1,0 +1,20 @@
+# Foundry build and cache directories
+out/
+out-optimized/
+cache/
+node_modules/
+
+# Coverage
+report/
+lcov.info
+
+# env vars
+.env
+
+# deployments
+broadcast/**/run-latest.json
+broadcast/**/dry-run/**/*
+
+# misc
+.DS_Store
+**/.DS_Store

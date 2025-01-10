@@ -1,3 +1,4 @@
+import { WalletTypes } from "@/app/config";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
@@ -15,8 +16,12 @@ export function UserConnectionDetails({
   const user = useUser();
   const signer = useSigner();
   const { logout } = useLogout();
-  const { theme, primaryColor } = useConfigStore(
-    ({ ui: { theme, primaryColor } }) => ({ theme, primaryColor })
+  const { theme, primaryColor, walletType } = useConfigStore(
+    ({ ui: { theme, primaryColor }, walletType }) => ({
+      theme,
+      primaryColor,
+      walletType,
+    })
   );
   const scaAccount = useAccount({ type: "LightAccount" });
 
@@ -69,40 +74,60 @@ export function UserConnectionDetails({
       {/* Smart Account */}
       <div className="flex flex-row justify-between">
         <span className="text-md md:text-sm text-fg-secondary">
-          Smart account
+          {walletType === WalletTypes.smart ? "Smart account" : "Address"}
         </span>
         <UserAddressLink address={scaAccount.address ?? ""} />
       </div>
-      {/* Status */}
-      <div className="flex flex-row justify-between items-center">
-        <span className="text-md md:text-sm text-fg-secondary">Status</span>
-        <div className="flex flex-row items-center">
-          <DeploymentStatusIndicator
-            isDeployed={!!deploymentStatus}
-            className="w-[12px] h-[12px]"
-          />
-          <span className="text-fg-primary block ml-1 text-md md:text-sm">
-            {deploymentStatus ? "Deployed" : "Not deployed"}
-          </span>
-        </div>
-      </div>
-      {/* Signer */}
-      <div className="flex flex-row justify-between items-center mt-[17px]">
-        <a
-          target="_blank"
-          href="https://accountkit.alchemy.com/concepts/smart-account-signer"
-          className="flex justify-center items-center"
-        >
-          <span className="text-md md:text-sm text-fg-secondary mr-1">
-            Signer
-          </span>
-          <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
-            <ExternalLinkIcon className="stroke-fg-secondary" />
-          </div>
-        </a>
 
-        <UserAddressLink address={signerAddress} />
-      </div>
+      {walletType === WalletTypes.smart ? (
+        <>
+          {/* Status */}
+          <div className="flex flex-row justify-between items-center">
+            <span className="text-md md:text-sm text-fg-secondary">Status</span>
+            <div className="flex flex-row items-center">
+              <DeploymentStatusIndicator
+                isDeployed={!!deploymentStatus}
+                className="w-[12px] h-[12px]"
+              />
+              <span className="text-fg-primary block ml-1 text-md md:text-sm">
+                {deploymentStatus ? "Deployed" : "Not deployed"}
+              </span>
+            </div>
+          </div>
+          {/* Signer */}
+          <div className="flex flex-row justify-between items-center mt-[17px]">
+            <a
+              target="_blank"
+              href="https://accountkit.alchemy.com/concepts/smart-account-signer"
+              className="flex justify-center items-center"
+            >
+              <span className="text-md md:text-sm text-fg-secondary mr-1">
+                Signer
+              </span>
+              <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
+                <ExternalLinkIcon className="stroke-fg-secondary" />
+              </div>
+            </a>
+
+            <UserAddressLink address={signerAddress} />
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-row justify-between items-center">
+          <span className="text-md md:text-sm text-fg-secondary">
+            Delegated to
+          </span>
+          <div className="flex flex-row items-center">
+            <DeploymentStatusIndicator
+              isDeployed={false}
+              className="w-[12px] h-[12px]"
+            />
+            <span className="text-fg-primary block ml-1 text-md md:text-sm">
+              None
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Logout */}
 
