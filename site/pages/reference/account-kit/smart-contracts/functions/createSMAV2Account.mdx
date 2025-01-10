@@ -12,7 +12,42 @@ Handles account initialization code, nonce generation, transaction encoding, and
 ## Import
 
 ```ts
-import { createSMAV2Account } from "@account-kit/smart-contracts";
+import {
+  createSMAV2AccountClient,
+  installValidationActions,
+} from "@account-kit/smart-contracts/experimental";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { Address, Hex, http, parseEther } from "viem";
+import {
+  alchemy,
+  alchemyFeeEstimator,
+  alchemyGasManagerMiddleware,
+  createAlchemySmartAccountClient,
+  polygonAmoy,
+} from "@account-kit/infra";
+
+const OWNER_PRIVATE_KEY = "0x" as Hex; // TO DO: replace with your private key!
+
+const ownerSigner =
+  LocalAccountSigner.privateKeyToAccountSigner(OWNER_PRIVATE_KEY);
+
+const ALCHEMY_API_KEY = ""; // TO DO: replace with your Alchemy API key!
+
+const rpcTransport = http(
+  `https://polygon-amoy.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+);
+
+const GAS_POLICY_ID = ""; // TO DO: replace with your gas policy ID!
+
+const accountClient = (
+    await createSMAV2AccountClient({
+      transport: alchemyTransport,
+      chain: polygonAmoy,
+      signer: ownerSigner,
+      feeEstimator: alchemyFeeEstimator(alchemyTransport),
+      ...alchemyGasManagerMiddleware(GAS_POLICY_ID),
+    })
+  ).extend(installValidationActions);
 ```
 
 ## Parameters
