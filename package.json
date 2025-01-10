@@ -51,7 +51,8 @@
     "docs:gen": "turbo run docs:gen",
     "test": "vitest dev",
     "test:ci": "vitest run",
-    "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
+    "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only ",
+    "lint:write": "eslint . --fix && yarn docs:gen && prettier --loglevel warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install && yarn turbo prepare",
     "version": "yarn build:libs"

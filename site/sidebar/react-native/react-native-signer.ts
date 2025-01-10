@@ -1,4 +1,5 @@
 import { SidebarItem } from "vocs";
+import { authenticatingUsersSidebar } from "./authenticating-users.js";
 
 export const reactNativeSignerSidebar: SidebarItem[] = [
   {
@@ -11,6 +12,7 @@ export const reactNativeSignerSidebar: SidebarItem[] = [
   },
   {
     text: "Authenticating Users",
-    link: "/react-native/signer/authenticating-users",
+    items: authenticatingUsersSidebar,
+    collapsed: true,
   },
 ];

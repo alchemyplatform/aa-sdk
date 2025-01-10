@@ -27,7 +27,7 @@ import {
   AllowlistModule,
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
-} from "@account-kit/smart-contracts";
+} from "@account-kit/smart-contracts/experimental";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
