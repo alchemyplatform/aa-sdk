@@ -30,7 +30,7 @@ const DEFAULT_SCOPE_AND_CLAIMS: Record<KnownAuthProvider, ScopeAndClaims> = {
  * @returns {ScopeAndClaims | undefined} default scope and claims
  */
 export function getDefaultScopeAndClaims(
-  knownAuthProviderId: KnownAuthProvider,
+  knownAuthProviderId: KnownAuthProvider
 ): ScopeAndClaims | undefined {
   return DEFAULT_SCOPE_AND_CLAIMS[knownAuthProviderId];
 }
