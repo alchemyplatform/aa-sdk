@@ -67,7 +67,7 @@ const UserConnectionAvatar = ({
               truncateAddress(user.address)
             ) : (
               <span className="block w-full overflow-hidden text-ellipsis">
-                {user.email ?? "User"}
+                {user.email ?? (user.claims?.nickname as string) ?? "User"}
               </span>
             )}
           </h3>
