@@ -29,6 +29,7 @@ export function getSectionsForConfig(
           authProviderId: "auth0",
           mode: "popup",
           auth0Connection: "twitter",
+          displayName: "X",
           logoUrl: "/images/twitter.svg",
         });
       } else if (enabled) {
