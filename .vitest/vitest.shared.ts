@@ -3,6 +3,9 @@ import { configDefaults, defineConfig } from "vitest/config";
 
 export const sharedConfig = defineConfig({
   test: {
+    typecheck: {
+      ignoreSourceErrors: true,
+    },
     alias: {
       "~test": join(__dirname, "./src"),
     },

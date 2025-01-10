@@ -18,6 +18,7 @@
     "!vitest.config.ts",
     "!.env",
     "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
     "!src/__tests__/**/*"
   ],
   "exports": {

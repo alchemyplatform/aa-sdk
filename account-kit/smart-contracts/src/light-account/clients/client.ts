@@ -16,9 +16,17 @@ import {
   lightAccountClientActions,
   type LightAccountClientActions,
 } from "../decorators/lightAccount.js";
+import {
+  type AlchemySmartAccountClient,
+  type AlchemyTransport,
+} from "@account-kit/infra";
+import {
+  createLightAccountAlchemyClient,
+  type AlchemyLightAccountClientConfig,
+} from "./alchemyClient.js";
 
 export type CreateLightAccountClientParams<
-  TTransport extends Transport = Transport,
+  TTransport extends Transport | AlchemyTransport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
@@ -31,14 +39,28 @@ export type CreateLightAccountClientParams<
   >;
 
 export function createLightAccountClient<
-  TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateLightAccountClientParams<Transport, TChain, TSigner>
+  params: AlchemyLightAccountClientConfig<TSigner> & {
+    transport: AlchemyTransport;
+  }
+): Promise<
+  AlchemySmartAccountClient<
+    Chain | undefined,
+    LightAccount<TSigner>,
+    LightAccountClientActions<TSigner>
+  >
+>;
+export function createLightAccountClient<
+  TChain extends Chain | undefined = Chain | undefined,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TTransport extends Transport = Transport
+>(
+  args: CreateLightAccountClientParams<TTransport, TChain, TSigner>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
-    Chain,
+    TChain,
     LightAccount<TSigner>,
     SmartAccountClientActions<Chain, SmartContractAccount> &
       LightAccountClientActions<TSigner, LightAccount<TSigner>>
@@ -47,6 +69,8 @@ export function createLightAccountClient<
 
 /**
  * Creates a light account client using the provided parameters, including account information, transport mechanism, blockchain chain, and additional client configurations. This function first creates a light account and then uses it to create a smart account client, extending it with light account client actions.
+ *
+ * Also, we modified the return type to be the light account alchemy client if the transport is alchemy.
  *
  * @example
  * ```ts
@@ -67,8 +91,15 @@ export function createLightAccountClient<
  */
 export async function createLightAccountClient(
   params: CreateLightAccountClientParams
-): Promise<SmartAccountClient> {
+): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = params;
+
+  if (isAlchemyTransport(transport, chain)) {
+    return await createLightAccountAlchemyClient({
+      ...params,
+      transport,
+    });
+  }
 
   const lightAccount = await createLightAccount({
     ...params,
@@ -82,4 +113,11 @@ export async function createLightAccountClient(
     chain: chain,
     account: lightAccount,
   }).extend(lightAccountClientActions);
+}
+
+function isAlchemyTransport(
+  transport: Transport,
+  chain: Chain
+): transport is AlchemyTransport {
+  return transport({ chain }).config.type === "alchemy";
 }
