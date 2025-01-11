@@ -1,14 +1,10 @@
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
-  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
 import {
-  accountLoupeActions,
-  createMultiOwnerModularAccount,
-  multiOwnerPluginActions,
-  pluginManagerActions,
+  createMultiOwnerModularAccountClient,
   type AccountLoupeActions,
   type CreateMultiOwnerModularAccountParams,
   type LightAccount,
@@ -59,27 +55,12 @@ export function createModularAccountAlchemyClient<
  *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
  * ```
- *
+ * @deprecated Use createModularAccountClient instead of this function, we are switching based on the transport
  * @param {AlchemyModularAccountClientConfig} config The configuration for creating the Alchemy client
  * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` configured with the desired plugins and actions
  */
 export async function createModularAccountAlchemyClient(
   config: AlchemyModularAccountClientConfig
 ): Promise<AlchemySmartAccountClient> {
-  const { transport, chain, opts } = config;
-
-  const account = await createMultiOwnerModularAccount({
-    ...config,
-    transport,
-    chain,
-  });
-
-  return createAlchemySmartAccountClient({
-    ...config,
-    account,
-    opts,
-  })
-    .extend(multiOwnerPluginActions)
-    .extend(pluginManagerActions)
-    .extend(accountLoupeActions);
+  return createMultiOwnerModularAccountClient(config);
 }

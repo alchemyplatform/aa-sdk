@@ -63,6 +63,10 @@ export const accountKitInfraReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/infra/functions/isAlchemySmartAccountClient",
       },
       {
+        text: "isAlchemyTransport",
+        link: "/reference/account-kit/infra/functions/isAlchemyTransport",
+      },
+      {
         text: "simulateUserOperationChanges",
         link: "/reference/account-kit/infra/functions/simulateUserOperationChanges",
       },

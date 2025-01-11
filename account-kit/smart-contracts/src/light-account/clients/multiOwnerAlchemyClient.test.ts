@@ -13,6 +13,7 @@ import {
 import { Alchemy, Network } from "alchemy-sdk";
 import { avalanche, type Chain } from "viem/chains";
 import { createMultiOwnerLightAccountAlchemyClient } from "./multiOwnerAlchemyClient.js";
+import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
 
 describe("MultiOwnerLightAccount Client Tests", () => {
   const dummyMnemonic =
@@ -138,7 +139,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
     signer: SmartAccountSigner;
     chain: Chain;
   }) =>
-    createMultiOwnerLightAccountAlchemyClient({
+    createMultiOwnerLightAccountClient({
       transport: alchemy({
         jwt: "test",
       }),
