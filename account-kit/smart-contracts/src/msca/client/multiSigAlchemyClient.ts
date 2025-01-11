@@ -1,18 +1,11 @@
+import { type SmartAccountSigner } from "@aa-sdk/core";
 import {
-  smartAccountClientActions,
-  type SmartAccountSigner,
-} from "@aa-sdk/core";
-import {
-  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
+  type AlchemyTransport,
 } from "@account-kit/infra";
 import {
-  accountLoupeActions,
-  createMultisigModularAccount,
-  multisigPluginActions,
-  multisigSignatureMiddleware,
-  pluginManagerActions,
+  createMultisigModularAccountClient,
   type AccountLoupeActions,
   type CreateMultisigModularAccountParams,
   type LightAccount,
@@ -38,7 +31,7 @@ export type AlchemyMultisigAccountClientConfig<
       MultisigUserOperationContext
     >,
     "account"
-  >;
+  > & { transport: AlchemyTransport };
 
 export function createMultisigAccountAlchemyClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -74,6 +67,7 @@ export function createMultisigAccountAlchemyClient<
  * });
  * ```
  *
+ * @deprecated Use createModularAccountClient instead of this function, we are switching based on the transport
  * @param {AlchemyMultisigAccountClientConfig} config The configuration for the Alchemy multisig account client
  * @returns {Promise<AlchemySmartAccountClient<Transport, Chain | undefined, MultisigModularAccount<SmartAccountSigner>, MultisigPluginActions<MultisigModularAccount<SmartAccountSigner>> & PluginManagerActions<MultisigModularAccount<SmartAccountSigner>> & AccountLoupeActions<MultisigModularAccount<SmartAccountSigner>>, MultisigUserOperationContext>>} A promise that resolves to an Alchemy Smart Account Client for multisig accounts with extended functionalities.
  */
@@ -89,22 +83,5 @@ export async function createMultisigAccountAlchemyClient(
     MultisigUserOperationContext
   >
 > {
-  const { transport, opts, chain } = config;
-
-  const account = await createMultisigModularAccount({
-    ...config,
-    transport,
-    chain,
-  });
-
-  return createAlchemySmartAccountClient({
-    ...config,
-    account,
-    opts,
-    signUserOperation: multisigSignatureMiddleware,
-  })
-    .extend(smartAccountClientActions)
-    .extend(multisigPluginActions)
-    .extend(pluginManagerActions)
-    .extend(accountLoupeActions);
+  return createMultisigModularAccountClient(config);
 }
