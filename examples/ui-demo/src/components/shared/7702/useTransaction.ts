@@ -1,4 +1,12 @@
 import { useState } from "react";
+import { createPublicClient } from "viem";
+import { mekong, splitMekongTransport } from "./transportSetup";
+import {
+  createBundlerClientFromExisting,
+  LocalAccountSigner,
+} from "@aa-sdk/core";
+import { privateKeyToAccount } from "viem/accounts";
+import { send7702UO } from "./demoSend7702UO";
 
 export type TransactionStages = "initial" | "initiating" | "next" | "complete";
 export type TransactionType = {
@@ -46,6 +54,19 @@ export const useTransactions = () => {
       newState[transactionIndex].state = "complete";
       return newState;
     });
+    const publicClient = createPublicClient({
+      chain: mekong,
+      transport: splitMekongTransport,
+    });
+    const bundlerClient = createBundlerClientFromExisting(publicClient);
+    const localAccount = privateKeyToAccount(
+      "0x18bec901c0253fbb203d3423dada59eb720c68f34935185de43d161b0524404b"
+    );
+    send7702UO(
+      bundlerClient,
+      splitMekongTransport,
+      new LocalAccountSigner(localAccount)
+    );
   };
   // Mock method to fire transactions for 7702
   const handleTransactions = async () => {
