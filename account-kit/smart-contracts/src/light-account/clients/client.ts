@@ -1,5 +1,6 @@
 import {
   createSmartAccountClient,
+  type NotType,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountClientConfig,
@@ -55,7 +56,8 @@ export function createLightAccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TTransport extends Transport = Transport
 >(
-  args: CreateLightAccountClientParams<TTransport, TChain, TSigner>
+  args: CreateLightAccountClientParams<TTransport, TChain, TSigner> &
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
