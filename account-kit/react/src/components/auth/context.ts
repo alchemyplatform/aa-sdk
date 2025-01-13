@@ -4,6 +4,21 @@ import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 import type { AuthType } from "./types";
 
+export enum AuthStepType {
+  EmailVerify = "email_verify",
+  OtpVerify = "otp_verify",
+  PasskeyVerify = "passkey_verify",
+  PasskeyCreate = "passkey_create",
+  PasskeyCreateSuccess = "passkey_create_success",
+  EmailCompleting = "email_completing",
+  OauthCompleting = "oauth_completing",
+  Initial = "initial",
+  Complete = "complete",
+  EoaConnect = "eoa_connect",
+  WalletConnect = "wallet_connect",
+  PickEoa = "pick_eoa",
+}
+
 export enum AuthStepStatus {
   base = "base",
   success = "success",
@@ -12,27 +27,27 @@ export enum AuthStepStatus {
 }
 
 export type AuthStep =
-  | { type: "email_verify"; email: string }
+  | { type: AuthStepType.EmailVerify; email: string }
   | {
-      type: "otp_verify";
+      type: AuthStepType.OtpVerify;
       email: string;
       error?: Error;
       status?: AuthStepStatus;
     }
-  | { type: "passkey_verify"; error?: Error }
-  | { type: "passkey_create"; error?: Error }
-  | { type: "passkey_create_success" }
-  | { type: "email_completing" }
+  | { type: AuthStepType.PasskeyVerify; error?: Error }
+  | { type: AuthStepType.PasskeyCreate; error?: Error }
+  | { type: AuthStepType.PasskeyCreateSuccess }
+  | { type: AuthStepType.EmailCompleting }
   | {
-      type: "oauth_completing";
+      type: AuthStepType.OauthCompleting;
       config: Extract<AuthType, { type: "social" }>;
       error?: Error;
     }
-  | { type: "initial"; error?: Error }
-  | { type: "complete" }
-  | { type: "eoa_connect"; connector: Connector; error?: Error }
-  | { type: "wallet_connect"; error?: Error }
-  | { type: "pick_eoa" };
+  | { type: AuthStepType.Initial; error?: Error }
+  | { type: AuthStepType.Complete }
+  | { type: AuthStepType.EoaConnect; connector: Connector; error?: Error }
+  | { type: AuthStepType.WalletConnect; error?: Error }
+  | { type: AuthStepType.PickEoa };
 
 type AuthContextType<
   TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined

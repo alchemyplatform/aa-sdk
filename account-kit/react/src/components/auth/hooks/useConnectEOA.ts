@@ -1,27 +1,27 @@
 "use client";
 
 import { useConnect } from "../../../hooks/useConnect.js";
-import { useAuthContext } from "../context.js";
+import { AuthStepType, useAuthContext } from "../context.js";
 
 export const useConnectEOA = () => {
   const { setAuthStep } = useAuthContext();
   const { connectors, connect } = useConnect({
     onMutate: ({ connector }) => {
       if (typeof connector === "function") {
-        setAuthStep({ type: "wallet_connect" });
+        setAuthStep({ type: AuthStepType.WalletConnect });
       } else {
-        setAuthStep({ type: "eoa_connect", connector });
+        setAuthStep({ type: AuthStepType.EoaConnect, connector });
       }
     },
     onError: (error, { connector }) => {
       if (typeof connector === "function") {
-        setAuthStep({ type: "wallet_connect", error });
+        setAuthStep({ type: AuthStepType.WalletConnect, error });
       } else {
-        setAuthStep({ type: "eoa_connect", connector, error });
+        setAuthStep({ type: AuthStepType.EoaConnect, connector, error });
       }
     },
     onSuccess: () => {
-      setAuthStep({ type: "complete" });
+      setAuthStep({ type: AuthStepType.Complete });
     },
   });
 

@@ -3,7 +3,7 @@ import { HelpText } from "../card/footer/help-text.js";
 import { OAuthContactSupport } from "../card/footer/oauth-contact-support.js";
 import { ProtectedBy } from "../card/footer/protected-by.js";
 import { RegistrationDisclaimer } from "../card/footer/registration-disclaimer.js";
-import type { AuthStep } from "../context.js";
+import { AuthStepType, type AuthStep } from "../context.js";
 
 type FooterProps = {
   authStep: AuthStep;
@@ -11,22 +11,23 @@ type FooterProps = {
 
 const RenderFooterText = ({ authStep }: FooterProps) => {
   switch (authStep.type) {
-    case "initial":
+    case AuthStepType.Initial:
       return <RegistrationDisclaimer />;
-    case "email_verify":
-    case "otp_verify":
+    case AuthStepType.EmailVerify:
+    case AuthStepType.OtpVerify:
       return <EmailNotReceivedDisclaimer authStep={authStep} />;
-    case "passkey_create":
-    case "wallet_connect":
-    case "passkey_verify":
+    case AuthStepType.PasskeyCreate:
+    case AuthStepType.WalletConnect:
+    case AuthStepType.PasskeyVerify:
       return <HelpText />;
-    case "oauth_completing":
+    case AuthStepType.OauthCompleting:
       return <OAuthContactSupport />;
-    case "email_completing":
-    case "passkey_create_success":
-    case "eoa_connect":
-    case "pick_eoa":
-    case "complete":
+    case AuthStepType.EmailCompleting:
+    case AuthStepType.PasskeyCreateSuccess:
+    case AuthStepType.EoaConnect:
+    case AuthStepType.PickEoa:
+    case AuthStepType.Complete:
+    default:
       return null;
   }
 };

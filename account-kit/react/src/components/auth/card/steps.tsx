@@ -1,4 +1,4 @@
-import { useAuthContext } from "../context.js";
+import { AuthStepType, useAuthContext } from "../context.js";
 import { AddPasskey } from "./add-passkey.js";
 import { EoaConnectCard, EoaPickCard, WalletConnectCard } from "./eoa.js";
 import { CompletingEmailAuth, LoadingEmail } from "./loading/email.js";
@@ -11,28 +11,28 @@ import { LoadingOtp } from "./loading/otp.js";
 export const Step = () => {
   const { authStep } = useAuthContext();
   switch (authStep.type) {
-    case "email_verify":
+    case AuthStepType.EmailVerify:
       return <LoadingEmail />;
-    case "otp_verify":
+    case AuthStepType.OtpVerify:
       return <LoadingOtp />;
-    case "passkey_verify":
+    case AuthStepType.PasskeyVerify:
       return <LoadingPasskeyAuth />;
-    case "email_completing":
+    case AuthStepType.EmailCompleting:
       return <CompletingEmailAuth />;
-    case "oauth_completing":
+    case AuthStepType.OauthCompleting:
       return <CompletingOAuth />;
-    case "passkey_create":
+    case AuthStepType.PasskeyCreate:
       return <AddPasskey />;
-    case "passkey_create_success":
+    case AuthStepType.PasskeyCreateSuccess:
       return <PasskeyAdded />;
-    case "eoa_connect":
+    case AuthStepType.EoaConnect:
       return <EoaConnectCard />;
-    case "pick_eoa":
+    case AuthStepType.PickEoa:
       return <EoaPickCard />;
-    case "wallet_connect":
+    case AuthStepType.WalletConnect:
       return <WalletConnectCard />;
-    case "complete":
-    case "initial":
+    case AuthStepType.Complete:
+    case AuthStepType.Initial:
     default:
       return <MainAuthContent />;
   }
