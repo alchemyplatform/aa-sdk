@@ -23,15 +23,15 @@ export const AuthModal = () => {
     if (addPasskeyOnSignup) {
       openAuthModal();
       setAuthStep({
-        type: AuthStepType.passkey_create,
+        type: AuthStepType.PasskeyCreate,
       });
     }
   }, [addPasskeyOnSignup, openAuthModal, setAuthStep]);
   useNewUserSignup(
     handleSignup,
     isConnected &&
-      (authStep.type === AuthStepType.complete ||
-        authStep.type === AuthStepType.initial) &&
+      (authStep.type === AuthStepType.Complete ||
+        authStep.type === AuthStepType.Initial) &&
       !isOpen
   );
 

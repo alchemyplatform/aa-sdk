@@ -1,17 +1,16 @@
 /* eslint-disable import/extensions */
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
-  View,
+  Linking,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
-  Linking,
   TouchableOpacity,
+  View,
 } from "react-native";
-
 import Config from "react-native-config";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 export default function MagicLinkAuthScreen() {
   const signer = RNAlchemySigner({
@@ -72,7 +71,7 @@ export default function MagicLinkAuthScreen() {
             style={styles.textInput}
             placeholderTextColor="gray"
             placeholder="enter your email"
-            onChangeText={setEmail}
+            onChangeText={(text) => setEmail(text.toLowerCase())}
             value={email}
           />
 

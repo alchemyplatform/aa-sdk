@@ -12,9 +12,9 @@ const meta: Meta<typeof LoadingOtp> = {
   render: () => {
     const { authStep, setAuthStep } = useAuthContext();
     useEffect(() => {
-      setAuthStep({ type: AuthStepType.otp_verify, email: "test@alchemy.com" });
+      setAuthStep({ type: AuthStepType.OtpVerify, email: "test@alchemy.com" });
     }, [setAuthStep]);
-    if (authStep.type === AuthStepType.otp_verify) {
+    if (authStep.type === AuthStepType.OtpVerify) {
       return <LoadingOtp />;
     }
 

@@ -11,22 +11,22 @@ type FooterProps = {
 
 const RenderFooterText = ({ authStep }: FooterProps) => {
   switch (authStep.type) {
-    case AuthStepType.initial:
+    case AuthStepType.Initial:
       return <RegistrationDisclaimer />;
-    case AuthStepType.email_verify:
-    case AuthStepType.otp_verify:
+    case AuthStepType.EmailVerify:
+    case AuthStepType.OtpVerify:
       return <EmailNotReceivedDisclaimer authStep={authStep} />;
-    case AuthStepType.passkey_create:
-    case AuthStepType.wallet_connect:
-    case AuthStepType.passkey_verify:
+    case AuthStepType.PasskeyCreate:
+    case AuthStepType.WalletConnect:
+    case AuthStepType.PasskeyVerify:
       return <HelpText />;
-    case AuthStepType.oauth_completing:
+    case AuthStepType.OauthCompleting:
       return <OAuthContactSupport />;
-    case AuthStepType.email_completing:
-    case AuthStepType.passkey_create_success:
-    case AuthStepType.eoa_connect:
-    case AuthStepType.pick_eoa:
-    case AuthStepType.complete:
+    case AuthStepType.EmailCompleting:
+    case AuthStepType.PasskeyCreateSuccess:
+    case AuthStepType.EoaConnect:
+    case AuthStepType.PickEoa:
+    case AuthStepType.Complete:
     default:
       return null;
   }

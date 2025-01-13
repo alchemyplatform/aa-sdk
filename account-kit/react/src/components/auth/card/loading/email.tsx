@@ -7,7 +7,7 @@ import { AuthStepType, useAuthContext } from "../../context.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingEmail = () => {
-  const { authStep } = useAuthContext(AuthStepType.email_verify);
+  const { authStep } = useAuthContext(AuthStepType.EmailVerify);
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
 
@@ -39,11 +39,11 @@ export const LoadingEmail = () => {
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const CompletingEmailAuth = () => {
   const { isConnected } = useSignerStatus();
-  const { setAuthStep } = useAuthContext(AuthStepType.email_completing);
+  const { setAuthStep } = useAuthContext(AuthStepType.EmailCompleting);
 
   useEffect(() => {
     if (isConnected) {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: AuthStepType.Complete });
     }
   }, [isConnected, setAuthStep]);
 

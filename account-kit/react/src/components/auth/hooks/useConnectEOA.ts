@@ -8,20 +8,20 @@ export const useConnectEOA = () => {
   const { connectors, connect } = useConnect({
     onMutate: ({ connector }) => {
       if (typeof connector === "function") {
-        setAuthStep({ type: AuthStepType.wallet_connect });
+        setAuthStep({ type: AuthStepType.WalletConnect });
       } else {
-        setAuthStep({ type: AuthStepType.eoa_connect, connector });
+        setAuthStep({ type: AuthStepType.EoaConnect, connector });
       }
     },
     onError: (error, { connector }) => {
       if (typeof connector === "function") {
-        setAuthStep({ type: AuthStepType.wallet_connect, error });
+        setAuthStep({ type: AuthStepType.WalletConnect, error });
       } else {
-        setAuthStep({ type: AuthStepType.eoa_connect, connector, error });
+        setAuthStep({ type: AuthStepType.EoaConnect, connector, error });
       }
     },
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: AuthStepType.Complete });
     },
   });
 

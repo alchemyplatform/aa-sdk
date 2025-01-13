@@ -31,20 +31,20 @@ export const EmailAuth = memo(
         if (params.type === "email" && "email" in params) {
           if (params.emailMode === "magicLink") {
             setAuthStep({
-              type: AuthStepType.email_verify,
+              type: AuthStepType.EmailVerify,
               email: params.email,
             });
           } else {
-            setAuthStep({ type: AuthStepType.otp_verify, email: params.email });
+            setAuthStep({ type: AuthStepType.OtpVerify, email: params.email });
           }
         }
       },
       onSuccess: () => {
-        setAuthStep({ type: AuthStepType.complete });
+        setAuthStep({ type: AuthStepType.Complete });
       },
       onError: (error) => {
         console.error(error);
-        setAuthStep({ type: AuthStepType.initial, error });
+        setAuthStep({ type: AuthStepType.Initial, error });
       },
     });
 
@@ -70,7 +70,7 @@ export const EmailAuth = memo(
         } catch (e) {
           const error = e instanceof Error ? e : new Error("An Unknown error");
 
-          setAuthStep({ type: AuthStepType.initial, error });
+          setAuthStep({ type: AuthStepType.Initial, error });
         }
       },
       validatorAdapter: zodValidator(),

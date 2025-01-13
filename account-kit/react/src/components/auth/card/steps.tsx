@@ -11,28 +11,28 @@ import { LoadingOtp } from "./loading/otp.js";
 export const Step = () => {
   const { authStep } = useAuthContext();
   switch (authStep.type) {
-    case AuthStepType.email_verify:
+    case AuthStepType.EmailVerify:
       return <LoadingEmail />;
-    case AuthStepType.otp_verify:
+    case AuthStepType.OtpVerify:
       return <LoadingOtp />;
-    case AuthStepType.passkey_verify:
+    case AuthStepType.PasskeyVerify:
       return <LoadingPasskeyAuth />;
-    case AuthStepType.email_completing:
+    case AuthStepType.EmailCompleting:
       return <CompletingEmailAuth />;
-    case AuthStepType.oauth_completing:
+    case AuthStepType.OauthCompleting:
       return <CompletingOAuth />;
-    case AuthStepType.passkey_create:
+    case AuthStepType.PasskeyCreate:
       return <AddPasskey />;
-    case AuthStepType.passkey_create_success:
+    case AuthStepType.PasskeyCreateSuccess:
       return <PasskeyAdded />;
-    case AuthStepType.eoa_connect:
+    case AuthStepType.EoaConnect:
       return <EoaConnectCard />;
-    case AuthStepType.pick_eoa:
+    case AuthStepType.PickEoa:
       return <EoaPickCard />;
-    case AuthStepType.wallet_connect:
+    case AuthStepType.WalletConnect:
       return <WalletConnectCard />;
-    case AuthStepType.complete:
-    case AuthStepType.initial:
+    case AuthStepType.Complete:
+    case AuthStepType.Initial:
     default:
       return <MainAuthContent />;
   }

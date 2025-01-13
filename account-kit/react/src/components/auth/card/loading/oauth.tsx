@@ -14,16 +14,16 @@ import { ls } from "../../../../strings.js";
 export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext(
-    AuthStepType.oauth_completing
+    AuthStepType.OauthCompleting
   );
   const { authenticate } = useOAuthVerify({ config: authStep.config });
   const oauthWasCancelled = authStep.error instanceof OauthCancelledError;
 
   useEffect(() => {
     if (isConnected) {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: AuthStepType.Complete });
     } else if (oauthWasCancelled) {
-      setAuthStep({ type: AuthStepType.initial });
+      setAuthStep({ type: AuthStepType.Initial });
     }
   }, [isConnected, oauthWasCancelled, setAuthStep]);
 
@@ -36,7 +36,7 @@ export const CompletingOAuth = () => {
         bodyText={ls.error.connection.oauthBody}
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() =>
-          setAuthStep({ type: AuthStepType.initial })
+          setAuthStep({ type: AuthStepType.Initial })
         }
         icon={
           <OAuthConnectionFailed provider={authStep.config.authProviderId} />

@@ -12,7 +12,7 @@ import { Button } from "../../../button.js";
 type EmailNotReceivedDisclaimerProps = {
   authStep: Extract<
     AuthStep,
-    { type: AuthStepType.email_verify | AuthStepType.otp_verify }
+    { type: AuthStepType.EmailVerify | AuthStepType.OtpVerify }
   >;
 };
 export const EmailNotReceivedDisclaimer = ({
@@ -22,13 +22,13 @@ export const EmailNotReceivedDisclaimer = ({
   const [emailResent, setEmailResent] = useState(false);
   const { authenticate } = useAuthenticate({
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: AuthStepType.Complete });
     },
   });
 
   const isOTPVerifying = useMemo(() => {
     return (
-      authStep.type === AuthStepType.otp_verify &&
+      authStep.type === AuthStepType.OtpVerify &&
       (authStep.status === AuthStepStatus.verifying ||
         authStep.status === AuthStepStatus.success)
     );
@@ -55,9 +55,10 @@ export const EmailNotReceivedDisclaimer = ({
       <Button
         variant="link"
         className={`text-xs font-normal underline ${
-          isOTPVerifying ? "text-fg-disabled" : "text-btn-primary"
+          isOTPVerifying
+            ? "text-fg-disabled disabled:opacity-100"
+            : "text-btn-primary"
         }`}
-        style={isOTPVerifying ? { opacity: 1 } : {}}
         disabled={emailResent || isOTPVerifying}
         onClick={() => {
           authenticate({

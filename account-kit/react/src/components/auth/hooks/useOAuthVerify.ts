@@ -20,19 +20,19 @@ export const useOAuthVerify = ({
     onMutate: () => {
       setAuthStep({
         config,
-        type: AuthStepType.oauth_completing,
+        type: AuthStepType.OauthCompleting,
       });
     },
     onError: (err) => {
       console.error(err);
       setAuthStep({
-        type: AuthStepType.oauth_completing,
+        type: AuthStepType.OauthCompleting,
         config,
         error: err,
       });
     },
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: AuthStepType.Complete });
     },
   });
 

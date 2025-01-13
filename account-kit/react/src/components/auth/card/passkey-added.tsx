@@ -6,7 +6,7 @@ export function PasskeyAdded() {
   const { setAuthStep } = useAuthContext();
 
   setTimeout(() => {
-    setAuthStep({ type: AuthStepType.complete });
+    setAuthStep({ type: AuthStepType.Complete });
   }, 5000);
 
   return (

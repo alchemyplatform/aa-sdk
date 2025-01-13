@@ -72,34 +72,34 @@ export const AuthCardContent = ({
 
   const canGoBack = useMemo(() => {
     return [
-      AuthStepType.email_verify,
-      AuthStepType.otp_verify,
-      AuthStepType.passkey_verify,
-      AuthStepType.passkey_create,
-      AuthStepType.pick_eoa,
-      AuthStepType.wallet_connect,
-      AuthStepType.eoa_connect,
-      AuthStepType.oauth_completing,
+      AuthStepType.EmailVerify,
+      AuthStepType.OtpVerify,
+      AuthStepType.PasskeyVerify,
+      AuthStepType.PasskeyCreate,
+      AuthStepType.PickEoa,
+      AuthStepType.WalletConnect,
+      AuthStepType.EoaConnect,
+      AuthStepType.OauthCompleting,
     ].includes(authStep.type);
   }, [authStep]);
 
   const onBack = useCallback(() => {
     switch (authStep.type) {
-      case AuthStepType.email_verify:
-      case AuthStepType.otp_verify:
-      case AuthStepType.passkey_verify:
-      case AuthStepType.passkey_create:
-      case AuthStepType.oauth_completing:
+      case AuthStepType.EmailVerify:
+      case AuthStepType.OtpVerify:
+      case AuthStepType.PasskeyVerify:
+      case AuthStepType.PasskeyCreate:
+      case AuthStepType.OauthCompleting:
         disconnect(config); // Terminate any inflight authentication
         didGoBack.current = true;
-        setAuthStep({ type: AuthStepType.initial });
+        setAuthStep({ type: AuthStepType.Initial });
         break;
-      case AuthStepType.wallet_connect:
-      case AuthStepType.eoa_connect:
-        setAuthStep({ type: AuthStepType.pick_eoa });
+      case AuthStepType.WalletConnect:
+      case AuthStepType.EoaConnect:
+        setAuthStep({ type: AuthStepType.PickEoa });
         break;
-      case AuthStepType.pick_eoa:
-        setAuthStep({ type: AuthStepType.initial });
+      case AuthStepType.PickEoa:
+        setAuthStep({ type: AuthStepType.Initial });
         break;
       default:
         console.warn("Unhandled back action for auth step", authStep);
@@ -112,20 +112,20 @@ export const AuthCardContent = ({
       disconnect(config);
     }
 
-    if (authStep.type === AuthStepType.passkey_create) {
-      setAuthStep({ type: AuthStepType.complete });
+    if (authStep.type === AuthStepType.PasskeyCreate) {
+      setAuthStep({ type: AuthStepType.Complete });
     } else {
-      setAuthStep({ type: AuthStepType.initial });
+      setAuthStep({ type: AuthStepType.Initial });
     }
     closeAuthModal();
   }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
 
   useEffect(() => {
-    if (authStep.type === AuthStepType.complete) {
+    if (authStep.type === AuthStepType.Complete) {
       didGoBack.current = false;
       closeAuthModal();
       onAuthSuccess?.();
-    } else if (authStep.type !== AuthStepType.initial) {
+    } else if (authStep.type !== AuthStepType.Initial) {
       didGoBack.current = false;
     }
   }, [

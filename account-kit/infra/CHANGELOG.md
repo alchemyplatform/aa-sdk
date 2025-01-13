@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+### Features
+
+- add ink mainnet ([#1225](https://github.com/alchemyplatform/aa-sdk/issues/1225)) ([0a6606e](https://github.com/alchemyplatform/aa-sdk/commit/0a6606e6a447f08406aa84308795118eda950531))
+- add mekong devnet support ([#1239](https://github.com/alchemyplatform/aa-sdk/issues/1239)) ([baad28a](https://github.com/alchemyplatform/aa-sdk/commit/baad28a6b1df36f66eae1fb723bbcfdc61592a51))
+- **chains:** add ink and soneium mainnet ([#1215](https://github.com/alchemyplatform/aa-sdk/issues/1215)) ([de83640](https://github.com/alchemyplatform/aa-sdk/commit/de83640936bfa43f04fa274efda5a968afc4d773))
+
 # [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
 
 **Note:** Version bump only for package @account-kit/infra

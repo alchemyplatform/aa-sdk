@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+### Bug Fixes
+
+- correctly trim implementation address ([#1261](https://github.com/alchemyplatform/aa-sdk/issues/1261)) ([5dae940](https://github.com/alchemyplatform/aa-sdk/commit/5dae940eee1c776b54804a9aac8d46fe51e89d19))
+- lost changes from other PRs ([#1259](https://github.com/alchemyplatform/aa-sdk/issues/1259)) ([6546664](https://github.com/alchemyplatform/aa-sdk/commit/6546664887a45e8b25745a3cac539cde9473e4bf))
+
+### Features
+
+- basic ma v2 sdk integrations ([#1220](https://github.com/alchemyplatform/aa-sdk/issues/1220)) ([e513d84](https://github.com/alchemyplatform/aa-sdk/commit/e513d84406acb9dcc72d30a12dce4fbd15adeab8)), closes [#1221](https://github.com/alchemyplatform/aa-sdk/issues/1221) [#1223](https://github.com/alchemyplatform/aa-sdk/issues/1223) [#1232](https://github.com/alchemyplatform/aa-sdk/issues/1232) [#1233](https://github.com/alchemyplatform/aa-sdk/issues/1233) [#1246](https://github.com/alchemyplatform/aa-sdk/issues/1246)
+
 # [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
 
 **Note:** Version bump only for package @aa-sdk/core

@@ -6,7 +6,7 @@ import { usePasskeyVerify } from "../../hooks/usePasskeyVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 
 export const LoadingPasskeyAuth = () => {
-  const { setAuthStep, authStep } = useAuthContext(AuthStepType.passkey_verify);
+  const { setAuthStep, authStep } = useAuthContext(AuthStepType.PasskeyVerify);
   const { authenticate } = usePasskeyVerify();
 
   if (authStep.error) {
@@ -17,7 +17,7 @@ export const LoadingPasskeyAuth = () => {
         icon={<ConnectionFailed />}
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() =>
-          setAuthStep({ type: AuthStepType.initial })
+          setAuthStep({ type: AuthStepType.Initial })
         }
       />
     );
@@ -47,7 +47,7 @@ export const LoadingPasskeyAuth = () => {
       </div>
       <button
         className="akui-btn akui-btn-secondary w-full mt-5"
-        onClick={() => setAuthStep({ type: AuthStepType.initial })}
+        onClick={() => setAuthStep({ type: AuthStepType.Initial })}
       >
         Cancel
       </button>

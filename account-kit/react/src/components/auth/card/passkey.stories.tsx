@@ -44,7 +44,7 @@ const PasskeyStory = (props: any) => {
 
   const { setAuthStep } = useAuthContext();
   useEffect(() => {
-    setAuthStep({ type: AuthStepType.passkey_create });
+    setAuthStep({ type: AuthStepType.PasskeyCreate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

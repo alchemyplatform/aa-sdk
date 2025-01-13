@@ -18,13 +18,13 @@ export const usePasskeyVerify = (): UsePasskeyVerifyReturnType => {
   const { setAuthStep } = useAuthContext();
   const { authenticate: authenticate_, isPending } = useAuthenticate({
     onMutate: () => {
-      setAuthStep({ type: AuthStepType.passkey_verify });
+      setAuthStep({ type: AuthStepType.PasskeyVerify });
     },
     onError: (err) => {
-      setAuthStep({ type: AuthStepType.passkey_verify, error: err });
+      setAuthStep({ type: AuthStepType.PasskeyVerify, error: err });
     },
     onSuccess: () => {
-      setAuthStep({ type: AuthStepType.complete });
+      setAuthStep({ type: AuthStepType.Complete });
     },
   });
 

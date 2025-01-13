@@ -9,7 +9,7 @@ export const ExternalWalletsAuth = () => {
     <Button
       variant="social"
       icon={<WalletIcon />}
-      onClick={() => setAuthStep({ type: AuthStepType.pick_eoa })}
+      onClick={() => setAuthStep({ type: AuthStepType.PickEoa })}
     >
       Continue with a wallet
     </Button>

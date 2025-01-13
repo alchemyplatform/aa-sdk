@@ -119,7 +119,7 @@ export const AlchemyAccountProvider = (
    * Reset the auth step to the initial state. This also clears the email auth query params from the URL.
    */
   const resetAuthStep = useCallback(() => {
-    setAuthStep({ type: AuthStepType.initial });
+    setAuthStep({ type: AuthStepType.Initial });
 
     clearSignupParam();
   }, []);
@@ -137,17 +137,17 @@ export const AlchemyAccountProvider = (
   const [authStep, setAuthStep] = useState<AuthStep>(() => {
     if (status === AlchemySignerStatus.AUTHENTICATING_EMAIL) {
       return {
-        type: AuthStepType.email_completing,
+        type: AuthStepType.EmailCompleting,
       };
     }
 
     return {
-      type: AuthStepType.initial,
+      type: AuthStepType.Initial,
     };
   });
 
   useEffect(() => {
-    if (authStep.type === AuthStepType.complete) {
+    if (authStep.type === AuthStepType.Complete) {
       clearSignupParam();
     }
   }, [authStep]);

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+### Features
+
+- add expo example ([#1204](https://github.com/alchemyplatform/aa-sdk/issues/1204)) ([bccb6e7](https://github.com/alchemyplatform/aa-sdk/commit/bccb6e7172fed90a24b5a875502cef3d0f660a8b))
+- add OTP authentication capabilities to RN Signer ([#1231](https://github.com/alchemyplatform/aa-sdk/issues/1231)) ([6ebfca5](https://github.com/alchemyplatform/aa-sdk/commit/6ebfca58a7ef617d0915661171038daa0b497068))
+- add otp example to bare rn app ([#1235](https://github.com/alchemyplatform/aa-sdk/issues/1235)) ([dbf4db9](https://github.com/alchemyplatform/aa-sdk/commit/dbf4db90b58220b184db388f43b2b2bded54d873))
+- **rn:** add iOS support ([#1210](https://github.com/alchemyplatform/aa-sdk/issues/1210)) ([2e3892c](https://github.com/alchemyplatform/aa-sdk/commit/2e3892cac57c517cb93d0349297feedd2ca07dfb))
+- **rn:** implement RN iOS stamper ([#1213](https://github.com/alchemyplatform/aa-sdk/issues/1213)) ([f9e3e91](https://github.com/alchemyplatform/aa-sdk/commit/f9e3e912700c35456ecdf97fa68bd1beb182f0bf))
+
 # [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
 
 ### Features
