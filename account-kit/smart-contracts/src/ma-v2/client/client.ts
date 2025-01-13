@@ -82,10 +82,13 @@ export function createSMAV2AccountClient<
  *
  * const transport = http(RPC_URL);
  *
+ * const policyId = "...";
+ *
  * const SMAV2SignerAccountClient = await createSMAV2AccountClient({
  *  chain,
  *  signer,
  *  transport,
+ *  policyId, // NOTE: you may only pass in a gas policy ID if you provide an Alchemy transport!
  * });
  * ```
  *
