@@ -140,7 +140,6 @@ export default function Home() {
             isEOAUser={isEOAUser}
             isSmartWallet={walletType === WalletTypes.smart}
           />
-          {user && !isEOAUser && <Debug7702Button />}
         </div>
       </div>
     </main>

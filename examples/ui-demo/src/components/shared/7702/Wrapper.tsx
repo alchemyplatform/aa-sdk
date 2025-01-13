@@ -3,6 +3,7 @@ import { MintCard7702 } from "./MintCard7702";
 import { TransactionsCard } from "./TransactionsCard";
 import { useMint } from "./useMint";
 import { useTransactions } from "./useTransaction";
+import { Debug7702Button } from "./Debug7702Button";
 
 export const Wrapper7702 = () => {
   const {
@@ -35,6 +36,7 @@ export const Wrapper7702 = () => {
         transactions={transactions}
         handleTransactions={handleTransactions}
       />
+      <Debug7702Button />
     </div>
   );
 };

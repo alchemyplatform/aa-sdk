@@ -6,6 +6,7 @@ site/.vitepress/cache/**/*
 
 /examples/*
 !/examples/ui-demo
+/examples/ui-demo/contracts
 /examples/ui-demo/.next/*
 
 **/.turbo/*

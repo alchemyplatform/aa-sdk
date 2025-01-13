@@ -1,20 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  req: Request,
-  { params }: { params: { routes: string[] } }
-) {
+export async function POST(req: NextRequest) {
   const body = await req.text();
-
+  const headers: Record<string, string> = {};
   req.headers.forEach((value, key) => {
     // don't pass the cookie because it doesn't get used downstream
     if (key === "cookie") return;
+
+    headers[key] = value;
   });
 
   const res = await fetch(
-    `https://rpc.mekong.ethpandaops.io/${params.routes.join("/")}`,
+    "http://internal-rundler-odyssey-prod-alb-567331340.us-east-1.elb.amazonaws.com:3000",
     {
       method: "POST",
+      headers: {
+        ...headers,
+      },
       body,
     }
   );
