@@ -12,6 +12,8 @@ import { AuthStepStatus, useAuthContext } from "../../context.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
+const AUTH_DELAY = 3000;
+
 export const LoadingOtp = () => {
   const { isConnected } = useSignerStatus();
   const { authStep } = useAuthContext("otp_verify");
@@ -22,16 +24,13 @@ export const LoadingOtp = () => {
   const resetOTP = (errorText = "") => {
     setOtpCode(initialOTPValue);
     setErrorText(errorText);
-
-    if (errorText) {
-      setTitleText(ls.loadingOtp.title);
-    }
+    setTitleText(ls.loadingOtp.title);
   };
   const { authenticate } = useAuthenticate({
     onError: (error: any) => {
       console.error(error);
 
-      setAuthStep({ ...authStep, error, status: null });
+      setAuthStep({ ...authStep, error, status: AuthStepStatus.base });
       resetOTP(getUserErrorMessage(error));
     },
     onSuccess: () => {
@@ -40,7 +39,7 @@ export const LoadingOtp = () => {
         setTitleText(ls.loadingOtp.verified);
         setTimeout(() => {
           setAuthStep({ type: "complete" });
-        }, 3000);
+        }, AUTH_DELAY);
       }
     },
   });

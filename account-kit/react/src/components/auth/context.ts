@@ -5,6 +5,7 @@ import { createContext, useContext } from "react";
 import type { AuthType } from "./types";
 
 export enum AuthStepStatus {
+  base = "base",
   success = "success",
   error = "error",
   verifying = "verifying",
@@ -16,7 +17,7 @@ export type AuthStep =
       type: "otp_verify";
       email: string;
       error?: Error;
-      status?: AuthStepStatus | null;
+      status?: AuthStepStatus;
     }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }

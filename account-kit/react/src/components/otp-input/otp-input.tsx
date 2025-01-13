@@ -145,12 +145,13 @@ export const OTPInput: React.FC<OTPInputProps> = ({
             className={`
               border w-8 h-10 rounded text-center 
               focus:outline-none focus:border-active 
-              ${!disabled && "bg-bg-surface-default text-fg-primary"}
-              ${!!errorText && "border-fg-critical"} 
-              ${isVerified && "border-fg-success"}
+              ${!disabled ? "bg-bg-surface-default text-fg-primary" : ""}
+              ${!!errorText ? "border-fg-critical" : ""} 
+              ${isVerified ? "border-fg-success" : ""}
               ${
-                disabled &&
-                "border-fg-disabled bg-bg-surface-inset text-fg-disabled"
+                disabled
+                  ? "border-fg-disabled bg-bg-surface-inset text-fg-disabled"
+                  : ""
               }
             `}
             ref={(el) => (refs.current[i] = el)}

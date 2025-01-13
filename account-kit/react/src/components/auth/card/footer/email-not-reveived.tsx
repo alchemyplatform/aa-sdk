@@ -51,9 +51,10 @@ export const EmailNotReceivedDisclaimer = ({
       <Button
         variant="link"
         className={`text-xs font-normal underline ${
-          isOTPVerifying ? "text-fg-disabled" : "text-btn-primary"
+          isOTPVerifying
+            ? "text-fg-disabled disabled:opacity-100"
+            : "text-btn-primary"
         }`}
-        style={isOTPVerifying ? { opacity: 1 } : {}}
         disabled={emailResent || isOTPVerifying}
         onClick={() => {
           authenticate({
