@@ -60,16 +60,12 @@ export const default7702UserOpSigner: ClientMiddlewareFn = async (
     r,
     s,
     v,
-    yParity = v,
+    yParity = v ? v - 27n : undefined,
   } = await signer.signAuthorization({
     chainId: client.chain.id,
     contractAddress: implAddress,
     nonce: accountNonce,
   });
-
-  if (!yParity) {
-    throw new Error("incomplete signature!");
-  }
 
   return {
     ...uo,

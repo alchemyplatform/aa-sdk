@@ -85,11 +85,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.4.3",
-    "viem": "^2.20.0",
+    "viem": "^2.22.6",
     "wagmi": "^2.12.7"
   },
   "resolutions": {
-    "viem": "2.20.0"
+    "viem": "2.22.6"
   },
   "publishConfig": {
     "access": "public",
