@@ -1,6 +1,7 @@
 import {
   createSmartAccountClient,
   smartAccountClientActions,
+  type NotType,
   type SmartAccountClient,
   type SmartAccountClientRpcSchema,
   type SmartAccountSigner,
@@ -104,10 +105,16 @@ export function createMultiOwnerModularAccountClient<
 >;
 
 export function createMultiOwnerModularAccountClient<
+  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateMultiOwnerModularAccountClientParams<Transport, TChain, TSigner>
+  args: CreateMultiOwnerModularAccountClientParams<
+    TTransport,
+    TChain,
+    TSigner
+  > &
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
@@ -207,10 +214,12 @@ export function createMultisigModularAccountClient<
 >;
 
 export function createMultisigModularAccountClient<
+  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateMultisigModularAccountClientParams<Transport, TChain, TSigner>
+  args: CreateMultisigModularAccountClientParams<TTransport, TChain, TSigner> &
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
