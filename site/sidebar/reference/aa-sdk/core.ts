@@ -233,6 +233,15 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
+        text: "EntityIdOverrideError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/EntityIdOverrideError/constructor",
+          },
+        ],
+      },
+      {
         text: "EntryPointNotFoundError",
         items: [
           {
@@ -287,11 +296,29 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
+        text: "InvalidEntityIdError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidEntityIdError/constructor",
+          },
+        ],
+      },
+      {
         text: "InvalidEntryPointError",
         items: [
           {
             text: "constructor",
             link: "/reference/aa-sdk/core/classes/InvalidEntryPointError/constructor",
+          },
+        ],
+      },
+      {
+        text: "InvalidNonceKeyError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidNonceKeyError/constructor",
           },
         ],
       },
@@ -501,7 +528,17 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
               },
               {
                 text: "Authenticating Users",
-                link: "/react-native/signer/authenticating-users",
+                items: [
+                  {
+                    text: "Authenticating Users via Magic Link",
+                    link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
+                  },
+                  {
+                    text: "Authenticating Users via One-Time Password (OTP)",
+                    link: "/react-native/signer/authenticating-users/authenticating-with-otp",
+                  },
+                ],
+                collapsed: true,
               },
             ],
           },

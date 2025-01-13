@@ -4,6 +4,7 @@
     "node_modules",
     "**/*/__tests__",
     "**/*/*.test.ts",
+    "**/*/*.test-d.ts",
     "**/*/*.e2e.test.ts",
     "vitest.config.ts",
     "vitest.config.e2e.ts",

@@ -1,18 +1,26 @@
 ---
-title: Authenticating Users with the React Native Signer
-description: Learn how to authenticate users with the React Native Signer
+title: Authenticating Users via Magic Link
+description: Learn how to authenticate users using an emailmagic link using the React Native Signer
 ---
 
-# Authenticating Users
+# Authenticating Users via Magic Link
 
 This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+
+:::info
+For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
+
+- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
+- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+
+:::
 
 ## Create a Signer Instance
 
 ```tsx
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
-const signer = new RNAlchemySigner({
+const signer = RNAlchemySigner({
   client: { connection: { apiKey: API_KEY } },
 });
 ```
@@ -21,17 +29,17 @@ const signer = new RNAlchemySigner({
 
 Next, you'll need to authenticate your user before you can use the Signer as an owner on the account
 
-:::info
-At the time of writing, the React Native Signer only supports Email at the moment.
-:::
-
 ### Send an Email Magic Link to a User
 
 To send an email magic link to a user, you can use the `signer.authenticate()` method.
 
 ```tsx
 signer
-  .authenticate({ email: "user@example.com", type: "email" })
+  .authenticate({
+    email: "user@example.com",
+    type: "email",
+    emailMode: "magicLink",
+  })
   .catch((error) => {
     console.error(error);
   });
@@ -53,7 +61,7 @@ import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const API_KEY = "your-api-key";
 
-const signer = new RNAlchemySigner({
+const signer = RNAlchemySigner({
   client: { connection: { apiKey: API_KEY } },
 });
 

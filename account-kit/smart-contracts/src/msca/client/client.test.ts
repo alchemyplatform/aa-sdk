@@ -165,21 +165,63 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     `);
   }, 100000);
 
+  it("should get the implementation address correctly", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer1,
+      owners,
+      usePaymaster: true,
+      salt: 1n, // different salt to avoid shared state with the other tests
+    });
+
+    const implementationAddressPreDeploy =
+      await provider.account.getImplementationAddress();
+
+    expect(implementationAddressPreDeploy).toEqual(
+      "0x0000000000000000000000000000000000000000"
+    );
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("1"),
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    const txnHash = provider.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+
+    const implementationAddressPostDeploy =
+      await provider.account.getImplementationAddress();
+
+    expect(implementationAddressPostDeploy).toEqual(
+      "0x0046000000000151008789797b54fdb500e2a61e"
+    );
+  }, 200000);
+
   const givenConnectedProvider = ({
     signer,
     accountAddress,
     owners,
     usePaymaster = false,
+    salt = 0n,
   }: {
     signer: SmartAccountSigner;
     owners: Address[];
     usePaymaster?: boolean;
     accountAddress?: Address;
+    salt?: bigint;
   }) =>
     createMultiOwnerModularAccountClient({
       signer,
       accountAddress,
       owners,
+      salt,
       transport: custom(instance.getClient()),
       chain: instance.chain,
       ...(usePaymaster ? erc7677Middleware() : {}),

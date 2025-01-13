@@ -13,6 +13,7 @@ import {
 import { Alchemy, Network } from "alchemy-sdk";
 import { avalanche, type Chain } from "viem/chains";
 import { createLightAccountAlchemyClient } from "./alchemyClient.js";
+import { createLightAccountClient } from "./client.js";
 
 describe("Light Account Client Tests", () => {
   const dummyMnemonic =
@@ -136,7 +137,7 @@ describe("Light Account Client Tests", () => {
     signer: SmartAccountSigner;
     chain: Chain;
   }) =>
-    createLightAccountAlchemyClient({
+    createLightAccountClient({
       transport: alchemy({
         jwt: "test",
       }),
