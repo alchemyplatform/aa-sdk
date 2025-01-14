@@ -1,12 +1,10 @@
 import type { HttpTransport, SmartAccountSigner } from "@aa-sdk/core";
 import {
-  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
 import {
-  createMultiOwnerLightAccount,
-  multiOwnerLightAccountClientActions,
+  createMultiOwnerLightAccountClient,
   type CreateMultiOwnerLightAccountParams,
   type MultiOwnerLightAccount,
   type MultiOwnerLightAccountClientActions,
@@ -55,6 +53,7 @@ export async function createMultiOwnerLightAccountAlchemyClient<
  * });
  * ```
  *
+ * @deprecated Use createMultiOwnerLightAccountAlchemyClient instead now, it should switch depending on the transport
  * @param {AlchemyMultiOwnerLightAccountClientConfig} config The configuration for creating the Alchemy client
  * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` object containing the created account information and methods
  */
@@ -64,17 +63,10 @@ export async function createMultiOwnerLightAccountAlchemyClient({
   chain,
   ...config
 }: AlchemyMultiOwnerLightAccountClientConfig): Promise<AlchemySmartAccountClient> {
-  const account = await createMultiOwnerLightAccount({
-    ...config,
-    transport,
-    chain,
-  });
-
-  return createAlchemySmartAccountClient({
-    ...config,
-    transport,
-    chain,
-    account,
+  return createMultiOwnerLightAccountClient({
     opts,
-  }).extend(multiOwnerLightAccountClientActions);
+    transport,
+    chain,
+    ...config,
+  });
 }

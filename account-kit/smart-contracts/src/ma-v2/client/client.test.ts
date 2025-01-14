@@ -1,3 +1,5 @@
+import * as AAInfraModule from "@account-kit/infra";
+import * as AACoreModule from "@aa-sdk/core";
 import {
   erc7677Middleware,
   LocalAccountSigner,
@@ -32,10 +34,12 @@ import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
+
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions>;
 
@@ -214,7 +218,7 @@ describe("MA v2 Tests", async () => {
         },
         contents: "Hello, Bob!",
       },
-    };
+    } as const;
 
     const hashedMessageTypedData = hashTypedData(typedData);
     let signature = await provider.signTypedData({ typedData });
@@ -860,4 +864,42 @@ describe("MA v2 Tests", async () => {
       transport: custom(instance.getClient()),
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
+
+  it("alchemy client calls the createAlchmeySmartAccountClient", async () => {
+    const alchemyClientSpy = vi
+      .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
+      .mockImplementation(() => "fakedAlchemy" as any);
+    const notAlcmeyClientSpy = vi
+      .spyOn(AACoreModule, "createSmartAccountClient")
+      .mockImplementation(() => "faked" as any);
+    expect(
+      await createSMAV2AccountClient({
+        chain: arbitrumSepolia,
+        signer,
+        transport: alchemy({ jwt: "AN_API_KEY" }),
+        accountAddress: "0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84",
+      })
+    ).toMatch("fakedAlchemy");
+
+    expect(alchemyClientSpy).toHaveBeenCalled();
+    expect(notAlcmeyClientSpy).not.toHaveBeenCalled();
+  });
+  it("custom client calls the createAlchmeySmartAccountClient", async () => {
+    const alchemyClientSpy = vi
+      .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
+      .mockImplementation(() => "fakedAlchemy" as any);
+    const notAlcmeyClientSpy = vi
+      .spyOn(AACoreModule, "createSmartAccountClient")
+      .mockImplementation(() => "faked" as any);
+    expect(
+      await createSMAV2AccountClient({
+        chain: instance.chain,
+        signer,
+        transport: custom(instance.getClient()),
+      })
+    ).toMatch("faked");
+
+    expect(alchemyClientSpy).not.toHaveBeenCalled();
+    expect(notAlcmeyClientSpy).toHaveBeenCalled();
+  });
 });

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+### Features
+
+- add better error handling to prevent crashes when creating sharedPreferences ([#1267](https://github.com/alchemyplatform/aa-sdk/issues/1267)) ([2d5dae9](https://github.com/alchemyplatform/aa-sdk/commit/2d5dae9545b13d21c3d5d432509f95e3cc275317))
+
 # [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
 
 ### Features

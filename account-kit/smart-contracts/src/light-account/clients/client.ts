@@ -1,5 +1,6 @@
 import {
   createSmartAccountClient,
+  type NotType,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountClientConfig,
@@ -11,19 +12,18 @@ import {
   createLightAccount,
   type CreateLightAccountParams,
   type LightAccount,
-} from "../accounts/account.js";
+} from "@account-kit/smart-contracts";
 import {
   lightAccountClientActions,
   type LightAccountClientActions,
 } from "../decorators/lightAccount.js";
 import {
+  isAlchemyTransport,
+  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemyTransport,
 } from "@account-kit/infra";
-import {
-  createLightAccountAlchemyClient,
-  type AlchemyLightAccountClientConfig,
-} from "./alchemyClient.js";
+import { type AlchemyLightAccountClientConfig } from "./alchemyClient.js";
 
 export type CreateLightAccountClientParams<
   TTransport extends Transport | AlchemyTransport = Transport,
@@ -56,7 +56,8 @@ export function createLightAccountClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TTransport extends Transport = Transport
 >(
-  args: CreateLightAccountClientParams<TTransport, TChain, TSigner>
+  args: CreateLightAccountClientParams<TTransport, TChain, TSigner> &
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
@@ -85,6 +86,19 @@ export function createLightAccountClient<
  *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
  * ```
+ * @example
+ * ```ts
+ * import { createLightAccountClient } from "@account-kit/smart-contracts";
+ * import { sepolia, alchemy } from "@account-kit/infra";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { generatePrivateKey } from "viem"
+ *
+ * const lightAlchemyAccountClient = await createLightAccountClient({
+ *  transport: alchemy({ apiKey: "your-api-key" }),
+ *  chain: sepolia,
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+ * });
+ * ```
  *
  * @param {CreateLightAccountClientParams} params The parameters for creating a light account client
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` object containing the created account information and methods
@@ -94,18 +108,19 @@ export async function createLightAccountClient(
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = params;
 
-  if (isAlchemyTransport(transport, chain)) {
-    return await createLightAccountAlchemyClient({
-      ...params,
-      transport,
-    });
-  }
-
   const lightAccount = await createLightAccount({
     ...params,
     transport,
     chain,
   });
+  if (isAlchemyTransport(transport, chain)) {
+    return createAlchemySmartAccountClient({
+      ...params,
+      transport,
+      chain,
+      account: lightAccount,
+    }).extend(lightAccountClientActions);
+  }
 
   return createSmartAccountClient({
     ...params,
@@ -113,11 +128,4 @@ export async function createLightAccountClient(
     chain: chain,
     account: lightAccount,
   }).extend(lightAccountClientActions);
-}
-
-function isAlchemyTransport(
-  transport: Transport,
-  chain: Chain
-): transport is AlchemyTransport {
-  return transport({ chain }).config.type === "alchemy";
 }

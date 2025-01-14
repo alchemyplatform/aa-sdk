@@ -24,6 +24,11 @@ export type Deferrable<T> = {
 };
 
 /**
+ * Used to ensure type doesn't extend another, for use in & chaining of properties
+ */
+export type NotType<A, B> = A extends B ? never : unknown;
+
+/**
  * Await all of the properties of a Deferrable object
  *
  * @param {Deferrable<T>} object - a Deferrable object
