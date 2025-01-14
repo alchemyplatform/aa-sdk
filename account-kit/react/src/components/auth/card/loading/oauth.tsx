@@ -5,11 +5,11 @@ import {
   ContinueWithOAuth,
   OAuthConnectionFailed,
 } from "../../../../icons/oauth.js";
-import { capitalize } from "../../../../utils.js";
 import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 import { ls } from "../../../../strings.js";
+import { getSocialProviderDisplayName } from "../../types.js";
 
 export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
@@ -28,9 +28,9 @@ export const CompletingOAuth = () => {
   if (authStep.error && !oauthWasCancelled) {
     return (
       <ConnectionError
-        headerText={`${ls.error.connection.oauthTitle} ${capitalize(
-          authStep.config.authProviderId
-        )}`}
+        headerText={`${
+          ls.error.connection.oauthTitle
+        } ${getSocialProviderDisplayName(authStep.config)}`}
         bodyText={ls.error.connection.oauthBody}
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
@@ -45,19 +45,16 @@ export const CompletingOAuth = () => {
     );
   }
 
+  const providerDisplayName = getSocialProviderDisplayName(authStep.config);
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">
         <ContinueWithOAuth provider={authStep.config.authProviderId} />
       </div>
 
-      <h3 className="font-semibold text-lg">{`Continue with ${capitalize(
-        authStep.config.authProviderId
-      )}`}</h3>
+      <h3 className="font-semibold text-lg">{`Continue with ${providerDisplayName}`}</h3>
       <p className="text-fg-secondary text-center text-sm">
-        {`Follow the steps in the pop up window to sign in with ${capitalize(
-          authStep.config.authProviderId
-        )}`}
+        {`Follow the steps in the pop up window to sign in with ${providerDisplayName}`}
       </p>
     </div>
   );

@@ -13,7 +13,10 @@ export type Config = {
     showPasskey: boolean;
     addPasskey: boolean;
     showOAuth: boolean;
-    oAuthMethods: Record<KnownAuthProvider | "auth0" | "discord", boolean>;
+    oAuthMethods: Record<
+      KnownAuthProvider | "auth0" | "twitter" | "discord",
+      boolean
+    >;
   };
   ui: {
     theme: "light" | "dark";
@@ -52,6 +55,7 @@ export const DEFAULT_CONFIG: Config = {
       auth0: false,
       apple: false,
       discord: true,
+      twitter: true,
       // TO DO: extend for BYO auth provider
     },
   },
