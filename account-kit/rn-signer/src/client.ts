@@ -185,6 +185,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
           } else if (error) {
             reject(new OauthFailedError(error));
           }
+        } else {
+          throw new Error(
+            "Couldn't perfom authentication operation. Browser not available."
+          );
         }
       });
     } catch (e) {
