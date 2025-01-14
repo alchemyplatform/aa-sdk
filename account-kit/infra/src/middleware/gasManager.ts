@@ -6,13 +6,13 @@ import { erc7677Middleware } from "@aa-sdk/core";
  *
  * @example
  *  ```ts
- * import { sepolia, alchemyErc7677Middleware } from "@account-kit/infra";
+ * import { sepolia, alchemyGasManagerMiddleware } from "@account-kit/infra";
  * import { http } from "viem";
  *
  * const client = createSmartAccountClient({
  *  transport: http("rpc-url"),
  *  chain: sepolia,
- *  ...alchemyErc7677Middleware("policyId")
+ *  ...alchemyGasManagerMiddleware("policyId")
  * });
  * ```
  *
