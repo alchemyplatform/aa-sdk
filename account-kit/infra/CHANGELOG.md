@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+### Features
+
+- **client:** multi account light and alchemy consolidation ([#1264](https://github.com/alchemyplatform/aa-sdk/issues/1264)) ([18a9228](https://github.com/alchemyplatform/aa-sdk/commit/18a922830f5cfcfbed4bf12d064bdf4699e29c6c))
+
 # [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
 
 ### Features

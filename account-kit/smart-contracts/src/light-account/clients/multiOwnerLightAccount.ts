@@ -1,5 +1,6 @@
 import {
   createSmartAccountClient,
+  type NotType,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountClientConfig,
@@ -66,10 +67,12 @@ export async function createMultiOwnerLightAccountClient<
 >;
 
 export function createMultiOwnerLightAccountClient<
+  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateMultiOwnerLightAccountClientParams<Transport, TChain, TSigner>
+  args: CreateMultiOwnerLightAccountClientParams<TTransport, TChain, TSigner> &
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
