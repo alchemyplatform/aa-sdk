@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/extensions
+/* eslint-disable import/extensions */
 export { RNAlchemySigner } from "./signer";
+export type { RNAlchemySignerType } from "./signer";

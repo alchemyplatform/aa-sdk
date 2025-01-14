@@ -95,7 +95,8 @@
     "react-native-config": "1.5.3",
     "react-native-gesture-handler": "2.21.2",
     "react-native-mmkv": "^3.1.0",
-    "react-native-inappbrowser-reborn": "^3.7.0"
+    "react-native-inappbrowser-reborn": "^3.7.0",
+    "react-native-webview": "^13.13.1"
   },
   "jest": {
     "preset": "react-native",

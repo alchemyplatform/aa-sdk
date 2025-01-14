@@ -9,13 +9,10 @@ import { RNAlchemySigner } from "@account-kit/react-native-signer";
 const signer = RNAlchemySigner({
   client: {
     connection: { apiKey: Config.API_KEY! },
-    appScheme: "rn-signer-demo",
   },
 });
 
-console.log("API KEY: ", Config.API_KEY);
-
-export default function OTPAuthScreen() {
+export default function OAuthScreen() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {

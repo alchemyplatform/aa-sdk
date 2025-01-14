@@ -42,7 +42,6 @@ export const RNSignerClientParamsSchema = z.object({
     .string()
     .optional()
     .default("https://signer.alchemy.com/callback"),
-  appScheme: z.string().optional(),
 });
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
@@ -51,11 +50,9 @@ export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
-  appScheme: string;
-  private appDeeplink: string;
 
   constructor(params: RNSignerClientParams) {
-    const { connection, rootOrgId, oauthCallbackUrl, appScheme } =
+    const { connection, rootOrgId, oauthCallbackUrl } =
       RNSignerClientParamsSchema.parse(params);
 
     super({
@@ -63,10 +60,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       rootOrgId: rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830",
       connection,
     });
-
-    this.appScheme = appScheme ?? "";
-
-    this.appDeeplink = `${this.appScheme}://`;
 
     this.oauthCallbackUrl = oauthCallbackUrl;
   }
@@ -155,9 +148,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   ): Promise<never> => {
     try {
       const providerUrl = await this.getOauthProviderUrl(_args);
+      const redirectUrl = _args.redirectUrl;
 
       if (await InAppBrowser.isAvailable()) {
-        const res = await InAppBrowser.openAuth(providerUrl, this.appDeeplink);
+        const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
 
         Alert.alert(JSON.stringify(res));
       }
@@ -169,24 +163,11 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       throw new Error("Error performing OAuth Operation");
     }
   };
-  override oauthWithPopup = async (
+  override oauthWithPopup(
     _args: Extract<OauthParams, { mode: "popup" }>
-  ): Promise<User> => {
-    try {
-      const providerUrl = await this.getOauthProviderUrl(_args);
-
-      if (await InAppBrowser.isAvailable()) {
-        const res = await InAppBrowser.openAuth(providerUrl, this.appDeeplink);
-
-        Alert.alert(JSON.stringify(res));
-      }
-
-      return {} as User;
-    } catch (e) {
-      console.error("Error performing OAuth Operation", e);
-      throw new Error("Error performing OAuth Operation");
-    }
-  };
+  ): Promise<User> {
+    throw new Error("Method not implemented");
+  }
 
   override async disconnect(): Promise<void> {
     this.user = undefined;
@@ -207,7 +188,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     throw new Error("Method not implemented.");
   }
 
-  private getOauthProviderUrl = async (args: OauthParams): Promise<string> => {
+  public getOauthProviderUrl = async (args: OauthParams): Promise<string> => {
     const {
       authProviderId,
       isCustomProvider,
@@ -219,7 +200,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       mode,
     } = args;
 
-    const res = await this.getOauthConfigForMode("popup");
+    const res = await this.getOauthConfigForMode(mode);
 
     const { codeChallenge, requestKey, authProviders } = res;
 
@@ -268,8 +249,8 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       requestKey,
       turnkeyPublicKey,
       expirationSeconds,
-      redirectUrl: mode === "redirect" ? redirectUrl : undefined, // We only use the 'Popup' mode in RN
-      openerOrigin: mode === "popup" ? this.appDeeplink : undefined,
+      redirectUrl: mode === "redirect" ? redirectUrl : undefined, // We only use the 'Redirect' mode in RN
+      openerOrigin: undefined,
     };
 
     const state = base64UrlEncode(
