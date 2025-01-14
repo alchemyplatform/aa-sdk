@@ -2,7 +2,11 @@ import { zeroAddress, type PublicClient } from "viem";
 
 import { type SmartAccountSigner, type BundlerClient } from "@aa-sdk/core";
 
-import { alchemyFeeEstimator, type AlchemyTransport } from "@account-kit/infra";
+import {
+  alchemyFeeEstimator,
+  alchemyGasManagerMiddleware,
+  type AlchemyTransport,
+} from "@account-kit/infra";
 
 import { createSMA7702AccountClient } from "@account-kit/smart-contracts/experimental";
 
@@ -23,6 +27,9 @@ export const send7702UO = async (
     transport,
     signer,
     feeEstimator: alchemyFeeEstimator(transport),
+    ...alchemyGasManagerMiddleware(
+      process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID!
+    ),
   });
 
   const uoHash = await accountClient.sendUserOperation({
@@ -31,20 +38,9 @@ export const send7702UO = async (
       data: "0x",
       value: BigInt(0),
     },
-    overrides: {
-      maxFeePerGas: {
-        multiplier: 1.5,
-      },
-      maxPriorityFeePerGas: {
-        multiplier: 1.5,
-      },
-    },
   });
 
   const txnHash = await accountClient.waitForUserOperationTransaction(uoHash);
-  // const txnHash = await accountClient.waitForUserOperationTransaction({
-  //   hash: "0xc0752298b3d149e973974d14c4598d354e71e822db7600de28efb637ab03325c",
-  // });
 
   console.log("txnHash: ", txnHash);
 };

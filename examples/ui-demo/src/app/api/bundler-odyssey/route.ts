@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { env } from "../../../../env.mjs";
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const headers: Record<string, string> = {};
@@ -10,16 +12,13 @@ export async function POST(req: NextRequest) {
     headers[key] = value;
   });
 
-  const res = await fetch(
-    "http://internal-rundler-odyssey-prod-alb-567331340.us-east-1.elb.amazonaws.com:3000",
-    {
-      method: "POST",
-      headers: {
-        ...headers,
-      },
-      body,
-    }
-  );
+  const res = await fetch(env.ALCHEMY_RPC_URL_ODYSSEY, {
+    method: "POST",
+    headers: {
+      ...headers,
+    },
+    body,
+  });
 
   if (!res.ok) {
     return NextResponse.json(await res.json().catch((e) => ({})), {

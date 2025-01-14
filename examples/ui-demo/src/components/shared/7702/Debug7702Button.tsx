@@ -4,7 +4,7 @@ import { Button } from "../Button";
 // import {
 //     useSmartAccountClient,
 //   } from "@account-kit/react";
-import { privateKeyToAccount } from "viem/accounts";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { createPublicClient, toRlp, fromRlp } from "viem";
 import {
   createBundlerClientFromExisting,
@@ -55,9 +55,7 @@ export const Debug7702Button = () => {
     if (local) {
       // Addr: 0xdF0C33fe84BEBdcbd1029E95295AC4D2A7Ca0f7a
       // pkey: 0x18bec901c0253fbb203d3423dada59eb720c68f34935185de43d161b0524404b
-      const localAccount = privateKeyToAccount(
-        "0x18bec901c0253fbb203d3423dada59eb720c68f34935185de43d161b0524404b"
-      );
+      const localAccount = privateKeyToAccount(generatePrivateKey());
 
       send7702UO(
         bundlerClient,
