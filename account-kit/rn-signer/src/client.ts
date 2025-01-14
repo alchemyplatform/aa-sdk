@@ -18,7 +18,7 @@ import {
   type User,
 } from "@account-kit/signer";
 import NativeTEKStamper from "./NativeTEKStamper";
-import { OAuthProvidersError } from "./errors";
+import { OAuthProvidersError } from "@account-kit/signer";
 import { z } from "zod";
 import { getDefaultScopeAndClaims, getOauthNonce } from "./oauth";
 import { base64UrlEncode } from "./utils/base64UrlEncode";
