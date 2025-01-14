@@ -20,12 +20,14 @@ export type AuthType =
           authProviderId: "auth0";
           isCustomProvider?: false;
           auth0Connection?: string;
+          displayName: string;
           logoUrl: string;
         }
       | {
           authProviderId: KnownAuthProvider;
           isCustomProvider?: false;
           auth0Connection?: never;
+          displayName?: never;
           logoUrl?: never;
         }
     ) &

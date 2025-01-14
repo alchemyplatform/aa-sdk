@@ -35,7 +35,11 @@ export const CompletingOAuth = () => {
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
         icon={
-          <OAuthConnectionFailed provider={authStep.config.authProviderId} />
+          <OAuthConnectionFailed
+            provider={authStep.config.authProviderId}
+            auth0Connection={authStep.config.auth0Connection}
+            logoUrl={authStep.config.logoUrl}
+          />
         }
       />
     );

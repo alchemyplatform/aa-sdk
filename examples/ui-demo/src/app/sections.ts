@@ -23,7 +23,17 @@ export function getSectionsForConfig(
   }
   if (showOAuth) {
     for (const [method, enabled] of Object.entries(oAuthMethods)) {
-      if (enabled) {
+      if (enabled && method === "discord") {
+        midSection.push({
+          type: "social",
+          authProviderId: "auth0",
+          mode: "popup",
+          auth0Connection: "discord",
+          displayName: "Discord",
+          logoUrl: "/images/discord.svg",
+          scope: "openid profile",
+        });
+      } else if (enabled) {
         midSection.push({
           type: "social",
           authProviderId: method as KnownAuthProvider, // TODO: extend for BYO auth provider

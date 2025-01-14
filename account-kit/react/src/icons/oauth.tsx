@@ -1,6 +1,6 @@
 import type { KnownAuthProvider } from "@account-kit/signer";
 import { Spinner } from "./spinner.js";
-import { GoogleIcon, FacebookIcon, DiscordIcon } from "./auth-icons/index.js";
+import { GoogleIcon, FacebookIcon } from "./auth-icons/index.js";
 
 interface ContinueWithOAuthProps {
   provider: KnownAuthProvider;
@@ -8,6 +8,8 @@ interface ContinueWithOAuthProps {
 
 interface OAuthConnectionFailedWithProps {
   provider: KnownAuthProvider;
+  logoUrl?: string;
+  auth0Connection?: string;
 }
 
 // TO DO: extend for BYO auth provider
@@ -16,8 +18,7 @@ export function ContinueWithOAuth({ provider }: ContinueWithOAuthProps) {
     <div className="relative flex flex-col items-center justify-center h-12 w-12">
       <Spinner className="absolute top-0 left-0 right-0 bottom-0" />
       {(provider === "google" && <GoogleIcon />) ||
-        (provider === "facebook" && <FacebookIcon />) ||
-        (provider === "discord" && <DiscordIcon />)}
+        (provider === "facebook" && <FacebookIcon />)}
     </div>
   );
 }
@@ -25,6 +26,8 @@ export function ContinueWithOAuth({ provider }: ContinueWithOAuthProps) {
 // TO DO: extend for BYO auth provider
 export function OAuthConnectionFailed({
   provider,
+  logoUrl,
+  auth0Connection,
 }: OAuthConnectionFailedWithProps) {
   return (
     <div className="relative flex flex-col items-center justify-center h-12 w-12">
@@ -48,7 +51,9 @@ export function OAuthConnectionFailed({
       </div>
       {(provider === "google" && <GoogleIcon />) ||
         (provider === "facebook" && <FacebookIcon />) ||
-        (provider === "discord" && <DiscordIcon />)}
+        (provider === "auth0" && logoUrl && (
+          <img src={logoUrl} alt={auth0Connection} />
+        ))}
     </div>
   );
 }

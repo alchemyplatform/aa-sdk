@@ -13,7 +13,7 @@ export type Config = {
     showPasskey: boolean;
     addPasskey: boolean;
     showOAuth: boolean;
-    oAuthMethods: Record<KnownAuthProvider | "auth0", boolean>;
+    oAuthMethods: Record<KnownAuthProvider | "auth0" | "discord", boolean>;
   };
   ui: {
     theme: "light" | "dark";
@@ -92,7 +92,6 @@ export const alchemyConfig = () =>
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },
             { type: "social", authProviderId: "facebook", mode: "popup" },
-            { type: "social", authProviderId: "discord", mode: "popup" },
           ],
         ],
         addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
