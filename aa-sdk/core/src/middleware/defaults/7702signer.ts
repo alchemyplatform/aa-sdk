@@ -43,18 +43,16 @@ export const default7702UserOpSigner: ClientMiddlewareFn = async (
   // even if the account is not deployed
 
   const implAddress = await account.getImplementationAddress();
-  if (code === "0xef0100" + implAddress.slice(2)) {
-    console.log("account is already 7702 delegated to a smart account");
+
+  const expectedCode = "0xef0100" + implAddress.slice(2);
+
+  if (code.toLowerCase() === expectedCode.toLowerCase()) {
     return uo;
   }
-
-  console.log("signing 7702 authorization");
 
   const accountNonce = await params.client.getTransactionCount({
     address: account.address,
   });
-
-  console.log("account nonce: ", accountNonce);
 
   const {
     r,
