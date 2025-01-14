@@ -139,7 +139,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract oauthWithRedirect(
     args: Extract<OauthParams, { mode: "redirect" }>
-  ): Promise<never>;
+  ): Promise<User | never>;
 
   public abstract oauthWithPopup(
     args: Extract<OauthParams, { mode: "popup" }>

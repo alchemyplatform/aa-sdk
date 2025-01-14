@@ -33,7 +33,11 @@ export default function OAuthScreen() {
                   type: "oauth",
                   mode: "redirect",
                   authProviderId: "google",
-                  redirectUrl: "rn-signer-demo:///",
+                  redirectUrl: "rn-signer-demo://oauth",
+                })
+                .then((user) => {
+                  // Get user details after a successful authentication
+                  setUser(user);
                 })
                 .catch(console.error);
             }}

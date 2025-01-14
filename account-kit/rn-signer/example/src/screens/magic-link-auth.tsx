@@ -16,7 +16,6 @@ export default function MagicLinkAuthScreen() {
   const signer = RNAlchemySigner({
     client: {
       connection: { apiKey: Config.API_KEY! },
-      appScheme: "rn-signer-demo",
     },
   });
 

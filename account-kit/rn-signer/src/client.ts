@@ -4,6 +4,7 @@ import "./utils/buffer-polyfill";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
+  OauthFailedError,
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
@@ -11,7 +12,6 @@ import {
   type GetWebAuthnAttestationResult,
   type KnownAuthProvider,
   type OauthConfig,
-  type OauthMode,
   type OauthParams,
   type OtpParams,
   type SignupResponse,
@@ -23,7 +23,7 @@ import { z } from "zod";
 import { getDefaultScopeAndClaims, getOauthNonce } from "./oauth";
 import { base64UrlEncode } from "./utils/base64UrlEncode";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
-import { Alert } from "react-native";
+import { parseSearchParams } from "./utils/parseUrlParams";
 
 type OauthState = {
   authProviderId: string;
@@ -50,6 +50,11 @@ export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
+  private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
+    "email",
+    "otp",
+    "oauth",
+  ];
 
   constructor(params: RNSignerClientParams) {
     const { connection, rootOrgId, oauthCallbackUrl } =
@@ -122,10 +127,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
   }): Promise<User> {
-    if (
-      params.authenticatingType !== "email" &&
-      params.authenticatingType !== "otp"
-    ) {
+    if (!this.validAuthenticatingTypes.includes(params.authenticatingType)) {
       throw new Error("Unsupported authenticating type");
     }
 
@@ -145,19 +147,46 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
   override oauthWithRedirect = async (
     _args: Extract<OauthParams, { mode: "redirect" }>
-  ): Promise<never> => {
+  ): Promise<User> => {
     try {
       const providerUrl = await this.getOauthProviderUrl(_args);
       const redirectUrl = _args.redirectUrl;
 
-      if (await InAppBrowser.isAvailable()) {
-        const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
+      return new Promise(async (resolve, reject) => {
+        if (await InAppBrowser.isAvailable()) {
+          const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
 
-        Alert.alert(JSON.stringify(res));
-      }
-      return new Promise((_, reject) =>
-        setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000)
-      );
+          if (res.type !== "success" || !res.url) {
+            return reject(
+              new OauthFailedError("An error occured completing your request")
+            );
+          }
+
+          const authResult = parseSearchParams(res.url);
+          const bundle = authResult["alchemy-bundle"] ?? "";
+          const orgId = authResult["alchemy-org-id"] ?? "";
+          const idToken = authResult["alchemy-id-token"] ?? "";
+          const isSignup = authResult["alchemy-is-signup"];
+          const error = authResult["alchemy-error"];
+
+          if (bundle && orgId && idToken) {
+            this.completeAuthWithBundle({
+              bundle,
+              orgId,
+              connectedEventName: "connectedOauth",
+              idToken,
+              authenticatingType: "oauth",
+            }).then((user) => {
+              if (isSignup) {
+                this.eventEmitter.emit("newUserSignup");
+              }
+              resolve(user);
+            }, reject);
+          } else if (error) {
+            reject(new OauthFailedError(error));
+          }
+        }
+      });
     } catch (e) {
       console.error("Error performing OAuth Operation", e);
       throw new Error("Error performing OAuth Operation");
@@ -200,7 +229,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       mode,
     } = args;
 
-    const res = await this.getOauthConfigForMode(mode);
+    const res = await this.getOauthConfig();
 
     const { codeChallenge, requestKey, authProviders } = res;
 
@@ -294,20 +323,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.setStamper(currentStamper);
     const nonce = getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
-  };
-
-  private getOauthConfigForMode = async (
-    mode: OauthMode
-  ): Promise<OauthConfig> => {
-    if (this.oauthConfig) {
-      return this.oauthConfig;
-    } else if (mode === "redirect") {
-      return this.initOauth();
-    } else {
-      throw new Error(
-        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"
-      );
-    }
   };
 }
 
