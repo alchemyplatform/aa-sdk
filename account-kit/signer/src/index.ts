@@ -15,3 +15,4 @@ export { AlchemyWebSigner } from "./signer.js";
 export type * from "./types.js";
 export { AlchemySignerStatus } from "./types.js";
 export { OAuthProvidersError, NotAuthenticatedError } from "./errors.js";
+export { getOauthNonce, getDefaultScopeAndClaims } from "./oauth.js";

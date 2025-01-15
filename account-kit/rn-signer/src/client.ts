@@ -18,9 +18,12 @@ import {
   type User,
 } from "@account-kit/signer";
 import NativeTEKStamper from "./NativeTEKStamper";
-import { OAuthProvidersError } from "@account-kit/signer";
+import {
+  OAuthProvidersError,
+  getOauthNonce,
+  getDefaultScopeAndClaims,
+} from "@account-kit/signer";
 import { z } from "zod";
-import { getDefaultScopeAndClaims, getOauthNonce } from "./oauth";
 import { base64UrlEncode } from "./utils/base64UrlEncode";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { parseSearchParams } from "./utils/parseUrlParams";
