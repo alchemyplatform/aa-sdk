@@ -9,14 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import Config from "react-native-config";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-
-const signer = RNAlchemySigner({
-  client: {
-    connection: { apiKey: Config.API_KEY! },
-  },
-});
+import signer from "../signer";
 
 export default function OTPAuthScreen() {
   const [email, setEmail] = useState<string>("");

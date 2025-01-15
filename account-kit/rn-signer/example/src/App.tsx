@@ -37,6 +37,7 @@ const RootStack = createBottomTabNavigator({
       linking: { path: "oauth" },
       options: {
         tabBarLabel: "Oauth",
+        tabBarIcon: () => <Text>🔐</Text>,
       },
     },
   },

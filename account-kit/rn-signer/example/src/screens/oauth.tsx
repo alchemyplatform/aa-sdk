@@ -3,14 +3,7 @@ import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import Config from "react-native-config";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-
-const signer = RNAlchemySigner({
-  client: {
-    connection: { apiKey: Config.API_KEY! },
-  },
-});
+import signer from "../signer";
 
 export default function OAuthScreen() {
   const [user, setUser] = useState<User | null>(null);

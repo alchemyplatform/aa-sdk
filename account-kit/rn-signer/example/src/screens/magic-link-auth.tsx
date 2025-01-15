@@ -1,7 +1,6 @@
 /* eslint-disable import/extensions */
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Linking,
   StyleSheet,
@@ -10,15 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Config from "react-native-config";
+
+import signer from "../signer";
 
 export default function MagicLinkAuthScreen() {
-  const signer = RNAlchemySigner({
-    client: {
-      connection: { apiKey: Config.API_KEY! },
-    },
-  });
-
   const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
 
@@ -32,7 +26,7 @@ export default function MagicLinkAuthScreen() {
       .catch(console.error);
   };
 
-  const handleIncomingURL = (event: { url: string }) => {
+  const handleIncomingURL = useCallback((event: { url: string }) => {
     const regex = /[?&]([^=#]+)=([^&#]*)/g;
 
     let params: Record<string, string> = {};
@@ -51,7 +45,7 @@ export default function MagicLinkAuthScreen() {
     handleUserAuth({
       bundle: params.bundle ?? "",
     });
-  };
+  }, []);
 
   useEffect(() => {
     // get the user if already logged in
@@ -63,7 +57,7 @@ export default function MagicLinkAuthScreen() {
     const subscription = Linking.addEventListener("url", handleIncomingURL);
 
     return () => subscription.remove();
-  }, []);
+  }, [handleIncomingURL]);
 
   return (
     <View style={styles.container}>
