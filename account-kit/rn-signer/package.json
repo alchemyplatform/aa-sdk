@@ -79,8 +79,8 @@
     "react": "18.3.1",
     "react-native": "0.76.5",
     "react-native-builder-bob": "^0.30.3",
-    "react-native-mmkv": "^3.1.0",
     "react-native-inappbrowser-reborn": "^3.7.0",
+    "react-native-mmkv": "^3.1.0",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2",
@@ -94,9 +94,8 @@
     "react-native": "*",
     "react-native-config": "1.5.3",
     "react-native-gesture-handler": "2.21.2",
-    "react-native-mmkv": "^3.1.0",
     "react-native-inappbrowser-reborn": "^3.7.0",
-    "react-native-webview": "^13.13.1"
+    "react-native-mmkv": "^3.1.0"
   },
   "jest": {
     "preset": "react-native",
