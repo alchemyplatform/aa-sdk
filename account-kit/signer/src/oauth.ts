@@ -34,3 +34,14 @@ export function getDefaultScopeAndClaims(
 ): ScopeAndClaims | undefined {
   return DEFAULT_SCOPE_AND_CLAIMS[knownAuthProviderId];
 }
+
+/**
+ * "openid" is a required scope in the OIDC protocol. Insert it if the user
+ * forgot.
+ *
+ * @param {string} scope scope param which may be missing "openid"
+ * @returns {string} scope which most definitely contains "openid"
+ */
+export function addOpenIdIfAbsent(scope: string): string {
+  return scope.match(/\bopenid\b/) ? scope : `openid ${scope}`;
+}

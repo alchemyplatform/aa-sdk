@@ -3,18 +3,21 @@ import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import type { Hex } from "viem";
-import { NotAuthenticatedError } from "../errors.js";
+import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { assertNever } from "../utils/typeAssertions.js";
+import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
 import type {
   AlchemySignerClientEvent,
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
   EmailAuthParams,
+  GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   OauthConfig,
   OauthParams,
+  OauthState,
   OtpParams,
   SignerBody,
   SignerResponse,
@@ -22,6 +25,12 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
+import type { OauthMode } from "../signer.js";
+import {
+  addOpenIdIfAbsent,
+  getDefaultScopeAndClaims,
+  getOauthNonce,
+} from "../oauth.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -46,7 +55,6 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   protected rootOrg: string;
   protected eventEmitter: EventEmitter<AlchemySignerClientEvents>;
   protected oauthConfig: OauthConfig | undefined;
-
   /**
    * Create a new instance of the Alchemy Signer client
    *
@@ -469,6 +477,158 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     }
 
     return result;
+  };
+
+  /**
+   * Returns the authentication url for the selected OAuth Proivder
+   *
+   * @example
+   * ```ts
+   *
+   * cosnt oauthParams = {
+   *  authProviderId: "google",
+   *  isCustomProvider: false,
+   *  auth0Connection: undefined,
+   *  scope: undefined,
+   *  claims: undefined,
+   *  mode: "redirect",
+   *  redirectUrl: "https://your-url-path/oauth-return",
+   *  expirationSeconds: 3000
+   * };
+   *
+   * const turnkeyPublicKey = await this.initIframeStamper();
+   * const oauthCallbackUrl = this.oauthCallbackUrl;
+   * const oauthConfig = this.getOauthConfig() // Optional value for OauthConfig()
+   * const usesRelativeUrl = true // Optional value to determine if we use a relative (or absolute) url for the `redirect_url`
+   *
+   * const oauthProviderUrl = getOauthProviderUrl({
+   *  oauthParams,
+   *  turnkeyPublicKey,
+   *  oauthCallbackUrl
+   * })
+   *
+   * ```
+   * @param {GetOauthProviderUrlArgs} args Required. The Oauth provider's auth parameters
+   *
+   * @returns {Promise<string>} returns the Oauth provider's url
+   */
+  public getOauthProviderUrl = async (
+    args: GetOauthProviderUrlArgs
+  ): Promise<string> => {
+    const {
+      oauthParams,
+      turnkeyPublicKey,
+      oauthCallbackUrl,
+      oauthConfig,
+      usesRelativeUrl = true,
+    } = args;
+
+    const {
+      authProviderId,
+      isCustomProvider,
+      auth0Connection,
+      scope: providedScope,
+      claims: providedClaims,
+      mode,
+      redirectUrl,
+      expirationSeconds,
+    } = oauthParams;
+
+    const { codeChallenge, requestKey, authProviders } =
+      oauthConfig ?? (await this.getOauthConfigForMode(mode));
+
+    if (!authProviders) {
+      throw new OAuthProvidersError();
+    }
+
+    const authProvider = authProviders.find(
+      (provider) =>
+        provider.id === authProviderId &&
+        !!provider.isCustomProvider === !!isCustomProvider
+    );
+
+    if (!authProvider) {
+      throw new Error(`No auth provider found with id ${authProviderId}`);
+    }
+
+    let scope: string;
+    let claims: string | undefined;
+
+    if (providedScope) {
+      scope = addOpenIdIfAbsent(providedScope);
+      claims = providedClaims;
+    } else {
+      if (isCustomProvider) {
+        throw new Error("scope must be provided for a custom provider");
+      }
+      const scopeAndClaims = getDefaultScopeAndClaims(authProviderId);
+      if (!scopeAndClaims) {
+        throw new Error(
+          `Default scope not known for provider ${authProviderId}`
+        );
+      }
+      ({ scope, claims } = scopeAndClaims);
+    }
+    const { authEndpoint, clientId } = authProvider;
+
+    const nonce = getOauthNonce(turnkeyPublicKey);
+    const stateObject: OauthState = {
+      authProviderId,
+      isCustomProvider,
+      requestKey,
+      turnkeyPublicKey,
+      expirationSeconds,
+      redirectUrl:
+        mode === "redirect"
+          ? usesRelativeUrl
+            ? resolveRelativeUrl(redirectUrl)
+            : redirectUrl
+          : undefined,
+      openerOrigin: mode === "popup" ? window.location.origin : undefined,
+    };
+    const state = base64UrlEncode(
+      new TextEncoder().encode(JSON.stringify(stateObject))
+    );
+    const authUrl = new URL(authEndpoint);
+    const params: Record<string, string> = {
+      redirect_uri: oauthCallbackUrl,
+      response_type: "code",
+      scope,
+      state,
+      code_challenge: codeChallenge,
+      code_challenge_method: "S256",
+      prompt: "select_account",
+      client_id: clientId,
+      nonce,
+    };
+    if (claims) {
+      params.claims = claims;
+    }
+    if (auth0Connection) {
+      params.connection = auth0Connection;
+    }
+
+    Object.keys(params).forEach((param) => {
+      params[param] && authUrl.searchParams.append(param, params[param]);
+    });
+
+    const [urlPath, searchParams] = authUrl.href.split("?");
+
+    return `${urlPath?.replace(/\/$/, "")}?${searchParams}`;
+  };
+
+  private getOauthConfigForMode = async (
+    mode: OauthMode
+  ): Promise<OauthConfig> => {
+    if (this.oauthConfig) {
+      return this.oauthConfig;
+    } else if (mode === "redirect") {
+      return this.initOauth();
+    } else {
+      throw new Error(
+        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"
+      );
+    }
   };
 
   // eslint-disable-next-line eslint-rules/require-jsdoc-on-reexported-functions

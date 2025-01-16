@@ -10,7 +10,6 @@ import {
   type CreateAccountParams,
   type EmailAuthParams,
   type GetWebAuthnAttestationResult,
-  type KnownAuthProvider,
   type OauthConfig,
   type OauthParams,
   type OtpParams,
@@ -18,25 +17,10 @@ import {
   type User,
 } from "@account-kit/signer";
 import NativeTEKStamper from "./NativeTEKStamper";
-import {
-  OAuthProvidersError,
-  getOauthNonce,
-  getDefaultScopeAndClaims,
-} from "@account-kit/signer";
+import { getOauthNonce } from "@account-kit/signer";
 import { z } from "zod";
-import { base64UrlEncode } from "./utils/base64UrlEncode";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { parseSearchParams } from "./utils/parseUrlParams";
-
-type OauthState = {
-  authProviderId: string;
-  isCustomProvider?: boolean;
-  requestKey: string;
-  turnkeyPublicKey: string;
-  expirationSeconds?: number;
-  redirectUrl?: string;
-  openerOrigin?: string;
-};
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
@@ -149,11 +133,23 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     return user;
   }
   override oauthWithRedirect = async (
-    _args: Extract<OauthParams, { mode: "redirect" }>
+    args: Extract<OauthParams, { mode: "redirect" }>
   ): Promise<User> => {
     try {
-      const providerUrl = await this.getOauthProviderUrl(_args);
-      const redirectUrl = _args.redirectUrl;
+      const oauthParams = args;
+      const turnkeyPublicKey = await this.stamper.init();
+      const oauthCallbackUrl = this.oauthCallbackUrl;
+      const oauthConfig = await this.getOauthConfig();
+
+      const providerUrl = await this.getOauthProviderUrl({
+        oauthParams,
+        turnkeyPublicKey,
+        oauthCallbackUrl,
+        oauthConfig,
+        usesRelativeUrl: false,
+      });
+
+      const redirectUrl = args.redirectUrl;
 
       return new Promise(async (resolve, reject) => {
         if (await InAppBrowser.isAvailable()) {
@@ -166,6 +162,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
           }
 
           const authResult = parseSearchParams(res.url);
+
           const bundle = authResult["alchemy-bundle"] ?? "";
           const orgId = authResult["alchemy-org-id"] ?? "";
           const idToken = authResult["alchemy-id-token"] ?? "";
@@ -224,104 +221,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     throw new Error("Method not implemented.");
   }
 
-  public getOauthProviderUrl = async (args: OauthParams): Promise<string> => {
-    const {
-      authProviderId,
-      isCustomProvider,
-      auth0Connection,
-      scope: providedScope,
-      claims: providedClaims,
-      expirationSeconds,
-      redirectUrl,
-      mode,
-    } = args;
-
-    const res = await this.getOauthConfig();
-
-    const { codeChallenge, requestKey, authProviders } = res;
-
-    if (!authProviders) {
-      throw new OAuthProvidersError();
-    }
-
-    const authProvider = authProviders.find(
-      (provider) =>
-        provider.id === authProviderId &&
-        !!provider.isCustomProvider === !!isCustomProvider
-    );
-
-    if (!authProvider) {
-      throw new Error(`OAuth provider with id ${authProviderId} not found`);
-    }
-
-    let scope: string;
-    let claims: string | undefined;
-
-    if (providedScope) {
-      scope = addOpenIdIfAbsent(providedScope);
-      claims = providedClaims;
-    } else {
-      if (isCustomProvider) {
-        throw new Error("scope must be provided for a custom provider");
-      }
-
-      const scopeAndClaims = getDefaultScopeAndClaims(
-        authProviderId as KnownAuthProvider
-      );
-      if (!scopeAndClaims) {
-        throw new Error(
-          `Default scope not known for provider ${authProviderId}`
-        );
-      }
-      ({ scope, claims } = scopeAndClaims);
-    }
-    const { authEndpoint, clientId } = authProvider;
-    const turnkeyPublicKey = await this.stamper.init();
-    const nonce = getOauthNonce(turnkeyPublicKey);
-
-    const stateObject: OauthState = {
-      authProviderId,
-      isCustomProvider,
-      requestKey,
-      turnkeyPublicKey,
-      expirationSeconds,
-      redirectUrl: mode === "redirect" ? redirectUrl : undefined, // We only use the 'Redirect' mode in RN
-      openerOrigin: undefined,
-    };
-
-    const state = base64UrlEncode(
-      new TextEncoder().encode(JSON.stringify(stateObject)).buffer
-    );
-    const authUrl = new URL(authEndpoint);
-
-    const params: Record<string, string> = {
-      redirect_uri: this.oauthCallbackUrl,
-      response_type: "code",
-      scope,
-      state,
-      code_challenge: codeChallenge,
-      code_challenge_method: "S256",
-      prompt: "select_account",
-      client_id: clientId,
-      nonce,
-    };
-    if (claims) {
-      params.claims = claims;
-    }
-    if (auth0Connection) {
-      params.connection = auth0Connection;
-    }
-
-    Object.keys(params).forEach((param) => {
-      params[param] && authUrl.searchParams.append(param, params[param]);
-    });
-
-    const [urlPath, searchParams] = authUrl.href.split("?");
-
-    // Ensure to prevent potential trailing backslashes.
-    return `${urlPath?.replace(/\/$/, "")}?${searchParams}`;
-  };
-
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
     const currentStamper = this.turnkeyClient.stamper;
     const publicKey = await this.stamper.init();
@@ -331,15 +230,4 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const nonce = getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
-}
-
-/**
- * "openid" is a required scope in the OIDC protocol. Insert it if the user
- * forgot.
- *
- * @param {string} scope scope param which may be missing "openid"
- * @returns {string} scope which most definitely contains "openid"
- */
-function addOpenIdIfAbsent(scope: string): string {
-  return scope.match(/\bopenid\b/) ? scope : `openid ${scope}`;
 }
