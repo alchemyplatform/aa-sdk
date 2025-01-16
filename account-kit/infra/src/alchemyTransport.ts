@@ -8,6 +8,7 @@ import {
 import {
   createTransport,
   http,
+  type Chain,
   type EIP1193RequestFn,
   type HttpTransportConfig,
   type PublicRpcSchema,
@@ -64,6 +65,22 @@ export type AlchemyTransport = AlchemyTransportBase & {
   updateHeaders(newHeaders: HeadersInit): void;
   config: AlchemyTransportConfig;
 };
+
+/**
+ * A type guard for the transport to determine if it is an Alchemy transport.
+ * Used in cases where we would like to do switching depending on the transport, where there used
+ * to be two clients for a alchemy and a non alchemy, and with this switch we don't need the two seperate clients. *
+ *
+ * @param {Transport} transport The transport to check
+ * @param {Chain} chain Chain for the transport to run its function to return the transport config
+ * @returns {boolean} `true` if the transport is an Alchemy transport, otherwise `false`
+ */
+export function isAlchemyTransport(
+  transport: Transport,
+  chain: Chain
+): transport is AlchemyTransport {
+  return transport({ chain }).config.type === "alchemy";
+}
 
 /**
  * Creates an Alchemy transport with the specified configuration options.

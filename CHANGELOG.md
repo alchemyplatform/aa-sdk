@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+### Features
+
+- **aa-sdk:** sdk light client can call the alchemy client ([#1236](https://github.com/alchemyplatform/aa-sdk/issues/1236)) ([cd9053b](https://github.com/alchemyplatform/aa-sdk/commit/cd9053ba1b4282eaf315f23065f4b1e877c70555))
+- add alchemy transport update for the mav2 account client ([#1271](https://github.com/alchemyplatform/aa-sdk/issues/1271)) ([71089c4](https://github.com/alchemyplatform/aa-sdk/commit/71089c45e9e04be87887c048405d2928dda0b7a5))
+- add better error handling to prevent crashes when creating sharedPreferences ([#1267](https://github.com/alchemyplatform/aa-sdk/issues/1267)) ([2d5dae9](https://github.com/alchemyplatform/aa-sdk/commit/2d5dae9545b13d21c3d5d432509f95e3cc275317))
+- **client:** multi account light and alchemy consolidation ([#1264](https://github.com/alchemyplatform/aa-sdk/issues/1264)) ([18a9228](https://github.com/alchemyplatform/aa-sdk/commit/18a922830f5cfcfbed4bf12d064bdf4699e29c6c))
+
 # [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
 
 ### Bug Fixes

@@ -1,9 +1,11 @@
 import { join } from "node:path";
 import { configDefaults, defineConfig } from "vitest/config";
-
+const typechecking = process.env["TYPECHECK"] === "true";
 export const sharedConfig = defineConfig({
   test: {
     typecheck: {
+      enabled: typechecking,
+      only: typechecking,
       ignoreSourceErrors: true,
     },
     alias: {
