@@ -21,6 +21,7 @@ import { getOauthNonce } from "@account-kit/signer";
 import { z } from "zod";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { parseSearchParams } from "./utils/parseUrlParams";
+import { InAppBrowserUnavailableError } from "./errors";
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
@@ -137,7 +138,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   ): Promise<User> => {
     // Ensure the In-App Browser required for authentication is available
     if (!(await InAppBrowser.isAvailable())) {
-      throw new Error("Browser not available");
+      throw new InAppBrowserUnavailableError();
     }
 
     const oauthParams = args;
