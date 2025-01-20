@@ -135,67 +135,58 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   override oauthWithRedirect = async (
     args: Extract<OauthParams, { mode: "redirect" }>
   ): Promise<User> => {
-    try {
-      const oauthParams = args;
-      const turnkeyPublicKey = await this.stamper.init();
-      const oauthCallbackUrl = this.oauthCallbackUrl;
-      const oauthConfig = await this.getOauthConfig();
-
-      const providerUrl = await this.getOauthProviderUrl({
-        oauthParams,
-        turnkeyPublicKey,
-        oauthCallbackUrl,
-        oauthConfig,
-        usesRelativeUrl: false,
-      });
-
-      const redirectUrl = args.redirectUrl;
-
-      return new Promise(async (resolve, reject) => {
-        if (await InAppBrowser.isAvailable()) {
-          const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
-
-          if (res.type !== "success" || !res.url) {
-            return reject(
-              new OauthFailedError("An error occured completing your request")
-            );
-          }
-
-          const authResult = parseSearchParams(res.url);
-
-          const bundle = authResult["alchemy-bundle"] ?? "";
-          const orgId = authResult["alchemy-org-id"] ?? "";
-          const idToken = authResult["alchemy-id-token"] ?? "";
-          const isSignup = authResult["alchemy-is-signup"];
-          const error = authResult["alchemy-error"];
-
-          if (bundle && orgId && idToken) {
-            this.completeAuthWithBundle({
-              bundle,
-              orgId,
-              connectedEventName: "connectedOauth",
-              idToken,
-              authenticatingType: "oauth",
-            }).then((user) => {
-              if (isSignup) {
-                this.eventEmitter.emit("newUserSignup");
-              }
-              resolve(user);
-            }, reject);
-          } else if (error) {
-            reject(new OauthFailedError(error));
-          }
-        } else {
-          throw new Error(
-            "Couldn't perfom authentication operation. Browser not available."
-          );
-        }
-      });
-    } catch (e) {
-      console.error("Error performing OAuth Operation", e);
-      throw new Error("Error performing OAuth Operation");
+    // Ensure the In-App Browser required for authentication is available
+    if (!(await InAppBrowser.isAvailable())) {
+      throw new Error("Browser not available");
     }
+
+    const oauthParams = args;
+    const turnkeyPublicKey = await this.stamper.init();
+    const oauthCallbackUrl = this.oauthCallbackUrl;
+    const oauthConfig = await this.getOauthConfig();
+    const providerUrl = await this.getOauthProviderUrl({
+      oauthParams,
+      turnkeyPublicKey,
+      oauthCallbackUrl,
+      oauthConfig,
+      usesRelativeUrl: false,
+    });
+    const redirectUrl = args.redirectUrl;
+    const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
+
+    if (res.type !== "success" || !res.url) {
+      throw new OauthFailedError("An error occured completing your request");
+    }
+
+    const authResult = parseSearchParams(res.url);
+    const bundle = authResult["alchemy-bundle"] ?? "";
+    const orgId = authResult["alchemy-org-id"] ?? "";
+    const idToken = authResult["alchemy-id-token"] ?? "";
+    const isSignup = authResult["alchemy-is-signup"];
+    const error = authResult["alchemy-error"];
+
+    if (bundle && orgId && idToken) {
+      const user = await this.completeAuthWithBundle({
+        bundle,
+        orgId,
+        connectedEventName: "connectedOauth",
+        idToken,
+        authenticatingType: "oauth",
+      });
+
+      if (isSignup) {
+        this.eventEmitter.emit("newUserSignup");
+      }
+
+      return user;
+    }
+
+    // Throw the Alchemy error if available, otherwise throw a generic error.
+    throw new OauthFailedError(
+      error ?? "An error occured completing your request"
+    );
   };
+
   override oauthWithPopup(
     _args: Extract<OauthParams, { mode: "popup" }>
   ): Promise<User> {
