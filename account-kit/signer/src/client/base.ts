@@ -512,7 +512,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    *
    * @returns {Promise<string>} returns the Oauth provider's url
    */
-  public getOauthProviderUrl = async (
+  protected getOauthProviderUrl = async (
     args: GetOauthProviderUrlArgs
   ): Promise<string> => {
     const {
