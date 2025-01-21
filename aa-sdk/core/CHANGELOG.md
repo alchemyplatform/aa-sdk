@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+### Features
+
+- add alchemy transport update for the mav2 account client ([#1271](https://github.com/alchemyplatform/aa-sdk/issues/1271)) ([71089c4](https://github.com/alchemyplatform/aa-sdk/commit/71089c45e9e04be87887c048405d2928dda0b7a5))
+
 # [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
 
 ### Bug Fixes
