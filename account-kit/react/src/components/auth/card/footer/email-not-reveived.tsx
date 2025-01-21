@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { ls } from "../../../../strings.js";
-import { useAuthContext, type AuthStep } from "../../context.js";
+import {
+  AuthStepStatus,
+  useAuthContext,
+  type AuthStep,
+} from "../../context.js";
 import { Button } from "../../../button.js";
 
 type EmailNotReceivedDisclaimerProps = {
@@ -18,6 +22,14 @@ export const EmailNotReceivedDisclaimer = ({
     },
   });
 
+  const isOTPVerifying = useMemo(() => {
+    return (
+      authStep.type === "otp_verify" &&
+      (authStep.status === AuthStepStatus.verifying ||
+        authStep.status === AuthStepStatus.success)
+    );
+  }, [authStep]);
+
   useEffect(() => {
     if (emailResent) {
       // set the text back to "Resend" after 2 seconds
@@ -29,13 +41,21 @@ export const EmailNotReceivedDisclaimer = ({
 
   return (
     <div className="flex flex-row gap-2 justify-center mb-2">
-      <span className="text-fg-tertiary text-xs">
+      <span
+        className={`${
+          isOTPVerifying ? "text-fg-disabled" : "text-fg-tertiary"
+        } text-xs`}
+      >
         {ls.loadingEmail.emailNotReceived}
       </span>
       <Button
         variant="link"
-        className="text-xs font-normal underline"
-        disabled={emailResent}
+        className={`text-xs font-normal underline ${
+          isOTPVerifying
+            ? "text-fg-disabled disabled:opacity-100"
+            : "text-btn-primary"
+        }`}
+        disabled={emailResent || isOTPVerifying}
         onClick={() => {
           authenticate({
             type: "email",
