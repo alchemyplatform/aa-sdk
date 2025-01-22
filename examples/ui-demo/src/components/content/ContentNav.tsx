@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { RenderUserConnectionAvatar } from "../shared/user-connection-avatar/RenderUserConnectionAvatar";
-import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
 import ExternalLink from "@/components/shared/ExternalLink";
 import { Metrics } from "@/metrics";
@@ -12,18 +11,13 @@ export function ContentNav({
   showCode: boolean;
   setShowCode: (showCode: boolean) => void;
 }) {
-  const theme = useTheme();
   const user = useUser();
   return (
     <div
       className={cn(
-        ` w-full p-6 top-0 left-0 border-b border-border z-10 sticky`,
-
-        theme === "dark"
-          ? showCode
-            ? "bg-white"
-            : "bg-demo-bg-darkmode"
-          : "bg-white"
+        ` w-full p-6 top-0 left-0 border-border z-10 sticky`,
+        !user && !showCode && "absolute",
+        (user || showCode) && "border-b"
       )}
     >
       <div

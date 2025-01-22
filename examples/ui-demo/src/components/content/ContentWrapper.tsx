@@ -2,22 +2,19 @@ import { cn } from "@/lib/utils";
 import { CodePreview } from "../preview/CodePreview";
 import { AuthCard, useUser } from "@account-kit/react";
 import { useConfigStore } from "@/state";
-import { useTheme } from "@/state/useTheme";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { WalletTypes } from "@/app/config";
 import { MintCard } from "../shared/mint-card/MintCard";
 import { Wrapper7702 } from "../shared/7702/Wrapper";
 
 export function ContentWrapper({ showCode }: { showCode: boolean }) {
-  const theme = useTheme();
   return (
     <>
       {/* Don't unmount when showing code preview so that the auth card retains its state */}
       <div
         className={cn(
-          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full px-6 pb-6",
-          showCode && "hidden",
-          theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white"
+          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full p-6",
+          showCode && "hidden"
         )}
       >
         <div className="flex flex-1 justify-center items-center ">

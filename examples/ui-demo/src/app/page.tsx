@@ -19,6 +19,8 @@ import { useConfigStore } from "@/state";
 import { WalletTypes } from "./config";
 import { ContentNav } from "@/components/content/ContentNav";
 import { ContentWrapper } from "@/components/content/ContentWrapper";
+import { cn } from "@/lib/utils";
+import { useTheme } from "@/state/useTheme";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -32,7 +34,7 @@ const inter = Inter({
 
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
-
+  const theme = useTheme();
   return (
     <main
       className={`flex flex-col h-auto lg:bg-bg-main min-h-screen lg:min-h-0 lg:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
@@ -44,9 +46,11 @@ export default function Home() {
         <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
           <ConfigurationWrapper />
           <div
-            className={
-              "flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none"
-            }
+            className={cn(
+              "flex flex-col flex-[2] basis-0 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none",
+              theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
+              showCode && "bg-white"
+            )}
           >
             <ContentNav showCode={showCode} setShowCode={setShowCode} />
             <ContentWrapper showCode={showCode} />
