@@ -1,0 +1,51 @@
+---
+title: Authenticating Users via Social Auth
+description: Learn how to authenticate users via social auth
+---
+
+# Authenticating Users via Social Auth
+
+This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+
+:::info
+For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
+
+-   [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
+-   [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+
+:::
+
+## Create a Signer Instance
+
+```ts twoslash
+// [!include ~/shared/react-native/signer.ts]
+```
+
+## Authenticate a User
+
+To authenticate a user via **social auth**, use the `signer.authenticate()` method with the `type` set to `OAuth`, the `redirectUrl` set to your app's deep link, the `mode` set to `redirect` and the `authProviderId` set to the social auth provider you want to use.
+
+Here is an example, authenticating a user via Google:
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+signer
+	.authenticate({
+		type: "OAuth",
+		redirectUrl: "com.example.app://oauth",
+		mode: "redirect",
+		authProviderId: "google",
+	})
+	.catch((error) => {
+		console.error(error);
+	});
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::
