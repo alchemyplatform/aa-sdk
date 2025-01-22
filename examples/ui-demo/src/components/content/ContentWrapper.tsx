@@ -1,33 +1,34 @@
-"use client";
-
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/state/useTheme";
+import { CodePreview } from "../preview/CodePreview";
 import { AuthCard, useUser } from "@account-kit/react";
-import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
-import { Wrapper7702 } from "../shared/7702/Wrapper";
 import { useConfigStore } from "@/state";
+import { useTheme } from "@/state/useTheme";
+import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { WalletTypes } from "@/app/config";
 import { MintCard } from "../shared/mint-card/MintCard";
-import { Debug7702Button } from "../shared/7702/Debug7702Button";
+import { Wrapper7702 } from "../shared/7702/Wrapper";
 
-export function AuthCardWrapper({ className }: { className?: string }) {
+export function ContentWrapper({ showCode }: { showCode: boolean }) {
   const theme = useTheme();
-
   return (
-    <div
-      className={cn(
-        "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full px-6 pb-6",
-        theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
-        className
-      )}
-    >
-      <div className="flex flex-1 justify-center items-center ">
-        <RenderContent />
+    <>
+      {/* Don't unmount when showing code preview so that the auth card retains its state */}
+      <div
+        className={cn(
+          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full px-6 pb-6",
+          showCode && "hidden",
+          theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white"
+        )}
+      >
+        <div className="flex flex-1 justify-center items-center ">
+          <RenderContent />
+        </div>
       </div>
-    </div>
+
+      {showCode && <CodePreview />}
+    </>
   );
 }
-
 const RenderContent = () => {
   const { walletType } = useConfigStore();
   const user = useUser();

@@ -10,17 +10,15 @@ import {
 import { MintCard } from "@/components/shared/mint-card/MintCard";
 import { Debug7702Button } from "@/components/shared/7702/Debug7702Button";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
-import { cn } from "@/lib/utils";
 import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
-import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
-import { CodePreview } from "../components/preview/CodePreview";
 import { TopNav } from "../components/topnav/TopNav";
 import { Wrapper7702 } from "@/components/shared/7702/Wrapper";
 import { useConfigStore } from "@/state";
 import { WalletTypes } from "./config";
 import { ContentNav } from "@/components/content/ContentNav";
+import { ContentWrapper } from "@/components/content/ContentWrapper";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -34,9 +32,6 @@ const inter = Inter({
 
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
-  const user = useUser();
-  const isEOAUser = user?.type === "eoa";
-  const { walletType } = useConfigStore();
 
   return (
     <main
@@ -54,20 +49,16 @@ export default function Home() {
             }
           >
             <ContentNav showCode={showCode} setShowCode={setShowCode} />
-            {/* Don't unmount when showing code preview so that the auth card retains its state */}
-            <AuthCardWrapper
-              className={cn(showCode && "hidden", !user ? "mt-0" : "mt-24")}
-            />
-            {showCode && <CodePreview />}
+            <ContentWrapper showCode={showCode} />
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 overflow-auto scrollbar-none lg:hidden">
+        {/* <div className="flex flex-1 flex-col gap-6 p-6 pt-24 overflow-auto scrollbar-none lg:hidden">
           <RenderContent
             user={!!user}
             isEOAUser={isEOAUser}
             isSmartWallet={walletType === WalletTypes.smart}
           />
-        </div>
+        </div> */}
       </div>
     </main>
   );
