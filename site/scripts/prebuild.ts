@@ -11,6 +11,7 @@ const referencePackages = [
   "@account-kit/react",
   "@account-kit/signer",
   "@account-kit/smart-contracts",
+  "@account-kit/react-native",
   "@aa-sdk/core",
   "@aa-sdk/ethers",
 ];
