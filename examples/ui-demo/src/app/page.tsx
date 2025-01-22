@@ -1,7 +1,7 @@
 "use client";
 
-import { Authentication } from "@/components/configuration/Authentication";
-import { Styling } from "@/components/configuration/Styling";
+import { ConfigurationWrapper } from "@/components/configuration/ConfigurationWrapper";
+
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
 import {
   EOAPostLoginActions,
@@ -21,7 +21,6 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { Configuration } from "@/components/configuration/Configuration";
 import { Wrapper7702 } from "@/components/shared/7702/Wrapper";
 import { useConfigStore } from "@/state";
 import { WalletTypes } from "./config";
@@ -52,12 +51,7 @@ export default function Home() {
         className={`flex flex-col flex-1 xl:px-6 lg:px-10 lg:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} lg:overflow-hidden`}
       >
         <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
-          <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
-            <Configuration />
-            <Authentication />
-            <Styling />
-          </div>
-
+          <ConfigurationWrapper />
           <div
             className={
               "flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none"
