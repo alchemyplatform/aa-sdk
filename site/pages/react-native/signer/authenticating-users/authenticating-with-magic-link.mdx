@@ -17,12 +17,8 @@ For example code on how to use the Signer in your project, please checkout our e
 
 ## Create a Signer Instance
 
-```tsx
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-
-const signer = RNAlchemySigner({
-  client: { connection: { apiKey: API_KEY } },
-});
+```ts twoslash
+// [!include ~/shared/react-native/signer.ts]
 ```
 
 ## Authenticate a User
@@ -33,17 +29,27 @@ Next, you'll need to authenticate your user before you can use the Signer as an 
 
 To send an email magic link to a user, you can use the `signer.authenticate()` method.
 
-```tsx
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
 signer
   .authenticate({
     email: "user@example.com",
     type: "email",
+    // Note: this is the default mode
     emailMode: "magicLink",
   })
   .catch((error) => {
     console.error(error);
   });
 ```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::
 
 ### Authenticate User via Deep Link
 

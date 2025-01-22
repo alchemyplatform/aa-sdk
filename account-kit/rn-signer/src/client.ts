@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-import "./utils/mmkv-localstorage-polyfill";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
@@ -14,8 +12,9 @@ import {
   type SignupResponse,
   type User,
 } from "@account-kit/signer";
-import NativeTEKStamper from "./NativeTEKStamper";
 import { z } from "zod";
+import NativeTEKStamper from "./NativeTEKStamper.js";
+import "./utils/mmkv-localstorage-polyfill.js";
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
