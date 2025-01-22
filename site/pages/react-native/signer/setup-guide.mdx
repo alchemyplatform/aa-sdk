@@ -27,9 +27,9 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
     <br />
     a. Apply the config to your app from step 1
     <img
-    	src="/images/getting-started/apply-config-to-app.png"
-    	alt="apply your the config to the app from the first step"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/apply-config-to-app.png"
+      alt="apply your the config to the app from the first step"
+      style={{ width: "50%" }}
     />
     <br />
     b. Enable authentication methods you want to support.
@@ -39,19 +39,19 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
 
     To use email auth, toggle on email.
 
-    -   To use email auth in your React Native app, your app needs to be set up to handle deep links that can be served via http or https.
-    -   In production scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links) on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app) on iOS to gracefully handle deep links.
-    -   For testing, simply setting up a simple server on [http://localhost:3000](http://localhost:3000/) or any other server you control which redirects an incoming request to your app scheme is the easiest way to get started.
-        a sample implementation of this can be found the `example` folder of the `React Native Signer` repo.
-    -   The http or https url you set up in the previous step would need to be added as the **Redirect URL** in the Account Kit Dashboard.
-    -   This is the url that the user will be redirected to if you use the magic link email flow to log in your users.
-    -   Optionally stylize ✨ the email with your brand color and logo!
+    - To use email auth in your React Native app, your app needs to be set up to handle deep links that can be served via http or https.
+    - In production scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links) on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app) on iOS to gracefully handle deep links.
+    - For testing, simply setting up a simple server on [http://localhost:3000](http://localhost:3000/) or any other server you control which redirects an incoming request to your app scheme is the easiest way to get started.
+      a sample implementation of this can be found the `example` folder of the `React Native Signer` repo.
+    - The http or https url you set up in the previous step would need to be added as the **Redirect URL** in the Account Kit Dashboard.
+    - This is the url that the user will be redirected to if you use the magic link email flow to log in your users.
+    - Optionally stylize ✨ the email with your brand color and logo!
 
     <br />
     <img
-    	src="/images/getting-started/email-auth-setup.png"
-    	alt="configure email auth"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/email-auth-setup.png"
+      alt="configure email auth"
+      style={{ width: "50%" }}
     />
     <br />
 
@@ -60,22 +60,22 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
     If you want to enable social login, toggle which auth providers
     you want to support.
 
-    -   Make sure to add your app's deep link as a **whitelisted origin**. This is necessary to handle redirects from the signer after a user has been authenticated.
-    -   Add the link that your dapp will be running on to the **whitelisted origin** list
-    -   Optionally enter your own OAuth credentials or use our defaults
+    - Make sure to add your app's deep link as a **whitelisted origin**. This is necessary to handle redirects from the signer after a user has been authenticated.
+    - Add the link that your dapp will be running on to the **whitelisted origin** list
+    - Optionally enter your own OAuth credentials or use our defaults
 
     <br />
     <img
-    	src="/images/getting-started/social-auth-setup-mobile.png"
-    	alt="configure social auth"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/social-auth-setup-mobile.png"
+      alt="configure social auth"
+      style={{ width: "50%" }}
     />
 
 3.  Create the config and copy the **API Key**
     <img
-    	src="/images/getting-started/get-api-key.png"
-    	alt="how to copy the api key"
-    	style={{ width: "50%" }}
+      src="/images/getting-started/get-api-key.png"
+      alt="how to copy the api key"
+      style={{ width: "50%" }}
     />
 
 ## Ensure Deep Linking is properly configured
@@ -86,5 +86,5 @@ Depending on if your app uses `expo-router`, `react-navigation`, or some other n
 
 Here are some useful links for some common navigation libraries:
 
--   [Expo Router](https://docs.expo.dev/linking/into-your-app/)
--   [React Navigation](https://reactnavigation.org/docs/deep-linking/)
+- [Expo Router](https://docs.expo.dev/linking/into-your-app/)
+- [React Navigation](https://reactnavigation.org/docs/deep-linking/)

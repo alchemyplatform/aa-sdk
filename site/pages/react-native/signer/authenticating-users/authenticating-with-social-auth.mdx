@@ -10,8 +10,8 @@ This guide assumes you have already followed the [Setup Guide](/react-native/sig
 :::info
 For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
 
--   [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
--   [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
+- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
 
 :::
 
@@ -33,15 +33,15 @@ Here is an example, authenticating a user via Google:
 import { signer } from "./signer";
 
 signer
-	.authenticate({
-		type: "OAuth",
-		redirectUrl: "com.example.app://oauth",
-		mode: "redirect",
-		authProviderId: "google",
-	})
-	.catch((error) => {
-		console.error(error);
-	});
+  .authenticate({
+    type: "OAuth",
+    redirectUrl: "com.example.app://oauth",
+    mode: "redirect",
+    authProviderId: "google",
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 ```ts twoslash [signer.ts] filename="signer.ts"
