@@ -64,6 +64,10 @@ export const default7702UserOpSigner: (
       nonce: accountNonce,
     });
 
+    if (yParity === undefined) {
+      throw new Error("Invalid signature: missing yParity or v");
+    }
+
     return {
       ...uo,
       authorizationTuple: {
@@ -72,7 +76,7 @@ export const default7702UserOpSigner: (
         address: implAddress,
         r,
         s,
-        yParity: Number(yParity),
+        yParity: toHex(yParity),
       },
     };
   };
