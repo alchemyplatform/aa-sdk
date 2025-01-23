@@ -3,11 +3,16 @@ import {
   useSmartAccountClient,
 } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
-import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
+import {
+  AccountKitNftMinterABI,
+  nftContractAddressOdyssey,
+} from "@/utils/config";
+import { ODYSSEY_EXPLORER_URL } from "./constants";
 import { useCallback, useState } from "react";
 import { useToast } from "@/hooks/useToast";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hash } from "viem";
 import { MintStatus } from "./MintCard7702";
+import { useSma7702Client } from "./useSma7702Client";
 
 const initialValuePropState = {
   signing: "initial",
@@ -20,13 +25,20 @@ export const useMint = () => {
   const [nftTransfered, setNftTransfered] = useState(false);
   const isLoading = Object.values(status).some((x) => x === "loading");
   const { setToast } = useToast();
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
-  const handleSuccess = () => {
+
+  const client = useSma7702Client();
+
+  const handleSuccess = (txnHash: Hash) => {
     setStatus(() => ({
       batch: "success",
       gas: "success",
       signing: "success",
     }));
+
+    // TODO: move this log to a toast
+    console.log("Mint successful");
+    console.log(`${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`);
+
     // Current design does not have a success toast, leaving commented to implement later.
     // setToast({
     //   type: "success",
@@ -57,30 +69,16 @@ export const useMint = () => {
   };
 
   const { data: uri } = useQuery({
-    queryKey: ["contractURI", nftContractAddress],
+    queryKey: ["contractURI", nftContractAddressOdyssey],
     queryFn: async () => {
       const uri = await client?.readContract({
-        address: nftContractAddress,
+        address: nftContractAddressOdyssey,
         abi: AccountKitNftMinterABI,
         functionName: "baseURI",
       });
       return uri;
     },
     enabled: !!client && !!client?.readContract,
-  });
-  const { sendUserOperation } = useSendUserOperation({
-    client,
-    waitForTxn: true,
-    onError: handleError,
-    onSuccess: handleSuccess,
-    onMutate: () => {
-      setTimeout(() => {
-        setStatus((prev) => ({ ...prev, signing: "success" }));
-      }, 500);
-      setTimeout(() => {
-        setStatus((prev) => ({ ...prev, gas: "success" }));
-      }, 750);
-    },
   });
 
   const handleCollectNFT = useCallback(async () => {
@@ -95,9 +93,17 @@ export const useMint = () => {
       gas: "loading",
       batch: "loading",
     });
-    sendUserOperation({
+
+    setTimeout(() => {
+      setStatus((prev) => ({ ...prev, signing: "success" }));
+    }, 500);
+    setTimeout(() => {
+      setStatus((prev) => ({ ...prev, gas: "success" }));
+    }, 750);
+
+    const uoHash = await client.sendUserOperation({
       uo: {
-        target: nftContractAddress,
+        target: nftContractAddressOdyssey,
         data: encodeFunctionData({
           abi: AccountKitNftMinterABI,
           functionName: "mintTo",
@@ -105,7 +111,17 @@ export const useMint = () => {
         }),
       },
     });
-  }, [client, sendUserOperation]);
+
+    const txnHash = await client
+      .waitForUserOperationTransaction(uoHash)
+      .catch((e) => {
+        handleError(e);
+      });
+
+    if (txnHash) {
+      handleSuccess(txnHash);
+    }
+  }, [client]);
 
   return {
     isLoading,
