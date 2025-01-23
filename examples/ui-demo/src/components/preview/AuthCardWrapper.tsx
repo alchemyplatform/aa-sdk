@@ -3,11 +3,9 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
-import { AuthCard, useUser, useSigner } from "@account-kit/react";
+import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { MintCard } from "../shared/mint-card/MintCard";
-
-const OTP_AUTH_DELAY = 3000;
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const theme = useTheme();
@@ -28,36 +26,20 @@ export function AuthCardWrapper({ className }: { className?: string }) {
 }
 
 const RenderContent = () => {
+  const { authStep } = useAuthContext();
   const user = useUser();
-  const signer = useSigner();
   const [showAuthCard, setShowAuthCard] = useState(() => !user);
 
   useEffect(() => {
-    const hasUser = !!user;
-
-    const getAuthDetails = async () => {
-      const sessionType = await signer?.getSessionType();
-
-      // Delay showing the auth card for OTP authenticated users
-      if (sessionType === "otp") {
-        setTimeout(() => {
-          setShowAuthCard(!hasUser);
-        }, OTP_AUTH_DELAY);
-      } else {
-        // Hide auth card for non-OTP authenticated users
-        setShowAuthCard(!hasUser);
-      }
-    };
-
     // Show auth card for unauthenticated users
-    if (!hasUser) {
+    if (!user) {
       setShowAuthCard(true);
 
       // Get auth details for authenticated users
-    } else if (signer && hasUser) {
-      getAuthDetails();
+    } else if (!!user && ["complete", "initial"].includes(authStep.type)) {
+      setShowAuthCard(false);
     }
-  }, [signer, user]);
+  }, [authStep.type, user]);
 
   if (showAuthCard) {
     return (

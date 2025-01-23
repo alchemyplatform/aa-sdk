@@ -198,16 +198,6 @@ export class SessionManager {
     return session;
   };
 
-  public getSessionType = (): string | null => {
-    const session = this.store.getState().session ?? null;
-
-    if (!session) {
-      return null;
-    }
-
-    return session.type;
-  };
-
   private setSession = (
     session_:
       | Omit<

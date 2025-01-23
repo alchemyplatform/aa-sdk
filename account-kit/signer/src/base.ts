@@ -572,38 +572,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     });
 
   /**
-   * Gets the current logged in user session type
-   * If a user has an ongoing session, it will use that session and
-   * return the session type
-   *
-   * @example
-   * ```ts
-   * import { AlchemyWebSigner } from "@account-kit/signer";
-   *
-   * const signer = new AlchemyWebSigner({
-   *  client: {
-   *    connection: {
-   *      rpcUrl: "/api/rpc",
-   *    },
-   *    iframeConfig: {
-   *      iframeContainerId: "alchemy-signer-iframe-container",
-   *    },
-   *  },
-   * });
-   *
-   * // throws if not logged in
-   * const sessionType = await signer.getSessionType();
-   * ```
-   *
-   * @returns {Promise<string | null>} the current user session type
-   */
-  getSessionType = async (): Promise<string | null> => {
-    const sessionType = await this.sessionManager.getSessionType();
-
-    return sessionType;
-  };
-
-  /**
    * Adds a passkey to the user's account
    *
    * @example

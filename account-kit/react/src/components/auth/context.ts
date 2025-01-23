@@ -56,7 +56,20 @@ export function useAuthContext<
   TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined
 >(type?: TType): AuthContextType<TType>;
 
-export function useAuthContext(
+/**
+ * A custom hook that provides the authentication context based on the specified authentication step type. It ensures that the hook is used within an `AuthModalProvider` and throws an error if the context is not available or if the current auth step type does not match the expected type.
+ *
+ * @example
+ * ```tsx
+ * import { useAuthContext } from "@account-kit/react";
+ *
+ * const { authStep } = useAuthContext();
+ * ```
+ *
+ * @param {AuthStep["type"]} [type] Optional type of authentication step to validate against the current context
+ * @returns {AuthContextType} The authentication context for the current component
+ * @throws Will throw an error if the hook is not used within an `AuthModalProvider` or if the current auth step type does not match the expected type
+ */ export function useAuthContext(
   type?: AuthStep["type"] | undefined
 ): AuthContextType {
   const context = useOptionalAuthContext();
