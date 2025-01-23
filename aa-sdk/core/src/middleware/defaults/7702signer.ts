@@ -7,73 +7,73 @@ import { defaultUserOpSigner } from "./userOpSigner.js";
 
 /**
  * Provides a default middleware function for signing user operations with a client account when using ERC-7702 to upgrade local accounts to smart accounts.
- * If the SmartAccount doesn't support `signAuthorization`, then this just runs the default UserOpSigner middleware
+ * If the SmartAccount doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware
  *
- * @param {UserOperationStruct} struct The user operation structure to be signed
- * @param {*} params The middleware context containing the client and account information
- * @param {Client} params.client The client object, which should include account and chain information
- * @param {Account} [params.account] Optional, the account used for signing, defaults to the client's account if not provided
- * @returns {Promise<UserOperationStruct>} A promise that resolves to the signed user operation structure
+ * @param {ClientMiddlewareFn} [userOpSigner] Optional user operation signer function
+ * @returns {Function} An async function that processes the user operation and returns the authorized operation with an authorization tuple if necessary
  */
-export const default7702UserOpSigner: ClientMiddlewareFn = async (
-  struct,
-  params
-) => {
-  const uo = await defaultUserOpSigner(struct, params);
-  const account = params.account ?? params.client.account;
-  const { client } = params;
+export const default7702UserOpSigner: (
+  userOpSigner?: ClientMiddlewareFn
+) => ClientMiddlewareFn =
+  (userOpSigner?: ClientMiddlewareFn) => async (struct, params) => {
+    const userOpSigner_ = userOpSigner ?? defaultUserOpSigner;
 
-  if (!account || !isSmartAccountWithSigner(account)) {
-    throw new AccountNotFoundError();
-  }
+    const uo = await userOpSigner_(struct, params);
 
-  const signer = account.getSigner();
+    const account = params.account ?? params.client.account;
+    const { client } = params;
 
-  if (!signer.signAuthorization) {
-    console.log("account does not support signAuthorization");
-    return uo;
-  }
+    if (!account || !isSmartAccountWithSigner(account)) {
+      throw new AccountNotFoundError();
+    }
 
-  if (!client.chain) {
-    throw new ChainNotFoundError();
-  }
+    const signer = account.getSigner();
 
-  const code = (await client.getCode({ address: account.address })) ?? "0x";
-  // TODO: this isn't the cleanest because now the account implementation HAS to know that it needs to return an impl address
-  // even if the account is not deployed
+    if (!signer.signAuthorization) {
+      console.log("account does not support signAuthorization");
+      return uo;
+    }
 
-  const implAddress = await account.getImplementationAddress();
+    if (!client.chain) {
+      throw new ChainNotFoundError();
+    }
 
-  const expectedCode = "0xef0100" + implAddress.slice(2);
+    const code = (await client.getCode({ address: account.address })) ?? "0x";
+    // TODO: this isn't the cleanest because now the account implementation HAS to know that it needs to return an impl address
+    // even if the account is not deployed
 
-  if (code.toLowerCase() === expectedCode.toLowerCase()) {
-    return uo;
-  }
+    const implAddress = await account.getImplementationAddress();
 
-  const accountNonce = await params.client.getTransactionCount({
-    address: account.address,
-  });
+    const expectedCode = "0xef0100" + implAddress.slice(2);
 
-  const {
-    r,
-    s,
-    v,
-    yParity = v ? v - 27n : undefined,
-  } = await signer.signAuthorization({
-    chainId: client.chain.id,
-    contractAddress: implAddress,
-    nonce: accountNonce,
-  });
+    if (code.toLowerCase() === expectedCode.toLowerCase()) {
+      return uo;
+    }
 
-  return {
-    ...uo,
-    authorizationTuple: {
-      chainId: client.chain.id,
-      nonce: toHex(accountNonce), // deepHexlify doesn't encode number(0) correctly, it returns "0x"
-      address: implAddress,
+    const accountNonce = await params.client.getTransactionCount({
+      address: account.address,
+    });
+
+    const {
       r,
       s,
-      yParity: Number(yParity),
-    },
+      v,
+      yParity = v ? v - 27n : undefined,
+    } = await signer.signAuthorization({
+      chainId: client.chain.id,
+      contractAddress: implAddress,
+      nonce: accountNonce,
+    });
+
+    return {
+      ...uo,
+      authorizationTuple: {
+        chainId: client.chain.id,
+        nonce: toHex(accountNonce), // deepHexlify doesn't encode number(0) correctly, it returns "0x"
+        address: implAddress,
+        r,
+        s,
+        yParity: Number(yParity),
+      },
+    };
   };
-};

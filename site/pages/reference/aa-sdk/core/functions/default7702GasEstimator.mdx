@@ -6,7 +6,8 @@ description: Overview of the default7702GasEstimator method
 
 # default7702GasEstimator
 
-Asynchronously processes a given struct and parameters, ensuring the account and entry point compatibility before modifying the struct with an authorization contract and estimating gas.
+A middleware function to estimate the gas usage of a user operation with an optional custom gas estimator.
+This function is only compatible with accounts using EntryPoint v0.7.0.
 
 ## Import
 
@@ -16,17 +17,12 @@ import { default7702GasEstimator } from "@aa-sdk/core";
 
 ## Parameters
 
-### struct
+### gasEstimator
 
-`UserOperationStruct`
-The user operation structure to estimate gas over
-
-### params
-
-`*`
-The parameters containing an account or a client with an account.
+`ClientMiddlewareFn`
+An optional custom gas estimator function
 
 ## Returns
 
-`Promise<UserOperationStruct>`
-A promise that resolves after estimating gas with the modified struct.
+`Function`
+A function that takes user operation structure and parameters, estimates gas usage, and returns the estimated user operation
