@@ -1,15 +1,4 @@
-import { sha256 } from "viem";
 import type { KnownAuthProvider } from "./signer";
-
-/**
- * Turnkey requires the nonce in the id token to be in this format.
- *
- * @param {string} turnkeyPublicKey key from a Turnkey iframe
- * @returns {string} nonce to be used in OIDC
- */
-export function getOauthNonce(turnkeyPublicKey: string): string {
-  return sha256(new TextEncoder().encode(turnkeyPublicKey)).slice(2);
-}
 
 export type ScopeAndClaims = {
   scope: string;

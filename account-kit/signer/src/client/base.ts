@@ -2,7 +2,7 @@ import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
 import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
-import type { Hex } from "viem";
+import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { assertNever } from "../utils/typeAssertions.js";
@@ -26,11 +26,7 @@ import type {
   User,
 } from "./types.js";
 import type { OauthMode } from "../signer.js";
-import {
-  addOpenIdIfAbsent,
-  getDefaultScopeAndClaims,
-  getOauthNonce,
-} from "../oauth.js";
+import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -571,7 +567,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     }
     const { authEndpoint, clientId } = authProvider;
 
-    const nonce = getOauthNonce(turnkeyPublicKey);
+    const nonce = this.getOauthNonce(turnkeyPublicKey);
     const stateObject: OauthState = {
       authProviderId,
       isCustomProvider,
@@ -680,4 +676,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return this.pollActivityCompletion(activity, organizationId, resultKey);
   };
   // #endregion
+
+  /**
+   * Turnkey requires the nonce in the id token to be in this format.
+   *
+   * @param {string} turnkeyPublicKey key from a Turnkey iframe
+   * @returns {string} nonce to be used in OIDC
+   */
+  protected getOauthNonce = (turnkeyPublicKey: string): string => {
+    return sha256(new TextEncoder().encode(turnkeyPublicKey)).slice(2);
+  };
 }

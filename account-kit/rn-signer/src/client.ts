@@ -17,7 +17,6 @@ import {
   type User,
 } from "@account-kit/signer";
 import NativeTEKStamper from "./NativeTEKStamper";
-import { getOauthNonce } from "@account-kit/signer";
 import { z } from "zod";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { parseSearchParams } from "./utils/parseUrlParams";
@@ -119,7 +118,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       throw new Error("Unsupported authenticating type");
     }
 
-    this.eventEmitter.emit("authenticating", { type: "email" });
+    this.eventEmitter.emit("authenticating", {
+      type: params.authenticatingType,
+    });
+
     await this.stamper.init();
 
     const result = await this.stamper.injectCredentialBundle(params.bundle);
@@ -140,6 +142,8 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     if (!(await InAppBrowser.isAvailable())) {
       throw new InAppBrowserUnavailableError();
     }
+
+    this.eventEmitter.emit("authenticating", { type: "oauth" });
 
     const oauthParams = args;
     const turnkeyPublicKey = await this.stamper.init();
@@ -214,12 +218,9 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
-    const currentStamper = this.turnkeyClient.stamper;
     const publicKey = await this.stamper.init();
 
-    // swap the stamper back in case the user logged in with a different stamper (passkeys)
-    this.setStamper(currentStamper);
-    const nonce = getOauthNonce(publicKey);
+    const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
 }

@@ -3,7 +3,6 @@ import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { z } from "zod";
-import { getOauthNonce } from "../oauth.js";
 import type { AuthParams } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
@@ -643,7 +642,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     // swap the stamper back in case the user logged in with a different stamper (passkeys)
     this.setStamper(currentStamper);
-    const nonce = getOauthNonce(publicKey);
+    const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
 }
