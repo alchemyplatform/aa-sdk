@@ -38,17 +38,22 @@ const RenderContent = () => {
     const getAuthDetails = async () => {
       const sessionType = await signer?.getSessionType();
 
+      // Delay showing the auth card for OTP authenticated users
       if (sessionType === "otp") {
         setTimeout(() => {
           setShowAuthCard(!hasUser);
         }, OTP_AUTH_DELAY);
       } else {
+        // Hide auth card for non-OTP authenticated users
         setShowAuthCard(!hasUser);
       }
     };
 
+    // Show auth card for unauthenticated users
     if (!hasUser) {
       setShowAuthCard(true);
+
+      // Get auth details for authenticated users
     } else if (signer && hasUser) {
       getAuthDetails();
     }
