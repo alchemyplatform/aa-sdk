@@ -10,7 +10,10 @@ import {
   createBundlerClientFromExisting,
   LocalAccountSigner,
 } from "@aa-sdk/core";
-import { odyssey, splitOdysseyTransport } from "./transportSetup";
+import {
+  odyssey,
+  splitOdysseyTransport,
+} from "../../../hooks/7702/transportSetup";
 import { send7702UO } from "./demoSend7702UO";
 import { useSigner } from "@account-kit/react";
 

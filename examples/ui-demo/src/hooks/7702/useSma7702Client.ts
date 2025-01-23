@@ -2,7 +2,6 @@ import { useSigner } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import { createSMA7702AccountClient } from "@account-kit/smart-contracts/experimental";
 import { odyssey, splitOdysseyTransport } from "./transportSetup";
-import { createPublicClient } from "viem";
 import {
   alchemyFeeEstimator,
   alchemyGasManagerMiddleware,
@@ -14,11 +13,6 @@ export const useSma7702Client = () => {
   const [client, setClient] = useState<Awaited<
     ReturnType<typeof createSMA7702AccountClient>
   > | null>(null);
-
-  const publicClient = createPublicClient({
-    chain: odyssey,
-    transport: splitOdysseyTransport,
-  });
 
   useEffect(() => {
     let isMounted = true;

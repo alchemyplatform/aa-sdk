@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
-import { TransactionType } from "./useTransaction";
+import { TransactionType } from "../../../hooks/7702/useRecurringTransactions";
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
 
@@ -22,7 +22,7 @@ export const Transactions = ({
 const Transaction = ({
   className,
   externalLink,
-  description,
+  buyAmountUsdc,
   state,
 }: TransactionType & { className?: string }) => {
   const getText = () => {
@@ -35,7 +35,9 @@ const Transaction = ({
     if (state === "next") {
       return "Next buy in 10 seconds...";
     }
-    return description;
+    if (state === "complete") {
+      return `Bought 1 ETH for ${buyAmountUsdc.toLocaleString()} USDC`;
+    }
   };
 
   return (

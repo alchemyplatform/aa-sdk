@@ -1,15 +1,15 @@
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 import { MintCard7702 } from "./MintCard7702";
 import { TransactionsCard } from "./TransactionsCard";
-import { useMint } from "./useMint";
-import { useTransactions } from "./useTransaction";
+import { useMint } from "../../../hooks/7702/useMint";
+import { useRecurringTransactions } from "../../../hooks/7702/useRecurringTransactions";
 
 export const Wrapper7702 = () => {
   const {
     isLoading: isLoadingTransactions,
     transactions,
     handleTransactions,
-  } = useTransactions();
+  } = useRecurringTransactions();
   const {
     isLoading: isLoadingMint,
     status,

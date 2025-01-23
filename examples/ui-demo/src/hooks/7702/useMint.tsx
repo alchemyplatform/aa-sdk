@@ -1,7 +1,3 @@
-import {
-  useSendUserOperation,
-  useSmartAccountClient,
-} from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import {
   AccountKitNftMinterABI,
@@ -11,7 +7,7 @@ import { ODYSSEY_EXPLORER_URL } from "./constants";
 import { useCallback, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { encodeFunctionData, Hash } from "viem";
-import { MintStatus } from "./MintCard7702";
+import { MintStatus } from "../../components/shared/7702/MintCard7702";
 import { useSma7702Client } from "./useSma7702Client";
 
 const initialValuePropState = {
@@ -121,7 +117,7 @@ export const useMint = () => {
     if (txnHash) {
       handleSuccess(txnHash);
     }
-  }, [client]);
+  }, [client, handleSuccess, handleError]);
 
   return {
     isLoading,

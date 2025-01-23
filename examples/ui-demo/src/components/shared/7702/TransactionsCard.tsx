@@ -2,7 +2,7 @@ import { Key } from "@/components/icons/key";
 import { Button } from "./Button";
 import { useState } from "react";
 import { Transactions } from "./Transactions";
-import { TransactionType } from "./useTransaction";
+import { TransactionType } from "../../../hooks/7702/useRecurringTransactions";
 
 export const TransactionsCard = ({
   isLoading,
