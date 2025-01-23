@@ -20,6 +20,7 @@ export const sharedConfig = defineConfig({
     pool: "threads",
     poolOptions: {
       threads: {
+        minThreads: 4,
         maxThreads: 4,
       },
     },
