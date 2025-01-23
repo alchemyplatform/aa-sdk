@@ -17,10 +17,12 @@ export const send7702UO = async (
   transport: AlchemyTransport,
   signer: SmartAccountSigner
 ) => {
-  console.log(
-    "supported entry points: ",
-    await client.getSupportedEntryPoints()
-  );
+  // console.log(
+  //   "supported entry points: ",
+  //   await client.getSupportedEntryPoints()
+  // );
+
+  // console.log("reading env from client", process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID);
 
   const accountClient = await createSMA7702AccountClient({
     chain: odyssey,
@@ -28,19 +30,19 @@ export const send7702UO = async (
     signer,
     feeEstimator: alchemyFeeEstimator(transport),
     ...alchemyGasManagerMiddleware(
-      process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID!
+      process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!
     ),
   });
 
-  const uoHash = await accountClient.sendUserOperation({
-    uo: {
-      target: zeroAddress,
-      data: "0x",
-      value: BigInt(0),
-    },
-  });
+  // const uoHash = await accountClient.sendUserOperation({
+  //   uo: {
+  //     target: zeroAddress,
+  //     data: "0x",
+  //     value: BigInt(0),
+  //   },
+  // });
 
-  const txnHash = await accountClient.waitForUserOperationTransaction(uoHash);
+  // const txnHash = await accountClient.waitForUserOperationTransaction(uoHash);
 
-  console.log("txnHash: ", txnHash);
+  // console.log("txnHash: ", txnHash);
 };

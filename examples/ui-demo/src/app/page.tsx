@@ -9,7 +9,6 @@ import {
 } from "@/components/shared/eoa-post-login/EOAPostLoginContents";
 import ExternalLink from "@/components/shared/ExternalLink";
 import { MintCard } from "@/components/shared/mint-card/MintCard";
-import { Debug7702Button } from "@/components/shared/7702/Debug7702Button";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 import { cn } from "@/lib/utils";
 import { Metrics } from "@/metrics";

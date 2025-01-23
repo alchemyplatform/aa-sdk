@@ -7,7 +7,7 @@ description: Overview of the default7702UserOpSigner method
 # default7702UserOpSigner
 
 Provides a default middleware function for signing user operations with a client account when using ERC-7702 to upgrade local accounts to smart accounts.
-If the SmartAccount doesn't support `signAuthorization`, then this just runs the default UserOpSigner middleware
+If the SmartAccount doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware
 
 ## Import
 
@@ -17,27 +17,12 @@ import { default7702UserOpSigner } from "@aa-sdk/core";
 
 ## Parameters
 
-### struct
+### userOpSigner
 
-`UserOperationStruct`
-The user operation structure to be signed
-
-### params
-
-`*`
-The middleware context containing the client and account information
-
-### params.client
-
-`Client`
-The client object, which should include account and chain information
-
-### params.account
-
-`Account`
-Optional, the account used for signing, defaults to the client's account if not provided
+`ClientMiddlewareFn`
+Optional user operation signer function
 
 ## Returns
 
-`Promise<UserOperationStruct>`
-A promise that resolves to the signed user operation structure
+`Function`
+An async function that processes the user operation and returns the authorized operation with an authorization tuple if necessary
