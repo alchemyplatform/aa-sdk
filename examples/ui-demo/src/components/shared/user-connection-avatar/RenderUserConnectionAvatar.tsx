@@ -39,10 +39,7 @@ export const RenderUserConnectionAvatar = (
   }, [nftTransferred, deploymentStatus, refetch]);
 
   return (
-    <div
-      className="border-b border-border overflow-hidden pb-6 lg:border-none lg:pb-0"
-      {...props}
-    >
+    <div className="overflow-hidden" {...props}>
       {/* Popover - Visible on desktop screens */}
       <div className="hidden lg:block overflow-hidden">
         <RenderPopoverMenu deploymentStatus={deploymentStatus} />

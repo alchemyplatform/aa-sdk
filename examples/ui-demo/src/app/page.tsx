@@ -10,13 +10,10 @@ import {
 import { MintCard } from "@/components/shared/mint-card/MintCard";
 import { Debug7702Button } from "@/components/shared/7702/Debug7702Button";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
-import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
 import { TopNav } from "../components/topnav/TopNav";
 import { Wrapper7702 } from "@/components/shared/7702/Wrapper";
-import { useConfigStore } from "@/state";
-import { WalletTypes } from "./config";
 import { ContentNav } from "@/components/content/ContentNav";
 import { ContentWrapper } from "@/components/content/ContentWrapper";
 import { cn } from "@/lib/utils";
@@ -41,13 +38,13 @@ export default function Home() {
     >
       <TopNav />
       <div
-        className={`flex flex-col flex-1 xl:px-6 lg:px-10 lg:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} lg:overflow-hidden`}
+        className={`flex flex-col flex-1 xl:px-6 lg:px-10 lg:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} lg:overflow-hidden mt-24 lg:mt-0`}
       >
-        <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
+        <div className="flex flex-1 justify-center gap-6 overflow-hidden">
           <ConfigurationWrapper />
           <div
             className={cn(
-              "flex flex-col flex-[2] basis-0 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none",
+              "flex flex-col lg:flex-1 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none",
               theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
               showCode && "bg-white"
             )}
@@ -56,13 +53,6 @@ export default function Home() {
             <ContentWrapper showCode={showCode} />
           </div>
         </div>
-        {/* <div className="flex flex-1 flex-col gap-6 p-6 pt-24 overflow-auto scrollbar-none lg:hidden">
-          <RenderContent
-            user={!!user}
-            isEOAUser={isEOAUser}
-            isSmartWallet={walletType === WalletTypes.smart}
-          />
-        </div> */}
       </div>
     </main>
   );

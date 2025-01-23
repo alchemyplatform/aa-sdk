@@ -5,7 +5,7 @@ import { Styling } from "./Styling";
 
 export function ConfigurationWrapper() {
   return (
-    <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+    <div className="hidden lg:block w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none">
       <Configuration />
       <Authentication />
       <Styling />
