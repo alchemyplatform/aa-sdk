@@ -30,7 +30,6 @@ export const default7702UserOpSigner: (
     const signer = account.getSigner();
 
     if (!signer.signAuthorization) {
-      console.log("account does not support signAuthorization");
       return uo;
     }
 
