@@ -1,10 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
-import { AuthCard, useUser } from "@account-kit/react";
+import { AuthCard, useUser, useSigner } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { MintCard } from "../shared/mint-card/MintCard";
+
+const OTP_AUTH_DELAY = 3000;
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const theme = useTheme();
@@ -26,9 +29,32 @@ export function AuthCardWrapper({ className }: { className?: string }) {
 
 const RenderContent = () => {
   const user = useUser();
-  const hasUser = !!user;
+  const signer = useSigner();
+  const [showAuthCard, setShowAuthCard] = useState(() => !user);
 
-  if (!hasUser) {
+  useEffect(() => {
+    const hasUser = !!user;
+
+    const getAuthDetails = async () => {
+      const sessionType = await signer?.getSessionType();
+
+      if (sessionType === "otp") {
+        setTimeout(() => {
+          setShowAuthCard(!hasUser);
+        }, OTP_AUTH_DELAY);
+      } else {
+        setShowAuthCard(!hasUser);
+      }
+    };
+
+    if (!hasUser) {
+      setShowAuthCard(true);
+    } else if (signer && hasUser) {
+      getAuthDetails();
+    }
+  }, [signer, user]);
+
+  if (showAuthCard) {
     return (
       <div className="flex flex-col gap-2 w-[368px]">
         <div
@@ -44,7 +70,7 @@ const RenderContent = () => {
     );
   }
 
-  const isEOAUser = user.type === "eoa";
+  const isEOAUser = user?.type === "eoa";
 
   if (isEOAUser) {
     return (
