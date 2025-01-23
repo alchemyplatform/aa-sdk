@@ -72,8 +72,8 @@ export async function createSMA7702AccountClient(
 
   return createSmartAccountClient({
     account: sma7702Account,
-    gasEstimator: default7702GasEstimator,
-    signUserOperation: default7702UserOpSigner,
+    gasEstimator: default7702GasEstimator(config.gasEstimator),
+    signUserOperation: default7702UserOpSigner(config.signUserOperation),
     ...config,
   });
 }
