@@ -55,6 +55,22 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
     />
     <br />
 
+    <u>**Social auth**</u>
+
+    If you want to enable social login, toggle which auth providers
+    you want to support.
+
+    - Make sure to add your app's deep link as a **whitelisted origin**. This is necessary to handle redirects from the signer after a user has been authenticated.
+    - Add the link that your dapp will be running on to the **whitelisted origin** list
+    - Optionally enter your own OAuth credentials or use our defaults
+
+    <br />
+    <img
+      src="/images/getting-started/social-auth-setup-mobile.png"
+      alt="configure social auth"
+      style={{ width: "50%" }}
+    />
+
 3.  Create the config and copy the **API Key**
     <img
       src="/images/getting-started/get-api-key.png"
@@ -64,7 +80,7 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
 
 ## Ensure Deep Linking is properly configured
 
-If you plan on using email auth, you'll need to ensure deep linking is properly configured in your app.
+If you plan on using email or social auth, you'll need to ensure deep linking is properly configured in your app.
 
 Depending on if your app uses `expo-router`, `react-navigation`, or some other navigation library, you'll need to configure deep linking accordingly.
 
