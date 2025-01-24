@@ -18,8 +18,13 @@ import { cookieStorage } from "@account-kit/core";
 
 ### config
 
-`{domain?: string}`
+`{sessionLength: number; domain?: string}`
 optional config object
+
+### config.sessionLength
+
+`number`
+the duration until the cookie expires in milliseconds (deprecated)
 
 ### config.domain
 
