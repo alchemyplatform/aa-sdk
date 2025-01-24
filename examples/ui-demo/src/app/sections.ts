@@ -23,7 +23,17 @@ export function getSectionsForConfig(
   }
   if (showOAuth) {
     for (const [method, enabled] of Object.entries(oAuthMethods)) {
-      if (enabled) {
+      if (method === "twitter" && enabled) {
+        midSection.push({
+          type: "social",
+          authProviderId: "auth0",
+          mode: "popup",
+          auth0Connection: "twitter",
+          displayName: "X",
+          logoUrl: "/images/twitter.svg",
+          scope: "openid profile",
+        });
+      } else if (enabled) {
         midSection.push({
           type: "social",
           authProviderId: method as KnownAuthProvider, // TODO: extend for BYO auth provider
