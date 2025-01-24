@@ -60,7 +60,7 @@ export function useAuthContext<
  * A custom hook that provides the authentication context based on the specified authentication step type. It ensures that the hook is used within an `AuthModalProvider` and throws an error if the context is not available or if the current auth step type does not match the expected type.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useAuthContext } from "@account-kit/react";
  *
  * const { authStep } = useAuthContext();
