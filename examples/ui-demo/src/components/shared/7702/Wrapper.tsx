@@ -1,9 +1,7 @@
-import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 import { MintCard7702 } from "./MintCard7702";
 import { TransactionsCard } from "./TransactionsCard";
 import { useMint } from "./useMint";
 import { useTransactions } from "./useTransaction";
-import { Debug7702Button } from "./Debug7702Button";
 
 export const Wrapper7702 = () => {
   const {
@@ -19,8 +17,7 @@ export const Wrapper7702 = () => {
     uri,
   } = useMint();
   return (
-    <div className="flex max-[1200px]:flex-col gap-6 lg:mt-6 items-center border-btn-secondary border lg:border-none radius-1">
-      <RenderUserConnectionAvatar className="lg:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
+    <div className="flex max-[1200px]:flex-col gap-6 lg:mt-6 items-center border-btn-secondary radius-1">
       <MintCard7702
         isLoading={isLoadingMint || isLoadingTransactions}
         isDisabled={isLoadingTransactions}
@@ -36,7 +33,6 @@ export const Wrapper7702 = () => {
         transactions={transactions}
         handleTransactions={handleTransactions}
       />
-      <Debug7702Button />
     </div>
   );
 };

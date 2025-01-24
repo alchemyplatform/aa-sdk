@@ -18,6 +18,7 @@ import { ContentNav } from "@/components/content/ContentNav";
 import { ContentWrapper } from "@/components/content/ContentWrapper";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
+import { useUser } from "@account-kit/react";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ const inter = Inter({
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
   const theme = useTheme();
+  const user = useUser();
   return (
     <main
       className={`flex flex-col h-auto lg:bg-bg-main min-h-screen lg:min-h-0 lg:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
@@ -44,9 +46,10 @@ export default function Home() {
           <ConfigurationWrapper />
           <div
             className={cn(
-              "flex flex-col lg:flex-1 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none",
+              "flex flex-col lg:flex-1 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none mb-6 lg:mb-0",
               theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
-              showCode && "bg-white"
+              showCode && "bg-white",
+              !user && "border-none lg:border-solid"
             )}
           >
             <ContentNav showCode={showCode} setShowCode={setShowCode} />

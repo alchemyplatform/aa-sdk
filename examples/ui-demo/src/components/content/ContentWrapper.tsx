@@ -55,11 +55,20 @@ const RenderContent = () => {
 
   if (isEOAUser) {
     return (
-      <div className="h-full w-full pb-10 pt-5 flex flex-col justify-center items-center">
+      <div className="h-full w-full pb-10 pt-5 flex flex-col justify-start items-center">
         <EOAPostLogin />
       </div>
     );
   }
 
-  return walletType === WalletTypes.smart ? <MintCard /> : <Wrapper7702 />;
+  const renderedMintCard =
+    walletType === WalletTypes.smart ? <MintCard /> : <Wrapper7702 />;
+
+  return (
+    <div>
+      {renderedMintCard}
+      {renderedMintCard}
+      {renderedMintCard}
+    </div>
+  );
 };
