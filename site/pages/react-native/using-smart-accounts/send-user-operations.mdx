@@ -1,0 +1,159 @@
+---
+title: Send User Operations
+description: Learn how to send user operations using Account Kit in a React Native application.
+---
+
+# Send user operations
+
+Once your users have been [authenticated](/react-native/signer/authenticating-users/authenticating-with-otp), you can start sending user operations! Account Kit makes it really easy to send user operations using React hooks.
+
+To send user operations, you need to first create a `SmartAccountClient` using the [`createLightAccountClient`](/reference/account-kit/smart-contracts/functions/createLightAccountClient) function.
+Once you have a `SmartAccountClient`, you can use the [`sendUserOperation`](/reference/aa-sdk/core/functions/sendUserOperation#senduseroperation) function to send user operations.
+
+If you want to sponsor the gas for a user, see our [guide](/react-native/sponsor-gas).
+
+## Single user operation
+
+:::tip
+In the below example, we use `LightAccount` as the underlying Smart Contract type. You can also use `MultiOwnerModularAccount` if you want to provide your users with an ERC-6900 compliant modular account,
+or you can use `MultiOwnerLightAccount` if you want to support an account with multiple owners.
+:::
+
+:::code-group
+
+```tsx twoslash [user-operation-component.tsx]
+import React, { useState, useEffect } from "react";
+import { Alert } from "react-native";
+import { User } from "@account-kit/signer";
+import {
+	createLightAccountClient,
+	LightAccount,
+} from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { SmartAccountClient } from "@aa-sdk/core";
+
+// import the signer
+import { signer } from "./signer";
+
+export default function MyOpSenderComponent() {
+	const [user, setUser] = useState<User | null>(null);
+	const [account, setAccount] = useState<LightAccount | null>(null);
+	const [client, setClient] = useState<SmartAccountClient | null>(null);
+	const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
+
+	useEffect(() => {
+		// get the user if they are already authenticated
+		signer.getAuthDetails().then(setUser);
+	}, []);
+
+	useEffect(() => {
+		if (user) {
+			// Create a light account client for the authenticated user
+			createLightAccountClient({
+				signer,
+				chain: sepolia,
+				transport: alchemy({ apiKey: "YOUR_API_KEY" }),
+			}).then((client) => {
+				setClient(client);
+				setAccount(client.account);
+			});
+		}
+	}, [user]);
+
+	const handleSendUserOperation = async () => {
+		try {
+			setIsSendingUserOperation(true);
+
+			const hash =
+				account &&
+				(await client?.sendUserOperation({
+					uo: {
+						target: "0x0000000000000000000000000000000000000000",
+						data: "0x",
+						value: 0n,
+					},
+					account,
+				}));
+
+			hash && Alert.alert("User Operation Sent", hash.hash);
+		} catch (error) {
+			console.error("Error sending user operation", error);
+			Alert.alert("Error", "Error sending user operation");
+		} finally {
+			setIsSendingUserOperation(false);
+		}
+	};
+
+	return (
+		<div>
+			<button
+				onClick={handleSendUserOperation}
+				disabled={isSendingUserOperation}
+			>
+				{isSendingUserOperation ? "Sending..." : "Send UO"}
+			</button>
+		</div>
+	);
+}
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::
+
+## Batch user operation
+
+It's also possible to send user operations in batch using the same hook.
+
+```tsx twoslash
+import React from "react";
+import {
+	type UseSendUserOperationResult,
+	useSendUserOperation,
+	useSmartAccountClient,
+} from "@account-kit/react";
+
+export default function MyOpSenderComponent() {
+	const { client } = useSmartAccountClient({ type: "LightAccount" });
+
+	const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+		client,
+		// optional parameter that will wait for the transaction to be mined before returning
+		waitForTxn: true,
+		onSuccess: ({ hash, request }) => {
+			// [optional] Do something with the hash and request
+		},
+		onError: (error) => {
+			// [optional] Do something with the error
+		},
+	});
+
+	return (
+		<div>
+			<button
+				onClick={() =>
+					sendUserOperation({
+						uo: [
+							{
+								target: "0xTARGET_ADDRESS",
+								data: "0x",
+								value: 0n,
+							},
+							{
+								target: "0xTARGET_ADDRESS",
+								data: "0x",
+								value: 0n,
+							},
+						],
+					})
+				}
+				disabled={isSendingUserOperation}
+			>
+				{isSendingUserOperation ? "Sending..." : "Send UO"}
+			</button>
+		</div>
+	);
+}
+```
