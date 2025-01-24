@@ -4,54 +4,66 @@ import type { StoredState } from "../store/types.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { deserialize } from "./deserialize.js";
 
-const THIRTY_DAYS_MS = 1000 * 60 * 60 * 24 * 30;
+// The maximum duration of a cookie according to the spec is 400 days.
+// https://httpwg.org/http-extensions/draft-ietf-httpbis-rfc6265bis.html#name-cookie-lifetime-limits
+const MAX_COOKIE_DURATION_MS = 1000 * 60 * 60 * 24 * 400;
 
 /**
  * Function to create cookie based Storage
  *
- * @param {{domain?: string}} config optional config object
+ * @param {{sessionLength: number; domain?: string}} config optional config object
+ * @param {number} config.sessionLength the duration until the cookie expires in milliseconds @deprecated
  * @param {string} config.domain optional domain to set the cookie on, eg: `example.com` if you want the cookie to work on all subdomains of example.com
  * @returns {Storage} an instance of a browser storage object that leverages cookies
  */
-export const cookieStorage = (config?: { domain?: string }): Storage => ({
-  // this is unused for now, we should update this if we do need it
-  length: 0,
-
-  clear: function (): void {
-    throw new Error(
-      "clearing cookies is not supported as this could lead to unexpected behaviour.\n" +
-        " Use removeItem instead or you can manually clear cookies with document.cookie = ''"
+export const cookieStorage = (config?: {
+  sessionLength?: number;
+  domain?: string;
+}): Storage => {
+  if (config?.sessionLength) {
+    console.warn(
+      "The cookieStorage sessionLength option is deprecated and will be ignored."
     );
-  },
+  }
+  return {
+    // this is unused for now, we should update this if we do need it
+    length: 0,
 
-  getItem: function (key: string): string | null {
-    if (typeof document === "undefined") return null;
+    clear: function (): void {
+      throw new Error(
+        "clearing cookies is not supported as this could lead to unexpected behaviour.\n" +
+          " Use removeItem instead or you can manually clear cookies with document.cookie = ''"
+      );
+    },
 
-    const cookieValue = Cookies.get(key);
-    return cookieValue ? decodeURIComponent(cookieValue) : null;
-  },
+    getItem: function (key: string): string | null {
+      if (typeof document === "undefined") return null;
 
-  // we will not be using this, if we have need for it add it back later
-  key: function (): string | null {
-    throw new Error("Function not implemented.");
-  },
+      const cookieValue = Cookies.get(key);
+      return cookieValue ? decodeURIComponent(cookieValue) : null;
+    },
 
-  removeItem: function (key: string): void {
-    if (typeof document === "undefined") return;
+    // we will not be using this, if we have need for it add it back later
+    key: function (): string | null {
+      throw new Error("Function not implemented.");
+    },
 
-    Cookies.remove(key);
-  },
+    removeItem: function (key: string): void {
+      if (typeof document === "undefined") return;
 
-  setItem: function (key: string, value: string): void {
-    if (typeof document === "undefined") return;
+      Cookies.remove(key);
+    },
 
-    Cookies.set(key, value, {
-      // Note that cookies without an expiration are removed when the browser is closed.
-      expires: new Date(Date.now() + THIRTY_DAYS_MS),
-      domain: config?.domain,
-    });
-  },
-});
+    setItem: function (key: string, value: string): void {
+      if (typeof document === "undefined") return;
+
+      Cookies.set(key, value, {
+        expires: new Date(Date.now() + MAX_COOKIE_DURATION_MS),
+        domain: config?.domain,
+      });
+    },
+  };
+};
 
 /**
  * Converts a cookie into an initial state object
