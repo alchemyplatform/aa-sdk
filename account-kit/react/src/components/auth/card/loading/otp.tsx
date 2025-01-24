@@ -12,7 +12,7 @@ import { AuthStepStatus, useAuthContext } from "../../context.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
-const AUTH_DELAY = 3000;
+const AUTH_DELAY = 1000;
 
 export const LoadingOtp = () => {
   const { isConnected } = useSignerStatus();
