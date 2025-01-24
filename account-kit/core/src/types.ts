@@ -103,7 +103,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
   ssr?: boolean;
 
   // TODO: should probably abstract this out into a function
-  storage?: (config?: { sessionLength?: number; domain?: string }) => Storage;
+  storage?: (config?: { domain?: string }) => Storage;
 
   connectors?: CreateConnectorFn[];
 

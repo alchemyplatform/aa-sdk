@@ -1,22 +1,19 @@
-import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { cookieToInitialState as wagmiCookieToInitialState } from "@wagmi/core";
 import Cookies from "js-cookie";
 import type { StoredState } from "../store/types.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { deserialize } from "./deserialize.js";
 
+const THIRTY_DAYS_MS = 1000 * 60 * 60 * 24 * 30;
+
 /**
  * Function to create cookie based Storage
  *
- * @param {{sessionLength: number; domain?: string}} config optional config object that allows you to set the session length
- * @param {number} config.sessionLength the length of the session in milliseconds
+ * @param {{domain?: string}} config optional config object
  * @param {string} config.domain optional domain to set the cookie on, eg: `example.com` if you want the cookie to work on all subdomains of example.com
  * @returns {Storage} an instance of a browser storage object that leverages cookies
  */
-export const cookieStorage = (config?: {
-  sessionLength?: number;
-  domain?: string;
-}): Storage => ({
+export const cookieStorage = (config?: { domain?: string }): Storage => ({
   // this is unused for now, we should update this if we do need it
   length: 0,
 
@@ -49,9 +46,8 @@ export const cookieStorage = (config?: {
     if (typeof document === "undefined") return;
 
     Cookies.set(key, value, {
-      expires: new Date(
-        Date.now() + (config?.sessionLength ?? DEFAULT_SESSION_MS)
-      ),
+      // Note that cookies without an expiration are removed when the browser is closed.
+      expires: new Date(Date.now() + THIRTY_DAYS_MS),
       domain: config?.domain,
     });
   },
