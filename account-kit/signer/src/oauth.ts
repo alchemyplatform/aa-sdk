@@ -1,15 +1,4 @@
-import { sha256 } from "viem";
 import type { KnownAuthProvider } from "./signer";
-
-/**
- * Turnkey requires the nonce in the id token to be in this format.
- *
- * @param {string} turnkeyPublicKey key from a Turnkey iframe
- * @returns {string} nonce to be used in OIDC
- */
-export function getOauthNonce(turnkeyPublicKey: string): string {
-  return sha256(new TextEncoder().encode(turnkeyPublicKey)).slice(2);
-}
 
 export type ScopeAndClaims = {
   scope: string;
@@ -33,4 +22,15 @@ export function getDefaultScopeAndClaims(
   knownAuthProviderId: KnownAuthProvider
 ): ScopeAndClaims | undefined {
   return DEFAULT_SCOPE_AND_CLAIMS[knownAuthProviderId];
+}
+
+/**
+ * "openid" is a required scope in the OIDC protocol. Insert it if the user
+ * forgot.
+ *
+ * @param {string} scope scope param which may be missing "openid"
+ * @returns {string} scope which most definitely contains "openid"
+ */
+export function addOpenIdIfAbsent(scope: string): string {
+  return scope.match(/\bopenid\b/) ? scope : `openid ${scope}`;
 }
