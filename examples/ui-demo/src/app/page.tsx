@@ -15,7 +15,7 @@ import { Metrics } from "@/metrics";
 import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
@@ -36,14 +36,6 @@ export default function Home() {
   const user = useUser();
   const theme = useTheme();
   const isEOAUser = user?.type === "eoa";
-
-  useEffect(() => {
-    const f = (event: MessageEvent) => {
-      console.log("Received message", event.data);
-    };
-    window.addEventListener("message", f);
-    return () => window.removeEventListener("message", f);
-  }, []);
 
   return (
     <main
