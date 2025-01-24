@@ -481,7 +481,11 @@ export const SessionKeyPluginExecutionFunctionAbi = [
         type: "tuple[]",
         internalType: "struct Call[]",
         components: [
-          { name: "target", type: "address", internalType: "address" },
+          {
+            name: "target",
+            type: "address",
+            internalType: "address",
+          },
           { name: "value", type: "uint256", internalType: "uint256" },
           { name: "data", type: "bytes", internalType: "bytes" },
         ],
@@ -497,7 +501,11 @@ export const SessionKeyPluginExecutionFunctionAbi = [
     inputs: [
       { name: "sessionKey", type: "address", internalType: "address" },
       { name: "tag", type: "bytes32", internalType: "bytes32" },
-      { name: "permissionUpdates", type: "bytes[]", internalType: "bytes[]" },
+      {
+        name: "permissionUpdates",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -542,7 +550,11 @@ export const SessionKeyPluginAbi = [
     inputs: [
       { name: "sessionKey", type: "address", internalType: "address" },
       { name: "tag", type: "bytes32", internalType: "bytes32" },
-      { name: "permissionUpdates", type: "bytes[]", internalType: "bytes[]" },
+      {
+        name: "permissionUpdates",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -556,7 +568,11 @@ export const SessionKeyPluginAbi = [
         type: "tuple[]",
         internalType: "struct Call[]",
         components: [
-          { name: "target", type: "address", internalType: "address" },
+          {
+            name: "target",
+            type: "address",
+            internalType: "address",
+          },
           { name: "value", type: "uint256", internalType: "uint256" },
           { name: "data", type: "bytes", internalType: "bytes" },
         ],
@@ -582,7 +598,11 @@ export const SessionKeyPluginAbi = [
     inputs: [
       { name: "account", type: "address", internalType: "address" },
       { name: "sessionKey", type: "address", internalType: "address" },
-      { name: "contractAddress", type: "address", internalType: "address" },
+      {
+        name: "contractAddress",
+        type: "address",
+        internalType: "address",
+      },
     ],
     outputs: [
       { name: "isOnList", type: "bool", internalType: "bool" },
@@ -622,9 +642,21 @@ export const SessionKeyPluginAbi = [
         components: [
           { name: "hasLimit", type: "bool", internalType: "bool" },
           { name: "limit", type: "uint256", internalType: "uint256" },
-          { name: "limitUsed", type: "uint256", internalType: "uint256" },
-          { name: "refreshInterval", type: "uint48", internalType: "uint48" },
-          { name: "lastUsedTime", type: "uint48", internalType: "uint48" },
+          {
+            name: "limitUsed",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "refreshInterval",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "lastUsedTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
         ],
       },
     ],
@@ -645,9 +677,21 @@ export const SessionKeyPluginAbi = [
         components: [
           { name: "hasLimit", type: "bool", internalType: "bool" },
           { name: "limit", type: "uint256", internalType: "uint256" },
-          { name: "limitUsed", type: "uint256", internalType: "uint256" },
-          { name: "refreshInterval", type: "uint48", internalType: "uint48" },
-          { name: "lastUsedTime", type: "uint48", internalType: "uint48" },
+          {
+            name: "limitUsed",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "refreshInterval",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "lastUsedTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
         ],
       },
       { name: "shouldReset", type: "bool", internalType: "bool" },
@@ -682,9 +726,21 @@ export const SessionKeyPluginAbi = [
         components: [
           { name: "hasLimit", type: "bool", internalType: "bool" },
           { name: "limit", type: "uint256", internalType: "uint256" },
-          { name: "limitUsed", type: "uint256", internalType: "uint256" },
-          { name: "refreshInterval", type: "uint48", internalType: "uint48" },
-          { name: "lastUsedTime", type: "uint48", internalType: "uint48" },
+          {
+            name: "limitUsed",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "refreshInterval",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "lastUsedTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
         ],
       },
     ],
@@ -706,7 +762,11 @@ export const SessionKeyPluginAbi = [
     inputs: [
       { name: "account", type: "address", internalType: "address" },
       { name: "sessionKey", type: "address", internalType: "address" },
-      { name: "contractAddress", type: "address", internalType: "address" },
+      {
+        name: "contractAddress",
+        type: "address",
+        internalType: "address",
+      },
       { name: "selector", type: "bytes4", internalType: "bytes4" },
     ],
     outputs: [{ name: "isOnList", type: "bool", internalType: "bool" }],
@@ -746,7 +806,11 @@ export const SessionKeyPluginAbi = [
         type: "tuple",
         internalType: "struct PluginManifest",
         components: [
-          { name: "interfaceIds", type: "bytes4[]", internalType: "bytes4[]" },
+          {
+            name: "interfaceIds",
+            type: "bytes4[]",
+            internalType: "bytes4[]",
+          },
           {
             name: "dependencyInterfaceIds",
             type: "bytes4[]",
@@ -767,7 +831,11 @@ export const SessionKeyPluginAbi = [
             type: "bool",
             internalType: "bool",
           },
-          { name: "canSpendNativeToken", type: "bool", internalType: "bool" },
+          {
+            name: "canSpendNativeToken",
+            type: "bool",
+            internalType: "bool",
+          },
           {
             name: "permittedExternalCalls",
             type: "tuple[]",
@@ -778,8 +846,16 @@ export const SessionKeyPluginAbi = [
                 type: "address",
                 internalType: "address",
               },
-              { name: "permitAnySelector", type: "bool", internalType: "bool" },
-              { name: "selectors", type: "bytes4[]", internalType: "bytes4[]" },
+              {
+                name: "permitAnySelector",
+                type: "bool",
+                internalType: "bool",
+              },
+              {
+                name: "selectors",
+                type: "bytes4[]",
+                internalType: "bytes4[]",
+              },
             ],
           },
           {
@@ -802,7 +878,11 @@ export const SessionKeyPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -832,7 +912,11 @@ export const SessionKeyPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -862,7 +946,11 @@ export const SessionKeyPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -892,7 +980,11 @@ export const SessionKeyPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -922,7 +1014,11 @@ export const SessionKeyPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -940,7 +1036,11 @@ export const SessionKeyPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -1034,11 +1134,19 @@ export const SessionKeyPluginAbi = [
         type: "tuple",
         internalType: "struct UserOperation",
         components: [
-          { name: "sender", type: "address", internalType: "address" },
+          {
+            name: "sender",
+            type: "address",
+            internalType: "address",
+          },
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
+          {
+            name: "callGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -1049,13 +1157,21 @@ export const SessionKeyPluginAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
+          {
+            name: "maxFeePerGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
+          {
+            name: "paymasterAndData",
+            type: "bytes",
+            internalType: "bytes",
+          },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
@@ -1141,11 +1257,19 @@ export const SessionKeyPluginAbi = [
         type: "tuple",
         internalType: "struct UserOperation",
         components: [
-          { name: "sender", type: "address", internalType: "address" },
+          {
+            name: "sender",
+            type: "address",
+            internalType: "address",
+          },
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
+          {
+            name: "callGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -1156,13 +1280,21 @@ export const SessionKeyPluginAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
+          {
+            name: "maxFeePerGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
+          {
+            name: "paymasterAndData",
+            type: "bytes",
+            internalType: "bytes",
+          },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
@@ -1212,7 +1344,12 @@ export const SessionKeyPluginAbi = [
         indexed: true,
         internalType: "address",
       },
-      { name: "tag", type: "bytes32", indexed: true, internalType: "bytes32" },
+      {
+        name: "tag",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
     ],
     anonymous: false,
   },

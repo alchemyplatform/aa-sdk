@@ -27,7 +27,7 @@ export const reactNativeSidebar: SidebarItem[] = [
       },
       {
         text: "Social Login",
-        link: "/react-native/signer/#TODO",
+        link: "/react-native/signer/authenticating-users/authenticating-with-social-auth",
       },
     ],
   },
