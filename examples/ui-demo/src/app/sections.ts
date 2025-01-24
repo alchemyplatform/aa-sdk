@@ -51,8 +51,6 @@ export function getSectionsForConfig(
             });
 
             break;
-          default:
-            break;
         }
       } else if (enabled) {
         midSection.push({

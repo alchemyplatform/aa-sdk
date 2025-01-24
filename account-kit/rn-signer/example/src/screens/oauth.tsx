@@ -1,89 +1,41 @@
 /* eslint-disable import/extensions */
 import type { User } from "@account-kit/signer";
-import { useCallback, useEffect, useState } from "react";
-import {
-  Linking,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import signer from "../signer";
 
-export default function MagicLinkAuthScreen() {
-  const [email, setEmail] = useState<string>("");
+export default function OAuthScreen() {
   const [user, setUser] = useState<User | null>(null);
-
-  const handleUserAuth = ({ bundle }: { bundle: string }) => {
-    signer
-      .authenticate({
-        bundle,
-        type: "email",
-      })
-      .then(setUser)
-      .catch(console.error);
-  };
-
-  const handleIncomingURL = useCallback((event: { url: string }) => {
-    const regex = /[?&]([^=#]+)=([^&#]*)/g;
-
-    let params: Record<string, string> = {};
-    let match: RegExpExecArray | null;
-
-    while ((match = regex.exec(event.url))) {
-      if (match[1] && match[2]) {
-        params[match[1]] = match[2];
-      }
-    }
-
-    if (!params.bundle || !params.orgId) {
-      return;
-    }
-
-    handleUserAuth({
-      bundle: params.bundle ?? "",
-    });
-  }, []);
 
   useEffect(() => {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
+    signer.preparePopupOauth();
   }, []);
-
-  // Add listener for incoming links
-  useEffect(() => {
-    const subscription = Linking.addEventListener("url", handleIncomingURL);
-
-    return () => subscription.remove();
-  }, [handleIncomingURL]);
 
   return (
     <View style={styles.container}>
       {!user ? (
         <>
-          <TextInput
-            style={styles.textInput}
-            placeholderTextColor="gray"
-            placeholder="enter your email"
-            onChangeText={(text) => setEmail(text.toLowerCase())}
-            value={email}
-          />
-
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
               signer
                 .authenticate({
-                  email,
-                  type: "email",
-                  emailMode: "magicLink",
+                  type: "oauth",
+                  mode: "redirect",
+                  authProviderId: "google",
+                  redirectUrl: "rn-signer-demo://oauth",
+                })
+                .then((user) => {
+                  // Get user details after a successful authentication
+                  setUser(user);
                 })
                 .catch(console.error);
             }}
           >
-            <Text style={styles.buttonText}>Sign in</Text>
+            <Text style={styles.buttonText}>Sign in with OAuth</Text>
           </TouchableOpacity>
         </>
       ) : (
