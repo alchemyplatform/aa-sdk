@@ -99,7 +99,9 @@ export type SignerEndpoints = [
   {
     Route: "/v1/signup";
     Body:
-      | (Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string })
+      | (Omit<EmailAuthParams, "redirectParams"> & {
+          redirectParams?: string;
+        })
       | {
           passkey: {
             challenge: string;
@@ -117,7 +119,9 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/auth";
-    Body: Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string };
+    Body: Omit<EmailAuthParams, "redirectParams"> & {
+      redirectParams?: string;
+    };
     Response: {
       orgId: string;
       otpId?: string;
@@ -176,4 +180,22 @@ export type GetWebAuthnAttestationResult = {
   attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
   challenge: ArrayBuffer;
   authenticatorUserId: ArrayBuffer;
+};
+
+export type OauthState = {
+  authProviderId: string;
+  isCustomProvider?: boolean;
+  requestKey: string;
+  turnkeyPublicKey: string;
+  expirationSeconds?: number;
+  redirectUrl?: string;
+  openerOrigin?: string;
+};
+
+export type GetOauthProviderUrlArgs = {
+  oauthParams: OauthParams;
+  turnkeyPublicKey: string;
+  oauthCallbackUrl: string;
+  oauthConfig?: OauthConfig;
+  usesRelativeUrl?: boolean;
 };
