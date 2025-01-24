@@ -26,8 +26,8 @@ import React, { useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { User } from "@account-kit/signer";
 import {
-	createLightAccountClient,
-	LightAccount,
+  createLightAccountClient,
+  LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { SmartAccountClient } from "@aa-sdk/core";
@@ -36,64 +36,64 @@ import { SmartAccountClient } from "@aa-sdk/core";
 import { signer } from "./signer";
 
 export default function MyOpSenderComponent() {
-	const [user, setUser] = useState<User | null>(null);
-	const [account, setAccount] = useState<LightAccount | null>(null);
-	const [client, setClient] = useState<SmartAccountClient | null>(null);
-	const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [account, setAccount] = useState<LightAccount | null>(null);
+  const [client, setClient] = useState<SmartAccountClient | null>(null);
+  const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
 
-	useEffect(() => {
-		// get the user if they are already authenticated
-		signer.getAuthDetails().then(setUser);
-	}, []);
+  useEffect(() => {
+    // get the user if they are already authenticated
+    signer.getAuthDetails().then(setUser);
+  }, []);
 
-	useEffect(() => {
-		if (user) {
-			// Create a light account client for the authenticated user
-			createLightAccountClient({
-				signer,
-				chain: sepolia,
-				transport: alchemy({ apiKey: "YOUR_API_KEY" }),
-			}).then((client) => {
-				setClient(client);
-				setAccount(client.account);
-			});
-		}
-	}, [user]);
+  useEffect(() => {
+    if (user) {
+      // Create a light account client for the authenticated user
+      createLightAccountClient({
+        signer,
+        chain: sepolia,
+        transport: alchemy({ apiKey: "YOUR_API_KEY" }),
+      }).then((client) => {
+        setClient(client);
+        setAccount(client.account);
+      });
+    }
+  }, [user]);
 
-	const handleSendUserOperation = async () => {
-		try {
-			setIsSendingUserOperation(true);
+  const handleSendUserOperation = async () => {
+    try {
+      setIsSendingUserOperation(true);
 
-			const hash =
-				account &&
-				(await client?.sendUserOperation({
-					uo: {
-						target: "0x0000000000000000000000000000000000000000",
-						data: "0x",
-						value: 0n,
-					},
-					account,
-				}));
+      const hash =
+        account &&
+        (await client?.sendUserOperation({
+          uo: {
+            target: "0x0000000000000000000000000000000000000000",
+            data: "0x",
+            value: 0n,
+          },
+          account,
+        }));
 
-			hash && Alert.alert("User Operation Sent", hash.hash);
-		} catch (error) {
-			console.error("Error sending user operation", error);
-			Alert.alert("Error", "Error sending user operation");
-		} finally {
-			setIsSendingUserOperation(false);
-		}
-	};
+      hash && Alert.alert("User Operation Sent", hash.hash);
+    } catch (error) {
+      console.error("Error sending user operation", error);
+      Alert.alert("Error", "Error sending user operation");
+    } finally {
+      setIsSendingUserOperation(false);
+    }
+  };
 
-	return (
-		<div>
-			<button
-				onClick={handleSendUserOperation}
-				disabled={isSendingUserOperation}
-			>
-				{isSendingUserOperation ? "Sending..." : "Send UO"}
-			</button>
-		</div>
-	);
+  return (
+    <div>
+      <button
+        onClick={handleSendUserOperation}
+        disabled={isSendingUserOperation}
+      >
+        {isSendingUserOperation ? "Sending..." : "Send UO"}
+      </button>
+    </div>
+  );
 }
 ```
 
@@ -110,50 +110,50 @@ It's also possible to send user operations in batch using the same hook.
 ```tsx twoslash
 import React from "react";
 import {
-	type UseSendUserOperationResult,
-	useSendUserOperation,
-	useSmartAccountClient,
+  type UseSendUserOperationResult,
+  useSendUserOperation,
+  useSmartAccountClient,
 } from "@account-kit/react";
 
 export default function MyOpSenderComponent() {
-	const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
 
-	const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
-		client,
-		// optional parameter that will wait for the transaction to be mined before returning
-		waitForTxn: true,
-		onSuccess: ({ hash, request }) => {
-			// [optional] Do something with the hash and request
-		},
-		onError: (error) => {
-			// [optional] Do something with the error
-		},
-	});
+  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    client,
+    // optional parameter that will wait for the transaction to be mined before returning
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      // [optional] Do something with the hash and request
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
+  });
 
-	return (
-		<div>
-			<button
-				onClick={() =>
-					sendUserOperation({
-						uo: [
-							{
-								target: "0xTARGET_ADDRESS",
-								data: "0x",
-								value: 0n,
-							},
-							{
-								target: "0xTARGET_ADDRESS",
-								data: "0x",
-								value: 0n,
-							},
-						],
-					})
-				}
-				disabled={isSendingUserOperation}
-			>
-				{isSendingUserOperation ? "Sending..." : "Send UO"}
-			</button>
-		</div>
-	);
+  return (
+    <div>
+      <button
+        onClick={() =>
+          sendUserOperation({
+            uo: [
+              {
+                target: "0xTARGET_ADDRESS",
+                data: "0x",
+                value: 0n,
+              },
+              {
+                target: "0xTARGET_ADDRESS",
+                data: "0x",
+                value: 0n,
+              },
+            ],
+          })
+        }
+        disabled={isSendingUserOperation}
+      >
+        {isSendingUserOperation ? "Sending..." : "Send UO"}
+      </button>
+    </div>
+  );
 }
 ```
