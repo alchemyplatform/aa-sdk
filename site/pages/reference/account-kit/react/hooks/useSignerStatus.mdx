@@ -4,19 +4,19 @@ title: useSignerStatus
 description: Overview of the useSignerStatus method
 ---
 
-# useSignerStatus
+# [useSignerStatus](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignerStatus.ts)
 
-Hook to get the signer status, optionally using an override configuration.
+Hook to get the signer status, optionally using an override configuration. Useful if you’re building your own login.
 
 ## Import
 
-```ts
+```ts twoslash
 import { useSignerStatus } from "@account-kit/react";
 ```
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useSignerStatus } from "@account-kit/react";
 
 const signerStatus = useSignerStatus();
@@ -26,10 +26,10 @@ const signerStatus = useSignerStatus();
 
 ### override
 
-`AlchemyAccountContextProps`
+[`AlchemyAccountContextProps`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/context.tsx#L26)
 optional configuration to override the default context
 
 ## Returns
 
-`UseSignerStatusResult`
+[`UseSignerStatusResult`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/core/src/store/types.ts#L53)
 the current state of the signer

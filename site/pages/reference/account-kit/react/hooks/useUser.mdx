@@ -4,19 +4,22 @@ title: useUser
 description: Overview of the useUser method
 ---
 
-# useUser
+# [useUser](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUser.ts)
 
 A React hook that returns the current user information, either from an External Owned Account (EOA) or from the client store. It uses the Alchemy account context and synchronizes with external store updates.
+The best way to check if user is logged in for both smart account contract users and EOA.
+
+If using smart contract account, returns address of the signer. If only using smart account contracts then you can use [useSignerStatus](https://accountkit.alchemy.com/reference/account-kit/react/hooks/useSignerStatus#usesignerstatus) or [useAccount](https://accountkit.alchemy.com/reference/account-kit/react/hooks/useAccount#useaccount) to see if the account is defined.
 
 ## Import
 
-```ts
+```ts twoslash
 import { useUser } from "@account-kit/react";
 ```
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useUser } from "@account-kit/react";
 
 const user = useUser();
@@ -24,5 +27,5 @@ const user = useUser();
 
 ## Returns
 
-`UseUserResult`
+[`UseUserResult`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUser.ts#L9)
 The user information, including address, orgId, userId, and type. If the user is not connected, it returns null.
