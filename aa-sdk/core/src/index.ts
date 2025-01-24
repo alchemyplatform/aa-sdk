@@ -99,6 +99,8 @@ export { defaultUserOpSigner } from "./middleware/defaults/userOpSigner.js";
 export type * from "./middleware/erc7677middleware.js";
 export { erc7677Middleware } from "./middleware/erc7677middleware.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
+export type * from "./middleware/circlePaymasterMiddleware/index.js";
+export { circlePaymasterMiddleware } from "./middleware/circlePaymasterMiddleware/index.js";
 export type * from "./middleware/types.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { SignerSchema, isSigner } from "./signer/schema.js";
