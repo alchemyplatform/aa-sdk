@@ -12,11 +12,12 @@ const MAX_COOKIE_DURATION_MS = 1000 * 60 * 60 * 24 * 400;
  * Function to create cookie based Storage
  *
  * @param {{sessionLength: number; domain?: string}} config optional config object
- * @param {number} config.sessionLength the duration until the cookie expires in milliseconds @deprecated
+ * @param {number} config.sessionLength the duration until the cookie expires in milliseconds (deprecated)
  * @param {string} config.domain optional domain to set the cookie on, eg: `example.com` if you want the cookie to work on all subdomains of example.com
  * @returns {Storage} an instance of a browser storage object that leverages cookies
  */
 export const cookieStorage = (config?: {
+  /** @deprecated this option is deprecated and will be ignored */
   sessionLength?: number;
   domain?: string;
 }): Storage => {
