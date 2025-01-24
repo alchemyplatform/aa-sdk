@@ -6,6 +6,10 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { useConfigStore } from "@/state";
+import { createPublicClient, http } from "viem";
+import { odyssey } from "../7702/transportSetup";
+import { useSma7702Client } from "../7702/useSma7702Client";
+import { WalletTypes } from "@/app/config";
 
 type RenderAvatarMenuProps = {
   deploymentStatus: boolean;
@@ -16,13 +20,31 @@ export const RenderUserConnectionAvatar = (
   const { account } = useAccount({
     type: "LightAccount",
   });
+  const { walletType } = useConfigStore();
+
+  const publicClient = createPublicClient({
+    chain: odyssey,
+    transport: http(),
+  });
+
+  const client = useSma7702Client();
 
   const { nftTransferred } = useConfigStore(({ nftTransferred }) => ({
     nftTransferred,
   }));
 
-  const { data: deploymentStatus = false, refetch } = useQuery({
-    queryKey: ["deploymentStatus"],
+  const { data: delegationStatus = false, refetch: refetch7702 } = useQuery({
+    queryKey: ["deploymentStatus7702"],
+    queryFn: async () => {
+      const delegation = await publicClient.getCode({
+        address: client!.account.address,
+      });
+      return delegation !== "0x";
+    },
+  });
+
+  const { data: deploymentStatusSCA = false, refetch: refetchSCA } = useQuery({
+    queryKey: ["deploymentStatusSCA"],
     queryFn: async () => {
       const initCode = await account?.getInitCode();
       return initCode && initCode === "0x";
@@ -33,10 +55,11 @@ export const RenderUserConnectionAvatar = (
   useEffect(() => {
     // Refetch the deployment status if the NFT transferred state changes.
     // Only refetch if this is a user's first NFT Transfer...
-    if (nftTransferred && !deploymentStatus) {
-      refetch();
+    if (nftTransferred && !deploymentStatusSCA) {
+      refetchSCA();
+      refetch7702();
     }
-  }, [nftTransferred, deploymentStatus, refetch]);
+  }, [nftTransferred, deploymentStatusSCA, refetchSCA, refetch7702]);
 
   return (
     <div
@@ -45,11 +68,23 @@ export const RenderUserConnectionAvatar = (
     >
       {/* Popover - Visible on desktop screens */}
       <div className="hidden lg:block overflow-hidden">
-        <RenderPopoverMenu deploymentStatus={deploymentStatus} />
+        <RenderPopoverMenu
+          deploymentStatus={
+            walletType === WalletTypes.hybrid7702
+              ? delegationStatus
+              : deploymentStatusSCA
+          }
+        />
       </div>
       {/* Dialog - Visible on mobile screens */}
       <div className="block lg:hidden">
-        <RenderDialogMenu deploymentStatus={deploymentStatus} />
+        <RenderDialogMenu
+          deploymentStatus={
+            walletType === WalletTypes.hybrid7702
+              ? delegationStatus
+              : deploymentStatusSCA
+          }
+        />
       </div>
     </div>
   );
