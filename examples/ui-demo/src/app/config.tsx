@@ -13,7 +13,7 @@ export type Config = {
     showPasskey: boolean;
     addPasskey: boolean;
     showOAuth: boolean;
-    oAuthMethods: Record<KnownAuthProvider | "auth0" | "twitter", boolean>;
+    oAuthMethods: Record<KnownAuthProvider | "twitter", boolean>;
   };
   ui: {
     theme: "light" | "dark";

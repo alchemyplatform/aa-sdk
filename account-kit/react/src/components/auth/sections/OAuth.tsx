@@ -35,7 +35,13 @@ export const OAuth = memo(({ ...config }: Props) => {
       return (
         <Button
           variant="social"
-          icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
+          icon={
+            <img
+              src={config.logoUrl}
+              alt={config.auth0Connection}
+              className={`${config.invertDarkLogo ? "dark:invert" : ""}`}
+            />
+          }
           onClick={authenticate}
         ></Button>
       );

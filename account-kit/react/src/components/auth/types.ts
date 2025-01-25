@@ -23,6 +23,7 @@ export type AuthType =
           auth0Connection?: string;
           displayName: string;
           logoUrl: string;
+          invertDarkLogo?: boolean;
         }
       | {
           authProviderId: KnownAuthProvider;
@@ -30,6 +31,7 @@ export type AuthType =
           auth0Connection?: never;
           displayName?: never;
           logoUrl?: never;
+          invertDarkLogo?: never;
         }
     ) &
       OauthRedirectConfig);

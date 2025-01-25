@@ -31,6 +31,7 @@ export function getSectionsForConfig(
           auth0Connection: "twitter",
           displayName: "X",
           logoUrl: "/images/twitter.svg",
+          invertDarkLogo: true,
           scope: "openid profile",
         });
       } else if (enabled) {
