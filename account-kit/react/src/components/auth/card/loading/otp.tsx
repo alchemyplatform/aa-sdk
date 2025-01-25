@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { ls } from "../../../../strings.js";
 import {
@@ -8,54 +8,51 @@ import {
   isOTPCodeType,
 } from "../../../otp-input/otp-input.js";
 import { Spinner } from "../../../../icons/spinner.js";
-import { useAuthContext } from "../../context.js";
+import { AuthStepStatus, useAuthContext } from "../../context.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 
+const AUTH_DELAY = 3000;
+
 export const LoadingOtp = () => {
   const { isConnected } = useSignerStatus();
-  const { authStep, setAuthStep } = useAuthContext("otp_verify");
+  const { setAuthStep, authStep } = useAuthContext("otp_verify");
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
-  const [errorText, setErrorText] = useState(
-    getUserErrorMessage(authStep.error)
-  );
-  const resetOTP = () => {
+  const [errorText, setErrorText] = useState(authStep.error?.message || "");
+  const [titleText, setTitleText] = useState(ls.loadingOtp.title);
+  // const { setAuthStep } = useAuthContext();
+  const resetOTP = (errorText = "") => {
     setOtpCode(initialOTPValue);
-    setErrorText("");
+    setErrorText(errorText);
+    setTitleText(ls.loadingOtp.title);
   };
   const { authenticate } = useAuthenticate({
     onError: (error: any) => {
       console.error(error);
-      const { email } = authStep;
-      setAuthStep({ type: "otp_verify", email, error });
+
+      setAuthStep({ ...authStep, error, status: AuthStepStatus.base });
+      resetOTP(getUserErrorMessage(error));
     },
     onSuccess: () => {
       if (isConnected) {
-        setAuthStep({ type: "complete" });
+        setAuthStep({ ...authStep, status: AuthStepStatus.success });
+        setTitleText(ls.loadingOtp.verified);
+
+        // Wait 3 seconds before completing the auth step
+        setTimeout(() => {
+          setAuthStep({ type: "complete" });
+        }, AUTH_DELAY);
       }
     },
   });
-
-  useEffect(() => {
-    if (isOTPCodeType(otpCode)) {
-      setAuthStep({
-        type: "otp_completing",
-        email: authStep.email,
-        otp: otpCode.join(""),
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otpCode]);
 
   const setValue = (otpCode: OTPCodeType) => {
     setOtpCode(otpCode);
     if (isOTPCodeType(otpCode)) {
       const otp = otpCode.join("");
-      setAuthStep({
-        type: "otp_completing",
-        email: authStep.email,
-        otp,
-      });
+
+      setAuthStep({ ...authStep, status: AuthStepStatus.verifying });
+      setTitleText(ls.loadingOtp.verifying);
       authenticate({ type: "otp", otpCode: otp });
     }
   };
@@ -71,7 +68,7 @@ export const LoadingOtp = () => {
         />
       </div>
       <h3 className="text-fg-primary font-semibold text-lg mb-2">
-        {ls.loadingOtp.title}
+        {titleText}
       </h3>
       <p className="text-fg-secondary text-center text-sm mb-1">
         {ls.loadingOtp.body}
@@ -80,28 +77,14 @@ export const LoadingOtp = () => {
         {authStep.email}
       </p>
       <OTPInput
+        disabled={authStep.status === AuthStepStatus.verifying}
         value={otpCode}
         setValue={setValue}
         setErrorText={setErrorText}
         errorText={errorText}
         handleReset={resetOTP}
+        isVerified={authStep.status === AuthStepStatus.success}
       />
-    </div>
-  );
-};
-
-export const CompletingOtp = () => {
-  return (
-    <div className="flex flex-col items-center justify-center ">
-      <div className="flex flex-col items-center justify-center h-12 w-12 mb-5">
-        <Spinner />
-      </div>
-      <h2 className="text-fg-primary font-semibold text-lg mb-2">
-        {ls.completingOtp.title}
-      </h2>
-      <p className="text-fg-secondary text-center text-sm">
-        {ls.completingOtp.body}
-      </p>
     </div>
   );
 };
