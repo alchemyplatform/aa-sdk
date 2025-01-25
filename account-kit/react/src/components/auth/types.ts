@@ -3,6 +3,7 @@ import type {
   OauthRedirectConfig,
 } from "@account-kit/signer";
 import type { WalletConnectParameters } from "wagmi/connectors";
+import { capitalize } from "../../utils.js";
 
 export type AuthType =
   | {
@@ -20,13 +21,21 @@ export type AuthType =
           authProviderId: "auth0";
           isCustomProvider?: false;
           auth0Connection?: string;
+          displayName: string;
           logoUrl: string;
         }
       | {
           authProviderId: KnownAuthProvider;
           isCustomProvider?: false;
           auth0Connection?: never;
+          displayName?: never;
           logoUrl?: never;
         }
     ) &
       OauthRedirectConfig);
+
+export function getSocialProviderDisplayName(
+  authType: Extract<AuthType, { type: "social" }>
+): string {
+  return authType.displayName ?? capitalize(authType.authProviderId);
+}

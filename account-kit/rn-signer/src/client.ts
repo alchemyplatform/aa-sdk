@@ -1,8 +1,10 @@
 /* eslint-disable import/extensions */
 import "./utils/mmkv-localstorage-polyfill";
+import "./utils/buffer-polyfill";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
+  OauthFailedError,
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
@@ -16,10 +18,17 @@ import {
 } from "@account-kit/signer";
 import NativeTEKStamper from "./NativeTEKStamper";
 import { z } from "zod";
+import { InAppBrowser } from "react-native-inappbrowser-reborn";
+import { parseSearchParams } from "./utils/parseUrlParams";
+import { InAppBrowserUnavailableError } from "./errors";
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
   rootOrgId: z.string().optional(),
+  oauthCallbackUrl: z
+    .string()
+    .optional()
+    .default("https://signer.alchemy.com/callback"),
 });
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
@@ -27,14 +36,24 @@ export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
+  oauthCallbackUrl: string;
+  private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
+    "email",
+    "otp",
+    "oauth",
+  ];
+
   constructor(params: RNSignerClientParams) {
-    const { connection, rootOrgId } = RNSignerClientParamsSchema.parse(params);
+    const { connection, rootOrgId, oauthCallbackUrl } =
+      RNSignerClientParamsSchema.parse(params);
 
     super({
       stamper: NativeTEKStamper,
       rootOrgId: rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830",
       connection,
     });
+
+    this.oauthCallbackUrl = oauthCallbackUrl;
   }
 
   override async submitOtpCode(
@@ -95,14 +114,14 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
   }): Promise<User> {
-    if (
-      params.authenticatingType !== "email" &&
-      params.authenticatingType !== "otp"
-    ) {
+    if (!this.validAuthenticatingTypes.includes(params.authenticatingType)) {
       throw new Error("Unsupported authenticating type");
     }
 
-    this.eventEmitter.emit("authenticating", { type: "email" });
+    this.eventEmitter.emit("authenticating", {
+      type: params.authenticatingType,
+    });
+
     await this.stamper.init();
 
     const result = await this.stamper.injectCredentialBundle(params.bundle);
@@ -116,15 +135,67 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
   }
-  override oauthWithRedirect(
-    _args: Extract<OauthParams, { mode: "redirect" }>
-  ): Promise<never> {
-    throw new Error("Method not implemented.");
-  }
+  override oauthWithRedirect = async (
+    args: Extract<OauthParams, { mode: "redirect" }>
+  ): Promise<User> => {
+    // Ensure the In-App Browser required for authentication is available
+    if (!(await InAppBrowser.isAvailable())) {
+      throw new InAppBrowserUnavailableError();
+    }
+
+    this.eventEmitter.emit("authenticating", { type: "oauth" });
+
+    const oauthParams = args;
+    const turnkeyPublicKey = await this.stamper.init();
+    const oauthCallbackUrl = this.oauthCallbackUrl;
+    const oauthConfig = await this.getOauthConfig();
+    const providerUrl = await this.getOauthProviderUrl({
+      oauthParams,
+      turnkeyPublicKey,
+      oauthCallbackUrl,
+      oauthConfig,
+      usesRelativeUrl: false,
+    });
+    const redirectUrl = args.redirectUrl;
+    const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
+
+    if (res.type !== "success" || !res.url) {
+      throw new OauthFailedError("An error occured completing your request");
+    }
+
+    const authResult = parseSearchParams(res.url);
+    const bundle = authResult["alchemy-bundle"] ?? "";
+    const orgId = authResult["alchemy-org-id"] ?? "";
+    const idToken = authResult["alchemy-id-token"] ?? "";
+    const isSignup = authResult["alchemy-is-signup"];
+    const error = authResult["alchemy-error"];
+
+    if (bundle && orgId && idToken) {
+      const user = await this.completeAuthWithBundle({
+        bundle,
+        orgId,
+        connectedEventName: "connectedOauth",
+        idToken,
+        authenticatingType: "oauth",
+      });
+
+      if (isSignup) {
+        this.eventEmitter.emit("newUserSignup");
+      }
+
+      return user;
+    }
+
+    // Throw the Alchemy error if available, otherwise throw a generic error.
+    throw new OauthFailedError(
+      error ?? "An error occured completing your request"
+    );
+  };
+
   override oauthWithPopup(
     _args: Extract<OauthParams, { mode: "popup" }>
   ): Promise<User> {
-    throw new Error("Method not implemented.");
+    throw new Error("Method not implemented");
   }
 
   override async disconnect(): Promise<void> {
@@ -138,13 +209,18 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   override lookupUserWithPasskey(_user?: User): Promise<User> {
     throw new Error("Method not implemented.");
   }
-  protected override getOauthConfig(): Promise<OauthConfig> {
-    throw new Error("Method not implemented.");
-  }
+
   protected override getWebAuthnAttestation(
     _options: CredentialCreationOptions,
     _userDetails?: { username: string }
   ): Promise<GetWebAuthnAttestationResult> {
     throw new Error("Method not implemented.");
   }
+
+  protected override getOauthConfig = async (): Promise<OauthConfig> => {
+    const publicKey = await this.stamper.init();
+
+    const nonce = this.getOauthNonce(publicKey);
+    return this.request("/v1/prepare-oauth", { nonce });
+  };
 }
