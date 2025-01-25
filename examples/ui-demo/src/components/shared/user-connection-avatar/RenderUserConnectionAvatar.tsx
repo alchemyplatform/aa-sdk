@@ -6,13 +6,14 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { useConfigStore } from "@/state";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, Hex, http } from "viem";
 import { odyssey } from "../7702/transportSetup";
 import { useSma7702Client } from "../7702/useSma7702Client";
 import { WalletTypes } from "@/app/config";
 
 type RenderAvatarMenuProps = {
   deploymentStatus: boolean;
+  delegationAddress?: Hex;
 };
 export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
@@ -33,13 +34,16 @@ export const RenderUserConnectionAvatar = (
     nftTransferred,
   }));
 
-  const { data: delegationStatus = false, refetch: refetch7702 } = useQuery({
+  const { data, refetch: refetch7702 } = useQuery({
     queryKey: ["deploymentStatus7702"],
     queryFn: async () => {
-      const delegation = await publicClient.getCode({
+      const delegationAddress = await publicClient.getCode({
         address: client!.account.address,
       });
-      return delegation !== "0x";
+      return {
+        delegationAddress,
+        delegationStatus: delegationAddress !== "0x",
+      };
     },
   });
 
@@ -71,9 +75,12 @@ export const RenderUserConnectionAvatar = (
         <RenderPopoverMenu
           deploymentStatus={
             walletType === WalletTypes.hybrid7702
-              ? delegationStatus
+              ? data
+                ? data.delegationStatus
+                : false
               : deploymentStatusSCA
           }
+          delegationAddress={data ? data.delegationAddress : "0x"}
         />
       </div>
       {/* Dialog - Visible on mobile screens */}
@@ -81,16 +88,22 @@ export const RenderUserConnectionAvatar = (
         <RenderDialogMenu
           deploymentStatus={
             walletType === WalletTypes.hybrid7702
-              ? delegationStatus
+              ? data
+                ? data.delegationStatus
+                : false
               : deploymentStatusSCA
           }
+          delegationAddress={data ? data.delegationAddress : "0x"}
         />
       </div>
     </div>
   );
 };
 
-const RenderPopoverMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
+const RenderPopoverMenu = ({
+  deploymentStatus,
+  delegationAddress,
+}: RenderAvatarMenuProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
@@ -102,13 +115,19 @@ const RenderPopoverMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
         />
       </PopoverMenu.Trigger>
       <PopoverMenu.Content>
-        <UserConnectionDetails deploymentStatus={deploymentStatus} />
+        <UserConnectionDetails
+          deploymentStatus={deploymentStatus}
+          delegationAddress={delegationAddress}
+        />
       </PopoverMenu.Content>
     </PopoverMenu>
   );
 };
 
-const RenderDialogMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
+const RenderDialogMenu = ({
+  deploymentStatus,
+  delegationAddress,
+}: RenderAvatarMenuProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
@@ -125,7 +144,10 @@ const RenderDialogMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
       <DialogMenu isOpen={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogMenu.Content>
           <p className="text-lg font-semibold text-fg-primary mb-5">Profile</p>
-          <UserConnectionDetails deploymentStatus={deploymentStatus} />
+          <UserConnectionDetails
+            deploymentStatus={deploymentStatus}
+            delegationAddress={delegationAddress}
+          />
         </DialogMenu.Content>
       </DialogMenu>
     </div>

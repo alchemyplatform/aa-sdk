@@ -6,12 +6,15 @@ import { UserAddressLink } from "@/components/shared/user-connection-avatar/User
 import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
+import { Hex } from "viem";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
+  delegationAddress?: Hex;
 };
 export function UserConnectionDetails({
   deploymentStatus,
+  delegationAddress,
 }: UserConnectionDetailsProps) {
   const user = useUser();
   const signer = useSigner();
@@ -36,6 +39,13 @@ export function UserConnectionDetails({
     queryKey: ["signerAddress"],
     queryFn: getSignerAddress,
   });
+
+  let explorerPage = "";
+  if (delegationAddress) {
+    explorerPage = `https://odyssey-explorer.ithaca.xyz/address/0x${delegationAddress.slice(
+      8
+    )}`;
+  }
 
   if (!user) return null;
 
@@ -119,11 +129,17 @@ export function UserConnectionDetails({
           </span>
           <div className="flex flex-row items-center">
             <DeploymentStatusIndicator
-              isDeployed={false}
+              isDeployed={deploymentStatus}
               className="w-[12px] h-[12px]"
             />
             <span className="text-fg-primary block ml-1 text-md md:text-sm">
-              None
+              {deploymentStatus ? (
+                <a href={explorerPage} target="_blank" className="underline">
+                  Modular Account
+                </a>
+              ) : (
+                "None"
+              )}
             </span>
           </div>
         </div>
