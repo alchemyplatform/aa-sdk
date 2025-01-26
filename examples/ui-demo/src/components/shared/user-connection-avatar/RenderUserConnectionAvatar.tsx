@@ -6,10 +6,9 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { useConfigStore } from "@/state";
-import { createPublicClient, Hex, http } from "viem";
-import { odyssey } from "../7702/transportSetup";
 import { useSma7702Client } from "../7702/useSma7702Client";
 import { WalletTypes } from "@/app/config";
+import { Hex } from "viem";
 
 type RenderAvatarMenuProps = {
   deploymentStatus: boolean;
@@ -18,15 +17,12 @@ type RenderAvatarMenuProps = {
 export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
+  const [autoRefresh, setAutoRefresh] = useState(true);
+
   const { account } = useAccount({
     type: "LightAccount",
   });
   const { walletType } = useConfigStore();
-
-  const publicClient = createPublicClient({
-    chain: odyssey,
-    transport: http(),
-  });
 
   const client = useSma7702Client();
 
@@ -34,17 +30,20 @@ export const RenderUserConnectionAvatar = (
     nftTransferred,
   }));
 
-  const { data, refetch: refetch7702 } = useQuery({
+  const { data: hybridAccount } = useQuery({
     queryKey: ["deploymentStatus7702"],
     queryFn: async () => {
-      const delegationAddress = await publicClient.getCode({
+      const delegationAddress = await client!.getCode({
         address: client!.account.address,
       });
+      const delegationStatus = delegationAddress && delegationAddress !== "0x";
+      if (delegationStatus) setAutoRefresh(false);
       return {
         delegationAddress,
-        delegationStatus: delegationAddress !== "0x",
+        delegationStatus,
       };
     },
+    refetchInterval: autoRefresh ? 5000 : false, // refetch every 5 seconds
   });
 
   const { data: deploymentStatusSCA = false, refetch: refetchSCA } = useQuery({
@@ -61,9 +60,8 @@ export const RenderUserConnectionAvatar = (
     // Only refetch if this is a user's first NFT Transfer...
     if (nftTransferred && !deploymentStatusSCA) {
       refetchSCA();
-      refetch7702();
     }
-  }, [nftTransferred, deploymentStatusSCA, refetchSCA, refetch7702]);
+  }, [nftTransferred, deploymentStatusSCA, refetchSCA]);
 
   return (
     <div
@@ -75,12 +73,14 @@ export const RenderUserConnectionAvatar = (
         <RenderPopoverMenu
           deploymentStatus={
             walletType === WalletTypes.hybrid7702
-              ? data
-                ? data.delegationStatus
+              ? hybridAccount
+                ? hybridAccount.delegationStatus
                 : false
               : deploymentStatusSCA
           }
-          delegationAddress={data ? data.delegationAddress : "0x"}
+          delegationAddress={
+            hybridAccount ? hybridAccount.delegationAddress : "0x"
+          }
         />
       </div>
       {/* Dialog - Visible on mobile screens */}
@@ -88,12 +88,14 @@ export const RenderUserConnectionAvatar = (
         <RenderDialogMenu
           deploymentStatus={
             walletType === WalletTypes.hybrid7702
-              ? data
-                ? data.delegationStatus
+              ? hybridAccount
+                ? hybridAccount.delegationStatus
                 : false
               : deploymentStatusSCA
           }
-          delegationAddress={data ? data.delegationAddress : "0x"}
+          delegationAddress={
+            hybridAccount ? hybridAccount.delegationAddress : "0x"
+          }
         />
       </div>
     </div>

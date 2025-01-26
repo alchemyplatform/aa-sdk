@@ -40,13 +40,6 @@ export function UserConnectionDetails({
     queryFn: getSignerAddress,
   });
 
-  let explorerPage = "";
-  if (delegationAddress) {
-    explorerPage = `https://odyssey-explorer.ithaca.xyz/address/0x${delegationAddress.slice(
-      8
-    )}`;
-  }
-
   if (!user) return null;
 
   if (isEOAUser) {
@@ -133,8 +126,14 @@ export function UserConnectionDetails({
               className="w-[12px] h-[12px]"
             />
             <span className="text-fg-primary block ml-1 text-md md:text-sm">
-              {deploymentStatus ? (
-                <a href={explorerPage} target="_blank" className="underline">
+              {deploymentStatus && delegationAddress ? (
+                <a
+                  href={`https://odyssey-explorer.ithaca.xyz/address/0x${delegationAddress.slice(
+                    8
+                  )}`}
+                  target="_blank"
+                  className="underline"
+                >
                   Modular Account
                 </a>
               ) : (
