@@ -40,8 +40,14 @@ export const reactNativeSidebar: SidebarItem[] = [
         text: "Send user operations",
         link: "/react-native/using-smart-accounts/send-user-operations",
       },
-      { text: "Sponsor gas", link: "/react-native/#TODO" },
-      { text: "Retry user operations", link: "/react-native/#TODO" },
+      {
+        text: "Sponsor gas",
+        link: "/react-native/using-smart-accounts/sponsor-gas",
+      },
+      {
+        text: "Retry user operations",
+        link: "/react-native/using-smart-accounts/retry-user-operations",
+      },
     ],
   },
 ];

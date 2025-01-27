@@ -10,7 +10,7 @@ Once your users have been [authenticated](/react-native/signer/authenticating-us
 To send user operations, you need to first create a `SmartAccountClient` using the [`createLightAccountClient`](/reference/account-kit/smart-contracts/functions/createLightAccountClient) function.
 Once you have a `SmartAccountClient`, you can use the [`sendUserOperation`](/reference/aa-sdk/core/functions/sendUserOperation#senduseroperation) function to send user operations.
 
-If you want to sponsor the gas for a user, see our [guide](/react-native/sponsor-gas).
+If you want to sponsor the gas for a user, see our [guide](/react-native/using-smart-accounts/sponsor-gas).
 
 ## Single user operation
 
@@ -21,7 +21,7 @@ or you can use `MultiOwnerLightAccount` if you want to support an account with m
 
 :::code-group
 
-```tsx twoslash [user-operation-component.tsx]
+```tsx twoslash [send-user-operation.tsx]
 import React, { useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { User } from "@account-kit/signer";
@@ -37,7 +37,6 @@ import { signer } from "./signer";
 
 export default function MyOpSenderComponent() {
   const [user, setUser] = useState<User | null>(null);
-  const [account, setAccount] = useState<LightAccount | null>(null);
   const [client, setClient] = useState<SmartAccountClient | null>(null);
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
 
@@ -55,29 +54,26 @@ export default function MyOpSenderComponent() {
         transport: alchemy({ apiKey: "YOUR_API_KEY" }),
       }).then((client) => {
         setClient(client);
-        setAccount(client.account);
       });
     }
   }, [user]);
 
   const handleSendUserOperation = async () => {
+    if (!client) return;
+
     try {
       setIsSendingUserOperation(true);
+      const { hash } = await client.sendUserOperation({
+        uo: {
+          target: "0xTARGET_ADDRESS",
+          data: "0x",
+          value: 0n,
+        },
+        account: client.account,
+      });
 
-      const hash =
-        account &&
-        (await client?.sendUserOperation({
-          uo: {
-            target: "0x0000000000000000000000000000000000000000",
-            data: "0x",
-            value: 0n,
-          },
-          account,
-        }));
-
-      hash && Alert.alert("User Operation Sent", hash.hash);
+      Alert.alert("User Operation Sent", hash);
     } catch (error) {
-      console.error("Error sending user operation", error);
       Alert.alert("Error", "Error sending user operation");
     } finally {
       setIsSendingUserOperation(false);
@@ -105,55 +101,93 @@ export default function MyOpSenderComponent() {
 
 ## Batch user operation
 
-It's also possible to send user operations in batch using the same hook.
+To send multiple user operations in a single call, simply pass an array of user operations to the `sendUserOperation` method.
 
-```tsx twoslash
-import React from "react";
+:::code-group
+
+```tsx twoslash [batch-user-operation-component.tsx]
+import React, { useState, useEffect } from "react";
+import { Alert } from "react-native";
+import { User } from "@account-kit/signer";
 import {
-  type UseSendUserOperationResult,
-  useSendUserOperation,
-  useSmartAccountClient,
-} from "@account-kit/react";
+  createLightAccountClient,
+  LightAccount,
+} from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { SmartAccountClient } from "@aa-sdk/core";
+
+// import the signer
+import { signer } from "./signer";
 
 export default function MyOpSenderComponent() {
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const [user, setUser] = useState<User | null>(null);
+  const [client, setClient] = useState<SmartAccountClient | null>(null);
+  const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
 
-  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
-    client,
-    // optional parameter that will wait for the transaction to be mined before returning
-    waitForTxn: true,
-    onSuccess: ({ hash, request }) => {
-      // [optional] Do something with the hash and request
-    },
-    onError: (error) => {
-      // [optional] Do something with the error
-    },
-  });
+  useEffect(() => {
+    // get the user if they are already authenticated
+    signer.getAuthDetails().then(setUser);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      // Create a light account client for the authenticated user
+      createLightAccountClient({
+        signer,
+        chain: sepolia,
+        transport: alchemy({ apiKey: "YOUR_API_KEY" }),
+      }).then((client) => {
+        setClient(client);
+        setAccount(client.account);
+      });
+    }
+  }, [user]);
+
+  const handleSendUserOperation = async () => {
+    if (!client) return;
+
+    try {
+      setIsSendingUserOperation(true);
+
+      const { hash } = await client.sendUserOperation({
+        uo: [
+          {
+            target: "0xTARGET_ADDRESS_1",
+            data: "0x",
+            value: 0n,
+          },
+          {
+            target: "0xTARGET_ADDRESS_2",
+            data: "0x",
+            value: 0n,
+          },
+        ],
+        account: client.account,
+      });
+
+      Alert.alert("User Operation Sent", hash);
+    } catch (error) {
+      Alert.alert("Error", "Error sending user operation");
+    } finally {
+      setIsSendingUserOperation(false);
+    }
+  };
 
   return (
     <div>
       <button
-        onClick={() =>
-          sendUserOperation({
-            uo: [
-              {
-                target: "0xTARGET_ADDRESS",
-                data: "0x",
-                value: 0n,
-              },
-              {
-                target: "0xTARGET_ADDRESS",
-                data: "0x",
-                value: 0n,
-              },
-            ],
-          })
-        }
+        onClick={handleSendUserOperation}
         disabled={isSendingUserOperation}
       >
-        {isSendingUserOperation ? "Sending..." : "Send UO"}
+        {isSendingUserOperation ? "Sending..." : "Send User Operations"}
       </button>
     </div>
   );
 }
 ```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::

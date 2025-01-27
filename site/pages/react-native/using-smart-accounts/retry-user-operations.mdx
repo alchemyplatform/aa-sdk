@@ -1,0 +1,101 @@
+---
+title: Drop and Replace
+description: Learn how to use Drop and Replace to retry failing user operations.
+---
+
+import Snippet from "../../../shared/infra/drop-and-replace-description.mdx";
+
+# Drop and replace failing user operations
+
+<Snippet />
+
+:::code-group
+
+```tsx twoslash [retry-user-operations.tsx]
+import React, { useState, useEffect } from "react";
+import { Alert } from "react-native";
+import {
+  createLightAccountClient,
+  LightAccount,
+} from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { User } from "@account-kit/signer";
+import { SmartAccountClient } from "@aa-sdk/core";
+// import the signer
+import { signer } from "./signer.ts";
+
+export default function MyComponent() {
+  const [client, setClient] = useState<SmartAccountClient | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
+
+  // Assume the user is already authenticated
+  useEffect(() => {
+    signer.getAuthDetails().then(setUser);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      // Create a smart account client for the authenticated user
+      createLightAccountClient({
+        signer,
+        chain: sepolia,
+        transport: alchemy({ apiKey: "API_KEY" }),
+      }).then((client) => {
+        setClient(client);
+      });
+    }
+  }, [user]);
+
+  const handleSendUserOperation = async () => {
+    // 0. Ensure the client is available before sending a user operation
+    if (!client) return;
+
+    // 1. Send a sponsored User Operation
+    setIsSendingUserOperation(true);
+    const { hash, request } = await client?.sendUserOperation({
+      uo: {
+        target: "0xTARGET_ADDRESS",
+        data: "0x",
+        value: 0n,
+      },
+      account: client.account,
+    });
+
+    try {
+      // 2. Wait for the user operation to be mined
+      const txHash = await client.waitForUserOperationTransaction({
+        hash,
+      });
+
+      Alert.alert("User Operation Sent");
+    } catch (error) {
+      // 3. If the user operation fails, drop and replace it
+      const { hash: newHash } = await client.dropAndReplaceUserOperation({
+        uoToDrop: request,
+      });
+
+      // 4. Wait for the new user operation to be mined
+      await client.waitForUserOperationTransaction({
+        hash: newHash,
+      });
+    } finally {
+      setIsSendingUserOperation(false);
+    }
+  };
+
+  return (
+    <button onClick={handleSendUserOperation} disabled={isSendingUserOperation}>
+      {isSendingUserOperation ? "Sending..." : "Send Sponsored User Operation"}
+    </button>
+  );
+}
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::
+
+In the above example, we only try to drop and replace once before failing completely, but you can build more complex retry logic using this combination of `waitForUserOperationTransaction` and `dropAndReplace`.
