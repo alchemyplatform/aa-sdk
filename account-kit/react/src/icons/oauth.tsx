@@ -9,6 +9,7 @@ interface ContinueWithOAuthProps {
 interface OAuthConnectionFailedWithProps {
   provider: KnownAuthProvider;
   logoUrl?: string;
+  logoUrlDark?: string;
   auth0Connection?: string;
 }
 
@@ -27,6 +28,7 @@ export function ContinueWithOAuth({ provider }: ContinueWithOAuthProps) {
 export function OAuthConnectionFailed({
   provider,
   logoUrl,
+  logoUrlDark,
   auth0Connection,
 }: OAuthConnectionFailedWithProps) {
   return (
@@ -52,7 +54,14 @@ export function OAuthConnectionFailed({
       {(provider === "google" && <GoogleIcon />) ||
         (provider === "facebook" && <FacebookIcon />) ||
         (provider === "auth0" && logoUrl && (
-          <img src={logoUrl} alt={auth0Connection} />
+          <>
+            <img src={logoUrl} alt={auth0Connection} className="dark:hidden" />
+            <img
+              src={logoUrlDark ?? logoUrl}
+              alt={auth0Connection}
+              className="hidden dark:block"
+            />
+          </>
         ))}
     </div>
   );

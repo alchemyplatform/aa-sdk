@@ -35,6 +35,7 @@ export function getSectionsForConfig(
               auth0Connection: "twitter",
               displayName: "X",
               logoUrl: "/images/twitter.svg",
+              logoUrlDark: "/images/twitter-dark.svg",
               scope: "openid profile",
             });
 

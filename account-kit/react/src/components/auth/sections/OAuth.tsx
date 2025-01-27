@@ -39,9 +39,25 @@ export const OAuth = memo(({ ...config }: Props) => {
       return (
         <Button
           variant="social"
-          icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
+          icon={
+            <>
+              <img
+                src={config.logoUrl}
+                alt={config.auth0Connection}
+                className="dark:hidden"
+              />
+              <img
+                // Fallback to light logo if no dark logo provided.
+                src={config.logoUrlDark ?? config.logoUrl}
+                alt={config.auth0Connection}
+                className="hidden dark:block"
+              />
+            </>
+          }
           onClick={authenticate}
-        ></Button>
+        >
+          {config.displayName}
+        </Button>
       );
     default:
       assertNever(
