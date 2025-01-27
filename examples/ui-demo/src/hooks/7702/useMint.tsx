@@ -24,46 +24,6 @@ export const useMint = () => {
 
   const client = useSma7702Client();
 
-  const handleSuccess = (txnHash: Hash) => {
-    setStatus(() => ({
-      batch: "success",
-      gas: "success",
-      signing: "success",
-    }));
-
-    // TODO: move this log to a toast
-    console.log("Mint successful");
-    console.log(`${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`);
-
-    // Current design does not have a success toast, leaving commented to implement later.
-    // setToast({
-    //   type: "success",
-    //   text: (
-    //     <>
-    //       <span className={"inline-block lg:hidden"}>
-    //         {`You've collected your NFT!`}
-    //       </span>
-    //       <span className={"hidden lg:inline-block"}>
-    //         {`You've successfully collected your NFT! Refresh to mint
-    //                       again.`}
-    //       </span>
-    //     </>
-    //   ),
-    //   open: true,
-    // });
-  };
-
-  const handleError = (error: Error) => {
-    console.error(error);
-    setStatus(initialValuePropState);
-    setNftTransfered(false);
-    setToast({
-      type: "error",
-      text: "There was a problem with that action",
-      open: true,
-    });
-  };
-
   const { data: uri } = useQuery({
     queryKey: ["contractURI", nftContractAddressOdyssey],
     queryFn: async () => {
@@ -78,6 +38,46 @@ export const useMint = () => {
   });
 
   const handleCollectNFT = useCallback(async () => {
+    const handleSuccess = (txnHash: Hash) => {
+      setStatus(() => ({
+        batch: "success",
+        gas: "success",
+        signing: "success",
+      }));
+
+      // TODO: move this log to a toast
+      console.log("Mint successful");
+      console.log(`${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`);
+
+      // Current design does not have a success toast, leaving commented to implement later.
+      // setToast({
+      //   type: "success",
+      //   text: (
+      //     <>
+      //       <span className={"inline-block lg:hidden"}>
+      //         {`You've collected your NFT!`}
+      //       </span>
+      //       <span className={"hidden lg:inline-block"}>
+      //         {`You've successfully collected your NFT! Refresh to mint
+      //                       again.`}
+      //       </span>
+      //     </>
+      //   ),
+      //   open: true,
+      // });
+    };
+
+    const handleError = (error: Error) => {
+      console.error(error);
+      setStatus(initialValuePropState);
+      setNftTransfered(false);
+      setToast({
+        type: "error",
+        text: "There was a problem with that action",
+        open: true,
+      });
+    };
+
     if (!client) {
       console.error("no client");
       return;
@@ -117,7 +117,7 @@ export const useMint = () => {
     if (txnHash) {
       handleSuccess(txnHash);
     }
-  }, [client, handleSuccess, handleError]);
+  }, [client, setToast]);
 
   return {
     isLoading,
