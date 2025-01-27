@@ -39,6 +39,7 @@ export const CompletingOAuth = () => {
             provider={authStep.config.authProviderId}
             auth0Connection={authStep.config.auth0Connection}
             logoUrl={authStep.config.logoUrl}
+            logoUrlDark={authStep.config.logoUrlDark}
           />
         }
       />
