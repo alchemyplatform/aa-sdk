@@ -52,7 +52,7 @@ export function circlePaymasterMiddleware(
     );
 
     const paymasterPostOpGasLimit = numberToHex(
-      await getContracts(client).paymasterContract.read.additionalGasCharge()
+      await paymasterContract.read.additionalGasCharge()
     );
 
     return {
