@@ -10,7 +10,7 @@ const CodePreviewSwitch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
 >(({ className, ...props }, ref) => (
-  <div className="flex gap-2 items-center">
+  <div className="hidden lg:flex gap-2 items-center">
     <label
       htmlFor="code-preview-switch"
       className={cn(
