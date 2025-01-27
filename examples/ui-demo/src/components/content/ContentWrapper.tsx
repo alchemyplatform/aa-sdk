@@ -1,11 +1,8 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "../preview/CodePreview";
 import { AuthCard, useUser } from "@account-kit/react";
-import { useConfigStore } from "@/state";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
-import { WalletTypes } from "@/app/config";
 import { MintCard } from "../shared/mint-card/MintCard";
-import { Wrapper7702 } from "../shared/7702/Wrapper";
 import { MobileSplashPage } from "../preview/MobileSplashPage";
 
 export function ContentWrapper({ showCode }: { showCode: boolean }) {
@@ -28,7 +25,6 @@ export function ContentWrapper({ showCode }: { showCode: boolean }) {
   );
 }
 const RenderContent = () => {
-  const { walletType } = useConfigStore();
   const user = useUser();
   const hasUser = !!user;
 
@@ -61,14 +57,9 @@ const RenderContent = () => {
     );
   }
 
-  const renderedMintCard =
-    walletType === WalletTypes.smart ? <MintCard /> : <Wrapper7702 />;
-
   return (
     <div>
-      {renderedMintCard}
-      {renderedMintCard}
-      {renderedMintCard}
+      <MintCard />
     </div>
   );
 };
