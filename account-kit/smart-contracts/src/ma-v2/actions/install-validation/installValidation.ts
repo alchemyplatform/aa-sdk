@@ -61,9 +61,16 @@ export type InstallValidationActions<
   installValidation: (
     args: InstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
+  encodeInstallValidation: (
+    // TODO: omit the user op sending related parameters from this type
+    args: InstallValidationParams<TSigner>
+  ) => Promise<Hex>;
   uninstallValidation: (
     args: UninstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
+  encodeUninstallValidation: (
+    args: UninstallValidationParams<TSigner>
+  ) => Promise<Hex>;
 };
 
 /**
@@ -114,15 +121,14 @@ export const installValidationActions: <
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   client: SMAV2AccountClient<TSigner>
-) => InstallValidationActions<TSigner> = (client) => ({
-  installValidation: async ({
+) => InstallValidationActions<TSigner> = (client) => {
+  const encodeInstallValidation = async ({
     validationConfig,
     selectors,
     installData,
     hooks,
     account = client.account,
-    overrides,
-  }) => {
+  }: InstallValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -160,21 +166,16 @@ export const installValidationActions: <
       })
     );
 
-    return client.sendUserOperation({
-      uo: callData,
-      account,
-      overrides,
-    });
-  },
+    return callData;
+  };
 
-  uninstallValidation: async ({
+  const encodeUninstallValidation = async ({
     moduleAddress,
     entityId,
     uninstallData,
     hookUninstallDatas,
     account = client.account,
-    overrides,
-  }) => {
+  }: UninstallValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -204,10 +205,56 @@ export const installValidationActions: <
       })
     );
 
-    return client.sendUserOperation({
-      uo: callData,
-      account,
+    return callData;
+  };
+
+  return {
+    encodeInstallValidation,
+    encodeUninstallValidation,
+    installValidation: async ({
+      validationConfig,
+      selectors,
+      installData,
+      hooks,
+      account = client.account,
       overrides,
-    });
-  },
-});
+    }) => {
+      const callData = await encodeInstallValidation({
+        validationConfig,
+        selectors,
+        installData,
+        hooks,
+        account,
+      });
+
+      return client.sendUserOperation({
+        uo: callData,
+        account,
+        overrides,
+      });
+    },
+
+    uninstallValidation: async ({
+      moduleAddress,
+      entityId,
+      uninstallData,
+      hookUninstallDatas,
+      account = client.account,
+      overrides,
+    }) => {
+      const callData = await encodeUninstallValidation({
+        moduleAddress,
+        entityId,
+        uninstallData,
+        hookUninstallDatas,
+        account,
+      });
+
+      return client.sendUserOperation({
+        uo: callData,
+        account,
+        overrides,
+      });
+    },
+  };
+};
