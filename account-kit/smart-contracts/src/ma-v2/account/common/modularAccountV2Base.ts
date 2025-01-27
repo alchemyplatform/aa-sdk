@@ -149,7 +149,7 @@ export async function createMAv2BaseFunctions(
 
     const fullNonceKey: bigint =
       (nonceKey << 40n) +
-      BigInt(entityId << 8) +
+      (BigInt(entityId) << 8n) +
       (isGlobalValidation ? 1n : 0n);
 
     return entryPointContract.read.getNonce([
