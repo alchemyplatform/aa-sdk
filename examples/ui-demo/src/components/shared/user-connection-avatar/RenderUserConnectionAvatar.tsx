@@ -43,7 +43,7 @@ export const RenderUserConnectionAvatar = (
         delegationStatus,
       };
     },
-    refetchInterval: autoRefresh ? 5000 : false, // refetch every 5 seconds
+    refetchInterval: autoRefresh ? 5000 : false, // refetch every 5 seconds until delegation address becomes available
   });
 
   const { data: deploymentStatusSCA = false, refetch: refetchSCA } = useQuery({
