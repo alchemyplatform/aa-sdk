@@ -5,6 +5,7 @@ import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
 import { FacebookIcon } from "../icons/facebook";
 import { GoogleIcon } from "../icons/google";
+import { DiscordLogo } from "../icons/discord";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
@@ -94,6 +95,22 @@ export const Authentication = ({ className }: { className?: string }) => {
     });
   };
 
+  const setAddDiscordAuth = () => {
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        discord: !auth.oAuthMethods.discord,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_discord",
+        enabled: !auth.oAuthMethods.discord,
+      },
+    });
+  };
+
   const setAddTwitterAuth = () => {
     setAuth({
       oAuthMethods: {
@@ -130,7 +147,11 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Social"
             iconClassName="mt-[2px] self-start"
             details={
-              <div className={cn("flex gap-x-3", { hidden: !auth.showOAuth })}>
+              <div
+                className={cn("flex gap-x-3 flex-wrap pr-6", {
+                  hidden: !auth.showOAuth,
+                })}
+              >
                 <OAuthMethod
                   active={auth.oAuthMethods.google}
                   icon={<GoogleIcon />}
@@ -142,26 +163,33 @@ export const Authentication = ({ className }: { className?: string }) => {
                   onClick={setAddFacebookAuth}
                 />
                 <OAuthMethod
+                  active={auth.oAuthMethods.discord}
+                  icon={<DiscordLogo />}
+                  onClick={setAddDiscordAuth}
+                />
+                <OAuthMethod
                   active={auth.oAuthMethods.twitter}
                   icon={<TwitterIcon />}
                   onClick={setAddTwitterAuth}
                 />
-                <ExternalLink
-                  href={links.auth0}
-                  onClick={() => {
-                    Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
-                  }}
-                  className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
-                >
-                  <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
-                    Custom
-                  </p>
-                  <ExternalLinkIcon
-                    height={16}
-                    width={16}
-                    className="stroke-demo-fg-secondary"
-                  />
-                </ExternalLink>
+                <div className="w-full pt-3">
+                  <ExternalLink
+                    href={links.auth0}
+                    onClick={() => {
+                      Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
+                    }}
+                    className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none w-full"
+                  >
+                    <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
+                      Custom
+                    </p>
+                    <ExternalLinkIcon
+                      height={16}
+                      width={16}
+                      className="stroke-demo-fg-secondary"
+                    />
+                  </ExternalLink>
+                </div>
               </div>
             }
             active={auth.showOAuth}

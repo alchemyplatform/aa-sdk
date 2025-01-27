@@ -1,5 +1,9 @@
 import { memo } from "react";
-import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
+import {
+  AppleIcon,
+  FacebookIcon,
+  GoogleIcon,
+} from "../../../icons/auth-icons/index.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
 import { useOAuthVerify } from "../hooks/useOAuthVerify.js";
