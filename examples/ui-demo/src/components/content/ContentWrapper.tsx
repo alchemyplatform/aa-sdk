@@ -11,11 +11,11 @@ export function ContentWrapper({ showCode }: { showCode: boolean }) {
       {/* Don't unmount when showing code preview so that the auth card retains its state */}
       <div
         className={cn(
-          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full p-6",
+          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative lg:p-6",
           showCode && "hidden"
         )}
       >
-        <div className="flex flex-1 justify-center items-center ">
+        <div className="flex flex-1 justify-center items-start lg:items-center ">
           <RenderContent />
         </div>
       </div>
@@ -51,7 +51,7 @@ const RenderContent = () => {
 
   if (isEOAUser) {
     return (
-      <div className="h-full w-full pb-10 pt-5 flex flex-col justify-start items-center">
+      <div className="h-full w-full pb-10 pt-5 flex flex-col lg:justify-center items-center">
         <EOAPostLogin />
       </div>
     );
