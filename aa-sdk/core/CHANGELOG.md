@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
+
+### Bug Fixes
+
+- remove unnecessary getTransaction call ([#1299](https://github.com/alchemyplatform/aa-sdk/issues/1299)) ([359669c](https://github.com/alchemyplatform/aa-sdk/commit/359669ce61946b1b715e2a5e235c5a14394172d9))
+
 # [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
 
 ### Features

@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "../preview/CodePreview";
-import { AuthCard, useUser } from "@account-kit/react";
+import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
 
 import { MobileSplashPage } from "../preview/MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
 import { MintCard } from "../mint-card/MintCard";
+import { useState, useEffect } from "react";
 
 export function ContentWrapper({ showCode }: { showCode: boolean }) {
   return (
@@ -27,9 +28,21 @@ export function ContentWrapper({ showCode }: { showCode: boolean }) {
 }
 const RenderContent = () => {
   const user = useUser();
-  const hasUser = !!user;
+  const { authStep } = useAuthContext();
+  const [showAuthCard, setShowAuthCard] = useState(() => !user);
 
-  if (!hasUser) {
+  useEffect(() => {
+    // Show auth card for unauthenticated users
+    if (!user) {
+      setShowAuthCard(true);
+
+      // Get auth details for authenticated users
+    } else if (!!user && ["complete", "initial"].includes(authStep.type)) {
+      setShowAuthCard(false);
+    }
+  }, [authStep.type, user]);
+
+  if (showAuthCard) {
     return (
       <>
         <div className="hidden lg:flex flex-col gap-2 w-[368px]">
@@ -48,7 +61,7 @@ const RenderContent = () => {
     );
   }
 
-  const isEOAUser = user.type === "eoa";
+  const isEOAUser = user?.type === "eoa";
 
   if (isEOAUser) {
     return (
