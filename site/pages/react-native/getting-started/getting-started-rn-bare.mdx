@@ -49,16 +49,16 @@ const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 const defaultConfig = getDefaultConfig(__dirname);
 
 const extraNodeModules = {
-	...defaultConfig.resolver.extraNodeModules,
-	...require("node-libs-react-native"),
-	crypto: require.resolve("crypto-browserify"),
-	stream: require.resolve("stream-browserify"),
+  ...defaultConfig.resolver.extraNodeModules,
+  ...require("node-libs-react-native"),
+  crypto: require.resolve("crypto-browserify"),
+  stream: require.resolve("stream-browserify"),
 };
 
 const config = {
-	resolver: {
-		extraNodeModules,
-	},
+  resolver: {
+    extraNodeModules,
+  },
 };
 
 module.exports = mergeConfig(defaultConfig, config);
