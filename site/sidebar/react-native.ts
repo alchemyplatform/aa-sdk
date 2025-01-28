@@ -18,16 +18,16 @@ export const reactNativeSidebar: SidebarItem[] = [
     text: "Authentication methods",
     items: [
       {
-        text: "Email Magic Link",
-        link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
-      },
-      {
         text: "Email OTP",
         link: "/react-native/signer/authenticating-users/authenticating-with-otp",
       },
       {
         text: "Social Login",
         link: "/react-native/signer/authenticating-users/authenticating-with-social-auth",
+      },
+      {
+        text: "Email Magic Link",
+        link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
       },
     ],
   },

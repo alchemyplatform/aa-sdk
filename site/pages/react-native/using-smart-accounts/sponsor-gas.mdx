@@ -25,6 +25,7 @@ Now you can send a sponsored User Operation with the Policy ID.
 
 ```tsx twoslash [gas-sponsorship.tsx]
 import React, { useState, useEffect } from "react";
+import { View, Button } from "react-native";
 import {
   createLightAccountClient,
   LightAccount,
@@ -83,9 +84,17 @@ export default function MyComponent() {
   };
 
   return (
-    <button onClick={handleSendUserOperation} disabled={isSendingUserOperation}>
-      {isSendingUserOperation ? "Sending..." : "Send Sponsored User Operation"}
-    </button>
+    <View>
+      <Button
+        onClick={handleSendUserOperation}
+        disabled={isSendingUserOperation}
+        title={
+          isSendingUserOperation
+            ? "Sending..."
+            : "Send Sponsored User Operation"
+        }
+      />
+    </View>
   );
 }
 ```
