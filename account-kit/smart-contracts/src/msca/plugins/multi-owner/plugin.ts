@@ -340,16 +340,8 @@ export const MultiOwnerPluginExecutionFunctionAbi = [
     type: "function",
     name: "updateOwners",
     inputs: [
-      {
-        name: "ownersToAdd",
-        type: "address[]",
-        internalType: "address[]",
-      },
-      {
-        name: "ownersToRemove",
-        type: "address[]",
-        internalType: "address[]",
-      },
+      { name: "ownersToAdd", type: "address[]", internalType: "address[]" },
+      { name: "ownersToRemove", type: "address[]", internalType: "address[]" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -363,17 +355,9 @@ export const MultiOwnerPluginExecutionFunctionAbi = [
       { name: "name", type: "string", internalType: "string" },
       { name: "version", type: "string", internalType: "string" },
       { name: "chainId", type: "uint256", internalType: "uint256" },
-      {
-        name: "verifyingContract",
-        type: "address",
-        internalType: "address",
-      },
+      { name: "verifyingContract", type: "address", internalType: "address" },
       { name: "salt", type: "bytes32", internalType: "bytes32" },
-      {
-        name: "extensions",
-        type: "uint256[]",
-        internalType: "uint256[]",
-      },
+      { name: "extensions", type: "uint256[]", internalType: "uint256[]" },
     ],
     stateMutability: "view",
   },
@@ -399,17 +383,9 @@ export const MultiOwnerPluginAbi = [
       { name: "name", type: "string", internalType: "string" },
       { name: "version", type: "string", internalType: "string" },
       { name: "chainId", type: "uint256", internalType: "uint256" },
-      {
-        name: "verifyingContract",
-        type: "address",
-        internalType: "address",
-      },
+      { name: "verifyingContract", type: "address", internalType: "address" },
       { name: "salt", type: "bytes32", internalType: "bytes32" },
-      {
-        name: "extensions",
-        type: "uint256[]",
-        internalType: "uint256[]",
-      },
+      { name: "extensions", type: "uint256[]", internalType: "uint256[]" },
     ],
     stateMutability: "view",
   },
@@ -484,11 +460,7 @@ export const MultiOwnerPluginAbi = [
         type: "tuple",
         internalType: "struct PluginManifest",
         components: [
-          {
-            name: "interfaceIds",
-            type: "bytes4[]",
-            internalType: "bytes4[]",
-          },
+          { name: "interfaceIds", type: "bytes4[]", internalType: "bytes4[]" },
           {
             name: "dependencyInterfaceIds",
             type: "bytes4[]",
@@ -509,11 +481,7 @@ export const MultiOwnerPluginAbi = [
             type: "bool",
             internalType: "bool",
           },
-          {
-            name: "canSpendNativeToken",
-            type: "bool",
-            internalType: "bool",
-          },
+          { name: "canSpendNativeToken", type: "bool", internalType: "bool" },
           {
             name: "permittedExternalCalls",
             type: "tuple[]",
@@ -524,16 +492,8 @@ export const MultiOwnerPluginAbi = [
                 type: "address",
                 internalType: "address",
               },
-              {
-                name: "permitAnySelector",
-                type: "bool",
-                internalType: "bool",
-              },
-              {
-                name: "selectors",
-                type: "bytes4[]",
-                internalType: "bytes4[]",
-              },
+              { name: "permitAnySelector", type: "bool", internalType: "bool" },
+              { name: "selectors", type: "bytes4[]", internalType: "bytes4[]" },
             ],
           },
           {
@@ -556,11 +516,7 @@ export const MultiOwnerPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  {
-                    name: "functionId",
-                    type: "uint8",
-                    internalType: "uint8",
-                  },
+                  { name: "functionId", type: "uint8", internalType: "uint8" },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -590,11 +546,7 @@ export const MultiOwnerPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  {
-                    name: "functionId",
-                    type: "uint8",
-                    internalType: "uint8",
-                  },
+                  { name: "functionId", type: "uint8", internalType: "uint8" },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -624,11 +576,7 @@ export const MultiOwnerPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  {
-                    name: "functionId",
-                    type: "uint8",
-                    internalType: "uint8",
-                  },
+                  { name: "functionId", type: "uint8", internalType: "uint8" },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -658,11 +606,7 @@ export const MultiOwnerPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  {
-                    name: "functionId",
-                    type: "uint8",
-                    internalType: "uint8",
-                  },
+                  { name: "functionId", type: "uint8", internalType: "uint8" },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -692,11 +636,7 @@ export const MultiOwnerPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  {
-                    name: "functionId",
-                    type: "uint8",
-                    internalType: "uint8",
-                  },
+                  { name: "functionId", type: "uint8", internalType: "uint8" },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -714,11 +654,7 @@ export const MultiOwnerPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  {
-                    name: "functionId",
-                    type: "uint8",
-                    internalType: "uint8",
-                  },
+                  { name: "functionId", type: "uint8", internalType: "uint8" },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -812,19 +748,11 @@ export const MultiOwnerPluginAbi = [
         type: "tuple",
         internalType: "struct UserOperation",
         components: [
-          {
-            name: "sender",
-            type: "address",
-            internalType: "address",
-          },
+          { name: "sender", type: "address", internalType: "address" },
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          {
-            name: "callGasLimit",
-            type: "uint256",
-            internalType: "uint256",
-          },
+          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -835,21 +763,13 @@ export const MultiOwnerPluginAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          {
-            name: "maxFeePerGas",
-            type: "uint256",
-            internalType: "uint256",
-          },
+          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          {
-            name: "paymasterAndData",
-            type: "bytes",
-            internalType: "bytes",
-          },
+          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
@@ -881,16 +801,8 @@ export const MultiOwnerPluginAbi = [
     type: "function",
     name: "updateOwners",
     inputs: [
-      {
-        name: "ownersToAdd",
-        type: "address[]",
-        internalType: "address[]",
-      },
-      {
-        name: "ownersToRemove",
-        type: "address[]",
-        internalType: "address[]",
-      },
+      { name: "ownersToAdd", type: "address[]", internalType: "address[]" },
+      { name: "ownersToRemove", type: "address[]", internalType: "address[]" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -905,19 +817,11 @@ export const MultiOwnerPluginAbi = [
         type: "tuple",
         internalType: "struct UserOperation",
         components: [
-          {
-            name: "sender",
-            type: "address",
-            internalType: "address",
-          },
+          { name: "sender", type: "address", internalType: "address" },
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          {
-            name: "callGasLimit",
-            type: "uint256",
-            internalType: "uint256",
-          },
+          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -928,21 +832,13 @@ export const MultiOwnerPluginAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          {
-            name: "maxFeePerGas",
-            type: "uint256",
-            internalType: "uint256",
-          },
+          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          {
-            name: "paymasterAndData",
-            type: "bytes",
-            internalType: "bytes",
-          },
+          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
