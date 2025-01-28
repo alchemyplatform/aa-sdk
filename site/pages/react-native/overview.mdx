@@ -9,27 +9,28 @@ import { TileButton } from "../../components/TileButton";
 
 # Using within React Native applications
 
-We've built a simple example using expo [here](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example). This guide assumes you're using Expo, but the same principles should apply to a bare React Native app as well.
+We've built a simple example for reference purposes [here](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example). This was built using Expo, but the same principles should apply to a bare React Native app as well.
 
 ## Getting Started
 
-:::tip
-If you're starting fresh, we recommend using Expo as it makes getting started significantly easier.
+:::info
+If you are starting a fresh project, we highly recommend using Expo. You can easily create a new Expo project by running `npx create-expo-app@latest` from your terminal.
+Visit the [Expo docs](https://docs.expo.dev/get-started/create-a-project/) for more information.
 :::
 
 Whether you're using Expo or a bare React Native app, follow our guides to get started with using Account Kit in your project.
 
 <div className="flex flex-row gap-4">
-  <TileButton
-    icon={<ExpoIcon width={24} height={24} />}
-    title="Expo"
-    description="Get started with using Account Kit in your Expo project"
-    href="/react-native/getting-started/getting-started-expo"
-  />
-  <TileButton
-    icon={<ReactNativeIcon width={24} height={24} />}
-    title="Bare React Native"
-    description="Get started with using Account Kit in your bare React Native project"
-    href="/react-native/getting-started/getting-started-rn-bare"
-  />
+	<TileButton
+		icon={<ExpoIcon width={24} height={24} />}
+		title="Expo"
+		description="Get started with using Account Kit in your Expo project"
+		href="/react-native/getting-started/getting-started-expo"
+	/>
+	<TileButton
+		icon={<ReactNativeIcon width={24} height={24} />}
+		title="Bare React Native"
+		description="Get started with using Account Kit in your bare React Native project"
+		href="/react-native/getting-started/getting-started-rn-bare"
+	/>
 </div>

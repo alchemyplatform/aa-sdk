@@ -75,10 +75,10 @@ const config = getDefaultConfig(__dirname);
 // The following code ensures we have the necessary
 // shims for crypto built into our project
 config.resolver.extraNodeModules = {
-  ...config.resolver.extraNodeModules,
-  ...require("node-libs-react-native"),
-  crypto: require.resolve("crypto-browserify"),
-  stream: require.resolve("stream-browserify"),
+	...config.resolver.extraNodeModules,
+	...require("node-libs-react-native"),
+	crypto: require.resolve("crypto-browserify"),
+	stream: require.resolve("stream-browserify"),
 };
 
 module.exports = config;
@@ -86,13 +86,12 @@ module.exports = config;
 
 #### Register global shims
 
-Import the following packages at the top of your `App.tsx` file so that libraries that depend on globals like `crypto` have access to them.
+Import the following packages at the top-most entry point of your app so that libraries that depend on globals like `crypto` have access to them.
 
-:::tip
-If you're using bare React Native, you would add the above imports to your `index.js` file.
-:::
+If you are using `expo-router`, add the imports in your top-most `_layout.tsx` file in the `app` directory. However if you are using a different navigation library (e.g. `react-navigation`),
+add the imports in your top-most `App.tsx` file.
 
-```tsx [App.tsx]
+```tsx [App.tsx or app/_layout.tsx]
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
 
@@ -125,8 +124,8 @@ CAUTION: The React Native Signer package is currently in Alpha and is only suppo
 
 There are a few things to note before using the Signer package in your Expo project:
 
-- The Signer package is incompatible with Expo Go and as a result, you'd need to use a Development Build. Check the [Expo Development Builds documentation](https://docs.expo.dev/develop/development-builds/introduction/) for more information.
-- The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your Expo project, check their [documentation](https://docs.expo.dev/guides/new-architecture/).
+-   The Signer package is incompatible with Expo Go and as a result, you'd need to use a Development Build. Check the [Expo Development Builds documentation](https://docs.expo.dev/develop/development-builds/introduction/) for more information.
+-   The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your Expo project, check their [documentation](https://docs.expo.dev/guides/new-architecture/).
 
 Once the prerequisites are met, you can install the Signer package using the following command:
 
