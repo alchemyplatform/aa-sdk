@@ -86,10 +86,10 @@ module.exports = config;
 
 #### Register global shims
 
-Import the following packages at the top-most entry point of your app so that libraries that depend on globals like `crypto` have access to them.
+Import the following packages at the topmost entry point of your app so that libraries that depend on globals like `crypto` have access to them.
 
-If you are using `expo-router`, add the imports in your top-most `_layout.tsx` file in the `app` directory. However if you are using a different navigation library (e.g. `react-navigation`),
-add the imports in your top-most `App.tsx` file.
+If you are using `expo-router`, add the imports in your topmost `_layout.tsx` file in the `app` directory. However if you are using a different navigation library (e.g. `react-navigation`),
+add the imports in your topmost `App.tsx` file.
 
 ```tsx [App.tsx or app/_layout.tsx]
 import "node-libs-react-native/globals.js";
