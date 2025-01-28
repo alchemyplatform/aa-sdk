@@ -25,7 +25,7 @@
     "ios",
     "cpp",
     "*.podspec",
-    "react-native.config.json",
+    "react-native.config.js",
     "!ios/build",
     "!android/build",
     "!android/gradle",
@@ -91,10 +91,8 @@
     "@types/react": "^18.2.44"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-native": "*",
-    "react-native-config": "1.5.3",
-    "react-native-gesture-handler": "2.21.2",
+    "react": ">=18.0.0",
+    "react-native": ">=0.76.0",
     "react-native-inappbrowser-reborn": "^3.7.0",
     "react-native-mmkv": "^3.1.0"
   },
