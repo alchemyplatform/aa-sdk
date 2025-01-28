@@ -3,12 +3,12 @@ import DialogMenu from "@/components/shared/user-connection-avatar/UserConnectio
 import { UserConnectionAvatar } from "./UserConnectionAvatar";
 import { UserConnectionDetails } from "./UserConnectionDetails";
 import React, { useEffect, useState } from "react";
-import { useAccount } from "@account-kit/react";
+import { useAccount, useSigner } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { useConfigStore } from "@/state";
-import { useSma7702Client } from "../7702/useSma7702Client";
 import { WalletTypes } from "@/app/config";
-import { Hex } from "viem";
+import { createPublicClient, Hex, http } from "viem";
+import { odysseyTestnet } from "viem/chains";
 
 type RenderAvatarMenuProps = {
   deploymentStatus: boolean;
@@ -17,33 +17,36 @@ type RenderAvatarMenuProps = {
 export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
-  const [autoRefresh, setAutoRefresh] = useState(true);
-
   const { account } = useAccount({
     type: "LightAccount",
   });
   const { walletType } = useConfigStore();
 
-  const client = useSma7702Client();
+  const publicClient = createPublicClient({
+    chain: odysseyTestnet,
+    transport: http(),
+  });
+
+  const signer = useSigner();
 
   const { nftTransferred } = useConfigStore(({ nftTransferred }) => ({
     nftTransferred,
   }));
 
-  const { data: hybridAccount } = useQuery({
+  const { data: hybridAccount, refetch: refetch7702 } = useQuery({
     queryKey: ["deploymentStatus7702"],
     queryFn: async () => {
-      const delegationAddress = await client!.getCode({
-        address: client!.account.address,
-      });
+      const delegationAddress = signer
+        ? await publicClient.getCode({
+            address: await signer?.getAddress(),
+          })
+        : "0x";
       const delegationStatus = delegationAddress && delegationAddress !== "0x";
-      if (delegationStatus) setAutoRefresh(false);
       return {
         delegationAddress,
         delegationStatus,
       };
     },
-    refetchInterval: autoRefresh ? 5000 : false, // refetch every 5 seconds until delegation address becomes available
   });
 
   const { data: deploymentStatusSCA = false, refetch: refetchSCA } = useQuery({
@@ -61,7 +64,17 @@ export const RenderUserConnectionAvatar = (
     if (nftTransferred && !deploymentStatusSCA) {
       refetchSCA();
     }
-  }, [nftTransferred, deploymentStatusSCA, refetchSCA]);
+
+    if (nftTransferred && !hybridAccount?.delegationStatus) {
+      refetch7702();
+    }
+  }, [
+    nftTransferred,
+    deploymentStatusSCA,
+    refetchSCA,
+    hybridAccount?.delegationStatus,
+    refetch7702,
+  ]);
 
   return (
     <div
