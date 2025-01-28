@@ -3,6 +3,7 @@ import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
+import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
 import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
@@ -128,7 +129,7 @@ export function UserConnectionDetails({
             <span className="text-fg-primary block ml-1 text-md md:text-sm">
               {deploymentStatus && delegationAddress ? (
                 <a
-                  href={`https://odyssey-explorer.ithaca.xyz/address/0x${delegationAddress.slice(
+                  href={`${ODYSSEY_EXPLORER_URL}/address/0x${delegationAddress.slice(
                     8
                   )}`}
                   target="_blank"
