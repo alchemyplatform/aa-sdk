@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { RenderUserConnectionAvatar } from "../shared/user-connection-avatar/RenderUserConnectionAvatar";
+import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 import { useUser } from "@account-kit/react";
 import ExternalLink from "@/components/shared/ExternalLink";
 import { Metrics } from "@/metrics";

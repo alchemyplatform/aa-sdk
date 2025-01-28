@@ -1,8 +1,8 @@
 import { useLogout } from "@account-kit/react";
-import { CheckIcon } from "../../icons/check";
-import { GasIcon } from "../../icons/gas";
-import { UserIcon } from "../../icons/user";
-import { WalletIcon } from "../../icons/wallet";
+import { CheckIcon } from "../icons/check";
+import { GasIcon } from "../icons/gas";
+import { UserIcon } from "../icons/user";
+import { WalletIcon } from "../icons/wallet";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();

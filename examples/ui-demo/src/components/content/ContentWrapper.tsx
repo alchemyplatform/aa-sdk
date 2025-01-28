@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "../preview/CodePreview";
 import { AuthCard, useUser } from "@account-kit/react";
-import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
-import { MintCard } from "../shared/mint-card/MintCard";
+
 import { MobileSplashPage } from "../preview/MobileSplashPage";
+import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
+import { MintCard } from "../mint-card/MintCard";
 
 export function ContentWrapper({ showCode }: { showCode: boolean }) {
   return (

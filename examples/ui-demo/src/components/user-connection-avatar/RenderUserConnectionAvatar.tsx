@@ -1,5 +1,5 @@
-import PopoverMenu from "@/components/shared/user-connection-avatar/UserConnectionMenuPopover";
-import DialogMenu from "@/components/shared/user-connection-avatar/UserConnectionMenuDialog";
+import PopoverMenu from "./UserConnectionMenuPopover";
+import DialogMenu from "./UserConnectionMenuDialog";
 import { UserConnectionAvatar } from "./UserConnectionAvatar";
 import { UserConnectionDetails } from "./UserConnectionDetails";
 import React, { useEffect, useState } from "react";
