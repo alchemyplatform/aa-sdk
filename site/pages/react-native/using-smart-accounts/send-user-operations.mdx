@@ -23,7 +23,7 @@ or you can use `MultiOwnerLightAccount` if you want to support an account with m
 
 ```tsx twoslash [send-user-operation.tsx]
 import React, { useState, useEffect } from "react";
-import { Alert } from "react-native";
+import { Alert, View, Button } from "react-native";
 import { User } from "@account-kit/signer";
 import {
   createLightAccountClient,
@@ -81,14 +81,13 @@ export default function MyOpSenderComponent() {
   };
 
   return (
-    <div>
-      <button
-        onClick={handleSendUserOperation}
+    <View>
+      <Button
+        onPress={handleSendUserOperation}
         disabled={isSendingUserOperation}
-      >
-        {isSendingUserOperation ? "Sending..." : "Send UO"}
-      </button>
-    </div>
+        title={isSendingUserOperation ? "Sending..." : "Send UO"}
+      />
+    </View>
   );
 }
 ```
@@ -107,7 +106,7 @@ To send multiple user operations in a single call, simply pass an array of user 
 
 ```tsx twoslash [batch-user-operation-component.tsx]
 import React, { useState, useEffect } from "react";
-import { Alert } from "react-native";
+import { Alert, View, Button } from "react-native";
 import { User } from "@account-kit/signer";
 import {
   createLightAccountClient,
@@ -174,14 +173,13 @@ export default function MyOpSenderComponent() {
   };
 
   return (
-    <div>
-      <button
+    <View>
+      <Button
         onClick={handleSendUserOperation}
         disabled={isSendingUserOperation}
-      >
-        {isSendingUserOperation ? "Sending..." : "Send User Operations"}
-      </button>
-    </div>
+        title={isSendingUserOperation ? "Sending..." : "Send UO"}
+      />
+    </View>
   );
 }
 ```
