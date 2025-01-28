@@ -3,19 +3,15 @@ title: Using a Signer in React Native
 description: Setup the React Native Signer Package in your React Native Project
 ---
 
-:::warning
-**CAUTION:** The Alchemy Signer is currently in Alpha.
-:::
+import Snippet from "../../../shared/react-native/prerequisites.mdx";
 
 For more information on what a Signer is, refer to the [concepts](/concepts/smart-account-signer) page.
 
 # React Native Signer setup guide
 
-:::info
-The React Native Signer package is only supported on React Native's new architecture, and requires your project to be on React Native version 0.76 or newer.
-:::
-
 Setting up the React Native Signer is similar to setting up the [React Signer](/signer/quickstart) with a few extra steps.
+
+<Snippet />
 
 1.  Get your **API key** by creating a new app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
     :::warning
@@ -42,7 +38,7 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
     - To use email auth in your React Native app, your app needs to be set up to handle deep links that can be served via http or https.
     - In production scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links) on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app) on iOS to gracefully handle deep links.
     - For testing, simply setting up a simple server on [http://localhost:3000](http://localhost:3000/) or any other server you control which redirects an incoming request to your app scheme is the easiest way to get started.
-      a sample implementation of this can be found the `example` folder of the `React Native Signer` repo.
+      a sample implementation of this can be found the [`example`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/react-native-expo-example/redirect-server/index.ts) folder of the `React Native Signer` repo.
     - The http or https url you set up in the previous step would need to be added as the **Redirect URL** in the Account Kit Dashboard.
     - This is the url that the user will be redirected to if you use the magic link email flow to log in your users.
     - Optionally stylize ✨ the email with your brand color and logo!
