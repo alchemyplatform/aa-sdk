@@ -41,7 +41,7 @@ export const RenderUserConnectionAvatar = (
             address: await signer?.getAddress(),
           })
         : "0x";
-      const delegationStatus = delegationAddress && delegationAddress !== "0x";
+      const delegationStatus = delegationAddress !== "0x";
       return {
         delegationAddress,
         delegationStatus,
