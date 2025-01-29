@@ -10,7 +10,6 @@ import {
   useSmartAccountClient,
 } from "@account-kit/react";
 import { encodeFunctionData } from "viem";
-import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 import { MintCardActionButtons } from "./MintCardActionButtons";
 import { NFT } from "./NFT";
 import { ValueProps } from "./ValueProps";

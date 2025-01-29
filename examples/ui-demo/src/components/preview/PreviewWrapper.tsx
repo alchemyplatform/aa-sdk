@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
-import { CodePreview } from "../preview/CodePreview";
+import { CodePreview } from "./CodePreview";
 import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
 
-import { MobileSplashPage } from "../preview/MobileSplashPage";
+import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
 import { MintCard } from "../mint-card/MintCard";
 import { useState, useEffect } from "react";
 
-export function ContentWrapper({ showCode }: { showCode: boolean }) {
+export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   return (
     <>
       {/* Don't unmount when showing code preview so that the auth card retains its state */}

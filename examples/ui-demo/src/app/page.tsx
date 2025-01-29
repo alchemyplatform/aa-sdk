@@ -4,8 +4,8 @@ import { ConfigurationSidebarWrapper } from "@/components/configuration/Configur
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
 import { TopNav } from "../components/topnav/TopNav";
-import { ContentNav } from "@/components/content/ContentNav";
-import { ContentWrapper } from "@/components/content/ContentWrapper";
+import { PreviewNav } from "@/components/preview/PreviewNav";
+import { PreviewWrapper } from "@/components/preview/PreviewWrapper";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
@@ -42,8 +42,8 @@ export default function Home() {
               !user && "border-none lg:border-solid"
             )}
           >
-            <ContentNav showCode={showCode} setShowCode={setShowCode} />
-            <ContentWrapper showCode={showCode} />
+            <PreviewNav showCode={showCode} setShowCode={setShowCode} />
+            <PreviewWrapper showCode={showCode} />
           </div>
         </div>
       </div>

@@ -4,7 +4,8 @@ import { useUser } from "@account-kit/react";
 import ExternalLink from "@/components/shared/ExternalLink";
 import { Metrics } from "@/metrics";
 import { CodePreviewSwitch } from "@/components/shared/CodePreviewSwitch";
-export function ContentNav({
+
+export function PreviewNav({
   showCode,
   setShowCode,
 }: {
