@@ -16,7 +16,7 @@ import {
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
-  createSMAV2AccountClient,
+  createModularAccountV2Client,
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
@@ -136,7 +136,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.toEqual(isValidSigSuccess);
 
     // connect session key
-    let sessionKeyClient = await createSMAV2AccountClient({
+    let sessionKeyClient = await createModularAccountV2Client({
       chain: instance.chain,
       signer: sessionKey,
       transport: custom(instance.getClient()),
@@ -228,7 +228,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.toEqual(isValidSigSuccess);
 
     // connect session key
-    let sessionKeyClient = await createSMAV2AccountClient({
+    let sessionKeyClient = await createModularAccountV2Client({
       chain: instance.chain,
       signer: sessionKey,
       transport: custom(instance.getClient()),
@@ -276,7 +276,7 @@ describe("MA v2 Tests", async () => {
     const startingAddressBalance = await getTargetBalance();
 
     // connect session key and send tx with session key
-    let sessionKeyClient = await createSMAV2AccountClient({
+    let sessionKeyClient = await createModularAccountV2Client({
       chain: instance.chain,
       signer: sessionKey,
       transport: custom(instance.getClient()),
@@ -343,7 +343,7 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(result);
 
     // connect session key and send tx with session key
-    let sessionKeyClient = await createSMAV2AccountClient({
+    let sessionKeyClient = await createModularAccountV2Client({
       chain: instance.chain,
       signer: sessionKey,
       transport: custom(instance.getClient()),
@@ -857,7 +857,7 @@ describe("MA v2 Tests", async () => {
     accountAddress?: `0x${string}`;
     usePaymaster?: boolean;
   }) =>
-    createSMAV2AccountClient({
+    createModularAccountV2Client({
       chain: instance.chain,
       signer,
       accountAddress,
@@ -865,15 +865,15 @@ describe("MA v2 Tests", async () => {
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
 
-  it("alchemy client calls the createAlchmeySmartAccountClient", async () => {
+  it("alchemy client calls the createAlchemySmartAccountClient", async () => {
     const alchemyClientSpy = vi
       .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
       .mockImplementation(() => "fakedAlchemy" as any);
-    const notAlcmeyClientSpy = vi
+    const notAlchemyClientSpy = vi
       .spyOn(AACoreModule, "createSmartAccountClient")
       .mockImplementation(() => "faked" as any);
     expect(
-      await createSMAV2AccountClient({
+      await createModularAccountV2Client({
         chain: arbitrumSepolia,
         signer,
         transport: alchemy({ jwt: "AN_API_KEY" }),
@@ -882,17 +882,17 @@ describe("MA v2 Tests", async () => {
     ).toMatch("fakedAlchemy");
 
     expect(alchemyClientSpy).toHaveBeenCalled();
-    expect(notAlcmeyClientSpy).not.toHaveBeenCalled();
+    expect(notAlchemyClientSpy).not.toHaveBeenCalled();
   });
-  it("custom client calls the createAlchmeySmartAccountClient", async () => {
+  it("custom client calls the createAlchemySmartAccountClient", async () => {
     const alchemyClientSpy = vi
       .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
       .mockImplementation(() => "fakedAlchemy" as any);
-    const notAlcmeyClientSpy = vi
+    const notAlchemyClientSpy = vi
       .spyOn(AACoreModule, "createSmartAccountClient")
       .mockImplementation(() => "faked" as any);
     expect(
-      await createSMAV2AccountClient({
+      await createModularAccountV2Client({
         chain: instance.chain,
         signer,
         transport: custom(instance.getClient()),
@@ -900,6 +900,6 @@ describe("MA v2 Tests", async () => {
     ).toMatch("faked");
 
     expect(alchemyClientSpy).not.toHaveBeenCalled();
-    expect(notAlcmeyClientSpy).toHaveBeenCalled();
+    expect(notAlchemyClientSpy).toHaveBeenCalled();
   });
 });
