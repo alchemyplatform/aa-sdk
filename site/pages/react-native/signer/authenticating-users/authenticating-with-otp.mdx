@@ -10,8 +10,8 @@ This guide assumes you have already followed the [Setup Guide](/react-native/sig
 :::info
 For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
 
--   [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
--   [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
+- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
 
 :::
 
@@ -35,14 +35,14 @@ To send an OTP to a user's email, use the `signer.authenticate()` method with th
 import { signer } from "./signer";
 
 signer
-	.authenticate({
-		email: "user@example.com",
-		type: "email",
-		emailMode: "otp",
-	})
-	.catch((error) => {
-		console.error(error);
-	});
+  .authenticate({
+    email: "user@example.com",
+    type: "email",
+    emailMode: "otp",
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 ```ts twoslash [signer.ts] filename="signer.ts"
@@ -67,12 +67,12 @@ Here's an example of a Sign In component using OTP. Feel free to embed this into
 // @noErrors
 import React, { useCallback, useState } from "react";
 import {
-	View,
-	Text,
-	TextInput,
-	Button,
-	Modal,
-	SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Modal,
+  SafeAreaView,
 } from "react-native";
 import { User } from "@account-kit/signer";
 
@@ -80,67 +80,66 @@ import { OtpPopUp } from "./otp-popup";
 import { signer } from "./signer";
 
 export const SignInWithOtp = () => {
-	const [email, setEmail] = useState<string>("");
-	const [showOtp, setShowOtp] = useState<boolean>(false);
-	const [user, setUser] = useState<User | null>(null);
-	const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [showOtp, setShowOtp] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-	// Make an authentication request to a user's email
-	const performAuthRequest = useCallback(async (email: string) => {
-		signer.authenticate({
-			email,
-			type: "email",
-			emailMode: "otp",
-		});
-		setLoading(true);
-		setShowOtp(true);
-	}, []);
+  // Make an authentication request to a user's email
+  const performAuthRequest = useCallback(async (email: string) => {
+    signer.authenticate({
+      email,
+      type: "email",
+      emailMode: "otp",
+    });
+    setLoading(true);
+    setShowOtp(true);
+  }, []);
 
-	const handleUserAuth = useCallback(async (user: User) => {
-		setUser(user);
-		setLoading(false);
-		setShowOtp(false);
-	}, []);
+  const handleUserAuth = useCallback(async (user: User) => {
+    setUser(user);
+    setLoading(false);
+    setShowOtp(false);
+  }, []);
 
-	return (
-		<View>
-			{user && (
-				<>
-					<Text>User Authenticated As: {user.email}</Text>
-					<Text>{user.address}</Text>
-				</>
-			)}
+  return (
+    <View>
+      {user && (
+        <>
+          <Text>User Authenticated As: {user.email}</Text>
+          <Text>{user.address}</Text>
+        </>
+      )}
 
-			<Text style={{ fontSize: 16 }}>Enter Email</Text>
-			<TextInput
-				value={email}
-				style={{ fontSize: 20 }}
-				onChangeText={setEmail}
-				placeholder="Enter Email"
-				autoCapitalize="none"
-			/>
-			<Button
-				title={loading ? "Loading" : "Sign In"}
-				disabled={loading}
-				onPress={() => performAuthRequest(email)}
-			/>
+      <Text style={{ fontSize: 16 }}>Enter Email</Text>
+      <TextInput
+        value={email}
+        style={{ fontSize: 20 }}
+        onChangeText={setEmail}
+        placeholder="Enter Email"
+        autoCapitalize="none"
+      />
+      <Button
+        title={loading ? "Loading" : "Sign In"}
+        disabled={loading}
+        onPress={() => performAuthRequest(email)}
+      />
 
-			<OtpPopUp
-				show={showOtp}
-				handleUserAuth={handleUserAuth}
-				close={() => {
-					setShowOtp(false);
-					setLoading(false);
-				}}
-			/>
-		</View>
-	);
+      <OtpPopUp
+        show={showOtp}
+        handleUserAuth={handleUserAuth}
+        close={() => {
+          setShowOtp(false);
+          setLoading(false);
+        }}
+      />
+    </View>
+  );
 };
 ```
 
 ```tsx [otp-popup.tsx] twoslash filename="otp-popup.tsx"
 // @noErrors
-
 import React, { useCallback, useState } from "react";
 import { Modal, Text, TextInput, Button, SafeAreaView } from "react-native";
 import { User } from "@account-kit/signer";
@@ -148,49 +147,49 @@ import { User } from "@account-kit/signer";
 import { signer } from "./signer";
 
 export const OtpPopUp = ({
-	show,
-	handleUserAuth,
-	close,
+  show,
+  handleUserAuth,
+  close,
 }: {
-	show: boolean;
-	handleUserAuth: (user: User) => void;
-	close: () => void;
+  show: boolean;
+  handleUserAuth: (user: User) => void;
+  close: () => void;
 }) => {
-	const [otpCode, setOtpCode] = useState<string>("");
-	const [loading, setLoading] = useState<boolean>(false);
+  const [otpCode, setOtpCode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-	// Authenticate a user using a bundle returned from a deep link
-	const handleUserOtp = useCallback(async (otpCode: string) => {
-		setLoading(true);
-		const user = await signer.authenticate({ otpCode, type: "otp" }); //<-- Pass the user's OTP code to the authenticate method using `otp` as the type value
-		handleUserAuth(user);
-	}, []);
+  // Authenticate a user using a bundle returned from a deep link
+  const handleUserOtp = useCallback(async (otpCode: string) => {
+    setLoading(true);
+    const user = await signer.authenticate({ otpCode, type: "otp" }); //<-- Pass the user's OTP code to the authenticate method using `otp` as the type value
+    handleUserAuth(user);
+  }, []);
 
-	return (
-		<Modal visible={show} style={{ paddingTop: 200 }}>
-			<SafeAreaView style={{ margin: 20 }}>
-				<Text style={{ fontSize: 16 }}>Enter OTP</Text>
-				<TextInput
-					style={{ fontSize: 20 }}
-					value={otpCode}
-					onChangeText={setOtpCode}
-					placeholder="Enter OTP"
-				/>
-				<Button
-					title={loading ? "Loading" : "Submit OTP"}
-					disabled={loading}
-					onPress={() => handleUserOtp(otpCode)}
-				/>
-				<Button
-					title="Close"
-					onPress={() => {
-						setLoading(false);
-						close();
-					}}
-				/>
-			</SafeAreaView>
-		</Modal>
-	);
+  return (
+    <Modal visible={show} style={{ paddingTop: 200 }}>
+      <SafeAreaView style={{ margin: 20 }}>
+        <Text style={{ fontSize: 16 }}>Enter OTP</Text>
+        <TextInput
+          style={{ fontSize: 20 }}
+          value={otpCode}
+          onChangeText={setOtpCode}
+          placeholder="Enter OTP"
+        />
+        <Button
+          title={loading ? "Loading" : "Submit OTP"}
+          disabled={loading}
+          onPress={() => handleUserOtp(otpCode)}
+        />
+        <Button
+          title="Close"
+          onPress={() => {
+            setLoading(false);
+            close();
+          }}
+        />
+      </SafeAreaView>
+    </Modal>
+  );
 };
 ```
 
