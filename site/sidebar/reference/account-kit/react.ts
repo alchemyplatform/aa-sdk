@@ -44,6 +44,10 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
       },
       {
+        text: "useAuthContext",
+        link: "/reference/account-kit/react/hooks/useAuthContext",
+      },
+      {
         text: "useAuthError",
         link: "/reference/account-kit/react/hooks/useAuthError",
       },
@@ -151,56 +155,6 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
   {
     text: "Resources",
     items: [
-      {
-        text: "React Native",
-        items: [
-          {
-            text: "Overview",
-            link: "/react-native/overview",
-          },
-          {
-            text: "Getting Started",
-            items: [
-              {
-                text: "Getting started on Expo",
-                link: "/react-native/getting-started/getting-started-expo",
-              },
-              {
-                text: "Getting started on Bare React Native",
-                link: "/react-native/getting-started/getting-started-rn-bare",
-              },
-            ],
-          },
-          {
-            text: "Using the Signer",
-            items: [
-              {
-                text: "Overview",
-                link: "/react-native/signer/overview",
-              },
-              {
-                text: "Setup",
-                link: "/react-native/signer/setup-guide",
-              },
-              {
-                text: "Authenticating Users",
-                items: [
-                  {
-                    text: "Authenticating Users via Magic Link",
-                    link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
-                  },
-                  {
-                    text: "Authenticating Users via One-Time Password (OTP)",
-                    link: "/react-native/signer/authenticating-users/authenticating-with-otp",
-                  },
-                ],
-                collapsed: true,
-              },
-            ],
-          },
-        ],
-        collapsed: true,
-      },
       {
         text: "Third Party",
         items: [

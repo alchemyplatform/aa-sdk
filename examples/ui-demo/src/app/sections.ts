@@ -2,6 +2,8 @@ import { AuthType } from "@account-kit/react";
 import { KnownAuthProvider } from "@account-kit/signer";
 import { Config } from "./config";
 
+const SocialAuth0Providers = ["twitter", "discord"];
+
 export function getSectionsForConfig(
   config: Config,
   walletConnectProjectId: string
@@ -23,7 +25,35 @@ export function getSectionsForConfig(
   }
   if (showOAuth) {
     for (const [method, enabled] of Object.entries(oAuthMethods)) {
-      if (enabled) {
+      if (enabled && SocialAuth0Providers.includes(method)) {
+        switch (method) {
+          case "twitter":
+            midSection.push({
+              type: "social",
+              authProviderId: "auth0",
+              mode: "popup",
+              auth0Connection: "twitter",
+              displayName: "X",
+              logoUrl: "/images/twitter.svg",
+              logoUrlDark: "/images/twitter-dark.svg",
+              scope: "openid profile",
+            });
+
+            break;
+          case "discord":
+            midSection.push({
+              type: "social",
+              authProviderId: "auth0",
+              mode: "popup",
+              auth0Connection: "discord",
+              displayName: "Discord",
+              logoUrl: "/images/discord.svg",
+              scope: "openid profile",
+            });
+
+            break;
+        }
+      } else if (enabled) {
         midSection.push({
           type: "social",
           authProviderId: method as KnownAuthProvider, // TODO: extend for BYO auth provider

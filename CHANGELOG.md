@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
+
+### Features
+
+- add OAuth RN Signer docs ([#1286](https://github.com/alchemyplatform/aa-sdk/issues/1286)) ([361b6ac](https://github.com/alchemyplatform/aa-sdk/commit/361b6acb876cf2e04466ba9bd1182e51e0c4d05e))
+- add react native smart accounts docs ([#1293](https://github.com/alchemyplatform/aa-sdk/issues/1293)) ([24cbef1](https://github.com/alchemyplatform/aa-sdk/commit/24cbef1f4d284b01b11202f056e48a5e6ea70f9e))
+- add updated bare and expo rn guides ([#1303](https://github.com/alchemyplatform/aa-sdk/issues/1303)) ([c43d9a5](https://github.com/alchemyplatform/aa-sdk/commit/c43d9a577324e9d541230b48685c79dd23dd4a39))
+- add updated OTP example ([#1308](https://github.com/alchemyplatform/aa-sdk/issues/1308)) ([abf4ad8](https://github.com/alchemyplatform/aa-sdk/commit/abf4ad8373d59fa135c0a909b12946454f452f0f))
+
+# [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
+
+### Bug Fixes
+
+- add logoUrlDark for auth0 provider logos ([#1298](https://github.com/alchemyplatform/aa-sdk/issues/1298)) ([80a0132](https://github.com/alchemyplatform/aa-sdk/commit/80a0132916cd1c89c8c622f5dfafca0b7a1a9508))
+- don't cache anvil state in CI and limit parallelism ([#1290](https://github.com/alchemyplatform/aa-sdk/issues/1290)) ([82ce8ca](https://github.com/alchemyplatform/aa-sdk/commit/82ce8ca483693137937eec1abc99583f23537839))
+- otp new styles and flow ([#1250](https://github.com/alchemyplatform/aa-sdk/issues/1250)) ([7295249](https://github.com/alchemyplatform/aa-sdk/commit/72952498d91056fdf4086557ed3963c18a5d5879))
+- remove unnecessary getTransaction call ([#1299](https://github.com/alchemyplatform/aa-sdk/issues/1299)) ([359669c](https://github.com/alchemyplatform/aa-sdk/commit/359669ce61946b1b715e2a5e235c5a14394172d9))
+
+### Features
+
+- add oauth support to react native signer ([#1273](https://github.com/alchemyplatform/aa-sdk/issues/1273)) ([61984bd](https://github.com/alchemyplatform/aa-sdk/commit/61984bdd65d5432a0abf8b5ce3549423438abe4e))
+- adding delay after OTP code validation ([#1288](https://github.com/alchemyplatform/aa-sdk/issues/1288)) ([afc60ad](https://github.com/alchemyplatform/aa-sdk/commit/afc60ad795c04e30d4728d3d9cc1fb428d722e7a))
+- address bar tooltip ([#1188](https://github.com/alchemyplatform/aa-sdk/issues/1188)) ([fe67cfa](https://github.com/alchemyplatform/aa-sdk/commit/fe67cfac61585104323b83b0b8bbac0516f6d543))
+- enable discord social auth ([#1281](https://github.com/alchemyplatform/aa-sdk/issues/1281)) ([1772da9](https://github.com/alchemyplatform/aa-sdk/commit/1772da972f2cc78dde3786fb9ebe3ec19f01e78b))
+- enable twitter social auth ([#1230](https://github.com/alchemyplatform/aa-sdk/issues/1230)) ([f4e8533](https://github.com/alchemyplatform/aa-sdk/commit/f4e8533ae0d79e22c939b4fa84da6801f6626bec))
+
 # [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
 
 ### Features

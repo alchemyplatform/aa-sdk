@@ -11,6 +11,7 @@ import { DotsIcon } from "../components/icons/DotsIcon";
 import { InfraIcon } from "../components/icons/InfraIcon";
 import { SmartContractIcon } from "../components/icons/SmartContractIcon";
 import { SignerIcon } from "../components/icons/SignerIcon";
+import { ReactNativeIcon } from "../components/icons/ReactNativeIcon";
 
 # Get started with Account Kit
 
@@ -49,6 +50,12 @@ Account Kit is also published as a set of lower level packages that can be used 
 utlimate control over your application.
 
 <div className="grid grid-cols-2 gap-8">
+  <SmallTileRow
+    icon={<ReactNativeIcon height={20} width={20} />}
+    title="React Native"
+    description="Mobile apps with React Native"
+    href="/react-native/overview"
+  />
   <SmallTileRow
     icon={<DotsIcon />}
     title="Other JS Frameworks"

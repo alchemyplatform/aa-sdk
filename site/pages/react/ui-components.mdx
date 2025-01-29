@@ -149,6 +149,8 @@ type SocialAuthType = {
       auth0Connection?: string;
       // URL for the provider's logo
       logoUrl: string;
+      // URL for the provider's logo in dark mode (optional, `logoUrl` is used for both light & dark mode if not provided)
+      logoUrlDark?: string;
     }
   | {
       // For using a known authentication provider other than Auth0: "google", "facebook", "apple"

@@ -1,5 +1,4 @@
 import type { Chain, Client, Hex, Transport } from "viem";
-import { getTransaction } from "viem/actions";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { FailedToFindTransactionError } from "../../errors/transaction.js";
@@ -72,9 +71,7 @@ export const waitForUserOperationTransaction: <
       });
 
     if (receipt) {
-      return getTransaction(client, {
-        hash: receipt.receipt.transactionHash,
-      }).then((x) => x.hash);
+      return receipt?.receipt.transactionHash;
     }
   }
 

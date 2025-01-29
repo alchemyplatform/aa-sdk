@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
-import { AuthCard, useUser } from "@account-kit/react";
+import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { MintCard } from "../shared/mint-card/MintCard";
 
@@ -25,10 +26,22 @@ export function AuthCardWrapper({ className }: { className?: string }) {
 }
 
 const RenderContent = () => {
+  const { authStep } = useAuthContext();
   const user = useUser();
-  const hasUser = !!user;
+  const [showAuthCard, setShowAuthCard] = useState(() => !user);
 
-  if (!hasUser) {
+  useEffect(() => {
+    // Show auth card for unauthenticated users
+    if (!user) {
+      setShowAuthCard(true);
+
+      // Get auth details for authenticated users
+    } else if (!!user && ["complete", "initial"].includes(authStep.type)) {
+      setShowAuthCard(false);
+    }
+  }, [authStep.type, user]);
+
+  if (showAuthCard) {
     return (
       <div className="flex flex-col gap-2 w-[368px]">
         <div
@@ -44,7 +57,7 @@ const RenderContent = () => {
     );
   }
 
-  const isEOAUser = user.type === "eoa";
+  const isEOAUser = user?.type === "eoa";
 
   if (isEOAUser) {
     return (

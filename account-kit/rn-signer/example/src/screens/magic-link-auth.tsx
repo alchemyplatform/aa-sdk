@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -10,13 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Config from "react-native-config";
+
+import signer from "../signer";
 
 export default function MagicLinkAuthScreen() {
-  const signer = RNAlchemySigner({
-    client: { connection: { apiKey: Config.API_KEY! } },
-  });
-
   const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
 
