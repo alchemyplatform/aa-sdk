@@ -6,7 +6,6 @@ import type {
 import {
   createBundlerClient,
   getEntryPoint,
-  toSmartContractAccount,
   getAccountAddress,
 } from "@aa-sdk/core";
 import {
@@ -18,16 +17,11 @@ import {
   type Transport,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
-import {
-  getDefaultMAV2FactoryAddress,
-  DEFAULT_OWNER_ENTITY_ID,
-} from "../utils.js";
-import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
-import { nativeSMASigner } from "./nativeSMASigner.js";
+import { getDefaultMAV2FactoryAddress } from "../utils.js";
 import {
   type SignerEntity,
   type MAV2Account,
-  createMAv2BaseFunctions,
+  createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 
 export type CreateSMAV2AccountParams<
@@ -73,11 +67,7 @@ export async function createSMAV2Account(
     initialOwner,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
-    signerEntity = {
-      isGlobalValidation: true,
-      entityId: DEFAULT_OWNER_ENTITY_ID,
-    },
-    signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
+    signerEntity,
   } = config;
 
   const client = createBundlerClient({
@@ -110,33 +100,14 @@ export async function createSMAV2Account(
     getAccountInitCode,
   });
 
-  const { encodeExecute, encodeBatchExecute, ...baseFunctions } =
-    await createMAv2BaseFunctions({
-      transport,
-      chain,
-      entryPoint,
-      signerEntity,
-      accountAddress: _accountAddress,
-    });
-
-  const baseAccount = await toSmartContractAccount({
+  return createMAv2Base({
+    source: `SMAV2Account`,
     transport,
     chain,
+    signer,
     entryPoint,
     accountAddress: _accountAddress,
-    source: `MAV2Account`,
-    encodeExecute,
-    encodeBatchExecute,
     getAccountInitCode,
-    ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, _accountAddress)
-      : singleSignerMessageSigner(signer, chain, _accountAddress, entityId)),
-  });
-
-  return {
-    ...baseAccount,
-    ...baseFunctions,
-    getSigner: () => signer,
     signerEntity,
-  };
+  });
 }

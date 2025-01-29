@@ -3,8 +3,8 @@ import {
   getEntryPoint,
   InvalidEntityIdError,
   InvalidNonceKeyError,
+  toSmartContractAccount,
   type AccountOp,
-  type EntryPointDef,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
@@ -24,6 +24,8 @@ import {
 } from "viem";
 import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
+import { nativeSMASigner } from "../nativeSMASigner.js";
+import { singleSignerMessageSigner } from "../../modules/single-signer-validation/signer.js";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
 
@@ -57,8 +59,9 @@ export type ValidationDataParams =
     };
 
 export type MAV2Account<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"MAV2Account", TSigner, "0.7.0"> & {
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  Name extends string = string
+> = SmartContractAccountWithSigner<Name, TSigner, "0.7.0"> & {
   signerEntity: SignerEntity;
   getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
   getValidationData: (
@@ -68,32 +71,47 @@ export type MAV2Account<
 };
 
 export type CreateMAV2BaseFunctionsParams<
-  TTransport extends Transport = Transport
-> = Pick<
-  ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
-  "transport" | "chain"
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  Name extends string = string
+> = Omit<
+  ToSmartContractAccountParams<Name, TTransport, Chain, "0.7.0">,
+  // Implements the following methods required by `toSmartContractAccount`, and passes through any other parameters.
+  | "encodeExecute"
+  | "encodeBatchExecute"
+  | "getNonce"
+  | "signMessage"
+  | "signTypedData"
+  | "getDummySignature"
 > & {
-  // salt?: bigint;
-  // factoryAddress?: Address;
-  // initCode?: Hex;
-  // initialOwner?: Address;
-  entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  signer: TSigner;
   signerEntity?: SignerEntity;
   accountAddress: Address;
 };
 
-export async function createMAv2BaseFunctions(
+export type CreateMAV2BaseReturnType<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  Name extends string = string
+> = Promise<MAV2Account<TSigner, Name>>;
+
+export async function createMAv2Base(
   config: CreateMAV2BaseFunctionsParams
-) {
+): CreateMAV2BaseReturnType {
   const {
     transport,
     chain,
+    signer,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
+    signerEntity = {
+      isGlobalValidation: true,
+      entityId: DEFAULT_OWNER_ENTITY_ID,
+    },
     signerEntity: {
       isGlobalValidation = true,
       entityId = DEFAULT_OWNER_ENTITY_ID,
     } = {},
     accountAddress,
+    ...remainingToSmartContractAccountParams
   } = config;
 
   if (entityId > Number(maxUint32)) {
@@ -136,7 +154,7 @@ export async function createMAv2BaseFunctions(
   const isAccountDeployed: () => Promise<boolean> = async () =>
     !!(await client.getCode({ address: accountAddress }));
   // TODO: add deferred action flag
-  const getAccountNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
+  const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
     if (nonceKey > maxUint152) {
       throw new InvalidNonceKeyError(nonceKey);
     }
@@ -206,12 +224,26 @@ export async function createMAv2BaseFunctions(
       : callData;
   };
 
+  const baseAccount = await toSmartContractAccount({
+    ...remainingToSmartContractAccountParams,
+    transport,
+    chain,
+    entryPoint,
+    accountAddress,
+    encodeExecute,
+    encodeBatchExecute,
+    getNonce,
+    ...(entityId === DEFAULT_OWNER_ENTITY_ID
+      ? nativeSMASigner(signer, chain, accountAddress)
+      : singleSignerMessageSigner(signer, chain, accountAddress, entityId)),
+  });
+
   return {
+    ...baseAccount,
+    getSigner: () => signer,
+    signerEntity,
     getExecutionData,
     getValidationData,
     encodeCallData,
-    getAccountNonce,
-    encodeExecute,
-    encodeBatchExecute,
   };
 }

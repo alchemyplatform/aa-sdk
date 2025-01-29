@@ -3,19 +3,13 @@ import type {
   SmartAccountSigner,
   ToSmartContractAccountParams,
 } from "@aa-sdk/core";
-import {
-  getEntryPoint,
-  toSmartContractAccount,
-  EntityIdOverrideError,
-} from "@aa-sdk/core";
+import { getEntryPoint, EntityIdOverrideError } from "@aa-sdk/core";
 import { type Chain, type Hex, type Transport, type Address } from "viem";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
-import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
-import { nativeSMASigner } from "./nativeSMASigner.js";
 import {
   type SignerEntity,
   type MAV2Account,
-  createMAv2BaseFunctions,
+  createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 
 export type CreateSMA7702AccountParams<
@@ -76,38 +70,19 @@ export async function createSMA7702Account(
     throw new EntityIdOverrideError();
   }
 
-  const { encodeExecute, encodeBatchExecute, ...baseFunctions } =
-    await createMAv2BaseFunctions({
-      transport,
-      chain,
-      entryPoint,
-      signerEntity,
-      accountAddress: _accountAddress,
-    });
-
-  const baseAccount = await toSmartContractAccount({
-    transport,
-    chain,
-    entryPoint,
-    accountAddress: _accountAddress,
-    source: `MAV2Account`,
-    encodeExecute,
-    encodeBatchExecute,
-    getAccountInitCode,
-    ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, _accountAddress)
-      : singleSignerMessageSigner(signer, chain, _accountAddress, entityId)),
-  });
-
   const implementation: Address = "0x69007702764179f14F51cdce752f4f775d74E139";
 
   const getImplementationAddress = async () => implementation;
 
-  return {
-    ...baseAccount,
-    ...baseFunctions,
-    getSigner: () => signer,
+  return createMAv2Base({
+    source: "SMA7702Account",
+    transport,
+    chain,
+    signer,
+    entryPoint,
     signerEntity,
+    accountAddress: _accountAddress,
+    getAccountInitCode,
     getImplementationAddress,
-  };
+  });
 }
