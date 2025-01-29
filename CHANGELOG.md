@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
+
+### Features
+
+- add OAuth RN Signer docs ([#1286](https://github.com/alchemyplatform/aa-sdk/issues/1286)) ([361b6ac](https://github.com/alchemyplatform/aa-sdk/commit/361b6acb876cf2e04466ba9bd1182e51e0c4d05e))
+- add react native smart accounts docs ([#1293](https://github.com/alchemyplatform/aa-sdk/issues/1293)) ([24cbef1](https://github.com/alchemyplatform/aa-sdk/commit/24cbef1f4d284b01b11202f056e48a5e6ea70f9e))
+- add updated bare and expo rn guides ([#1303](https://github.com/alchemyplatform/aa-sdk/issues/1303)) ([c43d9a5](https://github.com/alchemyplatform/aa-sdk/commit/c43d9a577324e9d541230b48685c79dd23dd4a39))
+- add updated OTP example ([#1308](https://github.com/alchemyplatform/aa-sdk/issues/1308)) ([abf4ad8](https://github.com/alchemyplatform/aa-sdk/commit/abf4ad8373d59fa135c0a909b12946454f452f0f))
+
 # [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
 
 ### Bug Fixes
