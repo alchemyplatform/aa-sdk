@@ -1,6 +1,6 @@
 "use client";
 
-import { ConfigurationWrapper } from "@/components/configuration/ConfigurationWrapper";
+import { ConfigurationSidebarWrapper } from "@/components/configuration/ConfigurationSidebarWrapper";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
 import { TopNav } from "../components/topnav/TopNav";
@@ -33,7 +33,7 @@ export default function Home() {
         className={`flex flex-col flex-1 xl:px-6 lg:px-10 lg:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} lg:overflow-hidden mt-[74px] lg:mt-0`}
       >
         <div className="flex flex-1 justify-center gap-6 overflow-hidden">
-          <ConfigurationWrapper />
+          <ConfigurationSidebarWrapper />
           <div
             className={cn(
               "flex flex-col lg:flex-1 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none mb-6 lg:mb-0 w-full lg:w-auto m-6 lg:m-0",
