@@ -10,7 +10,6 @@ import {
   useSmartAccountClient,
 } from "@account-kit/react";
 import { encodeFunctionData } from "viem";
-import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 import { MintCardActionButtons } from "./MintCardActionButtons";
 import { NFT } from "./NFT";
 import { ValueProps } from "./ValueProps";
@@ -116,10 +115,9 @@ export const MintCard = () => {
     Object.values(status).some((x) => x === "loading") || isLoadingClient;
 
   return (
-    <div className="flex mt-0 lg:mt-7 pb-10 lg:pb-0 lg:justify-center flex-col lg:h-full">
+    <div className="flex mt-0 lg:justify-center flex-col lg:h-full mb-6">
       <div className="lg:self-center">
-        <div className="flex items-center flex-col justify-center mb-12 lg:mb-0  lg:flex-row lg:justify-center lg:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 lg:mx-0 overflow-hidden lg:h-[470px]">
-          <RenderUserConnectionAvatar className="lg:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
+        <div className="flex items-center flex-col justify-center mb-12 lg:mb-0  lg:flex-row lg:justify-center lg:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 lg:mx-0 overflow-hidden lg:h-[470px] border-none lg:border-solid">
           <div className="hidden lg:block max-w-[410px] overflow-auto p-8 h-full">
             <h1 className="text-3xl lg:text-2xl font-semibold text-center leading-10 mb-8 text-fg-primary">
               {!nftTransfered
