@@ -106,6 +106,7 @@ export default defineConfig({
   sidebar: {
     "/": indexSidebar(),
     "/react": indexSidebar("react"),
+    "/react-native": indexSidebar("react-native"),
     "/core": indexSidebar("core"),
     "/infra": indexSidebar("infra"),
     "/signer": indexSidebar("signer"),

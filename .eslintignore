@@ -14,3 +14,5 @@ account-kit/rn-signer/lib/*
 **/ios/generated/*
 **/build/*
 **/.cxx/*
+
+**/vendor/*

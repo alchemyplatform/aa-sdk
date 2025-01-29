@@ -1,0 +1,106 @@
+---
+title: How to sponsor gas for a User Operation
+description: Follow this guide to sponsor gas for UserOperations from any
+  ERC-4337 smart account. Account Kit is a vertically integrated stack for
+  building apps that support ERC-4337.
+---
+
+import Snippet from "../../../shared/create-gas-policy.mdx";
+
+# How to sponsor gas for a User Operation
+
+Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
+
+After [setting up Account Kit](/react-native/signer/setup-guide) in your project, follow these steps to sponsor gas.
+
+## Create a Gas Manager policy
+
+<Snippet />
+
+## Send a sponsored User Operation with the Policy ID
+
+Now you can send a sponsored User Operation with the Policy ID.
+
+:::code-group
+
+```tsx twoslash [gas-sponsorship.tsx]
+import React, { useState, useEffect } from "react";
+import { View, Button } from "react-native";
+import {
+  createLightAccountClient,
+  LightAccount,
+} from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { User } from "@account-kit/signer";
+
+// import the signer
+import { signer } from "./signer.ts";
+
+export default function MyComponent() {
+  const [client, setClient] = useState<SmartAccountClient | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
+
+  // Assume the user is already authenticated
+  useEffect(() => {
+    signer.getAuthDetails().then(setUser);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      // Create a smart account client for the authenticated user with the policy ID
+      createLightAccountClient({
+        signer,
+        chain: sepolia,
+        policyId: "YOUR_GAS_POLICY_ID", // [!code ++]
+        transport: alchemy({ apiKey: "API_KEY" }),
+      }).then((client) => {
+        setClient(client);
+      });
+    }
+  }, [user]);
+
+  const handleSendUserOperation = async () => {
+    if (!client) return;
+    // Send a sponsored User Operation
+    try {
+      setIsSendingUserOperation(true);
+
+      const { hash } = await client.sendUserOperation({
+        uo: {
+          target: "0xTARGET_ADDRESS",
+          data: "0x",
+          value: 0n,
+        },
+        account: client.account,
+      });
+
+      Alert.alert("User Operation Sent", hash);
+    } catch (error) {
+      Alert.alert("Error", "Error sending user operation");
+    } finally {
+      setIsSendingUserOperation(false);
+    }
+  };
+
+  return (
+    <View>
+      <Button
+        onClick={handleSendUserOperation}
+        disabled={isSendingUserOperation}
+        title={
+          isSendingUserOperation
+            ? "Sending..."
+            : "Send Sponsored User Operation"
+        }
+      />
+    </View>
+  );
+}
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::
