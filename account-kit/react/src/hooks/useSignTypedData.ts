@@ -39,7 +39,9 @@ export type UseSignTypedDataResult = {
 };
 
 /**
- * Hook for signing typed data, supporting both connected accounts and clients.
+ * Similar to `useSignMessage`, [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts) for signing typed data, supporting both connected accounts and clients in EIP 712 format.
+ *
+ * Uses `eth_signtypedmessage` to sign structured, typed data. Accepts typed, complex data structures as input. Like `useSignMessage`, this hook also handles deployed (1271) and undeployed accounts (6492).
  *
  * @example
  * ```ts
@@ -56,8 +58,8 @@ export type UseSignTypedDataResult = {
  * });
  * ```
  *
- * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments
- * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process
+ * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L24)
+ * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L28)
  */
 export function useSignTypedData({
   client,

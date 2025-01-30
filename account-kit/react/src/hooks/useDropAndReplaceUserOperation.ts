@@ -45,7 +45,7 @@ export type UseDropAndReplaceUserOperationResult<
 };
 
 /**
- * Custom hook that handles the drop and replace user operation for a given client and mutation arguments.
+ * Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts) that handles the drop and replace user operation for a given client and mutation arguments.
  *
  * @example
  * ```tsx
@@ -104,8 +104,8 @@ export type UseDropAndReplaceUserOperationResult<
  * }
  * ```
  *
- * @param {UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>} config The configuration parameters including the client and other mutation arguments
- * @returns {UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount>} The result containing the mutation function, result data, loading state, and any error
+ * @param {UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>} config The configuration parameters including the client and other mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L23)
+ * @returns {UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount>} The result containing the mutation function, result data, loading state, and any error. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L30)
  */
 export function useDropAndReplaceUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,

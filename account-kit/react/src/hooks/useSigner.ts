@@ -6,7 +6,8 @@ import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "../context.js";
 
 /**
- * Hook for accessing the current Alchemy signer within a React component. It uses a synchronous external store for updates.
+ * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSigner.ts) for accessing the current Alchemy signer within a React component. It uses a synchronous external store for updates.
+ * This is a good use case if you want to use the signer as an EOA, giving you direct access to it.
  *
  * @example
  * ```ts
@@ -15,7 +16,7 @@ import { useAlchemyAccountContext } from "../context.js";
  * const signer = useSigner();
  * ```
  *
- * @returns {AlchemyWebSigner | null} The current Alchemy signer or null if none is available
+ * @returns {AlchemyWebSigner | null} The current Alchemy signer or null if none is available. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/index.ts#L50)
  */
 export const useSigner = (): AlchemyWebSigner | null => {
   const { config } = useAlchemyAccountContext();
