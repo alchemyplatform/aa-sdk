@@ -33,7 +33,7 @@ export function getSectionsForConfig(
               authProviderId: "auth0",
               mode: "popup",
               auth0Connection: "twitter",
-              displayName: "X",
+              displayName: "Twitter",
               logoUrl: "/images/twitter.svg",
               logoUrlDark: "/images/twitter-dark.svg",
               scope: "openid profile",
