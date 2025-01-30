@@ -28430,7 +28430,7 @@ vfile@^6.0.0, vfile@^6.0.1:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.20.0, viem@2.22.6, viem@^2.1.1, viem@^2.20.0, viem@^2.21.40, viem@^2.21.41:
+viem@2.20.0, viem@2.22.6, viem@^2.1.1, viem@^2.21.40, viem@^2.21.41, viem@^2.22.6:
   version "2.22.6"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.22.6.tgz#724c66caed2c8bfd73748f099131e60d392e26ef"
   integrity sha512-wbru5XP0Aa2QskBrZsv7VOriqRnAKn0tahs957xRPOM00ABN4AGAY9xM16UvIq+giRJU6oahXDhPrR1QaYymoA==

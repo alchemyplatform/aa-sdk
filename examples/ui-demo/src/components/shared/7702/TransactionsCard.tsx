@@ -32,7 +32,7 @@ export const TransactionsCard = ({
   };
 
   return (
-    <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-none lg:shadow-smallCard mb-5 lg:mb-0">
+    <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-smallCard mb-5 lg:mb-0">
       <div
         className="rounded-xl h-[222px] w-full mb-4 flex justify-center items-center relative"
         style={{
