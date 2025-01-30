@@ -59,7 +59,11 @@ export type UseExportAccountResult = {
  * ```
  *
  * @param {UseExportAccountMutationArgs} args Optional arguments for the mutation and export parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L11)
+<<<<<<< HEAD
  * @returns {UseExportAccountResult} An object containing the export state, possible error, and the export account function and component. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L32)*
+=======
+ * @returns {UseExportAccountResult} An object containing the export state, possible error, and the export account function and component. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L32)
+>>>>>>> 796d0d71 (docs: updated account kit react hook docs)
  */
 export function useExportAccount(
   args?: UseExportAccountMutationArgs
