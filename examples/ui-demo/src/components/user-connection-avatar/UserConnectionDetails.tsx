@@ -83,8 +83,8 @@ export function UserConnectionDetails({
         <UserAddressLink
           address={
             walletType === WalletTypes.smart
-              ? (scaAccount.address ?? "")
-              : (signerAddress ?? "")
+              ? scaAccount.address ?? ""
+              : signerAddress ?? ""
           }
         />
       </div>

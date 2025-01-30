@@ -26,7 +26,7 @@ export const MintCard7702 = ({
   uri?: string;
 }) => {
   return (
-    <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-none lg:shadow-smallCard ">
+    <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-smallCard ">
       {uri ? (
         <div className="relative flex flex-col items-center">
           <Image
