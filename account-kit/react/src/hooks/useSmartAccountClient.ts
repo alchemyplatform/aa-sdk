@@ -34,7 +34,12 @@ export function useSmartAccountClient<
 ): UseSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
 
 /**
- * Uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
+ * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts) that uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
+ * Under the hood, Smart Account Client takes care of all the necessary middleware operations needed to populate a user operation such as gas estimation and paymaster data.
+ *
+ * If passing in an undefined client, Smart Account Client will treat the connected account as an EOA.
+ *
+ * If using with an EOA, Smart Account Client won’t throw an error, but the client itself will stay undefined forever. We recommend useBundlerClient instead when using an EOA. The EOA must also be connected or authenticated with a signer.
  *
  * @example
  * ```ts
@@ -42,12 +47,12 @@ export function useSmartAccountClient<
  *
  * const { client, address, isLoadingClient } = useSmartAccountClient({
  *  type: "LightAccount",
- *  accountParams: {...}, // optional params to further configure the account
+ *  accountParams: {...}, // optional [params](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/core/src/actions/createAccount.ts#L23) to further configure the account
  * });
  * ```
  *
- * @param {UseSmartAccountClientProps} props The properties required to use the smart account client, including account parameters, type, and additional client parameters.
- * @returns {UseSmartAccountClientResult} An object containing the smart account client, the address, and a loading state.
+ * @param {UseSmartAccountClientProps} props The properties required to use the smart account client, including account parameters, type, and additional client parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L19)
+ * @returns {UseSmartAccountClientResult} An object containing the smart account client, the address, and a loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L24)
  */
 export function useSmartAccountClient({
   accountParams,

@@ -31,8 +31,9 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
   } & UseAccountMutationArgs<TAccount>;
 
 /**
- * Hook to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
- * The supported account types are: LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
+ * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts) to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
+ * The supported account types are: LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount. Primarily used to get the smart account address before deployment. Dependent on the signer, if the signer has not been initialized and authenticated, address and isLoadingAccount return null.
+ * If using a smart contract account, returns instance of a smart contract account that the user is connected to. Returns address of smart contract account, not address of the signer. If using an EOA, returns address of signer
  *
  * @example
  * ```ts
@@ -44,8 +45,8 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
  * ```
  *
  * @template {SupportedAccountTypes} TAccount The type of account to use
- * @param {UseAccountProps<TAccount>} params The parameters required for account management, including account type, specific account parameters, and optional mutation arguments
- * @returns {UseAccountResult<TAccount>} An object containing the account information, address, and loading state
+ * @param {UseAccountProps<TAccount>} params The parameters required for account management, including account type, specific account parameters, and optional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L28)
+ * @returns {UseAccountResult<TAccount>} An object containing the account information, address, and loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L22)
  */
 export function useAccount<TAccount extends SupportedAccountTypes>(
   params: UseAccountProps<TAccount>
