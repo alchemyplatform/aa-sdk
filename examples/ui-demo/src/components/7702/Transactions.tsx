@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
-import { TransactionType } from "../../../hooks/7702/useRecurringTransactions";
+import { TransactionType } from "../../hooks/7702/useRecurringTransactions";
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
 import { useEffect, useState } from "react";
