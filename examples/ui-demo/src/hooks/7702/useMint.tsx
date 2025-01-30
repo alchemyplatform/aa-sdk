@@ -7,8 +7,8 @@ import { ODYSSEY_EXPLORER_URL } from "./constants";
 import { useCallback, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { encodeFunctionData, Hash } from "viem";
-import { MintStatus } from "../../components/shared/7702/MintCard7702";
 import { useSma7702Client } from "./useSma7702Client";
+import { MintStatus } from "@/components/7702/MintCard7702";
 
 const initialValuePropState = {
   signing: "initial",
