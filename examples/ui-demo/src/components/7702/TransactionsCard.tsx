@@ -5,7 +5,7 @@ import { Transactions } from "./Transactions";
 import {
   TransactionType,
   CardStatus,
-} from "../../../hooks/7702/useRecurringTransactions";
+} from "../../hooks/7702/useRecurringTransactions";
 
 export const TransactionsCard = ({
   cardStatus,

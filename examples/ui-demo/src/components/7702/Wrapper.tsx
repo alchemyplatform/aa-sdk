@@ -1,8 +1,7 @@
 import { MintCard7702 } from "./MintCard7702";
 import { TransactionsCard } from "./TransactionsCard";
-import { useMint } from "../../../hooks/7702/useMint";
-import { useRecurringTransactions } from "../../../hooks/7702/useRecurringTransactions";
-import { RenderUserConnectionAvatar } from "@/components/user-connection-avatar/RenderUserConnectionAvatar";
+import { useMint } from "../../hooks/7702/useMint";
+import { useRecurringTransactions } from "../../hooks/7702/useRecurringTransactions";
 
 export const Wrapper7702 = () => {
   const { cardStatus, transactions, handleTransactions } =

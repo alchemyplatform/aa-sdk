@@ -7,7 +7,7 @@ import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
 import { MintCard } from "../mint-card/MintCard";
 import { useState, useEffect } from "react";
 import { WalletTypes } from "@/app/config";
-import { Wrapper7702 } from "../shared/7702/Wrapper";
+import { Wrapper7702 } from "../7702/Wrapper";
 import { useConfigStore } from "@/state";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
