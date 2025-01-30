@@ -1,5 +1,5 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { alchemy, sepolia } from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
@@ -78,7 +78,7 @@ export const alchemyConfig = () =>
   createConfig(
     {
       transport: alchemy({ rpcUrl: "/api/rpc" }),
-      chain: arbitrumSepolia,
+      chain: sepolia,
       ssr: true,
       policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
       connectors: [
