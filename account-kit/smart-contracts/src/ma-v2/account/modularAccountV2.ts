@@ -77,10 +77,11 @@ export async function createModularAccountV2<
 ): Promise<MAV2Account<TSigner>>;
 
 /**
- * Creates an SMAV2 bytecode account using defined parameters including chain, signer, salt, factory address, and more.
- * Handles account initialization code, nonce generation, transaction encoding, and more to construct a modular account with optional validation hooks.
+ * Creates a specific MAV2 account type depending on the provided "type" field and other defined parameters.
+ * Possible types include: "default", which is SMA Bytecode, and "7702".
+ * Handles nonce generation, transaction encoding, and more to construct a modular account with optional validation hooks.
  *
- * @param {CreateModularAccountV2Params} config Configuration parameters for creating an SMAV2 account. Includes chain details, signer, salt, factory address, and more.
+ * @param {CreateModularAccountV2Params} config Configuration parameters for creating an MAV2 account.
  * @returns {Promise<MAV2Account>} A promise that resolves to an `MAV2Account` providing methods for nonce retrieval, transaction execution, and more.
  */
 export async function createModularAccountV2(
