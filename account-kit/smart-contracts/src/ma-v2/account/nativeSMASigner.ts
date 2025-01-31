@@ -14,6 +14,7 @@ import {
   packUOSignature,
   pack1271Signature,
   DEFAULT_OWNER_ENTITY_ID,
+  SignatureType,
 } from "../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
@@ -82,6 +83,7 @@ export const nativeSMASigner = (
           primaryType: "ReplaySafeHash",
         }),
         entityId: DEFAULT_OWNER_ENTITY_ID,
+        signatureType: SignatureType.EOA,
       });
     },
 
@@ -115,6 +117,7 @@ export const nativeSMASigner = (
               primaryType: "ReplaySafeHash",
             }),
             entityId: DEFAULT_OWNER_ENTITY_ID,
+            signatureType: SignatureType.EOA,
           });
     },
   };

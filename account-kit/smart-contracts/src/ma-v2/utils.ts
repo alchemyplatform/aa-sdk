@@ -19,10 +19,15 @@ export type PackUOSignatureParams = {
   validationSignature: Hex;
 };
 
+export enum SignatureType {
+  EOA = "0x00",
+  NONE = "",
+}
 // TODO: direct call validation 1271
 export type Pack1271SignatureParams = {
   validationSignature: Hex;
   entityId: number;
+  signatureType: SignatureType;
 };
 
 // Signature packing utility for user operations
@@ -37,14 +42,22 @@ export const packUOSignature = ({
 export const pack1271Signature = ({
   validationSignature,
   entityId,
+  signatureType,
 }: Pack1271SignatureParams): Hex => {
-  return concat([
-    "0x00",
-    toHex(entityId, { size: 4 }),
-    "0xFF",
-    "0x00", // EOA type signature
-    validationSignature,
-  ]);
+  return signatureType
+    ? concat([
+        "0x00",
+        toHex(entityId, { size: 4 }),
+        "0xFF",
+        signatureType,
+        validationSignature,
+      ])
+    : concat([
+        "0x00",
+        toHex(entityId, { size: 4 }),
+        "0xFF",
+        validationSignature,
+      ]);
 };
 
 export const getDefaultMAV2FactoryAddress = (chain: Chain): Address => {

@@ -12,7 +12,11 @@ import {
 } from "viem";
 import { getDefaultSingleSignerValidationModuleAddress } from "../utils.js";
 
-import { packUOSignature, pack1271Signature } from "../../utils.js";
+import {
+  packUOSignature,
+  pack1271Signature,
+  SignatureType,
+} from "../../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
@@ -84,6 +88,7 @@ export const singleSignerMessageSigner = (
           primaryType: "ReplaySafeHash",
         }),
         entityId,
+        signatureType: SignatureType.EOA,
       });
     },
 
@@ -121,6 +126,7 @@ export const singleSignerMessageSigner = (
         : pack1271Signature({
             validationSignature,
             entityId,
+            signatureType: SignatureType.EOA,
           });
     },
   };
