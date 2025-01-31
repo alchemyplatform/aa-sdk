@@ -27,6 +27,24 @@ import {
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 
+export type CreateSMAWebAuthnAccountParams<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner // TODO: replace this with webauthn signer type
+> = Pick<
+  ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
+  "transport" | "chain"
+> & {
+  type: "webauthn";
+  signer: TSigner; // TODO: include webauthn signer in type TSigner, but do we need this?
+  salt?: bigint;
+  ownerX: bigint;
+  ownerY: bigint;
+  factoryAddress?: Address;
+  initCode?: Hex;
+  entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  signerEntity?: SignerEntity;
+};
+
 export type CreateSMAV2BytecodeAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -67,7 +85,8 @@ export type CreateModularAccountV2Params<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > =
   | CreateSMA7702AccountParams<TTransport, TSigner>
-  | CreateSMAV2BytecodeAccountParams<TTransport, TSigner>;
+  | CreateSMAV2BytecodeAccountParams<TTransport, TSigner>
+  | CreateSMAWebAuthnAccountParams<TTransport, TSigner>;
 
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
@@ -130,6 +149,42 @@ export async function createModularAccountV2(
           getAccountInitCode,
           accountAddress,
           getImplementationAddress,
+        };
+      }
+      case "webauthn": {
+        const {
+          salt = 0n,
+          factoryAddress = getDefaultMAV2FactoryAddress(chain),
+          initCode,
+          ownerX,
+          ownerY,
+        } = config as CreateSMAWebAuthnAccountParams;
+
+        const getAccountInitCode = async () => {
+          if (initCode) {
+            return initCode; // QUESTION: in what situations do we already get the initCode?
+          }
+
+          return concatHex([
+            factoryAddress,
+            encodeFunctionData({
+              abi: accountFactoryAbi,
+              functionName: "createWebAuthnAccount",
+              args: [ownerX, ownerY, salt, entityId],
+            }),
+          ]);
+        };
+
+        const accountAddress = await getAccountAddress({
+          client,
+          entryPoint,
+          accountAddress: _accountAddress,
+          getAccountInitCode,
+        });
+
+        return {
+          getAccountInitCode,
+          accountAddress,
         };
       }
       case "default": {
