@@ -1,7 +1,5 @@
 export const Key = ({ className }: { className?: string }) => (
   <svg
-    width="94"
-    height="94"
     viewBox="0 0 94 94"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
