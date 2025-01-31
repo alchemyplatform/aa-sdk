@@ -126,6 +126,10 @@ const hydrateAccountState = (
         config.MultiOwnerLightAccount && shouldReconnectAccounts
           ? reconnectingState(config.MultiOwnerLightAccount.accountAddress!)
           : defaultAccountState(),
+      MAV2Account:
+        config.MAV2Account && shouldReconnectAccounts
+          ? reconnectingState(config.MAV2Account.accountAddress!)
+          : defaultAccountState(),
     };
 
     return acc;

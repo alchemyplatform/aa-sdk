@@ -18,6 +18,7 @@ import {
   type MultiOwnerModularAccount,
   type MultiOwnerPluginActions,
   type PluginManagerActions,
+  type MAV2Account,
 } from "@account-kit/smart-contracts";
 import type { Address, Chain } from "viem";
 import type {
@@ -52,6 +53,8 @@ export type ClientActions<
       AccountLoupeActions<MultiOwnerModularAccount<AlchemyWebSigner>>
   : TAccount extends MultiOwnerLightAccount
   ? MultiOwnerLightAccountClientActions<AlchemyWebSigner>
+  : TAccount extends MAV2Account
+  ? {} // no ma v2 actions
   : never;
 
 export type GetSmartAccountClientResult<
@@ -211,6 +214,18 @@ export function getSmartAccountClient(
             .extend(multiOwnerPluginActions)
             .extend(pluginManagerActions)
             .extend(accountLoupeActions),
+          address: account.address,
+          isLoadingClient: false,
+        };
+      case "MAV2Account":
+        return {
+          client: createAlchemySmartAccountClient({
+            transport,
+            chain: connection.chain,
+            account: account,
+            policyId: connection.policyId,
+            ...clientParams,
+          }),
           address: account.address,
           isLoadingClient: false,
         };

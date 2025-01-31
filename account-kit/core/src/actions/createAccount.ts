@@ -3,10 +3,12 @@ import {
   createLightAccount,
   createMultiOwnerLightAccount,
   createMultiOwnerModularAccount,
+  createModularAccountV2,
   type CreateLightAccountParams,
   type CreateMultiOwnerLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
   type LightAccountVersion,
+  type CreateModularAccountV2Params,
 } from "@account-kit/smart-contracts";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
@@ -39,8 +41,13 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
         >,
         "signer" | "transport" | "chain"
       >
-    : Omit<
+    : TAccount extends "MultiOwnerModularAccount"
+    ? Omit<
         CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>,
+        "signer" | "transport" | "chain"
+      >
+    : Omit<
+        CreateModularAccountV2Params<Transport, AlchemyWebSigner>,
         "signer" | "transport" | "chain"
       >;
 
@@ -149,6 +156,27 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
             data: {
               accountType: "MultiOwnerModularAccount",
               accountVersion: "v1.0.0",
+            },
+          });
+
+          return account;
+        });
+      case "MAV2Account":
+        return createModularAccountV2({
+          ...(params as AccountConfig<"MAV2Account">),
+          ...(cachedConfig as Omit<
+            CreateModularAccountV2Params,
+            "transport" | "chain" | "signer"
+          >),
+          signer,
+          transport: (opts) => transport({ ...opts, retryCount: 0 }),
+          chain,
+        }).then((account) => {
+          CoreLogger.trackEvent({
+            name: "account_initialized",
+            data: {
+              accountType: "MAV2Account",
+              accountVersion: "v2.0.0",
             },
           });
 

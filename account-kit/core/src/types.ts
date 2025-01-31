@@ -13,6 +13,7 @@ import type {
   LightAccountVersion,
   MultiOwnerLightAccount,
   MultiOwnerModularAccount,
+  MAV2Account,
 } from "@account-kit/smart-contracts";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
@@ -23,7 +24,8 @@ import type { Store, StoredState } from "./store/types";
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
-  | "MultiOwnerModularAccount";
+  | "MultiOwnerModularAccount"
+  | "MAV2Account";
 
 export type SupportedAccounts =
   | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
@@ -31,7 +33,8 @@ export type SupportedAccounts =
   | MultiOwnerLightAccount<
       AlchemyWebSigner,
       LightAccountVersion<"MultiOwnerLightAccount">
-    >;
+    >
+  | MAV2Account<AlchemyWebSigner>;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
@@ -40,6 +43,8 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
     ? MultiOwnerModularAccount<AlchemyWebSigner>
     : T extends "MultiOwnerLightAccount"
     ? MultiOwnerLightAccount<AlchemyWebSigner>
+    : T extends "MAV2Account"
+    ? MAV2Account<AlchemyWebSigner>
     : never;
 
 export type AlchemyAccountsConfig = {

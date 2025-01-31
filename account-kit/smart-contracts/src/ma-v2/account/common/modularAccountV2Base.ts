@@ -59,9 +59,8 @@ export type ValidationDataParams =
     };
 
 export type MAV2Account<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  Name extends string = string
-> = SmartContractAccountWithSigner<Name, TSigner, "0.7.0"> & {
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = SmartContractAccountWithSigner<"MAV2Account", TSigner, "0.7.0"> & {
   signerEntity: SignerEntity;
   getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
   getValidationData: (
@@ -72,10 +71,9 @@ export type MAV2Account<
 
 export type CreateMAV2BaseFunctionsParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  Name extends string = string
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  ToSmartContractAccountParams<Name, TTransport, Chain, "0.7.0">,
+  ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
   // Implements the following methods required by `toSmartContractAccount`, and passes through any other parameters.
   | "encodeExecute"
   | "encodeBatchExecute"
@@ -90,9 +88,8 @@ export type CreateMAV2BaseFunctionsParams<
 };
 
 export type CreateMAV2BaseReturnType<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  Name extends string = string
-> = Promise<MAV2Account<TSigner, Name>>;
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = Promise<MAV2Account<TSigner>>;
 
 export async function createMAv2Base(
   config: CreateMAV2BaseFunctionsParams
