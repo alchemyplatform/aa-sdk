@@ -31,8 +31,6 @@ export type UseAuthenticateResult = {
  *
  * This can be complex for magic link or OTP flows: OPT calls authenticate twice, but this should be handled by the signer.
  *
- * An example flow, we kick off useAuthenticate with authenticateAsync: we fire off to an incognito window to get a session from a backend. We listen to the signer or smart contract account client state to make sure the address is defined. And onSuccess, we redirect to a new view, which might be gated on useSmartAccountClient and a defined address.
- *
  * @example
  * ```ts
  * import { useAuthenticate } from "@account-kit/react";
