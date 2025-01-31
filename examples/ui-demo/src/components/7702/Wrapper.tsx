@@ -14,7 +14,7 @@ export const Wrapper7702 = () => {
     uri,
   } = useMint();
   return (
-    <div className="flex max-[1200px]:flex-col gap-6 lg:mt-6 items-center">
+    <div className="flex max-[1200px]:flex-col gap-6 lg:mt-6 items-center p-6">
       <MintCard7702
         isLoading={
           isLoadingMint || cardStatus === "setup" || cardStatus === "active"

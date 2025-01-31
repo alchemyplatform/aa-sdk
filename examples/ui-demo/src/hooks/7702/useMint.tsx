@@ -45,26 +45,21 @@ export const useMint = () => {
         signing: "success",
       }));
 
-      // TODO: move this log to a toast
-      console.log("Mint successful");
-      console.log(`${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`);
-
-      // Current design does not have a success toast, leaving commented to implement later.
-      // setToast({
-      //   type: "success",
-      //   text: (
-      //     <>
-      //       <span className={"inline-block lg:hidden"}>
-      //         {`You've collected your NFT!`}
-      //       </span>
-      //       <span className={"hidden lg:inline-block"}>
-      //         {`You've successfully collected your NFT! Refresh to mint
-      //                       again.`}
-      //       </span>
-      //     </>
-      //   ),
-      //   open: true,
-      // });
+      setToast({
+        type: "success",
+        text: (
+          <>
+            <span className={"inline-block lg:hidden"}>
+              {`You've collected your NFT!`}
+            </span>
+            <span className={"hidden lg:inline-block"}>
+              {`You've successfully collected your NFT! Refresh to mint
+                            again.`}
+            </span>
+          </>
+        ),
+        open: true,
+      });
     };
 
     const handleError = (error: Error) => {

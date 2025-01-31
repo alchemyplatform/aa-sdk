@@ -33,12 +33,7 @@ export const TransactionsCard = ({
 
   return (
     <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-smallCard mb-5 lg:mb-0">
-      <div
-        className="rounded-xl h-[222px] w-full mb-4 flex justify-center items-center relative"
-        style={{
-          background: `rgba(54, 63, 249, 0.05)`,
-        }}
-      >
+      <div className="bg-[#EAEBFE] rounded-xl h-[67px] w-[60px] md:h-[154px] md:w-[140px] lg:h-[222px] lg:w-[326px] mb-4 flex justify-center items-center relative">
         <p className="absolute top-5 right-5 px-2 py-1 font-semibold rounded-md text-xs text-[#7c3AED] bg-[#F3F3FF]">
           New!
         </p>
