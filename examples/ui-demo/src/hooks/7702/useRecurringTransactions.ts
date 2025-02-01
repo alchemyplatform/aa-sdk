@@ -65,9 +65,9 @@ export const useRecurringTransactions = () => {
   const [sessionKeyEntityId] = useState<number>(() => genEntityId());
   const [sessionKeyAdded, setSessionKeyAdded] = useState<boolean>(false);
 
-  const client = useSma7702Client();
+  const { client, isLoadingClient } = useSma7702Client();
 
-  const sessionKeyClient = useSma7702Client({
+  const { client: sessionKeyClient } = useSma7702Client({
     key: localSessionKey,
     entityId: sessionKeyEntityId,
     accountAddress: client?.getAddress(),
@@ -264,6 +264,7 @@ export const useRecurringTransactions = () => {
   };
 
   return {
+    isLoadingClient,
     cardStatus,
     transactions,
     handleTransactions,
