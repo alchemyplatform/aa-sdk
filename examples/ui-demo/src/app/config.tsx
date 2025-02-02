@@ -82,7 +82,9 @@ export const alchemyConfig = () =>
       ssr: true,
       policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
       connectors: [
-        walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
+        walletConnect({
+          projectId: "30e7ffaff99063e68cc9870c105d905b",
+        }),
       ],
       storage: cookieStorage,
       enablePopupOauth: true,
