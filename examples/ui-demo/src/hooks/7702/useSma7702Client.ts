@@ -1,6 +1,6 @@
 import { LocalAccountSigner } from "@aa-sdk/core";
 import type { AlchemyWebSigner } from "@account-kit/signer";
-import { useSigner } from "@account-kit/react";
+import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import {
   createSMA7702AccountClient,
@@ -31,10 +31,17 @@ export const useSma7702Client = (
         readonly accountAddress?: Address;
       }
     | undefined
-): Client | undefined => {
-  const signer = useSigner();
-
+): {
+  client: Client | undefined;
+  isLoadingClient: boolean;
+  isError: boolean;
+} => {
   const [client, setClient] = useState<Client | undefined>(undefined);
+  const [isLoadingClient, setIsLoadingClient] = useState(true);
+  const [isError, setError] = useState(false);
+
+  const signer = useSigner();
+  const { isConnected } = useSignerStatus();
 
   // Must destructure the inner fields to use as dependencies in the useEffect hook, otherwise the object reference will be compared and cause an infinite render loop
   const { key, entityId, accountAddress } = localKeyOverride ?? {};
@@ -43,7 +50,7 @@ export const useSma7702Client = (
     let isMounted = true;
 
     const init = async () => {
-      if (!signer) {
+      if (!signer || !isConnected) {
         return;
       }
 
@@ -53,7 +60,7 @@ export const useSma7702Client = (
       }
 
       try {
-        const client = (
+        const _client = (
           await createSMA7702AccountClient({
             chain: odyssey,
             transport: splitOdysseyTransport,
@@ -80,7 +87,8 @@ export const useSma7702Client = (
           return;
         }
 
-        setClient(client);
+        setClient(_client);
+        setError(false);
       } catch (e) {
         console.error(e);
 
@@ -89,6 +97,9 @@ export const useSma7702Client = (
         }
 
         setClient(undefined);
+        setError(true);
+      } finally {
+        setIsLoadingClient(false);
       }
     };
 
@@ -97,7 +108,7 @@ export const useSma7702Client = (
     return () => {
       isMounted = false;
     };
-  }, [signer, key, entityId, accountAddress]);
+  }, [signer, key, entityId, accountAddress, isConnected]);
 
-  return client;
+  return { client, isLoadingClient, isError };
 };

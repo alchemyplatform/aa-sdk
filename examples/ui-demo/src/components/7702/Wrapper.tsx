@@ -4,8 +4,6 @@ import { useMint } from "../../hooks/7702/useMint";
 import { useRecurringTransactions } from "../../hooks/7702/useRecurringTransactions";
 
 export const Wrapper7702 = () => {
-  const { cardStatus, transactions, handleTransactions } =
-    useRecurringTransactions();
   const {
     isLoading: isLoadingMint,
     status,
@@ -13,6 +11,10 @@ export const Wrapper7702 = () => {
     handleCollectNFT,
     uri,
   } = useMint();
+
+  const { cardStatus, transactions, handleTransactions, isLoadingClient } =
+    useRecurringTransactions();
+
   return (
     <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6">
       <MintCard7702
@@ -26,7 +28,7 @@ export const Wrapper7702 = () => {
         uri={uri}
       />
       <TransactionsCard
-        isDisabled={isLoadingMint}
+        isDisabled={isLoadingClient}
         cardStatus={cardStatus}
         transactions={transactions}
         handleTransactions={handleTransactions}
