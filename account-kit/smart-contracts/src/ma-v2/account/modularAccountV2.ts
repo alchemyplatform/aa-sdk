@@ -127,6 +127,7 @@ export async function createModularAccountV2(
         const getImplementationAddress = async () => implementation;
 
         return {
+          source: `SMAV27702Account`,
           getAccountInitCode,
           accountAddress,
           getImplementationAddress,
@@ -162,6 +163,7 @@ export async function createModularAccountV2(
         });
 
         return {
+          source: `SMAV2BytecodeAccount`,
           getAccountInitCode,
           accountAddress,
         };
@@ -172,7 +174,6 @@ export async function createModularAccountV2(
   })();
 
   return createMAv2Base({
-    source: `SMAV2Account`,
     transport,
     chain,
     signer,
