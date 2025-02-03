@@ -1,13 +1,13 @@
 import { useLogout } from "@account-kit/react";
-import { CheckIcon } from "../../icons/check";
-import { GasIcon } from "../../icons/gas";
-import { UserIcon } from "../../icons/user";
-import { WalletIcon } from "../../icons/wallet";
+import { CheckIcon } from "../icons/check";
+import { GasIcon } from "../icons/gas";
+import { UserIcon } from "../icons/user";
+import { WalletIcon } from "../icons/wallet";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center px-6 lg:px-0">
       <p className="text-demo-fg-secondary lg:text-fg-secondary text-sm text-center mt-4 lg:mt-0">
         <span>
           Want to experience{" "}

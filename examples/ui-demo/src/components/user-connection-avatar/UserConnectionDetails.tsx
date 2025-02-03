@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
-import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
-import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
+import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
+import { UserAddressLink } from "./UserAddressLink";
 import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";

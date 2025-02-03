@@ -1,11 +1,11 @@
-import { UserAvatar } from "@/components/shared/UserAvatar";
+import { UserAvatar } from "./UserAvatar";
 import { cn } from "@/lib/utils";
 
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
 import { useAccount, useUser } from "@account-kit/react";
 
-import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
+import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
 
 interface UserConnectionAvatarProps {
