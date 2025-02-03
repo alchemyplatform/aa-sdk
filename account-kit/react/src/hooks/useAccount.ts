@@ -32,8 +32,11 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
 
 /**
  * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts) to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
- * The supported account types are: LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount. Primarily used to get the smart account address before deployment. Dependent on the signer, if the signer has not been initialized and authenticated, address and isLoadingAccount return null.
- * If using a smart contract account, returns instance of a smart contract account that the user is connected to. Returns address of smart contract account, not address of the signer. If using an EOA, returns address of signer
+ * The supported account types are: LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount. Primarily used to get the smart account address before deployment. Dependent on the signer: if the signer has not been initialized and authenticated, `address` and `isLoadingAccount` return null.
+ *
+ * If using a smart contract account, returns instance of a smart contract account that the user is connected to. Returns address of smart contract account, not address of the signer.
+ *
+ * If using an EOA, returns address of signer
  *
  * @example
  * ```ts
