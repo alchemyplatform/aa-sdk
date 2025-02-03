@@ -17,12 +17,13 @@ const initialValuePropState = {
 } satisfies MintStatus;
 
 export const useMint = () => {
+  const { client, isLoadingClient } = useSma7702Client();
+
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [nftTransfered, setNftTransfered] = useState(false);
-  const isLoading = Object.values(status).some((x) => x === "loading");
+  const isLoading =
+    Object.values(status).some((x) => x === "loading") || isLoadingClient;
   const { setToast } = useToast();
-
-  const client = useSma7702Client();
 
   const { data: uri } = useQuery({
     queryKey: ["contractURI", nftContractAddressOdyssey],
