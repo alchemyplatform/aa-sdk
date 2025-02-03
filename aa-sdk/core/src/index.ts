@@ -76,7 +76,7 @@ export {
   InvalidEntityIdError,
   InvalidNonceKeyError,
   EntityIdOverrideError,
-  InvalidMAV2AccountType,
+  InvalidModularAccountV2Type,
 } from "./errors/client.js";
 export {
   EntryPointNotFoundError,

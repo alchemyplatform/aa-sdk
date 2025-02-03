@@ -24,8 +24,8 @@ import {
   serializeModuleEntity,
 } from "../common/utils.js";
 
-import { type MAV2AccountClient } from "../../client/client.js";
-import { type MAV2Account } from "../../account/common/modularAccountV2Base.js";
+import { type ModularAccountV2Client } from "../../client/client.js";
+import { type ModularAccountV2 } from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
@@ -38,9 +38,9 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-  account?: MAV2Account<TSigner> | undefined;
+  account?: ModularAccountV2<TSigner> | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<MAV2Account<TSigner>>
+  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
 >;
 
 export type UninstallValidationParams<
@@ -50,9 +50,9 @@ export type UninstallValidationParams<
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-  account?: MAV2Account<TSigner> | undefined;
+  account?: ModularAccountV2<TSigner> | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<MAV2Account<TSigner>>
+  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
 >;
 
 export type InstallValidationActions<
@@ -78,10 +78,10 @@ export type InstallValidationActions<
  *
  * @example
  * ```ts
- * import { createSMAV2AccountClient, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
+ * import { createSModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
  * import { Address } from "viem";
  *
- * const client = (await createSMAV2AccountClient({ ... })).extend(installValidationActions);
+ * const client = (await createSModularAccountV2Client({ ... })).extend(installValidationActions);
  * const sessionKeyAddress: Address = "0x1234";
  * const sessionKeyEntityId: number = 1;
  *
@@ -120,7 +120,7 @@ export type InstallValidationActions<
 export const installValidationActions: <
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  client: MAV2AccountClient<TSigner>
+  client: ModularAccountV2Client<TSigner>
 ) => InstallValidationActions<TSigner> = (client) => {
   const encodeInstallValidation = async ({
     validationConfig,
@@ -149,9 +149,7 @@ export const installValidationActions: <
       throw new EntityIdOverrideError();
     }
 
-    const { encodeCallData } = account;
-
-    const callData = await encodeCallData(
+    return await account.encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "installValidation",
@@ -165,8 +163,6 @@ export const installValidationActions: <
         ],
       })
     );
-
-    return callData;
   };
 
   const encodeUninstallValidation = async ({
@@ -188,9 +184,7 @@ export const installValidationActions: <
       );
     }
 
-    const { encodeCallData } = account;
-
-    const callData = await encodeCallData(
+    return await account.encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "uninstallValidation",
@@ -204,8 +198,6 @@ export const installValidationActions: <
         ],
       })
     );
-
-    return callData;
   };
 
   return {

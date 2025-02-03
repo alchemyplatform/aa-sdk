@@ -320,7 +320,7 @@ export const createDefaultAccountState = (chains: Chain[]) => {
       MultiOwnerModularAccount:
         defaultAccountState<"MultiOwnerModularAccount">(),
       MultiOwnerLightAccount: defaultAccountState<"MultiOwnerLightAccount">(),
-      MAV2Account: defaultAccountState<"MAV2Account">(),
+      ModularAccountV2: defaultAccountState<"ModularAccountV2">(),
     };
     return acc;
   }, {} as NoUndefined<StoreState["accounts"]>);

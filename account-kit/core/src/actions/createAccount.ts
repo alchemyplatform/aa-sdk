@@ -161,9 +161,9 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
 
           return account;
         });
-      case "MAV2Account":
+      case "ModularAccountV2":
         return createModularAccountV2({
-          ...(params as AccountConfig<"MAV2Account">),
+          ...(params as AccountConfig<"ModularAccountV2">),
           ...(cachedConfig as Omit<
             CreateModularAccountV2Params,
             "transport" | "chain" | "signer"
@@ -175,7 +175,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           CoreLogger.trackEvent({
             name: "account_initialized",
             data: {
-              accountType: "MAV2Account",
+              accountType: "ModularAccountV2",
               accountVersion: "v2.0.0",
             },
           });

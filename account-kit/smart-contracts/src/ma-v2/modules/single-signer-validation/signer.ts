@@ -24,7 +24,7 @@ import { packUOSignature, pack1271Signature } from "../../utils.js";
  *
  * const MNEMONIC = "...":
  * 
- * const account = createSMAV2Account({ config });
+ * const account = createSModularAccountV2({ config });
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
  *
