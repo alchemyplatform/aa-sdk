@@ -26,7 +26,7 @@ export default function MagicLinkAuthScreen() {
         .then(setUser)
         .catch(console.error);
     },
-    [signer]
+    []
   );
 
   const handleIncomingURL = useCallback(
@@ -56,7 +56,7 @@ export default function MagicLinkAuthScreen() {
   useEffect(() => {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
-  }, [signer]);
+  }, []);
 
   // Add listener for incoming links
   useEffect(() => {
