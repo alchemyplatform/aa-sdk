@@ -56,7 +56,7 @@ const Transaction = ({
 
   return (
     <div className={`flex justify-between ${className} mb-4`}>
-      <div className="flex items-center">
+      <div className="flex items-center mr-1">
         <div className="w-4 h-4 mr-2">
           {state === "complete" ? (
             <CheckCircleFilledIcon className=" h-4 w-4 fill-demo-surface-success" />
