@@ -26,58 +26,60 @@ export const MintCard7702 = ({
   uri?: string;
 }) => {
   return (
-    <div className="bg-bg-surface-default rounded-lg p-6 w-[326px] h-[478px] flex flex-col shadow-smallCard ">
-      {uri ? (
-        <div className="relative flex flex-col items-center">
-          <Image
-            className="mb-4 rounded-xl object-cover h-[222px] w-[326px]"
-            width={326}
-            height={222}
-            src={uri}
-            alt="An NFT"
-            priority
-          />
+    <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[478px] flex flex-col shadow-smallCard">
+      <div className="flex xl:flex-col gap-4">
+        <div className="flex-shrink-0 sm:mb-3 xl:mb-0 rounded-lg overflow-hidden relative flex items-center justify-center h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
+          {uri ? (
+            <Image
+              width={326}
+              height={222}
+              src={uri}
+              alt="An NFT"
+              priority
+              className="object-cover h-full w-full"
+            />
+          ) : (
+            <LoadingIcon />
+          )}
         </div>
-      ) : (
-        <div className="flex justify-center items-center h-[222px] w-full mb-4">
-          <LoadingIcon />
-        </div>
-      )}
-      <div className="mb-3">
-        <h3 className="text-fg-primary text-xl font-semibold">
-          Gasless transactions
-        </h3>
-      </div>
-      {!nftTransfered ? (
-        <>
-          <p className="text-fg-primary text-sm mb-3">
-            Sponsor gas and sign in the background for a one-click transaction
-            experience.
-          </p>
-          <div className="flex justify-between items-center">
-            <p className="text-fg-secondary text-base">Gas Fee</p>
-            <p>
-              <span className="line-through mr-1 text-base text-fg-primary align-top">
-                $0.02
-              </span>
-              <span
-                className="text-base align-top"
-                style={{
-                  background:
-                    "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Free
-              </span>
-            </p>
+        <div>
+          <div className="mb-2">
+            <h3 className="text-fg-primary text-base xl:text-xl font-semibold">
+              Gasless transactions
+            </h3>
           </div>
-        </>
-      ) : (
-        <MintStages status={status} />
-      )}
+          {!nftTransfered ? (
+            <>
+              <p className="text-fg-primary text-sm mb-3">
+                Transact with one click using gas sponsorship and background
+                signing.
+              </p>
+              <div className="justify-between items-center hidden xl:flex">
+                <p className="text-fg-secondary text-base">Gas Fee</p>
+                <p>
+                  <span className="line-through mr-1 text-base text-fg-primary align-top">
+                    $0.02
+                  </span>
+                  <span
+                    className="text-base align-top"
+                    style={{
+                      background:
+                        "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    Free
+                  </span>
+                </p>
+              </div>
+            </>
+          ) : (
+            <MintStages status={status} />
+          )}
+        </div>
+      </div>
       <Button
         className="w-full mt-auto"
         onClick={handleCollectNFT}
