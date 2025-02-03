@@ -86,6 +86,17 @@ export function cookieToInitialState(
     state: StoredState["alchemy"];
   }>(state).state;
 
+  // If the expirationTimeMs is changed in the config, we should use the new config
+  // value instead of restoring the value from the cookie, otherwise it can lead
+  // to confusion and unexpected behavior when it seems like the expirationTimeMs
+  // is being ignored.
+  alchemyClientState.config.sessionConfig = {
+    ...alchemyClientState.config.sessionConfig,
+    expirationTimeMs:
+      config.store.getInitialState().config.sessionConfig?.expirationTimeMs ??
+      alchemyClientState.config.sessionConfig?.expirationTimeMs,
+  };
+
   const wagmiClientState = wagmiCookieToInitialState(
     config._internal.wagmiConfig,
     decodeURIComponent(cookie)
