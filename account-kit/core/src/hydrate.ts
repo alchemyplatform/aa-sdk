@@ -115,20 +115,21 @@ const hydrateAccountState = (
     const chainId = Number(chainKey);
     acc[chainId] = {
       LightAccount:
-        config.LightAccount && shouldReconnectAccounts
-          ? reconnectingState(config.LightAccount.accountAddress!)
+        config.LightAccount?.accountAddress && shouldReconnectAccounts
+          ? reconnectingState(config.LightAccount.accountAddress)
           : defaultAccountState(),
       MultiOwnerModularAccount:
-        config.MultiOwnerModularAccount && shouldReconnectAccounts
-          ? reconnectingState(config.MultiOwnerModularAccount.accountAddress!)
+        config.MultiOwnerModularAccount?.accountAddress &&
+        shouldReconnectAccounts
+          ? reconnectingState(config.MultiOwnerModularAccount.accountAddress)
           : defaultAccountState(),
       MultiOwnerLightAccount:
-        config.MultiOwnerLightAccount && shouldReconnectAccounts
-          ? reconnectingState(config.MultiOwnerLightAccount.accountAddress!)
+        config.MultiOwnerLightAccount?.accountAddress && shouldReconnectAccounts
+          ? reconnectingState(config.MultiOwnerLightAccount.accountAddress)
           : defaultAccountState(),
       ModularAccountV2:
-        config.ModularAccountV2 && shouldReconnectAccounts
-          ? reconnectingState(config.ModularAccountV2.accountAddress!)
+        config.ModularAccountV2?.accountAddress && shouldReconnectAccounts
+          ? reconnectingState(config.ModularAccountV2.accountAddress)
           : defaultAccountState(),
     };
 
