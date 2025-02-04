@@ -149,7 +149,7 @@ export const installValidationActions: <
       throw new EntityIdOverrideError();
     }
 
-    return await account.encodeCallData(
+    return account.encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "installValidation",
@@ -184,7 +184,7 @@ export const installValidationActions: <
       );
     }
 
-    return await account.encodeCallData(
+    return account.encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "uninstallValidation",
