@@ -38,7 +38,8 @@ export type UseExportAccountResult = {
 };
 
 /**
- * A hook use to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
+ * A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts) used to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
+ * What is returned is dependent on what you used most recently used to authenticate. If your session was initiated with a passkey, then a private key is returned. Otherwise, a seed phrase.
  *
  * @example
  * ```ts
@@ -57,8 +58,8 @@ export type UseExportAccountResult = {
  * });
  * ```
  *
- * @param {UseExportAccountMutationArgs} args Optional arguments for the mutation and export parameters
- * @returns {UseExportAccountResult} An object containing the export state, possible error, and the export account function and component
+ * @param {UseExportAccountMutationArgs} args Optional arguments for the mutation and export parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L11)
+ * @returns {UseExportAccountResult} An object containing the export state, possible error, and the export account function and component. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L32)*
  */
 export function useExportAccount(
   args?: UseExportAccountMutationArgs

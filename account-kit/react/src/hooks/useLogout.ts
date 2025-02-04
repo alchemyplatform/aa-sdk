@@ -15,7 +15,7 @@ export type UseLogoutResult = {
 };
 
 /**
- * Provides a hook to log out a user, disconnecting the signer and triggering the disconnectAsync function.
+ * Provides a [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useLogout.ts) to log out a user, disconnecting the signer and triggering the disconnectAsync function.
  *
  * @example
  * ```ts
