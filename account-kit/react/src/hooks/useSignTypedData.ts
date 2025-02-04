@@ -41,7 +41,7 @@ export type UseSignTypedDataResult = {
 /**
  * Similar to `useSignMessage`, [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts) for signing typed data, supporting both connected accounts and clients in EIP 712 format.
  *
- * Uses `eth_signtypedmessage` to sign structured, typed data. Accepts typed, complex data structures as input. Like `useSignMessage`, this hook also handles deployed (1271) and undeployed accounts (6492).
+ * Uses `eth_signTypedData` to sign structured, typed data. Accepts typed, complex data structures as input. Like `useSignMessage`, this hook also handles deployed (1271) and undeployed accounts (6492).
  *
  * @example
  * ```ts
