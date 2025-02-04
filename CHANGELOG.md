@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.11.0...v4.12.0) (2025-02-04)
+
+### Bug Fixes
+
+- change twitter display name in demo app ([#1311](https://github.com/alchemyplatform/aa-sdk/issues/1311)) ([22fb32b](https://github.com/alchemyplatform/aa-sdk/commit/22fb32b95278f572b310bab8caa1a6a7b2a5d3ee))
+- clean up / refactor demo app ([#1301](https://github.com/alchemyplatform/aa-sdk/issues/1301)) ([4c3956c](https://github.com/alchemyplatform/aa-sdk/commit/4c3956c01ce5ae3c157f006bf58fffde758e5d1b))
+
+### Features
+
+- session expiration improvements ([#1291](https://github.com/alchemyplatform/aa-sdk/issues/1291)) ([7cc7b33](https://github.com/alchemyplatform/aa-sdk/commit/7cc7b3371c2d8695ef0ccf34586d8f5079782953))
+
 # [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
 
 ### Features
