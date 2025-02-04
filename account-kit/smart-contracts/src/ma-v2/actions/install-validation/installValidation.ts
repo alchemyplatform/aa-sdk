@@ -78,10 +78,10 @@ export type InstallValidationActions<
  *
  * @example
  * ```ts
- * import { createSModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
+ * import { createModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
  * import { Address } from "viem";
  *
- * const client = (await createSModularAccountV2Client({ ... })).extend(installValidationActions);
+ * const client = (await createModularAccountV2Client({ ... })).extend(installValidationActions);
  * const sessionKeyAddress: Address = "0x1234";
  * const sessionKeyEntityId: number = 1;
  *

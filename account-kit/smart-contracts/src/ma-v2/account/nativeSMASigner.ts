@@ -26,7 +26,7 @@ import {
  *
  * const MNEMONIC = "...":
  *
- * const account = createSModularAccountV2({ config });
+ * const account = createModularAccountV2({ config });
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
  *
