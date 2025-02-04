@@ -8,7 +8,7 @@ import {
   getEntryPoint,
   getAccountAddress,
   EntityIdOverrideError,
-  InvalidMAV2AccountType,
+  InvalidModularAccountV2Type,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -22,16 +22,16 @@ import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { getDefaultMAV2FactoryAddress } from "../utils.js";
 import {
   type SignerEntity,
-  type MAV2Account,
+  type ModularAccountV2,
   createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 
-export type CreateSMAV2BytecodeAccountParams<
+export type CreateModularAccountV2BytecodeParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
-  ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
+  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   "transport" | "chain" | "accountAddress"
 > & {
   type?: "default";
@@ -43,16 +43,21 @@ export type CreateSMAV2BytecodeAccountParams<
   signerEntity?: SignerEntity;
 };
 
-export type CreateSMA7702AccountParams<
+export type CreateModularAccountV27702Params<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
-  ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
+  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   "transport" | "chain"
 > &
   Partial<
     Pick<
-      ToSmartContractAccountParams<"MAV2Account", TTransport, Chain, "0.7.0">,
+      ToSmartContractAccountParams<
+        "ModularAccountV2",
+        TTransport,
+        Chain,
+        "0.7.0"
+      >,
       "accountAddress"
     >
   > & {
@@ -66,27 +71,27 @@ export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > =
-  | CreateSMA7702AccountParams<TTransport, TSigner>
-  | CreateSMAV2BytecodeAccountParams<TTransport, TSigner>;
+  | CreateModularAccountV27702Params<TTransport, TSigner>
+  | CreateModularAccountV2BytecodeParams<TTransport, TSigner>;
 
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   config: CreateModularAccountV2Params<TTransport, TSigner>
-): Promise<MAV2Account<TSigner>>;
+): Promise<ModularAccountV2<TSigner>>;
 
 /**
  * Creates a specific MAV2 account type depending on the provided "type" field and other defined parameters.
  * Possible types include: "default", which is SMA Bytecode, and "7702".
  * Handles nonce generation, transaction encoding, and more to construct a modular account with optional validation hooks.
  *
- * @param {CreateModularAccountV2Params} config Configuration parameters for creating an MAV2 account.
- * @returns {Promise<MAV2Account>} A promise that resolves to an `MAV2Account` providing methods for nonce retrieval, transaction execution, and more.
+ * @param {CreateModularAccountV2Params} config Configuration parameters for creating a Modular Account V2.
+ * @returns {Promise<ModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
  */
 export async function createModularAccountV2(
   config: CreateModularAccountV2Params
-): Promise<MAV2Account> {
+): Promise<ModularAccountV2> {
   const {
     type = "default",
     transport,
@@ -127,7 +132,6 @@ export async function createModularAccountV2(
         const getImplementationAddress = async () => implementation;
 
         return {
-          source: `SMAV27702Account`,
           getAccountInitCode,
           accountAddress,
           getImplementationAddress,
@@ -138,7 +142,7 @@ export async function createModularAccountV2(
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
           initCode,
-        } = config as CreateSMAV2BytecodeAccountParams;
+        } = config as CreateModularAccountV2BytecodeParams;
 
         const getAccountInitCode = async () => {
           if (initCode) {
@@ -163,17 +167,17 @@ export async function createModularAccountV2(
         });
 
         return {
-          source: `SMAV2BytecodeAccount`,
           getAccountInitCode,
           accountAddress,
         };
       }
       default:
-        throw new InvalidMAV2AccountType(type);
+        throw new InvalidModularAccountV2Type(type);
     }
   })();
 
   return createMAv2Base({
+    source: "ModularAccountV2",
     transport,
     chain,
     signer,

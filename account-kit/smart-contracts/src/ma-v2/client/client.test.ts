@@ -16,7 +16,6 @@ import {
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
-  createModularAccountV2Client,
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
@@ -30,6 +29,7 @@ import {
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
 } from "@account-kit/smart-contracts/experimental";
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
