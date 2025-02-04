@@ -5,9 +5,8 @@ export { semiModularAccountBytecodeAbi } from "./abis/semiModularAccountBytecode
 export { semiModularAccountStorageAbi } from "./abis/semiModularAccountStorageAbi.js";
 
 export { nativeSMASigner } from "./account/nativeSMASigner.js";
-export type * from "./account/semiModularAccountV2.js";
-export { createSMAV2Account } from "./account/semiModularAccountV2.js";
-export { createSMA7702Account } from "./account/semiModularAccount7702.js";
+export type * from "./account/modularAccountV2.js";
+export { createModularAccountV2 } from "./account/modularAccountV2.js";
 
 export type {
   ModuleEntity,
@@ -24,10 +23,8 @@ export {
 export type * from "./actions/install-validation/installValidation.js";
 export { installValidationActions } from "./actions/install-validation/installValidation.js";
 
-export type * from "./client/smabv2.js";
-export type * from "./client/sma7702.js";
-export { createSMAV2AccountClient } from "./client/smabv2.js";
-export { createSMA7702AccountClient } from "./client/sma7702.js";
+export type * from "./client/client.js";
+export { createModularAccountV2Client } from "./client/client.js";
 
 export {
   getDefaultAllowlistModuleAddress,
