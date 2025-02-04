@@ -4,7 +4,7 @@ import {
   type SmartAccountSigner,
 } from "@aa-sdk/core";
 import { custom } from "viem";
-import { createModularAccountV2Client } from "@account-kit/smart-contracts/experimental";
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { local070Instance } from "~test/instances.js";
 import { accounts } from "~test/constants.js";
 import { alchemy } from "@account-kit/infra";

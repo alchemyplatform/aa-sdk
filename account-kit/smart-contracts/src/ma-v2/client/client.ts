@@ -20,13 +20,13 @@ import {
 } from "@account-kit/infra";
 import type { LightAccount } from "../../light-account/accounts/account.js";
 
-import type { MAV2Account } from "../account/common/modularAccountV2Base.js";
+import type { ModularAccountV2 } from "../account/common/modularAccountV2Base.js";
 
-export type MAV2AccountClient<
+export type ModularAccountV2Client<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TChain extends Chain = Chain,
   TTransport extends Transport | AlchemyTransport = Transport
-> = SmartAccountClient<TTransport, TChain, MAV2Account<TSigner>>;
+> = SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
 
 export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
@@ -60,7 +60,7 @@ export function createModularAccountV2Client<
     TChain,
     TSigner
   >
-): Promise<MAV2AccountClient<TSigner, TChain, AlchemyTransport>>;
+): Promise<ModularAccountV2Client<TSigner, TChain, AlchemyTransport>>;
 
 export function createModularAccountV2Client<
   TTransport extends Transport = Transport,
@@ -69,7 +69,7 @@ export function createModularAccountV2Client<
 >(
   args: CreateModularAccountV2ClientParams<TTransport, TChain, TSigner> &
     NotType<TTransport, AlchemyTransport>
-): Promise<MAV2AccountClient<TSigner, TChain>>;
+): Promise<ModularAccountV2Client<TSigner, TChain>>;
 
 /**
  * Creates a modular account v2 account client using the provided configuration parameters.
@@ -100,7 +100,7 @@ export function createModularAccountV2Client<
  * });
  * ```
  *
- * @param {CreateModularAccountV2ClientParams} config The configuration parameters required to create the MAv2 account client
+ * @param {CreateModularAccountV2ClientParams} config The configuration parameters required to create the Modular Account v2 account client
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance
  */
 export async function createModularAccountV2Client(

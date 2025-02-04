@@ -115,3 +115,10 @@ export {
   getMAInitializationData,
   getMSCAUpgradeToData,
 } from "./msca/utils.js";
+
+// ma v2 types
+export type * from "./ma-v2/account/modularAccountV2.js";
+export type * from "./ma-v2/account/common/modularAccountV2Base.js";
+export { createModularAccountV2 } from "./ma-v2/account/modularAccountV2.js";
+export type * from "./ma-v2/client/client.js";
+export { createModularAccountV2Client } from "./ma-v2/client/client.js";
