@@ -103,3 +103,21 @@ export class EntityIdOverrideError extends BaseError {
     super(`EntityId of 0 is reserved for the owner and cannot be used`);
   }
 }
+
+/**
+ * Error class denoting that the provided ma v2 account type is invalid.
+ */
+export class InvalidMAV2AccountType extends BaseError {
+  override name = "InvalidMAV2AccountType";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the provided ma v2 account type is invalid.
+   *
+   * @param {string} type The invalid ma v2 account type that was used
+   */
+  constructor(type: string) {
+    super(
+      `${type} provided is an invalid ma v2 account type, expected one of: "7702" or "default"`
+    );
+  }
+}
