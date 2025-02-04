@@ -7,6 +7,7 @@ export default mergeConfig(
   defineProject({
     test: {
       name: "account-kit/signer",
+      environment: "jsdom",
     },
   })
 );
