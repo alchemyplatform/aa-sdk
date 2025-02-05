@@ -20,13 +20,13 @@ import { defaultUserOpSigner } from "./userOpSigner.js";
  * } from "@aa-sdk/core";
  * import {
  *   createModularAccountV2,
- *   type CreateSMA7702AccountClientParams,
+ *   type CreateModularAccountV2ClientParams,
  * } from "@account-kit/smart-contracts";
  *
  * async function createSMA7702AccountClient(
- *   config: CreateSMA7702AccountClientParams
+ *   config: CreateModularAccountV2ClientParams
  * ): Promise<SmartAccountClient> {
- *   const sma7702Account = await createSMA7702Account(config);
+ *   const sma7702Account = await createModularAccountV2({ type: "7702", ...config});
  *
  *   return createSmartAccountClient({
  *     account: sma7702Account,
@@ -80,20 +80,15 @@ export const default7702UserOpSigner: (
       address: account.address,
     });
 
-    const {
-      r,
-      s,
-      v,
-      yParity = v ? v - 27n : undefined,
-    } = await signer.signAuthorization({
+    const authSignature = await signer.signAuthorization({
       chainId: client.chain.id,
       contractAddress: implAddress,
       nonce: accountNonce,
     });
 
-    if (yParity === undefined) {
-      throw new Error("Invalid signature: missing yParity or v");
-    }
+    const { r, s } = authSignature;
+
+    const yParity = authSignature.yParity ?? authSignature.v - 27n;
 
     return {
       ...uo,

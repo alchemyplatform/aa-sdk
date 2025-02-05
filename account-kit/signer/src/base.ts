@@ -541,7 +541,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * Signs an EIP-7702 Authorization and then returns the authorization with the signature.
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * import { AlchemyWebSigner } from "@account-kit/signer";
    *
    * const signer = new AlchemyWebSigner({
@@ -556,7 +556,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * });
    *
    * const tx = await signer.signAuthorization({
-   *  contractAddress: "0x1234",
+   *  contractAddress: "0x1234123412341234123412341234123412341234",
    *  chainId: 1,
    *  nonce: 0,
    * });

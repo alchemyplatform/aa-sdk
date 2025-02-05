@@ -80,10 +80,9 @@ export function createModularAccountV2Client<
  *
  * @example
  * ```ts twoslash
- * import { http } from "viem";
- * import { createModularAccountV2Client } from "@account-kit/smart-contracts/experimental";
+ * import { createModularAccountV2Client } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
- * import { sepolia } from "@account-kit/infra";
+ * import { alchemy, sepolia } from "@account-kit/infra";
  *
  * const MNEMONIC = "...";
  * const RPC_URL = "...";
@@ -92,7 +91,7 @@ export function createModularAccountV2Client<
  *
  * const chain = sepolia;
  *
- * const transport = http(RPC_URL);
+ * const transport = alchemy({ rpcUrl: RPC_URL });
  *
  * const policyId = "...";
  *
