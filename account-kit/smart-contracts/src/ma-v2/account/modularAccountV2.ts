@@ -47,9 +47,6 @@ export type CreateModularAccountV2Params<
       }
     | {
         type: "7702";
-        // salt?: never;
-        // factoryAddress?: never;
-        // initCode?: never;
       }
   );
 
@@ -61,9 +58,33 @@ export async function createModularAccountV2<
 ): Promise<ModularAccountV2<TSigner>>;
 
 /**
- * Creates a specific MAV2 account type depending on the provided "type" field and other defined parameters.
- * Possible types include: "default", which is SMA Bytecode, and "7702".
- * Handles nonce generation, transaction encoding, and more to construct a modular account with optional validation hooks.
+ * Creates a ModularAccount V2 account, with the type depending on the provided "type" field.
+ * Possible types include: "default", which is SMA Bytecode, and "7702", which is SMA 7702.
+ * Handles nonce generation, transaction encoding, and type variant-specific behavior like initcode construction.
+ *
+ * @example
+ * ```ts twoslash
+ * import { createModularAccountV2 } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { alchemy, sepolia } from "@account-kit/infra";
+ *
+ * const MNEMONIC = "...";
+ * const RPC_URL = "...";
+ *
+ * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+ *
+ * const chain = sepolia;
+ *
+ * const transport = alchemy({ rpcUrl: RPC_URL });
+ *
+ *
+ * const modularAccountV2 = await createModularAccountV2({
+ *  type: "default", // or "7702"
+ *  chain,
+ *  signer,
+ *  transport,
+ * });
+ * ```
  *
  * @param {CreateModularAccountV2Params} config Configuration parameters for creating a Modular Account V2.
  * @returns {Promise<ModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.

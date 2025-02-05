@@ -17,7 +17,7 @@ import { BaseAlchemySigner } from "@account-kit/signer";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
@@ -32,7 +32,7 @@ const signer = new AlchemyWebSigner({
 });
 
 const tx = await signer.signAuthorization({
-  contractAddress: "0x1234",
+  contractAddress: "0x1234123412341234123412341234123412341234",
   chainId: 1,
   nonce: 0,
 });
