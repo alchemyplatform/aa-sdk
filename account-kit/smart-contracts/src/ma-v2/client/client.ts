@@ -3,7 +3,10 @@ import {
   type SmartAccountSigner,
   type SmartAccountClientConfig,
   type NotType,
+  type OptionalFields,
   createSmartAccountClient,
+  default7702GasEstimator,
+  default7702UserOpSigner,
 } from "@aa-sdk/core";
 import { type Chain, type Transport } from "viem";
 
@@ -15,6 +18,7 @@ import {
 import {
   createAlchemySmartAccountClient,
   isAlchemyTransport,
+  type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
   type AlchemyTransport,
 } from "@account-kit/infra";
@@ -32,7 +36,7 @@ export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = CreateModularAccountV2Params<TTransport, TSigner> &
+> = OptionalFields<CreateModularAccountV2Params<TTransport, TSigner>, "type"> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
@@ -72,10 +76,10 @@ export function createModularAccountV2Client<
 ): Promise<ModularAccountV2Client<TSigner, TChain>>;
 
 /**
- * Creates a modular account v2 account client using the provided configuration parameters.
+ * Creates a Modular Account V2 client using the provided configuration parameters.
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { http } from "viem";
  * import { createModularAccountV2Client } from "@account-kit/smart-contracts/experimental";
  * import { LocalAccountSigner } from "@aa-sdk/core";
@@ -104,22 +108,40 @@ export function createModularAccountV2Client<
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance
  */
 export async function createModularAccountV2Client(
-  config: CreateModularAccountV2ClientParams
-): Promise<SmartAccountClient> {
-  const { transport, chain } = config;
-  const account = await createModularAccountV2(config);
+  config:
+    | CreateModularAccountV2ClientParams
+    | CreateModularAccountV2AlchemyClientParams
+): Promise<SmartAccountClient | AlchemySmartAccountClient> {
+  const config_ = {
+    type: config.type ?? "default",
+    ...config,
+  };
+
+  const { transport, chain } = config_;
+
+  const account = await createModularAccountV2(config_);
+
+  const middlewareToAppend =
+    config.type === "7702"
+      ? {
+          gasEstimator: default7702GasEstimator(config.gasEstimator),
+          signUserOperation: default7702UserOpSigner(config.signUserOperation),
+        }
+      : {};
 
   if (isAlchemyTransport(transport, chain)) {
     return createAlchemySmartAccountClient({
-      ...config,
+      ...config_,
       transport,
       chain,
       account,
+      ...middlewareToAppend,
     });
   }
 
   return createSmartAccountClient({
-    ...config,
+    ...config_,
     account,
+    ...middlewareToAppend,
   });
 }

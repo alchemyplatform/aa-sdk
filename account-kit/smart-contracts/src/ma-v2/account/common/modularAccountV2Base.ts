@@ -69,9 +69,9 @@ export type ModularAccountV2<
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
 
-export type CreateMAV2BaseFunctionsParams<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+export type CreateMAV2BaseParams<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TTransport extends Transport = Transport
 > = Omit<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   // Implements the following methods required by `toSmartContractAccount`, and passes through any other parameters.
@@ -91,9 +91,9 @@ export type CreateMAV2BaseReturnType<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Promise<ModularAccountV2<TSigner>>;
 
-export async function createMAv2Base(
-  config: CreateMAV2BaseFunctionsParams
-): CreateMAV2BaseReturnType {
+export async function createMAv2Base<
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
   const {
     transport,
     chain,

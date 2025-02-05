@@ -27,52 +27,31 @@ import {
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 
-export type CreateModularAccountV2BytecodeParams<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = Pick<
-  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
-  "transport" | "chain" | "accountAddress"
-> & {
-  type?: "default";
-  signer: TSigner;
-  salt?: bigint;
-  factoryAddress?: Address;
-  initCode?: Hex;
-  entryPoint?: EntryPointDef<"0.7.0", Chain>;
-  signerEntity?: SignerEntity;
-};
-
-export type CreateModularAccountV27702Params<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = Pick<
-  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
-  "transport" | "chain"
-> &
-  Partial<
-    Pick<
-      ToSmartContractAccountParams<
-        "ModularAccountV2",
-        TTransport,
-        Chain,
-        "0.7.0"
-      >,
-      "accountAddress"
-    >
-  > & {
-    type: "7702";
-    signer: TSigner;
-    entryPoint?: EntryPointDef<"0.7.0", Chain>;
-    signerEntity?: SignerEntity;
-  };
-
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> =
-  | CreateModularAccountV27702Params<TTransport, TSigner>
-  | CreateModularAccountV2BytecodeParams<TTransport, TSigner>;
+> = (Pick<
+  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
+  "transport" | "chain" | "accountAddress"
+> & {
+  signer: TSigner;
+  entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  signerEntity?: SignerEntity;
+}) &
+  (
+    | {
+        type: "default";
+        salt?: bigint;
+        factoryAddress?: Address;
+        initCode?: Hex;
+      }
+    | {
+        type: "7702";
+        // salt?: never;
+        // factoryAddress?: never;
+        // initCode?: never;
+      }
+  );
 
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
@@ -93,7 +72,6 @@ export async function createModularAccountV2(
   config: CreateModularAccountV2Params
 ): Promise<ModularAccountV2> {
   const {
-    type = "default",
     transport,
     chain,
     signer,
@@ -112,7 +90,7 @@ export async function createModularAccountV2(
   });
 
   const accountFunctions = await (async () => {
-    switch (type) {
+    switch (config.type) {
       case "7702": {
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
@@ -142,7 +120,7 @@ export async function createModularAccountV2(
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
           initCode,
-        } = config as CreateModularAccountV2BytecodeParams;
+        } = config;
 
         const getAccountInitCode = async () => {
           if (initCode) {
@@ -172,7 +150,7 @@ export async function createModularAccountV2(
         };
       }
       default:
-        throw new InvalidModularAccountV2Type(type);
+        assertNever(config);
     }
   })();
 
@@ -185,4 +163,9 @@ export async function createModularAccountV2(
     signerEntity,
     ...accountFunctions,
   });
+}
+
+// If we add more valid types, the switch case branch's type will no longer be `never`, which will cause a compile time error here and ensure we handle the new type.
+function assertNever(_valid: never): never {
+  throw new InvalidModularAccountV2Type();
 }

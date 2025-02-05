@@ -19,9 +19,9 @@ import { defaultUserOpSigner } from "./userOpSigner.js";
  *   type SmartAccountClient,
  * } from "@aa-sdk/core";
  * import {
- *   createSMA7702Account,
+ *   createModularAccountV2,
  *   type CreateSMA7702AccountClientParams,
- * } from "@account-kit/smart-contracts/experimental";
+ * } from "@account-kit/smart-contracts";
  *
  * async function createSMA7702AccountClient(
  *   config: CreateSMA7702AccountClientParams
