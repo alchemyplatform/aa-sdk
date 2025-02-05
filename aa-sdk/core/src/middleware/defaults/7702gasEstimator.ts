@@ -1,4 +1,6 @@
+import { zeroHash, toHex } from "viem";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { ChainNotFoundError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
 import type { ClientMiddlewareFn } from "../types";
 import { defaultGasEstimator } from "./gasEstimator.js";
@@ -48,6 +50,10 @@ export const default7702GasEstimator: (
       throw new AccountNotFoundError();
     }
 
+    if (!params.client.chain) {
+      throw new ChainNotFoundError();
+    }
+
     const entryPoint = account.getEntryPoint();
     if (entryPoint.version !== "0.7.0") {
       throw new Error(
@@ -55,16 +61,27 @@ export const default7702GasEstimator: (
       );
     }
 
+    // todo: persist this in context so the signer doesn't have to re-fetch.
+    const accountNonce = await params.client.getTransactionCount({
+      address: account.address,
+    });
+
     const implementationAddress = await account.getImplementationAddress();
 
     // Note: does not omit the delegation from estimation if the account is already 7702 delegated.
 
-    (struct as UserOperationStruct<"0.7.0">).authorizationContract =
-      implementationAddress;
+    (struct as UserOperationStruct<"0.7.0">).eip7702auth = {
+      chainId: toHex(params.client.chain.id),
+      nonce: toHex(accountNonce),
+      address: implementationAddress,
+      r: zeroHash,
+      s: zeroHash,
+      yParity: toHex(0),
+    };
 
     const estimatedUO = await gasEstimator_(struct, params);
 
-    estimatedUO.authorizationContract = undefined; // Strip out authorizationContract after estimation.
+    estimatedUO.eip7702auth = undefined; // Strip out the auth after estimation.
 
     return estimatedUO;
   };

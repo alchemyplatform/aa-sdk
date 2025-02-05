@@ -5,7 +5,6 @@ import {
   type StateOverride,
   type TransactionReceipt,
 } from "viem";
-import type { Authorization } from "viem/experimental";
 import type { z } from "zod";
 import type {
   UserOperationFeeOptionsFieldSchema,
@@ -202,9 +201,16 @@ export interface UserOperationRequest_v7 {
 }
 // [!endregion UserOperationRequest_v7]
 
-export type Eip7702ExtendedFields =
-  | { authorizationTuple?: Authorization; authorizationContract?: never }
-  | { authorizationTuple?: never; authorizationContract?: Address };
+export type Eip7702ExtendedFields = {
+  eip7702auth?: {
+    chainId: Hex;
+    nonce: Hex;
+    address: Address;
+    r: Hex;
+    s: Hex;
+    yParity: Hex;
+  };
+};
 
 // [!region UserOperationRequest]
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
