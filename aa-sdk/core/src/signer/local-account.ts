@@ -100,11 +100,11 @@ export class LocalAccountSigner<
    * Signs an unsigned authorization using the provided private key account.
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * import { LocalAccountSigner } from "@aa-sdk/core";
-   * import { generatePrivateKey } from "viem";
+   * import { generatePrivateKey } from "viem/accounts";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const signedAuthorization = await signer.signAuthorization({
    *   contractAddress: "0x1234123412341234123412341234123412341234",
    *   chainId: 1,
