@@ -322,6 +322,15 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
+        text: "InvalidModularAccountV2Type",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidModularAccountV2Type/constructor",
+          },
+        ],
+      },
+      {
         text: "InvalidNonceKeyError",
         items: [
           {

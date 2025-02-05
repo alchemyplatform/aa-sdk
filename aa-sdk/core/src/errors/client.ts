@@ -112,12 +112,8 @@ export class InvalidModularAccountV2Type extends BaseError {
 
   /**
    * Initializes a new instance of the error message with a default message indicating that the provided ma v2 account type is invalid.
-   *
-   * @param {string} type The invalid ma v2 account type that was used
    */
-  constructor(type: string) {
-    super(
-      `${type} provided is an invalid ma v2 account type, expected one of: "7702" or "default"`
-    );
+  constructor() {
+    super(`The provided account type is invalid for ModularAccount V2`);
   }
 }
