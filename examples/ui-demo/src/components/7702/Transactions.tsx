@@ -41,13 +41,13 @@ const Transaction = ({
 
   const getText = () => {
     if (state === "initial") {
-      return "...";
+      return "Waiting...";
     }
     if (state === "initiating") {
-      return "Buying 1 ETH...";
+      return "Buying 1 ETH";
     }
     if (state === "next") {
-      return `Next buy in ${countdownSeconds} seconds...`;
+      return `Next buy in ${countdownSeconds} seconds`;
     }
     if (state === "complete") {
       return `Bought 1 ETH for ${buyAmountUsdc.toLocaleString()} USDC`;
