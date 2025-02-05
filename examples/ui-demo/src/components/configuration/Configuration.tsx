@@ -28,7 +28,7 @@ export const Configuration = ({ className }: { className?: string }) => {
       </div>
       <div className="flex flex-row items-center gap-2 pb-2">
         <h4 className="font-normal text-sm text-secondary-foreground">
-          Embedded Wallet Type
+          Embedded wallet type
         </h4>
         {/* <HelpTooltip text="An account powered by a smart contract to enable more features. Not an EOA. Recommended for new wallets." /> */}
       </div>
@@ -38,8 +38,7 @@ export const Configuration = ({ className }: { className?: string }) => {
         onCheckedChange={onSwitchWalletType}
       />
       <p className="text-active text-xs font-normal pt-3">
-        EIP-7702 lets you give smart account features to your EOA wallet.
-        Curious about what this means?{" "}
+        EIP-7702 adds smart account features to an EOA wallet.{" "}
         <ExternalLink
           className="text-[#363FF9] whitespace-nowrap"
           href="https://eips.ethereum.org/EIPS/eip-7702"
