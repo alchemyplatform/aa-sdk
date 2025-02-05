@@ -15,7 +15,7 @@ import { type Chain } from "viem";
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
-import { alchemyGasManagerMiddleware } from "../middleware/gasManager.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
 import { alchemyUserOperationSimulator } from "../middleware/userOperationSimulator.js";
 import {
   alchemyActions,
@@ -144,6 +144,10 @@ export function createAlchemySmartAccountClient({
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
 
+  const gasAndPaymasterAndDataMiddleware = policyId
+    ? alchemyGasAndPaymasterAndDataMiddleware(policyId)
+    : undefined;
+
   const scaClient = createSmartAccountClient({
     account,
     transport,
@@ -153,18 +157,24 @@ export function createAlchemySmartAccountClient({
       ...opts,
       feeOptions,
     },
+    dummyPaymasterAndData:
+      gasAndPaymasterAndDataMiddleware?.dummyPaymasterAndData,
+    feeEstimator:
+      feeEstimator ??
+      gasAndPaymasterAndDataMiddleware?.feeEstimator ??
+      alchemyFeeEstimator(transport),
+    gasEstimator:
+      gasEstimator ?? gasAndPaymasterAndDataMiddleware?.gasEstimator,
     customMiddleware: async (struct, args) => {
       if (isSmartAccountWithSigner(args.account)) {
         transport.updateHeaders(getSignerTypeHeader(args.account));
       }
       return customMiddleware ? customMiddleware(struct, args) : struct;
     },
-    feeEstimator: feeEstimator ?? alchemyFeeEstimator(transport),
+    paymasterAndData: gasAndPaymasterAndDataMiddleware?.paymasterAndData,
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(transport)
       : undefined,
-    gasEstimator,
-    ...(policyId && alchemyGasManagerMiddleware(policyId)),
     signUserOperation,
   }).extend(alchemyActions);
 

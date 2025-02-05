@@ -2,7 +2,7 @@ import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
 
-const externalProvider = window.ethereum; // or anyother EIP-1193 provider
+const externalProvider = window.ethereum; // or any other EIP-1193 provider
 
 const walletClient = createWalletClient({
   chain: sepolia, // can provide a different chain here
