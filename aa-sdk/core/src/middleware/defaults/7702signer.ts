@@ -6,11 +6,39 @@ import type { ClientMiddlewareFn } from "../types";
 import { defaultUserOpSigner } from "./userOpSigner.js";
 
 /**
- * Provides a default middleware function for signing user operations with a client account when using ERC-7702 to upgrade local accounts to smart accounts.
- * If the SmartAccount doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware
+ * Provides a default middleware function for signing user operations with a client account when using EIP-7702 delegated accounts.
+ * If the signer doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware.
+ * This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+ *
+ * @example
+ * ```ts twoslash
+ * import {
+ *   default7702GasEstimator,
+ *   default7702UserOpSigner,
+ *   createSmartAccountClient,
+ *   type SmartAccountClient,
+ * } from "@aa-sdk/core";
+ * import {
+ *   createSMA7702Account,
+ *   type CreateSMA7702AccountClientParams,
+ * } from "@account-kit/smart-contracts/experimental";
+ *
+ * async function createSMA7702AccountClient(
+ *   config: CreateSMA7702AccountClientParams
+ * ): Promise<SmartAccountClient> {
+ *   const sma7702Account = await createSMA7702Account(config);
+ *
+ *   return createSmartAccountClient({
+ *     account: sma7702Account,
+ *     gasEstimator: default7702GasEstimator(config.gasEstimator),
+ *     signUserOperation: default7702UserOpSigner(config.signUserOperation),
+ *     ...config,
+ *   });
+ * }
+ * ```
  *
  * @param {ClientMiddlewareFn} [userOpSigner] Optional user operation signer function
- * @returns {Function} An async function that processes the user operation and returns the authorized operation with an authorization tuple if necessary
+ * @returns {Function} A middleware function that signs EIP-7702 authorization tuples if necessary, and also uses the provided or default user operation signer to generate the user op signature.
  */
 export const default7702UserOpSigner: (
   userOpSigner?: ClientMiddlewareFn
@@ -38,14 +66,13 @@ export const default7702UserOpSigner: (
     }
 
     const code = (await client.getCode({ address: account.address })) ?? "0x";
-    // TODO: this isn't the cleanest because now the account implementation HAS to know that it needs to return an impl address
-    // even if the account is not deployed
 
     const implAddress = await account.getImplementationAddress();
 
     const expectedCode = "0xef0100" + implAddress.slice(2);
 
     if (code.toLowerCase() === expectedCode.toLowerCase()) {
+      // If the delegation already matches the expected, then we don't need to sign and include an authorization tuple.
       return uo;
     }
 

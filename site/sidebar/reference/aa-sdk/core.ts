@@ -75,6 +75,14 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/aa-sdk/core/functions/deepHexlify",
       },
       {
+        text: "default7702GasEstimator",
+        link: "/reference/aa-sdk/core/functions/default7702GasEstimator",
+      },
+      {
+        text: "default7702UserOpSigner",
+        link: "/reference/aa-sdk/core/functions/default7702UserOpSigner",
+      },
+      {
         text: "defaultFeeEstimator",
         link: "/reference/aa-sdk/core/functions/defaultFeeEstimator",
       },
@@ -371,6 +379,10 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
           {
             text: "privateKeyToAccountSigner",
             link: "/reference/aa-sdk/core/classes/LocalAccountSigner/privateKeyToAccountSigner",
+          },
+          {
+            text: "signAuthorization",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/signAuthorization",
           },
           {
             text: "signMessage",
