@@ -33,7 +33,7 @@ const WalletTypeSwitch = forwardRef<
             checked ? selectedStyles : unselectedStyles
           } font-normal`}
         >
-          Smart contract account
+          Smart account
         </p>
       </div>
       <div className="flex items-center justify-center flex-1 basis-0">
