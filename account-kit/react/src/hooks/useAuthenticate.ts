@@ -31,8 +31,11 @@ export type UseAuthenticateResult = {
  *
  * This can be complex for magic link or OTP flows: OPT calls authenticate twice, but this should be handled by the signer.
  *
+ * @param {UseAuthenticateMutationArgs} [mutationArgs] Optional mutation arguments to configure the authentication mutation. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts#L15)
+ * @returns {UseAuthenticateResult} An object containing functions and state for handling user authentication, including methods for synchronously and asynchronously executing the authentication. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts#L20)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useAuthenticate } from "@account-kit/react";
  *
  * const { authenticate, authenticateAsync, isPending, error } = useAuthenticate({
@@ -43,9 +46,6 @@ export type UseAuthenticateResult = {
  *  onError: (error) => console.error(error),
  * });
  * ```
- *
- * @param {UseAuthenticateMutationArgs} [mutationArgs] Optional mutation arguments to configure the authentication mutation. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts#L15)
- * @returns {UseAuthenticateResult} An object containing functions and state for handling user authentication, including methods for synchronously and asynchronously executing the authentication. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts#L20)
  */
 export function useAuthenticate(
   mutationArgs?: UseAuthenticateMutationArgs

@@ -38,18 +38,18 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
  *
  * If using an EOA, returns address of signer
  *
+ * @template {SupportedAccountTypes} TAccount The type of account to use
+ * @param {UseAccountProps<TAccount>} params The parameters required for account management, including account type, specific account parameters, and optional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L28)
+ * @returns {UseAccountResult<TAccount>} An object containing the account information, address, and loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L22)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useAccount } from "@account-kit/react";
  *
  * const { account, address, isLoadingAccount } = useAccount({
  *  type: "LightAccount"
  * });
  * ```
- *
- * @template {SupportedAccountTypes} TAccount The type of account to use
- * @param {UseAccountProps<TAccount>} params The parameters required for account management, including account type, specific account parameters, and optional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L28)
- * @returns {UseAccountResult<TAccount>} An object containing the account information, address, and loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L22)
  */
 export function useAccount<TAccount extends SupportedAccountTypes>(
   params: UseAccountProps<TAccount>

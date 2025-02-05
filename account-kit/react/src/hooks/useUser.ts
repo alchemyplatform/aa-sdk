@@ -14,15 +14,19 @@ export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
  *
  * If using smart contract account, returns address of the signer. If only using smart account contracts then you can use [useSignerStatus](https://accountkit.alchemy.com/reference/account-kit/react/hooks/useSignerStatus#usesignerstatus) or [useAccount](https://accountkit.alchemy.com/reference/account-kit/react/hooks/useAccount#useaccount) to see if the account is defined.
  *
- * @example
- * ```ts
- * import { useUser } from "@account-kit/react";
- *
- * const user = useUser();
- * ```
- *
  * @returns {UseUserResult} The user information, including address, orgId, userId, and type. If the user is not connected, it returns null. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUser.ts#L9)
+ *
+ * @example
+ * ```ts twoslash
+ * import { useUser } from "@account-kit/react";
+ * import type { User } from "@account-kit/signer";
+ * type UseUserResult  = (User & { type: "eoa" | "sca" }) | null;
+ *
+ * const user : UseUserResult | null = useUser();
+ *
+ * ```
  */
+
 export const useUser = (): UseUserResult => {
   const { config } = useAlchemyAccountContext();
   const {

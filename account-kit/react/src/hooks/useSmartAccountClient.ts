@@ -41,18 +41,23 @@ export function useSmartAccountClient<
  *
  * If using with an EOA, Smart Account Client won’t throw an error, but the client itself will stay undefined forever. We recommend useBundlerClient instead when using an EOA. The EOA must also be connected or authenticated with a signer.
  *
+ * @param {UseSmartAccountClientProps} props The properties required to use the smart account client, including optional [account parameters](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/core/src/actions/createAccount.ts#L23), type, and additional client parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L19)
+ * @returns {UseSmartAccountClientResult} An object containing the smart account client, the address, and a loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L24)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSmartAccountClient } from "@account-kit/react";
  *
  * const { client, address, isLoadingClient } = useSmartAccountClient({
  *  type: "LightAccount",
- *  accountParams: {...}, // optional [params](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/core/src/actions/createAccount.ts#L23) to further configure the account
+ *  accountParams: {
+ *    salt?: 1n,
+ *    factoryAddress?: '0x0000000000000000000000000000',
+ *    initCode?: "0x0",
+ *    accountAddress?: '0x0000000000000000000000000000'
+ *   }
  * });
  * ```
- *
- * @param {UseSmartAccountClientProps} props The properties required to use the smart account client, including account parameters, type, and additional client parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L19)
- * @returns {UseSmartAccountClientResult} An object containing the smart account client, the address, and a loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L24)
  */
 export function useSmartAccountClient({
   accountParams,

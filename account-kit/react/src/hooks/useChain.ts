@@ -26,8 +26,12 @@ export interface UseChainResult {
  *
  * For switching chains, you can also use [createBundlerClient](https://accountkit.alchemy.com/reference/aa-sdk/core/functions/createBundlerClient#createbundlerclient) or [createSmartAccoutClient](https://accountkit.alchemy.com/reference/aa-sdk/core/functions/createSmartAccountClient) directly and create a different client for each chain. You would have to manage different clients, but you wouldn't have to wait for any hooks to complete and can run these queries in parallel. This way the chain set in the config that the smart account client and other hooks inherit is not also affected.
  *
+ * @param {UseChainParams} mutationArgs optional properties which contain mutation arg overrides. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts#L14)
+ * @returns {UseChainResult} an object containing the current chain and a function to set the chain as well as loading state of setting the chain. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts#L16)
+ *
  * @example
- * ```tsx
+ * ```tsx twoslash
+ * import React from 'react';
  * import { useChain } from "@account-kit/react";
  * // Assuming the chain sepolia is defined in your initial createConfig call
  * import { sepolia } from "@account-kit/infra";
@@ -43,9 +47,6 @@ export interface UseChainResult {
  *  );
  * }
  * ```
- *
- * @param {UseChainParams} mutationArgs optional properties which contain mutation arg overrides. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts#L14)
- * @returns {UseChainResult} an object containing the current chain and a function to set the chain as well as loading state of setting the chain. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts#L16)
  */
 export function useChain(mutationArgs?: UseChainParams): UseChainResult {
   const { config } = useAlchemyAccountContext();

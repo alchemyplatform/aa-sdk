@@ -67,16 +67,16 @@ export function useUiConfig<T = UiConfigStore>(
  * A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUiConfig.tsx) for accessing UI configuration from the `UiConfigContext`. Allows optional selection of specific parts of the UI config state using a selector function.
  * For editing and updating the underlying UI config on the fly.
  *
+ * @param {(state: UiConfigStore) => T} [selector] - An optional function to select specific parts of the UI config state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUiConfig.tsx#L23)
+ * @returns {T} - The selected state passed through the selector function or the entire state if no selector is provided
+ * @throws Will throw an error if the `UiConfigContext` is not present in the component tree
+ *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useUiConfig } from "@account-kit/react";
  *
  * const { illustrationStyle, auth } = useUiConfig(({ illustrationStyle, auth }) => ({ illustrationStyle, auth }));
  * ```
- *
- * @param {(state: UiConfigStore) => T} [selector] - An optional function to select specific parts of the UI config state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUiConfig.tsx#L23)
- * @returns {T} - The selected state passed through the selector function or the entire state if no selector is provided
- * @throws Will throw an error if the `UiConfigContext` is not present in the component tree
  */
 export function useUiConfig(
   selector?: (state: UiConfigStore) => UiConfigStore

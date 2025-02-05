@@ -78,8 +78,12 @@ export type UseSendUserOperationResult<
  * You can also optionally wait for a user operation to be mined and get the transaction hash before returning using `waitForTx`.
  * Like any method that takes a smart account client, throws an error if client undefined or is signer not authenticated.
  *
+ * @param {UseSendUserOperationArgs<TEntryPointVersion, TAccount>} params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L45)
+ * @returns {UseSendUserOperationResult<TEntryPointVersion, TAccount>} functions and state for sending UOs. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L53)
+ *
  * @example
- * ```tsx
+ * ```tsx twoslash
+ * import React from 'react';
  * import {
  *   useSendUserOperation,
  *   useSmartAccountClient,
@@ -122,9 +126,6 @@ export type UseSendUserOperationResult<
  *   );
  * }
  * ```
- *
- * @param {UseSendUserOperationArgs<TEntryPointVersion, TAccount>} params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L45)
- * @returns {UseSendUserOperationResult<TEntryPointVersion, TAccount>} functions and state for sending UOs. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L53)
  */
 export function useSendUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
