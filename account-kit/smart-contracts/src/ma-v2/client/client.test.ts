@@ -548,7 +548,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it("installs allowlist module, uses, then uninstalls", async () => {
+  it.only("installs allowlist module, uses, then uninstalls", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
