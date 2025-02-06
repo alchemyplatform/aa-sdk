@@ -220,7 +220,9 @@ export function getSmartAccountClient(
           isLoadingClient: false,
         };
       case "ModularAccountV2":
-        const mode = (accountParams as AccountConfig<"ModularAccountV2">).mode;
+        const mode =
+          (accountParams as AccountConfig<"ModularAccountV2">)?.mode ??
+          "default";
         return {
           client: createAlchemySmartAccountClient({
             transport,

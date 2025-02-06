@@ -30,7 +30,7 @@ export function NFT({
   status,
   ...props
 }: NFTProps) {
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { client } = useSmartAccountClient({ type: "ModularAccountV2" });
   const [mobileTrayOpen, setMobileTrayOpen] = useState(false);
   const breakpoint = useBreakpoint();
   const { data: uri } = useQuery({

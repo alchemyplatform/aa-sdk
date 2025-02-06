@@ -27,7 +27,9 @@ export function UserConnectionDetails({
       walletType,
     })
   );
-  const scaAccount = useAccount({ type: "LightAccount" });
+  const scaAccount = useAccount({
+    type: "ModularAccountV2",
+  });
 
   const isEOAUser = user?.type === "eoa";
 

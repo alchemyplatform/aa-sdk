@@ -71,8 +71,9 @@ export const MintCard = () => {
   };
 
   const { client, isLoadingClient } = useSmartAccountClient({
-    type: "LightAccount",
+    type: "ModularAccountV2",
   });
+  console.log({ client, isLoadingClient });
   const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
     client,
     waitForTxn: true,

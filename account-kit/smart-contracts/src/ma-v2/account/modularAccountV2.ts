@@ -27,6 +27,17 @@ import {
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 
+export type MAv2DefaultAccountParams = {
+  mode: "default" | undefined;
+  salt?: bigint;
+  factoryAddress?: Address;
+  initCode?: Hex;
+};
+
+export type MAv2SMA7702AccountParams = {
+  mode: "7702";
+};
+
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -38,17 +49,7 @@ export type CreateModularAccountV2Params<
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
   signerEntity?: SignerEntity;
 }) &
-  (
-    | {
-        mode: "default";
-        salt?: bigint;
-        factoryAddress?: Address;
-        initCode?: Hex;
-      }
-    | {
-        mode: "7702";
-      }
-  );
+  (MAv2DefaultAccountParams | MAv2SMA7702AccountParams);
 
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
@@ -103,6 +104,7 @@ export async function createModularAccountV2(
       entityId: DEFAULT_OWNER_ENTITY_ID,
     },
     signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
+    mode = "default",
   } = config;
 
   const client = createBundlerClient({
@@ -111,7 +113,7 @@ export async function createModularAccountV2(
   });
 
   const accountFunctions = await (async () => {
-    switch (config.mode) {
+    switch (mode) {
       case "7702": {
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
@@ -141,7 +143,7 @@ export async function createModularAccountV2(
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
           initCode,
-        } = config;
+        } = config as MAv2DefaultAccountParams;
 
         const getAccountInitCode = async () => {
           if (initCode) {
@@ -171,7 +173,7 @@ export async function createModularAccountV2(
         };
       }
       default:
-        assertNever(config);
+        assertNever(mode);
     }
   })();
 

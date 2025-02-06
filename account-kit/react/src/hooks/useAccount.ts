@@ -32,7 +32,7 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
 
 /**
  * Hook to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
- * The supported account types are: LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
+ * The supported account types are: ModularAccountV2, LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
  *
  * @example
  * ```ts
