@@ -3,7 +3,6 @@ import {
   AccountKitNftMinterABI,
   nftContractAddressOdyssey,
 } from "@/utils/config";
-import { ODYSSEY_EXPLORER_URL } from "./constants";
 import { useCallback, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { encodeFunctionData, Hash } from "viem";
