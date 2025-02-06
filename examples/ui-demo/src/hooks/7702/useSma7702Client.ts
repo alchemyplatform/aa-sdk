@@ -3,20 +3,19 @@ import type { AlchemyWebSigner } from "@account-kit/signer";
 import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import {
-  createSMA7702AccountClient,
+  createModularAccountV2Client,
+  ModularAccountV2Client,
+} from "@account-kit/smart-contracts";
+import {
   type InstallValidationActions,
   installValidationActions,
-  SMA7702AccountClient,
 } from "@account-kit/smart-contracts/experimental";
 import { odyssey, splitOdysseyTransport } from "./transportSetup";
-import {
-  alchemyFeeEstimator,
-  alchemyGasManagerMiddleware,
-} from "@account-kit/infra";
+import { alchemyFeeEstimator } from "@account-kit/infra";
 import { type Hex, type Address, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-type Client = SMA7702AccountClient<
+type Client = ModularAccountV2Client<
   AlchemyWebSigner | LocalAccountSigner<PrivateKeyAccount>
 > &
   InstallValidationActions<
@@ -61,7 +60,8 @@ export const useSma7702Client = (
 
       try {
         const _client = (
-          await createSMA7702AccountClient({
+          await createModularAccountV2Client({
+            type: "7702",
             chain: odyssey,
             transport: splitOdysseyTransport,
             accountAddress,
@@ -77,9 +77,7 @@ export const useSma7702Client = (
                   }
                 : undefined,
             feeEstimator: alchemyFeeEstimator(splitOdysseyTransport),
-            ...alchemyGasManagerMiddleware(
-              process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!
-            ),
+            policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
           })
         ).extend(installValidationActions);
 
