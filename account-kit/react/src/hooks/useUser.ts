@@ -22,7 +22,7 @@ export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
  * import type { User } from "@account-kit/signer";
  * type UseUserResult  = (User & { type: "eoa" | "sca" }) | null;
  *
- * const user : UseUserResult | null = useUser();
+ * const user = useUser();
  *
  * ```
  */

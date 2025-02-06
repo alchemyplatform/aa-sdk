@@ -56,6 +56,7 @@ export type UseSignMessageResult = {
  * ```ts twoslash
  * import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
  *
+ * const data = "messageToSign"
  * const { client } = useSmartAccountClient({ type: "LightAccount" });
  * const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
  *  client,
@@ -65,6 +66,8 @@ export type UseSignMessageResult = {
  *  },
  *  onError: (error) => console.error(error),
  * });
+ *
+ * const result = await signMessage({ message: data });
  * ```
  */
 export function useSignMessage({

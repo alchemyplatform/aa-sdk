@@ -14,8 +14,9 @@ import { useAlchemyAccountContext } from "../context.js";
  * @example
  * ```ts twoslash
  * import { useSigner } from "@account-kit/react";
+ * import type { AlchemyWebSigner } from "@account-kit/signer";
  *
- * const signer = useSigner();
+ * const signer : AlchemyWebSigner | null = useSigner();
  * ```
  */
 export const useSigner = (): AlchemyWebSigner | null => {

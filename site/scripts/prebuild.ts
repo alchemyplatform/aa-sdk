@@ -30,13 +30,44 @@ const generateItems = (
   });
 };
 
+// Define the hook groupings
+const hookGroupings = {
+  Authentication: [
+    "useAuthModal",
+    "useAddPasskey",
+    "useAuthenticate",
+    "useConnect",
+    "useExportAccount",
+    "useLogout",
+    "useSigner",
+    "useSignerStatus",
+    "useUser",
+  ],
+  "Account Client": ["useAccount", "useSmartAccountClient"],
+  "Smart Account Actions": [
+    "useSendUserOperation",
+    "useSignMessage",
+    "useSignTypedData",
+    "useWaitForUserOperationTransaction",
+    "useDropAndReplaceUserOperation",
+    "useClientActions",
+    "useChain",
+  ],
+  "Bundler/RPC Client": ["useBundlerClient"],
+  Utilities: [
+    "useAlchemyAccountContext",
+    "useUiConfig",
+    "useConnection",
+    "useAuthError",
+  ],
+};
+
 referencePackages.forEach(async (pkg) => {
   const cleanPkg = pkg.replace("@", "");
   const referencePath = `./reference/${cleanPkg}`;
   const functionFiles = await fs
     .readdir(path.resolve("./pages", referencePath, "./functions"))
     .catch(() => []);
-
   const hookFiles = await fs
     .readdir(path.resolve("./pages", referencePath, "./hooks"))
     .catch(() => []);
@@ -69,6 +100,21 @@ referencePackages.forEach(async (pkg) => {
     "functions"
   );
   const hookItems = generateItems(hookFiles, referencePath, "hooks");
+
+  // Group hooks according to the specified categories
+  const groupedHookItems = Object.entries(hookGroupings)
+    .map(([group, hooks]) => {
+      const groupItems = hookItems.filter((hook) => hooks.includes(hook.text));
+      if (groupItems.length) {
+        return {
+          text: group,
+          items: groupItems,
+        };
+      }
+      return null;
+    })
+    .filter((x) => x != null);
+
   const componentItems = generateItems(
     componentFiles,
     referencePath,
@@ -87,9 +133,6 @@ referencePackages.forEach(async (pkg) => {
     };
   });
 
-  const hooksSection = hookItems.length
-    ? { text: "Hooks", items: hookItems }
-    : undefined;
   const componentsSection = componentItems.length
     ? { text: "Components", items: componentItems }
     : undefined;
@@ -115,7 +158,7 @@ referencePackages.forEach(async (pkg) => {
             link: "${referencePath.replace(".", "")}"
         }],
     },
-    ${[componentsSection, hooksSection, functionsSection, classesSection]
+    ${[componentsSection, ...groupedHookItems, functionsSection, classesSection]
       .filter((x) => x != null)
       .map((x) => JSON.stringify(x, null, 2))
       .join(",\n")},
