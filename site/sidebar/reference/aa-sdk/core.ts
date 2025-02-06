@@ -322,11 +322,11 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
-        text: "InvalidModularAccountV2Type",
+        text: "InvalidModularAccountV2Mode",
         items: [
           {
             text: "constructor",
-            link: "/reference/aa-sdk/core/classes/InvalidModularAccountV2Type/constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidModularAccountV2Mode/constructor",
           },
         ],
       },

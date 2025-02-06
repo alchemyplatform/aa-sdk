@@ -7,9 +7,9 @@ description: Overview of the createModularAccountV2 method
 
 # createModularAccountV2
 
-Creates a ModularAccount V2 account, with the type depending on the provided "type" field.
-Possible types include: "default", which is SMA Bytecode, and "7702", which is SMA 7702.
-Handles nonce generation, transaction encoding, and type variant-specific behavior like initcode construction.
+Creates a ModularAccount V2 account, with the mode depending on the provided "mode" field.
+Possible modes include: "default", which is SMA Bytecode, and "7702", which is SMA 7702.
+Handles nonce generation, transaction encoding, and mode variant-specific behavior like initcode construction.
 
 ## Import
 
@@ -34,7 +34,7 @@ const chain = sepolia;
 const transport = alchemy({ rpcUrl: RPC_URL });
 
 const modularAccountV2 = await createModularAccountV2({
-  type: "default", // or "7702"
+  mode: "default", // or "7702"
   chain,
   signer,
   transport,

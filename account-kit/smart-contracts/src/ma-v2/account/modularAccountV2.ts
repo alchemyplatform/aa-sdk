@@ -8,7 +8,7 @@ import {
   getEntryPoint,
   getAccountAddress,
   EntityIdOverrideError,
-  InvalidModularAccountV2Type,
+  InvalidModularAccountV2Mode,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -40,13 +40,13 @@ export type CreateModularAccountV2Params<
 }) &
   (
     | {
-        type: "default";
+        mode: "default";
         salt?: bigint;
         factoryAddress?: Address;
         initCode?: Hex;
       }
     | {
-        type: "7702";
+        mode: "7702";
       }
   );
 
@@ -58,9 +58,9 @@ export async function createModularAccountV2<
 ): Promise<ModularAccountV2<TSigner>>;
 
 /**
- * Creates a ModularAccount V2 account, with the type depending on the provided "type" field.
- * Possible types include: "default", which is SMA Bytecode, and "7702", which is SMA 7702.
- * Handles nonce generation, transaction encoding, and type variant-specific behavior like initcode construction.
+ * Creates a ModularAccount V2 account, with the mode depending on the provided "mode" field.
+ * Possible modes include: "default", which is SMA Bytecode, and "7702", which is SMA 7702.
+ * Handles nonce generation, transaction encoding, and mode variant-specific behavior like initcode construction.
  *
  * @example
  * ```ts twoslash
@@ -79,7 +79,7 @@ export async function createModularAccountV2<
  *
  *
  * const modularAccountV2 = await createModularAccountV2({
- *  type: "default", // or "7702"
+ *  mode: "default", // or "7702"
  *  chain,
  *  signer,
  *  transport,
@@ -111,7 +111,7 @@ export async function createModularAccountV2(
   });
 
   const accountFunctions = await (async () => {
-    switch (config.type) {
+    switch (config.mode) {
       case "7702": {
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
@@ -186,7 +186,7 @@ export async function createModularAccountV2(
   });
 }
 
-// If we add more valid types, the switch case branch's type will no longer be `never`, which will cause a compile time error here and ensure we handle the new type.
+// If we add more valid modes, the switch case branch's mode will no longer be `never`, which will cause a compile time error here and ensure we handle the new type.
 function assertNever(_valid: never): never {
-  throw new InvalidModularAccountV2Type();
+  throw new InvalidModularAccountV2Mode();
 }
