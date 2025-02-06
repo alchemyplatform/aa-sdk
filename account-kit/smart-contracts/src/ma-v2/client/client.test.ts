@@ -28,8 +28,12 @@ import {
   AllowlistModule,
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
+  getDefaultSingleSignerValidationModuleAddress,
 } from "@account-kit/smart-contracts/experimental";
-import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import {
+  createModularAccountV2Client,
+  type SignerEntity,
+} from "@account-kit/smart-contracts";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
@@ -378,25 +382,30 @@ describe("MA v2 Tests", async () => {
     const paymaster = paymaster070.getPaymasterStubData();
 
     const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
-      entityId: 0,
+      entityId: 1,
       paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
     });
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: "0x",
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultPaymasterGuardModuleAddress(provider.chain),
-            entityId: 0, // uint32
+            entityId: 1, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
@@ -409,8 +418,18 @@ describe("MA v2 Tests", async () => {
     // verify hook installtion succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        usePaymaster: true,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
     // happy path: send a UO with correct paymaster
-    const result = await provider.sendUserOperation({
+    const result = await sessionKeyProvider.sendUserOperation({
       uo: {
         target: target,
         value: sendAmount,
@@ -419,16 +438,16 @@ describe("MA v2 Tests", async () => {
     });
 
     // verify if correct paymaster is used
-    const txnHash1 = provider.waitForUserOperationTransaction(result);
+    const txnHash1 = sessionKeyProvider.waitForUserOperationTransaction(result);
     await expect(txnHash1).resolves.not.toThrowError();
 
     const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
-      entityId: 0,
+      entityId: 1,
     });
 
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: zeroAddress,
-      entityId: 0,
+      entityId: 1,
       uninstallData: "0x",
       hookUninstallDatas: [hookUninstallData],
     });
@@ -455,25 +474,30 @@ describe("MA v2 Tests", async () => {
     const paymaster = paymaster070.getPaymasterStubData();
 
     const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
-      entityId: 0,
+      entityId: 1,
       paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
     });
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: "0x",
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultPaymasterGuardModuleAddress(provider.chain),
-            entityId: 0, // uint32
+            entityId: 1, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
@@ -487,13 +511,18 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(installResult);
 
     // sad path: send UO with no paymaster
-    let providerNoPaymaster = await givenConnectedProvider({
-      signer,
-      usePaymaster: false,
-    });
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        usePaymaster: false,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
 
     await expect(
-      providerNoPaymaster.sendUserOperation({
+      sessionKeyProvider.sendUserOperation({
         uo: {
           target: target,
           value: sendAmount,
@@ -503,12 +532,12 @@ describe("MA v2 Tests", async () => {
     ).rejects.toThrowError();
 
     const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
-      entityId: 0,
+      entityId: 1,
     });
 
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: zeroAddress,
-      entityId: 0,
+      entityId: 1,
       uninstallData: "0x",
       hookUninstallDatas: [hookUninstallData],
     });
@@ -530,7 +559,7 @@ describe("MA v2 Tests", async () => {
     });
 
     const hookInstallData = AllowlistModule.encodeOnInstallData({
-      entityId: 0,
+      entityId: 1,
       inputs: [
         {
           target,
@@ -544,19 +573,24 @@ describe("MA v2 Tests", async () => {
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: "0x",
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultAllowlistModuleAddress(provider.chain),
-            entityId: 0, // uint32
+            entityId: 1, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: false,
@@ -568,9 +602,20 @@ describe("MA v2 Tests", async () => {
 
     await provider.waitForUserOperationTransaction(installResult);
 
+    console.log("successfully installed validation module and allowlist hook");
+
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
     // Test that the allowlist is active.
     // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
-    const sendResult = await provider.sendUserOperation({
+    const sendResult = await sessionKeyProvider.sendUserOperation({
       uo: {
         target: target,
         value: 0n,
@@ -579,10 +624,11 @@ describe("MA v2 Tests", async () => {
     });
 
     await provider.waitForUserOperationTransaction(sendResult);
+    console.log("successfully calls into target address with allowlist module");
 
     // This should revert as we're calling an address separate fom the allowlisted target.
     await expect(
-      provider.sendUserOperation({
+      sessionKeyProvider.sendUserOperation({
         uo: {
           target: zeroAddress,
           value: 0n,
@@ -591,8 +637,12 @@ describe("MA v2 Tests", async () => {
       })
     ).rejects.toThrowError();
 
+    console.log(
+      "successfully FAILS to call into target address with allowlist module"
+    );
+
     const hookUninstallData = AllowlistModule.encodeOnUninstallData({
-      entityId: 0,
+      entityId: 1,
       inputs: [
         {
           target,
@@ -605,16 +655,20 @@ describe("MA v2 Tests", async () => {
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 0,
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
+      entityId: 1,
       uninstallData: "0x",
       hookUninstallDatas: [hookUninstallData],
     });
 
     await provider.waitForUserOperationTransaction(uninstallResult);
 
+    console.log("UNINSTALLS MODULE");
+
     // Post-uninstallation, we should now be able to call into any address successfully.
-    const postUninstallSendResult = await provider.sendUserOperation({
+    const postUninstallSendResult = await sessionKeyProvider.sendUserOperation({
       uo: {
         target: zeroAddress,
         value: 0n,
@@ -623,6 +677,10 @@ describe("MA v2 Tests", async () => {
     });
 
     await provider.waitForUserOperationTransaction(postUninstallSendResult);
+
+    console.log(
+      "we can call into ANY address BECAUSE ALLOWLIST MODULE HAS BEEN UNINSTALLED"
+    );
   });
 
   it("installs native token limit module, uses, then uninstalls", async () => {
@@ -852,15 +910,18 @@ describe("MA v2 Tests", async () => {
     signer,
     accountAddress,
     usePaymaster = false,
+    signerEntity,
   }: {
     signer: SmartAccountSigner;
     accountAddress?: `0x${string}`;
     usePaymaster?: boolean;
+    signerEntity?: SignerEntity;
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
       signer,
       accountAddress,
+      signerEntity,
       transport: custom(instance.getClient()),
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
