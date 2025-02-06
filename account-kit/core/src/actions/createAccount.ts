@@ -45,9 +45,11 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? OmitSignerTransportChain<
         CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>
       >
-    : OmitSignerTransportChain<
+    : TAccount extends "ModularAccountV2"
+    ? OmitSignerTransportChain<
         CreateModularAccountV2Params<Transport, AlchemyWebSigner>
-      >;
+      >
+    : never;
 
 export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
   type: TAccount;
