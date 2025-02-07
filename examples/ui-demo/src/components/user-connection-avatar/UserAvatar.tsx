@@ -1,5 +1,3 @@
-"use client";
-
 import Avatar from "boring-avatars";
 import { useMemo } from "react";
 
