@@ -33,7 +33,6 @@ import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
-import type { AccountConfig } from "./createAccount.js";
 import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
 
 export type GetSmartAccountClientParams<
@@ -220,14 +219,18 @@ export function getSmartAccountClient(
           isLoadingClient: false,
         };
       case "ModularAccountV2":
-        const mode = (accountParams as AccountConfig<"ModularAccountV2">).mode;
+        const is7702 =
+          params.accountParams &&
+          "mode" in params?.accountParams &&
+          params?.accountParams.mode === "7702";
         return {
           client: createAlchemySmartAccountClient({
             transport,
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
-            ...(mode === "7702"
+            // TODO(jh): is this called when reconnecting an account after page refresh?
+            ...(is7702
               ? {
                   gasEstimator: default7702GasEstimator(
                     clientParams.gasEstimator
