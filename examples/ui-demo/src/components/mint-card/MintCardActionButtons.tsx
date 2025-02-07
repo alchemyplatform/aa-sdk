@@ -7,6 +7,7 @@ type MintCardActionButtonsProps = {
   disabled?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
+// TODO(jh): delete this file
 export function MintCardActionButtons({
   nftTransfered,
   handleCollectNFT,

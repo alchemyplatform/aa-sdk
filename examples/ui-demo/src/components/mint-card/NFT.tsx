@@ -24,6 +24,7 @@ const NFT_MOBILE_SIZE = 288;
 const afterBoarder =
   "after:absolute after:bottom-[-16px] after:left-0 after:w-full after:h-[1px] after:bg-border lg:after:hidden";
 
+// TODO(jh): delete this file
 export function NFT({
   nftTransfered,
   transactionUrl,

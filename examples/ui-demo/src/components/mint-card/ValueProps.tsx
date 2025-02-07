@@ -9,6 +9,7 @@ type Props = {
   status: MintStatus;
 } & React.HTMLAttributes<HTMLDivElement>;
 
+// TODO(jh): delete this file
 export function ValueProps({ status, ...props }: Props) {
   return (
     <div {...props}>

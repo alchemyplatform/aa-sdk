@@ -28,6 +28,7 @@ export type MintStatus = {
   batch: NFTLoadingState | "batch";
 };
 
+// TODO(jh): delete this file
 export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const { setToast } = useToast();

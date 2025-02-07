@@ -1,6 +1,6 @@
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
-import { MintStatus } from "./MintCard7702";
+import { MintStatus } from "./MintCardMAv2";
 import { loadingState } from "./Transactions";
 
 export const MintStages = ({ status }: { status: MintStatus }) => {
@@ -14,6 +14,7 @@ export const MintStages = ({ status }: { status: MintStatus }) => {
         icon={status.gas}
         description="Sponsoring gas behind the scenes..."
       />
+      {/* TODO(jh): this is a lie if it not the smart account's first txn... */}
       <Stage
         icon={status.batch}
         description="Deploying your smart account..."

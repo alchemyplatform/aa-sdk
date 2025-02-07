@@ -6,6 +6,7 @@ type DeploymentStatusIndicatorProps = {
   showCheckIcon?: boolean;
 };
 
+// TODO(jh): add a loading state to this? (it currently says "not deployed" for quite a few seconds...)
 const DeploymentStatusIndicator = ({
   isDeployed,
   showCheckIcon = false,

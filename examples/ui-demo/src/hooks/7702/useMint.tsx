@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { encodeFunctionData, Hash } from "viem";
 import { useSma7702Client } from "./useSma7702Client";
-import { MintStatus } from "@/components/7702/MintCard7702";
+import { MintStatus } from "@/components/small-cards/MintCardMAv2";
 
 const initialValuePropState = {
   signing: "initial",
@@ -45,6 +45,8 @@ export const useMint = () => {
         signing: "success",
       }));
 
+      // TODO(jh): show
+
       setToast({
         type: "success",
         text: (
@@ -53,8 +55,7 @@ export const useMint = () => {
               {`You've collected your NFT!`}
             </span>
             <span className={"hidden lg:inline-block"}>
-              {`You've successfully collected your NFT! Refresh to mint
-                            again.`}
+              {`You've successfully collected your NFT!`}
             </span>
           </>
         ),

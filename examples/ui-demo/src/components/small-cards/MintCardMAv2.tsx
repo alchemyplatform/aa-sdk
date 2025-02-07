@@ -10,7 +10,7 @@ export type MintStatus = {
   batch: NFTLoadingState;
 };
 
-export const MintCard7702 = ({
+export const MintCardMAv2 = ({
   isLoading,
   isDisabled,
   status,
@@ -88,8 +88,8 @@ export const MintCard7702 = ({
         {!nftTransfered
           ? "Collect NFT"
           : isLoading
-          ? "Collecting NFT..."
-          : "Re-collect NFT"}
+            ? "Collecting NFT..."
+            : "Re-collect NFT"}
       </Button>
     </div>
   );
