@@ -105,15 +105,15 @@ export class EntityIdOverrideError extends BaseError {
 }
 
 /**
- * Error class denoting that the provided ma v2 account type is invalid.
+ * Error class denoting that the provided ma v2 account mode is invalid.
  */
-export class InvalidModularAccountV2Type extends BaseError {
-  override name = "InvalidModularAccountV2Type";
+export class InvalidModularAccountV2Mode extends BaseError {
+  override name = "InvalidModularAccountV2Mode";
 
   /**
-   * Initializes a new instance of the error message with a default message indicating that the provided ma v2 account type is invalid.
+   * Initializes a new instance of the error message with a default message indicating that the provided ma v2 account mode is invalid.
    */
   constructor() {
-    super(`The provided account type is invalid for ModularAccount V2`);
+    super(`The provided account mode is invalid for ModularAccount V2`);
   }
 }
