@@ -25,7 +25,7 @@ import { defaultGasEstimator } from "./gasEstimator.js";
  * async function createSMA7702AccountClient(
  *   config: CreateModularAccountV2ClientParams
  * ): Promise<SmartAccountClient> {
- *   const sma7702Account = await createModularAccountV2({ type: "7702", ...config});
+ *   const sma7702Account = await createModularAccountV2({ ...config, mode: "7702" });
  *
  *   return createSmartAccountClient({
  *     account: sma7702Account,
