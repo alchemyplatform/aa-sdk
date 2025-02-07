@@ -1,3 +1,5 @@
+"use client";
+
 import Avatar from "boring-avatars";
 import { useMemo } from "react";
 
@@ -10,21 +12,30 @@ const SUB_COLORS = ["#37BCFA", "#6D37FA"];
 
 const UserAvatar = ({ address, primaryColor }: UserAvatarProps) => {
   const avatarColors = useMemo(() => {
-    return shuffleColors([primaryColor, ...SUB_COLORS]);
-  }, [primaryColor]);
+    return shuffleColorsDeterministically(
+      [primaryColor, ...SUB_COLORS],
+      address
+    );
+  }, [address, primaryColor]);
 
   return (
-    <Avatar
-      size={40}
-      name={address}
-      variant="marble"
-      colors={avatarColors.length > 0 ? avatarColors : [primaryColor]}
-    />
+    <Avatar size={40} name={address} variant="marble" colors={avatarColors} />
   );
 };
 
-const shuffleColors = (colors: string[]) => {
-  return colors.sort(() => Math.random() - 0.5);
+// Always returns the same colors for the same seed, so
+// that rendering on the server and client will match.
+const shuffleColorsDeterministically = (colors: string[], seed: string) => {
+  if (colors.length === 1) {
+    return colors;
+  }
+  const hash = Array.from(seed).reduce(
+    (acc, char) => acc + char.charCodeAt(0),
+    0
+  );
+  return [...colors].sort(
+    (a, b) => (hash % a.charCodeAt(0)) - (hash % b.charCodeAt(0))
+  );
 };
 
 export { UserAvatar };
