@@ -92,7 +92,7 @@ export const default7702UserOpSigner: (
 
     return {
       ...uo,
-      eip7702auth: {
+      eip7702Auth: {
         // deepHexlify doesn't encode number(0) correctly, it returns "0x"
         chainId: toHex(client.chain.id),
         nonce: toHex(accountNonce),

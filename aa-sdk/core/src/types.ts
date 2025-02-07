@@ -202,7 +202,7 @@ export interface UserOperationRequest_v7 {
 // [!endregion UserOperationRequest_v7]
 
 export type Eip7702ExtendedFields = {
-  eip7702auth?: {
+  eip7702Auth?: {
     chainId: Hex;
     nonce: Hex;
     address: Address;
