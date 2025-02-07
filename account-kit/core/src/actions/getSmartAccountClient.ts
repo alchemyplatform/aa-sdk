@@ -221,8 +221,8 @@ export function getSmartAccountClient(
       case "ModularAccountV2":
         const is7702 =
           params.accountParams &&
-          "mode" in params?.accountParams &&
-          params?.accountParams.mode === "7702";
+          "mode" in params.accountParams &&
+          params.accountParams.mode === "7702";
         return {
           client: createAlchemySmartAccountClient({
             transport,
