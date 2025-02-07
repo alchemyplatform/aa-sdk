@@ -229,7 +229,6 @@ export function getSmartAccountClient(
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
-            // TODO(jh): is this called when reconnecting an account after page refresh?
             ...(is7702
               ? {
                   gasEstimator: default7702GasEstimator(
