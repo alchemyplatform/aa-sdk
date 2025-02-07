@@ -19,7 +19,7 @@ export const RenderUserConnectionAvatar = (
 ) => {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const { account } = useAccount({
-    type: "LightAccount",
+    type: "ModularAccountV2",
   });
   const { walletType } = useConfigStore();
 

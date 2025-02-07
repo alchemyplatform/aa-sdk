@@ -71,7 +71,7 @@ export const MintCard = () => {
   };
 
   const { client, isLoadingClient } = useSmartAccountClient({
-    type: "LightAccount",
+    type: "ModularAccountV2",
   });
   const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
     client,
