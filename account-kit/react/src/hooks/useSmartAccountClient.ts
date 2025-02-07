@@ -18,8 +18,13 @@ import { useAlchemyAccountContext } from "../context.js";
 
 export type UseSmartAccountClientProps<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes = SupportedAccountTypes
-> = GetSmartAccountClientParams<TChain, TAccount>;
+  TAccount extends SupportedAccountTypes | undefined =
+    | SupportedAccountTypes
+    | undefined
+> = GetSmartAccountClientParams<
+  TChain,
+  TAccount extends undefined ? "ModularAccountV2" : TAccount
+>;
 
 export type UseSmartAccountClientResult<
   TChain extends Chain | undefined = Chain | undefined,
@@ -28,10 +33,15 @@ export type UseSmartAccountClientResult<
 
 export function useSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes = SupportedAccountTypes
+  TAccount extends SupportedAccountTypes | undefined =
+    | SupportedAccountTypes
+    | undefined
 >(
   args: UseSmartAccountClientProps<TChain, TAccount>
-): UseSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
+): UseSmartAccountClientResult<
+  TChain,
+  SupportedAccount<TAccount extends undefined ? "ModularAccountV2" : TAccount>
+>;
 
 /**
  * Uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
