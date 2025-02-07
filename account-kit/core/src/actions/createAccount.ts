@@ -1,3 +1,4 @@
+import { type OptionalFields } from "@aa-sdk/core";
 import type { AlchemyWebSigner } from "@account-kit/signer";
 import {
   createLightAccount,
@@ -47,7 +48,10 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
       >
     : TAccount extends "ModularAccountV2"
     ? OmitSignerTransportChain<
-        CreateModularAccountV2Params<Transport, AlchemyWebSigner>
+        OptionalFields<
+          CreateModularAccountV2Params<Transport, AlchemyWebSigner>,
+          "mode"
+        >
       >
     : never;
 
