@@ -24,9 +24,9 @@ import {
   semiModularAccountBytecodeAbi,
   TimeRangeModule,
 } from "@account-kit/smart-contracts/experimental";
-import { odyssey } from "./transportSetup";
 import { genEntityId } from "./genEntityId";
 import { SingleSignerValidationModule } from "@account-kit/smart-contracts/experimental";
+import { odysseyTestnet } from "@/hooks/7702/transportSetup";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -55,7 +55,7 @@ const initialTransactions: TransactionType[] = [
   },
 ];
 
-export const useRecurringTransactions = () => {
+export const useRecurringTransactions7702 = () => {
   const [transactions, setTransactions] =
     useState<TransactionType[]>(initialTransactions);
 
@@ -116,9 +116,8 @@ export const useRecurringTransactions = () => {
     setTransactions((prev) => {
       const newState = [...prev];
       newState[transactionIndex].state = "complete";
-      newState[
-        transactionIndex
-      ].externalLink = `${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`;
+      newState[transactionIndex].externalLink =
+        `${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`;
       return newState;
     });
   };
@@ -180,7 +179,7 @@ export const useRecurringTransactions = () => {
                 validationConfig: {
                   moduleAddress:
                     await getDefaultSingleSignerValidationModuleAddress(
-                      odyssey
+                      odysseyTestnet
                     ),
                   entityId: sessionKeyEntityId,
                   isGlobal: false,
@@ -220,7 +219,7 @@ export const useRecurringTransactions = () => {
                         },
                       ],
                     },
-                    getDefaultAllowlistModuleAddress(odyssey)
+                    getDefaultAllowlistModuleAddress(odysseyTestnet)
                   ),
                   TimeRangeModule.buildHook(
                     {
@@ -230,7 +229,7 @@ export const useRecurringTransactions = () => {
                         SESSION_KEY_VALIDITY_TIME_SECONDS,
                       validAfter: 0,
                     },
-                    getDefaultTimeRangeModuleAddress(odyssey)
+                    getDefaultTimeRangeModuleAddress(odysseyTestnet)
                   ),
                 ],
               }),

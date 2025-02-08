@@ -27,7 +27,12 @@ export function UserConnectionDetails({
       walletType,
     })
   );
-  const scaAccount = useAccount({ type: "ModularAccountV2" });
+  const scaAccount = useAccount({
+    type: "ModularAccountV2",
+    accountParams: {
+      mode: walletType === WalletTypes.hybrid7702 ? "7702" : "default",
+    },
+  });
 
   const isEOAUser = user?.type === "eoa";
 
@@ -83,8 +88,8 @@ export function UserConnectionDetails({
         <UserAddressLink
           address={
             walletType === WalletTypes.smart
-              ? scaAccount.address ?? ""
-              : signerAddress ?? ""
+              ? (scaAccount.address ?? "")
+              : (signerAddress ?? "")
           }
         />
       </div>

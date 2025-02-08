@@ -1,5 +1,13 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import {
+  odysseyTestnet,
+  splitOdysseyTransport,
+} from "@/hooks/7702/transportSetup";
+import {
+  alchemy,
+  arbitrumSepolia,
+  alchemyFeeEstimator,
+} from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
@@ -85,9 +93,22 @@ export const alchemyConfig = () =>
   createConfig(
     {
       transport: alchemy({ rpcUrl: "/api/rpc" }),
-      chain: arbitrumSepolia,
+      chain: odysseyTestnet,
+      chains: [
+        {
+          chain: arbitrumSepolia,
+          transport: alchemy({ rpcUrl: "/api/rpc" }),
+          policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+        },
+        {
+          chain: odysseyTestnet,
+          transport: splitOdysseyTransport,
+          policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+          // TODO(jh): do we need to include fee estimator somewhere?
+          // i.e. alchemyFeeEstimator(splitOdysseyTransport)
+        },
+      ],
       ssr: true,
-      policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
       connectors: [
         walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
       ],

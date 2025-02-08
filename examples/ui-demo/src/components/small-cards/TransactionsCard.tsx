@@ -2,23 +2,27 @@ import { Key } from "@/components/icons/key";
 import { Button } from "./Button";
 import { LoadingIcon } from "@/components/icons/loading";
 import { Transactions } from "./Transactions";
-import {
-  TransactionType,
-  CardStatus,
-} from "../../hooks/7702/useRecurringTransactions";
+import { useRecurringTransactions7702 } from "@/hooks/7702/useRecurringTransactions7702";
+import { useConfigStore } from "@/state";
+import { WalletTypes } from "@/app/config";
+import { useRecurringTransactions } from "@/hooks/useRecurringTransactions";
+import { useMemo } from "react";
+import { exhaustiveGuard } from "@/lib/utils";
 
-export const TransactionsCard = ({
-  cardStatus,
-  isDisabled,
-  transactions,
-  handleTransactions,
-}: {
-  isDisabled: boolean;
-  cardStatus: CardStatus;
-  transactions: TransactionType[];
-  handleTransactions: () => void;
-}) => {
-  const getButtonText = () => {
+export const TransactionsCard = () => {
+  const { walletType } = useConfigStore();
+
+  // TODO(jh): once everything is done, we can prob just pass the SMAClient's
+  //  mode and the contract address to mint to a single hook? maybe chain too?
+  const recurringTransactions7702 = useRecurringTransactions7702();
+  const recurringTransactions = useRecurringTransactions();
+
+  const { cardStatus, transactions, handleTransactions, isLoadingClient } =
+    walletType === WalletTypes.smart
+      ? recurringTransactions
+      : recurringTransactions7702;
+
+  const buttonText = useMemo(() => {
     switch (cardStatus) {
       case "initial":
         return "Create session key";
@@ -28,8 +32,10 @@ export const TransactionsCard = ({
         return "Transactions in progress...";
       case "done":
         return "Restart session key";
+      default:
+        return exhaustiveGuard(cardStatus, "Unexpected card status");
     }
-  };
+  }, [cardStatus]);
 
   return (
     <div className="bg-bg-surface-default rounded-lg p-4 w-full xl:p-6 xl:w-[326px] xl:h-[478px] flex flex-col shadow-smallCard mb-5 xl:mb-0">
@@ -66,10 +72,10 @@ export const TransactionsCard = ({
         className="mt-auto"
         onClick={handleTransactions}
         disabled={
-          isDisabled || cardStatus === "setup" || cardStatus === "active"
+          isLoadingClient || cardStatus === "setup" || cardStatus === "active"
         }
       >
-        {getButtonText()}
+        {buttonText}
       </Button>
     </div>
   );

@@ -10,7 +10,7 @@ import {
   type InstallValidationActions,
   installValidationActions,
 } from "@account-kit/smart-contracts/experimental";
-import { odyssey, splitOdysseyTransport } from "./transportSetup";
+import { odysseyTestnet, splitOdysseyTransport } from "./transportSetup";
 import { alchemyFeeEstimator } from "@account-kit/infra";
 import { type Hex, type Address, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -61,8 +61,8 @@ export const useSma7702Client = (
       try {
         const _client = (
           await createModularAccountV2Client({
-            type: "7702",
-            chain: odyssey,
+            mode: "7702",
+            chain: odysseyTestnet,
             transport: splitOdysseyTransport,
             accountAddress,
             signer:

@@ -3,11 +3,11 @@ import {
   AccountKitNftMinterABI,
   nftContractAddressOdyssey,
 } from "@/utils/config";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { useToast } from "@/hooks/useToast";
 import { encodeFunctionData, Hash } from "viem";
+import { MintStatus } from "@/components/small-cards/MintCard";
 import { useSma7702Client } from "./useSma7702Client";
-import { MintStatus } from "@/components/small-cards/MintCardMAv2";
 
 const initialValuePropState = {
   signing: "initial",
@@ -15,14 +15,15 @@ const initialValuePropState = {
   batch: "initial",
 } satisfies MintStatus;
 
-export const useMint = () => {
+export const useMint7702 = () => {
   const { client, isLoadingClient } = useSma7702Client();
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
-  const [nftTransfered, setNftTransfered] = useState(false);
+  const [mintStarted, setMintStarted] = useState(false);
   const isLoading =
     Object.values(status).some((x) => x === "loading") || isLoadingClient;
   const { setToast } = useToast();
+  const [hash, setHash] = useState<Hash | undefined>();
 
   const { data: uri } = useQuery({
     queryKey: ["contractURI", nftContractAddressOdyssey],
@@ -45,7 +46,7 @@ export const useMint = () => {
         signing: "success",
       }));
 
-      // TODO(jh): show
+      setHash(txnHash);
 
       setToast({
         type: "success",
@@ -66,7 +67,7 @@ export const useMint = () => {
     const handleError = (error: Error) => {
       console.error(error);
       setStatus(initialValuePropState);
-      setNftTransfered(false);
+      setMintStarted(false);
       setToast({
         type: "error",
         text: "There was a problem with that action",
@@ -78,7 +79,9 @@ export const useMint = () => {
       console.error("no client");
       return;
     }
-    setNftTransfered(true);
+
+    setHash(undefined);
+    setMintStarted(true);
 
     setStatus({
       signing: "loading",
@@ -115,11 +118,19 @@ export const useMint = () => {
     }
   }, [client, setToast]);
 
+  const transactionUrl = useMemo(() => {
+    if (!client?.chain?.blockExplorers || !hash) {
+      return undefined;
+    }
+    return `${client.chain.blockExplorers.default.url}/tx/${hash}`;
+  }, [client, hash]);
+
   return {
     isLoading,
     status,
-    nftTransfered,
+    mintStarted,
     handleCollectNFT,
     uri,
+    transactionUrl,
   };
 };

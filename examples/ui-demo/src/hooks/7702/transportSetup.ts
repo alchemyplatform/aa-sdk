@@ -23,9 +23,9 @@ import { alchemy } from "@account-kit/infra";
 //   testnet: true,
 // });
 
-export const odyssey: Chain = defineChain({
+export const odysseyTestnet: Chain = defineChain({
   id: 911867,
-  name: "Odyssey",
+  name: "Odyssey Testnet",
   nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
   rpcUrls: {
     default: {
@@ -75,5 +75,5 @@ export const splitOdysseyTransport = alchemy({
   alchemyConnection: {
     rpcUrl: "/api/bundler-odyssey",
   },
-  nodeRpcUrl: "https://odyssey.ithaca.xyz",
+  nodeRpcUrl: odysseyTestnet.rpcUrls.default.http[0],
 });

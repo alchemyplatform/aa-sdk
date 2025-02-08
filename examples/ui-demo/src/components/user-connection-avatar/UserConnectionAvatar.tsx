@@ -7,6 +7,7 @@ import { useAccount, useUser } from "@account-kit/react";
 
 import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
+import { WalletTypes } from "@/app/config";
 
 interface UserConnectionAvatarProps {
   isFocused?: boolean;
@@ -25,8 +26,12 @@ const UserConnectionAvatar = ({
     })
   );
   const user = useUser();
+  const { walletType } = useConfigStore();
   const { address: SCAUserAddress } = useAccount({
     type: "ModularAccountV2",
+    accountParams: {
+      mode: walletType === WalletTypes.hybrid7702 ? "7702" : "default",
+    },
   });
 
   const isEOAUser = user?.type === "eoa";

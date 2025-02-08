@@ -1,9 +1,17 @@
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
-import { MintStatus } from "./MintCardMAv2";
+import { MintStatus } from "./MintCard";
 import { loadingState } from "./Transactions";
+import { ReactNode } from "react";
+import { ExternalLinkIcon } from "lucide-react";
 
-export const MintStages = ({ status }: { status: MintStatus }) => {
+export const MintStages = ({
+  status,
+  transactionUrl,
+}: {
+  status: MintStatus;
+  transactionUrl?: string;
+}) => {
   return (
     <div>
       <Stage
@@ -17,7 +25,21 @@ export const MintStages = ({ status }: { status: MintStatus }) => {
       {/* TODO(jh): this is a lie if it not the smart account's first txn... */}
       <Stage
         icon={status.batch}
-        description="Deploying your smart account..."
+        description={
+          <span className="flex gap-3 justify-between">
+            Deploying your smart account...
+            {status.batch === "success" && transactionUrl && (
+              <a
+                href={transactionUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center"
+              >
+                <ExternalLinkIcon className="stroke-fg-secondary w-4 h-4" />
+              </a>
+            )}
+          </span>
+        }
       />
     </div>
   );
@@ -29,7 +51,7 @@ const Stage = ({
   className,
 }: {
   icon: loadingState;
-  description: string | JSX.Element;
+  description: string | ReactNode;
   className?: string;
 }) => {
   return (

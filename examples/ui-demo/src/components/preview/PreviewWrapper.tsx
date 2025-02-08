@@ -5,7 +5,8 @@ import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
 import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
 import { useState, useEffect } from "react";
-import { SmallCardsWrapper } from "../small-cards/Wrapper";
+import { MintCard } from "../small-cards/MintCard";
+import { TransactionsCard } from "../small-cards/TransactionsCard";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   return (
@@ -71,5 +72,11 @@ const RenderContent = () => {
     );
   }
 
-  return <SmallCardsWrapper />;
+  return (
+    <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6">
+      <MintCard />
+      {/* TODO(jh): enable this after minting is working */}
+      {/* <TransactionsCard /> */}
+    </div>
+  );
 };
