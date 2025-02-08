@@ -7,28 +7,37 @@ description: Learn about different smart account implementations to use with
 
 # Choosing a Smart Account
 
-## What is a Smart Account?
+GOAL: Convince users to use MAv2.
+HOW?: Show benchmarks, show features.
 
-A smart account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. You can use it to manage assets, execute transactions (known as `UserOperation`s), and more. There are many different implementations of a smart account, including [Modular Account](/smart-contracts/modular-account/) and [Light Account](/smart-contracts/light-account/).
+---
 
-We provide some of the cheapest accounts on the market. You should also consider [account deployement gas costs](https://github.com/alchemyplatform/aa-benchmarks) when choosing an account.
+## Why Smart Accounts?
 
-## Modular Account
+Smart accounts are the key to unlocking the best online user experience ever had-- enabling features that have never been possible with traditional EOAs (externally-owned-accounts) like session keys, granular permissions, different authentication methods like email and passkeys, and much more. 
 
-[Modular Account](/smart-contracts/modular-account/) is an enterprise-grade smart contract account designed from the ground up for ERC-4337. It is highly secure, gas optimized, and endlessly customizable with ERC-6900 plugins. With our pre-built plugins, it supports multiple owners (1-of-n), multisig thresholds (m-of-n), and session keys with scoped permissions.
+Beyond that, alchemy's Account Kit offers a simple & clean SDK to provide your users with top-tier smart account features. With Account Kit's most powerful, most natively-supported account being Modular Account V2. MAv2 is the world's most fully-featured and efficient smart account, allowing for limitless modular expansion while remaining maximally gas-efficient.
 
-Modular Account is the first [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) account implementation, making it infinitely extensible with custom plugins. Plug and play from a selection of existing plugins, including session keys and multisig, or write your own to customize the account for your app. We have created three pre-built plugins available today: [`MultiOwnerPlugin`](#TODO/smart-contracts/using-smart-accounts/transfer-ownership/modular-account), [`SessionKeyPlugin`](#TODO/smart-contracts/using-smart-accounts/session-keys/), and [`MultisigPlugin`](/smart-contracts/modular-account/multisig-plugin/). We're actively building new plugins and look forward to what new plugins you create!
+As a frame of reference, see the deployment benchmarks below:
 
-For most applications, we recommend using **Modular Account**. Suppose you have already deployed Light Account in the past. In that case, you can follow [Upgrading to a Modular Account](/smart-contracts/modular-account/upgrading-to-modular-account) guide to easily upgrade your account from Light Account to Modular Account using Account Kit and unlock an ecosystem of plugins for your smart account stack.
+|                           | Runtime Deployment gas | UserOp Deployment gas |
+| :------------------------ | -------------: | ------------------: |
+| Alchemy Modular Account v2|       `97772`  |           `233004` |
+| Biconomy Nexus           |      `210309`  |           `342381` |
+| ZeroDev Kernel v3.1      |      `180465`  |           `338419` |
+| Safe v1.4.1              |      `289207`  |           `435486` |
+| Alchemy Light Account v2  |      `143842`  |           `266901` |
+| Coinbase Smart Wallet    |      `190525`  |           `317904` |
+| Simple Account           |      `174219`  |           `297367` |
 
-Modular Account has been audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-19_quantstamp_0e3fd1e.pdf). It is fully [open source](https://github.com/alchemyplatform/modular-account) and supported by a [Bug Bounty](https://hackerone.com/alchemyplatform) program. It is [deployed](/smart-contracts/modular-account/deployments) on multiple networks and their respective testnets.
+See more benchmarks [here!](https://github.com/alchemyplatform/aa-benchmarks/blob/master/README.md)
 
-## Light Account
+## Modular Account V2
 
-[Light Account](/smart-contracts/light-account) is a collection of lightweight, production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. It builds on top of Ethereum Foundation's canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) to add key improvements such as ownership transfers, multiple owners, ERC-1271 signature support, and gas optimizations.
+MAv2 is a zero-compromise smart account designed from the ground up for maximal security, modularity, and gas-efficiency. MAv2 abides by [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), meaning if you have a use case, there's probably a module for it-- and if there isn't, the simple, straightforward module interface ensures building new innovative features is a walk in the park.
 
-It is fully [open source](https://github.com/alchemyplatform/light-account) and has been audited [multiple](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-01-09_quantstamp_aa8196b.pdf) [times](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-04-26_quantstamp_93f46a2.pdf) by Quantstamp. It is [deployed](/smart-contracts/light-account/deployments) on multiple networks and their respective testnets.
+By default, MAv2 includes a fallback validation. This allows a zero-customization setup where the account's owner (which, technically, could be another account!) has full control over the account. The fallback validation signer, or the account's owner, can be swapped or the entire validation can be disabled entirely in favor of one or more other validations.
 
-## Use your own Account
+Validations are themselves modules that define an authorization scheme with granularly managed control over the account. You could use a [WebAuthn validation](https://github.com/alchemyplatform/modular-account/blob/develop/src/modules/validation/WebAuthnValidationModule.sol) to support passkeys or biometrics for example. 
 
-Account Kit also makes it easy to use your own smart account implementation. To learn how, see our guide on how to [use your own account](/third-party/smart-contracts).
+MAv2 also supports [EIP-7702](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md) out of the box, allowing EOAs to seamlessly turn into maximally expandable smart accounts.
