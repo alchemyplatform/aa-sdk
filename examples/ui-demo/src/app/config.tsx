@@ -1,9 +1,14 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
-import { cookieStorage, createConfig } from "@account-kit/react";
+import { alchemy, base, sepolia } from "@account-kit/infra";
+import {
+  AlchemyAccountsUIConfig,
+  cookieStorage,
+  createConfig,
+} from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { QueryClient } from "@tanstack/react-query";
+import { Chain } from "viem/chains";
 import { walletConnect } from "wagmi/connectors";
 
 export type Config = {
@@ -74,38 +79,71 @@ export const DEFAULT_CONFIG: Config = {
 
 export const queryClient = new QueryClient();
 
-export const alchemyConfig = () =>
-  createConfig(
-    {
-      transport: alchemy({ rpcUrl: "/api/rpc" }),
-      chain: arbitrumSepolia,
-      ssr: true,
-      policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
-      connectors: [
-        walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
+export const defaultChain = base;
+
+export enum SDKSupportedNetworkIdsEnum {
+  DEFAULT = defaultChain.id,
+}
+
+export const SDKChainIdToAAChainMap: {
+  [key in string]: Chain;
+} = {
+  [defaultChain.id]: defaultChain,
+};
+
+const uiConfig: AlchemyAccountsUIConfig = {
+  illustrationStyle: "outline",
+  auth: {
+    sections: [
+      [{ type: "email" }],
+      [
+        { type: "passkey" },
+        // to be re-enabled once verified
+        // { type: 'social', authProviderId: 'google', mode: 'popup' },
+        // { type: 'social', authProviderId: 'facebook', mode: 'popup' },
       ],
-      storage: cookieStorage,
-      enablePopupOauth: true,
-    },
+      [
+        {
+          type: "external_wallets",
+          walletConnect: { projectId: "832580820193ff6bae62a15dc0feff03" },
+        },
+      ],
+    ],
+    addPasskeyOnSignup: true,
+  },
+};
+
+export const getAccountKitConfig = ({
+  forkRpcUrl,
+  chainId,
+}: {
+  forkRpcUrl?: string;
+  chainId?: SDKSupportedNetworkIdsEnum;
+}) => {
+  return createConfig(
     {
-      illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
-      auth: {
-        sections: [
-          [{ type: "email", emailMode: "otp" }],
-          [
-            { type: "passkey" },
-            { type: "social", authProviderId: "google", mode: "popup" },
-            { type: "social", authProviderId: "facebook", mode: "popup" },
-          ],
-        ],
-        addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
-        header: (
-          <AuthCardHeader
-            theme={DEFAULT_CONFIG.ui.theme}
-            logoDark={DEFAULT_CONFIG.ui.logoDark}
-            logoLight={DEFAULT_CONFIG.ui.logoLight}
-          />
-        ),
+      transport: alchemy({
+        rpcUrl: "/api/rpc",
+      }),
+      signerConnection: {
+        // this is for Alchemy Signer requests
+        rpcUrl: "/api/rpc",
       },
-    }
+      chain: {
+        [SDKSupportedNetworkIdsEnum.DEFAULT]: defaultChain,
+      }[chainId ?? defaultChain.id] as Chain,
+      chains: Object.values(SDKChainIdToAAChainMap).map((chain) => ({
+        chain,
+        policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+      })),
+      ssr: true,
+      storage: cookieStorage,
+    },
+    uiConfig
   );
+};
+
+export const alchemyConfig = () =>
+  getAccountKitConfig({
+    chainId: defaultChain.id,
+  });

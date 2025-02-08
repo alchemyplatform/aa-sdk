@@ -13,7 +13,10 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
+import {
+  sendTransaction as wagmi_sendTransaction,
+  estimateGas as wagmi_estimateGas,
+} from "@wagmi/core";
 import type { Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
@@ -171,10 +174,17 @@ export function useSendUserOperation<
             );
           }
 
+          const gas = await wagmi_estimateGas(wagmiConfig, {
+            to: uo.target,
+            data: uo.data,
+            value: uo.value,
+          });
+
           const tx = await wagmi_sendTransaction(wagmiConfig, {
             to: uo.target,
             data: uo.data,
             value: uo.value,
+            gas,
           });
 
           return {
