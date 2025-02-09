@@ -1,4 +1,3 @@
-import { type OptionalFields } from "@aa-sdk/core";
 import type { AlchemyWebSigner } from "@account-kit/signer";
 import {
   createLightAccount,
