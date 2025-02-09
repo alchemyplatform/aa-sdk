@@ -1,5 +1,5 @@
 "use client";
-
+import { type OptionalFields } from "@aa-sdk/core";
 import type {
   GetSmartAccountClientParams,
   GetSmartAccountClientResult,
@@ -21,9 +21,12 @@ export type UseSmartAccountClientProps<
   TAccount extends SupportedAccountTypes | undefined =
     | SupportedAccountTypes
     | undefined
-> = GetSmartAccountClientParams<
-  TChain,
-  TAccount extends undefined ? "ModularAccountV2" : TAccount
+> = OptionalFields<
+  GetSmartAccountClientParams<
+    TChain,
+    TAccount extends undefined ? "ModularAccountV2" : TAccount
+  >,
+  "type"
 >;
 
 export type UseSmartAccountClientResult<
@@ -33,9 +36,7 @@ export type UseSmartAccountClientResult<
 
 export function useSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes | undefined =
-    | SupportedAccountTypes
-    | undefined
+  TAccount extends SupportedAccountTypes | undefined = "ModularAccountV2"
 >(
   args: UseSmartAccountClientProps<TChain, TAccount>
 ): UseSmartAccountClientResult<
@@ -66,7 +67,7 @@ export function useSmartAccountClient<
  */
 export function useSmartAccountClient({
   accountParams,
-  type,
+  type = "ModularAccountV2",
   ...clientParams
 }: UseSmartAccountClientProps): UseSmartAccountClientResult {
   const {
