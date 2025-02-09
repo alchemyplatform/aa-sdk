@@ -76,3 +76,15 @@ const accountClient = await createModularAccountV2Client({
 ```
 
 Next, if you want to use a different `signer` with a smart account signer, check out [choosing a signer](/signer/what-is-a-signer). Otherwise, if you are ready to get on-chain, go to [send user operations](/infra/send-user-operations).
+
+## Sending a user operation
+
+Now that you have a client, you can send a user operation with Modular Account V2.
+
+```ts twoslash
+const operation = await accountClient.sendUserOperation({
+  target: "0x123..",
+  data: "0x123..",
+  value: "0n",
+});
+```
