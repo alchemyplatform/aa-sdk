@@ -24,7 +24,10 @@ export const smartContractsSidebar: SidebarItem[] = [
           {
             text: "Modular Account",
             items: [
-              { text: "Overview", link: "/smart-contracts/other-accounts/modular-account" },
+              {
+                text: "Overview",
+                link: "/smart-contracts/other-accounts/modular-account",
+              },
               {
                 text: "Getting started",
                 link: "/smart-contracts/other-accounts/modular-account/getting-started",
@@ -56,7 +59,10 @@ export const smartContractsSidebar: SidebarItem[] = [
           {
             text: "Light Account",
             items: [
-              { text: "Overview", link: "/smart-contracts/other-accounts/light-account" },
+              {
+                text: "Overview",
+                link: "/smart-contracts/other-accounts/light-account",
+              },
               {
                 text: "Getting started",
                 link: "/smart-contracts/other-accounts/light-account/getting-started",
@@ -66,8 +72,8 @@ export const smartContractsSidebar: SidebarItem[] = [
           {
             text: "Custom accounts",
             link: "../third-party/smart-contracts",
-          }    
-        ]
+          },
+        ],
       },
       {
         text: "Gas benchmarks",
