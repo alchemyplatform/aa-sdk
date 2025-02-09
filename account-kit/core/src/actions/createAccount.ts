@@ -48,10 +48,7 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
       >
     : TAccount extends "ModularAccountV2"
     ? OmitSignerTransportChain<
-        OptionalFields<
-          CreateModularAccountV2Params<Transport, AlchemyWebSigner>,
-          "mode"
-        >
+        CreateModularAccountV2Params<Transport, AlchemyWebSigner>
       >
     : never;
 
@@ -160,12 +157,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           return account;
         });
       case "ModularAccountV2":
-        const maV2Params = {
-          mode: "default",
-          ...params,
-        };
         return createModularAccountV2({
-          ...(maV2Params as AccountConfig<"ModularAccountV2">),
+          ...(params as AccountConfig<"ModularAccountV2">),
           ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),

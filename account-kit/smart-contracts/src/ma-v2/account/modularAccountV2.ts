@@ -40,7 +40,7 @@ export type CreateModularAccountV2Params<
 }) &
   (
     | {
-        mode: "default";
+        mode?: "default";
         salt?: bigint;
         factoryAddress?: Address;
         initCode?: Hex;
@@ -136,7 +136,8 @@ export async function createModularAccountV2(
           getImplementationAddress,
         };
       }
-      case "default": {
+      case "default":
+      case undefined: {
         const {
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
