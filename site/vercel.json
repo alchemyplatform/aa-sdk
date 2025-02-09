@@ -29,7 +29,7 @@
     },
     {
       "source": "/smart-accounts/accounts/guides/light-account",
-      "destination": "/smart-contracts/light-account",
+      "destination": "/smart-contracts/other-accounts/light-account",
       "statusCode": 301
     },
     {

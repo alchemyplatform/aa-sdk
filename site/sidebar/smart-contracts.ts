@@ -13,56 +13,71 @@ export const smartContractsSidebar: SidebarItem[] = [
         text: "Modular Account V2",
         items: [
           {
+            text: "Overview",
+            link: "/smart-contracts/modular-account-v2/overview",
+          },
+          {
             text: "Getting started",
             link: "/smart-contracts/modular-account-v2/getting-started",
           },
         ],
       },
       {
-        text: "Modular Account",
+        text: "Other Accounts",
         items: [
-          { text: "Overview", link: "/smart-contracts/modular-account" },
           {
-            text: "Getting started",
-            link: "/smart-contracts/modular-account/getting-started",
-          },
-          {
-            text: "Upgrade",
-            link: "/smart-contracts/modular-account/upgrading-to-modular-account",
-          },
-          {
-            text: "Multisig plugin",
+            text: "Modular Account",
             items: [
               {
-                text: "Introduction",
-                link: "/smart-contracts/modular-account/multisig-plugin",
+                text: "Overview",
+                link: "/smart-contracts/other-accounts/modular-account",
               },
               {
                 text: "Getting started",
-                link: "/smart-contracts/modular-account/multisig-plugin/getting-started",
+                link: "/smart-contracts/other-accounts/modular-account/getting-started",
               },
               {
-                text: "Technical details",
-                link: "/smart-contracts/modular-account/multisig-plugin/details",
+                text: "Upgrade",
+                link: "/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account",
+              },
+              {
+                text: "Multisig plugin",
+                items: [
+                  {
+                    text: "Introduction",
+                    link: "/smart-contracts/other-accounts/modular-account/multisig-plugin",
+                  },
+                  {
+                    text: "Getting started",
+                    link: "/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started",
+                  },
+                  {
+                    text: "Technical details",
+                    link: "/smart-contracts/other-accounts/modular-account/multisig-plugin/details",
+                  },
+                ],
+                collapsed: true,
               },
             ],
-            collapsed: true,
           },
-        ],
-      },
-      {
-        text: "Light Account",
-        items: [
-          { text: "Overview", link: "/smart-contracts/light-account" },
           {
-            text: "Getting started",
-            link: "/smart-contracts/light-account/getting-started",
+            text: "Light Account",
+            items: [
+              {
+                text: "Overview",
+                link: "/smart-contracts/other-accounts/light-account",
+              },
+              {
+                text: "Getting started",
+                link: "/smart-contracts/other-accounts/light-account/getting-started",
+              },
+            ],
+          },
+          {
+            text: "Custom accounts",
+            link: "../third-party/smart-contracts",
           },
         ],
-      },
-      {
-        text: "Custom accounts",
-        link: "../third-party/smart-contracts",
       },
       {
         text: "Gas benchmarks",
@@ -97,14 +112,17 @@ export const smartContractsSidebar: SidebarItem[] = [
       {
         text: "Session keys",
         items: [
-          { text: "Overview", link: "/smart-contracts/session-keys" },
+          {
+            text: "Overview",
+            link: "/smart-contracts/other-accounts/modular-account/session-keys",
+          },
           {
             text: "Getting started",
-            link: "/smart-contracts/session-keys/getting-started",
+            link: "/smart-contracts/other-accounts/modular-account/session-keys/getting-started",
           },
           {
             text: "Supported permissions",
-            link: "/smart-contracts/session-keys/supported-permissions",
+            link: "/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions",
           },
         ],
       },
