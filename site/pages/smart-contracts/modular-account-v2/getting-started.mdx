@@ -1,0 +1,81 @@
+---
+title: Modular Account V2 • Getting started
+description: Getting started with Modular Account V2 in Account Kit
+---
+
+# Getting started with Modular Account V2
+
+It is easy to get started with Modular Account V2! We will show you two different ways using Alchemy Infra or 3rd party infra.
+
+## Install packages
+
+**Prerequisites**
+
+- minimum Typescript version of 5
+- pin viem to 2.20.0 (`yarn add viem@2.20.0`)
+
+**Installation**
+
+First, install the `@account-kit/smart-contracts` package.
+
+:::code-group
+
+```bash [yarn]
+yarn add @account-kit/smart-contracts
+# if using alchemy infra
+yarn add @account-kit/infra
+```
+
+```bash [npm]
+yarn add @account-kit/smart-contracts
+# if using alchemy infra
+yarn add @account-kit/infra
+```
+
+:::
+
+:::tip[Address calculation]
+For Modular Account V2, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/modular-account/blob/v2.0.x/src/factory/AccountFactory.sol#L98-L104). You will get the same smart account address each time you supply the same `owner`, the signer(s) used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).
+
+If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only for signing the operation.
+:::
+
+## Creating a Modular Account V2 client
+
+```ts twoslash [modular-account-v2.ts]
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { generatePrivateKey } from "viem/accounts";
+
+const accountClient = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }), // or http("RPC_URL") for non alchemy infra
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+```
+
+Next, if you want to use a different `signer` with a smart account signer, check out [choosing a signer](/signer/what-is-a-signer). Otherwise, if you are ready to get on-chain, go to [send user operations](/infra/send-user-operations).
+
+## Sending a user operation
+
+Now that you have a client, you can send a user operation with Modular Account V2.
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { generatePrivateKey } from "viem/accounts";
+
+const accountClient = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const operation = await accountClient.sendUserOperation({
+  target: "0x123..",
+  data: "0x123..",
+  value: "0n",
+});
+```

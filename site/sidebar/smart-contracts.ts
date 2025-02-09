@@ -10,6 +10,15 @@ export const smartContractsSidebar: SidebarItem[] = [
         link: "/smart-contracts/choosing-a-smart-account",
       },
       {
+        text: "Modular Account V2",
+        items: [
+          {
+            text: "Getting started",
+            link: "/smart-contracts/modular-account-v2/getting-started",
+          },
+        ],
+      },
+      {
         text: "Modular Account",
         items: [
           { text: "Overview", link: "/smart-contracts/modular-account" },
