@@ -245,7 +245,7 @@ export function getSmartAccountClient(
           isLoadingClient: false,
         };
       default:
-        throw new Error("Unsupported account type");
+        assertNeverAccountType(account);
     }
   })();
 
@@ -299,4 +299,8 @@ function setSmartAccountClientState<
       },
     },
   }));
+}
+
+function assertNeverAccountType(_accountType: never): never {
+  throw new Error("Unsupported account type");
 }
