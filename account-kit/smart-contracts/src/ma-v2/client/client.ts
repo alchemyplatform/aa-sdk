@@ -3,7 +3,6 @@ import {
   type SmartAccountSigner,
   type SmartAccountClientConfig,
   type NotType,
-  type OptionalFields,
   createSmartAccountClient,
   default7702GasEstimator,
   default7702UserOpSigner,
@@ -36,7 +35,7 @@ export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = OptionalFields<CreateModularAccountV2Params<TTransport, TSigner>, "mode"> &
+> = CreateModularAccountV2Params<TTransport, TSigner> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
@@ -111,14 +110,9 @@ export async function createModularAccountV2Client(
     | CreateModularAccountV2ClientParams
     | CreateModularAccountV2AlchemyClientParams
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
-  const config_ = {
-    ...config,
-    mode: config.mode ?? "default",
-  };
+  const { transport, chain } = config;
 
-  const { transport, chain } = config_;
-
-  const account = await createModularAccountV2(config_);
+  const account = await createModularAccountV2(config);
 
   const middlewareToAppend =
     config.mode === "7702"
@@ -130,7 +124,7 @@ export async function createModularAccountV2Client(
 
   if (isAlchemyTransport(transport, chain)) {
     return createAlchemySmartAccountClient({
-      ...config_,
+      ...config,
       transport,
       chain,
       account,
@@ -139,7 +133,7 @@ export async function createModularAccountV2Client(
   }
 
   return createSmartAccountClient({
-    ...config_,
+    ...config,
     account,
     ...middlewareToAppend,
   });
