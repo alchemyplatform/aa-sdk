@@ -201,15 +201,27 @@ export interface UserOperationRequest_v7 {
 }
 // [!endregion UserOperationRequest_v7]
 
+export type Eip7702ExtendedFields = {
+  eip7702auth?: {
+    chainId: Hex;
+    nonce: Hex;
+    address: Address;
+    r: Hex;
+    s: Hex;
+    yParity: Hex;
+  };
+};
+
 // [!region UserOperationRequest]
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export type UserOperationRequest<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
-> = TEntryPointVersion extends "0.6.0"
+> = (TEntryPointVersion extends "0.6.0"
   ? UserOperationRequest_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationRequest_v7
-  : never;
+  : never) &
+  Eip7702ExtendedFields;
 
 // [!endregion UserOperationRequest]
 
@@ -347,9 +359,10 @@ export interface UserOperationStruct_v7 {
 // [!region UserOperationStruct]
 export type UserOperationStruct<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
-> = TEntryPointVersion extends "0.6.0"
+> = (TEntryPointVersion extends "0.6.0"
   ? UserOperationStruct_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationStruct_v7
-  : never;
+  : never) &
+  Eip7702ExtendedFields;
 // [!endregion UserOperationStruct]
