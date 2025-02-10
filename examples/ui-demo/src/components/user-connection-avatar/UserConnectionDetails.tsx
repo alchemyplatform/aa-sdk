@@ -3,11 +3,11 @@ import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
 import { UserAddressLink } from "./UserAddressLink";
-import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
 import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { Hex } from "viem";
+import { ODYSSEY_EXPLORER_URL } from "@/lib/constants";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
@@ -27,7 +27,7 @@ export function UserConnectionDetails({
       walletType,
     })
   );
-  const scaAccount = useAccount({ type: "LightAccount" });
+  const scaAccount = useAccount({ type: "ModularAccountV2" });
 
   const isEOAUser = user?.type === "eoa";
 

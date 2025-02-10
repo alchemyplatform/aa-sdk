@@ -1,30 +1,42 @@
-import Image from "next/image";
 import { LoadingIcon } from "@/components/icons/loading";
+import { UseMintReturn } from "@/hooks/useMintDefault";
+import { nftContractAddress, nftContractAddressOdyssey } from "@/utils/config";
+import Image from "next/image";
+import { useMintDefault } from "@/hooks/useMintDefault";
 import { Button } from "./Button";
 import { MintStages } from "./MintStages";
+import { useMint7702 } from "@/hooks/useMint7702";
 
 type NFTLoadingState = "initial" | "loading" | "success";
+
 export type MintStatus = {
   signing: NFTLoadingState;
   gas: NFTLoadingState;
   batch: NFTLoadingState;
 };
 
-export const MintCard7702 = ({
+export const MintCardDefault = () => {
+  const mint = useMintDefault({
+    contractAddress: nftContractAddress,
+  });
+  return <MintCardInner {...mint} />;
+};
+
+export const MintCard7702 = () => {
+  const mint = useMint7702({
+    contractAddress: nftContractAddressOdyssey,
+  });
+  return <MintCardInner {...mint} />;
+};
+
+const MintCardInner = ({
   isLoading,
-  isDisabled,
   status,
-  nftTransfered,
+  mintStarted,
   handleCollectNFT,
   uri,
-}: {
-  isLoading: boolean;
-  isDisabled?: boolean;
-  status: MintStatus;
-  nftTransfered: boolean;
-  handleCollectNFT: () => void;
-  uri?: string;
-}) => {
+  transactionUrl,
+}: UseMintReturn) => {
   return (
     <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[478px] flex flex-col shadow-smallCard">
       <div className="flex xl:flex-col gap-4">
@@ -48,7 +60,7 @@ export const MintCard7702 = ({
               Gasless transactions
             </h3>
           </div>
-          {!nftTransfered ? (
+          {!mintStarted ? (
             <>
               <p className="text-fg-primary text-sm mb-3">
                 Transact with one click using gas sponsorship and background
@@ -76,16 +88,16 @@ export const MintCard7702 = ({
               </div>
             </>
           ) : (
-            <MintStages status={status} />
+            <MintStages status={status} transactionUrl={transactionUrl} />
           )}
         </div>
       </div>
       <Button
         className="w-full mt-auto"
         onClick={handleCollectNFT}
-        disabled={isLoading || isDisabled}
+        disabled={isLoading}
       >
-        {!nftTransfered
+        {!mintStarted
           ? "Collect NFT"
           : isLoading
           ? "Collecting NFT..."

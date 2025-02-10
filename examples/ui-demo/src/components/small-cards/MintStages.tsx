@@ -1,9 +1,16 @@
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
-import { MintStatus } from "./MintCard7702";
 import { loadingState } from "./Transactions";
+import { ExternalLinkIcon } from "@/components/icons/external-link";
+import { MintStatus } from "../small-cards/MintCard";
 
-export const MintStages = ({ status }: { status: MintStatus }) => {
+export const MintStages = ({
+  status,
+  transactionUrl,
+}: {
+  status: MintStatus;
+  transactionUrl?: string;
+}) => {
   return (
     <div>
       <Stage
@@ -16,7 +23,16 @@ export const MintStages = ({ status }: { status: MintStatus }) => {
       />
       <Stage
         icon={status.batch}
-        description="Deploying your smart account..."
+        description={
+          <span className="flex gap-3 justify-between">
+            Deploying your smart account...
+            {status.batch === "success" && transactionUrl && (
+              <a href={transactionUrl} target="_blank" rel="noreferrer">
+                <ExternalLinkIcon className="stroke-fg-secondary w-4 h-4" />
+              </a>
+            )}
+          </span>
+        }
       />
     </div>
   );
@@ -34,7 +50,7 @@ const Stage = ({
   return (
     <div className={`flex mb-4 items-center ${className}`}>
       <div className="w-4 h-4 mr-2">{getMintIcon(icon)}</div>
-      <p className="text-sm text-fg-secondary">{description}</p>
+      <p className="text-sm text-fg-secondary w-full">{description}</p>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { LocalAccountSigner } from "@aa-sdk/core";
 import type { AlchemyWebSigner } from "@account-kit/signer";
 import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
@@ -6,13 +5,13 @@ import {
   createModularAccountV2Client,
   ModularAccountV2Client,
 } from "@account-kit/smart-contracts";
+import { alchemyFeeEstimator, AlchemyTransport } from "@account-kit/infra";
 import {
-  type InstallValidationActions,
   installValidationActions,
+  InstallValidationActions,
 } from "@account-kit/smart-contracts/experimental";
-import { odyssey, splitOdysseyTransport } from "./transportSetup";
-import { alchemyFeeEstimator } from "@account-kit/infra";
-import { type Hex, type Address, PrivateKeyAccount } from "viem";
+import { Chain, Hex, Address, PrivateKeyAccount } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
 
 type Client = ModularAccountV2Client<
@@ -22,15 +21,23 @@ type Client = ModularAccountV2Client<
     AlchemyWebSigner | LocalAccountSigner<PrivateKeyAccount>
   >;
 
-export const useSma7702Client = (
-  localKeyOverride?:
-    | {
-        readonly key: Hex;
-        readonly entityId: number;
-        readonly accountAddress?: Address;
-      }
-    | undefined
-): {
+// Hook that creates an MAv2 client that can be used for things that
+// @account-kit/react doesn't yet support, such as session keys.
+export const useMAv2Client = ({
+  mode,
+  chain,
+  transport,
+  localKeyOverride,
+}: {
+  mode: "7702" | "default";
+  chain: Chain;
+  transport: AlchemyTransport;
+  localKeyOverride?: {
+    readonly key: Hex;
+    readonly entityId: number;
+    readonly accountAddress?: Address;
+  };
+}): {
   client: Client | undefined;
   isLoadingClient: boolean;
   isError: boolean;
@@ -61,22 +68,20 @@ export const useSma7702Client = (
       try {
         const _client = (
           await createModularAccountV2Client({
-            mode: "7702",
-            chain: odyssey,
-            transport: splitOdysseyTransport,
+            mode,
+            chain,
+            transport,
             accountAddress,
-            signer:
-              key != null
-                ? new LocalAccountSigner(privateKeyToAccount(key))
-                : signer,
-            signerEntity:
-              entityId != null
-                ? {
-                    isGlobalValidation: false,
-                    entityId,
-                  }
-                : undefined,
-            feeEstimator: alchemyFeeEstimator(splitOdysseyTransport),
+            signer: key
+              ? new LocalAccountSigner(privateKeyToAccount(key))
+              : signer,
+            signerEntity: entityId
+              ? {
+                  isGlobalValidation: false,
+                  entityId,
+                }
+              : undefined,
+            feeEstimator: alchemyFeeEstimator(transport),
             policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
           })
         ).extend(installValidationActions);
@@ -106,7 +111,16 @@ export const useSma7702Client = (
     return () => {
       isMounted = false;
     };
-  }, [signer, key, entityId, accountAddress, isConnected]);
+  }, [
+    accountAddress,
+    chain,
+    entityId,
+    isConnected,
+    key,
+    mode,
+    signer,
+    transport,
+  ]);
 
   return { client, isLoadingClient, isError };
 };

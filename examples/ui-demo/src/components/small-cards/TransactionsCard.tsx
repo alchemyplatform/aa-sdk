@@ -2,23 +2,29 @@ import { Key } from "@/components/icons/key";
 import { Button } from "./Button";
 import { LoadingIcon } from "@/components/icons/loading";
 import { Transactions } from "./Transactions";
+import { useMemo } from "react";
 import {
-  TransactionType,
-  CardStatus,
-} from "../../hooks/7702/useRecurringTransactions";
+  UseRecurringTransactionReturn,
+  useRecurringTransactions,
+} from "@/hooks/useRecurringTransactions";
 
-export const TransactionsCard = ({
+export const TransactionsCardDefault = () => {
+  const recurringTxns = useRecurringTransactions({ mode: "default" });
+  return <TransactionsCardInner {...recurringTxns} />;
+};
+
+export const TransactionsCard7702 = () => {
+  const recurringTxns = useRecurringTransactions({ mode: "7702" });
+  return <TransactionsCardInner {...recurringTxns} />;
+};
+
+const TransactionsCardInner = ({
   cardStatus,
-  isDisabled,
+  isLoadingClient,
   transactions,
   handleTransactions,
-}: {
-  isDisabled: boolean;
-  cardStatus: CardStatus;
-  transactions: TransactionType[];
-  handleTransactions: () => void;
-}) => {
-  const getButtonText = () => {
+}: UseRecurringTransactionReturn) => {
+  const buttonText = useMemo(() => {
     switch (cardStatus) {
       case "initial":
         return "Create session key";
@@ -29,7 +35,7 @@ export const TransactionsCard = ({
       case "done":
         return "Restart session key";
     }
-  };
+  }, [cardStatus]);
 
   return (
     <div className="bg-bg-surface-default rounded-lg p-4 w-full xl:p-6 xl:w-[326px] xl:h-[478px] flex flex-col shadow-smallCard mb-5 xl:mb-0">
@@ -66,10 +72,10 @@ export const TransactionsCard = ({
         className="mt-auto"
         onClick={handleTransactions}
         disabled={
-          isDisabled || cardStatus === "setup" || cardStatus === "active"
+          isLoadingClient || cardStatus === "setup" || cardStatus === "active"
         }
       >
-        {getButtonText()}
+        {buttonText}
       </Button>
     </div>
   );

@@ -1,9 +1,5 @@
 import { useState } from "react";
 import type { BatchUserOperationCallData } from "@aa-sdk/core";
-import { useSma7702Client } from "./useSma7702Client";
-import { SWAP_VENUE_ADDRESS, DEMO_USDC_ADDRESS } from "./dca/constants";
-import { swapAbi } from "./dca/abi/swap";
-import { erc20MintableAbi } from "./dca/abi/erc20Mintable";
 import {
   encodeFunctionData,
   toFunctionSelector,
@@ -11,10 +7,6 @@ import {
   parseEther,
   getAbiItem,
 } from "viem";
-import {
-  ODYSSEY_EXPLORER_URL,
-  SESSION_KEY_VALIDITY_TIME_SECONDS,
-} from "./constants";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
   AllowlistModule,
@@ -24,9 +16,14 @@ import {
   semiModularAccountBytecodeAbi,
   TimeRangeModule,
 } from "@account-kit/smart-contracts/experimental";
-import { odyssey } from "./transportSetup";
-import { genEntityId } from "./genEntityId";
 import { SingleSignerValidationModule } from "@account-kit/smart-contracts/experimental";
+import { genEntityId } from "@/lib/genEntityId";
+import { useMAv2Client } from "./useMAv2Client";
+import { odyssey, splitOdysseyTransport } from "@/lib/transportSetup";
+import { DEMO_USDC_ADDRESS, SWAP_VENUE_ADDRESS } from "./7702/dca/constants";
+import { swapAbi } from "./7702/dca/abi/swap";
+import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
+import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "@/lib/constants";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -34,28 +31,36 @@ export type TransactionStages = "initial" | "initiating" | "next" | "complete";
 export type TransactionType = {
   state: TransactionStages;
   buyAmountUsdc: number;
-  externalLink: string;
+  externalLink?: string;
 };
 
-const initialTransactions: TransactionType[] = [
+export const initialTransactions: TransactionType[] = [
   {
     state: "initiating",
     buyAmountUsdc: 4000,
-    externalLink: "www.alchemy.com",
   },
   {
     state: "initial",
     buyAmountUsdc: 3500,
-    externalLink: "www.alchemy.com",
   },
   {
     state: "initial",
     buyAmountUsdc: 4200,
-    externalLink: "www.alchemy.com",
   },
 ];
 
-export const useRecurringTransactions = () => {
+export interface UseRecurringTransactionReturn {
+  isLoadingClient: boolean;
+  cardStatus: CardStatus;
+  transactions: TransactionType[];
+  handleTransactions: () => void;
+}
+
+export const useRecurringTransactions = ({
+  mode,
+}: {
+  mode: "default" | "7702";
+}): UseRecurringTransactionReturn => {
   const [transactions, setTransactions] =
     useState<TransactionType[]>(initialTransactions);
 
@@ -65,12 +70,21 @@ export const useRecurringTransactions = () => {
   const [sessionKeyEntityId] = useState<number>(() => genEntityId());
   const [sessionKeyAdded, setSessionKeyAdded] = useState<boolean>(false);
 
-  const { client, isLoadingClient } = useSma7702Client();
+  const { client, isLoadingClient } = useMAv2Client({
+    mode,
+    chain: odyssey,
+    transport: splitOdysseyTransport,
+  });
 
-  const { client: sessionKeyClient } = useSma7702Client({
-    key: localSessionKey,
-    entityId: sessionKeyEntityId,
-    accountAddress: client?.getAddress(),
+  const { client: sessionKeyClient } = useMAv2Client({
+    mode,
+    chain: odyssey,
+    transport: splitOdysseyTransport,
+    localKeyOverride: {
+      key: localSessionKey,
+      entityId: sessionKeyEntityId,
+      accountAddress: client?.getAddress(),
+    },
   });
 
   const handleTransaction = async (transactionIndex: number) => {
@@ -116,12 +130,13 @@ export const useRecurringTransactions = () => {
     setTransactions((prev) => {
       const newState = [...prev];
       newState[transactionIndex].state = "complete";
-      newState[
-        transactionIndex
-      ].externalLink = `${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`;
+      newState[transactionIndex].externalLink = odyssey.blockExplorers
+        ? `${odyssey.blockExplorers?.default.url}/tx/${txnHash}`
+        : undefined;
       return newState;
     });
   };
+
   // Mock method to fire transactions for 7702
   const handleTransactions = async () => {
     if (!client) {
@@ -134,17 +149,14 @@ export const useRecurringTransactions = () => {
       {
         state: "initiating",
         buyAmountUsdc: 4000,
-        externalLink: "www.alchemy.com",
       },
       {
         state: "initial",
         buyAmountUsdc: 3500,
-        externalLink: "www.alchemy.com",
       },
       {
         state: "initial",
         buyAmountUsdc: 4200,
-        externalLink: "www.alchemy.com",
       },
     ]);
     setCardStatus("setup");

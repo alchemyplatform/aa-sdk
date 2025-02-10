@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  AccountKitNftMinterABI,
-  nftContractAddressOdyssey,
-} from "@/utils/config";
-import { useCallback, useState } from "react";
+import { AccountKitNftMinterABI } from "@/utils/config";
+import { useCallback, useState, useMemo } from "react";
 import { useToast } from "@/hooks/useToast";
-import { encodeFunctionData, Hash } from "viem";
-import { useSma7702Client } from "./useSma7702Client";
-import { MintStatus } from "@/components/7702/MintCard7702";
+import { Address, encodeFunctionData, Hash } from "viem";
+import { MintStatus } from "@/components/small-cards/MintCard";
+import { UseMintReturn } from "./useMintDefault";
+import { useMAv2Client } from "./useMAv2Client";
+import { odyssey, splitOdysseyTransport } from "@/lib/transportSetup";
 
 const initialValuePropState = {
   signing: "initial",
@@ -15,20 +14,27 @@ const initialValuePropState = {
   batch: "initial",
 } satisfies MintStatus;
 
-export const useMint = () => {
-  const { client, isLoadingClient } = useSma7702Client();
+export const useMint7702 = (props: {
+  contractAddress: Address;
+}): UseMintReturn => {
+  const { client, isLoadingClient } = useMAv2Client({
+    mode: "7702",
+    chain: odyssey,
+    transport: splitOdysseyTransport,
+  });
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
-  const [nftTransfered, setNftTransfered] = useState(false);
+  const [mintStarted, setMintStarted] = useState(false);
+  const [txnHash, setTxnHash] = useState<Hash | undefined>(undefined);
   const isLoading =
     Object.values(status).some((x) => x === "loading") || isLoadingClient;
   const { setToast } = useToast();
 
   const { data: uri } = useQuery({
-    queryKey: ["contractURI", nftContractAddressOdyssey],
+    queryKey: ["contractURI", props.contractAddress],
     queryFn: async () => {
       const uri = await client?.readContract({
-        address: nftContractAddressOdyssey,
+        address: props.contractAddress,
         abi: AccountKitNftMinterABI,
         functionName: "baseURI",
       });
@@ -44,6 +50,7 @@ export const useMint = () => {
         gas: "success",
         signing: "success",
       }));
+      setTxnHash(txnHash);
 
       setToast({
         type: "success",
@@ -65,7 +72,7 @@ export const useMint = () => {
     const handleError = (error: Error) => {
       console.error(error);
       setStatus(initialValuePropState);
-      setNftTransfered(false);
+      setMintStarted(false);
       setToast({
         type: "error",
         text: "There was a problem with that action",
@@ -77,7 +84,9 @@ export const useMint = () => {
       console.error("no client");
       return;
     }
-    setNftTransfered(true);
+
+    setTxnHash(undefined);
+    setMintStarted(true);
 
     setStatus({
       signing: "loading",
@@ -94,7 +103,7 @@ export const useMint = () => {
 
     const uoHash = await client.sendUserOperation({
       uo: {
-        target: nftContractAddressOdyssey,
+        target: props.contractAddress,
         data: encodeFunctionData({
           abi: AccountKitNftMinterABI,
           functionName: "mintTo",
@@ -112,13 +121,21 @@ export const useMint = () => {
     if (txnHash) {
       handleSuccess(txnHash);
     }
-  }, [client, setToast]);
+  }, [client, props.contractAddress, setToast]);
+
+  const transactionUrl = useMemo(() => {
+    if (!client?.chain?.blockExplorers || !txnHash) {
+      return undefined;
+    }
+    return `${client.chain.blockExplorers.default.url}/tx/${txnHash}`;
+  }, [client?.chain.blockExplorers, txnHash]);
 
   return {
     isLoading,
     status,
-    nftTransfered,
+    mintStarted,
     handleCollectNFT,
     uri,
+    transactionUrl,
   };
 };
