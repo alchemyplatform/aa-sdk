@@ -151,9 +151,11 @@ export type ToSmartContractAccountParams<
   getDummySignature: () => Hex | Promise<Hex>;
   encodeExecute: (tx: AccountOp) => Promise<Hex>;
   encodeBatchExecute?: (txs: AccountOp[]) => Promise<Hex>;
+  getNonce?: (nonceKey?: bigint) => Promise<bigint>;
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
+  getImplementationAddress?: () => Promise<NullAddress | Address>;
 } & Omit<CustomSource, "signTransaction" | "address">;
 // [!endregion ToSmartContractAccountParams]
 
@@ -260,6 +262,7 @@ export async function toSmartContractAccount<
   source,
   accountAddress,
   getAccountInitCode,
+  getNonce,
   signMessage,
   signTypedData,
   encodeBatchExecute,
@@ -339,11 +342,13 @@ export async function toSmartContractAccount(
     getAccountInitCode,
     signMessage,
     signTypedData,
-    encodeBatchExecute,
     encodeExecute,
+    encodeBatchExecute,
+    getNonce,
     getDummySignature,
     signUserOperationHash,
     encodeUpgradeToAndCall,
+    getImplementationAddress,
   } = params;
 
   const client = createBundlerClient({
@@ -410,16 +415,18 @@ export async function toSmartContractAccount(
     return initCode === "0x";
   };
 
-  const getNonce = async (nonceKey = 0n): Promise<bigint> => {
-    if (!(await isAccountDeployed())) {
-      return 0n;
-    }
+  const getNonce_ =
+    getNonce ??
+    (async (nonceKey = 0n): Promise<bigint> => {
+      if (!(await isAccountDeployed())) {
+        return 0n;
+      }
 
-    return entryPointContract.read.getNonce([
-      accountAddress_,
-      nonceKey,
-    ]) as Promise<bigint>;
-  };
+      return entryPointContract.read.getNonce([
+        accountAddress_,
+        nonceKey,
+      ]) as Promise<bigint>;
+    });
 
   const account = toAccount({
     address: accountAddress_,
@@ -468,24 +475,26 @@ export async function toSmartContractAccount(
     return create6492Signature(isDeployed, signature);
   };
 
-  const getImplementationAddress = async (): Promise<NullAddress | Address> => {
-    const storage = await client.getStorageAt({
-      address: account.address,
-      // This is the default slot for the implementation address for Proxies
-      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+  const getImplementationAddress_ =
+    getImplementationAddress ??
+    (async () => {
+      const storage = await client.getStorageAt({
+        address: account.address,
+        // This is the default slot for the implementation address for Proxies
+        slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+      });
+
+      if (storage == null) {
+        throw new FailedToGetStorageSlotError(
+          "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+          "Proxy Implementation Address"
+        );
+      }
+
+      // The storage slot contains a full bytes32, but we want only the last 20 bytes.
+      // So, slice off the leading `0x` and the first 12 bytes (24 characters), leaving the last 20 bytes, then prefix with `0x`.
+      return `0x${storage.slice(26)}`;
     });
-
-    if (storage == null) {
-      throw new FailedToGetStorageSlotError(
-        "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-        "Proxy Implementation Address"
-      );
-    }
-
-    // The storage slot contains a full bytes32, but we want only the last 20 bytes.
-    // So, slice off the leading `0x` and the first 12 bytes (24 characters), leaving the last 20 bytes, then prefix with `0x`.
-    return `0x${storage.slice(26)}`;
-  };
 
   if (entryPoint.version !== "0.6.0" && entryPoint.version !== "0.7.0") {
     throw new InvalidEntryPointError(chain, entryPoint.version);
@@ -510,9 +519,9 @@ export async function toSmartContractAccount(
     encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
     getEntryPoint: () => entryPoint,
     isAccountDeployed,
-    getAccountNonce: getNonce,
+    getAccountNonce: getNonce_,
     signMessageWith6492,
     signTypedDataWith6492,
-    getImplementationAddress,
+    getImplementationAddress: getImplementationAddress_,
   };
 }

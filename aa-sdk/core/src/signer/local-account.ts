@@ -14,6 +14,7 @@ import {
   privateKeyToAccount,
 } from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
+import type { Authorization } from "viem/experimental";
 
 /**
  * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
@@ -94,6 +95,33 @@ export class LocalAccountSigner<
   ): Promise<Hex> => {
     return this.inner.signTypedData(params);
   };
+
+  /**
+   * Signs an unsigned authorization using the provided private key account.
+   *
+   * @example
+   * ```ts twoslash
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { generatePrivateKey } from "viem/accounts";
+   *
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+   * const signedAuthorization = await signer.signAuthorization({
+   *   contractAddress: "0x1234123412341234123412341234123412341234",
+   *   chainId: 1,
+   *   nonce: 3,
+   * });
+   * ```
+   *
+   * @param {Authorization<number, false>} unsignedAuthorization - The unsigned authorization to be signed.
+   * @returns {Promise<Authorization<number, true>>} A promise that resolves to the signed authorization.
+   */
+
+  signAuthorization(
+    this: LocalAccountSigner<PrivateKeyAccount>,
+    unsignedAuthorization: Authorization<number, false>
+  ): Promise<Authorization<number, true>> {
+    return this.inner.experimental_signAuthorization(unsignedAuthorization);
+  }
 
   /**
    * Returns the address of the inner object in a specific hexadecimal format.
