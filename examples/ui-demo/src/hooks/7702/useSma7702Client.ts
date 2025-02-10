@@ -61,7 +61,7 @@ export const useSma7702Client = (
       try {
         const _client = (
           await createModularAccountV2Client({
-            type: "7702",
+            mode: "7702",
             chain: odyssey,
             transport: splitOdysseyTransport,
             accountAddress,
