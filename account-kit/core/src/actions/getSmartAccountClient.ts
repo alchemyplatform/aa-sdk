@@ -113,6 +113,11 @@ export function getSmartAccountClient(
   const clientState =
     config.store.getState().smartAccountClients[connection.chain.id]?.[type];
 
+  // TODO(jh): remove
+  console.log("getSmartAccountClient");
+  console.log(clientState);
+  // console.log({ params, config, account, status, error, clientState });
+
   // TODO(jh): This seems to work fine when on a single chain, but
   // it gets really glitchy on multiple chains. Also it seems like
   // the store update causes zustand to re-render using the old
@@ -129,46 +134,73 @@ export function getSmartAccountClient(
       config.store.getState().accountConfigs[connection.chain.id]?.[type]
         ?.mode ?? "default";
 
+    console.log({ wantMode, haveMode });
     if (wantMode !== haveMode) {
+      console.log("destorying accounts!"); // TODO(jh): remove
+      // TODO(jh): tbh this might be easier, it just has a weird flash when switching mode...
+      const {
+        accounts: initialAccounts,
+        accountConfigs: initialAccountConfigs,
+      } = config.store.getInitialState();
       config.store.setState((state) => ({
         ...state,
-        // TODO(jh): May not need to do this?
-        // smartAccountClients: {
-        //   ...state.smartAccountClients,
-        //   [connection.chain.id]: {
-        //     ...state.smartAccountClients[connection.chain.id],
-        //     [type]: {
-        //       client: undefined,
-        //       address: undefined,
-        //       isLoadingClient: true,
-        //     },
-        //   },
-        // },
-        // This must be done so we can be sure to use the correct address for the mode.
-        accounts: !state.accounts
-          ? undefined
-          : {
-              ...state.accounts,
-              [connection.chain.id]: {
-                ...state.accounts[connection.chain.id],
-                ModularAccountV2: {
-                  status: "DISCONNECTED",
-                  account: undefined,
+        accounts: initialAccounts,
+        accountConfigs: Object.fromEntries(
+          Object.entries(initialAccountConfigs).map(([chain, configs]) => [
+            chain,
+            Object.fromEntries(
+              Object.entries(configs).map(([t, c]) => [
+                t,
+                {
+                  ...c,
+                  ...(t === "ModularAccountV2"
+                    ? { ...c, mode: wantMode }
+                    : { ...c }),
                 },
-              },
-            },
-        // This must be done to avoid getting stuck in a loop.
-        accountConfigs: {
-          ...state.accountConfigs,
-          [connection.chain.id]: {
-            ...state.accountConfigs[connection.chain.id],
-            [type]:
-              type === "ModularAccountV2"
-                ? { mode: wantMode }
-                : state.accountConfigs[connection.chain.id]?.[type],
-          },
-        },
+              ])
+            ),
+          ])
+        ),
       }));
+      // config.store.setState((state) => ({
+      //   ...state,
+      //   // TODO(jh): May not need to do this?
+      //   // smartAccountClients: {
+      //   //   ...state.smartAccountClients,
+      //   //   [connection.chain.id]: {
+      //   //     ...state.smartAccountClients[connection.chain.id],
+      //   //     [type]: {
+      //   //       client: undefined,
+      //   //       address: undefined,
+      //   //       isLoadingClient: true,
+      //   //     },
+      //   //   },
+      //   // },
+      //   // This must be done so we can be sure to use the correct address for the mode.
+      //   accounts: !state.accounts
+      //     ? undefined
+      //     : {
+      //         ...state.accounts,
+      //         [connection.chain.id]: {
+      //           ...state.accounts[connection.chain.id],
+      //           ModularAccountV2: {
+      //             status: "DISCONNECTED",
+      //             account: undefined,
+      //           },
+      //         },
+      //       },
+      //   // This must be done to avoid getting stuck in a loop.
+      //   accountConfigs: {
+      //     ...state.accountConfigs,
+      //     [connection.chain.id]: {
+      //       ...state.accountConfigs[connection.chain.id],
+      //       [type]:
+      //         type === "ModularAccountV2"
+      //           ? { mode: wantMode }
+      //           : state.accountConfigs[connection.chain.id]?.[type],
+      //     },
+      //   },
+      // }));
       return getSmartAccountClientState({
         config,
         chainId: connection.chain.id,
@@ -288,6 +320,9 @@ export function getSmartAccountClient(
           params.accountParams &&
           "mode" in params.accountParams &&
           params.accountParams.mode === "7702";
+        console.log(
+          `creating mav2 account client - ${is7702 ? "7702" : "default"}`
+        );
         return {
           client: createAlchemySmartAccountClient({
             transport,

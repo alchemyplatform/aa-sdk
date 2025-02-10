@@ -13,16 +13,14 @@ export type MintStatus = {
 };
 
 export const MintCardDefault = () => {
-  console.log("*MintCardDefault");
   const mint = useMint({
-    contractAddress: nftContractAddressOdyssey, // TODO(jh): Change to nftContractAddress
+    contractAddress: nftContractAddress,
     mode: "default",
   });
   return <MintCardInner {...mint} />;
 };
 
 export const MintCard7702 = () => {
-  console.log("*MintCard7702");
   const mint = useMint({
     contractAddress: nftContractAddressOdyssey,
     mode: "7702",

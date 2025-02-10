@@ -34,6 +34,7 @@ export const useMint = (props: {
       mode: props.mode,
     },
   });
+  console.log({ isLoadingClient }); // TODO(jh): remove
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);

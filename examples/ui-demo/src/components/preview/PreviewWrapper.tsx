@@ -87,10 +87,8 @@ const RenderContent = () => {
 const SmallCards = () => {
   const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
 
-  // TODO(jh): revert
-  // const chain =
-  //   walletType === WalletTypes.smart ? arbitrumSepolia : odysseyTestnet;
-  const chain = odysseyTestnet;
+  const chain =
+    walletType === WalletTypes.smart ? arbitrumSepolia : odysseyTestnet;
 
   const { chain: activeChain, setChain, isSettingChain } = useChain();
 
