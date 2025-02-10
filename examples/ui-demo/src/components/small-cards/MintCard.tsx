@@ -2,13 +2,8 @@ import Image from "next/image";
 import { LoadingIcon } from "@/components/icons/loading";
 import { Button } from "./Button";
 import { MintStages } from "./MintStages";
-import { useConfigStore } from "@/state";
-import { useMint } from "@/hooks/useMint";
-import { WalletTypes } from "@/app/config";
+import { useMint, UseMintReturn } from "@/hooks/useMint";
 import { nftContractAddress, nftContractAddressOdyssey } from "@/utils/config";
-import { arbitrumSepolia } from "@account-kit/infra";
-import { odysseyTestnet } from "@/hooks/7702/transportSetup";
-import { Address, Chain } from "viem";
 
 type NFTLoadingState = "initial" | "loading" | "success";
 export type MintStatus = {
@@ -17,35 +12,32 @@ export type MintStatus = {
   batch: NFTLoadingState;
 };
 
-const mintConfig: Record<
-  WalletTypes,
-  { mode: "7702" | "default"; contractAddress: Address; chain: Chain }
-> = {
-  [WalletTypes.smart]: {
-    contractAddress: nftContractAddress,
-    chain: arbitrumSepolia,
+export const MintCardDefault = () => {
+  console.log("*MintCardDefault");
+  const mint = useMint({
+    contractAddress: nftContractAddressOdyssey, // TODO(jh): Change to nftContractAddress
     mode: "default",
-  },
-  [WalletTypes.hybrid7702]: {
+  });
+  return <MintCardInner {...mint} />;
+};
+
+export const MintCard7702 = () => {
+  console.log("*MintCard7702");
+  const mint = useMint({
     contractAddress: nftContractAddressOdyssey,
-    chain: odysseyTestnet,
-    mode: "7702", 
-  },
-}; 
+    mode: "7702",
+  });
+  return <MintCardInner {...mint} />;
+};
 
-export const MintCard = () => {
-  // should we reset state of mint card when switching wallet type?
-  // feels a little weird to be able to switch mid-txn...
-  const { walletType } = useConfigStore();
-  const {
-    isLoading,
-    status,
-    mintStarted,
-    handleCollectNFT,
-    uri,
-    transactionUrl,
-  } = useMint(mintConfig[walletType]);
-
+const MintCardInner = ({
+  isLoading,
+  status,
+  mintStarted,
+  handleCollectNFT,
+  uri,
+  transactionUrl,
+}: UseMintReturn) => {
   return (
     <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[478px] flex flex-col shadow-smallCard">
       <div className="flex xl:flex-col gap-4">
@@ -109,8 +101,8 @@ export const MintCard = () => {
         {!mintStarted
           ? "Collect NFT"
           : isLoading
-            ? "Collecting NFT..."
-            : "Re-collect NFT"}
+          ? "Collecting NFT..."
+          : "Re-collect NFT"}
       </Button>
     </div>
   );

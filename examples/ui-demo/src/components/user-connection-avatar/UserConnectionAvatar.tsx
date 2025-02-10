@@ -19,14 +19,14 @@ const UserConnectionAvatar = ({
   showDeploymentStatus = true,
   deploymentStatus,
 }: UserConnectionAvatarProps) => {
-  const { theme, primaryColor } = useConfigStore(
-    ({ ui: { theme, primaryColor } }) => ({
+  const { theme, primaryColor, walletType } = useConfigStore(
+    ({ ui: { theme, primaryColor }, walletType }) => ({
       theme,
       primaryColor,
+      walletType,
     })
   );
   const user = useUser();
-  const { walletType } = useConfigStore();
   const { address: SCAUserAddress } = useAccount({
     type: "ModularAccountV2",
     accountParams: {

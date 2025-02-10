@@ -120,8 +120,9 @@ export const useRecurringTransactions = () => {
     setTransactions((prev) => {
       const newState = [...prev];
       newState[transactionIndex].state = "complete";
-      newState[transactionIndex].externalLink =
-        `${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`;
+      newState[
+        transactionIndex
+      ].externalLink = `${ODYSSEY_EXPLORER_URL}/tx/${txnHash}`;
       return newState;
     });
   };

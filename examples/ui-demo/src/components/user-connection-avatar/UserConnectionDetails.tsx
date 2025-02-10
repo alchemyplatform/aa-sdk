@@ -13,6 +13,7 @@ type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
   delegationAddress?: Hex;
 };
+
 export function UserConnectionDetails({
   deploymentStatus,
   delegationAddress,
@@ -27,7 +28,7 @@ export function UserConnectionDetails({
       walletType,
     })
   );
-  const scaAccount = useAccount({
+  const account = useAccount({
     type: "ModularAccountV2",
     accountParams: {
       mode: walletType === WalletTypes.hybrid7702 ? "7702" : "default",
@@ -85,13 +86,7 @@ export function UserConnectionDetails({
         <span className="text-md md:text-sm text-fg-secondary">
           {walletType === WalletTypes.smart ? "Smart account" : "Address"}
         </span>
-        <UserAddressLink
-          address={
-            walletType === WalletTypes.smart
-              ? (scaAccount.address ?? "")
-              : (signerAddress ?? "")
-          }
-        />
+        <UserAddressLink address={account.address ?? ""} />
       </div>
 
       {walletType === WalletTypes.smart ? (

@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useToast } from "./useToast";
 import { MintStatus } from "@/components/small-cards/MintCard";
 import {
   useSmartAccountClient,
   useSendUserOperation,
-  useChain,
 } from "@account-kit/react";
-import { Address, Chain, encodeFunctionData, Hash } from "viem";
+import { Address, encodeFunctionData, Hash } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
 
 const initialValuePropState = {
@@ -16,41 +15,31 @@ const initialValuePropState = {
   batch: "initial",
 } satisfies MintStatus;
 
+export interface UseMintReturn {
+  isLoading: boolean;
+  status: MintStatus;
+  mintStarted: boolean;
+  handleCollectNFT: () => unknown;
+  uri?: string;
+  transactionUrl?: string;
+}
+
 export const useMint = (props: {
   mode: "default" | "7702";
   contractAddress: Address;
-  chain: Chain;
-}) => {
+}): UseMintReturn => {
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
     accountParams: {
       mode: props.mode,
     },
   });
-  const { chain, setChain, isSettingChain } = useChain();
-
-  useEffect(() => {
-    console.log({ have: chain.name, want: props.chain.name });
-    if (isSettingChain || chain.name === props.chain.name) return;
-    console.log("setting");
-    setChain({ chain: props.chain });
-  }, [chain.name, isSettingChain, props.chain, props.chain.id, setChain]);
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);
   const isLoading =
-    Object.values(status).some((x) => x === "loading") ||
-    isLoadingClient ||
-    isSettingChain ||
-    chain.name !== props.chain.name;
+    Object.values(status).some((x) => x === "loading") || isLoadingClient;
   const { setToast } = useToast();
-
-  console.log({
-    mode: props.mode,
-    chain: chain.name,
-    isLoadingClient,
-    address: client?.getAddress(),
-  });
 
   const handleSuccess = (txnHash: Hash) => {
     setStatus(() => ({
@@ -114,7 +103,7 @@ export const useMint = (props: {
         functionName: "baseURI",
       });
     },
-    enabled: !!client && !!client?.readContract && props.chain.id === chain.id,
+    enabled: !!client && !!client?.readContract,
   });
 
   const handleCollectNFT = useCallback(async () => {

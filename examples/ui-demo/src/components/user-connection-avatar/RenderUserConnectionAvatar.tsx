@@ -18,7 +18,7 @@ export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const { walletType } = useConfigStore();
+  const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
   const { account } = useAccount({
     type: "ModularAccountV2",
     accountParams: {
@@ -26,10 +26,12 @@ export const RenderUserConnectionAvatar = (
     },
   });
 
-  const publicClient = createPublicClient({
-    chain: odysseyTestnet,
-    transport: http(),
-  });
+  const [publicClient] = useState(() =>
+    createPublicClient({
+      chain: odysseyTestnet,
+      transport: http(),
+    })
+  );
 
   const signer = useSigner();
 
@@ -41,9 +43,9 @@ export const RenderUserConnectionAvatar = (
     queryKey: ["deploymentStatus7702"],
     queryFn: async () => {
       const delegationAddress = signer
-        ? ((await publicClient.getCode({
+        ? (await publicClient.getCode({
             address: await signer?.getAddress(),
-          })) ?? "0x")
+          })) ?? "0x"
         : "0x";
       const delegationStatus = delegationAddress !== "0x";
       if (delegationStatus) setAutoRefresh(false);

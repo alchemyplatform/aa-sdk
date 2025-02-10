@@ -34,6 +34,7 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
   const account = accounts?.[chain.id]?.[type];
+
   if (!account) {
     return {
       account: undefined,

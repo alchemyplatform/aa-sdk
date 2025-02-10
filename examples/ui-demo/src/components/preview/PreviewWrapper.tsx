@@ -1,12 +1,21 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "./CodePreview";
-import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
+import {
+  AuthCard,
+  useUser,
+  useAuthContext,
+  useChain,
+} from "@account-kit/react";
 
 import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
 import { useState, useEffect } from "react";
-import { MintCard } from "../small-cards/MintCard";
+import { MintCardDefault, MintCard7702 } from "../small-cards/MintCard";
 import { TransactionsCard } from "../small-cards/TransactionsCard";
+import { useConfigStore } from "@/state";
+import { WalletTypes } from "@/app/config";
+import { arbitrumSepolia } from "@account-kit/infra";
+import { odysseyTestnet } from "@/hooks/7702/transportSetup";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   return (
@@ -72,11 +81,41 @@ const RenderContent = () => {
     );
   }
 
+  return <SmallCards />;
+};
+
+const SmallCards = () => {
+  const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
+
+  // TODO(jh): revert
+  // const chain =
+  //   walletType === WalletTypes.smart ? arbitrumSepolia : odysseyTestnet;
+  const chain = odysseyTestnet;
+
+  const { chain: activeChain, setChain, isSettingChain } = useChain();
+
+  useEffect(() => {
+    console.log({ have: activeChain.name, want: chain.name });
+    if (isSettingChain || chain.id === activeChain.id) return;
+    console.log(`switching to ${chain.name}`);
+    setChain({ chain });
+  }, [activeChain, chain, isSettingChain, setChain]);
+
   return (
     <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6">
-      <MintCard />
-      {/* TODO(jh): enable this after minting is working */}
-      {/* <TransactionsCard /> */}
+      {walletType === WalletTypes.smart ? (
+        <>
+          <MintCardDefault />
+          {/* TODO(jh): enable this after minting is working */}
+          {/* <TransactionsCard /> */}
+        </>
+      ) : (
+        <>
+          <MintCard7702 />
+          {/* TODO(jh): enable this after minting is working */}
+          {/* <TransactionsCard /> */}
+        </>
+      )}
     </div>
   );
 };

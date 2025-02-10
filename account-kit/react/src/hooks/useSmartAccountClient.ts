@@ -71,12 +71,16 @@ export function useSmartAccountClient({
     config,
   } = useAlchemyAccountContext();
 
+  const getSMAC = useMemo(
+    () => () =>
+      getSmartAccountClient({ type, accountParams, ...clientParams }, config),
+    [accountParams, clientParams, config, type]
+  );
+
   const result = useSyncExternalStore(
     watchSmartAccountClient({ type, accountParams, ...clientParams }, config),
-    () =>
-      getSmartAccountClient({ type, accountParams, ...clientParams }, config),
-    () =>
-      getSmartAccountClient({ type, accountParams, ...clientParams }, config)
+    getSMAC,
+    getSMAC
   );
 
   const { isConnected, address: eoaAddress } = wagmi_useAccount({

@@ -10,7 +10,7 @@ import { useMemo } from "react";
 import { exhaustiveGuard } from "@/lib/utils";
 
 export const TransactionsCard = () => {
-  const { walletType } = useConfigStore();
+  const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
 
   // TODO(jh): once everything is done, we can prob just pass the SMAClient's
   //  mode and the contract address to mint to a single hook? maybe chain too?

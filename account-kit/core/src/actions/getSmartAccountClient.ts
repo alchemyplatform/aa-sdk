@@ -28,7 +28,7 @@ import type {
   SupportedAccounts,
   SupportedAccountTypes,
 } from "../types";
-import { createAccount } from "./createAccount.js";
+import { createAccount, type AccountConfig } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
@@ -78,7 +78,7 @@ export function getSmartAccountClient<
 
 /**
  * Obtains a smart account client based on the provided parameters and configuration. Supports creating any of the SupportAccountTypes in Account Kit.
- * If the signer is not connected, or an account is already being intializes, this results in a loading state.
+ * If the signer is not connected, or an account is already being intialized, this results in a loading state.
  *
  * @example
  * ```ts
@@ -113,6 +113,70 @@ export function getSmartAccountClient(
   const clientState =
     config.store.getState().smartAccountClients[connection.chain.id]?.[type];
 
+  // TODO(jh): This seems to work fine when on a single chain, but
+  // it gets really glitchy on multiple chains. Also it seems like
+  // the store update causes zustand to re-render using the old
+  // values somehow? So it loads the wrong mode again first,
+  // then notices again and switches to the correct mode.
+  // If type is MAv2 & account is ready but the MODE changed,
+  // we need to disconnect the account and switch the mode.
+  if (type === "ModularAccountV2" && status === "READY") {
+    const maV2Params = accountParams as
+      | AccountConfig<"ModularAccountV2">
+      | undefined;
+    const wantMode = maV2Params?.mode ?? "default";
+    const haveMode =
+      config.store.getState().accountConfigs[connection.chain.id]?.[type]
+        ?.mode ?? "default";
+
+    if (wantMode !== haveMode) {
+      config.store.setState((state) => ({
+        ...state,
+        // TODO(jh): May not need to do this?
+        // smartAccountClients: {
+        //   ...state.smartAccountClients,
+        //   [connection.chain.id]: {
+        //     ...state.smartAccountClients[connection.chain.id],
+        //     [type]: {
+        //       client: undefined,
+        //       address: undefined,
+        //       isLoadingClient: true,
+        //     },
+        //   },
+        // },
+        // This must be done so we can be sure to use the correct address for the mode.
+        accounts: !state.accounts
+          ? undefined
+          : {
+              ...state.accounts,
+              [connection.chain.id]: {
+                ...state.accounts[connection.chain.id],
+                ModularAccountV2: {
+                  status: "DISCONNECTED",
+                  account: undefined,
+                },
+              },
+            },
+        // This must be done to avoid getting stuck in a loop.
+        accountConfigs: {
+          ...state.accountConfigs,
+          [connection.chain.id]: {
+            ...state.accountConfigs[connection.chain.id],
+            [type]:
+              type === "ModularAccountV2"
+                ? { mode: wantMode }
+                : state.accountConfigs[connection.chain.id]?.[type],
+          },
+        },
+      }));
+      return getSmartAccountClientState({
+        config,
+        chainId: connection.chain.id,
+        type,
+      });
+    }
+  }
+
   if (status === "ERROR" && clientState?.error) {
     return clientState;
   } else if (status === "ERROR") {
@@ -142,8 +206,9 @@ export function getSmartAccountClient(
     signerStatus.isAuthenticating ||
     signerStatus.isInitializing
   ) {
-    if (!account && signerStatus.isConnected)
+    if (!account && signerStatus.isConnected) {
       createAccount({ type, accountParams }, config);
+    }
 
     if (clientState && clientState.isLoadingClient) {
       return clientState;
