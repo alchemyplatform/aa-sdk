@@ -1,12 +1,10 @@
 import type { HttpTransport, SmartAccountSigner } from "@aa-sdk/core";
 import {
-  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
 import {
-  createLightAccount,
-  lightAccountClientActions,
+  createLightAccountClient,
   type CreateLightAccountParams,
   type LightAccount,
   type LightAccountClientActions,
@@ -49,7 +47,7 @@ export async function createLightAccountAlchemyClient<
  *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
  * ```
- *
+ * @deprecated Use createLightAccountClient instead now, it should switch depending on the transport
  * @param {AlchemyLightAccountClientConfig} config The configuration for setting up the Alchemy Light Account Client
  * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` object containing the created client
  */
@@ -59,17 +57,10 @@ export async function createLightAccountAlchemyClient({
   chain,
   ...config
 }: AlchemyLightAccountClientConfig): Promise<AlchemySmartAccountClient> {
-  const account = await createLightAccount({
-    ...config,
-    transport,
-    chain,
-  });
-
-  return createAlchemySmartAccountClient({
-    ...config,
-    transport,
-    chain,
-    account,
+  return createLightAccountClient({
     opts,
-  }).extend(lightAccountClientActions);
+    transport,
+    chain,
+    ...config,
+  });
 }

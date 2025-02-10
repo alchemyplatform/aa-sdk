@@ -1,6 +1,7 @@
 import { SidebarItem } from "vocs";
 import { coreSidebar } from "./core.js";
 import { infraSidebar } from "./infra.js";
+import { reactNativeSidebar } from "./react-native.js";
 import { reactGuides } from "./react.js";
 import { signerSidebar } from "./signer.js";
 import { smartContractsSidebar } from "./smart-contracts.js";
@@ -10,7 +11,10 @@ export const concepts: SidebarItem = {
   text: "Concepts",
   collapsed: true,
   items: [
-    { text: "Intro to Account Kit", link: "/concepts/intro-to-account-kit" },
+    {
+      text: "Intro to Account Kit",
+      link: "/concepts/intro-to-account-kit",
+    },
     {
       text: "Smart Contract Account",
       link: "/concepts/smart-contract-account",
@@ -37,7 +41,6 @@ export const concepts: SidebarItem = {
 export const resources: SidebarItem = {
   text: "Resources",
   items: [
-    { text: "React Native", link: "/resources/react-native" },
     {
       text: "Third Party",
       items: thirdPartySidebar,
@@ -51,12 +54,17 @@ export const resources: SidebarItem = {
 };
 
 export const guides: (
-  section?: "react" | "core" | "infra" | "signer" | "contracts"
+  section?: "react" | "core" | "infra" | "signer" | "contracts" | "react-native"
 ) => SidebarItem[] = (section) => [
   {
     text: "React",
     items: reactGuides,
     collapsed: section !== "react",
+  },
+  {
+    text: "React Native",
+    items: reactNativeSidebar,
+    collapsed: section !== "react-native",
   },
   {
     text: "Other JS Frameworks",
@@ -81,5 +89,5 @@ export const guides: (
 ];
 
 export const sharedSidebar: (
-  section?: "react" | "core" | "infra" | "signer" | "contracts"
+  section?: "react" | "core" | "infra" | "signer" | "contracts" | "react-native"
 ) => SidebarItem[] = (section) => [...guides(section), resources];

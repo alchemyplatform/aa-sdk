@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.11.0...v4.12.0) (2025-02-04)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
+
+### Bug Fixes
+
+- remove unnecessary getTransaction call ([#1299](https://github.com/alchemyplatform/aa-sdk/issues/1299)) ([359669c](https://github.com/alchemyplatform/aa-sdk/commit/359669ce61946b1b715e2a5e235c5a14394172d9))
+
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+### Features
+
+- add alchemy transport update for the mav2 account client ([#1271](https://github.com/alchemyplatform/aa-sdk/issues/1271)) ([71089c4](https://github.com/alchemyplatform/aa-sdk/commit/71089c45e9e04be87887c048405d2928dda0b7a5))
+
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+### Bug Fixes
+
+- correctly trim implementation address ([#1261](https://github.com/alchemyplatform/aa-sdk/issues/1261)) ([5dae940](https://github.com/alchemyplatform/aa-sdk/commit/5dae940eee1c776b54804a9aac8d46fe51e89d19))
+- lost changes from other PRs ([#1259](https://github.com/alchemyplatform/aa-sdk/issues/1259)) ([6546664](https://github.com/alchemyplatform/aa-sdk/commit/6546664887a45e8b25745a3cac539cde9473e4bf))
+
+### Features
+
+- basic ma v2 sdk integrations ([#1220](https://github.com/alchemyplatform/aa-sdk/issues/1220)) ([e513d84](https://github.com/alchemyplatform/aa-sdk/commit/e513d84406acb9dcc72d30a12dce4fbd15adeab8)), closes [#1221](https://github.com/alchemyplatform/aa-sdk/issues/1221) [#1223](https://github.com/alchemyplatform/aa-sdk/issues/1223) [#1232](https://github.com/alchemyplatform/aa-sdk/issues/1232) [#1233](https://github.com/alchemyplatform/aa-sdk/issues/1233) [#1246](https://github.com/alchemyplatform/aa-sdk/issues/1246)
+
+# [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+### Bug Fixes
+
+- bigint multiply was sometimes generating floats ([#1135](https://github.com/alchemyplatform/aa-sdk/issues/1135)) ([217443f](https://github.com/alchemyplatform/aa-sdk/commit/217443f33a46e99e1712dcf368a582d4dc3ac2ef))
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.1...v4.1.0) (2024-10-23)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 ## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
 
 **Note:** Version bump only for package @aa-sdk/core

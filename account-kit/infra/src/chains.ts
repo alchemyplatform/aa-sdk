@@ -310,6 +310,114 @@ export const shape: Chain = defineChain({
   },
 });
 
+export const unichainMainnet: Chain = defineChain({
+  id: 130,
+  name: "Unichain Mainnet",
+  network: "Unichain Mainnet",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://unichain-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://unichain-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://unichain-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const unichainSepolia: Chain = defineChain({
+  id: 1301,
+  name: "Unichain Sepolia",
+  network: "Unichain Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://unichain-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://unichain-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://unichain-sepolia.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const soneiumMinato: Chain = defineChain({
+  id: 1946,
+  name: "Soneium Minato",
+  network: "Soneium Minato",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://soneium-minato.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://soneium-minato.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://soneium-minato.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const soneiumMainnet: Chain = defineChain({
+  id: 1868,
+  name: "Soneium Mainnet",
+  network: "Soneium Mainnet",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://soneium-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://soneium-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://soneium-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const opbnbTestnet: Chain = defineChain({
+  id: 5611,
+  name: "OPBNB Testnet",
+  network: "OPBNB Testnet",
+  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://opbnb-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://opbnb-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://opbnb-testnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const opbnbMainnet: Chain = defineChain({
+  id: 204,
+  name: "OPBNB Mainnet",
+  network: "OPBNB Mainnet",
+  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://opbnb-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://opbnb-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://opbnb-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const beraChainBartio: Chain = defineChain({
   id: 80084,
   name: "BeraChain Bartio",
@@ -328,9 +436,63 @@ export const beraChainBartio: Chain = defineChain({
   },
 });
 
+export const inkMainnet: Chain = defineChain({
+  id: 57073,
+  name: "Ink Mainnet",
+  network: "Ink Mainnet",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://ink-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://ink-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://ink-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const inkSepolia: Chain = defineChain({
+  id: 763373,
+  name: "Ink Sepolia",
+  network: "Ink Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://ink-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://ink-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://ink-sepolia.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const arbitrumNova: Chain = {
   ...vabn,
   rpcUrls: {
     ...vabn.rpcUrls,
   },
 };
+
+export const mekong: Chain = defineChain({
+  id: 7078815900,
+  name: "Mekong Pectra Devnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.mekong.ethpandaops.io"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://explorer.mekong.ethpandaops.io",
+    },
+  },
+  testnet: true,
+});

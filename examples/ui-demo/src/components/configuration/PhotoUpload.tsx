@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { ChangeEvent } from "react";
 import { PhotoIcon } from "../icons/photo";
@@ -21,6 +23,9 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
       fileName: file.name,
       fileSrc: URL.createObjectURL(file),
     });
+    Metrics.trackEvent({
+      name: "branding_logo_changed",
+    });
   };
 
   const onRemove = () => {
@@ -33,11 +38,19 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   return (
     <>
       {logo ? (
-        <button onClick={onRemove} className={sidebarButton}>
+        <button
+          onClick={onRemove}
+          className={cn(sidebarButton, "justify-center")}
+          id="logo-remove"
+        >
           Remove
         </button>
       ) : (
-        <FileUploadInput className={sidebarButton} onChange={onUpload}>
+        <FileUploadInput
+          className={sidebarButton}
+          onChange={onUpload}
+          id="logo-upload"
+        >
           <PhotoIcon />
           <span className="text-sm">Upload</span>
         </FileUploadInput>

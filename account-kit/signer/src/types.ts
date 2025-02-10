@@ -2,6 +2,7 @@ import type { User } from "./client/types";
 
 export type AlchemySignerEvents = {
   connected(user: User): void;
+  newUserSignup(): void;
   disconnected(): void;
   statusChanged(status: AlchemySignerStatus): void;
   errorChanged(error: ErrorInfo | undefined): void;
@@ -17,6 +18,7 @@ export enum AlchemySignerStatus {
   AUTHENTICATING_EMAIL = "AUTHENTICATING_EMAIL",
   AUTHENTICATING_OAUTH = "AUTHENTICATING_OAUTH",
   AWAITING_EMAIL_AUTH = "AWAITING_EMAIL_AUTH",
+  AWAITING_OTP_AUTH = "AWAITING_OTP_AUTH",
 }
 
 export interface ErrorInfo {

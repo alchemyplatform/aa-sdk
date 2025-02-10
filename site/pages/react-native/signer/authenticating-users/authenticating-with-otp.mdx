@@ -1,0 +1,200 @@
+---
+title: Authenticating Users via One-Time Password (OTP)
+description: Learn how to authenticate users via a one-time password (OTP), sent to their email
+---
+
+# Authenticating Users via OTP
+
+This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+
+:::info
+For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
+
+- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
+- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+
+:::
+
+## Create a Signer Instance
+
+```ts twoslash
+// [!include ~/shared/react-native/signer.ts]
+```
+
+## Authenticate a User
+
+Next, you'll need to authenticate your user before you can use the Signer as an owner on the account
+
+### Send a One-Time Password (OTP) to a User
+
+To send an OTP to a user's email, use the `signer.authenticate()` method with the `emailMode` set to `otp`.
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+signer
+  .authenticate({
+    email: "user@example.com",
+    type: "email",
+    emailMode: "otp",
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::
+
+### Prompt the User to enter the One-Time Password to complete authentication
+
+The user will receive an email with a one-time password (OTP) to enter into your app.
+
+Provide a means for the user to enter the OTP into your app and then call the `signer.authenticate()` method using the `otpCode` parameter to complete the authentication process.
+
+<br />
+
+Here's an example of a Sign In component using OTP. Feel free to embed this into your application to give it a try!
+
+:::code-group
+
+```tsx [sign-in-with-otp.tsx] twoslash filename="sign-in-with-otp.tsx"
+// @noErrors
+import React, { useCallback, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Modal,
+  SafeAreaView,
+} from "react-native";
+import { User } from "@account-kit/signer";
+
+import { OtpPopUp } from "./otp-popup";
+import { signer } from "./signer";
+
+export const SignInWithOtp = () => {
+  const [email, setEmail] = useState<string>("");
+  const [showOtp, setShowOtp] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Make an authentication request to a user's email
+  const performAuthRequest = useCallback(async (email: string) => {
+    signer.authenticate({
+      email,
+      type: "email",
+      emailMode: "otp",
+    });
+    setLoading(true);
+    setShowOtp(true);
+  }, []);
+
+  const handleUserAuth = useCallback(async (user: User) => {
+    setUser(user);
+    setLoading(false);
+    setShowOtp(false);
+  }, []);
+
+  return (
+    <View>
+      {user && (
+        <>
+          <Text>User Authenticated As: {user.email}</Text>
+          <Text>{user.address}</Text>
+        </>
+      )}
+
+      <Text style={{ fontSize: 16 }}>Enter Email</Text>
+      <TextInput
+        value={email}
+        style={{ fontSize: 20 }}
+        onChangeText={setEmail}
+        placeholder="Enter Email"
+        autoCapitalize="none"
+      />
+      <Button
+        title={loading ? "Loading" : "Sign In"}
+        disabled={loading}
+        onPress={() => performAuthRequest(email)}
+      />
+
+      <OtpPopUp
+        show={showOtp}
+        handleUserAuth={handleUserAuth}
+        close={() => {
+          setShowOtp(false);
+          setLoading(false);
+        }}
+      />
+    </View>
+  );
+};
+```
+
+```tsx [otp-popup.tsx] twoslash filename="otp-popup.tsx"
+// @noErrors
+import React, { useCallback, useState } from "react";
+import { Modal, Text, TextInput, Button, SafeAreaView } from "react-native";
+import { User } from "@account-kit/signer";
+
+import { signer } from "./signer";
+
+export const OtpPopUp = ({
+  show,
+  handleUserAuth,
+  close,
+}: {
+  show: boolean;
+  handleUserAuth: (user: User) => void;
+  close: () => void;
+}) => {
+  const [otpCode, setOtpCode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Authenticate a user using a bundle returned from a deep link
+  const handleUserOtp = useCallback(async (otpCode: string) => {
+    setLoading(true);
+    const user = await signer.authenticate({ otpCode, type: "otp" }); //<-- Pass the user's OTP code to the authenticate method using `otp` as the type value
+    handleUserAuth(user);
+  }, []);
+
+  return (
+    <Modal visible={show} style={{ paddingTop: 200 }}>
+      <SafeAreaView style={{ margin: 20 }}>
+        <Text style={{ fontSize: 16 }}>Enter OTP</Text>
+        <TextInput
+          style={{ fontSize: 20 }}
+          value={otpCode}
+          onChangeText={setOtpCode}
+          placeholder="Enter OTP"
+        />
+        <Button
+          title={loading ? "Loading" : "Submit OTP"}
+          disabled={loading}
+          onPress={() => handleUserOtp(otpCode)}
+        />
+        <Button
+          title="Close"
+          onPress={() => {
+            setLoading(false);
+            close();
+          }}
+        />
+      </SafeAreaView>
+    </Modal>
+  );
+};
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+// [!include ~/shared/react-native/signer.ts]
+```
+
+:::

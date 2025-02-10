@@ -30,8 +30,20 @@ const STRINGS = {
       resend: "Resend",
       resent: "Done!",
     },
+    loadingOtp: {
+      title: "Enter verification code",
+      body: "We sent a verification code to",
+      notReceived: "Didn't receive code?",
+      resend: "Resend",
+      verifying: "Verifying...",
+      verified: "Verified!",
+    },
     completingEmail: {
-      body: "Your email verification is almost complete. Please wait a few seconds for this to screen to update.",
+      body: "Completing login. Please wait a few seconds for this to screen to update.",
+    },
+    completingOtp: {
+      title: "Verifying...",
+      body: "It may take a moment to complete authentication.",
     },
     loadingPasskey: {
       title: "Continue with passkey",
@@ -39,8 +51,8 @@ const STRINGS = {
       supportText: "Having trouble?",
       supportLink: "Contact support",
     },
-    poweredBy: {
-      title: "powered by",
+    protectedBy: {
+      title: "protected by",
     },
     error: {
       general: {
@@ -53,6 +65,8 @@ const STRINGS = {
           "Passkey request timed out or canceled by the agent. You may have to use another method to register a passkey for your account.",
         oauthTitle: "Couldn't connect to ",
         oauthBody: "The connection failed or canceled",
+        otpTitle: "Connection failed",
+        otpBody: "The code could not be verified",
         walletTitle: "Couldn't connect to ",
         walletBody: "The wallet’s connection failed or canceled",
         timedOutTitle: "Connection timed out",
@@ -61,6 +75,31 @@ const STRINGS = {
       cta: {
         tryAgain: "Try again",
         useAnotherMethod: "Use another method",
+        skip: "Skip",
+      },
+      customErrorMessages: {
+        eoa: {
+          walletConnect: {
+            chainIdNotFound: {
+              heading: "The connected wallet does not support this network",
+              body: "The wallet connection failed.",
+              tryAgainCTA: "Try again with a different wallet",
+            },
+            walletConnectParamsNotFound: {
+              heading: "Couldn't connect to WalletConnect",
+              body: "The WalletConnect configuration is missing or incorrect.",
+              tryAgainCTA: "Try again",
+            },
+          },
+          default: {
+            heading: "Couldn't connect to ",
+            body: "The wallet's connection failed or was canceled.",
+            tryAgainCTA: "Try again",
+          },
+        },
+      },
+      otp: {
+        invalid: "The code you entered is incorrect",
       },
     },
     oauthContactSupport: {

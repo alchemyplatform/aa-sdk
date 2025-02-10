@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/logging",
-  "version": "4.0.1",
+  "version": "4.12.0",
   "description": "Core logging library for Account Kit packages",
   "author": "Alchemy",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "!vitest.config.ts",
     "!.env",
     "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
     "!src/__tests__/**/*"
   ],
   "exports": {
@@ -29,11 +30,11 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prebuild": "npx tsx ./prebuild.ts",
+    "prebuild": "tsx ./prebuild.ts",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "postbuild": "npx tsx ./postbuild.ts",
+    "postbuild": "tsx ./postbuild.ts",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
@@ -59,6 +60,6 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "dependencies": {
     "@segment/analytics-next": "^1.74.0",
-    "uuidv4": "^6.2.13"
+    "uuid": "^11.0.2"
   }
 }

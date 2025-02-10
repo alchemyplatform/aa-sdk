@@ -233,6 +233,15 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
+        text: "EntityIdOverrideError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/EntityIdOverrideError/constructor",
+          },
+        ],
+      },
+      {
         text: "EntryPointNotFoundError",
         items: [
           {
@@ -287,11 +296,29 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
+        text: "InvalidEntityIdError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidEntityIdError/constructor",
+          },
+        ],
+      },
+      {
         text: "InvalidEntryPointError",
         items: [
           {
             text: "constructor",
             link: "/reference/aa-sdk/core/classes/InvalidEntryPointError/constructor",
+          },
+        ],
+      },
+      {
+        text: "InvalidNonceKeyError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidNonceKeyError/constructor",
           },
         ],
       },
@@ -468,10 +495,6 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
   {
     text: "Resources",
     items: [
-      {
-        text: "React Native",
-        link: "/resources/react-native",
-      },
       {
         text: "Third Party",
         items: [

@@ -7,6 +7,10 @@ description: How to embed our authentication into your customized UI
 
 If you don't want to use our pre-built UI components, you can build your own custom UI using the [`useAuthenticate`](/reference/account-kit/react/hooks/useAuthenticate) hook.
 
+:::tip
+Tailwind CSS is a required dependency for using Alchemy Account Kit UI components. However, Alchemy Account Kit hooks function independently and do not require Tailwind.
+:::
+
 ### Email authentication
 
 ```tsx twoslash
@@ -90,7 +94,7 @@ To use your own auth provider, follow the instructions on how to do so with [Aut
 
 ### Passkey auth with email backup
 
-This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.
+This approach will allow you to log in or sign up users using a passkey as the primary auth mechanism and register an email as a backup.
 
 :::danger
 It's important that you verify this email to be correct first! Otherwise, if a user loses their passkey, they will not be able to recover their account.

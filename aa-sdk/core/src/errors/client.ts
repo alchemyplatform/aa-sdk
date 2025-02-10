@@ -53,3 +53,53 @@ export class ChainNotFoundError extends BaseError {
     super("No chain supplied to the client");
   }
 }
+
+/**
+ * Error class denoting that the provided entity id is invalid because it's too large.
+ */
+export class InvalidEntityIdError extends BaseError {
+  override name = "InvalidEntityIdError";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the entity id is invalid because it's too large.
+   *
+   * @param {number} entityId the invalid entityId used
+   */
+  constructor(entityId: number) {
+    super(
+      `Entity ID used is ${entityId}, but must be less than or equal to uint32.max`
+    );
+  }
+}
+
+/**
+ * Error class denoting that the nonce key is invalid because its too large.
+ */
+export class InvalidNonceKeyError extends BaseError {
+  override name = "InvalidNonceKeyError";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
+   *
+   * @param {bigint} nonceKey the invalid nonceKey used
+   */
+  constructor(nonceKey: bigint) {
+    super(
+      `Nonce key is ${nonceKey} but has to be less than or equal to 2**152`
+    );
+  }
+}
+
+/**
+ * Error class denoting that the provided entity id is invalid because it's overriding the native entity id.
+ */
+export class EntityIdOverrideError extends BaseError {
+  override name = "EntityIdOverrideError";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the nonce key is invalid.
+   */
+  constructor() {
+    super(`EntityId of 0 is reserved for the owner and cannot be used`);
+  }
+}

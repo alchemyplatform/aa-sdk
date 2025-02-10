@@ -29,6 +29,9 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
 
   config.store.persist.clearStorage();
 
+  // Clear Wallet Connect store
+  clearWalletConnectStore();
+
   config.store.setState(() => config.store.getInitialState());
 
   config.store.setState((state) => ({
@@ -38,3 +41,44 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
     ),
   }));
 }
+
+// Function to clear the Wallet Connect store to prevent
+// Persistence of Wallet Connect connection state on error.
+const clearWalletConnectStore = () => {
+  // Open Wallet Connect Indexed DB
+  let walletConnectDBExists = true;
+  const dbOpenRequest = indexedDB.open("WALLET_CONNECT_V2_INDEXED_DB");
+
+  dbOpenRequest.onupgradeneeded = () => {
+    if (dbOpenRequest.result.version === 1) {
+      walletConnectDBExists = false;
+
+      // Remove the Database created from the indexedDB.open() call above.
+      indexedDB.deleteDatabase("WALLET_CONNECT_V2_INDEXED_DB");
+    }
+  };
+
+  dbOpenRequest.onsuccess = () => {
+    if (!walletConnectDBExists) return;
+
+    try {
+      const db = dbOpenRequest.result;
+
+      const txn = db.transaction(["keyvaluestorage"], "readwrite");
+
+      const store = txn.objectStore("keyvaluestorage");
+
+      // Clear Store
+      store.clear();
+    } catch (error) {
+      console.error(
+        "Error clearing Wallet Connect DB. Cannot clear store.",
+        error
+      );
+    }
+  };
+
+  dbOpenRequest.onerror = () => {
+    console.error("Error opening Wallet Connect DB. Cannot clear store.");
+  };
+};

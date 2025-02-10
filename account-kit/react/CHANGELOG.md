@@ -3,6 +3,129 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.11.0...v4.12.0) (2025-02-04)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
+
+### Bug Fixes
+
+- add logoUrlDark for auth0 provider logos ([#1298](https://github.com/alchemyplatform/aa-sdk/issues/1298)) ([80a0132](https://github.com/alchemyplatform/aa-sdk/commit/80a0132916cd1c89c8c622f5dfafca0b7a1a9508))
+- otp new styles and flow ([#1250](https://github.com/alchemyplatform/aa-sdk/issues/1250)) ([7295249](https://github.com/alchemyplatform/aa-sdk/commit/72952498d91056fdf4086557ed3963c18a5d5879))
+
+### Features
+
+- adding delay after OTP code validation ([#1288](https://github.com/alchemyplatform/aa-sdk/issues/1288)) ([afc60ad](https://github.com/alchemyplatform/aa-sdk/commit/afc60ad795c04e30d4728d3d9cc1fb428d722e7a))
+- enable discord social auth ([#1281](https://github.com/alchemyplatform/aa-sdk/issues/1281)) ([1772da9](https://github.com/alchemyplatform/aa-sdk/commit/1772da972f2cc78dde3786fb9ebe3ec19f01e78b))
+- enable twitter social auth ([#1230](https://github.com/alchemyplatform/aa-sdk/issues/1230)) ([f4e8533](https://github.com/alchemyplatform/aa-sdk/commit/f4e8533ae0d79e22c939b4fa84da6801f6626bec))
+
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
+
+### Features
+
+- add email OTP support ([#1163](https://github.com/alchemyplatform/aa-sdk/issues/1163)) ([76720d9](https://github.com/alchemyplatform/aa-sdk/commit/76720d9b647d5e65a78726935520c41d94c1f6ff))
+
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+### Bug Fixes
+
+- correctly align protected by copy ([#1186](https://github.com/alchemyplatform/aa-sdk/issues/1186)) ([63be696](https://github.com/alchemyplatform/aa-sdk/commit/63be696199882b42fbad7eb7fa22aa823984c225))
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Bug Fixes
+
+- refactor connection error ([#1156](https://github.com/alchemyplatform/aa-sdk/issues/1156)) ([83ea665](https://github.com/alchemyplatform/aa-sdk/commit/83ea665514f49131565441f1b43e4e6e5b0fd68c))
+- update email completing string to be more generic ([#1173](https://github.com/alchemyplatform/aa-sdk/issues/1173)) ([18d0827](https://github.com/alchemyplatform/aa-sdk/commit/18d082798ab6c83417d2a2f155f4f7c655e1e6a4))
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+### Bug Fixes
+
+- changing protected by to powered by alchemy footer ([#1164](https://github.com/alchemyplatform/aa-sdk/issues/1164)) ([7c08a66](https://github.com/alchemyplatform/aa-sdk/commit/7c08a66b718aefce80629824d58893898c757b41))
+- oauth working, email still broken ([#1170](https://github.com/alchemyplatform/aa-sdk/issues/1170)) ([196905d](https://github.com/alchemyplatform/aa-sdk/commit/196905d4abbfd07ccb83e38484bab6eb0ea0d502))
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+### Bug Fixes
+
+- **wc:** wc connection should persist across refreshes ([#1162](https://github.com/alchemyplatform/aa-sdk/issues/1162)) ([a22f3d9](https://github.com/alchemyplatform/aa-sdk/commit/a22f3d92e5daaee46c6da7fe6a51488ea70f334f))
+
+### Features
+
+- oauth add passkey after signup (popup flow) ([#1151](https://github.com/alchemyplatform/aa-sdk/issues/1151)) ([844a481](https://github.com/alchemyplatform/aa-sdk/commit/844a48123ce8d74a877f23ccbf10d367a9a9551b))
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- don't show error view when cancelling oauth ([#1087](https://github.com/alchemyplatform/aa-sdk/issues/1087)) ([e1fddd8](https://github.com/alchemyplatform/aa-sdk/commit/e1fddd8a4e7818bc163efceda15d95ee9d6a37c3))
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- add exit animation to mobile dialog drawer ([#1108](https://github.com/alchemyplatform/aa-sdk/issues/1108)) ([afa37ea](https://github.com/alchemyplatform/aa-sdk/commit/afa37ea15bc5f911b405af5b82ebcc747359ef69))
+- change auth card navigation sizes on mobile ([#1122](https://github.com/alchemyplatform/aa-sdk/issues/1122)) ([eae2877](https://github.com/alchemyplatform/aa-sdk/commit/eae28776b55fe7cb436edba9b462ff195ad9a238))
+- oauth add passkey after signup (redirect flow) ([#1140](https://github.com/alchemyplatform/aa-sdk/issues/1140)) ([6d5e229](https://github.com/alchemyplatform/aa-sdk/commit/6d5e229e24402344b214df9689ca18d8f5954922))
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+### Bug Fixes
+
+- button nav size ([#1114](https://github.com/alchemyplatform/aa-sdk/issues/1114)) ([2ddd4fc](https://github.com/alchemyplatform/aa-sdk/commit/2ddd4fc11e311610707365bdb0ccf19d9c301e24))
+- define process.env for storybook ([#1116](https://github.com/alchemyplatform/aa-sdk/issues/1116)) ([509827a](https://github.com/alchemyplatform/aa-sdk/commit/509827a77ed7c5e0a6284fa37526f66202ba9904))
+- passkey icon is now using brand color ([#1123](https://github.com/alchemyplatform/aa-sdk/issues/1123)) ([a3238ec](https://github.com/alchemyplatform/aa-sdk/commit/a3238ecf5d1f4a8d402377444d773376bffd5f58))
+- repair pt on maincard ([#1117](https://github.com/alchemyplatform/aa-sdk/issues/1117)) ([711bed5](https://github.com/alchemyplatform/aa-sdk/commit/711bed54c7f7990162ab031eb91f40ab4ac3aac9))
+- show Oauth errors in from UI components ([#1118](https://github.com/alchemyplatform/aa-sdk/issues/1118)) ([8331372](https://github.com/alchemyplatform/aa-sdk/commit/833137251afad161f1fd982f6062160232b8340c))
+
+### Features
+
+- added dev:build script to improve dev experience ([#1120](https://github.com/alchemyplatform/aa-sdk/issues/1120)) ([0f024e7](https://github.com/alchemyplatform/aa-sdk/commit/0f024e75876c82addf8a389658b42dadc36ecefe))
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Bug Fixes
+
+- facebook logo ([#1113](https://github.com/alchemyplatform/aa-sdk/issues/1113)) ([da8f0f5](https://github.com/alchemyplatform/aa-sdk/commit/da8f0f5e3ba3c116270c295173aa0b3b05979c90))
+- new responsive design ([#1104](https://github.com/alchemyplatform/aa-sdk/issues/1104)) ([061ba2a](https://github.com/alchemyplatform/aa-sdk/commit/061ba2a5e1f68c64229234a64a3c66d643e7d7ac))
+
+### Features
+
+- add custom error messages for chainId errors ([#1101](https://github.com/alchemyplatform/aa-sdk/issues/1101)) ([150525a](https://github.com/alchemyplatform/aa-sdk/commit/150525a9245d26029105509de51c175b61d6e4ab))
+- add akui to common class names ([#1107](https://github.com/alchemyplatform/aa-sdk/issues/1107)) ([86e4dfb](https://github.com/alchemyplatform/aa-sdk/commit/86e4dfb6068761606d7aac611c935b6ee18281db))
+
+## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.1...v4.1.0) (2024-10-23)
+
+### Features
+
+- add back button to auth authentication screens ([#1094](https://github.com/alchemyplatform/aa-sdk/issues/1094)) ([ef73033](https://github.com/alchemyplatform/aa-sdk/commit/ef7303333830df53a9106ba37ce015675a276cd9))
+
 ## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
 
 **Note:** Version bump only for package @account-kit/react

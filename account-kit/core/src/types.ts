@@ -94,6 +94,12 @@ type RpcConnectionConfig =
       chains?: never;
     };
 
+type CreateStorageFn = (config?: {
+  /** @deprecated Use `sessionConfig` to define session length instead. */
+  sessionLength?: number;
+  domain?: string;
+}) => Storage;
+
 export type CreateConfigProps = RpcConnectionConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
   /**
@@ -102,8 +108,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
    */
   ssr?: boolean;
 
-  // TODO: should probably abstract this out into a function
-  storage?: (config?: { sessionLength?: number; domain?: string }) => Storage;
+  storage?: CreateStorageFn;
 
   connectors?: CreateConnectorFn[];
 

@@ -1,5 +1,9 @@
 import { memo } from "react";
-import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
+import {
+  AppleIcon,
+  FacebookIcon,
+  GoogleIcon,
+} from "../../../icons/auth-icons/index.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
 import { useOAuthVerify } from "../hooks/useOAuthVerify.js";
@@ -35,13 +39,32 @@ export const OAuth = memo(({ ...config }: Props) => {
       return (
         <Button
           variant="social"
-          icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
+          icon={
+            <>
+              <img
+                src={config.logoUrl}
+                alt={config.auth0Connection}
+                className="dark:hidden"
+              />
+              <img
+                // Fallback to light logo if no dark logo provided.
+                src={config.logoUrlDark ?? config.logoUrl}
+                alt={config.auth0Connection}
+                className="hidden dark:block"
+              />
+            </>
+          }
           onClick={authenticate}
-        ></Button>
+        >
+          {config.displayName}
+        </Button>
       );
     default:
-      assertNever("unhandled authProviderId passed into auth sections");
+      assertNever(
+        config,
+        `unhandled authProviderId ${
+          (config as any).authProviderId
+        } passed into auth sections`
+      );
   }
-
-  throw Error("unhandled authProviderId passed into auth sections");
 });

@@ -1,7 +1,7 @@
 import { EmailNotReceivedDisclaimer } from "../card/footer/email-not-reveived.js";
 import { HelpText } from "../card/footer/help-text.js";
 import { OAuthContactSupport } from "../card/footer/oauth-contact-support.js";
-import { PoweredBy } from "../card/footer/poweredby.js";
+import { ProtectedBy } from "../card/footer/protected-by.js";
 import { RegistrationDisclaimer } from "../card/footer/registration-disclaimer.js";
 import type { AuthStep } from "../context.js";
 
@@ -14,6 +14,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "initial":
       return <RegistrationDisclaimer />;
     case "email_verify":
+    case "otp_verify":
       return <EmailNotReceivedDisclaimer authStep={authStep} />;
     case "passkey_create":
     case "wallet_connect":
@@ -34,7 +35,7 @@ export const Footer = ({ authStep }: FooterProps) => {
     <div className="p-5 pt-2">
       <RenderFooterText authStep={authStep} />
       <div className="flex justify-center">
-        <PoweredBy />
+        <ProtectedBy />
       </div>
     </div>
   );

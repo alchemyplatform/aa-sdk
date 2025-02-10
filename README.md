@@ -6,7 +6,7 @@ This repo contains all of the packages that make up Account Kit as well as the c
 
 ## @account-kit/\*
 
-Account Kit packages are all prefixed with `@account-kit` are are broken down into the following packages:
+Account Kit packages are all prefixed with `@account-kit` are broken down into the following packages:
 
 1. [`@account-kit/react`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/react)
 1. [`@account-kit/core`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/core)
@@ -32,5 +32,13 @@ The `aa-sdk` is modular at every layer of the stack and can be easily extended t
 Check out this [quickstart guide](https://accountkit.alchemy.com/react/quickstart) to get started.
 
 ## Contributing
+
+If you are a member of the Alchemy team, make sure to run:
+
+```
+npx turbo login --sso-team=alchemy-dot-com
+```
+
+so that you can benefit from remote caching in your builds!
 
 We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](CONTRIBUTING.md) for more information.

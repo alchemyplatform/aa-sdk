@@ -4,6 +4,7 @@ import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { QueryClient } from "@tanstack/react-query";
+import { walletConnect } from "wagmi/connectors";
 
 export type Config = {
   auth: {
@@ -12,7 +13,10 @@ export type Config = {
     showPasskey: boolean;
     addPasskey: boolean;
     showOAuth: boolean;
-    oAuthMethods: Record<KnownAuthProvider | "auth0", boolean>;
+    oAuthMethods: Record<
+      KnownAuthProvider | "auth0" | "twitter" | "discord",
+      boolean
+    >;
   };
   ui: {
     theme: "light" | "dark";
@@ -50,6 +54,8 @@ export const DEFAULT_CONFIG: Config = {
       facebook: true,
       auth0: false,
       apple: false,
+      discord: true,
+      twitter: true,
       // TO DO: extend for BYO auth provider
     },
   },
@@ -75,6 +81,9 @@ export const alchemyConfig = () =>
       chain: arbitrumSepolia,
       ssr: true,
       policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+      connectors: [
+        walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
+      ],
       storage: cookieStorage,
       enablePopupOauth: true,
     },
@@ -82,7 +91,7 @@ export const alchemyConfig = () =>
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
       auth: {
         sections: [
-          [{ type: "email" }],
+          [{ type: "email", emailMode: "otp" }],
           [
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },

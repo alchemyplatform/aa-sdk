@@ -1,7 +1,7 @@
 {
   "name": "@aa-sdk/ethers",
   "license": "MIT",
-  "version": "4.0.1",
+  "version": "4.12.0",
   "description": "Ethers.js wrapper for @aa-sdk/core",
   "author": "Alchemy",
   "type": "module",
@@ -17,6 +17,7 @@
     "!.env",
     "!dist/**/*.tsbuildinfo",
     "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
     "!src/__tests__/**/*"
   ],
   "exports": {
@@ -35,13 +36,13 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/ethers",
+    "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/ethers",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@account-kit/smart-contracts": "^4.0.1",
+    "@account-kit/smart-contracts": "^4.12.0",
     "alchemy-sdk": "^3.0.0",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
@@ -49,7 +50,7 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.0.1",
+    "@aa-sdk/core": "^4.12.0",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",

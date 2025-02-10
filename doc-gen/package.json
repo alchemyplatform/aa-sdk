@@ -17,6 +17,7 @@
     "!vitest.config.ts",
     "!.env",
     "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
     "!src/__tests__/**/*"
   ],
   "exports": {
@@ -30,7 +31,7 @@
     "ak-docgen": "./dist/esm/cli.js"
   },
   "scripts": {
-    "prebuild": "npx tsx ./inject-version.ts",
+    "prebuild": "tsx ./inject-version.ts",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",

@@ -16,6 +16,10 @@ export const signerSidebar: SidebarItem[] = [
     text: "Authentication methods",
     items: [
       {
+        text: "Email OTP",
+        link: "/signer/authentication/email-otp",
+      },
+      {
         text: "Email magic-link",
         link: "/signer/authentication/email-magic-link",
       },

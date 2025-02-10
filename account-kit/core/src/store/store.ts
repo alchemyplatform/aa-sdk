@@ -209,6 +209,14 @@ export const createSigner = (params: ClientStoreConfig) => {
   return signer;
 };
 
+const AUTHENTICATING_STATUSES: AlchemySignerStatus[] = [
+  AlchemySignerStatus.AUTHENTICATING_EMAIL,
+  AlchemySignerStatus.AUTHENTICATING_OAUTH,
+  AlchemySignerStatus.AUTHENTICATING_PASSKEY,
+  AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+  AlchemySignerStatus.AWAITING_OTP_AUTH,
+];
+
 /**
  * Converts the AlchemySigner's status to a more readable object
  *
@@ -223,11 +231,7 @@ export const convertSignerStatusToState = (
   status: alchemySignerStatus,
   error,
   isInitializing: alchemySignerStatus === AlchemySignerStatus.INITIALIZING,
-  isAuthenticating:
-    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING_EMAIL ||
-    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING_OAUTH ||
-    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING_PASSKEY ||
-    alchemySignerStatus === AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+  isAuthenticating: AUTHENTICATING_STATUSES.includes(alchemySignerStatus),
   isConnected: alchemySignerStatus === AlchemySignerStatus.CONNECTED,
   isDisconnected: alchemySignerStatus === AlchemySignerStatus.DISCONNECTED,
 });
@@ -272,6 +276,9 @@ const addClientSideStoreListeners = (store: Store) => {
           ),
         }));
       });
+
+      // TODO: handle this appropriately, see https://github.com/alchemyplatform/aa-sdk/pull/1140#discussion_r1837265706
+      // signer.on("newUserSignup", () => console.log("got new user signup"));
 
       signer.on("connected", (user) => store.setState({ user }));
 

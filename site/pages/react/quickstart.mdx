@@ -196,6 +196,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
        - **ssr** (optional): Highly recommended for NextJs applications to keep account state consistent between the server and client
        - **storage** (optional): Cookie storage highly recommended for NextJs applications to persist and cache account state across page loads
        - **enablePopupOauth** (optional): If implementing social login, allow for the sign in window to appear as a pop up to your user.
+       - **sessionConfig** (optional): Used to configure the session duration
 
      - `ui`: for creating Alchemy Accounts UI components
 
@@ -219,6 +220,10 @@ export const config = createConfig(
     ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
     storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
+    // optional config to override default session manager config
+    sessionConfig: {
+      expirationTimeMs: 1000 * 60 * 60, // 60 minutes (default is 15 min)
+    },
   },
   {
     // authentication ui config - your customizations here
@@ -357,14 +362,14 @@ export default function Home() {
         <div className="flex flex-col gap-2 p-2">
           <p className="text-xl font-bold">Success!</p>
           You're logged in as {user.email ?? "anon"}.<button
-            className="btn btn-primary mt-6"
+            className="akui-btn akui-btn-primary mt-6"
             onClick={() => logout()}
           >
             Log out
           </button>
         </div>
       ) : (
-        <button className="btn btn-primary" onClick={openAuthModal}>
+        <button className="akui-btn akui-btn-primary" onClick={openAuthModal}>
           Login
         </button>
       )}

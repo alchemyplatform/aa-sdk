@@ -16,18 +16,18 @@ export const Navigation = ({
   onClose,
 }: NavigationProps) => {
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between w-full px-6 pt-5">
       <Button
         variant="link"
         onClick={onBack}
         disabled={!showBack}
         className={
           showBack
-            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
+            ? "text-fg-secondary w-[40px] h-[40px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
             : "invisible"
         }
       >
-        <BackArrow />
+        <BackArrow className="w-[24px] h-[24px] lg:w-[16px] lg:h-[16px]" />
       </Button>
 
       <Button
@@ -35,11 +35,11 @@ export const Navigation = ({
         onClick={onClose}
         className={
           showClose
-            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
+            ? "text-fg-secondary w-[40px] h-[40px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
             : "invisible"
         }
       >
-        <X />
+        <X className="w-[24px] h-[24px] lg:w-[16px] lg:h-[16px]" />
       </Button>
     </div>
   );

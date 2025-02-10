@@ -44,6 +44,10 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
       },
       {
+        text: "useAuthContext",
+        link: "/reference/account-kit/react/hooks/useAuthContext",
+      },
+      {
         text: "useAuthError",
         link: "/reference/account-kit/react/hooks/useAuthError",
       },
@@ -151,10 +155,6 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
   {
     text: "Resources",
     items: [
-      {
-        text: "React Native",
-        link: "/resources/react-native",
-      },
       {
         text: "Third Party",
         items: [

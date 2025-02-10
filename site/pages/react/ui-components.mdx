@@ -11,6 +11,10 @@ Account Kit allows you to use pre-built, [highly customizable](https://demo.alch
 - customize [authentication method ui](#customize-authentication-ui)
 - customize [theme](/react/customization/theme)
 
+:::tip
+Tailwind CSS is a required dependency for using Alchemy Account Kit UI components. However, Alchemy Account Kit hooks function independently and do not require Tailwind.
+:::
+
 ## Modal auth
 
 Assuming your application has been [set up](/react/quickstart), using UI components is the easiest way to authenticate users. All you have to do is leverage the [`useAuthModal`](/reference/account-kit/react/hooks/useAuthModal) hook and provide users a CTA to open the modal.
@@ -102,7 +106,7 @@ type EmailAuthType = {
 
 ### Passkey
 
-This adds a passkey login method to a section. Passkey login allows users to login with a passkey they've created else where in your app after logging in, or right after sign-up if you've enabled that setting.
+This adds a passkey login method to a section. Passkey login allows users to log in with a passkey they've created else where in your app after logging in, or right after sign-up if you've enabled that setting.
 The shape of this auth type is:
 
 ```ts
@@ -126,7 +130,7 @@ type ExternalWalletsAuthType = {
 
 ### Social
 
-This adds social authentication methods to a section. Social login authentication allows you to login and signup users using an OAuth provider, such as Google Sign-In or Facebook Login. You can also configure custom providers through Auth0. The shape of this auth type is:
+This adds social authentication methods to a section. Social login authentication allows you to log in and sign up users using an OAuth provider, such as Google Sign-In or Facebook Login. You can also configure custom providers through Auth0. The shape of this auth type is:
 
 ```ts
 type SocialAuthType = {
@@ -145,6 +149,8 @@ type SocialAuthType = {
       auth0Connection?: string;
       // URL for the provider's logo
       logoUrl: string;
+      // URL for the provider's logo in dark mode (optional, `logoUrl` is used for both light & dark mode if not provided)
+      logoUrlDark?: string;
     }
   | {
       // For using a known authentication provider other than Auth0: "google", "facebook", "apple"

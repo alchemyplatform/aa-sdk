@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.11.0...v4.12.0) (2025-02-04)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
+
+### Features
+
+- **client:** multi account light and alchemy consolidation ([#1264](https://github.com/alchemyplatform/aa-sdk/issues/1264)) ([18a9228](https://github.com/alchemyplatform/aa-sdk/commit/18a922830f5cfcfbed4bf12d064bdf4699e29c6c))
+
+# [4.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.7.0...v4.8.0) (2025-01-08)
+
+### Features
+
+- add ink mainnet ([#1225](https://github.com/alchemyplatform/aa-sdk/issues/1225)) ([0a6606e](https://github.com/alchemyplatform/aa-sdk/commit/0a6606e6a447f08406aa84308795118eda950531))
+- add mekong devnet support ([#1239](https://github.com/alchemyplatform/aa-sdk/issues/1239)) ([baad28a](https://github.com/alchemyplatform/aa-sdk/commit/baad28a6b1df36f66eae1fb723bbcfdc61592a51))
+- **chains:** add ink and soneium mainnet ([#1215](https://github.com/alchemyplatform/aa-sdk/issues/1215)) ([de83640](https://github.com/alchemyplatform/aa-sdk/commit/de83640936bfa43f04fa274efda5a968afc4d773))
+
+# [4.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.1...v4.7.0) (2024-12-16)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.6.0...v4.6.1) (2024-12-10)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.1...v4.6.0) (2024-12-03)
+
+### Features
+
+- **rn:** add alpha react native signer impl ([#1128](https://github.com/alchemyplatform/aa-sdk/issues/1128)) ([d87499e](https://github.com/alchemyplatform/aa-sdk/commit/d87499ee609e427def7abb6b02d565292d85c3cd)), closes [#1159](https://github.com/alchemyplatform/aa-sdk/issues/1159) [#1152](https://github.com/alchemyplatform/aa-sdk/issues/1152) [#1161](https://github.com/alchemyplatform/aa-sdk/issues/1161) [#1171](https://github.com/alchemyplatform/aa-sdk/issues/1171)
+
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- add unichain mainnet ([#1136](https://github.com/alchemyplatform/aa-sdk/issues/1136)) ([de9ba7c](https://github.com/alchemyplatform/aa-sdk/commit/de9ba7c6e6c37a0be9b10af78927ba0cf2841cac))
+
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Features
+
+- **networks:** add new networks ([#1106](https://github.com/alchemyplatform/aa-sdk/issues/1106)) ([569862f](https://github.com/alchemyplatform/aa-sdk/commit/569862f6b9bdca68bc73362e1438de31c691a5f2))
+
+## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
+
+### Bug Fixes
+
+- **fee-estimator:** add a 50% buffer to base fee by default in alchemy fee estimator ([#1103](https://github.com/alchemyplatform/aa-sdk/issues/1103)) ([62ec78d](https://github.com/alchemyplatform/aa-sdk/commit/62ec78d9d0055b5fc575f5df8f1c1815355af86c))
+
+# [4.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.1...v4.1.0) (2024-10-23)
+
+**Note:** Version bump only for package @account-kit/infra
+
 ## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
 
 **Note:** Version bump only for package @account-kit/infra

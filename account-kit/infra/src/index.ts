@@ -2,7 +2,7 @@ export type * from "./actions/simulateUserOperationChanges.js";
 export { simulateUserOperationChanges } from "./actions/simulateUserOperationChanges.js";
 export type * from "./actions/types.js";
 export type * from "./alchemyTransport.js";
-export { alchemy } from "./alchemyTransport.js";
+export { alchemy, isAlchemyTransport } from "./alchemyTransport.js";
 export type * from "./chains.js";
 export {
   arbitrum,
@@ -31,6 +31,15 @@ export {
   zora,
   zoraSepolia,
   beraChainBartio,
+  opbnbMainnet,
+  opbnbTestnet,
+  soneiumMinato,
+  soneiumMainnet,
+  unichainMainnet,
+  unichainSepolia,
+  inkMainnet,
+  inkSepolia,
+  mekong,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";

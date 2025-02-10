@@ -1,3 +1,5 @@
+import type { WalletConnectParameters } from "wagmi/connectors";
+
 export function capitalize(str: string) {
   return str
     .split(" ")
@@ -5,6 +7,25 @@ export function capitalize(str: string) {
     .join(" ");
 }
 
-export function assertNever(msg: string) {
-  throw new Error(msg);
+export function assertNever(_: never, message: string): never {
+  throw new Error(message);
+}
+
+export function getWalletConnectParams(
+  walletConnectAuthConfig: WalletConnectParameters | undefined
+): WalletConnectParameters | undefined {
+  if (!walletConnectAuthConfig) return undefined;
+
+  return walletConnectAuthConfig
+    ? ({
+        ...walletConnectAuthConfig,
+        qrModalOptions: {
+          ...walletConnectAuthConfig.qrModalOptions,
+          themeVariables: {
+            "--wcm-z-index": "1000000",
+            ...walletConnectAuthConfig.qrModalOptions?.themeVariables,
+          },
+        },
+      } as WalletConnectParameters)
+    : undefined;
 }

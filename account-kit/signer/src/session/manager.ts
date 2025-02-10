@@ -7,7 +7,11 @@ import {
 } from "zustand/middleware";
 import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
 import type { BaseSignerClient } from "../client/base";
-import type { User } from "../client/types";
+import type {
+  AlchemySignerClientEvent,
+  AlchemySignerClientEvents,
+  User,
+} from "../client/types";
 import { assertNever } from "../utils/typeAssertions.js";
 import type { Session, SessionManagerEvents } from "./types";
 
@@ -39,12 +43,15 @@ type Store = Mutate<
   [["zustand/subscribeWithSelector", never], ["zustand/persist", SessionState]]
 >;
 
+type TemporarySession = { orgId: string; isNewUser?: boolean };
+
 export class SessionManager {
   private sessionKey: string;
   private client: BaseSignerClient;
   private eventEmitter: EventEmitter<SessionManagerEvents>;
   readonly expirationTimeMs: number;
   private store: Store;
+  private clearSessionHandle: NodeJS.Timeout | null = null;
 
   constructor(params: SessionManagerParams) {
     const {
@@ -84,17 +91,25 @@ export class SessionManager {
 
     switch (existingSession.type) {
       case "email":
-      case "oauth": {
-        const connectedEventName =
-          existingSession.type === "email"
-            ? "connectedEmail"
-            : "connectedOauth";
+      case "oauth":
+      case "otp": {
+        const connectedEventName = (() => {
+          switch (existingSession.type) {
+            case "email":
+              return "connectedEmail";
+            case "oauth":
+              return "connectedOauth";
+            case "otp":
+              return "connectedOtp";
+          }
+        })();
         const result = await this.client
           .completeAuthWithBundle({
             bundle: existingSession.bundle,
             orgId: existingSession.user.orgId,
             authenticatingType: existingSession.type,
             connectedEventName,
+            idToken: existingSession.user.idToken,
           })
           .catch((e) => {
             console.warn("Failed to load user from session", e);
@@ -125,9 +140,13 @@ export class SessionManager {
 
   public clearSession = () => {
     this.store.setState({ session: null });
+
+    if (this.clearSessionHandle) {
+      clearTimeout(this.clearSessionHandle);
+    }
   };
 
-  public setTemporarySession = (session: { orgId: string }) => {
+  public setTemporarySession = (session: TemporarySession) => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     localStorage.setItem(
       `${this.sessionKey}:temporary`,
@@ -135,7 +154,7 @@ export class SessionManager {
     );
   };
 
-  public getTemporarySession = (): { orgId: string } | null => {
+  public getTemporarySession = (): TemporarySession | null => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     const sessionStr = localStorage.getItem(`${this.sessionKey}:temporary`);
 
@@ -170,24 +189,31 @@ export class SessionManager {
      * We should revisit this later
      */
     if (session.expirationDateMs < Date.now()) {
-      this.store.setState({ session: null });
+      this.clearSession();
       return null;
     }
+
+    this.registerSessionExpirationHandler(session);
 
     return session;
   };
 
   private setSession = (
-    session:
-      | Omit<Extract<Session, { type: "email" | "oauth" }>, "expirationDateMs">
+    session_:
+      | Omit<
+          Extract<Session, { type: "email" | "oauth" | "otp" }>,
+          "expirationDateMs"
+        >
       | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
   ) => {
-    this.store.setState({
-      session: {
-        ...session,
-        expirationDateMs: Date.now() + this.expirationTimeMs,
-      },
-    });
+    const session = {
+      ...session_,
+      expirationDateMs: Date.now() + this.expirationTimeMs,
+    };
+
+    this.registerSessionExpirationHandler(session);
+
+    this.store.setState({ session });
   };
 
   public initialize() {
@@ -220,42 +246,81 @@ export class SessionManager {
       }
     );
 
-    this.client.on("disconnected", () => this.clearSession());
+    // Helper type to ensure that a listener is either defined or explicitly
+    // omitted for every event type.
+    type Listeners = {
+      [K in keyof AlchemySignerClientEvents]:
+        | AlchemySignerClientEvents[K]
+        | undefined;
+    };
 
-    this.client.on("connectedEmail", (user, bundle) =>
-      this.setSessionWithUserAndBundle({ type: "email", user, bundle })
-    );
+    const listeners: Listeners = {
+      connected: undefined,
+      newUserSignup: undefined,
+      authenticating: undefined,
+      connectedEmail: (user, bundle) =>
+        this.setSessionWithUserAndBundle({ type: "email", user, bundle }),
+      connectedPasskey: (user) => {
+        const existingSession = this.getSession();
+        if (
+          existingSession != null &&
+          existingSession.type === "passkey" &&
+          existingSession.user.userId === user.userId
+        ) {
+          return;
+        }
 
-    this.client.on("connectedPasskey", (user) => {
-      const existingSession = this.getSession();
-      if (
-        existingSession != null &&
-        existingSession.type === "passkey" &&
-        existingSession.user.userId === user.userId
-      ) {
-        return;
+        this.setSession({ type: "passkey", user });
+      },
+      connectedOauth: (user, bundle) =>
+        this.setSessionWithUserAndBundle({ type: "oauth", user, bundle }),
+      connectedOtp: (user, bundle) => {
+        this.setSessionWithUserAndBundle({ type: "otp", user, bundle });
+      },
+      disconnected: () => this.clearSession(),
+    };
+
+    for (const [event, listener] of Object.entries(listeners)) {
+      if (listener) {
+        this.client.on(event as AlchemySignerClientEvent, listener);
       }
-
-      this.setSession({ type: "passkey", user });
-    });
-
-    this.client.on("connectedOauth", (user, bundle) =>
-      this.setSessionWithUserAndBundle({ type: "oauth", user, bundle })
-    );
+    }
 
     // sync local state if persisted state has changed from another tab
-    window.addEventListener("focus", () => {
-      const oldSession = this.store.getState().session;
-      this.store.persist.rehydrate();
-      const newSession = this.store.getState().session;
+    // only do this in the browser
+    // Add a try catch to prevent potential crashes in non-browser environments
+    try {
       if (
-        oldSession?.user.orgId !== newSession?.user.orgId ||
-        oldSession?.user.userId !== newSession?.user.userId
+        typeof window !== "undefined" &&
+        typeof window.addEventListener !== "undefined"
       ) {
-        // Initialize if the user has changed.
-        this.initialize();
+        window.addEventListener("focus", () => {
+          const oldSession = this.store.getState().session;
+          this.store.persist.rehydrate();
+          const newSession = this.store.getState().session;
+          if (
+            (oldSession?.expirationDateMs ?? 0) < Date.now() ||
+            oldSession?.user.orgId !== newSession?.user.orgId ||
+            oldSession?.user.userId !== newSession?.user.userId
+          ) {
+            // Initialize if the user has changed.
+            this.initialize();
+          }
+        });
       }
-    });
+    } catch (e) {
+      console.error("Error registering event listeners", e);
+    }
+  };
+
+  private registerSessionExpirationHandler = (session: Session) => {
+    if (this.clearSessionHandle) {
+      clearTimeout(this.clearSessionHandle);
+    }
+
+    this.clearSessionHandle = setTimeout(() => {
+      this.clearSession();
+    }, Math.min(session.expirationDateMs - Date.now(), Math.pow(2, 31) - 1));
   };
 
   private setSessionWithUserAndBundle = ({
@@ -263,7 +328,7 @@ export class SessionManager {
     user,
     bundle,
   }: {
-    type: "email" | "oauth";
+    type: "email" | "oauth" | "otp";
     user: User;
     bundle: string;
   }) => {

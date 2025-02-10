@@ -1,3 +1,4 @@
+import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 import {
   cookieToInitialConfig,
   generateClassesForRoot,
@@ -15,7 +16,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Account Kit Demo",
-  description: "Powered by Alchemy",
+  description: "Protected by Alchemy",
 };
 
 export default function RootLayout({
@@ -41,6 +42,9 @@ export default function RootLayout({
       className={classes.join(" ")}
       style={Object.fromEntries(styles)}
     >
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className={inter.className}>
         <Providers initialState={initialState} initialConfig={initialConfig}>
           {children}

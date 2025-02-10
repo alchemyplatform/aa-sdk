@@ -53,6 +53,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             text: "oauthWithRedirect",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect",
           },
+          {
+            text: "submitOtpCode",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode",
+          },
         ],
       },
       {
@@ -184,10 +188,6 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
   {
     text: "Resources",
     items: [
-      {
-        text: "React Native",
-        link: "/resources/react-native",
-      },
       {
         text: "Third Party",
         items: [

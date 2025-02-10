@@ -28,6 +28,7 @@ export type CreateAccountParams =
   | {
       type: "email";
       email: string;
+      emailMode?: EmailType;
       expirationSeconds?: number;
       redirectParams?: URLSearchParams;
     }
@@ -42,8 +43,11 @@ export type CreateAccountParams =
       creationOpts?: CredentialCreationOptionOverrides;
     };
 
+export type EmailType = "magicLink" | "otp";
+
 export type EmailAuthParams = {
   email: string;
+  emailMode?: EmailType;
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
@@ -53,10 +57,19 @@ export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
   expirationSeconds?: number;
 };
 
+export type OtpParams = {
+  orgId: string;
+  otpId: string;
+  otpCode: string;
+  targetPublicKey: string;
+  expirationSeconds?: number;
+};
+
 export type SignupResponse = {
   orgId: string;
   userId?: string;
   address?: Address;
+  otpId?: string;
 };
 
 export type OauthConfig = {
@@ -86,7 +99,9 @@ export type SignerEndpoints = [
   {
     Route: "/v1/signup";
     Body:
-      | (Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string })
+      | (Omit<EmailAuthParams, "redirectParams"> & {
+          redirectParams?: string;
+        })
       | {
           passkey: {
             challenge: string;
@@ -104,9 +119,12 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/auth";
-    Body: Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string };
+    Body: Omit<EmailAuthParams, "redirectParams"> & {
+      redirectParams?: string;
+    };
     Response: {
       orgId: string;
+      otpId?: string;
     };
   },
   {
@@ -133,19 +151,26 @@ export type SignerEndpoints = [
       nonce: string;
     };
     Response: OauthConfig;
+  },
+  {
+    Route: "/v1/otp";
+    Body: OtpParams;
+    Response: { credentialBundle: string };
   }
 ];
 
 export type AuthenticatingEventMetadata = {
-  type: "email" | "passkey" | "oauth";
+  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify";
 };
 
 export type AlchemySignerClientEvents = {
   connected(user: User): void;
+  newUserSignup(): void;
   authenticating(data: AuthenticatingEventMetadata): void;
   connectedEmail(user: User, bundle: string): void;
   connectedPasskey(user: User): void;
   connectedOauth(user: User, bundle: string): void;
+  connectedOtp(user: User, bundle: string): void;
   disconnected(): void;
 };
 
@@ -155,4 +180,22 @@ export type GetWebAuthnAttestationResult = {
   attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
   challenge: ArrayBuffer;
   authenticatorUserId: ArrayBuffer;
+};
+
+export type OauthState = {
+  authProviderId: string;
+  isCustomProvider?: boolean;
+  requestKey: string;
+  turnkeyPublicKey: string;
+  expirationSeconds?: number;
+  redirectUrl?: string;
+  openerOrigin?: string;
+};
+
+export type GetOauthProviderUrlArgs = {
+  oauthParams: OauthParams;
+  turnkeyPublicKey: string;
+  oauthCallbackUrl: string;
+  oauthConfig?: OauthConfig;
+  usesRelativeUrl?: boolean;
 };

@@ -1,7 +1,7 @@
 {
   "name": "@aa-sdk/core",
   "license": "MIT",
-  "version": "4.0.1",
+  "version": "4.12.0",
   "description": "viem based SDK that enables interactions with ERC-4337 Smart Accounts. ABIs are based off the definitions generated in @account-abstraction/contracts",
   "author": "Alchemy",
   "type": "module",
@@ -17,6 +17,7 @@
     "!vitest.config.ts",
     "!.env",
     "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
     "!src/__tests__/**/*"
   ],
   "exports": {
@@ -32,11 +33,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "prebuild": "npx tsx ./inject-version.ts",
+    "prebuild": "tsx ./inject-version.ts",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/core",
+    "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/core",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"

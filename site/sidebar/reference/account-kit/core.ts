@@ -138,10 +138,6 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
     text: "Resources",
     items: [
       {
-        text: "React Native",
-        link: "/resources/react-native",
-      },
-      {
         text: "Third Party",
         items: [
           {
