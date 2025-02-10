@@ -7,16 +7,11 @@ description: Learn about different smart account implementations to use with
 
 # Choosing a Smart Account
 
-GOAL: Convince users to use MAv2.
-HOW?: Show benchmarks, show features.
-
----
-
 ## Why Smart Accounts?
 
 Smart accounts are the key to unlocking the best online user experience ever had-- enabling features that have never been possible with traditional EOAs (externally-owned-accounts) like session keys, granular permissions, different authentication methods like email and passkeys, and much more. 
 
-Beyond that, alchemy's Account Kit offers a simple & clean SDK to provide your users with top-tier smart account features. With Account Kit's most powerful, most natively-supported account being Modular Account V2. MAv2 is the world's most fully-featured and efficient smart account, allowing for limitless modular expansion while remaining maximally gas-efficient.
+Beyond that, alchemy's Account Kit offers a simple & clean SDK to provide your users with top-tier smart account features. With Account Kit's most powerful, most natively-supported account being Modular Account V2. MAv2 is the most fully-featured and efficient smart account out there, allowing for limitless modular expansion while remaining maximally gas-efficient.
 
 As a frame of reference, see the deployment benchmarks below:
 
@@ -41,3 +36,15 @@ By default, MAv2 includes a fallback validation. This allows a zero-customizatio
 Validations are themselves modules that define an authorization scheme with granularly managed control over the account. You could use a [WebAuthn validation](https://github.com/alchemyplatform/modular-account/blob/develop/src/modules/validation/WebAuthnValidationModule.sol) to support passkeys or biometrics for example. 
 
 MAv2 also supports [EIP-7702](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md) out of the box, allowing EOAs to seamlessly turn into maximally expandable smart accounts.
+
+## Other Accounts
+
+The account abstraction landscape is full of numerous options, some more tailored to specific use cases than others. To make an informed choice, here's a table comparing different account functionality:
+
+MAv2
+Validation Method: Limitless
+Modularity: Execution & Validation Phase
+Interface: Expandable via Execution Functions
+Audited: Yes (Quantstamp, ChainLight)
+7702 Support: Yes
+
