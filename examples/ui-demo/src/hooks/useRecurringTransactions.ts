@@ -17,13 +17,13 @@ import {
   TimeRangeModule,
 } from "@account-kit/smart-contracts/experimental";
 import { SingleSignerValidationModule } from "@account-kit/smart-contracts/experimental";
-import { genEntityId } from "@/lib/genEntityId";
 import { useMAv2Client } from "./useMAv2Client";
-import { odyssey, splitOdysseyTransport } from "@/lib/transportSetup";
 import { DEMO_USDC_ADDRESS, SWAP_VENUE_ADDRESS } from "./7702/dca/constants";
 import { swapAbi } from "./7702/dca/abi/swap";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
-import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "@/lib/constants";
+import { genEntityId } from "./7702/genEntityId";
+import { odyssey, splitOdysseyTransport } from "./7702/transportSetup";
+import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 

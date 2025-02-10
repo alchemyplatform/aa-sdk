@@ -6,7 +6,7 @@ import { Address, encodeFunctionData, Hash } from "viem";
 import { MintStatus } from "@/components/small-cards/MintCard";
 import { UseMintReturn } from "./useMintDefault";
 import { useMAv2Client } from "./useMAv2Client";
-import { odyssey, splitOdysseyTransport } from "@/lib/transportSetup";
+import { odyssey, splitOdysseyTransport } from "./7702/transportSetup";
 
 const initialValuePropState = {
   signing: "initial",

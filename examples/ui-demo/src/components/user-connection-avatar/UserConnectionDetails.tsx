@@ -7,7 +7,7 @@ import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { Hex } from "viem";
-import { ODYSSEY_EXPLORER_URL } from "@/lib/constants";
+import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
