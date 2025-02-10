@@ -3,10 +3,12 @@ import {
   createLightAccount,
   createMultiOwnerLightAccount,
   createMultiOwnerModularAccount,
+  createModularAccountV2,
   type CreateLightAccountParams,
   type CreateMultiOwnerLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
   type LightAccountVersion,
+  type CreateModularAccountV2Params,
 } from "@account-kit/smart-contracts";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
@@ -20,29 +22,34 @@ import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 
+type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
+
 export type AccountConfig<TAccount extends SupportedAccountTypes> =
   TAccount extends "LightAccount"
-    ? Omit<
+    ? OmitSignerTransportChain<
         CreateLightAccountParams<
           Transport,
           AlchemyWebSigner,
           LightAccountVersion<"LightAccount">
-        >,
-        "signer" | "transport" | "chain"
+        >
       >
     : TAccount extends "MultiOwnerLightAccount"
-    ? Omit<
+    ? OmitSignerTransportChain<
         CreateMultiOwnerLightAccountParams<
           Transport,
           AlchemyWebSigner,
           LightAccountVersion<"MultiOwnerLightAccount">
-        >,
-        "signer" | "transport" | "chain"
+        >
       >
-    : Omit<
-        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>,
-        "signer" | "transport" | "chain"
-      >;
+    : TAccount extends "MultiOwnerModularAccount"
+    ? OmitSignerTransportChain<
+        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>
+      >
+    : TAccount extends "ModularAccountV2"
+    ? OmitSignerTransportChain<
+        CreateModularAccountV2Params<Transport, AlchemyWebSigner>
+      >
+    : never;
 
 export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
   type: TAccount;
@@ -116,10 +123,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       case "MultiOwnerLightAccount":
         return createMultiOwnerLightAccount({
           ...(params as AccountConfig<"MultiOwnerLightAccount">),
-          ...(cachedConfig as Omit<
-            CreateMultiOwnerLightAccountParams,
-            "transport" | "chain" | "signer"
-          >),
+          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -136,10 +140,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
           ...(params as AccountConfig<"MultiOwnerModularAccount">),
-          ...(cachedConfig as Omit<
-            CreateMultiOwnerModularAccountParams,
-            "transport" | "chain" | "signer"
-          >),
+          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -149,6 +150,24 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
             data: {
               accountType: "MultiOwnerModularAccount",
               accountVersion: "v1.0.0",
+            },
+          });
+
+          return account;
+        });
+      case "ModularAccountV2":
+        return createModularAccountV2({
+          ...(params as AccountConfig<"ModularAccountV2">),
+          ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
+          signer,
+          transport: (opts) => transport({ ...opts, retryCount: 0 }),
+          chain,
+        }).then((account) => {
+          CoreLogger.trackEvent({
+            name: "account_initialized",
+            data: {
+              accountType: "ModularAccountV2",
+              accountVersion: "v2.0.0",
             },
           });
 
