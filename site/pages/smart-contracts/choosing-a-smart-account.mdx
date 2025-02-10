@@ -9,21 +9,21 @@ description: Learn about different smart account implementations to use with
 
 ## Why Smart Accounts?
 
-Smart accounts are the key to unlocking the best online user experience ever had-- enabling features that have never been possible with traditional EOAs (externally-owned-accounts) like session keys, granular permissions, different authentication methods like email and passkeys, and much more. 
+Smart accounts are the key to unlocking the best online user experience ever had-- enabling features that have never been possible with traditional EOAs (externally-owned-accounts) like session keys, granular permissions, different authentication methods like email and passkeys, and much more.
 
 Beyond that, alchemy's Account Kit offers a simple & clean SDK to provide your users with top-tier smart account features. With Account Kit's most powerful, most natively-supported account being Modular Account V2. MAv2 is the most fully-featured and efficient smart account out there, allowing for limitless modular expansion while remaining maximally gas-efficient.
 
 As a frame of reference, see the deployment benchmarks below:
 
-|                           | Runtime Deployment gas | UserOp Deployment gas |
-| :------------------------ | -------------: | ------------------: |
-| Alchemy Modular Account v2|       `97772`  |           `233004` |
-| Biconomy Nexus           |      `210309`  |           `342381` |
-| ZeroDev Kernel v3.1      |      `180465`  |           `338419` |
-| Safe v1.4.1              |      `289207`  |           `435486` |
-| Alchemy Light Account v2  |      `143842`  |           `266901` |
-| Coinbase Smart Wallet    |      `190525`  |           `317904` |
-| Simple Account           |      `174219`  |           `297367` |
+|                            | Runtime Deployment gas | UserOp Deployment gas |
+| :------------------------- | ---------------------: | --------------------: |
+| Alchemy Modular Account v2 |                `97772` |              `233004` |
+| Biconomy Nexus             |               `210309` |              `342381` |
+| ZeroDev Kernel v3.1        |               `180465` |              `338419` |
+| Safe v1.4.1                |               `289207` |              `435486` |
+| Alchemy Light Account v2   |               `143842` |              `266901` |
+| Coinbase Smart Wallet      |               `190525` |              `317904` |
+| Simple Account             |               `174219` |              `297367` |
 
 See more benchmarks [here!](https://github.com/alchemyplatform/aa-benchmarks/blob/master/README.md)
 
@@ -33,6 +33,6 @@ MAv2 is a zero-compromise smart account designed from the ground up for maximal 
 
 By default, MAv2 includes a fallback validation. This allows a zero-customization setup where the account's owner (which, technically, could be another account!) has full control over the account. The fallback validation signer, or the account's owner, can be swapped or the entire validation can be disabled entirely in favor of one or more other validations.
 
-Validations are themselves modules that define an authorization scheme with granularly managed control over the account. You could use a [WebAuthn validation](https://github.com/alchemyplatform/modular-account/blob/develop/src/modules/validation/WebAuthnValidationModule.sol) to support passkeys or biometrics for example. 
+Validations are themselves modules that define an authorization scheme with granularly managed control over the account. You could use a [WebAuthn validation](https://github.com/alchemyplatform/modular-account/blob/develop/src/modules/validation/WebAuthnValidationModule.sol) to support passkeys or biometrics for example.
 
 MAv2 also supports [EIP-7702](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md) out of the box, allowing EOAs to seamlessly turn into maximally expandable smart accounts.
