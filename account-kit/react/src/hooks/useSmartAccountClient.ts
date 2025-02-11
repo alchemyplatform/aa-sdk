@@ -1,5 +1,5 @@
 "use client";
-
+import { type OptionalFields } from "@aa-sdk/core";
 import type {
   GetSmartAccountClientParams,
   GetSmartAccountClientResult,
@@ -18,8 +18,16 @@ import { useAlchemyAccountContext } from "../context.js";
 
 export type UseSmartAccountClientProps<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes = SupportedAccountTypes
-> = GetSmartAccountClientParams<TChain, TAccount>;
+  TAccount extends SupportedAccountTypes | undefined =
+    | SupportedAccountTypes
+    | undefined
+> = OptionalFields<
+  GetSmartAccountClientParams<
+    TChain,
+    TAccount extends undefined ? "ModularAccountV2" : TAccount
+  >,
+  "type"
+>;
 
 export type UseSmartAccountClientResult<
   TChain extends Chain | undefined = Chain | undefined,
@@ -28,10 +36,13 @@ export type UseSmartAccountClientResult<
 
 export function useSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes = SupportedAccountTypes
+  TAccount extends SupportedAccountTypes | undefined = "ModularAccountV2"
 >(
   args: UseSmartAccountClientProps<TChain, TAccount>
-): UseSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
+): UseSmartAccountClientResult<
+  TChain,
+  SupportedAccount<TAccount extends undefined ? "ModularAccountV2" : TAccount>
+>;
 
 /**
  * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts) that uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
@@ -61,7 +72,7 @@ export function useSmartAccountClient<
  */
 export function useSmartAccountClient({
   accountParams,
-  type,
+  type = "ModularAccountV2",
   ...clientParams
 }: UseSmartAccountClientProps): UseSmartAccountClientResult {
   const {
