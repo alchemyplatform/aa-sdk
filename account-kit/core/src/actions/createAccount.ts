@@ -22,32 +22,36 @@ import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 
-type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
+//type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
 
 export type AccountConfig<TAccount extends SupportedAccountTypes> =
   TAccount extends "LightAccount"
-    ? OmitSignerTransportChain<
+    ? Omit<
         CreateLightAccountParams<
           Transport,
           AlchemyWebSigner,
           LightAccountVersion<"LightAccount">
-        >
+        >,
+        "signer" | "transport" | "chain"
       >
     : TAccount extends "MultiOwnerLightAccount"
-    ? OmitSignerTransportChain<
+    ? Omit<
         CreateMultiOwnerLightAccountParams<
           Transport,
           AlchemyWebSigner,
           LightAccountVersion<"MultiOwnerLightAccount">
-        >
+        >,
+        "signer" | "transport" | "chain"
       >
     : TAccount extends "MultiOwnerModularAccount"
-    ? OmitSignerTransportChain<
-        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>
+    ? Omit<
+        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>,
+        "signer" | "transport" | "chain"
       >
     : TAccount extends "ModularAccountV2"
-    ? OmitSignerTransportChain<
-        CreateModularAccountV2Params<Transport, AlchemyWebSigner>
+    ? Omit<
+        CreateModularAccountV2Params<Transport, AlchemyWebSigner>,
+        "signer" | "transport" | "chain"
       >
     : never;
 
@@ -123,7 +127,10 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       case "MultiOwnerLightAccount":
         return createMultiOwnerLightAccount({
           ...(params as AccountConfig<"MultiOwnerLightAccount">),
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
+          ...(cachedConfig as Omit<
+            CreateMultiOwnerLightAccountParams,
+            "signer" | "transport" | "chain"
+          >),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -140,7 +147,10 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
           ...(params as AccountConfig<"MultiOwnerModularAccount">),
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
+          ...(cachedConfig as Omit<
+            CreateMultiOwnerModularAccountParams,
+            "signer" | "transport" | "chain"
+          >),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -158,7 +168,10 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       case "ModularAccountV2":
         return createModularAccountV2({
           ...(params as AccountConfig<"ModularAccountV2">),
-          ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
+          ...(cachedConfig as Omit<
+            CreateModularAccountV2Params,
+            "signer" | "transport" | "chain"
+          >),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
