@@ -11,7 +11,7 @@ This extends `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-ow
 
 ## Usage
 
-The following sets up a Smart Account Client using Modular Account V2 — the most cost-effective and advanced smart account option. This client will allow you to deploy and send transactions from a new Modular Account v2 instance controlled by the Alchemy Signer set up [here](/react/getting-started).
+The following sets up a Smart Account Client using Modular Account V2 — the most cost-effective and advanced smart account option. This client will allow you to deploy and send transactions from a new Modular Account v2 instance controlled by the **Alchemy Signer** set up [here](/react/getting-started).
 
 ```tsx twoslash
 import { useSmartAccountClient } from "@account-kit/react";
@@ -20,6 +20,8 @@ const { client, address, isLoadingClient } = useSmartAccountClient({
   type: "ModularAccountV2",
 });
 ```
+
+Note: React hooks only support Alchemy Signer. If you want to use a 3rd party signer, see this [guide](/third-party/signers).
 
 ## Configuration Options
 
@@ -41,32 +43,26 @@ Looking for 7702 support? Learn how to use advanced `ModularAccountV2` functiona
 Note: Changing the account type will deploy a different account. If you've already deployed an account for a user and want to change the underlying account type, you'll need to upgrade it. Learn how to upgrade [here](/smart-contracts/modular-account/upgrading-to-modular-account).
 :::
 
-### Other options
+### Gas Sponsorship
 
-| parameter           |                                            type |                                                                                                                                                                                                                                                                                 description |
-| :------------------ | ----------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| `type`              |                         `SupportedAccountTypes` |                                                                                                                                                                                        options are "ModularAccountV2", "LightAccount", "MultiOwnerLightAccount", "MultiOwnerModularAccount" |
-| `policyId`          |                                        `string` |                                                                                                                                                                                                       gas manager policy ID from the [Dashboard](https://dashboard.alchemy.com/gas-manager) |
-| `useSimulation`     |                                       `boolean` |                                                                                                                                                                      enables use of [`alchemyUserOperationSimulator`](/reference/account-kit/infra/functions/alchemyUserOperationSimulator) |
-| `customMiddleware`  |                            `ClientMiddlewareFn` |                                                                                                                                                                                                                                      custom middleware to run before requesting sponsorship |
-| `feeEstimator`      |                            `ClientMiddlewareFn` |                                                                                 function that estimates the fees for a user operation (if you are using our RPCs, it's important to use the [`alchemyFeeEstimator`](/reference/account-kit/infra/functions/alchemyFeeEstimator) middleware) |
-| `gasEstimator`      |
-| `signUserOperation` |                            `ClientMiddlewareFn` |                                                                                                                                                                                                                            function that sends a user operation or catch of user operations |
-| `opts`              | ` z.input<typeof SmartAccountClientOptsSchema>` |                                                                                                                                                                                                                                                                             further options |
-| `accountParams`     |                                 `AccountConfig` | object with the following fields <ul><li>`mode` : "default" \| "7702"</li><li>`entryPoint`: of type `EntryPointDef`</li><li>`signerEntity`: of type `SignerEntity`</li><li>`salt`: of type `bigint`</li><li>`factoryAddress`: of type `Address`</li><li>`initCode`: of type `Hex`</li></ul> |
+To improve transaction UX, we recommend sponsoring gas for users.
 
-:::tip
-We currently do not support using a third-party signer at the React hook level. To do so you must use the `createSMAV2Client` method
+- **`policyId`** (string) - [Gas Manager Policy ID](https://dashboard.alchemy.com/gas-manager/policy/create/?a=ak-docs) that enables gas sponsorship within policy limits
+
+See the [full guide](/react/sponsor-gas) for gas sponsorship.
+
+### Advanced
+
+:::details[Options]
+
+| Usage                                                                                                                                                                                 | Parameter           | Type                                                                                                                                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Smart contract account implementation                                                                                                                                                 | `type`              | One of `"ModularAccountV2"`, `"LightAccount"`, `"MultiOwnerLightAccount"`, `"MultiOwnerModularAccount"`                                                                                                                                                          |
+| Sponsor gas using your policy ID from the [dashboard](https://dashboard.alchemy.com/gas-manager)                                                                                      | `policyId`          | `string`                                                                                                                                                                                                                                                         |
+| Simulate user operations before sending (i.e. use [`alchemyUserOperationSimulator`](/reference/account-kit/infra/functions/alchemyUserOperationSimulator))                            | `useSimulation`     | `boolean`                                                                                                                                                                                                                                                        |
+| Custom middleware to run before requesting sponsorship                                                                                                                                | `customMiddleware`  | `ClientMiddlewareFn`                                                                                                                                                                                                                                             |
+| Override fee estimation middleware (if you are using our RPCs, it's important to use the default [`alchemyFeeEstimator`](/reference/account-kit/infra/functions/alchemyFeeEstimator)) | `feeEstimator`      | `ClientMiddlewareFn`                                                                                                                                                                                                                                             |
+| Override middleware that signs user operation(s)                                                                                                                                      | `signUserOperation` | `ClientMiddlewareFn`                                                                                                                                                                                                                                             |
+| Advanced account params                                                                                                                                                               | `accountParams`     | `AccountConfig` with the following fields: <ul><li>`mode`: `"default"` \| `"7702"`</li><li>`entryPoint`: `EntryPointDef`</li><li>`signerEntity`: `SignerEntity`</li><li>`salt`: `bigint`</li><li>`factoryAddress`: `Address`</li><li>`initCode`: `Hex`</li></ul> |
+
 :::
-
-## Legacy Users: other account options
-
-The following are the other smart accounts you can use
-
-|                    | LightAccount | MultiOwnerLightAccount | MultiOwnerModularAccount |
-| :----------------- | -----------: | ---------------------: | -----------------------: |
-| add owner          |           no |                    yes |                      yes |
-| remove owner       |           no |                    yes |                      yes |
-| add session key    |           no |                     no |                       no |
-| remove session key |           no |                     no |                       no |
-| update session key |           no |                     no |                       no |
