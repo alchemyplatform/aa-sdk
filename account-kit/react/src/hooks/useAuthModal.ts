@@ -10,8 +10,11 @@ export type UseAuthModalResult = {
  * A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts) that returns the open and close functions for the Auth Modal if uiConfig
  * is enabled on the Account Provider
  *
+ * @returns {UseAuthModalResult} an object containing methods for opening or closing the auth modal. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts#L4)
+ *
  * @example
- * ```tsx
+ * ```tsx twoslash
+ * import React from 'react';
  * import { useAuthModal } from "@account-kit/react";
  *
  * const ComponentWithAuthModal = () => {
@@ -24,8 +27,6 @@ export type UseAuthModalResult = {
  *  );
  * };
  * ```
- *
- * @returns {UseAuthModalResult} an object containing methods for opening or closing the auth modal. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts#L4)
  */
 export const useAuthModal = () => {
   const { isOpen, setModalOpen } = useUiConfig(
