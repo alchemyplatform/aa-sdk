@@ -26,7 +26,7 @@ import {
 } from "@account-kit/react";
 
 export default function MyOpSenderComponent() {
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { client } = useSmartAccountClient({});
 
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
     client,
@@ -74,7 +74,7 @@ import {
 } from "@account-kit/react";
 
 export default function MyOpSenderComponent() {
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { client } = useSmartAccountClient({});
 
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
     client,

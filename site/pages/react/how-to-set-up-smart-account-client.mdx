@@ -11,15 +11,15 @@ This extends `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-ow
 
 ## Usage
 
-The following sets up a Smart Account Client using Modular Account V2 — the most cost-effective and advanced smart account option. This client will allow you to deploy and send transactions from a new Modular Account v2 instance controlled by the **Alchemy Signer** set up [here](/react/getting-started).
+The following sets up a Smart Account Client that will allow you to create a new smart accounts and send transactions signed by your **[Alchemy Signer](/react/getting-started)**.
 
 ```tsx twoslash
 import { useSmartAccountClient } from "@account-kit/react";
 
-const { client, address, isLoadingClient } = useSmartAccountClient({
-  type: "ModularAccountV2",
-});
+const { client, address, isLoadingClient } = useSmartAccountClient({});
 ```
+
+The default smart account type is Modular Account V2 — the most cost-effective and advanced smart account option. You can specify other [account types](#account-type) with additional configuration.
 
 Note: React hooks only support Alchemy Signer. If you want to use a 3rd party signer, see this [guide](/third-party/signers).
 
@@ -32,7 +32,7 @@ You can customize your client by specifying additional parameters to change acco
 We recommend using [ModularAccountV2](/smart-contracts/modular-account-v2/overview) as it is the cheapest and most advanced Smart Account, but you can specify other smart contract account types as needed. Learn more about the different smart accounts [here](/smart-contracts/choosing-a-smart-account).
 
 - **`type`** (string) - Defines the smart account type. Options:
-  - `"ModularAccountV2"` (recommended)
+  - `"ModularAccountV2"` (recommended and default)
   - `"LightAccount"`
   - `"MultiOwnerLightAccount"`
   - `"MultiOwnerModularAccount"`
