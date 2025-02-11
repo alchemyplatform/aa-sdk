@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import path from "path";
 test.beforeEach(async ({ page, baseURL }) => {
   await page.goto(baseURL!);
 });
@@ -93,4 +94,65 @@ test("Toggle auth methods", async ({ page }) => {
   await externalWalletToggle.click();
   await expect(externalWalletToggle).toBeChecked();
   await expect(externalWalletButton).toBeVisible();
+});
+
+test("Branding config", async ({ page }) => {
+  // Dark mode
+  const darkModeToggle = page.locator("button[id='theme-switch']");
+  await expect(darkModeToggle).not.toBeChecked();
+  await expect(page.locator(".bg-bg-surface-default")).toHaveCSS(
+    "background-color",
+    "rgb(255, 255, 255)"
+  );
+  darkModeToggle.click();
+  await expect(darkModeToggle).toBeChecked();
+  await expect(page.locator("html")).toHaveClass("dark");
+  await expect(page.locator(".bg-bg-surface-default")).toHaveCSS(
+    "background-color",
+    "rgb(2, 6, 23)"
+  );
+  // Brand color
+  await expect(page.locator(".akui-btn-primary").first()).toHaveCSS(
+    "background-color",
+    "rgb(255, 102, 204)"
+  );
+  const brandColorButton = page.locator("button[id='color-picker']");
+  await brandColorButton.click();
+  const colorPicker = page
+    .locator("div")
+    .filter({ hasText: /^Hex$/ })
+    .getByRole("textbox");
+  await colorPicker.fill("#000000");
+  await expect(page.locator(".akui-btn-primary").first()).toHaveCSS(
+    "background-color",
+    "rgb(0, 0, 0)"
+  );
+  // Logo
+  const logoInput = page.locator('input[type="file"]');
+  // TODO: validate this in CI/CD
+  const logoPath = path.join(__dirname, "../public/next.svg");
+  await logoInput.setInputFiles(logoPath);
+  await expect(page.getByRole("img", { name: "next.svg" })).toBeVisible();
+  await page.locator("button[id='logo-remove']").click();
+  await expect(page.getByRole("img", { name: "next.svg" })).not.toBeVisible();
+  // Border radius
+  await expect(page.locator(".radius-2").first()).toHaveCSS(
+    "border-radius",
+    "16px"
+  );
+  await page.getByRole("button", { name: "Medium" }).click();
+  await expect(page.locator(".radius-2").first()).toHaveCSS(
+    "border-radius",
+    "32px"
+  );
+  await page.getByRole("button", { name: "Large" }).click();
+  await expect(page.locator(".radius-2").first()).toHaveCSS(
+    "border-radius",
+    "48px"
+  );
+  await page.getByRole("button", { name: "None" }).click();
+  await expect(page.locator(".radius-2").first()).toHaveCSS(
+    "border-radius",
+    "0px"
+  );
 });
