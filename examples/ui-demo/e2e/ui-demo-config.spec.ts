@@ -156,3 +156,19 @@ test("Branding config", async ({ page }) => {
     "0px"
   );
 });
+
+test("code preview", async ({ page }) => {
+  const codePreviewSwitch = page.getByRole("switch", { name: "Code preview" });
+  await expect(codePreviewSwitch).not.toBeChecked();
+  await codePreviewSwitch.click();
+  await expect(codePreviewSwitch).toBeChecked();
+  await expect(page.getByText("Export configuration")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Fully customize styling here." })
+  ).toHaveAttribute(
+    "href",
+    "https://accountkit.alchemy.com/react/customization/theme"
+  );
+  await codePreviewSwitch.click();
+  await expect(codePreviewSwitch).not.toBeChecked();
+});
