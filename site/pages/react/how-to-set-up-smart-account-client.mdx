@@ -1,0 +1,72 @@
+---
+title: How to set up a smart account client
+description: Learn how to set up your smart account client to enable transactions on-chain
+---
+
+# How to set up a smart account client
+
+Once users are [authenticated](/react/getting-started), you can start landing transactions on-chain using a Smart Account Client. Setting up a new account client is easy using the `useSmartAccountClient` hook!
+
+This extends `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-own-client), enabling account creation, sending transactions, signing messages, sponsoring gas, and more. It's also EIP-1193 compliant, so you can swap it in for other web3 providers like `window.ethereum`.
+
+## Usage
+
+The following sets up a Smart Account Client using Modular Account V2 — the most cost-effective and advanced smart account option. This client will allow you to deploy and send transactions from a new Modular Account v2 instance controlled by the Alchemy Signer set up [here](/react/getting-started).
+
+```tsx twoslash
+import { useSmartAccountClient } from "@account-kit/react";
+
+const { client, address, isLoadingClient } = useSmartAccountClient({
+  type: "ModularAccountV2",
+});
+```
+
+## Configuration Options
+
+You can customize your client by specifying additional parameters to change account type, add gas sponsorship, etc. These parameters are optional.
+
+### Account Type
+
+We recommend using [ModularAccountV2](/smart-contracts/modular-account-v2/overview) as it is the cheapest and most advanced Smart Account, but you can specify other smart contract account types as needed. Learn more about the different smart accounts [here](/smart-contracts/choosing-a-smart-account).
+
+- **`type`** (string) - Defines the smart account type. Options:
+  - `"ModularAccountV2"` (recommended)
+  - `"LightAccount"`
+  - `"MultiOwnerLightAccount"`
+  - `"MultiOwnerModularAccount"`
+
+Looking for 7702 support? Learn how to use advanced `ModularAccountV2` functionality [here](#TODO/702-guide).
+
+:::tip
+Note: Changing the account type will deploy a different account. If you've already deployed an account for a user and want to change the underlying account type, you'll need to upgrade it. Learn how to upgrade [here](/smart-contracts/modular-account/upgrading-to-modular-account).
+:::
+
+### Other options
+
+| parameter           |                                            type |                                                                                                                                                                                                                                                                                 description |
+| :------------------ | ----------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| `type`              |                         `SupportedAccountTypes` |                                                                                                                                                                                        options are "ModularAccountV2", "LightAccount", "MultiOwnerLightAccount", "MultiOwnerModularAccount" |
+| `policyId`          |                                        `string` |                                                                                                                                                                                                       gas manager policy ID from the [Dashboard](https://dashboard.alchemy.com/gas-manager) |
+| `useSimulation`     |                                       `boolean` |                                                                                                                                                                      enables use of [`alchemyUserOperationSimulator`](/reference/account-kit/infra/functions/alchemyUserOperationSimulator) |
+| `customMiddleware`  |                            `ClientMiddlewareFn` |                                                                                                                                                                                                                                      custom middleware to run before requesting sponsorship |
+| `feeEstimator`      |                            `ClientMiddlewareFn` |                                                                                 function that estimates the fees for a user operation (if you are using our RPCs, it's important to use the [`alchemyFeeEstimator`](/reference/account-kit/infra/functions/alchemyFeeEstimator) middleware) |
+| `gasEstimator`      |
+| `signUserOperation` |                            `ClientMiddlewareFn` |                                                                                                                                                                                                                            function that sends a user operation or catch of user operations |
+| `opts`              | ` z.input<typeof SmartAccountClientOptsSchema>` |                                                                                                                                                                                                                                                                             further options |
+| `accountParams`     |                                 `AccountConfig` | object with the following fields <ul><li>`mode` : "default" \| "7702"</li><li>`entryPoint`: of type `EntryPointDef`</li><li>`signerEntity`: of type `SignerEntity`</li><li>`salt`: of type `bigint`</li><li>`factoryAddress`: of type `Address`</li><li>`initCode`: of type `Hex`</li></ul> |
+
+:::tip
+We currently do not support using a third-party signer at the React hook level. To do so you must use the `createSMAV2Client` method
+:::
+
+## Legacy Users: other account options
+
+The following are the other smart accounts you can use
+
+|                    | LightAccount | MultiOwnerLightAccount | MultiOwnerModularAccount |
+| :----------------- | -----------: | ---------------------: | -----------------------: |
+| add owner          |           no |                    yes |                      yes |
+| remove owner       |           no |                    yes |                      yes |
+| add session key    |           no |                     no |                       no |
+| remove session key |           no |                     no |                       no |
+| update session key |           no |                     no |                       no |
