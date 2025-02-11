@@ -53,15 +53,15 @@ const accountClient = await createModularAccountV2Client({
 });
 ```
 
-Want to enable social login methods? Set up your [Alchemy Signer](/signer/quickstart).  
+Want to enable social login methods? Set up your [Alchemy Signer](/signer/quickstart).
 
-Alternatively, you can [bring a 3rd party signer](/third-party/signers) as the owner of your new account. 
+Alternatively, you can [bring a 3rd party signer](/third-party/signers) as the owner of your new account.
 
 Not sure what signer to use? [Learn more](/signer/what-is-a-signer).
 
 ## Sending a user operation
 
-Now that you have a client, you can send a User Operation. The first User Operation will also deploy the new Modular Account v2. 
+Now that you have a client, you can send a User Operation. The first User Operation will also deploy the new Modular Account v2.
 
 ```ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
@@ -84,9 +84,9 @@ const operation = await accountClient.sendUserOperation({
 });
 
 console.log(
-"User operation sent! \nUO hash: ",
-operation.hash,
-"\nModular Account v2 Address: ",
-operation.request.sender
+  "User operation sent! \nUO hash: ",
+  operation.hash,
+  "\nModular Account v2 Address: ",
+  operation.request.sender
 );
 ```
