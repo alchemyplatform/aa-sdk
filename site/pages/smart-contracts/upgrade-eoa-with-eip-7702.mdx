@@ -1,0 +1,136 @@
+---
+title: Upgrade Your Externally Owned Account (EOA) with EIP-7702
+description: Learn how to upgrade your existing EOA to a smart account using EIP-7702 with Account Kit.
+---
+
+# Upgrade Your Externally Owned Account (EOA) with EIP-7702
+
+Externally-owned accounts (EOAs) are accounts that are only controlled by a private key or seed phrase, and are not smart contract accounts.
+
+[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) introduces a straightforward way for Externally Owned Accounts (EOAs) to use smart contract code at their address. This is a major milestone in Ethereum’s account abstraction journey, enabling existing EOAs to benefit from functionality previously exclusive to smart accounts – such as batching actions, sponsored transactions, and more.
+
+With [Account Kit](https://accountkit.alchemy.com) from Alchemy, you can integrate this upgrade path directly into your app or wallet. Users will seamlessly enjoy advanced features like multi-call batching, session keys, and gas sponsorship, with the convenience of using existing account addresses and without asset migrations.
+
+Below, we’ll walk you through:
+
+- When to use EIP-7702
+- How to use EIP-7702 with Account Kit
+- Signer requirements
+- Using EIP-7702 in practice
+- When EIP-7702 will be available
+
+## When to Use EIP-7702?
+
+EIP-7702 is particularly useful in the following scenarios:
+
+1. You have an app using embedded wallets with EOA accounts
+2. You have a wallet using EOA accounts
+
+You can upgrade your users' EOA accounts directly to a smart account at their current address. This means you don’t have to move assets.
+
+#### Gain Smart Account Features
+
+By upgrading to a smart account, you immediately unlock features such as:
+
+- **Batching actions**: Execute multiple operations in a single transaction.
+- **Gas sponsorship**: Let your users pay zero gas by using sponsored transactions, or use custom paymaster contracts that allow you to pay gas in other tokens.
+- **Custom session keys**: Provide temporary keys to interact with your app without exposing your primary signer, allowing you to skip transaction confirmations.
+
+## How to Use EIP-7702
+
+Account Kit provides **Modular Account V2**, which is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) compliant account that you can upgrade EOAs to with EIP-7702. It also supports installing [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) modules.
+
+To use EIP-7702 with Account Kit, you can simply create a smart account client for Modular Account V2 with `mode` set to `"7702"`. Account Kit will automatically handles the upgrade from the regular EOA to the 7702-delegated smart EOA.
+
+[Jump to example](#using-eip-7702)
+
+## Signer Requirements
+
+To use EIP-7702, you need a signer that generate authorization signature. Typically, this is implemented as a method called `signAuthorization`.
+
+### Out-of-the-Box Support in Account Kit
+
+**Alchemy Signer**
+
+If you’re using Alchemy Signer, it already supports signing EIP-7702 authorizations. This means you can handle upgrades seamlessly for your users, either via Account Kit’s React hooks in `@account-kit/react` or with the low-level package `@account-kit/smart-contracts`.
+
+Please follow either the [React guide](/react/overview) or the [Signer guide](/signer/overview), making sure to use Modular Account V2 with `mode` set to `"7702"`.
+
+**Local Signer**
+
+Use a local account signer if you are integrating with a locally managed private key (e.g. you are a self-custodial wallet).
+
+:::note
+Note: viem requires that you generate a [Private Key account](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc) to use `signAuthorization`, meaning you cannot use Mnemonic accounts or Hierarchical Deterministic (HD) accounts yet.
+:::
+
+```ts [types.ts] twoslash
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const privateKey = "0x..."; // Private key
+
+const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+```
+
+### Using Third Party Signers
+
+If you have a custom signer or another third-party provider, you'll need to verify that it supports `signAuthorization`, and connect it to Account Kit.
+
+Follow the guide here to understand how to implement the interface: [Third Party Signers](/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+
+In most cases, you should be able to pass the arguments through to the inner signer.
+
+## Using EIP-7702
+
+Oonce your account type and signer is configured, you're ready to use EIP-7702!
+
+- The smary account client will automatically detect if your account is not yet delegated with 7702 when you send a user operation.
+  - If it is not yet delegated, it will request an authorization signature and include that in the submitted user operation.
+- The Alchemy ERC-4337 bundler will automatically include the EIP-7702 authorization with the first user op that your account performs.
+
+:::code-group
+
+```ts [example.ts] twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { signer } from "./signer.js";
+
+// Constructing the smart account client
+const smartAccountClient = await createModularAccountV2Client({
+  mode: "7702",
+  transport: alchemy({ apiKey: "your-api-key" }),
+  chain: sepolia,
+  signer,
+});
+
+// Sending a user operation
+const uoHash = await smartAccountClient.sendUserOperation({
+  uo: {
+    target: zeroAddress,
+    value: 0n,
+    data: "0x",
+  },
+});
+
+const txnHash = await smartAccountClient.waitForUserOperationTransaction(
+  uoHash
+);
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const privateKey = "0x...";
+
+export const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+```
+
+:::
+
+## When can I use it?
+
+EIP-7702 will be supported on Sepolia starting March 5. The Alchemy bundler and Account Kit will have day-one support. Mainnet support is expected to follow shortly after.
+
+Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
+
+Want to experiment on other testnets before March 5? Reach out to us at account-abstraction@alchemy.com for early access to experimental networks.
