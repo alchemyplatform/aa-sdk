@@ -68,6 +68,7 @@ import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
+import { parseEther } from "viem";
 
 const accountClient = await createModularAccountV2Client({
   chain: sepolia,
