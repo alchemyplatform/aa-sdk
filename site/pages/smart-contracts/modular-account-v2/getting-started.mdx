@@ -81,4 +81,11 @@ const operation = await accountClient.sendUserOperation({
   data: "0x123..",
   value: "0n",
 });
+
+console.log(
+"User operation sent! \nUO hash: ",
+operation.hash,
+"\nModular Account v2 Address: ",
+operation.request.sender
+);
 ```
