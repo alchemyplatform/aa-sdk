@@ -11,20 +11,11 @@ description: Learn about different smart account implementations to use with
 
 Smart accounts are the key to unlocking the best online user experience ever had-- enabling features that have never been possible with traditional EOAs (externally-owned-accounts) like session keys, granular permissions, different authentication methods like email and passkeys, and much more.
 
-Beyond that, alchemy's Account Kit offers a simple & clean SDK to provide your users with top-tier smart account features. With Account Kit's most powerful, most natively-supported account being Modular Account V2. MAv2 is the most fully-featured and efficient smart account out there, allowing for limitless modular expansion while remaining maximally gas-efficient.
+Beyond that, alchemy's Account Kit offers a simple & clean SDK to provide your users with top-tier smart account features. With Account Kit's most powerful, most natively-supported account being Modular Account V2.
 
-As a frame of reference, see the deployment benchmarks below:
+MAv2 is the most fully-featured and efficient smart account out there, allowing for limitless modular expansion. All the while the account is secured by audits from Quantstamp and ChainLight as well as a [bug bounty on Cantina.](https://cantina.xyz/bounties/246de4d3-e138-4340-bdfc-fc4c95951491) 
 
-|                            |    UserOp |   Direct  |
-| :------------------------- | --------: | --------: |
-| Alchemy Modular Account v2 | `233,004` |  `97,772` |
-| Biconomy Nexus             | `342,381` | `210,309` |
-| ZeroDev Kernel v3.1        | `338,419` | `180,465` |
-| Safe v1.4.1                | `435,486` | `289,207` |
-| Coinbase Smart Wallet      | `317,904` | `190,525` |
-| Simple Account             | `297,367` | `174,219` |
-
-Check out benchmarks for a host of other operations [here!](/smart-contracts/gas-benchmarks.mdx)
+MAv2 also strives to be maximally gas-efficient, with runtime account deployment has broken the **sub-100k gas barrier**, cheaper than _one Uniswap swap_. For more details around MAv2, and for more sweet benchmarks, check out the [MAv2 overview!](/smart-contracts/modular-account-v2/overview)
 
 ## Modular Account V2
 
@@ -47,7 +38,7 @@ Light Account is a minimalist ERC-4337 smart account optimized for **low gas cos
 - Ownership transfers
 - ERC-1271 signature validation
 
-While **Light Account is fully audited**, it does **not** support **advanced modular features like plugins or session keys**.
+While **Light Account is fully audited**, it does **not** support **advanced modular features like modules or session keys**.
 
 ### [Multi-Owner Light Account](/smart-contracts/light-account)
 
