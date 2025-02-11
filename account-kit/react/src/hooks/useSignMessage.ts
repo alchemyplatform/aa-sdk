@@ -49,10 +49,14 @@ export type UseSignMessageResult = {
  *
  * To reiterate, the signature that is returned must be verified against the account itself not the signer. The final structure of the signature is dictated by how the account does 1271 validation. You don’t want to be verifying in a different way than the way the account itself structures the signatures to be validated. For example LightAccount has three different ways to validate the account.
  *
+ * @param {UseSignMessageArgs} config The configuration arguments for the hook, including the client and additional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L25)
+ * @returns {UseSignMessageResult} An object containing methods and state for signing messages. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L29)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
  *
+ * const data = "messageToSign"
  * const { client } = useSmartAccountClient({ type: "LightAccount" });
  * const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
  *  client,
@@ -62,10 +66,9 @@ export type UseSignMessageResult = {
  *  },
  *  onError: (error) => console.error(error),
  * });
- * ```
  *
- * @param {UseSignMessageArgs} config The configuration arguments for the hook, including the client and additional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L25)
- * @returns {UseSignMessageResult} An object containing methods and state for signing messages. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L29)
+ * const result = await signMessage({ message: data });
+ * ```
  */
 export function useSignMessage({
   client,

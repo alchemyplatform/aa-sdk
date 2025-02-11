@@ -31,8 +31,11 @@ export type UseWaitForUserOperationTransactionResult = {
 /**
  * Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts) to wait for a user operation transaction and manage its state (pending, error, result).
  *
+ * @param {UseWaitForUserOperationTransactionArgs} config Configuration object containing the client. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L15)
+ * @returns {UseWaitForUserOperationTransactionResult} An object containing methods and state related to waiting for a user operation transaction. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L19)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useWaitForUserOperationTransaction, useSmartAccountClient } from "@account-kit/react";
  *
  * const { client } = useSmartAccountClient({ type: "LightAccount" });
@@ -50,9 +53,6 @@ export type UseWaitForUserOperationTransactionResult = {
  *  onError: (error) => console.error(error),
  * });
  * ```
- *
- * @param {UseWaitForUserOperationTransactionArgs} config Configuration object containing the client. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L15)
- * @returns {UseWaitForUserOperationTransactionResult} An object containing methods and state related to waiting for a user operation transaction. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L19)
  */
 export function useWaitForUserOperationTransaction({
   client,

@@ -17,6 +17,19 @@ import { ReactLogger } from "../metrics.js";
  *
  * @param {UseMutationParameters} params mutation parameters to use for the connect mutation
  * @returns {UseConnectReturnType} the wagmi useConnect return type
+ *
+ * @example
+ * ```ts twoslash
+ * import { useConnect } from "@account-kit/react";
+ *
+ * const { connectors, connect } = useConnect({
+ *  // these are optional
+ *  onSuccess: () => {
+ *   // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
  */
 export const useConnect = (
   params?: UseConnectParameters<Config>["mutation"]
