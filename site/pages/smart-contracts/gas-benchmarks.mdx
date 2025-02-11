@@ -3,54 +3,54 @@ title: Gas Benchmarks
 description: See gas benchmarks for multiple popular accounts and how they stack up.
 ---
 
-# Gas Benchmarks Table
+# UserOp Gas Benchmarks Table
 
-Below is a collection of gas benchmarks resulting from the open-source [aa-benchmarks repository.](https://github.com/alchemyplatform/aa-benchmarks/blob/master/README.md) They're separated into two columns, one for "Runtime" and one for "UserOp."
+Below is a collection of gas benchmarks resulting from the open-source [aa-benchmarks repository.](https://github.com/alchemyplatform/aa-benchmarks/blob/master/README.md) Each of these tables presents the gas costs for specific operations done via userOps-- the key feature of ERC-4337 account abstraction.
 
-This is because it's possible to use accounts without going through UserOps via direct calling, allowing for more flexibility in certain edge cases-- however, UserOp gas is by far the most impactful.
-
-Note that these benchmarks are denominated in EVM gas units. For reference, a simple Uniswap swap without smart accounts typically costs in the ballpark of 150000 gas.
+Note that these benchmarks are denominated in EVM gas units. For reference, a simple Uniswap swap without smart accounts typically costs in the ballpark of `150,000` gas.
 
 ## Deployment
 
-|                            |    UserOp |   Runtime |
-| :------------------------- | --------: | --------: |
-| Alchemy Modular Account v2 | `233,004` |  `97,772` |
-| Biconomy Nexus             | `342,381` | `210,309` |
-| ZeroDev Kernel v3.1        | `338,419` | `180,465` |
-| Safe v1.4.1                | `435,486` | `289,207` |
-| Coinbase Smart Wallet      | `317,904` | `190,525` |
-| Simple Account             | `297,367` | `174,219` |
+|                            |  Gas Cost |
+| :------------------------- | --------: |
+| Alchemy Modular Account v2 | `233,004` |
+| Biconomy Nexus             | `342,381` |
+| ZeroDev Kernel v3.1        | `338,419` |
+| Safe v1.4.1                | `435,486` |
+| Coinbase Smart Wallet      | `317,904` |
+| Simple Account             | `297,367` |
 
 ## Native Transfer
 
-|                            |    UserOp |  Runtime |
-| :------------------------- | --------: | -------: |
-| Alchemy Modular Account v2 | `158,725` | `49,021` |
-| Biconomy Nexus             | `164,351` | `39,685` |
-| ZeroDev Kernel v3.1        | `190,912` | `48,615` |
-| Safe v1.4.1                | `176,479` | `75,840` |
-| Coinbase Smart Wallet      | `156,812` | `39,681` |
-| Simple Account             | `151,045` | `39,381` |
+|                            |  Gas Cost |
+| :------------------------- | --------: |
+| Alchemy Modular Account v2 | `158,725` |
+| Biconomy Nexus             | `164,351` |
+| ZeroDev Kernel v3.1        | `190,912` |
+| Safe v1.4.1                | `176,479` |
+| Coinbase Smart Wallet      | `156,812` |
+| Simple Account             | `151,045` |
 
 ## ERC-20 Transfer
 
-|                            |    UserOp |  Runtime |
-| :------------------------- | --------: | -------: |
-| Alchemy Modular Account v2 | `182,665` | `72,946` |
-| Biconomy Nexus             | `188,136` | `63,384` |
-| ZeroDev Kernel v3.1        | `214,817` | `72,317` |
-| Safe v1.4.1                | `200,732` | `99,715` |
-| Coinbase Smart Wallet      | `181,014` | `63,803` |
-| Simple Account             | `175,283` | `63,503` |
+|                            |  Gas Cost |
+| :------------------------- | --------: |
+| Alchemy Modular Account v2 | `182,665` |
+| Biconomy Nexus             | `188,136` |
+| ZeroDev Kernel v3.1        | `214,817` |
+| Safe v1.4.1                | `200,732` |
+| Coinbase Smart Wallet      | `181,014` |
+| Simple Account             | `175,283` |
 
 ## Uniswap V3 Swap
 
-|                            |    UserOp |   Runtime |
-| :------------------------- | --------: | --------: |
-| Alchemy Modular Account v2 | `201,790` | `145,956` |
-| Biconomy Nexus             | `207,286` | `136,403` |
-| ZeroDev Kernel v3.1        | `234,378` | `145,355` |
-| Safe v1.4.1                | `220,464` | `155,690` |
-| Coinbase Smart Wallet      | `200,573` | `137,243` |
-| Simple Account             | `194,829` | `136,943` |
+|                            |  Gas Cost |
+| :------------------------- | --------: |
+| Alchemy Modular Account v2 | `201,790` |
+| Biconomy Nexus             | `207,286` |
+| ZeroDev Kernel v3.1        | `234,378` |
+| Safe v1.4.1                | `220,464` |
+| Coinbase Smart Wallet      | `200,573` |
+| Simple Account             | `194,829` |
+
+Take a look at more detailed benchmarks as well as $USD-denominated examples [here!](https://github.com/alchemyplatform/aa-benchmarks/blob/master/README.md)
