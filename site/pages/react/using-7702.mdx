@@ -1,0 +1,37 @@
+---
+title: Using EIP-7702 accounts
+description: Learn how to start landing transactions with EIP-7702 accounts
+---
+
+# Using EIP-7702 accounts
+
+We recommend using the default [ModularAccountV2](/smart-contracts/modular-account-v2/overview) as it is the cheapest and most advanced Smart Account, however you can get started with EIP-7702 compatible accounts.
+
+You might consider using EIP-7702 if:
+
+- you need consistent addresses across networks for e.g. multichain app development
+- you want to save on initial gas costs since the account contract is not immediately deployed
+- you need backward compatibility with EOA infrastructure
+
+## Usage
+
+The following sets up a Smart Account Client using the 7702 version of a Modular Account v2.
+
+```tsx twoslash
+import { useSmartAccountClient } from "@account-kit/react";
+
+const { client, address, isLoadingClient } = useSmartAccountClient({
+  type: "ModularAccountV2",
+  accountParams: {
+    mode: "7702",
+  },
+});
+```
+
+## Upgrading an existing EOA
+
+Want to upgrade your EOA to have smart contract functionality? Learn how to [here](/smart-contracts/modular-account/upgrading-to-modular-account).
+
+## Next steps
+
+Now that you have set up your smart account client with an EIP-7702 account, you can proceed with sending transactions just as you would with any underlying account type created with the `useSmartAccountClient` hook!

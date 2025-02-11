@@ -25,6 +25,10 @@ export const reactGuides: SidebarItem[] = [
         link: "/react/how-to-set-up-smart-account-client",
       },
       {
+        text: "Using 7702",
+        link: "/react/using-7702",
+      },
+      {
         text: "Send user operations",
         link: "/react/send-user-operations",
       },
