@@ -47,6 +47,7 @@ import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
 
 const accountClient = await createModularAccountV2Client({
+  mode: "default", // optional param to specify the MAv2 variant (either "default" or "7702")
   chain: sepolia,
   transport: alchemy({ apiKey: "your-api-key" }), // Get your API key at https://dashboard.alchemy.com/apps or http("RPC_URL") for non-alchemy infra
   signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
