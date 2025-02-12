@@ -26,7 +26,7 @@ export const smartContractsSidebar: SidebarItem[] = [
         text: "Other Accounts",
         items: [
           {
-            text: "Modular Account",
+            text: "Modular Account V1",
             items: [
               {
                 text: "Overview",
