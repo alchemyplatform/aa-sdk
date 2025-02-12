@@ -27,7 +27,8 @@ import { useSignMessage } from "@account-kit/react";
 ```ts
 import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
 
-const { client } = useSmartAccountClient({ type: "LightAccount" });
+const { client } = useSmartAccountClient({});
+
 const {
   signMessage,
   signMessageAsync,
