@@ -66,7 +66,7 @@ export const smartContractsSidebar: SidebarItem[] = [
       },
       {
         text: "Gas benchmarks",
-        link: "https://github.com/alchemyplatform/aa-benchmarks",
+        link: "/smart-contracts/gas-benchmarks",
       },
       {
         text: "Smart Contract Account Deployments",
