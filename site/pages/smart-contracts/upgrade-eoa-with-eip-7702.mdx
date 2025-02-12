@@ -1,5 +1,5 @@
 ---
-title: Upgrade Your Externally Owned Account (EOA) with EIP-7702
+title: Upgrade Your EOA with EIP-7702
 description: Learn how to upgrade your existing EOA to a smart account using EIP-7702 with Account Kit.
 ---
 
@@ -7,9 +7,9 @@ description: Learn how to upgrade your existing EOA to a smart account using EIP
 
 Externally-owned accounts (EOAs) are accounts that are only controlled by a private key or seed phrase, and are not smart contract accounts.
 
-[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) introduces a straightforward way for Externally Owned Accounts (EOAs) to use smart contract code at their address. This is a major milestone in Ethereum’s account abstraction journey, enabling existing EOAs to benefit from functionality previously exclusive to smart accounts – such as batching actions, sponsored transactions, and more.
+[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) introduces a straightforward way for Externally Owned Accounts (EOAs) to use smart contract account features. This is a major milestone in Ethereum’s account abstraction journey, enabling existing EOAs to benefit from functionality previously exclusive to smart accounts – such as batching actions, sponsoring transactions, and more.
 
-With [Account Kit](https://accountkit.alchemy.com) from Alchemy, you can integrate this upgrade path directly into your app or wallet. Users will seamlessly enjoy advanced features like multi-call batching, session keys, and gas sponsorship, with the convenience of using existing account addresses and without asset migrations.
+With Account Kit, you can support this upgrade path directly into your app or wallet. Users will seamlessly access advanced features like transaction batching, session keys, and gas sponsorship, while maintaining their existing EOA address and without having to migrate assets.
 
 Below, we’ll walk you through:
 
@@ -23,10 +23,12 @@ Below, we’ll walk you through:
 
 EIP-7702 is particularly useful in the following scenarios:
 
-1. You have an app using embedded wallets with EOA accounts
-2. You have a wallet using EOA accounts
+1. You have an app using embedded wallets with EOAs
+2. You have a wallet using EOAs
 
-You can upgrade your users' EOA accounts directly to a smart account at their current address. This means you don’t have to move assets.
+You can upgrade your users' EOAs directly to a smart account at their current address. This means you don’t have to move assets.
+
+See our full recommendations [here](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application).
 
 #### Gain Smart Account Features
 
@@ -36,29 +38,25 @@ By upgrading to a smart account, you immediately unlock features such as:
 - **Gas sponsorship**: Let your users pay zero gas by using sponsored transactions, or use custom paymaster contracts that allow you to pay gas in other tokens.
 - **Custom session keys**: Provide temporary keys to interact with your app without exposing your primary signer, allowing you to skip transaction confirmations.
 
-## How to Use EIP-7702
+## EIP-7702 Compatible Accounts
 
-Account Kit provides **Modular Account V2**, which is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) compliant account that you can upgrade EOAs to with EIP-7702. It also supports installing [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) modules.
-
-To use EIP-7702 with Account Kit, you can simply create a smart account client for Modular Account V2 with `mode` set to `"7702"`. Account Kit will automatically handles the upgrade from the regular EOA to the 7702-delegated smart EOA.
-
-[Jump to example](#using-eip-7702)
+Account Kit provides an EIP-7702 compatible smart account, [Modular Account v2](#TODO/linktomav2), that you can upgrade existing EOAs to. This ERC-4337 compatible account is the most gas efficient on the market, fully audited, and supports ecosystem modules for advanced functionality.
 
 ## Signer Requirements
 
-To use EIP-7702, you need a signer that generate authorization signature. Typically, this is implemented as a method called `signAuthorization`.
+To use EIP-7702, you need a signer that can generate an authorization signature. Typically, this is implemented as a method called `signAuthorization`. Regardless of which signer you choose, you'll need to create an instance of a [`SmartAccountSigner`](/resources/types#smartaccountsigner) that you can pass to the client.
 
 ### Out-of-the-Box Support in Account Kit
 
 **Alchemy Signer**
 
-If you’re using Alchemy Signer, it already supports signing EIP-7702 authorizations. This means you can handle upgrades seamlessly for your users, either via Account Kit’s React hooks in `@account-kit/react` or with the low-level package `@account-kit/smart-contracts`.
+Alchemy Signer supports signing EIP-7702 authorizations. This means you can create new embedded EOAs with social login that are upgradable to smart accounts seamlessly for your users. See [this guide](#TODO/using-7702-react-doc) for using simple React Hooks.
 
-Please follow either the [React guide](/react/overview) or the [Signer guide](/signer/overview), making sure to use Modular Account V2 with `mode` set to `"7702"`.
+If you are a developer without existing embedded wallet users, considering [using smart accounts ](/react-getting-started) from the start without EIP-7702. [Decide](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application) what's best for you!
 
 **Local Signer**
 
-Use a local account signer if you are integrating with a locally managed private key (e.g. you are a self-custodial wallet).
+If you have locally managed private keys (e.g. you are a self-custodial wallet), you can use a local account signer to upgrade your EOAs to smart accounts.
 
 :::note
 Note: viem requires that you generate a [Private Key account](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc) to use `signAuthorization`, meaning you cannot use Mnemonic accounts or Hierarchical Deterministic (HD) accounts yet.
@@ -72,17 +70,15 @@ const privateKey = "0x..."; // Private key
 const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 ```
 
-### Using Third Party Signers
+### Bring a third party wallet or signer
 
-If you have a custom signer or another third-party provider, you'll need to verify that it supports `signAuthorization`, and connect it to Account Kit.
+Account Kit provides support for you to bring your existing custom signer or another third-party embedded wallet provider! As long as your signer supports `signAuthorization` you can connect it to Account Kit and upgrade existing EOAs to smart accounts.
 
 Follow the guide here to understand how to implement the interface: [Third Party Signers](/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
 
-In most cases, you should be able to pass the arguments through to the inner signer.
-
 ## Using EIP-7702
 
-Oonce your account type and signer is configured, you're ready to use EIP-7702!
+Once your signer is configured and you have a `SmartAccountSigner` instance, you're ready to use EIP-7702 and upgrade EOAs to smart accounts! Account Kit will handle all of the complexity of delegating your account to a smart account and signing transactions correctly.
 
 - The smart account client will automatically detect if your account is not yet delegated with 7702 when you send a user operation.
   - If it is not yet delegated, it will request an authorization signature and include that in the submitted user operation.
