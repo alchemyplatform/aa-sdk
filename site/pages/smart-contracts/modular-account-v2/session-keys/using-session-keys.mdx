@@ -27,13 +27,13 @@ const client = await createModularAccountV2Client({
 
 let sessionKeyEntityId = 1;
 const sessionKeySigner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
+  LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
 
 const sessionKeyClient = await createModularAccountV2Client({
   chain: sepolia,
   transport: alchemy({ apiKey: "your-api-key" }),
-  accountAddress: await client.getAddress(),
   signer: sessionKeySigner,
+  accountAddress: client.getAddress(client.account),
   signerEntity: {
     entityId: sessionKeyEntityId,
     isGlobalValidation: true,

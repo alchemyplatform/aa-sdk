@@ -418,10 +418,13 @@ const sessionKeySigner: SmartAccountSigner =
 const hookEntityId = 0; // Make sure that the account does not have a hook with this entity id on the module yet
 const allowlistInstallData = AllowlistModule.encodeOnInstallData({
   entityId: hookEntityId,
-  hasSelectorAllowlist: false, // whether to limit the callable functions on call targets
-  hasERC20SpendLimit: false, // If "target" is an ERC20 token with a spend limit
-  erc20SpendLimit: parseEther("1"), // The spend limit to set, if relevant
-  selectors: [], // The function selectors to allow, if relevant
+  inputs: [{
+    target: "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+    hasSelectorAllowlist: false, // whether to limit the callable functions on call targets
+    hasERC20SpendLimit: false, // If "target" is an ERC20 token with a spend limit
+    erc20SpendLimit: parseEther("1"), // The spend limit to set, if relevant
+    selectors: [], // The function selectors to allow, if relevant
+  }]
 });
 
 // Adding a session key that has a 1 eth native token spend limit
