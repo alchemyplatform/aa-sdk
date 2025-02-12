@@ -18,12 +18,13 @@ export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const { walletType } = useConfigStore();
+  const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
   const { account } = useAccount({
     type: "ModularAccountV2",
     accountParams: {
       mode: walletType === WalletTypes.smart ? "default" : "7702",
     },
+    skipCreate: true,
   });
 
   const [publicClient] = useState(() =>

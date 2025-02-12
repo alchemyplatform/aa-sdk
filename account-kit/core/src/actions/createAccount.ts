@@ -101,8 +101,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   }
   const cachedConfig = accountConfigs[chain.id]?.[type];
 
-  // TODO(jh): if mode changed, we probably shouldn't use the cachedConfig?
-
   const accountPromise = (() => {
     switch (type) {
       case "LightAccount":

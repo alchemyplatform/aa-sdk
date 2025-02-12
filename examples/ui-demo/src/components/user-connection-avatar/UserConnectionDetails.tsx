@@ -32,6 +32,7 @@ export function UserConnectionDetails({
     accountParams: {
       mode: walletType === WalletTypes.smart ? "default" : "7702",
     },
+    skipCreate: true,
   });
 
   const isEOAUser = user?.type === "eoa";
