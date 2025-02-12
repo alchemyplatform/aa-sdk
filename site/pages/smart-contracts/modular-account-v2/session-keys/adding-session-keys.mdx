@@ -21,28 +21,30 @@ import {
   installValidationActions,
   getDefaultSingleSignerValidationModuleAddress,
   SingleSignerValidationModule,
-  modularAccountAbi,
 } from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 
-const client = await createModularAccountV2Client({
-  chain: sepolia,
-  transport: alchemy({ apiKey: "your-api-key" }),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-}).extend(installValidationActions);
+const client = (
+  await createModularAccountV2Client({
+    chain: sepolia,
+    transport: alchemy({ apiKey: "your-api-key" }),
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  })
+).extend(installValidationActions);
 
 let sessionKeyEntityId = 1;
 const ecdsaValidationModuleAddress =
-  getDefaultSingleSignerValidationModuleAddress(chain);
-const sessionKey: SmartAccountSigner =
+  getDefaultSingleSignerValidationModuleAddress(client.chain);
+const sessionKeySigner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
 
 // Adding a session key with full permissions
 await client.installValidation({
   validationConfig: {
-    validationModule: ecdsaValidationModuleAddress,
+    moduleAddress: ecdsaValidationModuleAddress,
     entityId: sessionKeyEntityId,
     isGlobal: true,
     isSignatureValidation: true,
@@ -62,7 +64,7 @@ const executeSelector = "0xb61d27f6";
 
 await client.installValidation({
   validationConfig: {
-    validationModule: ecdsaValidationModuleAddress,
+    moduleAddress: ecdsaValidationModuleAddress,
     entityId: sessionKeyEntityId,
     isGlobal: false,
     isSignatureValidation: false,
@@ -92,22 +94,32 @@ The Time Range Module is used to enforce time-based validation for User Operatio
 
 ```ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule, modularAccountAbi, getDefaultTimeRangeModuleAddress, TimeRangeModule } from "@account-kit/smart-contracts/experimental";
+import {
+  HookType,
+  installValidationActions,
+  getDefaultSingleSignerValidationModuleAddress,
+  SingleSignerValidationModule,
+  getDefaultTimeRangeModuleAddress,
+  TimeRangeModule,
+} from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 
-const client = (await createModularAccountV2Client({
-  chain: sepolia,
-  transport: alchemy({ apiKey: "your-api-key" }),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-}).extend(installValidationActions));
+const client = (
+  await createModularAccountV2Client({
+    chain: sepolia,
+    transport: alchemy({ apiKey: "your-api-key" }),
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  })
+).extend(installValidationActions);
 
 let sessionKeyEntityId = 1;
-const ecdsaValidationModuleAddress = getDefaultSingleSignerValidationModuleAddress(chain)
-const sessionKey: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  "SESSION_KEY_MNEMONIC"
-);
+const ecdsaValidationModuleAddress =
+  getDefaultSingleSignerValidationModuleAddress(client.chain);
+const sessionKeySigner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
 
 const hookEntityId = 0; // Make sure that the account does not have a hook with this entity id on the module yet
 const validAfter = Math.floor(Date.now() / 1000) + 86400; // validity starts 1 day from now
@@ -115,32 +127,34 @@ const validUntil = validAfter + 86400; // validity ends 2 days from now
 
 // Adding a session key that starts in a day and expires in two days
 await client.installValidation({
-    validationConfig: {
-        validationModule: ecdsaValidationModuleAddress,
-        entityId: sessionKeyEntityId,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
+  validationConfig: {
+    moduleAddress: ecdsaValidationModuleAddress,
+    entityId: sessionKeyEntityId,
+    isGlobal: true,
+    isSignatureValidation: true,
+    isUserOpValidation: true,
+  },
+  selectors: [],
+  installData: SingleSignerValidationModule.encodeOnInstallData({
+    entityId: sessionKeyEntityId,
+    signer: await sessionKeySigner.getAddress(), // Address of the session key
+  }),
+  hooks: [
+    {
+      hookConfig: {
+        address: getDefaultTimeRangeModuleAddress(client.chain),
+        entityId: hookEntityId,
+        hookType: HookType.VALIDATION, // fixed value
+        hasPreHooks: true, // fixed value
+        hasPostHooks: false, // fixed value
+      },
+      initData: TimeRangeModule.encodeOnInstallData({
+        entityId: hookEntityId,
+        validAfter,
+        validUntil,
+      }),
     },
-    selectors: [],
-    installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: sessionKeyEntityId,
-        signer: await sessionKeySigner.getAddress(), // Address of the session key
-    }),
-    hooks: [{
-        hookConfig: {
-          address: getDefaultTimeRangeModuleAddress(client.chain),
-          entityId: hookEntityId,
-          hookType: HookType.VALIDATION, // fixed value
-          hasPreHooks: true, // fixed value
-          hasPostHooks: false // fixed value
-        },
-        initData: TimeRangeModule.encodeOnInstallData({
-          entityId: hookEntityId,
-          validAfter 
-          validUntil
-        }),
-    }]
+  ],
 });
 ```
 
@@ -157,53 +171,65 @@ This module provides the ability to force user operations from an account to onl
 
 ```ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule, modularAccountAbi, getDefaultPaymasterGuardModuleAddress, PaymasterGuardModule } from "@account-kit/smart-contracts/experimental";
+import {
+  HookType,
+  installValidationActions,
+  getDefaultSingleSignerValidationModuleAddress,
+  SingleSignerValidationModule,
+  getDefaultPaymasterGuardModuleAddress,
+  PaymasterGuardModule,
+} from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 
-const client = (await createModularAccountV2Client({
-  chain: sepolia,
-  transport: alchemy({ apiKey: "your-api-key" }),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-}).extend(installValidationActions));
+const client = (
+  await createModularAccountV2Client({
+    chain: sepolia,
+    transport: alchemy({ apiKey: "your-api-key" }),
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  })
+).extend(installValidationActions);
 
 let sessionKeyEntityId = 1;
-const ecdsaValidationModuleAddress = getDefaultSingleSignerValidationModuleAddress(chain)
-const sessionKey: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  "SESSION_KEY_MNEMONIC"
-);
+const ecdsaValidationModuleAddress =
+  getDefaultSingleSignerValidationModuleAddress(client.chain);
+const sessionKeySigner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
 
 const hookEntityId = 0; // Make sure that the account does not have a hook with this entity id on the module yet
-const paymasterAddress = 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045;
+const paymasterAddress = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
 
 // Adding a session key that can only use the above paymaster for user operations
 await client.installValidation({
-    validationConfig: {
-        validationModule: ecdsaValidationModuleAddress,
-        entityId: sessionKeyEntityId,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
+  validationConfig: {
+    moduleAddress: ecdsaValidationModuleAddress,
+    entityId: sessionKeyEntityId,
+    isGlobal: true,
+    isSignatureValidation: true,
+    isUserOpValidation: true,
+  },
+  selectors: [],
+  installData: SingleSignerValidationModule.encodeOnInstallData({
+    entityId: sessionKeyEntityId,
+    signer: await sessionKeySigner.getAddress(), // Address of the session key
+  }),
+  hooks: [
+    {
+      hookConfig: {
+        address: getDefaultPaymasterGuardModuleAddress(client.chain),
+        entityId: hookEntityId,
+        hookType: HookType.VALIDATION, // fixed value
+        hasPreHooks: true, // fixed value
+        hasPostHooks: false, // fixed value
+      },
+      initData: PaymasterGuardModule.encodeOnInstallData({
+        entityId: hookEntityId,
+        paymaster: paymasterAddress,
+      }),
     },
-    selectors: [],
-    installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: sessionKeyEntityId,
-        signer: await sessionKeySigner.getAddress(), // Address of the session key
-    }),
-    hooks: [{
-        hookConfig: {
-          address: getDefaultPaymasterGuardModuleAddress(client.chain),
-          entityId: hookEntityId,
-          hookType: HookType.VALIDATION, // fixed value
-          hasPreHooks: true, // fixed value
-          hasPostHooks: false // fixed value
-        },
-        initData: PaymasterGuardModule.encodeOnInstallData({
-          entityId: hookEntityId,
-          paymaster: paymasterAddress,
-        }),
-    }]
+  ],
 });
 ```
 
@@ -220,13 +246,13 @@ This module provides native token spending limits for modular accounts by:
 #### Token Limit Features
 
 - Tracks native token spending across:
-    - Direct transfers via `execute`
-    - Batch transfers via `executeBatch`
-    - Contract creation via `performCreate`
-    - UserOperation gas costs (when applicable)
+  - Direct transfers via `execute`
+  - Batch transfers via `executeBatch`
+  - Contract creation via `performCreate`
+  - UserOperation gas costs (when applicable)
 - Supports special paymaster configurations for:
-    - Standard paymasters (gas costs don't count against limit)
-    - Special paymasters (gas costs do count against limit)
+  - Standard paymasters (gas costs don't count against limit)
+  - Special paymasters (gas costs do count against limit)
 - Maintains separate limits per entity ID
 
 #### Gas Cost Tracking
@@ -248,62 +274,75 @@ For UserOperations, the module tracks:
 
 ```ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule, modularAccountAbi, getDefaultNativeTokenLimitModule, NativeTokenLimitModule } from "@account-kit/smart-contracts/experimental";
+import {
+  HookType,
+  installValidationActions,
+  getDefaultSingleSignerValidationModuleAddress,
+  SingleSignerValidationModule,
+  getDefaultNativeTokenLimitModuleAddress,
+  NativeTokenLimitModule,
+} from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
 import { parseEther } from "viem";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 
-const client = (await createModularAccountV2Client({
-  chain: sepolia,
-  transport: alchemy({ apiKey: "your-api-key" }),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-}).extend(installValidationActions));
+const client = (
+  await createModularAccountV2Client({
+    chain: sepolia,
+    transport: alchemy({ apiKey: "your-api-key" }),
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  })
+).extend(installValidationActions);
 
 let sessionKeyEntityId = 1;
-const ecdsaValidationModuleAddress = getDefaultSingleSignerValidationModuleAddress(chain)
-const sessionKey: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  "SESSION_KEY_MNEMONIC"
-);
+const ecdsaValidationModuleAddress =
+  getDefaultSingleSignerValidationModuleAddress(client.chain);
+const sessionKeySigner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
 
 const hookEntityId = 0; // Make sure that the account does not have a hook with this entity id on the module yet
 
 // Adding a session key that has a 1 eth native token spend limit
 await client.installValidation({
-    validationConfig: {
-        validationModule: ecdsaValidationModuleAddress,
-        entityId: sessionKeyEntityId,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
+  validationConfig: {
+    moduleAddress: ecdsaValidationModuleAddress,
+    entityId: sessionKeyEntityId,
+    isGlobal: true,
+    isSignatureValidation: true,
+    isUserOpValidation: true,
+  },
+  selectors: [],
+  installData: SingleSignerValidationModule.encodeOnInstallData({
+    entityId: sessionKeyEntityId,
+    signer: await sessionKeySigner.getAddress(), // Address of the session key
+  }),
+  hooks: [
+    {
+      hookConfig: {
+        address: getDefaultNativeTokenLimitModuleAddress(client.chain),
+        entityId: hookEntityId,
+        hookType: HookType.VALIDATION, // fixed value
+        hasPreHooks: true, // fixed value
+        hasPostHooks: false, // fixed value
+      },
+      initData: NativeTokenLimitModule.encodeOnInstallData({
+        entityId: hookEntityId,
+        spendLimit: parseEther("1"),
+      }),
     },
-    selectors: [],
-    installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: sessionKeyEntityId,
-        signer: await sessionKeySigner.getAddress(), // Address of the session key
-    }),
-    hooks: [{
-        hookConfig: {
-          address: getDefaultNativeTokenLimitModuleAddress(client.chain),
-          entityId: hookEntityId,
-          hookType: HookType.VALIDATION, // fixed value
-          hasPreHooks: true, // fixed value
-          hasPostHooks: false // fixed value
-        },
-        initData: NativeTokenLimitModule.encodeOnInstallData({
-          entityId: hookEntityId,
-          spendLimit: parseEther("1"),
-        }),
-    }, {
-        hookConfig: {
-          address: getDefaultNativeTokenLimitModuleAddress(client.chain),
-          entityId: hookEntityId,
-          hookType: HookType.EXECUTION, // fixed value
-          hasPreHooks: true, // fixed value
-          hasPostHooks: false // fixed value
-        },
-        initData: "0x", // no initdata required as the limit was set up in the above installation call
-    }]
+    {
+      hookConfig: {
+        address: getDefaultNativeTokenLimitModuleAddress(client.chain),
+        entityId: hookEntityId,
+        hookType: HookType.EXECUTION, // fixed value
+        hasPreHooks: true, // fixed value
+        hasPostHooks: false, // fixed value
+      },
+      initData: "0x", // no initdata required as the limit was set up in the above installation call
+    },
+  ],
 });
 ```
 
@@ -319,24 +358,24 @@ This module provides two key security features for modular accounts:
 #### Allowlist Features
 
 - Can specify permissions for:
-    - Specific addresses + specific functions
-    - Specific addresses + all functions (wildcard)
-    - All addresses + specific functions (wildcard)
+  - Specific addresses + specific functions
+  - Specific addresses + all functions (wildcard)
+  - All addresses + specific functions (wildcard)
 - Only applies to execute and executeBatch functions
 - Permission checks follow this order:
-    - If wildcard address → Allow
-    - If wildcard function → Allow
-    - If specific address + specific function match → Allow
-    - Otherwise → Revert
+  - If wildcard address → Allow
+  - If wildcard function → Allow
+  - If specific address + specific function match → Allow
+  - Otherwise → Revert
 
 #### ERC-20 Spend Limit Features
 
 - Only allows transfer and approve functions for tracked tokens
 - Works with standard execution functions:
-    - execute
-    - executeWithRuntimeValidation
-    - executeUserOp
-    - executeBatch
+  - execute
+  - executeWithRuntimeValidation
+  - executeUserOp
+  - executeBatch
 
 #### Additional Notes
 
@@ -348,57 +387,69 @@ This module provides two key security features for modular accounts:
 
 ```ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule, modularAccountAbi, getDefaultAllowlistModuleAddress, AllowlistModule } from "@account-kit/smart-contracts/experimental";
+import {
+  HookType,
+  installValidationActions,
+  getDefaultSingleSignerValidationModuleAddress,
+  SingleSignerValidationModule,
+  getDefaultAllowlistModuleAddress,
+  AllowlistModule,
+} from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
 import { parseEther } from "viem";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 
-const client = (await createModularAccountV2Client({
-  chain: sepolia,
-  transport: alchemy({ apiKey: "your-api-key" }),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-}).extend(installValidationActions));
+const client = (
+  await createModularAccountV2Client({
+    chain: sepolia,
+    transport: alchemy({ apiKey: "your-api-key" }),
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  })
+).extend(installValidationActions);
 
 let sessionKeyEntityId = 1;
-const ecdsaValidationModuleAddress = getDefaultSingleSignerValidationModuleAddress(chain)
-const sessionKey: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  "SESSION_KEY_MNEMONIC"
-);
+const ecdsaValidationModuleAddress =
+  getDefaultSingleSignerValidationModuleAddress(client.chain);
+const sessionKeySigner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
 
 const hookEntityId = 0; // Make sure that the account does not have a hook with this entity id on the module yet
-const allowlistInstallData = AllowlistLimitModule.encodeOnInstallData({
-          entityId: hookEntityId,
-          hasSelectorAllowlist: false,         // whether to limit the callable functions on call targets
-          hasERC20SpendLimit: false,           // If "target" is an ERC20 token with a spend limit
-          erc20SpendLimit: parseEther("1"),    // The spend limit to set, if relevant
-          selectors: [],                       // The function selectors to allow, if relevant
-        });
+const allowlistInstallData = AllowlistModule.encodeOnInstallData({
+  entityId: hookEntityId,
+  hasSelectorAllowlist: false, // whether to limit the callable functions on call targets
+  hasERC20SpendLimit: false, // If "target" is an ERC20 token with a spend limit
+  erc20SpendLimit: parseEther("1"), // The spend limit to set, if relevant
+  selectors: [], // The function selectors to allow, if relevant
+});
 
 // Adding a session key that has a 1 eth native token spend limit
 await client.installValidation({
-    validationConfig: {
-        validationModule: ecdsaValidationModuleAddress,
-        entityId: sessionKeyEntityId,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
+  validationConfig: {
+    moduleAddress: ecdsaValidationModuleAddress,
+    entityId: sessionKeyEntityId,
+    isGlobal: true,
+    isSignatureValidation: true,
+    isUserOpValidation: true,
+  },
+  selectors: [],
+  installData: SingleSignerValidationModule.encodeOnInstallData({
+    entityId: sessionKeyEntityId,
+    signer: await sessionKeySigner.getAddress(), // Address of the session key
+  }),
+  hooks: [
+    {
+      hookConfig: {
+        address: getDefaultAllowlistModuleAddress(client.chain),
+        entityId: hookEntityId,
+        hookType: HookType.VALIDATION, // fixed value
+        hasPreHooks: true, // fixed value
+        hasPostHooks: false, // fixed value
+      },
+      initData: allowlistInstallData,
     },
-    selectors: [],
-    installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: sessionKeyEntityId,
-        signer: await sessionKeySigner.getAddress(), // Address of the session key
-    }),
-    hooks: [{
-        hookConfig: {
-          address: getDefaultAllowlistModuleAddress(client.chain),
-          entityId: hookEntityId,
-          hookType: HookType.VALIDATION, // fixed value
-          hasPreHooks: true, // fixed value
-          hasPostHooks: false // fixed value
-        },
-        initData: installData,
-    }]
+  ],
 });
 ```
 
