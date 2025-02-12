@@ -1,0 +1,43 @@
+---
+title: Removing Session Keys
+description: Removing Session Keys from your Modular Account V2
+---
+
+:::tip
+Session Keys are currently an experimental feature in the SDK. We are actively working on simplifying the usage, please note that there could be breaking changes as we improve this feature.
+:::
+
+# Removing session keys
+
+Removing session keys is done with the `uninstallValidation` method. Below are some example configurations with code snippets. To learn more about the configuration parameters, check out the [uninstall validation](./removing-session-keys.mdx#uninstall-validation-method) section below.
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import {
+  installValidationActions,
+  getDefaultSingleSignerValidationModuleAddress,
+  SingleSignerValidationModule,
+  modularAccountAbi,
+} from "@account-kit/smart-contracts/experimental";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { generatePrivateKey } from "viem/accounts";
+
+const client = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+}).extend(installValidationActions);
+
+let sessionKeyEntityId = 1;
+
+// Removing a basic session key
+await client.uninstallValidation({
+  moduleAddress: getDefaultSingleSignerValidationModuleAddress(client.chain),
+  entityId: sessionKeyEntityId,
+  uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+    entityId: sessionKeyEntityId,
+  }),
+  hookUninstallData: [],
+});
+```

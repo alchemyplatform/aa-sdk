@@ -1,0 +1,42 @@
+---
+title: Using Session Keys
+description: Using Session Keys with your Modular Account V2
+---
+
+:::tip
+Session Keys are currently an experimental feature in the SDK. We are actively working on simplifying the usage, please note that there could be breaking changes as we improve this feature.
+:::
+
+# Using session keys
+
+Once session keys are added, using them is straightforward - just create another client instance with the session key connected along with properties of the session key, the session key entityId and whether the session key can use global validation. These properties were set during the installValidation call.
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const client = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+let sessionKeyEntityId = 1;
+const ecdsaValidationModuleAddress =
+  getDefaultSingleSignerValidationModuleAddress(chain);
+const sessionKey: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
+
+const sessionKeyClient = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  accountAddress: await client.getAddress(),
+  signer: sessionKey,
+  signerEntity: {
+    entityId: sessionKeyEntityId,
+    isGlobalValidation: true,
+  },
+});
+```
+
+Note that you have to pass in `accountAddress` to session key clients. By default, the client uses an account address counterfactual that assumes that the connected signer is the owner.
