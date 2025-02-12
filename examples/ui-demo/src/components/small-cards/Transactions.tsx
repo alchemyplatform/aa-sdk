@@ -1,8 +1,8 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
-import { TransactionType } from "../../hooks/7702/useRecurringTransactions";
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
 import { useEffect, useState } from "react";
+import { TransactionType } from "@/hooks/useRecurringTransactions";
 
 export type loadingState = "loading" | "success" | "initial";
 
@@ -68,9 +68,7 @@ const Transaction = ({
       </div>
       {externalLink && state === "complete" && (
         <a href={externalLink} target="_blank" rel="noreferrer">
-          <div className="w-4 h-4">
-            <ExternalLinkIcon className="stroke-fg-secondary" />
-          </div>
+          <ExternalLinkIcon className="stroke-fg-secondary h-4 w-4" />
         </a>
       )}
     </div>

@@ -19,15 +19,16 @@ export const RenderUserConnectionAvatar = (
 ) => {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const { account } = useAccount({
-    type: "LightAccount",
+    type: "ModularAccountV2",
   });
   const { walletType } = useConfigStore();
 
-  const publicClient = createPublicClient({
-    chain: odysseyTestnet,
-    transport: http(),
-  });
-
+  const [publicClient] = useState(() =>
+    createPublicClient({
+      chain: odysseyTestnet,
+      transport: http(),
+    })
+  );
   const signer = useSigner();
 
   const { nftTransferred } = useConfigStore(({ nftTransferred }) => ({
