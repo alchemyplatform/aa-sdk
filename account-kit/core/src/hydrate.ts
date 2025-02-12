@@ -110,25 +110,27 @@ const hydrateAccountState = (
     ([, cnx]) => cnx.chain
   );
   const initialState = createDefaultAccountState(chains);
+  const activeChainId = config.store.getState().chain.id;
 
   return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
     const chainId = Number(chainKey);
+    const isActiveChain = chainId === activeChainId;
+    const shouldReconnect = shouldReconnectAccounts && isActiveChain;
     acc[chainId] = {
       LightAccount:
-        config.LightAccount?.accountAddress && shouldReconnectAccounts
+        shouldReconnect && config.LightAccount?.accountAddress
           ? reconnectingState(config.LightAccount.accountAddress)
           : defaultAccountState(),
       MultiOwnerModularAccount:
-        config.MultiOwnerModularAccount?.accountAddress &&
-        shouldReconnectAccounts
+        shouldReconnect && config.MultiOwnerModularAccount?.accountAddress
           ? reconnectingState(config.MultiOwnerModularAccount.accountAddress)
           : defaultAccountState(),
       MultiOwnerLightAccount:
-        config.MultiOwnerLightAccount?.accountAddress && shouldReconnectAccounts
+        shouldReconnect && config.MultiOwnerLightAccount?.accountAddress
           ? reconnectingState(config.MultiOwnerLightAccount.accountAddress)
           : defaultAccountState(),
       ModularAccountV2:
-        config.ModularAccountV2?.accountAddress && shouldReconnectAccounts
+        shouldReconnect && config.ModularAccountV2?.accountAddress
           ? reconnectingState(config.ModularAccountV2.accountAddress)
           : defaultAccountState(),
     };
