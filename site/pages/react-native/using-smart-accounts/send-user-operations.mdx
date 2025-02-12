@@ -7,7 +7,7 @@ description: Learn how to send user operations using Account Kit in a React Nati
 
 Once your users have been [authenticated](/react-native/signer/authenticating-users/authenticating-with-otp), you can start sending user operations! Account Kit makes it really easy to send user operations using React hooks.
 
-To send user operations, you need to first create a `SmartAccountClient` using the [`createLightAccountClient`](/reference/account-kit/smart-contracts/functions/createLightAccountClient) function.
+To send user operations, you need to first create a `SmartAccountClient` using the [`createModularAccountV2Client`](/reference/account-kit/smart-contracts/functions/createModularAccountV2Client) function.
 Once you have a `SmartAccountClient`, you can use the [`sendUserOperation`](/reference/aa-sdk/core/functions/sendUserOperation#senduseroperation) function to send user operations.
 
 If you want to sponsor the gas for a user, see our [guide](/react-native/using-smart-accounts/sponsor-gas).
@@ -15,8 +15,7 @@ If you want to sponsor the gas for a user, see our [guide](/react-native/using-s
 ## Single user operation
 
 :::tip
-In the below example, we use `LightAccount` as the underlying Smart Contract type. You can also use `MultiOwnerModularAccount` if you want to provide your users with an ERC-6900 compliant modular account,
-or you can use `MultiOwnerLightAccount` if you want to support an account with multiple owners.
+In the below example, we use `ModularAccountV2` as the underlying Smart Contract type. You can also use a different account type (see other options [here](/smart-contract/other-accounts)).
 :::
 
 :::code-group
@@ -26,8 +25,8 @@ import React, { useState, useEffect } from "react";
 import { Alert, View, Button } from "react-native";
 import { User } from "@account-kit/signer";
 import {
-  createLightAccountClient,
-  LightAccount,
+  createModularAccountV2Client,
+  ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { SmartAccountClient } from "@aa-sdk/core";
@@ -48,7 +47,7 @@ export default function MyOpSenderComponent() {
   useEffect(() => {
     if (user) {
       // Create a light account client for the authenticated user
-      createLightAccountClient({
+      createModularAccountV2Client({
         signer,
         chain: sepolia,
         transport: alchemy({ apiKey: "YOUR_API_KEY" }),
@@ -109,8 +108,8 @@ import React, { useState, useEffect } from "react";
 import { Alert, View, Button } from "react-native";
 import { User } from "@account-kit/signer";
 import {
-  createLightAccountClient,
-  LightAccount,
+  createModularAccountV2Client,
+  ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { SmartAccountClient } from "@aa-sdk/core";
@@ -131,7 +130,7 @@ export default function MyOpSenderComponent() {
   useEffect(() => {
     if (user) {
       // Create a light account client for the authenticated user
-      createLightAccountClient({
+      createModularAccountV2Client({
         signer,
         chain: sepolia,
         transport: alchemy({ apiKey: "YOUR_API_KEY" }),
