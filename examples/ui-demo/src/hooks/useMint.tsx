@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useToast } from "./useToast";
 import {
   useSmartAccountClient,
   useSendUserOperation,
+  useChain,
 } from "@account-kit/react";
-import { Address, encodeFunctionData } from "viem";
+import { Address, Chain, encodeFunctionData } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
 import { MintStatus } from "@/components/small-cards/MintCard";
 
@@ -27,7 +28,15 @@ export interface UseMintReturn {
 export const useMint = (props: {
   contractAddress: Address;
   mode: "default" | "7702";
+  chain: Chain;
 }): UseMintReturn => {
+  const { chain: activeChain, setChain, isSettingChain } = useChain();
+  useEffect(() => {
+    if (!activeChain || isSettingChain || props.chain.id === activeChain.id)
+      return;
+    setChain({ chain: props.chain });
+  }, [activeChain, props.chain, isSettingChain, setChain]);
+
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
     accountParams: {
@@ -38,7 +47,10 @@ export const useMint = (props: {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);
   const isLoading =
-    Object.values(status).some((x) => x === "loading") || isLoadingClient;
+    Object.values(status).some((x) => x === "loading") ||
+    isLoadingClient ||
+    isSettingChain ||
+    activeChain !== props.chain;
   const { setToast } = useToast();
 
   const handleSuccess = () => {

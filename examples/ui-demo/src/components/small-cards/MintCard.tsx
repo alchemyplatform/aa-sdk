@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useMint } from "@/hooks/useMint";
 import { Button } from "./Button";
 import { MintStages } from "./MintStages";
+import { odyssey } from "@/hooks/7702/transportSetup";
+import { arbitrumSepolia } from "@account-kit/infra";
 
 type NFTLoadingState = "initial" | "loading" | "success";
 
@@ -18,6 +20,7 @@ export const MintCardDefault = () => {
   const mint = useMint({
     mode: "default",
     contractAddress: nftContractAddress,
+    chain: arbitrumSepolia,
   });
   return <MintCardInner {...mint} />;
 };
@@ -26,6 +29,7 @@ export const MintCard7702 = () => {
   const mint = useMint({
     mode: "7702",
     contractAddress: nftContractAddressOdyssey,
+    chain: odyssey,
   });
   return <MintCardInner {...mint} />;
 };
@@ -101,8 +105,8 @@ const MintCardInner = ({
         {!mintStarted
           ? "Collect NFT"
           : isLoading
-          ? "Collecting NFT..."
-          : "Re-collect NFT"}
+            ? "Collecting NFT..."
+            : "Re-collect NFT"}
       </Button>
     </div>
   );

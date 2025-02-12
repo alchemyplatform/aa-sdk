@@ -97,8 +97,6 @@ export const alchemyConfig = () =>
           chain: odyssey,
           transport: splitOdysseyTransport,
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
-          // TODO(jh): do we need to include fee estimator somewhere?
-          // i.e. alchemyFeeEstimator(splitOdysseyTransport)
         },
       ],
       ssr: true,
