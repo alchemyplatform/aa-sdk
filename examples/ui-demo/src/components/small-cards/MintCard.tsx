@@ -105,8 +105,8 @@ const MintCardInner = ({
         {!mintStarted
           ? "Collect NFT"
           : isLoading
-            ? "Collecting NFT..."
-            : "Re-collect NFT"}
+          ? "Collecting NFT..."
+          : "Re-collect NFT"}
       </Button>
     </div>
   );

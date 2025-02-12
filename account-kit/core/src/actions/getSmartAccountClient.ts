@@ -153,6 +153,7 @@ export function getSmartAccountClient(
       const { accounts: initialAccounts } = config.store.getInitialState();
       config.store.setState((state) => ({
         ...state,
+        // TODO(jh): maybe just wipe out the account for current chain for MAv2 instead of all?
         accounts: initialAccounts,
       }));
       return getSmartAccountClientState({
