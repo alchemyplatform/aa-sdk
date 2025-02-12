@@ -3,10 +3,6 @@ import { SidebarItem } from "vocs";
 export const smartContractsSidebar: SidebarItem[] = [
   { text: "Overview", link: "/smart-contracts/overview" },
   {
-    text: "Upgrading EOAs with EIP-7702",
-    link: "/smart-contracts/upgrade-eoa-with-eip-7702",
-  },
-  {
     text: "Choosing a smart account",
     link: "/smart-contracts/choosing-a-smart-account",
   },
