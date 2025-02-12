@@ -1,0 +1,41 @@
+---
+title: Using Session Keys
+description: Using Session Keys with your Modular Account V2
+---
+
+# Managing Ownership
+
+You can add an owner to your account, or transfer ownership of your account with Modular Account V2. Adding an owner has the same flow as adding a session key with no root permissions. To transfer ownership, we use the flow below:
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { semiModularAccountBytecodeAbi } from "@account-kit/smart-contracts/experimental";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey } from "viem/accounts";
+import { type SmartAccountSigner } from "@aa-sdk/core";
+import { encodeFunctionData } from "viem";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const client = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const newOwner = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
+
+await client.sendUserOperation(
+  uo: {
+    target: client.getAddress(),
+    value: 0n,
+    calldata: encodeFunctionData({
+        abi: semiModularAccountBytecodeAbi,
+        functionName: 'updateFallbackSignerData',
+        parameters: [newOwner, false],
+    })
+  }
+)
+
+```
+
+Note that you have to pass in `accountAddress` to session key clients. By default, the client uses an account address counterfactual that assumes that the connected signer is the owner.
