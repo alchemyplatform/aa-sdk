@@ -25,10 +25,6 @@ export const reactGuides: SidebarItem[] = [
         link: "/react/how-to-set-up-smart-account-client",
       },
       {
-        text: "Using 7702",
-        link: "/react/using-7702",
-      },
-      {
         text: "Send user operations",
         link: "/react/send-user-operations",
       },
@@ -36,6 +32,10 @@ export const reactGuides: SidebarItem[] = [
       { text: "Add passkey", link: "/react/add-passkey" },
       { text: "Multi-chain apps", link: "/react/multi-chain-apps" },
     ],
+  },
+  {
+    text: "Using EIP-7702",
+    link: "/react/using-7702",
   },
   {
     text: "Customizing UI components",
