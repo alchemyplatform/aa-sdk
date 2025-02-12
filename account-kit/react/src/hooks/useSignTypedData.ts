@@ -50,14 +50,7 @@ export type UseSignTypedDataResult = {
  * ```ts twoslash
  * import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
  *
- * const typedData = {
- *     types: {
- *       Message: [{ name: "content", type: "string" }],
- *     },
- *     primaryType: "Message",
- *     message: { content: "Hello" },
- *   }
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { client } = useSmartAccountClient({});
  * const { signTypedData, signTypedDataAsync, signedTypedData, isSigningTypedData, error } = useSignTypedData({
  *  client,
  *  // these are optional
