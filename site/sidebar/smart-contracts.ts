@@ -22,10 +22,6 @@ export const smartContractsSidebar: SidebarItem[] = [
         link: "/smart-contracts/modular-account-v2/using-7702",
       },
       {
-        text: "Getting started",
-        link: "/smart-contracts/modular-account-v2/getting-started",
-      },
-      {
         text: "Session Keys",
         items: [
           {
