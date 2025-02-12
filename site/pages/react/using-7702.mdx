@@ -7,19 +7,19 @@ description: Learn how to use EIP-7702 to enable smart account features for EOAs
 
 ## What is EIP-7702?
 
-EIP-7702 is an upcoming Ethereum upgrade set to launch in the coming months as part of the Pectra hardfork. Specifically, EIP-7702 enables Externally Owned Accounts (EOAs) to use smart contract account features. This upgrade marks a pivotal moment in Ethereum’s journey toward account abstraction, a breakthrough designed to make onchain experiences smoother, smarter, and more accessible. EIP-7702 doesn’t replace Ethereum’s existing AA standard, ERC-4337. EIP-7702 was designed to be complementary ERC-4337 and make it easier for those account abstraction features to reach users.
+EIP-7702 is an upcoming Ethereum upgrade set to launch in the coming months as part of the Pectra hardfork. Specifically, EIP-7702 enables Externally Owned Accounts (EOAs) to use smart contract account features. This upgrade marks a pivotal moment in Ethereum’s journey toward account abstraction, a breakthrough designed to make onchain experiences smoother, smarter, and more accessible. EIP-7702 doesn’t replace Ethereum’s existing AA standard, ERC-4337. EIP-7702 was designed to be complementary to ERC-4337 and make it easier for those account abstraction features to reach users.
 
 - EIP-7702 enables EOAs to delegate control to smart contract accounts that can execute code directly from their addresses
-- It is compatible with the prevailing AA standard, ERC-4437, so existing wallets can become smart contract wallets without creating a new address and transferring assets
-- For users, it will enable web2-like features, including account recovery and passkey sign-in for easier authentication, and web3-benefits like gas-sponsored transaction fees and paying for gas in any token, not just ETH
+- It is compatible with the prevailing AA standard, ERC-4437, so existing EOAs can enable smart account features without creating a new address and transferring assets
+- For users, it will enable web2-like features, including account recovery and passkey sign-in for easier authentication, and web3 benefits like gas-sponsored transaction fees and paying for gas in any token, not just ETH
 
-[Learn more about EIP-7702](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application).
+[Learn more about EIP-7702](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork).
 
 ## When to use EIP-7702?
 
 **For developers with existing users and embedded wallets**
 
-Upgrade your existing embedded EOA users to smart accounts to enable features like batching and gas sponsorship. Account Kit makes this upgrade easy with compatible smart accounts and infrastructure. Follow [this guide](#TODO/7702-uypgrade).
+Upgrade your existing embedded EOA users to smart accounts to enable features like batching and gas sponsorship. Account Kit makes this upgrade easy with compatible smart accounts and infrastructure. Follow [this guide](#TODO/7702-upgrade).
 
 **For developers who have not deployed their app**
 
@@ -30,7 +30,7 @@ While ERC-4337 and EIP-7702 both enable account abstraction, they serve differen
 
 See our full [recommendations](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application) to decide what's best for you.
 
-## How to use embedded EIP-7702 accounts
+## How to ship smart EOAs
 
 In this example, we will upgrade a **new** embedded EOA to a smart contract account ([Modular Account v2](#TODO/link-toMAv2) specifically) and send a gasless transaction from the account.
 
@@ -59,7 +59,7 @@ Continue on to [sending user operations](/react/send-user-operations) (aka smart
 
 ## When can I use it?
 
-EIP-7702 will be supported on Sepolia starting March 5. The Alchemy infrastructure and Account Kit will have day-one support! Mainnet support is expected to follow shortly after.
+EIP-7702 will be supported on Sepolia starting March 5, and mainnet is expected to follow shortly after. Account Kit will support EIP-7702 integration on Day 1 at both milestones.
 
 Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
 
