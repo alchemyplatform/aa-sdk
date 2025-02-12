@@ -29,27 +29,11 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     ],
   },
   {
-    text: "Hooks",
+    text: "Authentication",
     items: [
-      {
-        text: "useAccount",
-        link: "/reference/account-kit/react/hooks/useAccount",
-      },
       {
         text: "useAddPasskey",
         link: "/reference/account-kit/react/hooks/useAddPasskey",
-      },
-      {
-        text: "useAlchemyAccountContext",
-        link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
-      },
-      {
-        text: "useAuthContext",
-        link: "/reference/account-kit/react/hooks/useAuthContext",
-      },
-      {
-        text: "useAuthError",
-        link: "/reference/account-kit/react/hooks/useAuthError",
       },
       {
         text: "useAuthModal",
@@ -60,9 +44,47 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useAuthenticate",
       },
       {
-        text: "useBundlerClient",
-        link: "/reference/account-kit/react/hooks/useBundlerClient",
+        text: "useConnect",
+        link: "/reference/account-kit/react/hooks/useConnect",
       },
+      {
+        text: "useExportAccount",
+        link: "/reference/account-kit/react/hooks/useExportAccount",
+      },
+      {
+        text: "useLogout",
+        link: "/reference/account-kit/react/hooks/useLogout",
+      },
+      {
+        text: "useSigner",
+        link: "/reference/account-kit/react/hooks/useSigner",
+      },
+      {
+        text: "useSignerStatus",
+        link: "/reference/account-kit/react/hooks/useSignerStatus",
+      },
+      {
+        text: "useUser",
+        link: "/reference/account-kit/react/hooks/useUser",
+      },
+    ],
+  },
+  {
+    text: "Account Client",
+    items: [
+      {
+        text: "useAccount",
+        link: "/reference/account-kit/react/hooks/useAccount",
+      },
+      {
+        text: "useSmartAccountClient",
+        link: "/reference/account-kit/react/hooks/useSmartAccountClient",
+      },
+    ],
+  },
+  {
+    text: "Smart Account Actions",
+    items: [
       {
         text: "useChain",
         link: "/reference/account-kit/react/hooks/useChain",
@@ -72,24 +94,8 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useClientActions",
       },
       {
-        text: "useConnect",
-        link: "/reference/account-kit/react/hooks/useConnect",
-      },
-      {
-        text: "useConnection",
-        link: "/reference/account-kit/react/hooks/useConnection",
-      },
-      {
         text: "useDropAndReplaceUserOperation",
         link: "/reference/account-kit/react/hooks/useDropAndReplaceUserOperation",
-      },
-      {
-        text: "useExportAccount",
-        link: "/reference/account-kit/react/hooks/useExportAccount",
-      },
-      {
-        text: "useLogout",
-        link: "/reference/account-kit/react/hooks/useLogout",
       },
       {
         text: "useSendUserOperation",
@@ -104,28 +110,38 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useSignTypedData",
       },
       {
-        text: "useSigner",
-        link: "/reference/account-kit/react/hooks/useSigner",
+        text: "useWaitForUserOperationTransaction",
+        link: "/reference/account-kit/react/hooks/useWaitForUserOperationTransaction",
+      },
+    ],
+  },
+  {
+    text: "Bundler/RPC Client",
+    items: [
+      {
+        text: "useBundlerClient",
+        link: "/reference/account-kit/react/hooks/useBundlerClient",
+      },
+    ],
+  },
+  {
+    text: "Utilities",
+    items: [
+      {
+        text: "useAlchemyAccountContext",
+        link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
       },
       {
-        text: "useSignerStatus",
-        link: "/reference/account-kit/react/hooks/useSignerStatus",
+        text: "useAuthError",
+        link: "/reference/account-kit/react/hooks/useAuthError",
       },
       {
-        text: "useSmartAccountClient",
-        link: "/reference/account-kit/react/hooks/useSmartAccountClient",
+        text: "useConnection",
+        link: "/reference/account-kit/react/hooks/useConnection",
       },
       {
         text: "useUiConfig",
         link: "/reference/account-kit/react/hooks/useUiConfig",
-      },
-      {
-        text: "useUser",
-        link: "/reference/account-kit/react/hooks/useUser",
-      },
-      {
-        text: "useWaitForUserOperationTransaction",
-        link: "/reference/account-kit/react/hooks/useWaitForUserOperationTransaction",
       },
     ],
   },
