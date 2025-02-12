@@ -52,6 +52,16 @@ export async function reconnect(config: AlchemyAccountsConfig) {
       );
     }
 
+    if (accountConfigs[chain.id]?.["ModularAccountV2"]) {
+      await createAccount(
+        {
+          type: "ModularAccountV2",
+          accountParams: accountConfigs[chain.id]["ModularAccountV2"],
+        },
+        config
+      );
+    }
+
     setTimeout(() => unsubConnected(), 1);
   });
 

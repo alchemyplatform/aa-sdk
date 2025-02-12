@@ -43,10 +43,20 @@ export type UseSignTypedDataResult = {
  *
  * Uses `eth_signTypedData` to sign structured, typed data. Accepts typed, complex data structures as input. Like `useSignMessage`, this hook also handles deployed (1271) and undeployed accounts (6492).
  *
+ * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L24)
+ * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L28)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
  *
+ * const typedData = {
+ *     types: {
+ *       Message: [{ name: "content", type: "string" }],
+ *     },
+ *     primaryType: "Message",
+ *     message: { content: "Hello" },
+ *   }
  * const { client } = useSmartAccountClient({ type: "LightAccount" });
  * const { signTypedData, signTypedDataAsync, signedTypedData, isSigningTypedData, error } = useSignTypedData({
  *  client,
@@ -56,10 +66,9 @@ export type UseSignTypedDataResult = {
  *  },
  *  onError: (error) => console.error(error),
  * });
- * ```
  *
- * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L24)
- * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L28)
+ * const result = await signTypedData({ typedData });
+ * ```
  */
 export function useSignTypedData({
   client,

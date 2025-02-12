@@ -18,10 +18,6 @@ export const smartContractsSidebar: SidebarItem[] = [
             link: "/smart-contracts/modular-account/getting-started",
           },
           {
-            text: "Deployments",
-            link: "/smart-contracts/modular-account/deployments",
-          },
-          {
             text: "Upgrade",
             link: "/smart-contracts/modular-account/upgrading-to-modular-account",
           },
@@ -53,10 +49,6 @@ export const smartContractsSidebar: SidebarItem[] = [
             text: "Getting started",
             link: "/smart-contracts/light-account/getting-started",
           },
-          {
-            text: "Deployments",
-            link: "/smart-contracts/light-account/deployments",
-          },
         ],
       },
       {
@@ -66,6 +58,10 @@ export const smartContractsSidebar: SidebarItem[] = [
       {
         text: "Gas benchmarks",
         link: "https://github.com/alchemyplatform/aa-benchmarks",
+      },
+      {
+        text: "Smart Contract Account Deployments",
+        link: "/smart-contracts/deployed-addresses",
       },
     ],
   },

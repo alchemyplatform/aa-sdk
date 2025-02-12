@@ -24,8 +24,11 @@ export type UseAddPasskeyResult = {
 /**
  * A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts) to handle the addition of a passkey to an already authenticated account, which includes executing a mutation with optional parameters.
  *
+ * @param {UseAddPasskeyMutationArgs} [mutationArgs] Optional arguments for the mutation used for adding a passkey. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L8)
+ * @returns {UseAddPasskeyResult} An object containing the `addPasskey` function, a boolean `isAddingPasskey` to track the mutation status, and any error encountered. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L13)
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useAddPasskey } from "@account-kit/react";
  *
  * const { addPasskey, isAddingPasskey, error } = useAddPasskey({
@@ -36,9 +39,6 @@ export type UseAddPasskeyResult = {
  *  onError: (error) => console.error(error),
  * });
  * ```
- *
- * @param {UseAddPasskeyMutationArgs} [mutationArgs] Optional arguments for the mutation used for adding a passkey. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L8)
- * @returns {UseAddPasskeyResult} An object containing the `addPasskey` function, a boolean `isAddingPasskey` to track the mutation status, and any error encountered. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L13)
  */
 export function useAddPasskey(
   mutationArgs?: UseAddPasskeyMutationArgs

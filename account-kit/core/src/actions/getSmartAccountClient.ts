@@ -18,6 +18,7 @@ import {
   type MultiOwnerModularAccount,
   type MultiOwnerPluginActions,
   type PluginManagerActions,
+  type ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import type { Address, Chain } from "viem";
 import type {
@@ -32,6 +33,7 @@ import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
+import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
 
 export type GetSmartAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
@@ -52,6 +54,8 @@ export type ClientActions<
       AccountLoupeActions<MultiOwnerModularAccount<AlchemyWebSigner>>
   : TAccount extends MultiOwnerLightAccount
   ? MultiOwnerLightAccountClientActions<AlchemyWebSigner>
+  : TAccount extends ModularAccountV2
+  ? {} // no ma v2 actions
   : never;
 
 export type GetSmartAccountClientResult<
@@ -214,8 +218,34 @@ export function getSmartAccountClient(
           address: account.address,
           isLoadingClient: false,
         };
+      case "ModularAccountV2":
+        const is7702 =
+          params.accountParams &&
+          "mode" in params.accountParams &&
+          params.accountParams.mode === "7702";
+        return {
+          client: createAlchemySmartAccountClient({
+            transport,
+            chain: connection.chain,
+            account: account,
+            policyId: connection.policyId,
+            ...(is7702
+              ? {
+                  gasEstimator: default7702GasEstimator(
+                    clientParams.gasEstimator
+                  ),
+                  signUserOperation: default7702UserOpSigner(
+                    clientParams.signUserOperation
+                  ),
+                }
+              : {}),
+            ...clientParams,
+          }),
+          address: account.address,
+          isLoadingClient: false,
+        };
       default:
-        throw new Error("Unsupported account type");
+        assertNeverAccountType(account);
     }
   })();
 
@@ -269,4 +299,8 @@ function setSmartAccountClientState<
       },
     },
   }));
+}
+
+function assertNeverAccountType(_accountType: never): never {
+  throw new Error("Unsupported account type");
 }
