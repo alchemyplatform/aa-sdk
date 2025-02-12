@@ -56,6 +56,7 @@ export type UseWaitForUserOperationTransactionResult = {
  */
 export function useWaitForUserOperationTransaction({
   client,
+  ...mutationArgs
 }: UseWaitForUserOperationTransactionArgs): UseWaitForUserOperationTransactionResult {
   const { queryClient } = useAlchemyAccountContext();
 
@@ -75,6 +76,7 @@ export function useWaitForUserOperationTransaction({
 
         return client.waitForUserOperationTransaction(params);
       },
+      ...mutationArgs,
     },
     queryClient
   );
