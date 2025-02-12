@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/useToast";
 import { Address, encodeFunctionData, Hash } from "viem";
 import { MintStatus } from "@/components/small-cards/MintCard";
 import { UseMintReturn } from "./useMintDefault";
-import { useMAv2Client } from "./useMAv2Client";
+import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { odyssey, splitOdysseyTransport } from "./7702/transportSetup";
 
 const initialValuePropState = {
@@ -17,7 +17,7 @@ const initialValuePropState = {
 export const useMint7702 = (props: {
   contractAddress: Address;
 }): UseMintReturn => {
-  const { client, isLoadingClient } = useMAv2Client({
+  const { client, isLoadingClient } = useModularAccountV2Client({
     mode: "7702",
     chain: odyssey,
     transport: splitOdysseyTransport,
