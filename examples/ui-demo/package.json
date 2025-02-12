@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:write": "prettier --no-ignore --write ./src"
+    "lint:write": "prettier --no-ignore --write ./src",
+    "test:e2e": "playwright test",
+    "playwright": "playwright test --ui"
   },
   "dependencies": {
     "@account-kit/core": "^4.2.0",
