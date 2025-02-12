@@ -101,12 +101,14 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   }
   const cachedConfig = accountConfigs[chain.id]?.[type];
 
+  // TODO(jh): if mode changed, we probably shouldn't use the cachedConfig?
+
   const accountPromise = (() => {
     switch (type) {
       case "LightAccount":
         return createLightAccount({
-          ...cachedConfig,
           ...params,
+          ...cachedConfig,
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -123,8 +125,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerLightAccount":
         return createMultiOwnerLightAccount({
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
           ...(params as AccountConfig<"MultiOwnerLightAccount">),
+          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -140,8 +142,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
           ...(params as AccountConfig<"MultiOwnerModularAccount">),
+          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -158,8 +160,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "ModularAccountV2":
         return createModularAccountV2({
-          ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
           ...(params as AccountConfig<"ModularAccountV2">),
+          ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -196,7 +198,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
 
   try {
     const account = await accountPromise;
-
     const initCode = await account.getInitCode();
     store.setState((state) => ({
       accounts: {

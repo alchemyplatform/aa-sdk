@@ -28,10 +28,9 @@ export type GetAccountParams<TAccount extends SupportedAccountTypes> =
  * @returns {GetAccountResult<TAccount>} The result which includes the account if found and its status
  */
 export const getAccount = <TAccount extends SupportedAccountTypes>(
-  params: GetAccountParams<TAccount>,
+  { type }: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
-  const { type } = params;
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
   const account = accounts?.[chain.id]?.[type];
