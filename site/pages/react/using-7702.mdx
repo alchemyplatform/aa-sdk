@@ -1,0 +1,70 @@
+---
+title: Using EIP-7702
+description: Learn how to use EIP-7702 to enable smart account features for EOAs
+---
+
+# Using EIP-7702
+
+## What is EIP-7702?
+
+EIP-7702 is an upcoming Ethereum upgrade set to launch in the coming months as part of the Pectra hardfork. Specifically, EIP-7702 enables Externally Owned Accounts (EOAs) to use smart contract account features. This upgrade marks a pivotal moment in Ethereum’s journey toward account abstraction, a breakthrough designed to make onchain experiences smoother, smarter, and more accessible. EIP-7702 doesn’t replace Ethereum’s existing AA standard, ERC-4337. EIP-7702 was designed to be complementary to ERC-4337 and make it easier for those account abstraction features to reach users.
+
+- EIP-7702 enables EOAs to delegate control to smart contract accounts that can execute code directly from their addresses
+- It is compatible with the prevailing AA standard, ERC-4437, so existing EOAs can enable smart account features without creating a new address and transferring assets
+- For users, it will enable web2-like features, including account recovery and passkey sign-in for easier authentication, and web3 benefits like gas-sponsored transaction fees and paying for gas in any token, not just ETH
+
+[Learn more about EIP-7702](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork).
+
+## When to use EIP-7702?
+
+**For developers with existing users and embedded wallets**
+
+Upgrade your existing embedded EOA users to smart accounts to enable features like batching and gas sponsorship. Account Kit makes this upgrade easy with compatible smart accounts and infrastructure. Follow [this guide](#TODO/7702-upgrade).
+
+**For developers who have not deployed their app**
+
+While ERC-4337 and EIP-7702 both enable account abstraction, they serve different needs in modern blockchain applications. You can either:
+
+- (Recommended) Use ERC-4337 smart accounts from the start to leverage the fullest of Ethereum AA features such as maximum account programability, extensive transaction customization, and established tooling: get started [here](/react/how-to-set-up-smart-account-client)
+- Use EIP-7702 smart EOAs: keep reading this guide
+
+See our full [recommendations](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application) to decide what's best for you.
+
+## How to ship smart EOAs
+
+In this example, we will upgrade a **new** embedded EOA to a smart contract account ([Modular Account v2](/smart-contracts/modular-account-v2/overview) specifically) and send a gasless transaction from the account.
+
+:::tip
+Note: Sepolia EIP-7702 support is not yet live. For early access to testnet support, please reach out to account-abstraction@alchemy.com
+:::
+
+The following sets up a Smart Account Client using the EIP-7702 supported version of a Modular Account v2. Make sure to first go through the [authentication setup](/react/getting-started) to generate a signer.
+
+```tsx twoslash
+import { useSmartAccountClient } from "@account-kit/react";
+
+const { client, address, isLoadingClient } = useSmartAccountClient({
+  type: "ModularAccountV2",
+  accountParams: {
+    mode: "7702",
+  },
+});
+```
+
+### 2. Send a sponsored transaction
+
+Now that you have a smart account client with an EIP-7702 supported smart account, you can leverage all of the easy-to-use React hooks to take action on the account. Account Kit will handle all of the complexity of delegating your EOA to the smart account and handling the special signature types.
+
+Continue on to [sending user operations](/react/send-user-operations) (aka smart account transactions) and [sponsoring gas](/react/sponsor-gas).
+
+## When can I use it?
+
+EIP-7702 will be supported on Sepolia starting March 5, and mainnet is expected to follow shortly after. Account Kit will support EIP-7702 integration on Day 1 at both milestones.
+
+Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
+
+Want to experiment on other testnets before March 5? Reach out to us at account-abstraction@alchemy.com for early access to experimental networks.
+
+## Upgrading an existing EOA
+
+Want to upgrade your EOA to have smart contract functionality? Learn how to [here](/smart-contracts/modular-account/upgrading-to-modular-account).
