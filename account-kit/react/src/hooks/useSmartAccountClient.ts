@@ -60,7 +60,12 @@ export function useSmartAccountClient<
  * import { useSmartAccountClient } from "@account-kit/react";
  *
  * const { client, address, isLoadingClient } = useSmartAccountClient({
- *  accountParams: {...}, // optional [params](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/core/src/actions/createAccount.ts#L23) to further configure the account
+ *  accountParams: {
+ *    salt?: 1n,
+ *    factoryAddress?: '0x0000000000000000000000000000',
+ *    initCode?: "0x0",
+ *    accountAddress?: '0x0000000000000000000000000000'
+ *   } // optional [params](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/core/src/actions/createAccount.ts#L23) to further configure the account
  * });
  * ```
  */

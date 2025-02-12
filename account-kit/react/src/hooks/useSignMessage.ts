@@ -55,7 +55,7 @@ export type UseSignMessageResult = {
  * @example
  * ```ts twoslash
  * import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
- *
+ * const data = "messageToSign"
  * const { client } = useSmartAccountClient({});
  *
  * const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
