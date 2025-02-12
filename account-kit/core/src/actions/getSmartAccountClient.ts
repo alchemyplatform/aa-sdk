@@ -28,7 +28,7 @@ import type {
   SupportedAccounts,
   SupportedAccountTypes,
 } from "../types";
-import { createAccount } from "./createAccount.js";
+import { createAccount, type AccountConfig } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
@@ -135,6 +135,34 @@ export function getSmartAccountClient(
     });
   }
 
+  if (params.type === "ModularAccountV2" && status === "READY") {
+    const accountConfig =
+      config.store.getState().accountConfigs[connection.chain.id]?.[
+        "ModularAccountV2"
+      ];
+
+    const haveMode = accountConfig?.mode;
+
+    const wantMode = (
+      params.accountParams as AccountConfig<"ModularAccountV2"> | undefined
+    )?.mode;
+
+    if (haveMode !== wantMode) {
+      // Wipe the MAv2 account state from the store since the mode has changed.
+      // This seems to work fine, but the UI does a weird flash from too many re-renders.
+      const { accounts: initialAccounts } = config.store.getInitialState();
+      config.store.setState((state) => ({
+        ...state,
+        accounts: initialAccounts,
+      }));
+      return getSmartAccountClientState({
+        config,
+        chainId: connection.chain.id,
+        type,
+      });
+    }
+  }
+
   if (
     !account ||
     status === "INITIALIZING" ||
@@ -142,8 +170,9 @@ export function getSmartAccountClient(
     signerStatus.isAuthenticating ||
     signerStatus.isInitializing
   ) {
-    if (!account && signerStatus.isConnected)
+    if (!account && signerStatus.isConnected) {
       createAccount({ type, accountParams }, config);
+    }
 
     if (clientState && clientState.isLoadingClient) {
       return clientState;
