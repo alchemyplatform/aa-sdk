@@ -24,7 +24,7 @@ import { useSignMessage } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
 
 const { client } = useSmartAccountClient({});
@@ -43,6 +43,8 @@ const {
   },
   onError: (error) => console.error(error),
 });
+
+const result = await signMessage({ message: data });
 ```
 
 ## Parameters
