@@ -41,8 +41,16 @@ export default function MyLoginPage() {
     </div>
   );
 }
+```
 
-// Then send the OTP
+Then send the OTP
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
 
 export default function MyOTPInputPage() {
   const { authenticate, isPending } = useAuthenticate();
@@ -50,13 +58,8 @@ export default function MyOTPInputPage() {
 
   return (
     <div>
-      <input
-        value={otpCode}
-        onChange={(e) => setOTPCode(e.target.value)}
-      />
-      <button
-        onClick={() => authenticate({ type: "otp", otpCode });}
-      >
+      <input value={otpCode} onChange={(e) => setOTPCode(e.target.value)} />
+      <button onClick={() => authenticate({ type: "otp", otpCode })}>
         Submit
       </button>
     </div>
