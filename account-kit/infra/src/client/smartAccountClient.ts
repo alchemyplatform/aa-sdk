@@ -145,7 +145,11 @@ export function createAlchemySmartAccountClient({
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
 
   const gasAndPaymasterAndDataMiddleware = policyId
-    ? alchemyGasAndPaymasterAndDataMiddleware(policyId)
+    ? alchemyGasAndPaymasterAndDataMiddleware({
+        policyId,
+        transport,
+        enableDummyPaymasterAndData: !!(feeEstimator || gasEstimator),
+      })
     : undefined;
 
   const scaClient = createSmartAccountClient({
