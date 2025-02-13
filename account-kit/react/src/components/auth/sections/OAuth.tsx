@@ -19,19 +19,34 @@ export const OAuth = memo(({ ...config }: Props) => {
   switch (config.authProviderId) {
     case "google":
       return (
-        <Button variant="social" icon={<GoogleIcon />} onClick={authenticate}>
+        <Button
+          variant="social"
+          icon={<GoogleIcon />}
+          onClick={authenticate}
+          aria-label="Google sign in"
+        >
           Google
         </Button>
       );
     case "facebook":
       return (
-        <Button variant="social" icon={<FacebookIcon />} onClick={authenticate}>
+        <Button
+          variant="social"
+          icon={<FacebookIcon />}
+          onClick={authenticate}
+          aria-label="Facebook sign in"
+        >
           Facebook
         </Button>
       );
     case "apple":
       return (
-        <Button variant="social" icon={<AppleIcon />} onClick={authenticate}>
+        <Button
+          variant="social"
+          icon={<AppleIcon />}
+          onClick={authenticate}
+          aria-label="Apple sign in"
+        >
           Apple
         </Button>
       );
@@ -55,6 +70,7 @@ export const OAuth = memo(({ ...config }: Props) => {
             </>
           }
           onClick={authenticate}
+          aria-label={`${config.displayName} sign in`}
         >
           {config.displayName}
         </Button>

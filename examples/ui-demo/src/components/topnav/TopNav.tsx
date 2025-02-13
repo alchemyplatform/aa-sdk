@@ -39,6 +39,7 @@ export function TopNav() {
           <ExternalLink
             href={links.github}
             onClick={() => Metrics.trackEvent({ name: "github_clicked" })}
+            aria-label="GitHub"
           >
             <GithubLogo className="hidden md:flex" />
           </ExternalLink>
