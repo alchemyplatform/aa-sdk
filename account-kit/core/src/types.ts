@@ -13,6 +13,7 @@ import type {
   LightAccountVersion,
   MultiOwnerLightAccount,
   MultiOwnerModularAccount,
+  ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
@@ -23,7 +24,8 @@ import type { Store, StoredState } from "./store/types";
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
-  | "MultiOwnerModularAccount";
+  | "MultiOwnerModularAccount"
+  | "ModularAccountV2";
 
 export type SupportedAccounts =
   | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
@@ -31,7 +33,8 @@ export type SupportedAccounts =
   | MultiOwnerLightAccount<
       AlchemyWebSigner,
       LightAccountVersion<"MultiOwnerLightAccount">
-    >;
+    >
+  | ModularAccountV2<AlchemyWebSigner>;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
@@ -40,6 +43,8 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
     ? MultiOwnerModularAccount<AlchemyWebSigner>
     : T extends "MultiOwnerLightAccount"
     ? MultiOwnerLightAccount<AlchemyWebSigner>
+    : T extends "ModularAccountV2"
+    ? ModularAccountV2<AlchemyWebSigner>
     : never;
 
 export type AlchemyAccountsConfig = {
@@ -94,6 +99,12 @@ type RpcConnectionConfig =
       chains?: never;
     };
 
+type CreateStorageFn = (config?: {
+  /** @deprecated Use `sessionConfig` to define session length instead. */
+  sessionLength?: number;
+  domain?: string;
+}) => Storage;
+
 export type CreateConfigProps = RpcConnectionConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
   /**
@@ -102,8 +113,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
    */
   ssr?: boolean;
 
-  // TODO: should probably abstract this out into a function
-  storage?: (config?: { sessionLength?: number; domain?: string }) => Storage;
+  storage?: CreateStorageFn;
 
   connectors?: CreateConnectorFn[];
 

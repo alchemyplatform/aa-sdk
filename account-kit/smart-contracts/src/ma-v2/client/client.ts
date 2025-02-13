@@ -4,42 +4,49 @@ import {
   type SmartAccountClientConfig,
   type NotType,
   createSmartAccountClient,
+  default7702GasEstimator,
+  default7702UserOpSigner,
 } from "@aa-sdk/core";
 import { type Chain, type Transport } from "viem";
 
 import {
-  createSMAV2Account,
-  type CreateSMAV2AccountParams,
-  type MAV2Account,
-} from "../account/semiModularAccountV2.js";
+  createModularAccountV2,
+  type CreateModularAccountV2Params,
+} from "../account/modularAccountV2.js";
+
 import {
   createAlchemySmartAccountClient,
   isAlchemyTransport,
+  type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
   type AlchemyTransport,
 } from "@account-kit/infra";
 import type { LightAccount } from "../../light-account/accounts/account.js";
-export type SMAV2AccountClient<
+
+import type { ModularAccountV2 } from "../account/common/modularAccountV2Base.js";
+
+export type ModularAccountV2Client<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TChain extends Chain = Chain,
   TTransport extends Transport | AlchemyTransport = Transport
-> = SmartAccountClient<TTransport, TChain, MAV2Account<TSigner>>;
+> = SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
 
-export type CreateSMAV2AccountClientParams<
+export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = CreateSMAV2AccountParams<TTransport, TSigner> &
+> = CreateModularAccountV2Params<TTransport, TSigner> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
   >;
-export type CreateSMAV2AlchemyAccountClientParams<
+
+export type CreateModularAccountV2AlchemyClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateSMAV2AccountClientParams<TTransport, TChain, TSigner>,
+  CreateModularAccountV2ClientParams<TTransport, TChain, TSigner>,
   "transport"
 > &
   Omit<
@@ -47,31 +54,34 @@ export type CreateSMAV2AlchemyAccountClientParams<
     "account"
   > & { paymasterAndData?: never; dummyPaymasterAndData?: never };
 
-export function createSMAV2AccountClient<
+export function createModularAccountV2Client<
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateSMAV2AlchemyAccountClientParams<AlchemyTransport, TChain, TSigner>
-): Promise<SMAV2AccountClient<TSigner, TChain, AlchemyTransport>>;
+  args: CreateModularAccountV2AlchemyClientParams<
+    AlchemyTransport,
+    TChain,
+    TSigner
+  >
+): Promise<ModularAccountV2Client<TSigner, TChain, AlchemyTransport>>;
 
-export function createSMAV2AccountClient<
+export function createModularAccountV2Client<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateSMAV2AccountClientParams<TTransport, TChain, TSigner> &
+  args: CreateModularAccountV2ClientParams<TTransport, TChain, TSigner> &
     NotType<TTransport, AlchemyTransport>
-): Promise<SMAV2AccountClient<TSigner, TChain>>;
+): Promise<ModularAccountV2Client<TSigner, TChain>>;
 
 /**
- * Creates a SMAv2 account client using the provided configuration parameters.
+ * Creates a Modular Account V2 client using the provided configuration parameters.
  *
  * @example
- * ```ts
- * import { http } from "viem";
- * import { createSMAV2AccountClient } from "@account-kit/smart-contracts";
+ * ```ts twoslash
+ * import { createModularAccountV2Client } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
- * import { sepolia } from "@account-kit/infra";
+ * import { alchemy, sepolia } from "@account-kit/infra";
  *
  * const MNEMONIC = "...";
  * const RPC_URL = "...";
@@ -80,11 +90,11 @@ export function createSMAV2AccountClient<
  *
  * const chain = sepolia;
  *
- * const transport = http(RPC_URL);
+ * const transport = alchemy({ rpcUrl: RPC_URL });
  *
  * const policyId = "...";
  *
- * const SMAV2SignerAccountClient = await createSMAV2AccountClient({
+ * const modularAccountV2Client = await createModularAccountV2Client({
  *  chain,
  *  signer,
  *  transport,
@@ -92,29 +102,39 @@ export function createSMAV2AccountClient<
  * });
  * ```
  *
- * @param {CreateSMAV2AccountClientParams} config The configuration parameters required to create the MAv2 account client
+ * @param {CreateModularAccountV2ClientParams} config The configuration parameters required to create the Modular Account v2 account client
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance
  */
-export async function createSMAV2AccountClient(
-  config: CreateSMAV2AccountClientParams
-): Promise<SmartAccountClient> {
+export async function createModularAccountV2Client(
+  config:
+    | CreateModularAccountV2ClientParams
+    | CreateModularAccountV2AlchemyClientParams
+): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
-  const smaV2Account = await createSMAV2Account({
-    ...config,
-    transport,
-    chain,
-  });
+
+  const account = await createModularAccountV2(config);
+
+  const middlewareToAppend =
+    config.mode === "7702"
+      ? {
+          gasEstimator: default7702GasEstimator(config.gasEstimator),
+          signUserOperation: default7702UserOpSigner(config.signUserOperation),
+        }
+      : {};
+
   if (isAlchemyTransport(transport, chain)) {
     return createAlchemySmartAccountClient({
       ...config,
       transport,
       chain,
-      account: smaV2Account,
+      account,
+      ...middlewareToAppend,
     });
   }
 
   return createSmartAccountClient({
     ...config,
-    account: smaV2Account,
+    account,
+    ...middlewareToAppend,
   });
 }

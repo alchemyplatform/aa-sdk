@@ -24,8 +24,8 @@ import {
   serializeModuleEntity,
 } from "../common/utils.js";
 
-import { type SMAV2AccountClient } from "../../client/client.js";
-import { type MAV2Account } from "../../account/semiModularAccountV2.js";
+import { type ModularAccountV2Client } from "../../client/client.js";
+import { type ModularAccountV2 } from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
@@ -38,9 +38,9 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-  account?: MAV2Account<TSigner> | undefined;
+  account?: ModularAccountV2<TSigner> | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<MAV2Account<TSigner>>
+  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
 >;
 
 export type UninstallValidationParams<
@@ -50,9 +50,9 @@ export type UninstallValidationParams<
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-  account?: MAV2Account<TSigner> | undefined;
+  account?: ModularAccountV2<TSigner> | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<MAV2Account<TSigner>>
+  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
 >;
 
 export type InstallValidationActions<
@@ -61,9 +61,16 @@ export type InstallValidationActions<
   installValidation: (
     args: InstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
+  encodeInstallValidation: (
+    // TODO: omit the user op sending related parameters from this type
+    args: InstallValidationParams<TSigner>
+  ) => Promise<Hex>;
   uninstallValidation: (
     args: UninstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
+  encodeUninstallValidation: (
+    args: UninstallValidationParams<TSigner>
+  ) => Promise<Hex>;
 };
 
 /**
@@ -71,10 +78,10 @@ export type InstallValidationActions<
  *
  * @example
  * ```ts
- * import { createSMAV2AccountClient, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
+ * import { createModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
  * import { Address } from "viem";
  *
- * const client = (await createSMAV2AccountClient({ ... })).extend(installValidationActions);
+ * const client = (await createModularAccountV2Client({ ... })).extend(installValidationActions);
  * const sessionKeyAddress: Address = "0x1234";
  * const sessionKeyEntityId: number = 1;
  *
@@ -113,16 +120,15 @@ export type InstallValidationActions<
 export const installValidationActions: <
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  client: SMAV2AccountClient<TSigner>
-) => InstallValidationActions<TSigner> = (client) => ({
-  installValidation: async ({
+  client: ModularAccountV2Client<TSigner>
+) => InstallValidationActions<TSigner> = (client) => {
+  const encodeInstallValidation = async ({
     validationConfig,
     selectors,
     installData,
     hooks,
     account = client.account,
-    overrides,
-  }) => {
+  }: InstallValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -143,9 +149,7 @@ export const installValidationActions: <
       throw new EntityIdOverrideError();
     }
 
-    const { encodeCallData } = account;
-
-    const callData = await encodeCallData(
+    return account.encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "installValidation",
@@ -159,22 +163,15 @@ export const installValidationActions: <
         ],
       })
     );
+  };
 
-    return client.sendUserOperation({
-      uo: callData,
-      account,
-      overrides,
-    });
-  },
-
-  uninstallValidation: async ({
+  const encodeUninstallValidation = async ({
     moduleAddress,
     entityId,
     uninstallData,
     hookUninstallDatas,
     account = client.account,
-    overrides,
-  }) => {
+  }: UninstallValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -187,9 +184,7 @@ export const installValidationActions: <
       );
     }
 
-    const { encodeCallData } = account;
-
-    const callData = await encodeCallData(
+    return account.encodeCallData(
       encodeFunctionData({
         abi: semiModularAccountBytecodeAbi,
         functionName: "uninstallValidation",
@@ -203,11 +198,55 @@ export const installValidationActions: <
         ],
       })
     );
+  };
 
-    return client.sendUserOperation({
-      uo: callData,
-      account,
+  return {
+    encodeInstallValidation,
+    encodeUninstallValidation,
+    installValidation: async ({
+      validationConfig,
+      selectors,
+      installData,
+      hooks,
+      account = client.account,
       overrides,
-    });
-  },
-});
+    }) => {
+      const callData = await encodeInstallValidation({
+        validationConfig,
+        selectors,
+        installData,
+        hooks,
+        account,
+      });
+
+      return client.sendUserOperation({
+        uo: callData,
+        account,
+        overrides,
+      });
+    },
+
+    uninstallValidation: async ({
+      moduleAddress,
+      entityId,
+      uninstallData,
+      hookUninstallDatas,
+      account = client.account,
+      overrides,
+    }) => {
+      const callData = await encodeUninstallValidation({
+        moduleAddress,
+        entityId,
+        uninstallData,
+        hookUninstallDatas,
+        account,
+      });
+
+      return client.sendUserOperation({
+        uo: callData,
+        account,
+        overrides,
+      });
+    },
+  };
+};

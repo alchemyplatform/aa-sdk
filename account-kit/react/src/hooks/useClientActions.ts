@@ -76,17 +76,27 @@ export type ClientActionParameters<
 };
 
 /**
- * A hook that allows you to leverage client decorators to execute actions
+ * A [hook](https://github.com/alchemyplatform/aa-sdk/blob/4c3956c01ce5ae3c157f006bf58fffde758e5d1b/account-kit/react/src/hooks/useClientActions.ts) that allows you to leverage client decorators to execute actions
  * and await them in your UX. This is particularly useful for using Plugins
  * with Modular Accounts.
  *
+ * @param {UseClientActionsProps<TTransport, TChain, TActions>} args the hooks arguments highlighted below. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useClientActions.ts#L10)
+ * @param {SmartAccountClient} args.client the smart account client returned from useSmartAccountClient
+ * @param {object} args.actions the smart account client decorator you want to execute actions from
+ * @returns {UseClientActionsResult<TActions>} an object containing methods to execute the actions as well loading and error states [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useClientActions.ts#L21)
+ *
  * @example
- * ```tsx
+ * ```tsx twoslash
+ * import React from 'react';
+ * import { useSmartAccountClient } from "@account-kit/react";
+ * import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
+ * import { useClientActions } from "@account-kit/react";
+ *
  * const Foo = () => {
  *  const { client } = useSmartAccountClient({ type: "MultiOwnerModularAccount" });
  *  const { executeAction } = useClientActions({
- *    client,
- *    pluginActions: sessionKeyPluginActions,
+ *    client: client,
+ *    actions: sessionKeyPluginActions,
  *  });
  *
  *  executeAction({
@@ -95,11 +105,6 @@ export type ClientActionParameters<
  *  });
  * };
  * ```
- *
- * @param {UseClientActionsProps<TTransport, TChain, TActions>} args the hooks arguments highlighted below
- * @param {SmartAccountClient} args.client the smart account client returned from useSmartAccountClient
- * @param {object} args.actions the smart account client decorator you want to execute actions from
- * @returns {UseClientActionsResult<TActions>} an object containing methods to execute the actions as well loading and error states
  */
 export function useClientActions<
   TTransport extends Transport = Transport,

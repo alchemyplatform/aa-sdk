@@ -148,35 +148,39 @@ export const Authentication = ({ className }: { className?: string }) => {
             iconClassName="mt-[2px] self-start"
             details={
               <div
-                className={cn("flex gap-x-3 flex-wrap pr-6", {
+                className={cn({
                   hidden: !auth.showOAuth,
                 })}
               >
-                <OAuthMethod
-                  active={auth.oAuthMethods.google}
-                  icon={<GoogleIcon />}
-                  onClick={setAddGoogleAuth}
-                />
-                <OAuthMethod
-                  active={auth.oAuthMethods.facebook}
-                  icon={<FacebookIcon />}
-                  onClick={setAddFacebookAuth}
-                />
-                <OAuthMethod
-                  active={auth.oAuthMethods.discord}
-                  icon={<DiscordLogo />}
-                  onClick={setAddDiscordAuth}
-                />
-                <OAuthMethod
-                  active={auth.oAuthMethods.twitter}
-                  icon={<TwitterIcon />}
-                  onClick={setAddTwitterAuth}
-                />
+                <div className="flex gap-x-3">
+                  <OAuthMethod
+                    active={auth.oAuthMethods.google}
+                    icon={<GoogleIcon />}
+                    onClick={setAddGoogleAuth}
+                  />
+                  <OAuthMethod
+                    active={auth.oAuthMethods.facebook}
+                    icon={<FacebookIcon />}
+                    onClick={setAddFacebookAuth}
+                  />
+                  <OAuthMethod
+                    active={auth.oAuthMethods.discord}
+                    icon={<DiscordLogo />}
+                    onClick={setAddDiscordAuth}
+                  />
+                  <OAuthMethod
+                    active={auth.oAuthMethods.twitter}
+                    icon={<TwitterIcon />}
+                    onClick={setAddTwitterAuth}
+                  />
+                </div>
                 <div className="w-full pt-3">
                   <ExternalLink
                     href={links.auth0}
                     onClick={() => {
-                      Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
+                      Metrics.trackEvent({
+                        name: "clicked_custom_oauth_link",
+                      });
                     }}
                     className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none w-full"
                   >
@@ -322,7 +326,7 @@ const OAuthMethod = ({
     <button
       onClick={onClick}
       className={cn(
-        "flex grow-0 shrink-0 border border-[#64748B]  rounded-lg p-1 h-10 w-10 justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "flex border border-[#64748B]  rounded-lg p-1 h-10 w-full justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? "border-[#64748B] bg-demo-surface-secondary"
           : "border-gray-300"

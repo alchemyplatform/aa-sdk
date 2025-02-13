@@ -30,7 +30,7 @@ describe("AlchemySmartAccountClient tests", () => {
 
   it("should set the headers when using non-hoisted accounts", async () => {
     const client = givenClient();
-    client
+    await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
     expect(
@@ -66,7 +66,7 @@ describe("AlchemySmartAccountClient tests", () => {
     // clear the mock calls so we only get the latest call below
     // @ts-expect-error - fetch is mocked
     global.fetch.mockClear();
-    client
+    await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
@@ -97,7 +97,7 @@ describe("AlchemySmartAccountClient tests", () => {
       }),
     });
 
-    client
+    await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
@@ -147,7 +147,7 @@ describe("AlchemySmartAccountClient tests", () => {
       }
     `);
 
-    client
+    await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
@@ -176,6 +176,7 @@ describe("AlchemySmartAccountClient tests", () => {
     return createAlchemySmartAccountClient({
       transport: alchemy({
         rpcUrl: "https://localhost:3000",
+        retryCount: 0,
       }),
       chain: sepolia,
       account,
