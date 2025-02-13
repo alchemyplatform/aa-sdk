@@ -86,9 +86,11 @@ const accountClient = await createModularAccountV2Client({
 
 const operation = await accountClient.sendUserOperation({
   // simple UO sending no data or value to vitalik's address
-  target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // The address to call in the UO
-  data: "0x", // The calldata to send in the UO
-  value: parseEther("0"), // The value to send in the UO
+  uo: {
+    target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // The address to call in the UO
+    data: "0x", // The calldata to send in the UO
+    value: parseEther("0"), // The value to send in the UO
+  },
 });
 
 console.log(
