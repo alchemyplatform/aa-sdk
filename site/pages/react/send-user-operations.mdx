@@ -133,11 +133,6 @@ import {
 
 export default function MyOpSenderComponent() {
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
-    uo: {
-      target: "0x...",
-      data: "0x...",
-      value: 0n,
-    },
     // optional parameter that will wait for the transaction to be mined before returning
     waitForTxn: true,
     onSuccess: ({ hash, request }) => {
