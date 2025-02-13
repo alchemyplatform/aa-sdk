@@ -47,6 +47,9 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
     ? ModularAccountV2<AlchemyWebSigner>
     : never;
 
+export type SupportedAccountModes<T extends SupportedAccountTypes> =
+  T extends "ModularAccountV2" ? "default" | "7702" : "default";
+
 export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {

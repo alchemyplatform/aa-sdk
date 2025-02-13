@@ -129,10 +129,16 @@ const hydrateAccountState = (
         shouldReconnect && config.MultiOwnerLightAccount?.accountAddress
           ? reconnectingState(config.MultiOwnerLightAccount.accountAddress)
           : defaultAccountState(),
-      ModularAccountV2:
-        shouldReconnect && config.ModularAccountV2?.accountAddress
-          ? reconnectingState(config.ModularAccountV2.accountAddress)
-          : defaultAccountState(),
+      ModularAccountV2: {
+        default:
+          shouldReconnect && config.ModularAccountV2?.default?.accountAddress
+            ? reconnectingState(config.ModularAccountV2.default.accountAddress)
+            : defaultAccountState(),
+        "7702":
+          shouldReconnect && config.ModularAccountV2?.["7702"]?.accountAddress
+            ? reconnectingState(config.ModularAccountV2["7702"].accountAddress)
+            : defaultAccountState(),
+      },
     };
 
     return acc;

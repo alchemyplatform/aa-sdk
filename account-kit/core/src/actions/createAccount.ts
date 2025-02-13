@@ -21,6 +21,8 @@ import type {
 import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
+import type { AccountState } from "../store/types.js";
+import { parseMode } from "../utils/parser.js";
 
 type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
 
@@ -78,6 +80,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   { type, accountParams: params }: CreateAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): Promise<SupportedAccounts> {
+  const mode = parseMode(type, params);
   const store = config.store;
   const accounts = store.getState().accounts;
   if (!accounts) {
@@ -94,18 +97,26 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  const cachedAccount = accounts[chain.id]?.[type];
+  const cachedAccount = (
+    type === "ModularAccountV2"
+      ? accounts[chain.id]?.["ModularAccountV2"]?.[mode]
+      : accounts[chain.id]?.[type]
+  ) as AccountState<TAccount>;
+
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
-  const cachedConfig = store.getState().accountConfigs[chain.id]?.[type];
+  const cachedConfig =
+    type === "ModularAccountV2"
+      ? store.getState().accountConfigs[chain.id]?.["ModularAccountV2"]?.[mode]
+      : store.getState().accountConfigs[chain.id]?.[type];
 
   const accountPromise = (() => {
     switch (type) {
       case "LightAccount":
         return createLightAccount({
           ...params,
-          ...cachedConfig,
+          ...(cachedConfig as OmitSignerTransportChain<CreateLightAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -184,10 +195,20 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]: {
-            status: "INITIALIZING",
-            account: accountPromise,
-          },
+          [type]:
+            type === "ModularAccountV2"
+              ? {
+                  ...accounts[chain.id][type],
+                  [mode]: {
+                    status: "INITIALIZING",
+                    account: accountPromise,
+                  },
+                }
+              : {
+                  ...accounts[chain.id][type],
+                  status: "INITIALIZING",
+                  account: accountPromise,
+                },
         },
       },
     }));
@@ -201,21 +222,42 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]: {
-            status: "READY",
-            account,
-          },
+          [type]:
+            type === "ModularAccountV2"
+              ? {
+                  ...accounts[chain.id][type],
+                  [mode]: {
+                    status: "READY",
+                    account,
+                  },
+                }
+              : {
+                  ...accounts[chain.id][type],
+                  status: "READY",
+                  account,
+                },
         },
       },
       accountConfigs: {
         ...state.accountConfigs,
         [chain.id]: {
           ...state.accountConfigs[chain.id],
-          [type]: {
-            ...params,
-            accountAddress: account.address,
-            initCode,
-          },
+          [type]:
+            type === "ModularAccountV2"
+              ? {
+                  ...state.accountConfigs[chain.id][type],
+                  [mode]: {
+                    ...params,
+                    accountAddress: account.address,
+                    initCode,
+                  },
+                }
+              : {
+                  ...state.accountConfigs[chain.id][type],
+                  ...params,
+                  accountAddress: account.address,
+                  initCode,
+                },
         },
       },
     }));
@@ -225,10 +267,20 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]: {
-            status: "ERROR",
-            error,
-          },
+          [type]:
+            type === "ModularAccountV2"
+              ? {
+                  ...accounts[chain.id][type],
+                  [mode]: {
+                    status: "ERROR",
+                    error,
+                  },
+                }
+              : {
+                  ...accounts[chain.id][type],
+                  status: "ERROR",
+                  error,
+                },
         },
       },
     }));

@@ -24,15 +24,14 @@ export interface UseMintReturn {
   transactionUrl?: string;
 }
 
-// TODO(jh): Once the client supports switching b/w default
-// & 7702 modes, this hook should support both modes.
-export const useMintDefault = (props: {
+export const useMint = (props: {
   contractAddress: Address;
+  mode: "default" | "7702";
 }): UseMintReturn => {
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
     accountParams: {
-      mode: "default",
+      mode: props.mode,
     },
   });
 

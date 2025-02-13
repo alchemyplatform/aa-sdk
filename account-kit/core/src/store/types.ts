@@ -16,6 +16,7 @@ import type { GetSmartAccountClientResult } from "../actions/getSmartAccountClie
 import type {
   Connection,
   SupportedAccount,
+  SupportedAccountModes,
   SupportedAccountTypes,
 } from "../types";
 
@@ -81,15 +82,23 @@ export type StoreState = {
   signer?: AlchemyWebSigner;
   accounts?: {
     [chain: number]: {
-      [key in SupportedAccountTypes]: AccountState<key>;
+      [T in SupportedAccountTypes]: T extends "ModularAccountV2"
+        ? {
+            [M in SupportedAccountModes<"ModularAccountV2">]: AccountState<"ModularAccountV2">;
+          }
+        : AccountState<T>;
     };
   };
   smartAccountClients: {
     [chain: number]: Partial<{
-      [key in SupportedAccountTypes]: GetSmartAccountClientResult<
-        Chain,
-        SupportedAccount<key>
-      >;
+      [T in SupportedAccountTypes]: T extends "ModularAccountV2"
+        ? {
+            [M in SupportedAccountModes<"ModularAccountV2">]: GetSmartAccountClientResult<
+              Chain,
+              SupportedAccount<"ModularAccountV2">
+            >;
+          }
+        : GetSmartAccountClientResult<Chain, SupportedAccount<T>>;
     }>;
   };
   bundlerClient: ClientWithAlchemyMethods;
@@ -99,7 +108,11 @@ export type StoreState = {
   config: ClientStoreConfig;
   accountConfigs: {
     [chain: number]: Partial<{
-      [key in SupportedAccountTypes]: AccountConfig<key>;
+      [T in SupportedAccountTypes]: T extends "ModularAccountV2"
+        ? {
+            [M in SupportedAccountModes<"ModularAccountV2">]: AccountConfig<"ModularAccountV2">;
+          }
+        : AccountConfig<T>;
     }>;
   };
   user?: User;

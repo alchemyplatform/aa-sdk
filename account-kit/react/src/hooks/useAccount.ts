@@ -4,8 +4,11 @@ import {
   createAccount,
   getAccount,
   watchAccount,
+  type AccountConfig,
+  type CreateModularAccountV2Params,
   type GetAccountParams,
   type SupportedAccount,
+  type SupportedAccountModes,
   type SupportedAccounts,
   type SupportedAccountTypes,
 } from "@account-kit/core";
@@ -57,8 +60,10 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
   const { type, accountParams, skipCreate, ...mutationArgs } = params;
   const { config, queryClient } = useAlchemyAccountContext();
   const status = useSignerStatus();
+  const mode = parseMode(type, accountParams);
+
   const account = useSyncExternalStore(
-    watchAccount(type, config),
+    watchAccount(type, config, mode as SupportedAccountModes<TAccount>),
     () => getAccount(params, config),
     () => getAccount(params, config)
   );
@@ -97,4 +102,15 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
       status.isAuthenticating ||
       status.isInitializing,
   };
+}
+
+function parseMode<T extends SupportedAccountTypes>(
+  type: T,
+  accountParams: AccountConfig<T> | undefined
+) {
+  if (type !== "ModularAccountV2") {
+    return "default";
+  }
+  return ((accountParams as CreateModularAccountV2Params | undefined)?.mode ??
+    "default") as SupportedAccountModes<"ModularAccountV2">;
 }

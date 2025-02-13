@@ -1,5 +1,6 @@
 import type { AccountState } from "../store/types.js";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
+import { parseMode } from "../utils/parser.js";
 import { type CreateAccountParams } from "./createAccount.js";
 import { getChain } from "./getChain.js";
 
@@ -28,12 +29,19 @@ export type GetAccountParams<TAccount extends SupportedAccountTypes> =
  * @returns {GetAccountResult<TAccount>} The result which includes the account if found and its status
  */
 export const getAccount = <TAccount extends SupportedAccountTypes>(
-  { type }: GetAccountParams<TAccount>,
+  params: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
+  const { type, accountParams } = params;
+  const mode = parseMode(type, accountParams);
+
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
-  const account = accounts?.[chain.id]?.[type];
+  const account =
+    params.type === "ModularAccountV2"
+      ? accounts?.[chain.id]?.["ModularAccountV2"]?.[mode]
+      : accounts?.[chain.id]?.[type];
+
   if (!account) {
     return {
       account: undefined,
@@ -41,5 +49,5 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
     };
   }
 
-  return account;
+  return account as GetAccountResult<TAccount>;
 };

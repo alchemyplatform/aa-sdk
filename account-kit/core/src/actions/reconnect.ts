@@ -52,11 +52,21 @@ export async function reconnect(config: AlchemyAccountsConfig) {
       );
     }
 
-    if (accountConfigs[chain.id]?.["ModularAccountV2"]) {
+    if (accountConfigs[chain.id]?.["ModularAccountV2"]?.default) {
       await createAccount(
         {
           type: "ModularAccountV2",
-          accountParams: accountConfigs[chain.id]["ModularAccountV2"],
+          accountParams: accountConfigs[chain.id]["ModularAccountV2"]?.default,
+        },
+        config
+      );
+    }
+
+    if (accountConfigs[chain.id]?.["ModularAccountV2"]?.["7702"]) {
+      await createAccount(
+        {
+          type: "ModularAccountV2",
+          accountParams: accountConfigs[chain.id]["ModularAccountV2"]?.["7702"],
         },
         config
       );

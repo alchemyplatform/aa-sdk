@@ -25,6 +25,7 @@ import type {
   AlchemyAccountsConfig,
   Connection,
   SupportedAccount,
+  SupportedAccountModes,
   SupportedAccounts,
   SupportedAccountTypes,
 } from "../types";
@@ -34,6 +35,7 @@ import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
+import { parseMode } from "../utils/parser.js";
 
 export type GetSmartAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
@@ -110,8 +112,16 @@ export function getSmartAccountClient(
   const signerStatus = getSignerStatus(config);
   const transport = getAlchemyTransport(config);
   const connection = getConnection(config);
+  const mode = parseMode(type, accountParams);
+
   const clientState =
-    config.store.getState().smartAccountClients[connection.chain.id]?.[type];
+    type === "ModularAccountV2"
+      ? config.store.getState().smartAccountClients[connection.chain.id]?.[
+          "ModularAccountV2"
+        ]?.[mode]
+      : config.store.getState().smartAccountClients[connection.chain.id]?.[
+          type
+        ];
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;
@@ -125,6 +135,7 @@ export function getSmartAccountClient(
         error,
       },
       type,
+      mode,
       connection,
     });
 
@@ -132,6 +143,7 @@ export function getSmartAccountClient(
       config,
       chainId: connection.chain.id,
       type,
+      mode,
     });
   }
 
@@ -142,8 +154,9 @@ export function getSmartAccountClient(
     signerStatus.isAuthenticating ||
     signerStatus.isInitializing
   ) {
-    if (!account && signerStatus.isConnected)
+    if (!account && signerStatus.isConnected) {
       createAccount({ type, accountParams }, config);
+    }
 
     if (clientState && clientState.isLoadingClient) {
       return clientState;
@@ -162,6 +175,7 @@ export function getSmartAccountClient(
       config,
       newState: loadingState,
       type,
+      mode,
       connection,
     });
 
@@ -169,6 +183,7 @@ export function getSmartAccountClient(
       config,
       chainId: connection.chain.id,
       type,
+      mode,
     });
   }
 
@@ -219,17 +234,13 @@ export function getSmartAccountClient(
           isLoadingClient: false,
         };
       case "ModularAccountV2":
-        const is7702 =
-          params.accountParams &&
-          "mode" in params.accountParams &&
-          params.accountParams.mode === "7702";
         return {
           client: createAlchemySmartAccountClient({
             transport,
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
-            ...(is7702
+            ...(mode === "7702"
               ? {
                   gasEstimator: default7702GasEstimator(
                     clientParams.gasEstimator
@@ -253,6 +264,7 @@ export function getSmartAccountClient(
     config,
     newState,
     type,
+    mode,
     connection,
   });
 
@@ -260,6 +272,7 @@ export function getSmartAccountClient(
     config,
     chainId: connection.chain.id,
     type,
+    mode,
   });
 }
 
@@ -268,13 +281,21 @@ function getSmartAccountClientState<
 >({
   config,
   chainId,
+  mode,
   type,
 }: {
   chainId: number;
+  mode: SupportedAccountModes<TAccountType>;
   type: TAccountType;
   config: AlchemyAccountsConfig;
 }) {
-  return config.store.getState().smartAccountClients[chainId][type]!;
+  return type === "ModularAccountV2"
+    ? config.store.getState().smartAccountClients[chainId]["ModularAccountV2"]![
+        mode
+      ]
+    : (config.store.getState().smartAccountClients[chainId][
+        type
+      ]! as GetSmartAccountClientResult<Chain, SupportedAccount<TAccountType>>);
 }
 
 function setSmartAccountClientState<
@@ -283,9 +304,11 @@ function setSmartAccountClientState<
   config,
   newState,
   type,
+  mode,
   connection,
 }: {
   config: AlchemyAccountsConfig;
+  mode?: SupportedAccountModes<TAccountType>;
   type: TAccountType;
   newState: GetSmartAccountClientResult;
   connection: Connection;
@@ -295,7 +318,15 @@ function setSmartAccountClientState<
       ...state.smartAccountClients,
       [connection.chain.id]: {
         ...state.smartAccountClients[connection.chain.id],
-        [type]: newState,
+        [type]:
+          type === "ModularAccountV2"
+            ? {
+                ...state.smartAccountClients[connection.chain.id][
+                  "ModularAccountV2"
+                ],
+                [mode ?? "default"]: newState,
+              }
+            : newState,
       },
     },
   }));
