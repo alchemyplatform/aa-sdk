@@ -132,7 +132,9 @@ import {
 } from "@account-kit/react";
 
 export default function MyOpSenderComponent() {
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    client,
     // optional parameter that will wait for the transaction to be mined before returning
     waitForTxn: true,
     onSuccess: ({ hash, request }) => {
