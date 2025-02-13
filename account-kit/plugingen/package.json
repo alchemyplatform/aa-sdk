@@ -1,0 +1,82 @@
+{
+  "name": "@account-kit/plugingen",
+  "version": "4.13.0",
+  "description": "A CLI tool that enables you to generate TS code for your ERC-6900 plugins",
+  "author": "Alchemy",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "main": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src/**/*.ts",
+    "!dist/**/*.tsbuildinfo",
+    "!vitest.config.ts",
+    "!.env",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
+    "!src/__tests__/**/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/exports/index.d.ts",
+      "default": "./dist/esm/exports/index.js"
+    },
+    "./config": {
+      "types": "./dist/types/exports/config.d.ts",
+      "default": "./dist/esm/exports/config.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "plugingen": "./dist/esm/cli.js"
+  },
+  "scripts": {
+    "prebuild": "tsx ./inject-version.ts",
+    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "postbuild": "chmod +x ./dist/esm/cli.js",
+    "clean": "rm -rf ./dist"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "typescript": "^5.0.4",
+    "typescript-template": "*",
+    "vitest": "^2.0.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alchemyplatform/aa-sdk/issues"
+  },
+  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
+  "dependencies": {
+    "@aa-sdk/core": "^4.13.0",
+    "bundle-require": "^4.0.2",
+    "cac": "^6.7.14",
+    "change-case": "^5.4.3",
+    "chokidar": "^3.6.0",
+    "dedent": "^1.5.1",
+    "esbuild": "^0.20.1",
+    "find-up": "^7.0.0",
+    "fs-extra": "^11.2.0",
+    "ora": "^8.0.1",
+    "pathe": "^1.1.2",
+    "picocolors": "^1.0.0",
+    "prettier": "^3.2.5",
+    "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "viem": "^2.22.6"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "generate": {
+      "env": ["OPENAI_API_KEY"],
+      "inputs": ["plugindefs/**"],
+      "dependsOn": ["@account-kit/plugingen#build"],
+      "outputs": ["src/**/plugins/**/plugin.ts"]
+    },
+    "build": {
+      "dependsOn": ["^build", "generate"],
+      "outputs": ["dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", "src/**", "!src/**/plugins/**/plugin.ts"],
+      "cache": true
+    }
+  }
+}

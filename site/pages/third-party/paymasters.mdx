@@ -1,0 +1,155 @@
+---
+title: 3rd Party Paymasters
+description: Learn how to use a 3rd party Paymaster with Account Kit
+---
+
+# Using a third-party paymaster
+
+The `SmartAccountClient` within `@aa-sdk/core` is unopinionated about which paymaster you use, so you can connect to any paymaster really simply. Configuration is done using the `paymasterAndData` config option when you call `createSmartAccountClient`.
+
+## Usage
+
+```ts twoslash
+import { createSmartAccountClient } from "@aa-sdk/core";
+import { http } from "viem";
+import { sepolia } from "viem/chains";
+
+const chain = sepolia;
+const client = createSmartAccountClient({
+  chain,
+  transport: http("RPC_URL"),
+  // sets the dummy paymasterAndData with paymaster address appended with some dummy paymasterData
+  // that looks like a valid paymasterData
+  dummyPaymasterAndData: async (userop) => ({
+    ...userop,
+    paymasterAndData: `0x<PAYMASTER_ADDRESS><PAYMASTER_DUMMY_DATA>`,
+  }),
+  paymasterAndData: async (userop, opts) => {
+    // call your paymaster here to sponsor the userop
+    // leverage the `opts` field to apply any overrides
+    return {
+      ...userop,
+      paymasterAndData: "0xresponsefromprovider",
+    };
+  },
+});
+```
+
+## ERC-7677 Paymaster
+
+If your pamyaster supports the ERC-7677 standard, you can use the [`erc7677Middleware`](/reference/aa-sdk/core/functions/erc7677Middleware) to interact with it.
+
+### Usage with single RPC provider
+
+If you're using the same RPC provider for your Paymaster, Bundler, and Node RPC traffic, then you can do the following:
+
+```ts twoslash
+import { createSmartAccountClient, erc7677Middleware } from "@aa-sdk/core";
+import { http } from "viem";
+import { sepolia } from "viem/chains";
+
+const chain = sepolia;
+const client = createSmartAccountClient({
+  chain,
+  // This example assumes that your RPC provider supports the ERC-7677 methods
+  transport: http("RPC_URL"),
+  ...erc7677Middleware(),
+});
+```
+
+### Usage with multiple RPC providers
+
+If you're using a separate RPC provider for your Paymaster, you can can use the (`split`)[/third-party/bundlers#splitting-bundler-traffic-and-node-rpc-traffic] transport to route your ERC-7677 traffic to a different provider:
+
+```ts twoslash
+import {
+  createSmartAccountClient,
+  erc7677Middleware,
+  split,
+} from "@aa-sdk/core";
+import { http } from "viem";
+import { sepolia } from "viem/chains";
+
+const chain = sepolia;
+const erc7677Methods = ["pm_getPaymasterStubData", "pm_getPaymasterData"];
+const transport = split({
+  overrides: [
+    // NOTE: if you're splitting Node and Bundler traffic too, you can add the bundler config to this array
+    {
+      methods: erc7677Methods,
+      transport: http("PAYMASTER_RPC_URL"),
+    },
+  ],
+  fallback: http("NODE_AND_BUNDLER_RPC_URL"),
+});
+
+const client = createSmartAccountClient({
+  chain,
+  transport,
+  ...erc7677Middleware(),
+});
+```
+
+## ERC20 Gas Sponsorship
+
+We are working on building support for an ERC20 paymaster!
+
+In the meantime, you could use a third-party paymaster, such as [Stackup](https://docs.stackup.sh/docs/paymaster-api), to sponsor ERC-20 gas. Here's an example using Stackup with the Alchemy SDK:
+
+```ts twoslash
+import { createMultiOwnerModularAccountClient } from "@account-kit/smart-contracts";
+import {
+  alchemyFeeEstimator,
+  createAlchemyPublicRpcClient,
+  alchemy,
+} from "@account-kit/infra";
+import {
+  deepHexlify,
+  resolveProperties,
+  LocalAccountSigner,
+} from "@aa-sdk/core";
+import { createClient, http } from "viem";
+import { sepolia } from "viem/chains";
+
+const signer = LocalAccountSigner.generatePrivateKeySigner();
+const chain = sepolia;
+const stackupClient = createClient({
+  // TODO: Replace with your stackup API key here (https://docs.stackup.sh/docs/paymaster-api)
+  transport: http("https://api.stackup.sh/v1/paymaster/STACKUP_API_KEY"),
+});
+
+const alchemyTransport = http("ALCHEMY_RPC_URL");
+
+const alchemyClient = await createMultiOwnerModularAccountClient({
+  chain,
+  signer,
+  transport: http("ALCHEMY_RPC_URL"),
+  // Bypasses alchemy gas estimation and instead uses Stackup for gas estimation
+  gasEstimator: async (userOp) => ({
+    ...userOp,
+    callGasLimit: "0x0",
+    preVerificationGas: "0x0",
+    verificationGasLimit: "0x0",
+  }),
+  // Uses alchemy fee estimation to comply with bundler
+  feeEstimator: alchemyFeeEstimator(alchemyTransport),
+  paymasterAndData: async (userop, opts) => {
+    const pmResponse: any = await stackupClient.request({
+      // @ts-ignore
+      method: "pm_sponsorUserOperation",
+      params: [
+        deepHexlify(await resolveProperties(userop)),
+        opts.account.getEntryPoint().address,
+        {
+          // @ts-ignore
+          type: "payg", // Replace with ERC20 context based on stackups documentation
+        },
+      ],
+    });
+    return {
+      ...userop,
+      ...pmResponse,
+    };
+  },
+});
+```

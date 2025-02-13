@@ -1,0 +1,137 @@
+name: Run checks on Pull Requests
+on:
+  pull_request:
+
+jobs:
+  enforce_title:
+    name: Enforce PR Title Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Use commitlint to check PR title
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$TITLE" | yarn commitlint
+  
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write 
+    env:
+      REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build eslint plugin
+        run: |
+          cd templates/eslint && yarn build
+
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+
+      - name: Run eslint with reviewdog
+        run: |
+          npx --no-install -c "eslint -f=rdjson ." | reviewdog -f=rdjson -reporter=github-pr-review -filter-mode=added -tee
+      
+      - name: Run eslint for errors
+        run: yarn lint:check
+
+  build_and_lint_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      # using your own fork url avoids getting rate limited by the public api
+      # later we'll look at deploying everything we need directly to anvil so
+      # so we don't need a fork url
+      - name: Conditionally set fork url
+        if: ${{ env.API_KEY != '' }}
+        run: echo "VITEST_SEPOLIA_FORK_URL=https://eth-sepolia.g.alchemy.com/v2/${{ env.API_KEY }}" >> $GITHUB_ENV
+
+      - name: Set up Rundler
+        uses: jaxxstorm/action-install-gh-release@v1.12.0
+        with:
+          repo: alchemyplatform/rundler
+          platform: linux
+          tag: v0.2.2
+          cache: enable
+
+      - name: Build Libraries
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+        run: yarn build:libs
+
+      - name: Unit Test
+        run: yarn test:ci
+        
+      - name: Typecheck Test
+        run: yarn test:typecheck
+    
+  build_ios:
+    name: Build iOS
+    runs-on: macos-14
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install cocoapods
+        working-directory: account-kit/rn-signer/example/ios
+        run: |
+          pod install
+        env:
+          NO_FLIPPER: 1
+      
+      - name: Build example for iOS
+        run: |
+          yarn turbo run build:ios
+

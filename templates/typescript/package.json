@@ -1,0 +1,11 @@
+{
+  "name": "typescript-template",
+  "version": "1.0.0",
+  "description": "tsconfig base",
+  "private": "false",
+  "main": "index.js",
+  "files": [
+    "base.json",
+    "react-library.json"
+  ]
+}

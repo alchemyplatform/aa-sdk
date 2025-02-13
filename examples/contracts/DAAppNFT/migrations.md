@@ -1,0 +1,45 @@
+# Polygon Mumbai
+
+## Version 1
+
+Deployer: 0x15a411507e901f26965f0ebcd3155834b058a6b2
+Deployed to: 0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c
+Transaction hash: 0x46f95ea67e2b103f607884a87fd25d53d619eaa7d67437f1d7cb51f7c99b6de2
+
+## Version 2
+
+Deployer: 0x15a411507e901f26965f0ebcd3155834b058a6b2
+Deployed to: 0x5679b0de84bba361d31b2e7152ab20f0f8565245
+Transaction hash: 0x59b65a2bd7a730efbea86376c986efcc2cd65c076f39a47cea84a6d4246c8d03
+
+# Polygon Mainnet
+
+## Version 1
+
+Deployer: 0x15a411507e901f26965f0ebcd3155834b058a6b2
+Deployed to: 0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c
+Transaction hash: 0xdc73899cf183cf852605c7a7473c0b110554155d5f4cc03452c11a4ce0d4ff33
+
+# Arbitrum Mainnet
+
+Deployer: 0x15a411507e901f26965f0ebcd3155834b058a6b2
+Deployed to: 0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c
+Transaction hash: 0x4ca9a016935f5634d009e4580ea0dc9c4b3edf0d8
+
+# Opt Mainnet
+
+Deployer: 0xD8Ea779b8FFC1096CA422D40588C4c0641709890
+Deployed to: 0x835629117Abb8cfe20a2e8717C691905A4725b7c
+Transaction hash: 0x9f33c06fb1016da9922927cbd9ff2eca2bf239d8779b17079c05f3f5fd3ae828
+
+# Arbitrum Sepolia
+
+## Version 1
+Deployer: 0xD8Ea779b8FFC1096CA422D40588C4c0641709890
+Deployed to: 0xE3aE65fC1bBd58719cc1D2496406B8133578BfF3
+Transaction hash: 0xf1254c4e37078047c244b97f2ad5c5ce93b12f1b8eecef19a84516a72c3ae4e3
+
+## Version 2
+Deployer: 0xD8Ea779b8FFC1096CA422D40588C4c0641709890
+Deployed to: 0x92ccF22A61f92d83463b04090A32dA9a6D958f64
+Transaction hash: 0x432417cf2e5cc50de33fe1213f196ddec9b702ea4b25ec1cffc1c7995a3f2578

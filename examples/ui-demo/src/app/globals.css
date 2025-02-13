@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: #020617;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 215 19% 35%;
+    --secondary-foreground: 215 19% 35%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --akui-fg-accent-brand: #363ff9;
+    --akui-btn-primary: #363ff9;
+    --akui-illustration-style: linear;
+  }
+}
+
+@layer base {
+  /**
+   * For the color picker, see: https://uiwjs.github.io/react-color
+   */
+
+  [data-color-mode*="dark"] .w-color-sketch {
+    --sketch-background: #323232 !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-swatch {
+    --sketch-swatch-border-top: 1px solid #525252 !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-block {
+    --block-background-color: #323232 !important;
+    --block-box-shadow: rgb(0 0 0 / 10%) 0 1px !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-editable-input {
+    --editable-input-label-color: #757575 !important;
+    --editable-input-box-shadow: #616161 0px 0px 0px 1px inset !important;
+    --editable-input-color: #bbb !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-github {
+    --github-border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    --github-background-color: #323232 !important;
+    --github-box-shadow: rgb(0 0 0 / 15%) 0px 3px 12px !important;
+    --github-arrow-border-color: rgba(0, 0, 0, 0.15) !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-compact {
+    --compact-background-color: #323232 !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-material {
+    --material-background-color: #323232 !important;
+    --material-border-bottom-color: #707070 !important;
+  }
+
+  [data-color-mode*="dark"] .w-color-alpha {
+    --alpha-pointer-background-color: #6a6a6a !important;
+    --alpha-pointer-box-shadow: rgb(0 0 0 / 37%) 0px 1px 4px 0px !important;
+  }
+}
+
+/* Radix Toast Animations */
+@keyframes slideInToast {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes hideToast {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+#toast[data-state="open"] {
+  animation: slideInToast 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#toast[data-state="closed"] {
+  animation: hideToast 100ms ease-in forwards;
+}

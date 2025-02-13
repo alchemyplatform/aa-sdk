@@ -1,0 +1,21 @@
+[submodule "examples/contracts/DAAppNFT/lib/openzeppelin-contracts"]
+	path = examples/contracts/DAAppNFT/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
+[submodule "examples/contracts/DAAppNFT/lib/forge-std"]
+	path = examples/contracts/DAAppNFT/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "examples/contracts/DAAppNFT/lib/ds-test"]
+	path = examples/contracts/DAAppNFT/lib/ds-test
+	url = https://github.com/dapphub/ds-test
+[submodule "examples/contracts/DAAppNFT/lib/solmate"]
+	path = examples/contracts/DAAppNFT/lib/solmate
+	url = https://github.com/transmissions11/solmate
+[submodule "examples/contracts/AccountKitToken/lib/forge-std"]
+	path = examples/contracts/AccountKitToken/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "examples/contracts/AccountKitToken/lib/openzeppelin-contracts"]
+	path = examples/contracts/AccountKitToken/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
+[submodule "examples/embedded-accounts-quickstart"]
+	path = examples/embedded-accounts-quickstart
+	url = https://github.com/alchemyplatform/embedded-accounts-quickstart

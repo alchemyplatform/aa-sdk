@@ -1,0 +1,17 @@
+{
+  "name": "local-vitest",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/is-ci": "^3.0.4",
+    "is-ci": "^3.0.1",
+    "prool": "^0.0.15",
+    "tar": "^7.4.1",
+    "typescript-template": "*",
+    "viem": "2.22.6"
+  },
+  "dependencies": {
+    "@aa-sdk/core": "^4.0.0-alpha.8"
+  }
+}

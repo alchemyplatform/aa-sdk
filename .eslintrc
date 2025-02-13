@@ -1,0 +1,76 @@
+{
+  "extends": ["react-app", "plugin:jsdoc/recommended-typescript-error"],
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "plugins": ["import", "eslint-rules"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/extensions": ["error", "ignorePackages"],
+    "jsdoc/tag-lines": [
+      "error",
+      "any",
+      {
+        "startLines": 1
+      }
+    ],
+    "jsdoc/require-returns": [
+      "error",
+      {
+        "enableFixer": true
+      }
+    ],
+    "jsdoc/require-param": [
+      "error",
+      {
+        "enableFixer": true
+      }
+    ],
+    "jsdoc/require-param-type": "error",
+    "jsdoc/require-returns-type": "error",
+    "jsdoc/no-types": "off",
+    "jsdoc/require-jsdoc": "off",
+    "jsdoc/match-description": [
+      "error",
+      {
+        "matchDescription": "[A-Z].*",
+        "tags": {
+          "example": {
+            "message": "Example tags must provide a code block with a language identifier.",
+            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```"
+          }
+        }
+      }
+    ],
+    "eslint-rules/require-jsdoc-on-reexported-functions": [
+      "error",
+      {
+        "fixBatchSize": 0
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "site/snippets/**/*.ts",
+        "site/snippets/**/*.tsx",
+        "**/site/**/*.mdx"
+      ],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "import/extensions": ["off", "ignorePackages"],
+        "jsdoc/require-jsdoc": "off"
+      }
+    },
+    {
+      "files": ["**/*.mdx"],
+      "extends": ["plugin:mdx/recommended"],
+      "settings": {
+        "import/extensions": ["off", "ignorePackages"]
+      }
+    }
+  ]
+}

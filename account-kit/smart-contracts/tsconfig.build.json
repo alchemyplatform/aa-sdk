@@ -1,0 +1,20 @@
+{
+  "extends": "typescript-template/build.json",
+  "exclude": [
+    "node_modules",
+    "**/*/__tests__",
+    "**/*/*.test.ts",
+    "**/*/*.test-d.ts",
+    "**/*/*.e2e.test.ts",
+    "vitest.config.ts",
+    "vitest.config.e2e.ts"
+  ],
+  "include": ["src", "plugindefs", "experimental"],
+  "compilerOptions": {
+    "sourceMap": true,
+    "paths": {
+      "@account-kit/smart-contracts": ["./src/index.ts"],
+      "@account-kit/smart-contracts/experimental": ["./src/ma-v2/index.ts"]
+    }
+  }
+}

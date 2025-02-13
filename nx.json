@@ -1,0 +1,28 @@
+{
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build", "generate"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "cache": true
+    },
+    "generate": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/src/plugins"],
+      "cache": true
+    },
+    "prepare": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": false
+    }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": ["default"]
+  }
+}

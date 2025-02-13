@@ -1,0 +1,72 @@
+name: Publish new Package
+
+# workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Flag to publish new package"
+        required: true
+        default: false
+        type: boolean
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+# If we ever migrate this to not be manual, we HAVE to check that the commit
+# it is running against DOES NOT contain [skip-ci] in the commit message
+jobs:
+  build_and_test_deploy:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    # Needed for Publishing
+    permissions:
+      contents: write  
+      packages: write
+
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+          
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          # skip android cache for this because it's not working with the publish step below
+          use-android-cache: false
+
+      - name: Set Github User Details
+        run: |
+          git config --global user.name "Alchemy Bot"
+          git config --global user.email "alchemy-bot@alchemy.com"
+
+      - name: Set NPM Permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+
+      # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
+      - name: Publish using Lerna
+        if: inputs.publish
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+        shell: bash
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access

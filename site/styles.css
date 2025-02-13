@@ -1,0 +1,54 @@
+@layer vocs_preflight {
+  @tailwind base;
+}
+@tailwind components;
+@tailwind utilities;
+
+.vocs_DocsLayout[data-layout="landing"] {
+  footer.vocs_Footer {
+    @apply p-0 h-0;
+  }
+
+  .vocs_Button_button {
+    align-items: unset;
+    background: unset;
+    border: unset;
+    border-radius: unset;
+    color: unset;
+    display: unset;
+    font-size: unset;
+    font-weight: unset;
+    height: unset;
+    padding: unset;
+    transition: unset;
+    white-space: unset;
+    width: unset;
+    width: unset;
+  }
+}
+
+.vocs_NavLogo_logoImage {
+  width: 113.1px;
+  height: 25px;
+}
+
+.vocs_DocsLayout_content {
+  @apply flex flex-col;
+}
+
+.vocs_Content {
+  @apply flex flex-col grow;
+}
+
+.vocs_Sidebar_sectionHeader > .vocs_Sidebar_item {
+  @apply font-semibold;
+}
+
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.transparent-text-fill {
+  -webkit-text-fill-color: transparent;
+}

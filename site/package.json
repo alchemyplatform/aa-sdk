@@ -1,0 +1,38 @@
+{
+  "name": "docs",
+  "private": true,
+  "version": "3.8.2-alpha.1",
+  "type": "module",
+  "scripts": {
+    "predev": "tsx ./scripts/prebuild.ts",
+    "dev": "vocs dev",
+    "prebuild": "tsx ./scripts/prebuild.ts",
+    "build": "vocs build",
+    "preview": "vocs preview"
+  },
+  "devDependencies": {
+    "@types/prettier": "^2.7.3",
+    "autoprefixer": "^10.4.16",
+    "change-case": "^5.4.4",
+    "dedent": "^1.5.3",
+    "execa": "^8.0.1",
+    "fs-extra": "^11.2.0",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.3.3"
+  },
+  "dependencies": {
+    "@aa-sdk/core": "^4.0.0-beta.8",
+    "@aa-sdk/ethers": "^4.0.0-beta.8",
+    "@account-kit/core": "^4.0.0-beta.8",
+    "@account-kit/infra": "^4.0.0-beta.8",
+    "@account-kit/react": "^4.0.0-beta.8",
+    "@account-kit/signer": "^4.0.0-beta.8",
+    "@account-kit/smart-contracts": "^4.0.0-beta.8",
+    "react": "^18.2.0",
+    "react-native": "0.76.5",
+    "react-dom": "^18.2.0",
+    "viem": "2.22.6",
+    "vocs": "^1.0.0-alpha.62",
+    "wagmi": "2.12.7"
+  }
+}
