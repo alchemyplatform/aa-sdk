@@ -26,7 +26,12 @@ import {
   type StoreState,
 } from "./types.js";
 
-export const createAccountKitStore = (
+/**
+ * Creates a store for managing account kit state, supporting both server-side and client-side environments.
+ *
+ * @param {CreateAccountKitStoreParams} params - The parameters for creating the account kit store, including connections, storage, and SSR settings.
+ * @returns {Store} The created store for managing account kit state.
+ */ export const createAccountKitStore = (
   params: CreateAccountKitStoreParams
 ): Store => {
   const {
