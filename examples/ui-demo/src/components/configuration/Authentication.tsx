@@ -157,21 +157,25 @@ export const Authentication = ({ className }: { className?: string }) => {
                     active={auth.oAuthMethods.google}
                     icon={<GoogleIcon />}
                     onClick={setAddGoogleAuth}
+                    name="Google"
                   />
                   <OAuthMethod
                     active={auth.oAuthMethods.facebook}
                     icon={<FacebookIcon />}
                     onClick={setAddFacebookAuth}
+                    name="Facebook"
                   />
                   <OAuthMethod
                     active={auth.oAuthMethods.discord}
                     icon={<DiscordLogo />}
                     onClick={setAddDiscordAuth}
+                    name="Discord"
                   />
                   <OAuthMethod
                     active={auth.oAuthMethods.twitter}
                     icon={<TwitterIcon />}
                     onClick={setAddTwitterAuth}
+                    name="Twitter"
                   />
                 </div>
                 <div className="w-full pt-3">
@@ -316,15 +320,18 @@ const OAuthMethod = ({
   icon,
   onClick,
   active,
+  name,
 }: {
   icon: React.ReactNode;
   onClick: () => void;
   className?: string;
   active: boolean;
+  name: string;
 }) => {
   return (
     <button
       onClick={onClick}
+      aria-label={`${name} social authentication toggle`}
       className={cn(
         "flex border border-[#64748B]  rounded-lg p-1 h-10 w-full justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active

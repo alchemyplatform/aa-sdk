@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:write": "prettier --no-ignore --write ./src"
+    "lint:write": "prettier --no-ignore --write ./src",
+    "test:e2e": "playwright test",
+    "playwright": "playwright test --ui"
   },
   "dependencies": {
     "@account-kit/core": "^4.2.0",
@@ -40,6 +42,7 @@
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
