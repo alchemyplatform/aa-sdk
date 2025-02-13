@@ -36,6 +36,7 @@ export type AlchemyAccountsProviderProps = {
   config: AlchemyAccountsConfigWithUI;
   initialState?: AlchemyClientState;
   queryClient: QueryClient;
+  isRN?: boolean;
 };
 
 /**
@@ -103,9 +104,13 @@ export const useAlchemyAccountContext = (
 export const AlchemyAccountProvider = (
   props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
-  const { config, queryClient, children } = props;
+  const { config, queryClient, children, isRN } = props;
 
   const clearSignupParam = () => {
+    if (isRN) {
+      return;
+    }
+
     const url = new URL(window.location.href);
     url.searchParams.delete(IS_SIGNUP_QP);
     window.history.replaceState(window.history.state, "", url.toString());
@@ -147,6 +152,18 @@ export const AlchemyAccountProvider = (
       clearSignupParam();
     }
   }, [authStep]);
+
+  if (isRN) {
+    return (
+      <Hydrate {...props}>
+        <AlchemyAccountContext.Provider value={initialContext}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </AlchemyAccountContext.Provider>
+      </Hydrate>
+    );
+  }
 
   return (
     <Hydrate {...props}>

@@ -6174,6 +6174,11 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
+"@react-native-community/netinfo@^11.4.1":
+  version "11.4.1"
+  resolved "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-11.4.1.tgz#a3c247aceab35f75dd0aa4bfa85d2be5a4508688"
+  integrity sha512-B0BYAkghz3Q2V09BF88RA601XursIEA111tnc2JOaN7axJWmNefmfjZqw/KdSxKZp7CZUuPpjBmz/WCR9uaHYg==
+
 "@react-native/assets-registry@0.76.5":
   version "0.76.5"
   resolved "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.76.5.tgz#3343338813aa6354df9fec52af50d0b5f7f3d013"
@@ -9744,6 +9749,15 @@
     "@walletconnect/modal-core" "2.7.0"
     "@walletconnect/modal-ui" "2.7.0"
 
+"@walletconnect/react-native-compat@^2.18.0":
+  version "2.18.0"
+  resolved "https://registry.npmjs.org/@walletconnect/react-native-compat/-/react-native-compat-2.18.0.tgz#d104bffcf344056669c7dccc45976da0ff9f4b3d"
+  integrity sha512-4UzCQXtzJ11J9RZnGDXwLZlCOQ+CkNBJi5jfWFjLG7Kj0/ewpgoisfJjiCUjPGOrgzuvKtJk2RKNRmTvqV0vBQ==
+  dependencies:
+    events "3.3.0"
+    fast-text-encoding "1.0.6"
+    react-native-url-polyfill "2.0.0"
+
 "@walletconnect/relay-api@1.0.11":
   version "1.0.11"
   resolved "https://registry.npmjs.org/@walletconnect/relay-api/-/relay-api-1.0.11.tgz"
@@ -12852,6 +12866,11 @@ csstype@^3.0.2, csstype@^3.0.7:
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
+custom-event-polyfill@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/custom-event-polyfill/-/custom-event-polyfill-1.0.7.tgz#9bc993ddda937c1a30ccd335614c6c58c4f87aee"
+  integrity sha512-TDDkd5DkaZxZFM8p+1I3yAlvM3rSr1wbrOliG4yJiwinMZN8z/iGL7BTlDkrJcYTmgUSb4ywVCc3ZaUtOtC76w==
+
 cwd@^0.10.0:
   version "0.10.0"
   resolved "https://registry.npmjs.org/cwd/-/cwd-0.10.0.tgz"
@@ -15438,6 +15457,11 @@ fast-safe-stringify@^2.0.6:
   version "2.1.1"
   resolved "https://registry.npmjs.org/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz"
   integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
+
+fast-text-encoding@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/fast-text-encoding/-/fast-text-encoding-1.0.6.tgz#0aa25f7f638222e3396d72bf936afcf1d42d6867"
+  integrity sha512-VhXlQgj9ioXCqGstD37E/HBeqEGV/qOD/kmbVG8h5xKBYvM1L3lR1Zn4555cQ8GkYbJa8aJSipLPndE1k6zK2w==
 
 fast-uri@^3.0.1:
   version "3.0.3"
@@ -22089,6 +22113,13 @@ node-stream-zip@^1.9.1:
   resolved "https://registry.npmjs.org/node-stream-zip/-/node-stream-zip-1.15.0.tgz"
   integrity sha512-LN4fydt9TqhZhThkZIVQnF9cwjU3qmUH9h78Mx/K7d3VvfRqqwthLwJEUOEL0QPZ0XQmNN7be5Ggit5+4dq3Bw==
 
+node-window-polyfill@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/node-window-polyfill/-/node-window-polyfill-1.0.4.tgz#4440a2cf9a927272f82f80db4a8f20045efbd01a"
+  integrity sha512-Od/jDxv5w7gtZfIS+Czy0UgLQldtituEjT9djgykQK4yq/hKySc3GXTXuUvxKvpM+J/+AwO789ojLmq2Jk8coQ==
+  dependencies:
+    ws "^7.4.3"
+
 nopt@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/nopt/-/nopt-5.0.0.tgz"
@@ -24458,6 +24489,13 @@ react-native-screens@~4.1.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-url-polyfill@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/react-native-url-polyfill/-/react-native-url-polyfill-2.0.0.tgz#db714520a2985cff1d50ab2e66279b9f91ffd589"
+  integrity sha512-My330Do7/DvKnEvwQc0WdcBnFPploYKp9CYlefDXzIdEaA+PAhDYllkvGeEroEzvc4Kzzj2O4yVdz8v6fjRvhA==
+  dependencies:
+    whatwg-url-without-unicode "8.0.0-3"
 
 react-native-webview@^11.26.0:
   version "11.26.1"
@@ -29025,7 +29063,7 @@ ws@^6.2.3:
   dependencies:
     async-limiter "~1.0.0"
 
-ws@^7, ws@^7.5.10:
+ws@^7, ws@^7.4.3, ws@^7.5.10:
   version "7.5.10"
   resolved "https://registry.npmjs.org/ws/-/ws-7.5.10.tgz"
   integrity sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==

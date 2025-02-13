@@ -17,10 +17,11 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import { API_KEY } from "@env";
+import { useSigner } from "@account-kit/react";
 
-const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
-});
+// const signer = RNAlchemySigner({
+// 	client: { connection: { apiKey: API_KEY } },
+// });
 
 export default function MagicLinkAuthScreen() {
 	const [email, setEmail] = useState<string>("");
@@ -28,6 +29,9 @@ export default function MagicLinkAuthScreen() {
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
+	const signer = useSigner();
+
+	
 
 	const handleUserAuth = ({ bundle }: { bundle: string }) => {
 		signer

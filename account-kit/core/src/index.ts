@@ -38,7 +38,7 @@ export type * from "./createConfig.js";
 export { DEFAULT_IFRAME_CONTAINER_ID, createConfig } from "./createConfig.js";
 export { ClientOnlyPropertyError } from "./errors.js";
 export { hydrate } from "./hydrate.js";
-export { defaultAccountState } from "./store/store.js";
+export { defaultAccountState, createAccountKitStore } from "./store/store.js";
 export type { SignerStatus } from "./store/types.js";
 export type * from "./types.js";
 export {

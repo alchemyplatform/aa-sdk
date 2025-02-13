@@ -1,5 +1,7 @@
-import "./utils/buffer-polyfill.js";
-import "./utils/mmkv-localstorage-polyfill.js";
+import "./utils/polyfills/buffer-polyfill.js";
+import "./utils/polyfills/mmkv-localstorage-polyfill.js";
+import "./utils/polyfills/custom-event.js";
+import "./utils/polyfills/window.js";
 
 /* eslint-disable import/extensions */
 import { type ConnectionConfig } from "@aa-sdk/core";
