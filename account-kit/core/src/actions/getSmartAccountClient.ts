@@ -112,14 +112,13 @@ export function getSmartAccountClient(
   const signerStatus = getSignerStatus(config);
   const transport = getAlchemyTransport(config);
   const connection = getConnection(config);
-  const mode = parseMode(type, accountParams);
+  const mode = parseMode(accountParams);
 
-  const clientState =
-    // TODO(jh): fix
-    // @ts-ignore
-    config.store.getState().smartAccountClients[connection.chain.id]?.[type]?.[
-      mode
-    ];
+  // TODO(jh): fix
+  // @ts-ignore
+  const clientState = config.store.getState().smartAccountClients[
+    connection.chain.id
+  ]?.[type]?.[mode] as GetSmartAccountClientResult;
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;
@@ -286,11 +285,11 @@ function getSmartAccountClientState<
   mode: SupportedAccountModes<TAccountType>;
   type: TAccountType;
   config: AlchemyAccountsConfig;
-}) {
+}): GetSmartAccountClientResult {
   // TODO(jh): can we get rid of this cast?
-  return config.store.getState().smartAccountClients[chainId][type]![
-    mode
-  ] as GetSmartAccountClientResult;
+  const state =
+    config.store.getState().smartAccountClients[chainId][type]![mode];
+  return state as GetSmartAccountClientResult;
 }
 
 function setSmartAccountClientState<

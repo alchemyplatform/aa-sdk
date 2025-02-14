@@ -79,7 +79,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   { type, accountParams: params }: CreateAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): Promise<SupportedAccounts> {
-  const mode = parseMode(type, params);
+  const mode = parseMode(params);
   const store = config.store;
   const accounts = store.getState().accounts;
   if (!accounts) {
@@ -96,16 +96,12 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  // TODO(jh): fix
-  // @ts-ignore
   const cachedAccount = accounts[chain.id]?.[type]?.[mode];
 
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
   const cachedConfig =
-    // TODO(jh): fix
-    // @ts-ignore
     store.getState().accountConfigs[chain.id]?.[type]?.[mode];
 
   const accountPromise = (() => {

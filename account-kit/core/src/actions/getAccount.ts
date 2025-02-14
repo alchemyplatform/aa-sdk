@@ -33,12 +33,10 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
   const { type, accountParams } = params;
-  const mode = parseMode(type, accountParams);
+  const mode = parseMode(accountParams);
 
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
-  // TODO(jh): fix
-  // @ts-ignore
   const account = accounts?.[chain.id]?.[type]?.[mode];
 
   if (!account) {
@@ -48,6 +46,5 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
     };
   }
 
-  // TODO(jh): can we remove this cast?
-  return account as GetAccountResult<TAccount>;
+  return account;
 };
