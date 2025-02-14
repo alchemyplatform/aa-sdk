@@ -1,5 +1,6 @@
 import type {
   ClientMiddlewareConfig,
+  ClientMiddlewareFn,
   EntryPointVersion,
   Multiplier,
   UserOperationFeeOptions,
@@ -18,7 +19,6 @@ import {
   noopMiddleware,
   resolveProperties,
 } from "@aa-sdk/core";
-import { getAlchemyPaymasterAddress } from "../gas-manager.js";
 import { fromHex, isHex, type Hex } from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 import type { AlchemyTransport } from "../alchemyTransport.js";
@@ -53,7 +53,8 @@ export function alchemyGasManagerMiddleware(
 interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
   policyId: string;
   transport: AlchemyTransport;
-  enableDummyPaymasterAndData?: boolean;
+  gasEstimatorOverride?: ClientMiddlewareFn;
+  feeEstimatorOverride?: ClientMiddlewareFn;
 }
 
 /**
@@ -78,7 +79,8 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
  * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams} params configuration params
  * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.policyId} params.policyId the policyId for Alchemy's gas manager
  * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.transport} params.transport fallback transport to use for fee estimation when not using the paymaster
- * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.enableDummyPaymasterAndData} params.enableDummyPaymasterAndData whether to enable the dummy paymaster and data middleware, which typically is only needed if the client is using a custom gasEstimator or feeEstimator
+ * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.gasEstimatorOverride} params.gasEstimatorOverride custom gas estimator middleware
+ * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.feeEstimatorOverride} params.feeEstimatorOverride custom fee estimator middleware
  * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
  */
 export function alchemyGasAndPaymasterAndDataMiddleware(
@@ -87,40 +89,37 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
   ClientMiddlewareConfig,
   "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData"
 > {
-  const { policyId, transport, enableDummyPaymasterAndData } = params;
+  const { policyId, transport, gasEstimatorOverride, feeEstimatorOverride } =
+    params;
   return {
     dummyPaymasterAndData: async (uo, args) => {
-      if (!args.client.chain) {
-        throw new ChainNotFoundError();
-      }
-
       if (
-        // No reason to generate stub data if we are bypassing the paymaster.
+        // No reason to generate dummy data if we are bypassing the paymaster.
         bypassPaymasterAndData(args.overrides) ||
-        // TODO(jh): Is this safe to do? Is my thinking that we normally don't need to actually do anything in
-        // this middleware function if using the default feeEstimator/gasEstimator correct, b/c the paymasterAndData
-        // middleware function should handle everything?
-        !enableDummyPaymasterAndData
+        // When using alchemy_requestGasAndPaymasterAndData, there is generally no reason to generate dummy
+        // data. However, if the gas/feeEstimator is overriden, then this option should be enabled.
+        !(gasEstimatorOverride || feeEstimatorOverride)
       ) {
         return noopMiddleware(uo, args);
       }
 
-      const paymaster = getAlchemyPaymasterAddress(args.client.chain); // throws if unsupported chain
-      const paymasterData = await args.account.getDummySignature();
-
-      return {
-        ...uo,
-        paymaster,
-        paymasterData,
-      };
+      // Fall back to the default 7677 dummyPaymasterAndData middleware.
+      return alchemyGasManagerMiddleware(policyId).dummyPaymasterAndData!(
+        uo,
+        args
+      );
     },
     feeEstimator: (uo, args) => {
-      return bypassPaymasterAndData(args.overrides)
+      return feeEstimatorOverride
+        ? feeEstimatorOverride(uo, args)
+        : bypassPaymasterAndData(args.overrides)
         ? alchemyFeeEstimator(transport)(uo, args)
         : noopMiddleware(uo, args);
     },
     gasEstimator: (uo, args) => {
-      return bypassPaymasterAndData(args.overrides)
+      return gasEstimatorOverride
+        ? gasEstimatorOverride(uo, args)
+        : bypassPaymasterAndData(args.overrides)
         ? defaultGasEstimator(args.client)(uo, args)
         : noopMiddleware(uo, args);
     },

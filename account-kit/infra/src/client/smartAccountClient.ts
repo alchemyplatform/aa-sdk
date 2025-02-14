@@ -144,14 +144,6 @@ export function createAlchemySmartAccountClient({
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
 
-  const gasAndPaymasterAndDataMiddleware = policyId
-    ? alchemyGasAndPaymasterAndDataMiddleware({
-        policyId,
-        transport,
-        enableDummyPaymasterAndData: !!(feeEstimator || gasEstimator),
-      })
-    : undefined;
-
   const scaClient = createSmartAccountClient({
     account,
     transport,
@@ -161,21 +153,22 @@ export function createAlchemySmartAccountClient({
       ...opts,
       feeOptions,
     },
-    dummyPaymasterAndData:
-      gasAndPaymasterAndDataMiddleware?.dummyPaymasterAndData,
-    feeEstimator:
-      feeEstimator ??
-      gasAndPaymasterAndDataMiddleware?.feeEstimator ??
-      alchemyFeeEstimator(transport),
-    gasEstimator:
-      gasEstimator ?? gasAndPaymasterAndDataMiddleware?.gasEstimator,
+    feeEstimator: feeEstimator ?? alchemyFeeEstimator(transport),
+    gasEstimator,
     customMiddleware: async (struct, args) => {
       if (isSmartAccountWithSigner(args.account)) {
         transport.updateHeaders(getSignerTypeHeader(args.account));
       }
       return customMiddleware ? customMiddleware(struct, args) : struct;
     },
-    paymasterAndData: gasAndPaymasterAndDataMiddleware?.paymasterAndData,
+    ...(policyId
+      ? alchemyGasAndPaymasterAndDataMiddleware({
+          policyId,
+          transport,
+          gasEstimatorOverride: gasEstimator,
+          feeEstimatorOverride: feeEstimator,
+        })
+      : {}),
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(transport)
       : undefined,
