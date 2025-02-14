@@ -52,10 +52,15 @@ the policyId for Alchemy's gas manager
 `AlchemyGasAndPaymasterAndDataMiddlewareParams.transport`
 fallback transport to use for fee estimation when not using the paymaster
 
-### params.enableDummyPaymasterAndData
+### params.gasEstimatorOverride
 
-`AlchemyGasAndPaymasterAndDataMiddlewareParams.enableDummyPaymasterAndData`
-whether to enable the dummy paymaster and data middleware, which typically is only needed if the client is using a custom gasEstimator or feeEstimator
+`AlchemyGasAndPaymasterAndDataMiddlewareParams.gasEstimatorOverride`
+custom gas estimator middleware
+
+### params.feeEstimatorOverride
+
+`AlchemyGasAndPaymasterAndDataMiddlewareParams.feeEstimatorOverride`
+custom fee estimator middleware
 
 ## Returns
 

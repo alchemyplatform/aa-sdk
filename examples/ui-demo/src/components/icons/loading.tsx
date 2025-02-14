@@ -1,5 +1,5 @@
 import { useTheme } from "@/state/useTheme";
-export const LoadingIcon = () => {
+export const LoadingIcon = ({ className }: { className?: string }) => {
   const theme = useTheme();
   const animationClass =
     theme === "dark" ? "animate-ui-loading-dark" : "animate-ui-loading-light";
@@ -11,6 +11,7 @@ export const LoadingIcon = () => {
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <circle
         className={animationClass}
