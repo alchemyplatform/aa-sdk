@@ -38,9 +38,11 @@ describe("watchSmartAccountClient", () => {
         [sepolia.id]: {
           ...state.accounts![sepolia.id],
           LightAccount: {
-            status: "ERROR",
-            account: undefined,
-            error: new Error("An error occurred"),
+            default: {
+              status: "ERROR",
+              account: undefined,
+              error: new Error("An error occurred"),
+            },
           },
         },
       },
@@ -74,9 +76,11 @@ describe("watchSmartAccountClient", () => {
         [sepolia.id]: {
           ...state.accounts![sepolia.id],
           LightAccount: {
-            status: "ERROR",
-            account: undefined,
-            error: new Error("An error occurred"),
+            default: {
+              status: "ERROR",
+              account: undefined,
+              error: new Error("An error occurred"),
+            },
           },
         },
       },

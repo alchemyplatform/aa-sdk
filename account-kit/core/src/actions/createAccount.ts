@@ -21,7 +21,6 @@ import type {
 import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
-import type { AccountState } from "../store/types.js";
 import { parseMode } from "../utils/parser.js";
 
 type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
@@ -97,19 +96,17 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  const cachedAccount = (
-    type === "ModularAccountV2"
-      ? accounts[chain.id]?.["ModularAccountV2"]?.[mode]
-      : accounts[chain.id]?.[type]
-  ) as AccountState<TAccount>;
+  // TODO(jh): fix
+  // @ts-ignore
+  const cachedAccount = accounts[chain.id]?.[type]?.[mode];
 
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
   const cachedConfig =
-    type === "ModularAccountV2"
-      ? store.getState().accountConfigs[chain.id]?.["ModularAccountV2"]?.[mode]
-      : store.getState().accountConfigs[chain.id]?.[type];
+    // TODO(jh): fix
+    // @ts-ignore
+    store.getState().accountConfigs[chain.id]?.[type]?.[mode];
 
   const accountPromise = (() => {
     switch (type) {
@@ -195,20 +192,13 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]:
-            type === "ModularAccountV2"
-              ? {
-                  ...accounts[chain.id][type],
-                  [mode]: {
-                    status: "INITIALIZING",
-                    account: accountPromise,
-                  },
-                }
-              : {
-                  ...accounts[chain.id][type],
-                  status: "INITIALIZING",
-                  account: accountPromise,
-                },
+          [type]: {
+            ...accounts[chain.id][type],
+            [mode]: {
+              status: "INITIALIZING",
+              account: accountPromise,
+            },
+          },
         },
       },
     }));
@@ -222,42 +212,27 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]:
-            type === "ModularAccountV2"
-              ? {
-                  ...accounts[chain.id][type],
-                  [mode]: {
-                    status: "READY",
-                    account,
-                  },
-                }
-              : {
-                  ...accounts[chain.id][type],
-                  status: "READY",
-                  account,
-                },
+          [type]: {
+            ...accounts[chain.id][type],
+            [mode]: {
+              status: "READY",
+              account,
+            },
+          },
         },
       },
       accountConfigs: {
         ...state.accountConfigs,
         [chain.id]: {
           ...state.accountConfigs[chain.id],
-          [type]:
-            type === "ModularAccountV2"
-              ? {
-                  ...state.accountConfigs[chain.id][type],
-                  [mode]: {
-                    ...params,
-                    accountAddress: account.address,
-                    initCode,
-                  },
-                }
-              : {
-                  ...state.accountConfigs[chain.id][type],
-                  ...params,
-                  accountAddress: account.address,
-                  initCode,
-                },
+          [type]: {
+            ...state.accountConfigs[chain.id][type],
+            [mode]: {
+              ...params,
+              accountAddress: account.address,
+              initCode,
+            },
+          },
         },
       },
     }));
@@ -267,20 +242,13 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]:
-            type === "ModularAccountV2"
-              ? {
-                  ...accounts[chain.id][type],
-                  [mode]: {
-                    status: "ERROR",
-                    error,
-                  },
-                }
-              : {
-                  ...accounts[chain.id][type],
-                  status: "ERROR",
-                  error,
-                },
+          [type]: {
+            ...accounts[chain.id][type],
+            [mode]: {
+              status: "ERROR",
+              error,
+            },
+          },
         },
       },
     }));

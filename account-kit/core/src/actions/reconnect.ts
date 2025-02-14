@@ -32,21 +32,22 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   const chain = getChain(config);
 
   const unsubConnected = signer.on("connected", async () => {
-    if (accountConfigs[chain.id]?.["LightAccount"]) {
+    if (accountConfigs[chain.id]?.["LightAccount"]?.default) {
       await createAccount(
         {
           type: "LightAccount",
-          accountParams: accountConfigs[chain.id]["LightAccount"],
+          accountParams: accountConfigs[chain.id]["LightAccount"]?.default,
         },
         config
       );
     }
 
-    if (accountConfigs[chain.id]?.["MultiOwnerModularAccount"]) {
+    if (accountConfigs[chain.id]?.["MultiOwnerModularAccount"]?.default) {
       await createAccount(
         {
           type: "MultiOwnerModularAccount",
-          accountParams: accountConfigs[chain.id]["MultiOwnerModularAccount"],
+          accountParams:
+            accountConfigs[chain.id]["MultiOwnerModularAccount"]?.default,
         },
         config
       );

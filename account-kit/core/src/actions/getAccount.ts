@@ -37,10 +37,9 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
 
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
-  const account =
-    params.type === "ModularAccountV2"
-      ? accounts?.[chain.id]?.["ModularAccountV2"]?.[mode]
-      : accounts?.[chain.id]?.[type];
+  // TODO(jh): fix
+  // @ts-ignore
+  const account = accounts?.[chain.id]?.[type]?.[mode];
 
   if (!account) {
     return {
@@ -49,5 +48,6 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
     };
   }
 
+  // TODO(jh): can we remove this cast?
   return account as GetAccountResult<TAccount>;
 };

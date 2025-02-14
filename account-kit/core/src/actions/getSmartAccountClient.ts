@@ -115,13 +115,11 @@ export function getSmartAccountClient(
   const mode = parseMode(type, accountParams);
 
   const clientState =
-    type === "ModularAccountV2"
-      ? config.store.getState().smartAccountClients[connection.chain.id]?.[
-          "ModularAccountV2"
-        ]?.[mode]
-      : config.store.getState().smartAccountClients[connection.chain.id]?.[
-          type
-        ];
+    // TODO(jh): fix
+    // @ts-ignore
+    config.store.getState().smartAccountClients[connection.chain.id]?.[type]?.[
+      mode
+    ];
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;
@@ -289,13 +287,10 @@ function getSmartAccountClientState<
   type: TAccountType;
   config: AlchemyAccountsConfig;
 }) {
-  return type === "ModularAccountV2"
-    ? config.store.getState().smartAccountClients[chainId]["ModularAccountV2"]![
-        mode
-      ]
-    : (config.store.getState().smartAccountClients[chainId][
-        type
-      ]! as GetSmartAccountClientResult<Chain, SupportedAccount<TAccountType>>);
+  // TODO(jh): can we get rid of this cast?
+  return config.store.getState().smartAccountClients[chainId][type]![
+    mode
+  ] as GetSmartAccountClientResult;
 }
 
 function setSmartAccountClientState<
@@ -304,7 +299,7 @@ function setSmartAccountClientState<
   config,
   newState,
   type,
-  mode,
+  mode = "default",
   connection,
 }: {
   config: AlchemyAccountsConfig;
@@ -318,15 +313,10 @@ function setSmartAccountClientState<
       ...state.smartAccountClients,
       [connection.chain.id]: {
         ...state.smartAccountClients[connection.chain.id],
-        [type]:
-          type === "ModularAccountV2"
-            ? {
-                ...state.smartAccountClients[connection.chain.id][
-                  "ModularAccountV2"
-                ],
-                [mode ?? "default"]: newState,
-              }
-            : newState,
+        [type]: {
+          ...state.smartAccountClients[connection.chain.id][type],
+          [mode]: newState,
+        },
       },
     },
   }));

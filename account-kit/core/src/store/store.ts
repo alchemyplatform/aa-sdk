@@ -316,10 +316,15 @@ const createEmptyAccountConfigState = (chains: Chain[]) => {
 export const createDefaultAccountState = (chains: Chain[]) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {
-      LightAccount: defaultAccountState<"LightAccount">(),
-      MultiOwnerModularAccount:
-        defaultAccountState<"MultiOwnerModularAccount">(),
-      MultiOwnerLightAccount: defaultAccountState<"MultiOwnerLightAccount">(),
+      LightAccount: {
+        default: defaultAccountState<"LightAccount">(),
+      },
+      MultiOwnerModularAccount: {
+        default: defaultAccountState<"MultiOwnerModularAccount">(),
+      },
+      MultiOwnerLightAccount: {
+        default: defaultAccountState<"MultiOwnerLightAccount">(),
+      },
       ModularAccountV2: {
         default: defaultAccountState<"ModularAccountV2">(),
         "7702": defaultAccountState<"ModularAccountV2">(),
