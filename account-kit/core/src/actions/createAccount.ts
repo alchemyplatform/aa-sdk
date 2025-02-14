@@ -180,7 +180,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   })();
 
   if (cachedAccount.status !== "RECONNECTING") {
-    store.setState(() => ({
+    store.setState((state) => ({
       accounts: {
         ...accounts,
         [chain.id]: {
@@ -188,6 +188,15 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           [type]: {
             status: "INITIALIZING",
             account: accountPromise,
+          },
+        },
+      },
+      accountConfigs: {
+        ...state.accountConfigs,
+        [chain.id]: {
+          ...state.accountConfigs[chain.id],
+          [type]: {
+            ...params,
           },
         },
       },

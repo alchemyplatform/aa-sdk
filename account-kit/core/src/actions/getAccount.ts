@@ -32,7 +32,6 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   params: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
-  console.log("getAccount");
   const accounts = config.store.getState().accounts;
   const accountConfigs = config.store.getState().accountConfigs;
   const chain = getChain(config);
@@ -66,6 +65,13 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
           [chain.id]: {
             ...accountConfigs[chain.id],
             ModularAccountV2: {},
+          },
+        },
+        smartAccountClients: {
+          ...state.smartAccountClients,
+          [chain.id]: {
+            ...state.smartAccountClients[chain.id],
+            ModularAccountV2: undefined,
           },
         },
       }));

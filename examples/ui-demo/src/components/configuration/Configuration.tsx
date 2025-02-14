@@ -1,8 +1,6 @@
-// import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 import { SettingsIcon } from "../icons/settings";
-// import { HelpTooltip } from "../shared/HelpTooltip";
 import { WalletTypeSwitch } from "../shared/WalletTypeSwitch";
 import ExternalLink from "../shared/ExternalLink";
 import { useConfigStore } from "@/state";
@@ -10,7 +8,6 @@ import { WalletTypes } from "@/app/config";
 
 export const Configuration = ({ className }: { className?: string }) => {
   const { setWalletType, walletType } = useConfigStore();
-  // const [walletType, setWalletType] = useState(WalletTypes.smart);
 
   const onSwitchWalletType = () => {
     setWalletType(

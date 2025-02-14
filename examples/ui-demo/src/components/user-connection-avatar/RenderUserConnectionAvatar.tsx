@@ -43,9 +43,9 @@ export const RenderUserConnectionAvatar = (
     queryKey: ["deploymentStatus7702"],
     queryFn: async () => {
       const delegationAddress = signer
-        ? ((await publicClient.getCode({
+        ? (await publicClient.getCode({
             address: await signer?.getAddress(),
-          })) ?? "0x")
+          })) ?? "0x"
         : "0x";
       const delegationStatus = delegationAddress !== "0x";
       if (delegationStatus) setAutoRefresh(false);
