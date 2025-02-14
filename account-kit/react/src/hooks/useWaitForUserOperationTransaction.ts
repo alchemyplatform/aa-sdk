@@ -38,7 +38,7 @@ export type UseWaitForUserOperationTransactionResult = {
  * ```ts twoslash
  * import { useWaitForUserOperationTransaction, useSmartAccountClient } from "@account-kit/react";
  *
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { client } = useSmartAccountClient({});
  * const {
  *  waitForUserOperationTransaction,
  *  waitForUserOperationTransactionResult,

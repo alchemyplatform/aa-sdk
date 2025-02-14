@@ -17,10 +17,11 @@ import { useSigner } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useSigner } from "@account-kit/react";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 
-const signer = useSigner();
+const signer: AlchemyWebSigner | null = useSigner();
 ```
 
 ## Returns
