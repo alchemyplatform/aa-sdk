@@ -41,7 +41,7 @@ export const Configuration = ({ className }: { className?: string }) => {
         EIP-7702 adds smart account features to an EOA wallet.{" "}
         <ExternalLink
           className="text-[#363FF9] whitespace-nowrap"
-          href="https://eips.ethereum.org/EIPS/eip-7702"
+          href="https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork?utm_source=what_is_7702&utm_medium=demo&utm_campaign=eip_7702_series"
         >
           Learn more.
         </ExternalLink>
