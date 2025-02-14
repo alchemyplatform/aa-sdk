@@ -4,8 +4,8 @@ import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
 
 import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
-import { MintCard } from "../mint-card/MintCard";
 import { useState, useEffect } from "react";
+import { SmallCardsWrapper } from "../small-cards/Wrapper";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   return (
@@ -71,9 +71,5 @@ const RenderContent = () => {
     );
   }
 
-  return (
-    <div>
-      <MintCard />
-    </div>
-  );
+  return <SmallCardsWrapper />;
 };
