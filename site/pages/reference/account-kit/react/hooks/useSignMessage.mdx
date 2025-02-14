@@ -24,9 +24,10 @@ import { useSignMessage } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
 
+const data = "messageToSign";
 const { client } = useSmartAccountClient({ type: "LightAccount" });
 const {
   signMessage,
@@ -42,6 +43,8 @@ const {
   },
   onError: (error) => console.error(error),
 });
+
+const result = await signMessage({ message: data });
 ```
 
 ## Parameters

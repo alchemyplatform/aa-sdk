@@ -23,21 +23,39 @@ import {
   sepolia,
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
-import { http } from "viem";
+import { alchemy } from "@account-kit/infra";
 
-const client = createSmartAccountClient({
-  transport: http("rpc-url"),
+const client = createAlchemySmartAccountClient({
+  transport: alchemy({ apiKey: "your-api-key" }),
   chain: sepolia,
-  ...alchemyGasAndPaymasterAndDataMiddleware("policyId"),
+  ...alchemyGasAndPaymasterAndDataMiddleware({
+    policyId: "policyId",
+    transport: alchemy({ apiKey: "your-api-key" }),
+  }),
 });
 ```
 
 ## Parameters
 
-### policyId
+### params
 
-`string`
+`AlchemyGasAndPaymasterAndDataMiddlewareParams`
+configuration params
+
+### params.policyId
+
+`AlchemyGasAndPaymasterAndDataMiddlewareParams.policyId`
 the policyId for Alchemy's gas manager
+
+### params.transport
+
+`AlchemyGasAndPaymasterAndDataMiddlewareParams.transport`
+fallback transport to use for fee estimation when not using the paymaster
+
+### params.enableDummyPaymasterAndData
+
+`AlchemyGasAndPaymasterAndDataMiddlewareParams.enableDummyPaymasterAndData`
+whether to enable the dummy paymaster and data middleware, which typically is only needed if the client is using a custom gasEstimator or feeEstimator
 
 ## Returns
 

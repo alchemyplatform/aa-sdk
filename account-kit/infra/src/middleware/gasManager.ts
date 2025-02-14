@@ -94,15 +94,14 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         throw new ChainNotFoundError();
       }
 
-      if (!enableDummyPaymasterAndData) {
+      if (
+        // No reason to generate stub data if we are bypassing the paymaster.
+        bypassPaymasterAndData(args.overrides) ||
         // TODO(jh): Is this safe to do? Is my thinking that we normally don't need to actually do anything in
         // this middleware function if using the default feeEstimator/gasEstimator correct, b/c the paymasterAndData
         // middleware function should handle everything?
-        return noopMiddleware(uo, args);
-      }
-
-      if (bypassPaymasterAndData(args.overrides)) {
-        // No reason to generate stub data if we are bypassing the paymaster.
+        !enableDummyPaymasterAndData
+      ) {
         return noopMiddleware(uo, args);
       }
 
@@ -125,8 +124,6 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         ? defaultGasEstimator(args.client)(uo, args)
         : noopMiddleware(uo, args);
     },
-    // The user can bypass this by just overriding the paymasterAndData middleware and seeting the
-    // paymaster to 0x. So this won't run if paymaster is bypassed. No other changes needed.
     paymasterAndData: async (
       uo,
       { account, client, feeOptions, overrides: overrides_ }
