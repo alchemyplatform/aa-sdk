@@ -286,7 +286,6 @@ function getSmartAccountClientState<
   type: TAccountType;
   config: AlchemyAccountsConfig;
 }): GetSmartAccountClientResult {
-  // TODO(jh): can we get rid of this cast?
   const state =
     config.store.getState().smartAccountClients[chainId][type]![mode];
   return state as GetSmartAccountClientResult;

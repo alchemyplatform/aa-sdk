@@ -1,5 +1,8 @@
 import type { AccountConfig } from "../actions/createAccount";
-import type { SupportedAccountModes, SupportedAccountTypes } from "../types";
+import {
+  type SupportedAccountModes,
+  type SupportedAccountTypes,
+} from "../types.js";
 
 export function parseMode<T extends SupportedAccountTypes>(
   accountParams: AccountConfig<T> | undefined
