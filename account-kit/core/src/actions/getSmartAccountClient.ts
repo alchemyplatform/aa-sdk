@@ -142,8 +142,9 @@ export function getSmartAccountClient(
     signerStatus.isAuthenticating ||
     signerStatus.isInitializing
   ) {
-    if (!account && signerStatus.isConnected)
+    if (!account && signerStatus.isConnected) {
       createAccount({ type, accountParams }, config);
+    }
 
     if (clientState && clientState.isLoadingClient) {
       return clientState;

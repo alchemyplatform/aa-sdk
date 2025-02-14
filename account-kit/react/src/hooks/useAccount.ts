@@ -57,6 +57,7 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
   const { type, accountParams, skipCreate, ...mutationArgs } = params;
   const { config, queryClient } = useAlchemyAccountContext();
   const status = useSignerStatus();
+
   const account = useSyncExternalStore(
     watchAccount(type, config),
     () => getAccount(params, config),

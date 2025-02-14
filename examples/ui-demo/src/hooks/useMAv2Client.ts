@@ -23,7 +23,7 @@ type Client = ModularAccountV2Client<
 
 // Hook that creates an MAv2 client that can be used for things that
 // @account-kit/react doesn't yet support, such as session keys.
-export const useModularAccountV2Client = ({
+export const useMAv2Client = ({
   mode,
   chain,
   transport,

@@ -27,7 +27,13 @@ export function UserConnectionDetails({
       walletType,
     })
   );
-  const scaAccount = useAccount({ type: "ModularAccountV2" });
+  const scaAccount = useAccount({
+    type: "ModularAccountV2",
+    accountParams: {
+      mode: walletType === WalletTypes.smart ? "default" : "7702",
+    },
+    skipCreate: true,
+  });
 
   const isEOAUser = user?.type === "eoa";
 
@@ -80,13 +86,7 @@ export function UserConnectionDetails({
         <span className="text-md md:text-sm text-fg-secondary">
           {walletType === WalletTypes.smart ? "Smart account" : "Address"}
         </span>
-        <UserAddressLink
-          address={
-            walletType === WalletTypes.smart
-              ? scaAccount.address ?? ""
-              : signerAddress ?? ""
-          }
-        />
+        <UserAddressLink address={scaAccount.address ?? ""} />
       </div>
 
       {walletType === WalletTypes.smart ? (

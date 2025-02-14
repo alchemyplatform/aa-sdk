@@ -17,7 +17,7 @@ import {
   TimeRangeModule,
 } from "@account-kit/smart-contracts/experimental";
 import { SingleSignerValidationModule } from "@account-kit/smart-contracts/experimental";
-import { useModularAccountV2Client } from "./useModularAccountV2Client";
+import { useMAv2Client } from "./useMAv2Client";
 import { DEMO_USDC_ADDRESS, SWAP_VENUE_ADDRESS } from "./7702/dca/constants";
 import { swapAbi } from "./7702/dca/abi/swap";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
@@ -70,13 +70,13 @@ export const useRecurringTransactions = ({
   const [sessionKeyEntityId] = useState<number>(() => genEntityId());
   const [sessionKeyAdded, setSessionKeyAdded] = useState<boolean>(false);
 
-  const { client, isLoadingClient } = useModularAccountV2Client({
+  const { client, isLoadingClient } = useMAv2Client({
     mode,
     chain: odyssey,
     transport: splitOdysseyTransport,
   });
 
-  const { client: sessionKeyClient } = useModularAccountV2Client({
+  const { client: sessionKeyClient } = useMAv2Client({
     mode,
     chain: odyssey,
     transport: splitOdysseyTransport,

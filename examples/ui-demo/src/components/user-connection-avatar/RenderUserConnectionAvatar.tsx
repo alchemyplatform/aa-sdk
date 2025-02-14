@@ -18,10 +18,14 @@ export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
   const { account } = useAccount({
     type: "ModularAccountV2",
+    accountParams: {
+      mode: walletType === WalletTypes.smart ? "default" : "7702",
+    },
+    skipCreate: true,
   });
-  const { walletType } = useConfigStore();
 
   const [publicClient] = useState(() =>
     createPublicClient({
@@ -39,9 +43,9 @@ export const RenderUserConnectionAvatar = (
     queryKey: ["deploymentStatus7702"],
     queryFn: async () => {
       const delegationAddress = signer
-        ? (await publicClient.getCode({
+        ? ((await publicClient.getCode({
             address: await signer?.getAddress(),
-          })) ?? "0x"
+          })) ?? "0x")
         : "0x";
       const delegationStatus = delegationAddress !== "0x";
       if (delegationStatus) setAutoRefresh(false);

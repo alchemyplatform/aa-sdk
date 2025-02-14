@@ -83,6 +83,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
+  const accountConfigs = store.getState().accountConfigs;
 
   const bundlerClient = getBundlerClient(config);
   const transport = custom(bundlerClient);
@@ -98,7 +99,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
-  const cachedConfig = store.getState().accountConfigs[chain.id]?.[type];
+  const cachedConfig = accountConfigs[chain.id]?.[type];
 
   const accountPromise = (() => {
     switch (type) {
