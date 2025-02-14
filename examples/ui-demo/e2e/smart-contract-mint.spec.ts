@@ -2,7 +2,8 @@ import { test, expect } from "@playwright/test";
 
 const googleEmail = process.env.PLAYWRIGHT_GOOGLE_EMAIL;
 const googlePassword = process.env.PLAYWRIGHT_GOOGLE_PASSWORD;
-
+const facebookEmail = process.env.PLAYWRIGHT_FACEBOOK_EMAIL;
+const facebookPassword = process.env.PLAYWRIGHT_FACEBOOK_PASSWORD;
 test.beforeEach(async ({ page, baseURL }) => {
   await page.goto(baseURL!);
 });
@@ -71,4 +72,33 @@ test("Google sign in", async ({ page }) => {
     "href",
     "https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6"
   );
+});
+
+test("Facebook sign in", async ({ page }) => {
+  if (!facebookEmail || !facebookPassword) {
+    throw new Error(
+      "PLAYWRIGHT_FACEBOOK_EMAIL and PLAYWRIGHT_FACEBOOK_PASSWORD must be set"
+    );
+  }
+  await expect(page).toHaveTitle(/Account Kit/);
+  // Enabling and disabling email to ensure config is loaded
+  await page.getByRole("switch", { name: "Email" }).click();
+  await page.getByRole("switch", { name: "Email" }).click();
+  await page.locator("button[aria-label='Facebook sign in']").click();
+  const pagePromise = page.waitForEvent("popup");
+  const popup = await pagePromise;
+  await popup.waitForLoadState("networkidle");
+  const emailInput = await popup.getByRole("textbox", { name: "email" });
+  await emailInput.fill(facebookEmail);
+  const passwordInput = await popup.getByRole("textbox", { name: "pass" });
+  await passwordInput.fill(facebookPassword);
+  await popup.getByRole("button", { name: "Log In" }).click();
+  await popup.locator('[aria-label^="Continue as"]').click();
+  // Wait for the page to load after sign in
+  await expect(page.getByText(/One-click checkout/i).first()).toBeVisible();
+  const avatar = await page.getByRole("button", {
+    name: `Hello, ${googleEmail}`,
+  });
+  expect(avatar).toBeVisible();
+  await page.locator("img[alt='An NFT']");
 });
