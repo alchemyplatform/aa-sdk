@@ -54,12 +54,11 @@ const MintCardInner = ({
             <LoadingIcon />
           )}
         </div>
-        <div>
-          <div className="mb-2">
-            <h3 className="text-fg-primary text-base xl:text-xl font-semibold">
-              Gasless transactions
-            </h3>
-          </div>
+        <div className="w-full mb-3">
+          <h3 className="text-fg-primary xl:text-xl font-semibold mb-2 xl:mb-3">
+            Gasless transactions
+          </h3>
+
           {!mintStarted ? (
             <>
               <p className="text-fg-primary text-sm mb-3">

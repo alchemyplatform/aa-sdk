@@ -1,8 +1,10 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
-import { useEffect, useState } from "react";
 import { TransactionType } from "@/hooks/useRecurringTransactions";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { time } from "console";
 
 export type loadingState = "loading" | "success" | "initial";
 
@@ -25,29 +27,19 @@ const Transaction = ({
   externalLink,
   buyAmountUsdc,
   state,
+  secUntilBuy = 0,
 }: TransactionType & { className?: string }) => {
-  const [countdownSeconds, setCountdownSeconds] = useState<number>(10);
-
-  useEffect(() => {
-    if (state === "next") {
-      const interval = setInterval(() => {
-        setCountdownSeconds((prev) => (prev === 0 ? 0 : prev - 1));
-      }, 1000);
-      return () => clearInterval(interval);
-    } else {
-      setCountdownSeconds(10);
-    }
-  }, [state]);
-
   const getText = () => {
     if (state === "initial") {
       return "Waiting...";
     }
+    if (state === "next") {
+      return secUntilBuy <= 0
+        ? "Waiting for previous transaction..."
+        : `Next buy in ${secUntilBuy} second${secUntilBuy === 1 ? "" : "s"}`;
+    }
     if (state === "initiating") {
       return "Buying 1 ETH";
-    }
-    if (state === "next") {
-      return `Next buy in ${countdownSeconds} seconds`;
     }
     if (state === "complete") {
       return `Bought 1 ETH for ${buyAmountUsdc.toLocaleString()} USDC`;
@@ -55,11 +47,11 @@ const Transaction = ({
   };
 
   return (
-    <div className={`flex justify-between ${className} mb-4`}>
+    <div className={cn("flex justify-between mb-4", className)}>
       <div className="flex items-center mr-1">
         <div className="w-4 h-4 mr-2">
           {state === "complete" ? (
-            <CheckCircleFilledIcon className=" h-4 w-4 fill-demo-surface-success" />
+            <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
           ) : (
             <LoadingIcon className="h-4 w-4" />
           )}

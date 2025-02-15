@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { BatchUserOperationCallData } from "@aa-sdk/core";
 import {
   encodeFunctionData,
@@ -24,6 +24,7 @@ import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
 import { genEntityId } from "./7702/genEntityId";
 import { odyssey, splitOdysseyTransport } from "./7702/transportSetup";
 import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
+import { useToast } from "@/hooks/useToast";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -32,11 +33,13 @@ export type TransactionType = {
   state: TransactionStages;
   buyAmountUsdc: number;
   externalLink?: string;
+  timeToBuy?: number; // timestamp when the txn will initiate
+  secUntilBuy?: number; // seconds until the txn will initiate
 };
 
 export const initialTransactions: TransactionType[] = [
   {
-    state: "initiating",
+    state: "initial",
     buyAmountUsdc: 4000,
   },
   {
@@ -87,21 +90,68 @@ export const useRecurringTransactions = ({
     },
   });
 
-  const handleTransaction = async (transactionIndex: number) => {
-    setTransactions((prev) => {
-      const newState = [...prev];
-      newState[transactionIndex].state = "initiating";
-      if (transactionIndex + 1 < newState.length) {
-        newState[transactionIndex + 1].state = "next";
-      }
-      return newState;
-    });
+  const { setToast } = useToast();
 
-    if (!sessionKeyClient) {
-      console.error("no session key client");
-      setCardStatus("initial");
+  const handleError = (error: Error) => {
+    console.error(error);
+    setCardStatus("initial");
+    setTransactions(initialTransactions);
+    setToast({
+      type: "error",
+      text: "Something went wrong. Please try again.",
+      open: true,
+    });
+  };
+
+  // Handle the ticking of the timers.
+  useEffect(() => {
+    if (
+      transactions.every(
+        (it) => it.state === "complete" || it.state === "initial"
+      )
+    ) {
       return;
     }
+
+    const interval = setInterval(() => {
+      setTransactions((prev) =>
+        prev.map((txn) =>
+          txn.state === "next" && txn.timeToBuy
+            ? {
+                ...txn,
+                secUntilBuy: Math.ceil((txn.timeToBuy - Date.now()) / 1000),
+              }
+            : txn
+        )
+      );
+
+      if (transactions.every((it) => it.state === "complete")) {
+        clearInterval(interval);
+      }
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, [transactions]);
+
+  const handleTransaction = async (transactionIndex: number) => {
+    if (!sessionKeyClient) {
+      return handleError(new Error("no session key client"));
+    }
+
+    setTransactions((prev) =>
+      prev.map((txn, idx) =>
+        idx === transactionIndex
+          ? { ...txn, state: "initiating" }
+          : idx === transactionIndex + 1
+          ? {
+              ...txn,
+              state: "next",
+              timeToBuy: Date.now() + 10_000,
+              secUntilBuy: 10,
+            }
+          : txn
+      )
+    );
 
     const usdcInAmount = transactions[transactionIndex].buyAmountUsdc;
 
@@ -119,46 +169,36 @@ export const useRecurringTransactions = ({
     const txnHash = await sessionKeyClient
       .waitForUserOperationTransaction(uoHash)
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       });
 
     if (!txnHash) {
-      setCardStatus("initial");
-      return;
+      return handleError(new Error("missing swap txn hash"));
     }
 
-    setTransactions((prev) => {
-      const newState = [...prev];
-      newState[transactionIndex].state = "complete";
-      newState[transactionIndex].externalLink = odyssey.blockExplorers
-        ? `${odyssey.blockExplorers?.default.url}/tx/${txnHash}`
-        : undefined;
-      return newState;
-    });
+    setTransactions((prev) =>
+      prev.map((txn, idx) =>
+        idx === transactionIndex
+          ? {
+              ...txn,
+              state: "complete",
+              externalLink: odyssey.blockExplorers
+                ? `${odyssey.blockExplorers?.default.url}/tx/${txnHash}`
+                : undefined,
+            }
+          : txn
+      )
+    );
   };
 
-  // Mock method to fire transactions for 7702
+  // Mock method to fire transactions
   const handleTransactions = async () => {
     if (!client) {
       console.error("no client");
       return;
     }
 
-    // initial state as referenced by `const initialTransactions` is mutated, so we need to re-create it.
-    setTransactions([
-      {
-        state: "initiating",
-        buyAmountUsdc: 4000,
-      },
-      {
-        state: "initial",
-        buyAmountUsdc: 3500,
-      },
-      {
-        state: "initial",
-        buyAmountUsdc: 4200,
-      },
-    ]);
+    setTransactions(initialTransactions);
     setCardStatus("setup");
 
     // Start by minting the required USDC amount, and installing the session key, if not already installed.
@@ -257,19 +297,23 @@ export const useRecurringTransactions = ({
     const txnHash = await client
       .waitForUserOperationTransaction(uoHash)
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       });
 
     if (!txnHash) {
-      setCardStatus("initial");
-      return;
+      return handleError(new Error("missing batch txn hash"));
     }
 
     setSessionKeyAdded(true);
     setCardStatus("active");
 
     for (let i = 0; i < transactions.length; i++) {
-      await handleTransaction(i);
+      await Promise.all([
+        handleTransaction(i),
+        ...(i < transactions.length - 1
+          ? [new Promise((resolve) => setTimeout(resolve, 10_000))]
+          : []),
+      ]);
     }
 
     setCardStatus("done");
