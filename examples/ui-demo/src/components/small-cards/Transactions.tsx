@@ -3,8 +3,6 @@ import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
 import { TransactionType } from "@/hooks/useRecurringTransactions";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { time } from "console";
 
 export type loadingState = "loading" | "success" | "initial";
 
