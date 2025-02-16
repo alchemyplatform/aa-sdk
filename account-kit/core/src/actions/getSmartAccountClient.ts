@@ -97,11 +97,8 @@ export function getSmartAccountClient<
  * @param {AlchemyAccountsConfig} config The configuration containing the client store and other necessary information
  * @returns {GetSmartAccountClientResult} The result object which includes the client, address, and loading status of the client
  */
-export function getSmartAccountClient<
-  TAccount extends SupportedAccountTypes,
-  TChain extends Chain | undefined = Chain | undefined
->(
-  params: GetSmartAccountClientParams<TChain, TAccount>,
+export function getSmartAccountClient(
+  params: GetSmartAccountClientParams,
   config: AlchemyAccountsConfig
 ): GetSmartAccountClientResult {
   const { accountParams, type, ...clientParams } = params;
@@ -116,12 +113,6 @@ export function getSmartAccountClient<
   const transport = getAlchemyTransport(config);
   const connection = getConnection(config);
   const mode = getMode(params);
-
-  if (type === "ModularAccountV2") {
-    console.log(mode);
-  } else {
-    console.log(mode);
-  }
 
   const clientState = getSmartAccountClientState({
     config,
