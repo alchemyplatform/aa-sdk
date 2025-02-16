@@ -4,8 +4,6 @@ import {
   createAccount,
   getAccount,
   watchAccount,
-  type AccountConfig,
-  type CreateModularAccountV2Params,
   type GetAccountParams,
   type SupportedAccount,
   type SupportedAccountModes,

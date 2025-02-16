@@ -21,7 +21,7 @@ import type {
 import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
-import { parseMode } from "../utils/parser.js";
+import { getMode } from "../store/store.js";
 
 type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
 
@@ -79,7 +79,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   { type, accountParams: params }: CreateAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): Promise<SupportedAccounts> {
-  const mode = parseMode(params);
+  const mode = getMode({ type, accountParams: params });
   const store = config.store;
   const accounts = store.getState().accounts;
   if (!accounts) {

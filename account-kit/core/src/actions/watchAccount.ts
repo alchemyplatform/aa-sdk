@@ -1,5 +1,4 @@
 import { ClientOnlyPropertyError } from "../errors.js";
-import type { AccountState } from "../store/types.js";
 import type {
   AlchemyAccountsConfig,
   SupportedAccountModes,
@@ -30,7 +29,7 @@ export const watchAccount =
   <TAccount extends SupportedAccountTypes>(
     type: TAccount,
     config: AlchemyAccountsConfig,
-    mode?: SupportedAccountModes<TAccount>
+    mode: SupportedAccountModes<TAccount> = "default"
   ) =>
   (onChange: (account: GetAccountResult<TAccount>) => void) => {
     const accounts = config.store.getState().accounts;
@@ -41,10 +40,7 @@ export const watchAccount =
     const chain = getChain(config);
     return config.store.subscribe(
       // this should be available on the client now because of the check above
-      ({ accounts }) =>
-        (type === "ModularAccountV2"
-          ? accounts![chain.id]["ModularAccountV2"][mode ?? "default"]
-          : accounts![chain.id][type]) as AccountState<TAccount>,
+      ({ accounts }) => accounts![chain.id][type][mode],
       onChange,
       {
         equalityFn(a, b) {

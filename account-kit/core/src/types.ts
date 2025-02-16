@@ -50,13 +50,6 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 export type SupportedAccountModes<T extends SupportedAccountTypes> =
   T extends "ModularAccountV2" ? "default" | "7702" : "default";
 
-export const ValidAccountModes: Record<SupportedAccountTypes, string[]> = {
-  LightAccount: ["default"],
-  MultiOwnerLightAccount: ["default"],
-  MultiOwnerModularAccount: ["default"],
-  ModularAccountV2: ["default", "7702"],
-};
-
 export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {

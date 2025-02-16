@@ -35,7 +35,7 @@ import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
-import { parseMode } from "../utils/parser.js";
+import { getMode } from "../store/store.js";
 
 export type GetSmartAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
@@ -97,8 +97,11 @@ export function getSmartAccountClient<
  * @param {AlchemyAccountsConfig} config The configuration containing the client store and other necessary information
  * @returns {GetSmartAccountClientResult} The result object which includes the client, address, and loading status of the client
  */
-export function getSmartAccountClient(
-  params: GetSmartAccountClientParams,
+export function getSmartAccountClient<
+  TAccount extends SupportedAccountTypes,
+  TChain extends Chain | undefined = Chain | undefined
+>(
+  params: GetSmartAccountClientParams<TChain, TAccount>,
   config: AlchemyAccountsConfig
 ): GetSmartAccountClientResult {
   const { accountParams, type, ...clientParams } = params;
@@ -112,13 +115,20 @@ export function getSmartAccountClient(
   const signerStatus = getSignerStatus(config);
   const transport = getAlchemyTransport(config);
   const connection = getConnection(config);
-  const mode = parseMode(accountParams);
+  const mode = getMode(params);
 
-  // TODO(jh): fix
-  // @ts-ignore
-  const clientState = config.store.getState().smartAccountClients[
-    connection.chain.id
-  ]?.[type]?.[mode] as GetSmartAccountClientResult;
+  if (type === "ModularAccountV2") {
+    console.log(mode);
+  } else {
+    console.log(mode);
+  }
+
+  const clientState = getSmartAccountClientState({
+    config,
+    chainId: connection.chain.id,
+    type,
+    mode,
+  });
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;

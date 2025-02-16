@@ -13,7 +13,11 @@ import {
 } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
-import type { Connection, SupportedAccountTypes } from "../types.js";
+import type {
+  Connection,
+  SupportedAccountModes,
+  SupportedAccountTypes,
+} from "../types.js";
 import { storeReplacer } from "../utils/replacer.js";
 import { storeReviver } from "../utils/reviver.js";
 import {
@@ -25,6 +29,7 @@ import {
   type Store,
   type StoreState,
 } from "./types.js";
+import type { CreateAccountParams } from "../actions/createAccount";
 
 export const createAccountKitStore = (
   params: CreateAccountKitStoreParams
@@ -340,4 +345,12 @@ export const createEmptySmartAccountClientState = (chains: Chain[]) => {
 
     return acc;
   }, {} as StoreState["smartAccountClients"]);
+};
+
+export const getMode = <T extends SupportedAccountTypes>(
+  account: CreateAccountParams<T>
+): SupportedAccountModes<T> => {
+  return ((account.accountParams && "mode" in account.accountParams
+    ? account.accountParams.mode
+    : undefined) ?? "default") as SupportedAccountModes<T>;
 };

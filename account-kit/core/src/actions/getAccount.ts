@@ -1,6 +1,6 @@
+import { getMode } from "../store/store.js";
 import type { AccountState } from "../store/types.js";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
-import { parseMode } from "../utils/parser.js";
 import { type CreateAccountParams } from "./createAccount.js";
 import { getChain } from "./getChain.js";
 
@@ -32,8 +32,8 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   params: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
-  const { type, accountParams } = params;
-  const mode = parseMode(accountParams);
+  const { type } = params;
+  const mode = getMode(params);
 
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
