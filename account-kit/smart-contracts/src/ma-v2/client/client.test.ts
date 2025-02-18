@@ -28,7 +28,6 @@ import {
   AllowlistModule,
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
-  getDefaultSingleSignerValidationModuleAddress,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createModularAccountV2Client,
@@ -710,27 +709,73 @@ describe("MA v2 Tests", async () => {
 
     const spendLimit = parseEther("0.5");
 
-    // Let's verify the module's limit is set correctly after installation
-    const hookInstallData = NativeTokenLimitModule.encodeOnInstallData({
-      entityId: 0,
-      spendLimit,
-    });
-
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: "0x",
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
+    // Sending over the limit should currently pass
+    const preHookInstallationSendResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: parseEther("0.6"),
+        data: "0x",
+      },
+    });
+    await provider.waitForUserOperationTransaction(
+      preHookInstallationSendResult
+    );
+
+    // Let's verify the module's limit is set correctly after installation
+    const hookInstallData = NativeTokenLimitModule.encodeOnInstallData({
+      entityId: 1,
+      spendLimit,
+    });
+
+    const installHookResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
-            entityId: 0,
+            entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: false,
@@ -740,7 +785,7 @@ describe("MA v2 Tests", async () => {
         {
           hookConfig: {
             address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
-            entityId: 0,
+            entityId: 1,
             hookType: HookType.EXECUTION,
             hasPreHooks: true,
             hasPostHooks: false,
@@ -750,10 +795,10 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationTransaction(installResult);
+    await provider.waitForUserOperationTransaction(installHookResult);
 
     // Try to send less than the limit - should pass
-    const passingSendResult = await provider.sendUserOperation({
+    const passingSendResult = await sessionKeyProvider.sendUserOperation({
       uo: {
         target: target,
         value: parseEther("0.05"), // below the 0.5 limit
@@ -764,7 +809,7 @@ describe("MA v2 Tests", async () => {
 
     // Try to send more than the limit - should fail
     await expect(
-      provider.sendUserOperation({
+      sessionKeyProvider.sendUserOperation({
         uo: {
           target: target,
           value: parseEther("0.6"), // passing the 0.5 limit
@@ -774,27 +819,22 @@ describe("MA v2 Tests", async () => {
     ).rejects.toThrowError();
 
     const hookUninstallData = NativeTokenLimitModule.encodeOnUninstallData({
-      entityId: 0,
+      entityId: 1,
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 0,
-      uninstallData: "0x",
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        sessionKeyProvider.chain
+      ),
+      entityId: 1,
+      uninstallData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hookUninstallDatas: [hookUninstallData, "0x"],
     });
 
     await provider.waitForUserOperationTransaction(uninstallResult);
-
-    // Sending over the limit should now pass
-    const postUninstallSendResult = await provider.sendUserOperation({
-      uo: {
-        target: target,
-        value: parseEther("0.6"),
-        data: "0x",
-      },
-    });
-    await provider.waitForUserOperationTransaction(postUninstallSendResult);
   });
 
   it("installs time range module, then uninstalls module within valid time range", async () => {
