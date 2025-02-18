@@ -32,7 +32,7 @@ test("Google sign in", async ({ page }) => {
   await popup.getByRole("button", { name: /Next/i }).click();
 
   // Wait for the page to load after sign in
-  await expect(page.getByText(/One-click checkout/i).first()).toBeVisible();
+  await expect(page.getByText(/Gasless transactions/i)).toBeVisible();
   const avatar = await page.getByRole("button", {
     name: `Hello, ${googleEmail}`,
   });
@@ -45,22 +45,14 @@ test("Google sign in", async ({ page }) => {
     timeout: 30000,
   });
 
+  // Create session key
+  await page.getByRole("button", { name: "Create session key" }).click();
+  await expect(await page.getByText("Bought 1 ETH")).toBeVisible({
+    timeout: 30000,
+  });
+
   // Check external links
-  await expect(
-    page.getByRole("link", { name: "View transaction" })
-  ).toBeVisible();
-  await expect(
-    await page.getByRole("link", { name: "Build with Account kit" })
-  ).toHaveAttribute(
-    "href",
-    "https://dashboard.alchemy.com/accounts?utm_source=demo_alchemy_com&utm_medium=referral&utm_campaign=demo_to_dashboard"
-  );
-  await expect(
-    await page.getByRole("link", { name: "Learn how." })
-  ).toHaveAttribute("href", "https://accountkit.alchemy.com/react/sponsor-gas");
-  await expect(
-    await page.getByRole("link", { name: "View docs" })
-  ).toHaveAttribute("href", "https://accountkit.alchemy.com/react/quickstart");
+  await expect(page.locator("a[aria-label='View transaction']")).toBeVisible();
   await expect(
     await page.getByRole("link", { name: "Quickstart" })
   ).toHaveAttribute("href", "https://accountkit.alchemy.com/react/quickstart");
