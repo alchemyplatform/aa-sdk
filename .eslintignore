@@ -17,3 +17,5 @@ account-kit/rn-signer/lib/*
 **/.cxx/*
 
 **/vendor/*
+**/test-results/*
+**/playwright-report/*

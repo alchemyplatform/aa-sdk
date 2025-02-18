@@ -27,13 +27,16 @@ export const Configuration = ({ className }: { className?: string }) => {
         <span className="font-semibold">Configuration</span>
       </div>
       <div className="flex flex-row items-center gap-2 pb-2">
-        <h4 className="font-normal text-sm text-secondary-foreground">
+        <label
+          className="font-normal text-sm text-secondary-foreground"
+          htmlFor="wallet-switch"
+        >
           Embedded wallet type
-        </h4>
+        </label>
         {/* <HelpTooltip text="An account powered by a smart contract to enable more features. Not an EOA. Recommended for new wallets." /> */}
       </div>
       <WalletTypeSwitch
-        id="theme-switch"
+        id="wallet-switch"
         checked={walletType === WalletTypes.hybrid7702}
         onCheckedChange={onSwitchWalletType}
       />
