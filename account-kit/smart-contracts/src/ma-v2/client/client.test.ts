@@ -548,7 +548,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it.only("installs allowlist module, uses, then uninstalls", async () => {
+  it("installs allowlist module, uses, then uninstalls", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
@@ -557,6 +557,50 @@ describe("MA v2 Tests", async () => {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
+
+    // install validation module
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
+    // verify we can call into the zero address before allow list hook is installed
+    const sendResultBeforeHookInstallation =
+      await sessionKeyProvider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      });
+
+    await provider.waitForUserOperationTransaction(
+      sendResultBeforeHookInstallation
+    );
 
     const hookInstallData = AllowlistModule.encodeOnInstallData({
       entityId: 1,
@@ -571,7 +615,8 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    const installResult = await provider.installValidation({
+    // install hook
+    const installHookResult = await provider.installValidation({
       validationConfig: {
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
           provider.chain
@@ -600,18 +645,7 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationTransaction(installResult);
-
-    console.log("successfully installed validation module and allowlist hook");
-
-    // create session key client
-    const sessionKeyProvider = (
-      await givenConnectedProvider({
-        signer: sessionKey,
-        accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
-      })
-    ).extend(installValidationActions);
+    await provider.waitForUserOperationTransaction(installHookResult);
 
     // Test that the allowlist is active.
     // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
@@ -624,7 +658,6 @@ describe("MA v2 Tests", async () => {
     });
 
     await provider.waitForUserOperationTransaction(sendResult);
-    console.log("successfully calls into target address with allowlist module");
 
     // This should revert as we're calling an address separate fom the allowlisted target.
     await expect(
@@ -636,10 +669,6 @@ describe("MA v2 Tests", async () => {
         },
       })
     ).rejects.toThrowError();
-
-    console.log(
-      "successfully FAILS to call into target address with allowlist module"
-    );
 
     const hookUninstallData = AllowlistModule.encodeOnUninstallData({
       entityId: 1,
@@ -659,28 +688,14 @@ describe("MA v2 Tests", async () => {
         provider.chain
       ),
       entityId: 1,
-      uninstallData: "0x",
+      uninstallData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hookUninstallDatas: [hookUninstallData],
     });
 
     await provider.waitForUserOperationTransaction(uninstallResult);
-
-    console.log("UNINSTALLS MODULE");
-
-    // Post-uninstallation, we should now be able to call into any address successfully.
-    const postUninstallSendResult = await sessionKeyProvider.sendUserOperation({
-      uo: {
-        target: zeroAddress,
-        value: 0n,
-        data: "0x",
-      },
-    });
-
-    await provider.waitForUserOperationTransaction(postUninstallSendResult);
-
-    console.log(
-      "we can call into ANY address BECAUSE ALLOWLIST MODULE HAS BEEN UNINSTALLED"
-    );
   });
 
   it("installs native token limit module, uses, then uninstalls", async () => {
