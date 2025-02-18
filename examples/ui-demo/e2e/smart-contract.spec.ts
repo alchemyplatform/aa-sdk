@@ -16,9 +16,11 @@ test("Google sign in", async ({ page }) => {
   // Fast way to initialize the page and ensure config is loaded
   await page.getByRole("switch", { name: "Email" }).click();
   await page.getByRole("switch", { name: "Email" }).click();
+
   const walletSwitch = await page.locator("#wallet-switch");
-  if ((await walletSwitch.getAttribute("aria-checked")) === "false") {
+  if ((await walletSwitch.getAttribute("aria-checked")) === "true") {
     await walletSwitch.click();
   }
+
   await mintWithGoogleAuthWorkflow(page, googleEmail, googlePassword);
 });
