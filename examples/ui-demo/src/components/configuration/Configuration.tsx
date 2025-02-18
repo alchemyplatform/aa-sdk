@@ -1,23 +1,27 @@
-// import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 import { SettingsIcon } from "../icons/settings";
-// import { HelpTooltip } from "../shared/HelpTooltip";
 import { WalletTypeSwitch } from "../shared/WalletTypeSwitch";
 import ExternalLink from "../shared/ExternalLink";
 import { useConfigStore } from "@/state";
 import { WalletTypes } from "@/app/config";
+import { useChain } from "@account-kit/react";
+import { arbitrumSepolia } from "@account-kit/infra";
+import { odyssey } from "@/hooks/7702/transportSetup";
 
 export const Configuration = ({ className }: { className?: string }) => {
   const { setWalletType, walletType } = useConfigStore();
-  // const [walletType, setWalletType] = useState(WalletTypes.smart);
+  const { setChain } = useChain();
 
   const onSwitchWalletType = () => {
-    setWalletType(
+    const newValue =
       walletType === WalletTypes.smart
         ? WalletTypes.hybrid7702
-        : WalletTypes.smart
-    );
+        : WalletTypes.smart;
+    setWalletType(newValue);
+    setChain({
+      chain: newValue === WalletTypes.smart ? arbitrumSepolia : odyssey,
+    });
   };
 
   return (
