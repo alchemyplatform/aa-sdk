@@ -535,9 +535,13 @@ describe("MA v2 Tests", async () => {
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        sessionKeyProvider.chain
+      ),
       entityId: 1,
-      uninstallData: "0x",
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+        entityId: 1,
+      }),
       hookUninstallDatas: [hookUninstallData],
     });
 
@@ -687,9 +691,8 @@ describe("MA v2 Tests", async () => {
         provider.chain
       ),
       entityId: 1,
-      uninstallData: SingleSignerValidationModule.encodeOnInstallData({
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
-        signer: await sessionKey.getAddress(),
       }),
       hookUninstallDatas: [hookUninstallData],
     });
@@ -827,9 +830,8 @@ describe("MA v2 Tests", async () => {
         sessionKeyProvider.chain
       ),
       entityId: 1,
-      uninstallData: SingleSignerValidationModule.encodeOnInstallData({
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
-        signer: await sessionKey.getAddress(),
       }),
       hookUninstallDatas: [hookUninstallData, "0x"],
     });
