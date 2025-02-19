@@ -27,7 +27,12 @@ export const MintStages = ({
           <span className="flex gap-3 justify-between">
             Deploying your smart account...
             {status.batch === "success" && transactionUrl && (
-              <a href={transactionUrl} target="_blank" rel="noreferrer">
+              <a
+                href={transactionUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="View transaction"
+              >
                 <ExternalLinkIcon className="stroke-fg-secondary w-4 h-4" />
               </a>
             )}
