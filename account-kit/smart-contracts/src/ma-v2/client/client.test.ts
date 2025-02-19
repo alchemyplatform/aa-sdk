@@ -404,7 +404,7 @@ describe("MA v2 Tests", async () => {
         {
           hookConfig: {
             address: getDefaultPaymasterGuardModuleAddress(provider.chain),
-            entityId: 1, // uint32
+            entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
@@ -496,7 +496,7 @@ describe("MA v2 Tests", async () => {
         {
           hookConfig: {
             address: getDefaultPaymasterGuardModuleAddress(provider.chain),
-            entityId: 1, // uint32
+            entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
@@ -536,7 +536,7 @@ describe("MA v2 Tests", async () => {
 
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        sessionKeyProvider.chain
+        provider.chain
       ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
@@ -638,7 +638,7 @@ describe("MA v2 Tests", async () => {
         {
           hookConfig: {
             address: getDefaultAllowlistModuleAddress(provider.chain),
-            entityId: 1, // uint32
+            entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: false,
@@ -827,7 +827,7 @@ describe("MA v2 Tests", async () => {
 
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        sessionKeyProvider.chain
+        provider.chain
       ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
@@ -885,7 +885,7 @@ describe("MA v2 Tests", async () => {
         {
           hookConfig: {
             address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 1, // uint32
+            entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
