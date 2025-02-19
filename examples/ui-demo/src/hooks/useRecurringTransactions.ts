@@ -6,7 +6,7 @@ import {
   Hex,
   parseEther,
   getAbiItem,
-  Chain,
+  type Chain,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
