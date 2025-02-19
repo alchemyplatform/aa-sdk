@@ -839,7 +839,7 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(uninstallResult);
   });
 
-  it("installs time range module, then uninstalls module within valid time range", async () => {
+  it("installs time range module, sends transaction within valid time range, uninstalls module", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
@@ -851,27 +851,41 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 0,
+      entityId: 1,
       validAfter: 0,
       validUntil: 10000000000,
     });
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: "0x",
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 0, // uint32
+            entityId: 1, // uint32
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
@@ -884,14 +898,28 @@ describe("MA v2 Tests", async () => {
     // verify hook installtion succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
+    // send transaction within time range
+    const passingSendResult = await sessionKeyProvider.sendUserOperation({
+      uo: {
+        target: zeroAddress,
+        value: parseEther("0"),
+        data: "0x",
+      },
+    });
+    await provider.waitForUserOperationTransaction(passingSendResult);
+
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 0,
+      entityId: 1,
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 0,
-      uninstallData: "0x",
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
+      entityId: 1,
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+        entityId: 1,
+      }),
       hookUninstallDatas: [hookUninstallData],
     });
 
@@ -901,7 +929,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it("installs time range module, then uninstalls module outside valid time range", async () => {
+  it("installs time range module, tries to send transaction outside valid time range, uninstalls module", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
@@ -913,27 +941,41 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 0,
+      entityId: 2,
       validAfter: 0,
       validUntil: 1,
     });
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: zeroAddress,
-        entityId: 0,
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 2,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: "0x",
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 2,
+        signer: await sessionKey.getAddress(),
+      }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 0, // uint32
+            entityId: 2,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
             hasPostHooks: true,
@@ -946,21 +988,36 @@ describe("MA v2 Tests", async () => {
     // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
+    // send transaction outside of time range
+    await expect(
+      sessionKeyProvider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: parseEther("0"),
+          data: "0x",
+        },
+      })
+    ).rejects.toThrowError();
+
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 0,
+      entityId: 2,
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 0,
-      uninstallData: "0x",
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
+      entityId: 2,
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+        entityId: 2,
+      }),
       hookUninstallDatas: [hookUninstallData],
     });
 
-    // uninstall should fail
+    // verify uninstall
     await expect(
       provider.waitForUserOperationTransaction(uninstallResult)
-    ).rejects.toThrowError();
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
