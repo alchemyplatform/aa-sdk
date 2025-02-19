@@ -1,8 +1,12 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
-import { TransactionType } from "@/hooks/useRecurringTransactions";
+import {
+  RECURRING_TXN_INTERVAL,
+  TransactionType,
+} from "@/hooks/useRecurringTransactions";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export type loadingState = "loading" | "success" | "initial";
 
@@ -25,16 +29,32 @@ const Transaction = ({
   externalLink,
   buyAmountUsdc,
   state,
-  secUntilBuy = 0,
+  timeToBuy,
 }: TransactionType & { className?: string }) => {
+  const [secUntilBuy, setSecUntilBuy] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (state === "complete" || state === "initial" || !timeToBuy) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setSecUntilBuy(Math.ceil((timeToBuy - Date.now()) / 1000));
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, [state, timeToBuy]);
+
   const getText = () => {
     if (state === "initial") {
       return "Waiting...";
     }
     if (state === "next") {
-      return secUntilBuy <= 0
+      return secUntilBuy != null && secUntilBuy <= 0
         ? "Waiting for previous transaction..."
-        : `Next buy in ${secUntilBuy} second${secUntilBuy === 1 ? "" : "s"}`;
+        : `Next buy in ${secUntilBuy ?? RECURRING_TXN_INTERVAL / 1000} second${
+            secUntilBuy === 1 ? "" : "s"
+          }`;
     }
     if (state === "initiating") {
       return "Buying 1 ETH";

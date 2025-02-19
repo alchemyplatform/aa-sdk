@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { BatchUserOperationCallData } from "@aa-sdk/core";
 import {
   encodeFunctionData,
@@ -33,8 +33,7 @@ export type TransactionType = {
   state: TransactionStages;
   buyAmountUsdc: number;
   externalLink?: string;
-  timeToBuy?: number; // timestamp when the txn will initiate
-  secUntilBuy?: number; // seconds until the txn will initiate
+  timeToBuy?: number; // timestamp when the txn should initiate
 };
 
 export const initialTransactions: TransactionType[] = [
@@ -51,6 +50,8 @@ export const initialTransactions: TransactionType[] = [
     buyAmountUsdc: 4200,
   },
 ];
+
+export const RECURRING_TXN_INTERVAL = 10_000;
 
 export interface UseRecurringTransactionReturn {
   isLoadingClient: boolean;
@@ -103,36 +104,6 @@ export const useRecurringTransactions = ({
     });
   };
 
-  // Handle the ticking of the timers.
-  useEffect(() => {
-    if (
-      transactions.every(
-        (it) => it.state === "complete" || it.state === "initial"
-      )
-    ) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setTransactions((prev) =>
-        prev.map((txn) =>
-          txn.state === "next" && txn.timeToBuy
-            ? {
-                ...txn,
-                secUntilBuy: Math.ceil((txn.timeToBuy - Date.now()) / 1000),
-              }
-            : txn
-        )
-      );
-
-      if (transactions.every((it) => it.state === "complete")) {
-        clearInterval(interval);
-      }
-    }, 250);
-
-    return () => clearInterval(interval);
-  }, [transactions]);
-
   const handleTransaction = async (transactionIndex: number) => {
     if (!sessionKeyClient) {
       return handleError(new Error("no session key client"));
@@ -146,8 +117,7 @@ export const useRecurringTransactions = ({
           ? {
               ...txn,
               state: "next",
-              timeToBuy: Date.now() + 10_000,
-              secUntilBuy: 10,
+              timeToBuy: Date.now() + RECURRING_TXN_INTERVAL,
             }
           : txn
       )
@@ -311,7 +281,11 @@ export const useRecurringTransactions = ({
       await Promise.all([
         handleTransaction(i),
         ...(i < transactions.length - 1
-          ? [new Promise((resolve) => setTimeout(resolve, 10_000))]
+          ? [
+              new Promise((resolve) =>
+                setTimeout(resolve, RECURRING_TXN_INTERVAL)
+              ),
+            ]
           : []),
       ]);
     }
