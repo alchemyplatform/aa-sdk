@@ -437,8 +437,8 @@ describe("MA v2 Tests", async () => {
     });
 
     // verify if correct paymaster is used
-    const txnHash1 = sessionKeyProvider.waitForUserOperationTransaction(result);
-    await expect(txnHash1).resolves.not.toThrowError();
+    const txnHash = sessionKeyProvider.waitForUserOperationTransaction(result);
+    await expect(txnHash).resolves.not.toThrowError();
 
     const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
       entityId: 1,
