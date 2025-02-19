@@ -1,4 +1,5 @@
 import {
+  bytesToHex,
   getAddress,
   type Hex,
   type SignableMessage,
@@ -97,7 +98,16 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
     async (message) => {
       const account = this.inner.account ?? (await this.getAddress());
 
-      return this.inner.signMessage({ message, account });
+      // Seems Wallet Connect only supports signing messages as strings.
+      return this.inner.signMessage({
+        message:
+          typeof message === "string"
+            ? message
+            : typeof message.raw === "string"
+            ? message.raw
+            : bytesToHex(message.raw),
+        account,
+      });
     };
 
   /**
