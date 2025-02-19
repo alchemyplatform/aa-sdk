@@ -6,6 +6,7 @@ import {
   Hex,
   parseEther,
   getAbiItem,
+  type Chain,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
@@ -22,9 +23,10 @@ import { DEMO_USDC_ADDRESS, SWAP_VENUE_ADDRESS } from "./7702/dca/constants";
 import { swapAbi } from "./7702/dca/abi/swap";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
 import { genEntityId } from "./7702/genEntityId";
-import { odyssey, splitOdysseyTransport } from "./7702/transportSetup";
 import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 import { useToast } from "@/hooks/useToast";
+import { AlchemyTransport } from "@account-kit/infra";
+
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -60,10 +62,10 @@ export interface UseRecurringTransactionReturn {
   handleTransactions: () => void;
 }
 
-export const useRecurringTransactions = ({
-  mode,
-}: {
+export const useRecurringTransactions = (clientOptions: {
   mode: "default" | "7702";
+  chain: Chain;
+  transport: AlchemyTransport;
 }): UseRecurringTransactionReturn => {
   const [transactions, setTransactions] =
     useState<TransactionType[]>(initialTransactions);
@@ -75,15 +77,11 @@ export const useRecurringTransactions = ({
   const [sessionKeyAdded, setSessionKeyAdded] = useState<boolean>(false);
 
   const { client, isLoadingClient } = useModularAccountV2Client({
-    mode,
-    chain: odyssey,
-    transport: splitOdysseyTransport,
+    ...clientOptions,
   });
 
   const { client: sessionKeyClient } = useModularAccountV2Client({
-    mode,
-    chain: odyssey,
-    transport: splitOdysseyTransport,
+    ...clientOptions,
     localKeyOverride: {
       key: localSessionKey,
       entityId: sessionKeyEntityId,
@@ -152,8 +150,8 @@ export const useRecurringTransactions = ({
           ? {
               ...txn,
               state: "complete",
-              externalLink: odyssey.blockExplorers
-                ? `${odyssey.blockExplorers?.default.url}/tx/${txnHash}`
+              externalLink: clientOptions.chain.blockExplorers
+                ? `${clientOptions.chain.blockExplorers.default.url}/tx/${txnHash}`
                 : undefined,
             }
           : txn
@@ -202,7 +200,7 @@ export const useRecurringTransactions = ({
                 validationConfig: {
                   moduleAddress:
                     await getDefaultSingleSignerValidationModuleAddress(
-                      odyssey
+                      clientOptions.chain
                     ),
                   entityId: sessionKeyEntityId,
                   isGlobal: false,
@@ -242,7 +240,7 @@ export const useRecurringTransactions = ({
                         },
                       ],
                     },
-                    getDefaultAllowlistModuleAddress(odyssey)
+                    getDefaultAllowlistModuleAddress(clientOptions.chain)
                   ),
                   TimeRangeModule.buildHook(
                     {
@@ -252,7 +250,7 @@ export const useRecurringTransactions = ({
                         SESSION_KEY_VALIDITY_TIME_SECONDS,
                       validAfter: 0,
                     },
-                    getDefaultTimeRangeModuleAddress(odyssey)
+                    getDefaultTimeRangeModuleAddress(clientOptions.chain)
                   ),
                 ],
               }),
