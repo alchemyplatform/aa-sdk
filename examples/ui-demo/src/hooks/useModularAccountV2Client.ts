@@ -56,7 +56,7 @@ export const useModularAccountV2Client = ({
     let isMounted = true;
 
     const init = async () => {
-      if (!signer || !isConnected) {
+      if (!signer || !isConnected || client) {
         return;
       }
 
@@ -114,6 +114,7 @@ export const useModularAccountV2Client = ({
   }, [
     accountAddress,
     chain,
+    client,
     entityId,
     isConnected,
     key,
