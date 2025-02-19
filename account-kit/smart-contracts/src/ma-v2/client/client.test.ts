@@ -378,11 +378,11 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const paymaster = paymaster070.getPaymasterStubData();
+    const paymaster = paymaster070.getPaymasterDetails().address;
 
     const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
       entityId: 1,
-      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+      paymaster: paymaster,
     });
 
     const installResult = await provider.installValidation({
@@ -470,11 +470,11 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const paymaster = paymaster070.getPaymasterStubData();
+    const paymaster = paymaster070.getPaymasterDetails().address;
 
     const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
       entityId: 1,
-      paymaster: "paymaster" in paymaster ? paymaster.paymaster : "0x0", // dummy value for paymaster address if it DNE
+      paymaster: paymaster,
     });
 
     const installResult = await provider.installValidation({
@@ -630,10 +630,7 @@ describe("MA v2 Tests", async () => {
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: await sessionKey.getAddress(),
-      }),
+      installData: "0x",
       hooks: [
         {
           hookConfig: {
@@ -770,10 +767,7 @@ describe("MA v2 Tests", async () => {
         isUserOpValidation: true,
       },
       selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: await sessionKey.getAddress(),
-      }),
+      installData: "0x",
       hooks: [
         {
           hookConfig: {
