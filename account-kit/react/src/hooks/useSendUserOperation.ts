@@ -90,9 +90,8 @@ export type UseSendUserOperationResult<
  * } from "@account-kit/react";
  *
  * function ComponentWithSendUserOperation() {
- *   const { client } = useSmartAccountClient({
- *     type: "MultiOwnerModularAccount",
- *   });
+ *   const { client } = useSmartAccountClient({});
+ *
  *   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
  *     client,
  *     // optional parameter that will wait for the transaction to be mined before returning

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
+
+### Bug Fixes
+
+- improve size of social auth squares ([#1324](https://github.com/alchemyplatform/aa-sdk/issues/1324)) ([db6f05d](https://github.com/alchemyplatform/aa-sdk/commit/db6f05d02f75fb88ba212e5022ae9c5b56ca0ffb))
+- syntax error in demo GA script & hydration warning ([#1333](https://github.com/alchemyplatform/aa-sdk/issues/1333)) ([df1d99a](https://github.com/alchemyplatform/aa-sdk/commit/df1d99adfd2cf9d46ba04a1347b637fb85f16875))
+
+### Features
+
+- eip-7702 support in aa-sdk/core, and sma7702 support in account-kit/smart-contracts ([#1287](https://github.com/alchemyplatform/aa-sdk/issues/1287)) ([8d5501f](https://github.com/alchemyplatform/aa-sdk/commit/8d5501f05e898f2711ef382524813a40f0edc999)), closes [#1269](https://github.com/alchemyplatform/aa-sdk/issues/1269) [#1309](https://github.com/alchemyplatform/aa-sdk/issues/1309) [#1314](https://github.com/alchemyplatform/aa-sdk/issues/1314) [#1328](https://github.com/alchemyplatform/aa-sdk/issues/1328) [#1329](https://github.com/alchemyplatform/aa-sdk/issues/1329) [#1335](https://github.com/alchemyplatform/aa-sdk/issues/1335) [#1339](https://github.com/alchemyplatform/aa-sdk/issues/1339) [#1338](https://github.com/alchemyplatform/aa-sdk/issues/1338)
+- update react-native docs to have quickstart information ([#1320](https://github.com/alchemyplatform/aa-sdk/issues/1320)) ([f486487](https://github.com/alchemyplatform/aa-sdk/commit/f486487b99860cf8dcfa5312ca525bf4c133b436))
+
 # [4.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.11.0...v4.12.0) (2025-02-04)
 
 ### Bug Fixes

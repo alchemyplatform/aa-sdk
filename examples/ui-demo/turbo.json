@@ -4,7 +4,12 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["API_KEY", "ALCHEMY_API_URL", "ALCHEMY_RPC_URL"]
+      "env": [
+        "API_KEY",
+        "ALCHEMY_API_URL",
+        "ALCHEMY_RPC_URL",
+        "ALCHEMY_RPC_URL_ODYSSEY"
+      ]
     },
     "dev": {
       "dependsOn": ["^build"],
