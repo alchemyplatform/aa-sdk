@@ -27,7 +27,6 @@ import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
 
-
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
 export type TransactionStages = "initial" | "initiating" | "next" | "complete";
