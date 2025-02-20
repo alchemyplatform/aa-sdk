@@ -13,6 +13,7 @@ import {
   getContract,
   hashMessage,
   hashTypedData,
+  type Address,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -39,17 +40,26 @@ import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 
-// TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
 
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions>;
 
+  let testClient: ReturnType<typeof instance.getTestClient>;
+
   const isValidSigSuccess = "0x1626ba7e";
+
+  let snapshotId: Address = "0x";
 
   beforeAll(async () => {
     client = instance.getClient().extend(publicActions);
+    testClient = instance.getTestClient();
+    snapshotId = await testClient.snapshot();
+  });
+
+  beforeEach(async () => {
+    await testClient.revert({ id: snapshotId });
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
