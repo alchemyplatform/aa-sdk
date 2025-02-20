@@ -1,3 +1,4 @@
+import  "@account-kit/react-native-signer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {  AlchemyAccountsConfig, createConfig } from "@account-kit/core";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
@@ -32,9 +33,7 @@ export const useAlchemyAccountContext = () => {
 export const AccountkitProvider = (props: React.PropsWithChildren<AlchemyAccountsProviderProps>) => {
   const { children, config, queryClient } = props;
 
-  // console.log("AccountkitConfig", config.store);
-  // console.log("config", config.store.getState());
-  // console.log("LOcalstorage", localStorage);
+  
 
   return (
       <AlchemyAccountProvider config={config} queryClient={queryClient} isRN={true}>

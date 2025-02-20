@@ -16,13 +16,17 @@ import {
 	LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
-import { useSigner } from "@account-kit/react";
+import { useAuthenticate, useLogout, useSigner, useSignerStatus, useUser } from "@account-kit/react";
+import { AlchemySigner } from "@account-kit/core";
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
-	const [user, setUser] = useState<User | null>(null);
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
+	const {authenticate} = useAuthenticate();
+
+	const user = useUser(); 
+	const {logout} = useLogout();
 
 	const signer: AlchemySigner = useSigner();
 
@@ -32,19 +36,18 @@ export default function OTPAuthScreen() {
 
 	const handleUserAuth = ({ code }: { code: string }) => {
 		setAwaitingOtp(false);
-		signer
-			.authenticate({
+		
+		authenticate({
 				otpCode: code,
 				type: "otp",
-			})
-			.then(setUser)
-			.catch(console.error);
+			});
+			
 	};
 
-	useEffect(() => {
-		// get the user if already logged in
-		signer.getAuthDetails().then(setUser);
-	}, []);
+	// useEffect(() => {
+	// 	// get the user if already logged in
+	// 	signer.getAuthDetails().then(setUser);
+	// }, []);
 
 	useEffect(() => {
 		if (user) {
@@ -92,13 +95,12 @@ export default function OTPAuthScreen() {
 					<TouchableOpacity
 						style={styles.button}
 						onPress={() => {
-							signer
-								.authenticate({
+							authenticate({
 									email,
 									type: "email",
 									emailMode: "otp",
 								})
-								.catch(console.error);
+							
 							setAwaitingOtp(true);
 						}}
 					>
@@ -121,9 +123,7 @@ export default function OTPAuthScreen() {
 
 					<TouchableOpacity
 						style={styles.button}
-						onPress={() =>
-							signer.disconnect().then(() => setUser(null))
-						}
+						onPress={() =>logout()}
 					>
 						<Text style={styles.buttonText}>Sign out</Text>
 					</TouchableOpacity>
