@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useToast } from "./useToast";
 import {
   useSmartAccountClient,
@@ -30,12 +30,7 @@ export const useMint = (props: {
   mode: "default" | "7702";
   chain: Chain;
 }): UseMintReturn => {
-  const { chain: activeChain, setChain, isSettingChain } = useChain();
-  useEffect(() => {
-    if (!activeChain || isSettingChain || props.chain.id === activeChain.id)
-      return;
-    setChain({ chain: props.chain });
-  }, [activeChain, props.chain, isSettingChain, setChain]);
+  const { chain: activeChain, isSettingChain } = useChain();
 
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",

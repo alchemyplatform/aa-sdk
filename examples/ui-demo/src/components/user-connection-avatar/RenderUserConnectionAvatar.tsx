@@ -21,9 +21,6 @@ export const RenderUserConnectionAvatar = (
   const { walletType } = useConfigStore(({ walletType }) => ({ walletType }));
   const { account } = useAccount({
     type: "ModularAccountV2",
-    accountParams: {
-      mode: walletType === WalletTypes.smart ? "default" : "7702",
-    },
     skipCreate: true,
   });
 

@@ -1,13 +1,10 @@
 import { UserAvatar } from "./UserAvatar";
 import { cn } from "@/lib/utils";
-
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
 import { useAccount, useUser } from "@account-kit/react";
-
 import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
 
 interface UserConnectionAvatarProps {
   isFocused?: boolean;
@@ -19,7 +16,7 @@ const UserConnectionAvatar = ({
   showDeploymentStatus = true,
   deploymentStatus,
 }: UserConnectionAvatarProps) => {
-  const { theme, primaryColor, walletType } = useConfigStore(
+  const { theme, primaryColor } = useConfigStore(
     ({ ui: { theme, primaryColor }, walletType }) => ({
       theme,
       primaryColor,
@@ -29,9 +26,6 @@ const UserConnectionAvatar = ({
   const user = useUser();
   const { address: SCAUserAddress } = useAccount({
     type: "ModularAccountV2",
-    accountParams: {
-      mode: walletType === WalletTypes.smart ? "default" : "7702",
-    },
     skipCreate: true,
   });
 
