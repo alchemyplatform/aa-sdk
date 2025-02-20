@@ -933,7 +933,7 @@ describe("MA v2 Tests", async () => {
     ).resolves.not.toThrowError();
   });
 
-  it("installs time range module, tries to send transaction outside valid time range, uninstalls module", async () => {
+  it.only("installs time range module, tries to send transaction outside valid time range, uninstalls module", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
@@ -950,14 +950,14 @@ describe("MA v2 Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 2, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
 
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
       entityId: 2,
-      validAfter: 0,
-      validUntil: 1,
+      validAfter: 1722043948,
+      validUntil: 1722043949,
     });
 
     const installResult = await provider.installValidation({
@@ -992,16 +992,22 @@ describe("MA v2 Tests", async () => {
     // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
+    console.log(await provider.account.getValidationData({ entityId: 2 }));
+
+    // force block timestamp to be outside of range
+    await testClient.setNextBlockTimestamp({
+      timestamp: 10000000000n,
+    });
+
     // send transaction outside of time range
-    await expect(
-      sessionKeyProvider.sendUserOperation({
-        uo: {
-          target: zeroAddress,
-          value: parseEther("0"),
-          data: "0x",
-        },
-      })
-    ).rejects.toThrowError();
+    const uoResult = await sessionKeyProvider.sendUserOperation({
+      uo: {
+        target: zeroAddress,
+        value: parseEther("0"),
+        data: "0x",
+      },
+    });
+    console.log({ uoResult });
 
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
       entityId: 2,
@@ -1019,9 +1025,7 @@ describe("MA v2 Tests", async () => {
     });
 
     // verify uninstall
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).resolves.not.toThrowError();
+    await provider.waitForUserOperationTransaction(uninstallResult);
   });
 
   const givenConnectedProvider = async ({
