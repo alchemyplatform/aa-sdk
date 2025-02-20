@@ -2,6 +2,7 @@ import { AuthType } from "@account-kit/react";
 import { KnownAuthProvider } from "@account-kit/signer";
 import { Config } from "./config";
 
+const isTesting = process.env.NODE_ENV === "test";
 const SocialAuth0Providers = ["twitter", "discord"];
 
 export function getSectionsForConfig(
@@ -72,6 +73,19 @@ export function getSectionsForConfig(
         walletConnect: { projectId: walletConnectProjectId },
       },
     ]);
+  }
+  if (isTesting) {
+    midSection.push({
+      type: "social",
+      authProviderId: "auth0",
+      mode: "popup",
+      auth0Connection: "Username-Password-Authentication",
+      displayName: "Test",
+      // Re-using twitter logo for testing, will not be seen in production
+      logoUrl: "/images/twitter.svg",
+      logoUrlDark: "/images/twitter-dark.svg",
+      scope: "openid profile",
+    });
   }
   return sections;
 }
