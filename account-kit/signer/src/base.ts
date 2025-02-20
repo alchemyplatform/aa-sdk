@@ -16,6 +16,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
+import { hashAuthorization, type Authorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -27,7 +28,9 @@ import {
   SessionManager,
   type SessionManagerParams,
 } from "./session/manager.js";
+import type { SessionManagerEvents } from "./session/types";
 import type { AuthParams } from "./signer";
+import { SolanaSigner } from "./solanaSigner.js";
 import {
   AlchemySignerStatus,
   type AlchemySignerEvent,
@@ -35,8 +38,6 @@ import {
   type ErrorInfo,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
-import type { SessionManagerEvents } from "./session/types";
-import { hashAuthorization, type Authorization } from "viem/experimental";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -731,6 +732,38 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       ) => this.signTypedData<typedData, primaryType>(typedDataDefinition),
       signTransaction: this.signTransaction,
     });
+  };
+
+  /**
+   * Creates a new instance of `SolanaSigner` using the provided inner value.
+   * This requires the signer to be authenticated first
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const solanaSigner = signer.toSolanaSigner();
+   * ```
+   *
+   * @returns {SolanaSigner} A new instance of `SolanaSigner`
+   */
+  experimental_toSolanaSigner = (): SolanaSigner => {
+    if (!this.inner.getUser()) {
+      throw new NotAuthenticatedError();
+    }
+
+    return new SolanaSigner(this.inner);
   };
 
   private authenticateWithEmail = async (
