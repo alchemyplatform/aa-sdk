@@ -2,7 +2,7 @@ import { WalletTypes } from "@/app/config";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
-import { UserAddressLink } from "./UserAddressLink";
+import { UserAddressTooltip } from "./UserAddressLink";
 import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
@@ -56,7 +56,7 @@ export function UserConnectionDetails({
           <span className="text-md md:text-sm text-fg-secondary">
             EOA Address
           </span>
-          <UserAddressLink address={user?.address} />
+          <UserAddressTooltip address={user?.address} linkEnabled />
         </div>
 
         {/* Logout */}
@@ -85,7 +85,15 @@ export function UserConnectionDetails({
         <span className="text-md md:text-sm text-fg-secondary">
           {walletType === WalletTypes.smart ? "Smart account" : "Address"}
         </span>
-        <UserAddressLink address={scaAccount.address ?? ""} />
+        {/* TODO(jh): can maybe use scaAccount.address here always once mode switching works? */}
+        <UserAddressTooltip
+          address={
+            walletType === WalletTypes.smart
+              ? (scaAccount.address ?? "")
+              : (signerAddress ?? "")
+          }
+          linkEnabled
+        />
       </div>
 
       {walletType === WalletTypes.smart ? (
@@ -118,7 +126,7 @@ export function UserConnectionDetails({
               </div>
             </a>
 
-            <UserAddressLink address={signerAddress} />
+            <UserAddressTooltip address={signerAddress} />
           </div>
         </>
       ) : (
