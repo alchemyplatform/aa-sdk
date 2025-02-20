@@ -7,14 +7,26 @@ import {
   UseRecurringTransactionReturn,
   useRecurringTransactions,
 } from "@/hooks/useRecurringTransactions";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
 
 export const TransactionsCardDefault = () => {
-  const recurringTxns = useRecurringTransactions({ mode: "default" });
+  const recurringTxns = useRecurringTransactions({
+    mode: "default",
+    chain: arbitrumSepolia,
+    transport: alchemy({
+      rpcUrl: "/api/rpc",
+    }),
+  });
   return <TransactionsCardInner {...recurringTxns} />;
 };
 
 export const TransactionsCard7702 = () => {
-  const recurringTxns = useRecurringTransactions({ mode: "7702" });
+  const recurringTxns = useRecurringTransactions({
+    mode: "7702",
+    chain: odyssey,
+    transport: splitOdysseyTransport,
+  });
   return <TransactionsCardInner {...recurringTxns} />;
 };
 

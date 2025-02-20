@@ -5,16 +5,23 @@ import { WalletTypeSwitch } from "../shared/WalletTypeSwitch";
 import ExternalLink from "../shared/ExternalLink";
 import { useConfigStore } from "@/state";
 import { WalletTypes } from "@/app/config";
+import { useChain } from "@account-kit/react";
+import { arbitrumSepolia } from "@account-kit/infra";
+import { odyssey } from "@/hooks/7702/transportSetup";
 
 export const Configuration = ({ className }: { className?: string }) => {
   const { setWalletType, walletType } = useConfigStore();
+  const { setChain } = useChain();
 
   const onSwitchWalletType = () => {
-    setWalletType(
+    const newValue =
       walletType === WalletTypes.smart
         ? WalletTypes.hybrid7702
-        : WalletTypes.smart
-    );
+        : WalletTypes.smart;
+    setWalletType(newValue);
+    setChain({
+      chain: newValue === WalletTypes.smart ? arbitrumSepolia : odyssey,
+    });
   };
 
   return (
@@ -24,13 +31,16 @@ export const Configuration = ({ className }: { className?: string }) => {
         <span className="font-semibold">Configuration</span>
       </div>
       <div className="flex flex-row items-center gap-2 pb-2">
-        <h4 className="font-normal text-sm text-secondary-foreground">
+        <label
+          className="font-normal text-sm text-secondary-foreground"
+          htmlFor="wallet-switch"
+        >
           Embedded wallet type
-        </h4>
+        </label>
         {/* <HelpTooltip text="An account powered by a smart contract to enable more features. Not an EOA. Recommended for new wallets." /> */}
       </div>
       <WalletTypeSwitch
-        id="theme-switch"
+        id="wallet-switch"
         checked={walletType === WalletTypes.hybrid7702}
         onCheckedChange={onSwitchWalletType}
       />
