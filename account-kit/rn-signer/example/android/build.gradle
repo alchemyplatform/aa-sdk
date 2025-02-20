@@ -1,3 +1,6 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
 buildscript {
     ext {
         buildToolsVersion = "35.0.0"
@@ -16,6 +19,10 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
+}
+
+plugins {
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 apply plugin: "com.facebook.react.rootproject"
