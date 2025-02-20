@@ -4,9 +4,11 @@ import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
+import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
+import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
-import { assertNever } from "../utils/typeAssertions.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
+import { assertNever } from "../utils/typeAssertions.js";
 import type {
   AlchemySignerClientEvent,
   AlchemySignerClientEvents,
@@ -25,8 +27,6 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
-import type { OauthMode } from "../signer.js";
-import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -315,11 +315,19 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * that result here.
    *
    * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} mode specify if signing should happen for solana or ethereum
    * @returns {Promise<Hex>} the signature over the raw hex
    */
-  public signRawMessage = async (msg: Hex): Promise<Hex> => {
+  public signRawMessage = async (
+    msg: Hex,
+    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+  ): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
+    }
+
+    if (!this.user.solanaAddress && mode === "SOLANA") {
+      throw new Error("No Solana address available for the user");
     }
 
     const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
@@ -328,9 +336,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       timestampMs: Date.now().toString(),
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
+        hashFunction:
+          mode === "ETHEREUM"
+            ? "HASH_FUNCTION_NO_OP"
+            : "HASH_FUNCTION_NOT_APPLICABLE",
         payload: msg,
-        signWith: this.user.address,
+        signWith:
+          mode === "ETHEREUM" ? this.user.address : this.user.solanaAddress!,
       },
     });
 

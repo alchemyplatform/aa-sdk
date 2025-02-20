@@ -1,6 +1,7 @@
-import { useConfigStore } from "@/state";
 import { WalletTypes } from "@/app/config";
+import { useConfigStore } from "@/state";
 import { MintCard7702, MintCardDefault } from "./MintCard";
+import { SolanaCard } from "./SolanaCard";
 import {
   TransactionsCard7702,
   TransactionsCardDefault,
@@ -22,6 +23,7 @@ export const SmallCardsWrapper = () => {
           <TransactionsCard7702 />
         </>
       )}
+      <SolanaCard />
     </div>
   );
 };
