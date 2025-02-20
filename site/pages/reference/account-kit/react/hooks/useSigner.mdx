@@ -19,12 +19,12 @@ import { useSigner } from "@account-kit/react";
 
 ```ts twoslash
 import { useSigner } from "@account-kit/react";
-import type { AlchemySigner } from "@account-kit/signer";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 
-const signer: AlchemySigner | null = useSigner();
+const signer: AlchemyWebSigner | null = useSigner();
 ```
 
 ## Returns
 
-`AlchemySigner | null`
+`AlchemyWebSigner | null`
 The current Alchemy signer or null if none is available. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/index.ts#L50)
