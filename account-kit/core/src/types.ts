@@ -21,11 +21,21 @@ import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Store, StoredState } from "./store/types";
 
-export type SupportedAccountTypes =
-  | "MultiOwnerLightAccount"
-  | "LightAccount"
-  | "MultiOwnerModularAccount"
-  | "ModularAccountV2";
+export const AccountDetails = [
+  { type: "LightAccount", modes: ["default"] },
+  { type: "MultiOwnerLightAccount", modes: ["default"] },
+  { type: "MultiOwnerModularAccount", modes: ["default"] },
+  { type: "ModularAccountV2", modes: ["default", "7702"] },
+] as const;
+
+export type SupportedAccountTypes = (typeof AccountDetails)[number]["type"];
+
+type AccountModesMap = {
+  [TAccount in (typeof AccountDetails)[number] as TAccount["type"]]: TAccount["modes"][number];
+};
+
+export type SupportedAccountModes<TAccount extends SupportedAccountTypes> =
+  AccountModesMap[TAccount];
 
 export type SupportedAccounts =
   | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
@@ -46,9 +56,6 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
     : T extends "ModularAccountV2"
     ? ModularAccountV2<AlchemyWebSigner>
     : never;
-
-export type SupportedAccountModes<T extends SupportedAccountTypes> =
-  T extends "ModularAccountV2" ? "default" | "7702" : "default";
 
 export type AlchemyAccountsConfig = {
   store: Store;

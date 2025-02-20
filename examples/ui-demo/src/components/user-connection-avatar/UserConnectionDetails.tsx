@@ -89,8 +89,8 @@ export function UserConnectionDetails({
         <UserAddressTooltip
           address={
             walletType === WalletTypes.smart
-              ? (scaAccount.address ?? "")
-              : (signerAddress ?? "")
+              ? scaAccount.address ?? ""
+              : signerAddress ?? ""
           }
           linkEnabled
         />
