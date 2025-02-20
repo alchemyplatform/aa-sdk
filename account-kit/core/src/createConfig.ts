@@ -48,6 +48,7 @@ export const createConfig = (
     connectors,
     oauthCallbackUrl,
     enablePopupOauth,
+    overrideSigner,
     ...connectionConfig
   } = params;
 
@@ -111,6 +112,7 @@ export const createConfig = (
 
   const config: AlchemyAccountsConfig = {
     store: store,
+    overrideSigner,
     _internal: {
       ssr,
       wagmiConfig,

@@ -1,4 +1,4 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
+import type { AlchemySigner } from "../types";
 import type { AlchemyAccountsConfig } from "../types";
 
 /**
@@ -18,6 +18,6 @@ import type { AlchemyAccountsConfig } from "../types";
  */
 export const watchSigner =
   (config: AlchemyAccountsConfig) =>
-  (onChange: (signer?: AlchemyWebSigner) => void) => {
+  (onChange: (signer?: AlchemySigner) => void) => {
     return config.store.subscribe(({ signer }) => signer, onChange);
   };

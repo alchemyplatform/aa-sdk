@@ -17,7 +17,9 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import { API_KEY } from "@env";
-import { useSigner } from "@account-kit/react";
+import { useAlchemyAccountContext, useSigner, useSignerStatus } from "@account-kit/react";
+import { SmartAccountSigner } from "@aa-sdk/core";
+import { AlchemySigner } from "@account-kit/core";
 
 // const signer = RNAlchemySigner({
 // 	client: { connection: { apiKey: API_KEY } },
@@ -29,15 +31,17 @@ export default function MagicLinkAuthScreen() {
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
-	const signer = useSigner();
+	const signer: AlchemySigner = useSigner();
 
+	const { config, queryClient } = useAlchemyAccountContext();
+
+	const {status} = useSignerStatus({config, queryClient});
 	
 
 	const handleUserAuth = ({ bundle }: { bundle: string }) => {
-		signer
-			.authenticate({
-				bundle,
-				type: "email",
+		signer?.authenticate({
+			bundle,
+			type: "email",
 			})
 			.then(setUser)
 			.catch(console.error);
@@ -68,7 +72,7 @@ export default function MagicLinkAuthScreen() {
 
 	useEffect(() => {
 		// get the user if already logged in
-		signer.getAuthDetails().then(setUser);
+		signer?.getAuthDetails().then(setUser);
 	}, []);
 
 	// Add listener for incoming links
@@ -81,14 +85,14 @@ export default function MagicLinkAuthScreen() {
 	useEffect(() => {
 		if (user) {
 			createLightAccountAlchemyClient({
-				signer,
+				signer: signer as SmartAccountSigner<any>,
 				chain: sepolia,
 				transport: alchemy({ apiKey: API_KEY! }),
 			}).then((client) => {
 				setAccount(client.account);
 			});
 
-			signer.getAddress().then((address) => {
+			signer?.getAddress().then((address) => {
 				setSignerAddress(address);
 			});
 		}
@@ -113,8 +117,7 @@ export default function MagicLinkAuthScreen() {
 								style={styles.button}
 								onPress={() => {
 									setAuthRequestSent(true);
-									signer
-										.authenticate({
+									signer?.authenticate({
 											email,
 											type: "email",
 											emailMode: "magicLink",
@@ -146,8 +149,7 @@ export default function MagicLinkAuthScreen() {
 							<TouchableOpacity
 								style={styles.button}
 								onPress={() =>
-									signer
-										.disconnect()
+									signer?.disconnect()
 										.then(() => setUser(null))
 								}
 							>

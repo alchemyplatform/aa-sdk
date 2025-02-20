@@ -8,6 +8,7 @@ import type {
   AlchemySignerWebClient,
   AlchemyWebSigner,
 } from "@account-kit/signer";
+import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
 import type {
   LightAccount,
   LightAccountVersion,
@@ -28,27 +29,28 @@ export type SupportedAccountTypes =
   | "ModularAccountV2";
 
 export type SupportedAccounts =
-  | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
-  | MultiOwnerModularAccount<AlchemyWebSigner>
+  | LightAccount<AlchemySigner, LightAccountVersion<"LightAccount">>
+  | MultiOwnerModularAccount<AlchemySigner>
   | MultiOwnerLightAccount<
-      AlchemyWebSigner,
+      AlchemySigner,
       LightAccountVersion<"MultiOwnerLightAccount">
     >
-  | ModularAccountV2<AlchemyWebSigner>;
+  | ModularAccountV2<AlchemySigner>;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
-    ? LightAccount<AlchemyWebSigner>
+    ? LightAccount<AlchemySigner>
     : T extends "MultiOwnerModularAccount"
-    ? MultiOwnerModularAccount<AlchemyWebSigner>
+    ? MultiOwnerModularAccount<AlchemySigner>
     : T extends "MultiOwnerLightAccount"
-    ? MultiOwnerLightAccount<AlchemyWebSigner>
+    ? MultiOwnerLightAccount<AlchemySigner>
     : T extends "ModularAccountV2"
-    ? ModularAccountV2<AlchemyWebSigner>
+    ? ModularAccountV2<AlchemySigner>
     : never;
 
 export type AlchemyAccountsConfig = {
   store: Store;
+  overrideSigner?: AlchemySigner;
   _internal: {
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
@@ -106,6 +108,7 @@ type CreateStorageFn = (config?: {
 }) => Storage;
 
 export type CreateConfigProps = RpcConnectionConfig & {
+  overrideSigner?: AlchemyWebSigner | RNAlchemySignerType;
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
@@ -133,5 +136,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
     "connection"
   >;
 // [!endregion CreateConfigProps]
+
+export type AlchemySigner = AlchemyWebSigner | RNAlchemySignerType;
 
 export type AlchemyClientState = StoredState;

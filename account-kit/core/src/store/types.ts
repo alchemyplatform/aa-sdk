@@ -3,10 +3,10 @@ import type {
   AlchemySignerParams,
   AlchemySignerStatus,
   AlchemySignerWebClient,
-  AlchemyWebSigner,
   ErrorInfo,
   User,
 } from "@account-kit/signer";
+import type { RNSignerClient } from "@account-kit/react-native-signer";
 import type { State as WagmiState } from "@wagmi/core";
 import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
@@ -14,6 +14,7 @@ import type { Mutate, StoreApi } from "zustand/vanilla";
 import type { AccountConfig } from "../actions/createAccount";
 import type { GetSmartAccountClientResult } from "../actions/getSmartAccountClient";
 import type {
+  AlchemySigner,
   Connection,
   SupportedAccount,
   SupportedAccountTypes,
@@ -67,10 +68,12 @@ export type StoredState = {
 export type CreateAccountKitStoreParams = ClientStoreConfig & {
   connections: Connection[];
   chain: Chain;
-  client: PartialBy<
-    Exclude<AlchemySignerParams["client"], AlchemySignerWebClient>,
-    "iframeConfig"
-  >;
+  client:
+    | PartialBy<
+        Exclude<AlchemySignerParams["client"], AlchemySignerWebClient>,
+        "iframeConfig"
+      >
+    | RNSignerClient;
   sessionConfig?: AlchemySignerParams["sessionConfig"];
   storage?: Storage;
   ssr?: boolean;
@@ -78,7 +81,7 @@ export type CreateAccountKitStoreParams = ClientStoreConfig & {
 
 export type StoreState = {
   // non-serializable
-  signer?: AlchemyWebSigner;
+  signer?: AlchemySigner;
   accounts?: {
     [chain: number]: {
       [key in SupportedAccountTypes]: AccountState<key>;

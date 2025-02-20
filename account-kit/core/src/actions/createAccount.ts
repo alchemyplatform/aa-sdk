@@ -1,4 +1,5 @@
 import type { AlchemyWebSigner } from "@account-kit/signer";
+import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
 import {
   createLightAccount,
   createMultiOwnerLightAccount,
@@ -29,7 +30,7 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? OmitSignerTransportChain<
         CreateLightAccountParams<
           Transport,
-          AlchemyWebSigner,
+          AlchemyWebSigner | RNAlchemySignerType,
           LightAccountVersion<"LightAccount">
         >
       >
@@ -37,17 +38,23 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? OmitSignerTransportChain<
         CreateMultiOwnerLightAccountParams<
           Transport,
-          AlchemyWebSigner,
+          AlchemyWebSigner | RNAlchemySignerType,
           LightAccountVersion<"MultiOwnerLightAccount">
         >
       >
     : TAccount extends "MultiOwnerModularAccount"
     ? OmitSignerTransportChain<
-        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>
+        CreateMultiOwnerModularAccountParams<
+          Transport,
+          AlchemyWebSigner | RNAlchemySignerType
+        >
       >
     : TAccount extends "ModularAccountV2"
     ? OmitSignerTransportChain<
-        CreateModularAccountV2Params<Transport, AlchemyWebSigner>
+        CreateModularAccountV2Params<
+          Transport,
+          AlchemyWebSigner | RNAlchemySignerType
+        >
       >
     : never;
 

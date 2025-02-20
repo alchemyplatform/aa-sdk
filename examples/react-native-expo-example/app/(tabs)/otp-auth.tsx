@@ -16,16 +16,15 @@ import {
 	LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
-
-const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY! } },
-});
+import { useSigner } from "@account-kit/react";
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
 	const [user, setUser] = useState<User | null>(null);
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
+
+	const signer: AlchemySigner = useSigner();
 
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 

@@ -1,9 +1,6 @@
 // Add global shims
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
-import "@walletconnect/react-native-compat";
-import "node-window-polyfill/register";
-
 
 import React from "react";
 import { Stack } from "expo-router";
@@ -12,19 +9,26 @@ import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
 import { PAYMASTER_POLICY_ID, API_KEY } from "@env";
 import { AccountkitProvider } from "../src/AccountkitProvider";
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+// Initialize the signer
+const signer = RNAlchemySigner({
+	client: { connection: { apiKey: API_KEY } },
+});
 
 const alchemyConfig = createConfig({
 	transport: alchemy({ apiKey: API_KEY }),
 	chain: arbitrumSepolia,
 	ssr: false,
 	policyId: PAYMASTER_POLICY_ID,
+	overrideSigner: signer,
 	signerConnection: {
 		apiKey: API_KEY,
 	},
 	 
   });
 
-console.log("ALCHEMY Signer", alchemyConfig.store.getState().signer);
+
 
 const queryClient = new QueryClient()
   
