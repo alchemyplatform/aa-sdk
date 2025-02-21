@@ -30,6 +30,14 @@ export const AccountDetails = [
 
 export type SupportedAccountTypes = (typeof AccountDetails)[number]["type"];
 
+export function assertIsSuportedAccountType(
+  type: string
+): asserts type is SupportedAccountTypes {
+  if (!AccountDetails.some((account) => account.type === type)) {
+    throw new Error(`Unsupported account type: ${type}`);
+  }
+}
+
 type AccountModes = {
   [TAccount in (typeof AccountDetails)[number] as TAccount["type"]]: TAccount["modes"][number];
 };

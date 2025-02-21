@@ -1,5 +1,8 @@
 import { createSigner } from "../store/store.js";
-import type { AlchemyAccountsConfig } from "../types.js";
+import {
+  assertIsSuportedAccountType,
+  type AlchemyAccountsConfig,
+} from "../types.js";
 import { createAccount } from "./createAccount.js";
 import { getChain } from "./getChain.js";
 
@@ -32,45 +35,15 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   const chain = getChain(config);
 
   const unsubConnected = signer.on("connected", async () => {
-    if (accountConfigs[chain.id]?.["LightAccount"]?.default) {
-      await createAccount(
-        {
-          type: "LightAccount",
-          accountParams: accountConfigs[chain.id]["LightAccount"]?.default,
-        },
-        config
-      );
-    }
+    const configs = accountConfigs[chain.id];
 
-    if (accountConfigs[chain.id]?.["MultiOwnerModularAccount"]?.default) {
-      await createAccount(
-        {
-          type: "MultiOwnerModularAccount",
-          accountParams:
-            accountConfigs[chain.id]["MultiOwnerModularAccount"]?.default,
-        },
-        config
-      );
-    }
-
-    if (accountConfigs[chain.id]?.["ModularAccountV2"]?.default) {
-      await createAccount(
-        {
-          type: "ModularAccountV2",
-          accountParams: accountConfigs[chain.id]["ModularAccountV2"]?.default,
-        },
-        config
-      );
-    }
-
-    if (accountConfigs[chain.id]?.["ModularAccountV2"]?.["7702"]) {
-      await createAccount(
-        {
-          type: "ModularAccountV2",
-          accountParams: accountConfigs[chain.id]["ModularAccountV2"]?.["7702"],
-        },
-        config
-      );
+    for (const [type, modes] of Object.entries(configs)) {
+      assertIsSuportedAccountType(type);
+      for (const accountParams of Object.values(modes)) {
+        if (accountParams) {
+          await createAccount({ type, accountParams }, config);
+        }
+      }
     }
 
     setTimeout(() => unsubConnected(), 1);

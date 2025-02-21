@@ -108,8 +108,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     switch (type) {
       case "LightAccount":
         return createLightAccount({
-          ...params,
-          ...(cachedConfig as OmitSignerTransportChain<CreateLightAccountParams>),
+          ...(params as OmitSignerTransportChain<CreateLightAccountParams>),
+          ...(cachedConfig as AccountConfig<"LightAccount">),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -126,8 +126,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerLightAccount":
         return createMultiOwnerLightAccount({
-          ...(params as AccountConfig<"MultiOwnerLightAccount">),
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
+          ...(params as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
+          ...(cachedConfig as AccountConfig<"MultiOwnerLightAccount">),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -143,8 +143,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
-          ...(params as AccountConfig<"MultiOwnerModularAccount">),
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
+          ...(params as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
+          ...(cachedConfig as AccountConfig<"MultiOwnerModularAccount">),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -161,8 +161,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "ModularAccountV2":
         return createModularAccountV2({
-          ...(params as AccountConfig<"ModularAccountV2">),
-          ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
+          ...(params as OmitSignerTransportChain<CreateModularAccountV2Params>),
+          ...(cachedConfig as AccountConfig<"ModularAccountV2">),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
