@@ -37,9 +37,9 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   const unsubConnected = signer.on("connected", async () => {
     const configs = accountConfigs[chain.id];
 
-    for (const [type, modes] of Object.entries(configs)) {
+    for (const [type, modes] of Object.entries(configs ?? {})) {
       assertIsSuportedAccountType(type);
-      for (const accountParams of Object.values(modes)) {
+      for (const accountParams of Object.values(modes ?? {})) {
         if (accountParams) {
           await createAccount({ type, accountParams }, config);
         }

@@ -114,12 +114,9 @@ export function getSmartAccountClient(
   const connection = getConnection(config);
   const mode = getMode(params);
 
-  // TODO(jh): figure out how to properly type this
-  const clientState =
-    // @ts-ignore
-    config.store.getState().smartAccountClients[connection.chain.id]?.[type]?.[
-      mode
-    ];
+  const cachedClients =
+    config.store.getState().smartAccountClients[connection.chain.id]?.[type];
+  const clientState = cachedClients?.[mode as keyof typeof cachedClients];
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;
