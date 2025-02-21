@@ -23,7 +23,6 @@ const alchemyConfigParams = {
 	chain: arbitrumSepolia,
 	ssr: false,
 	policyId: PAYMASTER_POLICY_ID,
-	
   }
 
 const queryClient = new QueryClient()
