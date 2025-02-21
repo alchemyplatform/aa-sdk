@@ -1,0 +1,125 @@
+# Upgrade LA to MAv2
+## **1. Check the implementation of your account (using `client.account.getImplementationAddress()`):**
+
+- **LightAccount** deployment addresses [here](https://github.com/alchemyplatform/light-account/tree/v2.0.0/deployments)
+- **ModularAccount** deployment addresses [here](https://github.com/alchemyplatform/modular-account/tree/develop/deployments)
+
+Depending on the result, take different actions based on the state of the account.
+
+```ts
+const impl = await client.account.getImplementationAddress();
+
+// implementation slot exists and is a deployed light account
+if (impl == "LightAccountImpl") {
+  // go to step A
+}
+
+// implementation slot exists and is a deployed modular account
+else if (impl == "ModularAccountImpl") {
+  // go to step C
+}
+
+// implementation slot is empty
+else if (impl == NullAddress) {
+  // account is not deployed and has assets at the counterfactual
+  const balance = await client.getBalance({ address: client.account.address });
+  if (balance) {
+    // go to step A
+  }
+  // account does not exist
+  else {
+    // go to step B
+  }
+}
+```
+---
+
+## **2. Upgrade Account!**
+### **Case A: Implementation Slot Exists and is a LightAccount**
+
+If the implementation slot exists and points to **LightAccount**, it means the account is a legacy **LightAccount.** Follow this path if the account has been deployed or if the account hasn’t been deployed but has assets at the counterfactual.
+
+Steps:
+
+1. Retrieve the upgrade data `upgradeToData` and method `createMAV2Account` to create the MAv2 account using `getMAV2UpgradeToData` .
+2. Call `upgradeAccount` to prepare the upgrade data for MAv2 with the initializer set to give it the same owner as the LA.
+3. Call `createSmartAccountClientFromExisting` to create the MAv2 client from your newly upgraded account
+
+```ts
+const { createMAV2Account, ...upgradeToData } = await getMAV2UpgradeToData(
+  lightAccountclient,
+  { account: lightAccountClient.account }
+);
+
+await lightAccountClient.upgradeAccount({
+  upgradeTo: upgradeToData,
+  waitForTx: true,
+});
+
+const maV2Client = createSmartAccountClientFromExisting({
+  client: createBundlerClient({
+    chain: yourchain,
+    transport: yourTransport,
+  }),
+  account: await createMAV2Account(),
+});
+```
+### **Case B: Implementation Slot is Empty (No Account or Account Not Deployed With No Assets)**
+
+If the implementation slot is empty, this means that the account doesn’t exist. Or, if the account exists but has no assets, we still want to follow this path.
+
+- Construct a **MAv2** client with the signer to handle both cases:
+  1. **New user with no account**.
+  2. **New user with an existing but un-deployed account**.
+
+```ts twoslash [modular-account-v2.ts]
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { generatePrivateKey } from "viem/accounts";
+
+const maV2Client = await createModularAccountV2Client({
+  mode: "default", // optional param to specify the MAv2 variant (either "default" or "7702")
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }), // Get your API key at https://dashboard.alchemy.com/apps or http("RPC_URL") for non-alchemy infra
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+```
+
+### **Case C: Implementation Slot Exists and is a ModularAccountV1 (Already Upgraded to ModularAccount)**
+
+If the implementation slot points to **ModularAccountV1**, it means the account has already been upgraded to **ModularAccount**.
+
+- Construct the **ModularAccountV2** client and override the account address with the **LightAccount** address.
+
+Example:
+
+```ts
+const maV2Client = await createModularAccountV2Client({
+  mode: "default", // optional param to specify the MAv2 variant (either "default" or "7702")
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }), // Get your API key at https://dashboard.alchemy.com/apps or http("RPC_URL") for non-alchemy infra
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  accountAddress: oldClient.account.address,
+});
+```
+
+This ensures that operations are executed on the already upgraded **MAv2** account.
+
+---
+
+### **3. Send a User Operation!**
+
+Send a user operation to deploy your upgraded account!
+
+```tsx
+const result = await maV2Client.sendUserOperation({
+  uo: {
+    target: target,
+    value: sendAmount,
+    data: "0x",
+  },
+});
+```
+
+And now you’ve upgraded your account to MAV2!
