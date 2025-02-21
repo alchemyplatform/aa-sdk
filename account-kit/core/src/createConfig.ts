@@ -112,12 +112,12 @@ export const createConfig = (
 
   const config: AlchemyAccountsConfig = {
     store: store,
-    overrideSigner,
     _internal: {
       ssr,
       wagmiConfig,
       storageKey: "alchemy-account-state",
       sessionLength: sessionConfig?.expirationTimeMs ?? DEFAULT_SESSION_MS,
+      overrideSigner,
     },
   };
 

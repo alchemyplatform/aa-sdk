@@ -4,38 +4,33 @@ import "react-native-get-random-values";
 
 import React from "react";
 import { Stack } from "expo-router";
-import { createAccountKitStore, createConfig } from "@account-kit/core";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
 import { PAYMASTER_POLICY_ID, API_KEY } from "@env";
-import { AccountkitProvider } from "../src/AccountkitProvider";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
+import { AccountkitProvider, RNAlchemySigner } from "@account-kit/react-native-signer";
 
-// Initialize the signer
 const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
-});
+	client: {
+		connection: {
+			apiKey: API_KEY
+		}
+	}	
+})
 
-const alchemyConfig = createConfig({
+const alchemyConfigParams = {
+	signer,
 	transport: alchemy({ apiKey: API_KEY }),
 	chain: arbitrumSepolia,
 	ssr: false,
 	policyId: PAYMASTER_POLICY_ID,
-	overrideSigner: signer,
-	signerConnection: {
-		apiKey: API_KEY,
-	},
-	 
-  });
-
-
+	
+  }
 
 const queryClient = new QueryClient()
   
-  
 export default function RootLayout() {
 	return (
-		<AccountkitProvider config={alchemyConfig} queryClient={queryClient}>
+		<AccountkitProvider configParams={alchemyConfigParams} queryClient={queryClient}>
 			<Stack>
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			</Stack>

@@ -8,7 +8,7 @@ import type {
   AlchemySignerWebClient,
   AlchemyWebSigner,
 } from "@account-kit/signer";
-import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
+import type { RNAlchemySignerSingleton } from "@account-kit/react-native-signer";
 import type {
   LightAccount,
   LightAccountVersion,
@@ -21,6 +21,8 @@ import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Store, StoredState } from "./store/types";
+
+export type AlchemySigner = AlchemyWebSigner | RNAlchemySignerSingleton;
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
@@ -50,12 +52,12 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 
 export type AlchemyAccountsConfig = {
   store: Store;
-  overrideSigner?: AlchemySigner;
   _internal: {
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;
     sessionLength: number;
+    overrideSigner?: AlchemySigner;
   };
 };
 
@@ -108,7 +110,7 @@ type CreateStorageFn = (config?: {
 }) => Storage;
 
 export type CreateConfigProps = RpcConnectionConfig & {
-  overrideSigner?: AlchemyWebSigner | RNAlchemySignerType;
+  overrideSigner?: AlchemySigner;
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
@@ -136,7 +138,5 @@ export type CreateConfigProps = RpcConnectionConfig & {
     "connection"
   >;
 // [!endregion CreateConfigProps]
-
-export type AlchemySigner = AlchemyWebSigner | RNAlchemySignerType;
 
 export type AlchemyClientState = StoredState;

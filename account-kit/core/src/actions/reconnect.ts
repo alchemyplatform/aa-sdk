@@ -18,7 +18,10 @@ import { getChain } from "./getChain.js";
  * @param {AlchemyAccountsConfig} config the account config which contains the client store
  */
 export async function reconnect(config: AlchemyAccountsConfig) {
-  const { store, overrideSigner } = config;
+  const {
+    store,
+    _internal: { overrideSigner },
+  } = config;
   const signerConfig = store.getState().config;
   const accountConfigs = store.getState().accountConfigs;
 

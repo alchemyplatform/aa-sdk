@@ -107,10 +107,6 @@ export const AlchemyAccountProvider = (
   const { config, queryClient, children, isRN } = props;
 
   const clearSignupParam = () => {
-    if (isRN) {
-      return;
-    }
-
     const url = new URL(window.location.href);
     url.searchParams.delete(IS_SIGNUP_QP);
     window.history.replaceState(window.history.state, "", url.toString());

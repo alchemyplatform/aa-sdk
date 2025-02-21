@@ -25,7 +25,7 @@ export const useSigner = (): AlchemySigner | null => {
   // TODO: figure out how to handle this on the server
   // I think we need a version of the signer that can be run on the server that essentially no-ops or errors
   // for all calls
-  return useSyncExternalStore(
+  return useSyncExternalStore<AlchemySigner | null>(
     watchSigner(config),
     () => getSigner(config),
     // We don't want to return null here, should return something of type AlchemySigner

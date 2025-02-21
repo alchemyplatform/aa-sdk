@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
 	View,
@@ -10,14 +9,12 @@ import {
 } from "react-native";
 
 import { API_KEY } from "@env";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
 import {
 	createLightAccountAlchemyClient,
 	LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
-import { useAuthenticate, useLogout, useSigner, useSignerStatus, useUser } from "@account-kit/react";
-import { AlchemySigner } from "@account-kit/core";
+import { useAuthenticate, useLogout, useSigner, useUser } from "@account-kit/react";
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
@@ -27,8 +24,8 @@ export default function OTPAuthScreen() {
 
 	const user = useUser(); 
 	const {logout} = useLogout();
-
-	const signer: AlchemySigner = useSigner();
+	
+	const signer = useSigner();
 
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 
@@ -50,6 +47,8 @@ export default function OTPAuthScreen() {
 	// }, []);
 
 	useEffect(() => {
+		if(!signer) return;
+
 		if (user) {
 			createLightAccountAlchemyClient({
 				signer,

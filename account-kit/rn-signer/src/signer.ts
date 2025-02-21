@@ -74,7 +74,9 @@ export class RNAlchemySignerSingleton extends BaseAlchemySigner<RNSignerClient> 
  * @param {RNAlchemySignerParams} params The parameters required to configure the RNAlchemySigner instance.
  * @returns {RNAlchemySignerSingleton} The singleton instance of RNAlchemySigner configured with the provided parameters.
  */
-export function RNAlchemySigner(params: RNAlchemySignerParams) {
+export function RNAlchemySigner(
+  params: RNAlchemySignerParams
+): RNAlchemySignerType {
   const instance = RNAlchemySignerSingleton.getInstance(params);
 
   return instance;

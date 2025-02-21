@@ -28,20 +28,25 @@ export type HydrateProps = {
  */
 export function Hydrate(props: PropsWithChildren<HydrateProps>) {
   const { children, config, initialState } = props;
+  const hasMounted = useRef(false);
+  // Hydrate for SSR
+  const active = useRef(true);
 
   const { onMount } = hydrate(config, initialState);
 
   // Hydrate for Non-SSR
-  if (!config._internal.ssr) {
+  if (!config._internal.ssr && !hasMounted.current) {
     onMount();
+    hasMounted.current = true;
   }
 
-  // Hydrate for SSR
-  const active = useRef(true);
   useEffect(() => {
     if (!active.current) return;
     if (!config._internal.ssr) return;
-    onMount();
+
+    !hasMounted.current && onMount();
+    hasMounted.current = true;
+
     return () => {
       active.current = false;
     };

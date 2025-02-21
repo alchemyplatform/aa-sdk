@@ -31,7 +31,7 @@ export default function MagicLinkAuthScreen() {
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
-	const signer: AlchemySigner = useSigner();
+	const signer = useSigner();
 
 	const { config, queryClient } = useAlchemyAccountContext();
 
