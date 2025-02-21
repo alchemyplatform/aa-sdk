@@ -49,7 +49,7 @@ export type DemoState = Config & {
   ) => void;
   setTheme: (theme: Config["ui"]["theme"]) => void;
   setSupportUrl: (url: string) => void;
-  setAccountMode: (accountMode: "default" | "7702") => void;
+  setAccountMode: (accountMode: AccountMode) => void;
 };
 
 export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
