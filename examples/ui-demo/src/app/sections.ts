@@ -3,6 +3,7 @@ import { KnownAuthProvider } from "@account-kit/signer";
 import { Config } from "./config";
 
 const isTesting = process.env.NODE_ENV === "test";
+const auth0TestingConnection = process.env.NEXT_PUBLIC_AUTH0_TESTING_CONNECTION;
 const SocialAuth0Providers = ["twitter", "discord"];
 
 export function getSectionsForConfig(
@@ -74,16 +75,16 @@ export function getSectionsForConfig(
       },
     ]);
   }
-  if (isTesting) {
+  if (isTesting && auth0TestingConnection) {
     midSection.push({
       type: "social",
       authProviderId: "auth0",
       mode: "popup",
-      auth0Connection: "Username-Password-Authentication",
+      auth0Connection: auth0TestingConnection,
       displayName: "Test",
       // Re-using twitter logo for testing, will not be seen in production
-      logoUrl: "/images/twitter.svg",
-      logoUrlDark: "/images/twitter-dark.svg",
+      logoUrl: "/images/key.svg",
+      logoUrlDark: "/images/key.svg",
       scope: "openid profile",
     });
   }
