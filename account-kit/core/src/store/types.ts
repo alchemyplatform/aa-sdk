@@ -88,14 +88,14 @@ export type StoreState = {
     };
   };
   smartAccountClients: {
-    [chain: number]: {
-      [T in SupportedAccountTypes]?: {
-        [M in SupportedAccountModes<T>]?: GetSmartAccountClientResult<
+    [chain: number]: Partial<{
+      [T in SupportedAccountTypes]: Partial<{
+        [M in SupportedAccountModes<T>]: GetSmartAccountClientResult<
           Chain,
           SupportedAccount<T>
         >;
-      };
-    };
+      }>;
+    }>;
   };
   bundlerClient: ClientWithAlchemyMethods;
   // serializable state
@@ -103,11 +103,11 @@ export type StoreState = {
   // be mindful of how big this gets. cookie limit 4KB
   config: ClientStoreConfig;
   accountConfigs: {
-    [chain: number]: {
-      [T in SupportedAccountTypes]?: {
-        [M in SupportedAccountModes<T>]?: AccountConfig<T>;
-      };
-    };
+    [chain: number]: Partial<{
+      [T in SupportedAccountTypes]: Partial<{
+        [M in SupportedAccountModes<T>]: AccountConfig<T>;
+      }>;
+    }>;
   };
   user?: User;
   signerStatus: SignerStatus;

@@ -63,18 +63,12 @@ export type ClientActions<
 export type GetSmartAccountClientResult<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccounts = SupportedAccounts
-> =
-  | {
-      client?: AlchemySmartAccountClient<
-        TChain,
-        TAccount,
-        ClientActions<TAccount>
-      >;
-      address?: Address;
-      isLoadingClient: boolean;
-      error?: Error;
-    }
-  | undefined;
+> = {
+  client?: AlchemySmartAccountClient<TChain, TAccount, ClientActions<TAccount>>;
+  address?: Address;
+  isLoadingClient: boolean;
+  error?: Error;
+};
 
 export function getSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
@@ -120,12 +114,12 @@ export function getSmartAccountClient(
   const connection = getConnection(config);
   const mode = getMode(params);
 
-  const clientState = getSmartAccountClientState({
-    config,
-    chainId: connection.chain.id,
-    type,
-    mode,
-  });
+  // TODO(jh): figure out how to properly type this
+  const clientState =
+    // @ts-ignore
+    config.store.getState().smartAccountClients[connection.chain.id]?.[type]?.[
+      mode
+    ];
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;
@@ -294,7 +288,7 @@ function getSmartAccountClientState<
   mode: TMode;
   config: AlchemyAccountsConfig;
 }): GetSmartAccountClientResult<Chain, SupportedAccount<TAccountType>> {
-  return config.store.getState().smartAccountClients[chainId][type]![mode];
+  return config.store.getState().smartAccountClients[chainId][type]![mode]!;
 }
 
 function setSmartAccountClientState<

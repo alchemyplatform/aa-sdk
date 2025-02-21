@@ -36,6 +36,11 @@ The type of account to watch
 `AlchemyAccountsConfig`
 The configuration containing client store settings
 
+### mode
+
+`SupportedAccountModes<TAccount>`
+The mode of the account to watch (optional, defaults to "default")
+
 ## Returns
 
 `(onChange: (account: GetAccountResult<TAccount>) => void) => (() => void)`

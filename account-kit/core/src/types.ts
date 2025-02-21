@@ -30,12 +30,12 @@ export const AccountDetails = [
 
 export type SupportedAccountTypes = (typeof AccountDetails)[number]["type"];
 
-type AccountModesMap = {
+type AccountModes = {
   [TAccount in (typeof AccountDetails)[number] as TAccount["type"]]: TAccount["modes"][number];
 };
 
 export type SupportedAccountModes<TAccount extends SupportedAccountTypes> =
-  AccountModesMap[TAccount];
+  AccountModes[TAccount];
 
 export type SupportedAccounts =
   | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>

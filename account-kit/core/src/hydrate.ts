@@ -114,42 +114,38 @@ const hydrateAccountState = (
 
   return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
     const chainId = Number(chainKey);
-    const isActiveChain = chainId === activeChainId;
-    const shouldReconnect = shouldReconnectAccounts && isActiveChain;
+
+    const getAccountState = <TAccount extends SupportedAccountTypes>(
+      accountAddress: Address | undefined
+    ) => {
+      return accountAddress &&
+        shouldReconnectAccounts &&
+        chainId === activeChainId
+        ? reconnectingState<TAccount>(accountAddress)
+        : defaultAccountState<TAccount>();
+    };
+
     acc[chainId] = {
       LightAccount: {
-        default:
-          shouldReconnect && config.LightAccount?.default?.accountAddress
-            ? reconnectingState(config.LightAccount.default?.accountAddress)
-            : defaultAccountState(),
+        default: getAccountState(config.LightAccount?.default?.accountAddress),
       },
       MultiOwnerModularAccount: {
-        default:
-          shouldReconnect &&
+        default: getAccountState(
           config.MultiOwnerModularAccount?.default?.accountAddress
-            ? reconnectingState(
-                config.MultiOwnerModularAccount.default.accountAddress
-              )
-            : defaultAccountState(),
+        ),
       },
       MultiOwnerLightAccount: {
-        default:
-          shouldReconnect &&
+        default: getAccountState(
           config.MultiOwnerLightAccount?.default?.accountAddress
-            ? reconnectingState(
-                config.MultiOwnerLightAccount.default.accountAddress
-              )
-            : defaultAccountState(),
+        ),
       },
       ModularAccountV2: {
-        default:
-          shouldReconnect && config.ModularAccountV2?.default?.accountAddress
-            ? reconnectingState(config.ModularAccountV2.default.accountAddress)
-            : defaultAccountState(),
-        "7702":
-          shouldReconnect && config.ModularAccountV2?.["7702"]?.accountAddress
-            ? reconnectingState(config.ModularAccountV2["7702"].accountAddress)
-            : defaultAccountState(),
+        default: getAccountState(
+          config.ModularAccountV2?.default?.accountAddress
+        ),
+        "7702": getAccountState(
+          config.ModularAccountV2?.["7702"]?.accountAddress
+        ),
       },
     };
 

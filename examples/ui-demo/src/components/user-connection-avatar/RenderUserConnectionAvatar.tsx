@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import { useAccount, useSigner } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
 import { createPublicClient, Hex, http } from "viem";
 import { odysseyTestnet } from "viem/chains";
 
@@ -18,11 +17,11 @@ export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const { walletType } = useConfigStore();
+  const { accountMode } = useConfigStore();
   const { account } = useAccount({
     type: "ModularAccountV2",
     accountParams: {
-      mode: walletType === WalletTypes.smart ? "default" : "7702",
+      mode: accountMode,
     },
   });
 
@@ -79,7 +78,7 @@ export const RenderUserConnectionAvatar = (
       <div className="hidden lg:block overflow-hidden">
         <RenderPopoverMenu
           deploymentStatus={
-            walletType === WalletTypes.hybrid7702
+            accountMode === "7702"
               ? hybridAccount
                 ? hybridAccount.delegationStatus
                 : false
@@ -94,7 +93,7 @@ export const RenderUserConnectionAvatar = (
       <div className="block lg:hidden">
         <RenderDialogMenu
           deploymentStatus={
-            walletType === WalletTypes.hybrid7702
+            accountMode === "7702"
               ? hybridAccount
                 ? hybridAccount.delegationStatus
                 : false

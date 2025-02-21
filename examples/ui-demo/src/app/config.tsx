@@ -40,14 +40,11 @@ export type Config = {
         }
       | undefined;
   };
-  walletType: WalletTypes;
+  accountMode: AccountMode;
   supportUrl?: string;
 };
 
-export enum WalletTypes {
-  smart = "smart",
-  hybrid7702 = "7702",
-}
+export type AccountMode = "default" | "7702";
 
 export const DEFAULT_CONFIG: Config = {
   auth: {
@@ -77,7 +74,7 @@ export const DEFAULT_CONFIG: Config = {
     logoLight: undefined,
     logoDark: undefined,
   },
-  walletType: WalletTypes.smart,
+  accountMode: "default",
 };
 
 export const queryClient = new QueryClient();

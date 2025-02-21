@@ -7,7 +7,6 @@ import { useAccount, useUser } from "@account-kit/react";
 
 import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
 
 interface UserConnectionAvatarProps {
   isFocused?: boolean;
@@ -19,18 +18,18 @@ const UserConnectionAvatar = ({
   showDeploymentStatus = true,
   deploymentStatus,
 }: UserConnectionAvatarProps) => {
-  const { theme, primaryColor, walletType } = useConfigStore(
-    ({ ui: { theme, primaryColor }, walletType }) => ({
+  const { theme, primaryColor, accountMode } = useConfigStore(
+    ({ ui: { theme, primaryColor }, accountMode }) => ({
       theme,
       primaryColor,
-      walletType,
+      accountMode,
     })
   );
   const user = useUser();
   const { address: SCAUserAddress } = useAccount({
     type: "ModularAccountV2",
     accountParams: {
-      mode: walletType === WalletTypes.smart ? "default" : "7702",
+      mode: accountMode,
     },
   });
 

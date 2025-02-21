@@ -1,5 +1,4 @@
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
 import { MintCard7702, MintCardDefault } from "./MintCard";
 import {
   TransactionsCard7702,
@@ -11,10 +10,10 @@ import { arbitrumSepolia } from "@account-kit/infra";
 import { useEffect } from "react";
 
 export const SmallCardsWrapper = () => {
-  const { walletType } = useConfigStore();
+  const { accountMode } = useConfigStore();
 
   const { chain: activeChain, setChain, isSettingChain } = useChain();
-  const chain = walletType === WalletTypes.smart ? arbitrumSepolia : odyssey;
+  const chain = accountMode === "default" ? arbitrumSepolia : odyssey;
 
   useEffect(() => {
     if (!activeChain || isSettingChain || chain.id === activeChain.id) return;
@@ -23,7 +22,7 @@ export const SmallCardsWrapper = () => {
 
   return (
     <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6 w-full justify-center max-w-screen-sm xl:max-w-none">
-      {walletType === WalletTypes.smart ? (
+      {accountMode === "default" ? (
         <>
           <MintCardDefault />
           <TransactionsCardDefault />
