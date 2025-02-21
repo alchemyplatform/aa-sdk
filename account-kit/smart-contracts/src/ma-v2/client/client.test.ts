@@ -3,6 +3,8 @@ import * as AACoreModule from "@aa-sdk/core";
 import {
   erc7677Middleware,
   LocalAccountSigner,
+  createBundlerClient,
+  createSmartAccountClientFromExisting,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
@@ -36,6 +38,7 @@ import {
   semiModularAccountBytecodeAbi,
 } from "@account-kit/smart-contracts/experimental";
 import {
+  createLightAccountClient,
   createModularAccountV2Client,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
@@ -53,6 +56,7 @@ import {
   arbitrumSepolia,
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
+import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 
 // TODO: Include a snapshot to reset to in afterEach
 describe("MA v2 Tests", async () => {
@@ -1114,6 +1118,56 @@ describe("MA v2 Tests", async () => {
     }
 
     client.setAutomine(true);
+  });
+
+  it("upgrade from a lightaccount", async () => {
+    const lightAccountClient = await createLightAccountClient({
+      chain: instance.chain,
+      signer,
+      transport: custom(instance.getClient()),
+      version: "v2.0.0",
+    });
+
+    await setBalance(client, {
+      address: lightAccountClient.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const { createMAV2Account, ...upgradeToData } = await getMAV2UpgradeToData(
+      lightAccountClient,
+      { account: lightAccountClient.account }
+    );
+
+    await lightAccountClient.upgradeAccount({
+      upgradeTo: upgradeToData,
+      waitForTx: true,
+    });
+
+    const maV2Client = createSmartAccountClientFromExisting({
+      client: createBundlerClient({
+        chain: instance.chain,
+        transport: custom(client),
+      }),
+      account: await createMAV2Account(),
+    });
+
+    // test uo
+
+    const startingAddressBalance = await getTargetBalance();
+
+    const result = await maV2Client.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await maV2Client.waitForUserOperationTransaction(result);
+
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount
+    );
   });
 
   const givenConnectedProvider = async ({
