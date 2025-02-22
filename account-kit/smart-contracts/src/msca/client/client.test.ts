@@ -1,12 +1,9 @@
-import {
-  LocalAccountSigner,
-  type SmartAccountSigner,
-  erc7677Middleware,
-} from "@aa-sdk/core";
+import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
 import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
 import { local060Instance } from "~test/instances.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("Modular Account Multi Owner Account Tests", async () => {
   const instance = local060Instance;
@@ -156,11 +153,11 @@ describe("Modular Account Multi Owner Account Tests", async () => {
         )
     ).resolves.toMatchInlineSnapshot(`
       {
-        "callGasLimit": 1n,
-        "maxFeePerGas": 1n,
-        "maxPriorityFeePerGas": 1n,
-        "preVerificationGas": 1n,
-        "verificationGasLimit": 1n,
+        "callGasLimit": "0x1",
+        "maxFeePerGas": "0x1",
+        "maxPriorityFeePerGas": "0x1",
+        "preVerificationGas": "0x1",
+        "verificationGasLimit": "0x1",
       }
     `);
   }, 100000);
@@ -224,6 +221,12 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       salt,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(usePaymaster
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : {}),
     });
 });

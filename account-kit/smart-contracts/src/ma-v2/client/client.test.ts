@@ -1,10 +1,6 @@
 import * as AAInfraModule from "@account-kit/infra";
 import * as AACoreModule from "@aa-sdk/core";
-import {
-  erc7677Middleware,
-  LocalAccountSigner,
-  type SmartAccountSigner,
-} from "@aa-sdk/core";
+import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
 import {
   custom,
   parseEther,
@@ -34,7 +30,11 @@ import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import {
+  alchemy,
+  arbitrumSepolia,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
@@ -862,7 +862,13 @@ describe("MA v2 Tests", async () => {
       signer,
       accountAddress,
       transport: custom(instance.getClient()),
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(usePaymaster
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : {}),
     });
 
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {

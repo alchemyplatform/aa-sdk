@@ -21,6 +21,7 @@ import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { createLightAccountClient } from "./client.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
@@ -385,6 +386,12 @@ describe("Light Account Tests", () => {
       version,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(usePaymaster
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : {}),
     });
 });

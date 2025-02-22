@@ -25,7 +25,8 @@ import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 
 /**
- * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring transactions.
+ * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
+ * transactions. Adheres to the ERC-7677 standardized communication protocol.
  *
  * @example
  *  ```ts
@@ -58,15 +59,16 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 }
 
 /**
- * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring transactions using
- * the `alchemy_requestGasAndPaymasterAndData` method instead of standard ERC-7677 methods.
+ * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
+ * transactions. Uses Alchemy's custom `alchemy_requestGasAndPaymasterAndData`
+ * method instead of conforming to the standard ERC-7677 interface.
  *
  * @example
- *  ```ts
- * import { sepolia, alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
- * import { alchemy } from "@account-kit/infra";
+ *  ```ts twoslash
+ * import { sepolia, alchemyGasAndPaymasterAndDataMiddleware, alchemy } from "@account-kit/infra";
+ * import { createSmartAccountClient } from "@account-kit/core";
  *
- * const client = createAlchemySmartAccountClient({
+ * const client = createSmartAccountClient({
  *  transport: alchemy({ apiKey: "your-api-key" }),
  *  chain: sepolia,
  *  ...alchemyGasAndPaymasterAndDataMiddleware({

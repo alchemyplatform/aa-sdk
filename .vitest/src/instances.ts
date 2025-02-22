@@ -97,7 +97,12 @@ function defineInstance(params: DefineInstanceParams) {
             transport: http(rpcUrls().bundler),
           },
           {
-            methods: ["pm_getPaymasterStubData", "pm_getPaymasterData"],
+            methods: [
+              "pm_getPaymasterStubData",
+              "pm_getPaymasterData",
+              "alchemy_requestGasAndPaymasterAndData",
+              "rundler_maxPriorityFeePerGas",
+            ],
             transport: paymasterTransport(
               createClient({
                 chain,
