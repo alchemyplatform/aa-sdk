@@ -10,7 +10,7 @@ export const SmallCardsWrapper = () => {
   const { walletType } = useConfigStore();
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6">
+    <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6 w-full justify-center max-w-screen-sm xl:max-w-none">
       {walletType === WalletTypes.smart ? (
         <>
           <MintCardDefault />
