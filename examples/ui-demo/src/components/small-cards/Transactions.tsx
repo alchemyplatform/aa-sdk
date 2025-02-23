@@ -1,8 +1,12 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { LoadingIcon } from "@/components/icons/loading";
+import {
+  RECURRING_TXN_INTERVAL,
+  TransactionType,
+} from "@/hooks/useRecurringTransactions";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { TransactionType } from "@/hooks/useRecurringTransactions";
 
 export type loadingState = "loading" | "success" | "initial";
 
@@ -25,29 +29,35 @@ const Transaction = ({
   externalLink,
   buyAmountUsdc,
   state,
+  timeToBuy,
 }: TransactionType & { className?: string }) => {
-  const [countdownSeconds, setCountdownSeconds] = useState<number>(10);
+  const [secUntilBuy, setSecUntilBuy] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (state === "next") {
-      const interval = setInterval(() => {
-        setCountdownSeconds((prev) => (prev === 0 ? 0 : prev - 1));
-      }, 1000);
-      return () => clearInterval(interval);
-    } else {
-      setCountdownSeconds(10);
+    if (state === "complete" || state === "initial" || !timeToBuy) {
+      return;
     }
-  }, [state]);
+
+    const interval = setInterval(() => {
+      setSecUntilBuy(Math.ceil((timeToBuy - Date.now()) / 1000));
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, [state, timeToBuy]);
 
   const getText = () => {
     if (state === "initial") {
       return "Waiting...";
     }
+    if (state === "next") {
+      return secUntilBuy != null && secUntilBuy <= 0
+        ? "Waiting for previous transaction..."
+        : `Next buy in ${secUntilBuy ?? RECURRING_TXN_INTERVAL / 1000} second${
+            secUntilBuy === 1 ? "" : "s"
+          }`;
+    }
     if (state === "initiating") {
       return "Buying 1 ETH";
-    }
-    if (state === "next") {
-      return `Next buy in ${countdownSeconds} seconds`;
     }
     if (state === "complete") {
       return `Bought 1 ETH for ${buyAmountUsdc.toLocaleString()} USDC`;
@@ -55,11 +65,11 @@ const Transaction = ({
   };
 
   return (
-    <div className={`flex justify-between ${className} mb-4`}>
+    <div className={cn("flex justify-between mb-4", className)}>
       <div className="flex items-center mr-1">
         <div className="w-4 h-4 mr-2">
           {state === "complete" ? (
-            <CheckCircleFilledIcon className=" h-4 w-4 fill-demo-surface-success" />
+            <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
           ) : (
             <LoadingIcon className="h-4 w-4" />
           )}
