@@ -426,7 +426,7 @@ describe("MA v2 Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
