@@ -52,6 +52,7 @@ const bundlerMethods = [
   "debug_bundler_dumpMempool",
   "debug_bundler_clearState",
   "debug_bundler_setBundlingMode",
+  "rundler_maxPriorityFeePerGas",
 ];
 
 function defineInstance(params: DefineInstanceParams) {
@@ -101,13 +102,19 @@ function defineInstance(params: DefineInstanceParams) {
               "pm_getPaymasterStubData",
               "pm_getPaymasterData",
               "alchemy_requestGasAndPaymasterAndData",
-              "rundler_maxPriorityFeePerGas",
             ],
             transport: paymasterTransport(
               createClient({
                 chain,
                 transport: http(rpcUrls().anvil),
-              }).extend(() => ({ mode: "anvil" }))
+              }).extend(() => ({ mode: "anvil" })),
+              // Paymaster transport needs to be able to send requests
+              // to the bundler in order to estimate gas during the
+              // alchemy_requestGasAndPaymasterAndData method.
+              createClient({
+                chain,
+                transport: http(rpcUrls().bundler),
+              }).extend(() => ({ mode: "bundler" }))
             ),
           },
         ],

@@ -61,7 +61,9 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
  * transactions. Uses Alchemy's custom `alchemy_requestGasAndPaymasterAndData`
- * method instead of conforming to the standard ERC-7677 interface.
+ * method instead of conforming to the standard ERC-7677 interface. Note that
+ * if you use `createAlchemySmartAccountClient`, this middleware is already
+ * used by default and you do not need to manually include it.
  *
  * @example
  *  ```ts twoslash

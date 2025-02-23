@@ -1,6 +1,10 @@
 import * as AAInfraModule from "@account-kit/infra";
 import * as AACoreModule from "@aa-sdk/core";
-import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import {
+  erc7677Middleware,
+  LocalAccountSigner,
+  type SmartAccountSigner,
+} from "@aa-sdk/core";
 import {
   custom,
   parseEther,
@@ -366,7 +370,7 @@ describe("MA v2 Tests", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
       })
     ).extend(installValidationActions);
 
@@ -443,7 +447,7 @@ describe("MA v2 Tests", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
       })
     ).extend(installValidationActions);
 
@@ -489,7 +493,7 @@ describe("MA v2 Tests", async () => {
     // sad path: send UO with no paymaster
     let providerNoPaymaster = await givenConnectedProvider({
       signer,
-      usePaymaster: false,
+      paymasterMiddleware: undefined,
     });
 
     await expect(
@@ -851,23 +855,25 @@ describe("MA v2 Tests", async () => {
   const givenConnectedProvider = async ({
     signer,
     accountAddress,
-    usePaymaster = false,
+    paymasterMiddleware,
   }: {
     signer: SmartAccountSigner;
     accountAddress?: `0x${string}`;
-    usePaymaster?: boolean;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
       signer,
       accountAddress,
       transport: custom(instance.getClient()),
-      ...(usePaymaster
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
             transport: custom(instance.getClient()),
           })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
         : {}),
     });
 
