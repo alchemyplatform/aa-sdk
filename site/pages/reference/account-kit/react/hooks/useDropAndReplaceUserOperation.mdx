@@ -17,7 +17,8 @@ import { useDropAndReplaceUserOperation } from "@account-kit/react";
 
 ## Usage
 
-```tsx
+```tsx twoslash
+import React from "react";
 import {
   useDropAndReplaceUserOperation,
   useSendUserOperation,
@@ -25,9 +26,8 @@ import {
 } from "@account-kit/react";
 
 export function ComponentWithDropAndReplaceUO() {
-  const { client } = useSmartAccountClient({
-    type: "MultiOwnerModularAccount",
-  });
+  const { client } = useSmartAccountClient({});
+
   const { sendUserOperationAsync, isSendingUserOperation } =
     useSendUserOperation({
       client,

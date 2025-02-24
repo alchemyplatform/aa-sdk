@@ -19,8 +19,10 @@ import { useUser } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useUser } from "@account-kit/react";
+import type { User } from "@account-kit/signer";
+type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
 
 const user = useUser();
 ```

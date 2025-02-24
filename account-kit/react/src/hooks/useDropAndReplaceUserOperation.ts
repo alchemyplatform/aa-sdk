@@ -60,9 +60,8 @@ export type UseDropAndReplaceUserOperationResult<
  * } from "@account-kit/react";
  *
  * export function ComponentWithDropAndReplaceUO() {
- *   const { client } = useSmartAccountClient({
- *     type: "MultiOwnerModularAccount",
- *   });
+ *   const { client } = useSmartAccountClient({});
+ *
  *   const { sendUserOperationAsync, isSendingUserOperation } =
  *     useSendUserOperation({
  *       client,

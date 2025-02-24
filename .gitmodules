@@ -19,3 +19,9 @@
 [submodule "examples/embedded-accounts-quickstart"]
 	path = examples/embedded-accounts-quickstart
 	url = https://github.com/alchemyplatform/embedded-accounts-quickstart
+[submodule "examples/ui-demo/contracts/lib/openzeppelin-contracts"]
+	path = examples/ui-demo/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "examples/ui-demo/contracts/lib/forge-std"]
+	path = examples/ui-demo/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std

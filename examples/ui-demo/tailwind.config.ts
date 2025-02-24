@@ -104,6 +104,10 @@ const config = {
       backgroundImage: {
         "bg-main": "url('/images/bg-main.webp')",
       },
+      boxShadow: {
+        smallCard:
+          "0px 50px 50px 0px rgba(0, 0, 0, 0.09), 0px 12px 27px 0px rgba(0, 0, 0, 0.10)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],

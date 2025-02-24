@@ -22,6 +22,6 @@ As mentioned abve, the client can be configured with a series of middleware that
 1. `dummyPaymasterAndData` - Generates a dummy paymaster and data for gas estimation if using a paymaster (default: noop)
 2. `feeEstimator` - Estimates the fees for a user operation. If you are using our RPCs, it's important to use the [`alchemyFeeEstimator`](/reference/account-kit/infra/functions/alchemyFeeEstimator) middleware.
 3. `gasEstimator` - Estimates the gas limits for a user operation. The default middleware calls the underlying bundler RPC to `eth_estimateUserOperationGas`.
-4. `customMiddleware` - Allows you define custom middleware to run before requesting sponsorhip if there are any additional steps you need to take before requesting sponsorship. (default: noop)
+4. `customMiddleware` - Allows you define custom middleware to run before requesting sponsorship if there are any additional steps you need to take before requesting sponsorship. (default: noop)
 5. `paymasterAndData` - Requests a gas sponsorship from a paymaster. (default: noop)
 6. `userOperationSimulator` - Simulates a user operation to check if it will be successful. (default: noop)

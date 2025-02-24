@@ -19,14 +19,19 @@ import { useClientActions } from "@account-kit/react";
 
 ## Usage
 
-```tsx
+```tsx twoslash
+import React from "react";
+import { useSmartAccountClient } from "@account-kit/react";
+import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
+import { useClientActions } from "@account-kit/react";
+
 const Foo = () => {
   const { client } = useSmartAccountClient({
     type: "MultiOwnerModularAccount",
   });
   const { executeAction } = useClientActions({
-    client,
-    pluginActions: sessionKeyPluginActions,
+    client: client,
+    actions: sessionKeyPluginActions,
   });
 
   executeAction({

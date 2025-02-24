@@ -19,10 +19,16 @@ import { useSignTypedData } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
-
-const { client } = useSmartAccountClient({ type: "LightAccount" });
+const typedData = {
+  types: {
+    Message: [{ name: "content", type: "string" }],
+  },
+  primaryType: "Message",
+  message: { content: "Hello" },
+};
+const { client } = useSmartAccountClient({});
 const {
   signTypedData,
   signTypedDataAsync,
@@ -37,6 +43,8 @@ const {
   },
   onError: (error) => console.error(error),
 });
+
+const result = await signTypedData({ typedData });
 ```
 
 ## Parameters

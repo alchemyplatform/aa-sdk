@@ -36,7 +36,7 @@
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.5.0",
     "tailwind-merge": "^2.3.0",
-    "viem": "^2.20.0",
+    "viem": "^2.22.6",
     "wagmi": "^2.12.7",
     "zod": "^3.0.0",
     "zustand": "^5.0.0-rc.2"

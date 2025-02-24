@@ -1,0 +1,17 @@
+{
+    "extends": "solhint:recommended",
+    "rules": {
+      "immutable-vars-naming": ["error"],
+      "no-unused-import": ["error"],
+      "compiler-version": ["error", ">=0.8.19"],
+      "func-visibility": ["error", { "ignoreConstructors": true }],
+      "max-line-length": ["error", 120],
+      "func-param-name-mixedcase": ["error"],
+      "modifier-name-mixedcase": ["error"],
+      "private-vars-leading-underscore": ["error"],
+      "ordering": ["warn"],
+      "no-inline-assembly": "off",
+      "avoid-low-level-calls": "off",
+      "no-complex-fallback": "off"
+    }
+  }

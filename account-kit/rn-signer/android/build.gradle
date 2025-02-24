@@ -1,3 +1,7 @@
+import groovy.json.JsonSlurper
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["ReactNativeSigner_kotlinVersion"]
@@ -16,6 +20,7 @@ buildscript {
 
 plugins {
   id 'org.jetbrains.kotlin.plugin.serialization' version "$ReactNativeSigner_kotlinVersion"
+  id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -104,6 +109,47 @@ android {
   }
 }
 
+def getLibraryVersion() {
+  def packageFile = file("../package.json")
+  def packageJson = new JsonSlurper().parseText(packageFile.getText()) as Map<String, String>
+  return packageJson["version"] as String
+}
+
+mavenPublishing {
+  configure(new AndroidSingleVariantLibrary("release", true, true))
+  publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+  signAllPublications()
+
+  coordinates("com.alchemy.accountkit", "reactnativesigner", getLibraryVersion())
+
+  pom {
+    name = "Account Kit React Native Stamper"
+    description = "React Native Android module for Stamping requests with the Alchemy Signer"
+    inceptionYear = "2024"
+    url = "https://github.com/alchemyplatform/aa-sdk/"
+    licenses {
+      license {
+        name = "MIT License"
+        url = "https://github.com/alchemyplatform/aa-sdk/blob/main/LICENSE"
+        distribution = "https://github.com/alchemyplatform/aa-sdk/blob/main/LICENSE"
+      }
+    }
+    developers {
+      // TODO: this needs to be like alchemyplatform or something
+      developer {
+        id = "moldy530"
+        name = "Michael Moldoveanu"
+        url = "https://github.com/moldy530"
+      }
+    }
+    scm {
+      url = "https://github.com/alchemyplatform/aa-sdk/"
+      connection = "scm:git:git://github.com/alchemyplatform/aa-sdk.git"
+      developerConnection = "scm:git:ssh://git@github.com/alchemyplatform/aa-sdk.git"
+    }
+  }
+}
+
 repositories {
   mavenCentral()
   google()
@@ -112,14 +158,17 @@ repositories {
 dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+  // TODO: 1) we should assume folks are on > 0.71 (they have to be for new arch) and then we should read the correct version from pkg.json
+  // of the dependency
+  // we can't use "com.facebook.react:react-native:+" here because it won't publish to maven if we do
   //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native:+"
+  implementation "com.facebook.react:react-android:0.76"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "javax.xml.bind:jaxb-api:2.3.1"
-  implementation "xerces:xercesImpl:2.12.2"
-  implementation "androidx.security:security-crypto:1.1.0-alpha06"
-  implementation "com.google.crypto.tink:tink-android:1.15.0"
-  implementation "org.bitcoinj:bitcoinj-core:0.16.3"
+  api "javax.xml.bind:jaxb-api:2.3.1"
+  api "xerces:xercesImpl:2.12.2"
+  api "androidx.security:security-crypto:1.1.0-alpha06"
+  api "com.google.crypto.tink:tink-android:1.15.0"
+  api "org.bitcoinj:bitcoinj-core:0.16.3"
   implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 }
 
@@ -130,3 +179,14 @@ if (isNewArchitectureEnabled()) {
     codegenJavaPackageName = "com.accountkit.reactnativesigner"
   }
 }
+
+task extractJar(type: Copy) {
+    def aarFile = file("$buildDir/outputs/aar/${project.name}-release.aar")
+    def outputDir = file("$buildDir/libs")
+    from(zipTree(aarFile)) {
+        include "classes.jar"
+    }
+    into(outputDir)
+    rename { "${project.name}.jar" }
+}
+extractJar.dependsOn("assembleRelease")

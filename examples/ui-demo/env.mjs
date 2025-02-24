@@ -11,6 +11,7 @@ export const env = createEnv({
     API_KEY: z.string(),
     ALCHEMY_API_URL: z.string().url(),
     ALCHEMY_RPC_URL: z.string().url(),
+    ALCHEMY_RPC_URL_ODYSSEY: z.string().url(),
   },
 
   /**
@@ -29,5 +30,6 @@ export const env = createEnv({
     API_KEY: process.env.API_KEY,
     ALCHEMY_API_URL: process.env.ALCHEMY_API_URL,
     ALCHEMY_RPC_URL: process.env.ALCHEMY_RPC_URL,
+    ALCHEMY_RPC_URL_ODYSSEY: process.env.ALCHEMY_RPC_URL_ODYSSEY,
   },
 });

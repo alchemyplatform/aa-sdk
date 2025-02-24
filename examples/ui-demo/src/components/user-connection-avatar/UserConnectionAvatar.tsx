@@ -26,7 +26,7 @@ const UserConnectionAvatar = ({
   );
   const user = useUser();
   const { address: SCAUserAddress } = useAccount({
-    type: "LightAccount",
+    type: "ModularAccountV2",
   });
 
   const isEOAUser = user?.type === "eoa";
