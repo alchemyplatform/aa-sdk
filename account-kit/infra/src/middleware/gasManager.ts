@@ -67,8 +67,8 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
  *
  * @example
  *  ```ts twoslash
- * import { sepolia, alchemyGasAndPaymasterAndDataMiddleware, alchemy } from "@account-kit/infra";
- * import { createSmartAccountClient } from "@account-kit/core";
+ * import { sepolia, alchemy, alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
+ * import { createSmartAccountClient } from "@aa-sdk/core";
  *
  * const client = createSmartAccountClient({
  *  transport: alchemy({ apiKey: "your-api-key" }),
