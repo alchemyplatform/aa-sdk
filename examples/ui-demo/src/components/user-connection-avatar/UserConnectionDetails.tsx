@@ -85,7 +85,6 @@ export function UserConnectionDetails({
         <span className="text-md md:text-sm text-fg-secondary">
           {accountMode === "default" ? "Smart account" : "Address"}
         </span>
-        {/* TODO(jh): scaAccount.address might be good here for both when able to properly switch MAv2 mode? */}
         <UserAddressTooltip address={scaAccount.address ?? ""} linkEnabled />
       </div>
 
