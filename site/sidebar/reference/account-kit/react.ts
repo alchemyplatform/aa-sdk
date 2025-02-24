@@ -216,24 +216,3 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     ],
   },
 ];
-
-
-
-export default function MyOTPInputPage() {
-  const { authenticate, isPending } = useAuthenticate();
-  const [otpCode, setOTPCode] = React.useState("");
-
-  return (
-    <div>
-      <input
-        value={otpCode}
-        onChange={(e) => setOTPCode(e.target.value)}
-      />
-      <button
-        onClick={() => authenticate({ type: "otp", otpCode });}
-      >
-        Submit
-      </button>
-    </div>
-  );
-}
