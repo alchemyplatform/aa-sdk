@@ -1,0 +1,12 @@
+{
+    "devDependencies": {
+      "pnpm": "^8.7.5",
+      "solhint": "^3.6.2"
+    },
+    "scripts": {
+      "lint": "pnpm lint:src && pnpm lint:test && pnpm lint:script",
+      "lint:src": "solhint --max-warnings 0 -c .solhint-src.json './src/**/*.sol'",
+      "lint:test": "solhint --max-warnings 0 -c .solhint-test.json './test/**/*.sol'",
+      "lint:script": "solhint --max-warnings 0 -c .solhint-script.json './script/**/*.sol'"
+    }
+  }
