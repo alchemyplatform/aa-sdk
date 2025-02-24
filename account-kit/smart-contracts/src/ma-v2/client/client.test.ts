@@ -950,12 +950,12 @@ describe("MA v2 Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 2, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
 
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 2,
+      entityId: 1,
       validAfter: 1722043948,
       validUntil: 1722043949,
     });
@@ -965,24 +965,24 @@ describe("MA v2 Tests", async () => {
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
           provider.chain
         ),
-        entityId: 2,
+        entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
       installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 2,
+        entityId: 1,
         signer: await sessionKey.getAddress(),
       }),
       hooks: [
         {
           hookConfig: {
             address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 2,
+            entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
-            hasPostHooks: true,
+            hasPostHooks: false,
           },
           initData: hookInstallData,
         },
@@ -991,12 +991,17 @@ describe("MA v2 Tests", async () => {
 
     // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
+    console.log("INSTALLED");
 
-    console.log(await provider.account.getValidationData({ entityId: 2 }));
+    // console.log(await provider.account.getValidationData({ entityId: 2 }));
 
     // force block timestamp to be outside of range
     await testClient.setNextBlockTimestamp({
-      timestamp: 10000000000n,
+      timestamp: 1924507101n,
+    });
+
+    await testClient.mine({
+      blocks: 1,
     });
 
     // send transaction outside of time range
@@ -1007,19 +1012,32 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
+    console.log("TRANSACTION LANDED");
+    // console.log({ uoResult });
+    console.log(await client.getBlock());
     console.log({ uoResult });
 
+    const timeRangeModule = getContract({
+      address: getDefaultTimeRangeModuleAddress(provider.chain),
+      abi: TimeRangeModule.abi,
+      client: provider,
+    });
+
+    console.log(
+      await timeRangeModule.read.timeRanges([1, provider.account.address])
+    );
+
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 2,
+      entityId: 1,
     });
 
     const uninstallResult = await provider.uninstallValidation({
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
         provider.chain
       ),
-      entityId: 2,
+      entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
-        entityId: 2,
+        entityId: 1,
       }),
       hookUninstallDatas: [hookUninstallData],
     });
