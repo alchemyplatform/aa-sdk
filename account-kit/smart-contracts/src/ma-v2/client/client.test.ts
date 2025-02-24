@@ -37,7 +37,11 @@ import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import {
+  alchemy,
+  arbitrumSepolia,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests", async () => {
@@ -369,7 +373,7 @@ describe("MA v2 Tests", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
       })
     ).extend(installValidationActions);
 
@@ -422,7 +426,7 @@ describe("MA v2 Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
@@ -461,7 +465,7 @@ describe("MA v2 Tests", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
       })
     ).extend(installValidationActions);
 
@@ -515,7 +519,6 @@ describe("MA v2 Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        usePaymaster: false,
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
@@ -1016,14 +1019,14 @@ describe("MA v2 Tests", async () => {
 
   const givenConnectedProvider = async ({
     signer,
-    accountAddress,
-    usePaymaster = false,
     signerEntity,
+    accountAddress,
+    paymasterMiddleware,
   }: {
     signer: SmartAccountSigner;
-    accountAddress?: `0x${string}`;
-    usePaymaster?: boolean;
     signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
@@ -1031,7 +1034,15 @@ describe("MA v2 Tests", async () => {
       accountAddress,
       signerEntity,
       transport: custom(instance.getClient()),
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
     });
 
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {

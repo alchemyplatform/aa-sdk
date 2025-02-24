@@ -39,6 +39,7 @@ const alchemyMethods = [
   "rundler_maxPriorityFeePerGas",
   "pm_getPaymasterData",
   "pm_getPaymasterStubData",
+  "alchemy_requestGasAndPaymasterAndData",
 ];
 
 export type AlchemyTransportConfig = (
