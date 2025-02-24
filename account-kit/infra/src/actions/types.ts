@@ -1,5 +1,10 @@
-import type { UserOperationStruct } from "@aa-sdk/core";
-import type { Address, Hash } from "viem";
+import type {
+  UserOperationStruct,
+  UserOperationRequest,
+  UserOperationOverrides,
+  EntryPointVersion,
+} from "@aa-sdk/core";
+import type { Address, Hash, Hex } from "viem";
 
 export enum SimulateAssetType {
   NATIVE = "NATIVE",
@@ -47,3 +52,37 @@ export interface SimulateAssetChange {
   name?: string;
   logo?: string;
 }
+
+export type RequestGasAndPaymasterAndDataRequest = [
+  {
+    policyId: string;
+    entryPoint: Address;
+    dummySignature: Hex;
+    userOperation: UserOperationRequest;
+    overrides?: UserOperationOverrides;
+  }
+];
+
+export type RequestGasAndPaymasterAndDataResponse<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = Pick<
+  UserOperationRequest,
+  | "callGasLimit"
+  | "preVerificationGas"
+  | "verificationGasLimit"
+  | "maxFeePerGas"
+  | "maxPriorityFeePerGas"
+> &
+  (TEntryPointVersion extends "0.6.0"
+    ? {
+        paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
+      }
+    : TEntryPointVersion extends "0.7.0"
+    ? Pick<
+        UserOperationRequest<"0.7.0">,
+        | "paymaster"
+        | "paymasterData"
+        | "paymasterVerificationGasLimit"
+        | "paymasterPostOpGasLimit"
+      >
+    : never);
