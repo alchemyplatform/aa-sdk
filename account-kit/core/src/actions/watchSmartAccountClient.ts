@@ -59,9 +59,9 @@ import {
       {
         equalityFn(a, b) {
           return (
-            a.signerStatus.status === b.signerStatus.status &&
+            a.signerStatus === b.signerStatus &&
             a.account === b.account &&
-            a.chain.id === b.chain.id
+            a.chain === b.chain
           );
         },
       }

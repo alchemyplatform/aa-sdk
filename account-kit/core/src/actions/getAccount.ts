@@ -31,25 +31,25 @@ export type GetAccountParams<TAccount extends SupportedAccountTypes> =
  * @returns {GetAccountResult<TAccount>} The result which includes the account if found and its status
  */
 export const getAccount = <TAccount extends SupportedAccountTypes>(
-  params: GetAccountParams<TAccount>,
+  { type, accountParams }: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
-  const account = accounts?.[chain.id]?.[params.type];
+  const account = accounts?.[chain.id]?.[type];
   const accountConfig =
-    config.store.getState().accountConfigs[chain.id]?.[params.type];
+    config.store.getState().accountConfigs[chain.id]?.[type];
 
-  if (params.type === "ModularAccountV2" && account?.status === "READY") {
-    const accountParams = params.accountParams as
+  if (type === "ModularAccountV2" && account?.status === "READY") {
+    const _accountParams = accountParams as
       | CreateModularAccountV2Params
       | undefined;
-    const cachedConfig = accountConfig as
+    const _accountConfig = accountConfig as
       | AccountConfig<"ModularAccountV2">
       | undefined;
 
-    const wantMode = accountParams?.mode ?? "default";
-    const haveMode = cachedConfig?.mode ?? "default";
+    const wantMode = _accountParams?.mode ?? "default";
+    const haveMode = _accountConfig?.mode ?? "default";
 
     if (wantMode !== haveMode) {
       return defaultAccountState();

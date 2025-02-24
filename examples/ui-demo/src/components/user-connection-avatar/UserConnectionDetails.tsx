@@ -86,14 +86,7 @@ export function UserConnectionDetails({
           {accountMode === "default" ? "Smart account" : "Address"}
         </span>
         {/* TODO(jh): scaAccount.address might be good here for both when able to properly switch MAv2 mode? */}
-        <UserAddressTooltip
-          address={
-            accountMode === "default"
-              ? scaAccount.address ?? ""
-              : signerAddress ?? ""
-          }
-          linkEnabled
-        />
+        <UserAddressTooltip address={scaAccount.address ?? ""} linkEnabled />
       </div>
 
       {accountMode === "default" ? (

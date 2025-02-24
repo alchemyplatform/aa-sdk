@@ -8,6 +8,7 @@ import {
   useAccount,
   useChain,
   useSmartAccountClient,
+  useUser,
 } from "@account-kit/react";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { odyssey } from "@/hooks/7702/transportSetup";
@@ -27,6 +28,7 @@ export const Configuration = ({ className }: { className?: string }) => {
   );
   const { isLoadingAccount } = useAccount(clientParams);
   const { isLoadingClient } = useSmartAccountClient(clientParams);
+  const user = useUser();
 
   const onSwitchWalletType = () => {
     const newMode = accountMode === "default" ? "7702" : "default";
@@ -55,7 +57,7 @@ export const Configuration = ({ className }: { className?: string }) => {
         id="wallet-switch"
         checked={accountMode === "7702"}
         onCheckedChange={onSwitchWalletType}
-        disabled={isLoadingClient || isLoadingAccount}
+        disabled={!!user && (isLoadingClient || isLoadingAccount)}
       />
       <p className="text-active text-xs font-normal pt-3">
         EIP-7702 adds smart account features to an EOA wallet.{" "}

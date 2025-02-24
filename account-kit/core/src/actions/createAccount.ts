@@ -83,6 +83,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
+  const accountConfigs = store.getState().accountConfigs;
 
   const bundlerClient = getBundlerClient(config);
   const transport = custom(bundlerClient);
@@ -94,8 +95,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  const accountConfigs = store.getState().accountConfigs;
-
   const cachedAccount = accounts[chain.id]?.[type];
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
@@ -106,8 +105,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     switch (type) {
       case "LightAccount":
         return createLightAccount({
-          ...(cachedConfig as AccountConfig<"LightAccount">),
-          ...(params as OmitSignerTransportChain<CreateLightAccountParams>),
+          ...cachedConfig,
+          ...params,
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
