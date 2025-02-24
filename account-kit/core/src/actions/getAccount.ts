@@ -37,27 +37,25 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
   const account = accounts?.[chain.id]?.[type];
-  const accountConfig =
-    config.store.getState().accountConfigs[chain.id]?.[type];
+  if (!account) {
+    return defaultAccountState();
+  }
 
   if (type === "ModularAccountV2" && account?.status === "READY") {
-    const _accountParams = accountParams as
-      | CreateModularAccountV2Params
-      | undefined;
+    const accountConfig =
+      config.store.getState().accountConfigs[chain.id]?.[type];
     const _accountConfig = accountConfig as
       | AccountConfig<"ModularAccountV2">
       | undefined;
+    const _accountParams = accountParams as
+      | CreateModularAccountV2Params
+      | undefined;
 
-    const wantMode = _accountParams?.mode ?? "default";
     const haveMode = _accountConfig?.mode ?? "default";
-
-    if (wantMode !== haveMode) {
+    const wantMode = _accountParams?.mode ?? "default";
+    if (haveMode !== wantMode) {
       return defaultAccountState();
     }
-  }
-
-  if (!account) {
-    return defaultAccountState();
   }
 
   return account;
