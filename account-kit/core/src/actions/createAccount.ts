@@ -83,7 +83,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
-  const accountConfigs = store.getState().accountConfigs;
 
   const bundlerClient = getBundlerClient(config);
   const transport = custom(bundlerClient);
@@ -95,36 +94,20 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  let invalidate = false;
-  if (type === "ModularAccountV2") {
-    const wantMode = (params as CreateModularAccountV2Params | undefined)?.mode;
-    const haveMode =
-      (
-        accountConfigs[chain.id][type] as
-          | AccountConfig<"ModularAccountV2">
-          | undefined
-      )?.mode ?? "default";
-    if (wantMode !== haveMode) {
-      invalidate = true;
-    }
-  }
+  const accountConfigs = store.getState().accountConfigs;
 
   const cachedAccount = accounts[chain.id]?.[type];
-  if (
-    !invalidate &&
-    cachedAccount.status !== "RECONNECTING" &&
-    cachedAccount.account
-  ) {
+  if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
-  const cachedConfig = invalidate ? {} : accountConfigs[chain.id]?.[type];
+  const cachedConfig = accountConfigs[chain.id]?.[type];
 
   const accountPromise = (() => {
     switch (type) {
       case "LightAccount":
         return createLightAccount({
-          ...(cachedConfig as OmitSignerTransportChain<CreateLightAccountParams>),
-          ...(params as AccountConfig<"LightAccount">),
+          ...(cachedConfig as AccountConfig<"LightAccount">),
+          ...(params as OmitSignerTransportChain<CreateLightAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -141,8 +124,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerLightAccount":
         return createMultiOwnerLightAccount({
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
-          ...(params as AccountConfig<"MultiOwnerLightAccount">),
+          ...(cachedConfig as AccountConfig<"MultiOwnerLightAccount">),
+          ...(params as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -158,8 +141,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
-          ...(cachedConfig as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
-          ...(params as AccountConfig<"MultiOwnerModularAccount">),
+          ...(cachedConfig as AccountConfig<"MultiOwnerModularAccount">),
+          ...(params as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -176,8 +159,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "ModularAccountV2":
         return createModularAccountV2({
-          ...(cachedConfig as OmitSignerTransportChain<CreateModularAccountV2Params>),
-          ...(params as AccountConfig<"ModularAccountV2">),
+          ...(cachedConfig as AccountConfig<"ModularAccountV2">),
+          ...(params as OmitSignerTransportChain<CreateModularAccountV2Params>),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,

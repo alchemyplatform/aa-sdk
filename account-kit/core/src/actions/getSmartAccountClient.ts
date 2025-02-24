@@ -19,7 +19,6 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
   type ModularAccountV2,
-  type CreateModularAccountV2Params,
 } from "@account-kit/smart-contracts";
 import type { Address, Chain } from "viem";
 import type {
@@ -35,7 +34,6 @@ import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
-import type { AccountConfig } from "./createAccount";
 
 export type GetSmartAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
@@ -114,8 +112,6 @@ export function getSmartAccountClient(
   const connection = getConnection(config);
   const clientState =
     config.store.getState().smartAccountClients[connection.chain.id]?.[type];
-  const accountConfig =
-    config.store.getState().accountConfigs[connection.chain.id]?.[type];
 
   if (status === "ERROR" && clientState?.error) {
     return clientState;
@@ -139,27 +135,14 @@ export function getSmartAccountClient(
     });
   }
 
-  let invalidate = false;
-  if (type === "ModularAccountV2") {
-    const wantMode = (accountParams as CreateModularAccountV2Params | undefined)
-      ?.mode;
-    const haveMode =
-      (accountConfig as AccountConfig<"ModularAccountV2"> | undefined)?.mode ??
-      "default";
-    if (wantMode !== haveMode) {
-      invalidate = true;
-    }
-  }
-
   if (
     !account ||
-    invalidate ||
     status === "INITIALIZING" ||
     status === "RECONNECTING" ||
     signerStatus.isAuthenticating ||
     signerStatus.isInitializing
   ) {
-    if ((!account || invalidate) && signerStatus.isConnected) {
+    if (!account && signerStatus.isConnected) {
       createAccount({ type, accountParams }, config);
     }
 

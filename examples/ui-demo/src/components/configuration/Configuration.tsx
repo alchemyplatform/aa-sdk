@@ -4,23 +4,35 @@ import { SettingsIcon } from "../icons/settings";
 import { WalletTypeSwitch } from "../shared/WalletTypeSwitch";
 import ExternalLink from "../shared/ExternalLink";
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
-import { useChain } from "@account-kit/react";
+import {
+  useAccount,
+  useChain,
+  useSmartAccountClient,
+} from "@account-kit/react";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { odyssey } from "@/hooks/7702/transportSetup";
+import { useMemo } from "react";
 
 export const Configuration = ({ className }: { className?: string }) => {
-  const { setWalletType, walletType } = useConfigStore();
+  const { setAccountMode, accountMode } = useConfigStore();
   const { setChain } = useChain();
+  const clientParams = useMemo(
+    () => ({
+      type: "ModularAccountV2" as const,
+      accountParams: {
+        mode: accountMode,
+      },
+    }),
+    [accountMode]
+  );
+  const { isLoadingAccount } = useAccount(clientParams);
+  const { isLoadingClient } = useSmartAccountClient(clientParams);
 
   const onSwitchWalletType = () => {
-    const newValue =
-      walletType === WalletTypes.smart
-        ? WalletTypes.hybrid7702
-        : WalletTypes.smart;
-    setWalletType(newValue);
+    const newMode = accountMode === "default" ? "7702" : "default";
+    setAccountMode(newMode);
     setChain({
-      chain: newValue === WalletTypes.smart ? arbitrumSepolia : odyssey,
+      chain: newMode === "default" ? arbitrumSepolia : odyssey,
     });
   };
 
@@ -41,8 +53,9 @@ export const Configuration = ({ className }: { className?: string }) => {
       </div>
       <WalletTypeSwitch
         id="wallet-switch"
-        checked={walletType === WalletTypes.hybrid7702}
+        checked={accountMode === "7702"}
         onCheckedChange={onSwitchWalletType}
+        disabled={isLoadingClient || isLoadingAccount}
       />
       <p className="text-active text-xs font-normal pt-3">
         EIP-7702 adds smart account features to an EOA wallet.{" "}
