@@ -102,7 +102,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   }
 
   const accountPromise = (() => {
-    if (isLightAccountAccountParams(params)) {
+    if (isLightAccountParams(params)) {
       return createLightAccount({
         ...accountConfigs[chain.id]?.[params.type],
         ...params,
@@ -250,7 +250,7 @@ export const isModularV2AccountParams = (
   return params.type === "ModularAccountV2";
 };
 
-export const isLightAccountAccountParams = (
+export const isLightAccountParams = (
   params: CreateAccountParams<SupportedAccountTypes>
 ): params is GetAccountParams<"LightAccount"> => {
   return params.type === "LightAccount";
