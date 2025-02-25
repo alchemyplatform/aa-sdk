@@ -54,9 +54,9 @@ export type AlchemyAccountsProviderProps = {
  * @returns {AlchemyAccountContextProps} The alchemy account context if one exists
  * @throws if used outside of the AlchemyAccountProvider
  */
-export const useAlchemyAccountContext = <T extends AlchemySigner>(
-  override?: AlchemyAccountContextProps<T>
-): AlchemyAccountContextProps<T> => {
+export const useAlchemyAccountContext = (
+  override?: AlchemyAccountContextProps<AlchemyWebSigner>
+): AlchemyAccountContextProps<AlchemyWebSigner> => {
   const context = useContext(AlchemyAccountContext);
   if (override != null) return override;
 

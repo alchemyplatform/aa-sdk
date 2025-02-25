@@ -4,7 +4,7 @@ import {
   type AlchemyAccountsConfig,
   type AlchemyClientState,
 } from "@account-kit/core";
-import { hydrate } from "@account-kit/core/web";
+import { hydrate } from "@account-kit/core/react-native";
 import { useEffect, useRef, type PropsWithChildren } from "react";
 import type { AlchemyWebSigner } from "@account-kit/signer";
 
@@ -30,24 +30,20 @@ export type HydrateProps = {
 export function Hydrate(props: PropsWithChildren<HydrateProps>) {
   const { children, config, initialState } = props;
 
+  const hasMounted = useRef(false);
   const { onMount } = hydrate(config, initialState);
 
-  // Hydrate for Non-SSR
-  if (!config._internal.ssr) {
-    onMount();
-  }
-
-  // Hydrate for SSR
-  const active = useRef(true);
+  // Hydrate!
   useEffect(() => {
-    if (!active.current) return;
-    if (!config._internal.ssr) return;
-    onMount();
+    if (!hasMounted.current) {
+      onMount();
+      hasMounted.current = true;
+    }
+
     return () => {
-      active.current = false;
+      hasMounted.current = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onMount]);
 
   return children;
 }

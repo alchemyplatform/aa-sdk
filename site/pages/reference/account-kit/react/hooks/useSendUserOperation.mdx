@@ -27,8 +27,9 @@ import {
 } from "@account-kit/react";
 
 function ComponentWithSendUserOperation() {
-  const { client } = useSmartAccountClient({});
-
+  const { client } = useSmartAccountClient({
+    type: "MultiOwnerModularAccount",
+  });
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
     client,
     // optional parameter that will wait for the transaction to be mined before returning

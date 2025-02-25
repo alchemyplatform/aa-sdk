@@ -1,0 +1,6 @@
+{
+	"extends": "typescript-template/base.json",
+	"compilerOptions": {
+		"jsx": "preserve"
+	}
+}
