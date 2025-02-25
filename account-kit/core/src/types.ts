@@ -61,7 +61,7 @@ export type AlchemyAccountsConfig = {
 export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
-  policyId?: string;
+  policyId?: string | string[];
 };
 
 type RpcConnectionConfig =
@@ -69,7 +69,7 @@ type RpcConnectionConfig =
       chain: Chain;
       chains: {
         chain: Chain;
-        policyId?: string;
+        policyId?: string | string[];
         // optional transport override
         transport?: AlchemyTransport;
       }[];
@@ -83,7 +83,7 @@ type RpcConnectionConfig =
       chain: Chain;
       chains: {
         chain: Chain;
-        policyId?: string;
+        policyId?: string | string[];
         transport: AlchemyTransport;
       }[];
       transport?: never;
@@ -94,7 +94,7 @@ type RpcConnectionConfig =
   | {
       transport: AlchemyTransport;
       chain: Chain;
-      policyId?: string;
+      policyId?: string | string[];
       signerConnection?: ConnectionConfig;
       chains?: never;
     };
