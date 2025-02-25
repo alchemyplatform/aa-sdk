@@ -73,15 +73,14 @@ export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
             ...config
           }) => config,
           skipHydration: true,
-          version: 2,
+          version: 3,
         })
   );
 };
 
-function createInitialState(
-  initialConfig: Config = DEFAULT_CONFIG
-): StateCreator<DemoState> {
+function createInitialState(initialConfig?: Config): StateCreator<DemoState> {
   return (set, get) => ({
+    ...DEFAULT_CONFIG,
     ...initialConfig,
     nftTransferred: false,
     setNftTransferred: (transferred) => {
