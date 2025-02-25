@@ -21,6 +21,7 @@ import type {
 import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
+import type { GetAccountParams } from "./getAccount";
 
 type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
 
@@ -75,7 +76,7 @@ export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
  * @returns {Promise<SupportedAccounts>} A promise that resolves to the created account object
  */
 export async function createAccount<TAccount extends SupportedAccountTypes>(
-  { type, accountParams: params }: CreateAccountParams<TAccount>,
+  params: CreateAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): Promise<SupportedAccounts> {
   const store = config.store;
@@ -95,87 +96,83 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  const cachedAccount = accounts[chain.id]?.[type];
+  const cachedAccount = accounts[chain.id]?.[params.type];
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
-  const cachedConfig = accountConfigs[chain.id]?.[type];
 
   const accountPromise = (() => {
-    switch (type) {
-      case "LightAccount":
-        return createLightAccount({
-          ...cachedConfig,
-          ...params,
-          signer,
-          transport: (opts) => transport({ ...opts, retryCount: 0 }),
-          chain,
-        }).then((account) => {
-          CoreLogger.trackEvent({
-            name: "account_initialized",
-            data: {
-              accountType: "LightAccount",
-              accountVersion: account.getLightAccountVersion(),
-            },
-          });
+    if (isLightAccountAccountParams(params)) {
+      return createLightAccount({
+        ...accountConfigs[chain.id]?.[params.type],
+        ...params,
+        signer,
+        transport: (opts) => transport({ ...opts, retryCount: 0 }),
+        chain,
+      }).then((account) => {
+        CoreLogger.trackEvent({
+          name: "account_initialized",
+          data: {
+            accountType: "LightAccount",
+            accountVersion: account.getLightAccountVersion(),
+          },
+        });
+        return account;
+      });
+    } else if (isMultiOwnerLightAccountParams(params)) {
+      return createMultiOwnerLightAccount({
+        ...accountConfigs[chain.id]?.[params.type],
+        ...params,
+        signer,
+        transport: (opts) => transport({ ...opts, retryCount: 0 }),
+        chain,
+      }).then((account) => {
+        CoreLogger.trackEvent({
+          name: "account_initialized",
+          data: {
+            accountType: "MultiOwnerLightAccount",
+            accountVersion: account.getLightAccountVersion(),
+          },
+        });
+        return account;
+      });
+    } else if (isMultiOwnerModularAccountParams(params)) {
+      return createMultiOwnerModularAccount({
+        ...accountConfigs[chain.id]?.[params.type],
+        ...params,
+        signer,
+        transport: (opts) => transport({ ...opts, retryCount: 0 }),
+        chain,
+      }).then((account) => {
+        CoreLogger.trackEvent({
+          name: "account_initialized",
+          data: {
+            accountType: "MultiOwnerModularAccount",
+            accountVersion: "v1.0.0",
+          },
+        });
+        return account;
+      });
+    } else if (isModularV2AccountParams(params)) {
+      return createModularAccountV2({
+        ...accountConfigs[chain.id]?.[params.type],
+        ...params,
+        signer,
+        transport: (opts) => transport({ ...opts, retryCount: 0 }),
+        chain,
+      }).then((account) => {
+        CoreLogger.trackEvent({
+          name: "account_initialized",
+          data: {
+            accountType: "ModularAccountV2",
+            accountVersion: "v2.0.0",
+          },
+        });
 
-          return account;
-        });
-      case "MultiOwnerLightAccount":
-        return createMultiOwnerLightAccount({
-          ...(cachedConfig as AccountConfig<"MultiOwnerLightAccount">),
-          ...(params as OmitSignerTransportChain<CreateMultiOwnerLightAccountParams>),
-          signer,
-          transport: (opts) => transport({ ...opts, retryCount: 0 }),
-          chain,
-        }).then((account) => {
-          CoreLogger.trackEvent({
-            name: "account_initialized",
-            data: {
-              accountType: "MultiOwnerLightAccount",
-              accountVersion: account.getLightAccountVersion(),
-            },
-          });
-          return account;
-        });
-      case "MultiOwnerModularAccount":
-        return createMultiOwnerModularAccount({
-          ...(cachedConfig as AccountConfig<"MultiOwnerModularAccount">),
-          ...(params as OmitSignerTransportChain<CreateMultiOwnerModularAccountParams>),
-          signer,
-          transport: (opts) => transport({ ...opts, retryCount: 0 }),
-          chain,
-        }).then((account) => {
-          CoreLogger.trackEvent({
-            name: "account_initialized",
-            data: {
-              accountType: "MultiOwnerModularAccount",
-              accountVersion: "v1.0.0",
-            },
-          });
-
-          return account;
-        });
-      case "ModularAccountV2":
-        return createModularAccountV2({
-          ...(cachedConfig as AccountConfig<"ModularAccountV2">),
-          ...(params as OmitSignerTransportChain<CreateModularAccountV2Params>),
-          signer,
-          transport: (opts) => transport({ ...opts, retryCount: 0 }),
-          chain,
-        }).then((account) => {
-          CoreLogger.trackEvent({
-            name: "account_initialized",
-            data: {
-              accountType: "ModularAccountV2",
-              accountVersion: "v2.0.0",
-            },
-          });
-
-          return account;
-        });
-      default:
-        throw new Error("Unsupported account type");
+        return account;
+      });
+    } else {
+      throw new Error(`Unsupported account type: ${params.type}`);
     }
   })();
 
@@ -185,7 +182,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]: {
+          [params.type]: {
             status: "INITIALIZING",
             account: accountPromise,
           },
@@ -195,7 +192,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...state.accountConfigs,
         [chain.id]: {
           ...state.accountConfigs[chain.id],
-          [type]: {
+          [params.type]: {
             ...params,
           },
         },
@@ -211,7 +208,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]: {
+          [params.type]: {
             status: "READY",
             account,
           },
@@ -221,7 +218,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...state.accountConfigs,
         [chain.id]: {
           ...state.accountConfigs[chain.id],
-          [type]: {
+          [params.type]: {
             ...params,
             accountAddress: account.address,
             initCode,
@@ -235,7 +232,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         ...accounts,
         [chain.id]: {
           ...accounts[chain.id],
-          [type]: {
+          [params.type]: {
             status: "ERROR",
             error,
           },
@@ -246,3 +243,27 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
 
   return accountPromise;
 }
+
+export const isModularV2AccountParams = (
+  params: CreateAccountParams<SupportedAccountTypes>
+): params is GetAccountParams<"ModularAccountV2"> => {
+  return params.type === "ModularAccountV2";
+};
+
+export const isLightAccountAccountParams = (
+  params: CreateAccountParams<SupportedAccountTypes>
+): params is GetAccountParams<"LightAccount"> => {
+  return params.type === "LightAccount";
+};
+
+export const isMultiOwnerLightAccountParams = (
+  params: CreateAccountParams<SupportedAccountTypes>
+): params is GetAccountParams<"MultiOwnerLightAccount"> => {
+  return params.type === "MultiOwnerLightAccount";
+};
+
+export const isMultiOwnerModularAccountParams = (
+  params: CreateAccountParams<SupportedAccountTypes>
+): params is GetAccountParams<"MultiOwnerModularAccount"> => {
+  return params.type === "MultiOwnerModularAccount";
+};
