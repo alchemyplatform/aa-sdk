@@ -804,12 +804,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             ? AlchemyMfaStatus.REQUIRED
             : AlchemyMfaStatus.NOT_REQUIRED,
         });
-
-        // Emit MFA required event if applicable
-        if (isMfaRequired && multifactor?.factors) {
-          // TODO: emit mfaRequired event
-          // this.eventEmitter.emit("mfaRequired", multifactor.factors);
-        }
       } else {
         const { orgId, otpId } = await this.inner.createAccount({
           type: "email",
