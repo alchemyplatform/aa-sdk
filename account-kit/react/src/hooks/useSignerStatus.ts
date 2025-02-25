@@ -7,6 +7,7 @@ import {
   useAlchemyAccountContext,
   type AlchemyAccountContextProps,
 } from "../context.js";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 
 export type UseSignerStatusResult = SignerStatus;
 
@@ -24,7 +25,7 @@ export type UseSignerStatusResult = SignerStatus;
  * ```
  */
 export const useSignerStatus = (
-  override?: AlchemyAccountContextProps
+  override?: AlchemyAccountContextProps<AlchemyWebSigner>
 ): UseSignerStatusResult => {
   const { config } = useAlchemyAccountContext(override);
 

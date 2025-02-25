@@ -9,10 +9,12 @@ import { ReactLogger } from "./metrics.js";
 import type { AlchemyAccountsUIConfig } from "./types";
 import { getWalletConnectParams } from "./utils.js";
 import { WALLET_CONNECT } from "./components/auth/card/eoa.js";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 
-export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
-  ui?: AlchemyAccountsUIConfig;
-};
+export type AlchemyAccountsConfigWithUI =
+  AlchemyAccountsConfig<AlchemyWebSigner> & {
+    ui?: AlchemyAccountsUIConfig;
+  };
 
 /**
  * Wraps the `createConfig` that is exported from `@aa-sdk/core` to allow passing

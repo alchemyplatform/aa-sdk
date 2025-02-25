@@ -20,7 +20,7 @@ import { useAlchemyAccountContext } from "../context.js";
  * ```
  */
 export const useSigner = (): AlchemyWebSigner | null => {
-  const { config } = useAlchemyAccountContext();
+  const { config } = useAlchemyAccountContext<AlchemyWebSigner>();
 
   // TODO: figure out how to handle this on the server
   // I think we need a version of the signer that can be run on the server that essentially no-ops or errors
