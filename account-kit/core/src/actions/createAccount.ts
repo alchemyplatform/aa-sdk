@@ -105,7 +105,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     if (isLightAccountParams(params)) {
       return createLightAccount({
         ...accountConfigs[chain.id]?.[params.type],
-        ...params,
+        ...params.accountParams,
         signer,
         transport: (opts) => transport({ ...opts, retryCount: 0 }),
         chain,
@@ -122,7 +122,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     } else if (isMultiOwnerLightAccountParams(params)) {
       return createMultiOwnerLightAccount({
         ...accountConfigs[chain.id]?.[params.type],
-        ...params,
+        ...params.accountParams,
         signer,
         transport: (opts) => transport({ ...opts, retryCount: 0 }),
         chain,
@@ -139,7 +139,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     } else if (isMultiOwnerModularAccountParams(params)) {
       return createMultiOwnerModularAccount({
         ...accountConfigs[chain.id]?.[params.type],
-        ...params,
+        ...params.accountParams,
         signer,
         transport: (opts) => transport({ ...opts, retryCount: 0 }),
         chain,
@@ -156,7 +156,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     } else if (isModularV2AccountParams(params)) {
       return createModularAccountV2({
         ...accountConfigs[chain.id]?.[params.type],
-        ...params,
+        ...params.accountParams,
         signer,
         transport: (opts) => transport({ ...opts, retryCount: 0 }),
         chain,
@@ -168,7 +168,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
             accountVersion: "v2.0.0",
           },
         });
-
         return account;
       });
     } else {
@@ -193,7 +192,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         [chain.id]: {
           ...state.accountConfigs[chain.id],
           [params.type]: {
-            ...params,
+            ...params.accountParams,
           },
         },
       },
@@ -219,7 +218,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         [chain.id]: {
           ...state.accountConfigs[chain.id],
           [params.type]: {
-            ...params,
+            ...params.accountParams,
             accountAddress: account.address,
             initCode,
           },

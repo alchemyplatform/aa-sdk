@@ -28,7 +28,7 @@ import type {
   SupportedAccounts,
   SupportedAccountTypes,
 } from "../types";
-import { createAccount } from "./createAccount.js";
+import { createAccount, isModularV2AccountParams } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
@@ -221,9 +221,8 @@ export function getSmartAccountClient(
         };
       case "ModularAccountV2":
         const is7702 =
-          params.accountParams &&
-          "mode" in params.accountParams &&
-          params.accountParams.mode === "7702";
+          isModularV2AccountParams(params) &&
+          params.accountParams?.mode === "7702";
         return {
           client: createAlchemySmartAccountClient({
             transport,
