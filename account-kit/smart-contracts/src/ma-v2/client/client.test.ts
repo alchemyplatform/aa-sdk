@@ -945,6 +945,11 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
+    // force block timestamp to be outside of range
+    // await testClient.setNextBlockTimestamp({
+    //   timestamp: 2_200_000_000,
+    // });
+
     // create session key client
     const sessionKeyProvider = (
       await givenConnectedProvider({
@@ -954,10 +959,12 @@ describe("MA v2 Tests", async () => {
       })
     ).extend(installValidationActions);
 
+    console.log(await client.getBlock());
+
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
       entityId: 1,
-      validAfter: 1722043948,
-      validUntil: 1722043949,
+      validAfter: 1_900_000_000,
+      validUntil: 2_100_000_000,
     });
 
     const installResult = await provider.installValidation({
@@ -993,16 +1000,11 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(installResult);
     console.log("INSTALLED");
 
-    // console.log(await provider.account.getValidationData({ entityId: 2 }));
+    console.log(await provider.account.getValidationData({ entityId: 1 }));
 
-    // force block timestamp to be outside of range
-    await testClient.setNextBlockTimestamp({
-      timestamp: 1924507101n,
-    });
-
-    await testClient.mine({
-      blocks: 1,
-    });
+    // await testClient.mine({
+    //   blocks: 1,
+    // });
 
     // send transaction outside of time range
     const uoResult = await sessionKeyProvider.sendUserOperation({
@@ -1012,10 +1014,12 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
+
     console.log("TRANSACTION LANDED");
     // console.log({ uoResult });
-    console.log(await client.getBlock());
+    // console.log(await client.getBlock());
     console.log({ uoResult });
+    console.log(await client.getBlock());
 
     const timeRangeModule = getContract({
       address: getDefaultTimeRangeModuleAddress(provider.chain),
