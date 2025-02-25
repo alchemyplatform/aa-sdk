@@ -41,7 +41,7 @@ export type AlchemySmartAccountClientConfig<
 > = {
   account?: account;
   useSimulation?: boolean;
-  policyId?: string;
+  policyId?: string | string[];
 } & Pick<
   SmartAccountClientConfig<AlchemyTransport, chain, account, context>,
   | "customMiddleware"
