@@ -945,11 +945,6 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    // force block timestamp to be outside of range
-    // await testClient.setNextBlockTimestamp({
-    //   timestamp: 2_200_000_000,
-    // });
-
     // create session key client
     const sessionKeyProvider = (
       await givenConnectedProvider({
@@ -958,7 +953,8 @@ describe("MA v2 Tests", async () => {
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
-
+    console.log(provider.account.getSigner());
+    console.log(sessionKeyProvider.account.getSigner());
     console.log(await client.getBlock());
 
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
@@ -1000,12 +996,19 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(installResult);
     console.log("INSTALLED");
 
-    console.log(await provider.account.getValidationData({ entityId: 1 }));
+    testClient.setAutomine(false);
 
-    // await testClient.mine({
-    //   blocks: 1,
-    // });
+    // force block timestamp to be outside of range
+    await testClient.setNextBlockTimestamp({
+      timestamp: 2_200_000_000n,
+    });
 
+    console.log((await client.getBlock()).timestamp);
+
+    await testClient.mine({
+      blocks: 1,
+    });
+    console.log((await client.getBlock()).timestamp);
     // send transaction outside of time range
     const uoResult = await sessionKeyProvider.sendUserOperation({
       uo: {
@@ -1015,11 +1018,11 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    console.log("TRANSACTION LANDED");
+    console.log("TRANSACTION LANDED: IT SHOULDN'T");
     // console.log({ uoResult });
     // console.log(await client.getBlock());
-    console.log({ uoResult });
-    console.log(await client.getBlock());
+    // console.log({ uoResult });
+    console.log((await client.getBlock()).timestamp);
 
     const timeRangeModule = getContract({
       address: getDefaultTimeRangeModuleAddress(provider.chain),
