@@ -55,6 +55,8 @@ export type EmailAuthParams = {
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
   expirationSeconds?: number;
+  // TODO: add multifactor
+  // multifactor?: MfaChallenge;
 };
 
 export type OtpParams = {
@@ -63,6 +65,7 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
+  multifactor?: MfaChallenge;
 };
 
 export type SignupResponse = {
@@ -125,6 +128,7 @@ export type SignerEndpoints = [
     Response: {
       orgId: string;
       otpId?: string;
+      multifactor?: MfaState;
     };
   },
   {
@@ -155,7 +159,47 @@ export type SignerEndpoints = [
   {
     Route: "/v1/otp";
     Body: OtpParams;
-    Response: { credentialBundle: string };
+    Response: {
+      credentialBundle: string | null;
+      multifactor?: MfaState;
+    };
+  },
+  {
+    Route: "/v1/account/authenticator/mfas";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      factors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/account/authenticator/mfa";
+    Body: {
+      stampedRequest: TSignedRequest;
+      factors: string[];
+    };
+    Response: {
+      factors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/account/authenticator/mfa/request/totp";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: EnableMfaResult;
+  },
+  {
+    Route: "/v1/account/authenticator/mfa/verify/totp";
+    Body: {
+      stampedRequest: TSignedRequest;
+      factorId: string;
+      factorCode: string;
+    };
+    Response: {
+      factors: MfaFactor[];
+    };
   }
 ];
 
@@ -198,4 +242,42 @@ export type GetOauthProviderUrlArgs = {
   oauthCallbackUrl: string;
   oauthConfig?: OauthConfig;
   usesRelativeUrl?: boolean;
+};
+
+export type MfaFactor = {
+  factorId: string;
+  factorType: string;
+};
+
+export type MfaState = {
+  factors?: MfaFactor[];
+  multiFactorState: "required" | "not_required";
+};
+
+export type EnableMfaParams = {
+  factorType: string;
+};
+
+export type EnableMfaResult = {
+  factorType: string;
+  factorId: string;
+  factorTotpUrl: string;
+};
+
+export type VerifyMfaParams = {
+  factorId: string;
+  factorCode: string;
+};
+
+export type DisableMfaParams = {
+  factors: string[];
+};
+
+export type MfaChallenge = {
+  factorId: string;
+  factorChallenge:
+    | {
+        code: string;
+      }
+    | Record<string, any>;
 };

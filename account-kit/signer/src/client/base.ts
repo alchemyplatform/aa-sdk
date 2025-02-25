@@ -12,9 +12,13 @@ import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
+  DisableMfaParams,
   EmailAuthParams,
+  EnableMfaParams,
+  EnableMfaResult,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
+  MfaState,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -24,6 +28,7 @@ import type {
   SignerRoutes,
   SignupResponse,
   User,
+  VerifyMfaParams,
 } from "./types.js";
 import type { OauthMode } from "../signer.js";
 import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
@@ -131,7 +136,40 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string; otpId?: string }>;
+  ): Promise<{ orgId: string; otpId?: string; multifactor?: MfaState }>;
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ factors: Array<{ factorId: string; factorType: string }> }>} A promise that resolves to an array of configured MFA factors
+   */
+  public abstract getMfaFactors(): Promise<{
+    factors: { factorId: string; factorType: string }[];
+  }>;
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user.
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   */
+  public abstract enableMfa(params: EnableMfaParams): Promise<EnableMfaResult>;
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<void>} A promise that resolves when verification is complete
+   */
+  public abstract verifyMfa(params: VerifyMfaParams): Promise<void>;
+
+  /**
+   * Disables (removes) existing MFA factors by ID or factor type.
+   *
+   * @param {DisableMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<void>} A promise that resolves when the factors are disabled
+   */
+  public abstract disableMfa(params: DisableMfaParams): Promise<void>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;

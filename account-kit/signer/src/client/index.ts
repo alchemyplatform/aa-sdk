@@ -17,7 +17,13 @@ import type {
   OauthConfig,
   OtpParams,
   User,
+  MfaFactor,
+  EnableMfaParams,
+  EnableMfaResult,
+  VerifyMfaParams,
+  DisableMfaParams,
 } from "./types.js";
+import { NotAuthenticatedError } from "../errors.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -242,6 +248,12 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       ...args,
       targetPublicKey,
     });
+
+    if (!credentialBundle) {
+      throw new Error(
+        "Failed to submit OTP code. Check if multifactor is required."
+      );
+    }
     return { bundle: credentialBundle };
   }
 
@@ -644,6 +656,106 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     this.setStamper(currentStamper);
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
+  };
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ factors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public override getMfaFactors = async (): Promise<{
+    factors: MfaFactor[];
+  }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    return this.request("/v1/account/authenticator/mfas", {
+      stampedRequest,
+    });
+  };
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user.
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @throws {Error} If an unsupported factor type is provided
+   */
+  public override enableMfa = async (
+    params: EnableMfaParams
+  ): Promise<EnableMfaResult> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    switch (params.factorType) {
+      case "totp":
+        return this.request("/v1/account/authenticator/mfa/request/totp", {
+          stampedRequest,
+        });
+      default:
+        throw new Error(`Unsupported MFA factor type: ${params.factorType}`);
+    }
+  };
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<void>} A promise that resolves when verification is complete
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public override verifyMfa = async (
+    params: VerifyMfaParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    await this.request("/v1/account/authenticator/mfa/verify/totp", {
+      stampedRequest,
+      factorId: params.factorId,
+      factorCode: params.factorCode,
+    });
+  };
+
+  /**
+   * Disables (removes) existing MFA factors by ID.
+   *
+   * @param {DisableMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<void>} A promise that resolves when the factors are disabled
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public override disableMfa = async (
+    params: DisableMfaParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    await this.request("/v1/account/authenticator/mfa", {
+      stampedRequest,
+      factors: params.factors,
+    });
   };
 }
 

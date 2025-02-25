@@ -4,7 +4,10 @@ import {
   AlchemySignerClientParamsSchema,
   AlchemySignerWebClient,
 } from "./client/index.js";
-import type { CredentialCreationOptionOverrides } from "./client/types.js";
+import type {
+  CredentialCreationOptionOverrides,
+  MfaChallenge,
+} from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AuthParams =
@@ -46,6 +49,7 @@ export type AuthParams =
   | {
       type: "otp";
       otpCode: string;
+      multifactor?: MfaChallenge;
     };
 
 export type OauthProviderConfig =

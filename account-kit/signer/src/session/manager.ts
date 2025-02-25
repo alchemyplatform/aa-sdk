@@ -43,7 +43,11 @@ type Store = Mutate<
   [["zustand/subscribeWithSelector", never], ["zustand/persist", SessionState]]
 >;
 
-type TemporarySession = { orgId: string; isNewUser?: boolean };
+type TemporarySession = {
+  orgId: string;
+  isNewUser?: boolean;
+  isMfaRequired?: boolean;
+};
 
 export class SessionManager {
   private sessionKey: string;
