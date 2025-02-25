@@ -40,19 +40,19 @@ import { alchemyFeeEstimator } from "./feeEstimator.js";
  * });
  * ```
  *
- * @param {string} policyId the policyId for Alchemy's gas manager
+ * @param {string | string[]} policyId the policyId (or list of policyIds) for Alchemy's gas manager
  * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
  */
 export function alchemyGasManagerMiddleware(
-  policyId: string
+  policyId: string | string[]
 ): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
-  return erc7677Middleware<{ policyId: string }>({
+  return erc7677Middleware<{ policyId: string | string[] }>({
     context: { policyId: policyId },
   });
 }
 
 interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
-  policyId: string;
+  policyId: string | string[];
   transport: AlchemyTransport;
   gasEstimatorOverride?: ClientMiddlewareFn;
   feeEstimatorOverride?: ClientMiddlewareFn;
