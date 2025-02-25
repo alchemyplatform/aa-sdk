@@ -1,5 +1,5 @@
 import { type ClientWithAlchemyMethods } from "@account-kit/infra";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Retrieves the BundlerClient from the core store of the given AlchemyAccountsConfig.
@@ -15,8 +15,8 @@ import type { AlchemyAccountsConfig } from "../types";
  * @param {AlchemyAccountsConfig} config The configuration object containing the core store.
  * @returns {ClientWithAlchemyMethods} The BundlerClient from the core store.
  */
-export const getBundlerClient = (
-  config: AlchemyAccountsConfig
+export const getBundlerClient = <T extends AlchemySigner>(
+  config: AlchemyAccountsConfig<T>
 ): ClientWithAlchemyMethods => {
   const { bundlerClient } = config.store.getState();
 

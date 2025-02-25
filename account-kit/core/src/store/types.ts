@@ -3,7 +3,6 @@ import type {
   AlchemySignerParams,
   AlchemySignerStatus,
   AlchemySignerWebClient,
-  AlchemyWebSigner,
   ErrorInfo,
   User,
 } from "@account-kit/signer";
@@ -17,6 +16,7 @@ import type {
   Connection,
   SupportedAccount,
   SupportedAccountTypes,
+  AlchemySigner,
 } from "../types";
 
 export const DEFAULT_STORAGE_KEY = "alchemy-account-state";
@@ -59,8 +59,8 @@ export type SignerStatus = {
   isDisconnected: boolean;
 };
 
-export type StoredState = {
-  alchemy: Omit<StoreState, "signer" | "accounts" | "bundlerClient">;
+export type StoredState<T extends AlchemySigner> = {
+  alchemy: Omit<StoreState<T>, "signer" | "accounts" | "bundlerClient">;
   wagmi?: WagmiState;
 };
 
@@ -76,9 +76,9 @@ export type CreateAccountKitStoreParams = ClientStoreConfig & {
   ssr?: boolean;
 };
 
-export type StoreState = {
+export type StoreState<T extends AlchemySigner> = {
   // non-serializable
-  signer?: AlchemyWebSigner;
+  signer?: T;
   accounts?: {
     [chain: number]: {
       [key in SupportedAccountTypes]: AccountState<key>;
@@ -108,7 +108,7 @@ export type StoreState = {
   connections: Map<number, Connection>;
 };
 
-export type Store = Mutate<
-  StoreApi<StoreState>,
-  [["zustand/subscribeWithSelector", never], ["zustand/persist", StoreState]]
+export type Store<T extends AlchemySigner> = Mutate<
+  StoreApi<StoreState<T>>,
+  [["zustand/subscribeWithSelector", never], ["zustand/persist", StoreState<T>]]
 >;

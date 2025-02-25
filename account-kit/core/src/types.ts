@@ -20,6 +20,7 @@ import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Store, StoredState } from "./store/types";
+import type { RNAlchemySignerType } from "../../rn-signer/lib/typescript/module/src/signer";
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
@@ -28,27 +29,27 @@ export type SupportedAccountTypes =
   | "ModularAccountV2";
 
 export type SupportedAccounts =
-  | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
-  | MultiOwnerModularAccount<AlchemyWebSigner>
+  | LightAccount<AlchemySigner, LightAccountVersion<"LightAccount">>
+  | MultiOwnerModularAccount<AlchemySigner>
   | MultiOwnerLightAccount<
-      AlchemyWebSigner,
+      AlchemySigner,
       LightAccountVersion<"MultiOwnerLightAccount">
     >
-  | ModularAccountV2<AlchemyWebSigner>;
+  | ModularAccountV2<AlchemySigner>;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
-    ? LightAccount<AlchemyWebSigner>
+    ? LightAccount<AlchemySigner>
     : T extends "MultiOwnerModularAccount"
-    ? MultiOwnerModularAccount<AlchemyWebSigner>
+    ? MultiOwnerModularAccount<AlchemySigner>
     : T extends "MultiOwnerLightAccount"
-    ? MultiOwnerLightAccount<AlchemyWebSigner>
+    ? MultiOwnerLightAccount<AlchemySigner>
     : T extends "ModularAccountV2"
-    ? ModularAccountV2<AlchemyWebSigner>
+    ? ModularAccountV2<AlchemySigner>
     : never;
 
-export type AlchemyAccountsConfig = {
-  store: Store;
+export type AlchemyAccountsConfig<T extends AlchemySigner> = {
+  store: Store<T>;
   _internal: {
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
@@ -134,4 +135,6 @@ export type CreateConfigProps = RpcConnectionConfig & {
   >;
 // [!endregion CreateConfigProps]
 
-export type AlchemyClientState = StoredState;
+export type AlchemySigner = AlchemyWebSigner | RNAlchemySignerType;
+
+export type AlchemyClientState<T extends AlchemySigner> = StoredState<T>;

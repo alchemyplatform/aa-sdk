@@ -1,9 +1,9 @@
 import { alchemy, type AlchemyTransport } from "@account-kit/infra";
 import { ChainNotFoundError } from "../errors.js";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 export function getAlchemyTransport(
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig<AlchemySigner>
 ): AlchemyTransport {
   const { chain, connections } = config.store.getState();
   if (!connections.has(chain.id)) {

@@ -23,6 +23,7 @@ import {
 import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   Connection,
   SupportedAccount,
   SupportedAccounts,
@@ -73,7 +74,7 @@ export function getSmartAccountClient<
   TAccount extends SupportedAccountTypes = SupportedAccountTypes
 >(
   params: GetSmartAccountClientParams<TChain, TAccount>,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig<AlchemySigner>
 ): GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
 
 /**
@@ -97,7 +98,7 @@ export function getSmartAccountClient<
  */
 export function getSmartAccountClient(
   params: GetSmartAccountClientParams,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig<AlchemySigner>
 ): GetSmartAccountClientResult {
   const { accountParams, type, ...clientParams } = params;
   const { account, status, error } = getAccount(
@@ -272,7 +273,7 @@ function getSmartAccountClientState<
 }: {
   chainId: number;
   type: TAccountType;
-  config: AlchemyAccountsConfig;
+  config: AlchemyAccountsConfig<AlchemySigner>;
 }) {
   return config.store.getState().smartAccountClients[chainId][type]!;
 }
@@ -285,7 +286,7 @@ function setSmartAccountClientState<
   type,
   connection,
 }: {
-  config: AlchemyAccountsConfig;
+  config: AlchemyAccountsConfig<AlchemySigner>;
   type: TAccountType;
   newState: GetSmartAccountClientResult;
   connection: Connection;

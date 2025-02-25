@@ -1,7 +1,7 @@
 import { AlchemySignerStatus } from "@account-kit/signer";
 import { disconnect as wagmi_disconnect } from "@wagmi/core";
 import { convertSignerStatusToState } from "../store/store.js";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 import { getSigner } from "./getSigner.js";
 
 /**
@@ -22,7 +22,9 @@ import { getSigner } from "./getSigner.js";
  *
  * @param {AlchemyAccountsConfig} config The configuration containing the store to be cleared
  */
-export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
+export async function disconnect<T extends AlchemySigner>(
+  config: AlchemyAccountsConfig<T>
+): Promise<void> {
   const signer = getSigner(config);
   await wagmi_disconnect(config._internal.wagmiConfig);
   await signer?.disconnect();

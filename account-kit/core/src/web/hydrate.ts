@@ -1,14 +1,14 @@
 import type { Address } from "@aa-sdk/core";
 import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
-import { reconnect } from "./actions/reconnect.js";
+import { reconnect } from "./reconnect.js";
 import {
   convertSignerStatusToState,
   createDefaultAccountState,
   defaultAccountState,
-} from "./store/store.js";
-import type { AccountState, StoreState, StoredState } from "./store/types.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
+} from "../store/store.js";
+import type { AccountState, StoreState, StoredState } from "../store/types.js";
+import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
 
 export type HydrateResult = {
   onMount: () => Promise<void>;

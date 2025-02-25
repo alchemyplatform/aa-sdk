@@ -1,4 +1,8 @@
-import type { AlchemyAccountsConfig, Connection } from "../types";
+import type {
+  AlchemyAccountsConfig,
+  AlchemySigner,
+  Connection,
+} from "../types";
 
 /**
  * Subscribe to changes to the active connection
@@ -15,7 +19,7 @@ import type { AlchemyAccountsConfig, Connection } from "../types";
  * @param {AlchemyAccountsConfig} config the account config
  * @returns {(onChange: (connection: Connection) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the connection changes and returns a function to unsubscribe from the store
  */
-export function watchConnection(config: AlchemyAccountsConfig) {
+export function watchConnection(config: AlchemyAccountsConfig<AlchemySigner>) {
   return (onChange: (connection: Connection) => void) => {
     return config.store.subscribe(
       ({ chain }) => chain,

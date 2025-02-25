@@ -2,7 +2,7 @@ import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
 import { switchChain } from "@wagmi/core";
 import type { Chain } from "viem";
 import { ChainNotFoundError } from "../errors.js";
-import type { AlchemyAccountsConfig } from "../types.js";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
 
 /**
  * Allows you to change the current chain in the core store. Note, this chain
@@ -20,7 +20,10 @@ import type { AlchemyAccountsConfig } from "../types.js";
  * @param {AlchemyAccountsConfig} config the accounts config object
  * @param {Chain} chain the chain to change to. It must be present in the connections config object
  */
-export async function setChain(config: AlchemyAccountsConfig, chain: Chain) {
+export async function setChain(
+  config: AlchemyAccountsConfig<AlchemySigner>,
+  chain: Chain
+) {
   const connection = config.store.getState().connections.get(chain.id);
   if (connection == null) {
     throw new ChainNotFoundError(chain);

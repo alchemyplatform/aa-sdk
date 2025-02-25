@@ -1,8 +1,8 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
-import { createSigner } from "../store/store.js";
+import { createSigner } from "./createSigner.js";
 import type { AlchemyAccountsConfig } from "../types.js";
-import { createAccount } from "./createAccount.js";
-import { getChain } from "./getChain.js";
+import { createAccount } from "../actions/createAccount.js";
+import { getChain } from "../actions/getChain.js";
+import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
 
 /**
  * This method will use the current state in the client store and attempt to restore
@@ -19,14 +19,13 @@ import { getChain } from "./getChain.js";
  * @param {AlchemyAccountsConfig} config the account config which contains the client store
  */
 export async function reconnect(
-  config: AlchemyAccountsConfig<AlchemyWebSigner>
+  config: AlchemyAccountsConfig<RNAlchemySignerType>
 ) {
   const { store } = config;
   const signerConfig = store.getState().config;
   const accountConfigs = store.getState().accountConfigs;
 
-  const signer: AlchemyWebSigner =
-    store.getState().signer ?? createSigner(signerConfig);
+  const signer = store.getState().signer ?? createSigner(signerConfig);
   if (!store.getState().signer) {
     store.setState({
       signer,

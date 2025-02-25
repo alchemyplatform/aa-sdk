@@ -6,6 +6,7 @@ import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   Connection,
   CreateConfigProps,
 } from "./types.js";
@@ -35,7 +36,7 @@ export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
  */
 export const createConfig = (
   params: CreateConfigProps
-): AlchemyAccountsConfig => {
+): AlchemyAccountsConfig<AlchemySigner> => {
   const {
     chain,
     iframeConfig,
@@ -109,7 +110,7 @@ export const createConfig = (
     ssr,
   });
 
-  const config: AlchemyAccountsConfig = {
+  const config: AlchemyAccountsConfig<AlchemySigner> = {
     store: store,
     _internal: {
       ssr,

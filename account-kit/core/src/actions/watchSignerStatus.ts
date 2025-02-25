@@ -1,5 +1,5 @@
 import type { SignerStatus } from "../store/types.js";
-import type { AlchemyAccountsConfig } from "../types.js";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
 
 /**
  * Watches the signer status in the client store and triggers the provided callback function when the status changes.
@@ -17,11 +17,13 @@ import type { AlchemyAccountsConfig } from "../types.js";
  * @returns {(onChange: (status: SignerStatus) => void) => (() => void)} A function that accepts a callback to be called when the signer status changes which returns a function to unsubscribe from the store
  */
 export const watchSignerStatus =
-  (config: AlchemyAccountsConfig) =>
+  (config: AlchemyAccountsConfig<AlchemySigner>) =>
   (onChange: (status: SignerStatus) => void) => {
     return config.store.subscribe(
       ({ signerStatus }) => signerStatus,
       onChange,
-      { equalityFn: (a, b) => a.status === b.status && a.error === b.error }
+      {
+        equalityFn: (a, b) => a.status === b.status && a.error === b.error,
+      }
     );
   };

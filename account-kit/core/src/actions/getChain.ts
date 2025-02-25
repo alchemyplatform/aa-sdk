@@ -1,5 +1,5 @@
 import type { Chain } from "viem";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Gets the currently active chain
@@ -7,6 +7,8 @@ import type { AlchemyAccountsConfig } from "../types";
  * @param {AlchemyAccountsConfig} config the account config object
  * @returns {Chain} the currently active chain
  */
-export function getChain(config: AlchemyAccountsConfig): Chain {
+export function getChain<T extends AlchemySigner>(
+  config: AlchemyAccountsConfig<T>
+): Chain {
   return config.store.getState().chain;
 }

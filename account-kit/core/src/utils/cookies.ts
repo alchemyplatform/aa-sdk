@@ -1,7 +1,7 @@
 import { cookieToInitialState as wagmiCookieToInitialState } from "@wagmi/core";
 import Cookies from "js-cookie";
 import type { StoredState } from "../store/types.js";
-import type { AlchemyAccountsConfig } from "../types.js";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
 import { deserialize } from "./deserialize.js";
 
 // The maximum duration of a cookie according to the spec is 400 days.
@@ -73,17 +73,17 @@ export const cookieStorage = (config?: {
  * @param {string | undefined} cookie optional cookie string
  * @returns {StoredState | undefined} the deserialized AlchemyClientState if the cookie exists, otherwise undefined
  */
-export function cookieToInitialState(
-  config: AlchemyAccountsConfig,
+export function cookieToInitialState<T extends AlchemySigner>(
+  config: AlchemyAccountsConfig<T>,
   cookie?: string
-): StoredState | undefined {
+): StoredState<T> | undefined {
   if (!cookie) return;
 
   const state = parseCookie(cookie, config._internal.storageKey);
   if (!state) return;
 
   const alchemyClientState = deserialize<{
-    state: StoredState["alchemy"];
+    state: StoredState<T>["alchemy"];
   }>(state).state;
 
   // If the expirationTimeMs is changed in the config, we should use the new config

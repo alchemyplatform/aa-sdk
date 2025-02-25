@@ -1,5 +1,5 @@
 import { type ClientWithAlchemyMethods } from "@account-kit/infra";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Watches for changes to the bundler client within the given configuration and triggers a callback when changes occur.
@@ -17,7 +17,7 @@ import type { AlchemyAccountsConfig } from "../types";
  * @returns {(onChange: (bundlerClient: ClientWithAlchemyMethods) => void) => (() => void)} A function accepting a callback function to invoke when the bundler client changes and returns a function to unsubscribe from the store
  */
 export const watchBundlerClient =
-  (config: AlchemyAccountsConfig) =>
+  (config: AlchemyAccountsConfig<AlchemySigner>) =>
   (onChange: (bundlerClient: ClientWithAlchemyMethods) => void) => {
     return config.store.subscribe(
       ({ bundlerClient }) => bundlerClient,

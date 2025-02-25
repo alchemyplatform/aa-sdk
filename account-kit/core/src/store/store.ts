@@ -13,7 +13,11 @@ import {
 } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
-import type { Connection, SupportedAccountTypes } from "../types.js";
+import type {
+  AlchemySigner,
+  Connection,
+  SupportedAccountTypes,
+} from "../types.js";
 import { storeReplacer } from "../utils/replacer.js";
 import { storeReviver } from "../utils/reviver.js";
 import {
@@ -26,9 +30,9 @@ import {
   type StoreState,
 } from "./types.js";
 
-export const createAccountKitStore = (
+export const createAccountKitStore = <T extends AlchemySigner>(
   params: CreateAccountKitStoreParams
-): Store => {
+): Store<T> => {
   const {
     connections,
     storage = typeof window !== "undefined" ? localStorage : undefined,
@@ -37,17 +41,17 @@ export const createAccountKitStore = (
 
   // State defined in here should work either on the server or on the client
   // bundler client for example can be used in either setting to make RPC calls
-  const store = createStore(
+  const store: Store<T> = createStore(
     subscribeWithSelector(
       storage
         ? persist(() => createInitialStoreState(params), {
             name: DEFAULT_STORAGE_KEY,
-            storage: createJSONStorage<StoreState>(() => storage, {
+            storage: createJSONStorage<StoreState<T>>(() => storage, {
               replacer: (key, value) => {
                 if (key === "bundlerClient") return undefined;
 
                 if (key === "user") {
-                  const user = value as StoreState["user"];
+                  const user = value as StoreState<T>["user"];
                   if (!user) return undefined;
 
                   return {
@@ -55,7 +59,7 @@ export const createAccountKitStore = (
                     orgId: user.orgId,
                     userId: user.userId,
                     email: user.email,
-                  } as StoreState["user"];
+                  } as StoreState<T>["user"];
                 }
 
                 if (key === "chain") {
@@ -79,7 +83,7 @@ export const createAccountKitStore = (
               },
             }),
             merge: (persisted, current) => {
-              const persistedState = persisted as StoreState;
+              const persistedState = persisted as StoreState<T>;
               if (persistedState.chain == null) {
                 return createInitialStoreState(params);
               }
@@ -120,9 +124,9 @@ export const createAccountKitStore = (
   return store;
 };
 
-const createInitialStoreState = (
+const createInitialStoreState = <T extends AlchemySigner>(
   params: CreateAccountKitStoreParams
-): StoreState => {
+): StoreState<T> => {
   const { connections, chain, client, sessionConfig } = params;
   const connectionMap = createConnectionsMap(connections);
 
@@ -132,7 +136,7 @@ const createInitialStoreState = (
 
   const chains = connections.map((c) => c.chain);
   const accountConfigs = createEmptyAccountConfigState(chains);
-  const baseState: StoreState = {
+  const baseState: StoreState<T> = {
     bundlerClient: createAlchemyPublicRpcClient({
       chain,
       transport: alchemy(connectionMap.get(chain.id)!.transport),
@@ -259,7 +263,9 @@ export const defaultAccountState = <
   T extends SupportedAccountTypes
 >(): AccountState<T> => staticState;
 
-const addClientSideStoreListeners = (store: Store) => {
+const addClientSideStoreListeners = <T extends AlchemySigner>(
+  store: Store<T>
+) => {
   if (typeof window === "undefined") {
     return;
   }
@@ -306,14 +312,18 @@ const addClientSideStoreListeners = (store: Store) => {
   );
 };
 
-const createEmptyAccountConfigState = (chains: Chain[]) => {
+const createEmptyAccountConfigState = <T extends AlchemySigner>(
+  chains: Chain[]
+) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {};
     return acc;
-  }, {} as StoreState["accountConfigs"]);
+  }, {} as StoreState<T>["accountConfigs"]);
 };
 
-export const createDefaultAccountState = (chains: Chain[]) => {
+export const createDefaultAccountState = <T extends AlchemySigner>(
+  chains: Chain[]
+) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {
       LightAccount: defaultAccountState<"LightAccount">(),
@@ -323,13 +333,15 @@ export const createDefaultAccountState = (chains: Chain[]) => {
       ModularAccountV2: defaultAccountState<"ModularAccountV2">(),
     };
     return acc;
-  }, {} as NoUndefined<StoreState["accounts"]>);
+  }, {} as NoUndefined<StoreState<T>["accounts"]>);
 };
 
-export const createEmptySmartAccountClientState = (chains: Chain[]) => {
+export const createEmptySmartAccountClientState = <T extends AlchemySigner>(
+  chains: Chain[]
+) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {};
 
     return acc;
-  }, {} as StoreState["smartAccountClients"]);
+  }, {} as StoreState<T>["smartAccountClients"]);
 };

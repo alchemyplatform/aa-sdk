@@ -15,6 +15,7 @@ import { ClientOnlyPropertyError } from "../errors.js";
 import { CoreLogger } from "../metrics.js";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   SupportedAccountTypes,
   SupportedAccounts,
 } from "../types.js";
@@ -74,9 +75,12 @@ export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
  * @param {AlchemyAccountsConfig} config The configuration object for Alchemy accounts
  * @returns {Promise<SupportedAccounts>} A promise that resolves to the created account object
  */
-export async function createAccount<TAccount extends SupportedAccountTypes>(
+export async function createAccount<
+  TAccount extends SupportedAccountTypes,
+  TSigner extends AlchemySigner
+>(
   { type, accountParams: params }: CreateAccountParams<TAccount>,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig<TSigner>
 ): Promise<SupportedAccounts> {
   const store = config.store;
   const accounts = store.getState().accounts;
@@ -87,8 +91,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   const bundlerClient = getBundlerClient(config);
   const transport = custom(bundlerClient);
   const chain = bundlerClient.chain;
-  const signer = getSigner(config);
-  const signerStatus = getSignerStatus(config);
+  const signer = getSigner<TSigner>(config);
+  const signerStatus = getSignerStatus<TSigner>(config);
 
   if (!signerStatus.isConnected || !signer) {
     throw new Error("Signer not connected");

@@ -1,5 +1,4 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
-import type { AlchemyAccountsConfig } from "../types.js";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
 
 /**
  * If there is a signer attached to the client state, it will return it.
@@ -17,8 +16,8 @@ import type { AlchemyAccountsConfig } from "../types.js";
  * @param {AlchemyAccountsConfig} config The account config which contains the client store
  * @returns {AlchemyWebSigner | null} the instance of the signer present in the store if it exists, otherwise null
  */
-export const getSigner = (
-  config: AlchemyAccountsConfig
-): AlchemyWebSigner | null => {
+export const getSigner = <T extends AlchemySigner>(
+  config: AlchemyAccountsConfig<T>
+): T | null => {
   return config.store.getState().signer ?? null;
 };

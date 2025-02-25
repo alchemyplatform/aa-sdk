@@ -1,5 +1,5 @@
 import type { User } from "@account-kit/signer";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 export type GetUserResult = (User & { type: "eoa" | "sca" }) | null;
 
@@ -19,7 +19,7 @@ export type GetUserResult = (User & { type: "eoa" | "sca" }) | null;
  * @returns {GetUserResult} the user if the signer or an EOA are connected
  */
 export const getUser = (
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig<AlchemySigner>
 ): (User & { type: "eoa" | "sca" }) | null => {
   const user = config.store.getState().user;
   if (user == null) return user ?? null;

@@ -1,5 +1,5 @@
 import type { Chain } from "viem";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Allows you to subscribe to changes of the chain in the client store.
@@ -16,7 +16,7 @@ import type { AlchemyAccountsConfig } from "../types";
  * @param {AlchemyAccountsConfig} config the account config object
  * @returns {(onChange: (chain: Chain) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the chain changes and returns a function to unsubscribe from the store
  */
-export function watchChain(config: AlchemyAccountsConfig) {
+export function watchChain(config: AlchemyAccountsConfig<AlchemySigner>) {
   return (onChange: (chain: Chain) => void) => {
     return config.store.subscribe(({ chain }) => chain, onChange);
   };

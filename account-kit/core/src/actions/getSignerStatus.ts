@@ -1,4 +1,4 @@
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Retrieves the signer status from the client's store in the provided configuration.
@@ -15,6 +15,8 @@ import type { AlchemyAccountsConfig } from "../types";
  * @param {AlchemyAccountsConfig} config The configuration object containing the client store
  * @returns {SignerStatus} The current signer status from the client store
  */
-export const getSignerStatus = (config: AlchemyAccountsConfig) => {
+export const getSignerStatus = <T extends AlchemySigner>(
+  config: AlchemyAccountsConfig<T>
+) => {
   return config.store.getState().signerStatus;
 };

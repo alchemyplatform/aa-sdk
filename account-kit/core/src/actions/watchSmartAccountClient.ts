@@ -2,6 +2,7 @@ import type { Chain } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   SupportedAccount,
   SupportedAccountTypes,
 } from "../types";
@@ -35,7 +36,7 @@ import {
   TChain extends Chain | undefined = Chain | undefined
 >(
   params: GetSmartAccountClientParams<TChain, TAccount>,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig<AlchemySigner>
 ) {
   return (
     onChange: (

@@ -1,5 +1,9 @@
 import { ChainNotFoundError } from "../errors.js";
-import type { AlchemyAccountsConfig, Connection } from "../types.js";
+import type {
+  AlchemyAccountsConfig,
+  AlchemySigner,
+  Connection,
+} from "../types.js";
 import { getChain } from "./getChain.js";
 
 /**
@@ -16,7 +20,9 @@ import { getChain } from "./getChain.js";
  * @param {AlchemyAccountsConfig} config the account config
  * @returns {Connection} a connection object for the current active chain
  */
-export function getConnection(config: AlchemyAccountsConfig): Connection {
+export function getConnection(
+  config: AlchemyAccountsConfig<AlchemySigner>
+): Connection {
   const chain = getChain(config);
   const connection = config.store.getState().connections.get(chain.id);
   if (!connection) {

@@ -1,5 +1,9 @@
 import { ClientOnlyPropertyError } from "../errors.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
+import type {
+  AlchemyAccountsConfig,
+  AlchemySigner,
+  SupportedAccountTypes,
+} from "../types.js";
 import { type GetAccountResult } from "./getAccount.js";
 import { getChain } from "./getChain.js";
 
@@ -23,7 +27,7 @@ import { getChain } from "./getChain.js";
 export const watchAccount =
   <TAccount extends SupportedAccountTypes>(
     type: TAccount,
-    config: AlchemyAccountsConfig
+    config: AlchemyAccountsConfig<AlchemySigner>
   ) =>
   (onChange: (account: GetAccountResult<TAccount>) => void) => {
     const accounts = config.store.getState().accounts;

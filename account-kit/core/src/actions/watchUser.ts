@@ -1,5 +1,5 @@
 import type { User } from "@account-kit/signer";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Watches for changes to the user in the client store and triggers the provided callback when a change is detected.
@@ -17,7 +17,8 @@ import type { AlchemyAccountsConfig } from "../types";
  * @returns {(onChange: (user: User) => void) => (() => void)} a function which accepts a callback that fires when the user changes and returns a function to unsubscribe from the user updates
  */
 export const watchUser =
-  (config: AlchemyAccountsConfig) => (onChange: (user?: User) => void) => {
+  (config: AlchemyAccountsConfig<AlchemySigner>) =>
+  (onChange: (user?: User) => void) => {
     return config.store.subscribe(({ user }) => user, onChange, {
       equalityFn: (a, b) => a?.userId === b?.userId,
     });
