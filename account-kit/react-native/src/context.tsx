@@ -1,3 +1,4 @@
+import "./polyfills/index.js";
 import {
   AlchemyAccountContext,
   NoAlchemyAccountContextError,

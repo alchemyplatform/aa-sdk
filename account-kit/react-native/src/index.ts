@@ -1,3 +1,5 @@
+import "./polyfills/index.js";
+
 export type * from "./context.js";
 export { AlchemyAccountProvider, useAlchemyAccountContext } from "./context.js";
 export { Hydrate } from "./hydrate.js";
