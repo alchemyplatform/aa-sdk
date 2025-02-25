@@ -170,7 +170,7 @@ export type GetMAV2UpgradeToData<
  * Note that the upgrade will be to the Semi Modular Account Storage variant
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { createLightAccountClient, GetMAV2UpgradeToData } from "@account-kit/smart-contracts";
  *
  * const client = createLightAccountClient(...);
