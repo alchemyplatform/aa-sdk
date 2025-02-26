@@ -4,6 +4,7 @@ import {
   erc7677Middleware,
   LocalAccountSigner,
   type SmartAccountSigner,
+  type UserOperationRequest_v7,
 } from "@aa-sdk/core";
 import {
   custom,
@@ -14,6 +15,10 @@ import {
   hashMessage,
   hashTypedData,
   type Address,
+  encodeFunctionData,
+  fromHex,
+  isAddress,
+  concat,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -39,6 +44,10 @@ import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import {
+  packAccountGasLimits,
+  packPaymasterData,
+} from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -998,9 +1007,9 @@ describe("MA v2 Tests", async () => {
 
     testClient.setAutomine(false);
 
-    // force block timestamp to be outside of range
+    // // force block timestamp to be outside of range
     await testClient.setNextBlockTimestamp({
-      timestamp: 2_200_000_000n,
+      timestamp: 2_000_000_000n,
     });
 
     console.log((await client.getBlock()).timestamp);
@@ -1008,31 +1017,102 @@ describe("MA v2 Tests", async () => {
     await testClient.mine({
       blocks: 1,
     });
-    console.log((await client.getBlock()).timestamp);
-    // send transaction outside of time range
-    const uoResult = await sessionKeyProvider.sendUserOperation({
+    // console.log((await client.getBlock()).timestamp);
+    // // send transaction outside of time range
+    // const uoResult = await sessionKeyProvider.sendUserOperation({
+    //   uo: {
+    //     target: zeroAddress,
+    //     value: parseEther("0"),
+    //     data: "0x",
+    //   },
+    // });
+
+    // console.log("TRANSACTION LANDED: IT SHOULDN'T");
+    // // console.log({ uoResult });
+    // // console.log(await client.getBlock());
+    // // console.log({ uoResult });
+    // console.log((await client.getBlock()).timestamp);
+
+    // const timeRangeModule = getContract({
+    //   address: getDefaultTimeRangeModuleAddress(provider.chain),
+    //   abi: TimeRangeModule.abi,
+    //   client: provider,
+    // });
+
+    // console.log(
+    //   await timeRangeModule.read.timeRanges([1, provider.account.address])
+    // );
+
+    const uo = await sessionKeyProvider.buildUserOperation({
       uo: {
-        target: zeroAddress,
-        value: parseEther("0"),
+        target,
         data: "0x",
       },
     });
 
-    console.log("TRANSACTION LANDED: IT SHOULDN'T");
-    // console.log({ uoResult });
-    // console.log(await client.getBlock());
-    // console.log({ uoResult });
-    console.log((await client.getBlock()).timestamp);
+    const signedUO = (await sessionKeyProvider.signUserOperation({
+      uoStruct: uo,
+    })) as UserOperationRequest_v7;
 
-    const timeRangeModule = getContract({
-      address: getDefaultTimeRangeModuleAddress(provider.chain),
-      abi: TimeRangeModule.abi,
-      client: provider,
+    console.log("SIGNED USER OP");
+
+    const epCallData = encodeFunctionData({
+      abi: AACoreModule.EntryPointAbi_v7,
+      functionName: "handleOps",
+      args: [
+        [
+          {
+            ...signedUO,
+            initCode:
+              signedUO.factory && signedUO.factoryData
+                ? concat([signedUO.factory, signedUO.factoryData])
+                : "0x",
+            nonce: fromHex(signedUO.callGasLimit, "bigint"),
+            preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
+            accountGasLimits: packAccountGasLimits(
+              (({ verificationGasLimit, callGasLimit }) => ({
+                verificationGasLimit,
+                callGasLimit,
+              }))(signedUO)
+            ),
+            gasFees: packAccountGasLimits(
+              (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+              }))(signedUO)
+            ),
+            paymasterAndData:
+              signedUO.paymaster && isAddress(signedUO.paymaster)
+                ? packPaymasterData(
+                    (({
+                      paymaster,
+                      paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit,
+                      paymasterData,
+                    }) => ({
+                      paymaster,
+                      paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit,
+                      paymasterData,
+                    }))(signedUO)
+                  )
+                : "0x",
+          },
+        ],
+        await sessionKeyProvider.account.getSigner().getAddress(),
+      ],
     });
 
+    console.log("ENCODED UO");
+
     console.log(
-      await timeRangeModule.read.timeRanges([1, provider.account.address])
+      await sessionKeyProvider.sendTransaction({
+        to: sessionKeyProvider.account.getEntryPoint().address,
+        data: epCallData,
+      })
     );
+
+    console.log("UO LANDED????????");
 
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
       entityId: 1,
