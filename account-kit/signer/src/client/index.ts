@@ -739,7 +739,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   /**
-   * Disables (removes) existing MFA factors by ID.
+   * Removes existing MFA factors by ID.
    *
    * @param {DisableMfaParams} params The parameters specifying which factors to disable
    * @returns {Promise<void>} A promise that resolves when the factors are disabled

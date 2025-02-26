@@ -241,7 +241,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
    *
    * @throws {Error} This method is not implemented in RNSignerClient
    */
-  public override getMfaFactors(): Promise<{ factors: MfaFactor[] }> {
+  public override getMfaFactors(): Promise<{ multiFactors: MfaFactor[] }> {
     throw new Error("getMfaFactors is not implemented in RNSignerClient");
   }
 
@@ -251,9 +251,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
    * @param {EnableMfaParams} _params The parameters required to enable a new MFA factor
    * @throws {Error} This method is not implemented in RNSignerClient
    */
-  public override enableMfa(
-    _params: EnableMfaParams
-  ): Promise<EnableMfaResult> {
+  public override addMfa(_params: EnableMfaParams): Promise<EnableMfaResult> {
     throw new Error("enableMfa is not implemented in RNSignerClient");
   }
 
@@ -268,12 +266,12 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   /**
-   * Disables (removes) existing MFA factors by ID.
+   * Removes existing MFA factors by ID.
    *
    * @param {DisableMfaParams} _params The parameters specifying which factors to disable
    * @throws {Error} This method is not implemented in RNSignerClient
    */
-  public override disableMfa(_params: DisableMfaParams): Promise<void> {
+  public override removeMfa(_params: DisableMfaParams): Promise<void> {
     throw new Error("disableMfa is not implemented in RNSignerClient");
   }
 }
