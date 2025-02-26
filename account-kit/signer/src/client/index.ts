@@ -672,8 +672,16 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Listing MFA Factors",
+        signWith: this.user.address,
+      },
     });
 
     return this.request("/v1/auth-list-multi-factors", {
@@ -696,17 +704,27 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Adding MFA",
+        signWith: this.user.address,
+      },
     });
 
-    switch (params.factorType) {
+    switch (params.multiFactorType) {
       case "totp":
         return this.request("/v1/auth-request-multi-factor", {
           stampedRequest,
         });
       default:
-        throw new Error(`Unsupported MFA factor type: ${params.factorType}`);
+        throw new Error(
+          `Unsupported MFA factor type: ${params.multiFactorType}`
+        );
     }
   };
 
@@ -724,18 +742,27 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Verifying MFA",
+        signWith: this.user.address,
+      },
     });
 
-    const response = await this.request("/v1/auth-verify-multi-factors", {
+    await this.request("/v1/auth-verify-multi-factors", {
       stampedRequest,
-      multiFactorId: params.factorId,
-      multiFactorCode: params.factorCode,
+      multiFactorId: params.multiFactorId,
+      multiFactorCode: params.multiFactorCode,
     });
 
     // Emit the event with the updated factors
-    this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
+    // this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
+    // TODO: maybe emit event with updated factors, will need the verify response to get the updated factors
   };
 
   /**
@@ -747,22 +774,31 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override removeMfa = async (
     params: DisableMfaParams
-  ): Promise<void> => {
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Removing MFA",
+        signWith: this.user.address,
+      },
     });
 
     const response = await this.request("/v1/auth-delete-multi-factors", {
       stampedRequest,
-      multiFactorIds: params.factors,
+      multiFactorIds: params.multiFactorIds,
     });
 
     // Emit the event with the factors that were disabled
-    this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
+    // this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
+    return response;
   };
 }
 

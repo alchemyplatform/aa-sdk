@@ -170,7 +170,9 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @param {DisableMfaParams} params The parameters specifying which factors to disable
    * @returns {Promise<void>} A promise that resolves when the factors are disabled
    */
-  public abstract removeMfa(params: DisableMfaParams): Promise<void>;
+  public abstract removeMfa(
+    params: DisableMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;

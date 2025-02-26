@@ -215,7 +215,7 @@ export type AlchemySignerClientEvents = {
   connectedOauth(user: User, bundle: string): void;
   connectedOtp(user: User, bundle: string): void;
   disconnected(): void;
-  mfaFactorsUpdated(factors: MfaFactor[]): void;
+  // mfaFactorsUpdated(factors: MfaFactor[]): void;
 };
 
 export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;
@@ -254,30 +254,30 @@ export type MfaState = {
   multiFactorState: "required" | "not_required";
 };
 
-type FactorType = "totp";
+type MultiFactorType = "totp";
 
 export type EnableMfaParams = {
-  factorType: FactorType;
+  multiFactorType: MultiFactorType;
 };
 
 export type EnableMfaResult = {
-  factorType: string;
-  factorId: string;
-  factorTotpUrl: string;
+  multiFactorType: string;
+  multiFactorId: string;
+  multiFactorTotpUrl: string;
 };
 
 export type VerifyMfaParams = {
-  factorId: string;
-  factorCode: string;
+  multiFactorId: string;
+  multiFactorCode: string;
 };
 
 export type DisableMfaParams = {
-  factors: string[];
+  multiFactorIds: string[];
 };
 
 export type MfaChallenge = {
-  factorId: string;
-  factorChallenge:
+  multiFactorId: string;
+  multiFactorChallenge:
     | {
         code: string;
       }
