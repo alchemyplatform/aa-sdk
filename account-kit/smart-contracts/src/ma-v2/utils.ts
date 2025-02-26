@@ -173,7 +173,7 @@ export type GetMAV2UpgradeToData<
  * ```ts twoslash
  * import { createLightAccountClient, getMAV2UpgradeToData } from "@account-kit/smart-contracts";
  *
- * const client = createLightAccountClient(...);
+ * const client = createLightAccountClient({});
  * const upgradeData = await getMAV2UpgradeToData(client, {});
  * ```
  *
