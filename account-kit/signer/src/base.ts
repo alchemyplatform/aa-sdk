@@ -781,14 +781,15 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const expirationSeconds = this.getExpirationSeconds();
 
       if (existingUser) {
-        const { orgId, otpId, multifactor } = await this.inner.initEmailAuth({
+        const { orgId, otpId, multiFactor } = await this.inner.initEmailAuth({
           email: params.email,
           emailMode: params.emailMode,
           expirationSeconds,
           redirectParams: params.redirectParams,
+          multiFactor: params.multiFactor,
         });
 
-        const isMfaRequired = multifactor?.multiFactorState === "required";
+        const isMfaRequired = multiFactor?.multiFactorState === "required";
 
         this.sessionManager.setTemporarySession({
           orgId,
@@ -923,7 +924,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if (!otpId) {
       throw new Error("otpId not found in session");
     }
-    if (isMfaRequired && !args.multifactor) {
+    if (isMfaRequired && !args.multiFactor) {
       throw new Error(`MFA is required.`);
     }
 
@@ -932,7 +933,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
-      multifactor: args.multifactor,
+      multiFactor: args.multiFactor,
     });
     const user = await this.inner.completeAuthWithBundle({
       bundle,
@@ -1030,6 +1031,19 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       this.store.setState({
         status,
         error: null,
+      });
+    });
+
+    // Add listeners for MFA events
+    this.inner.on("mfaFactorsUpdated", (factors) => {
+      // If factors exist, MFA is required
+      const mfaStatus =
+        factors.length > 0
+          ? AlchemyMfaStatus.REQUIRED
+          : AlchemyMfaStatus.NOT_REQUIRED;
+
+      this.store.setState({
+        mfaStatus,
       });
     });
   };

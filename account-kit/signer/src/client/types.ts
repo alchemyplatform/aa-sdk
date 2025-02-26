@@ -51,12 +51,11 @@ export type EmailAuthParams = {
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
+  multiFactor?: MfaChallenge;
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
   expirationSeconds?: number;
-  // TODO: add multifactor
-  // multifactor?: MfaChallenge;
 };
 
 export type OtpParams = {
@@ -65,7 +64,7 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
-  multifactor?: MfaChallenge;
+  multiFactor?: MfaChallenge;
 };
 
 export type SignupResponse = {
@@ -128,7 +127,7 @@ export type SignerEndpoints = [
     Response: {
       orgId: string;
       otpId?: string;
-      multifactor?: MfaState;
+      multiFactor?: MfaState;
     };
   },
   {
@@ -161,7 +160,7 @@ export type SignerEndpoints = [
     Body: OtpParams;
     Response: {
       credentialBundle: string | null;
-      multifactor?: MfaState;
+      multiFactor?: MfaState;
     };
   },
   {
@@ -216,6 +215,7 @@ export type AlchemySignerClientEvents = {
   connectedOauth(user: User, bundle: string): void;
   connectedOtp(user: User, bundle: string): void;
   disconnected(): void;
+  mfaFactorsUpdated(factors: MfaFactor[]): void;
 };
 
 export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;
@@ -254,8 +254,10 @@ export type MfaState = {
   multiFactorState: "required" | "not_required";
 };
 
+type FactorType = "totp";
+
 export type EnableMfaParams = {
-  factorType: string;
+  factorType: FactorType;
 };
 
 export type EnableMfaResult = {

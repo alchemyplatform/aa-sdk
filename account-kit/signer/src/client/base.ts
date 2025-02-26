@@ -136,7 +136,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string; otpId?: string; multifactor?: MfaState }>;
+  ): Promise<{ orgId: string; otpId?: string; multiFactor?: MfaState }>;
 
   /**
    * Retrieves the list of MFA factors configured for the current user.

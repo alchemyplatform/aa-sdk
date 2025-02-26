@@ -210,6 +210,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
+      multiFactor: params.multiFactor,
     });
   };
 
@@ -251,7 +252,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     if (!credentialBundle) {
       throw new Error(
-        "Failed to submit OTP code. Check if multifactor is required."
+        "Failed to submit OTP code. Check if multiFactor is required."
       );
     }
     return { bundle: credentialBundle };
@@ -727,11 +728,17 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    await this.request("/v1/account/authenticator/mfa/verify/totp", {
-      stampedRequest,
-      factorId: params.factorId,
-      factorCode: params.factorCode,
-    });
+    const response = await this.request(
+      "/v1/account/authenticator/mfa/verify/totp",
+      {
+        stampedRequest,
+        factorId: params.factorId,
+        factorCode: params.factorCode,
+      }
+    );
+
+    // Emit the event with the updated factors
+    this.eventEmitter.emit("mfaFactorsUpdated", response.factors);
   };
 
   /**
@@ -752,10 +759,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    await this.request("/v1/account/authenticator/mfa", {
+    const response = await this.request("/v1/account/authenticator/mfa", {
       stampedRequest,
       factors: params.factors,
     });
+
+    // Emit the event with the factors that were disabled
+    this.eventEmitter.emit("mfaFactorsUpdated", response.factors);
   };
 }
 

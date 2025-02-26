@@ -16,6 +16,7 @@ export type AuthParams =
       email: string;
       emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
+      multiFactor?: MfaChallenge;
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
@@ -49,7 +50,7 @@ export type AuthParams =
   | {
       type: "otp";
       otpCode: string;
-      multifactor?: MfaChallenge;
+      multiFactor?: MfaChallenge;
     };
 
 export type OauthProviderConfig =
