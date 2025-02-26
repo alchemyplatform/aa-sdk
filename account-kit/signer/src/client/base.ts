@@ -18,6 +18,7 @@ import type {
   EnableMfaResult,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
+  MfaFactor,
   MfaState,
   OauthConfig,
   OauthParams,
@@ -144,7 +145,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @returns {Promise<{ factors: Array<{ factorId: string; factorType: string }> }>} A promise that resolves to an array of configured MFA factors
    */
   public abstract getMfaFactors(): Promise<{
-    factors: { factorId: string; factorType: string }[];
+    multiFactors: MfaFactor[];
   }>;
 
   /**
@@ -153,7 +154,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
    * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
    */
-  public abstract enableMfa(params: EnableMfaParams): Promise<EnableMfaResult>;
+  public abstract addMfa(params: EnableMfaParams): Promise<EnableMfaResult>;
 
   /**
    * Verifies a newly created MFA factor to complete the setup process.
@@ -169,7 +170,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @param {DisableMfaParams} params The parameters specifying which factors to disable
    * @returns {Promise<void>} A promise that resolves when the factors are disabled
    */
-  public abstract disableMfa(params: DisableMfaParams): Promise<void>;
+  public abstract removeMfa(params: DisableMfaParams): Promise<void>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;

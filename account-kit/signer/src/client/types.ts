@@ -164,40 +164,40 @@ export type SignerEndpoints = [
     };
   },
   {
-    Route: "/v1/account/authenticator/mfas";
+    Route: "/v1/auth-list-multi-factors";
     Body: {
       stampedRequest: TSignedRequest;
     };
     Response: {
-      factors: MfaFactor[];
+      multiFactors: MfaFactor[];
     };
   },
   {
-    Route: "/v1/account/authenticator/mfa";
+    Route: "/v1/auth-delete-multi-factors";
     Body: {
       stampedRequest: TSignedRequest;
-      factors: string[];
+      multiFactorIds: string[];
     };
     Response: {
-      factors: MfaFactor[];
+      multiFactors: MfaFactor[];
     };
   },
   {
-    Route: "/v1/account/authenticator/mfa/request/totp";
+    Route: "/v1/auth-request-multi-factor";
     Body: {
       stampedRequest: TSignedRequest;
     };
     Response: EnableMfaResult;
   },
   {
-    Route: "/v1/account/authenticator/mfa/verify/totp";
+    Route: "/v1/auth-verify-multi-factors";
     Body: {
       stampedRequest: TSignedRequest;
-      factorId: string;
-      factorCode: string;
+      multiFactorId: string;
+      multiFactorCode: string;
     };
     Response: {
-      factors: MfaFactor[];
+      multiFactors: MfaFactor[];
     };
   }
 ];
@@ -245,8 +245,8 @@ export type GetOauthProviderUrlArgs = {
 };
 
 export type MfaFactor = {
-  factorId: string;
-  factorType: string;
+  multiFactorId: string;
+  multiFactorType: string;
 };
 
 export type MfaState = {

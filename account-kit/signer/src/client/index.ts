@@ -666,7 +666,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @throws {NotAuthenticatedError} If no user is authenticated
    */
   public override getMfaFactors = async (): Promise<{
-    factors: MfaFactor[];
+    multiFactors: MfaFactor[];
   }> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
@@ -676,7 +676,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    return this.request("/v1/account/authenticator/mfas", {
+    return this.request("/v1/auth-list-multi-factors", {
       stampedRequest,
     });
   };
@@ -689,7 +689,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @throws {NotAuthenticatedError} If no user is authenticated
    * @throws {Error} If an unsupported factor type is provided
    */
-  public override enableMfa = async (
+  public override addMfa = async (
     params: EnableMfaParams
   ): Promise<EnableMfaResult> => {
     if (!this.user) {
@@ -702,7 +702,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     switch (params.factorType) {
       case "totp":
-        return this.request("/v1/account/authenticator/mfa/request/totp", {
+        return this.request("/v1/auth-request-multi-factor", {
           stampedRequest,
         });
       default:
@@ -728,17 +728,14 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    const response = await this.request(
-      "/v1/account/authenticator/mfa/verify/totp",
-      {
-        stampedRequest,
-        factorId: params.factorId,
-        factorCode: params.factorCode,
-      }
-    );
+    const response = await this.request("/v1/auth-verify-multi-factors", {
+      stampedRequest,
+      multiFactorId: params.factorId,
+      multiFactorCode: params.factorCode,
+    });
 
     // Emit the event with the updated factors
-    this.eventEmitter.emit("mfaFactorsUpdated", response.factors);
+    this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
   };
 
   /**
@@ -748,7 +745,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<void>} A promise that resolves when the factors are disabled
    * @throws {NotAuthenticatedError} If no user is authenticated
    */
-  public override disableMfa = async (
+  public override removeMfa = async (
     params: DisableMfaParams
   ): Promise<void> => {
     if (!this.user) {
@@ -759,13 +756,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    const response = await this.request("/v1/account/authenticator/mfa", {
+    const response = await this.request("/v1/auth-delete-multi-factors", {
       stampedRequest,
-      factors: params.factors,
+      multiFactorIds: params.factors,
     });
 
     // Emit the event with the factors that were disabled
-    this.eventEmitter.emit("mfaFactorsUpdated", response.factors);
+    this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
   };
 }
 
