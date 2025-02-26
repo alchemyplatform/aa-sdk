@@ -4,7 +4,7 @@ import {
   erc7677Middleware,
   LocalAccountSigner,
   createBundlerClient,
-  createSmartAccountClientFromExisting,
+  createSmartAccountClient,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
@@ -1143,11 +1143,9 @@ describe("MA v2 Tests", async () => {
       waitForTx: true,
     });
 
-    const maV2Client = createSmartAccountClientFromExisting({
-      client: createBundlerClient({
-        chain: instance.chain,
-        transport: custom(client),
-      }),
+    const maV2Client = createSmartAccountClient({
+      chain: instance.chain,
+      transport: custom(client),
       account: await createMAV2Account(),
     });
 
