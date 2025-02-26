@@ -3,7 +3,6 @@ import * as AACoreModule from "@aa-sdk/core";
 import {
   erc7677Middleware,
   LocalAccountSigner,
-  createBundlerClient,
   createSmartAccountClient,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
