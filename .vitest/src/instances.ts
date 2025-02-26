@@ -6,6 +6,7 @@ import { createServer } from "prool";
 import { anvil, rundler } from "prool/instances";
 import {
   createClient,
+  createPublicClient,
   createTestClient,
   http,
   type Chain,
@@ -166,6 +167,12 @@ function defineInstance(params: DefineInstanceParams) {
       return createTestClient({
         chain,
         mode: "anvil",
+        transport: clientConfig.transport,
+      });
+    },
+    getPublicClient() {
+      return createPublicClient({
+        chain,
         transport: clientConfig.transport,
       });
     },

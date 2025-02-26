@@ -19,6 +19,7 @@ import {
   fromHex,
   isAddress,
   concat,
+  decodeErrorResult,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -48,6 +49,7 @@ import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
+import { entryPoint07Abi } from "viem/account-abstraction";
 
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
@@ -56,6 +58,8 @@ describe("MA v2 Tests", async () => {
     ReturnType<typeof publicActions>;
 
   let testClient: ReturnType<typeof instance.getTestClient>;
+
+  const publicClient = instance.getPublicClient();
 
   const isValidSigSuccess = "0x1626ba7e";
 
@@ -968,8 +972,8 @@ describe("MA v2 Tests", async () => {
 
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
       entityId: 1,
-      validAfter: 1_900_000_000,
-      validUntil: 2_100_000_000,
+      validAfter: 1634507101,
+      validUntil: 1834507101,
     });
 
     const installResult = await provider.installValidation({
@@ -1043,76 +1047,138 @@ describe("MA v2 Tests", async () => {
     //   await timeRangeModule.read.timeRanges([1, provider.account.address])
     // );
 
-    const uo = await sessionKeyProvider.buildUserOperation({
-      uo: {
-        target,
-        data: "0x",
-      },
-    });
+    // const uo = await sessionKeyProvider.buildUserOperation({
+    //   uo: {
+    //     target,
+    //     data: "0x",
+    //   },
+    // });
 
-    const signedUO = (await sessionKeyProvider.signUserOperation({
-      uoStruct: uo,
-    })) as UserOperationRequest_v7;
+    // const signedUO = (await sessionKeyProvider.signUserOperation({
+    //   uoStruct: uo,
+    // })) as UserOperationRequest_v7;
 
-    console.log("SIGNED USER OP");
+    // console.log("SIGNED USER OP");
 
-    const epCallData = encodeFunctionData({
-      abi: AACoreModule.EntryPointAbi_v7,
-      functionName: "handleOps",
-      args: [
-        [
-          {
-            ...signedUO,
-            initCode:
-              signedUO.factory && signedUO.factoryData
-                ? concat([signedUO.factory, signedUO.factoryData])
-                : "0x",
-            nonce: fromHex(signedUO.callGasLimit, "bigint"),
-            preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
-            accountGasLimits: packAccountGasLimits(
-              (({ verificationGasLimit, callGasLimit }) => ({
-                verificationGasLimit,
-                callGasLimit,
-              }))(signedUO)
-            ),
-            gasFees: packAccountGasLimits(
-              (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
-                maxPriorityFeePerGas,
-                maxFeePerGas,
-              }))(signedUO)
-            ),
-            paymasterAndData:
-              signedUO.paymaster && isAddress(signedUO.paymaster)
-                ? packPaymasterData(
-                    (({
-                      paymaster,
-                      paymasterVerificationGasLimit,
-                      paymasterPostOpGasLimit,
-                      paymasterData,
-                    }) => ({
-                      paymaster,
-                      paymasterVerificationGasLimit,
-                      paymasterPostOpGasLimit,
-                      paymasterData,
-                    }))(signedUO)
-                  )
-                : "0x",
-          },
-        ],
-        await sessionKeyProvider.account.getSigner().getAddress(),
-      ],
-    });
+    // try {
+    //   const { request } = await publicClient.simulateContract({
+    //     address: sessionKeyProvider.account.getEntryPoint().address,
+    //     abi: entryPoint07Abi,
+    //     functionName: "handleOps",
+    //     args: [
+    //       [
+    //         {
+    //           sender: sessionKeyProvider.account.address,
+    //           nonce: fromHex(signedUO.callGasLimit, "bigint"),
+    //           initCode:
+    //             signedUO.factory && signedUO.factoryData
+    //               ? concat([signedUO.factory, signedUO.factoryData])
+    //               : "0x",
+    //           callData: signedUO.callData,
+    //           accountGasLimits: packAccountGasLimits(
+    //             (({ verificationGasLimit, callGasLimit }) => ({
+    //               verificationGasLimit,
+    //               callGasLimit,
+    //             }))(signedUO)
+    //           ),
+    //           preVerificationGas: fromHex(
+    //             signedUO.preVerificationGas,
+    //             "bigint"
+    //           ),
+    //           gasFees: packAccountGasLimits(
+    //             (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
+    //               maxPriorityFeePerGas,
+    //               maxFeePerGas,
+    //             }))(signedUO)
+    //           ),
+    //           paymasterAndData:
+    //             signedUO.paymaster && isAddress(signedUO.paymaster)
+    //               ? packPaymasterData(
+    //                   (({
+    //                     paymaster,
+    //                     paymasterVerificationGasLimit,
+    //                     paymasterPostOpGasLimit,
+    //                     paymasterData,
+    //                   }) => ({
+    //                     paymaster,
+    //                     paymasterVerificationGasLimit,
+    //                     paymasterPostOpGasLimit,
+    //                     paymasterData,
+    //                   }))(signedUO)
+    //                 )
+    //               : "0x",
+    //           signature: signedUO.signature,
+    //         },
+    //       ],
+    //       "0x0a36A39150f1e963bFB908D164f78adcB341DEBc",
+    //     ],
+    //     account: await sessionKeyProvider.account.getSigner().getAddress(),
+    //   });
+    // } catch (e) {
+    //   console.log(e);
+    //   // console.log(decodeErrorResult({
+    //   //   abi: entryPoint07Abi,
+    //   //   data: e
+    //   // }))
+    // }
 
-    console.log("ENCODED UO");
+    // const epCallData = encodeFunctionData({
+    //   abi: AACoreModule.EntryPointAbi_v7,
+    //   functionName: "handleOps",
+    //   args: [
+    //     [
+    //       {
+    //         ...signedUO,
+    //         initCode:
+    //           signedUO.factory && signedUO.factoryData
+    //             ? concat([signedUO.factory, signedUO.factoryData])
+    //             : "0x",
+    //         nonce: fromHex(signedUO.callGasLimit, "bigint"),
+    //         preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
+    //         accountGasLimits: packAccountGasLimits(
+    //           (({ verificationGasLimit, callGasLimit }) => ({
+    //             verificationGasLimit,
+    //             callGasLimit,
+    //           }))(signedUO)
+    //         ),
+    //         gasFees: packAccountGasLimits(
+    //           (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
+    //             maxPriorityFeePerGas,
+    //             maxFeePerGas,
+    //           }))(signedUO)
+    //         ),
+    //         paymasterAndData:
+    //           signedUO.paymaster && isAddress(signedUO.paymaster)
+    //             ? packPaymasterData(
+    //                 (({
+    //                   paymaster,
+    //                   paymasterVerificationGasLimit,
+    //                   paymasterPostOpGasLimit,
+    //                   paymasterData,
+    //                 }) => ({
+    //                   paymaster,
+    //                   paymasterVerificationGasLimit,
+    //                   paymasterPostOpGasLimit,
+    //                   paymasterData,
+    //                 }))(signedUO)
+    //               )
+    //             : "0x",
+    //       },
+    //     ],
+    //     await sessionKeyProvider.account.getSigner().getAddress(),
+    //   ],
+    // });
 
-    console.log(
-      await sessionKeyProvider.sendTransaction({
-        to: sessionKeyProvider.account.getEntryPoint().address,
-        data: epCallData,
-      })
-    );
+    // console.log("ENCODED UO");
 
-    console.log("UO LANDED????????");
+    // console.log(
+    //   await sessionKeyProvider.sendTransaction({
+    //     to: sessionKeyProvider.account.getEntryPoint().address,
+    //     data: epCallData,
+    //   })
+    // );
+
+    // console.log("UO LANDED????????");
 
     const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
       entityId: 1,
