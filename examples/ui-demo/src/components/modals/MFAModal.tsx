@@ -145,7 +145,10 @@ const MFASContent = ({
         >
           Can&apos;t scan it?
         </button>
-        <button className="akui-btn akui-btn-primary rounded-lg h-10 w-full mb-5">
+        <button
+          className="akui-btn akui-btn-primary rounded-lg h-10 w-full mb-5"
+          onClick={() => setStage("verify")}
+        >
           Next
         </button>
       </>
