@@ -2,6 +2,7 @@ import type { Address } from "@aa-sdk/core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
+import type { AlchemyMfaStatus } from "../types";
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
@@ -250,7 +251,7 @@ export type MfaFactor = {
 
 export type MfaState = {
   factors?: MfaFactor[];
-  multiFactorState: "required" | "not_required";
+  multiFactorState: AlchemyMfaStatus;
 };
 
 type MultiFactorType = "totp";
