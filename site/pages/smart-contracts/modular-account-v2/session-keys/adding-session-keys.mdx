@@ -269,8 +269,6 @@ For UserOperations, the module tracks:
 #### Additional Notes
 
 - The module must be installed with both validation and execution hooks, the validation hook track gas, whereas the execution hook tracks value
-- Special paymasters must be explicitly configured to count against limits (SDK WIP)
-- Limits can be updated dynamically after installation (SDK WIP)
 - The module maintains a global singleton state for all accounts
 
 ```ts twoslash
@@ -422,13 +420,13 @@ const allowlistInstallData = AllowlistModule.encodeOnInstallData({
       target: "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
       hasSelectorAllowlist: false, // whether to limit the callable functions on call targets
       hasERC20SpendLimit: false, // If "target" is an ERC20 token with a spend limit
-      erc20SpendLimit: parseEther("1"), // The spend limit to set, if relevant
+      erc20SpendLimit: parseEther("100"), // The spend limit to set, if relevant
       selectors: [], // The function selectors to allow, if relevant
     },
   ],
 });
 
-// Adding a session key that has a 1 eth native token spend limit
+// Adding a session key that has a 100 ERC token spend limit
 await client.installValidation({
   validationConfig: {
     moduleAddress: ecdsaValidationModuleAddress,
