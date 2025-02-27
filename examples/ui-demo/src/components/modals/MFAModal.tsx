@@ -6,10 +6,11 @@ import { AlchemyLogo } from "../icons/alchemy";
 import { AlchemyTwoToneLogo } from "../icons/alchemy-two-tone";
 import Image from "next/image";
 import { Button } from "../small-cards/Button";
-import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
+// import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
 import { CopyLeftIcon } from "../icons/copy-left";
 import { TooltipComponent } from "../ui/tooltip";
 import { OTPInput, OTPCodeType, initialOTPValue } from "../ui/OTPInput";
+import { useSigner } from "@account-kit/react";
 
 type MFAStage = "init" | "qr" | "manual" | "verify" | "success";
 
@@ -17,17 +18,86 @@ export function MFAModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stage, setStage] = useState<MFAStage>("init");
   const [otp, setOTP] = useState<OTPCodeType>(initialOTPValue);
-  const [mfaKey, setMFAKey] = useState<string | null>(null);
+  // const [mfaKey, setMFAKey] = useState<string | null>(null);
+  const [totpUrl, setTotpUrl] = useState<string | null>(null);
+  const [multiFactorId, setMultiFactorId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const signer = useSigner();
+
   const handleClose = () => setIsModalOpen(false);
-  const handleInitMFASetup = () => {
+
+  const handleInitMFASetup = async () => {
     setStage("init");
     setOTP(initialOTPValue);
-    setMFAKey("TEMPORARY KEY");
+    // setMFAKey(null);
+    setTotpUrl(null);
+    setMultiFactorId(null);
+    setError(null);
     setIsModalOpen(true);
   };
-  const verifyTOTP = () => {
-    setStage("success");
+
+  const resetModalState = () => {
+    setIsModalOpen(false);
+    setStage("init");
+    setOTP(initialOTPValue);
+    setTotpUrl(null);
+    setMultiFactorId(null);
+    setError(null);
   };
+
+  const startMFASetup = async () => {
+    if (!signer) {
+      setError("Signer not available");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await signer.inner.addMfa({
+        multiFactorType: "totp",
+      });
+
+      if (result?.multiFactorTotpUrl) {
+        setTotpUrl(result.multiFactorTotpUrl);
+        setMultiFactorId(result.multiFactorId);
+        // setMFAKey(result.multiFactorSecret || "");
+        setStage("qr");
+      } else {
+        setError("Failed to generate MFA setup");
+      }
+    } catch (error) {
+      console.error("Error adding MFA:", error);
+      setError("Failed to set up MFA.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const verifyTOTP = async () => {
+    if (!multiFactorId || !otp.join("") || !signer) {
+      setError("Missing required information for verification");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await signer.inner.verifyMfa({
+        multiFactorId: multiFactorId,
+        multiFactorCode: otp.join(""),
+      });
+
+      setStage("success");
+    } catch (error) {
+      console.error("Error verifying MFA:", error);
+      setError("Verification failed.");
+      setOTP(initialOTPValue);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (otp.every((value) => value !== "")) {
       verifyTOTP();
@@ -48,8 +118,17 @@ export function MFAModal() {
               setStage={setStage}
               setOTP={setOTP}
               otp={otp}
-              mfaKey={mfaKey}
+              // mfaKey={mfaKey}
+              totpUrl={totpUrl}
+              isLoading={isLoading}
+              startMFASetup={startMFASetup}
+              resetModalState={resetModalState}
             />
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full">
+                {error}
+              </div>
+            )}
             <div className="flex flex-row gap-1 items-center h-[14px] text-fg-disabled">
               <span className="text-[11px] pt-[1px]">protected by</span>
               <AlchemyLogo className="fill-fg-disabled" />
@@ -67,12 +146,20 @@ const MFASContent = ({
   setOTP,
   otp,
   mfaKey,
+  totpUrl,
+  isLoading,
+  startMFASetup,
+  resetModalState,
 }: {
   stage: MFAStage;
   setStage: (stage: MFAStage) => void;
   setOTP: (otp: OTPCodeType) => void;
   otp: OTPCodeType;
-  mfaKey: string | null;
+  mfaKey?: string | null;
+  totpUrl: string | null;
+  isLoading: boolean;
+  startMFASetup: () => Promise<void>;
+  resetModalState: () => void;
 }) => {
   const [copied, setCopied] = useState(false);
   const handleCopyClick = () => {
@@ -103,9 +190,10 @@ const MFASContent = ({
         </p>
         <button
           className="akui-btn akui-btn-primary h-10 w-full rounded-lg flex-1 mb-5"
-          onClick={() => setStage("qr")}
+          onClick={startMFASetup}
+          disabled={isLoading}
         >
-          Set up authenticator app
+          {isLoading ? "Setting up..." : "Set up authenticator app"}
         </button>
       </>
     );
@@ -115,24 +203,31 @@ const MFASContent = ({
       <>
         <h2 className="text-lg font-semibold mb-5">Set up authenticator app</h2>
         <div className="relative mb-5">
-          <AlchemyLogoSmall
+          {/* <AlchemyLogoSmall
             height="40px"
             width="40px"
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          />
-          {/* TODO: Loading state here if no mfaKey */}
-          {mfaKey && (
+          /> */}
+          {isLoading ? (
+            <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : totpUrl ? (
             <QRCodeSVG
               className="p-4"
               size={250}
-              value={mfaKey}
-              imageSettings={{
-                height: 60,
-                width: 60,
-                excavate: true,
-                src: "",
-              }}
+              value={totpUrl}
+              // imageSettings={{
+              //   height: 60,
+              //   width: 60,
+              //   excavate: true,
+              //   src: "",
+              // }}
             />
+          ) : (
+            <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
+              No QR code available
+            </div>
           )}
         </div>
         <p className="mb-5 text-center text-sm">
@@ -168,7 +263,7 @@ const MFASContent = ({
               <span>
                 Enter your email address and this key (spaces don&apos;t
                 matter):
-                <strong>{mfaKey}</strong>
+                <strong>{mfaKey ?? "TEMPORARY KEY"}</strong>
               </span>
               <TooltipComponent content="Copied to clipboard" open={copied}>
                 <button
@@ -208,16 +303,41 @@ const MFASContent = ({
   if (stage === "verify") {
     return (
       <>
-        <h2>Enter authenticator code</h2>
-        <div className="flex gap-2">
+        <h2 className="text-lg font-semibold mb-5">Enter authenticator code</h2>
+        <p className="mb-5 text-center text-sm">
+          Enter the 6-digit code from your authenticator app
+        </p>
+        <div className="flex gap-2 mb-5">
           <OTPInput
             value={otp}
             setValue={setOTP}
             setErrorText={() => {}}
             handleReset={() => {}}
-            disabled={false}
+            disabled={isLoading}
           />
         </div>
+        {isLoading && (
+          <div className="flex justify-center mb-5">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
+          </div>
+        )}
+      </>
+    );
+  }
+
+  if (stage === "success") {
+    return (
+      <>
+        <h2 className="text-lg font-semibold mb-5">Setup Complete!</h2>
+        <p className="mb-5 text-center text-sm">
+          You will now be asked for a verification code when logging in.
+        </p>
+        <button
+          className="akui-btn akui-btn-primary rounded-lg h-10 w-full mb-5"
+          onClick={resetModalState}
+        >
+          Done
+        </button>
       </>
     );
   }
