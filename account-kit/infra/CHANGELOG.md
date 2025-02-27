@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Features
+
+- add multi-policy sponsorships ([#1189](https://github.com/alchemyplatform/aa-sdk/issues/1189)) ([024d735](https://github.com/alchemyplatform/aa-sdk/commit/024d73545b03e8ce08485ef2f8252d6ed95e4521))
+- use alchemy_requestGasAndPaymasterAndData when using alchemy paymaster ([#1310](https://github.com/alchemyplatform/aa-sdk/issues/1310)) ([20b80a6](https://github.com/alchemyplatform/aa-sdk/commit/20b80a6bce7b754b7b2e8a64522c2c00e8f5a70c))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

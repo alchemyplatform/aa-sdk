@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Features
+
+- playwright in ui-demo ([#1359](https://github.com/alchemyplatform/aa-sdk/issues/1359)) ([f7c7911](https://github.com/alchemyplatform/aa-sdk/commit/f7c7911cdc1f690db4107e21956469955c990bc8))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features
