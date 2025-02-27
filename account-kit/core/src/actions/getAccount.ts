@@ -1,6 +1,10 @@
+import { defaultAccountState } from "../store/store.js";
 import type { AccountState } from "../store/types.js";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
-import { type CreateAccountParams } from "./createAccount.js";
+import {
+  isModularV2AccountParams,
+  type CreateAccountParams,
+} from "./createAccount.js";
 import { getChain } from "./getChain.js";
 
 export type GetAccountResult<TAccount extends SupportedAccountTypes> =
@@ -28,17 +32,24 @@ export type GetAccountParams<TAccount extends SupportedAccountTypes> =
  * @returns {GetAccountResult<TAccount>} The result which includes the account if found and its status
  */
 export const getAccount = <TAccount extends SupportedAccountTypes>(
-  { type }: GetAccountParams<TAccount>,
+  params: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
   const accounts = config.store.getState().accounts;
   const chain = getChain(config);
-  const account = accounts?.[chain.id]?.[type];
+  const account = accounts?.[chain.id]?.[params.type];
   if (!account) {
-    return {
-      account: undefined,
-      status: "DISCONNECTED",
-    };
+    return defaultAccountState();
+  }
+
+  if (isModularV2AccountParams(params) && account?.status === "READY") {
+    const accountConfig =
+      config.store.getState().accountConfigs[chain.id]?.[params.type];
+    const haveMode = accountConfig?.mode ?? "default";
+    const wantMode = params.accountParams?.mode ?? "default";
+    if (haveMode !== wantMode) {
+      return defaultAccountState();
+    }
   }
 
   return account;

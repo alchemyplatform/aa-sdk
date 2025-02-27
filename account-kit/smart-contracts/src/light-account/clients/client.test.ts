@@ -21,6 +21,7 @@ import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { createLightAccountClient } from "./client.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
@@ -226,12 +227,12 @@ describe("Light Account Tests", () => {
   });
 
   it(
-    "should successfully execute with paymaster info",
+    "should successfully execute with paymaster info using erc-7677 middleware",
     { retry: 2, timeout: 10_000 },
     async () => {
       const provider = await givenConnectedProvider({
         signer,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
       });
 
       const result = await provider.sendUserOperation({
@@ -252,12 +253,69 @@ describe("Light Account Tests", () => {
   );
 
   it(
-    "should bypass paymaster when paymasterAndData of user operation overrides is set to 0x",
+    "should successfully execute with paymaster info using alchemy paymaster middleware",
+    { retry: 2, timeout: 10_000 },
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer,
+        paymasterMiddleware: "alchemyGasAndPaymasterAndData",
+      });
+
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        },
+      });
+
+      // @ts-expect-error this is union type when used generically, but we know it's 0.6.0 for now
+      // TODO: when using multiple versions, we need to check the version and cast accordingly
+      expect(result.request.paymasterAndData).not.toBe("0x");
+
+      const txnHash = provider.waitForUserOperationTransaction(result);
+
+      await expect(txnHash).resolves.not.toThrowError();
+    }
+  );
+
+  it(
+    "should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using erc-7677 middleware",
     { retry: 2 },
     async () => {
       const provider = await givenConnectedProvider({
         signer,
-        usePaymaster: true,
+        paymasterMiddleware: "erc7677",
+      });
+
+      // set the value to 0 so that we can capture an error in sending the uo
+      await resetBalance(provider, instance.getClient());
+
+      const toSend = {
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        } as UserOperationCallData,
+        overrides: {
+          paymasterAndData: "0x", // bypass paymaster
+        } as UserOperationOverrides<"0.6.0">,
+      };
+      const uoStruct = (await provider.buildUserOperation(
+        toSend
+      )) as UserOperationStruct<"0.6.0">;
+
+      expect(uoStruct.paymasterAndData).toBe("0x");
+
+      await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
+    }
+  );
+
+  it(
+    "should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using alchemy paymaster middleware",
+    { retry: 2 },
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer,
+        paymasterMiddleware: "alchemyGasAndPaymasterAndData",
       });
 
       // set the value to 0 so that we can capture an error in sending the uo
@@ -372,11 +430,11 @@ describe("Light Account Tests", () => {
     signer,
     version = "v1.1.0",
     accountAddress,
-    usePaymaster = false,
+    paymasterMiddleware,
   }: {
     signer: SmartAccountSigner;
     version?: LightAccountVersion<"LightAccount">;
-    usePaymaster?: boolean;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
     accountAddress?: Address;
   }) =>
     createLightAccountClient({
@@ -385,6 +443,14 @@ describe("Light Account Tests", () => {
       version,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
     });
 });

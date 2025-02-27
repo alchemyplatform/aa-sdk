@@ -31,6 +31,10 @@ export const accountKitInfraReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/infra/functions/alchemyFeeEstimator",
       },
       {
+        text: "alchemyGasAndPaymasterAndDataMiddleware",
+        link: "/reference/account-kit/infra/functions/alchemyGasAndPaymasterAndDataMiddleware",
+      },
+      {
         text: "alchemyGasManagerMiddleware",
         link: "/reference/account-kit/infra/functions/alchemyGasManagerMiddleware",
       },

@@ -1,4 +1,3 @@
-import { WalletTypes } from "@/app/config";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
@@ -20,14 +19,20 @@ export function UserConnectionDetails({
   const user = useUser();
   const signer = useSigner();
   const { logout } = useLogout();
-  const { theme, primaryColor, walletType } = useConfigStore(
-    ({ ui: { theme, primaryColor }, walletType }) => ({
+  const { theme, primaryColor, accountMode } = useConfigStore(
+    ({ ui: { theme, primaryColor }, accountMode }) => ({
       theme,
       primaryColor,
-      walletType,
+      accountMode,
     })
   );
-  const scaAccount = useAccount({ type: "ModularAccountV2" });
+  const scaAccount = useAccount({
+    type: "ModularAccountV2",
+    accountParams: {
+      mode: accountMode,
+    },
+    skipCreate: true,
+  });
 
   const isEOAUser = user?.type === "eoa";
 
@@ -78,19 +83,12 @@ export function UserConnectionDetails({
       {/* Smart Account */}
       <div className="flex flex-row justify-between">
         <span className="text-md md:text-sm text-fg-secondary">
-          {walletType === WalletTypes.smart ? "Smart account" : "Address"}
+          {accountMode === "default" ? "Smart account" : "Address"}
         </span>
-        <UserAddressTooltip
-          address={
-            walletType === WalletTypes.smart
-              ? scaAccount.address ?? ""
-              : signerAddress ?? ""
-          }
-          linkEnabled
-        />
+        <UserAddressTooltip address={scaAccount.address ?? ""} linkEnabled />
       </div>
 
-      {walletType === WalletTypes.smart ? (
+      {accountMode === "default" ? (
         <>
           {/* Status */}
           <div className="flex flex-row justify-between items-center">

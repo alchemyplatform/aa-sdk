@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Bug Fixes
+
+- fb mobile auth ([#1396](https://github.com/alchemyplatform/aa-sdk/issues/1396)) ([c4939ce](https://github.com/alchemyplatform/aa-sdk/commit/c4939ce3dc0e84f1de8fc65575eb9c1c8730a427))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

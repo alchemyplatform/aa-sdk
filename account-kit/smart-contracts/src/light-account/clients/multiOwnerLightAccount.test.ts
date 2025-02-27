@@ -15,6 +15,7 @@ import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types";
 import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
@@ -76,12 +77,33 @@ describe("MultiOwner Light Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it("should successfully execute with paymaster", async () => {
+  it("should successfully execute with erc-7677 paymaster", async () => {
     await mine(client, { blocks: 2 });
 
     const provider = await givenConnectedProvider({
       signer,
-      usePaymaster: true,
+      paymasterMiddleware: "erc7677",
+      accountIndex: 1n,
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    const txnHash = provider.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 15_000);
+
+  it("should successfully execute with alchemy paymaster", async () => {
+    await mine(client, { blocks: 2 });
+
+    const provider = await givenConnectedProvider({
+      signer,
+      paymasterMiddleware: "alchemyGasAndPaymasterAndData",
       accountIndex: 1n,
     });
 
@@ -243,12 +265,12 @@ describe("MultiOwner Light Account Tests", () => {
     signer,
     version = "v2.0.0",
     accountAddress,
-    usePaymaster = false,
+    paymasterMiddleware,
     accountIndex,
   }: {
     signer: SmartAccountSigner;
     version?: LightAccountVersion<"MultiOwnerLightAccount">;
-    usePaymaster?: boolean;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
     accountAddress?: Address;
     accountIndex?: bigint;
   }) =>
@@ -259,6 +281,14 @@ describe("MultiOwner Light Account Tests", () => {
       transport: custom(client),
       chain: instance.chain,
       salt: accountIndex,
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
     });
 });

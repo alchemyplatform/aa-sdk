@@ -20,7 +20,7 @@ export default defineConfig({
   },
   iconUrl: "/kit-icon.svg",
   rootDir: "./",
-  ogImageUrl: "/images/og-image.jpg",
+  ogImageUrl: "https://accountkit.alchemy.com/images/og-image.png",
   head: (
     <>
       <script
