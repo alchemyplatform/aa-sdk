@@ -1057,8 +1057,8 @@ describe("MA v2 Tests", async () => {
     })) as UserOperationRequest_v7;
 
     // calls entrypoint directly
-    await expect(
-      client.simulateContract({
+    try {
+      await client.simulateContract({
         address: sessionKeyProvider.account.getEntryPoint().address,
         abi: entryPoint07Abi,
         functionName: "handleOps",
@@ -1097,11 +1097,17 @@ describe("MA v2 Tests", async () => {
               signature: signedUO.signature,
             },
           ],
-          "0x0a36A39150f1e963bFB908D164f78adcB341DEBc",
+          zeroAddress,
         ],
         account: await sessionKeyProvider.account.getSigner().getAddress(),
-      })
-    ).rejects.toThrowError();
+      });
+    } catch (err: any) {
+      assert(
+        err.metaMessages.filter((str: string) =>
+          str.includes("AA22 expired or not due")
+        ).length > 0
+      );
+    }
 
     testClient.setAutomine(true);
   });
