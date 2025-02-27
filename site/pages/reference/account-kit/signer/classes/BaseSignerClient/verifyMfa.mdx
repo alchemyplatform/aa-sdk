@@ -23,5 +23,5 @@ The parameters required to verify the MFA factor
 
 ## Returns
 
-`Promise<void>`
-A promise that resolves when verification is complete
+`Promise<{ multiFactors: MfaFactor[] }>`
+A promise that resolves to the updated list of MFA factors
