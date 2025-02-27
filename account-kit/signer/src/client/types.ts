@@ -191,7 +191,7 @@ export type SignerEndpoints = [
     Response: EnableMfaResult;
   },
   {
-    Route: "/v1/auth-verify-multi-factors";
+    Route: "/v1/auth-verify-multi-factor";
     Body: {
       stampedRequest: TSignedRequest;
       multiFactorId: string;

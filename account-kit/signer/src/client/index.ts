@@ -730,7 +730,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    await this.request("/v1/auth-verify-multi-factors", {
+    await this.request("/v1/auth-verify-multi-factor", {
       stampedRequest,
       multiFactorId: params.multiFactorId,
       multiFactorCode: params.multiFactorCode,
