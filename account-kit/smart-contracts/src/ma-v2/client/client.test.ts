@@ -847,7 +847,6 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(uninstallResult);
   });
 
-  // TO DO: investigate why the the uninstall module transaction cannot land after the contract simulation
   it("installs time range module, sends transaction within valid time range", async () => {
     let provider = (
       await givenConnectedProvider({
@@ -966,7 +965,7 @@ describe("MA v2 Tests", async () => {
             signature: signedUO.signature,
           },
         ],
-        "0x0a36A39150f1e963bFB908D164f78adcB341DEBc",
+        zeroAddress,
       ],
       account: await sessionKeyProvider.account.getSigner().getAddress(),
     });
