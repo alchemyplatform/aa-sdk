@@ -2,6 +2,7 @@ import type { Address } from "@aa-sdk/core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
+import type { AlchemyMfaStatus } from "../types";
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
@@ -51,6 +52,7 @@ export type EmailAuthParams = {
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
+  multiFactor?: MfaChallenge;
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -63,6 +65,7 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
+  multiFactor?: MfaChallenge;
 };
 
 export type SignupResponse = {
@@ -125,6 +128,7 @@ export type SignerEndpoints = [
     Response: {
       orgId: string;
       otpId?: string;
+      multiFactor?: MfaState;
     };
   },
   {
@@ -155,7 +159,47 @@ export type SignerEndpoints = [
   {
     Route: "/v1/otp";
     Body: OtpParams;
-    Response: { credentialBundle: string };
+    Response: {
+      credentialBundle: string | null;
+      multiFactor?: MfaState;
+    };
+  },
+  {
+    Route: "/v1/auth-list-multi-factors";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/auth-delete-multi-factors";
+    Body: {
+      stampedRequest: TSignedRequest;
+      multiFactorIds: string[];
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/auth-request-multi-factor";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: EnableMfaResult;
+  },
+  {
+    Route: "/v1/auth-verify-multi-factor";
+    Body: {
+      stampedRequest: TSignedRequest;
+      multiFactorId: string;
+      multiFactorCode: string;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
   }
 ];
 
@@ -198,4 +242,44 @@ export type GetOauthProviderUrlArgs = {
   oauthCallbackUrl: string;
   oauthConfig?: OauthConfig;
   usesRelativeUrl?: boolean;
+};
+
+export type MfaFactor = {
+  multiFactorId: string;
+  multiFactorType: string;
+};
+
+export type MfaState = {
+  factors?: MfaFactor[];
+  multiFactorState: AlchemyMfaStatus;
+};
+
+type MultiFactorType = "totp";
+
+export type EnableMfaParams = {
+  multiFactorType: MultiFactorType;
+};
+
+export type EnableMfaResult = {
+  multiFactorType: MultiFactorType;
+  multiFactorId: string;
+  multiFactorTotpUrl: string;
+};
+
+export type VerifyMfaParams = {
+  multiFactorId: string;
+  multiFactorCode: string;
+};
+
+export type RemoveMfaParams = {
+  multiFactorIds: string[];
+};
+
+export type MfaChallenge = {
+  multiFactorId: string;
+  multiFactorChallenge:
+    | {
+        code: string;
+      }
+    | Record<string, any>;
 };

@@ -12,9 +12,14 @@ import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
+  RemoveMfaParams,
   EmailAuthParams,
+  EnableMfaParams,
+  EnableMfaResult,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
+  MfaFactor,
+  MfaState,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -24,6 +29,7 @@ import type {
   SignerRoutes,
   SignupResponse,
   User,
+  VerifyMfaParams,
 } from "./types.js";
 import type { OauthMode } from "../signer.js";
 import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
@@ -131,7 +137,44 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string; otpId?: string }>;
+  ): Promise<{ orgId: string; otpId?: string; multiFactor?: MfaState }>;
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ multiFactors: Array<MfaFactor> }>} A promise that resolves to an array of configured MFA factors
+   */
+  public abstract getMfaFactors(): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   */
+  public abstract addMfa(params: EnableMfaParams): Promise<EnableMfaResult>;
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  public abstract verifyMfa(params: VerifyMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
+
+  /**
+   * Removes existing MFA factors by ID or factor type.
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  public abstract removeMfa(params: RemoveMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;

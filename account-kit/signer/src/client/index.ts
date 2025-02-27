@@ -17,7 +17,13 @@ import type {
   OauthConfig,
   OtpParams,
   User,
+  MfaFactor,
+  EnableMfaParams,
+  EnableMfaResult,
+  VerifyMfaParams,
+  RemoveMfaParams,
 } from "./types.js";
+import { NotAuthenticatedError } from "../errors.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -204,6 +210,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
+      multiFactor: params.multiFactor,
     });
   };
 
@@ -242,6 +249,12 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       ...args,
       targetPublicKey,
     });
+
+    if (!credentialBundle) {
+      throw new Error(
+        "Failed to submit OTP code. Check if multiFactor is required."
+      );
+    }
     return { bundle: credentialBundle };
   }
 
@@ -644,6 +657,108 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     this.setStamper(currentStamper);
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
+  };
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public override getMfaFactors = async (): Promise<{
+    multiFactors: MfaFactor[];
+  }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    return this.request("/v1/auth-list-multi-factors", {
+      stampedRequest,
+    });
+  };
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @throws {Error} If an unsupported factor type is provided
+   */
+  public override addMfa = async (
+    params: EnableMfaParams
+  ): Promise<EnableMfaResult> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    switch (params.multiFactorType) {
+      case "totp":
+        return this.request("/v1/auth-request-multi-factor", {
+          stampedRequest,
+        });
+      default:
+        throw new Error(
+          `Unsupported MFA factor type: ${params.multiFactorType}`
+        );
+    }
+  };
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public override verifyMfa = async (
+    params: VerifyMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    return this.request("/v1/auth-verify-multi-factor", {
+      stampedRequest,
+      multiFactorId: params.multiFactorId,
+      multiFactorCode: params.multiFactorCode,
+    });
+  };
+
+  /**
+   * Removes existing MFA factors by ID.
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public override removeMfa = async (
+    params: RemoveMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
+
+    return this.request("/v1/auth-delete-multi-factors", {
+      stampedRequest,
+      multiFactorIds: params.multiFactorIds,
+    });
   };
 }
 
