@@ -261,7 +261,9 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
    * @param {VerifyMfaParams} _params The parameters required to verify the MFA factor
    * @throws {Error} This method is not implemented in RNSignerClient
    */
-  public override verifyMfa(_params: VerifyMfaParams): Promise<void> {
+  public override verifyMfa(_params: VerifyMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }> {
     throw new Error("verifyMfa is not implemented in RNSignerClient");
   }
 
