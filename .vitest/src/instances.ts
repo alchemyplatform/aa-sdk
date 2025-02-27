@@ -6,7 +6,6 @@ import { createServer } from "prool";
 import { anvil, rundler } from "prool/instances";
 import {
   createClient,
-  createPublicClient,
   createTestClient,
   http,
   type Chain,
