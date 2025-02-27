@@ -966,14 +966,11 @@ describe("MA v2 Tests", async () => {
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
-    console.log(provider.account.getSigner());
-    console.log(sessionKeyProvider.account.getSigner());
-    console.log(await client.getBlock());
 
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
       entityId: 1,
       validAfter: 1634507101,
-      validUntil: 1834507101,
+      validUntil: 1934507101,
     });
 
     const installResult = await provider.installValidation({
@@ -1012,115 +1009,75 @@ describe("MA v2 Tests", async () => {
     testClient.setAutomine(false);
 
     // // force block timestamp to be outside of range
-    await testClient.setNextBlockTimestamp({
-      timestamp: 2_000_000_000n,
-    });
+    // await testClient.setNextBlockTimestamp({
+    //   timestamp: 1734507101n,
+    // });
 
     console.log((await client.getBlock()).timestamp);
 
-    await testClient.mine({
-      blocks: 1,
+    const uo = await sessionKeyProvider.buildUserOperation({
+      uo: {
+        target,
+        data: "0x",
+      },
     });
-    // console.log((await client.getBlock()).timestamp);
-    // // send transaction outside of time range
-    // const uoResult = await sessionKeyProvider.sendUserOperation({
-    //   uo: {
-    //     target: zeroAddress,
-    //     value: parseEther("0"),
-    //     data: "0x",
-    //   },
-    // });
 
-    // console.log("TRANSACTION LANDED: IT SHOULDN'T");
-    // // console.log({ uoResult });
-    // // console.log(await client.getBlock());
-    // // console.log({ uoResult });
-    // console.log((await client.getBlock()).timestamp);
+    const signedUO = (await sessionKeyProvider.signUserOperation({
+      uoStruct: uo,
+    })) as UserOperationRequest_v7;
 
-    // const timeRangeModule = getContract({
-    //   address: getDefaultTimeRangeModuleAddress(provider.chain),
-    //   abi: TimeRangeModule.abi,
-    //   client: provider,
-    // });
+    console.log("SIGNED USER OP");
 
-    // console.log(
-    //   await timeRangeModule.read.timeRanges([1, provider.account.address])
-    // );
-
-    // const uo = await sessionKeyProvider.buildUserOperation({
-    //   uo: {
-    //     target,
-    //     data: "0x",
-    //   },
-    // });
-
-    // const signedUO = (await sessionKeyProvider.signUserOperation({
-    //   uoStruct: uo,
-    // })) as UserOperationRequest_v7;
-
-    // console.log("SIGNED USER OP");
-
-    // try {
-    //   const { request } = await publicClient.simulateContract({
-    //     address: sessionKeyProvider.account.getEntryPoint().address,
-    //     abi: entryPoint07Abi,
-    //     functionName: "handleOps",
-    //     args: [
-    //       [
-    //         {
-    //           sender: sessionKeyProvider.account.address,
-    //           nonce: fromHex(signedUO.callGasLimit, "bigint"),
-    //           initCode:
-    //             signedUO.factory && signedUO.factoryData
-    //               ? concat([signedUO.factory, signedUO.factoryData])
-    //               : "0x",
-    //           callData: signedUO.callData,
-    //           accountGasLimits: packAccountGasLimits(
-    //             (({ verificationGasLimit, callGasLimit }) => ({
-    //               verificationGasLimit,
-    //               callGasLimit,
-    //             }))(signedUO)
-    //           ),
-    //           preVerificationGas: fromHex(
-    //             signedUO.preVerificationGas,
-    //             "bigint"
-    //           ),
-    //           gasFees: packAccountGasLimits(
-    //             (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
-    //               maxPriorityFeePerGas,
-    //               maxFeePerGas,
-    //             }))(signedUO)
-    //           ),
-    //           paymasterAndData:
-    //             signedUO.paymaster && isAddress(signedUO.paymaster)
-    //               ? packPaymasterData(
-    //                   (({
-    //                     paymaster,
-    //                     paymasterVerificationGasLimit,
-    //                     paymasterPostOpGasLimit,
-    //                     paymasterData,
-    //                   }) => ({
-    //                     paymaster,
-    //                     paymasterVerificationGasLimit,
-    //                     paymasterPostOpGasLimit,
-    //                     paymasterData,
-    //                   }))(signedUO)
-    //                 )
-    //               : "0x",
-    //           signature: signedUO.signature,
-    //         },
-    //       ],
-    //       "0x0a36A39150f1e963bFB908D164f78adcB341DEBc",
-    //     ],
-    //     account: await sessionKeyProvider.account.getSigner().getAddress(),
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    //   // console.log(decodeErrorResult({
-    //   //   abi: entryPoint07Abi,
-    //   //   data: e
-    //   // }))
-    // }
+    const { request } = await publicClient.simulateContract({
+      address: sessionKeyProvider.account.getEntryPoint().address,
+      abi: entryPoint07Abi,
+      functionName: "handleOps",
+      args: [
+        [
+          {
+            sender: sessionKeyProvider.account.address,
+            nonce: fromHex(signedUO.nonce, "bigint"),
+            initCode:
+              signedUO.factory && signedUO.factoryData
+                ? concat([signedUO.factory, signedUO.factoryData])
+                : "0x",
+            callData: signedUO.callData,
+            accountGasLimits: packAccountGasLimits(
+              (({ verificationGasLimit, callGasLimit }) => ({
+                verificationGasLimit,
+                callGasLimit,
+              }))(signedUO)
+            ),
+            preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
+            gasFees: packAccountGasLimits(
+              (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+              }))(signedUO)
+            ),
+            paymasterAndData:
+              signedUO.paymaster && isAddress(signedUO.paymaster)
+                ? packPaymasterData(
+                    (({
+                      paymaster,
+                      paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit,
+                      paymasterData,
+                    }) => ({
+                      paymaster,
+                      paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit,
+                      paymasterData,
+                    }))(signedUO)
+                  )
+                : "0x",
+            signature: signedUO.signature,
+          },
+        ],
+        "0x0a36A39150f1e963bFB908D164f78adcB341DEBc",
+      ],
+      account: await sessionKeyProvider.account.getSigner().getAddress(),
+    });
 
     // const epCallData = encodeFunctionData({
     //   abi: AACoreModule.EntryPointAbi_v7,
@@ -1133,7 +1090,7 @@ describe("MA v2 Tests", async () => {
     //           signedUO.factory && signedUO.factoryData
     //             ? concat([signedUO.factory, signedUO.factoryData])
     //             : "0x",
-    //         nonce: fromHex(signedUO.callGasLimit, "bigint"),
+    //         nonce: fromHex(signedUO.nonce, "bigint"),
     //         preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
     //         accountGasLimits: packAccountGasLimits(
     //           (({ verificationGasLimit, callGasLimit }) => ({
@@ -1196,7 +1153,9 @@ describe("MA v2 Tests", async () => {
     });
 
     // verify uninstall
-    await provider.waitForUserOperationTransaction(uninstallResult);
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
   });
 
   const givenConnectedProvider = async ({
