@@ -6,7 +6,7 @@ description: Overview of the removeMfa method
 
 # removeMfa
 
-Removes existing MFA factors by ID or factor type.
+Disables (removes) existing MFA factors by ID or factor type.
 
 ## Import
 
@@ -23,5 +23,5 @@ The parameters specifying which factors to disable
 
 ## Returns
 
-`Promise<{ multiFactors: MfaFactor[] }>`
-A promise that resolves to the updated list of MFA factors
+`Promise<void>`
+A promise that resolves when the factors are disabled

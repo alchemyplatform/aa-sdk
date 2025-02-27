@@ -271,7 +271,9 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
    * @param {DisableMfaParams} _params The parameters specifying which factors to disable
    * @throws {Error} This method is not implemented in RNSignerClient
    */
-  public override removeMfa(_params: DisableMfaParams): Promise<void> {
+  public override removeMfa(
+    _params: DisableMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> {
     throw new Error("disableMfa is not implemented in RNSignerClient");
   }
 }
