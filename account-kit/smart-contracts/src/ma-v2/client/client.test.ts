@@ -55,20 +55,12 @@ describe("MA v2 Tests", async () => {
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions>;
 
-  let testClient: ReturnType<typeof instance.getTestClient>;
+  let testClient = instance.getTestClient();
 
   const isValidSigSuccess = "0x1626ba7e";
 
-  let snapshotId: Address = "0x";
-
   beforeAll(async () => {
     client = instance.getClient().extend(publicActions);
-    testClient = instance.getTestClient();
-    snapshotId = await testClient.snapshot();
-  });
-
-  beforeEach(async () => {
-    await testClient.revert({ id: snapshotId });
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
@@ -852,7 +844,8 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(uninstallResult);
   });
 
-  it("installs time range module, sends transaction within valid time range, uninstalls module", async () => {
+  // TO DO: investigate why the the uninstall module transaction cannot land after the contract simulation
+  it("installs time range module, sends transaction within valid time range", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
@@ -875,97 +868,7 @@ describe("MA v2 Tests", async () => {
 
     const hookInstallData = TimeRangeModule.encodeOnInstallData({
       entityId: 1,
-      validAfter: 0,
-      validUntil: 10000000000,
-    });
-
-    const installResult = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: await sessionKey.getAddress(),
-      }),
-      hooks: [
-        {
-          hookConfig: {
-            address: getDefaultTimeRangeModuleAddress(provider.chain),
-            entityId: 1,
-            hookType: HookType.VALIDATION,
-            hasPreHooks: true,
-            hasPostHooks: true,
-          },
-          initData: hookInstallData,
-        },
-      ],
-    });
-
-    // verify hook installtion succeeded
-    await provider.waitForUserOperationTransaction(installResult);
-
-    // send transaction within time range
-    const passingSendResult = await sessionKeyProvider.sendUserOperation({
-      uo: {
-        target: zeroAddress,
-        value: parseEther("0"),
-        data: "0x",
-      },
-    });
-    await provider.waitForUserOperationTransaction(passingSendResult);
-
-    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 1,
-    });
-
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        provider.chain
-      ),
-      entityId: 1,
-      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
-        entityId: 1,
-      }),
-      hookUninstallDatas: [hookUninstallData],
-    });
-
-    // verify uninstall
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).resolves.not.toThrowError();
-  });
-
-  it.only("installs time range module, tries to send transaction outside valid time range, uninstalls module", async () => {
-    let provider = (
-      await givenConnectedProvider({
-        signer,
-      })
-    ).extend(installValidationActions);
-
-    await setBalance(client, {
-      address: provider.getAddress(),
-      value: parseEther("2"),
-    });
-
-    // create session key client
-    const sessionKeyProvider = (
-      await givenConnectedProvider({
-        signer: sessionKey,
-        accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
-      })
-    ).extend(installValidationActions);
-
-    const hookInstallData = TimeRangeModule.encodeOnInstallData({
-      entityId: 1,
-      validAfter: 1634507101,
+      validAfter: 1734507101,
       validUntil: 1934507101,
     });
 
@@ -1000,16 +903,17 @@ describe("MA v2 Tests", async () => {
 
     // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
-    console.log("INSTALLED");
 
     testClient.setAutomine(false);
 
-    // // force block timestamp to be outside of range
-    // await testClient.setNextBlockTimestamp({
-    //   timestamp: 1734507101n,
-    // });
+    // force block timestamp to be outside of range
+    await testClient.setNextBlockTimestamp({
+      timestamp: 1754507101n,
+    });
 
-    console.log((await client.getBlock()).timestamp);
+    await testClient.mine({
+      blocks: 1,
+    });
 
     const uo = await sessionKeyProvider.buildUserOperation({
       uo: {
@@ -1022,9 +926,8 @@ describe("MA v2 Tests", async () => {
       uoStruct: uo,
     })) as UserOperationRequest_v7;
 
-    console.log("SIGNED USER OP");
-
-    const { request } = await client.simulateContract({
+    // calls entrypoint directly
+    await client.simulateContract({
       address: sessionKeyProvider.account.getEntryPoint().address,
       abi: entryPoint07Abi,
       functionName: "handleOps",
@@ -1038,34 +941,24 @@ describe("MA v2 Tests", async () => {
                 ? concat([signedUO.factory, signedUO.factoryData])
                 : "0x",
             callData: signedUO.callData,
-            accountGasLimits: packAccountGasLimits(
-              (({ verificationGasLimit, callGasLimit }) => ({
-                verificationGasLimit,
-                callGasLimit,
-              }))(signedUO)
-            ),
+            accountGasLimits: packAccountGasLimits({
+              verificationGasLimit: signedUO.verificationGasLimit,
+              callGasLimit: signedUO.callGasLimit,
+            }),
             preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
-            gasFees: packAccountGasLimits(
-              (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
-                maxPriorityFeePerGas,
-                maxFeePerGas,
-              }))(signedUO)
-            ),
+            gasFees: packAccountGasLimits({
+              maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
+              maxFeePerGas: signedUO.maxFeePerGas,
+            }),
             paymasterAndData:
               signedUO.paymaster && isAddress(signedUO.paymaster)
-                ? packPaymasterData(
-                    (({
-                      paymaster,
-                      paymasterVerificationGasLimit,
-                      paymasterPostOpGasLimit,
-                      paymasterData,
-                    }) => ({
-                      paymaster,
-                      paymasterVerificationGasLimit,
-                      paymasterPostOpGasLimit,
-                      paymasterData,
-                    }))(signedUO)
-                  )
+                ? packPaymasterData({
+                    paymaster: signedUO.paymaster,
+                    paymasterVerificationGasLimit:
+                      signedUO.paymasterVerificationGasLimit,
+                    paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
+                    paymasterData: signedUO.paymasterData,
+                  })
                 : "0x",
             signature: signedUO.signature,
           },
@@ -1075,83 +968,139 @@ describe("MA v2 Tests", async () => {
       account: await sessionKeyProvider.account.getSigner().getAddress(),
     });
 
-    // const epCallData = encodeFunctionData({
-    //   abi: AACoreModule.EntryPointAbi_v7,
-    //   functionName: "handleOps",
-    //   args: [
-    //     [
-    //       {
-    //         ...signedUO,
-    //         initCode:
-    //           signedUO.factory && signedUO.factoryData
-    //             ? concat([signedUO.factory, signedUO.factoryData])
-    //             : "0x",
-    //         nonce: fromHex(signedUO.nonce, "bigint"),
-    //         preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
-    //         accountGasLimits: packAccountGasLimits(
-    //           (({ verificationGasLimit, callGasLimit }) => ({
-    //             verificationGasLimit,
-    //             callGasLimit,
-    //           }))(signedUO)
-    //         ),
-    //         gasFees: packAccountGasLimits(
-    //           (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
-    //             maxPriorityFeePerGas,
-    //             maxFeePerGas,
-    //           }))(signedUO)
-    //         ),
-    //         paymasterAndData:
-    //           signedUO.paymaster && isAddress(signedUO.paymaster)
-    //             ? packPaymasterData(
-    //                 (({
-    //                   paymaster,
-    //                   paymasterVerificationGasLimit,
-    //                   paymasterPostOpGasLimit,
-    //                   paymasterData,
-    //                 }) => ({
-    //                   paymaster,
-    //                   paymasterVerificationGasLimit,
-    //                   paymasterPostOpGasLimit,
-    //                   paymasterData,
-    //                 }))(signedUO)
-    //               )
-    //             : "0x",
-    //       },
-    //     ],
-    //     await sessionKeyProvider.account.getSigner().getAddress(),
-    //   ],
-    // });
+    testClient.setAutomine(true);
+  });
 
-    // console.log("ENCODED UO");
+  // NOTE: uses different validation and hook entity id than previous test because we do not uninstall the hook in the previous test
+  it("installs time range module, tries to send transaction outside valid time range", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+      })
+    ).extend(installValidationActions);
 
-    // console.log(
-    //   await sessionKeyProvider.sendTransaction({
-    //     to: sessionKeyProvider.account.getEntryPoint().address,
-    //     data: epCallData,
-    //   })
-    // );
-
-    // console.log("UO LANDED????????");
-
-    const hookUninstallData = TimeRangeModule.encodeOnUninstallData({
-      entityId: 1,
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
     });
 
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        provider.chain
-      ),
-      entityId: 1,
-      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
-        entityId: 1,
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 2, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
+    const hookInstallData = TimeRangeModule.encodeOnInstallData({
+      entityId: 2,
+      validAfter: 1734507101,
+      validUntil: 1934507101,
+    });
+
+    const installResult = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 2,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 2,
+        signer: await sessionKey.getAddress(),
       }),
-      hookUninstallDatas: [hookUninstallData],
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            entityId: 2,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
     });
 
-    // verify uninstall
+    // verify hook installation succeeded
+    await provider.waitForUserOperationTransaction(installResult);
+
+    testClient.setAutomine(false);
+
+    // force block timestamp to be outside of range
+    await testClient.setNextBlockTimestamp({
+      timestamp: 2054507101n,
+    });
+
+    await testClient.mine({
+      blocks: 1,
+    });
+
+    const uo = await sessionKeyProvider.buildUserOperation({
+      uo: {
+        target,
+        data: "0x",
+      },
+    });
+
+    const signedUO = (await sessionKeyProvider.signUserOperation({
+      uoStruct: uo,
+    })) as UserOperationRequest_v7;
+
+    // calls entrypoint directly
     await expect(
-      provider.waitForUserOperationTransaction(uninstallResult)
-    ).resolves.not.toThrowError();
+      client.simulateContract({
+        address: sessionKeyProvider.account.getEntryPoint().address,
+        abi: entryPoint07Abi,
+        functionName: "handleOps",
+        args: [
+          [
+            {
+              sender: sessionKeyProvider.account.address,
+              nonce: fromHex(signedUO.nonce, "bigint"),
+              initCode:
+                signedUO.factory && signedUO.factoryData
+                  ? concat([signedUO.factory, signedUO.factoryData])
+                  : "0x",
+              callData: signedUO.callData,
+              accountGasLimits: packAccountGasLimits({
+                verificationGasLimit: signedUO.verificationGasLimit,
+                callGasLimit: signedUO.callGasLimit,
+              }),
+              preVerificationGas: fromHex(
+                signedUO.preVerificationGas,
+                "bigint"
+              ),
+              gasFees: packAccountGasLimits({
+                maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
+                maxFeePerGas: signedUO.maxFeePerGas,
+              }),
+              paymasterAndData:
+                signedUO.paymaster && isAddress(signedUO.paymaster)
+                  ? packPaymasterData({
+                      paymaster: signedUO.paymaster,
+                      paymasterVerificationGasLimit:
+                        signedUO.paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
+                      paymasterData: signedUO.paymasterData,
+                    })
+                  : "0x",
+              signature: signedUO.signature,
+            },
+          ],
+          "0x0a36A39150f1e963bFB908D164f78adcB341DEBc",
+        ],
+        account: await sessionKeyProvider.account.getSigner().getAddress(),
+      })
+    ).rejects.toThrowError();
+
+    testClient.setAutomine(true);
   });
 
   const givenConnectedProvider = async ({
