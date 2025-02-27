@@ -1033,19 +1033,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         error: null,
       });
     });
-
-    // Add listeners for MFA events
-    this.inner.on("mfaFactorsUpdated", (factors) => {
-      // If factors exist, MFA is required
-      const mfaStatus =
-        factors.length > 0
-          ? AlchemyMfaStatus.REQUIRED
-          : AlchemyMfaStatus.NOT_REQUIRED;
-
-      this.store.setState({
-        mfaStatus,
-      });
-    });
   };
 
   private emitNewUserEvent = (isNewUser?: boolean) => {

@@ -12,7 +12,7 @@ import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
-  DisableMfaParams,
+  RemoveMfaParams,
   EmailAuthParams,
   EnableMfaParams,
   EnableMfaResult,
@@ -142,14 +142,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   /**
    * Retrieves the list of MFA factors configured for the current user.
    *
-   * @returns {Promise<{ factors: Array<{ factorId: string; factorType: string }> }>} A promise that resolves to an array of configured MFA factors
+   * @returns {Promise<{ multiFactors: Array<MfaFactor> }>} A promise that resolves to an array of configured MFA factors
    */
   public abstract getMfaFactors(): Promise<{
     multiFactors: MfaFactor[];
   }>;
 
   /**
-   * Initiates the setup of a new MFA factor for the current user.
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
    *
    * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
    * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
@@ -165,12 +165,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract verifyMfa(params: VerifyMfaParams): Promise<void>;
 
   /**
-   * Disables (removes) existing MFA factors by ID or factor type.
+   * Removes existing MFA factors by ID or factor type.
    *
-   * @param {DisableMfaParams} params The parameters specifying which factors to disable
-   * @returns {Promise<void>} A promise that resolves when the factors are disabled
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
    */
-  public abstract removeMfa(params: DisableMfaParams): Promise<void>;
+  public abstract removeMfa(params: RemoveMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;

@@ -282,7 +282,6 @@ export class SessionManager {
         this.setSessionWithUserAndBundle({ type: "otp", user, bundle });
       },
       disconnected: () => this.clearSession(),
-      mfaFactorsUpdated: undefined,
     };
 
     for (const [event, listener] of Object.entries(listeners)) {

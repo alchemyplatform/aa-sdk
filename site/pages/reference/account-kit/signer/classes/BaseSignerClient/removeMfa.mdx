@@ -6,7 +6,7 @@ description: Overview of the removeMfa method
 
 # removeMfa
 
-Disables (removes) existing MFA factors by ID or factor type.
+Removes existing MFA factors by ID or factor type.
 
 ## Import
 
@@ -18,10 +18,10 @@ import { BaseSignerClient } from "@account-kit/signer";
 
 ### params
 
-`DisableMfaParams`
+`RemoveMfaParams`
 The parameters specifying which factors to disable
 
 ## Returns
 
-`Promise<void>`
-A promise that resolves when the factors are disabled
+`Promise<{ multiFactors: MfaFactor[] }>`
+A promise that resolves to the updated list of MFA factors

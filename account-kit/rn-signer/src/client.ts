@@ -9,7 +9,7 @@ import {
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
-  type DisableMfaParams,
+  type RemoveMfaParams,
   type EmailAuthParams,
   type EnableMfaParams,
   type EnableMfaResult,
@@ -268,10 +268,12 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   /**
    * Removes existing MFA factors by ID.
    *
-   * @param {DisableMfaParams} _params The parameters specifying which factors to disable
+   * @param {RemoveMfaParams} _params The parameters specifying which factors to disable
    * @throws {Error} This method is not implemented in RNSignerClient
    */
-  public override removeMfa(_params: DisableMfaParams): Promise<void> {
+  public override removeMfa(_params: RemoveMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }> {
     throw new Error("disableMfa is not implemented in RNSignerClient");
   }
 }

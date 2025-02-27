@@ -18,10 +18,10 @@ import { AlchemySignerWebClient } from "@account-kit/signer";
 
 ### params
 
-`DisableMfaParams`
+`RemoveMfaParams`
 The parameters specifying which factors to disable
 
 ## Returns
 
-`Promise<void>`
-A promise that resolves when the factors are disabled
+`Promise<{ multiFactors: MfaFactor[] }>`
+A promise that resolves to the updated list of MFA factors
