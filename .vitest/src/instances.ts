@@ -170,12 +170,6 @@ function defineInstance(params: DefineInstanceParams) {
         transport: clientConfig.transport,
       });
     },
-    getPublicClient() {
-      return createPublicClient({
-        chain,
-        transport: clientConfig.transport,
-      });
-    },
     async restart() {
       if (useLocalRunningInstance) return;
 

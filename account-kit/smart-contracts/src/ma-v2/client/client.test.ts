@@ -15,11 +15,9 @@ import {
   hashMessage,
   hashTypedData,
   type Address,
-  encodeFunctionData,
   fromHex,
   isAddress,
   concat,
-  decodeErrorResult,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -58,8 +56,6 @@ describe("MA v2 Tests", async () => {
     ReturnType<typeof publicActions>;
 
   let testClient: ReturnType<typeof instance.getTestClient>;
-
-  const publicClient = instance.getPublicClient();
 
   const isValidSigSuccess = "0x1626ba7e";
 
@@ -1028,7 +1024,7 @@ describe("MA v2 Tests", async () => {
 
     console.log("SIGNED USER OP");
 
-    const { request } = await publicClient.simulateContract({
+    const { request } = await client.simulateContract({
       address: sessionKeyProvider.account.getEntryPoint().address,
       abi: entryPoint07Abi,
       functionName: "handleOps",
