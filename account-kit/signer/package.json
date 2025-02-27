@@ -51,6 +51,8 @@
   "dependencies": {
     "@aa-sdk/core": "^4.13.0",
     "@account-kit/logging": "^4.13.0",
+    "@turnkey/api-key-stamper": "^0.4.4",
+    "@turnkey/crypto": "^2.3.1",
     "@turnkey/http": "^2.6.2",
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",

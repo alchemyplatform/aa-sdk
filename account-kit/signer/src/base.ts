@@ -16,6 +16,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
+import { hashAuthorization, type Authorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -27,6 +28,7 @@ import {
   SessionManager,
   type SessionManagerParams,
 } from "./session/manager.js";
+import type { SessionManagerEvents } from "./session/types";
 import type { AuthParams } from "./signer";
 import {
   AlchemySignerStatus,
@@ -35,8 +37,6 @@ import {
   type ErrorInfo,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
-import type { SessionManagerEvents } from "./session/types";
-import { hashAuthorization, type Authorization } from "viem/experimental";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
