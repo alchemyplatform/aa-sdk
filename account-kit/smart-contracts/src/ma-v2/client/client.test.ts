@@ -49,6 +49,7 @@ import {
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { entryPoint07Abi } from "viem/account-abstraction";
 
+// TODO: Include a snapshot to reset to in afterEach
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
 
