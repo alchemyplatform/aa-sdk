@@ -909,7 +909,7 @@ describe("MA v2 Tests", async () => {
 
     testClient.setAutomine(false);
 
-    // force block timestamp to be outside of range
+    // force block timestamp to be inside of range
     await testClient.setNextBlockTimestamp({
       timestamp: 1754507101n,
     });
