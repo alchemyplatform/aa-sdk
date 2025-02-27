@@ -160,9 +160,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * Verifies a newly created MFA factor to complete the setup process.
    *
    * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
-   * @returns {Promise<void>} A promise that resolves when verification is complete
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
    */
-  public abstract verifyMfa(params: VerifyMfaParams): Promise<void>;
+  public abstract verifyMfa(params: VerifyMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
 
   /**
    * Removes existing MFA factors by ID or factor type.

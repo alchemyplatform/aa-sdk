@@ -716,12 +716,12 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * Verifies a newly created MFA factor to complete the setup process.
    *
    * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
-   * @returns {Promise<void>} A promise that resolves when verification is complete
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
    * @throws {NotAuthenticatedError} If no user is authenticated
    */
   public override verifyMfa = async (
     params: VerifyMfaParams
-  ): Promise<void> => {
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
@@ -730,7 +730,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       organizationId: this.user.orgId,
     });
 
-    await this.request("/v1/auth-verify-multi-factor", {
+    return this.request("/v1/auth-verify-multi-factor", {
       stampedRequest,
       multiFactorId: params.multiFactorId,
       multiFactorCode: params.multiFactorCode,
