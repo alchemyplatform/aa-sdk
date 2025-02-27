@@ -662,7 +662,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   /**
    * Retrieves the list of MFA factors configured for the current user.
    *
-   * @returns {Promise<{ factors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
    * @throws {NotAuthenticatedError} If no user is authenticated
    */
   public override getMfaFactors = async (): Promise<{
@@ -690,7 +690,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   /**
-   * Initiates the setup of a new MFA factor for the current user.
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
    *
    * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
    * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
@@ -759,10 +759,6 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       multiFactorId: params.multiFactorId,
       multiFactorCode: params.multiFactorCode,
     });
-
-    // Emit the event with the updated factors
-    // this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
-    // TODO: maybe emit event with updated factors, will need the verify response to get the updated factors
   };
 
   /**
@@ -791,14 +787,10 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       },
     });
 
-    const response = await this.request("/v1/auth-delete-multi-factors", {
+    return this.request("/v1/auth-delete-multi-factors", {
       stampedRequest,
       multiFactorIds: params.multiFactorIds,
     });
-
-    // Emit the event with the factors that were disabled
-    // this.eventEmitter.emit("mfaFactorsUpdated", response.multiFactors);
-    return response;
   };
 }
 

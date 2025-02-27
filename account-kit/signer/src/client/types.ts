@@ -215,7 +215,6 @@ export type AlchemySignerClientEvents = {
   connectedOauth(user: User, bundle: string): void;
   connectedOtp(user: User, bundle: string): void;
   disconnected(): void;
-  // mfaFactorsUpdated(factors: MfaFactor[]): void;
 };
 
 export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;
