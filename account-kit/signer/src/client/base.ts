@@ -596,6 +596,8 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       prompt: "select_account",
       client_id: clientId,
       nonce,
+      // Fixes Facebook mobile login so that `window.opener` doesn't get nullified.
+      ...(authProvider.id === "facebook" ? { sdk: "joey" } : {}),
     };
     if (claims) {
       params.claims = claims;
