@@ -6,11 +6,12 @@ import { AlchemyLogo } from "../icons/alchemy";
 import { AlchemyTwoToneLogo } from "../icons/alchemy-two-tone";
 import Image from "next/image";
 import { Button } from "../small-cards/Button";
-// import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
+import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
 import { CopyLeftIcon } from "../icons/copy-left";
 import { TooltipComponent } from "../ui/tooltip";
 import { OTPInput, OTPCodeType, initialOTPValue } from "../ui/OTPInput";
 import { useSigner } from "@account-kit/react";
+import { useTheme } from "@/state/useTheme";
 
 type MFAStage = "init" | "qr" | "manual" | "verify" | "success";
 
@@ -18,7 +19,6 @@ export function MFAModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stage, setStage] = useState<MFAStage>("init");
   const [otp, setOTP] = useState<OTPCodeType>(initialOTPValue);
-  // const [mfaKey, setMFAKey] = useState<string | null>(null);
   const [totpUrl, setTotpUrl] = useState<string | null>(null);
   const [multiFactorId, setMultiFactorId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,6 @@ export function MFAModal() {
   const handleInitMFASetup = async () => {
     setStage("init");
     setOTP(initialOTPValue);
-    // setMFAKey(null);
     setTotpUrl(null);
     setMultiFactorId(null);
     setError(null);
@@ -102,6 +101,7 @@ export function MFAModal() {
     if (otp.every((value) => value !== "")) {
       verifyTOTP();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otp]);
 
   return (
@@ -118,7 +118,6 @@ export function MFAModal() {
               setStage={setStage}
               setOTP={setOTP}
               otp={otp}
-              // mfaKey={mfaKey}
               totpUrl={totpUrl}
               isLoading={isLoading}
               startMFASetup={startMFASetup}
@@ -168,6 +167,7 @@ const MFASContent = ({
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+  const theme = useTheme();
   if (stage === "init") {
     return (
       <>
@@ -183,8 +183,10 @@ const MFASContent = ({
           width={126}
           height={126}
         />
-        <h2 className="font-bold mb-5">Enable 2-Step Verification</h2>
-        <p className="mb-5 text-sm">
+        <h2 className="font-bold mb-5 text-fg-primary">
+          Enable 2-Step Verification
+        </h2>
+        <p className="mb-5 text-sm text-fg-primary">
           You&apos;re holding serious crypto. Make sure it stays that way.{" "}
           <strong>Secure your assets in 10 seconds.</strong>
         </p>
@@ -201,13 +203,15 @@ const MFASContent = ({
   if (stage === "qr") {
     return (
       <>
-        <h2 className="text-lg font-semibold mb-5">Set up authenticator app</h2>
+        <h2 className="text-lg font-semibold mb-5 text-fg-primary">
+          Set up authenticator app
+        </h2>
         <div className="relative mb-5">
-          {/* <AlchemyLogoSmall
+          <AlchemyLogoSmall
             height="40px"
             width="40px"
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          /> */}
+          />
           {isLoading ? (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -217,12 +221,14 @@ const MFASContent = ({
               className="p-4"
               size={250}
               value={totpUrl}
-              // imageSettings={{
-              //   height: 60,
-              //   width: 60,
-              //   excavate: true,
-              //   src: "",
-              // }}
+              bgColor={theme === "dark" ? "#020617" : "#FFFFFF"}
+              fgColor={theme === "dark" ? "#FFFFFF" : "#0C0C0E"}
+              imageSettings={{
+                height: 60,
+                width: 60,
+                excavate: true,
+                src: "",
+              }}
             />
           ) : (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
@@ -230,7 +236,7 @@ const MFASContent = ({
             </div>
           )}
         </div>
-        <p className="mb-5 text-center text-sm">
+        <p className="mb-5 text-center text-sm text-fg-primary">
           Alchemy recommends using Google Authenticator. <br />
           Scan the QR code using your app.
         </p>
@@ -252,13 +258,15 @@ const MFASContent = ({
   if (stage === "manual") {
     return (
       <>
-        <h2 className="text-lg font-semibold mb-5">Set up authenticator app</h2>
+        <h2 className="text-lg font-semibold mb-5 text-fg-primary">
+          Set up authenticator app
+        </h2>
         <ol className="list-style list-decimal flex flex-col gap-2 ml-6">
-          <li>
+          <li className="text-fg-primary">
             In the Google Authenticator app, tap the + button then tap{" "}
             <strong>Enter a setup key</strong>
           </li>
-          <li>
+          <li className="text-fg-primary">
             <div className="flex flex-row gap-2">
               <span>
                 Enter your email address and this key (spaces don&apos;t
@@ -276,10 +284,10 @@ const MFASContent = ({
               </TooltipComponent>
             </div>
           </li>
-          <li>
+          <li className="text-fg-primary">
             Make sure <strong>Time based</strong> is selected.
           </li>
-          <li>
+          <li className="text-fg-primary">
             Tap <strong>Add</strong> to finish.
           </li>
         </ol>
@@ -303,11 +311,10 @@ const MFASContent = ({
   if (stage === "verify") {
     return (
       <>
-        <h2 className="text-lg font-semibold mb-5">Enter authenticator code</h2>
-        <p className="mb-5 text-center text-sm">
-          Enter the 6-digit code from your authenticator app
-        </p>
-        <div className="flex gap-2 mb-5">
+        <h2 className="text-lg font-semibold mb-5 text-fg-primary">
+          Enter authenticator app code
+        </h2>
+        <div className="flex gap-2">
           <OTPInput
             value={otp}
             setValue={setOTP}
