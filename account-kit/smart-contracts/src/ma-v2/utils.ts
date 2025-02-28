@@ -179,7 +179,7 @@ export type GetMAV2UpgradeToData<
  *
  * @param {SmartAccountClient<TTransport, TChain, TAccount>} client The smart account client
  * @param {GetMAV2UpgradeToData<TSigner, TAccount>} args The arguments required for the upgrade
- * @returns {Promise<UpgradeToData & { createMAV2Account: () => Promise<ModularAccountV2<TSigner>>}>} A promise that resolves to upgrade data augmented with a function to create a Modular Account V2
+ * @returns {Promise<UpgradeToData & { createModularAccountV2FromExisting: () => Promise<ModularAccountV2<TSigner>>}>} A promise that resolves to upgrade data augmented with a function to create a Modular Account V2
  */
 export async function getMAV2UpgradeToData<
   TTransport extends Transport = Transport,
@@ -193,7 +193,9 @@ export async function getMAV2UpgradeToData<
   args: GetMAV2UpgradeToData<TSigner, TAccount>
 ): Promise<
   UpgradeToData & {
-    createMAV2Account: () => Promise<ModularAccountV2<TSigner>>;
+    createModularAccountV2FromExisting: () => Promise<
+      ModularAccountV2<TSigner>
+    >;
   }
 > {
   const { account: account_ = client.account } = args;
@@ -217,7 +219,7 @@ export async function getMAV2UpgradeToData<
   return {
     implAddress: getDefaultSMAV2StorageAddress(chain),
     initializationData: initData,
-    createMAV2Account: async () =>
+    createModularAccountV2FromExisting: async () =>
       createModularAccountV2({
         transport: custom(client.transport),
         chain: chain as Chain,
