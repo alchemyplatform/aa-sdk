@@ -186,6 +186,12 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           : {}),
       });
 
+      // The gas estimator requires the 7702 auth address to be set on the `authorizationContract` field.
+      if (userOp.eip7702Auth?.address) {
+        userOp.authorizationContract = userOp.eip7702Auth.address;
+        userOp.eip7702Auth = undefined;
+      }
+
       const result = await (client as AlchemySmartAccountClient).request({
         method: "alchemy_requestGasAndPaymasterAndData",
         params: [

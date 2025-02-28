@@ -69,9 +69,5 @@ export const default7702GasEstimator: (
       yParity: "0x0",
     };
 
-    const estimatedUO = await gasEstimator_(struct, params);
-
-    estimatedUO.eip7702Auth = undefined; // Strip out the auth after estimation.
-
-    return estimatedUO;
+    return gasEstimator_(struct, params);
   };
