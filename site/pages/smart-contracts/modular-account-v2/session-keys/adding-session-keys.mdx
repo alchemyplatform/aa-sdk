@@ -65,7 +65,19 @@ await client.installValidation({
 
 // 2. Adding a session key that can only call `execute` on the account
 sessionKeyEntityId = 2;
-const executeSelector = "0xb61d27f6";
+const executeSelector = toFunctionSelector({
+  getAbiItem({
+    abi: semiModularAccountBytecodeAbi,
+    name: "execute",
+  })
+});
+
+const executeBatchSelector = toFunctionSelector({
+  getAbiItem({
+    abi: semiModularAccountBytecodeAbi,
+    name: "executeBatch",
+  })
+});
 
 await client.installValidation({
   validationConfig: {
@@ -75,7 +87,7 @@ await client.installValidation({
     isSignatureValidation: false,
     isUserOpValidation: true,
   },
-  selectors: [executeSelector],
+  selectors: [executeSelector, executeBatchSelector],
   installData: SingleSignerValidationModule.encodeOnInstallData({
     entityId: sessionKeyEntityId,
     signer: await sessionKeySigner.getAddress(), // Address of the session key
@@ -93,6 +105,7 @@ Configuring a session key with a time range allows you to limit how long the ses
 Additional Notes
 
 - the interval is inclusive i.e. `[beginningOfInterval, endOfInterval]`
+- the values `beginningOfInterval` and `endOfInterval` are unix timestamps with a maximum size of uint32
 - the timestamp specifying the end of the interval must be **strictly greater than** the end of the interval
 
 ```ts twoslash
@@ -125,7 +138,7 @@ const sessionKeySigner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner("SESSION_KEY_MNEMONIC");
 
 const hookEntityId = 0; // Make sure that the account does not have a hook with this entity id on the module yet
-const validAfter = Math.floor(Date.now() / 1000) + 86400; // validity starts 1 day from now
+const validAfter = 0; // validity once added
 const validUntil = validAfter + 86400; // validity ends 2 days from now
 
 // Adding a session key that starts in a day and expires in two days
@@ -170,7 +183,7 @@ This module provides the ability to limit a session key to only be able to use a
 #### Additional Notes
 
 - you MUST specify a paymaster when using this module
-- if the paymaster that is registered with this module decides to no longer sponsor your user operations, the account would need to send a non user operation transaction to uninstall the module.
+- if the paymaster that is registered with this module decides to no longer sponsor your user operations, the entity associated with this hook would no longer be able to send user operations.
 
 ```ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
