@@ -1,8 +1,8 @@
 {
-	"extends": "typescript-template/base.json",
-	"include": ["src"],
-	"compilerOptions": {
-		"jsx": "react-native",
-		"sourceMap": true
-	}
+  "extends": "typescript-template/base.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "jsx": "react-native",
+    "sourceMap": true
+  }
 }
