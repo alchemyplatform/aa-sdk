@@ -1132,10 +1132,10 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const { createMAV2Account, ...upgradeToData } = await getMAV2UpgradeToData(
-      lightAccountClient,
-      { account: lightAccountClient.account }
-    );
+    const { createModularAccountV2FromExisting, ...upgradeToData } =
+      await getMAV2UpgradeToData(lightAccountClient, {
+        account: lightAccountClient.account,
+      });
 
     await lightAccountClient.upgradeAccount({
       upgradeTo: upgradeToData,
@@ -1145,7 +1145,7 @@ describe("MA v2 Tests", async () => {
     const maV2Client = createSmartAccountClient({
       chain: instance.chain,
       transport: custom(client),
-      account: await createMAV2Account(),
+      account: await createModularAccountV2FromExisting(),
     });
 
     // test uo
