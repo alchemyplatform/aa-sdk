@@ -6,11 +6,14 @@ import { AlchemyLogo } from "../icons/alchemy";
 import { AlchemyTwoToneLogo } from "../icons/alchemy-two-tone";
 import Image from "next/image";
 import { Button } from "../small-cards/Button";
+// import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
 import { CopyLeftIcon } from "../icons/copy-left";
 import { TooltipComponent } from "../ui/tooltip";
 import { OTPInput, OTPCodeType, initialOTPValue } from "../ui/OTPInput";
 import { useSigner } from "@account-kit/react";
 import { useTheme } from "@/state/useTheme";
+import { Spinner } from "../ui/Spinner";
+import { ThreeStarsIcon } from "../icons/three-stars";
 
 type MFAStage = "init" | "qr" | "manual" | "verify" | "success";
 
@@ -260,6 +263,11 @@ const MFASContent = ({
           Set up authenticator app
         </h2>
         <div className="relative mb-5">
+          {/* <AlchemyLogoSmall
+            height="40px"
+            width="40px"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          /> */}
           {isLoading ? (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -271,6 +279,12 @@ const MFASContent = ({
               value={totpUrl}
               bgColor={theme === "dark" ? "#020617" : "#FFFFFF"}
               fgColor={theme === "dark" ? "#FFFFFF" : "#0C0C0E"}
+              // imageSettings={{
+              //   height: 60,
+              //   width: 60,
+              //   excavate: true,
+              //   src: "",
+              // }}
             />
           ) : (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
@@ -303,7 +317,7 @@ const MFASContent = ({
         <h2 className="text-lg font-semibold mb-5 text-fg-primary">
           Set up authenticator app
         </h2>
-        <ol className="list-style list-decimal flex flex-col gap-2 ml-6">
+        <ol className="list-style list-decimal flex flex-col gap-2 ml-6 mb-5">
           <li className="text-fg-primary">
             In the Google Authenticator app, tap the + button then tap{" "}
             <strong>Enter a setup key</strong>
@@ -325,7 +339,7 @@ const MFASContent = ({
                 </button>
               </TooltipComponent>
             </div>
-            <strong>{mfaKey}</strong>
+            <strong>{mfaKey?.match(/.{1,4}/g)?.join(" ")}</strong>
           </li>
           <li className="text-fg-primary">
             Make sure <strong>Time based</strong> is selected.
@@ -334,15 +348,15 @@ const MFASContent = ({
             Tap <strong>Add</strong> to finish.
           </li>
         </ol>
-        <div className="flex flex-row items-start gap-2">
+        <div className="flex flex-row items-start w-full gap-2">
           <button
-            className=" rounded-lg h-10  mb-5"
+            className="rounded-lg h-10  mb-5 mr-2 border p-3 flex justify-center items-center"
             onClick={() => setStage("qr")}
           >
             Back
           </button>
           <button
-            className="akui-btn akui-btn-primary rounded-lg h-10 w-full mb-5"
+            className="akui-btn akui-btn-primary rounded-lg h-10  mb-5 flex-1 "
             onClick={() => setStage("verify")}
           >
             Next
@@ -354,6 +368,13 @@ const MFASContent = ({
   if (stage === "verify") {
     return (
       <>
+        <div className="flex justify-center mb-5 relative">
+          <ThreeStarsIcon
+            isBranded={true}
+            className="h-8 w-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          />
+          <Spinner className="h-12 w-12" />
+        </div>
         <h2 className="text-lg font-semibold mb-5 text-fg-primary">
           Enter authenticator app code
         </h2>

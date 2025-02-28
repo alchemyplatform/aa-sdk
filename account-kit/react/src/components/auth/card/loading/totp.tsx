@@ -7,20 +7,22 @@ import {
   isOTPCodeType,
   type OTPCodeType,
 } from "../../../otp-input/otp-input.js";
-import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { Spinner } from "../../../../icons/spinner.js";
+import { ThreeStarsIcon } from "../../../../icons/threeStars.js";
 
 export const LoadingTotp = () => {
   const { authStep, setAuthStep } = useAuthContext("totp_verify");
   const [totpCode, setTotpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
-
-  const { authenticate, isPending } = useAuthenticate({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { authenticate } = useAuthenticate({
     onSuccess: () => {
+      setIsSubmitting(false);
       setAuthStep({ type: "complete" });
     },
     onError: (err) => {
       console.error("TOTP verify error", err);
+      setIsSubmitting(false);
       setErrorText(err?.message || "TOTP invalid");
     },
   });
@@ -28,6 +30,7 @@ export const LoadingTotp = () => {
   const setValue = async (otpCode: OTPCodeType) => {
     setTotpCode(otpCode);
     if (isOTPCodeType(otpCode)) {
+      setIsSubmitting(true);
       const otp = otpCode.join("");
       handleVerify(otp);
     }
@@ -53,24 +56,17 @@ export const LoadingTotp = () => {
     <div className="flex flex-col items-center">
       <div className="relative h-12 w-12 mb-5">
         <Spinner className="absolute" />
-        <EmailIllustration
-          height="32"
-          width="32"
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        />
+        <ThreeStarsIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
       <h3 className="text-fg-primary font-semibold text-lg mb-2">
-        Enter your TOTP Code
+        Enter authentication code
       </h3>
-      <p className="text-fg-secondary text-center text-sm mb-5">
-        Check your authenticator app for a 6-digit code.
-      </p>
       <OTPInput
         value={totpCode}
         setValue={setValue}
         errorText={errorText}
         setErrorText={setErrorText}
-        disabled={isPending}
+        disabled={isSubmitting}
         handleReset={() => setTotpCode(initialOTPValue)}
       />
     </div>
