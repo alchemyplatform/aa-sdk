@@ -43,7 +43,7 @@ const MintCardInner = ({
   transactionUrl,
 }: UseMintReturn) => {
   return (
-    <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[500px] flex flex-col shadow-smallCard">
+    <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[500px] flex flex-col shadow-smallCard min-h-[220px]">
       <div className="flex xl:flex-col gap-4">
         <div className="flex-shrink-0 sm:mb-3 xl:mb-0 rounded-lg overflow-hidden relative flex items-center justify-center h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
           {uri ? (
