@@ -6,7 +6,7 @@ import { AlchemyLogo } from "../icons/alchemy";
 import { AlchemyTwoToneLogo } from "../icons/alchemy-two-tone";
 import Image from "next/image";
 import { Button } from "../small-cards/Button";
-import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
+// import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
 import { CopyLeftIcon } from "../icons/copy-left";
 import { TooltipComponent } from "../ui/tooltip";
 import { OTPInput, OTPCodeType, initialOTPValue } from "../ui/OTPInput";
