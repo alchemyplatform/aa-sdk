@@ -3,7 +3,7 @@
 import { disconnect } from "@account-kit/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useOptionalAuthContext } from "../components/auth/context.js";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { BaseHookMutationArgs } from "../types.js";
 
 export type UseLogoutMutationArgs = BaseHookMutationArgs<void, void>;

@@ -28,4 +28,7 @@ config.resolver.extraNodeModules = {
 	stream: require.resolve("stream-browserify"),
 };
 
+// Important to allow importing package exports
+config.resolver.unstable_enablePackageExports = true;
+
 module.exports = config;
