@@ -20,8 +20,7 @@ import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Store, StoredState } from "./store/types";
-import type { RNAlchemySignerType } from "../../rn-signer/lib/typescript/module/src/signer";
-
+import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"

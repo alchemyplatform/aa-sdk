@@ -10,6 +10,7 @@ import {
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
   type EmailAuthParams,
+  type ExportWalletParams,
   type GetWebAuthnAttestationResult,
   type OauthConfig,
   type OauthParams,
@@ -35,7 +36,7 @@ export const RNSignerClientParamsSchema = z.object({
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
 // TODO: need to emit events
-export class RNSignerClient extends BaseSignerClient<undefined> {
+export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
   private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
@@ -204,7 +205,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.stamper.clear();
     await this.stamper.init();
   }
-  override exportWallet(_params: unknown): Promise<boolean> {
+  override exportWallet(_params: ExportWalletParams): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
   override lookupUserWithPasskey(_user?: User): Promise<User> {

@@ -1,11 +1,7 @@
 "use client";
 
-import type {
-  AlchemyAccountsConfig,
-  AlchemyClientState,
-  AlchemySigner,
-} from "@account-kit/core";
-import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
+import type { AlchemyClientState, AlchemySigner } from "@account-kit/core";
+import { AlchemySignerStatus } from "@account-kit/signer";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import {
   createContext,
@@ -24,18 +20,18 @@ import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { UiConfigProvider } from "./hooks/useUiConfig.js";
 import { Hydrate } from "./hydrate.js";
 
-export type AlchemyAccountContextProps<T extends AlchemySigner> = {
-  config: AlchemyAccountsConfig<T>;
+export type AlchemyAccountContextProps = {
+  config: AlchemyAccountsConfigWithUI;
   queryClient: QueryClient;
 };
 
 export const AlchemyAccountContext = createContext<
-  AlchemyAccountContextProps<AlchemySigner> | undefined
+  AlchemyAccountContextProps | undefined
 >(undefined);
 
 export type AlchemyAccountsProviderProps = {
   config: AlchemyAccountsConfigWithUI;
-  initialState?: AlchemyClientState<AlchemyWebSigner>;
+  initialState?: AlchemyClientState<AlchemySigner>;
   queryClient: QueryClient;
 };
 
@@ -55,8 +51,8 @@ export type AlchemyAccountsProviderProps = {
  * @throws if used outside of the AlchemyAccountProvider
  */
 export const useAlchemyAccountContext = (
-  override?: AlchemyAccountContextProps<AlchemyWebSigner>
-): AlchemyAccountContextProps<AlchemyWebSigner> => {
+  override?: AlchemyAccountContextProps
+): AlchemyAccountContextProps => {
   const context = useContext(AlchemyAccountContext);
   if (override != null) return override;
 

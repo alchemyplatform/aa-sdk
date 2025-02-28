@@ -1,6 +1,5 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
 import { createSigner } from "../store/store.js";
-import type { AlchemyAccountsConfig } from "../types.js";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
 import { createAccount } from "./createAccount.js";
 import { getChain } from "./getChain.js";
 
@@ -18,14 +17,12 @@ import { getChain } from "./getChain.js";
  *
  * @param {AlchemyAccountsConfig} config the account config which contains the client store
  */
-export async function reconnect(
-  config: AlchemyAccountsConfig<AlchemyWebSigner>
-) {
+export async function reconnect(config: AlchemyAccountsConfig<AlchemySigner>) {
   const { store } = config;
   const signerConfig = store.getState().config;
   const accountConfigs = store.getState().accountConfigs;
 
-  const signer: AlchemyWebSigner =
+  const signer: AlchemySigner =
     store.getState().signer ?? createSigner(signerConfig);
   if (!store.getState().signer) {
     store.setState({

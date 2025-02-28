@@ -1,6 +1,7 @@
 import {
   createConfig as createCoreConfig,
   type AlchemyAccountsConfig,
+  type AlchemySigner,
   type CreateConfigProps,
 } from "@account-kit/core";
 import { walletConnect } from "wagmi/connectors";
@@ -9,10 +10,9 @@ import { ReactLogger } from "./metrics.js";
 import type { AlchemyAccountsUIConfig } from "./types";
 import { getWalletConnectParams } from "./utils.js";
 import { WALLET_CONNECT } from "./components/auth/card/eoa.js";
-import type { AlchemyWebSigner } from "@account-kit/signer";
 
 export type AlchemyAccountsConfigWithUI =
-  AlchemyAccountsConfig<AlchemyWebSigner> & {
+  AlchemyAccountsConfig<AlchemySigner> & {
     ui?: AlchemyAccountsUIConfig;
   };
 
@@ -79,7 +79,8 @@ export const createConfig = (
     props.connectors.push(walletConnect(walletConnectParams));
   }
 
-  const config = createCoreConfig(props);
+  const config: AlchemyAccountsConfig<AlchemySigner> =
+    createCoreConfig<AlchemySigner>(props);
 
   ReactLogger.trackEvent({
     name: "config_created",

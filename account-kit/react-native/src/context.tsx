@@ -1,29 +1,37 @@
-import "./polyfills/index.js";
-import {
-  AlchemyAccountContext,
-  NoAlchemyAccountContextError,
-  type AlchemyAccountContextProps,
-} from "@account-kit/react";
+import "./polyfills/buffer-polyfill.js";
+import "./polyfills/custom-event-polyfill.js";
+import "./polyfills/window-polyfill.js";
+import "./polyfills/mmkv-localstorage-polyfill.js";
+
 import { Hydrate } from "./hydrate.js";
-import { useContext, useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { RNAlchemySignerType } from "../../rn-signer/lib/typescript/module/src/signer.js";
 import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
+  AlchemySigner,
 } from "@account-kit/core";
 
-export type AlchemyAccountsProviderProps = {
-  config: AlchemyAccountsConfig<RNAlchemySignerType>;
-  initialState?: AlchemyClientState<RNAlchemySignerType>;
+export type AlchemyAccountContextProps = {
+  config: AlchemyAccountsConfig<AlchemySigner>;
   queryClient: QueryClient;
 };
+
+export type AlchemyAccountsProviderProps = {
+  config: AlchemyAccountsConfig<AlchemySigner>;
+  initialState?: AlchemyClientState<AlchemySigner>;
+  queryClient: QueryClient;
+};
+
+export const AlchemyAccountContext = createContext<
+  AlchemyAccountContextProps | undefined
+>(undefined);
 /**
  * Provider for Alchemy accounts.
  *
  * @example
  * ```tsx
- * import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
+ * import { AlchemyAccountProvider, createConfig } from "@account-kit/react-native";
  * import { sepolia } from "@account-kit/infra";
  * import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
  *
@@ -92,13 +100,17 @@ export const AlchemyAccountProvider = (
  * @throws if used outside of the AlchemyAccountProvider
  */
 export const useAlchemyAccountContext = (
-  override?: AlchemyAccountContextProps<RNAlchemySignerType>
-): AlchemyAccountContextProps<RNAlchemySignerType> => {
-  const context = useContext(AlchemyAccountContext);
+  override?: AlchemyAccountContextProps
+): AlchemyAccountContextProps => {
+  const context = useContext<AlchemyAccountContextProps | undefined>(
+    AlchemyAccountContext
+  );
   if (override != null) return override;
 
   if (context == null) {
-    throw new NoAlchemyAccountContextError("useAlchemyAccountContext");
+    throw new Error(
+      "useAlchemyAccountContext is not inside an AlchemyAccountProvider"
+    );
   }
 
   return context;

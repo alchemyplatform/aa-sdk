@@ -321,6 +321,12 @@ const createEmptyAccountConfigState = <T extends AlchemySigner>(
   }, {} as StoreState<T>["accountConfigs"]);
 };
 
+/**
+ * Creates the default account state for the given chains.
+ *
+ * @param {Chain[]} chains the chains to create the default account state for
+ * @returns {NoUndefined<StoreState<T>["accounts"]>} The default account state for the given chains
+ */
 export const createDefaultAccountState = <T extends AlchemySigner>(
   chains: Chain[]
 ) => {

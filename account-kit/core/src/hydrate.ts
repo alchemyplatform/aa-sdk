@@ -1,5 +1,5 @@
 import type { Address } from "@aa-sdk/core";
-import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
+import { AlchemySignerStatus } from "@account-kit/signer";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { reconnect } from "./actions/reconnect.js";
 import {
@@ -8,7 +8,11 @@ import {
   defaultAccountState,
 } from "./store/store.js";
 import type { AccountState, StoreState, StoredState } from "./store/types.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
+import type {
+  AlchemyAccountsConfig,
+  AlchemySigner,
+  SupportedAccountTypes,
+} from "./types.js";
 
 export type HydrateResult = {
   onMount: () => Promise<void>;
@@ -32,8 +36,8 @@ export type HydrateResult = {
  * @returns {{ onMount: () => Promise<void> }} an object containing an onMount function that can be called when your component first renders on the client
  */
 export function hydrate(
-  config: AlchemyAccountsConfig<AlchemyWebSigner>,
-  initialState?: StoredState<AlchemyWebSigner>
+  config: AlchemyAccountsConfig<AlchemySigner>,
+  initialState?: StoredState<AlchemySigner>
 ): HydrateResult {
   const initialAlchemyState =
     initialState != null && "alchemy" in initialState
@@ -102,10 +106,10 @@ const reconnectingState = <T extends SupportedAccountTypes>(
 });
 
 const hydrateAccountState = (
-  accountConfigs: StoreState<AlchemyWebSigner>["accountConfigs"],
+  accountConfigs: StoreState<AlchemySigner>["accountConfigs"],
   shouldReconnectAccounts: boolean,
-  config: AlchemyAccountsConfig<AlchemyWebSigner>
-): StoreState<AlchemyWebSigner>["accounts"] => {
+  config: AlchemyAccountsConfig<AlchemySigner>
+): StoreState<AlchemySigner>["accounts"] => {
   const chains = Array.from(config.store.getState().connections.entries()).map(
     ([, cnx]) => cnx.chain
   );

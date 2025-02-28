@@ -34,9 +34,9 @@ export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
  * @param {CreateConfigProps} params The parameters to create the config with
  * @returns {AlchemyAccountsConfig} An alchemy account config object containing the core and client store
  */
-export const createConfig = (
+export const createConfig = <T extends AlchemySigner>(
   params: CreateConfigProps
-): AlchemyAccountsConfig<AlchemySigner> => {
+): AlchemyAccountsConfig<T> => {
   const {
     chain,
     iframeConfig,
@@ -70,7 +70,7 @@ export const createConfig = (
   }
 
   const defaultConnection = connections[0].transport;
-  const store = createAccountKitStore({
+  const store = createAccountKitStore<T>({
     connections,
     chain,
     client: {
@@ -110,7 +110,7 @@ export const createConfig = (
     ssr,
   });
 
-  const config: AlchemyAccountsConfig<AlchemySigner> = {
+  const config: AlchemyAccountsConfig<T> = {
     store: store,
     _internal: {
       ssr,

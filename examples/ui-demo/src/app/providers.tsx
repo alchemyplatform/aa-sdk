@@ -2,7 +2,8 @@
 
 import { ToastProvider } from "@/contexts/ToastProvider";
 import { convertDemoConfigToUiConfig } from "@/state/store";
-import { AlchemyClientState } from "@account-kit/core";
+import { AlchemyClientState, AlchemySigner } from "@account-kit/core";
+
 import {
   AlchemyAccountProvider,
   AlchemyAccountsConfigWithUI,
@@ -14,7 +15,7 @@ import { alchemyConfig, Config, queryClient } from "./config";
 
 export const Providers = (
   props: PropsWithChildren<{
-    initialState?: AlchemyClientState;
+    initialState?: AlchemyClientState<AlchemySigner>;
     initialConfig?: Config;
   }>
 ) => {

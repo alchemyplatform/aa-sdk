@@ -6,13 +6,14 @@ import {
   convertSignerStatusToState,
   createDefaultAccountState,
   defaultAccountState,
-} from "../store/store.js";
-import type { AccountState, StoreState, StoredState } from "../store/types.js";
-import type {
-  AlchemyAccountsConfig,
-  AlchemySigner,
-  SupportedAccountTypes,
-} from "../types.js";
+  type AlchemyAccountsConfig,
+  type SupportedAccountTypes,
+  type AccountState,
+  type StoreState,
+  type StoredState,
+  type Store,
+  type AlchemySigner,
+} from "@account-kit/core";
 import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
 
 export type HydrateResult = {
@@ -32,20 +33,21 @@ export type HydrateResult = {
  * // call onMount once your component has mounted
  * ```
  *
- * @param {AlchemyAccountsConfig} config the config containing the client store
- * @param {StoredState} initialState optional param detailing the initial ClientState
+ * @param {AlchemyAccountsConfig<RNAlchemySignerType>} config the config containing the client store
+ * @param {StoredState<RNAlchemySignerType>} initialState optional param detailing the initial ClientState
  * @returns {{ onMount: () => Promise<void> }} an object containing an onMount function that can be called when your component first renders on the client
  */
 export function hydrate(
-  config: AlchemyAccountsConfig<RNAlchemySignerType>,
-  initialState?: StoredState<RNAlchemySignerType>
+  config: AlchemyAccountsConfig<AlchemySigner>,
+  initialState?: StoredState<AlchemySigner>
 ): HydrateResult {
   const initialAlchemyState =
     initialState != null && "alchemy" in initialState
       ? initialState.alchemy
       : initialState;
 
-  if (initialAlchemyState && !config.store.persist.hasHydrated()) {
+  const store = config.store as Store<RNAlchemySignerType>;
+  if (initialAlchemyState && !store.persist.hasHydrated()) {
     const { accountConfigs, signerStatus, ...rest } = initialAlchemyState;
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
@@ -58,7 +60,7 @@ export function hydrate(
         AlchemySignerStatus.INITIALIZING,
         undefined
       ),
-      accounts: hydrateAccountState<RNAlchemySignerType>(
+      accounts: hydrateAccountState(
         accountConfigs,
         shouldReconnectAccounts,
         config
@@ -106,14 +108,16 @@ const reconnectingState = <T extends SupportedAccountTypes>(
   },
 });
 
-const hydrateAccountState = <T extends AlchemySigner>(
-  accountConfigs: StoreState<T>["accountConfigs"],
+const hydrateAccountState = (
+  accountConfigs: StoreState<AlchemySigner>["accountConfigs"],
   shouldReconnectAccounts: boolean,
-  config: AlchemyAccountsConfig<T>
-): StoreState<T>["accounts"] => {
-  const chains = Array.from(config.store.getState().connections.entries()).map(
-    ([, cnx]) => cnx.chain
-  );
+  config: AlchemyAccountsConfig<AlchemySigner>
+): StoreState<RNAlchemySignerType>["accounts"] => {
+  const chains = Array.from(
+    (config.store as Store<RNAlchemySignerType>)
+      .getState()
+      .connections.entries()
+  ).map(([, cnx]) => cnx.chain);
   const initialState = createDefaultAccountState(chains);
   const activeChainId = config.store.getState().chain.id;
 

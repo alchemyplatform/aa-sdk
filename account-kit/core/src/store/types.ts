@@ -108,7 +108,13 @@ export type StoreState<T extends AlchemySigner> = {
   connections: Map<number, Connection>;
 };
 
-export type Store<T extends AlchemySigner> = Mutate<
-  StoreApi<StoreState<T>>,
-  [["zustand/subscribeWithSelector", never], ["zustand/persist", StoreState<T>]]
+type Expanded<T> = { [K in keyof T]: T[K] };
+
+type Middleware = [
+  ["zustand/subscribeWithSelector", never],
+  ["zustand/persist", StoreState<AlchemySigner>]
+];
+
+export type Store<T extends AlchemySigner> = Expanded<
+  Mutate<StoreApi<StoreState<T>>, Middleware>
 >;

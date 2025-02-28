@@ -1,12 +1,11 @@
 "use client";
 
 import type { SignerStatus } from "@account-kit/core";
-import { getSignerStatus, watchSignerStatus } from "@account-kit/core";
+import { getSignerStatus } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "../context.js";
 import type { AlchemyAccountContextProps } from "@account-kit/react";
-import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
-
+import { watchSignerStatus } from "../core/watchSigner.js";
 export type UseSignerStatusResult = SignerStatus;
 
 /**
@@ -23,7 +22,7 @@ export type UseSignerStatusResult = SignerStatus;
  * ```
  */
 export const useSignerStatus = (
-  override?: AlchemyAccountContextProps<RNAlchemySignerType>
+  override?: AlchemyAccountContextProps
 ): UseSignerStatusResult => {
   const { config } = useAlchemyAccountContext(override);
 

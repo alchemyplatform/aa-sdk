@@ -3,14 +3,14 @@
 import {
   type AlchemyAccountsConfig,
   type AlchemyClientState,
+  type AlchemySigner,
 } from "@account-kit/core";
-import { hydrate } from "@account-kit/core/web";
+import { hydrate } from "@account-kit/core";
 import { useEffect, useRef, type PropsWithChildren } from "react";
-import type { AlchemyWebSigner } from "@account-kit/signer";
 
 export type HydrateProps = {
-  config: AlchemyAccountsConfig<AlchemyWebSigner>;
-  initialState?: AlchemyClientState<AlchemyWebSigner>;
+  config: AlchemyAccountsConfig<AlchemySigner>;
+  initialState?: AlchemyClientState<AlchemySigner>;
 };
 
 /**
