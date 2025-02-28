@@ -46,7 +46,6 @@ export const SmallCardsWrapper = () => {
                   multiFactorIds: [factorId],
                 });
                 console.log(result);
-                setFactorId("");
               } catch (error) {
                 console.error("Error removing MFA factor:", error);
               }
