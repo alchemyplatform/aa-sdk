@@ -1,0 +1,48 @@
+---
+title: Overview of Session Keys for Modular Account V2
+description: An overview of Session Keys for Modular Account V2
+---
+
+# Session keys overview
+
+## Why Session Keys?
+
+Session Keys enable you to add additional signers to your smart account with specific permissions. This unlocks features like automated actions a dapp can perform on a user’s behalf, improved security by enabling partial owners on an account, and more!
+
+### Skip duplicate confirmations
+
+Session keys unlock a simplified authentication process by allowing users to interact with apps without needing to confirm each action using their primary key. Instead, users create a session key with permissions specific to the app, then the app can use that key for future actions. This speeds up the user interaction and provides a smoother experience.
+
+### Automate actions
+
+With the ability to delegate specific permissions to session keys, users can automate actions within predefined limits. Session keys can be used to streamline processes like recurring payments, contract interactions, or any activity that benefits from automation.
+
+### Secure delegation of authority
+
+By delegating authorization to a separate key, the exposure of the main private key is minimized. Even if a session key is compromised, the attacker would not gain access to the user's main account and funds. This layered approach to security helps in mitigating risks associated with key management.
+
+### Security through applying permissions on session keys
+
+To ensure that session keys are not able to take over an account, permissions have to be applied on them to scope the keys such that they can only perform certain actions. Modular Account V2 comes with several permissions you could use today, and if any other custom permission is required, you could build a hook module that provides this to plug into Modular Account V2. Please reach out to us if you're interested in building a module!
+
+## Supported permissions
+
+### Time range
+
+Supports limiting keys with a start and/or expiry time ranges
+
+### ERC-20 Spending Limits
+
+Supports limiting how much of a specific ERC-20 token a key may spend
+
+### Gas and native token spending limits
+
+Supports limiting how much native tokens, e.g. ETH on mainnet, a key may spend
+
+### Access control lists
+
+Supports limiting function selectors and/or external contracts that a key may interact with
+
+### Internal selector allowlist
+
+Supports limiting what functions a key may call on the Modular Account (e.g. installing or uninstalling modules, or upgrading the account)
