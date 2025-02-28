@@ -2,7 +2,6 @@ import type { Address } from "@aa-sdk/core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
-import type { AlchemyMfaStatus } from "../types";
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
@@ -65,7 +64,8 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
-  multiFactor?: MfaChallenge;
+  multiFactorId?: string;
+  multiFactorCode?: string;
 };
 
 export type SignupResponse = {
@@ -128,7 +128,7 @@ export type SignerEndpoints = [
     Response: {
       orgId: string;
       otpId?: string;
-      multiFactor?: MfaState;
+      multiFactors?: MfaFactor[];
     };
   },
   {
@@ -161,7 +161,8 @@ export type SignerEndpoints = [
     Body: OtpParams;
     Response: {
       credentialBundle: string | null;
-      multiFactor?: MfaState;
+      multiFactorId: string;
+      multiFactorCode: string;
     };
   },
   {
@@ -247,11 +248,6 @@ export type GetOauthProviderUrlArgs = {
 export type MfaFactor = {
   multiFactorId: string;
   multiFactorType: string;
-};
-
-export type MfaState = {
-  factors?: MfaFactor[];
-  multiFactorState: AlchemyMfaStatus;
 };
 
 type MultiFactorType = "totp";

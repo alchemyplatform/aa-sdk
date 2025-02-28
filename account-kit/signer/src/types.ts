@@ -6,7 +6,10 @@ export type AlchemySignerEvents = {
   disconnected(): void;
   statusChanged(status: AlchemySignerStatus): void;
   errorChanged(error: ErrorInfo | undefined): void;
-  mfaStatusChanged(mfaStatus: AlchemyMfaStatus): void;
+  mfaStatusChanged(mfaStatus: {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  }): void;
 };
 
 export type AlchemySignerEvent = keyof AlchemySignerEvents;

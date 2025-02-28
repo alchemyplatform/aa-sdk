@@ -30,7 +30,6 @@ import {
 import type { AuthParams } from "./signer";
 import {
   AlchemySignerStatus,
-  AlchemyMfaStatus,
   type AlchemySignerEvent,
   type AlchemySignerEvents,
   type ErrorInfo,
@@ -51,7 +50,10 @@ type AlchemySignerStore = {
   error: ErrorInfo | null;
   otpId?: string;
   isNewUser?: boolean;
-  mfaStatus: AlchemyMfaStatus;
+  mfaStatus: {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  };
 };
 
 type UnpackedSignature = {
@@ -100,7 +102,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             user: null,
             status: AlchemySignerStatus.INITIALIZING,
             error: initialError ?? null,
-            mfaStatus: AlchemyMfaStatus.NOT_REQUIRED,
+            mfaStatus: {
+              mfaRequired: false,
+              mfaFactorId: undefined,
+            },
           } satisfies AlchemySignerStore)
       )
     );
@@ -613,9 +618,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * }
    * ```
    *
-   * @returns {AlchemyMfaStatus} The current MFA status
+   * @returns {{ mfaRequired: boolean; mfaFactorId?: string }} The current MFA status
    */
-  getMfaStatus = (): AlchemyMfaStatus => {
+  getMfaStatus = (): {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  } => {
     return this.store.getState().mfaStatus;
   };
 
@@ -779,9 +787,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if ("email" in params) {
       const existingUser = await this.getUser(params.email);
       const expirationSeconds = this.getExpirationSeconds();
-
+      debugger;
       if (existingUser) {
-        const { orgId, otpId, multiFactor } = await this.inner.initEmailAuth({
+        const { orgId, otpId, multiFactors } = await this.inner.initEmailAuth({
           email: params.email,
           emailMode: params.emailMode,
           expirationSeconds,
@@ -789,7 +797,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           multiFactor: params.multiFactor,
         });
 
-        const isMfaRequired = multiFactor?.multiFactorState === "required";
+        const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
 
         this.sessionManager.setTemporarySession({
           orgId,
@@ -801,9 +809,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
           otpId,
           error: null,
-          mfaStatus: isMfaRequired
-            ? AlchemyMfaStatus.REQUIRED
-            : AlchemyMfaStatus.NOT_REQUIRED,
+          mfaStatus: {
+            mfaRequired: isMfaRequired,
+            mfaFactorId: multiFactors?.[0]?.multiFactorId,
+          },
         });
       } else {
         const { orgId, otpId } = await this.inner.createAccount({
@@ -933,7 +942,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
-      multiFactor: args.multiFactor,
+      multiFactorId: args.multiFactor?.multiFactorId,
+      multiFactorCode: args.multiFactor?.multiFactorChallenge?.code,
     });
     const user = await this.inner.completeAuthWithBundle({
       bundle,

@@ -19,7 +19,6 @@ import type {
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   MfaFactor,
-  MfaState,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -137,7 +136,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string; otpId?: string; multiFactor?: MfaState }>;
+  ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }>;
 
   /**
    * Retrieves the list of MFA factors configured for the current user.
