@@ -965,7 +965,7 @@ describe("MA v2 Tests", async () => {
             signature: signedUO.signature,
           },
         ],
-        zeroAddress,
+        target,
       ],
       account: await sessionKeyProvider.account.getSigner().getAddress(),
     });
@@ -1096,7 +1096,7 @@ describe("MA v2 Tests", async () => {
               signature: signedUO.signature,
             },
           ],
-          zeroAddress,
+          target,
         ],
         account: await sessionKeyProvider.account.getSigner().getAddress(),
       });
