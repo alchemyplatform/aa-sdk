@@ -6,7 +6,6 @@ import { AlchemyLogo } from "../icons/alchemy";
 import { AlchemyTwoToneLogo } from "../icons/alchemy-two-tone";
 import Image from "next/image";
 import { Button } from "../small-cards/Button";
-import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
 import { CopyLeftIcon } from "../icons/copy-left";
 import { TooltipComponent } from "../ui/tooltip";
 import { OTPInput, OTPCodeType, initialOTPValue } from "../ui/OTPInput";
@@ -261,11 +260,6 @@ const MFASContent = ({
           Set up authenticator app
         </h2>
         <div className="relative mb-5">
-          <AlchemyLogoSmall
-            height="40px"
-            width="40px"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          />
           {isLoading ? (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -277,12 +271,6 @@ const MFASContent = ({
               value={totpUrl}
               bgColor={theme === "dark" ? "#020617" : "#FFFFFF"}
               fgColor={theme === "dark" ? "#FFFFFF" : "#0C0C0E"}
-              imageSettings={{
-                height: 60,
-                width: 60,
-                excavate: true,
-                src: "",
-              }}
             />
           ) : (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
