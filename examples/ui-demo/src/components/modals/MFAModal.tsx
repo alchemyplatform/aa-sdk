@@ -233,7 +233,7 @@ const MFASContent = ({
           className="mb-5"
         />
         <Image
-          src="/images/data-security-icon.png"
+          src="/images/dataSecurityIcon.png"
           className="mb-5"
           alt="data-security icon"
           width={126}
