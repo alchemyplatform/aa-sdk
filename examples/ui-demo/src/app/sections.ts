@@ -21,7 +21,7 @@ export function getSectionsForConfig(
   const midSection: AuthType[] = [];
   if (showEmail) {
     //TODO: Toggle between magic link and OTP in sidebar confg
-    sections.push([{ type: "email", emailMode: "magicLink" }]);
+    sections.push([{ type: "email", emailMode: "otp" }]);
   }
   if (showPasskey) {
     midSection.push({ type: "passkey" });
