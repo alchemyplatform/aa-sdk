@@ -9,6 +9,7 @@ import {
 import { Address, Chain, encodeFunctionData } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
 import { MintStatus } from "@/components/small-cards/MintCard";
+import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
 const initialValuePropState = {
   signing: "initial",
@@ -38,6 +39,8 @@ export const useMint = (props: {
       mode: props.mode,
     },
   });
+  const { isDeployed, refetch: refetchDeploymentStatus } =
+    useDeploymentStatus();
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);
@@ -45,7 +48,7 @@ export const useMint = (props: {
     Object.values(status).some((x) => x === "loading") ||
     isLoadingClient ||
     isSettingChain ||
-    activeChain !== props.chain;
+    activeChain.id !== props.chain.id;
   const { setToast } = useToast();
 
   const handleSuccess = () => {
@@ -54,6 +57,10 @@ export const useMint = (props: {
       gas: "success",
       signing: "success",
     }));
+
+    if (!isDeployed) {
+      refetchDeploymentStatus();
+    }
 
     setToast({
       type: "success",
