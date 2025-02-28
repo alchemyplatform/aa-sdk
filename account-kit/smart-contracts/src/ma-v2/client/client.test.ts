@@ -17,6 +17,8 @@ import {
   fromHex,
   isAddress,
   concat,
+  testActions,
+  type TestActions,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -57,14 +59,16 @@ describe("MA v2 Tests", async () => {
   const instance = local070Instance;
 
   let client: ReturnType<typeof instance.getClient> &
-    ReturnType<typeof publicActions>;
-
-  let testClient = instance.getTestClient();
+    ReturnType<typeof publicActions> &
+    TestActions;
 
   const isValidSigSuccess = "0x1626ba7e";
 
   beforeAll(async () => {
-    client = instance.getClient().extend(publicActions);
+    client = instance
+      .getClient()
+      .extend(publicActions)
+      .extend(testActions({ mode: "anvil" }));
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
@@ -906,14 +910,14 @@ describe("MA v2 Tests", async () => {
     // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
-    testClient.setAutomine(false);
+    client.setAutomine(false);
 
     // force block timestamp to be inside of range
-    await testClient.setNextBlockTimestamp({
+    await client.setNextBlockTimestamp({
       timestamp: 1754507101n,
     });
 
-    await testClient.mine({
+    await client.mine({
       blocks: 1,
     });
 
@@ -965,12 +969,12 @@ describe("MA v2 Tests", async () => {
             signature: signedUO.signature,
           },
         ],
-        target,
+        provider.account.address,
       ],
       account: await sessionKeyProvider.account.getSigner().getAddress(),
     });
 
-    testClient.setAutomine(true);
+    client.setAutomine(true);
   });
 
   // NOTE: uses different validation and hook entity id than previous test because we do not uninstall the hook in the previous test
@@ -1033,14 +1037,14 @@ describe("MA v2 Tests", async () => {
     // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
-    testClient.setAutomine(false);
+    client.setAutomine(false);
 
     // force block timestamp to be outside of range
-    await testClient.setNextBlockTimestamp({
+    await client.setNextBlockTimestamp({
       timestamp: 2054507101n,
     });
 
-    await testClient.mine({
+    await client.mine({
       blocks: 1,
     });
 
@@ -1096,7 +1100,7 @@ describe("MA v2 Tests", async () => {
               signature: signedUO.signature,
             },
           ],
-          target,
+          provider.account.address,
         ],
         account: await sessionKeyProvider.account.getSigner().getAddress(),
       });
@@ -1108,7 +1112,7 @@ describe("MA v2 Tests", async () => {
       );
     }
 
-    testClient.setAutomine(true);
+    client.setAutomine(true);
   });
 
   const givenConnectedProvider = async ({

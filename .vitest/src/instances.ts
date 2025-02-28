@@ -4,13 +4,7 @@ dotenv.config();
 import getPort from "get-port";
 import { createServer } from "prool";
 import { anvil, rundler } from "prool/instances";
-import {
-  createClient,
-  createTestClient,
-  http,
-  type Chain,
-  type ClientConfig,
-} from "viem";
+import { createClient, http, type Chain, type ClientConfig } from "viem";
 import { localhost } from "viem/chains";
 import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
@@ -173,13 +167,6 @@ function defineInstance(params: DefineInstanceParams) {
         chain,
         transport: clientConfig.transport,
       }).extend(() => ({ mode: "anvil" }));
-    },
-    getTestClient() {
-      return createTestClient({
-        chain,
-        mode: "anvil",
-        transport: clientConfig.transport,
-      });
     },
     async restart() {
       if (useLocalRunningInstance) return;
