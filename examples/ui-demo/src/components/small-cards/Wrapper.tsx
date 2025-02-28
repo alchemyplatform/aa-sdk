@@ -1,6 +1,5 @@
 import { useSigner } from "@account-kit/react";
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
 import { MintCard7702, MintCardDefault } from "./MintCard";
 import {
   TransactionsCard7702,
@@ -9,12 +8,12 @@ import {
 import { MFACard } from "./MFACard";
 
 export const SmallCardsWrapper = () => {
-  const { walletType } = useConfigStore();
+  const { accountMode } = useConfigStore();
   const signer = useSigner();
 
   return (
     <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6 w-full justify-center max-w-screen-sm xl:max-w-none">
-      {walletType === WalletTypes.smart ? (
+      {accountMode === "default" ? (
         <>
           <MintCardDefault />
           <TransactionsCardDefault />

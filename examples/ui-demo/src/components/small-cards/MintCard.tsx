@@ -1,11 +1,12 @@
 import { LoadingIcon } from "@/components/icons/loading";
-import { UseMintReturn } from "@/hooks/useMintDefault";
+import { UseMintReturn } from "@/hooks/useMint";
 import { nftContractAddress, nftContractAddressOdyssey } from "@/utils/config";
 import Image from "next/image";
-import { useMintDefault } from "@/hooks/useMintDefault";
+import { useMint } from "@/hooks/useMint";
 import { Button } from "./Button";
 import { MintStages } from "./MintStages";
-import { useMint7702 } from "@/hooks/useMint7702";
+import { odyssey } from "@/hooks/7702/transportSetup";
+import { arbitrumSepolia } from "@account-kit/infra";
 
 type NFTLoadingState = "initial" | "loading" | "success";
 
@@ -16,15 +17,19 @@ export type MintStatus = {
 };
 
 export const MintCardDefault = () => {
-  const mint = useMintDefault({
+  const mint = useMint({
+    mode: "default",
     contractAddress: nftContractAddress,
+    chain: arbitrumSepolia,
   });
   return <MintCardInner {...mint} />;
 };
 
 export const MintCard7702 = () => {
-  const mint = useMint7702({
+  const mint = useMint({
+    mode: "7702",
     contractAddress: nftContractAddressOdyssey,
+    chain: odyssey,
   });
   return <MintCardInner {...mint} />;
 };
@@ -38,7 +43,7 @@ const MintCardInner = ({
   transactionUrl,
 }: UseMintReturn) => {
   return (
-    <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[478px] flex flex-col shadow-smallCard">
+    <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[500px] flex flex-col shadow-smallCard min-h-[220px]">
       <div className="flex xl:flex-col gap-4">
         <div className="flex-shrink-0 sm:mb-3 xl:mb-0 rounded-lg overflow-hidden relative flex items-center justify-center h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
           {uri ? (

@@ -55,7 +55,7 @@ export interface SimulateAssetChange {
 
 export type RequestGasAndPaymasterAndDataRequest = [
   {
-    policyId: string;
+    policyId: string | string[];
     entryPoint: Address;
     dummySignature: Hex;
     userOperation: UserOperationRequest;

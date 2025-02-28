@@ -63,7 +63,7 @@ export const createConfig = (
       connections.push({
         transport: transport?.config ?? connectionConfig.transport!.config,
         chain,
-        policyId,
+        policyId: policyId ?? connectionConfig.policyId,
       });
     });
   }

@@ -1,4 +1,4 @@
-import { Config, DEFAULT_CONFIG, WalletTypes } from "@/app/config";
+import { AccountMode, Config, DEFAULT_CONFIG } from "@/app/config";
 import { getSectionsForConfig } from "@/app/sections";
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { cookieStorage, parseCookie } from "@account-kit/core";
@@ -49,7 +49,7 @@ export type DemoState = Config & {
   ) => void;
   setTheme: (theme: Config["ui"]["theme"]) => void;
   setSupportUrl: (url: string) => void;
-  setWalletType: (walletType: WalletTypes) => void;
+  setAccountMode: (accountMode: AccountMode) => void;
 };
 
 export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
@@ -69,19 +69,18 @@ export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
             setTheme,
             setNftTransferred,
             nftTransferred,
-            setWalletType,
+            setAccountMode,
             ...config
           }) => config,
           skipHydration: true,
-          version: 2,
+          version: 3,
         })
   );
 };
 
-function createInitialState(
-  initialConfig: Config = DEFAULT_CONFIG
-): StateCreator<DemoState> {
+function createInitialState(initialConfig?: Config): StateCreator<DemoState> {
   return (set, get) => ({
+    ...DEFAULT_CONFIG,
     ...initialConfig,
     nftTransferred: false,
     setNftTransferred: (transferred) => {
@@ -143,9 +142,9 @@ function createInitialState(
         },
       }));
     },
-    setWalletType: (walletType: WalletTypes) => {
+    setAccountMode: (accountMode: AccountMode) => {
       set(() => ({
-        walletType,
+        accountMode,
       }));
     },
   });
