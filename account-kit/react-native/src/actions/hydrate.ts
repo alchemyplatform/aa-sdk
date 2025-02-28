@@ -1,0 +1,149 @@
+import type { Address } from "@aa-sdk/core";
+import { AlchemySignerStatus } from "@account-kit/signer";
+import { hydrate as wagmi_hydrate } from "@wagmi/core";
+import { reconnect } from "./reconnect.js";
+import {
+  convertSignerStatusToState,
+  createDefaultAccountState,
+  defaultAccountState,
+  type AlchemyAccountsConfig,
+  type SupportedAccountTypes,
+  type AccountState,
+  type StoreState,
+  type StoredState,
+  type Store,
+  type AlchemySigner,
+} from "@account-kit/core";
+import type { RNAlchemySignerType } from "@account-kit/react-native-signer";
+
+export type HydrateResult = {
+  onMount: () => Promise<void>;
+};
+
+/**
+ * Will hydrate the client store with the provided initial state if one is provided.
+ *
+ * @example
+ * ```ts
+ * import { hydrate, cookieToInitialState } from "@account-kit/core";
+ * import { config } from "./config";
+ *
+ * const initialState = cookieToInitialState(document.cookie);
+ * const { onMount } = hydrate(config, initialState);
+ * // call onMount once your component has mounted
+ * ```
+ *
+ * @param {AlchemyAccountsConfig<RNAlchemySignerType>} config the config containing the client store
+ * @param {StoredState<RNAlchemySignerType>} initialState optional param detailing the initial ClientState
+ * @returns {{ onMount: () => Promise<void> }} an object containing an onMount function that can be called when your component first renders on the client
+ */
+export function hydrate(
+  config: AlchemyAccountsConfig<AlchemySigner>,
+  initialState?: StoredState<AlchemySigner>
+): HydrateResult {
+  const initialAlchemyState =
+    initialState != null && "alchemy" in initialState
+      ? initialState.alchemy
+      : initialState;
+
+  const store = config.store as Store<RNAlchemySignerType>;
+  if (initialAlchemyState && !store.persist.hasHydrated()) {
+    const { accountConfigs, signerStatus, ...rest } = initialAlchemyState;
+    const shouldReconnectAccounts =
+      signerStatus.isConnected || signerStatus.isAuthenticating;
+
+    config.store.setState({
+      ...rest,
+      user: initialAlchemyState.user,
+      accountConfigs,
+      signerStatus: convertSignerStatusToState(
+        AlchemySignerStatus.INITIALIZING,
+        undefined
+      ),
+      accounts: hydrateAccountState(
+        accountConfigs,
+        shouldReconnectAccounts,
+        config
+      ),
+    });
+  } else if (!config.store.persist.hasHydrated()) {
+    config.store.setState({
+      ...config.store.getInitialState(),
+      user: undefined,
+    });
+  }
+
+  const initialWagmiState =
+    initialState != null && "wagmi" in initialState
+      ? initialState.wagmi
+      : undefined;
+
+  const { onMount: wagmi_onMount } = wagmi_hydrate(
+    config._internal.wagmiConfig,
+    {
+      initialState: initialWagmiState,
+      reconnectOnMount: true,
+    }
+  );
+
+  return {
+    async onMount() {
+      if (config._internal.ssr) {
+        await config.store.persist.rehydrate();
+      }
+
+      await wagmi_onMount();
+
+      await reconnect(config);
+    },
+  };
+}
+
+const reconnectingState = <T extends SupportedAccountTypes>(
+  address: Address
+): AccountState<T> => ({
+  status: "RECONNECTING",
+  account: {
+    address,
+  },
+});
+
+const hydrateAccountState = (
+  accountConfigs: StoreState<AlchemySigner>["accountConfigs"],
+  shouldReconnectAccounts: boolean,
+  config: AlchemyAccountsConfig<AlchemySigner>
+): StoreState<RNAlchemySignerType>["accounts"] => {
+  const chains = Array.from(
+    (config.store as Store<RNAlchemySignerType>)
+      .getState()
+      .connections.entries()
+  ).map(([, cnx]) => cnx.chain);
+  const initialState = createDefaultAccountState(chains);
+  const activeChainId = config.store.getState().chain.id;
+
+  return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
+    const chainId = Number(chainKey);
+    const isActiveChain = chainId === activeChainId;
+    const shouldReconnect = shouldReconnectAccounts && isActiveChain;
+    acc[chainId] = {
+      LightAccount:
+        shouldReconnect && config.LightAccount?.accountAddress
+          ? reconnectingState(config.LightAccount.accountAddress)
+          : defaultAccountState(),
+      MultiOwnerModularAccount:
+        shouldReconnect && config.MultiOwnerModularAccount?.accountAddress
+          ? reconnectingState(config.MultiOwnerModularAccount.accountAddress)
+          : defaultAccountState(),
+      MultiOwnerLightAccount:
+        shouldReconnect && config.MultiOwnerLightAccount?.accountAddress
+          ? reconnectingState(config.MultiOwnerLightAccount.accountAddress)
+          : defaultAccountState(),
+      ModularAccountV2:
+        shouldReconnect && config.ModularAccountV2?.accountAddress
+          ? reconnectingState(config.ModularAccountV2.accountAddress)
+          : defaultAccountState(),
+    };
+
+    return acc;
+  }, initialState);
+};
