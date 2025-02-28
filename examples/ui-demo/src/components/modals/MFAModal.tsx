@@ -6,7 +6,7 @@ import { AlchemyLogo } from "../icons/alchemy";
 import { AlchemyTwoToneLogo } from "../icons/alchemy-two-tone";
 import Image from "next/image";
 import { Button } from "../small-cards/Button";
-// import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
+import { AlchemyLogoSmall } from "../icons/alchemy-logo-small";
 import { CopyLeftIcon } from "../icons/copy-left";
 import { TooltipComponent } from "../ui/tooltip";
 import { OTPInput, OTPCodeType, initialOTPValue } from "../ui/OTPInput";
@@ -20,12 +20,12 @@ export function MFAModal() {
   const [stage, setStage] = useState<MFAStage>("init");
   const [otp, setOTP] = useState<OTPCodeType>(initialOTPValue);
   const [totpUrl, setTotpUrl] = useState<string | null>(null);
+  const [mfaKey, setMfaKey] = useState<string | null>(null);
   const [multiFactorId, setMultiFactorId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const signer = useSigner();
-
   const handleClose = () => setIsModalOpen(false);
 
   const handleInitMFASetup = async () => {
@@ -36,7 +36,6 @@ export function MFAModal() {
     setError(null);
     setIsModalOpen(true);
   };
-
   const resetModalState = () => {
     setIsModalOpen(false);
     setStage("init");
@@ -60,8 +59,10 @@ export function MFAModal() {
 
       if (result?.multiFactorTotpUrl) {
         setTotpUrl(result.multiFactorTotpUrl);
+        const url = new URL(result.multiFactorTotpUrl);
+        const secret = new URLSearchParams(url.search).get("secret");
+        setMfaKey(secret);
         setMultiFactorId(result.multiFactorId);
-        // setMFAKey(result.multiFactorSecret || "");
         setStage("qr");
       } else {
         setError("Failed to generate MFA setup");
@@ -119,6 +120,7 @@ export function MFAModal() {
               setOTP={setOTP}
               otp={otp}
               totpUrl={totpUrl}
+              mfaKey={mfaKey}
               isLoading={isLoading}
               startMFASetup={startMFASetup}
               resetModalState={resetModalState}
@@ -154,7 +156,7 @@ const MFASContent = ({
   setStage: (stage: MFAStage) => void;
   setOTP: (otp: OTPCodeType) => void;
   otp: OTPCodeType;
-  mfaKey?: string | null;
+  mfaKey: string | null;
   totpUrl: string | null;
   isLoading: boolean;
   startMFASetup: () => Promise<void>;
@@ -207,11 +209,11 @@ const MFASContent = ({
           Set up authenticator app
         </h2>
         <div className="relative mb-5">
-          {/* <AlchemyLogoSmall
+          <AlchemyLogoSmall
             height="40px"
             width="40px"
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          /> */}
+          />
           {isLoading ? (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -223,12 +225,12 @@ const MFASContent = ({
               value={totpUrl}
               bgColor={theme === "dark" ? "#020617" : "#FFFFFF"}
               fgColor={theme === "dark" ? "#FFFFFF" : "#0C0C0E"}
-              // imageSettings={{
-              //   height: 60,
-              //   width: 60,
-              //   excavate: true,
-              //   src: "",
-              // }}
+              imageSettings={{
+                height: 60,
+                width: 60,
+                excavate: true,
+                src: "",
+              }}
             />
           ) : (
             <div className="p-4 flex items-center justify-center h-[250px] w-[250px]">
@@ -271,7 +273,7 @@ const MFASContent = ({
               <span>
                 Enter your email address and this key (spaces don&apos;t
                 matter):
-                <strong>{mfaKey ?? "TEMPORARY KEY"}</strong>
+                <br />
               </span>
               <TooltipComponent content="Copied to clipboard" open={copied}>
                 <button
@@ -283,6 +285,7 @@ const MFASContent = ({
                 </button>
               </TooltipComponent>
             </div>
+            <strong>{mfaKey}</strong>
           </li>
           <li className="text-fg-primary">
             Make sure <strong>Time based</strong> is selected.
@@ -314,7 +317,7 @@ const MFASContent = ({
         <h2 className="text-lg font-semibold mb-5 text-fg-primary">
           Enter authenticator app code
         </h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-5">
           <OTPInput
             value={otp}
             setValue={setOTP}
