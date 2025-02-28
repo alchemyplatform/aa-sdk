@@ -426,7 +426,7 @@ describe("MA v2 Tests", async () => {
             entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
-            hasPostHooks: true,
+            hasPostHooks: false,
           },
           initData: hookInstallData,
         },
@@ -518,7 +518,7 @@ describe("MA v2 Tests", async () => {
             entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
-            hasPostHooks: true,
+            hasPostHooks: false,
           },
           initData: hookInstallData,
         },
@@ -1105,6 +1105,7 @@ describe("MA v2 Tests", async () => {
         account: await sessionKeyProvider.account.getSigner().getAddress(),
       });
     } catch (err: any) {
+      // verify that simulation fails due to violation of time range restriction on session key
       assert(
         err.metaMessages.filter((str: string) =>
           str.includes("AA22 expired or not due")
