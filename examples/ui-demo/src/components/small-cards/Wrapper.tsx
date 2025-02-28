@@ -1,4 +1,3 @@
-import { useSigner } from "@account-kit/react";
 import { useConfigStore } from "@/state";
 import { MintCard7702, MintCardDefault } from "./MintCard";
 import {
@@ -9,7 +8,6 @@ import { MFACard } from "./MFACard";
 
 export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
-  const signer = useSigner();
 
   return (
     <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6 w-full justify-center max-w-screen-sm xl:max-w-none">
