@@ -1,18 +1,18 @@
 {
-	"extends": "typescript-template/base.json",
-	"compilerOptions": {
-		"jsx": "react-native",
-		"strict": true,
-		"noImplicitAny": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"noEmit": true,
-		"incremental": true,
-		"resolveJsonModule": true,
-		"moduleResolution": "bundler",
-		"module": "ESNext",
-		"target": "ESNext",
-		"lib": ["ESNext"],
-		"isolatedModules": true
-	}
+  "extends": "typescript-template/base.json",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "isolatedModules": true
+  }
 }
