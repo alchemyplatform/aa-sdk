@@ -219,11 +219,7 @@ export const installValidationActions: <
         account,
       });
 
-      return client.sendUserOperation({
-        uo: callData,
-        account,
-        overrides,
-      });
+      return client.sendUserOperation({ uo: callData, overrides });
     },
 
     uninstallValidation: async ({
@@ -242,11 +238,7 @@ export const installValidationActions: <
         account,
       });
 
-      return client.sendUserOperation({
-        uo: callData,
-        account,
-        overrides,
-      });
+      return client.sendUserOperation({ uo: callData, overrides });
     },
   };
 };
