@@ -26,10 +26,12 @@ import {
   installValidationActions,
   getDefaultSingleSignerValidationModuleAddress,
   SingleSignerValidationModule,
+  semiModularAccountBytecodeAbi,
 } from "@account-kit/smart-contracts/experimental";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
+import { toFunctionSelector, getAbiItem } from "viem";
 import { type SmartAccountSigner } from "@aa-sdk/core";
 
 const client = (
@@ -63,21 +65,21 @@ await client.installValidation({
   hooks: [],
 });
 
-// 2. Adding a session key that can only call `execute` on the account
+// 2. Adding a session key that can only call `execute` or `executeBatch` on the account
 sessionKeyEntityId = 2;
-const executeSelector = toFunctionSelector({
+const executeSelector = toFunctionSelector(
   getAbiItem({
     abi: semiModularAccountBytecodeAbi,
     name: "execute",
   })
-});
+);
 
-const executeBatchSelector = toFunctionSelector({
+const executeBatchSelector = toFunctionSelector(
   getAbiItem({
     abi: semiModularAccountBytecodeAbi,
     name: "executeBatch",
   })
-});
+);
 
 await client.installValidation({
   validationConfig: {
