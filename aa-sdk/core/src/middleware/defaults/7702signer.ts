@@ -46,7 +46,13 @@ export const default7702UserOpSigner: (
   (userOpSigner?: ClientMiddlewareFn) => async (struct, params) => {
     const userOpSigner_ = userOpSigner ?? defaultUserOpSigner;
 
-    const uo = await userOpSigner_(struct, params);
+    const uo = await userOpSigner_(
+      {
+        ...struct,
+        eip7702Auth: undefined,
+      },
+      params
+    );
 
     const account = params.account ?? params.client.account;
     const { client } = params;

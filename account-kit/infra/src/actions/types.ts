@@ -58,7 +58,9 @@ export type RequestGasAndPaymasterAndDataRequest = [
     policyId: string | string[];
     entryPoint: Address;
     dummySignature: Hex;
-    userOperation: UserOperationRequest;
+    userOperation: Omit<UserOperationRequest, "eip7702auth"> & {
+      authorizationContract?: Address;
+    };
     overrides?: UserOperationOverrides;
   }
 ];
