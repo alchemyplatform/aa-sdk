@@ -64,8 +64,12 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
-  multiFactorId?: string;
-  multiFactorCode?: string;
+  multiFactors?: [
+    {
+      multiFactorId?: string;
+      multiFactorCode?: string;
+    }
+  ];
 };
 
 export type SignupResponse = {

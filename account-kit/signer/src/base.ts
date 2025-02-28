@@ -787,7 +787,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if ("email" in params) {
       const existingUser = await this.getUser(params.email);
       const expirationSeconds = this.getExpirationSeconds();
-      debugger;
+
       if (existingUser) {
         const { orgId, otpId, multiFactors } = await this.inner.initEmailAuth({
           email: params.email,
@@ -942,8 +942,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
-      multiFactorId: args.multiFactor?.multiFactorId,
-      multiFactorCode: args.multiFactor?.multiFactorChallenge?.code,
+      multiFactors: args.multiFactor?.multiFactorId
+        ? [
+            {
+              multiFactorId: args.multiFactor?.multiFactorId,
+              multiFactorCode: args.multiFactor?.multiFactorChallenge?.code,
+            },
+          ]
+        : undefined,
     });
     const user = await this.inner.completeAuthWithBundle({
       bundle,
