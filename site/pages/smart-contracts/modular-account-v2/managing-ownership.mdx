@@ -1,0 +1,40 @@
+---
+title: Managing ownership
+description: Managing ownership on your Modular Account V2
+---
+
+# Managing Ownership
+
+You can add an owner to your account, or transfer ownership of your account with Modular Account V2. Adding an owner has the same flow as adding a session key with no root permissions.
+
+To transfer ownership:
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { semiModularAccountBytecodeAbi } from "@account-kit/smart-contracts/experimental";
+import { type SmartAccountSigner, LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey } from "viem/accounts";
+import { encodeFunctionData } from "viem";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const client = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const newOwner = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
+
+// The boolean parameter in updateFallbackSignerData indicates that the 1st owner is no longer an owner of the account
+await client.sendUserOperation({
+  uo: {
+    target: client.account.address,
+    value: 0n,
+    data: encodeFunctionData({
+      abi: semiModularAccountBytecodeAbi,
+      functionName: "updateFallbackSignerData",
+      args: [newOwner, false],
+    }),
+  },
+});
+```
