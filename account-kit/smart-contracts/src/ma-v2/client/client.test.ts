@@ -1107,9 +1107,9 @@ describe("MA v2 Tests", async () => {
     } catch (err: any) {
       // verify that simulation fails due to violation of time range restriction on session key
       assert(
-        err.metaMessages.filter((str: string) =>
+        err.metaMessages.some((str: string) =>
           str.includes("AA22 expired or not due")
-        ).length > 0
+        )
       );
     }
 
