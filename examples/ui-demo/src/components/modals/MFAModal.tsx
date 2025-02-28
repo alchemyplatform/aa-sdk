@@ -15,7 +15,19 @@ import { useTheme } from "@/state/useTheme";
 
 type MFAStage = "init" | "qr" | "manual" | "verify" | "success";
 
-export function MFAModal() {
+type MFAModalProps = {
+  isMfaActive?: boolean;
+  onMfaEnabled?: () => void;
+  onMfaRemoved?: () => void;
+  isLoadingClient?: boolean;
+};
+
+export function MFAModal({
+  isMfaActive = false,
+  onMfaEnabled,
+  onMfaRemoved,
+  isLoadingClient,
+}: MFAModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stage, setStage] = useState<MFAStage>("init");
   const [otp, setOTP] = useState<OTPCodeType>(initialOTPValue);
@@ -24,6 +36,7 @@ export function MFAModal() {
   const [multiFactorId, setMultiFactorId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const signer = useSigner();
   const handleClose = () => setIsModalOpen(false);
@@ -89,12 +102,43 @@ export function MFAModal() {
       });
 
       setStage("success");
+      onMfaEnabled?.();
     } catch (error) {
       console.error("Error verifying MFA:", error);
       setError("Verification failed.");
       setOTP(initialOTPValue);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const removeMFA = async () => {
+    if (!signer) {
+      setError("Signer not available");
+      return;
+    }
+
+    setIsRemoving(true);
+    try {
+      const factors = await signer.inner.getMfaFactors();
+      const factorId = factors?.multiFactors?.[0]?.multiFactorId;
+
+      if (!factorId) {
+        setError("No MFA factor ID found");
+        return;
+      }
+
+      await signer.inner.removeMfa({
+        multiFactorIds: [factorId],
+      });
+
+      onMfaRemoved?.();
+      resetModalState();
+    } catch (error) {
+      console.error("Error removing MFA:", error);
+      setError("Failed to remove MFA.");
+    } finally {
+      setIsRemoving(false);
     }
   };
 
@@ -107,7 +151,15 @@ export function MFAModal() {
 
   return (
     <>
-      <Button onClick={handleInitMFASetup}>Enable Authenticator App</Button>
+      {isMfaActive ? (
+        <Button onClick={removeMFA} disabled={isRemoving || isLoadingClient}>
+          {isRemoving ? "Removing..." : "Remove MFA"}
+        </Button>
+      ) : (
+        <Button onClick={handleInitMFASetup} disabled={isLoadingClient}>
+          {isLoadingClient ? "Loading..." : "Enable Authenticator App"}
+        </Button>
+      )}
       <Dialog isOpen={isModalOpen} onClose={handleClose}>
         <div className={`akui-modal md:w-[400px] rounded-lg overflow-hidden`}>
           <div className=" p-6 flex flex-col items-center">
