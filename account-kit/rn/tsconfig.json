@@ -1,8 +1,8 @@
 {
-	"extends": "typescript-template/base.json",
-	"compilerOptions": {
-		"jsx": "preserve",
-		"moduleResolution": "node",
-		"verbatimModuleSyntax": false
-	}
+  "extends": "typescript-template/base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "verbatimModuleSyntax": false
+  }
 }
