@@ -94,5 +94,3 @@ export {
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
-
-export * from "./environments/react-native/actions/index.js";

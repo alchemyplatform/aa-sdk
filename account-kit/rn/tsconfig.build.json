@@ -1,9 +1,9 @@
 {
-	"extends": "typescript-template/build.json",
-	"include": ["src"],
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"sourceMap": true,
-		"allowUnreachableCode": false
-	}
+  "extends": "typescript-template/build.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "allowUnreachableCode": false
+  }
 }

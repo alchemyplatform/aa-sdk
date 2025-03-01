@@ -3,7 +3,7 @@ import {
   type RNAlchemySignerParams,
 } from "@account-kit/react-native-signer";
 
-export const createRNSigner = (params: RNAlchemySignerParams) => {
+export const createSigner = (params: RNAlchemySignerParams) => {
   const { client, sessionConfig } = params;
 
   return RNAlchemySigner({

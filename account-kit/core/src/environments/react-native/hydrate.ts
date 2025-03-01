@@ -1,21 +1,21 @@
 import type { Address } from "@aa-sdk/core";
 import { AlchemySignerStatus } from "@account-kit/signer";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
-import { reconnectRN } from "./reconnectRN.js";
+import { reconnect } from "./reconnect.js";
 import {
   convertSignerStatusToState,
   createDefaultAccountState,
   defaultAccountState,
-} from "../../../store/store.js";
+} from "../../store/store.js";
 import type {
   AccountState,
   StoreState,
   StoredState,
-} from "../../../store/types.js";
+} from "../../store/types.js";
 import type {
   AlchemyAccountsConfig,
   SupportedAccountTypes,
-} from "../../../types.js";
+} from "../../types.js";
 
 export type HydrateResult = {
   onMount: () => Promise<void>;
@@ -38,7 +38,7 @@ export type HydrateResult = {
  * @param {StoredState} initialState optional param detailing the initial ClientState
  * @returns {{ onMount: () => Promise<void> }} an object containing an onMount function that can be called when your component first renders on the client
  */
-export function hydrateRN(
+export function hydrate(
   config: AlchemyAccountsConfig,
   initialState?: StoredState
 ): HydrateResult {
@@ -94,7 +94,7 @@ export function hydrateRN(
 
       await wagmi_onMount();
 
-      await reconnectRN(config);
+      await reconnect(config);
     },
   };
 }
