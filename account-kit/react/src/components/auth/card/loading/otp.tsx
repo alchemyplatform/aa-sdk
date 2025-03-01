@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSigner } from "../../../../hooks/useSigner.js";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { ls } from "../../../../strings.js";
 import {
@@ -20,6 +21,7 @@ export const LoadingOtp = () => {
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const [titleText, setTitleText] = useState(ls.loadingOtp.title);
+  const signer = useSigner();
 
   const resetOTP = (errorText = "") => {
     setOtpCode(initialOTPValue);
@@ -33,7 +35,15 @@ export const LoadingOtp = () => {
       setAuthStep({ ...authStep, error, status: AuthStepStatus.base });
       resetOTP(getUserErrorMessage(error));
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() ?? {};
+      if (mfaRequired) {
+        setAuthStep({
+          type: "totp_verify",
+          factorId: mfaFactorId ?? "",
+        });
+        return;
+      }
       if (isConnected) {
         setAuthStep({ ...authStep, status: AuthStepStatus.success });
         setTitleText(ls.loadingOtp.verified);
@@ -46,14 +56,23 @@ export const LoadingOtp = () => {
     },
   });
 
-  const setValue = (otpCode: OTPCodeType) => {
+  const setValue = async (otpCode: OTPCodeType) => {
     setOtpCode(otpCode);
     if (isOTPCodeType(otpCode)) {
       const otp = otpCode.join("");
 
       setAuthStep({ ...authStep, status: AuthStepStatus.verifying });
       setTitleText(ls.loadingOtp.verifying);
-      authenticate({ type: "otp", otpCode: otp });
+      const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() ?? {};
+      if (mfaRequired) {
+        setAuthStep({
+          type: "totp_verify",
+          factorId: mfaFactorId ?? "",
+          otpCode: otp,
+        });
+      } else {
+        authenticate({ type: "otp", otpCode: otp });
+      }
     }
   };
 

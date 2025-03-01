@@ -11,7 +11,7 @@ export const XIcon = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
       <path
         id="Icon"
         d="M12.6668 3.33301L3.3335 12.6663M12.6668 12.6663L3.3335 3.33301"
-        strokeWidth="2"
+        strokeWidth="1"
         strokeLinecap="round"
       />
     </g>

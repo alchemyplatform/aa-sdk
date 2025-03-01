@@ -50,6 +50,10 @@ type AlchemySignerStore = {
   error: ErrorInfo | null;
   otpId?: string;
   isNewUser?: boolean;
+  mfaStatus: {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  };
 };
 
 type UnpackedSignature = {
@@ -98,6 +102,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             user: null,
             status: AlchemySignerStatus.INITIALIZING,
             error: initialError ?? null,
+            mfaStatus: {
+              mfaRequired: false,
+              mfaFactorId: undefined,
+            },
           } satisfies AlchemySignerStore)
       )
     );
@@ -168,6 +176,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           (isNewUser) => {
             if (isNewUser) (listener as AlchemySignerEvents["newUserSignup"])();
           },
+          { fireImmediately: true }
+        );
+      case "mfaStatusChanged":
+        return this.store.subscribe(
+          ({ mfaStatus }) => mfaStatus,
+          (mfaStatus) =>
+            (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus),
           { fireImmediately: true }
         );
       default:
@@ -579,6 +594,39 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     }
   );
 
+  /**
+   * Gets the current MFA status
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const mfaStatus = signer.getMfaStatus();
+   * if (mfaStatus === AlchemyMfaStatus.REQUIRED) {
+   *   // Handle MFA requirement
+   * }
+   * ```
+   *
+   * @returns {{ mfaRequired: boolean; mfaFactorId?: string }} The current MFA status
+   */
+  getMfaStatus = (): {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  } => {
+    return this.store.getState().mfaStatus;
+  };
+
   private unpackSignRawMessageBytes = (
     hex: `0x${string}`
   ): UnpackedSignature => {
@@ -740,30 +788,51 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const existingUser = await this.getUser(params.email);
       const expirationSeconds = this.getExpirationSeconds();
 
-      const { orgId, otpId } = existingUser
-        ? await this.inner.initEmailAuth({
-            email: params.email,
-            emailMode: params.emailMode,
-            expirationSeconds,
-            redirectParams: params.redirectParams,
-          })
-        : await this.inner.createAccount({
-            type: "email",
-            email: params.email,
-            emailMode: params.emailMode,
-            expirationSeconds,
-            redirectParams: params.redirectParams,
-          });
+      if (existingUser) {
+        const { orgId, otpId, multiFactors } = await this.inner.initEmailAuth({
+          email: params.email,
+          emailMode: params.emailMode,
+          expirationSeconds,
+          redirectParams: params.redirectParams,
+          multiFactor: params.multiFactor,
+        });
 
-      this.sessionManager.setTemporarySession({
-        orgId,
-        isNewUser: !existingUser,
-      });
-      this.store.setState({
-        status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
-        otpId,
-        error: null,
-      });
+        const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
+
+        this.sessionManager.setTemporarySession({
+          orgId,
+          isNewUser: !existingUser,
+          isMfaRequired,
+        });
+
+        this.store.setState({
+          status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+          otpId,
+          error: null,
+          mfaStatus: {
+            mfaRequired: isMfaRequired,
+            mfaFactorId: multiFactors?.[0]?.multiFactorId,
+          },
+        });
+      } else {
+        const { orgId, otpId } = await this.inner.createAccount({
+          type: "email",
+          email: params.email,
+          emailMode: params.emailMode,
+          expirationSeconds,
+          redirectParams: params.redirectParams,
+        });
+
+        this.sessionManager.setTemporarySession({
+          orgId,
+          isNewUser: !existingUser,
+        });
+        this.store.setState({
+          status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+          otpId,
+          error: null,
+        });
+      }
 
       // We wait for the session manager to emit a connected event if
       // cross tab sessions are permitted
@@ -856,7 +925,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     args: Extract<AuthParams, { type: "otp" }>
   ): Promise<User> => {
     const tempSession = this.sessionManager.getTemporarySession();
-    const { orgId, isNewUser } = tempSession ?? {};
+    const { orgId, isNewUser, isMfaRequired } = tempSession ?? {};
     const { otpId } = this.store.getState();
     if (!orgId) {
       throw new Error("orgId not found in session");
@@ -864,11 +933,23 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if (!otpId) {
       throw new Error("otpId not found in session");
     }
+    if (isMfaRequired && !args.multiFactor) {
+      throw new Error(`MFA is required.`);
+    }
+
     const { bundle } = await this.inner.submitOtpCode({
       orgId,
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
+      multiFactors: args.multiFactor?.multiFactorId
+        ? [
+            {
+              multiFactorId: args.multiFactor?.multiFactorId,
+              multiFactorCode: args.multiFactor?.multiFactorChallenge?.code,
+            },
+          ]
+        : undefined,
     });
     const user = await this.inner.completeAuthWithBundle({
       bundle,
