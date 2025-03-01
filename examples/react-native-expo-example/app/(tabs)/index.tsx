@@ -18,6 +18,9 @@ import {
 } from "react-native";
 import { API_KEY } from "@env";
 
+
+console.log("APi_KEY: ", API_KEY)
+
 const signer = RNAlchemySigner({
 	client: { connection: { apiKey: API_KEY } },
 });

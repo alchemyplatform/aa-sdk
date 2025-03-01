@@ -313,6 +313,12 @@ const createEmptyAccountConfigState = (chains: Chain[]) => {
   }, {} as StoreState["accountConfigs"]);
 };
 
+/**
+ * Creates the default account state for the given chains.
+ *
+ * @param {Chain[]} chains The chains to create the account state for
+ * @returns {NoUndefined<StoreState["accounts"]>} The default account state for the given chains
+ */
 export const createDefaultAccountState = (chains: Chain[]) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {
