@@ -479,6 +479,24 @@ export const arbitrumNova: Chain = {
   },
 };
 
+export const monadTestnet: Chain = defineChain({
+  id: 10143,
+  name: "Monad Testnet",
+  nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://monad-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://monad-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://monad-testnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: true,
+});
+
 export const mekong: Chain = defineChain({
   id: 7078815900,
   name: "Mekong Pectra Devnet",
