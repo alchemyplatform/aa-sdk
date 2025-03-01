@@ -1,6 +1,6 @@
-import { createRNSigner } from "./createRNSigner.js";
-import type { AlchemyAccountsConfig } from "../../../types.js";
-import { createAccount, getChain } from "../../../index.js";
+import { createSigner } from "./createSigner.js";
+import type { AlchemyAccountsConfig } from "../../types.js";
+import { createAccount, getChain } from "../../index.js";
 
 /**
  * This method will use the current state in the client store and attempt to restore
@@ -17,12 +17,12 @@ import { createAccount, getChain } from "../../../index.js";
  * @param {AlchemyAccountsConfig} config the account config which contains the client store
  */
 
-export async function reconnectRN(config: AlchemyAccountsConfig) {
+export async function reconnect(config: AlchemyAccountsConfig) {
   const { store } = config;
   const signerConfig = store.getState().config;
   const accountConfigs = store.getState().accountConfigs;
 
-  const signer = store.getState().signer ?? createRNSigner(signerConfig);
+  const signer = store.getState().signer ?? createSigner(signerConfig);
   if (!store.getState().signer) {
     store.setState({
       signer,

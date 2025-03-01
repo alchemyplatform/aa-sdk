@@ -1,10 +1,10 @@
 "use client";
 
-import {
-  hydrateRN,
-  type AlchemyAccountsConfig,
-  type AlchemyClientState,
+import type {
+  AlchemyAccountsConfig,
+  AlchemyClientState,
 } from "@account-kit/core";
+import { hydrate } from "@account-kit/core/react-native";
 import { useEffect, useRef, type PropsWithChildren } from "react";
 
 export type HydrateProps = {
@@ -29,7 +29,7 @@ export type HydrateProps = {
 export function Hydrate(props: PropsWithChildren<HydrateProps>) {
   const { children, config, initialState } = props;
 
-  const { onMount } = hydrateRN(config, initialState);
+  const { onMount } = hydrate(config, initialState);
   const hasMounted = useRef(false);
 
   useEffect(() => {
