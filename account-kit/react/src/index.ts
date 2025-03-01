@@ -1,15 +1,16 @@
 export { cookieStorage, type CreateConfigProps } from "@account-kit/core";
 export type * from "./context.js";
-export {
-  AlchemyAccountContext,
-  AlchemyAccountProvider,
-  useAlchemyAccountContext,
-} from "./context.js";
+export { AlchemyAccountProvider } from "./context.js";
+export type * from "./AlchemyAccountContext.js";
+export { AlchemyAccountContext } from "./AlchemyAccountContext.js";
 export {
   createConfig,
   type AlchemyAccountsConfigWithUI,
 } from "./createConfig.js";
 export { NoAlchemyAccountContextError } from "./errors.js";
+
+// Hooks
+export { useAlchemyAccountContext } from "./hooks/useAlchemyAccountContext.js";
 export type * from "./hooks/useAccount.js";
 export { useAccount } from "./hooks/useAccount.js";
 export type * from "./hooks/useAddPasskey.js";

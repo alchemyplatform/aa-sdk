@@ -3,7 +3,7 @@
 import { getBundlerClient, watchBundlerClient } from "@account-kit/core";
 import type { ClientWithAlchemyMethods } from "@account-kit/infra";
 import { useSyncExternalStore } from "react";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 export type UseBundlerClientResult = ClientWithAlchemyMethods;
 

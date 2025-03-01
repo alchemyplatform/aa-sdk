@@ -12,7 +12,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useSyncExternalStore } from "react";
 import type { Address } from "viem";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSignerStatus } from "./useSignerStatus.js";
 
