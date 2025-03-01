@@ -26,8 +26,9 @@ import {
 } from "@account-kit/react";
 
 export function ComponentWithDropAndReplaceUO() {
-  const { client } = useSmartAccountClient({});
-
+  const { client } = useSmartAccountClient({
+    type: "MultiOwnerModularAccount",
+  });
   const { sendUserOperationAsync, isSendingUserOperation } =
     useSendUserOperation({
       client,
