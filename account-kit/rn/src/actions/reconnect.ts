@@ -1,5 +1,5 @@
 import { createSigner } from "./createSigner.js";
-import type { AlchemyAccountsConfig, StoreState } from "@account-kit/core";
+import type { AlchemyAccountsConfig } from "@account-kit/core";
 import { createAccount, getChain } from "@account-kit/core";
 
 /**
@@ -18,58 +18,57 @@ import { createAccount, getChain } from "@account-kit/core";
  */
 
 export async function reconnect(config: AlchemyAccountsConfig) {
-	const { store } = config;
-	const signerConfig = store.getState().config;
-	const accountConfigs = store.getState().accountConfigs;
+  const { store } = config;
+  const signerConfig = store.getState().config;
+  const accountConfigs = store.getState().accountConfigs;
 
-	const signer = store.getState().signer ?? createSigner(signerConfig);
-	if (!store.getState().signer) {
-		store.setState({
-			signer,
-		});
-	}
+  const signer = store.getState().signer ?? createSigner(signerConfig);
+  if (!store.getState().signer) {
+    store.setState({
+      signer,
+    });
+  }
 
-	const chain = getChain(config);
+  const chain = getChain(config);
 
-	const unsubConnected = signer.on("connected", async () => {
-		if (accountConfigs[chain.id]?.["LightAccount"]) {
-			await createAccount(
-				{
-					type: "LightAccount",
-					accountParams: accountConfigs[chain.id]["LightAccount"],
-				},
-				config
-			);
-		}
+  const unsubConnected = signer.on("connected", async () => {
+    if (accountConfigs[chain.id]?.["LightAccount"]) {
+      await createAccount(
+        {
+          type: "LightAccount",
+          accountParams: accountConfigs[chain.id]["LightAccount"],
+        },
+        config
+      );
+    }
 
-		if (accountConfigs[chain.id]?.["MultiOwnerModularAccount"]) {
-			await createAccount(
-				{
-					type: "MultiOwnerModularAccount",
-					accountParams:
-						accountConfigs[chain.id]["MultiOwnerModularAccount"],
-				},
-				config
-			);
-		}
+    if (accountConfigs[chain.id]?.["MultiOwnerModularAccount"]) {
+      await createAccount(
+        {
+          type: "MultiOwnerModularAccount",
+          accountParams: accountConfigs[chain.id]["MultiOwnerModularAccount"],
+        },
+        config
+      );
+    }
 
-		if (accountConfigs[chain.id]?.["ModularAccountV2"]) {
-			await createAccount(
-				{
-					type: "ModularAccountV2",
-					accountParams: accountConfigs[chain.id]["ModularAccountV2"],
-				},
-				config
-			);
-		}
+    if (accountConfigs[chain.id]?.["ModularAccountV2"]) {
+      await createAccount(
+        {
+          type: "ModularAccountV2",
+          accountParams: accountConfigs[chain.id]["ModularAccountV2"],
+        },
+        config
+      );
+    }
 
-		setTimeout(() => unsubConnected(), 1);
-	});
+    setTimeout(() => unsubConnected(), 1);
+  });
 
-	const unsubDisconnected = signer.on("disconnected", () => {
-		store.setState({
-			accountConfigs: {},
-		});
-		setTimeout(() => unsubDisconnected(), 1);
-	});
+  const unsubDisconnected = signer.on("disconnected", () => {
+    store.setState({
+      accountConfigs: {},
+    });
+    setTimeout(() => unsubDisconnected(), 1);
+  });
 }
