@@ -3,10 +3,8 @@
 import type { SignerStatus } from "@account-kit/core";
 import { getSignerStatus, watchSignerStatus } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
-import {
-  useAlchemyAccountContext,
-  type AlchemyAccountContextProps,
-} from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import type { AlchemyAccountContextProps } from "../AlchemyAccountContext.js";
 
 export type UseSignerStatusResult = SignerStatus;
 
