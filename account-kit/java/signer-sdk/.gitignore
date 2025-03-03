@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Maven build temp files ###
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag
+pom.xml.next
