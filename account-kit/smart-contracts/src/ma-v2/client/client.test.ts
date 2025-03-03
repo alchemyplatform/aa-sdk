@@ -77,10 +77,6 @@ describe("MA v2 Tests", async () => {
 
   beforeEach(async () => {
     await client.revert({ id: snapshotId });
-    client = instance
-      .getClient()
-      .extend(publicActions)
-      .extend(testActions({ mode: "anvil" }));
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
