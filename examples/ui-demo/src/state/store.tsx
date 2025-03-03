@@ -38,7 +38,6 @@ export function convertDemoConfigToUiConfig(
 
 export type DemoState = Config & {
   nftTransferred: boolean;
-  setNftTransferred: (transferred: boolean) => void;
   setIllustrationStyle: (style: Config["ui"]["illustrationStyle"]) => void;
   setBorderRadius: (radius: Config["ui"]["borderRadius"]) => void;
   setAuth: (auth: Partial<Config["auth"]>) => void;
@@ -67,13 +66,12 @@ export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
             setPrimaryColor,
             setSupportUrl,
             setTheme,
-            setNftTransferred,
             nftTransferred,
             setAccountMode,
             ...config
           }) => config,
           skipHydration: true,
-          version: 3,
+          version: 4,
         })
   );
 };
@@ -83,9 +81,6 @@ function createInitialState(initialConfig?: Config): StateCreator<DemoState> {
     ...DEFAULT_CONFIG,
     ...initialConfig,
     nftTransferred: false,
-    setNftTransferred: (transferred) => {
-      set({ nftTransferred: transferred });
-    },
     setTheme: (theme) => {
       set((state) => ({
         ui: {

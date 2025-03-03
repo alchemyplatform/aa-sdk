@@ -3,10 +3,10 @@ import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
 import { UserAddressTooltip } from "./UserAddressLink";
 import { useConfigStore } from "@/state";
-import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
-import { useQuery } from "@tanstack/react-query";
+import { useAccount, useLogout, useUser } from "@account-kit/react";
 import { Hex } from "viem";
 import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
+import { useSignerAddress } from "@/hooks/useSignerAddress";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
@@ -17,7 +17,7 @@ export function UserConnectionDetails({
   delegationAddress,
 }: UserConnectionDetailsProps) {
   const user = useUser();
-  const signer = useSigner();
+  const signerAddress = useSignerAddress();
   const { logout } = useLogout();
   const { theme, primaryColor, accountMode } = useConfigStore(
     ({ ui: { theme, primaryColor }, accountMode }) => ({
@@ -31,20 +31,9 @@ export function UserConnectionDetails({
     accountParams: {
       mode: accountMode,
     },
-    skipCreate: true,
   });
 
   const isEOAUser = user?.type === "eoa";
-
-  const getSignerAddress = async (): Promise<string | null> => {
-    const signerAddress = await signer?.getAddress();
-    return signerAddress ?? null;
-  };
-
-  const { data: signerAddress = "" } = useQuery({
-    queryKey: ["signerAddress"],
-    queryFn: getSignerAddress,
-  });
 
   if (!user) return null;
 
@@ -118,7 +107,7 @@ export function UserConnectionDetails({
               </div>
             </a>
 
-            <UserAddressTooltip address={signerAddress} />
+            <UserAddressTooltip address={signerAddress ?? null} />
           </div>
         </>
       ) : (

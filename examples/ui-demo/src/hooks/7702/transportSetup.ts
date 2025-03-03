@@ -38,7 +38,7 @@ export const odyssey: Chain = defineChain({
   blockExplorers: {
     default: {
       name: "Block Explorer",
-      url: "https://odyssey-explorer.ithaca.xyz/",
+      url: "https://odyssey-explorer.ithaca.xyz",
     },
   },
   testnet: true,

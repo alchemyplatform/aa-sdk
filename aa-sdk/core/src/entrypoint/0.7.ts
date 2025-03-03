@@ -22,35 +22,24 @@ const packUserOperation = (request: UserOperationRequest<"0.7.0">): Hex => {
     request.factory && request.factoryData
       ? concat([request.factory, request.factoryData])
       : "0x";
-  const accountGasLimits = packAccountGasLimits(
-    (({ verificationGasLimit, callGasLimit }) => ({
-      verificationGasLimit,
-      callGasLimit,
-    }))(request)
-  );
+  const accountGasLimits = packAccountGasLimits({
+    verificationGasLimit: request.verificationGasLimit,
+    callGasLimit: request.callGasLimit,
+  });
 
-  const gasFees = packAccountGasLimits(
-    (({ maxPriorityFeePerGas, maxFeePerGas }) => ({
-      maxPriorityFeePerGas,
-      maxFeePerGas,
-    }))(request)
-  );
+  const gasFees = packAccountGasLimits({
+    maxPriorityFeePerGas: request.maxPriorityFeePerGas,
+    maxFeePerGas: request.maxFeePerGas,
+  });
 
   const paymasterAndData =
     request.paymaster && isAddress(request.paymaster)
-      ? packPaymasterData(
-          (({
-            paymaster,
-            paymasterVerificationGasLimit,
-            paymasterPostOpGasLimit,
-            paymasterData,
-          }) => ({
-            paymaster,
-            paymasterVerificationGasLimit,
-            paymasterPostOpGasLimit,
-            paymasterData,
-          }))(request)
-        )
+      ? packPaymasterData({
+          paymaster: request.paymaster,
+          paymasterVerificationGasLimit: request.paymasterVerificationGasLimit,
+          paymasterPostOpGasLimit: request.paymasterPostOpGasLimit,
+          paymasterData: request.paymasterData,
+        })
       : "0x";
 
   return encodeAbiParameters(
