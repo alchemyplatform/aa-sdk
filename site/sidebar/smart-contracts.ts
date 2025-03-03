@@ -7,7 +7,7 @@ export const smartContractsSidebar: SidebarItem[] = [
     link: "/smart-contracts/choosing-a-smart-account",
   },
   {
-    text: "(Best) Modular Account V2",
+    text: "Modular Account V2",
     items: [
       {
         text: "Overview",
@@ -130,7 +130,7 @@ export const smartContractsSidebar: SidebarItem[] = [
     link: "https://github.com/alchemyplatform/aa-benchmarks",
   },
   {
-    text: "Deployment Addresses",
+    text: "Deployment addresses",
     link: "/smart-contracts/deployed-addresses",
   },
   { text: "SDK Reference", link: "/reference/account-kit/smart-contracts" },
