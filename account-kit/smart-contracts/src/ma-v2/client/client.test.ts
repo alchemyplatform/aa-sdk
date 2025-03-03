@@ -14,6 +14,7 @@ import {
   getContract,
   hashMessage,
   hashTypedData,
+  type Address,
   fromHex,
   isAddress,
   concat,
@@ -54,7 +55,6 @@ import {
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
 
-// TODO: Include a snapshot to reset to in afterEach
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
 
@@ -64,11 +64,18 @@ describe("MA v2 Tests", async () => {
 
   const isValidSigSuccess = "0x1626ba7e";
 
+  let snapshotId: Address = "0x";
+
   beforeAll(async () => {
     client = instance
       .getClient()
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
+    snapshotId = await client.snapshot();
+  });
+
+  beforeEach(async () => {
+    await client.revert({ id: snapshotId });
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
