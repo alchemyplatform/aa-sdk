@@ -12,11 +12,18 @@ import {
 } from "@account-kit/react";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { odyssey } from "@/hooks/7702/transportSetup";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { AccountMode } from "@/app/config";
+import { Chain } from "viem";
+
+const chainForAccountMode: Record<AccountMode, Chain> = {
+  default: arbitrumSepolia,
+  "7702": odyssey,
+};
 
 export const Configuration = ({ className }: { className?: string }) => {
   const { setAccountMode, accountMode } = useConfigStore();
-  const { setChain } = useChain();
+  const { chain, setChain } = useChain();
   const clientParams = useMemo(
     () => ({
       type: "ModularAccountV2" as const,
@@ -33,10 +40,16 @@ export const Configuration = ({ className }: { className?: string }) => {
   const onSwitchWalletType = () => {
     const newMode = accountMode === "default" ? "7702" : "default";
     setAccountMode(newMode);
-    setChain({
-      chain: newMode === "default" ? arbitrumSepolia : odyssey,
-    });
   };
+
+  // This must be in an effect so that it works correctly based on initial
+  // state (i.e. after refreshing page if 7702 is already active).
+  useEffect(() => {
+    if (chain.id === chainForAccountMode[accountMode].id) return;
+    setChain({
+      chain: chainForAccountMode[accountMode],
+    });
+  }, [accountMode, chain.id, setChain]);
 
   return (
     <div className={cn("flex flex-col", className)}>
