@@ -16,16 +16,8 @@ import {
 	LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
-import { RNAlchemySigner, type RNAlchemySignerType } from "@account-kit/react-native-signer";
+import { type RNAlchemySignerType } from "@account-kit/react-native-signer";
 
-
-const _signer = RNAlchemySigner({
-	client: {
-		connection: {
-			rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/demo",
-		},
-	},
-});
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");

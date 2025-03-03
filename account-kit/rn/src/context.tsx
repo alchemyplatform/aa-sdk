@@ -1,11 +1,15 @@
 import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
+  CreateConfigProps,
 } from "@account-kit/core";
 import { AlchemyAccountContext } from "@account-kit/react/alchemy-account-context";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Hydrate } from "./hydrate.js";
+import { createConfig } from "@account-kit/core";
+import type { ClientStoreConfig } from "@account-kit/core";
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 export type AlchemyAccountContextProps = {
   config: AlchemyAccountsConfig;
@@ -13,7 +17,7 @@ export type AlchemyAccountContextProps = {
 };
 
 export type AlchemyAccountsProviderProps = {
-  config: AlchemyAccountsConfig;
+  params: CreateConfigProps;
   initialState?: AlchemyClientState;
   queryClient: QueryClient;
 };
@@ -55,7 +59,18 @@ export type AlchemyAccountsProviderProps = {
 export const AlchemyAccountProvider = (
   props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
-  const { config, queryClient, children } = props;
+  const { params, queryClient, children } = props;
+
+  // Important: Pass the signer to the config else it will default to the web signer.
+  const createRNAlchemySigner = (config: ClientStoreConfig) => {
+    return RNAlchemySigner({
+      ...config,
+    });
+  };
+  const config = createConfig({
+    ...params,
+    createSigner: createRNAlchemySigner,
+  });
 
   const initialContext = useMemo(
     () => ({
@@ -66,7 +81,7 @@ export const AlchemyAccountProvider = (
   );
 
   return (
-    <Hydrate {...props}>
+    <Hydrate {...props} config={config}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
           {children}
