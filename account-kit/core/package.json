@@ -54,6 +54,7 @@
     "@account-kit/infra": "^4.14.0",
     "@account-kit/logging": "^4.14.0",
     "@account-kit/signer": "^4.14.0",
+    "@account-kit/react-native-signer": "^4.14.0",
     "@account-kit/smart-contracts": "^4.14.0",
     "js-cookie": "^3.0.5",
     "zod": "^3.22.4",

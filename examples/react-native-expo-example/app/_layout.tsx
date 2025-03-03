@@ -4,7 +4,6 @@ import "react-native-get-random-values";
 
 import {AlchemyAccountProvider} from "@account-kit/rn"
 import {alchemy, sepolia} from '@account-kit/infra'
-import { createConfig } from "@account-kit/core";
 import { QueryClient } from "@tanstack/react-query";
 import { API_KEY } from "@env";
 
@@ -14,7 +13,7 @@ import { Stack } from "expo-router";
 const queryClient = new QueryClient()
 
 export default function RootLayout() {
-	const config = createConfig({
+	const configParams = ({
 		chain: sepolia,
 		transport: alchemy({
 			apiKey: API_KEY!
@@ -24,7 +23,7 @@ export default function RootLayout() {
 		}
 	})
 	return (
-		<AlchemyAccountProvider config={config} queryClient={queryClient}>
+		<AlchemyAccountProvider params={configParams} queryClient={queryClient}>
 			<Stack>
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			</Stack>

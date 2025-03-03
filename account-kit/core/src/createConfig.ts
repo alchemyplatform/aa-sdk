@@ -48,6 +48,7 @@ export const createConfig = (
     connectors,
     oauthCallbackUrl,
     enablePopupOauth,
+    createSigner,
     ...connectionConfig
   } = params;
 
@@ -113,6 +114,7 @@ export const createConfig = (
     store: store,
     _internal: {
       ssr,
+      createSigner,
       wagmiConfig,
       storageKey: "alchemy-account-state",
       sessionLength: sessionConfig?.expirationTimeMs ?? DEFAULT_SESSION_MS,

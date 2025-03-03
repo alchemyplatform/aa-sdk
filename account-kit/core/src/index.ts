@@ -49,6 +49,7 @@ export type {
   StoredState,
   Store,
   AccountState,
+  ClientStoreConfig,
 } from "./store/types.js";
 export type * from "./types.js";
 export {

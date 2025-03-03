@@ -19,8 +19,11 @@ import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
-import type { Store, StoredState } from "./store/types";
-import type { RNAlchemySignerSingleton as RNAlchemySigner } from "@account-kit/react-native-signer";
+import type { ClientStoreConfig, Store, StoredState } from "./store/types";
+import type {
+  RNAlchemySignerSingleton as RNAlchemySigner,
+  RNSignerClient,
+} from "@account-kit/react-native-signer";
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
@@ -51,6 +54,8 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {
+    // if not provided, the default signer will be used
+    createSigner?: (config: ClientStoreConfig) => AlchemySigner;
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;
@@ -108,6 +113,7 @@ type CreateStorageFn = (config?: {
 
 export type CreateConfigProps = RpcConnectionConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
+  createSigner?: (config: ClientStoreConfig) => AlchemySigner;
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
    * Turing this setting on will disable automatic hydration of the client store
@@ -138,3 +144,5 @@ export type CreateConfigProps = RpcConnectionConfig & {
 export type AlchemyClientState = StoredState;
 
 export type AlchemySigner = AlchemyWebSigner | RNAlchemySigner;
+
+export type AlchemySignerClient = (AlchemyWebSigner | RNSignerClient) & {};
