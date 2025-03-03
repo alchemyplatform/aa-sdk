@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Features
+
+- change order of sidebar ([#1374](https://github.com/alchemyplatform/aa-sdk/issues/1374)) ([ab04ec6](https://github.com/alchemyplatform/aa-sdk/commit/ab04ec6215d98d51ab8167f75c3968f8a452ad48))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 **Note:** Version bump only for package @account-kit/react-native-signer

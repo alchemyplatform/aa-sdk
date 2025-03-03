@@ -13,7 +13,7 @@ export const reactGuides: SidebarItem[] = [
     text: "Authentication",
     items: [
       { text: "Set up", link: "/react/getting-started" },
-      { text: "UI Components", link: "/react/ui-components" },
+      { text: "UI components", link: "/react/ui-components" },
       { text: "Custom UI", link: "/react/react-hooks" },
     ],
   },

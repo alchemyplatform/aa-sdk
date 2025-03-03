@@ -4,10 +4,12 @@ import { useToast } from "./useToast";
 import {
   useSmartAccountClient,
   useSendUserOperation,
+  useChain,
 } from "@account-kit/react";
-import { Address, encodeFunctionData } from "viem";
+import { Address, Chain, encodeFunctionData } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
 import { MintStatus } from "@/components/small-cards/MintCard";
+import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
 const initialValuePropState = {
   signing: "initial",
@@ -24,22 +26,29 @@ export interface UseMintReturn {
   transactionUrl?: string;
 }
 
-// TODO(jh): Once the client supports switching b/w default
-// & 7702 modes, this hook should support both modes.
-export const useMintDefault = (props: {
+export const useMint = (props: {
   contractAddress: Address;
+  mode: "default" | "7702";
+  chain: Chain;
 }): UseMintReturn => {
+  const { chain: activeChain, isSettingChain } = useChain();
+
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
     accountParams: {
-      mode: "default",
+      mode: props.mode,
     },
   });
+  const { isDeployed, refetch: refetchDeploymentStatus } =
+    useDeploymentStatus();
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);
   const isLoading =
-    Object.values(status).some((x) => x === "loading") || isLoadingClient;
+    Object.values(status).some((x) => x === "loading") ||
+    isLoadingClient ||
+    isSettingChain ||
+    activeChain.id !== props.chain.id;
   const { setToast } = useToast();
 
   const handleSuccess = () => {
@@ -48,6 +57,10 @@ export const useMintDefault = (props: {
       gas: "success",
       signing: "success",
     }));
+
+    if (!isDeployed) {
+      refetchDeploymentStatus();
+    }
 
     setToast({
       type: "success",

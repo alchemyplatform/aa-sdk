@@ -4,25 +4,52 @@ import { SettingsIcon } from "../icons/settings";
 import { WalletTypeSwitch } from "../shared/WalletTypeSwitch";
 import ExternalLink from "../shared/ExternalLink";
 import { useConfigStore } from "@/state";
-import { WalletTypes } from "@/app/config";
-import { useChain } from "@account-kit/react";
+import {
+  useAccount,
+  useChain,
+  useSmartAccountClient,
+  useUser,
+} from "@account-kit/react";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { odyssey } from "@/hooks/7702/transportSetup";
+import { useEffect, useMemo } from "react";
+import { AccountMode } from "@/app/config";
+import { Chain } from "viem";
+
+const chainForAccountMode: Record<AccountMode, Chain> = {
+  default: arbitrumSepolia,
+  "7702": odyssey,
+};
 
 export const Configuration = ({ className }: { className?: string }) => {
-  const { setWalletType, walletType } = useConfigStore();
-  const { setChain } = useChain();
+  const { setAccountMode, accountMode } = useConfigStore();
+  const { chain, setChain } = useChain();
+  const clientParams = useMemo(
+    () => ({
+      type: "ModularAccountV2" as const,
+      accountParams: {
+        mode: accountMode,
+      },
+    }),
+    [accountMode]
+  );
+  const { isLoadingAccount } = useAccount(clientParams);
+  const { isLoadingClient } = useSmartAccountClient(clientParams);
+  const user = useUser();
 
   const onSwitchWalletType = () => {
-    const newValue =
-      walletType === WalletTypes.smart
-        ? WalletTypes.hybrid7702
-        : WalletTypes.smart;
-    setWalletType(newValue);
-    setChain({
-      chain: newValue === WalletTypes.smart ? arbitrumSepolia : odyssey,
-    });
+    const newMode = accountMode === "default" ? "7702" : "default";
+    setAccountMode(newMode);
   };
+
+  // This must be in an effect so that it works correctly based on initial
+  // state (i.e. after refreshing page if 7702 is already active).
+  useEffect(() => {
+    if (chain.id === chainForAccountMode[accountMode].id) return;
+    setChain({
+      chain: chainForAccountMode[accountMode],
+    });
+  }, [accountMode, chain.id, setChain]);
 
   return (
     <div className={cn("flex flex-col", className)}>
@@ -41,8 +68,9 @@ export const Configuration = ({ className }: { className?: string }) => {
       </div>
       <WalletTypeSwitch
         id="wallet-switch"
-        checked={walletType === WalletTypes.hybrid7702}
+        checked={accountMode === "7702"}
         onCheckedChange={onSwitchWalletType}
+        disabled={!!user && (isLoadingClient || isLoadingAccount)}
       />
       <p className="text-active text-xs font-normal pt-3">
         EIP-7702 adds smart account features to an EOA wallet.{" "}
