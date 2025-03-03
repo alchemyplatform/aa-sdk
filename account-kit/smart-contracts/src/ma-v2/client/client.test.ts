@@ -55,7 +55,6 @@ import {
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
 
-// TODO: Include a snapshot to reset to in afterEach
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
 
