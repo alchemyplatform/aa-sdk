@@ -1,6 +1,6 @@
 export { cookieStorage, type CreateConfigProps } from "@account-kit/core";
-export type * from "./context.js";
-export { AlchemyAccountProvider } from "./context.js";
+export type * from "./AlchemyAccountProvider.js";
+export { AlchemyAccountProvider } from "./AlchemyAccountProvider.js";
 export type * from "./AlchemyAccountContext.js";
 export { AlchemyAccountContext } from "./AlchemyAccountContext.js";
 export {

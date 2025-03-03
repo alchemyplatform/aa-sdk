@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
 	View,
@@ -8,24 +7,33 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
+import {useAuthenticate, useUser, useSigner} from "@account-kit/react/hooks"
 
 import { API_KEY } from "@env";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
 import {
 	createLightAccountAlchemyClient,
 	LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
+import { RNAlchemySigner, type RNAlchemySignerType } from "@account-kit/react-native-signer";
 
-const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY! } },
+
+const _signer = RNAlchemySigner({
+	client: {
+		connection: {
+			rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/demo",
+		},
+	},
 });
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
-	const [user, setUser] = useState<User | null>(null);
+	const user = useUser()
+	const { authenticate } = useAuthenticate()
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
+	const signer = useSigner<RNAlchemySignerType>();
 
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 
@@ -33,22 +41,18 @@ export default function OTPAuthScreen() {
 
 	const handleUserAuth = ({ code }: { code: string }) => {
 		setAwaitingOtp(false);
-		signer
-			.authenticate({
-				otpCode: code,
-				type: "otp",
-			})
-			.then(setUser)
-			.catch(console.error);
+		authenticate({
+			otpCode: code,
+			type: "otp",
+		})
 	};
 
-	useEffect(() => {
-		// get the user if already logged in
-		signer.getAuthDetails().then(setUser);
-	}, []);
 
 	useEffect(() => {
 		if (user) {
+			if (!signer) {
+				return
+			}
 			createLightAccountAlchemyClient({
 				signer,
 				chain: sepolia,
@@ -93,13 +97,12 @@ export default function OTPAuthScreen() {
 					<TouchableOpacity
 						style={styles.button}
 						onPress={() => {
-							signer
-								.authenticate({
+							authenticate({
 									email,
 									type: "email",
 									emailMode: "otp",
 								})
-								.catch(console.error);
+					
 							setAwaitingOtp(true);
 						}}
 					>
@@ -122,9 +125,7 @@ export default function OTPAuthScreen() {
 
 					<TouchableOpacity
 						style={styles.button}
-						onPress={() =>
-							signer.disconnect().then(() => setUser(null))
-						}
+						onPress={() => signer?.disconnect()}
 					>
 						<Text style={styles.buttonText}>Sign out</Text>
 					</TouchableOpacity>
