@@ -716,6 +716,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       case "totp":
         return this.request("/v1/auth-request-multi-factor", {
           stampedRequest,
+          multiFactorType: params.multiFactorType,
         });
       default:
         throw new Error(
