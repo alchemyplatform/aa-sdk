@@ -16,7 +16,6 @@ import {
 	LightAccount,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
-import { type RNAlchemySignerType } from "@account-kit/react-native-signer";
 
 
 export default function OTPAuthScreen() {
