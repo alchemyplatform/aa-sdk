@@ -98,11 +98,7 @@ export function useMFA(): UseMFAResult {
     mutate: verifyMFA,
     isPending: isVerifyingMFA,
     error: verifyError,
-  } = useMutation<
-    { multiFactors: MfaFactor[] },
-    Error,
-    { multiFactorId: string; multiFactorCode: string }
-  >(
+  } = useMutation<{ multiFactors: MfaFactor[] }, Error, VerifyMfaParams>(
     {
       mutationFn: async (params) => {
         ensureMfaAvailable();
@@ -116,11 +112,7 @@ export function useMFA(): UseMFAResult {
     mutate: removeMFA,
     isPending: isRemovingMFA,
     error: removeError,
-  } = useMutation<
-    { multiFactors: MfaFactor[] },
-    Error,
-    { multiFactorIds: string[] }
-  >(
+  } = useMutation<{ multiFactors: MfaFactor[] }, Error, RemoveMfaParams>(
     {
       mutationFn: async (params) => {
         ensureMfaAvailable();

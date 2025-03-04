@@ -6,11 +6,7 @@ import { useMFA } from "@account-kit/react";
 export function MFACard() {
   const [isMfaActive, setIsMfaActive] = useState(false);
 
-  const { getMFAFactors, isGettingFactors, isMfaAvailable } = useMFA({
-    onError: (error) => {
-      console.error("Error checking MFA status:", error);
-    },
-  });
+  const { getMFAFactors, isGettingFactors, isMfaAvailable } = useMFA();
 
   useEffect(() => {
     if (isMfaAvailable) {
