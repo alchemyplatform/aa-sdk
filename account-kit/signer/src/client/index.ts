@@ -23,7 +23,8 @@ import type {
   VerifyMfaParams,
   RemoveMfaParams,
 } from "./types.js";
-import { NotAuthenticatedError } from "../errors.js";
+import { MfaRequiredError, NotAuthenticatedError } from "../errors.js";
+import { parseMfaError } from "../utils/parseMfaError.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -204,14 +205,25 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const { email, emailMode, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
 
-    return this.request("/v1/auth", {
-      email,
-      emailMode,
-      targetPublicKey: publicKey,
-      expirationSeconds,
-      redirectParams: params.redirectParams?.toString(),
-      multiFactors: params.multiFactors,
-    });
+    try {
+      return await this.request("/v1/auth", {
+        email,
+        emailMode,
+        targetPublicKey: publicKey,
+        expirationSeconds,
+        redirectParams: params.redirectParams?.toString(),
+        multiFactors: params.multiFactors,
+      });
+    } catch (error) {
+      const multiFactors = parseMfaError(error);
+
+      // If MFA is required, and emailMode is Magic Link, the user must submit mfa with the request or
+      // the the server will return an error with the required mfa factors.
+      if (multiFactors) {
+        throw new MfaRequiredError(multiFactors);
+      }
+      throw error;
+    }
   };
 
   /**
