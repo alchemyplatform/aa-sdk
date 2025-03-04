@@ -1,83 +1,88 @@
 {
-  "name": "@account-kit/core",
-  "version": "4.14.0",
-  "description": "Core library for account kit that provides state management and framework indepednent abstractions across infra, Alchemy Signer, and Smart Contracts",
-  "author": "Alchemy",
-  "license": "MIT",
-  "private": false,
-  "type": "module",
-  "main": "./dist/esm/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
-  "typings": "./dist/types/index.d.ts",
-  "sideEffects": false,
-  "files": [
-    "dist",
-    "src/**/*.ts",
-    "!dist/**/*.tsbuildinfo",
-    "!vitest.config.ts",
-    "!.env",
-    "!src/**/*.test.ts",
-    "!src/**/*.test-d.ts",
-    "!src/__tests__/**/*"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/esm/index.js"
-    },
-    "./react-native": {
-      "types": "./dist/types/environments/react-native/index.d.ts",
-      "import": "./dist/esm/environments/react-native/index.js",
-      "default": "./dist/esm/environments/react-native/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "scripts": {
-    "prebuild": "tsx ./inject-version.ts",
-    "build": "yarn clean && yarn build:esm && yarn build:types",
-    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
-    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "clean": "rm -rf ./dist",
-    "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/core",
-    "test": "vitest --passWithNoTests",
-    "test:run": "vitest run --passWithNoTests"
-  },
-  "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
-  },
-  "dependencies": {
-    "@account-kit/infra": "^4.14.0",
-    "@account-kit/logging": "^4.14.0",
-    "@account-kit/signer": "^4.14.0",
-    "@account-kit/react-native-signer": "^4.14.0",
-    "@account-kit/smart-contracts": "^4.14.0",
-    "js-cookie": "^3.0.5",
-    "zod": "^3.22.4",
-    "zustand": "^5.0.0-rc.2"
-  },
-  "peerDependencies": {
-    "viem": "^2.22.6",
-    "wagmi": "^2.12.7"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
-  },
-  "bugs": {
-    "url": "https://github.com/alchemyplatform/aa-sdk/issues"
-  },
-  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
-  "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
-  "optionalDependencies": {
-    "alchemy-sdk": "^3.0.0"
-  }
+	"name": "@account-kit/core",
+	"version": "4.14.0",
+	"description": "Core library for account kit that provides state management and framework indepednent abstractions across infra, Alchemy Signer, and Smart Contracts",
+	"author": "Alchemy",
+	"license": "MIT",
+	"private": false,
+	"type": "module",
+	"main": "./dist/esm/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/types/index.d.ts",
+	"typings": "./dist/types/index.d.ts",
+	"sideEffects": false,
+	"files": [
+		"dist",
+		"src/**/*.ts",
+		"!dist/**/*.tsbuildinfo",
+		"!vitest.config.ts",
+		"!.env",
+		"!src/**/*.test.ts",
+		"!src/**/*.test-d.ts",
+		"!src/__tests__/**/*"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/esm/index.js",
+			"default": "./dist/esm/index.js"
+		},
+		"./react-native": {
+			"types": "./dist/types/environments/react-native/index.d.ts",
+			"import": "./dist/esm/environments/react-native/index.js",
+			"default": "./dist/esm/environments/react-native/index.js"
+		},
+		"./web": {
+			"types": "./dist/types/environments/web/index.d.ts",
+			"import": "./dist/esm/environments/web/index.js",
+			"default": "./dist/esm/environments/web/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"scripts": {
+		"prebuild": "tsx ./inject-version.ts",
+		"build": "yarn clean && yarn build:esm && yarn build:types",
+		"build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+		"build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+		"clean": "rm -rf ./dist",
+		"docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/core",
+		"test": "vitest --passWithNoTests",
+		"test:run": "vitest run --passWithNoTests"
+	},
+	"devDependencies": {
+		"@types/js-cookie": "^3.0.6",
+		"typescript": "^5.0.4",
+		"typescript-template": "*",
+		"vitest": "^2.0.4"
+	},
+	"dependencies": {
+		"@account-kit/infra": "^4.14.0",
+		"@account-kit/logging": "^4.14.0",
+		"@account-kit/signer": "^4.14.0",
+		"@account-kit/react-native-signer": "^4.14.0",
+		"@account-kit/smart-contracts": "^4.14.0",
+		"js-cookie": "^3.0.5",
+		"zod": "^3.22.4",
+		"zustand": "^5.0.0-rc.2"
+	},
+	"peerDependencies": {
+		"viem": "^2.22.6",
+		"wagmi": "^2.12.7"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+	},
+	"bugs": {
+		"url": "https://github.com/alchemyplatform/aa-sdk/issues"
+	},
+	"homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
+	"gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
+	"optionalDependencies": {
+		"alchemy-sdk": "^3.0.0"
+	}
 }
