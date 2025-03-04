@@ -16,16 +16,6 @@
       "site",
       "doc-gen",
       ".vitest"
-    ],
-    "nohoist": [
-      "**/react-native",
-      "**/react-native/**",
-      "**/@react-native-community/cli",
-      "**/@react-native-community/cli/**",
-      "**/react-native-test-app",
-      "**/react-native-test-app/**",
-      "**/react-native-config",
-      "**react-native-config/**"
     ]
   },
   "resolutions": {
@@ -33,6 +23,7 @@
     "viem": "2.22.6",
     "zustand": "^5.0.0-rc.2",
     "react-native": "0.76.5",
+    "react-native-config": "1.5.3",
     "@react-native-community/cli": "15.0.1"
   },
   "scripts": {
