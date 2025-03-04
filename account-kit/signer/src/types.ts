@@ -6,6 +6,10 @@ export type AlchemySignerEvents = {
   disconnected(): void;
   statusChanged(status: AlchemySignerStatus): void;
   errorChanged(error: ErrorInfo | undefined): void;
+  mfaStatusChanged(mfaStatus: {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  }): void;
 };
 
 export type AlchemySignerEvent = keyof AlchemySignerEvents;
@@ -19,6 +23,11 @@ export enum AlchemySignerStatus {
   AUTHENTICATING_OAUTH = "AUTHENTICATING_OAUTH",
   AWAITING_EMAIL_AUTH = "AWAITING_EMAIL_AUTH",
   AWAITING_OTP_AUTH = "AWAITING_OTP_AUTH",
+}
+
+export enum AlchemyMfaStatus {
+  NOT_REQUIRED = "not_required",
+  REQUIRED = "required",
 }
 
 export interface ErrorInfo {

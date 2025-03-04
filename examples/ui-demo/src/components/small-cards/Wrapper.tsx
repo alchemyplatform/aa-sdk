@@ -4,6 +4,7 @@ import {
   TransactionsCard7702,
   TransactionsCardDefault,
 } from "./TransactionsCard";
+import { MFACard } from "./MFACard";
 
 export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
@@ -14,11 +15,13 @@ export const SmallCardsWrapper = () => {
         <>
           <MintCardDefault />
           <TransactionsCardDefault />
+          <MFACard />
         </>
       ) : (
         <>
           <MintCard7702 />
           <TransactionsCard7702 />
+          <MFACard />
         </>
       )}
     </div>
