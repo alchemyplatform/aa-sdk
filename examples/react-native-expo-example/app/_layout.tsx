@@ -16,11 +16,15 @@ export default function RootLayout() {
 	const configParams = ({
 		chain: sepolia,
 		transport: alchemy({
-			apiKey: API_KEY!
+			apiKey: API_KEY!,
 		}),
 		signerConnection: {
-			apiKey: API_KEY!
+			apiKey: API_KEY!,
+		},
+		sessionConfig: {
+			expirationTimeMs: 1000 * 60 * 60 * 24 , // <-- Adjust the session expiration time as needed (currently 24 hours)
 		}
+		
 	})
 	return (
 		<AlchemyAccountProvider params={configParams} queryClient={queryClient}>
