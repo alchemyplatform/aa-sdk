@@ -3,8 +3,6 @@
 import { getSigner, watchSigner, type AlchemySigner } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
-import type { AlchemyWebSigner } from "@account-kit/signer";
-import type { RNAlchemySignerType as RNAlchemySigner } from "@account-kit/react-native-signer";
 
 /**
  * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSigner.ts) for accessing the current Alchemy signer within a React component. It uses a synchronous external store for updates.
@@ -28,32 +26,7 @@ export const useSigner = <T extends AlchemySigner>(): T | null => {
   // for all calls
   return useSyncExternalStore(
     watchSigner(config),
-    () => {
-      const signer = getSigner(config);
-
-      if (!signer) {
-        return null;
-      }
-
-      if (isRNAlchemySigner(signer)) {
-        return signer as T;
-      }
-
-      if (isAlchemyWebSigner(signer)) {
-        return signer as T;
-      }
-
-      throw new Error("Invalid signer type");
-    },
-    // We don't want to return null here, should return something of type AlchemySigner
+    () => getSigner<T>(config),
     () => null
   );
 };
-
-function isRNAlchemySigner(signer: AlchemySigner): signer is RNAlchemySigner {
-  return signer.signerType === "rn-alchemy-signer";
-}
-
-function isAlchemyWebSigner(signer: AlchemySigner): signer is AlchemyWebSigner {
-  return signer.signerType === "alchemy-signer";
-}

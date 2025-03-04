@@ -16,8 +16,10 @@ import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
  * @param {AlchemyAccountsConfig} config The account config which contains the client store
  * @returns {AlchemySigner | null} the instance of the signer present in the store if it exists, otherwise null
  */
-export const getSigner = (
+export const getSigner = <T extends AlchemySigner>(
   config: AlchemyAccountsConfig
-): AlchemySigner | null => {
-  return config.store.getState().signer ?? null;
+): T | null => {
+  const signer: T | null = config.store.getState().signer as T | null;
+
+  return signer;
 };
