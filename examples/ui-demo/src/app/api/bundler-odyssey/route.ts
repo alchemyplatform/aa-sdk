@@ -5,7 +5,7 @@ import { env } from "../../../../env.mjs";
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const headers: Record<string, string> = {};
-  req.headers.forEach((value, key) => {
+  req.headers.forEach((value: string, key: string) => {
     // don't pass the cookie because it doesn't get used downstream
     if (key === "cookie") return;
 

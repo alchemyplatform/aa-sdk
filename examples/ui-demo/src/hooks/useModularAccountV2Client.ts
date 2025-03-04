@@ -1,4 +1,4 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
+import type { AlchemySigner } from "@account-kit/core";
 import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import {
@@ -15,10 +15,10 @@ import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
 
 type Client = ModularAccountV2Client<
-  AlchemyWebSigner | LocalAccountSigner<PrivateKeyAccount>
+  AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
 > &
   InstallValidationActions<
-    AlchemyWebSigner | LocalAccountSigner<PrivateKeyAccount>
+    AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
   >;
 
 // Hook that creates an MAv2 client that can be used for things that
@@ -66,7 +66,7 @@ export const useModularAccountV2Client = ({
       }
 
       try {
-        const _client = (
+        const _client: Client = (
           await createModularAccountV2Client({
             mode,
             chain,
