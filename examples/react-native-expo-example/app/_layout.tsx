@@ -2,7 +2,7 @@
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
 
-import {AlchemyAccountProvider} from "@account-kit/rn"
+import {AlchemyAccountProvider} from "@account-kit/react-native"
 import {alchemy, sepolia} from '@account-kit/infra'
 import { QueryClient } from "@tanstack/react-query";
 import { API_KEY } from "@env";

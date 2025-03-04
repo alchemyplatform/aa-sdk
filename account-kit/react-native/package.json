@@ -1,0 +1,61 @@
+{
+	"name": "@account-kit/react-native",
+	"version": "4.14.0",
+	"description": "React Native Components and Hooks for using Account Kit",
+	"license": "MIT",
+	"author": "Alchemy",
+	"private": false,
+	"type": "module",
+	"main": "./dist/esm/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/types/index.d.ts",
+	"typings": "./dist/types/index.d.ts",
+	"sideEffects": false,
+	"files": [
+		"dist",
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"!.env"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/esm/index.js",
+			"default": "./dist/esm/index.js"
+		}
+	},
+	"scripts": {
+		"prebuild": "tsx ./inject-version.ts",
+		"build": "yarn clean && yarn build:esm && yarn build:types",
+		"build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+		"build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+		"docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
+		"clean": "rm -rf ./dist"
+	},
+	"devDependencies": {
+		"typescript": "^5.0.4",
+		"typescript-template": "*",
+		"react": "^18.2.0",
+		"@tanstack/react-query": "^5.28.9"
+	},
+	"dependencies": {
+		"@account-kit/core": "^4.14.0",
+		"@account-kit/infra": "^4.14.0",
+		"@account-kit/signer": "^4.14.0",
+		"@account-kit/react-native-signer": "^4.14.0",
+		"@account-kit/react": "^4.14.0",
+		"zustand": "^5.0.0-rc.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+	},
+	"bugs": {
+		"url": "https://github.com/alchemyplatform/aa-sdk/issues"
+	},
+	"homepage": "https://github.com/alchemyplatform/aa-sdk#readme"
+}
