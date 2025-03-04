@@ -11,6 +11,7 @@ site/.vitepress/cache/**/*
 
 **/.turbo/*
 account-kit/rn-signer/lib/*
+account-kit/java/*
 **/android/generated/*
 **/ios/generated/*
 **/build/*

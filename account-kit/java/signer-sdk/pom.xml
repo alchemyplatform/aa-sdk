@@ -4,9 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.alchemy</groupId>
+  <description>This is an Alchemy signer SDK</description>
+  <url>https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/java/signer-sdk</url>
+
+  <groupId>io.github.andysim3d</groupId>
   <artifactId>signer-sdk</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
@@ -15,9 +18,10 @@
   </properties>
 
   <scm>
-      <connection>scm:git:git@github.com:alchemyplatform/aa-sdk.git</connection>
-      <developerConnection>scm:git:ssh://alchemyplatform/aa-sdk.git</developerConnection>
-      <url>https://github.com/alchemyplatform/aa-sdk</url>
+    <connection>scm:git:git@github.com:alchemyplatform/aa-sdk.git</connection>
+    <developerConnection>scm:git:git@github.com:alchemyplatform/aa-sdk.git</developerConnection>
+    <url>https://github.com/alchemyplatform/aa-sdk</url>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>
@@ -44,11 +48,59 @@
 
   <build>
     <plugins>
+
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.7.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>3.0.1</version>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 </project>
