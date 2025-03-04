@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
 import { ThreeStarsIcon } from "../icons/three-stars";
 import { MFAModal } from "../modals/MFAModal";
-import { useSmartAccountClient } from "@account-kit/react";
-import { useConfigStore } from "@/state";
+import { useMFA } from "@account-kit/react";
 
 export function MFACard() {
-  const { accountMode } = useConfigStore();
   const [isMfaActive, setIsMfaActive] = useState(false);
-  const { client, isLoadingClient } = useSmartAccountClient({
-    type: "ModularAccountV2",
-    accountParams: {
-      mode: accountMode,
+
+  const { getMFAFactors, isGettingFactors, isMfaAvailable } = useMFA({
+    onError: (error) => {
+      console.error("Error checking MFA status:", error);
     },
   });
 
-  const checkMfaStatus = async () => {
-    try {
-      const signer = await client?.account.getSigner();
-      const factors = await signer?.inner.getMfaFactors();
-
-      setIsMfaActive(
-        !!factors?.multiFactors && factors.multiFactors.length > 0
-      );
-    } catch (error) {
-      console.error("Error checking MFA status:", error);
-    }
-  };
-
   useEffect(() => {
-    if (client && !isLoadingClient) {
-      checkMfaStatus();
+    if (isMfaAvailable) {
+      getMFAFactors(undefined, {
+        onSuccess: (factors) => {
+          setIsMfaActive(
+            !!factors?.multiFactors && factors.multiFactors.length > 0
+          );
+        },
+      });
     }
-  }, [client, isLoadingClient]);
+  }, [isMfaAvailable, getMFAFactors]);
 
   return (
     <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[500px] flex flex-col justify-between shadow-smallCard min-h-[220px]">
@@ -61,12 +52,16 @@ export function MFACard() {
           </p>
         </div>
       </div>
-      <MFAModal
-        isMfaActive={isMfaActive}
-        onMfaEnabled={() => setIsMfaActive(true)}
-        onMfaRemoved={() => setIsMfaActive(false)}
-        isLoadingClient={isLoadingClient}
-      />
+      {isGettingFactors ? (
+        <div>Loading...</div>
+      ) : (
+        <MFAModal
+          isMfaActive={isMfaActive}
+          onMfaEnabled={() => setIsMfaActive(true)}
+          onMfaRemoved={() => setIsMfaActive(false)}
+          isLoadingClient={!isMfaAvailable}
+        />
+      )}
     </div>
   );
 }
