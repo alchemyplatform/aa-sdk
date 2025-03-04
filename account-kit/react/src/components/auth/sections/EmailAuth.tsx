@@ -13,7 +13,7 @@ import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
-import { AlchemySignerStatus } from "@account-kit/signer";
+import { AlchemySignerStatus, MfaRequiredError } from "@account-kit/signer";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 
@@ -69,25 +69,19 @@ export const EmailAuth = memo(
             setAuthStep({ type: "email_verify", email });
           }
         } catch (e) {
-          const error = e instanceof Error ? e : new Error("An Unknown error");
-
-          if (error.message.includes("MFA is required")) {
-            try {
-              const errorData = JSON.parse(error.message);
-              const mfaFactorId = errorData.data.multiFactors[0].multiFactorId;
-              setAuthStep({
-                type: "totp_verify",
-                previousStep: "magicLink",
-                factorId: mfaFactorId,
-                email,
-              });
-            } catch (parseError) {
-              // Fallback to existing behavior if JSON parsing fails
-              setAuthStep({ type: "initial", error });
-            }
-          } else {
-            setAuthStep({ type: "initial", error });
+          if (e instanceof MfaRequiredError) {
+            const { multiFactorId } = e.multiFactors[0];
+            setAuthStep({
+              type: "totp_verify",
+              previousStep: "magicLink",
+              factorId: multiFactorId,
+              email,
+            });
+            return;
           }
+
+          const error = e instanceof Error ? e : new Error("An Unknown error");
+          setAuthStep({ type: "initial", error });
         }
       },
       validatorAdapter: zodValidator(),

@@ -20,7 +20,14 @@ import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import type { BaseSignerClient } from "./client/base";
-import type { OauthConfig, OauthParams, User } from "./client/types";
+import type {
+  EmailType,
+  MfaFactor,
+  OauthConfig,
+  OauthParams,
+  User,
+  VerifyMfaParams,
+} from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
 import {
@@ -784,97 +791,48 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private authenticateWithEmail = async (
     params: Extract<AuthParams, { type: "email" }>
   ): Promise<User> => {
-    if ("email" in params) {
-      const existingUser = await this.getUser(params.email);
-      const expirationSeconds = this.getExpirationSeconds();
-
-      if (existingUser) {
-        const { orgId, otpId, multiFactors } = await this.inner.initEmailAuth({
-          email: params.email,
-          emailMode: params.emailMode,
-          expirationSeconds,
-          redirectParams: params.redirectParams,
-          multiFactors: params.multiFactor?.multiFactorId
-            ? [
-                {
-                  multiFactorId: params.multiFactor?.multiFactorId,
-                  multiFactorCode:
-                    params.multiFactor?.multiFactorChallenge?.code,
-                },
-              ]
-            : undefined,
-        });
-
-        const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
-
-        this.sessionManager.setTemporarySession({
-          orgId,
-          isNewUser: !existingUser,
-          isMfaRequired,
-        });
-
-        this.store.setState({
-          status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
-          otpId,
-          error: null,
-          mfaStatus: {
-            mfaRequired: isMfaRequired,
-            mfaFactorId: multiFactors?.[0]?.multiFactorId,
-          },
-        });
-      } else {
-        const { orgId, otpId } = await this.inner.createAccount({
-          type: "email",
-          email: params.email,
-          emailMode: params.emailMode,
-          expirationSeconds,
-          redirectParams: params.redirectParams,
-        });
-
-        this.sessionManager.setTemporarySession({
-          orgId,
-          isNewUser: !existingUser,
-        });
-        this.store.setState({
-          status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
-          otpId,
-          error: null,
-        });
-      }
-
-      // We wait for the session manager to emit a connected event if
-      // cross tab sessions are permitted
-      return new Promise<User>((resolve) => {
-        const removeListener = this.sessionManager.on(
-          "connected",
-          (session) => {
-            resolve(session.user);
-            removeListener();
-          }
-        );
-      });
-    } else {
-      const temporarySession = params.orgId
-        ? { orgId: params.orgId }
-        : this.sessionManager.getTemporarySession();
-
-      if (!temporarySession) {
-        this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
-        throw new Error("Could not find email auth init session!");
-      }
-
-      const user = await this.inner.completeAuthWithBundle({
-        bundle: params.bundle,
-        orgId: temporarySession.orgId,
-        connectedEventName: "connectedEmail",
-        authenticatingType: "email",
-      });
-
-      // fire new user event
-      this.emitNewUserEvent(params.isNewUser);
-
-      return user;
+    if ("bundle" in params) {
+      return this.completeEmailAuth(params);
     }
+
+    if (!("email" in params)) {
+      throw new Error("Email is required");
+    }
+
+    const { orgId, otpId, multiFactors, isNewUser } =
+      await this.initOrCreateEmailUser(
+        params.email,
+        params.emailMode ?? "otp",
+        params.multiFactors,
+        params.redirectParams
+      );
+
+    const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
+
+    this.sessionManager.setTemporarySession({
+      orgId,
+      isNewUser,
+      isMfaRequired,
+    });
+
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+      otpId,
+      error: null,
+      mfaStatus: {
+        mfaRequired: isMfaRequired,
+        mfaFactorId: multiFactors?.[0]?.multiFactorId,
+      },
+    });
+
+    // We wait for the session manager to emit a connected event if
+    // cross tab sessions are permitted
+    return new Promise<User>((resolve) => {
+      const removeListener = this.sessionManager.on("connected", (session) => {
+        resolve(session.user);
+        removeListener();
+      });
+    });
   };
 
   private authenticateWithPasskey = async (
@@ -941,7 +899,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if (!otpId) {
       throw new Error("otpId not found in session");
     }
-    if (isMfaRequired && !args.multiFactor) {
+    if (isMfaRequired && !args.multiFactors) {
       throw new Error(`MFA is required.`);
     }
 
@@ -950,14 +908,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
-      multiFactors: args.multiFactor?.multiFactorId
-        ? [
-            {
-              multiFactorId: args.multiFactor?.multiFactorId,
-              multiFactorCode: args.multiFactor?.multiFactorChallenge?.code,
-            },
-          ]
-        : undefined,
+      multiFactors: args.multiFactors,
     });
     const user = await this.inner.completeAuthWithBundle({
       bundle,
@@ -1063,6 +1014,79 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // assumes that if isNewUser is undefined it is a returning user
     if (isNewUser) this.store.setState({ isNewUser });
   };
+
+  private async initOrCreateEmailUser(
+    email: string,
+    emailMode: EmailType,
+    multiFactors?: VerifyMfaParams[],
+    redirectParams?: URLSearchParams
+  ): Promise<{
+    orgId: string;
+    otpId?: string;
+    multiFactors?: MfaFactor[];
+    isNewUser: boolean;
+  }> {
+    const existingUser = await this.getUser(email);
+    const expirationSeconds = this.getExpirationSeconds();
+
+    if (existingUser) {
+      const {
+        orgId,
+        otpId,
+        multiFactors: mfaFactors,
+      } = await this.inner.initEmailAuth({
+        email: email,
+        emailMode: emailMode,
+        expirationSeconds,
+        redirectParams: redirectParams,
+        multiFactors,
+      });
+      return {
+        orgId,
+        otpId,
+        multiFactors: mfaFactors,
+        isNewUser: false,
+      };
+    }
+
+    const { orgId, otpId } = await this.inner.createAccount({
+      type: "email",
+      email,
+      emailMode,
+      expirationSeconds,
+      redirectParams,
+    });
+    return {
+      orgId,
+      otpId,
+      isNewUser: true,
+    };
+  }
+
+  private async completeEmailAuth(
+    params: Extract<AuthParams, { type: "email"; bundle: string }>
+  ): Promise<User> {
+    const temporarySession = params.orgId
+      ? { orgId: params.orgId }
+      : this.sessionManager.getTemporarySession();
+
+    if (!temporarySession) {
+      this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
+      throw new Error("Could not find email auth init session!");
+    }
+
+    const user = await this.inner.completeAuthWithBundle({
+      bundle: params.bundle,
+      orgId: temporarySession.orgId,
+      connectedEventName: "connectedEmail",
+      authenticatingType: "email",
+    });
+
+    // fire new user event
+    this.emitNewUserEvent(params.isNewUser);
+
+    return user;
+  }
 }
 
 function toErrorInfo(error: unknown): ErrorInfo {

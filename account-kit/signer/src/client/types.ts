@@ -51,12 +51,7 @@ export type EmailAuthParams = {
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
-  multiFactors?: [
-    {
-      multiFactorId?: string;
-      multiFactorCode?: string;
-    }
-  ];
+  multiFactors?: VerifyMfaParams[];
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -69,12 +64,7 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
-  multiFactors?: [
-    {
-      multiFactorId?: string;
-      multiFactorCode?: string;
-    }
-  ];
+  multiFactors?: VerifyMfaParams[];
 };
 
 export type SignupResponse = {
@@ -133,12 +123,7 @@ export type SignerEndpoints = [
     Route: "/v1/auth";
     Body: Omit<EmailAuthParams, "redirectParams"> & {
       redirectParams?: string;
-      multiFactors?: [
-        {
-          multiFactorId?: string;
-          multiFactorCode?: string;
-        }
-      ];
+      multiFactors?: VerifyMfaParams[];
     };
     Response: {
       orgId: string;
@@ -176,8 +161,6 @@ export type SignerEndpoints = [
     Body: OtpParams;
     Response: {
       credentialBundle: string | null;
-      multiFactorId: string;
-      multiFactorCode: string;
     };
   },
   {
@@ -208,10 +191,8 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/auth-verify-multi-factor";
-    Body: {
+    Body: VerifyMfaParams & {
       stampedRequest: TSignedRequest;
-      multiFactorId: string;
-      multiFactorCode: string;
     };
     Response: {
       multiFactors: MfaFactor[];

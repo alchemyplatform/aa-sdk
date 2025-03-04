@@ -52,19 +52,23 @@ export const LoadingTotp = () => {
           email: authStep.email,
           emailMode: "magicLink",
           redirectParams: new URLSearchParams(),
-          multiFactor: {
-            multiFactorId: authStep.factorId,
-            multiFactorChallenge: { code: codeString },
-          },
+          multiFactors: [
+            {
+              multiFactorId: authStep.factorId,
+              multiFactorCode: codeString,
+            },
+          ],
         });
       } else if (authStep.previousStep === "otp") {
         await authenticateAsync({
           type: "otp",
           otpCode: authStep.otpCode ?? "",
-          multiFactor: {
-            multiFactorId: authStep.factorId,
-            multiFactorChallenge: { code: codeString },
-          },
+          multiFactors: [
+            {
+              multiFactorId: authStep.factorId,
+              multiFactorCode: codeString,
+            },
+          ],
         });
       } else {
         throw new Error("Invalid previous step");

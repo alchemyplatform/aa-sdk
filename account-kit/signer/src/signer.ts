@@ -6,7 +6,7 @@ import {
 } from "./client/index.js";
 import type {
   CredentialCreationOptionOverrides,
-  MfaChallenge,
+  VerifyMfaParams,
 } from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
@@ -16,7 +16,7 @@ export type AuthParams =
       email: string;
       emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
-      multiFactor?: MfaChallenge;
+      multiFactors?: VerifyMfaParams[];
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
@@ -50,7 +50,7 @@ export type AuthParams =
   | {
       type: "otp";
       otpCode: string;
-      multiFactor?: MfaChallenge;
+      multiFactors?: VerifyMfaParams[];
     };
 
 export type OauthProviderConfig =
