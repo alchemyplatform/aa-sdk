@@ -19,7 +19,11 @@ import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
-import type { Store, StoredState } from "./store/types";
+import type { ClientStoreConfig, Store, StoredState } from "./store/types";
+import type {
+  RNAlchemySignerSingleton as RNAlchemySigner,
+  RNSignerClient,
+} from "@account-kit/react-native-signer";
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
@@ -28,28 +32,30 @@ export type SupportedAccountTypes =
   | "ModularAccountV2";
 
 export type SupportedAccounts =
-  | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
-  | MultiOwnerModularAccount<AlchemyWebSigner>
+  | LightAccount<AlchemySigner, LightAccountVersion<"LightAccount">>
+  | MultiOwnerModularAccount<AlchemySigner>
   | MultiOwnerLightAccount<
-      AlchemyWebSigner,
+      AlchemySigner,
       LightAccountVersion<"MultiOwnerLightAccount">
     >
-  | ModularAccountV2<AlchemyWebSigner>;
+  | ModularAccountV2<AlchemySigner>;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
-    ? LightAccount<AlchemyWebSigner>
+    ? LightAccount<AlchemySigner>
     : T extends "MultiOwnerModularAccount"
-    ? MultiOwnerModularAccount<AlchemyWebSigner>
+    ? MultiOwnerModularAccount<AlchemySigner>
     : T extends "MultiOwnerLightAccount"
-    ? MultiOwnerLightAccount<AlchemyWebSigner>
+    ? MultiOwnerLightAccount<AlchemySigner>
     : T extends "ModularAccountV2"
-    ? ModularAccountV2<AlchemyWebSigner>
+    ? ModularAccountV2<AlchemySigner>
     : never;
 
 export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {
+    // if not provided, the default signer will be used
+    createSigner?: (config: ClientStoreConfig) => AlchemySigner;
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;
@@ -107,6 +113,7 @@ type CreateStorageFn = (config?: {
 
 export type CreateConfigProps = RpcConnectionConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
+  createSigner?: (config: ClientStoreConfig) => AlchemySigner;
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
    * Turing this setting on will disable automatic hydration of the client store
@@ -135,3 +142,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
 // [!endregion CreateConfigProps]
 
 export type AlchemyClientState = StoredState;
+
+export type AlchemySigner = AlchemyWebSigner | RNAlchemySigner;
+
+export type AlchemySignerClient = (AlchemyWebSigner | RNSignerClient) & {};

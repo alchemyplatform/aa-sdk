@@ -1,4 +1,3 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
 import {
   createLightAccount,
   createMultiOwnerLightAccount,
@@ -15,6 +14,7 @@ import { ClientOnlyPropertyError } from "../errors.js";
 import { CoreLogger } from "../metrics.js";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   SupportedAccountTypes,
   SupportedAccounts,
 } from "../types.js";
@@ -30,7 +30,7 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? OmitSignerTransportChain<
         CreateLightAccountParams<
           Transport,
-          AlchemyWebSigner,
+          AlchemySigner,
           LightAccountVersion<"LightAccount">
         >
       >
@@ -38,17 +38,17 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? OmitSignerTransportChain<
         CreateMultiOwnerLightAccountParams<
           Transport,
-          AlchemyWebSigner,
+          AlchemySigner,
           LightAccountVersion<"MultiOwnerLightAccount">
         >
       >
     : TAccount extends "MultiOwnerModularAccount"
     ? OmitSignerTransportChain<
-        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>
+        CreateMultiOwnerModularAccountParams<Transport, AlchemySigner>
       >
     : TAccount extends "ModularAccountV2"
     ? OmitSignerTransportChain<
-        CreateModularAccountV2Params<Transport, AlchemyWebSigner>
+        CreateModularAccountV2Params<Transport, AlchemySigner>
       >
     : never;
 

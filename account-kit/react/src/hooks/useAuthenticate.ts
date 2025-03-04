@@ -7,7 +7,7 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";

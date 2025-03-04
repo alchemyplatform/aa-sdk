@@ -4,7 +4,7 @@ import { DEFAULT_IFRAME_CONTAINER_ID } from "@account-kit/core";
 import type { ExportWalletParams as ExportAccountParams } from "@account-kit/signer";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { createElement, useCallback, type CSSProperties } from "react";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 

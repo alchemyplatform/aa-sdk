@@ -3,6 +3,7 @@ import {
   type AlchemyAccountsConfig,
   type CreateConfigProps,
 } from "@account-kit/core";
+import { createSigner } from "@account-kit/core/web";
 import { walletConnect } from "wagmi/connectors";
 import type { AuthType } from "./components/auth/types.js";
 import { ReactLogger } from "./metrics.js";
@@ -77,7 +78,10 @@ export const createConfig = (
     props.connectors.push(walletConnect(walletConnectParams));
   }
 
-  const config = createCoreConfig(props);
+  const config = createCoreConfig({
+    ...props,
+    createSigner,
+  });
 
   ReactLogger.trackEvent({
     name: "config_created",

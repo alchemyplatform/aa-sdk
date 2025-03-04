@@ -3,7 +3,7 @@
 import type { WaitForUserOperationTxParameters } from "@aa-sdk/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { Hash } from "viem";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";

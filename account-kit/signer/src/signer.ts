@@ -80,7 +80,9 @@ export const AlchemySignerParamsSchema = z
       .or(AlchemySignerClientParamsSchema),
   })
   .extend({
-    sessionConfig: SessionManagerParamsSchema.omit({ client: true }).optional(),
+    sessionConfig: SessionManagerParamsSchema.omit({
+      client: true,
+    }).optional(),
   });
 
 export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
@@ -110,6 +112,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
    *
    * @param {AlchemySignerParams} params The parameters for the Alchemy signer, including the client and session configuration
    */
+
   constructor(params: AlchemySignerParams) {
     const { sessionConfig, ...params_ } =
       AlchemySignerParamsSchema.parse(params);
@@ -146,6 +149,8 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
     super({ client, sessionConfig, initialError });
 
     const isNewUser = isSignup === "true";
+
+    this.signerType = "alchemy-signer";
 
     if (emailBundle) {
       this.authenticate({
