@@ -1,3 +1,5 @@
+"use client";
+
 import type { AlchemyAccountsConfig } from "@account-kit/core";
 import { type QueryClient } from "@tanstack/react-query";
 import { createContext } from "react";
