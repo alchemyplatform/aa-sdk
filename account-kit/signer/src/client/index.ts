@@ -210,7 +210,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
-      multiFactor: params.multiFactor,
+      multiFactors: params.multiFactors,
     });
   };
 

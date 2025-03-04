@@ -51,7 +51,12 @@ export type EmailAuthParams = {
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
-  multiFactor?: MfaChallenge;
+  multiFactors?: [
+    {
+      multiFactorId?: string;
+      multiFactorCode?: string;
+    }
+  ];
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -128,6 +133,12 @@ export type SignerEndpoints = [
     Route: "/v1/auth";
     Body: Omit<EmailAuthParams, "redirectParams"> & {
       redirectParams?: string;
+      multiFactors?: [
+        {
+          multiFactorId?: string;
+          multiFactorCode?: string;
+        }
+      ];
     };
     Response: {
       orgId: string;

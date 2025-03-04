@@ -794,7 +794,15 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           emailMode: params.emailMode,
           expirationSeconds,
           redirectParams: params.redirectParams,
-          multiFactor: params.multiFactor,
+          multiFactors: params.multiFactor?.multiFactorId
+            ? [
+                {
+                  multiFactorId: params.multiFactor?.multiFactorId,
+                  multiFactorCode:
+                    params.multiFactor?.multiFactorChallenge?.code,
+                },
+              ]
+            : undefined,
         });
 
         const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;

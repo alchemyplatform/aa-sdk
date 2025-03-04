@@ -36,14 +36,6 @@ export const LoadingOtp = () => {
       resetOTP(getUserErrorMessage(error));
     },
     onSuccess: async () => {
-      const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() ?? {};
-      if (mfaRequired) {
-        setAuthStep({
-          type: "totp_verify",
-          factorId: mfaFactorId ?? "",
-        });
-        return;
-      }
       if (isConnected) {
         setAuthStep({ ...authStep, status: AuthStepStatus.success });
         setTitleText(ls.loadingOtp.verified);
@@ -67,6 +59,7 @@ export const LoadingOtp = () => {
       if (mfaRequired) {
         setAuthStep({
           type: "totp_verify",
+          previousStep: "otp",
           factorId: mfaFactorId ?? "",
           otpCode: otp,
         });

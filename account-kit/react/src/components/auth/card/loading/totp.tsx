@@ -15,7 +15,14 @@ export const LoadingTotp = () => {
   const [totpCode, setTotpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { authenticate } = useAuthenticate({
+  const { authenticateAsync } = useAuthenticate({
+    onMutate: async (params) => {
+      if (params.type === "email" && "email" in params) {
+        if (params.emailMode === "magicLink") {
+          setAuthStep({ type: "email_verify", email: params.email });
+        }
+      }
+    },
     onSuccess: () => {
       setIsSubmitting(false);
       setAuthStep({ type: "complete" });
@@ -39,14 +46,29 @@ export const LoadingTotp = () => {
   // Called when all digits are typed or user hits "Verify" button
   const handleVerify = async (codeString: string) => {
     try {
-      await authenticate({
-        type: "otp",
-        otpCode: authStep.otpCode ?? "",
-        multiFactor: {
-          multiFactorId: authStep.factorId,
-          multiFactorChallenge: { code: codeString },
-        },
-      });
+      if (authStep.previousStep === "magicLink") {
+        await authenticateAsync({
+          type: "email",
+          email: authStep.email,
+          emailMode: "magicLink",
+          redirectParams: new URLSearchParams(),
+          multiFactor: {
+            multiFactorId: authStep.factorId,
+            multiFactorChallenge: { code: codeString },
+          },
+        });
+      } else if (authStep.previousStep === "otp") {
+        await authenticateAsync({
+          type: "otp",
+          otpCode: authStep.otpCode ?? "",
+          multiFactor: {
+            multiFactorId: authStep.factorId,
+            multiFactorChallenge: { code: codeString },
+          },
+        });
+      } else {
+        throw new Error("Invalid previous step");
+      }
     } catch (err) {
       console.error("TOTP submission error", err);
     }
