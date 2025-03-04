@@ -52,16 +52,12 @@ export function MFACard() {
           </p>
         </div>
       </div>
-      {isGettingFactors ? (
-        <div>Loading...</div>
-      ) : (
-        <MFAModal
-          isMfaActive={isMfaActive}
-          onMfaEnabled={() => setIsMfaActive(true)}
-          onMfaRemoved={() => setIsMfaActive(false)}
-          isLoadingClient={!isMfaAvailable}
-        />
-      )}
+      <MFAModal
+        isMfaActive={isMfaActive}
+        onMfaEnabled={() => setIsMfaActive(true)}
+        onMfaRemoved={() => setIsMfaActive(false)}
+        isLoadingClient={!isMfaAvailable || isGettingFactors}
+      />
     </div>
   );
 }
