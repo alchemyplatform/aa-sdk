@@ -43,6 +43,10 @@ export const smartContractsSidebar: SidebarItem[] = [
         ],
         collapsed: true,
       },
+      {
+        text: "Managing ownership",
+        link: "/smart-contracts/modular-account-v2/managing-ownership",
+      },
     ],
   },
   {
