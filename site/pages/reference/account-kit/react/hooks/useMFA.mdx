@@ -35,20 +35,8 @@ const {
   isGettingFactors,
   isMfaAvailable,
   error,
-} = useMFA({
-  onSuccess: () => {
-    // do something on success
-  },
-  onError: (error) => console.error(error),
-});
+} = useMFA();
 ```
-
-## Parameters
-
-### mutationArgs
-
-`BaseHookMutationArgs`
-Optional mutation arguments to configure the MFA operations
 
 ## Returns
 

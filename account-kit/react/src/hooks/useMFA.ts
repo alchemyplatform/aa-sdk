@@ -1,33 +1,29 @@
 "use client";
 
-import {
-  useMutation,
-  type UseMutateFunction,
-  type UseMutationOptions,
-} from "@tanstack/react-query";
+import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "../context.js";
-import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 import { useSignerStatus } from "./useSignerStatus.js";
-import type { EnableMfaResult, MfaFactor } from "@account-kit/signer";
+import type {
+  EnableMfaParams,
+  EnableMfaResult,
+  MfaFactor,
+  RemoveMfaParams,
+  VerifyMfaParams,
+} from "@account-kit/signer";
 
 export type UseMFAResult = {
-  addMFA: UseMutateFunction<
-    EnableMfaResult,
-    Error,
-    { multiFactorType: "totp" },
-    unknown
-  >;
+  addMFA: UseMutateFunction<EnableMfaResult, Error, EnableMfaParams, unknown>;
   verifyMFA: UseMutateFunction<
     { multiFactors: MfaFactor[] },
     Error,
-    { multiFactorId: string; multiFactorCode: string },
+    VerifyMfaParams,
     unknown
   >;
   removeMFA: UseMutateFunction<
     { multiFactors: MfaFactor[] },
     Error,
-    { multiFactorIds: string[] },
+    RemoveMfaParams,
     unknown
   >;
   getMFAFactors: UseMutateFunction<
@@ -51,7 +47,6 @@ export type UseMFAResult = {
  * The hook checks if the signer is connected before allowing MFA operations and provides an `isMfaAvailable` flag
  * to indicate whether MFA operations can be performed.
  *
- * @param {BaseHookMutationArgs} [mutationArgs] Optional mutation arguments to configure the MFA operations
  * @returns {UseMFAResult} An object containing functions and state for handling MFA operations
  *
  * @example
@@ -69,40 +64,32 @@ export type UseMFAResult = {
  *   isGettingFactors,
  *   isMfaAvailable,
  *   error
- * } = useMFA({
- *   onSuccess: () => {
- *     // do something on success
- *   },
- *   onError: (error) => console.error(error),
- * });
+ * } = useMFA();
  * ```
  */
-export function useMFA(mutationArgs?: BaseHookMutationArgs): UseMFAResult {
+export function useMFA(): UseMFAResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
   const { isConnected } = useSignerStatus();
 
-  // MFA is available only when signer is connected and initialized
   const isMfaAvailable = isConnected && !!signer?.inner;
+  const ensureMfaAvailable = () => {
+    if (!isMfaAvailable) {
+      throw new Error("Signer not connected or initialized");
+    }
+  };
 
   const {
     mutate: addMFA,
     isPending: isAddingMFA,
     error: addError,
-  } = useMutation<EnableMfaResult, Error, { multiFactorType: "totp" }>(
+  } = useMutation<EnableMfaResult, Error, EnableMfaParams>(
     {
-      mutationFn: async (params) => {
-        if (!isMfaAvailable) {
-          throw new Error("Signer not connected or initialized");
-        }
+      mutationKey: ["addMFA"],
+      mutationFn: async (params: EnableMfaParams) => {
+        ensureMfaAvailable();
         return signer!.inner.addMfa(params);
       },
-      ...(mutationArgs as UseMutationOptions<
-        EnableMfaResult,
-        Error,
-        { multiFactorType: "totp" },
-        unknown
-      >),
     },
     queryClient
   );
@@ -118,17 +105,9 @@ export function useMFA(mutationArgs?: BaseHookMutationArgs): UseMFAResult {
   >(
     {
       mutationFn: async (params) => {
-        if (!isMfaAvailable) {
-          throw new Error("Signer not connected or initialized");
-        }
+        ensureMfaAvailable();
         return signer!.inner.verifyMfa(params);
       },
-      ...(mutationArgs as UseMutationOptions<
-        { multiFactors: MfaFactor[] },
-        Error,
-        { multiFactorId: string; multiFactorCode: string },
-        unknown
-      >),
     },
     queryClient
   );
@@ -144,17 +123,9 @@ export function useMFA(mutationArgs?: BaseHookMutationArgs): UseMFAResult {
   >(
     {
       mutationFn: async (params) => {
-        if (!isMfaAvailable) {
-          throw new Error("Signer not connected or initialized");
-        }
+        ensureMfaAvailable();
         return signer!.inner.removeMfa(params);
       },
-      ...(mutationArgs as UseMutationOptions<
-        { multiFactors: MfaFactor[] },
-        Error,
-        { multiFactorIds: string[] },
-        unknown
-      >),
     },
     queryClient
   );
@@ -166,17 +137,9 @@ export function useMFA(mutationArgs?: BaseHookMutationArgs): UseMFAResult {
   } = useMutation<{ multiFactors: MfaFactor[] }, Error, void>(
     {
       mutationFn: async () => {
-        if (!isMfaAvailable) {
-          throw new Error("Signer not connected or initialized");
-        }
+        ensureMfaAvailable();
         return signer!.inner.getMfaFactors();
       },
-      ...(mutationArgs as UseMutationOptions<
-        { multiFactors: MfaFactor[] },
-        Error,
-        void,
-        unknown
-      >),
     },
     queryClient
   );
