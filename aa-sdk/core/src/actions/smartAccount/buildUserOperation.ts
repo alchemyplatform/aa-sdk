@@ -42,7 +42,7 @@ const USER_OPERATION_METHOD = "buildUserOperation";
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client the client instance used to build the user operation
+ * @param {Client<TTransport, TChain, TAccount>} client_ the client instance used to build the user operation
  * @param {BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>} args the parameters required to build the user operation, including account, overrides, and context
  * @returns {Promise<UserOperationStruct<TEntryPointVersion>>} a promise that resolves to a `UserOperationStruct` object containing the built user operation details
  */
@@ -57,10 +57,10 @@ export async function buildUserOperation<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
-  client = clientHeaderTrack(client, USER_OPERATION_METHOD);
+  const client = clientHeaderTrack(client_, USER_OPERATION_METHOD);
   const { account = client.account, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -83,7 +83,7 @@ export async function buildUserOperation<
     })
   );
 }
-function clientHeaderTrack<X extends {}>(client: X, crumb: string) {
+function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
   return maybeUpdateHeader(client, (x) => ({
     [TRACKER_HEADER]: Math.random().toString(36).substring(10),
     ...x,
