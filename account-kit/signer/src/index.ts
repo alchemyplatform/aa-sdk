@@ -14,4 +14,8 @@ export type * from "./signer.js";
 export { AlchemyWebSigner } from "./signer.js";
 export type * from "./types.js";
 export { AlchemySignerStatus } from "./types.js";
-export { OAuthProvidersError, NotAuthenticatedError } from "./errors.js";
+export {
+  OAuthProvidersError,
+  NotAuthenticatedError,
+  MfaRequiredError,
+} from "./errors.js";
