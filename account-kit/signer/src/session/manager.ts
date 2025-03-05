@@ -189,6 +189,7 @@ export class SessionManager {
      * We should revisit this later
      */
     if (session.expirationDateMs < Date.now()) {
+      this.client.disconnect();
       this.clearSession();
       return null;
     }
@@ -319,6 +320,7 @@ export class SessionManager {
     }
 
     this.clearSessionHandle = setTimeout(() => {
+      this.client.disconnect();
       this.clearSession();
     }, Math.min(session.expirationDateMs - Date.now(), Math.pow(2, 31) - 1));
   };
