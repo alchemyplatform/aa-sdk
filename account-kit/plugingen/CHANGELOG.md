@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

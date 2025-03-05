@@ -56,6 +56,9 @@ export { getDefaultUserOperationFeeOptions } from "./defaults.js";
 export { getAlchemyPaymasterAddress } from "./gas-manager.js";
 export { alchemyFeeEstimator } from "./middleware/feeEstimator.js";
 export type * from "./middleware/gasManager.js";
-export { alchemyGasManagerMiddleware } from "./middleware/gasManager.js";
+export {
+  alchemyGasManagerMiddleware,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "./middleware/gasManager.js";
 export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulator.js";
 export type * from "./schema.js";
