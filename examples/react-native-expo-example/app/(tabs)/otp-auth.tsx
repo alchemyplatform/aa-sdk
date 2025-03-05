@@ -7,7 +7,7 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import {useAuthenticate, useUser, useSigner} from "@account-kit/react/hooks"
+import {useAuthenticate, useUser, useSigner, useLogout} from "@account-kit/react-native"
 
 import { API_KEY } from "@env";
 
@@ -26,6 +26,7 @@ export default function OTPAuthScreen() {
 	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	const signer = useSigner<RNAlchemySignerType>();
+	const { logout } = useLogout();
 
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 
@@ -117,7 +118,7 @@ export default function OTPAuthScreen() {
 
 					<TouchableOpacity
 						style={styles.button}
-						onPress={() => signer?.disconnect()}
+						onPress={() => logout()}
 					>
 						<Text style={styles.buttonText}>Sign out</Text>
 					</TouchableOpacity>
