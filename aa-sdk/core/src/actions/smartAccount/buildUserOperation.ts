@@ -13,7 +13,16 @@ import type {
   BuildUserOperationParameters,
   UserOperationContext,
 } from "./types";
+import { maybeUpdateHeader } from "../../client/updateHeaders.js";
 
+export const TRACKER_HEADER = "x-tracker-id";
+export const TRACKER_BREADCRUMB = "x-tracker-breadcrumb";
+
+export function addCrumb(previous: string | undefined, crumb: string): string {
+  return previous ? `${previous} - ${crumb}` : crumb;
+}
+
+const USER_OPERATION_METHOD = "buildUserOperation";
 /**
  * Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
  *
@@ -51,6 +60,7 @@ export async function buildUserOperation<
   client: Client<TTransport, TChain, TAccount>,
   args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
+  client = clientHeaderTrack(client, USER_OPERATION_METHOD);
   const { account = client.account, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -59,7 +69,7 @@ export async function buildUserOperation<
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "buildUserOperation",
+      USER_OPERATION_METHOD,
       client
     );
   }
@@ -72,4 +82,11 @@ export async function buildUserOperation<
       context,
     })
   );
+}
+function clientHeaderTrack<X extends {}>(client: X, crumb: string) {
+  return maybeUpdateHeader(client, (x) => ({
+    [TRACKER_HEADER]: Math.random().toString(36).substring(10),
+    ...x,
+    [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
+  }));
 }

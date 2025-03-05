@@ -2,6 +2,7 @@ import {
   ChainNotFoundError,
   createSmartAccountClient,
   isSmartAccountWithSigner,
+  updateHeaderSymbol,
   type Prettify,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -9,10 +10,11 @@ import {
   type SmartAccountClientRpcSchema,
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
+  type UpdateHeaderFn,
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
-import type { AlchemyTransport } from "../alchemyTransport.js";
+import { type AlchemyTransport } from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
@@ -125,59 +127,57 @@ export function createAlchemySmartAccountClient<
  * @param {AlchemySmartAccountClientConfig} config The configuration for creating the Alchemy smart account client
  * @returns {AlchemySmartAccountClient} An instance of `AlchemySmartAccountClient` configured based on the provided options
  */
-export function createAlchemySmartAccountClient({
-  account,
-  policyId,
-  useSimulation,
-  feeEstimator,
-  customMiddleware,
-  gasEstimator,
-  signUserOperation,
-  transport,
-  chain,
-  opts,
-}: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
-  if (!chain) {
+export function createAlchemySmartAccountClient(
+  config: AlchemySmartAccountClientConfig
+): AlchemySmartAccountClient {
+  if (!config.chain) {
     throw new ChainNotFoundError();
   }
 
   const feeOptions =
-    opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
+    config.opts?.feeOptions ?? getDefaultUserOperationFeeOptions(config.chain);
 
   const scaClient = createSmartAccountClient({
-    account,
-    transport,
-    chain,
+    account: config.account,
+    transport: config.transport,
+    chain: config.chain,
     type: "AlchemySmartAccountClient",
     opts: {
-      ...opts,
+      ...config.opts,
       feeOptions,
     },
-    feeEstimator: feeEstimator ?? alchemyFeeEstimator(transport),
-    gasEstimator,
+    feeEstimator: config.feeEstimator ?? alchemyFeeEstimator(config.transport),
+    gasEstimator: config.gasEstimator,
     customMiddleware: async (struct, args) => {
       if (isSmartAccountWithSigner(args.account)) {
-        transport.updateHeaders(getSignerTypeHeader(args.account));
+        config.transport.updateHeaders(getSignerTypeHeader(args.account));
       }
-      return customMiddleware ? customMiddleware(struct, args) : struct;
+      return config.customMiddleware
+        ? config.customMiddleware(struct, args)
+        : struct;
     },
-    ...(policyId
+    ...(config.policyId
       ? alchemyGasAndPaymasterAndDataMiddleware({
-          policyId,
-          transport,
-          gasEstimatorOverride: gasEstimator,
-          feeEstimatorOverride: feeEstimator,
+          policyId: config.policyId,
+          transport: config.transport,
+          gasEstimatorOverride: config.gasEstimator,
+          feeEstimatorOverride: config.feeEstimator,
         })
       : {}),
-    userOperationSimulator: useSimulation
-      ? alchemyUserOperationSimulator(transport)
+    userOperationSimulator: config.useSimulation
+      ? alchemyUserOperationSimulator(config.transport)
       : undefined,
-    signUserOperation,
+    signUserOperation: config.signUserOperation,
   }).extend(alchemyActions);
 
-  if (account && isSmartAccountWithSigner(account)) {
-    transport.updateHeaders(getSignerTypeHeader(account));
-  }
-
-  return scaClient;
+  return {
+    ...scaClient,
+    [updateHeaderSymbol](updateFn: UpdateHeaderFn) {
+      const transport = config.transport[updateHeaderSymbol](updateFn);
+      return createAlchemySmartAccountClient({
+        ...config,
+        transport,
+      });
+    },
+  };
 }
