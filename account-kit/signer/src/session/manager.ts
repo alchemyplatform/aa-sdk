@@ -140,6 +140,7 @@ export class SessionManager {
 
   public clearSession = () => {
     this.store.setState({ session: null });
+    localStorage.removeItem(`${this.sessionKey}:temporary`);
 
     if (this.clearSessionHandle) {
       clearTimeout(this.clearSessionHandle);
