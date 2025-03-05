@@ -35,7 +35,7 @@ export const LoadingOtp = () => {
       setAuthStep({ ...authStep, error, status: AuthStepStatus.base });
       resetOTP(getUserErrorMessage(error));
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       if (isConnected) {
         setAuthStep({ ...authStep, status: AuthStepStatus.success });
         setTitleText(ls.loadingOtp.verified);
