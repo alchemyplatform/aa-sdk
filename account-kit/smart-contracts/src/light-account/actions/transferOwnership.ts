@@ -24,7 +24,7 @@ export type TransferLightAccountOwnershipParams<
 
 /**
  * Transfers the ownership of a light account to a new owner.
- * This function ensures that the client is a compatible smart acccount client and that a Light Account is provided.
+ * This function ensures that the client is a compatible smart account client and that a Light Account is provided.
  * If the waitForTxn parameter is true, it will wait for the transaction to be completed before returning.
  *
  * @example

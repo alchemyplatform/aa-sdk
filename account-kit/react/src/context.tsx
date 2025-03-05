@@ -94,7 +94,7 @@ export const useAlchemyAccountContext = (
  * ```
  *
  * @param {React.PropsWithChildren<AlchemyAccountsProviderProps>} props alchemy accounts provider props
- * @param {AlchemyAccountsConfig} props.config the acccount config generated using `createConfig`
+ * @param {AlchemyAccountsConfig} props.config the account config generated using `createConfig`
  * @param {QueryClient} props.queryClient the react-query query client to use
  * @param {AlchemyAccountsUIConfig} props.uiConfig optional UI configuration
  * @param {React.ReactNode | undefined} props.children react components that should have this accounts context
