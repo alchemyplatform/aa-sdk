@@ -5,8 +5,12 @@ import type { User } from "@account-kit/signer";
 import { useMemo, useSyncExternalStore } from "react";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
+import type { Address } from "@aa-sdk/core";
 
-export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
+export type UseUserResult =
+  | (User & { type: "eoa" | "sca"; loading?: never })
+  | null
+  | { address?: Address; type: "eoa" | "sca"; loading: true };
 
 /**
  * A React [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUser.ts) that returns the current user information, either from an External Owned Account (EOA) or from the client store. It uses the Alchemy account context and synchronizes with external store updates.
@@ -43,6 +47,13 @@ export const useUser = (): UseUserResult => {
   const eoaUser = useMemo(() => {
     if (account.status !== "connected" && account.status !== "reconnecting") {
       return null;
+    } else if (account.status === "reconnecting") {
+      //return user info for "reconnecting" status
+      return {
+        address: account.address,
+        type: "eoa" as const,
+        loading: true as const,
+      };
     }
 
     if (!account.address) {
