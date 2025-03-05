@@ -1,13 +1,11 @@
 import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
-  CreateConfigProps,
 } from "@account-kit/core";
 import { AlchemyAccountContext } from "@account-kit/react/alchemy-account-context";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { Hydrate } from "./hydrate.js";
-import { createConfig } from "@account-kit/core/react-native";
+import { Hydrate } from "@account-kit/react/hydrate";
 
 export type AlchemyAccountContextProps = {
   config: AlchemyAccountsConfig;
@@ -15,11 +13,14 @@ export type AlchemyAccountContextProps = {
 };
 
 export type AlchemyAccountsProviderProps = {
-  params: CreateConfigProps;
+  config: AlchemyAccountsConfig;
   initialState?: AlchemyClientState;
   queryClient: QueryClient;
 };
 
+// NOTE: This is a copy of the AlchemyAccountProvider from @account-kit/react
+// We are doing so because the version from @account-kit/react imports and renders some DOM elements
+// which are not supported in React Native.
 /**
  * Provider for Alchemy accounts.
  *
@@ -57,9 +58,7 @@ export type AlchemyAccountsProviderProps = {
 export const AlchemyAccountProvider = (
   props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
-  const { params, queryClient, children } = props;
-
-  const config = createConfig(params);
+  const { config, queryClient, children } = props;
 
   const initialContext = useMemo(
     () => ({
@@ -70,7 +69,7 @@ export const AlchemyAccountProvider = (
   );
 
   return (
-    <Hydrate {...props} config={config}>
+    <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
           {children}

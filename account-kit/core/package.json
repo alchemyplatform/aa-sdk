@@ -27,11 +27,6 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
     },
-    "./react-native": {
-      "types": "./dist/types/environments/react-native/index.d.ts",
-      "import": "./dist/esm/environments/react-native/index.js",
-      "default": "./dist/esm/environments/react-native/index.js"
-    },
     "./web": {
       "types": "./dist/types/environments/web/index.d.ts",
       "import": "./dist/esm/environments/web/index.js",

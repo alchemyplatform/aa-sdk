@@ -38,6 +38,11 @@
       "import": "./dist/esm/AlchemyAccountContext.js",
       "default": "./dist/esm/AlchemyAccountContext.js"
     },
+    "./hydrate": {
+      "types": "./dist/types/hydrate.d.ts",
+      "import": "./dist/esm/hydrate.js",
+      "default": "./dist/esm/hydrate.js"
+    },
     "./hooks": {
       "types": "./dist/types/hooks/index.d.ts",
       "import": "./dist/esm/hooks/index.js",

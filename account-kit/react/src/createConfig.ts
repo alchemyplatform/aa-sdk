@@ -2,7 +2,7 @@ import {
   type AlchemyAccountsConfig,
   type CreateConfigProps,
 } from "@account-kit/core";
-import { createConfig as createCoreConfig } from "@account-kit/core/web";
+import { createConfig as createCoreConfig } from "@account-kit/core";
 import { walletConnect } from "wagmi/connectors";
 import type { AuthType } from "./components/auth/types.js";
 import { ReactLogger } from "./metrics.js";

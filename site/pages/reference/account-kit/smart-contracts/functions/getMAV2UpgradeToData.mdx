@@ -41,5 +41,5 @@ The arguments required for the upgrade
 
 ## Returns
 
-`Promise<UpgradeToData & { createMAV2Account: () => Promise<ModularAccountV2<TSigner>>}>`
+`Promise<UpgradeToData & { createModularAccountV2FromExisting: () => Promise<ModularAccountV2<TSigner>>}>`
 A promise that resolves to upgrade data augmented with a function to create a Modular Account V2

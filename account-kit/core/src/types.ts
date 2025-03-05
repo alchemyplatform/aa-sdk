@@ -55,7 +55,7 @@ export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {
     // if not provided, the default signer will be used
-    createSigner?: (config: ClientStoreConfig) => AlchemySigner;
+    createSigner: (config: ClientStoreConfig) => AlchemySigner;
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;
@@ -146,5 +146,7 @@ export type BaseCreateConfigProps = RpcConnectionConfig & {
   >;
 
 export type CreateConfigProps = BaseCreateConfigProps & {
-  createSigner?: (config: ClientStoreConfig) => AlchemySigner;
+  _internal?: {
+    createSigner?: (config: ClientStoreConfig) => AlchemySigner;
+  };
 };
