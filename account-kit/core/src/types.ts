@@ -63,7 +63,7 @@ export type AlchemyAccountsConfig = {
   };
 };
 
-// [!region CreateConfigProps]
+// [!region CreateCorConfigProps]
 export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
@@ -111,9 +111,14 @@ type CreateStorageFn = (config?: {
   domain?: string;
 }) => Storage;
 
-export type CreateConfigProps = RpcConnectionConfig & {
+export type AlchemyClientState = StoredState;
+
+export type AlchemySigner = AlchemyWebSigner | RNAlchemySigner;
+
+export type AlchemySignerClient = (AlchemyWebSigner | RNSignerClient) & {};
+
+export type BaseCreateConfigProps = RpcConnectionConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
-  createSigner?: (config: ClientStoreConfig) => AlchemySigner;
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
    * Turing this setting on will disable automatic hydration of the client store
@@ -139,10 +144,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
     >,
     "connection"
   >;
-// [!endregion CreateConfigProps]
 
-export type AlchemyClientState = StoredState;
-
-export type AlchemySigner = AlchemyWebSigner | RNAlchemySigner;
-
-export type AlchemySignerClient = (AlchemyWebSigner | RNSignerClient) & {};
+export type CreateConfigProps = BaseCreateConfigProps & {
+  createSigner?: (config: ClientStoreConfig) => AlchemySigner;
+};
