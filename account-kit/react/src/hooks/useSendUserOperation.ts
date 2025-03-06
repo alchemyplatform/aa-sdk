@@ -16,7 +16,7 @@ import {
 import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
 import type { Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import {
   ClientUndefinedHookError,
   UnsupportedEOAActionError,

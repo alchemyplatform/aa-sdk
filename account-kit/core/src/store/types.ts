@@ -3,7 +3,6 @@ import type {
   AlchemySignerParams,
   AlchemySignerStatus,
   AlchemySignerWebClient,
-  AlchemyWebSigner,
   ErrorInfo,
   User,
 } from "@account-kit/signer";
@@ -14,6 +13,7 @@ import type { Mutate, StoreApi } from "zustand/vanilla";
 import type { AccountConfig } from "../actions/createAccount";
 import type { GetSmartAccountClientResult } from "../actions/getSmartAccountClient";
 import type {
+  AlchemySigner,
   Connection,
   SupportedAccount,
   SupportedAccountTypes,
@@ -78,7 +78,7 @@ export type CreateAccountKitStoreParams = ClientStoreConfig & {
 
 export type StoreState = {
   // non-serializable
-  signer?: AlchemyWebSigner;
+  signer?: AlchemySigner;
   accounts?: {
     [chain: number]: {
       [key in SupportedAccountTypes]: AccountState<key>;
@@ -108,7 +108,11 @@ export type StoreState = {
   connections: Map<number, Connection>;
 };
 
-export type Store = Mutate<
-  StoreApi<StoreState>,
-  [["zustand/subscribeWithSelector", never], ["zustand/persist", StoreState]]
->;
+type Expanded<T> = { [K in keyof T]: T[K] };
+
+type Middleware = [
+  ["zustand/subscribeWithSelector", never],
+  ["zustand/persist", StoreState]
+];
+
+export type Store = Expanded<Mutate<StoreApi<StoreState>, Middleware>>;

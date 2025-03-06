@@ -1,5 +1,4 @@
-import type { AlchemyWebSigner } from "@account-kit/signer";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemySigner } from "../types";
 
 /**
  * Subscribe to changes of the signer instance on the client store.
@@ -14,10 +13,10 @@ import type { AlchemyAccountsConfig } from "../types";
  * ```
  *
  * @param {AlchemyAccountsConfig} config the account config containing the client store
- * @returns {(onChange: (chain: AlchemyWebSigner) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the signer changes and returns a function to unsubscribe from the store
+ * @returns {(onChange: (chain: AlchemySigner) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the signer changes and returns a function to unsubscribe from the store
  */
 export const watchSigner =
   (config: AlchemyAccountsConfig) =>
-  (onChange: (signer?: AlchemyWebSigner) => void) => {
+  (onChange: (signer?: AlchemySigner) => void) => {
     return config.store.subscribe(({ signer }) => signer, onChange);
   };

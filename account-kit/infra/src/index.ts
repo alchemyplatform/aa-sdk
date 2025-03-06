@@ -40,6 +40,7 @@ export {
   inkMainnet,
   inkSepolia,
   mekong,
+  monadTestnet,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
