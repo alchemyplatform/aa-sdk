@@ -9,6 +9,7 @@ import type {
   Connection,
   CreateConfigProps,
 } from "./types.js";
+import { createSigner as createWebSigner } from "./environments/web/createSigner.js";
 
 export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
@@ -48,6 +49,7 @@ export const createConfig = (
     connectors,
     oauthCallbackUrl,
     enablePopupOauth,
+    _internal: { createSigner } = {},
     ...connectionConfig
   } = params;
 
@@ -113,6 +115,7 @@ export const createConfig = (
     store: store,
     _internal: {
       ssr,
+      createSigner: createSigner ?? createWebSigner, // <-- Default to web signer if not provided
       wagmiConfig,
       storageKey: "alchemy-account-state",
       sessionLength: sessionConfig?.expirationTimeMs ?? DEFAULT_SESSION_MS,

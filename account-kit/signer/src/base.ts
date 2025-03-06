@@ -70,7 +70,7 @@ type InternalStore = Mutate<
 export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   implements SmartAccountAuthenticator<AuthParams, User, TClient>
 {
-  signerType: string = "alchemy-signer";
+  signerType: "alchemy-signer" | "rn-alchemy-signer" = "alchemy-signer";
   inner: TClient;
   private sessionManager: SessionManager;
   private store: InternalStore;
@@ -782,7 +782,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         : this.sessionManager.getTemporarySession();
 
       if (!temporarySession) {
-        this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
+        this.store.setState({
+          status: AlchemySignerStatus.DISCONNECTED,
+        });
         throw new Error("Could not find email auth init session!");
       }
 
@@ -830,7 +832,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     } else {
       user = await this.inner.lookupUserWithPasskey();
       if (!user) {
-        this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
+        this.store.setState({
+          status: AlchemySignerStatus.DISCONNECTED,
+        });
         throw new Error("No user found");
       }
     }

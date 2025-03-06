@@ -1,4 +1,13 @@
-import { concat, toHex, type Hex, type Chain, type Address } from "viem";
+import {
+  concat,
+  toHex,
+  custom,
+  encodeFunctionData,
+  type Hex,
+  type Chain,
+  type Address,
+  type Transport,
+} from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -11,6 +20,18 @@ import {
   polygonAmoy,
   sepolia,
 } from "@account-kit/infra";
+import { createModularAccountV2 } from "./account/modularAccountV2.js";
+import { type ModularAccountV2 } from "./account/common/modularAccountV2Base.js";
+import { semiModularAccountStorageAbi } from "./abis/semiModularAccountStorageAbi.js";
+import {
+  AccountNotFoundError,
+  ChainNotFoundError,
+  type GetAccountParameter,
+  type SmartAccountClient,
+  type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
+  type UpgradeToData,
+} from "@aa-sdk/core";
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
@@ -136,3 +157,74 @@ export const getDefaultMAV2Address = (chain: Chain): Address => {
       return "0x00000000000002377B26b1EdA7b0BC371C60DD4f";
   }
 };
+
+export type GetMAV2UpgradeToData<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends
+    | SmartContractAccountWithSigner<string, TSigner>
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
+> = GetAccountParameter<TAccount>;
+
+/**
+ * Retrieves the data necessary to upgrade to a Modular Account V2 (MA v2).
+ * Note that the upgrade will be to the Semi Modular Account Storage variant
+ *
+ * @example
+ * ```ts
+ * import { createLightAccountClient, getMAV2UpgradeToData } from "@account-kit/smart-contracts";
+ *
+ * const client = createLightAccountClient({});
+ * const upgradeData = await getMAV2UpgradeToData(client, {});
+ * ```
+ *
+ * @param {SmartAccountClient<TTransport, TChain, TAccount>} client The smart account client
+ * @param {GetMAV2UpgradeToData<TSigner, TAccount>} args The arguments required for the upgrade
+ * @returns {Promise<UpgradeToData & { createModularAccountV2FromExisting: () => Promise<ModularAccountV2<TSigner>>}>} A promise that resolves to upgrade data augmented with a function to create a Modular Account V2
+ */
+export async function getMAV2UpgradeToData<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends
+    | SmartContractAccountWithSigner<string, TSigner>
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
+>(
+  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  args: GetMAV2UpgradeToData<TSigner, TAccount>
+): Promise<
+  UpgradeToData & {
+    createModularAccountV2FromExisting: () => Promise<
+      ModularAccountV2<TSigner>
+    >;
+  }
+> {
+  const { account: account_ = client.account } = args;
+
+  if (!account_) {
+    throw new AccountNotFoundError();
+  }
+  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
+
+  const chain = client.chain;
+  if (!chain) {
+    throw new ChainNotFoundError();
+  }
+
+  const initData = encodeFunctionData({
+    abi: semiModularAccountStorageAbi,
+    functionName: "initialize",
+    args: [await account.getSigner().getAddress()],
+  });
+
+  return {
+    implAddress: getDefaultSMAV2StorageAddress(chain),
+    initializationData: initData,
+    createModularAccountV2FromExisting: async () =>
+      createModularAccountV2({
+        transport: custom(client.transport),
+        chain: chain as Chain,
+        signer: account.getSigner(),
+        accountAddress: account.address,
+      }),
+  };
+}
