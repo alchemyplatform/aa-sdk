@@ -19,5 +19,5 @@ export const PasskeyAuth = memo(
         {label}
       </Button>
     );
-  }
+  },
 );

@@ -20,7 +20,7 @@ const UserConnectionAvatar = ({
     ({ ui: { theme, primaryColor }, accountMode }) => ({
       theme,
       primaryColor,
-    })
+    }),
   );
   const user = useUser();
 
@@ -39,7 +39,7 @@ const UserConnectionAvatar = ({
             className={cn(
               "p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
               deploymentStatus && "p-[1px]",
-              theme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]"
+              theme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]",
             )}
           >
             <DeploymentStatusIndicator
@@ -67,7 +67,7 @@ const UserConnectionAvatar = ({
             <ChevronDown
               className={cn(
                 "transition-transform stroke-fg-primary",
-                isFocused && "rotate-180"
+                isFocused && "rotate-180",
               )}
             />
           </div>

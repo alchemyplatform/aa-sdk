@@ -38,7 +38,8 @@ type ExecutionActions<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   updateOwners: (
     args: Pick<
@@ -50,7 +51,7 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
@@ -69,20 +70,21 @@ type ManagementActions<
   TContext extends UserOperationContext | undefined =
     | Record<string, any>
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   installMultiOwnerPlugin: (
     args: UserOperationOverridesParameter<TEntryPointVersion> &
       InstallMultiOwnerPluginParams &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type ReadAndEncodeActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = {
   encodeUpdateOwners: (
     args: Pick<
@@ -91,7 +93,7 @@ type ReadAndEncodeActions<
         "updateOwners"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeEip712Domain: (
@@ -101,11 +103,11 @@ type ReadAndEncodeActions<
         "eip712Domain"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   readEip712Domain: (
-    args: GetAccountParameter<TAccount>
+    args: GetAccountParameter<TAccount>,
   ) => Promise<
     ReadContractReturnType<
       typeof MultiOwnerPluginExecutionFunctionAbi,
@@ -120,7 +122,7 @@ type ReadAndEncodeActions<
         "isValidSignature"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   readIsValidSignature: (
@@ -131,7 +133,7 @@ type ReadAndEncodeActions<
       >,
       "args"
     > &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount>,
   ) => Promise<
     ReadContractReturnType<
       typeof MultiOwnerPluginExecutionFunctionAbi,
@@ -146,7 +148,7 @@ export type MultiOwnerPluginActions<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = ExecutionActions<TAccount, TContext> &
   ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
@@ -177,7 +179,7 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
   },
   getContract: <C extends Client>(
     client: C,
-    address?: Address
+    address?: Address,
   ): GetContractReturnType<
     typeof MultiOwnerPluginAbi,
     PublicClient,
@@ -205,9 +207,9 @@ export const multiOwnerPluginActions: <
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => MultiOwnerPluginActions<TAccount, TContext> = (client) => ({
   updateOwners({ args, overrides, context, account = client.account }) {
     if (!account) {
@@ -217,7 +219,7 @@ export const multiOwnerPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "updateOwners",
-        client
+        client,
       );
     }
 
@@ -243,7 +245,7 @@ export const multiOwnerPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installMultiOwnerPlugin",
-        client
+        client,
       );
     }
 
@@ -259,7 +261,7 @@ export const multiOwnerPluginActions: <
 
     if (!pluginAddress) {
       throw new Error(
-        "missing MultiOwnerPlugin address for chain " + chain.name
+        "missing MultiOwnerPlugin address for chain " + chain.name,
       );
     }
 
@@ -295,7 +297,7 @@ export const multiOwnerPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "readEip712Domain",
-        client
+        client,
       );
     }
 
@@ -322,7 +324,7 @@ export const multiOwnerPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "readIsValidSignature",
-        client
+        client,
       );
     }
 

@@ -49,7 +49,7 @@ export type AuthIllustrationStyle = NonNullable<
  */
 export type BaseHookMutationArgs<
   TData extends any = void,
-  TVariable extends any = void
+  TVariable extends any = void,
 > = Partial<
   Omit<
     UseMutationOptions<TData, Error, TVariable, unknown>,

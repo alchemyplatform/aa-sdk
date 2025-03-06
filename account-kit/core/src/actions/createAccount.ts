@@ -35,22 +35,22 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
         >
       >
     : TAccount extends "MultiOwnerLightAccount"
-    ? OmitSignerTransportChain<
-        CreateMultiOwnerLightAccountParams<
-          Transport,
-          AlchemySigner,
-          LightAccountVersion<"MultiOwnerLightAccount">
+      ? OmitSignerTransportChain<
+          CreateMultiOwnerLightAccountParams<
+            Transport,
+            AlchemySigner,
+            LightAccountVersion<"MultiOwnerLightAccount">
+          >
         >
-      >
-    : TAccount extends "MultiOwnerModularAccount"
-    ? OmitSignerTransportChain<
-        CreateMultiOwnerModularAccountParams<Transport, AlchemySigner>
-      >
-    : TAccount extends "ModularAccountV2"
-    ? OmitSignerTransportChain<
-        CreateModularAccountV2Params<Transport, AlchemySigner>
-      >
-    : never;
+      : TAccount extends "MultiOwnerModularAccount"
+        ? OmitSignerTransportChain<
+            CreateMultiOwnerModularAccountParams<Transport, AlchemySigner>
+          >
+        : TAccount extends "ModularAccountV2"
+          ? OmitSignerTransportChain<
+              CreateModularAccountV2Params<Transport, AlchemySigner>
+            >
+          : never;
 
 export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
   type: TAccount;
@@ -77,7 +77,7 @@ export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
  */
 export async function createAccount<TAccount extends SupportedAccountTypes>(
   params: CreateAccountParams<TAccount>,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): Promise<SupportedAccounts> {
   const store = config.store;
   const accounts = store.getState().accounts;
@@ -244,25 +244,25 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
 }
 
 export const isModularV2AccountParams = (
-  params: CreateAccountParams<SupportedAccountTypes>
+  params: CreateAccountParams<SupportedAccountTypes>,
 ): params is GetAccountParams<"ModularAccountV2"> => {
   return params.type === "ModularAccountV2";
 };
 
 export const isLightAccountParams = (
-  params: CreateAccountParams<SupportedAccountTypes>
+  params: CreateAccountParams<SupportedAccountTypes>,
 ): params is GetAccountParams<"LightAccount"> => {
   return params.type === "LightAccount";
 };
 
 export const isMultiOwnerLightAccountParams = (
-  params: CreateAccountParams<SupportedAccountTypes>
+  params: CreateAccountParams<SupportedAccountTypes>,
 ): params is GetAccountParams<"MultiOwnerLightAccount"> => {
   return params.type === "MultiOwnerLightAccount";
 };
 
 export const isMultiOwnerModularAccountParams = (
-  params: CreateAccountParams<SupportedAccountTypes>
+  params: CreateAccountParams<SupportedAccountTypes>,
 ): params is GetAccountParams<"MultiOwnerModularAccount"> => {
   return params.type === "MultiOwnerModularAccount";
 };

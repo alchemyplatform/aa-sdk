@@ -54,7 +54,13 @@ export const resources: SidebarItem = {
 };
 
 export const guides: (
-  section?: "react" | "core" | "infra" | "signer" | "contracts" | "react-native"
+  section?:
+    | "react"
+    | "core"
+    | "infra"
+    | "signer"
+    | "contracts"
+    | "react-native",
 ) => SidebarItem[] = (section) => [
   {
     text: "React",
@@ -89,5 +95,11 @@ export const guides: (
 ];
 
 export const sharedSidebar: (
-  section?: "react" | "core" | "infra" | "signer" | "contracts" | "react-native"
+  section?:
+    | "react"
+    | "core"
+    | "infra"
+    | "signer"
+    | "contracts"
+    | "react-native",
 ) => SidebarItem[] = (section) => [...guides(section), resources];

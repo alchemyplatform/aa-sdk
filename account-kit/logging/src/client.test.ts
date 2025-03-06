@@ -13,7 +13,7 @@ type TestSchema = [
     EventData: {
       test: boolean;
     };
-  }
+  },
 ];
 
 describe("Client Logger", () => {
@@ -111,7 +111,7 @@ describe("Client Logger", () => {
         "timestamp": Any<String>,
         "type": "track",
       }
-    `
+    `,
     );
   });
 });

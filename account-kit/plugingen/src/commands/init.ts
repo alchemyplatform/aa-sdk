@@ -35,7 +35,7 @@ export async function init(options: InitOptions = {}) {
   const configPath = await findConfig(options);
   if (configPath) {
     logger.info(
-      `Config already exists at ${pc.gray(relative(process.cwd(), configPath))}`
+      `Config already exists at ${pc.gray(relative(process.cwd(), configPath))}`,
     );
     return configPath;
   }
@@ -86,7 +86,7 @@ export async function init(options: InitOptions = {}) {
   await fs.writeFile(outPath, formatted);
   spinner.succeed();
   logger.success(
-    `Config created at ${pc.gray(relative(process.cwd(), outPath))}`
+    `Config created at ${pc.gray(relative(process.cwd(), outPath))}`,
   );
 
   return outPath;

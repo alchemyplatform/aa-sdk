@@ -24,7 +24,7 @@ import { createLightAccountClient } from "./client.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 const versions = Object.keys(
-  AccountVersionRegistry.LightAccount
+  AccountVersionRegistry.LightAccount,
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
@@ -36,7 +36,7 @@ describe("Light Account Tests", () => {
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner
+    accounts.fundedAccountOwner,
   );
 
   it.each(versions)(
@@ -51,18 +51,18 @@ describe("Light Account Tests", () => {
         case "v1.0.2":
         case "v1.1.0":
           expect(account.getDummySignature()).toBe(
-            "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
+            "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
           );
           break;
         case "v2.0.0":
           expect(account.getDummySignature()).toBe(
-            "0x00fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
+            "0x00fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
           );
           break;
         default:
           throw new Error(`Unknown version ${version}`);
       }
-    }
+    },
   );
 
   it.each(versions)("should correctly sign the message", async (version) => {
@@ -77,7 +77,7 @@ describe("Light Account Tests", () => {
     switch (version) {
       case "v1.0.2":
         await expect(account.signMessage({ message })).rejects.toThrowError(
-          "LightAccount v1.0.2 doesn't support 1271"
+          "LightAccount v1.0.2 doesn't support 1271",
         );
         break;
       case "v1.0.1":
@@ -94,7 +94,7 @@ describe("Light Account Tests", () => {
               address: account.address,
               message,
               signature,
-            })
+            }),
           ).toBe(true);
         }
         break;
@@ -120,7 +120,7 @@ describe("Light Account Tests", () => {
     switch (version) {
       case "v1.0.2":
         await expect(account.signTypedData(typedData)).rejects.toThrowError(
-          "Version v1.0.2 of LightAccount doesn't support 1271"
+          "Version v1.0.2 of LightAccount doesn't support 1271",
         );
         break;
       case "v1.1.0":
@@ -135,7 +135,7 @@ describe("Light Account Tests", () => {
               address: account.address,
               signature,
               ...typedData,
-            })
+            }),
           ).toBe(true);
         }
         break;
@@ -153,12 +153,12 @@ describe("Light Account Tests", () => {
       });
       expect(
         account.encodeTransferOwnership(
-          "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
-        )
+          "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        ),
       ).toBe(
-        "0xf2fde38b000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+        "0xf2fde38b000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       );
-    }
+    },
   );
 
   it.each(versions)(
@@ -177,15 +177,15 @@ describe("Light Account Tests", () => {
       ] satisfies BatchUserOperationCallData;
 
       expect(await provider.account.encodeBatchExecute(data)).toBe(
-        "0x47e1da2a000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"
+        "0x47e1da2a000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000",
       );
-    }
+    },
   );
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ signer });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"'
+      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
     );
   });
 
@@ -249,7 +249,7 @@ describe("Light Account Tests", () => {
       const txnHash = provider.waitForUserOperationTransaction(result);
 
       await expect(txnHash).resolves.not.toThrowError();
-    }
+    },
   );
 
   it(
@@ -275,7 +275,7 @@ describe("Light Account Tests", () => {
       const txnHash = provider.waitForUserOperationTransaction(result);
 
       await expect(txnHash).resolves.not.toThrowError();
-    }
+    },
   );
 
   it(
@@ -300,13 +300,13 @@ describe("Light Account Tests", () => {
         } as UserOperationOverrides<"0.6.0">,
       };
       const uoStruct = (await provider.buildUserOperation(
-        toSend
+        toSend,
       )) as UserOperationStruct<"0.6.0">;
 
       expect(uoStruct.paymasterAndData).toBe("0x");
 
       await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
-    }
+    },
   );
 
   it(
@@ -331,20 +331,19 @@ describe("Light Account Tests", () => {
         } as UserOperationOverrides<"0.6.0">,
       };
       const uoStruct = (await provider.buildUserOperation(
-        toSend
+        toSend,
       )) as UserOperationStruct<"0.6.0">;
 
       expect(uoStruct.paymasterAndData).toBe("0x");
 
       await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
-    }
+    },
   );
 
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
-    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
-      generatePrivateKey()
-    );
+    const throwawaySigner =
+      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
     const throwawayClient = await givenConnectedProvider({
       signer: throwawaySigner,
     });
@@ -356,9 +355,8 @@ describe("Light Account Tests", () => {
     });
 
     // create new signer and transfer ownership
-    const newOwner = LocalAccountSigner.privateKeyToAccountSigner(
-      generatePrivateKey()
-    );
+    const newOwner =
+      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 
     await throwawayClient.transferOwnership({
       newOwner,
@@ -378,9 +376,8 @@ describe("Light Account Tests", () => {
 
   it("should upgrade a deployed light account to msca successfully", async () => {
     // create a owner signer to create the account
-    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
-      generatePrivateKey()
-    );
+    const throwawaySigner =
+      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
     const throwawayClient = await givenConnectedProvider({
       signer: throwawaySigner,
     });
@@ -399,7 +396,7 @@ describe("Light Account Tests", () => {
       {
         account: throwawayClient.account,
         multiOwnerPluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-      }
+      },
     );
 
     await throwawayClient.upgradeAccount({
@@ -450,7 +447,7 @@ describe("Light Account Tests", () => {
             transport: custom(instance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
-        ? erc7677Middleware()
-        : {}),
+          ? erc7677Middleware()
+          : {}),
     });
 });

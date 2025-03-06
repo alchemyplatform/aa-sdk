@@ -37,7 +37,7 @@ export const useUser = (): UseUserResult => {
   const user = useSyncExternalStore(
     watchUser(config),
     () => getUser(config) ?? null,
-    () => getUser(config) ?? null
+    () => getUser(config) ?? null,
   );
 
   const eoaUser = useMemo(() => {

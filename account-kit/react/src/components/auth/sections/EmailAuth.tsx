@@ -125,7 +125,7 @@ export const EmailAuth = memo(
                   type="submit"
                   variant="primary"
                   disabled={Boolean(
-                    isPending || !canSubmit || isSubmitting || !email
+                    isPending || !canSubmit || isSubmitting || !email,
                   )}
                 >
                   {buttonLabel}
@@ -136,5 +136,5 @@ export const EmailAuth = memo(
         </div>
       </form>
     );
-  }
+  },
 );

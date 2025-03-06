@@ -22,9 +22,9 @@ describe("Utils Tests", () => {
         signature:
           "0xd16f93b584fbfdc03a5ee85914a1f29aa35c44fea5144c387ee1040a3c1678252bf323b7e9c3e9b4dfd91cca841fc522f4d3160a1e803f2bf14eb5fa037aae4a1b",
         verificationGasLimit: "0x114c2",
-      })
+      }),
     ).toMatchInlineSnapshot(
-      '"0xbb5560c1a3983429a6cdb244fa532fb4f2cf0de8ba9ccbf257bff93d069c76a3"'
+      '"0xbb5560c1a3983429a6cdb244fa532fb4f2cf0de8ba9ccbf257bff93d069c76a3"',
     );
   });
 
@@ -33,7 +33,7 @@ describe("Utils Tests", () => {
       const index = stringToIndex("alice@example.com");
 
       expect(index).toEqual(
-        53219281434065493725260108619161294016101536485294536107629387514619165176826n
+        53219281434065493725260108619161294016101536485294536107629387514619165176826n,
       );
     });
   });

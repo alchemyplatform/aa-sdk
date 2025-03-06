@@ -36,10 +36,11 @@ export async function estimateUserOperationGas<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>
+  args: SendUserOperationParameters<TAccount, TContext>,
 ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>> {
   const { account = client.account, overrides } = args;
   if (!account) {
@@ -50,7 +51,7 @@ export async function estimateUserOperationGas<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "estimateUserOperationGas",
-      client
+      client,
     );
   }
 
@@ -59,7 +60,7 @@ export async function estimateUserOperationGas<
     return client.estimateUserOperationGas(
       request,
       account.getEntryPoint().address,
-      overrides?.stateOverride
+      overrides?.stateOverride,
     );
   });
 }

@@ -56,7 +56,7 @@ export type AlchemyAccountsProviderProps = {
  * @returns {React.JSX.Element} The element to wrap your application in for Alchemy Accounts context.
  */
 export const AlchemyAccountProvider = (
-  props: React.PropsWithChildren<AlchemyAccountsProviderProps>
+  props: React.PropsWithChildren<AlchemyAccountsProviderProps>,
 ) => {
   const { config, queryClient, children } = props;
 
@@ -65,7 +65,7 @@ export const AlchemyAccountProvider = (
       config,
       queryClient,
     }),
-    [config, queryClient]
+    [config, queryClient],
   );
 
   return (

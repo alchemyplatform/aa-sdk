@@ -12,9 +12,9 @@ describe("BigInt utility", () => {
 
     it("should fail to multiply a big int and a float with too much precision", async () => {
       expect(() =>
-        bigIntMultiply(10n, 0.53958491842948789, RoundingMode.ROUND_UP)
+        bigIntMultiply(10n, 0.53958491842948789, RoundingMode.ROUND_UP),
       ).toThrowError(
-        "bigIntMultiply requires a multiplier validated number as the second argument"
+        "bigIntMultiply requires a multiplier validated number as the second argument",
       );
     });
 

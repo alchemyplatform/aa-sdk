@@ -13,7 +13,7 @@ import {
  * @returns {AlchemyAccountsConfig} An object of type AlchemyAccountsConfig containing the configured properties
  */
 export const createConfig = (
-  params: BaseCreateConfigProps
+  params: BaseCreateConfigProps,
 ): AlchemyAccountsConfig => {
   const createSigner = (config: ClientStoreConfig) => RNAlchemySigner(config);
 

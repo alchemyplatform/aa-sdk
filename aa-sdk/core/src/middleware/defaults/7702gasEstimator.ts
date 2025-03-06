@@ -39,7 +39,7 @@ import { defaultGasEstimator } from "./gasEstimator.js";
  * @returns {Function} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
  */
 export const default7702GasEstimator: (
-  gasEstimator?: ClientMiddlewareFn
+  gasEstimator?: ClientMiddlewareFn,
 ) => ClientMiddlewareFn =
   (gasEstimator?: ClientMiddlewareFn) => async (struct, params) => {
     const gasEstimator_ = gasEstimator ?? defaultGasEstimator(params.client);
@@ -52,7 +52,7 @@ export const default7702GasEstimator: (
     const entryPoint = account.getEntryPoint();
     if (entryPoint.version !== "0.7.0") {
       throw new Error(
-        "This middleware is only compatible with EntryPoint v0.7.0"
+        "This middleware is only compatible with EntryPoint v0.7.0",
       );
     }
 

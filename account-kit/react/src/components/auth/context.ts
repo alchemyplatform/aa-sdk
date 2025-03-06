@@ -35,7 +35,7 @@ export type AuthStep =
   | { type: "pick_eoa" };
 
 type AuthContextType<
-  TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined
+  TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined,
 > = TType extends undefined
   ? {
       authStep: AuthStep;
@@ -49,11 +49,11 @@ type AuthContextType<
     };
 
 export const AuthModalContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function useAuthContext<
-  TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined
+  TType extends AuthStep["type"] | undefined = AuthStep["type"] | undefined,
 >(type?: TType): AuthContextType<TType>;
 
 /**
@@ -70,13 +70,13 @@ export function useAuthContext<
  * @returns {AuthContextType} The authentication context for the current component
  * @throws Will throw an error if the hook is not used within an `AuthModalProvider` or if the current auth step type does not match the expected type
  */ export function useAuthContext(
-  type?: AuthStep["type"] | undefined
+  type?: AuthStep["type"] | undefined,
 ): AuthContextType {
   const context = useOptionalAuthContext();
 
   if (!context) {
     throw new Error(
-      "useAuthModalContext must be used within a AuthModalProvider"
+      "useAuthModalContext must be used within a AuthModalProvider",
     );
   }
 

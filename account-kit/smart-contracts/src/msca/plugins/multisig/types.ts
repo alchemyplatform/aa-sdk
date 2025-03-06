@@ -28,7 +28,8 @@ export type SignMultisigUserOperationParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   userOperationRequest: UserOperationRequest<TEntryPointVersion>;
   signatures: Signature[];
@@ -39,7 +40,8 @@ export type ProposeUserOperationResult<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   request: UserOperationRequest<TEntryPointVersion>;
   aggregatedSignature: Hex;

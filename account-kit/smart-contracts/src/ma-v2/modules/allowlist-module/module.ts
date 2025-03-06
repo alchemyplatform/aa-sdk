@@ -15,7 +15,7 @@ export const AllowlistModule = {
         selectors: Array<Hex>;
       }>;
     },
-    address: Address
+    address: Address,
   ): {
     hookConfig: HookConfig;
     initData: Hex;
@@ -67,9 +67,9 @@ export const AllowlistModule = {
               input.hasERC20SpendLimit,
               input.erc20SpendLimit,
               input.selectors,
-            ] as const
+            ] as const,
         ),
-      ]
+      ],
     );
   },
 
@@ -108,9 +108,9 @@ export const AllowlistModule = {
               input.hasERC20SpendLimit,
               input.erc20SpendLimit,
               input.selectors,
-            ] as const
+            ] as const,
         ),
-      ]
+      ],
     );
   },
 };

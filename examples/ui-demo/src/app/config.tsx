@@ -123,5 +123,5 @@ export const alchemyConfig = () =>
           />
         ),
       },
-    }
+    },
   );

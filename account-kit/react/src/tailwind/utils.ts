@@ -13,7 +13,7 @@ import type {
  */
 export const createColorSet = (
   light: string,
-  dark: string
+  dark: string,
 ): ColorVariantRecord => ({
   light,
   dark,
@@ -29,7 +29,7 @@ export const createColorSet = (
  */
 export const apply = <S extends Record<string, any>>(
   source: S,
-  target?: DeepPartial<S>
+  target?: DeepPartial<S>,
 ): S => {
   if (!target) return source;
 

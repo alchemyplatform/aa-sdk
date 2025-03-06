@@ -10,7 +10,7 @@ cli
   .command("generate", "Generate documentation")
   .option(
     "--in <path>",
-    "[string] path to source file containing public exports"
+    "[string] path to source file containing public exports",
   )
   .option("--out <path>", "[string] path to output directory")
   .example((name) => `${name} generate --in src/index.ts --out docs`)

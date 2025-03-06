@@ -29,7 +29,7 @@ import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = (Pick<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   "transport" | "chain" | "accountAddress"
@@ -52,9 +52,9 @@ export type CreateModularAccountV2Params<
 
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  config: CreateModularAccountV2Params<TTransport, TSigner>
+  config: CreateModularAccountV2Params<TTransport, TSigner>,
 ): Promise<ModularAccountV2<TSigner>>;
 
 /**
@@ -90,7 +90,7 @@ export async function createModularAccountV2<
  * @returns {Promise<ModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
  */
 export async function createModularAccountV2(
-  config: CreateModularAccountV2Params
+  config: CreateModularAccountV2Params,
 ): Promise<ModularAccountV2> {
   const {
     transport,

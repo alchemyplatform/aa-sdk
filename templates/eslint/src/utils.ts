@@ -4,11 +4,11 @@ import path from "node:path";
 export function getExportedFilePath(baseDir: string, filePath: string) {
   const exportedFilePathTs = path.resolve(
     path.dirname(baseDir),
-    filePath.replace(".js", ".ts")
+    filePath.replace(".js", ".ts"),
   );
   const exportedFilePathTsx = path.resolve(
     path.dirname(baseDir),
-    filePath.replace(".js", ".tsx")
+    filePath.replace(".js", ".tsx"),
   );
 
   if (

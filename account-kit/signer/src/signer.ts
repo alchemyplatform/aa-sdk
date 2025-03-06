@@ -179,7 +179,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
  * as the input whose values are the values of the query params.
  */
 function getAndRemoveQueryParams<T extends Record<string, string>>(
-  keys: T
+  keys: T,
 ): { [K in keyof T]: string | undefined } {
   const url = new URL(window.location.href);
   const result: Record<string, string | undefined> = {};

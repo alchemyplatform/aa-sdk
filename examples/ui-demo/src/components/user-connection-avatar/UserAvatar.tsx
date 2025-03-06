@@ -12,7 +12,7 @@ const UserAvatar = ({ address, primaryColor }: UserAvatarProps) => {
   const avatarColors = useMemo(() => {
     return shuffleColorsDeterministically(
       [primaryColor, ...SUB_COLORS],
-      address
+      address,
     );
   }, [address, primaryColor]);
 
@@ -29,10 +29,10 @@ const shuffleColorsDeterministically = (colors: string[], seed: string) => {
   }
   const hash = Array.from(seed).reduce(
     (acc, char) => acc + char.charCodeAt(0),
-    0
+    0,
   );
   return [...colors].sort(
-    (a, b) => (hash % a.charCodeAt(0)) - (hash % b.charCodeAt(0))
+    (a, b) => (hash % a.charCodeAt(0)) - (hash % b.charCodeAt(0)),
   );
 };
 

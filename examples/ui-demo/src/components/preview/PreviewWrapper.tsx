@@ -14,7 +14,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
       <div
         className={cn(
           "flex flex-col flex-1 overflow-y-auto scrollbar-none relative lg:p-6",
-          showCode && "hidden"
+          showCode && "hidden",
         )}
       >
         <div className="flex flex-1 justify-center items-start lg:items-center ">

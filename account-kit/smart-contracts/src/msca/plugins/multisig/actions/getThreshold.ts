@@ -14,10 +14,10 @@ export async function getThreshold<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+  args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
 ) {
   const account = args.account ?? client.account;
   if (!account) {
@@ -30,7 +30,7 @@ export async function getThreshold<
 
   const [, threshold] = await MultisigPlugin.getContract(
     client,
-    args.pluginAddress
+    args.pluginAddress,
   ).read.ownershipInfoOf([account.address]);
 
   return threshold === 0n ? account.getLocalThreshold() : threshold;

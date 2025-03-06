@@ -8,7 +8,7 @@ export function reExportFixerEslint(
   fixer: Rule.RuleFixer,
   node: Rule.Node,
   context: Rule.RuleContext,
-  fixBatchSize = 10
+  fixBatchSize = 10,
 ) {
   if (fixBatchSize > 0 && numFixes > fixBatchSize) {
     // TODO: add this back to the configuration
@@ -38,5 +38,5 @@ export function reExportFixerEslint(
 }
 
 const getCommentSync = createSyncFn(require.resolve("./openai-worker.js")) as (
-  code: string
+  code: string,
 ) => string;

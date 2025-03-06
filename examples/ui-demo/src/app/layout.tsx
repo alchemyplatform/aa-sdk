@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   const initialState = cookieToInitialState(
     alchemyConfig(),
-    headers().get("cookie") ?? undefined
+    headers().get("cookie") ?? undefined,
   );
 
   const initialConfig = cookieToInitialConfig(headers().get("cookie"));

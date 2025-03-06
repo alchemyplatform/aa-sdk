@@ -53,49 +53,49 @@ export type UserOperationFeeOptionsField = z.input<
 >;
 
 export type UserOperationFeeOptions<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = TEntryPointVersion extends "0.6.0"
   ? z.input<typeof UserOperationFeeOptionsSchema_v6>
   : TEntryPointVersion extends "0.7.0"
-  ? z.input<typeof UserOperationFeeOptionsSchema_v7>
-  : z.input<typeof UserOperationFeeOptionsSchema>;
+    ? z.input<typeof UserOperationFeeOptionsSchema_v7>
+    : z.input<typeof UserOperationFeeOptionsSchema>;
 
 export type UserOperationOverridesParameter<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
-  Required extends boolean = false
+  Required extends boolean = false,
 > = Required extends true
   ? { overrides: UserOperationOverrides<TEntryPointVersion> }
   : { overrides?: UserOperationOverrides<TEntryPointVersion> };
 
 // [!region UserOperationPaymasterOverrides]
 export type UserOperationPaymasterOverrides<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = TEntryPointVersion extends "0.6.0"
   ? {
       // paymasterData overrides to bypass paymaster middleware
       paymasterAndData: Hex;
     }
   : TEntryPointVersion extends "0.7.0"
-  ? {
-      // paymasterData overrides to bypass paymaster middleware
-      // if set to '0x', all paymaster related fields are omitted from the user op request
-      paymasterData: Hex;
-      paymaster: Address;
-      paymasterVerificationGasLimit:
-        | NoUndefined<
-            UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
-          >
-        | Multiplier;
-      paymasterPostOpGasLimit:
-        | NoUndefined<UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]>
-        | Multiplier;
-    }
-  : {};
+    ? {
+        // paymasterData overrides to bypass paymaster middleware
+        // if set to '0x', all paymaster related fields are omitted from the user op request
+        paymasterData: Hex;
+        paymaster: Address;
+        paymasterVerificationGasLimit:
+          | NoUndefined<
+              UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
+            >
+          | Multiplier;
+        paymasterPostOpGasLimit:
+          | NoUndefined<UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]>
+          | Multiplier;
+      }
+    : {};
 // [!endregion UserOperationOverridesParameter]
 
 // [!region UserOperationOverrides]
 export type UserOperationOverrides<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = Partial<
   {
     callGasLimit:
@@ -215,19 +215,19 @@ export type Eip7702ExtendedFields = {
 // [!region UserOperationRequest]
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export type UserOperationRequest<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = (TEntryPointVersion extends "0.6.0"
   ? UserOperationRequest_v6
   : TEntryPointVersion extends "0.7.0"
-  ? UserOperationRequest_v7
-  : never) &
+    ? UserOperationRequest_v7
+    : never) &
   Eip7702ExtendedFields;
 
 // [!endregion UserOperationRequest]
 
 // [!region UserOperationEstimateGasResponse]
 export interface UserOperationEstimateGasResponse<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > {
   /* Gas overhead of this UserOperation */
   preVerificationGas: BigNumberish;
@@ -248,7 +248,7 @@ export interface UserOperationEstimateGasResponse<
 
 // [!region UserOperationResponse]
 export interface UserOperationResponse<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > {
   /* the User Operation */
   userOperation: UserOperationRequest<TEntryPointVersion>;
@@ -358,11 +358,11 @@ export interface UserOperationStruct_v7 {
 
 // [!region UserOperationStruct]
 export type UserOperationStruct<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = (TEntryPointVersion extends "0.6.0"
   ? UserOperationStruct_v6
   : TEntryPointVersion extends "0.7.0"
-  ? UserOperationStruct_v7
-  : never) &
+    ? UserOperationStruct_v7
+    : never) &
   Eip7702ExtendedFields;
 // [!endregion UserOperationStruct]

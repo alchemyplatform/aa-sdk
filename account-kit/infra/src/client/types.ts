@@ -27,7 +27,7 @@ export type AlchemyRpcSchema = [
     Method: "alchemy_requestGasAndPaymasterAndData";
     Parameters: RequestGasAndPaymasterAndDataRequest;
     ReturnType: RequestGasAndPaymasterAndDataResponse;
-  }
+  },
 ];
 
 export type ClientWithAlchemyMethods = BundlerClient<AlchemyTransport> & {

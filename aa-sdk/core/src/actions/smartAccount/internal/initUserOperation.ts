@@ -36,12 +36,13 @@ export async function _initUserOperation<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args:
     | SendUserOperationParameters<TAccount, TContext, TEntryPointVersion>
-    | BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
+    | BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>,
 ): Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>> {
   const { account = client.account, uo, overrides } = args;
   if (!account) {
@@ -57,8 +58,8 @@ export async function _initUserOperation<
   const callData = Array.isArray(uo)
     ? account.encodeBatchExecute(uo)
     : typeof uo === "string"
-    ? uo
-    : account.encodeExecute(uo);
+      ? uo
+      : account.encodeExecute(uo);
 
   const signature = account.getDummySignature();
 
@@ -76,11 +77,11 @@ export async function _initUserOperation<
       : ({
           factory: conditionalReturn(
             account.isAccountDeployed().then((deployed) => !deployed),
-            account.getFactoryAddress
+            account.getFactoryAddress,
           ),
           factoryData: conditionalReturn(
             account.isAccountDeployed().then((deployed) => !deployed),
-            account.getFactoryData
+            account.getFactoryData,
           ),
           sender: account.address,
           nonce,

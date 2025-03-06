@@ -86,7 +86,7 @@ export default function RootLayout({
   const initialState = cookieToInitialState(
     // the config here is just used to compute the initial state
     config(),
-    headers().get("cookie") ?? undefined
+    headers().get("cookie") ?? undefined,
   );
 
   return (
@@ -114,7 +114,7 @@ import { PropsWithChildren, Suspense } from "react";
 import { config, queryClient } from "./config";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
 ) => {
   const ref = useRef<AlchemyAccountsConfigWithUI>();
   if (!ref.current) {
