@@ -3,25 +3,23 @@ title: Getting started with Account Kit on bare React Native
 description: A guide on integrating Account Kit within a Bare React Native application
 ---
 
-:::warning
-To use Account Kit in your React Native application, ensure you are on React Native version 0.76 or higher.
+import Snippet from "../../../shared/react-native/prerequisites.mdx";
+
+:::info
+This guide assumes you already have a Bare React Native app and want to integrate Account Kit. If you are starting a project from scratch, we recommend following the [Expo guide](/react-native/getting-started/getting-started-expo) instead.
 :::
 
-## Getting Started on a Bare React Native project
+# Getting Started on a Bare React Native project
 
 We would go through the steps to get your environment setup for using Account Kit within a Bare React Native application.
 
-### Prerequisites
+<Snippet />
 
-To use Account Kit in your React Native project, ensure your project is setup with React Native version 0.76 or higher.
-
-Please follow the [React Native Upgrade Guide](https://reactnative.dev/docs/upgrading) if you need to upgrade your project.
-
-### Set up shims
+## Set up shims
 
 Once we've got our React Native project setup and running, we need to setup a few shims so we can use crypto libraries in React Native.
 
-#### Install shim dependencies
+### Install shim dependencies
 
 :::code-group
 
@@ -35,7 +33,7 @@ yarn add node-libs-react-native crypto-browserify stream-browserify react-native
 
 :::
 
-#### Register shim modules in Metro
+### Register shim modules in Metro
 
 Create or edit your `metro.config.js` file in the root of your project so that it includes the following:
 
@@ -60,7 +58,7 @@ const config = {
 module.exports = mergeConfig(defaultConfig, config);
 ```
 
-#### Register global shims
+### Register global shims
 
 Import the following packages at the top of your `index.js` file so that libraries that depend on globals like `crypto` have access to them.
 
@@ -71,63 +69,39 @@ import "react-native-get-random-values";
 // rest of index.js
 ```
 
-### Install Account Kit and build!
+## Install Account Kit and build!
 
 That's it! Now you can install the packages you want from Account Kit and start building your React Native Account Abstraction app.
 
 :::code-group
 
 ```bash [npm]
-npm install -s @account-kit/smart-contracts @account-kit/infra
+npm install -s @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
 ```
 
 ```bash [yarn]
-yarn add @account-kit/smart-contracts @account-kit/infra
+yarn add @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
 ```
 
 :::
 
-### Install the React Native Signer Package
-
-:::warning
-CAUTION: The React Native Signer package is currently in Alpha and is only supported on Android.
-:::
-
-:::info
-The Signer package requires you to be on React Native's new architecture. For information on how to enable it in your project, check the [documentation](https://reactnative.dev/architecture/landing-page).
-:::
-
-#### Install the Signer package
-
-:::code-group
-
-```bash [npm]
-npm install @account-kit/react-native-signer
-```
-
-```bash [yarn]
-yarn add @account-kit/react-native-signer
-```
-
-:::
-
-#### Add supporting dependencies
+### Add supporting dependencies
 
 To ensure the Signer package works correctly, you'll need to add the following dependencies to your project:
 
 :::code-group
 
 ```bash [npm]
-npm install @account-kit/signer react-native-mmkv zustand abitype
+npm install @account-kit/signer react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 ```bash [yarn]
-yarn add @account-kit/signer react-native-mmkv zustand abitype
+yarn add @account-kit/signer react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 :::
 
-### Build and run your project
+## Build and run your project
 
 Now that we've got everything setup, we can build our project!
 

@@ -7,7 +7,7 @@ description: Overview of the useDropAndReplaceUserOperation method
 
 # useDropAndReplaceUserOperation
 
-Custom hook that handles the drop and replace user operation for a given client and mutation arguments.
+Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts) that handles the drop and replace user operation for a given client and mutation arguments.
 
 ## Import
 
@@ -17,7 +17,8 @@ import { useDropAndReplaceUserOperation } from "@account-kit/react";
 
 ## Usage
 
-```tsx
+```tsx twoslash
+import React from "react";
 import {
   useDropAndReplaceUserOperation,
   useSendUserOperation,
@@ -25,9 +26,8 @@ import {
 } from "@account-kit/react";
 
 export function ComponentWithDropAndReplaceUO() {
-  const { client } = useSmartAccountClient({
-    type: "MultiOwnerModularAccount",
-  });
+  const { client } = useSmartAccountClient({});
+
   const { sendUserOperationAsync, isSendingUserOperation } =
     useSendUserOperation({
       client,
@@ -78,9 +78,9 @@ export function ComponentWithDropAndReplaceUO() {
 ### config
 
 `UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>`
-The configuration parameters including the client and other mutation arguments
+The configuration parameters including the client and other mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L23)
 
 ## Returns
 
 `UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount>`
-The result containing the mutation function, result data, loading state, and any error
+The result containing the mutation function, result data, loading state, and any error. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L30)

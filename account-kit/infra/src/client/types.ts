@@ -6,6 +6,8 @@ import {
 import type {
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
+  RequestGasAndPaymasterAndDataRequest,
+  RequestGasAndPaymasterAndDataResponse,
 } from "../actions/types";
 import type { AlchemyTransport } from "../alchemyTransport";
 
@@ -20,7 +22,12 @@ export type AlchemyRpcSchema = [
     Parameters: [];
     ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
   },
-  ...Erc7677RpcSchema<{ policyId: string }>
+  ...Erc7677RpcSchema<{ policyId: string }>,
+  {
+    Method: "alchemy_requestGasAndPaymasterAndData";
+    Parameters: RequestGasAndPaymasterAndDataRequest;
+    ReturnType: RequestGasAndPaymasterAndDataResponse;
+  }
 ];
 
 export type ClientWithAlchemyMethods = BundlerClient<AlchemyTransport> & {
@@ -35,5 +42,10 @@ export type ClientWithAlchemyMethods = BundlerClient<AlchemyTransport> & {
         method: "rundler_maxPriorityFeePerGas";
         params: [];
       }): Promise<UserOperationRequest["maxPriorityFeePerGas"]>;
+
+      request(args: {
+        method: "alchemy_requestGasAndPaymasterAndData";
+        params: RequestGasAndPaymasterAndDataRequest;
+      }): Promise<RequestGasAndPaymasterAndDataResponse>;
     }["request"];
 };

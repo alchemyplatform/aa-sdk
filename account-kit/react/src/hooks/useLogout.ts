@@ -15,10 +15,13 @@ export type UseLogoutResult = {
 };
 
 /**
- * Provides a hook to log out a user, disconnecting the signer and triggering the disconnectAsync function.
+ * Provides a [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useLogout.ts) to log out a user, disconnecting the signer and triggering the disconnectAsync function.
+ *
+ * @param {UseLogoutMutationArgs} [mutationArgs] optional arguments to customize the mutation behavior
+ * @returns {UseLogoutResult} an object containing the logout function, a boolean indicating if logout is in progress, and any error encountered during logout
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useLogout } from "@account-kit/react";
  *
  * const { logout, isLoggingOut, error } = useLogout({
@@ -29,9 +32,6 @@ export type UseLogoutResult = {
  *  onError: (error) => console.error(error),
  * });
  * ```
- *
- * @param {UseLogoutMutationArgs} [mutationArgs] optional arguments to customize the mutation behavior
- * @returns {UseLogoutResult} an object containing the logout function, a boolean indicating if logout is in progress, and any error encountered during logout
  */
 export function useLogout(
   mutationArgs?: UseLogoutMutationArgs

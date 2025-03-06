@@ -37,7 +37,7 @@ const client = createSmartAccountClient({
 
 ## ERC-7677 Paymaster
 
-If your pamyaster supports the ERC-7677 standard, you can use the [`erc7677Middleware`](/reference/aa-sdk/core/functions/erc7677Middleware) to interact with it.
+If your paymaster supports the ERC-7677 standard, you can use the [`erc7677Middleware`](/reference/aa-sdk/core/functions/erc7677Middleware) to interact with it.
 
 ### Usage with single RPC provider
 
@@ -59,7 +59,7 @@ const client = createSmartAccountClient({
 
 ### Usage with multiple RPC providers
 
-If you're using a separate RPC provider for your Paymaster, you can can use the (`split`)[/third-party/bundlers#splitting-bundler-traffic-and-node-rpc-traffic] transport to route your ERC-7677 traffic to a different provider:
+If you're using a separate RPC provider for your Paymaster, you can can use the [`split`](/third-party/bundlers#splitting-bundler-traffic-and-node-rpc-traffic) transport to route your ERC-7677 traffic to a different provider:
 
 ```ts twoslash
 import {
@@ -90,9 +90,9 @@ const client = createSmartAccountClient({
 });
 ```
 
-## ERC20 Gas Sponsorship
+## ERC-20 Gas Sponsorship
 
-We are working on building support for an ERC20 paymaster!
+We are working on building support for an ERC-20 paymaster!
 
 To allow users to pay for gas permissionlessly using USDC, you can use [Circle Paymaster](https://developers.circle.com/stablecoins/paymaster-overview). Here's an example using Circle Paymaster with the Alchemy SDK:
 

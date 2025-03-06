@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Features
+
+- playwright in ui-demo ([#1359](https://github.com/alchemyplatform/aa-sdk/issues/1359)) ([f7c7911](https://github.com/alchemyplatform/aa-sdk/commit/f7c7911cdc1f690db4107e21956469955c990bc8))
+
+# [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
+
+### Features
+
+- eip-7702 support in aa-sdk/core, and sma7702 support in account-kit/smart-contracts ([#1287](https://github.com/alchemyplatform/aa-sdk/issues/1287)) ([8d5501f](https://github.com/alchemyplatform/aa-sdk/commit/8d5501f05e898f2711ef382524813a40f0edc999)), closes [#1269](https://github.com/alchemyplatform/aa-sdk/issues/1269) [#1309](https://github.com/alchemyplatform/aa-sdk/issues/1309) [#1314](https://github.com/alchemyplatform/aa-sdk/issues/1314) [#1328](https://github.com/alchemyplatform/aa-sdk/issues/1328) [#1329](https://github.com/alchemyplatform/aa-sdk/issues/1329) [#1335](https://github.com/alchemyplatform/aa-sdk/issues/1335) [#1339](https://github.com/alchemyplatform/aa-sdk/issues/1339) [#1338](https://github.com/alchemyplatform/aa-sdk/issues/1338)
+
+# [4.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.11.0...v4.12.0) (2025-02-04)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.10.0...v4.11.0) (2025-01-29)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.9.0...v4.10.0) (2025-01-28)
+
+### Bug Fixes
+
+- add logoUrlDark for auth0 provider logos ([#1298](https://github.com/alchemyplatform/aa-sdk/issues/1298)) ([80a0132](https://github.com/alchemyplatform/aa-sdk/commit/80a0132916cd1c89c8c622f5dfafca0b7a1a9508))
+- otp new styles and flow ([#1250](https://github.com/alchemyplatform/aa-sdk/issues/1250)) ([7295249](https://github.com/alchemyplatform/aa-sdk/commit/72952498d91056fdf4086557ed3963c18a5d5879))
+
+### Features
+
+- adding delay after OTP code validation ([#1288](https://github.com/alchemyplatform/aa-sdk/issues/1288)) ([afc60ad](https://github.com/alchemyplatform/aa-sdk/commit/afc60ad795c04e30d4728d3d9cc1fb428d722e7a))
+- enable discord social auth ([#1281](https://github.com/alchemyplatform/aa-sdk/issues/1281)) ([1772da9](https://github.com/alchemyplatform/aa-sdk/commit/1772da972f2cc78dde3786fb9ebe3ec19f01e78b))
+- enable twitter social auth ([#1230](https://github.com/alchemyplatform/aa-sdk/issues/1230)) ([f4e8533](https://github.com/alchemyplatform/aa-sdk/commit/f4e8533ae0d79e22c939b4fa84da6801f6626bec))
+
 # [4.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.8.0...v4.9.0) (2025-01-13)
 
 **Note:** Version bump only for package @account-kit/react

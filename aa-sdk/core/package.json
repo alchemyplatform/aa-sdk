@@ -1,7 +1,7 @@
 {
   "name": "@aa-sdk/core",
   "license": "MIT",
-  "version": "4.9.0",
+  "version": "4.14.0",
   "description": "viem based SDK that enables interactions with ERC-4337 Smart Accounts. ABIs are based off the definitions generated in @account-abstraction/contracts",
   "author": "Alchemy",
   "type": "module",
@@ -55,7 +55,7 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "viem": "^2.20.0"
+    "viem": "^2.22.6"
   },
   "repository": {
     "type": "git",

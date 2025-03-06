@@ -62,7 +62,7 @@ export type SmartAccountClientRpcSchema = [
   ...PublicRpcSchema
 ];
 
-//#region SmartAccountClientActions
+// [!region SmartAccountClientActions]
 export type SmartAccountClientActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
@@ -74,9 +74,9 @@ export type SmartAccountClientActions<
 > = BaseSmartAccountClientActions<chain, account, context> &
   BundlerActions &
   PublicActions;
-//#endregion SmartAccountClientActions
+// [!endregion SmartAccountClientActions]
 
-//#region SmartAccountClient
+// [!region SmartAccountClient]
 export type SmartAccountClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
@@ -97,7 +97,7 @@ export type SmartAccountClient<
     actions & SmartAccountClientActions<chain, account, context>
   >
 >;
-//#endregion SmartAccountClient
+// [!endregion SmartAccountClient]
 
 export type BaseSmartAccountClient<
   transport extends Transport = Transport,

@@ -1,5 +1,9 @@
 import { memo } from "react";
-import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
+import {
+  AppleIcon,
+  FacebookIcon,
+  GoogleIcon,
+} from "../../../icons/auth-icons/index.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
 import { useOAuthVerify } from "../hooks/useOAuthVerify.js";
@@ -15,19 +19,34 @@ export const OAuth = memo(({ ...config }: Props) => {
   switch (config.authProviderId) {
     case "google":
       return (
-        <Button variant="social" icon={<GoogleIcon />} onClick={authenticate}>
+        <Button
+          variant="social"
+          icon={<GoogleIcon />}
+          onClick={authenticate}
+          aria-label="Google sign in"
+        >
           Google
         </Button>
       );
     case "facebook":
       return (
-        <Button variant="social" icon={<FacebookIcon />} onClick={authenticate}>
+        <Button
+          variant="social"
+          icon={<FacebookIcon />}
+          onClick={authenticate}
+          aria-label="Facebook sign in"
+        >
           Facebook
         </Button>
       );
     case "apple":
       return (
-        <Button variant="social" icon={<AppleIcon />} onClick={authenticate}>
+        <Button
+          variant="social"
+          icon={<AppleIcon />}
+          onClick={authenticate}
+          aria-label="Apple sign in"
+        >
           Apple
         </Button>
       );
@@ -35,9 +54,26 @@ export const OAuth = memo(({ ...config }: Props) => {
       return (
         <Button
           variant="social"
-          icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
+          icon={
+            <>
+              <img
+                src={config.logoUrl}
+                alt={config.auth0Connection}
+                className="dark:hidden"
+              />
+              <img
+                // Fallback to light logo if no dark logo provided.
+                src={config.logoUrlDark ?? config.logoUrl}
+                alt={config.auth0Connection}
+                className="hidden dark:block"
+              />
+            </>
+          }
           onClick={authenticate}
-        ></Button>
+          aria-label={`${config.displayName} sign in`}
+        >
+          {config.displayName}
+        </Button>
       );
     default:
       assertNever(

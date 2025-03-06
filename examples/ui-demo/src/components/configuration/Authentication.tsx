@@ -5,9 +5,11 @@ import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
 import { FacebookIcon } from "../icons/facebook";
 import { GoogleIcon } from "../icons/google";
+import { DiscordLogo } from "../icons/discord";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
+import { TwitterIcon } from "../icons/twitter";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
@@ -18,7 +20,6 @@ export const Authentication = ({ className }: { className?: string }) => {
     auth,
     setAuth,
   }));
-
   const setEmailAuth = (active: boolean) => {
     setAuth({ showEmail: active });
     Metrics.trackEvent({
@@ -94,6 +95,38 @@ export const Authentication = ({ className }: { className?: string }) => {
     });
   };
 
+  const setAddDiscordAuth = () => {
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        discord: !auth.oAuthMethods.discord,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_discord",
+        enabled: !auth.oAuthMethods.discord,
+      },
+    });
+  };
+
+  const setAddTwitterAuth = () => {
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        twitter: !auth.oAuthMethods.twitter,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_twitter",
+        enabled: !auth.oAuthMethods.twitter,
+      },
+    });
+  };
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-row gap-2 items-center">
@@ -114,33 +147,57 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Social"
             iconClassName="mt-[2px] self-start"
             details={
-              <div className={cn("flex gap-x-3", { hidden: !auth.showOAuth })}>
-                <OAuthMethod
-                  active={auth.oAuthMethods.google}
-                  icon={<GoogleIcon />}
-                  onClick={setAddGoogleAuth}
-                />
-                <OAuthMethod
-                  active={auth.oAuthMethods.facebook}
-                  icon={<FacebookIcon />}
-                  onClick={setAddFacebookAuth}
-                />
-                <ExternalLink
-                  href={links.auth0}
-                  onClick={() => {
-                    Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
-                  }}
-                  className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
-                >
-                  <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
-                    Custom
-                  </p>
-                  <ExternalLinkIcon
-                    height={16}
-                    width={16}
-                    className="stroke-demo-fg-secondary"
+              <div
+                className={cn({
+                  hidden: !auth.showOAuth,
+                })}
+              >
+                <div className="flex gap-x-3">
+                  <OAuthMethod
+                    active={auth.oAuthMethods.google}
+                    icon={<GoogleIcon />}
+                    onClick={setAddGoogleAuth}
+                    name="Google"
                   />
-                </ExternalLink>
+                  <OAuthMethod
+                    active={auth.oAuthMethods.facebook}
+                    icon={<FacebookIcon />}
+                    onClick={setAddFacebookAuth}
+                    name="Facebook"
+                  />
+                  <OAuthMethod
+                    active={auth.oAuthMethods.discord}
+                    icon={<DiscordLogo />}
+                    onClick={setAddDiscordAuth}
+                    name="Discord"
+                  />
+                  <OAuthMethod
+                    active={auth.oAuthMethods.twitter}
+                    icon={<TwitterIcon />}
+                    onClick={setAddTwitterAuth}
+                    name="Twitter"
+                  />
+                </div>
+                <div className="w-full pt-3">
+                  <ExternalLink
+                    href={links.auth0}
+                    onClick={() => {
+                      Metrics.trackEvent({
+                        name: "clicked_custom_oauth_link",
+                      });
+                    }}
+                    className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none w-full"
+                  >
+                    <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
+                      Custom
+                    </p>
+                    <ExternalLinkIcon
+                      height={16}
+                      width={16}
+                      className="stroke-demo-fg-secondary"
+                    />
+                  </ExternalLink>
+                </div>
               </div>
             }
             active={auth.showOAuth}
@@ -182,7 +239,7 @@ export const Authentication = ({ className }: { className?: string }) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 mb-10">
+      <div className="flex flex-col gap-2 mb-6">
         <p className="font-medium text-secondary-foreground text-sm">Connect</p>
         <AuthMethod
           icon={<WalletIcon className="stroke-demo-fg-primary" />}
@@ -263,17 +320,20 @@ const OAuthMethod = ({
   icon,
   onClick,
   active,
+  name,
 }: {
   icon: React.ReactNode;
   onClick: () => void;
   className?: string;
   active: boolean;
+  name: string;
 }) => {
   return (
     <button
       onClick={onClick}
+      aria-label={`${name} social authentication toggle`}
       className={cn(
-        "flex grow-0 shrink-0 border border-[#64748B]  rounded-lg p-1 h-10 w-10 justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "flex border border-[#64748B]  rounded-lg p-1 h-10 w-full justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? "border-[#64748B] bg-demo-surface-secondary"
           : "border-gray-300"

@@ -63,7 +63,7 @@ export const createConfig = (
       connections.push({
         transport: transport?.config ?? connectionConfig.transport!.config,
         chain,
-        policyId,
+        policyId: policyId ?? connectionConfig.policyId,
       });
     });
   }
@@ -87,7 +87,6 @@ export const createConfig = (
     storage: storage?.(
       sessionConfig
         ? {
-            sessionLength: sessionConfig.expirationTimeMs,
             domain: sessionConfig.domain,
           }
         : undefined

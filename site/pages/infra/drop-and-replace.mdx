@@ -3,32 +3,11 @@ title: Drop and Replace
 description: Learn how to use Drop and Replace to retry failing user operations.
 ---
 
+import Snippet from "../../shared/infra/drop-and-replace-description.mdx";
+
 # Drop and replace failing user operations
 
-In the previous guides, we learned how to send user operations with gas sponsorship, but what happens when a user operation fails to mine? In this guide,
-we'll cover how to use drop and replace to resend failing user operations and ensure they get mined.
-
-## What is drop and replace?
-
-If fees change and your user operation gets stuck in the mempool, you can use drop and replace to resend the user operation with higher fees. This is most useful
-when used in combination with [`waitForUserOperationTransaction`](/reference/aa-sdk/core/functions/waitForUserOperationTransaction) to ensure the transaction is mined
-and then resend the user operation with higher fees if waiting times out.
-
-Drop and replace works by resubmitting a user operation with the greater of:
-
-1. 10% higher fees
-2. The current minimum fees
-
-We export a `dropAndReplace` function from `@aa-sdk/core` that you can use to handle this flow for you and is automatically added to the Smart Account Client.
-
-## How to drop and replace effectively
-
-Let's run through an example that uses drop and replace if waiting for a user operation to mine times out.
-
-:::warning
-If sponsoring gas, like in the example below, each call to `sendUserOperation` and `dropAndReplace` will generate pending gas sponsorships in your dashboard. This can result in you hitting your gas manager limit.
-At the moment, pending sponsorships expire after 10 minutes of inactivity, but it is possible that retrying excessively can temporarily exhaust your sponsorship limits.
-:::
+<Snippet />
 
 :::code-group
 

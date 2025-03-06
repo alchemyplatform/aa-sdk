@@ -56,7 +56,6 @@ import {
 
 export default function MyComponent() {
   const { client } = useSmartAccountClient({
-    type: "LightAccount",
     policyId: "GAS_MANAGER_POLICY_ID",
   });
   const { sendUserOperation } = useSendUserOperation({ client });
