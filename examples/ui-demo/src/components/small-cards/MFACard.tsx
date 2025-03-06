@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ThreeStarsIcon } from "../icons/three-stars";
-import { MFAModal } from "../modals/MFAModal";
+import { MFAModal } from "../modals/MFA/MFAModal";
 import { useMFA } from "@account-kit/react";
 
 export function MFACard() {
