@@ -37,9 +37,9 @@ export function MFAModal({
   const [mfaKey, setMfaKey] = useState<string | null>(null);
   const [multiFactorId, setMultiFactorId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [otpError, setOtpError] = useState<string | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
-
+  const [systemError, setSystemError] = useState(false);
   const signer = useSigner();
   const handleClose = () => setIsModalOpen(false);
 
@@ -48,7 +48,8 @@ export function MFAModal({
     setOTP(initialOTPValue);
     setTotpUrl(null);
     setMultiFactorId(null);
-    setError(null);
+    setOtpError(null);
+    setSystemError(false);
     setIsModalOpen(true);
   };
   const resetModalState = useCallback(() => {
@@ -57,12 +58,14 @@ export function MFAModal({
     setOTP(initialOTPValue);
     setTotpUrl(null);
     setMultiFactorId(null);
-    setError(null);
+    setOtpError(null);
+    setSystemError(false);
   }, []);
 
   const startMFASetup = useCallback(async () => {
     if (!signer) {
-      setError("Signer not available");
+      setSystemError(true);
+      console.error("Signer not available");
       return;
     }
     setIsLoading(true);
@@ -79,11 +82,12 @@ export function MFAModal({
         setMultiFactorId(result.multiFactorId);
         setStage("qr");
       } else {
-        setError("Failed to generate MFA setup");
+        setSystemError(true);
+        console.error("Failed to generate MFA setup");
       }
     } catch (error) {
       console.error("Error adding MFA:", error);
-      setError("Failed to set up MFA.");
+      setSystemError(true);
     } finally {
       setIsLoading(false);
     }
@@ -91,7 +95,8 @@ export function MFAModal({
 
   const verifyTOTP = useCallback(async () => {
     if (!multiFactorId || !otp.join("") || !signer) {
-      setError("Missing required information for verification");
+      setSystemError(true);
+      console.error("Missing required information for verification");
       return;
     }
 
@@ -106,7 +111,7 @@ export function MFAModal({
       onMfaEnabled?.();
     } catch (error) {
       console.error("Error verifying MFA:", error);
-      setError("The code you entered is incorrect");
+      setOtpError("The code you entered is incorrect");
       setOTP(initialOTPValue);
     } finally {
       setIsLoading(false);
@@ -115,7 +120,8 @@ export function MFAModal({
 
   const removeMFA = useCallback(async () => {
     if (!signer) {
-      setError("Signer not available");
+      setSystemError(true);
+      console.error("Signer not available");
       return;
     }
     setIsRemoving(true);
@@ -124,7 +130,8 @@ export function MFAModal({
       const factorId = factors?.multiFactors?.[0]?.multiFactorId;
 
       if (!factorId) {
-        setError("No MFA factor ID found");
+        setSystemError(true);
+        console.error("No MFA factor ID found");
         return;
       }
 
@@ -136,7 +143,7 @@ export function MFAModal({
       resetModalState();
     } catch (error) {
       console.error("Error removing MFA:", error);
-      setError("Failed to remove MFA.");
+      setSystemError(true);
     } finally {
       setIsRemoving(false);
     }
@@ -169,8 +176,8 @@ export function MFAModal({
           <MFAModalVerify
             otp={otp}
             setOTP={setOTP}
-            setError={setError}
-            error={error}
+            setError={setOtpError}
+            error={otpError}
             isLoading={isLoading}
           />
         );
@@ -184,7 +191,7 @@ export function MFAModal({
     totpUrl,
     mfaKey,
     otp,
-    error,
+    otpError,
     resetModalState,
   ]);
 
@@ -213,6 +220,11 @@ export function MFAModal({
                 />
               </button>
               {renderContent()}
+              {systemError && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full">
+                  Something went wrong.
+                </div>
+              )}
               <div className="flex flex-row gap-1 items-center h-[14px] text-fg-disabled">
                 <span className="text-[11px] pt-[1px]">protected by</span>
                 <AlchemyLogo className="fill-fg-disabled" />
