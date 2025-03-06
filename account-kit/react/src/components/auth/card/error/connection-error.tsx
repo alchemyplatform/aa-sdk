@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
 import { disconnect } from "@account-kit/core";
-import { useAlchemyAccountContext } from "../../../../context.js";
+import { useAlchemyAccountContext } from "../../../../hooks/useAlchemyAccountContext.js";
 
 type ConnectionErrorProps = {
   headerText: string;

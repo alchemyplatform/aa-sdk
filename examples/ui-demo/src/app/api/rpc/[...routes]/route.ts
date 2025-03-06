@@ -11,7 +11,7 @@ export async function POST(
   const headers: Record<string, string> = {
     Authorization: `Bearer ${env.API_KEY}`,
   };
-  req.headers.forEach((value, key) => {
+  req.headers.forEach((value: string, key: string) => {
     // don't pass the cookie because it doesn't get used downstream
     if (key === "cookie") return;
 

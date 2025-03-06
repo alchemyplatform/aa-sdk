@@ -33,6 +33,21 @@
       "import": "./dist/esm/tailwind/index.js",
       "default": "./dist/esm/tailwind/index.js"
     },
+    "./alchemy-account-context": {
+      "types": "./dist/types/AlchemyAccountContext.d.ts",
+      "import": "./dist/esm/AlchemyAccountContext.js",
+      "default": "./dist/esm/AlchemyAccountContext.js"
+    },
+    "./hydrate": {
+      "types": "./dist/types/hydrate.d.ts",
+      "import": "./dist/esm/hydrate.js",
+      "default": "./dist/esm/hydrate.js"
+    },
+    "./hooks": {
+      "types": "./dist/types/hooks/index.d.ts",
+      "import": "./dist/esm/hooks/index.js",
+      "default": "./dist/esm/hooks/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

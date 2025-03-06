@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNewUserSignup } from "../../hooks/internal/useNewUserSignup.js";
 import { useAuthModal } from "../../hooks/useAuthModal.js";
 import { useUiConfig } from "../../hooks/useUiConfig.js";
-import { useSignerStatus } from "../../index.js";
+import { useSignerStatus } from "../../hooks/useSignerStatus.js";
 import { Dialog } from "../dialog/dialog.js";
 import { AuthCardContent } from "./card/index.js";
 import { useAuthContext } from "./context.js";

@@ -6,7 +6,7 @@ import {
   type UseConnectParameters,
   type UseConnectReturnType,
 } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ReactLogger } from "../metrics.js";
 
 /**

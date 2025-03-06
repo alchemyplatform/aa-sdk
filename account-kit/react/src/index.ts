@@ -1,15 +1,16 @@
 export { cookieStorage, type CreateConfigProps } from "@account-kit/core";
-export type * from "./context.js";
-export {
-  AlchemyAccountContext,
-  AlchemyAccountProvider,
-  useAlchemyAccountContext,
-} from "./context.js";
+export type * from "./AlchemyAccountProvider.js";
+export { AlchemyAccountProvider } from "./AlchemyAccountProvider.js";
+export type * from "./AlchemyAccountContext.js";
+export { AlchemyAccountContext } from "./AlchemyAccountContext.js";
 export {
   createConfig,
   type AlchemyAccountsConfigWithUI,
 } from "./createConfig.js";
 export { NoAlchemyAccountContextError } from "./errors.js";
+
+// Hooks
+export { useAlchemyAccountContext } from "./hooks/useAlchemyAccountContext.js";
 export type * from "./hooks/useAccount.js";
 export { useAccount } from "./hooks/useAccount.js";
 export type * from "./hooks/useAddPasskey.js";
@@ -60,3 +61,4 @@ export { AuthCard } from "./components/auth/card/index.js";
 export type * from "./components/auth/types.js";
 export { useAuthModal } from "./hooks/useAuthModal.js";
 export { useAuthContext } from "./components/auth/context.js";
+export { Hydrate } from "./hydrate.js";
