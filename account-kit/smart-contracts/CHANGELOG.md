@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Bug Fixes
+
+- time range module tests ([#1379](https://github.com/alchemyplatform/aa-sdk/issues/1379)) ([65b4416](https://github.com/alchemyplatform/aa-sdk/commit/65b441665eafdc224b42862e8b3f748537ff4c8a))
+
+### Features
+
+- add upgrade helpers for ma v2 ([#1382](https://github.com/alchemyplatform/aa-sdk/issues/1382)) ([96d1394](https://github.com/alchemyplatform/aa-sdk/commit/96d13941ec60799a85f9139c7332d1d3bb1b2f71))
+
 # [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
 
 ### Bug Fixes
