@@ -4,10 +4,10 @@ export type OTPCodeType = [string, string, string, string, string, string];
 export const initialOTPValue: OTPCodeType = ["", "", "", "", "", ""];
 const OTP_LENGTH = 6;
 type OTPInputProps = {
-  errorText?: string;
+  errorText?: string | null;
   value: OTPCodeType;
   setValue: (otpCode: OTPCodeType) => void;
-  setErrorText: React.Dispatch<React.SetStateAction<string>>;
+  setErrorText: React.Dispatch<React.SetStateAction<string | null>>;
   disabled?: boolean;
   handleReset: () => void;
   className?: string;
