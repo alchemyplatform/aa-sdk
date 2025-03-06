@@ -8,7 +8,7 @@ address is a light account address or a modular account address. So we construct
 Our **Light Account** client:
 
 ```ts
-import {createLightAccountClient} from "@account-kit/smart-contracts";
+import { createLightAccountClient } from "@account-kit/smart-contracts";
 const lightAccountClient = await createLightAccountClient({
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
