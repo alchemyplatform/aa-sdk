@@ -27,7 +27,7 @@ import {
  * @returns {Address} The webauthn validation module address associated with the specified chain ID or a default address if no specific mapping exists
  */
 export const getDefaultWebauthnValidationModuleAddress = (
-  chain: Chain,
+  chain: Chain
 ): Address => {
   switch (chain.id) {
     // TODO: case mekong.id:
@@ -93,7 +93,7 @@ export const getDefaultTimeRangeModuleAddress = (chain: Chain): Address => {
  * @returns {Address} The single signer validation module address associated with the specified chain ID or a default address if no specific mapping exists
  */
 export const getDefaultSingleSignerValidationModuleAddress = (
-  chain: Chain,
+  chain: Chain
 ): Address => {
   switch (chain.id) {
     // TODO: case mekong.id:
@@ -127,7 +127,7 @@ export const getDefaultSingleSignerValidationModuleAddress = (
  * @returns {Address} The paymaster guard module address associated with the specified chain ID or a default address if no specific mapping exists
  */
 export const getDefaultPaymasterGuardModuleAddress = (
-  chain: Chain,
+  chain: Chain
 ): Address => {
   switch (chain.id) {
     // TODO: case mekong.id:
@@ -161,7 +161,7 @@ export const getDefaultPaymasterGuardModuleAddress = (
  * @returns {Address} The native token limit module address associated with the specified chain ID or a default address if no specific mapping exists
  */
 export const getDefaultNativeTokenLimitModuleAddress = (
-  chain: Chain,
+  chain: Chain
 ): Address => {
   switch (chain.id) {
     // TODO: case mekong.id:

@@ -41,7 +41,7 @@ import {
 export const nativeSMASigner = (
   signer: SmartAccountSigner,
   chain: Chain,
-  accountAddress: Address,
+  accountAddress: Address
 ) => {
   return {
     getDummySignature: (): Hex => {
@@ -59,7 +59,7 @@ export const nativeSMASigner = (
         packUOSignature({
           // orderedHookData: [],
           validationSignature: signature,
-        }),
+        })
       );
     },
 
@@ -89,9 +89,9 @@ export const nativeSMASigner = (
     // we don't apply the expected 1271 packing since deferred sigs use typed data sigs and don't expect the 1271 packing
     signTypedData: async <
       const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
     >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
     ): Promise<Hex> => {
       // the accounts domain already gives replay protection across accounts for deferred actions, so we don't need to apply another wrapping
       const isDeferredAction =

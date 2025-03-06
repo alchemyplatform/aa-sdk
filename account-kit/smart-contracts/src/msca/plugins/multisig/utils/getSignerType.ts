@@ -22,7 +22,7 @@ type GetSignerTypeParams<
     TAccount,
     PublicRpcSchema,
     PublicActions
-  > = Client<TTransport, TChain, TAccount, PublicRpcSchema, PublicActions>,
+  > = Client<TTransport, TChain, TAccount, PublicRpcSchema, PublicActions>
 > = {
   signer: SmartAccountSigner<any>;
   signature: Hex;
@@ -50,7 +50,7 @@ type GetSignerTypeParams<
  */
 export const getSignerType = async <
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
+  TChain extends Chain | undefined = Chain | undefined
 >({
   client,
   signature,

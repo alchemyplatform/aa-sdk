@@ -26,7 +26,7 @@ export const paymaster070: Paymaster = toPaymaster({
     const { address } = self.getPaymasterDetails();
     const uo = deepHexlify(
       // @ts-ignore
-      await resolveProperties(uo_),
+      await resolveProperties(uo_)
     ) as UserOperationRequest_v7;
 
     const validUntil = 0n;
@@ -73,8 +73,8 @@ export const paymaster070: Paymaster = toPaymaster({
           entrypoint070,
           BigInt(client.chain!.id),
           expiryPacked,
-        ],
-      ),
+        ]
+      )
     );
 
     const signature = await accounts.paymasterOwner.signMessage({

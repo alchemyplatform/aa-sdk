@@ -22,7 +22,7 @@ export const useDeploymentStatus = () => {
     createPublicClient({
       chain: odysseyTestnet,
       transport: http(),
-    }),
+    })
   );
   const signerAddress = useSignerAddress();
 

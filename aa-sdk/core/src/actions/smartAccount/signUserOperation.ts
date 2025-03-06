@@ -19,11 +19,10 @@ export async function signUserOperation<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SignUserOperationParameters<TAccount>,
+  args: SignUserOperationParameters<TAccount>
 ): Promise<UserOperationRequest<TEntryPointVersion>> {
   const { account = client.account, context } = args;
 
@@ -35,7 +34,7 @@ export async function signUserOperation<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "signUserOperation",
-      client,
+      client
     );
   }
 

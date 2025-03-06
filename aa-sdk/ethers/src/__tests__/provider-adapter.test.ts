@@ -43,7 +43,7 @@ describe("Simple Account Tests", async () => {
         // todo: This provider doesn't support signMessageWith6492, so we have to manually provider the factory data to the verifier. Add support here for 6492 signature generation.
         factory: await provider.account.getFactoryAddress(),
         factoryData: await provider.account.getFactoryData(),
-      }),
+      })
     ).toBe(true);
   });
 });
@@ -59,12 +59,12 @@ const givenConnectedProvider = async ({
 
   return EthersProviderAdapter.fromEthersProvider(
     alchemyProvider,
-    chain,
+    chain
   ).connectToAccount(
     await createLightAccount({
       chain,
       signer: convertWalletToAccountSigner(signer),
       transport: http(`${endpoint}`),
-    }),
+    })
   );
 };

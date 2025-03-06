@@ -20,7 +20,7 @@ export type UseSmartAccountClientProps<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccountTypes | undefined =
     | SupportedAccountTypes
-    | undefined,
+    | undefined
 > = OptionalFields<
   GetSmartAccountClientParams<
     TChain,
@@ -31,14 +31,14 @@ export type UseSmartAccountClientProps<
 
 export type UseSmartAccountClientResult<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccounts = SupportedAccounts,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = GetSmartAccountClientResult<TChain, TAccount>;
 
 export function useSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes | undefined = "ModularAccountV2",
+  TAccount extends SupportedAccountTypes | undefined = "ModularAccountV2"
 >(
-  args: UseSmartAccountClientProps<TChain, TAccount>,
+  args: UseSmartAccountClientProps<TChain, TAccount>
 ): UseSmartAccountClientResult<
   TChain,
   SupportedAccount<TAccount extends undefined ? "ModularAccountV2" : TAccount>
@@ -79,7 +79,7 @@ export function useSmartAccountClient({
     () =>
       getSmartAccountClient({ type, accountParams, ...clientParams }, config),
     () =>
-      getSmartAccountClient({ type, accountParams, ...clientParams }, config),
+      getSmartAccountClient({ type, accountParams, ...clientParams }, config)
   );
 
   const { isConnected, address: eoaAddress } = wagmi_useAccount({

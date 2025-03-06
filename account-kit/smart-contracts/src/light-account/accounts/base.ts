@@ -38,8 +38,7 @@ enum SignatureType {
 export type LightAccountBase<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends
-    LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>
 > = SmartContractAccountWithSigner<
   TLightAccountType,
   TSigner,
@@ -51,10 +50,9 @@ export type LightAccountBase<
 //#region CreateLightAccountBaseParams
 export type CreateLightAccountBaseParams<
   TLightAccountType extends LightAccountType,
-  TLightAccountVersion extends
-    LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
   ToSmartContractAccountParams<TLightAccountType, TTransport, Chain>,
   "transport" | "chain" | "getAccountInitCode"
@@ -75,7 +73,7 @@ export async function createLightAccountBase<
   TLightAccountType extends LightAccountType,
   TLightAccountVersion extends LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
   transport,
   chain,
@@ -112,15 +110,14 @@ export async function createLightAccountBase<
     if (storage == null) {
       throw new FailedToGetStorageSlotError(
         "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-        "Proxy Implementation Address",
+        "Proxy Implementation Address"
       );
     }
 
     const implementationAddresses = Object.values(
-      AccountVersionRegistry[type],
+      AccountVersionRegistry[type]
     ).map(
-      (x) =>
-        x.addresses.overrides?.[chain.id]?.impl ?? x.addresses.default.impl,
+      (x) => x.addresses.overrides?.[chain.id]?.impl ?? x.addresses.default.impl
     );
 
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
@@ -130,8 +127,8 @@ export async function createLightAccountBase<
     ) {
       throw new Error(
         `could not determine if smart account implementation is ${type} ${String(
-          version,
-        )}`,
+          version
+        )}`
       );
     }
 
@@ -144,7 +141,7 @@ export async function createLightAccountBase<
 
   const signWith1271Wrapper = async (
     hashedMessage: Hex,
-    version: string,
+    version: string
   ): Promise<Hex> => {
     return signer.signTypedData({
       // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
@@ -188,7 +185,7 @@ export async function createLightAccountBase<
 
           return accum;
         },
-        [[], [], []] as [Address[], bigint[], Hex[]],
+        [[], [], []] as [Address[], bigint[], Hex[]]
       );
       return encodeFunctionData({
         abi,
@@ -217,7 +214,7 @@ export async function createLightAccountBase<
         case "v2.0.0":
           const signature = await signWith1271Wrapper(
             hashMessage(message),
-            "2",
+            "2"
           );
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
@@ -229,18 +226,18 @@ export async function createLightAccountBase<
       switch (version as string) {
         case "v1.0.1":
           return signer.signTypedData(
-            params as unknown as SignTypedDataParameters,
+            params as unknown as SignTypedDataParameters
           );
         case "v1.0.2":
           throw new Error(
-            `Version ${String(version)} of LightAccount doesn't support 1271`,
+            `Version ${String(version)} of LightAccount doesn't support 1271`
           );
         case "v1.1.0":
           return signWith1271Wrapper(hashTypedData(params), "1");
         case "v2.0.0":
           const signature = await signWith1271Wrapper(
             hashTypedData(params),
-            "2",
+            "2"
           );
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);

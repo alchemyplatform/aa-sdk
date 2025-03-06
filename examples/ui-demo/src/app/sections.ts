@@ -8,7 +8,7 @@ const SocialAuth0Providers = ["twitter", "discord"];
 
 export function getSectionsForConfig(
   config: Config,
-  walletConnectProjectId: string,
+  walletConnectProjectId: string
 ): AuthType[][] {
   const {
     showEmail,

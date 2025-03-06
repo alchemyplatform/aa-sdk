@@ -112,7 +112,7 @@ type Expanded<T> = { [K in keyof T]: T[K] };
 
 type Middleware = [
   ["zustand/subscribeWithSelector", never],
-  ["zustand/persist", StoreState],
+  ["zustand/persist", StoreState]
 ];
 
 export type Store = Expanded<Mutate<StoreApi<StoreState>, Middleware>>;

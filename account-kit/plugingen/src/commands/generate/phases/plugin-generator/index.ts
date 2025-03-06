@@ -17,8 +17,8 @@ export const PluginGeneratorPhase: Phase = async (input) => {
 
   input.content.push(dedent`
     export const ${pluginConfig.name}: Plugin<typeof ${
-      pluginConfig.name
-    }Abi> = {
+    pluginConfig.name
+  }Abi> = {
         ${result.content.join(",\n")}
     };
   `);

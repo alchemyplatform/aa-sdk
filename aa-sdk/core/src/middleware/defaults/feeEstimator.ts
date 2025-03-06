@@ -24,7 +24,7 @@ import type { ClientMiddlewareFn } from "../types";
  * @returns {ClientMiddlewareFn} A middleware function that takes in the struct and options, estimates the fees, and updates the struct with the estimated fees
  */
 export function defaultFeeEstimator<C extends MiddlewareClient>(
-  client: C,
+  client: C
 ): ClientMiddlewareFn {
   return async (struct, { overrides, feeOptions }) => {
     // maxFeePerGas must be at least the sum of maxPriorityFeePerGas and baseFee
@@ -39,7 +39,7 @@ export function defaultFeeEstimator<C extends MiddlewareClient>(
     const feeData = await client.estimateFeesPerGas();
     if (!feeData.maxFeePerGas || feeData.maxPriorityFeePerGas == null) {
       throw new Error(
-        "feeData is missing maxFeePerGas or maxPriorityFeePerGas",
+        "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
       );
     }
 
@@ -49,7 +49,7 @@ export function defaultFeeEstimator<C extends MiddlewareClient>(
     maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
       maxPriorityFeePerGas,
       overrides?.maxPriorityFeePerGas,
-      feeOptions?.maxPriorityFeePerGas,
+      feeOptions?.maxPriorityFeePerGas
     );
 
     let maxFeePerGas: BigNumberish =
@@ -60,7 +60,7 @@ export function defaultFeeEstimator<C extends MiddlewareClient>(
     maxFeePerGas = applyUserOpOverrideOrFeeOption(
       maxFeePerGas,
       overrides?.maxFeePerGas,
-      feeOptions?.maxFeePerGas,
+      feeOptions?.maxFeePerGas
     );
 
     struct.maxFeePerGas = maxFeePerGas;

@@ -23,7 +23,7 @@ import { getChain } from "./getChain.js";
 export const watchAccount =
   <TAccount extends SupportedAccountTypes>(
     type: TAccount,
-    config: AlchemyAccountsConfig,
+    config: AlchemyAccountsConfig
   ) =>
   (onChange: (account: GetAccountResult<TAccount>) => void) => {
     const accounts = config.store.getState().accounts;
@@ -42,6 +42,6 @@ export const watchAccount =
             ? a.account.address === b.account.address
             : a?.status === b?.status;
         },
-      },
+      }
     );
   };

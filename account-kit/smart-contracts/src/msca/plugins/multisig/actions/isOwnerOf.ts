@@ -13,11 +13,11 @@ export async function isOwnerOf<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: { address: Address } & GetPluginAddressParameter &
-    GetAccountParameter<TAccount>,
+    GetAccountParameter<TAccount>
 ) {
   const account = args.account ?? client.account;
   if (!account) {

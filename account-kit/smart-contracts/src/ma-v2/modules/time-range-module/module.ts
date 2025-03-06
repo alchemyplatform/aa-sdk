@@ -11,17 +11,17 @@ export const TimeRangeModule = {
       validUntil: number;
       validAfter: number;
     },
-    address: Address,
+    address: Address
   ): { hookConfig: HookConfig; initData: Hex } => {
     if (installArgs.validUntil > 2 ** 48 - 1) {
       throw new Error(
-        "TimeRangeModule.buildHook: validUntil > type(uint48).max",
+        "TimeRangeModule.buildHook: validUntil > type(uint48).max"
       );
     }
 
     if (installArgs.validAfter > 2 ** 48 - 1) {
       throw new Error(
-        "TimeRangeModule.buildHook: validAfter > type(uint48).max",
+        "TimeRangeModule.buildHook: validAfter > type(uint48).max"
       );
     }
 
@@ -56,7 +56,7 @@ export const TimeRangeModule = {
           type: "uint48",
         },
       ],
-      [entityId, validUntil, validAfter],
+      [entityId, validUntil, validAfter]
     );
   },
   encodeOnUninstallData: (args: { entityId: number }): Hex => {
@@ -68,7 +68,7 @@ export const TimeRangeModule = {
           type: "uint32",
         },
       ],
-      [entityId],
+      [entityId]
     );
   },
   encodeSetTimeRange: (args: {
@@ -90,7 +90,7 @@ export const TimeRangeModule = {
           type: "uint48",
         },
       ],
-      [entityId, validUntil, validAfter],
+      [entityId, validUntil, validAfter]
     );
   },
 };

@@ -22,13 +22,13 @@ export type UseSignerStatusResult = SignerStatus;
  * ```
  */
 export const useSignerStatus = (
-  override?: AlchemyAccountContextProps,
+  override?: AlchemyAccountContextProps
 ): UseSignerStatusResult => {
   const { config } = useAlchemyAccountContext(override);
 
   return useSyncExternalStore(
     watchSignerStatus(config),
     () => getSignerStatus(config),
-    () => getSignerStatus(config),
+    () => getSignerStatus(config)
   );
 };

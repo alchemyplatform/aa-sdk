@@ -53,13 +53,12 @@ export async function sendTransaction<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
   overrides?: UserOperationOverrides<TEntryPointVersion>,
-  context?: TContext,
+  context?: TContext
 ): Promise<Hex> {
   const { account = client.account } = args;
   if (!account || typeof account === "string") {
@@ -74,7 +73,7 @@ export async function sendTransaction<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "sendTransaction",
-      client,
+      client
     );
   }
 
@@ -82,7 +81,7 @@ export async function sendTransaction<
     client,
     args,
     overrides,
-    context,
+    context
   );
 
   const { hash, request } = await _sendUserOperation(client, {

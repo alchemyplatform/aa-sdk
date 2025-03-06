@@ -13,7 +13,7 @@ export const AuthModal = () => {
     ({ modalBaseClassName, auth }) => ({
       modalBaseClassName,
       addPasskeyOnSignup: auth?.addPasskeyOnSignup,
-    }),
+    })
   );
 
   const { setAuthStep, authStep } = useAuthContext();
@@ -31,7 +31,7 @@ export const AuthModal = () => {
     handleSignup,
     isConnected &&
       (authStep.type === "complete" || authStep.type === "initial") &&
-      !isOpen,
+      !isOpen
   );
 
   return (

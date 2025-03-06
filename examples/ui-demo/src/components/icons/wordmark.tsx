@@ -1,7 +1,7 @@
 import { SVGProps } from "react";
 
 export const Wordmark = (
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
 ) => (
   <svg
     width="120"

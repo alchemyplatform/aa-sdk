@@ -30,7 +30,7 @@ export type UseAuthModalResult = {
  */
 export const useAuthModal = () => {
   const { isOpen, setModalOpen } = useUiConfig(
-    ({ isModalOpen, setModalOpen }) => ({ isOpen: isModalOpen, setModalOpen }),
+    ({ isModalOpen, setModalOpen }) => ({ isOpen: isModalOpen, setModalOpen })
   );
 
   const openAuthModal = useCallback(() => setModalOpen(true), [setModalOpen]);

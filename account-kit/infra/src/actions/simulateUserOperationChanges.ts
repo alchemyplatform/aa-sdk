@@ -31,13 +31,13 @@ export const simulateUserOperationChanges: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<Transport, TChain, TAccount, AlchemyRpcSchema>,
-  args: SendUserOperationParameters<TAccount>,
+  args: SendUserOperationParameters<TAccount>
 ) => Promise<SimulateUserOperationAssetChangesResponse> = async (
   client,
-  { account = client.account, overrides, ...params },
+  { account = client.account, overrides, ...params }
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -47,7 +47,7 @@ export const simulateUserOperationChanges: <
     throw new IncompatibleClientError(
       "AlchemySmartAccountClient",
       "SimulateUserOperationAssetChanges",
-      client,
+      client
     );
   }
 
@@ -56,7 +56,7 @@ export const simulateUserOperationChanges: <
       ...params,
       account,
       overrides,
-    }),
+    })
   );
 
   return client.request({

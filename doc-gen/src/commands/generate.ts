@@ -24,7 +24,7 @@ export async function generate(options: GenerateOptions) {
   const sourceFilePath = path.resolve(process.cwd(), options.in);
   const outputFilePath = path.resolve(process.cwd(), options.out);
   logger.info(
-    `Generating documentation for ${sourceFilePath} and ouputing to ${outputFilePath}`,
+    `Generating documentation for ${sourceFilePath} and ouputing to ${outputFilePath}`
   );
 
   const sourceFile = getSourceFile(sourceFilePath);
@@ -56,11 +56,11 @@ export async function generate(options: GenerateOptions) {
     }
     const exportedFilePathTs = path.resolve(
       path.dirname(sourceFilePath),
-      node.moduleSpecifier.text.replace(".js", ".ts"),
+      node.moduleSpecifier.text.replace(".js", ".ts")
     );
     const exportedFilePathTsx = path.resolve(
       path.dirname(sourceFilePath),
-      node.moduleSpecifier.text.replace(".js", ".tsx"),
+      node.moduleSpecifier.text.replace(".js", ".tsx")
     );
 
     const isTsx = fs.existsSync(exportedFilePathTsx);
@@ -72,7 +72,7 @@ export async function generate(options: GenerateOptions) {
         exportedFilePath,
         outputFilePath,
         packageJSON.name,
-        isTsx,
+        isTsx
       );
     });
   });
@@ -83,7 +83,7 @@ async function generateDocumentation(
   sourceFilePath: string,
   outputFilePath: string,
   packageName: string,
-  isTsx: boolean,
+  isTsx: boolean
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
@@ -102,7 +102,7 @@ async function generateDocumentation(
       importedName,
       outputFilePath,
       packageName,
-      isTsx,
+      isTsx
     );
   }
 }
@@ -117,12 +117,12 @@ function getSourceFile(filePath: string) {
     filePath,
     fileContent,
     ts.ScriptTarget.Latest,
-    true,
+    true
   );
 }
 
 async function getPackageJson(
-  sourcePath: string,
+  sourcePath: string
 ): Promise<{ name: string } | null> {
   const rootDir = resolve(sourcePath);
   const path = await findUp("package.json", { cwd: rootDir });
@@ -138,7 +138,7 @@ function generateFunctionDocs(
   importedName: string,
   outputFilePath: string,
   packageName: string,
-  isTsx: boolean,
+  isTsx: boolean
 ) {
   const documentation = functionTemplate(node, importedName, packageName);
   if (!documentation) {
@@ -149,10 +149,10 @@ function generateFunctionDocs(
   const outputLocation = ts.isClassElement(node)
     ? ""
     : importedName.startsWith("use")
-      ? "./hooks"
-      : isTsx
-        ? "./components"
-        : "./functions";
+    ? "./hooks"
+    : isTsx
+    ? "./components"
+    : "./functions";
 
   const fileName = ts.isClassElement(node)
     ? node.name?.getText() ?? "constructor"
@@ -161,7 +161,7 @@ function generateFunctionDocs(
   fs.outputFileSync(
     path.resolve(outputFilePath, outputLocation, `${fileName}.mdx`),
     // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
-    format(format(documentation, { parser: "mdx" }), { parser: "mdx" }),
+    format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
   );
 }
 
@@ -169,11 +169,11 @@ function generateClassDocs(
   node: ts.ClassDeclaration,
   outputFilePath: string,
   importedName: string,
-  packageName: string,
+  packageName: string
 ) {
   const classOutputBasePath = path.resolve(
     outputFilePath,
-    `./classes/${importedName}`,
+    `./classes/${importedName}`
   );
 
   node.members.forEach((member) => {
@@ -182,7 +182,7 @@ function generateClassDocs(
       member.modifiers?.some(
         (modifier) =>
           modifier.kind === ts.SyntaxKind.PrivateKeyword ||
-          modifier.kind === ts.SyntaxKind.ProtectedKeyword,
+          modifier.kind === ts.SyntaxKind.ProtectedKeyword
       )
     ) {
       // skip properties that aren't public functions
@@ -203,7 +203,7 @@ function generateClassDocs(
         importedName,
         classOutputBasePath,
         packageName,
-        false,
+        false
       );
     }
   });

@@ -8,7 +8,7 @@ class ValidationError extends Error {
     message: string,
     options: {
       details: Zod.ZodIssue[];
-    },
+    }
   ) {
     super(message);
     this.details = options.details;
@@ -28,7 +28,7 @@ export function fromZodError(
     issueSeparator?: string;
     prefixSeparator?: string;
     prefix?: string;
-  } = {},
+  } = {}
 ): ValidationError {
   function joinPath(arr: Array<string | number>): string {
     return arr.reduce<string>((acc, value) => {

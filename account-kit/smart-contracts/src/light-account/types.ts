@@ -9,7 +9,7 @@ import type { LightAccountBase } from "./accounts/base";
 export type LightAccountType = "LightAccount" | "MultiOwnerLightAccount";
 
 export type LightAccountVersionConfig<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   entryPointVersion: TEntryPointVersion;
   addresses: {
@@ -47,8 +47,7 @@ export type GetLightAccountType<TAccount extends LightAccountBase> =
 
 export type LightAccountEntryPointVersion<
   TLightAccountType extends LightAccountType,
-  TLightAccountVersion extends
-    LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>
 > = LightAccountVersionConfigs[TLightAccountType][TLightAccountVersion] extends LightAccountVersionConfig
   ? LightAccountVersionConfigs[TLightAccountType][TLightAccountVersion]["entryPointVersion"]
   : never;

@@ -34,7 +34,7 @@ export type UseLogoutResult = {
  * ```
  */
 export function useLogout(
-  mutationArgs?: UseLogoutMutationArgs,
+  mutationArgs?: UseLogoutMutationArgs
 ): UseLogoutResult {
   const { queryClient, config } = useAlchemyAccountContext();
   const authContext = useOptionalAuthContext();
@@ -51,7 +51,7 @@ export function useLogout(
       },
       ...mutationArgs,
     },
-    queryClient,
+    queryClient
   );
 
   return {

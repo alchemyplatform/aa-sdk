@@ -11,7 +11,7 @@ import type { ClientMiddlewareFn } from "../types";
  */
 export const defaultPaymasterAndData: ClientMiddlewareFn = async (
   struct,
-  { account },
+  { account }
 ) => {
   const entryPoint = account.getEntryPoint();
   if (entryPoint.version === "0.6.0") {

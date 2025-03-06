@@ -12,7 +12,7 @@ import { getExportedFilePath } from "./utils.js";
  */
 export function resolveReExport(
   filePath: string,
-  importedName: string,
+  importedName: string
 ): ts.FunctionDeclaration | ts.ClassDeclaration | ts.VariableStatement | null {
   if (!fs.existsSync(filePath)) {
     return null;
@@ -23,7 +23,7 @@ export function resolveReExport(
     filePath,
     fileContent,
     ts.ScriptTarget.Latest,
-    true,
+    true
   );
 
   let resolvedNode:
@@ -40,7 +40,7 @@ export function resolveReExport(
     ) {
       const exportedFilePath = getExportedFilePath(
         filePath,
-        node.moduleSpecifier.text,
+        node.moduleSpecifier.text
       );
       if (!exportedFilePath) return;
 
@@ -49,7 +49,7 @@ export function resolveReExport(
           if (element.name.text === importedName) {
             resolvedNode = resolveReExport(
               exportedFilePath,
-              element.propertyName?.text || element.name.text,
+              element.propertyName?.text || element.name.text
             );
           }
         });
@@ -65,7 +65,7 @@ export function resolveReExport(
             decl.name.text === importedName &&
             decl.initializer &&
             (ts.isArrowFunction(decl.initializer) ||
-              ts.isFunctionExpression(decl.initializer)),
+              ts.isFunctionExpression(decl.initializer))
         ))
     ) {
       resolvedNode = node;

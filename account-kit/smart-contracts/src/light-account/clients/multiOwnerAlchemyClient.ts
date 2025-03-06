@@ -12,7 +12,7 @@ import {
 import { type Chain } from "viem";
 
 export type AlchemyMultiOwnerLightAccountClientConfig<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultiOwnerLightAccountParams<HttpTransport, TSigner>,
   "transport" | "type"
@@ -23,9 +23,9 @@ export type AlchemyMultiOwnerLightAccountClientConfig<
   >;
 
 export async function createMultiOwnerLightAccountAlchemyClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyMultiOwnerLightAccountClientConfig<TSigner>,
+  params: AlchemyMultiOwnerLightAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,

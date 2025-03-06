@@ -4,7 +4,7 @@ import ts from "typescript";
 export function functionTemplate(
   node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
   importedName: string,
-  packageName: string,
+  packageName: string
 ) {
   const jsDocCommentAndTags = ts.getJSDocCommentsAndTags(node);
   if (!jsDocCommentAndTags.length) return;
@@ -12,8 +12,8 @@ export function functionTemplate(
   const functionName = ts.isConstructorDeclaration(node)
     ? importedName
     : ts.isClassElement(node)
-      ? node.name?.getText() ?? importedName
-      : importedName;
+    ? node.name?.getText() ?? importedName
+    : importedName;
 
   const importStatement = ts.isClassElement(node)
     ? (node.parent as ts.ClassDeclaration).name?.getText() ?? functionName
@@ -27,7 +27,7 @@ export function functionTemplate(
     if (!classDeclaration.heritageClauses) return "";
 
     const extendsClause = classDeclaration.heritageClauses.find(
-      (x) => x.token === ts.SyntaxKind.ExtendsKeyword,
+      (x) => x.token === ts.SyntaxKind.ExtendsKeyword
     );
     if (!extendsClause) return "";
 
@@ -40,17 +40,17 @@ export function functionTemplate(
   })();
 
   const comment = jsDocCommentAndTags.find(
-    (x) => x.kind === ts.SyntaxKind.JSDoc,
+    (x) => x.kind === ts.SyntaxKind.JSDoc
   ) as ts.JSDoc;
 
   const exampleTag = comment.tags?.find(
     (x) =>
-      x.kind === ts.SyntaxKind.JSDocTag && x.tagName.escapedText === "example",
+      x.kind === ts.SyntaxKind.JSDocTag && x.tagName.escapedText === "example"
   );
 
   const parameterTags =
     (comment.tags?.filter(
-      (x) => x.kind === ts.SyntaxKind.JSDocParameterTag,
+      (x) => x.kind === ts.SyntaxKind.JSDocParameterTag
     ) as ts.JSDocParameterTag[]) ?? [];
   const parameters = parameterTags.map((tag) => {
     const type = tag.typeExpression?.type;
@@ -71,7 +71,7 @@ export function functionTemplate(
     ### ${param.name}
     \`${param.type}\`
     ${param.description}
-    `,
+    `
       )
       .join("\n\n")}
     \n
@@ -79,7 +79,7 @@ export function functionTemplate(
     : "";
 
   const returnTag = comment.tags?.find(
-    (x) => x.kind === ts.SyntaxKind.JSDocReturnTag,
+    (x) => x.kind === ts.SyntaxKind.JSDocReturnTag
   ) as ts.JSDocReturnTag | undefined;
 
   const returnSection = returnTag

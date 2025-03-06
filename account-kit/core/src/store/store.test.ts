@@ -31,11 +31,11 @@ describe("createConfig tests", () => {
     const hydratedConfig = await givenConfig();
 
     expect(hydratedConfig.store.getState().chain.id).toBe(
-      config.store.getState().chain.id,
+      config.store.getState().chain.id
     );
 
     expect(hydratedConfig.store.getState().bundlerClient.chain.id).toBe(
-      config.store.getState().bundlerClient.chain.id,
+      config.store.getState().bundlerClient.chain.id
     );
 
     expect(getAlchemyTransport(hydratedConfig).config).toMatchInlineSnapshot(`

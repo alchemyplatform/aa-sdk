@@ -27,6 +27,6 @@ export const useSigner = <T extends AlchemySigner>(): T | null => {
   return useSyncExternalStore(
     watchSigner(config),
     () => getSigner<T>(config),
-    () => null,
+    () => null
   );
 };

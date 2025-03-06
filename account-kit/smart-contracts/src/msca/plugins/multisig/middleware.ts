@@ -63,7 +63,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<
   }
 
   const signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request),
+    account.getEntryPoint().getUserOperationHash(request)
   );
 
   const signerType = await getSignerType({
@@ -142,7 +142,7 @@ const isUsingMaxValues = (
     upperLimitPvg: Hex;
     upperLimitMaxFeePerGas: Hex;
     upperLimitMaxPriorityFeePerGas: Hex;
-  },
+  }
 ): boolean => {
   if (
     BigInt(request.preVerificationGas) !== BigInt(upperLimits.upperLimitPvg)

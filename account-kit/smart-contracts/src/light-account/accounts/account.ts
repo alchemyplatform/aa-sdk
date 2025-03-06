@@ -35,8 +35,7 @@ import {
 
 export type LightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends
-    LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">
 > = LightAccountBase<TSigner, "LightAccount", TLightAccountVersion> & {
   encodeTransferOwnership: (newOwner: Address) => Hex;
   getOwnerAddress: () => Promise<Address>;
@@ -46,8 +45,7 @@ export type LightAccount<
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends
-    LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">
 > = Omit<
   CreateLightAccountBaseParams<
     "LightAccount",
@@ -77,9 +75,9 @@ export type CreateLightAccountParams<
 export async function createLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = "v2.0.0",
+  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = "v2.0.0"
 >(
-  config: CreateLightAccountParams<TTransport, TSigner, TLightAccountVersion>,
+  config: CreateLightAccountParams<TTransport, TSigner, TLightAccountVersion>
 ): Promise<LightAccount<TSigner, TLightAccountVersion>>;
 
 /**
@@ -132,7 +130,7 @@ export async function createLightAccount({
     if (initCode) return initCode;
 
     const salt = LightAccountUnsupported1271Factories.has(
-      factoryAddress.toLowerCase() as Address,
+      factoryAddress.toLowerCase() as Address
     )
       ? 0n
       : salt_;

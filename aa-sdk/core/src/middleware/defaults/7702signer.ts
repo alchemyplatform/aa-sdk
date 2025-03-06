@@ -41,7 +41,7 @@ import { defaultUserOpSigner } from "./userOpSigner.js";
  * @returns {Function} A middleware function that signs EIP-7702 authorization tuples if necessary, and also uses the provided or default user operation signer to generate the user op signature.
  */
 export const default7702UserOpSigner: (
-  userOpSigner?: ClientMiddlewareFn,
+  userOpSigner?: ClientMiddlewareFn
 ) => ClientMiddlewareFn =
   (userOpSigner?: ClientMiddlewareFn) => async (struct, params) => {
     const userOpSigner_ = userOpSigner ?? defaultUserOpSigner;

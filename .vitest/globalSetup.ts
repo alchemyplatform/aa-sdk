@@ -20,7 +20,7 @@ export default async function () {
       const shutdown = instance.start();
 
       return shutdown;
-    }),
+    })
   );
 
   return async () => {

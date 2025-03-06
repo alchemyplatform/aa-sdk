@@ -68,7 +68,7 @@ export const config = createConfig(
     storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
-  uiConfig,
+  uiConfig
 );
 // ...other stuff in the file
 ```
@@ -178,7 +178,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
      },
      {
        // 2. (optional) overwrite AccountKit theme
-     },
+     }
    );
    ```
 
@@ -245,7 +245,7 @@ export const config = createConfig(
       addPasskeyOnSignup: true,
       showSignInText: true,
     },
-  },
+  }
 );
 
 export const queryClient = new QueryClient();
@@ -272,7 +272,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -320,7 +320,7 @@ export default function RootLayout({
   // This will allow us to persist state across page boundaries (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
   const initialState = cookieToInitialState(
     config,
-    headers().get("cookie") ?? undefined,
+    headers().get("cookie") ?? undefined
   );
 
   return (

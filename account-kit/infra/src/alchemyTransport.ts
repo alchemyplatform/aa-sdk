@@ -78,7 +78,7 @@ export type AlchemyTransport = AlchemyTransportBase & {
  */
 export function isAlchemyTransport(
   transport: Transport,
-  chain: Chain,
+  chain: Chain
 ): transport is AlchemyTransport {
   return transport({ chain }).config.type === "alchemy";
 }
@@ -132,7 +132,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
   const fetchOptions = { ...config.fetchOptions };
 
   const connectionConfig = ConnectionConfigSchema.parse(
-    config.alchemyConnection ?? config,
+    config.alchemyConnection ?? config
   );
 
   const headersAsObject = convertHeadersToObject(fetchOptions.headers);
@@ -189,7 +189,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         retryDelay,
         type: "alchemy",
       },
-      { alchemyRpcUrl: rpcUrl, fetchOptions },
+      { alchemyRpcUrl: rpcUrl, fetchOptions }
     );
   };
 
@@ -207,7 +207,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
 }
 
 const convertHeadersToObject = (
-  headers?: HeadersInit,
+  headers?: HeadersInit
 ): Record<string, string> => {
   if (!headers) {
     return {};
@@ -222,13 +222,10 @@ const convertHeadersToObject = (
   }
 
   if (Array.isArray(headers)) {
-    return headers.reduce(
-      (acc, header) => {
-        acc[header[0]] = header[1];
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
+    return headers.reduce((acc, header) => {
+      acc[header[0]] = header[1];
+      return acc;
+    }, {} as Record<string, string>);
   }
 
   return headers;

@@ -13,7 +13,7 @@ describe("Alchemy Transport Tests", () => {
     expect(() =>
       alchemy({
         ...args,
-      }),
+      })
     ).not.toThrowError();
   });
 

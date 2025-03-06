@@ -21,8 +21,7 @@ export type UpgradeAccountParams<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   upgradeTo: UpgradeToData;
   waitForTx?: boolean;
@@ -37,8 +36,7 @@ export type SendUserOperationParameters<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
 } & GetAccountParameter<TAccount> &
@@ -52,8 +50,7 @@ export type BuildUserOperationParameters<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = SendUserOperationParameters<TAccount, TContext, TEntryPointVersion>;
 // [!endregion BuildUserOperationParameters]
 
@@ -62,11 +59,10 @@ export type SignUserOperationParameters<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 > = {
   uoStruct: UserOperationStruct<TEntryPointVersion>;
 } & GetAccountParameter<TAccount> &
@@ -79,8 +75,7 @@ export type SendTransactionsParameters<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   requests: RpcTransactionRequest[];
 } & GetAccountParameter<TAccount> &
@@ -94,8 +89,7 @@ export type BuildTransactionParameters<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = SendTransactionsParameters<TAccount, TContext, TEntryPointVersion>;
 // [!endregion BuildTransactionParameters]
 
@@ -105,8 +99,7 @@ export type DropAndReplaceUserOperationParameters<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   uoToDrop: UserOperationRequest<TEntryPointVersion>;
 } & GetAccountParameter<TAccount> &
@@ -141,7 +134,7 @@ export type WaitForUserOperationTxParameters = {
 
 // [!region BuildUserOperationFromTransactionsResult]
 export type BuildUserOperationFromTransactionsResult<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uoStruct: UserOperationStruct<TEntryPointVersion>;
   batch: BatchUserOperationCallData;
@@ -156,11 +149,10 @@ export type UserOperationContext = Record<string, any>;
 export type GetContextParameter<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
-> =
-  IsUndefined<TContext> extends true
-    ? {
-        context?: TContext;
-      }
-    : { context: TContext };
+    | undefined
+> = IsUndefined<TContext> extends true
+  ? {
+      context?: TContext;
+    }
+  : { context: TContext };
 // [!endregion GetContextParameter]

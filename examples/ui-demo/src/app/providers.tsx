@@ -16,7 +16,7 @@ export const Providers = (
   props: PropsWithChildren<{
     initialState?: AlchemyClientState;
     initialConfig?: Config;
-  }>,
+  }>
 ) => {
   const configRef = useRef<AlchemyAccountsConfigWithUI>();
   if (!configRef.current) {

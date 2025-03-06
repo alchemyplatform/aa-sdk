@@ -21,9 +21,9 @@ export function isAlchemySmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  client: Client<Transport, TChain, TAccount>,
+  client: Client<Transport, TChain, TAccount>
 ): client is AlchemySmartAccountClient<TChain, TAccount> {
   return client.transport.type === "alchemy";
 }

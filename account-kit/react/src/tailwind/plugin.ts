@@ -44,7 +44,7 @@ export const getAccountKitContentPath = () => {
   const pathToMe = require.resolve("@account-kit/react");
   const contentPath = `${pathToMe.replace(
     "index.js",
-    "",
+    ""
   )}**/*.{js,ts,jsx,tsx,mdx}`;
 
   return contentPath;
@@ -75,7 +75,7 @@ export const getAccountKitContentPath = () => {
  * @returns {TailWindPlugin} a TailwindPlugin to be used within the tailwind.config.js
  */
 export const accountKitUi: (
-  themeOverride?: AccountKitThemeOverride,
+  themeOverride?: AccountKitThemeOverride
 ) => TailWindPlugin = (themeOverride) => {
   const defaultTheme = createDefaultTheme();
   const accountKitTheme = apply(defaultTheme, themeOverride);
@@ -105,10 +105,10 @@ export const accountKitUi: (
             (acc, key) => ({
               ...acc,
               [key]: `var(${getColorVariableName(
-                key as AccountKitThemeColor,
+                key as AccountKitThemeColor
               )})`,
             }),
-            {} as Record<AccountKitThemeColor, string>,
+            {} as Record<AccountKitThemeColor, string>
           ),
           keyframes: {
             "fade-in": {
@@ -148,7 +148,7 @@ export const accountKitUi: (
           },
         },
       },
-    },
+    }
   );
 };
 
@@ -161,7 +161,7 @@ export const accountKitUi: (
  */
 export const withAccountKitUi = (
   config: TailwindConfig,
-  themeOverride?: AccountKitThemeOverride,
+  themeOverride?: AccountKitThemeOverride
 ): TailwindConfig => ({
   darkMode: [
     "variant",

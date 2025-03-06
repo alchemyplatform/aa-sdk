@@ -62,7 +62,7 @@ export type UseExportAccountResult = {
  * ```
  */
 export function useExportAccount(
-  args?: UseExportAccountMutationArgs,
+  args?: UseExportAccountMutationArgs
 ): UseExportAccountResult {
   const { params, ...mutationArgs } = args ?? {};
   const { queryClient } = useAlchemyAccountContext();
@@ -82,7 +82,7 @@ export function useExportAccount(
         signer!.exportWallet(params ?? { iframeContainerId }),
       ...mutationArgs,
     },
-    queryClient,
+    queryClient
   );
 
   const ExportAccountComponent = useCallback(
@@ -95,7 +95,7 @@ export function useExportAccount(
 
           return `${acc}\n${kebabKey}: ${value};`;
         },
-        "",
+        ""
       );
 
       return createElement(
@@ -107,10 +107,10 @@ export function useExportAccount(
           },
           id: iframeContainerId,
         },
-        createElement("style", {}, `iframe { ${iframeCssString} } `),
+        createElement("style", {}, `iframe { ${iframeCssString} } `)
       );
     },
-    [iframeContainerId],
+    [iframeContainerId]
   );
 
   return {

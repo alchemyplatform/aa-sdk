@@ -62,7 +62,7 @@ const packUserOperation = (request: UserOperationRequest<"0.7.0">): Hex => {
       hexToBigInt(request.preVerificationGas),
       gasFees,
       keccak256(paymasterAndData),
-    ],
+    ]
   );
 };
 
@@ -78,7 +78,7 @@ export default {
   getUserOperationHash: (
     request: UserOperationRequest<"0.7.0">,
     entryPointAddress: Address,
-    chainId: number,
+    chainId: number
   ): Hash => {
     const encoded = encodeAbiParameters(
       [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
@@ -86,7 +86,7 @@ export default {
         keccak256(packUserOperation(request)),
         entryPointAddress,
         BigInt(chainId),
-      ],
+      ]
     );
 
     return keccak256(encoded);
@@ -98,7 +98,7 @@ export default {
 export function packAccountGasLimits(
   data:
     | Pick<UserOperationRequest_v7, "verificationGasLimit" | "callGasLimit">
-    | Pick<UserOperationRequest_v7, "maxPriorityFeePerGas" | "maxFeePerGas">,
+    | Pick<UserOperationRequest_v7, "maxPriorityFeePerGas" | "maxFeePerGas">
 ): Hex {
   return concat(Object.values(data).map((v) => pad(v, { size: 16 })));
 }

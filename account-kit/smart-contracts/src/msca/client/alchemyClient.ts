@@ -15,7 +15,7 @@ import {
 import { type Chain, type HttpTransport } from "viem";
 
 export type AlchemyModularAccountClientConfig<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
   "transport"
@@ -26,9 +26,9 @@ export type AlchemyModularAccountClientConfig<
   >;
 
 export function createModularAccountAlchemyClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyModularAccountClientConfig<TSigner>,
+  params: AlchemyModularAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,
@@ -60,7 +60,7 @@ export function createModularAccountAlchemyClient<
  * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` configured with the desired plugins and actions
  */
 export async function createModularAccountAlchemyClient(
-  config: AlchemyModularAccountClientConfig,
+  config: AlchemyModularAccountClientConfig
 ): Promise<AlchemySmartAccountClient> {
   return createMultiOwnerModularAccountClient(config);
 }

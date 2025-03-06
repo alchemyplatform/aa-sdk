@@ -6,7 +6,7 @@ export const executionAbiConst = (name: string) =>
 
 export const extractExecutionAbi = (
   executionFunctions: readonly Address[],
-  abi: Abi,
+  abi: Abi
 ): AbiFunction[] => {
   return executionFunctions.map((f) => {
     const item = getAbiItem({
@@ -17,7 +17,7 @@ export const extractExecutionAbi = (
     if (item.type !== "function") {
       throw new Error(
         "execution function not mapping to a function in the ABI",
-        { cause: JSON.stringify(item, null, 2) },
+        { cause: JSON.stringify(item, null, 2) }
       );
     }
 

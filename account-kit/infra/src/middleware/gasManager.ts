@@ -44,7 +44,7 @@ import { alchemyFeeEstimator } from "./feeEstimator.js";
  * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
  */
 export function alchemyGasManagerMiddleware(
-  policyId: string | string[],
+  policyId: string | string[]
 ): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
   return erc7677Middleware<{ policyId: string | string[] }>({
     context: { policyId: policyId },
@@ -88,7 +88,7 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
  * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
  */
 export function alchemyGasAndPaymasterAndDataMiddleware(
-  params: AlchemyGasAndPaymasterAndDataMiddlewareParams,
+  params: AlchemyGasAndPaymasterAndDataMiddlewareParams
 ): Pick<
   ClientMiddlewareConfig,
   "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData"
@@ -110,26 +110,26 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       // Fall back to the default 7677 dummyPaymasterAndData middleware.
       return alchemyGasManagerMiddleware(policyId).dummyPaymasterAndData!(
         uo,
-        args,
+        args
       );
     },
     feeEstimator: (uo, args) => {
       return feeEstimatorOverride
         ? feeEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
-          ? alchemyFeeEstimator(transport)(uo, args)
-          : noopMiddleware(uo, args);
+        ? alchemyFeeEstimator(transport)(uo, args)
+        : noopMiddleware(uo, args);
     },
     gasEstimator: (uo, args) => {
       return gasEstimatorOverride
         ? gasEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
-          ? defaultGasEstimator(args.client)(uo, args)
-          : noopMiddleware(uo, args);
+        ? defaultGasEstimator(args.client)(uo, args)
+        : noopMiddleware(uo, args);
     },
     paymasterAndData: async (
       uo,
-      { account, client, feeOptions, overrides: overrides_ },
+      { account, client, feeOptions, overrides: overrides_ }
     ) => {
       if (!client.chain) {
         throw new ChainNotFoundError();
@@ -142,31 +142,31 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           "maxFeePerGas",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp,
+          userOp
         ),
         maxPriorityFeePerGas: overrideField(
           "maxPriorityFeePerGas",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp,
+          userOp
         ),
         callGasLimit: overrideField(
           "callGasLimit",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp,
+          userOp
         ),
         verificationGasLimit: overrideField(
           "verificationGasLimit",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp,
+          userOp
         ),
         preVerificationGas: overrideField(
           "preVerificationGas",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp,
+          userOp
         ),
         ...(account.getEntryPoint().version === "0.7.0"
           ? {
@@ -174,13 +174,13 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
                 "paymasterVerificationGasLimit",
                 overrides_ as UserOperationOverrides<"0.7.0">,
                 feeOptions,
-                userOp,
+                userOp
               ),
               paymasterPostOpGasLimit: overrideField<"0.7.0">(
                 "paymasterPostOpGasLimit",
                 overrides_ as UserOperationOverrides<"0.7.0">,
                 feeOptions,
-                userOp,
+                userOp
               ),
             }
           : {}),
@@ -218,12 +218,12 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
  * @returns {Hex | Multiplier | undefined} the overridden field value
  */
 const overrideField = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
   field: keyof UserOperationFeeOptions<TEntryPointVersion>,
   overrides: UserOperationOverrides<TEntryPointVersion> | undefined,
   feeOptions: UserOperationFeeOptions<TEntryPointVersion> | undefined,
-  userOperation: UserOperationRequest<TEntryPointVersion>,
+  userOperation: UserOperationRequest<TEntryPointVersion>
 ): Hex | Multiplier | undefined => {
   let _field = field as keyof UserOperationOverrides<TEntryPointVersion>;
 

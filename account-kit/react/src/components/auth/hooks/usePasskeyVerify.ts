@@ -30,7 +30,7 @@ export const usePasskeyVerify = (): UsePasskeyVerifyReturnType => {
 
   const authenticate = useCallback(
     () => authenticate_({ type: "passkey", createNew: false }),
-    [authenticate_],
+    [authenticate_]
   );
 
   return {

@@ -80,7 +80,7 @@ const rule: Rule.RuleModule = {
 
     function checkArrowFunctionOrFunctionExpression(
       node: (ESTree.FunctionExpression | ESTree.ArrowFunctionExpression) &
-        Rule.NodeParentExtension,
+        Rule.NodeParentExtension
     ) {
       if (
         node.parent.type === "VariableDeclarator" &&
@@ -171,7 +171,7 @@ function populateExports(packageJsonPath: string, packageName: string) {
   packageNameToExports.set(packageName, exportsMap);
   const indexPath = path.resolve(
     path.dirname(packageJsonPath),
-    "./src/index.ts",
+    "./src/index.ts"
   );
 
   if (!fs.existsSync(indexPath)) {
@@ -183,7 +183,7 @@ function populateExports(packageJsonPath: string, packageName: string) {
     indexPath,
     fileContent,
     ts.ScriptTarget.Latest,
-    true,
+    true
   );
 
   sourceFile.forEachChild((node) => {
@@ -207,7 +207,7 @@ function populateExports(packageJsonPath: string, packageName: string) {
 
       const exportedFrom = getExportedFilePath(
         indexPath,
-        exportedNode.getSourceFile().fileName,
+        exportedNode.getSourceFile().fileName
       );
       if (!exportedFrom) {
         return;
@@ -255,7 +255,7 @@ function getImportOf(node: ts.Node) {
 
 function registerClassMembers(
   node: ts.Node | null,
-  exportsMap: Map<string, Export>,
+  exportsMap: Map<string, Export>
 ) {
   if (!node || !ts.isClassDeclaration(node)) {
     return;
@@ -274,7 +274,7 @@ function registerClassMembers(
         const superClassLocation = getImportOf(superClass);
         const exportedFrom = getExportedFilePath(
           sourceFile.fileName,
-          superClassLocation,
+          superClassLocation
         );
         if (!exportedFrom) {
           return;

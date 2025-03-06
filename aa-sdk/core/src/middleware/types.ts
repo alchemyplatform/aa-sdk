@@ -17,8 +17,7 @@ export type ClientMiddlewareArgs<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   overrides?: UserOperationOverrides<TEntryPointVersion>;
   context?: TContext;
@@ -31,15 +30,14 @@ export type ClientMiddlewareArgs<
 export type ClientMiddlewareFn<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 > = <
   TAccount extends SmartContractAccount,
   C extends MiddlewareClient,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   struct: Deferrable<UserOperationStruct<TEntryPointVersion>>,
-  args: ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion>,
+  args: ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion>
 ) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
 // [!endregion ClientMiddlewareFn]
 
@@ -47,7 +45,7 @@ export type ClientMiddlewareFn<
 export type ClientMiddleware<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 > = {
   dummyPaymasterAndData: ClientMiddlewareFn<TContext>;
   feeEstimator: ClientMiddlewareFn<TContext>;

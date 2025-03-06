@@ -56,8 +56,8 @@ export class SessionKeySigner
         typeof this.storageType !== "string"
           ? this.storageType
           : this.storageType === "session-storage"
-            ? sessionStorage
-            : localStorage;
+          ? sessionStorage
+          : localStorage;
       const key = storage.getItem(this.storageKey);
 
       if (key) {
@@ -104,7 +104,7 @@ export class SessionKeySigner
    * @returns {Promise<Hex>} A promise that resolves to the signed message
    */
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
-    msg,
+    msg
   ) => {
     return this.inner.signMessage(msg);
   };
@@ -134,9 +134,9 @@ export class SessionKeySigner
    */
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => {
     return this.inner.signTypedData(params);
   };

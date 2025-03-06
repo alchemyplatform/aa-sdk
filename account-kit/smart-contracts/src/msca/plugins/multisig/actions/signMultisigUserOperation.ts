@@ -19,10 +19,10 @@ export async function signMultisigUserOperation<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  params: SignMultisigUserOperationParams<TAccount>,
+  params: SignMultisigUserOperationParams<TAccount>
 ): Promise<SignMultisigUserOperationResult> {
   const { account = client.account, signatures, userOperationRequest } = params;
 
@@ -34,7 +34,7 @@ export async function signMultisigUserOperation<
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "signMultisigUserOperation",
-      client,
+      client
     );
   }
 
@@ -75,13 +75,13 @@ export async function signMultisigUserOperation<
   });
 
   const signatureObj = splitSignatures.signatures.find(
-    (x) => x.signer === signerAddress,
+    (x) => x.signer === signerAddress
   );
 
   if (!signatureObj) {
     // TODO: strongly type this
     throw new Error(
-      "INTERNAL ERROR: signature not found in split signatures, this is an internal bug please report",
+      "INTERNAL ERROR: signature not found in split signatures, this is an internal bug please report"
     );
   }
 

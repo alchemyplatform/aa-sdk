@@ -26,7 +26,7 @@ function useBorderRadius() {
       theme,
       primaryColor,
       borderRadius,
-    }),
+    })
   );
 }
 
@@ -98,7 +98,7 @@ function CornerRadiusSelectMenu() {
         isOpen={menuOpen}
         className={cn(
           "w-full radius py-3 px-4 bg-white border border-border flex items-center justify-between transition-colors ease-out",
-          menuOpen && `border-[${primaryColor[theme]}]`,
+          menuOpen && `border-[${primaryColor[theme]}]`
         )}
       >
         <span className="text-sm font-normal block text-left text-secondary-foreground">
@@ -108,7 +108,7 @@ function CornerRadiusSelectMenu() {
           <ChevronDown
             className={cn(
               "transition-transform stroke-demo-fg-primary",
-              menuOpen && "rotate-180",
+              menuOpen && "rotate-180"
             )}
           />
         </div>
@@ -123,7 +123,7 @@ function CornerRadiusSelectMenu() {
                 "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
                 selected === option.id
                   ? "font-medium bg-demo-surface-secondary"
-                  : "font-normal",
+                  : "font-normal"
               )}
             >
               {option.label}

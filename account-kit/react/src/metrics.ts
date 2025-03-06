@@ -18,7 +18,7 @@ export type ReactEventsSchema = readonly [
   {
     EventName: "eoa_connected";
     EventData: undefined;
-  },
+  }
 ];
 
 export const ReactLogger = createLogger<ReactEventsSchema>({

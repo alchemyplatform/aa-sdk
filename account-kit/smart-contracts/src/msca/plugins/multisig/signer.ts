@@ -13,7 +13,7 @@ import { MultisigPlugin, MultisigPluginAbi } from "./plugin.js";
 
 type MultisigSignMethodsParams<
   TTransport extends Transport,
-  TSigner extends SmartAccountSigner,
+  TSigner extends SmartAccountSigner
 > = {
   client: BundlerClient<TTransport>;
   accountAddress: Address;
@@ -24,7 +24,7 @@ type MultisigSignMethodsParams<
 
 export const multisigSignMethods = <
   TTransport extends Transport,
-  TSigner extends SmartAccountSigner,
+  TSigner extends SmartAccountSigner
 >({
   client,
   accountAddress,
@@ -76,7 +76,7 @@ export const multisigSignMethods = <
         "FF".repeat(32 * 3) +
         "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3c" +
         "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c".repeat(
-          Number(actualThreshold) - 1,
+          Number(actualThreshold) - 1
         )) as Hex;
     },
 
@@ -90,9 +90,9 @@ export const multisigSignMethods = <
 
     signTypedData: <
       const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
     >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
     ): Promise<Hex> => {
       return signWith712Wrapper(hashTypedData(typedDataDefinition));
     },

@@ -26,7 +26,7 @@ import type { AlchemyTransport } from "../alchemyTransport";
  * @returns {ClientMiddlewareFn} A middleware function that takes a transaction structure and fee options, and returns the augmented structure with estimated fees
  */
 export const alchemyFeeEstimator: (
-  transport: AlchemyTransport,
+  transport: AlchemyTransport
 ) => ClientMiddlewareFn =
   (transport) =>
   async (struct, { overrides, feeOptions, client }) => {
@@ -48,12 +48,12 @@ export const alchemyFeeEstimator: (
     const maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
       maxPriorityFeePerGasEstimate,
       overrides?.maxPriorityFeePerGas,
-      feeOptions?.maxPriorityFeePerGas,
+      feeOptions?.maxPriorityFeePerGas
     );
     const maxFeePerGas = applyUserOpOverrideOrFeeOption(
       bigIntMultiply(baseFeePerGas, 1.5) + BigInt(maxPriorityFeePerGas),
       overrides?.maxFeePerGas,
-      feeOptions?.maxFeePerGas,
+      feeOptions?.maxFeePerGas
     );
 
     return {

@@ -12,10 +12,10 @@ export async function readOwners<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+  args: GetPluginAddressParameter & GetAccountParameter<TAccount>
 ) {
   const account = args?.account ?? client.account;
   if (!account) {
@@ -25,7 +25,7 @@ export async function readOwners<
   // either via account loupe or checking if the supports interface call passes on the account
   const [owners] = await MultisigPlugin.getContract(
     client,
-    args?.pluginAddress,
+    args?.pluginAddress
   ).read.ownershipInfoOf([account.address]);
   return owners;
 }

@@ -20,9 +20,9 @@ import { allEqual, isBigNumberish } from "./index.js";
  * @returns {boolean} a type guard that asserts the UserOperationRequest is valid
  */
 export function isValidRequest<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
-  request: UserOperationStruct<TEntryPointVersion>,
+  request: UserOperationStruct<TEntryPointVersion>
 ): request is UserOperationRequest<TEntryPointVersion> {
   // These are the only ones marked as optional in the interface above
   return (
@@ -43,7 +43,7 @@ export function isValidRequest<
  * @returns {boolean}  a type guard that asserts the UserOperationRequest is a UserOperationRequest
  */
 export function isValidPaymasterAndData<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
   if ("paymasterAndData" in request) {
     return (request as UserOperationStruct_v6).paymasterAndData != null;
@@ -54,7 +54,7 @@ export function isValidPaymasterAndData<
     (request as UserOperationStruct_v7).paymaster == null,
     (request as UserOperationStruct_v7).paymasterData == null,
     (request as UserOperationStruct_v7).paymasterPostOpGasLimit == null,
-    (request as UserOperationStruct_v7).paymasterVerificationGasLimit == null,
+    (request as UserOperationStruct_v7).paymasterVerificationGasLimit == null
   );
 }
 
@@ -65,7 +65,7 @@ export function isValidPaymasterAndData<
  * @returns {boolean} a type guard that asserts the UserOperationStruct is a UserOperationRequest
  */
 export function isValidFactoryAndData<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
   if ("initCode" in request) {
     const { initCode } = request as UserOperationStruct_v6;
@@ -75,7 +75,7 @@ export function isValidFactoryAndData<
   // either all exist, or none.
   return allEqual(
     (request as UserOperationStruct_v7).factory == null,
-    (request as UserOperationStruct_v7).factoryData == null,
+    (request as UserOperationStruct_v7).factoryData == null
   );
 }
 
@@ -89,7 +89,7 @@ export function isValidFactoryAndData<
  */
 export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
   value: TValue,
-  override?: BigNumberish | Multiplier,
+  override?: BigNumberish | Multiplier
 ): TValue | BigNumberish {
   if (override == null) {
     return value;
@@ -115,7 +115,7 @@ export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
  */
 export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
   value: TValue,
-  feeOption?: UserOperationFeeOptionsField,
+  feeOption?: UserOperationFeeOptionsField
 ): TValue | BigNumberish {
   if (feeOption == null) {
     return value;
@@ -127,7 +127,7 @@ export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
           ? bigIntMultiply(value, feeOption.multiplier)
           : value,
         feeOption.min,
-        feeOption.max,
+        feeOption.max
       )
     : feeOption.min ?? 0n;
 }
@@ -143,11 +143,11 @@ export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
  * @returns {BigNumberish} the new value of the field after applying the override or fee option
  */
 export function applyUserOpOverrideOrFeeOption<
-  TValue extends BigNumberish | undefined,
+  TValue extends BigNumberish | undefined
 >(
   value: TValue,
   override?: BigNumberish | Multiplier,
-  feeOption?: UserOperationFeeOptionsField,
+  feeOption?: UserOperationFeeOptionsField
 ): TValue | BigNumberish {
   return value != null && override != null
     ? applyUserOpOverride(value, override)!
@@ -164,9 +164,9 @@ export function applyUserOpOverrideOrFeeOption<
  * @returns {boolean} whether the paymaster middleware should be bypassed
  */
 export const bypassPaymasterAndData = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
-  overrides: UserOperationOverrides<TEntryPointVersion> | undefined,
+  overrides: UserOperationOverrides<TEntryPointVersion> | undefined
 ): boolean =>
   !!overrides &&
   ("paymasterAndData" in overrides || "paymasterData" in overrides);
@@ -181,9 +181,9 @@ export const bypassPaymasterAndData = <
  * @returns {boolean} whether the paymaster middleware should be bypassed
  */
 export const bypassPaymasterAndDataEmptyHex = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
-  overrides: UserOperationOverrides<TEntryPointVersion> | undefined,
+  overrides: UserOperationOverrides<TEntryPointVersion> | undefined
 ): boolean =>
   overrides !== undefined &&
   (("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
@@ -197,7 +197,7 @@ export const bypassPaymasterAndDataEmptyHex = <
  * @returns {{ paymaster: Hex; paymasterData: Hex}} the parsed paymaster and paymasterData fields of entrypoint v0.7 user operation request paymaster and paymasterData field
  */
 export const parsePaymasterAndData = (
-  paymasterAndData: Hex,
+  paymasterAndData: Hex
 ): Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData"> => ({
   paymaster: paymasterAndData.substring(0, 42) as Address,
   paymasterData: `0x${paymasterAndData.substring(42)}` as Hex,

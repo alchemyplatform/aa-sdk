@@ -3,7 +3,7 @@ import type { Evaluate, MaybeArray, MaybePromise } from "./types";
 
 export type ContractConfig<
   chainId extends number = number,
-  requiredChainId extends number | undefined = undefined,
+  requiredChainId extends number | undefined = undefined
 > = {
   /**
    * Contract ABI
@@ -73,7 +73,7 @@ export type Config = {
 };
 
 export function defineConfig(
-  config: MaybeArray<Config> | (() => MaybePromise<MaybeArray<Config>>),
+  config: MaybeArray<Config> | (() => MaybePromise<MaybeArray<Config>>)
 ) {
   return config;
 }

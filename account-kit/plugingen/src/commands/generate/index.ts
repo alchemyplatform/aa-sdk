@@ -101,7 +101,7 @@ export async function generate(options: GenerateOptions = {}) {
       if (!(chain.id in plugin.addresses)) {
         spinner.fail();
         throw new Error(
-          `contract address missing for the reference chain ${chain.id}`,
+          `contract address missing for the reference chain ${chain.id}`
         );
       }
 
@@ -123,8 +123,8 @@ export async function generate(options: GenerateOptions = {}) {
           pluginConfig: plugin.pluginConfig,
           contract: plugin.contract,
           config,
-        }),
-      ),
+        })
+      )
     );
   }
 }
@@ -201,7 +201,7 @@ const generatePlugin = async ({
   ${Array.from(types.entries())
     .map(
       ([name, type]) =>
-        `${type.isPublic ? "export" : ""} type ${name} = ${type.definition};`,
+        `${type.isPublic ? "export" : ""} type ${name} = ${type.definition};`
     )
     .join("\n\n")}
 
@@ -249,7 +249,7 @@ const writePlugin = async ({
   // 3. generate an index.ts file which correctly exports all of the types + exports the output of extensions.ts
   // so that it's easier to extend and import without conflicts
   const pluginPath = `${config.outDir}/${kebabCase(
-    pluginConfig.name.replaceAll(pluginRegEx, ""),
+    pluginConfig.name.replaceAll(pluginRegEx, "")
   )}/plugin.${isTypeScript ? "ts" : "js"}`;
 
   const code = dedent`

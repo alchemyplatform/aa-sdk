@@ -41,7 +41,7 @@ export type UseAddPasskeyResult = {
  * ```
  */
 export function useAddPasskey(
-  mutationArgs?: UseAddPasskeyMutationArgs,
+  mutationArgs?: UseAddPasskeyMutationArgs
 ): UseAddPasskeyResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
@@ -53,13 +53,13 @@ export function useAddPasskey(
   } = useMutation(
     {
       mutationFn: async (
-        params: CredentialCreationOptions | undefined | void,
+        params: CredentialCreationOptions | undefined | void
       ) => {
         return signer!.addPasskey(params ?? undefined);
       },
       ...mutationArgs,
     },
-    queryClient,
+    queryClient
   );
 
   return {

@@ -3,14 +3,11 @@ import type { Context, Plugin } from "@segment/analytics-next";
 const allowlist: readonly string[] = ["page"] as const;
 
 function stripContext(ctx: Context): Context {
-  ctx.event.context = allowlist.reduce(
-    (acc, key) => {
-      acc[key] = ctx.event?.context?.[key];
+  ctx.event.context = allowlist.reduce((acc, key) => {
+    acc[key] = ctx.event?.context?.[key];
 
-      return acc;
-    },
-    {} as Record<(typeof allowlist)[number], unknown>,
-  );
+    return acc;
+  }, {} as Record<(typeof allowlist)[number], unknown>);
 
   return ctx;
 }

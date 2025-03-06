@@ -24,7 +24,7 @@ import {
  * @returns {UserOperationFeeOptions} An object containing the default fee options for user operations on the specified chain
  */
 export const getDefaultUserOperationFeeOptions = (
-  chain: Chain,
+  chain: Chain
 ): UserOperationFeeOptions => {
   const feeOptions: UserOperationFeeOptions = {
     maxFeePerGas: { multiplier: 1.5 },

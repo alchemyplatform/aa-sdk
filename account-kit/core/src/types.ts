@@ -44,12 +44,12 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
     ? LightAccount<AlchemySigner>
     : T extends "MultiOwnerModularAccount"
-      ? MultiOwnerModularAccount<AlchemySigner>
-      : T extends "MultiOwnerLightAccount"
-        ? MultiOwnerLightAccount<AlchemySigner>
-        : T extends "ModularAccountV2"
-          ? ModularAccountV2<AlchemySigner>
-          : never;
+    ? MultiOwnerModularAccount<AlchemySigner>
+    : T extends "MultiOwnerLightAccount"
+    ? MultiOwnerLightAccount<AlchemySigner>
+    : T extends "ModularAccountV2"
+    ? ModularAccountV2<AlchemySigner>
+    : never;
 
 export type AlchemyAccountsConfig = {
   store: Store;

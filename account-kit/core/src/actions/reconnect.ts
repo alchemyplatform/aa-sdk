@@ -41,7 +41,7 @@ export async function reconnect(config: AlchemyAccountsConfig) {
           type: "LightAccount",
           accountParams: accountConfigs[chain.id]["LightAccount"],
         },
-        config,
+        config
       );
     }
 
@@ -51,7 +51,7 @@ export async function reconnect(config: AlchemyAccountsConfig) {
           type: "MultiOwnerModularAccount",
           accountParams: accountConfigs[chain.id]["MultiOwnerModularAccount"],
         },
-        config,
+        config
       );
     }
 
@@ -61,7 +61,7 @@ export async function reconnect(config: AlchemyAccountsConfig) {
           type: "ModularAccountV2",
           accountParams: accountConfigs[chain.id]["ModularAccountV2"],
         },
-        config,
+        config
       );
     }
 

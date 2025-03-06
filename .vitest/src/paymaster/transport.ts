@@ -18,7 +18,7 @@ import { estimateUserOperationGas } from "../../../aa-sdk/core/src/actions/bundl
 
 export const paymasterTransport = (
   client: Client & { mode: "anvil" },
-  bundlerClient: Client & { mode: "bundler" },
+  bundlerClient: Client & { mode: "bundler" }
 ) =>
   custom({
     request: async (args) => {
@@ -27,7 +27,7 @@ export const paymasterTransport = (
           UserOperationRequest,
           Address,
           Hex,
-          Record<string, any>,
+          Record<string, any>
         ];
 
         try {
@@ -48,7 +48,7 @@ export const paymasterTransport = (
           UserOperationRequest,
           Address,
           Hex,
-          Record<string, any>,
+          Record<string, any>
         ];
 
         try {
@@ -73,7 +73,7 @@ export const paymasterTransport = (
               dummySignature: Hex;
               userOperation: UserOperationRequest;
               overrides?: UserOperationOverrides;
-            },
+            }
           ];
           const isPMv7 =
             entryPoint.toLowerCase() ===
@@ -86,10 +86,10 @@ export const paymasterTransport = (
               hexToBigInt(
                 await client.request({
                   method: "eth_gasPrice",
-                }),
+                })
               ),
-              1.5,
-            ),
+              1.5
+            )
           );
 
           const maxPriorityFeePerGas = await bundlerClient.request<{
@@ -115,7 +115,7 @@ export const paymasterTransport = (
             await estimateUserOperationGas(bundlerClient, {
               request: uo,
               entryPoint,
-            }),
+            })
           );
 
           uo = {

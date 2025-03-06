@@ -14,7 +14,7 @@ type ResolveConfigParameters = {
  * @returns {Promise<MaybeArray<Config>>} an array of the config objects
  */
 export async function resolveConfig(
-  parameters: ResolveConfigParameters,
+  parameters: ResolveConfigParameters
 ): Promise<MaybeArray<Config>> {
   const { configPath } = parameters;
   const res = await bundleRequire({ filepath: configPath });

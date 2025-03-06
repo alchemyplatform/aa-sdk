@@ -64,66 +64,64 @@ export type BaseSmartAccountClientActions<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   buildUserOperation: (
-    args: BuildUserOperationParameters<TAccount, TContext>,
+    args: BuildUserOperationParameters<TAccount, TContext>
   ) => Promise<UserOperationStruct<TEntryPointVersion>>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
     overrides?: UserOperationOverrides<TEntryPointVersion>,
-    context?: TContext,
+    context?: TContext
   ) => Promise<UserOperationStruct<TEntryPointVersion>>;
   buildUserOperationFromTxs: (
-    args: BuildTransactionParameters<TAccount, TContext>,
+    args: BuildTransactionParameters<TAccount, TContext>
   ) => Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
   checkGasSponsorshipEligibility: <
     TContext extends UserOperationContext | undefined =
       | UserOperationContext
       | undefined,
-    TEntryPointVersion extends
-      GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+    TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
   >(
-    args: SendUserOperationParameters<TAccount, TContext>,
+    args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<
     CheckGasSponsorshipEligibilityResult<TAccount, TEntryPointVersion>
   >;
   signUserOperation: (
-    args: SignUserOperationParameters<TAccount, TEntryPointVersion, TContext>,
+    args: SignUserOperationParameters<TAccount, TEntryPointVersion, TContext>
   ) => Promise<UserOperationRequest<TEntryPointVersion>>;
   dropAndReplaceUserOperation: (
-    args: DropAndReplaceUserOperationParameters<TAccount, TContext>,
+    args: DropAndReplaceUserOperationParameters<TAccount, TContext>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   // TODO: for v4 we should combine override and context into an `opts` parameter
   // which wraps both of these properties so we can use GetContextParameter
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
     overrides?: UserOperationOverrides<TEntryPointVersion>,
-    context?: TContext,
+    context?: TContext
   ) => Promise<Hex>;
   sendTransactions: (
-    args: SendTransactionsParameters<TAccount, TContext>,
+    args: SendTransactionsParameters<TAccount, TContext>
   ) => Promise<Hex>;
   sendUserOperation: (
     args: SendUserOperationParameters<
       TAccount,
       TContext,
       GetEntryPointFromAccount<TAccount>
-    >,
+    >
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   waitForUserOperationTransaction: (
-    args: WaitForUserOperationTxParameters,
+    args: WaitForUserOperationTxParameters
   ) => Promise<Hex>;
   upgradeAccount: (
-    args: UpgradeAccountParams<TAccount, TContext>,
+    args: UpgradeAccountParams<TAccount, TContext>
   ) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>,
+    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
   ) => Promise<Hex>;
 } & (IsUndefined<TAccount> extends false
   ? { getAddress: () => Address }
@@ -148,9 +146,9 @@ export const smartAccountClientActions: <
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => BaseSmartAccountClientActions<TChain, TAccount, TContext> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
   buildUserOperationFromTx: (args, overrides, context) =>
@@ -175,7 +173,7 @@ export const smartAccountClientActions: <
 
 export const smartAccountClientMethodKeys = Object.keys(
   // @ts-expect-error we just want to get the keys
-  smartAccountClientActions(undefined),
+  smartAccountClientActions(undefined)
 ).reduce((accum, curr) => {
   accum.add(curr);
   return accum;

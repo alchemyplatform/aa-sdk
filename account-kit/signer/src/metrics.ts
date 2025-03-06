@@ -19,7 +19,7 @@ export type SignerEventsSchema = [
   {
     EventName: "signer_sign_message";
     EventData: undefined;
-  },
+  }
 ];
 
 export const SignerLogger = createLogger<SignerEventsSchema>({

@@ -15,10 +15,10 @@ export const upgradeAccount: <
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: UpgradeAccountParams<TAccount, TContext>,
+  args: UpgradeAccountParams<TAccount, TContext>
 ) => Promise<Hash> = async (client, args) => {
   const {
     account = client.account,
@@ -36,7 +36,7 @@ export const upgradeAccount: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "upgradeAccount",
-      client,
+      client
     );
   }
 

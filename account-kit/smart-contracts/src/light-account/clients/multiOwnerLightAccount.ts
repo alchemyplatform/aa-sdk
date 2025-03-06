@@ -26,7 +26,7 @@ import {
 export type CreateMultiOwnerLightAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   transport: CreateMultiOwnerLightAccountParams<
     TTransport,
@@ -45,7 +45,7 @@ export type CreateMultiOwnerLightAccountClientParams<
 export type CreateMultiOwnerLightAccountClientDynamicTransportParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > =
   | (AlchemyMultiOwnerLightAccountClientConfig<TSigner> & {
       transport: AlchemyTransport;
@@ -53,11 +53,11 @@ export type CreateMultiOwnerLightAccountClientDynamicTransportParams<
   | CreateMultiOwnerLightAccountClientParams<TTransport, TChain, TSigner>;
 
 export async function createMultiOwnerLightAccountClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   params: AlchemyMultiOwnerLightAccountClientConfig<TSigner> & {
     transport: AlchemyTransport;
-  },
+  }
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,
@@ -69,10 +69,10 @@ export async function createMultiOwnerLightAccountClient<
 export function createMultiOwnerLightAccountClient<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   args: CreateMultiOwnerLightAccountClientParams<TTransport, TChain, TSigner> &
-    NotType<TTransport, AlchemyTransport>,
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
@@ -123,7 +123,7 @@ export function createMultiOwnerLightAccountClient<
  * @returns {Promise<SmartAccountClient>} a promise that resolves to a `SmartAccountClient` containing the created account client and relevant methods
  */
 export async function createMultiOwnerLightAccountClient(
-  params: CreateMultiOwnerLightAccountClientDynamicTransportParams,
+  params: CreateMultiOwnerLightAccountClientDynamicTransportParams
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = params;
 

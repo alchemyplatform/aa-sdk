@@ -9,7 +9,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
   const executionAbiConst = `${pluginConfig.name}ExecutionFunctionAbi`;
   const executionAbi = extractExecutionAbi(
     executionFunctions,
-    pluginConfig.abi,
+    pluginConfig.abi
   );
 
   addImport("viem", { name: "EncodeFunctionDataParameters", isType: true });
@@ -26,7 +26,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
 
     const encodeMethodName = `encode${pascalCase(n.name)}`;
     accountFunctionActionDefs.push(
-      dedent`${encodeMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args">) => Hex`,
+      dedent`${encodeMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args">) => Hex`
     );
     methodContent.push(dedent`
       ${encodeMethodName}(${argsParamString}) {
@@ -53,7 +53,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
               GetAccountParameter<TAccount>
           ) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
           : dedent`${readMethodName}: (args: GetAccountParameter<TAccount>) =>
-              Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`,
+              Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
       );
 
       methodContent.push(dedent`
@@ -89,7 +89,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
     typeName,
     dedent`{
     ${accountFunctionActionDefs.join(";\n\n")}
-  }`,
+  }`
   );
   input.content.push(...accountFunctions);
 

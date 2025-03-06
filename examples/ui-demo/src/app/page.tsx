@@ -39,7 +39,7 @@ export default function Home() {
               "flex flex-col lg:flex-1 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none mb-6 lg:mb-0 w-full lg:w-auto m-6 lg:m-0",
               theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
               showCode && "bg-white",
-              !user && "border-none lg:border-solid",
+              !user && "border-none lg:border-solid"
             )}
           >
             <PreviewNav showCode={showCode} setShowCode={setShowCode} />

@@ -2,7 +2,7 @@ import * as chains from "viem/chains";
 import { mainnet, type Chain } from "viem/chains";
 
 export const ChainsById: Map<number, chains.Chain> = new Map(
-  Object.values(chains).map((x) => [x.id, x]),
+  Object.values(chains).map((x) => [x.id, x])
 );
 
 /**

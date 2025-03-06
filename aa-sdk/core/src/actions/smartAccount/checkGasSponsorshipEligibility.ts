@@ -17,8 +17,7 @@ export type CheckGasSponsorshipEligibilityResult<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   eligible: boolean;
   request?: UserOperationStruct<TEntryPointVersion>;
@@ -60,10 +59,10 @@ export function checkGasSponsorshipEligibility<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>,
+  args: SendUserOperationParameters<TAccount, TContext>
 ): Promise<CheckGasSponsorshipEligibilityResult<TAccount>> {
   const { account = client.account, overrides, context } = args;
 
@@ -75,7 +74,7 @@ export function checkGasSponsorshipEligibility<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "checkGasSponsorshipEligibility",
-      client,
+      client
     );
   }
 

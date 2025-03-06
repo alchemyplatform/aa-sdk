@@ -17,10 +17,10 @@ import { setBalance } from "viem/actions";
 export async function resetBalance<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount = SmartContractAccount,
+  account extends SmartContractAccount = SmartContractAccount
 >(
   client: SmartAccountClient<transport, chain, account>,
-  testClient: Client & { mode: "anvil" },
+  testClient: Client & { mode: "anvil" }
 ) {
   const ep = client.account.getEntryPoint();
   const entryPointContract = getContract({

@@ -17,7 +17,7 @@ import type { ClientMiddlewareFn } from "../types.js";
  * @returns {ClientMiddlewareFn} middleware execution function used to estimate gas for user operations
  */
 export const defaultGasEstimator: <C extends MiddlewareClient>(
-  client: C,
+  client: C
 ) => ClientMiddlewareFn =
   (client: MiddlewareClient): ClientMiddlewareFn =>
   async (struct, { account, overrides, feeOptions }) => {
@@ -26,23 +26,23 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
     const estimates = await client.estimateUserOperationGas(
       request,
       account.getEntryPoint().address,
-      overrides?.stateOverride,
+      overrides?.stateOverride
     );
 
     const callGasLimit = applyUserOpOverrideOrFeeOption(
       estimates.callGasLimit,
       overrides?.callGasLimit,
-      feeOptions?.callGasLimit,
+      feeOptions?.callGasLimit
     );
     const verificationGasLimit = applyUserOpOverrideOrFeeOption(
       estimates.verificationGasLimit,
       overrides?.verificationGasLimit,
-      feeOptions?.verificationGasLimit,
+      feeOptions?.verificationGasLimit
     );
     const preVerificationGas = applyUserOpOverrideOrFeeOption(
       estimates.preVerificationGas,
       overrides?.preVerificationGas,
-      feeOptions?.preVerificationGas,
+      feeOptions?.preVerificationGas
     );
 
     struct.callGasLimit = callGasLimit;
@@ -56,7 +56,7 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
         (overrides as UserOperationOverrides<"0.7.0">)
           ?.paymasterVerificationGasLimit,
         (feeOptions as UserOperationFeeOptions<"0.7.0">)
-          ?.paymasterVerificationGasLimit,
+          ?.paymasterVerificationGasLimit
       );
       const uo_v7 = struct as UserOperationStruct<"0.7.0">;
 

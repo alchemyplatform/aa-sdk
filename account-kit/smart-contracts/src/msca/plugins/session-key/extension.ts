@@ -24,8 +24,7 @@ export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = Omit<
   SessionKeyPluginActions_<TAccount>,
   | "removeSessionKey"
@@ -35,17 +34,17 @@ export type SessionKeyPluginActions<
 > & {
   isAccountSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>,
+      GetAccountParameter<TAccount>
   ) => Promise<boolean>;
 
   getAccountSessionKeys: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
 
   removeSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> &
-      UserOperationOverridesParameter<TEntryPointVersion>,
+      UserOperationOverridesParameter<TEntryPointVersion>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   addSessionKey: (
@@ -55,7 +54,7 @@ export type SessionKeyPluginActions<
       tag: Hex;
     } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> &
-      UserOperationOverridesParameter<TEntryPointVersion>,
+      UserOperationOverridesParameter<TEntryPointVersion>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   rotateSessionKey: (
@@ -64,7 +63,7 @@ export type SessionKeyPluginActions<
       newKey: Address;
     } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> &
-      UserOperationOverridesParameter<TEntryPointVersion>,
+      UserOperationOverridesParameter<TEntryPointVersion>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   updateSessionKeyPermissions: (
@@ -73,12 +72,12 @@ export type SessionKeyPluginActions<
       permissions: Hex[];
     } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> &
-      UserOperationOverridesParameter<TEntryPointVersion>,
+      UserOperationOverridesParameter<TEntryPointVersion>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 } & (IsUndefined<TAccount> extends false
     ? {
         getAccountSessionKeys: (
-          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
@@ -101,19 +100,18 @@ export const sessionKeyPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => SessionKeyPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => {
   const {
     removeSessionKey,
@@ -211,14 +209,14 @@ export const sessionKeyPluginActions: <
     },
 
     getAccountSessionKeys: async (
-      args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
     ) => {
       const account = args?.account ?? client.account;
       if (!account) throw new AccountNotFoundError();
 
       const contract = SessionKeyPlugin.getContract(
         client,
-        args?.pluginAddress,
+        args?.pluginAddress
       );
 
       return await contract.read.sessionKeysOf([account.address]);

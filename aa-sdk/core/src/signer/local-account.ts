@@ -20,7 +20,7 @@ import type { Authorization } from "viem/experimental";
  * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
  */
 export class LocalAccountSigner<
-  T extends HDAccount | PrivateKeyAccount | LocalAccount,
+  T extends HDAccount | PrivateKeyAccount | LocalAccount
 > implements SmartAccountSigner<T>
 {
   inner: T;
@@ -62,7 +62,7 @@ export class LocalAccountSigner<
    * @returns {Promise<any>} A promise that resolves to the signed message
    */
   readonly signMessage: (message: SignableMessage) => Promise<`0x${string}`> = (
-    message,
+    message
   ) => {
     return this.inner.signMessage({ message });
   };
@@ -89,9 +89,9 @@ export class LocalAccountSigner<
    */
   readonly signTypedData = async <
     const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ): Promise<Hex> => {
     return this.inner.signTypedData(params);
   };
@@ -118,7 +118,7 @@ export class LocalAccountSigner<
 
   signAuthorization(
     this: LocalAccountSigner<PrivateKeyAccount>,
-    unsignedAuthorization: Authorization<number, false>,
+    unsignedAuthorization: Authorization<number, false>
   ): Promise<Authorization<number, true>> {
     return this.inner.experimental_signAuthorization(unsignedAuthorization);
   }
@@ -158,7 +158,7 @@ export class LocalAccountSigner<
    */
   static mnemonicToAccountSigner(
     key: string,
-    opts?: HDOptions,
+    opts?: HDOptions
   ): LocalAccountSigner<HDAccount> {
     const signer = mnemonicToAccount(key, opts);
     return new LocalAccountSigner(signer);
@@ -179,7 +179,7 @@ export class LocalAccountSigner<
    * @returns {LocalAccountSigner<PrivateKeyAccount>} An instance of `LocalAccountSigner` initialized with the provided private key
    */
   static privateKeyToAccountSigner(
-    key: Hex,
+    key: Hex
   ): LocalAccountSigner<PrivateKeyAccount> {
     const signer = privateKeyToAccount(key);
     return new LocalAccountSigner(signer);

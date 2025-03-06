@@ -10,7 +10,7 @@ export const NativeTokenLimitModule = {
     const { entityId, spendLimit } = args;
     return encodeAbiParameters(
       [{ type: "uint32" }, { type: "uint256" }],
-      [entityId, spendLimit],
+      [entityId, spendLimit]
     );
   },
 

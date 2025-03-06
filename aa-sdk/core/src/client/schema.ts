@@ -5,7 +5,7 @@ import { BigNumberishRangeSchema, MultiplierSchema } from "../utils/index.js";
 import type { BundlerClient } from "./bundlerClient.js";
 
 export const createPublicErc4337ClientSchema = <
-  TTransport extends Transport = Transport,
+  TTransport extends Transport = Transport
 >() =>
   z.custom<BundlerClient<TTransport>>((provider) => {
     return (

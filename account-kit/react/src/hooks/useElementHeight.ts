@@ -5,7 +5,7 @@ import { useResizeObserver } from "./useResizeObserver.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export function useElementHeight(
-  target: MutableRefObject<HTMLDivElement | null>,
+  target: MutableRefObject<HTMLDivElement | null>
 ) {
   const [height, setHeight] = useState<number>();
 

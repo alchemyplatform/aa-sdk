@@ -15,17 +15,17 @@ const chain = sepolia;
 describe("Multisig Modular Account Alchemy Client Tests", async () => {
   const signer1 = LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 0 },
+    { accountIndex: 0 }
   );
 
   const signer2 = LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 1 },
+    { accountIndex: 1 }
   );
 
   const signer3 = LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 2 },
+    { accountIndex: 2 }
   );
 
   const threshold = 2n;
@@ -46,7 +46,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0xea78315aec5Ff47bF320843A1BaA769C99c8Ae32"',
+      '"0xea78315aec5Ff47bF320843A1BaA769C99c8Ae32"'
     );
   });
 
@@ -59,11 +59,11 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     });
 
     expect((await provider.readOwners()).slice().sort()).toMatchInlineSnapshot(
-      owners.slice().sort(),
+      owners.slice().sort()
     );
 
     expect(await provider.getThreshold({ account: provider.account })).toBe(
-      threshold,
+      threshold
     );
   });
 

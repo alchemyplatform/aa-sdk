@@ -15,12 +15,12 @@ describe("Wallet Client Signer Tests", () => {
 
     const smartAccountSigner: WalletClientSigner = new WalletClientSigner(
       walletClient,
-      "test",
+      "test"
     );
 
     const signature = await smartAccountSigner.signMessage("hello world");
     expect(signature).toMatchInlineSnapshot(
-      '"0xcaf98cb42536352270a5a6e7d5aa2c186cd53701b9059d8596a1a13feb8d33d4194914598a6f60be302947b79d3c2635378adef4e72139e94030a3b8a7cd8d891c"',
+      '"0xcaf98cb42536352270a5a6e7d5aa2c186cd53701b9059d8596a1a13feb8d33d4194914598a6f60be302947b79d3c2635378adef4e72139e94030a3b8a7cd8d891c"'
     );
   });
 });

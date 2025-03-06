@@ -17,7 +17,7 @@ cli
 cli
   .command(
     "generate",
-    "Generate code for all of the plugins configured within the plugingen config",
+    "Generate code for all of the plugins configured within the plugingen config"
   )
   .option("-c, --config <path>", "[string] path to config file")
   .option("-r, --root <path>", "[string] root path to resolve config from")

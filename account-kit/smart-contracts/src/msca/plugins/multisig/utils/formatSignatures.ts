@@ -14,7 +14,7 @@ import type { Signature } from "../types";
  */
 export const formatSignatures = (
   signatures: Signature[],
-  usingMaxValues: boolean = false,
+  usingMaxValues: boolean = false
 ) => {
   let eoaSigs: string = "";
   let contractSigs: string = "";

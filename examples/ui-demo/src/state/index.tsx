@@ -29,7 +29,7 @@ export const ConfigContext = createContext<
 >(undefined);
 
 export function useConfigStore<T = DemoState>(
-  selector?: (state: DemoState) => T,
+  selector?: (state: DemoState) => T
 ): T {
   const configContext = useContext(ConfigContext);
 
@@ -40,7 +40,7 @@ export function useConfigStore<T = DemoState>(
   return useStoreWithEqualityFn(
     configContext,
     selector ?? ((state) => state),
-    deepEqual,
+    deepEqual
   );
 }
 
@@ -48,7 +48,7 @@ export function ConfigContextProvider(
   props: PropsWithChildren<{
     initialConfig?: Config;
     initialState?: AlchemyClientState;
-  }>,
+  }>
 ) {
   const storeRef = useRef<ReturnType<typeof createDemoStore>>();
   if (!storeRef.current) {

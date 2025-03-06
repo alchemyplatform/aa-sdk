@@ -96,8 +96,9 @@ const result = await modularAccountClient.updateOwners({
   args: [ownersToAdd, ownersToRemove],
 });
 
-const txHash =
-  await modularAccountClient.waitForUserOperationTransaction(result);
+const txHash = await modularAccountClient.waitForUserOperationTransaction(
+  result
+);
 ```
 
 ```ts [client.ts]  filename="client.ts" twoslash

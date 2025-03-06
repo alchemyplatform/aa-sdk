@@ -32,13 +32,13 @@ const UserConnectionPopoverMenu = ({
 };
 
 const MenuTrigger = (
-  props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverTrigger>,
+  props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverTrigger>
 ) => {
   return <PopoverTrigger {...props}>{props.children}</PopoverTrigger>;
 };
 
 const MenuContent = (
-  props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverContent>,
+  props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverContent>
 ) => {
   const theme = useTheme();
 
@@ -50,7 +50,7 @@ const MenuContent = (
       align="start"
       className={cn(
         "border border-solid border-[#E2E8F0] min-w-[274px] bg-bg-surface-default",
-        theme === "dark" && "border-[#374141]",
+        theme === "dark" && "border-[#374141]"
       )}
     >
       {props.children}

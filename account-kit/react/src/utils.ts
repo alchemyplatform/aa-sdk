@@ -12,7 +12,7 @@ export function assertNever(_: never, message: string): never {
 }
 
 export function getWalletConnectParams(
-  walletConnectAuthConfig: WalletConnectParameters | undefined,
+  walletConnectAuthConfig: WalletConnectParameters | undefined
 ): WalletConnectParameters | undefined {
   if (!walletConnectAuthConfig) return undefined;
 

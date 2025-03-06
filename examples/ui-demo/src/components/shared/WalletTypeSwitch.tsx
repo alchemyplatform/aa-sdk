@@ -15,7 +15,7 @@ const WalletTypeSwitch = forwardRef<
   <Root
     className={cn(
       "relative peer inline-flex w-full h-9 shrink-0 cursor-pointer items-center rounded-[8px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 bg-active border border-[#94A3B8]",
-      className,
+      className
     )}
     checked={checked}
     {...props}
@@ -23,7 +23,7 @@ const WalletTypeSwitch = forwardRef<
   >
     <Thumb
       className={cn(
-        "pointer-events-none block h-full w-2/4 rounded-[7px] bg-background ring-0 transition-transform data-[state=checked]:translate-x-[100%] data-[state=unchecked]:translate-x-[0%] border border-active",
+        "pointer-events-none block h-full w-2/4 rounded-[7px] bg-background ring-0 transition-transform data-[state=checked]:translate-x-[100%] data-[state=unchecked]:translate-x-[0%] border border-active"
       )}
     ></Thumb>
     <div className="absolute flex text-sm items-center z-10 justify-between bg-transparent w-full">

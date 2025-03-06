@@ -67,7 +67,7 @@ export const AuthCardContent = ({
     ({ onAuthSuccess, addPasskeyOnSignup }) => ({
       onAuthSuccess,
       addPasskeyOnSignup,
-    }),
+    })
   );
 
   const canGoBack = useMemo(() => {

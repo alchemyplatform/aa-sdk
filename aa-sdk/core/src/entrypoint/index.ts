@@ -32,31 +32,30 @@ export const entryPointRegistry: EntryPointRegistry = {
  * @returns {boolean} true if the value is a valid key of EntryPointRegistry, false otherwise
  */
 export const isEntryPointVersion = (
-  value: any,
+  value: any
 ): value is keyof EntryPointRegistry => {
   return Object.keys(entryPointRegistry).includes(value);
 };
 
 export function getEntryPoint<
   TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion,
-  TChain extends Chain = Chain,
+  TChain extends Chain = Chain
 >(
   chain: TChain,
-  options: GetEntryPointOptions<TEntryPointVersion>,
+  options: GetEntryPointOptions<TEntryPointVersion>
 ): EntryPointDefRegistry<TChain>[TEntryPointVersion];
 
 export function getEntryPoint<
-  TEntryPointVersion extends
-    DefaultEntryPointVersion = DefaultEntryPointVersion,
-  TChain extends Chain = Chain,
+  TEntryPointVersion extends DefaultEntryPointVersion = DefaultEntryPointVersion,
+  TChain extends Chain = Chain
 >(
   chain: TChain,
-  options?: GetEntryPointOptions<TEntryPointVersion>,
+  options?: GetEntryPointOptions<TEntryPointVersion>
 ): EntryPointDefRegistry<TChain>[TEntryPointVersion];
 
 export function getEntryPoint<TChain extends Chain = Chain>(
   chain: TChain,
-  options?: GetEntryPointOptions<DefaultEntryPointVersion>,
+  options?: GetEntryPointOptions<DefaultEntryPointVersion>
 ): EntryPointDefRegistry<TChain>[DefaultEntryPointVersion];
 
 /**
@@ -77,10 +76,10 @@ export function getEntryPoint<TChain extends Chain = Chain>(
  */
 export function getEntryPoint<
   TEntryPointVersion extends EntryPointVersion,
-  TChain extends Chain = Chain,
+  TChain extends Chain = Chain
 >(
   chain: TChain,
-  options: GetEntryPointOptions<TEntryPointVersion>,
+  options: GetEntryPointOptions<TEntryPointVersion>
 ): EntryPointDefRegistry<TChain>[EntryPointVersion] {
   const { version = defaultEntryPointVersion, addressOverride } = options ?? {
     version: defaultEntryPointVersion,

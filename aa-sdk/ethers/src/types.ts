@@ -10,7 +10,7 @@ export type EthersProviderAdapterOpts<
   TChain extends Chain = Chain,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = {
   account?: TAccount;
 } & (

@@ -45,11 +45,11 @@ export type BundlerClient<T extends Transport = Transport> = Client<
  * @returns {BundlerClient<T>} A bundler client that extends the functionality of the provided public client
  */
 export const createBundlerClientFromExisting: <
-  T extends Transport | FallbackTransport = Transport,
+  T extends Transport | FallbackTransport = Transport
 >(
-  client: PublicClient<T, Chain>,
+  client: PublicClient<T, Chain>
 ) => BundlerClient<T> = <T extends Transport | FallbackTransport = Transport>(
-  client: PublicClient<T, Chain>,
+  client: PublicClient<T, Chain>
 ): BundlerClient<T> => {
   return client.extend(bundlerActions);
 };
@@ -62,7 +62,7 @@ export const createBundlerClientFromExisting: <
  * @returns {BundlerClient<TTransport>} a PublicClient with methods for calling Bundler RPC methods
  */
 export function createBundlerClient<TTransport extends Transport>(
-  args: PublicClientConfig<TTransport, Chain> & { type?: string },
+  args: PublicClientConfig<TTransport, Chain> & { type?: string }
 ): BundlerClient<TTransport>;
 
 /**
@@ -83,7 +83,7 @@ export function createBundlerClient<TTransport extends Transport>(
  * @returns {BundlerClient} The created Bundler Client with extended public and bundler actions
  */
 export function createBundlerClient(
-  args: PublicClientConfig & { type?: string },
+  args: PublicClientConfig & { type?: string }
 ): BundlerClient {
   if (!args.chain) {
     throw new ChainNotFoundError();

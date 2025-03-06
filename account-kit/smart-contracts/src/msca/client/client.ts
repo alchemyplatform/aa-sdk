@@ -48,7 +48,7 @@ import type { AlchemyMultisigAccountClientConfig } from "./multiSigAlchemyClient
 export type CreateMultiOwnerModularAccountClientWithoutAlchemyParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
   "transport" | "chain"
@@ -57,7 +57,7 @@ export type CreateMultiOwnerModularAccountClientWithoutAlchemyParams<
 export type CreateMultiOwnerModularAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > =
   | CreateMultiOwnerModularAccountClientWithoutAlchemyParams<
       TTransport,
@@ -69,7 +69,7 @@ export type CreateMultiOwnerModularAccountClientParams<
 export type CreateMultisigModularAccountClientWithoutAlchemyParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultisigModularAccountParams<TTransport, TSigner>,
   "transport" | "chain"
@@ -79,7 +79,7 @@ export type CreateMultisigModularAccountClientWithoutAlchemyParams<
 export type CreateMultisigModularAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > =
   | CreateMultisigModularAccountClientWithoutAlchemyParams<
       TTransport,
@@ -89,11 +89,11 @@ export type CreateMultisigModularAccountClientParams<
   | AlchemyMultisigAccountClientConfig<TSigner>;
 
 export function createMultiOwnerModularAccountClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   params: AlchemyModularAccountClientConfig<TSigner> & {
     transport: AlchemyTransport;
-  },
+  }
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,
@@ -107,14 +107,14 @@ export function createMultiOwnerModularAccountClient<
 export function createMultiOwnerModularAccountClient<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   args: CreateMultiOwnerModularAccountClientParams<
     TTransport,
     TChain,
     TSigner
   > &
-    NotType<TTransport, AlchemyTransport>,
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
@@ -199,9 +199,9 @@ export async function createMultiOwnerModularAccountClient({
 }
 
 export function createMultisigModularAccountClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyMultisigAccountClientConfig<TSigner>,
+  params: AlchemyMultisigAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,
@@ -216,10 +216,10 @@ export function createMultisigModularAccountClient<
 export function createMultisigModularAccountClient<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   args: CreateMultisigModularAccountClientParams<TTransport, TChain, TSigner> &
-    NotType<TTransport, AlchemyTransport>,
+    NotType<TTransport, AlchemyTransport>
 ): Promise<
   SmartAccountClient<
     CustomTransport,

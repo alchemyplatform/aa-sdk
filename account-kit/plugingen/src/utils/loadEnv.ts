@@ -10,12 +10,12 @@ export function loadEnv(
   config: {
     mode?: string;
     envDir?: string;
-  } = {},
+  } = {}
 ): Record<string, string> {
   const mode = config.mode;
   if (mode === "local") {
     throw new Error(
-      `"local" cannot be used as a mode name because it conflicts with the .local postfix for .env files.`,
+      `"local" cannot be used as a mode name because it conflicts with the .local postfix for .env files.`
     );
   }
 
@@ -39,7 +39,7 @@ export function loadEnv(
       });
       if (!path) return [];
       return Object.entries(parse(readFileSync(path)));
-    }),
+    })
   );
 
   try {
@@ -50,7 +50,7 @@ export function loadEnv(
     // check for message "TypeError: Cannot read properties of undefined (reading 'split')"
     if ((error as Error).message.includes("split")) {
       throw new Error(
-        "dotenv-expand failed to expand env vars. Maybe you need to escape `$`?",
+        "dotenv-expand failed to expand env vars. Maybe you need to escape `$`?"
       );
     }
     throw error;
@@ -66,7 +66,7 @@ function lookupFile(
     pathOnly?: boolean;
     rootDir?: string;
     predicate?: (file: string) => boolean;
-  },
+  }
 ): string | undefined {
   for (const format of formats) {
     const fullPath = join(dir, format);

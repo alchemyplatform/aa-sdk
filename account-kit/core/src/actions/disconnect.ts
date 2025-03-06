@@ -37,7 +37,7 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
   config.store.setState((state) => ({
     signerStatus: convertSignerStatusToState(
       AlchemySignerStatus.DISCONNECTED,
-      state.signerStatus.error,
+      state.signerStatus.error
     ),
   }));
 }
@@ -73,7 +73,7 @@ const clearWalletConnectStore = () => {
     } catch (error) {
       console.error(
         "Error clearing Wallet Connect DB. Cannot clear store.",
-        error,
+        error
       );
     }
   };

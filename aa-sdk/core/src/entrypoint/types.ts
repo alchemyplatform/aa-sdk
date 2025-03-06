@@ -23,7 +23,7 @@ export type DefaultEntryPointVersion = OneOf<"0.6.0", EntryPointVersion>;
 export type SupportedEntryPoint<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   TChain extends Chain = Chain,
-  TAbi extends Abi | readonly unknown[] = Abi,
+  TAbi extends Abi | readonly unknown[] = Abi
 > = {
   version: TEntryPointVersion;
   address: Record<TChain["id"] | "default", Address>;
@@ -40,7 +40,7 @@ export type SupportedEntryPoint<
   getUserOperationHash: (
     request: UserOperationRequest<TEntryPointVersion>,
     entryPointAddress: Address,
-    chainId: number,
+    chainId: number
   ) => Hash;
 
   /**
@@ -53,7 +53,7 @@ export type SupportedEntryPoint<
    * @returns the hash of the UserOperation
    */
   packUserOperation: (
-    userOperation: UserOperationRequest<TEntryPointVersion>,
+    userOperation: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
 };
 
@@ -69,17 +69,17 @@ export interface EntryPointRegistry<TChain extends Chain = Chain>
 export type EntryPointDef<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   TChain extends Chain = Chain,
-  TAbi extends Abi | readonly unknown[] = Abi,
+  TAbi extends Abi | readonly unknown[] = Abi
 > = {
   version: TEntryPointVersion;
   address: Address;
   chain: TChain;
   abi: GetContractParameters<Transport, TChain, Account, TAbi>["abi"];
   getUserOperationHash: (
-    request: UserOperationRequest<TEntryPointVersion>,
+    request: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
   packUserOperation: (
-    userOperation: UserOperationRequest<TEntryPointVersion>,
+    userOperation: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
 };
 // [!endregion EntryPointDef]
@@ -93,30 +93,28 @@ export interface EntryPointDefRegistry<TChain extends Chain = Chain>
 }
 
 export type GetEntryPointOptions<
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion,
-> =
-  EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
-    ?
-        | {
-            addressOverride?: Address;
-            version?: OneOf<TEntryPointVersion, EntryPointVersion>;
-          }
-        | undefined
-    : {
-        addressOverride?: Address;
-        version: OneOf<TEntryPointVersion, EntryPointVersion>;
-      };
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
+  ?
+      | {
+          addressOverride?: Address;
+          version?: OneOf<TEntryPointVersion, EntryPointVersion>;
+        }
+      | undefined
+  : {
+      addressOverride?: Address;
+      version: OneOf<TEntryPointVersion, EntryPointVersion>;
+    };
 
 export type EntryPointParameter<
   TEntryPointVersion extends EntryPointVersion,
-  TChain extends Chain = Chain,
-> =
-  EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
-    ? {
-        entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
-      }
-    : {
-        entryPoint: IsOneOf<TEntryPointVersion, EntryPointVersion> extends true
-          ? EntryPointDef<TEntryPointVersion, TChain>
-          : never;
-      };
+  TChain extends Chain = Chain
+> = EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
+  ? {
+      entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
+    }
+  : {
+      entryPoint: IsOneOf<TEntryPointVersion, EntryPointVersion> extends true
+        ? EntryPointDef<TEntryPointVersion, TChain>
+        : never;
+    };

@@ -46,7 +46,7 @@ export async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
     results.reduce((accum, curr) => {
       accum[curr.key as keyof T] = curr.value;
       return accum;
-    }, {} as T),
+    }, {} as T)
   );
 }
 
@@ -75,7 +75,7 @@ export function deepHexlify(obj: any): any {
       ...set,
       [key]: deepHexlify(obj[key]),
     }),
-    {},
+    {}
   );
 }
 
@@ -151,7 +151,7 @@ export const allEqual = (...params: any[]): boolean => {
  */
 export const conditionalReturn = <T>(
   condition: Promise<boolean>,
-  value: () => Promise<T>,
+  value: () => Promise<T>
 ): Promise<T | undefined> => condition.then((t) => (t ? value() : undefined));
 
 /**
@@ -177,19 +177,16 @@ export const conditionalReturn = <T>(
 export const toRecord = <
   T extends { [K in RecordableKeys<T>]: string | number | symbol },
   K extends RecordableKeys<T>,
-  V,
+  V
 >(
   array: T[],
   selector: K,
-  fn: (item: T) => V,
+  fn: (item: T) => V
 ): Record<T[K], V> =>
-  array.reduce(
-    (acc, item) => {
-      acc[item[selector]] = fn(item);
-      return acc;
-    },
-    {} as Record<T[K], V>,
-  );
+  array.reduce((acc, item) => {
+    acc[item[selector]] = fn(item);
+    return acc;
+  }, {} as Record<T[K], V>);
 
 export * from "./bigint.js";
 export * from "./bytes.js";

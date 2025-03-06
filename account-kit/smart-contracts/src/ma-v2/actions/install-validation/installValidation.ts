@@ -29,7 +29,7 @@ import { type ModularAccountV2 } from "../../account/common/modularAccountV2Base
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   validationConfig: ValidationConfig;
   selectors: Hex[];
@@ -44,7 +44,7 @@ export type InstallValidationParams<
 >;
 
 export type UninstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   moduleAddress: Address;
   entityId: number;
@@ -56,20 +56,20 @@ export type UninstallValidationParams<
 >;
 
 export type InstallValidationActions<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   installValidation: (
-    args: InstallValidationParams<TSigner>,
+    args: InstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
   encodeInstallValidation: (
     // TODO: omit the user op sending related parameters from this type
-    args: InstallValidationParams<TSigner>,
+    args: InstallValidationParams<TSigner>
   ) => Promise<Hex>;
   uninstallValidation: (
-    args: UninstallValidationParams<TSigner>,
+    args: UninstallValidationParams<TSigner>
   ) => Promise<SendUserOperationResult>;
   encodeUninstallValidation: (
-    args: UninstallValidationParams<TSigner>,
+    args: UninstallValidationParams<TSigner>
   ) => Promise<Hex>;
 };
 
@@ -118,9 +118,9 @@ export type InstallValidationActions<
  * @returns {object} - An object containing two methods, `installValidation` and `uninstallValidation`.
  */
 export const installValidationActions: <
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  client: ModularAccountV2Client<TSigner>,
+  client: ModularAccountV2Client<TSigner>
 ) => InstallValidationActions<TSigner> = (client) => {
   const encodeInstallValidation = async ({
     validationConfig,
@@ -137,7 +137,7 @@ export const installValidationActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installValidation",
-        client,
+        client
       );
     }
 
@@ -158,10 +158,10 @@ export const installValidationActions: <
           selectors,
           installData,
           hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
-            concatHex([serializeHookConfig(hook.hookConfig), hook.initData]),
+            concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
           ),
         ],
-      }),
+      })
     );
   };
 
@@ -180,7 +180,7 @@ export const installValidationActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "uninstallValidation",
-        client,
+        client
       );
     }
 
@@ -196,7 +196,7 @@ export const installValidationActions: <
           uninstallData,
           hookUninstallDatas,
         ],
-      }),
+      })
     );
   };
 

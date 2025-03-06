@@ -8,5 +8,5 @@ module.exports = getConfig(
   {
     presets: ["module:@react-native/babel-preset"],
   },
-  { root, pkg },
+  { root, pkg }
 );

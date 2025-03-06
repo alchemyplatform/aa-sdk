@@ -26,17 +26,17 @@ describe("MultiOwner Light Account Tests", () => {
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner,
+    accounts.fundedAccountOwner
   );
 
   const undeployedSigner: SmartAccountSigner = new LocalAccountSigner(
-    accounts.unfundedAccountOwner,
+    accounts.unfundedAccountOwner
   );
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ signer });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"',
+      '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"'
     );
   });
 
@@ -141,7 +141,7 @@ describe("MultiOwner Light Account Tests", () => {
         address: account.address,
         signature,
         ...typedData,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -157,7 +157,7 @@ describe("MultiOwner Light Account Tests", () => {
         address: account.address,
         message,
         signature,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -170,14 +170,15 @@ describe("MultiOwner Light Account Tests", () => {
     `);
     // match with current signer
     expect(await client.account.getOwnerAddresses()).toContain(
-      await signer.getAddress(),
+      await signer.getAddress()
     );
   });
 
   it("should update ownership successfully", async () => {
     // create a throwaway address
-    const throwawaySigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
     const throwawayClient = await givenConnectedProvider({
       signer: throwawaySigner,
     });
@@ -189,8 +190,9 @@ describe("MultiOwner Light Account Tests", () => {
     });
 
     // create new signer and transfer ownership
-    const newOwner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const newOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
 
     await throwawayClient.updateOwners({
       ownersToAdd: [await newOwner.getAddress()],
@@ -211,8 +213,9 @@ describe("MultiOwner Light Account Tests", () => {
 
   it("should upgrade a deployed multi owner light account to msca successfully", async () => {
     // create a owner signer to create the account
-    const throwawaySigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
     const throwawayClient = await givenConnectedProvider({
       signer: throwawaySigner,
     });
@@ -231,7 +234,7 @@ describe("MultiOwner Light Account Tests", () => {
       {
         account: throwawayClient.account,
         multiOwnerPluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-      },
+      }
     );
 
     await throwawayClient.upgradeAccount({
@@ -285,7 +288,7 @@ describe("MultiOwner Light Account Tests", () => {
             transport: custom(instance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
-          ? erc7677Middleware()
-          : {}),
+        ? erc7677Middleware()
+        : {}),
     });
 });

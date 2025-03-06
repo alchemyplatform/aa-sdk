@@ -22,7 +22,7 @@ export function Styling({ className }: { className?: string }) {
         setTheme,
         setSupportUrl,
       };
-    },
+    }
   );
 
   const onSwitchTheme = (isDarkMode: boolean) => {

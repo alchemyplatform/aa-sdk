@@ -34,7 +34,7 @@ const windowPolyfill: Partial<Window> = {
   removeEventListener: (type: string, callback: EventCallback) => {
     if (eventListeners[type]) {
       eventListeners[type] = eventListeners[type].filter(
-        (cb) => cb !== callback,
+        (cb) => cb !== callback
       );
     }
   },

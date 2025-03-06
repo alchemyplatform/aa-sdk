@@ -44,11 +44,10 @@ export async function sendUserOperation<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>,
+  args: SendUserOperationParameters<TAccount, TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account, context, overrides } = args;
 
@@ -60,7 +59,7 @@ export async function sendUserOperation<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "sendUserOperation",
-      client,
+      client
     );
   }
 

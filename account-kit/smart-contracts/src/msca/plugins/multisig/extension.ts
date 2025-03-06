@@ -26,34 +26,34 @@ import {
 export type MultisigPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = MultisigPluginActions_<TAccount, MultisigUserOperationContext> & {
   readOwners: (
-    params: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+    params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
 
   isOwnerOf: (
     params: { address: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>,
+      GetAccountParameter<TAccount>
   ) => Promise<boolean>;
 
   getThreshold: (
-    params: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+    params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<bigint>;
 
   proposeUserOperation: (
-    params: SendUserOperationParameters<TAccount, undefined>,
+    params: SendUserOperationParameters<TAccount, undefined>
   ) => Promise<
     ProposeUserOperationResult<TAccount, GetEntryPointFromAccount<TAccount>>
   >;
 
   signMultisigUserOperation: (
-    params: SignMultisigUserOperationParams<TAccount>,
+    params: SignMultisigUserOperationParams<TAccount>
   ) => Promise<SignMultisigUserOperationResult>;
 } & (IsUndefined<TAccount> extends false
     ? {
         readOwners: (
-          params?: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+          params?: GetPluginAddressParameter & GetAccountParameter<TAccount>
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
@@ -76,38 +76,38 @@ export const multisigPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => MultisigPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => ({
   ...multisigPluginActions_(client),
   readOwners: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => readOwners(client, args),
 
   isOwnerOf: (
     args: { address: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>,
+      GetAccountParameter<TAccount>
   ) => isOwnerOf(client, args),
 
   getThreshold: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => getThreshold(client, args),
 
   proposeUserOperation: (
-    args: SendUserOperationParameters<TAccount, undefined>,
+    args: SendUserOperationParameters<TAccount, undefined>
   ) => proposeUserOperation(client, args),
 
   signMultisigUserOperation: (
-    params: SignMultisigUserOperationParams<TAccount>,
+    params: SignMultisigUserOperationParams<TAccount>
   ): Promise<SignMultisigUserOperationResult> =>
     signMultisigUserOperation(client, params),
 });

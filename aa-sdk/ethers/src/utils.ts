@@ -10,7 +10,7 @@ import type { SignableMessage, TypedData, TypedDataDefinition } from "viem";
  * @returns {SmartAccountSigner<Wallet>} a signer that can be used to sign and send user operations
  */
 export const convertWalletToAccountSigner = (
-  wallet: Wallet,
+  wallet: Wallet
 ): SmartAccountSigner<Wallet> => {
   return {
     inner: wallet,
@@ -18,19 +18,19 @@ export const convertWalletToAccountSigner = (
     getAddress: async () => Promise.resolve(wallet.address as `0x${string}`),
     signMessage: async (msg: SignableMessage) =>
       (await wallet.signMessage(
-        typeof msg === "string" ? msg : msg.raw,
+        typeof msg === "string" ? msg : msg.raw
       )) as `0x${string}`,
     signTypedData: async <
       const TTypedData extends TypedData | { [key: string]: unknown },
-      TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
+      TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
     >(
-      params: TypedDataDefinition<TTypedData, TPrimaryType>,
+      params: TypedDataDefinition<TTypedData, TPrimaryType>
     ) => {
       return (await wallet._signTypedData(
         params.domain ?? {},
         // @ts-expect-error: these params should line up due to the spec for this function
         params.types,
-        params.message,
+        params.message
       )) as `0x${string}`;
     },
   };
@@ -43,7 +43,7 @@ export const convertWalletToAccountSigner = (
  * @returns {SmartAccountSigner<Signer>} a signer that can be used to sign and send user operations
  */
 export const convertEthersSignerToAccountSigner = (
-  signer: Signer,
+  signer: Signer
 ): SmartAccountSigner<Signer> => {
   return {
     inner: signer,
@@ -51,16 +51,16 @@ export const convertEthersSignerToAccountSigner = (
     getAddress: async () => signer.getAddress() as Promise<Address>,
     signMessage: async (msg: SignableMessage) =>
       (await signer.signMessage(
-        typeof msg === "string" ? msg : msg.raw,
+        typeof msg === "string" ? msg : msg.raw
       )) as `0x${string}`,
     signTypedData: async <
       const TTypedData extends TypedData | { [key: string]: unknown },
-      TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
+      TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
     >(
-      _params: TypedDataDefinition<TTypedData, TPrimaryType>,
+      _params: TypedDataDefinition<TTypedData, TPrimaryType>
     ) => {
       throw new Error(
-        "signTypedData is not supported for ethers signers; use Wallet",
+        "signTypedData is not supported for ethers signers; use Wallet"
       );
     },
   };

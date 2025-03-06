@@ -6,7 +6,7 @@ import { SessionKeyPlugin } from "./plugin.js";
 type BuildSessionKeysToRemoveStructParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = {
   keys: ReadonlyArray<Address>;
   pluginAddress?: Address;
@@ -35,10 +35,10 @@ export async function buildSessionKeysToRemoveStruct<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: BuildSessionKeysToRemoveStructParams,
+  args: BuildSessionKeysToRemoveStructParams
 ): Promise<{ sessionKey: Address; predecessor: Address }[]> {
   const { keys, pluginAddress, account = client.account } = args;
 
@@ -52,7 +52,7 @@ export async function buildSessionKeysToRemoveStruct<
           key,
           await contract.read.findPredecessor([account.address, key]),
         ];
-      }),
+      })
     )
   ).map(([key, predecessor]) => ({
     sessionKey: key,

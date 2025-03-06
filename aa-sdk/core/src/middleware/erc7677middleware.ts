@@ -23,7 +23,7 @@ import {
 import type { ClientMiddlewareFn } from "./types";
 
 export type Erc7677RpcSchema<
-  TContext extends Record<string, any> = Record<string, any>,
+  TContext extends Record<string, any> = Record<string, any>
 > = [
   {
     Method: "pm_getPaymasterStubData";
@@ -46,19 +46,19 @@ export type Erc7677RpcSchema<
       paymasterData?: Hex; // Paymaster data (entrypoint v0.7)
       paymasterAndData?: Hex; // Paymaster and data (entrypoint v0.6)
     };
-  },
+  }
 ];
 
 export type Erc7677Client<
   T extends Transport = Transport,
-  TContext extends Record<string, any> = Record<string, any>,
+  TContext extends Record<string, any> = Record<string, any>
 > = Client<T, Chain, undefined, Erc7677RpcSchema<TContext>>;
 
 export type Erc7677MiddlewareParams<
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
     | undefined,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   context?:
     | ((
@@ -66,7 +66,7 @@ export type Erc7677MiddlewareParams<
         args: {
           overrides?: UserOperationOverrides<TEntryPointVersion>;
           feeOptions?: UserOperationFeeOptions;
-        },
+        }
       ) => Promise<TContext>)
     | TContext;
 };
@@ -95,13 +95,13 @@ export type Erc7677MiddlewareParams<
 export function erc7677Middleware<
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined,
+    | undefined
 >(
-  params?: Erc7677MiddlewareParams<TContext>,
+  params?: Erc7677MiddlewareParams<TContext>
 ): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
   const dummyPaymasterAndData: ClientMiddlewareFn = async (
     uo,
-    { client, account, feeOptions, overrides },
+    { client, account, feeOptions, overrides }
   ) => {
     const userOp = deepHexlify(await resolveProperties(uo));
 
@@ -159,7 +159,7 @@ export function erc7677Middleware<
 
   const paymasterAndData: ClientMiddlewareFn = async (
     uo,
-    { client, account, feeOptions, overrides },
+    { client, account, feeOptions, overrides }
   ) => {
     const userOp = deepHexlify(await resolveProperties(uo));
     const context =

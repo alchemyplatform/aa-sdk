@@ -55,11 +55,10 @@ export async function dropAndReplaceUserOperation<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: DropAndReplaceUserOperationParameters<TAccount, TContext>,
+  args: DropAndReplaceUserOperationParameters<TAccount, TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account, uoToDrop, overrides, context } = args;
   if (!account) {
@@ -69,7 +68,7 @@ export async function dropAndReplaceUserOperation<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "dropAndReplaceUserOperation",
-      client,
+      client
     );
   }
 
@@ -104,18 +103,18 @@ export async function dropAndReplaceUserOperation<
   // however, we have migrated to using erc7677middleware for alchemy paymaster flows
   // and most of the other paymasters we've seen don't do fee estimation
   const { maxFeePerGas, maxPriorityFeePerGas } = await resolveProperties(
-    await client.middleware.feeEstimator(uoToSubmit, { account, client }),
+    await client.middleware.feeEstimator(uoToSubmit, { account, client })
   );
 
   const _overrides = {
     ...overrides,
     maxFeePerGas: bigIntMax(
       BigInt(maxFeePerGas ?? 0n),
-      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1),
+      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1)
     ),
     maxPriorityFeePerGas: bigIntMax(
       BigInt(maxPriorityFeePerGas ?? 0n),
-      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1),
+      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1)
     ),
   } as UserOperationOverrides<TEntryPointVersion>;
 

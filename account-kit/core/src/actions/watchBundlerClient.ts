@@ -26,6 +26,6 @@ export const watchBundlerClient =
         equalityFn(a, b) {
           return a.chain.id === b.chain.id;
         },
-      },
+      }
     );
   };

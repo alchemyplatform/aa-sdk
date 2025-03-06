@@ -162,7 +162,7 @@ export type GetMAV2UpgradeToData<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends
     | SmartContractAccountWithSigner<string, TSigner>
-    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined,
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 > = GetAccountParameter<TAccount>;
 
 /**
@@ -187,10 +187,10 @@ export async function getMAV2UpgradeToData<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends
     | SmartContractAccountWithSigner<string, TSigner>
-    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined,
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  args: GetMAV2UpgradeToData<TSigner, TAccount>,
+  args: GetMAV2UpgradeToData<TSigner, TAccount>
 ): Promise<
   UpgradeToData & {
     createModularAccountV2FromExisting: () => Promise<

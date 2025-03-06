@@ -14,23 +14,20 @@ import { getColorVariableName } from "../utils.js";
 export const colorVariables = (theme: AccountKitTheme): ComponentDef => {
   // This assumes that the colors object is a flat object of type { [name: string]: ColorVariantRecord }
   const { colors } = theme;
-  const rules = Object.entries(colors).reduce(
-    (accum, [name_, variant]) => {
-      const name = name_ as AccountKitThemeColor;
-      accum[
-        `@apply [${getColorVariableName(name)}:${variant.light.replaceAll(
-          " ",
-          "_",
-        )}] dark:[${getColorVariableName(name)}:${variant.dark.replaceAll(
-          " ",
-          "_",
-        )}]`
-      ] = {};
+  const rules = Object.entries(colors).reduce((accum, [name_, variant]) => {
+    const name = name_ as AccountKitThemeColor;
+    accum[
+      `@apply [${getColorVariableName(name)}:${variant.light.replaceAll(
+        " ",
+        "_"
+      )}] dark:[${getColorVariableName(name)}:${variant.dark.replaceAll(
+        " ",
+        "_"
+      )}]`
+    ] = {};
 
-      return accum;
-    },
-    {} as Record<string, {}>,
-  );
+    return accum;
+  }, {} as Record<string, {}>);
 
   return {
     ":root": {

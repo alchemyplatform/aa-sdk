@@ -54,7 +54,7 @@ export function useChain(mutationArgs?: UseChainParams): UseChainResult {
   const chain = useSyncExternalStore(
     watchChain(config),
     () => getChain(config),
-    () => getChain(config),
+    () => getChain(config)
   );
 
   const { mutate: setChain, isPending } = useMutation({

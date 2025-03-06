@@ -26,8 +26,7 @@ export type UninstallPluginParams<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   pluginAddress: Address;
   config?: Hash;
@@ -44,7 +43,7 @@ export async function uninstallPlugin<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
@@ -52,7 +51,7 @@ export async function uninstallPlugin<
     account = client.account,
     context,
     ...params
-  }: UninstallPluginParams<TAccount, TContext>,
+  }: UninstallPluginParams<TAccount, TContext>
 ) {
   if (!account) {
     throw new AccountNotFoundError();
@@ -62,7 +61,7 @@ export async function uninstallPlugin<
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "uninstallPlugin",
-      client,
+      client
     );
   }
 
@@ -77,7 +76,7 @@ export async function uninstallPlugin<
 }
 
 export async function encodeUninstallPluginUserOperation(
-  params: Omit<UninstallPluginParams, "account" | "overrides" | "context">,
+  params: Omit<UninstallPluginParams, "account" | "overrides" | "context">
 ) {
   return encodeFunctionData({
     abi: IPluginManagerAbi,

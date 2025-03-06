@@ -31,8 +31,7 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
  */
 export class AccountSigner<
   TAccount extends SmartContractAccount = SmartContractAccount,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > extends Signer {
   readonly account: TAccount;
 
@@ -64,16 +63,13 @@ export class AccountSigner<
    * @param {EthersProviderAdapter} provider the ethers provider to use
    * @param {TAccount} account the smart contract account that will be used to sign user ops and send them
    */
-  constructor(
-    public provider: EthersProviderAdapter,
-    account: TAccount,
-  ) {
+  constructor(public provider: EthersProviderAdapter, account: TAccount) {
     super();
     this.account = account;
 
     this.sendUserOperation = (
       args: UserOperationCallData | BatchUserOperationCallData,
-      overrides?: UserOperationOverrides<TEntryPointVersion>,
+      overrides?: UserOperationOverrides<TEntryPointVersion>
     ) =>
       this.provider.accountProvider.sendUserOperation({
         uo: args,
@@ -83,7 +79,7 @@ export class AccountSigner<
 
     this.waitForUserOperationTransaction =
       this.provider.accountProvider.waitForUserOperationTransaction.bind(
-        this.provider.accountProvider,
+        this.provider.accountProvider
       );
   }
 
@@ -192,7 +188,7 @@ export class AccountSigner<
    * @throws {AccountNotFoundError} if the account is not found in the provider
    */
   async sendTransaction(
-    transaction: Deferrable<TransactionRequest>,
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
     if (!this.provider.accountProvider.account || !this.account) {
       throw new AccountNotFoundError();
@@ -216,10 +212,10 @@ export class AccountSigner<
    * @throws {Error} Will always throw an error indicating transaction signing is unsupported
    */
   signTransaction(
-    _transaction: Deferrable<TransactionRequest>,
+    _transaction: Deferrable<TransactionRequest>
   ): Promise<string> {
     throw new Error(
-      "Transaction signing is not supported, use sendUserOperation instead",
+      "Transaction signing is not supported, use sendUserOperation instead"
     );
   }
 

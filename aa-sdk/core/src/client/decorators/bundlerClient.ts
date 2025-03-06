@@ -47,7 +47,7 @@ export type BundlerRpcSchema = [
     Method: "eth_supportedEntryPoints";
     Parameters: [];
     ReturnType: Address[];
-  },
+  }
 ];
 
 // [!region BundlerActions]
@@ -61,11 +61,11 @@ export type BundlerActions = {
    * @returns the gas estimates for the given response
    */
   estimateUserOperationGas<
-    TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+    TEntryPointVersion extends EntryPointVersion = EntryPointVersion
   >(
     request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address,
-    stateOverride?: StateOverride,
+    stateOverride?: StateOverride
   ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 
   /**
@@ -76,10 +76,10 @@ export type BundlerActions = {
    * @returns the hash of the sent UserOperation
    */
   sendRawUserOperation<
-    TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+    TEntryPointVersion extends EntryPointVersion = EntryPointVersion
   >(
     request: UserOperationRequest<TEntryPointVersion>,
-    entryPoint: Address,
+    entryPoint: Address
   ): Promise<Hash>;
 
   /**
@@ -122,9 +122,9 @@ export const bundlerActions: <
     Chain | undefined,
     any,
     [...PublicRpcSchema, ...BundlerRpcSchema]
-  >,
+  >
 >(
-  client: TClient,
+  client: TClient
 ) => BundlerActions = (client) => ({
   estimateUserOperationGas: async (request, entryPoint, stateOverride) =>
     estimateUserOperationGas(client, { request, entryPoint, stateOverride }),

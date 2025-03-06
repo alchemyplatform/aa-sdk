@@ -16,12 +16,12 @@ describe("Modular Account Multi Owner Account Tests", async () => {
 
   const signer1 = LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 0 },
+    { accountIndex: 0 }
   );
 
   const signer2 = LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 1 },
+    { accountIndex: 1 }
   );
 
   const owners = [await signer1.getAddress(), await signer2.getAddress()];
@@ -32,7 +32,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       owners,
     });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      `"0xE599B1c2cecFbAa007Bea0e6FBeD1dc1757fDd89"`,
+      `"0xE599B1c2cecFbAa007Bea0e6FBeD1dc1757fDd89"`
     );
   });
 
@@ -171,8 +171,8 @@ describe("Modular Account Multi Owner Account Tests", async () => {
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
-          }),
-        ),
+          })
+        )
     ).resolves.toMatchInlineSnapshot(`
       {
         "callGasLimit": 1n,
@@ -219,8 +219,8 @@ describe("Modular Account Multi Owner Account Tests", async () => {
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
-          }),
-        ),
+          })
+        )
     ).resolves.toMatchInlineSnapshot(`
       {
         "callGasLimit": "0x1",
@@ -244,7 +244,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       await provider.account.getImplementationAddress();
 
     expect(implementationAddressPreDeploy).toEqual(
-      "0x0000000000000000000000000000000000000000",
+      "0x0000000000000000000000000000000000000000"
     );
 
     await setBalance(instance.getClient(), {
@@ -267,7 +267,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       await provider.account.getImplementationAddress();
 
     expect(implementationAddressPostDeploy).toEqual(
-      "0x0046000000000151008789797b54fdb500e2a61e",
+      "0x0046000000000151008789797b54fdb500e2a61e"
     );
   }, 200000);
 
@@ -298,7 +298,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
             transport: custom(instance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
-          ? erc7677Middleware()
-          : {}),
+        ? erc7677Middleware()
+        : {}),
     });
 });

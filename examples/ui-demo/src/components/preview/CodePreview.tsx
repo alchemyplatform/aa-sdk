@@ -25,7 +25,7 @@ export function CodePreview({ className }: { className?: string }) {
     <div
       className={twMerge(
         "flex flex-col gap-6 p-6 overflow-y-auto scrollbar-none",
-        className,
+        className
       )}
     >
       <div className="flex flex-col">
@@ -133,11 +133,11 @@ function getTailwindCode(ui: Config["ui"]) {
     // override account kit themes
     colors: {
       "btn-primary": createColorSet("${ui.primaryColor.light}", "${
-        ui.primaryColor.dark
-      }"),
+    ui.primaryColor.dark
+  }"),
       "fg-accent-brand": createColorSet("${ui.primaryColor.light}", "${
-        ui.primaryColor.dark
-      }"),
+    ui.primaryColor.dark
+  }"),
     },${
       ui.borderRadius !== DEFAULT_CONFIG.ui.borderRadius
         ? `
@@ -150,7 +150,7 @@ function getTailwindCode(ui: Config["ui"]) {
 function getConfigCode(config: Config) {
   const sections = getSectionsForConfig(config, "your-project-id");
   const socialIsEnabled = Object.values(config.auth.oAuthMethods).some(
-    (enabled) => enabled,
+    (enabled) => enabled
   );
 
   const code = dedent`
@@ -165,10 +165,10 @@ function getConfigCode(config: Config) {
       addPasskeyOnSignup: ${
         config.auth.addPasskey && config.auth.showPasskey
       },${
-        config.ui.logoLight || config.ui.logoDark
-          ? '\n      header: <img src="path/to/logo.svg" />,'
-          : ""
-      }
+    config.ui.logoLight || config.ui.logoDark
+      ? '\n      header: <img src="path/to/logo.svg" />,'
+      : ""
+  }
     },${config.supportUrl ? `\n    supportUrl: "${config.supportUrl}"` : ""}
   };
 

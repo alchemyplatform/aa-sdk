@@ -129,9 +129,9 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
    */
   signTypedData = async <
     const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" | string = string,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" | string = string
   >(
-    typedData: TypedDataDefinition<TTypedData, TPrimaryType>,
+    typedData: TypedDataDefinition<TTypedData, TPrimaryType>
   ): Promise<Hex> => {
     const account = this.inner.account ?? (await this.getAddress());
 

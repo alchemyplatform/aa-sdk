@@ -9,7 +9,7 @@ export const minPriorityFeePerBidDefaults = new Map<number, bigint>([
 ]);
 
 export const getDefaultUserOperationFeeOptions = (
-  chain: Chain,
+  chain: Chain
 ): UserOperationFeeOptions => {
   return {
     maxPriorityFeePerGas: {

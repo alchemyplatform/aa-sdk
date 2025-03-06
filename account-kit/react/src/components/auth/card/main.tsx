@@ -13,7 +13,7 @@ export const MainAuthContent = () => {
       header,
       sections,
       hideSignInText,
-    }),
+    })
   );
 
   return (

@@ -17,14 +17,13 @@ export type PluginManagerActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installPlugin: (
-    params: InstallPluginParams<TAccount>,
+    params: InstallPluginParams<TAccount>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   uninstallPlugin: (
-    params: UninstallPluginParams<TAccount>,
+    params: UninstallPluginParams<TAccount>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
@@ -48,9 +47,9 @@ export function pluginManagerActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ): PluginManagerActions<TAccount> {
   return {
     installPlugin: async (params) => installPlugin(client, params),

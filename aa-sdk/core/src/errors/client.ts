@@ -19,7 +19,7 @@ export class IncompatibleClientError extends BaseError {
       [
         `Client of type (${client.type}) is not a ${expectedClient}.`,
         `Create one with \`createSmartAccountClient\` first before using \`${method}\``,
-      ].join("\n"),
+      ].join("\n")
     );
   }
 }
@@ -67,7 +67,7 @@ export class InvalidEntityIdError extends BaseError {
    */
   constructor(entityId: number) {
     super(
-      `Entity ID used is ${entityId}, but must be less than or equal to uint32.max`,
+      `Entity ID used is ${entityId}, but must be less than or equal to uint32.max`
     );
   }
 }
@@ -85,7 +85,7 @@ export class InvalidNonceKeyError extends BaseError {
    */
   constructor(nonceKey: bigint) {
     super(
-      `Nonce key is ${nonceKey} but has to be less than or equal to 2**152`,
+      `Nonce key is ${nonceKey} but has to be less than or equal to 2**152`
     );
   }
 }

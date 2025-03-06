@@ -13,12 +13,12 @@ import { MultiOwnerPlugin, MultiOwnerPluginAbi } from "./plugin.js";
 
 export const multiOwnerMessageSigner = <
   TTransport extends Transport,
-  TSigner extends SmartAccountSigner,
+  TSigner extends SmartAccountSigner
 >(
   client: BundlerClient<TTransport>,
   accountAddress: Address,
   signer: () => TSigner,
-  pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id],
+  pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id]
 ) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
     const [, name, version, chainId, verifyingContract, salt] =
@@ -66,9 +66,9 @@ export const multiOwnerMessageSigner = <
 
     signTypedData: <
       const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
     >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
     ): Promise<Hex> => {
       return signWith712Wrapper(hashTypedData(typedDataDefinition));
     },

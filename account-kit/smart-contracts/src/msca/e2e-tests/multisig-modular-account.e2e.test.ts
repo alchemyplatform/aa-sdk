@@ -59,7 +59,7 @@ describe("Multisig Modular Account Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0xB717003B9777B894000B89d60B179FDA96a655D3"',
+      '"0xB717003B9777B894000B89d60B179FDA96a655D3"'
     );
   });
 
@@ -72,7 +72,7 @@ describe("Multisig Modular Account Tests", async () => {
     });
 
     expect((await provider.readOwners()).slice().sort()).toStrictEqual(
-      owners.slice().sort(),
+      owners.slice().sort()
     );
 
     expect(await provider.getThreshold({})).toBe(threshold);
@@ -112,7 +112,7 @@ describe("Multisig Modular Account Tests", async () => {
           signer: await signer2.getAddress(),
         },
       ],
-      true,
+      true
     );
 
     expect(
@@ -120,7 +120,7 @@ describe("Multisig Modular Account Tests", async () => {
         address: provider1.getAddress(),
         message,
         signature: combined,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -175,7 +175,7 @@ describe("Multisig Modular Account Tests", async () => {
           signer: await signer2.getAddress(),
         },
       ],
-      true,
+      true
     );
 
     expect(
@@ -185,7 +185,7 @@ describe("Multisig Modular Account Tests", async () => {
         primaryType,
         message,
         signature: combined,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -216,7 +216,7 @@ describe("Multisig Modular Account Tests", async () => {
       account: { address },
     } = provider1;
     expect(address).toMatchInlineSnapshot(
-      '"0xD605446440A7d09772C909263823189377A503Da"',
+      '"0xD605446440A7d09772C909263823189377A503Da"'
     );
 
     const message = "test";
@@ -240,11 +240,11 @@ describe("Multisig Modular Account Tests", async () => {
           signer: await signer2.getAddress(),
         },
       ],
-      true,
+      true
     );
 
     const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
-      await provider1.account.getInitCode(),
+      await provider1.account.getInitCode()
     );
 
     const wrappedSig = wrapSignatureWith6492({
@@ -264,7 +264,7 @@ describe("Multisig Modular Account Tests", async () => {
         address: provider1.getAddress(),
         message,
         signature: wrappedSig,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -293,7 +293,7 @@ describe("Multisig Modular Account Tests", async () => {
       account: { address },
     } = provider1;
     expect(address).toMatchInlineSnapshot(
-      '"0xD605446440A7d09772C909263823189377A503Da"',
+      '"0xD605446440A7d09772C909263823189377A503Da"'
     );
 
     const types = {
@@ -333,11 +333,11 @@ describe("Multisig Modular Account Tests", async () => {
           signer: await signer2.getAddress(),
         },
       ],
-      true,
+      true
     );
 
     const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
-      await provider1.account.getInitCode(),
+      await provider1.account.getInitCode()
     );
 
     const wrappedSig = wrapSignatureWith6492({
@@ -359,7 +359,7 @@ describe("Multisig Modular Account Tests", async () => {
         primaryType,
         message,
         signature: wrappedSig,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -442,7 +442,7 @@ describe("Multisig Modular Account Tests", async () => {
         aggregatedSignature: aggregatedSignature,
         signatures: [signatureObj],
         userOpSignatureType: "ACTUAL",
-      },
+      }
     );
 
     await expect(result).resolves.not.toThrowError();
@@ -533,7 +533,7 @@ describe("Multisig Modular Account Tests", async () => {
       account: { address },
     } = provider1;
     expect(address).toMatchInlineSnapshot(
-      '"0xF2dBBB10E1a7406B17B0056357132B0702e184D5"',
+      '"0xF2dBBB10E1a7406B17B0056357132B0702e184D5"'
     );
 
     const { request, signatureObj: signature1 } =

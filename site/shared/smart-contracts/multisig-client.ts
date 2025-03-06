@@ -8,15 +8,15 @@ const MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC = "YOUR MNEMONIC";
 export const signers = [
   LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 0 },
+    { accountIndex: 0 }
   ),
   LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 1 },
+    { accountIndex: 1 }
   ),
   LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-    { accountIndex: 2 },
+    { accountIndex: 2 }
   ),
 ];
 

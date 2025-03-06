@@ -39,7 +39,7 @@ export const paymaster060: Paymaster = toPaymaster({
 
     const paymasterAndData = encodePacked(
       ["address", "uint256", "bytes"],
-      [address, expiry, signature],
+      [address, expiry, signature]
     ) as Hex;
 
     return { paymasterAndData };

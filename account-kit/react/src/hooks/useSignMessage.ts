@@ -95,7 +95,7 @@ export function useSignMessage({
 
       return client.signMessage(params);
     },
-    [client, isConnected, wagmiConfig],
+    [client, isConnected, wagmiConfig]
   );
 
   const {
@@ -110,14 +110,14 @@ export function useSignMessage({
       mutationFn,
       ...mutationArgs,
     },
-    queryClient,
+    queryClient
   );
 
   return {
     signMessage: ReactLogger.profiled("signMessage", signMessage),
     signMessageAsync: ReactLogger.profiled(
       "signMessageAsync",
-      signMessageAsync,
+      signMessageAsync
     ),
     signedMessage,
     isSigningMessage,

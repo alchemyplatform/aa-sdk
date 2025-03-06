@@ -32,8 +32,7 @@ import {
 
 export type MultiOwnerLightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends
-    LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
+  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
 > = LightAccountBase<
   TSigner,
   "MultiOwnerLightAccount",
@@ -41,7 +40,7 @@ export type MultiOwnerLightAccount<
 > & {
   encodeUpdateOwners: (
     ownersToAdd: Address[],
-    ownersToRemove: Address[],
+    ownersToRemove: Address[]
   ) => Hex;
   getOwnerAddresses: () => Promise<readonly Address[]>;
 };
@@ -49,8 +48,7 @@ export type MultiOwnerLightAccount<
 export type CreateMultiOwnerLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends
-    LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
+  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
 > = Omit<
   CreateLightAccountBaseParams<
     "MultiOwnerLightAccount",
@@ -83,14 +81,13 @@ export type CreateMultiOwnerLightAccountParams<
 export async function createMultiOwnerLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends
-    LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
+  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
 >(
   config: CreateMultiOwnerLightAccountParams<
     TTransport,
     TSigner,
     TLightAccountVersion
-  >,
+  >
 ): Promise<MultiOwnerLightAccount<TSigner, TLightAccountVersion>>;
 
 /**
@@ -125,7 +122,7 @@ export async function createMultiOwnerLightAccount({
   accountAddress,
   factoryAddress = getDefaultMultiOwnerLightAccountFactoryAddress(
     chain,
-    version,
+    version
   ),
   salt: salt_ = 0n,
   owners = [],

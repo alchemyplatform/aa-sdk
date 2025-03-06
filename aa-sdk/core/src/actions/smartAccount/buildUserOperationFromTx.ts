@@ -67,13 +67,12 @@ export async function buildUserOperationFromTx<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
   overrides?: UserOperationOverrides<TEntryPointVersion>,
-  context?: TContext,
+  context?: TContext
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
   const { account = client.account, ...request } = args;
   if (!account || typeof account === "string") {
@@ -88,7 +87,7 @@ export async function buildUserOperationFromTx<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "buildUserOperationFromTx",
-      client,
+      client
     );
   }
 

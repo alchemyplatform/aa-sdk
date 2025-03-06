@@ -156,7 +156,7 @@ export type SignerEndpoints = [
     Route: "/v1/otp";
     Body: OtpParams;
     Response: { credentialBundle: string };
-  },
+  }
 ];
 
 export type AuthenticatingEventMetadata = {

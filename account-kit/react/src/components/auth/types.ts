@@ -37,7 +37,7 @@ export type AuthType =
       OauthRedirectConfig);
 
 export function getSocialProviderDisplayName(
-  authType: Extract<AuthType, { type: "social" }>,
+  authType: Extract<AuthType, { type: "social" }>
 ): string {
   return authType.displayName ?? capitalize(authType.authProviderId);
 }

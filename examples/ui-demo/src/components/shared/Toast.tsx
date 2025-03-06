@@ -22,7 +22,7 @@ export const Toast = () => {
           type === "success"
             ? "bg-demo-surface-success-subtle"
             : "bg-demo-surface-critical-subtle",
-          "align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center",
+          "align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center"
         )}
       >
         <p
@@ -30,7 +30,7 @@ export const Toast = () => {
             type === "success"
               ? "text-demo-text-success"
               : "text-demo-text-critical",
-            "text-center pr-2 align-middle whitespace-nowrap",
+            "text-center pr-2 align-middle whitespace-nowrap"
           )}
         >
           <span
@@ -38,7 +38,7 @@ export const Toast = () => {
               type === "success"
                 ? "bg-demo-surface-success"
                 : "bg-demo-surface-critical",
-              "align-middle px-2 py-1 text-demo-text-invert text-xs font-semibold rounded mr-2 hidden md:inline",
+              "align-middle px-2 py-1 text-demo-text-invert text-xs font-semibold rounded mr-2 hidden md:inline"
             )}
           >
             {type === "success" ? "Success" : "Error"}
@@ -50,7 +50,7 @@ export const Toast = () => {
             className={cn(
               type === "success"
                 ? "stroke-demo-surface-success"
-                : "stroke-demo-surface-critical",
+                : "stroke-demo-surface-critical"
             )}
           />
         </Close>

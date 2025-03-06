@@ -12,7 +12,7 @@ export function TopNav() {
     Metrics.trackEvent({ name: "get_api_key_clicked" });
     window.open(
       `${links.dashboard}&utm_id=${Metrics._internal.anonId}`,
-      "_blank",
+      "_blank"
     );
   }, []);
 

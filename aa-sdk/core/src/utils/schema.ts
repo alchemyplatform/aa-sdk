@@ -7,7 +7,7 @@ export const ChainSchema = z.custom<Chain>(
     chain != null &&
     typeof chain === "object" &&
     "id" in chain &&
-    typeof chain.id === "number",
+    typeof chain.id === "number"
 );
 
 export const HexSchema = z.custom<`0x${string}` | "0x">((val) => {
@@ -37,7 +37,7 @@ export const MultiplierSchema = z
       (n) => {
         return (n.toString().split(".")[1]?.length ?? 0) <= 4;
       },
-      { message: "Max precision is 4 decimal places" },
+      { message: "Max precision is 4 decimal places" }
     ),
   })
   .strict();

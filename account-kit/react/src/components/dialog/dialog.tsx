@@ -95,7 +95,7 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
             </FocusTrap>
           </div>
         </RemoveScroll>,
-        document.body,
+        document.body
       )
     : null;
 };

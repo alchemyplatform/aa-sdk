@@ -38,15 +38,14 @@ export async function _runMiddlewareStack<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uo: Deferrable<UserOperationStruct<TEntryPointVersion>>;
     context?: TContext;
   } & GetAccountParameter<TAccount> &
-    UserOperationOverridesParameter<TEntryPointVersion>,
+    UserOperationOverridesParameter<TEntryPointVersion>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
   const { uo, overrides, account = client.account, context } = args;
   if (!account) {
@@ -67,15 +66,15 @@ export async function _runMiddlewareStack<
             ...("paymasterAndData" in overrides!
               ? { paymasterAndData: overrides.paymasterAndData }
               : "paymasterData" in overrides! &&
-                  "paymaster" in overrides &&
-                  overrides.paymasterData !== "0x"
-                ? {
-                    paymasterData: overrides.paymasterData,
-                    paymaster: overrides.paymaster,
-                  }
-                : // At this point, nothing has run so no fields are set
-                  // for 0.7 when not using a paymaster, all fields should be undefined
-                  undefined),
+                "paymaster" in overrides &&
+                overrides.paymasterData !== "0x"
+              ? {
+                  paymasterData: overrides.paymasterData,
+                  paymaster: overrides.paymaster,
+                }
+              : // At this point, nothing has run so no fields are set
+                // for 0.7 when not using a paymaster, all fields should be undefined
+                undefined),
           };
         },
         paymasterAndData: noopMiddleware,
@@ -91,7 +90,7 @@ export async function _runMiddlewareStack<
     client.middleware.gasEstimator,
     client.middleware.customMiddleware,
     paymasterAndData,
-    client.middleware.userOperationSimulator,
+    client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
   return resolveProperties<

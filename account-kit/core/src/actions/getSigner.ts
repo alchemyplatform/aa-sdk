@@ -17,7 +17,7 @@ import type { AlchemyAccountsConfig, AlchemySigner } from "../types.js";
  * @returns {AlchemySigner | null} the instance of the signer present in the store if it exists, otherwise null
  */
 export const getSigner = <T extends AlchemySigner>(
-  config: AlchemyAccountsConfig,
+  config: AlchemyAccountsConfig
 ): T | null => {
   const signer: T | null = config.store.getState().signer as T | null;
 

@@ -279,7 +279,7 @@ const AuthMethod = ({
     <div
       className={cn(
         "flex flex-col flex-1 border rounded-lg px-4 py-3 relative basis-0.5 gap-3 border-gray-300",
-        className,
+        className
       )}
     >
       <div className={cn("flex flex-1 items-center")}>
@@ -336,7 +336,7 @@ const OAuthMethod = ({
         "flex border border-[#64748B]  rounded-lg p-1 h-10 w-full justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? "border-[#64748B] bg-demo-surface-secondary"
-          : "border-gray-300",
+          : "border-gray-300"
       )}
     >
       {icon}

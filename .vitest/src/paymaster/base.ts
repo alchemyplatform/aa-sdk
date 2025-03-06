@@ -29,12 +29,12 @@ type ToPaymasterArgs = {
   abi: typeof VerifyingPaymaster060Abi | typeof VerifyingPaymaster070Abi;
   dummyData: Hex;
   getPaymasterStubData: (
-    self: Paymaster,
+    self: Paymaster
   ) => { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex };
   getPaymasterData: (
     self: Paymaster,
     uo: UserOperationRequest,
-    client: Client & { mode: "anvil" },
+    client: Client & { mode: "anvil" }
   ) => Promise<
     { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex }
   >;
@@ -154,7 +154,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
             { name: "verifyingPaymaster", type: "address" },
             { name: "proxyCallData", type: "bytes" },
           ],
-          [implAddress, proxyCallData],
+          [implAddress, proxyCallData]
         ),
       ]);
 

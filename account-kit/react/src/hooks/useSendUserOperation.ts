@@ -26,7 +26,7 @@ import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
 export type SendUserOperationWithEOA<
-  TEntryPointVersion extends EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion
 > =
   | SendUserOperationResult<TEntryPointVersion>
   | {
@@ -36,7 +36,7 @@ export type SendUserOperationWithEOA<
 
 export type UseSendUserOperationMutationArgs<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = BaseHookMutationArgs<
   SendUserOperationWithEOA<TEntryPointVersion>,
   SendUserOperationParameters<TAccount>
@@ -44,7 +44,7 @@ export type UseSendUserOperationMutationArgs<
 
 export type UseSendUserOperationArgs<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   client: UseSmartAccountClientResult["client"] | undefined;
   waitForTxn?: boolean;
@@ -52,7 +52,7 @@ export type UseSendUserOperationArgs<
 
 export type UseSendUserOperationResult<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   sendUserOperation: UseMutateFunction<
     SendUserOperationWithEOA<TEntryPointVersion>,
@@ -128,9 +128,9 @@ export type UseSendUserOperationResult<
  */
 export function useSendUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts,
+  TAccount extends SupportedAccounts = SupportedAccounts
 >(
-  params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>,
+  params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
   const { client, waitForTxn = false, ...mutationArgs } = params;
 
@@ -153,21 +153,21 @@ export function useSendUserOperation<
       mutationFn: async (params: SendUserOperationParameters<TAccount>) => {
         if (isConnected) {
           console.warn(
-            "useSendUserOperation: connected to an EOA, sending as a transaction instead",
+            "useSendUserOperation: connected to an EOA, sending as a transaction instead"
           );
           const { uo } = params;
 
           if (Array.isArray(uo)) {
             throw new UnsupportedEOAActionError(
               "useSendUserOperation",
-              "batch execute",
+              "batch execute"
             );
           }
 
           if (typeof uo === "string") {
             throw new UnsupportedEOAActionError(
               "useSendUserOperation",
-              "hex user operation",
+              "hex user operation"
             );
           }
 
@@ -204,17 +204,17 @@ export function useSendUserOperation<
       },
       ...mutationArgs,
     },
-    queryClient,
+    queryClient
   );
 
   return {
     sendUserOperation: ReactLogger.profiled(
       "sendUserOperation",
-      sendUserOperation,
+      sendUserOperation
     ),
     sendUserOperationAsync: ReactLogger.profiled(
       "sendUserOperationAsync",
-      sendUserOperationAsync,
+      sendUserOperationAsync
     ),
     sendUserOperationResult,
     isSendingUserOperation,

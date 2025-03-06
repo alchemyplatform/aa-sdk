@@ -24,7 +24,7 @@ export function UserConnectionDetails({
       theme,
       primaryColor,
       accountMode,
-    }),
+    })
   );
   const scaAccount = useAccount({
     type: "ModularAccountV2",
@@ -124,7 +124,7 @@ export function UserConnectionDetails({
               {deploymentStatus && delegationAddress ? (
                 <a
                   href={`${ODYSSEY_EXPLORER_URL}/address/0x${delegationAddress.slice(
-                    8,
+                    8
                   )}`}
                   target="_blank"
                   className="underline"

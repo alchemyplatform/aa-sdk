@@ -12,8 +12,7 @@ export type SplitAggregateSignatureParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   aggregatedSignature: Hex;
   threshold: number;
@@ -41,9 +40,9 @@ export type SplitAggregateSignatureResult = {
 export const splitAggregatedSignature = async <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  args: SplitAggregateSignatureParams<TAccount>,
+  args: SplitAggregateSignatureParams<TAccount>
 ): Promise<SplitAggregateSignatureResult> => {
   const { aggregatedSignature, threshold, account, request } = args;
   if (aggregatedSignature.length < 192 + (65 * threshold - 1)) {
@@ -110,11 +109,11 @@ export const splitAggregatedSignature = async <
       const signer = takeBytes(signature, { count: 20, offset: 12 });
       const offset = fromHex(
         takeBytes(signature, { count: 32, offset: 32 }),
-        "number",
+        "number"
       );
       const signatureLength = fromHex(
         takeBytes(signaturesAndData, { count: 32, offset }),
-        "number",
+        "number"
       );
 
       return {
@@ -126,7 +125,7 @@ export const splitAggregatedSignature = async <
           offset: offset + 32,
         }),
       };
-    },
+    }
   );
 
   return {
