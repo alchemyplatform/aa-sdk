@@ -7,7 +7,7 @@ import type {
 } from "@aa-sdk/core";
 import type { SupportedAccounts } from "@account-kit/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";

@@ -1,12 +1,13 @@
 import {
+  erc7677Middleware,
   LocalAccountSigner,
   type SmartAccountSigner,
-  erc7677Middleware,
 } from "@aa-sdk/core";
 import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
 import { local060Instance } from "~test/instances.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("Modular Account Multi Owner Account Tests", async () => {
   const instance = local060Instance;
@@ -99,11 +100,11 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it("should successfully execute with paymaster", async () => {
+  it("should successfully execute with paymaster using erc-7677 middleware", async () => {
     const provider = await givenConnectedProvider({
       signer: signer1,
       owners,
-      usePaymaster: true,
+      paymasterMiddleware: "erc7677",
     });
 
     const result = await provider.sendUserOperation({
@@ -117,11 +118,29 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it("should successfully override fees and gas when using paymaster", async () => {
+  it("should successfully execute with paymaster using alchemy paymaster middleware", async () => {
     const provider = await givenConnectedProvider({
       signer: signer1,
       owners,
-      usePaymaster: true,
+      paymasterMiddleware: "alchemyGasAndPaymasterAndData",
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+    const txnHash = provider.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
+
+  it("should successfully override fees and gas when using paymaster with erc-7677 middleware", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer1,
+      owners,
+      paymasterMiddleware: "erc7677",
     });
 
     await expect(
@@ -165,11 +184,59 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     `);
   }, 100000);
 
+  it("should successfully override fees and gas when using paymaster with alchemy paymaster middleware", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer1,
+      owners,
+      paymasterMiddleware: "alchemyGasAndPaymasterAndData",
+    });
+
+    await expect(
+      provider
+        .buildUserOperation({
+          uo: {
+            target: provider.getAddress(),
+            data: "0x",
+          },
+          overrides: {
+            maxFeePerGas: 1n,
+            maxPriorityFeePerGas: 1n,
+            callGasLimit: 1n,
+            verificationGasLimit: 1n,
+            preVerificationGas: 1n,
+          },
+        })
+        .then(
+          ({
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+            callGasLimit,
+            verificationGasLimit,
+            preVerificationGas,
+          }) => ({
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+            callGasLimit,
+            verificationGasLimit,
+            preVerificationGas,
+          })
+        )
+    ).resolves.toMatchInlineSnapshot(`
+      {
+        "callGasLimit": "0x1",
+        "maxFeePerGas": "0x1",
+        "maxPriorityFeePerGas": "0x1",
+        "preVerificationGas": "0x1",
+        "verificationGasLimit": "0x1",
+      }
+    `);
+  }, 100000);
+
   it("should get the implementation address correctly", async () => {
     const provider = await givenConnectedProvider({
       signer: signer1,
       owners,
-      usePaymaster: true,
+      paymasterMiddleware: "erc7677",
       salt: 1n, // different salt to avoid shared state with the other tests
     });
 
@@ -208,12 +275,12 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     signer,
     accountAddress,
     owners,
-    usePaymaster = false,
+    paymasterMiddleware,
     salt = 0n,
   }: {
     signer: SmartAccountSigner;
     owners: Address[];
-    usePaymaster?: boolean;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
     accountAddress?: Address;
     salt?: bigint;
   }) =>
@@ -224,6 +291,14 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       salt,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      ...(usePaymaster ? erc7677Middleware() : {}),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
     });
 });

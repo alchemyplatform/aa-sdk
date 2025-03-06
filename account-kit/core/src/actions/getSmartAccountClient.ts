@@ -3,7 +3,6 @@ import {
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
-import type { AlchemyWebSigner } from "@account-kit/signer";
 import {
   accountLoupeActions,
   lightAccountClientActions,
@@ -23,12 +22,13 @@ import {
 import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   Connection,
   SupportedAccount,
   SupportedAccounts,
   SupportedAccountTypes,
 } from "../types";
-import { createAccount } from "./createAccount.js";
+import { createAccount, isModularV2AccountParams } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
@@ -47,13 +47,13 @@ export type GetSmartAccountClientParams<
 export type ClientActions<
   TAccount extends SupportedAccounts = SupportedAccounts
 > = TAccount extends LightAccount
-  ? LightAccountClientActions<AlchemyWebSigner>
+  ? LightAccountClientActions<AlchemySigner>
   : TAccount extends MultiOwnerModularAccount
-  ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
-      PluginManagerActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<AlchemyWebSigner>>
+  ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemySigner>> &
+      PluginManagerActions<MultiOwnerModularAccount<AlchemySigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<AlchemySigner>>
   : TAccount extends MultiOwnerLightAccount
-  ? MultiOwnerLightAccountClientActions<AlchemyWebSigner>
+  ? MultiOwnerLightAccountClientActions<AlchemySigner>
   : TAccount extends ModularAccountV2
   ? {} // no ma v2 actions
   : never;
@@ -142,8 +142,9 @@ export function getSmartAccountClient(
     signerStatus.isAuthenticating ||
     signerStatus.isInitializing
   ) {
-    if (!account && signerStatus.isConnected)
+    if (!account && signerStatus.isConnected) {
       createAccount({ type, accountParams }, config);
+    }
 
     if (clientState && clientState.isLoadingClient) {
       return clientState;
@@ -220,9 +221,8 @@ export function getSmartAccountClient(
         };
       case "ModularAccountV2":
         const is7702 =
-          params.accountParams &&
-          "mode" in params.accountParams &&
-          params.accountParams.mode === "7702";
+          isModularV2AccountParams(params) &&
+          params.accountParams?.mode === "7702";
         return {
           client: createAlchemySmartAccountClient({
             transport,

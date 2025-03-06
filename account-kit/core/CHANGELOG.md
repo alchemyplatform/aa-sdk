@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Features
+
+- add react-native core files ([#1402](https://github.com/alchemyplatform/aa-sdk/issues/1402)) ([060e1ab](https://github.com/alchemyplatform/aa-sdk/commit/060e1ab231db8455a71f25452e1a4cddace60dbd))
+
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Bug Fixes
+
+- only reconnect accounts for active chain during rehydration ([#1356](https://github.com/alchemyplatform/aa-sdk/issues/1356)) ([95c6174](https://github.com/alchemyplatform/aa-sdk/commit/95c6174168047cedef1ea04182b7d7d2ceedc5ef))
+
+### Features
+
+- add multi-policy sponsorships ([#1189](https://github.com/alchemyplatform/aa-sdk/issues/1189)) ([024d735](https://github.com/alchemyplatform/aa-sdk/commit/024d73545b03e8ce08485ef2f8252d6ed95e4521))
+- invalidate MAv2 account when switching mode ([#1384](https://github.com/alchemyplatform/aa-sdk/issues/1384)) ([c75826e](https://github.com/alchemyplatform/aa-sdk/commit/c75826e781fe6dd29c5a9202ca2a828d9c146578))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

@@ -17,7 +17,7 @@ When using the [React](/react/overview), [Core](/core/overview), or [Infra](/inf
 If you want to sponsor gas, the Smart Account Clients in these packages abstract the relevant middleware away from you since all you need is a `policyId` to sponsor gas with Alchemy.
 :::
 
-As mentioned abve, the client can be configured with a series of middleware that always run in the same order:
+As mentioned above, the client can be configured with a series of middleware that always run in the same order:
 
 1. `dummyPaymasterAndData` - Generates a dummy paymaster and data for gas estimation if using a paymaster (default: noop)
 2. `feeEstimator` - Estimates the fees for a user operation. If you are using our RPCs, it's important to use the [`alchemyFeeEstimator`](/reference/account-kit/infra/functions/alchemyFeeEstimator) middleware.
