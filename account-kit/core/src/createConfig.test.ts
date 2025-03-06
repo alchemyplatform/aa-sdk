@@ -1,5 +1,6 @@
 import { alchemy, sepolia } from "@account-kit/infra";
 import { createConfig } from "./createConfig.js";
+import { createSigner as createWebSigner } from "./environments/web/createSigner.js";
 
 describe("createConfig", () => {
   it("should set the internal session length", async () => {
@@ -23,6 +24,7 @@ describe("createConfig", () => {
       sessionConfig: {
         expirationTimeMs: 5000,
       },
+      createSigner: createWebSigner,
     });
   };
 });

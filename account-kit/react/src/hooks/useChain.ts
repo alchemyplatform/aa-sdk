@@ -8,7 +8,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useSyncExternalStore } from "react";
 import type { Chain } from "viem";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { BaseHookMutationArgs } from "../types.js";
 
 export type UseChainParams = BaseHookMutationArgs<void, { chain: Chain }>;

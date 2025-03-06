@@ -18,7 +18,6 @@ import {
   TimeRangeModule,
 } from "@account-kit/smart-contracts/experimental";
 import { SingleSignerValidationModule } from "@account-kit/smart-contracts/experimental";
-import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { DEMO_USDC_ADDRESS, SWAP_VENUE_ADDRESS } from "./7702/dca/constants";
 import { swapAbi } from "./7702/dca/abi/swap";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
@@ -26,6 +25,8 @@ import { genEntityId } from "./7702/genEntityId";
 import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
+import { useModularAccountV2Client } from "./useModularAccountV2Client";
+import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -89,6 +90,9 @@ export const useRecurringTransactions = (clientOptions: {
   });
 
   const { setToast } = useToast();
+
+  const { isDeployed, refetch: refetchDeploymentStatus } =
+    useDeploymentStatus();
 
   const handleError = (error: Error) => {
     console.error(error);
@@ -271,6 +275,9 @@ export const useRecurringTransactions = (clientOptions: {
       return handleError(new Error("missing batch txn hash"));
     }
 
+    if (!isDeployed) {
+      refetchDeploymentStatus();
+    }
     setSessionKeyAdded(true);
     setCardStatus("active");
 
