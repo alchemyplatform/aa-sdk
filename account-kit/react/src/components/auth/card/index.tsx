@@ -8,7 +8,7 @@ import {
   useRef,
   type PropsWithChildren,
 } from "react";
-import { useAlchemyAccountContext } from "../../../context.js";
+import { useAlchemyAccountContext } from "../../../hooks/useAlchemyAccountContext.js";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";

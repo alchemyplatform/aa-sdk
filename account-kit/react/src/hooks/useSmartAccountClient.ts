@@ -14,7 +14,7 @@ import {
 import { useMemo, useSyncExternalStore } from "react";
 import type { Chain } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 export type UseSmartAccountClientProps<
   TChain extends Chain | undefined = Chain | undefined,

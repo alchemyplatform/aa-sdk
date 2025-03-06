@@ -41,6 +41,8 @@ export class RNAlchemySignerSingleton extends BaseAlchemySigner<RNSignerClient> 
       client,
       sessionConfig,
     });
+
+    this.signerType = "rn-alchemy-signer";
   }
 
   public static getInstance(params: RNAlchemySignerParams) {
