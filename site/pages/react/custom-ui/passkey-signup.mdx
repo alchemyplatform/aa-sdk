@@ -1,0 +1,96 @@
+---
+title: Custom UI for Passkey Signup
+description: How to implement custom UI for passkey signup in your React app
+---
+
+# Custom UI for Passkey Signup
+
+This guide shows you how to implement a custom UI for passkey signup in your React application using Account Kit hooks.
+
+## Overview
+
+Passkeys provide a secure, passwordless authentication method that can be used to create wallets for your users without going through email verification flows. You can implement passkey signup with or without an associated email address.
+
+:::warning
+If you create a passkey without an email associated with the user, you risk your users losing access to their wallets if they lose their device.
+:::
+
+## Implementation
+
+To implement passkey signup, you'll use the `useAuthenticate` hook from Account Kit.
+
+### Option 1: Passkey Signup with Email (Recommended)
+
+This approach associates an email with the passkey, allowing users to recover their account if they lose access to their device.
+
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
+// When the user submits their email and wants to create a passkey
+const handlePasskeySignup = async (email: string) => {
+  try {
+    // Important: Validate the email before proceeding
+    if (!isValidEmail(email)) {
+      throw new Error("Please enter a valid email address");
+    }
+    
+    await authenticate({
+      type: "passkey",
+      email,
+    });
+    // Success - passkey created and user authenticated
+  } catch (error) {
+    // Handle error
+  }
+};
+
+// Simple email validation function
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+```
+
+:::danger
+It's important that you validate the email before creating an account for the user. This is to prevent users from losing access to their wallets if they lose their device.
+:::
+
+### Option 2: Passkey Signup without Email
+
+This approach creates a passkey without an associated email. Use this only if you have another recovery mechanism in place.
+
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
+// When the user wants to create a passkey without email
+const handlePasskeyOnlySignup = async (username: string) => {
+  try {
+    await authenticate({
+      type: "passkey",
+      createNew: true,
+      username, // A unique identifier for the passkey
+    });
+    // Success - passkey created and user authenticated
+  } catch (error) {
+    // Handle error
+  }
+};
+```
+
+### Step 3: Track Authentication Status
+
+Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+```tsx twoslash
+import { useSignerStatus } from "@account-kit/react";
+
+// Inside your component
+const { isConnected } = useSignerStatus();
+
+// You can use isConnected to conditionally render UI
+```

@@ -14,7 +14,46 @@ export const reactGuides: SidebarItem[] = [
     items: [
       { text: "Set up", link: "/react/getting-started" },
       { text: "UI components", link: "/react/ui-components" },
-      { text: "Custom UI", link: "/react/react-hooks" },
+      // { text: "Custom UI", link: "/react/react-hooks" },
+      {
+        text: "Custom UI",
+        items: [
+          { text: "Overview", link: "/react/custom-ui" },
+          { text: "Email OTP", link: "/react/custom-ui/email-otp" },
+          {
+            text: "Email magic-link",
+            link: "/react/custom-ui/email-magic-link",
+          },
+          {
+            text: "Social login",
+            link: "/react/custom-ui/social-login",
+          },
+          {
+            text: "Custom social providers",
+            link: "/react/custom-ui/social-providers",
+          },
+          {
+            text: "Passkey signup",
+            link: "/react/custom-ui/passkey-signup",
+          },
+          {
+            text: "Passkey login",
+            link: "/react/custom-ui/passkey-login",
+          },
+        ],
+      },
+      {
+        text: "Multi-factor authentication",
+        collapsed: true,
+        items: [
+          { text: "Setup MFA", link: "/react/mfa/setup-mfa" },
+          { text: "Email OTP", link: "/react/mfa/email-otp" },
+          {
+            text: "Email magic-link",
+            link: "/react/mfa/email-magic-link",
+          },
+        ],
+      },
     ],
   },
   {

@@ -1,0 +1,98 @@
+---
+title: Custom UI for Social Login Authentication
+description: How to implement custom UI for social login authentication in your React app
+---
+
+# Custom UI for Social Login Authentication
+
+This guide shows you how to implement a custom UI for social login authentication in your React application using Account Kit hooks.
+
+## Overview
+
+Social login authentication allows users to authenticate using OAuth providers like Google, Facebook, or custom providers through Auth0. There are two authentication flows available:
+
+1. **Redirect flow**: Redirects the user to the provider's login page and back to your application
+2. **Popup flow**: Opens the provider's login page in a popup window without leaving your application
+
+## Implementation
+
+To authenticate users with social login, you'll use the `useAuthenticate` hook from Account Kit.
+
+### Step 1: Configure Your Application
+
+Before implementing social login, make sure you've:
+
+1. Set up your authentication providers in the Account Kit dashboard
+2. If using popup flow, set `enablePopupOauth: true` in your Account Kit configuration
+
+### Step 2: Implement the Authentication
+
+Create buttons or UI elements for each social provider you want to support:
+
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate, isPending } = useAuthenticate();
+
+// For redirect flow
+const handleGoogleRedirectLogin = async () => {
+  try {
+    await authenticate({
+      type: "oauth",
+      authProviderId: "google",
+      mode: "redirect",
+      redirectUrl: "/", // Redirect to this page after authentication
+    });
+    // The page will redirect, so no need for success handling here
+  } catch (error) {
+    // Handle error
+  }
+};
+
+// For popup flow
+const handleGooglePopupLogin = async () => {
+  try {
+    await authenticate({
+      type: "oauth",
+      authProviderId: "google",
+      mode: "popup",
+    });
+    // Authentication successful!
+  } catch (error) {
+    // Handle error
+  }
+};
+```
+
+### Step 3: Track Authentication Status
+
+Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+```tsx twoslash
+import { useSignerStatus } from "@account-kit/react";
+
+// Inside your component
+const { isConnected } = useSignerStatus();
+
+// You can use isConnected to conditionally render UI
+```
+
+### Step 4: Handle Redirect (for redirect flow)
+
+If you're using the redirect flow, you need to handle the redirect when the user returns to your application:
+
+```tsx twoslash
+import { useEffect } from "react";
+import { useSignerStatus } from "@account-kit/react";
+
+// Inside your component
+const { isAuthenticating } = useSignerStatus();
+
+// Show loading state during authentication
+useEffect(() => {
+  if (isAuthenticating) {
+    // Show loading UI while authentication completes
+  }
+}, [isAuthenticating]);
+```
