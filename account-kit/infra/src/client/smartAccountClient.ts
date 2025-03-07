@@ -2,7 +2,7 @@ import {
   ChainNotFoundError,
   createSmartAccountClient,
   isSmartAccountWithSigner,
-  updateHeaderSymbol,
+  UPDATE_HEADER,
   type Prettify,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -172,8 +172,8 @@ export function createAlchemySmartAccountClient(
 
   return {
     ...scaClient,
-    [updateHeaderSymbol](updateFn: UpdateHeaderFn) {
-      const transport = config.transport[updateHeaderSymbol](updateFn);
+    [UPDATE_HEADER](updateFn: UpdateHeaderFn) {
+      const transport = config.transport[UPDATE_HEADER](updateFn);
       return createAlchemySmartAccountClient({
         ...config,
         transport,

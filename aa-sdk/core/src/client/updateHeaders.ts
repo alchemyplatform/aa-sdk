@@ -1,25 +1,41 @@
-export const updateHeaderSymbol = Symbol("updateHeader");
+export const UPDATE_HEADER = Symbol("updateHeader");
 export type UpdateHeaderFn = (
   previous: Record<string, string>
 ) => Record<string, string>;
 
 export type UpdateHeader<T> = {
-  [updateHeaderSymbol]<This extends T>(
-    this: This,
-    update: UpdateHeaderFn
-  ): This;
+  [UPDATE_HEADER]<This extends T>(this: This, update: UpdateHeaderFn): This;
 };
 
-export function hasUpdateHeader<A extends {}>(a: A): a is A & UpdateHeader<A> {
-  return updateHeaderSymbol in a;
+export const TRACKER_HEADER = "X-Alchemy-Trace-Id";
+export const TRACKER_BREADCRUMB = "X-Alchemy-Trace-Breadcrumb";
+
+function addCrumb(previous: string | undefined, crumb: string): string {
+  return previous ? `${previous} - ${crumb}` : crumb;
 }
 
-export function maybeUpdateHeader<A extends {}>(
+function hasUpdateHeader<A extends {}>(a: A): a is A & UpdateHeader<A> {
+  return UPDATE_HEADER in a;
+}
+
+function maybeUpdateHeader<A extends {}>(
   a: A,
   updateHeader: UpdateHeaderFn
 ): A {
   if (hasUpdateHeader(a)) {
-    return a[updateHeaderSymbol](updateHeader);
+    return a[UPDATE_HEADER](updateHeader);
   }
   return a;
+}
+
+export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
+  return maybeUpdateHeader(client, headersUpdate(crumb));
+}
+export function headersUpdate(crumb: string): UpdateHeaderFn {
+  const headerUpdate_ = (x: Record<string, string>) => ({
+    [TRACKER_HEADER]: Math.random().toString(36).substring(10),
+    ...x,
+    [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
+  });
+  return headerUpdate_;
 }

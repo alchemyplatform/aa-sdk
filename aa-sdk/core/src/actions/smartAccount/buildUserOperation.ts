@@ -13,14 +13,7 @@ import type {
   BuildUserOperationParameters,
   UserOperationContext,
 } from "./types";
-import { maybeUpdateHeader } from "../../client/updateHeaders.js";
-
-export const TRACKER_HEADER = "x-tracker-id";
-export const TRACKER_BREADCRUMB = "x-tracker-breadcrumb";
-
-export function addCrumb(previous: string | undefined, crumb: string): string {
-  return previous ? `${previous} - ${crumb}` : crumb;
-}
+import { clientHeaderTrack } from "../../client/updateHeaders.js";
 
 const USER_OPERATION_METHOD = "buildUserOperation";
 /**
@@ -82,11 +75,4 @@ export async function buildUserOperation<
       context,
     })
   );
-}
-function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
-  return maybeUpdateHeader(client, (x) => ({
-    [TRACKER_HEADER]: Math.random().toString(36).substring(10),
-    ...x,
-    [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
-  }));
 }

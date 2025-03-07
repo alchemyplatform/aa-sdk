@@ -15,6 +15,7 @@ describe("createConfig tests", () => {
           "rpcUrl": "/api/sepolia",
         },
         "updateHeaders": [Function],
+        Symbol(updateHeader): [Function],
       }
     `);
   });
