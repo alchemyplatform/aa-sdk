@@ -28,6 +28,10 @@ import { signer } from "./signer";
 const { multiFactors } = await signer.inner.addMFA({
   multiFactorType: "totp",
 });
+
+// Display the QR code or secret to the user
+const totpUrl = result?.multiFactors[0].multiFactorTotpUrl;
+const multiFactorId = result?.multiFactors[0].multiFactorId;
 ```
 
 ```ts twoslash [signer] filename="signer.ts"

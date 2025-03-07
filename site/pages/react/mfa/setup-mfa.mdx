@@ -23,26 +23,29 @@ To implement MFA in your React application, you'll use the `useMFA` hook from Ac
 
 First, add a new TOTP factor to the user's account:
 
-```tsx
+```tsx twoslash
 import { useMFA } from "@account-kit/react";
 
 // Inside your component
 const { addMFA } = useMFA();
 
-const handleAddMFA = async () => {
-  try {
-    const result = await addMFA({
+const handleAddMFA = () => {
+  addMFA(
+    {
       multiFactorType: "totp",
-    });
-    
-    // Display the QR code or secret to the user
-    const totpUrl = result.multiFactors[0].multiFactorTotpUrl;
-    const multiFactorId = result.multiFactors[0].multiFactorId;
-    
-    // Store multiFactorId for verification step
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: (result) => {
+        // Display the QR code or secret to the user using the multiFactorTotpUrl
+        // Store multiFactorId for verification step
+        console.log(result.multiFactorTotpUrl);
+        console.log(result.multiFactorId);
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -50,23 +53,27 @@ const handleAddMFA = async () => {
 
 After the user scans the QR code with their authenticator app, they need to verify the setup:
 
-```tsx
+```tsx twoslash
 import { useMFA } from "@account-kit/react";
 
 // Inside your component
 const { verifyMFA } = useMFA();
 
-const handleVerifyMFA = async (code: string, multiFactorId: string) => {
-  try {
-    await verifyMFA({
+const handleVerifyMFA = (code: string, multiFactorId: string) => {
+  verifyMFA(
+    {
       multiFactorId,
       multiFactorCode: code, // 6-digit code from authenticator app
-    });
-    
-    // MFA setup successful
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // MFA setup successful
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -74,33 +81,38 @@ const handleVerifyMFA = async (code: string, multiFactorId: string) => {
 
 You can retrieve and remove MFA factors:
 
-```tsx
+```tsx twoslash
 import { useMFA } from "@account-kit/react";
 
 // Inside your component
 const { getMFAFactors, removeMFA } = useMFA();
 
 // Get all MFA factors
-const fetchFactors = async () => {
-  try {
-    const result = await getMFAFactors();
-    const factors = result.multiFactors;
-    // Display factors to user
-  } catch (error) {
-    // Handle error
-  }
+const fetchFactors = () => {
+  getMFAFactors(undefined, {
+    onSuccess: (factors) => {
+      const mfaFactors = factors.multiFactors;
+      // Display factors to user
+    },
+    onError: (error) => {
+      // Handle error
+    },
+  });
 };
 
 // Remove an MFA factor
-const handleRemoveFactor = async (multiFactorId: string) => {
-  try {
-    await removeMFA({
-      multiFactorIds: [multiFactorId],
-    });
-    // Factor removed successfully
-  } catch (error) {
-    // Handle error
-  }
+const handleRemoveFactor = (multiFactorId: string) => {
+  removeMFA(
+    { multiFactorIds: [multiFactorId] },
+    {
+      onSuccess: () => {
+        // Factor removed successfully
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -108,7 +120,7 @@ const handleRemoveFactor = async (multiFactorId: string) => {
 
 Before attempting to set up MFA, check if it's available for the current user:
 
-```tsx
+```tsx twoslash
 import { useMFA } from "@account-kit/react";
 
 // Inside your component

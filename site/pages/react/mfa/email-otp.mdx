@@ -1,130 +1,104 @@
 ---
-title: Setting Up Multi-Factor Authentication
-description: How to set up TOTP-based multi-factor authentication in your React app
+title: Email OTP with Multi-Factor Authentication
+description: How to authenticate using Email OTP when MFA is enabled
 ---
 
-# Setting Up Multi-Factor Authentication
+# Email OTP with Multi-Factor Authentication
 
-This guide shows you how to implement Time-based One-Time Password (TOTP) multi-factor authentication in your React application using Account Kit hooks.
-
-:::tip
-Multi-Factor Authentication is currently only supported when authenticating with Email OTP or Email Magic Link.
-:::
+This guide shows you how to implement Email OTP authentication when a user has Multi-Factor Authentication (MFA) enabled.
 
 ## Overview
 
-Multi-factor authentication adds an extra layer of security by requiring users to verify their identity using multiple methods. Account Kit supports TOTP-based MFA, which works with authenticator apps like Google Authenticator, Authy, or Microsoft Authenticator.
+When MFA is enabled, the authentication process requires two steps:
+
+1. Verify the user's email with a one-time password
+2. Verify the TOTP code from their authenticator app
 
 ## Implementation
 
-To implement MFA in your React application, you'll use the `useMFA` hook from Account Kit.
+### Step 1: Start Email OTP Authentication
 
-### Step 1: Add a TOTP Factor
+First, initiate the email OTP authentication process:
 
-First, add a new TOTP factor to the user's account:
-
-```tsx
-import { useMFA } from "@account-kit/react";
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { addMFA } = useMFA();
+const { authenticate } = useAuthenticate();
 
-const handleAddMFA = async () => {
+const handleSendCode = async (email: string) => {
   try {
-    const result = await addMFA({
-      multiFactorType: "totp",
+    await authenticate({
+      type: "email",
+      emailMode: "otp",
+      email,
     });
-    
-    // Display the QR code or secret to the user
-    const totpUrl = result.multiFactors[0].multiFactorTotpUrl;
-    const multiFactorId = result.multiFactors[0].multiFactorId;
-    
-    // Store multiFactorId for verification step
+    // Success - now show the OTP input form
   } catch (error) {
     // Handle error
   }
 };
 ```
 
-### Step 2: Verify the TOTP Setup
+### Step 2: Check MFA Status
 
-After the user scans the QR code with their authenticator app, they need to verify the setup:
+After receiving the email OTP, check if MFA is required:
 
-```tsx
-import { useMFA } from "@account-kit/react";
+```tsx twoslash
+import { useSigner } from "@account-kit/react";
 
 // Inside your component
-const { verifyMFA } = useMFA();
+const signer = useSigner();
 
-const handleVerifyMFA = async (code: string, multiFactorId: string) => {
-  try {
-    await verifyMFA({
-      multiFactorId,
-      multiFactorCode: code, // 6-digit code from authenticator app
-    });
-    
-    // MFA setup successful
-  } catch (error) {
-    // Handle error
-  }
+const checkMfaStatus = () => {
+  const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() || {};
+  return { mfaRequired, mfaFactorId };
 };
 ```
 
-### Step 3: Managing MFA Factors
+### Step 3: Complete Authentication
 
-You can retrieve and remove MFA factors:
+If MFA is required, you'll need both the email OTP and the TOTP code:
 
-```tsx
-import { useMFA } from "@account-kit/react";
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { getMFAFactors, removeMFA } = useMFA();
+const { authenticate } = useAuthenticate();
 
-// Get all MFA factors
-const fetchFactors = async () => {
+const handleVerify = async (
+  emailOtp: string,
+  mfaFactorId?: string,
+  totpCode?: string
+) => {
   try {
-    const result = await getMFAFactors();
-    const factors = result.multiFactors;
-    // Display factors to user
+    if (mfaFactorId && totpCode) {
+      // MFA is required
+      await authenticate({
+        type: "otp",
+        otpCode: emailOtp,
+        multiFactors: [
+          {
+            multiFactorId: mfaFactorId,
+            multiFactorCode: totpCode,
+          },
+        ],
+      });
+    } else {
+      // No MFA required
+      await authenticate({
+        type: "otp",
+        otpCode: emailOtp,
+      });
+    }
+    // Authentication successful!
   } catch (error) {
     // Handle error
   }
 };
-
-// Remove an MFA factor
-const handleRemoveFactor = async (multiFactorId: string) => {
-  try {
-    await removeMFA({
-      multiFactorIds: [multiFactorId],
-    });
-    // Factor removed successfully
-  } catch (error) {
-    // Handle error
-  }
-};
-```
-
-## Checking MFA Availability
-
-Before attempting to set up MFA, check if it's available for the current user:
-
-```tsx
-import { useMFA } from "@account-kit/react";
-
-// Inside your component
-const { isMfaAvailable } = useMFA();
-
-// Only show MFA setup options if available
-if (isMfaAvailable) {
-  // Render MFA setup UI
-} else {
-  // User needs to authenticate first
-}
 ```
 
 ## Next Steps
 
-After setting up MFA, users will need to provide both their primary authentication factor and the TOTP code when signing in:
-
-- [Email OTP with MFA](/react/mfa/email-otp)
+- [Set up MFA for your users](/react/mfa/setup-mfa)
 - [Email Magic Link with MFA](/react/mfa/email-magic-link)
