@@ -7,7 +7,7 @@ export const smartContractsSidebar: SidebarItem[] = [
     link: "/smart-contracts/choosing-a-smart-account",
   },
   {
-    text: "Modular Account V2",
+    text: "(Best) Modular Account V2",
     items: [
       {
         text: "Overview",
@@ -22,30 +22,8 @@ export const smartContractsSidebar: SidebarItem[] = [
         link: "/smart-contracts/modular-account-v2/using-7702",
       },
       {
-        text: "Session Keys",
-        items: [
-          {
-            text: "Overview",
-            link: "/smart-contracts/modular-account-v2/session-keys",
-          },
-          {
-            text: "Adding session keys",
-            link: "/smart-contracts/modular-account-v2/session-keys/adding-session-keys",
-          },
-          {
-            text: "Using session keys",
-            link: "/smart-contracts/modular-account-v2/session-keys/using-session-keys",
-          },
-          {
-            text: "Removing session keys",
-            link: "/smart-contracts/modular-account-v2/session-keys/removing-session-keys",
-          },
-        ],
-        collapsed: true,
-      },
-      {
-        text: "Managing ownership",
-        link: "/smart-contracts/modular-account-v2/managing-ownership",
+        text: "Upgrading to MAv2",
+        link: "/smart-contracts/modular-account-v2/upgrading-to-MAv2",
       },
     ],
   },
@@ -156,7 +134,7 @@ export const smartContractsSidebar: SidebarItem[] = [
     link: "https://github.com/alchemyplatform/aa-benchmarks",
   },
   {
-    text: "Deployment addresses",
+    text: "Deployment Addresses",
     link: "/smart-contracts/deployed-addresses",
   },
   { text: "SDK Reference", link: "/reference/account-kit/smart-contracts" },
