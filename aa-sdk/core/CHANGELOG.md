@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+### Bug Fixes
+
+- pass eip7702auth fields to alchemyGasAndPaymasterAndDataMiddleware ([#1403](https://github.com/alchemyplatform/aa-sdk/issues/1403)) ([c12e1e4](https://github.com/alchemyplatform/aa-sdk/commit/c12e1e460e4dfb4a2e95fad27f446de255061e61))
+
 # [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
 
 ### Bug Fixes

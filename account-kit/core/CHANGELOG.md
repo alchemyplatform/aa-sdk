@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+### Bug Fixes
+
+- add a check to migrate store versions ([#1420](https://github.com/alchemyplatform/aa-sdk/issues/1420)) ([0990240](https://github.com/alchemyplatform/aa-sdk/commit/099024047f9934b663d91517e1faf7fda9984562))
+
 # [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
 
 ### Features
