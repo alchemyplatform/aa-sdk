@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react-native",
-  "version": "4.15.1",
+  "version": "4.15.2",
   "description": "React Native Components and Hooks for using Account Kit",
   "license": "MIT",
   "author": "Alchemy",
@@ -39,11 +39,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/core": "^4.15.1",
-    "@account-kit/infra": "^4.15.1",
-    "@account-kit/react": "^4.15.1",
-    "@account-kit/react-native-signer": "^4.15.1",
-    "@account-kit/signer": "^4.15.1",
+    "@account-kit/core": "^4.15.2",
+    "@account-kit/infra": "^4.15.2",
+    "@account-kit/react": "^4.15.2",
+    "@account-kit/react-native-signer": "^4.15.2",
+    "@account-kit/signer": "^4.15.2",
     "zustand": "^5.0.0-rc.2"
   },
   "publishConfig": {
