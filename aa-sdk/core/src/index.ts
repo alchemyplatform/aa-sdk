@@ -91,6 +91,7 @@ export {
   InvalidUserOperationError,
   WaitForUserOperationError,
 } from "./errors/useroperation.js";
+export * from "./client/updateHeaders.js";
 export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
 export { default7702UserOpSigner } from "./middleware/defaults/7702signer.js";
@@ -112,6 +113,10 @@ export type {
 export { wrapSignatureWith6492 } from "./signer/utils.js";
 export { WalletClientSigner } from "./signer/wallet-client.js";
 export { split, type SplitTransportParams } from "./transport/split.js";
+export {
+  tracingHeader,
+  type TracingHeadersParams,
+} from "./transport/tracingHeader.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {

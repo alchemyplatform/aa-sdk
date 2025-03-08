@@ -12,6 +12,7 @@ import type {
   SendUserOperationParameters,
   UserOperationContext,
 } from "./types";
+import { clientHeaderTrack } from "../../index.js";
 
 export type CheckGasSponsorshipEligibilityResult<
   TAccount extends SmartContractAccount | undefined =
@@ -47,7 +48,7 @@ export type CheckGasSponsorshipEligibilityResult<
  * );
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client the smart account client to use for making RPC calls
+ * @param {Client<TTransport, TChain, TAccount>} client_ the smart account client to use for making RPC calls
  * @param {SendUserOperationParameters} args containing the user operation, account, context, and overrides
  * @returns {Promise<CheckGasSponsorshipEligibilityResult<TAccount>>} a Promise containing a boolean indicating if the account is elgibile for sponsorship and the sponsored UO
  */
@@ -61,9 +62,10 @@ export function checkGasSponsorshipEligibility<
     | UserOperationContext
     | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
 ): Promise<CheckGasSponsorshipEligibilityResult<TAccount>> {
+  const client = clientHeaderTrack(client_, "checkGasSponsorshipEligibility");
   const { account = client.account, overrides, context } = args;
 
   if (!account) {
