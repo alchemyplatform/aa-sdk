@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
+
+### Bug Fixes
+
+- docs smart contracts sidebar ([#1423](https://github.com/alchemyplatform/aa-sdk/issues/1423)) ([a8fca06](https://github.com/alchemyplatform/aa-sdk/commit/a8fca0676887f4a9dfded093633bc5efcfa19e8f))
+
 ## [4.15.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.1...v4.15.2) (2025-03-07)
 
 **Note:** Version bump only for package root
