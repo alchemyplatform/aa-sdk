@@ -35,16 +35,6 @@ const uiConfig: AlchemyAccountsUIConfig = {
         { type: "social", authProviderId: "google", mode: "popup" },
         { type: "social", authProviderId: "facebook", mode: "popup" },
         { type: "social", authProviderId: "apple", mode: "popup" },
-
-        // Example of a custom provider via Auth0
-        {
-          type: "social",
-          authProviderId: "auth0",
-          isCustomProvider: false,
-          auth0Connection: "github",
-          logoUrl: "https://path-to-github-logo.png",
-          mode: "popup",
-        },
       ],
     ],
   },
@@ -60,6 +50,28 @@ export const config = createConfig(
   uiConfig
 );
 ```
+
+:::note
+For custom OAuth providers like GitHub, Twitter, etc., see the [Custom Social Providers](/react/login-methods/social-providers) documentation.
+:::
+
+Standard social login providers accept the following configuration:
+
+```ts
+type SocialAuthType = {
+  type: "social";
+  // For standard providers (google, facebook, apple)
+  authProviderId: "google" | "facebook" | "apple";
+  // Authentication mode (popup or redirect)
+  mode: "popup" | "redirect";
+  // Optional: Specifies the requested OAuth scope
+  scope?: string;
+  // Optional: Specifies additional claims to be included in the authentication token
+  claims?: string;
+};
+```
+
+You can find the full type definition in the [Account Kit source code](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts).
 
 For more details on UI component customization, see the [UI Components](/react/ui-components) documentation.
 

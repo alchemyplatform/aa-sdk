@@ -33,6 +33,8 @@ const uiConfig: AlchemyAccountsUIConfig = {
       [
         {
           type: "email",
+          emailMode: "otp",
+
           // Optional customizations:
           buttonLabel: "Continue with Email",
           placeholder: "Enter your email address",
@@ -50,6 +52,23 @@ export const config = createConfig(
   uiConfig
 );
 ```
+
+Email OTP configuration accepts the following options:
+
+```ts
+type EmailAuthType = {
+  type: "email";
+  emailMode: "otp";
+  // hides the continue button
+  hideButton?: boolean;
+  // changes the button label
+  buttonLabel?: string;
+  // changes the placeholder text in the input
+  placeholder?: string;
+};
+```
+
+You can find the full type definition in the [Account Kit source code](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts).
 
 For more details on UI component customization, see the [UI Components](/react/ui-components) documentation.
 

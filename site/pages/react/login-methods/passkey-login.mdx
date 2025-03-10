@@ -47,6 +47,16 @@ export const config = createConfig(
 );
 ```
 
+Passkey login configuration accepts the following options:
+
+```ts
+type PasskeyAuthType = {
+  type: "passkey";
+};
+```
+
+You can find the full type definition in the [Account Kit source code](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts).
+
 For more details on UI component customization, see the [UI Components](/react/ui-components) documentation.
 
 ## Custom UI

@@ -82,6 +82,30 @@ export const config = createConfig(
 );
 ```
 
+Auth0 custom providers accept the following configuration:
+
+```ts
+type SocialAuthType = {
+  type: "social";
+  // For Auth0 custom providers
+  authProviderId: "auth0";
+  // Auth0-specific connection string (e.g., "github", "twitter")
+  auth0Connection?: string;
+  // URL for the provider's logo
+  logoUrl: string;
+  // URL for the provider's logo in dark mode (optional, `logoUrl` is used for both light & dark mode if not provided)
+  logoUrlDark?: string;
+  // Authentication mode (popup or redirect)
+  mode: "popup" | "redirect";
+  // Optional: Specifies the requested OAuth scope
+  scope?: string;
+  // Optional: Specifies additional claims to be included in the authentication token
+  claims?: string;
+};
+```
+
+You can find the full type definition in the [Account Kit source code](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts).
+
 For more details on UI component customization, see the [UI Components](/react/ui-components) documentation.
 
 ## Custom UI
