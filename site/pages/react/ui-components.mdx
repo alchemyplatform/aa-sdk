@@ -104,27 +104,9 @@ can be passed into sections:**
 
 This adds an email login to a section. For detailed information on email authentication, see [Email OTP](/react/login-methods/email-otp) and [Email Magic Link](/react/login-methods/email-magic-link) pages.
 
-```ts
-type EmailAuthType = {
-  type: "email";
-  // hides the continue button
-  hideButton?: boolean;
-  // changes the button label
-  buttonLabel?: string;
-  // changes the placeholder text in the input
-  placeholder?: string;
-};
-```
-
 ### Passkey
 
 This adds a passkey login method to a section. For detailed information on passkey authentication, see [Passkey Login](/react/login-methods/passkey-login) and [Passkey Signup](/react/login-methods/passkey-signup) pages.
-
-```ts
-type PasskeyAuthType = {
-  type: "passkey";
-};
-```
 
 ### External wallets
 
@@ -141,40 +123,6 @@ type ExternalWalletsAuthType = {
 ### Social
 
 This adds social authentication methods to a section. For detailed information on social authentication, see [Social Login](/react/login-methods/social-login) and [Custom Social Providers](/react/login-methods/social-providers) pages.
-
-```ts
-type SocialAuthType = {
-  type: "social";
-  // Specifies the requested OAuth scope
-  scope?: string;
-  // Specifies additional claims to be included in the authentication token
-  claims?: string;
-} & (
-  | {
-      // For using the Auth0 authentication provider
-      authProviderId: "auth0";
-      // Indicates whether a custom provider is used (default is false)
-      isCustomProvider?: false;
-      // Auth0-specific connection string
-      auth0Connection?: string;
-      // URL for the provider's logo
-      logoUrl: string;
-      // URL for the provider's logo in dark mode (optional, `logoUrl` is used for both light & dark mode if not provided)
-      logoUrlDark?: string;
-    }
-  | {
-      // For using a known authentication provider other than Auth0: "google", "facebook", "apple"
-      authProviderId: KnownAuthProvider;
-      // Indicates whether a custom provider is used (default false)
-      isCustomProvider?: false;
-      // Auth0 connection should not be specified when using other providers
-      auth0Connection?: never;
-      // Logo URL is optional for other providers
-      logoUrl?: never;
-    }
-) &
-  OauthRedirectConfig;
-```
 
 ### Example
 
