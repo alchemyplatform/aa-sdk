@@ -9,10 +9,24 @@ import Snippet from "../../shared/get-api-key.mdx";
 
 Account Kit makes it really easy to authenticate your users using a number of different authentication methods. If you followed the [quickstart](/react/quickstart), then your app is already setup to authenticate users and you can skip this guide!
 
-We'll show you two different ways to authenticate users:
+## Authentication Methods
 
-1. [Using our UI components](/react/ui-components) to handle the entire authentication flow.
-2. [Using our React hooks](/react/react-hooks) to build your own custom UI.
+Account Kit supports several authentication methods:
+
+- **Email OTP** - One-time password sent via email
+- **Email Magic Link** - Authentication links sent via email
+- **Social Login** - Authentication with providers like Google and Facebook
+- **Custom Social Providers** - Add custom OAuth providers via Auth0
+- **Passkey Signup** - Create accounts with passkeys
+- **Passkey Login** - Authenticate with existing passkeys
+
+## Implementation Options
+
+For each authentication method, you have two implementation options:
+
+1. [**Pre-built UI Components**](/react/ui-components) - Ready-to-use components that handle the entire authentication flow with minimal code and customizable styling.
+
+2. [**Custom UI with React Hooks**](/react/react-hooks) - Build your own UI components using our React hooks for complete control over the user experience.
 
 # Setup
 
@@ -39,7 +53,9 @@ export const config = createConfig(
 
 # What's next?
 
-Now you can setup your application's logic and UI to handle authentication! You'll be able to integrate authentication in one of two ways:
+Now you can choose which authentication methods you want to implement and how you want to implement them:
 
-1. [With our UI components](/react/ui-components) to handle the entire authentication flow.
-2. [With our React hooks](/react/react-hooks) to build your own custom UI.
+1. [Using our Pre-built UI components](/react/ui-components) to handle the entire authentication flow with minimal code.
+2. [Using our React hooks](/react/react-hooks) to build your own custom UI for complete control.
+
+Each authentication method has dedicated documentation for both implementation approaches.

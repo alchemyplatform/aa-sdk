@@ -1,17 +1,9 @@
 ---
-title: Custom UI for Email Magic Link Authentication
-description: How to implement custom UI for email magic link authentication in your React app
+title: Email Magic Link Authentication
+description: How to implement Email Magic Link authentication in your React app
 ---
 
-# Custom UI for Email Magic Link Authentication
-
-:::tip
-Account Kit provides [pre-built UI components](/react/ui-components) that handle email magic link authentication with minimal code. Consider using these components before building custom UI!
-:::
-
-This guide shows you how to implement a custom UI for email magic link authentication in your React application using Account Kit hooks.
-
-## Overview
+# Email Magic Link Authentication
 
 Email magic link authentication is a two-step process:
 
@@ -19,12 +11,56 @@ Email magic link authentication is a two-step process:
 2. The user clicks the link in their email, which redirects them back to your application to complete authentication
 
 :::tip
-Email OTP has been shown to have up to a 3x higher conversion rate and a 10-second faster flow compared to magic links. Consider using [Email OTP](/react/custom-ui/email-otp) for better user experience.
+Email OTP has been shown to have up to a 3x higher conversion rate and a 10-second faster flow compared to magic links. Consider using [Email OTP](/react/login-methods/email-otp) for better user experience.
 :::
 
-## Implementation
+You can implement Email Magic Link authentication in two ways:
 
-To authenticate users with email magic links, you'll use the `useAuthenticate` hook from Account Kit.
+- [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
+- [Custom UI](#custom-ui) - Complete control over the user experience
+
+## Pre-built UI Components
+
+Account Kit provides pre-built UI components that handle the entire Email Magic Link authentication flow with minimal code. Follow the instructions in the [UI Components](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+
+### Configuring Email Magic Link in UI Components
+
+To customize the Email Magic Link authentication experience in your pre-built components, configure the UI as follows:
+
+```tsx
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const uiConfig: AlchemyAccountsUIConfig = {
+  auth: {
+    sections: [
+      [
+        {
+          type: "email",
+          // Optional customizations:
+          buttonLabel: "Continue with Email",
+          placeholder: "Enter your email address",
+          // Email magic link is the default mode
+        },
+      ],
+    ],
+  },
+};
+
+export const config = createConfig(
+  {
+    transport: alchemy({ apiKey: "your-api-key" }),
+    chain: sepolia,
+  },
+  uiConfig
+);
+```
+
+For more details on UI component customization, see the [UI Components](/react/ui-components) documentation.
+
+## Custom UI
+
+If you need complete control over the user experience, you can implement your own custom UI for Email Magic Link authentication using Account Kit hooks.
 
 ### Step 1: Send the Magic Link
 

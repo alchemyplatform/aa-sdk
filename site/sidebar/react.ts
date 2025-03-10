@@ -10,35 +10,35 @@ export const reactGuides: SidebarItem[] = [
     link: "/react/quickstart",
   },
   {
-    text: "Authentication",
+    text: "Login",
     items: [
       { text: "Set up", link: "/react/getting-started" },
-      { text: "UI components", link: "/react/ui-components" },
-      // { text: "Custom UI", link: "/react/react-hooks" },
+      { text: "Pre-built UI", link: "/react/ui-components" },
+      { text: "Custom UI", link: "/react/react-hooks" },
       {
-        text: "Custom UI",
+        text: "Login Methods",
+        collapsed: true,
         items: [
-          { text: "Overview", link: "/react/custom-ui" },
-          { text: "Email OTP", link: "/react/custom-ui/email-otp" },
+          { text: "Email OTP", link: "/react/login-methods/email-otp" },
           {
             text: "Email magic-link",
-            link: "/react/custom-ui/email-magic-link",
+            link: "/react/login-methods/email-magic-link",
           },
           {
             text: "Social login",
-            link: "/react/custom-ui/social-login",
+            link: "/react/login-methods/social-login",
           },
           {
             text: "Custom social providers",
-            link: "/react/custom-ui/social-providers",
+            link: "/react/login-methods/social-providers",
           },
           {
             text: "Passkey signup",
-            link: "/react/custom-ui/passkey-signup",
+            link: "/react/login-methods/passkey-signup",
           },
           {
             text: "Passkey login",
-            link: "/react/custom-ui/passkey-login",
+            link: "/react/login-methods/passkey-login",
           },
         ],
       },

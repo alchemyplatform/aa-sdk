@@ -1,0 +1,146 @@
+---
+title: Custom Social Providers with Auth0
+description: How to implement custom social providers using Auth0 in your React app
+---
+
+# Custom Social Providers with Auth0
+
+In addition to the standard social login providers (Google, Facebook, Apple), Account Kit allows you to integrate custom OAuth providers through Auth0. This gives you flexibility to add authentication methods like GitHub, Twitter, LinkedIn, and more.
+
+You can implement custom social providers in two ways:
+
+- [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
+- [Custom UI](#custom-ui) - Complete control over the user experience
+
+## Pre-built UI Components
+
+Account Kit provides pre-built UI components that handle the entire custom social provider authentication flow with minimal code. Follow the instructions in the [UI Components](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+
+### Setting Up Auth0
+
+Before configuring the UI components, you need to set up Auth0:
+
+1. Create or log in to an account on [auth0.com](https://auth0.com)
+2. In the Auth0 dashboard, go to "Authentication → Social" in the sidebar
+3. Click "Create Social Connection" and choose your desired provider (e.g., GitHub)
+4. Configure the provider with appropriate credentials and permissions
+5. Note the "Name" field (e.g., "github") - you'll need this later
+6. Enable the connection for your Auth0 application
+7. From your Auth0 dashboard, go to "Applications → Applications"
+8. Select your application and note the "Domain", "Client ID", and "Client Secret"
+9. Add these to your Account Kit dashboard in the embedded accounts auth config
+
+### Configuring Custom Social Providers in UI Components
+
+To customize the custom social provider experience in your pre-built components, configure the UI as follows:
+
+```tsx
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const uiConfig: AlchemyAccountsUIConfig = {
+  auth: {
+    sections: [
+      [
+        // Standard social providers
+        { type: "social", authProviderId: "google", mode: "popup" },
+
+        // Custom social providers via Auth0
+        {
+          type: "social",
+          authProviderId: "auth0",
+          // Specify the Auth0 connection to use directly
+          auth0Connection: "github",
+          // Custom logo URL for the provider
+          logoUrl:
+            "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
+          // Optional dark mode logo
+          logoUrlDark:
+            "https://github.githubassets.com/assets/GitHub-Mark-Light-ea2971cee799.png",
+          mode: "popup",
+        },
+        {
+          type: "social",
+          authProviderId: "auth0",
+          auth0Connection: "twitter",
+          logoUrl: "https://path-to-twitter-logo.png",
+          mode: "popup",
+        },
+      ],
+    ],
+  },
+};
+
+export const config = createConfig(
+  {
+    transport: alchemy({ apiKey: "your-api-key" }),
+    chain: sepolia,
+    // Required for popup flow
+    enablePopupOauth: true,
+  },
+  uiConfig
+);
+```
+
+For more details on UI component customization, see the [UI Components](/react/ui-components) documentation.
+
+## Custom UI
+
+If you need complete control over the user experience, you can implement your own custom UI for custom social providers using Account Kit hooks.
+
+### Step 1: Set Up Auth0
+
+Before implementing in your React app, you need to configure Auth0 as described in the [Setting Up Auth0](#setting-up-auth0) section above.
+
+### Step 2: Implement Authentication in Your React App
+
+Use the `useAuthenticate` hook to implement Auth0 authentication:
+
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
+// Option 1: Generic Auth0 login (shows Auth0 provider selection screen)
+const handleAuth0Login = async () => {
+  try {
+    await authenticate({
+      type: "oauth",
+      authProviderId: "auth0",
+      mode: "popup", // or "redirect"
+    });
+    // Authentication successful!
+  } catch (error) {
+    // Handle error
+  }
+};
+
+// Option 2: Direct provider login (bypasses Auth0 selection screen)
+const handleGitHubLogin = async () => {
+  try {
+    await authenticate({
+      type: "oauth",
+      authProviderId: "auth0",
+      auth0Connection: "github", // Use the connection name from Auth0
+      mode: "popup", // or "redirect"
+    });
+    // Authentication successful!
+  } catch (error) {
+    // Handle error
+  }
+};
+```
+
+### Step 3: Track Authentication Status
+
+Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+```tsx twoslash
+import { useSignerStatus } from "@account-kit/react";
+
+// Inside your component
+const { isConnected } = useSignerStatus();
+
+// You can use isConnected to conditionally render UI
+```

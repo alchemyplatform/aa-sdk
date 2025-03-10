@@ -5,22 +5,22 @@ description: Overview of implementing custom authentication UI in your React app
 
 # Custom UI for Authentication
 
-:::tip
-Account Kit provides pre-built, [highly customizable UI components](/react/ui-components) that handle authentication with minimal code. Consider using these components before building custom UI!
-:::
-
 While Account Kit provides pre-built UI components for authentication, you may want to create your own custom UI to match your application's design system. This section covers how to implement custom authentication flows using Account Kit hooks.
+
+:::tip
+Tailwind CSS is a required dependency for using Alchemy Account Kit UI components. However, Alchemy Account Kit hooks function independently and do not require Tailwind.
+:::
 
 ## Available Authentication Methods
 
 Account Kit supports several authentication methods that you can implement with custom UI:
 
-- [Email OTP](/react/custom-ui/email-otp) - One-time password sent via email
-- [Email Magic Link](/react/custom-ui/email-magic-link) - Authentication links sent via email
-- [Social Login](/react/custom-ui/social-login) - Authentication with providers like Google and Facebook
-- [Custom Social Providers](/react/custom-ui/social-providers) - Add custom OAuth providers via Auth0
-- [Passkey Signup](/react/custom-ui/passkey-signup) - Create accounts with passkeys
-- [Passkey Login](/react/custom-ui/passkey-login) - Authenticate with existing passkeys
+- [Email OTP](/react/login-methods/email-otp) - One-time password sent via email
+- [Email Magic Link](/react/login-methods/email-magic-link) - Authentication links sent via email
+- [Social Login](/react/login-methods/social-login) - Authentication with providers like Google and Facebook
+- [Custom Social Providers](/react/login-methods/social-providers) - Add custom OAuth providers via Auth0
+- [Passkey Signup](/react/login-methods/passkey-signup) - Create accounts with passkeys
+- [Passkey Login](/react/login-methods/passkey-login) - Authenticate with existing passkeys
 
 ## Core Hooks for Custom UI
 
