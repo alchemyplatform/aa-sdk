@@ -21,6 +21,36 @@ export const smartContractsSidebar: SidebarItem[] = [
         text: "Using 7702",
         link: "/smart-contracts/modular-account-v2/using-7702",
       },
+      {
+        text: "Upgrading to MAv2",
+        link: "/smart-contracts/modular-account-v2/upgrading-to-MAv2",
+      },
+      {
+        text: "Session Keys",
+        items: [
+          {
+            text: "Overview",
+            link: "/smart-contracts/modular-account-v2/session-keys",
+          },
+          {
+            text: "Adding session keys",
+            link: "/smart-contracts/modular-account-v2/session-keys/adding-session-keys",
+          },
+          {
+            text: "Using session keys",
+            link: "/smart-contracts/modular-account-v2/session-keys/using-session-keys",
+          },
+          {
+            text: "Removing session keys",
+            link: "/smart-contracts/modular-account-v2/session-keys/removing-session-keys",
+          },
+        ],
+        collapsed: true,
+      },
+      {
+        text: "Managing ownership",
+        link: "/smart-contracts/modular-account-v2/managing-ownership",
+      },
     ],
   },
   {
