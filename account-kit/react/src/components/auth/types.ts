@@ -5,11 +5,13 @@ import type {
 import type { WalletConnectParameters } from "wagmi/connectors";
 import { capitalize } from "../../utils.js";
 
+export type EmailMode = "magicLink" | "otp";
+
 export type AuthType =
   | {
       // TODO: this should support setting redirectParams which will be added to the email redirect
       type: "email";
-      emailMode?: "magicLink" | "otp";
+      emailMode?: EmailMode;
       hideButton?: boolean;
       buttonLabel?: string;
       placeholder?: string;

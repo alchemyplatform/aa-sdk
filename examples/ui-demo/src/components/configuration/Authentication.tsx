@@ -14,17 +14,26 @@ import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
 import { links } from "@/utils/links";
+import { EmailModeSwitch } from "../shared/EmailModeSwitch";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { auth, setAuth } = useConfigStore(({ auth, setAuth }) => ({
     auth,
     setAuth,
   }));
-  const setEmailAuth = (active: boolean) => {
+  const setEmailActive = (active: boolean) => {
     setAuth({ showEmail: active });
     Metrics.trackEvent({
       name: "authentication_toggled",
       data: { auth_type: "email", enabled: active },
+    });
+  };
+  const toggleEmailMode = () => {
+    const newMode = auth.emailMode === "otp" ? "magicLink" : "otp";
+    setAuth({ emailMode: newMode });
+    Metrics.trackEvent({
+      name: "email_mode_changed",
+      data: { mode: newMode },
     });
   };
 
@@ -140,7 +149,14 @@ export const Authentication = ({ className }: { className?: string }) => {
             icon={<MailIcon />}
             name="Email"
             active={auth.showEmail}
-            setActive={setEmailAuth}
+            setActive={setEmailActive}
+            iconClassName="mt-[2px] self-start"
+            details={
+              <EmailModeSwitch
+                checked={auth.emailMode === "magicLink"}
+                onCheckedChange={toggleEmailMode}
+              />
+            }
           />
           <AuthMethod
             icon={<SocialIcon />}

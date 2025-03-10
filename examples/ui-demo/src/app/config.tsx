@@ -1,7 +1,7 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
-import { cookieStorage, createConfig } from "@account-kit/react";
+import { cookieStorage, createConfig, EmailMode } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { QueryClient } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { walletConnect } from "wagmi/connectors";
 export type Config = {
   auth: {
     showEmail: boolean;
+    emailMode: EmailMode;
     showExternalWallets: boolean;
     showPasskey: boolean;
     addPasskey: boolean;
@@ -49,6 +50,7 @@ export type AccountMode = "default" | "7702";
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,
+    emailMode: "otp",
     showExternalWallets: true,
     showPasskey: true,
     addPasskey: false,
@@ -107,7 +109,7 @@ export const alchemyConfig = () =>
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
       auth: {
         sections: [
-          [{ type: "email", emailMode: "otp" }],
+          [{ type: "email", emailMode: DEFAULT_CONFIG.auth.emailMode }],
           [
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },

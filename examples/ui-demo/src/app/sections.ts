@@ -12,6 +12,7 @@ export function getSectionsForConfig(
 ): AuthType[][] {
   const {
     showEmail,
+    emailMode,
     showPasskey,
     showOAuth,
     oAuthMethods,
@@ -20,7 +21,7 @@ export function getSectionsForConfig(
   const sections: AuthType[][] = [];
   const midSection: AuthType[] = [];
   if (showEmail) {
-    sections.push([{ type: "email", emailMode: "otp" }]);
+    sections.push([{ type: "email", emailMode }]);
   }
   if (showPasskey) {
     midSection.push({ type: "passkey" });

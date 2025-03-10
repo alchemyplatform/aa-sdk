@@ -1,4 +1,5 @@
 import { createLogger } from "@account-kit/logging";
+import { EmailMode } from "@account-kit/react";
 
 type DemoEvents = [
   {
@@ -9,6 +10,12 @@ type DemoEvents = [
     EventData: {
       auth_type: string;
       enabled: boolean;
+    };
+  },
+  {
+    EventName: "email_mode_changed";
+    EventData: {
+      mode: EmailMode;
     };
   },
   {
