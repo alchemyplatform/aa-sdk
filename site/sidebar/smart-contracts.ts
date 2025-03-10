@@ -22,6 +22,10 @@ export const smartContractsSidebar: SidebarItem[] = [
         link: "/smart-contracts/modular-account-v2/using-7702",
       },
       {
+        text: "Upgrading to MAv2",
+        link: "/smart-contracts/modular-account-v2/upgrading-to-MAv2",
+      },
+      {
         text: "Session Keys",
         items: [
           {
