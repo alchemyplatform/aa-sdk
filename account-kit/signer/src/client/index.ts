@@ -27,6 +27,13 @@ import { MfaRequiredError, NotAuthenticatedError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
+const MFA_PAYLOAD = {
+  GET: "get_mfa",
+  ADD: "add_mfa",
+  DELETE: "delete_mfas",
+  VERIFY: "verify_mfa",
+  LIST: "list_mfas",
+};
 
 export const AlchemySignerClientParamsSchema = z.object({
   connection: ConnectionConfigSchema,
@@ -691,7 +698,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
         hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: "Listing MFA Factors",
+        payload: MFA_PAYLOAD.LIST,
         signWith: this.user.address,
       },
     });
@@ -723,7 +730,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
         hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: "Adding MFA Factor",
+        payload: MFA_PAYLOAD.ADD,
         signWith: this.user.address,
       },
     });
@@ -762,7 +769,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
         hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: "Verifying MFA Factor",
+        payload: MFA_PAYLOAD.VERIFY,
         signWith: this.user.address,
       },
     });
@@ -795,7 +802,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
         hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: "Removing MFA Factor",
+        payload: MFA_PAYLOAD.DELETE,
         signWith: this.user.address,
       },
     });
