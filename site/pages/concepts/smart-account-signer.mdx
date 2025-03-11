@@ -6,13 +6,13 @@ description: Explore Account Kit integration guides for signers including Magic.
 
 # What is a Signer?
 
-A **Signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
+A **Signer** is a service (e.g. Alchemy Signer) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
 
 With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user's assets (e.g. tokens or NFTs).
 
 The signer connected to the `SmartAccountClient` is used to sign messages, data including user operations and transactions. The signatures for the user operation will be only valid and execute if the signer is the owner or one of the owners of the account.
 
-You can choose any Signer service or application to manage the Owner private key for the user. Using services like Magic, Turnkey, or Web3auth, you can secure the user's account with an email, social login, or passkeys. You can also use a self-custodial wallet like MetaMask as the Signer.
+Using Account Kit, you can secure your user's account with an email, social login, or passkeys. You can also use a self-custodial wallet like MetaMask as the Signer. You can choose any Signer service or application to manage the Owner private key for the user.
 
 This doc provides a basic introduction to signers and the criteria you should consider when choosing which Signer to use with Account Kit in your application.
 
@@ -26,6 +26,12 @@ The Signer plays a crucial role in your app because it controls the user’s sma
 - Signing user operations requested by the user, if and only if the user has authenticated
 - Optionally offering account recovery methods
 
+## Alchemy Signer
+
+User security is our top priority. Alchemy Signer is a non-custodial signer service where private keys are securely generated inside a [secure enclave](https://docs.turnkey.com/security/secure-enclaves). Only the end user can access their keys, not Alchemy nor your app. Read more about Turnkey's [security model](https://docs.turnkey.com/security/our-approach) that powers Alchemy Signer.
+
+Alchemy Signer is supported out of the box with Account Kit via easy to use [React Hooks](/react/getting-started) and lower-lever [SDKs](/signer/quickstart). Using Account Kit with the Alchemy Signer, you can secure your user's account with an email, social login, or passkeys.
+
 ## Criteria to consider
 
 Here are some important criteria to consider when choosing a Signer.
@@ -34,15 +40,22 @@ Here are some important criteria to consider when choosing a Signer.
   - Self-Custodial: the end user controls the private key and manually approves signature requests
   - Non-Custodial: a third-party service manages the private key or a subset of the key shares, but cannot sign transactions without the user’s involvement
   - Custodial: a third-party service manages the private key and can sign transactions without the user’s involvement
+  - **Alchemy Signer** is a fully non-custodial provider - only the end user can access their keys, not Alchemy, not your app, and not Turnkey.
 - **Security model**: Assess the security model of the provider. Where is the private key stored? (on a device? in the cloud? on what cloud provider?) Is the private key encrypted? What encryption algorithm is used? Who has access to the decryption keys? This is a non-exhaustive list and we recommend doing further research.
+  - **Alchemy Signer**: Private keys are secured by Turnkey. Turnkey runs all secure workloads in “Secure Enclaves,” a type of Trusted Execution Environment. Read about the security approach [here](https://docs.turnkey.com/security/our-approach).
 - **Authentication methods:** What authentication method delivers the right balance of security, self-sovereignty, and ease-of-use for your target users?
-  - Email + Password: sign up for a smart account with an email and password.
-  - Social logins: sign up for a smart account with Google, Facebook, or other social logins.
-  - Passkeys: sign up for a smart account secured by a passkey (e.g. fingerprint or Face ID) stored on-device.
-  - Self custodial Wallet: sign up for a smart account using a self-custodial wallet such as MetaMask or Ledger.
+  - **Alchemy Signer:** See full support [here](/react/ui-components#customize-authentication-ui).
+    - Email magic-link and OTP
+    - Social logins: OAuth providers (google, github, facebook and custom providers via Auth0)
+    - Passkey sign up and login
 - **Availability:** If the Signer service provider goes down, will users be able to sign transactions?
+
+  - **Alchemy signer:** The private key export method does not rely on Alchemy's infrastructure, so even if Alchemy is down, a user can still export their private key. Private key export doesn't rely on Alchemy being up, but on Turnkey being up. For full availability if Turnkey goes down the user should export their private key at some point.
+
 - **Key export:** Does the Signer allow the end user to export their private key? Can the user initiate an export even if the service provider has gone down? This is an important factor to ensure the user retains control of their assets no matter what happens to the service provider.
+  - **Alchemy Signer** allows user's to easily [export their private key](/reference/account-kit/react/hooks/useExportAccount), allowing them a right to exit at any time.
 - **Key recovery**: If the user forgets their password or loses their passkey, what recovery methods does the Signer provide? If the provider stores a backup copy of the private key or MPC key shares, where are those backups stored and who has access to them?
+  - **Alchemy signer:** You can add an additional backup login method with a passkey so that users can recover their key with either their email/social or passkey login. Additionally, if using an account that supports more than one owner, you can add multiple owners to an accounts making it recoverable by any owner.
 
 ## Types of Signers
 
@@ -50,7 +63,7 @@ Here are some important criteria to consider when choosing a Signer.
 
 Non-custodial wallet providers store private keys such that they cannot access the private key without the user’s involvement. For example, the user must provide a password or passkey that only they know in order to decrypt the private key stored by the provider. Users benefit from heightened security, while remaining in control of their private keys at all times. This is similar to a safety deposit box vault: the provider secures the bank vault but only the user has access to the individual safety deposit boxes (e.g. wallets).
 
-**Example**: Turnkey, Magic
+**Example**: Alchemy, Turnkey, Magic
 
 ### MPC wallets (non-custodial)
 
