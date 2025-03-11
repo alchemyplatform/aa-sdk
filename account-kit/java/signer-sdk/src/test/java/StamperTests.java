@@ -1,6 +1,7 @@
 import com.alchemy.aa.Stamper;
 import com.alchemy.aa.core.TEKManager;
 import com.google.crypto.tink.InsecureSecretKeyAccess;
+import com.google.crypto.tink.config.TinkConfig;
 import com.google.crypto.tink.hybrid.HpkeParameters;
 import com.google.crypto.tink.hybrid.HpkePrivateKey;
 import com.google.crypto.tink.hybrid.HpkePublicKey;
@@ -16,6 +17,7 @@ public class StamperTests {
     TEKManager tekManager;
 
     public StamperTests() throws GeneralSecurityException {
+        TinkConfig.register();
     }
 
     @BeforeEach

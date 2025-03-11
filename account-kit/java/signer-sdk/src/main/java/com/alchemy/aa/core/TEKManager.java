@@ -12,7 +12,6 @@ import com.google.crypto.tink.CleartextKeysetHandle;
 import com.google.crypto.tink.hybrid.internal.HpkeContext;
 import com.google.crypto.tink.hybrid.internal.HpkeKemKeyFactory;
 import com.google.crypto.tink.hybrid.internal.HpkePrimitiveFactory;
-import com.google.crypto.tink.config.TinkConfig;
 
 import com.google.crypto.tink.proto.KeyData;
 import com.google.crypto.tink.proto.Keyset;
@@ -24,21 +23,23 @@ import java.security.GeneralSecurityException;
 public class TEKManager {
 
     public TEKManager() throws GeneralSecurityException {
-        TinkConfig.register();
     }
 
     public static TEKManager InitializeTEKManagerFromHpkeKey(HpkePrivateKey privateKey)
             throws GeneralSecurityException, InvalidProtocolBufferException {
-        TEKManager tke = new TEKManager();
-        HpkePublicKey publicKey = privateKey.getPublicKey();
         KeysetHandle keysetHandle = KeysetHandle.newBuilder()
                 .addEntry(KeysetHandle.importKey(privateKey).makePrimary().withFixedId(0)).build();
+        return InitializeTEKManagerFromKeySetHandle(keysetHandle);
+    }
+
+    public static TEKManager InitializeTEKManagerFromKeySetHandle(KeysetHandle keysetHandle)
+            throws GeneralSecurityException {
+        TEKManager tek = new TEKManager();
+
         String serializedKeyset = TinkJsonProtoKeysetFormat.serializeKeyset(keysetHandle,
                 InsecureSecretKeyAccess.get());
-
-        tke.serializedKeyset = serializedKeyset.toCharArray();
-        tke.toHpkePublicKey(getHpkeParams(), keysetHandle);
-        return tke;
+        tek.serializedKeyset = serializedKeyset.toCharArray();
+        return tek;
     }
 
     public HpkePublicKey createTEK() throws GeneralSecurityException, InvalidProtocolBufferException {
