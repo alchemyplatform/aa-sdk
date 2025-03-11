@@ -56,6 +56,7 @@ import {
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
+import { DeferredActionBuilder } from "../deferredActionUtils.js";
 
 // TODO: Include a snapshot to reset to in afterEach
 describe("MA v2 Tests", async () => {
@@ -322,6 +323,37 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
+  });
+
+  it("Deferred Actions", async () => {
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const startingAddressBalance = await getTargetBalance();
+
+    // connect session key and send tx with session key
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+    });
+
+    const res = await DeferredActionBuilder.createTypedDataObject({
+      client: provider,
+      calldata: "0x",
+      deadline: 0,
+      entityId: 0,
+      isGlobalValidation: false,
+    });
+    console.log(res);
   });
 
   it("uninstalls a session key", async () => {
