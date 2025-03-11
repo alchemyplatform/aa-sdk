@@ -1,26 +1,28 @@
 import type { Address, SmartAccountClient } from "@aa-sdk/core";
 import { type Hex } from "viem";
 
-type DeferredActionData = {
-  typedData: {
-    domain: {
-      chainId: number;
-      verifyingContract: Address;
-    };
-    types: {
-      DeferredAction: [
-        { name: "nonce"; type: "uint256" },
-        { name: "deadline"; type: "uint48" },
-        { name: "call"; type: "bytes" }
-      ];
-    };
-    primaryType: "DeferredAction";
-    message: {
-      nonce: bigint;
-      deadline: number;
-      call: Hex;
-    };
+type DeferredActionTypedData = {
+  domain: {
+    chainId: number;
+    verifyingContract: Address;
   };
+  types: {
+    DeferredAction: [
+      { name: "nonce"; type: "uint256" },
+      { name: "deadline"; type: "uint48" },
+      { name: "call"; type: "bytes" }
+    ];
+  };
+  primaryType: "DeferredAction";
+  message: {
+    nonce: bigint;
+    deadline: number;
+    call: Hex;
+  };
+};
+
+type DeferredActionReturnData = {
+  typedData: DeferredActionTypedData;
   nonceOverride: bigint;
 };
 
@@ -32,7 +34,7 @@ export const DeferredActionBuilder = {
     entityId: number;
     isGlobalValidation: boolean;
     nonceKeyOverride?: bigint;
-  }): Promise<DeferredActionData> => {
+  }): Promise<DeferredActionReturnData> => {
     if (!args.client.account) {
       throw "Account undefined in client";
     }
@@ -64,4 +66,9 @@ export const DeferredActionBuilder = {
       nonceOverride: nonce,
     };
   },
+  // Maybe a better name for this
+  buildDigest: async (args: {
+    typedData: DeferredActionTypedData;
+    sig: Hex;
+  }) => {},
 };
