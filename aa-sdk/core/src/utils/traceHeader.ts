@@ -1,0 +1,124 @@
+function generateRandomHexString(numBytes: number) {
+  const bytes = crypto.getRandomValues(new Uint8Array(numBytes));
+  const array = Array.from(bytes);
+  const hexPairs = array.map((b) => b.toString(16).padStart(2, "0"));
+  return hexPairs.join("");
+}
+/**
+ * Some tools that are useful when dealing with the values
+ */
+export class TraceHeader {
+  readonly traceId: string;
+  readonly parentId: string;
+  readonly traceFlags: string;
+  readonly traceState: Record<string, string>;
+
+  /**
+   * Initializes a new instance with the provided trace identifiers and state information.
+   *
+   * @example ```ts
+   * function headersUpdate(crumb: string): UpdateHeaderFn {
+        const headerUpdate_ = (x: Record<string, string>) => {
+            const traceHeader = (
+            TraceHeader.fromTraceHeader(x) || TraceHeader.default()
+            ).withEvent(crumb);
+            return {
+            [TRACKER_HEADER]: Math.random().toString(36).substring(10),
+            ...x,
+            [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
+            ...traceHeader.toTraceHeader(),
+            };
+        };
+        return headerUpdate_;
+    }
+   * 
+   * ```
+   *
+   * @param {string} traceId The unique identifier for the trace
+   * @param {string} parentId The identifier of the parent trace
+   * @param {string} traceFlags Flags containing trace-related options
+   * @param {TraceHeader["traceState"]} traceState The trace state information for additional trace context
+   */
+  constructor(
+    traceId: string,
+    parentId: string,
+    traceFlags: string,
+    traceState: TraceHeader["traceState"]
+  ) {
+    this.traceId = traceId;
+    this.parentId = parentId;
+    this.traceFlags = traceFlags;
+    this.traceState = traceState;
+  }
+
+  /**
+   * Creating a default trace id that is a random setup for both trace id and parent id
+   *
+   * @returns {TraceHeader} A default trace header
+   */
+  static default() {
+    return new TraceHeader(
+      generateRandomHexString(16),
+      generateRandomHexString(8),
+      "00", //Means no flag have been set, and no sampled state https://www.w3.org/TR/trace-context/#trace-flags
+      {}
+    );
+  }
+  /**
+   * Should be able to consume a trace header from the headers of an http request
+   *
+   * @param {Record<string,string>} headers The headers from the http request
+   * @returns {TraceHeader | undefined} The trace header object, or nothing if not found
+   */
+  static fromTraceHeader(
+    headers: Record<string, string>
+  ): TraceHeader | undefined {
+    const [version, traceId, parentId, traceFlags] =
+      headers["traceheader"]?.split("-");
+    const traceState =
+      headers["tracestate"]?.split(",").reduce((acc, curr) => {
+        const [key, value] = curr.split("=");
+        acc[key] = value;
+        return acc;
+      }, {} as Record<string, string>) || {};
+    if (version !== "00") {
+      console.debug(
+        new Error(`Invalid version for traceheader: ${headers["traceheader"]}`)
+      );
+      return undefined;
+    }
+    return new TraceHeader(traceId, parentId, traceFlags, traceState);
+  }
+
+  /**
+   * Should be able to convert the trace header to the format that is used in the headers of an http request
+   *
+   * @returns {Record<string, string>} The trace header in the format of a record, used in our http client
+   */
+  toTraceHeader(): Record<string, string> {
+    return {
+      traceheader: `00-${this.traceId}-${this.parentId}-${this.traceFlags}`,
+      tracestate: Object.entries(this.traceState)
+        .map(([key, value]) => `${key}=${value}`)
+        .join(","),
+    };
+  }
+
+  /**
+   * Should be able to create a new trace header with a new event in the trace state,
+   *  as the key of the eventName as breadcrumbs appending onto previous breadcrumbs with the - infix if exists. And the
+   * trace parent gets updated as according to the docs
+   *
+   * @param {string} eventName The key of the new event
+   * @returns {TraceHeader} The new trace header
+   */
+  withEvent(eventName: string): TraceHeader {
+    const breadcrumbs = this.traceState.breadcrumbs
+      ? `${this.traceState.breadcrumbs}-${eventName}`
+      : eventName;
+    return new TraceHeader(this.traceId, this.traceId, this.traceFlags, {
+      ...this.traceState,
+      breadcrumbs,
+    });
+  }
+}

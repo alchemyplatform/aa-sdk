@@ -119,6 +119,7 @@ export {
 } from "./transport/tracingHeader.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
+export { TraceHeader } from "./utils/traceHeader.js";
 export {
   BigNumberishRangeSchema,
   BigNumberishSchema,

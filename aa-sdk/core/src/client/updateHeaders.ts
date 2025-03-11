@@ -1,3 +1,5 @@
+import { TraceHeader } from "../utils/traceHeader.js";
+
 export const UPDATE_HEADER = Symbol("updateHeader");
 export type UpdateHeaderFn = (
   previous: Record<string, string>
@@ -32,10 +34,16 @@ export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
   return maybeUpdateHeader(client, headersUpdate(crumb));
 }
 export function headersUpdate(crumb: string): UpdateHeaderFn {
-  const headerUpdate_ = (x: Record<string, string>) => ({
-    [TRACKER_HEADER]: Math.random().toString(36).substring(10),
-    ...x,
-    [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
-  });
+  const headerUpdate_ = (x: Record<string, string>) => {
+    const traceHeader = (
+      TraceHeader.fromTraceHeader(x) || TraceHeader.default()
+    ).withEvent(crumb);
+    return {
+      [TRACKER_HEADER]: Math.random().toString(36).substring(10),
+      ...x,
+      [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
+      ...traceHeader.toTraceHeader(),
+    };
+  };
   return headerUpdate_;
 }
