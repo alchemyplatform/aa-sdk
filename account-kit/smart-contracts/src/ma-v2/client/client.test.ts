@@ -58,16 +58,14 @@ import {
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { DeferredActionBuilder } from "../deferredActionUtils.js";
 
-// TODO: Include a snapshot to reset to in afterEach
+// Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
+  const isValidSigSuccess = "0x1626ba7e";
 
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions> &
     TestActions;
-
-  const isValidSigSuccess = "0x1626ba7e";
-
   beforeAll(async () => {
     client = instance
       .getClient()
@@ -335,7 +333,49 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const startingAddressBalance = await getTargetBalance();
+    // const startingAddressBalance = await getTargetBalance();
+
+    const sessionKeyEntityId = 1;
+    const isGlobalValidation = true;
+
+    let encodedInstallData = await provider.encodeInstallValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: sessionKeyEntityId,
+        isGlobal: isGlobalValidation,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: sessionKeyEntityId,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    const res = await DeferredActionBuilder.createTypedDataObject({
+      client: provider,
+      calldata: encodedInstallData,
+      deadline: 0,
+      entityId: sessionKeyEntityId,
+      isGlobalValidation: isGlobalValidation,
+    });
+    console.log(res);
+
+    const sig = await provider.signTypedData({ typedData: res.typedData });
+
+    console.log("SIGNATURE:\n", sig);
+
+    DeferredActionBuilder.buildDigest({
+      typedData: res.typedData,
+      sig: sig,
+      nonce: res.nonceOverride,
+    });
+
+    // Ideally we have one function which returns the slice of data to prepend to the signature, and a nonce override.
 
     // connect session key and send tx with session key
     let sessionKeyClient = await createModularAccountV2Client({
@@ -345,15 +385,6 @@ describe("MA v2 Tests", async () => {
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
-
-    const res = await DeferredActionBuilder.createTypedDataObject({
-      client: provider,
-      calldata: "0x",
-      deadline: 0,
-      entityId: 0,
-      isGlobalValidation: false,
-    });
-    console.log(res);
   });
 
   it("uninstalls a session key", async () => {
