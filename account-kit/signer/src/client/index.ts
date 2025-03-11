@@ -684,8 +684,16 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Listing MFA Factors",
+        signWith: this.user.address,
+      },
     });
 
     return this.request("/v1/auth-list-multi-factors", {
@@ -708,8 +716,16 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Adding MFA Factor",
+        signWith: this.user.address,
+      },
     });
 
     switch (params.multiFactorType) {
@@ -739,8 +755,16 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Verifying MFA Factor",
+        signWith: this.user.address,
+      },
     });
 
     return this.request("/v1/auth-verify-multi-factor", {
@@ -764,8 +788,16 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new NotAuthenticatedError();
     }
 
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
       organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: "Removing MFA Factor",
+        signWith: this.user.address,
+      },
     });
 
     return this.request("/v1/auth-delete-multi-factors", {
