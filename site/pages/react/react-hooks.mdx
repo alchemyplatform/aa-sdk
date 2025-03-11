@@ -13,7 +13,7 @@ Tailwind CSS is a required dependency for using Alchemy Account Kit UI component
 
 ## Available Authentication Methods
 
-Account Kit supports several authentication methods that you can implement with custom UI:
+Account Kit supports several authentication methods that you can implement with custom UI. Each method has its own dedicated page with detailed implementation instructions, code examples, and specific parameters for the authentication hooks:
 
 - [Email OTP](/react/login-methods/email-otp) - One-time password sent via email
 - [Email Magic Link](/react/login-methods/email-magic-link) - Authentication links sent via email
@@ -22,9 +22,13 @@ Account Kit supports several authentication methods that you can implement with 
 - [Passkey Signup](/react/login-methods/passkey-signup) - Create accounts with passkeys
 - [Passkey Login](/react/login-methods/passkey-login) - Authenticate with existing passkeys
 
+:::info
+**Visit each method's dedicated page** for specific implementation details, including the exact parameters to use with the `useAuthenticate` hook for that authentication method.
+:::
+
 ## Core Hooks for Custom UI
 
-When building custom authentication UI, you'll primarily work with these hooks:
+The following section provides an overview of the main hooks you'll use when implementing custom authentication UI. These hooks are the foundation for all authentication methods, but their specific usage and parameters vary depending on the authentication method you choose.
 
 ### useAuthenticate
 
@@ -37,7 +41,8 @@ function MyAuthComponent() {
   const { authenticate, isPending } = useAuthenticate();
 
   // Use authenticate with different parameters based on auth method
-  // isPending indicates if authentication is in progress
+  // The specific parameters depend on the authentication method
+  // See the individual authentication method pages for details
 }
 ```
 
@@ -49,11 +54,7 @@ The `useAccount` hook provides information about the authenticated user's accoun
 import { useAccount } from "@account-kit/react";
 
 function MyComponent() {
-  import { useAccount } from "@account-kit/react";
-
-  const { account, address, isLoadingAccount } = useAccount({
-    type: "LightAccount",
-  });
+  const { account, address, isLoadingAccount } = useAccount({});
 }
 ```
 
@@ -61,9 +62,10 @@ function MyComponent() {
 
 To implement custom authentication UI:
 
-1. Choose the authentication method(s) you want to support
-2. Implement the UI components using the appropriate hooks
-3. Handle success and error states appropriately
-4. Track authentication status to update your UI
+1. **Choose an authentication method** from the list above and visit its dedicated page
+2. Follow the method-specific implementation guidelines on that page
+3. Use the core hooks described above following the method-specific parameters
+4. Implement the UI components for your chosen authentication flow
+5. Handle success and error states appropriately
 
-Check the individual authentication method pages for specific implementation details.
+Each authentication method page provides detailed code examples tailored to that specific method, showing exactly how to configure the hooks and implement the entire authentication flow.

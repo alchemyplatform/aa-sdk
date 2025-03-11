@@ -36,12 +36,39 @@ Before configuring the UI components, you need to set up Auth0:
 1. Create or log in to an account on [auth0.com](https://auth0.com)
 2. In the Auth0 dashboard, go to "Authentication → Social" in the sidebar
 3. Click "Create Social Connection" and choose your desired provider (e.g., GitHub)
-4. Configure the provider with appropriate credentials and permissions
-5. Note the "Name" field (e.g., "github") - you'll need this later
-6. Enable the connection for your Auth0 application
-7. From your Auth0 dashboard, go to "Applications → Applications"
-8. Select your application and note the "Domain", "Client ID", and "Client Secret"
-9. Add these to your Account Kit dashboard in the embedded accounts auth config
+
+   <img src="/images/auth0-provider.png" alt="Auth0 provider list" />
+
+4. You can either use Auth0's dev keys for testing or add your own credentials. If you want to add your own, click the link that says "How to obtain a Client ID" and follow the directions.
+
+5. Select the attributes and permissions you'll be requesting. It's recommended to at least request the user's email address as it can be useful for merging accounts from different providers later. Note that your users will be prompted for consent to share whatever information you request.
+
+   <img
+     src="/images/auth0-config.png"
+     alt="Configure Github auth provider settings Auth0"
+   />
+
+6. Note the "Name" field (e.g., "github") - you'll need this later for the `auth0Connection` parameter
+7. Enable the connection for your Auth0 application
+
+   <img src="/images/auth0-app.png" alt="Auth0 app selection page" />
+
+8. From your Auth0 dashboard, go to "Applications → Applications" in the sidebar
+9. Select your application and note the "Domain", "Client ID", and "Client Secret"
+
+   <img
+     src="/images/auth0-app-settings.png"
+     alt="Settings page in Auth0 with relevant fields"
+   />
+
+10. Add these to your Account Kit dashboard in the embedded accounts auth config
+
+    <img
+      src="/images/alchemy-auth0-config.png"
+      alt="Copy fields from Auth0 to the Alchemy accounts config"
+    />
+
+    In addition to the "Client ID" and "Client Secret" fields, you must also fill in the "Auth0 Domain" field from the Auth0 dashboard.
 
 ### Step 3: Configure Custom Social Providers in UI Components
 
@@ -172,6 +199,11 @@ const handleGitHubLogin = async () => {
   }
 };
 ```
+
+Option 1 will take users to an Auth0 login page where they can choose the authentication method they want. Option 2 sends users directly to the specific provider's login (like GitHub) without showing the Auth0 selection screen, which usually provides a better user experience.
+
+The value passed to `auth0Connection` should match the string that appeared in the "Name" field of your auth provider connection in the Auth0 dashboard.
+
 
 ### Step 3: Track Authentication Status
 
