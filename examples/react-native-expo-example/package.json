@@ -10,8 +10,10 @@
 		"start:redirect-server": "tsx ./redirect-server/index.ts"
 	},
 	"dependencies": {
-		"@account-kit/react-native-signer": "^4.6.1",
-		"@account-kit/signer": "^4.6.1",
+		"@account-kit/react": "4.15.0",
+		"@account-kit/react-native": "4.15.0",
+		"@account-kit/react-native-signer": "4.15.0",
+		"@account-kit/signer": "4.15.0",
 		"expo": "~52.0.18",
 		"expo-constants": "~17.0.3",
 		"expo-linking": "~7.0.3",

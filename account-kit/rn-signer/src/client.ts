@@ -211,6 +211,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     throw new Error("Method not implemented.");
   }
 
+  override targetPublicKey(): Promise<string> {
+    return this.stamper.init();
+  }
+
   protected override getWebAuthnAttestation(
     _options: CredentialCreationOptions,
     _userDetails?: { username: string }

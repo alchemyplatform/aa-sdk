@@ -557,6 +557,31 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
   };
 
+  /**
+   * Initializes the iframe stamper and returns its public key.
+   *
+   * @example
+   * ```ts twoslash
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const publicKey = await client.targetPublicKey();
+   * ```
+   *
+   * @returns {Promise<string>} A promise that resolves with the target public key when the iframe stamper is successfully initialized, or throws an error if the target public key is not supported.
+   */
+  public override targetPublicKey = async (): Promise<string> => {
+    return this.initIframeStamper();
+  };
+
   private initIframeStamper = async () => {
     if (!this.iframeStamper.publicKey()) {
       await this.iframeStamper.init();

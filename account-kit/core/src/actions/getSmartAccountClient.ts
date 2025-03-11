@@ -3,7 +3,6 @@ import {
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
-import type { AlchemyWebSigner } from "@account-kit/signer";
 import {
   accountLoupeActions,
   lightAccountClientActions,
@@ -23,6 +22,7 @@ import {
 import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
+  AlchemySigner,
   Connection,
   SupportedAccount,
   SupportedAccounts,
@@ -47,13 +47,13 @@ export type GetSmartAccountClientParams<
 export type ClientActions<
   TAccount extends SupportedAccounts = SupportedAccounts
 > = TAccount extends LightAccount
-  ? LightAccountClientActions<AlchemyWebSigner>
+  ? LightAccountClientActions<AlchemySigner>
   : TAccount extends MultiOwnerModularAccount
-  ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
-      PluginManagerActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<AlchemyWebSigner>>
+  ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemySigner>> &
+      PluginManagerActions<MultiOwnerModularAccount<AlchemySigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<AlchemySigner>>
   : TAccount extends MultiOwnerLightAccount
-  ? MultiOwnerLightAccountClientActions<AlchemyWebSigner>
+  ? MultiOwnerLightAccountClientActions<AlchemySigner>
   : TAccount extends ModularAccountV2
   ? {} // no ma v2 actions
   : never;
