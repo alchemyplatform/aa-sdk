@@ -203,8 +203,38 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * ```
    * @returns {Promise<OauthConfig>} the config which must be loaded before
    * using popup-based OAuth
+   *
+   * @deprecated This method is no longer used and will be removed in a future version. Please use `initOauth` instead.
    */
   preparePopupOauth = (): Promise<OauthConfig> => this.inner.initOauth();
+
+  /**
+   * Prepares the config . This is recommended to be called on page load as it is required for popup-based oauth login and email login.
+   *
+   * This method exists because browsers may prevent popups from opening unless
+   * triggered by user interaction, and so the OAuth config must already have
+   * been fetched at the time a user clicks a social login button.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * await signer.initOauth();
+   * ```
+   * @returns {Promise<OauthConfig>} the oauth config as fetched from signer service
+   */
+  initOauth = (): Promise<OauthConfig> => this.inner.initOauth();
 
   /**
    * Retrieves oauth config

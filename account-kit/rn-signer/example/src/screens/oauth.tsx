@@ -11,7 +11,7 @@ export default function OAuthScreen() {
   useEffect(() => {
     // get the user if already logged in
     signer.getAuthDetails().then(setUser);
-    signer.preparePopupOauth();
+    signer.initOauth();
   }, []);
 
   return (

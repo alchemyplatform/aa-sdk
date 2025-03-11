@@ -112,6 +112,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth",
           },
           {
+            text: "initOauth",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/initOauth",
+          },
+          {
             text: "signAuthorization",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/signAuthorization",
           },
