@@ -1,5 +1,5 @@
 import type { Address, SmartAccountClient } from "@aa-sdk/core";
-import { type Hex } from "viem";
+import { encodePacked, type Hex, toHex } from "viem";
 
 type DeferredActionTypedData = {
   domain: {
@@ -27,6 +27,8 @@ type DeferredActionReturnData = {
 };
 
 export const DeferredActionBuilder = {
+  /// Creates the typed data object ready for signing and the nonce for the given deferred action.
+  /// Returns the typed data object and the nonce to override.
   createTypedDataObject: async (args: {
     client: SmartAccountClient;
     calldata: Hex;
@@ -39,8 +41,7 @@ export const DeferredActionBuilder = {
       throw "Account undefined in client";
     }
 
-    // TODO: override the nonce
-    const nonce =
+    const nonceOverride =
       (await args.client.account.getAccountNonce(args.nonceKeyOverride)) | 2n;
 
     return {
@@ -58,17 +59,35 @@ export const DeferredActionBuilder = {
         },
         primaryType: "DeferredAction",
         message: {
-          nonce: nonce,
+          nonce: nonceOverride,
           deadline: args.deadline,
           call: args.calldata,
         },
       },
-      nonceOverride: nonce,
+      nonceOverride: nonceOverride,
     };
   },
   // Maybe a better name for this
   buildDigest: async (args: {
     typedData: DeferredActionTypedData;
+    nonce: bigint;
     sig: Hex;
-  }) => {},
+  }) => {
+    // nonce used to determine validation locator
+    const validationLocator = ((args.nonce << 88n) >> 88n) & 0xffffffffffn;
+    console.log("LOCATOR:", validationLocator.toString(16));
+    console.log("LOCATOR:", toHex(validationLocator));
+
+    let encodedData = encodePacked(
+      ["uint168", "uint48", "bytes"],
+      [
+        validationLocator,
+        args.typedData.message.deadline,
+        args.typedData.message.call,
+      ]
+    );
+
+    console.log("ENCODED DATA:", encodedData);
+    console.log("ENCODED DATA LENGTH:", encodedData.length);
+  },
 };
