@@ -4,9 +4,11 @@ import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
+import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
+import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
-import { assertNever } from "../utils/typeAssertions.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
+import { assertNever } from "../utils/typeAssertions.js";
 import type {
   AlchemySignerClientEvent,
   AlchemySignerClientEvents,
@@ -25,8 +27,6 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
-import type { OauthMode } from "../signer.js";
-import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -158,6 +158,8 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
 
   public abstract lookupUserWithPasskey(user?: User): Promise<User>;
+
+  public abstract targetPublicKey(): Promise<string>;
 
   protected abstract getOauthConfig(): Promise<OauthConfig>;
 
