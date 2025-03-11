@@ -5,7 +5,6 @@ import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
 import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
-import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
 import { assertNever } from "../utils/typeAssertions.js";
@@ -73,7 +72,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @returns {Promise<OauthConfig>} A promise that resolves to the OAuth configuration
    */
   public initOauth = async (): Promise<OauthConfig> => {
-    this.oauthConfig = await this.getOauthConfig();
+    this.oauthConfig = await this.fetchOauthConfig();
     return this.oauthConfig;
   };
 
@@ -161,7 +160,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract targetPublicKey(): Promise<string>;
 
-  protected abstract getOauthConfig(): Promise<OauthConfig>;
+  protected abstract fetchOauthConfig(): Promise<OauthConfig>;
 
   protected abstract getWebAuthnAttestation(
     options: CredentialCreationOptions,
@@ -533,7 +532,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     } = oauthParams;
 
     const { codeChallenge, requestKey, authProviders } =
-      oauthConfig ?? (await this.getOauthConfigForMode(mode));
+      oauthConfig ?? (await this.getOauthConfig());
 
     if (!authProviders) {
       throw new OAuthProvidersError();
@@ -619,21 +618,19 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return `${urlPath?.replace(/\/$/, "")}?${searchParams}`;
   };
 
-  private getOauthConfigForMode = async (
-    mode: OauthMode
-  ): Promise<OauthConfig> => {
+  /**
+   * Asynchronously fetches and sets the OAuth configuration.
+   *
+   * @returns {Promise<OauthConfig>} A promise that resolves to the OAuth configuration
+   */
+  public getOauthConfig = async (): Promise<OauthConfig> => {
     if (this.oauthConfig) {
       return this.oauthConfig;
-    } else if (mode === "redirect") {
-      return this.initOauth();
     } else {
-      throw new Error(
-        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"
-      );
+      return this.initOauth();
     }
   };
 
-  // eslint-disable-next-line eslint-rules/require-jsdoc-on-reexported-functions
   protected pollActivityCompletion = async <
     T extends keyof Awaited<
       ReturnType<(typeof this.turnkeyClient)["getActivity"]>

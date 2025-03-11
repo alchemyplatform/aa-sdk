@@ -84,7 +84,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const response = await this.request("/v1/signup", {
       email,
-      emailMode: params.emailMode,
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
@@ -101,7 +100,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const response = await this.request("/v1/auth", {
       email: params.email,
-      emailMode: params.emailMode,
       targetPublicKey,
     });
 
@@ -222,7 +220,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     throw new Error("Method not implemented.");
   }
 
-  protected override getOauthConfig = async (): Promise<OauthConfig> => {
+  protected override fetchOauthConfig = async (): Promise<OauthConfig> => {
     const publicKey = await this.stamper.init();
 
     const nonce = this.getOauthNonce(publicKey);

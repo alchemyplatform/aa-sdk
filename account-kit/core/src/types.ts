@@ -3,10 +3,10 @@ import type {
   AlchemyTransport,
   AlchemyTransportConfig,
 } from "@account-kit/infra";
-import type {
-  AlchemySignerParams,
-  AlchemySignerWebClient,
+import {
   AlchemyWebSigner,
+  type AlchemySignerParams,
+  type AlchemySignerWebClient,
 } from "@account-kit/signer";
 import type {
   LightAccount,

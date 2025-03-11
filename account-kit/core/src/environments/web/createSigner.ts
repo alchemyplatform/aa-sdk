@@ -37,9 +37,7 @@ export const createSigner = (params: ClientStoreConfig) => {
     sessionConfig,
   });
 
-  if (client.enablePopupOauth) {
-    signer.preparePopupOauth();
-  }
+  signer.preparePopupOauth();
 
   return signer;
 };

@@ -127,12 +127,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override createAccount = async (params: CreateAccountParams) => {
     if (params.type === "email") {
       this.eventEmitter.emit("authenticating", { type: "otp" });
-      const { email, emailMode, expirationSeconds } = params;
+      const { email, expirationSeconds } = params;
       const publicKey = await this.initIframeStamper();
 
       const response = await this.request("/v1/signup", {
         email,
-        emailMode,
         targetPublicKey: publicKey,
         expirationSeconds,
         redirectParams: params.redirectParams?.toString(),
@@ -195,12 +194,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
     this.eventEmitter.emit("authenticating", { type: "otp" });
-    const { email, emailMode, expirationSeconds } = params;
+    const { email, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
 
     return this.request("/v1/auth", {
       email,
-      emailMode,
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
@@ -661,7 +659,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     return { challenge, authenticatorUserId, attestation };
   };
 
-  protected override getOauthConfig = async (): Promise<OauthConfig> => {
+  protected override fetchOauthConfig = async (): Promise<OauthConfig> => {
     const currentStamper = this.turnkeyClient.stamper;
     const publicKey = await this.initIframeStamper();
 
