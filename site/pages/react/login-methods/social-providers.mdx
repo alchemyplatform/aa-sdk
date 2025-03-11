@@ -3,6 +3,9 @@ title: Custom Social Providers with Auth0
 description: How to implement custom social providers using Auth0 in your React app
 ---
 
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
+import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+
 # Custom Social Providers with Auth0
 
 In addition to the standard social login providers (Google, Facebook, Apple), Account Kit allows you to integrate custom OAuth providers through Auth0. This gives you flexibility to add authentication methods like GitHub, Twitter, LinkedIn, and more.
@@ -14,9 +17,19 @@ You can implement custom social providers in two ways:
 
 ## Pre-built UI Components
 
-Account Kit provides pre-built UI components that handle the entire custom social provider authentication flow with minimal code. Follow the instructions in the [UI Components](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+Account Kit provides pre-built UI components that handle the entire custom social provider authentication flow with minimal code.
 
-### Setting Up Auth0
+### Step 1: Add Authentication Components to Your Page
+
+Before configuring your authentication, first add one of the pre-built components to your application:
+
+<ModalAuthExample />
+
+Or:
+
+<EmbeddedAuthExample />
+
+### Step 2: Setting Up Auth0
 
 Before configuring the UI components, you need to set up Auth0:
 
@@ -30,11 +43,11 @@ Before configuring the UI components, you need to set up Auth0:
 8. Select your application and note the "Domain", "Client ID", and "Client Secret"
 9. Add these to your Account Kit dashboard in the embedded accounts auth config
 
-### Configuring Custom Social Providers in UI Components
+### Step 3: Configure Custom Social Providers in UI Components
 
-To customize the custom social provider experience in your pre-built components, configure the UI as follows:
+After adding the components and setting up Auth0, configure the custom social providers in your application config:
 
-```tsx
+```tsx twoslash
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -51,6 +64,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
           authProviderId: "auth0",
           // Specify the Auth0 connection to use directly
           auth0Connection: "github",
+          displayName: "GitHub",
           // Custom logo URL for the provider
           logoUrl:
             "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
@@ -63,6 +77,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
           type: "social",
           authProviderId: "auth0",
           auth0Connection: "twitter",
+          displayName: "Twitter",
           logoUrl: "https://path-to-twitter-logo.png",
           mode: "popup",
         },
@@ -84,13 +99,15 @@ export const config = createConfig(
 
 Auth0 custom providers accept the following configuration:
 
-```ts
+```ts twoslash
 type SocialAuthType = {
   type: "social";
   // For Auth0 custom providers
   authProviderId: "auth0";
   // Auth0-specific connection string (e.g., "github", "twitter")
   auth0Connection?: string;
+  // Display name for the provider button
+  displayName?: string;
   // URL for the provider's logo
   logoUrl: string;
   // URL for the provider's logo in dark mode (optional, `logoUrl` is used for both light & dark mode if not provided)

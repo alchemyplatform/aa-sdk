@@ -3,6 +3,9 @@ title: Social Login Authentication
 description: How to implement Social Login authentication in your React app
 ---
 
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
+import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+
 # Social Login Authentication
 
 Social login authentication allows users to authenticate using OAuth providers like Google, Facebook, or custom providers through Auth0. There are two authentication flows available:
@@ -17,13 +20,23 @@ You can implement Social Login authentication in two ways:
 
 ## Pre-built UI Components
 
-Account Kit provides pre-built UI components that handle the entire Social Login authentication flow with minimal code. Follow the instructions in the [UI Components](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+Account Kit provides pre-built UI components that handle the entire Social Login authentication flow with minimal code.
 
-### Configuring Social Login in UI Components
+### Step 1: Add Authentication Components to Your Page
 
-To customize the Social Login authentication experience in your pre-built components, configure the UI as follows:
+Before configuring your authentication, first add one of the pre-built components to your application:
 
-```tsx
+<ModalAuthExample />
+
+Or:
+
+<EmbeddedAuthExample />
+
+### Step 2: Configure Social Login in UI Components
+
+After adding the components, configure the Social Login authentication in your application config:
+
+```tsx twoslash
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -57,7 +70,7 @@ For custom OAuth providers like GitHub, Twitter, etc., see the [Custom Social Pr
 
 Standard social login providers accept the following configuration:
 
-```ts
+```ts twoslash
 type SocialAuthType = {
   type: "social";
   // For standard providers (google, facebook, apple)

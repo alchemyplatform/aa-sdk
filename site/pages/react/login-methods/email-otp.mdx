@@ -3,6 +3,9 @@ title: Email OTP Authentication
 description: How to implement Email OTP authentication in your React app
 ---
 
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
+import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+
 # Email OTP Authentication
 
 Email OTP (One-Time Password) authentication is a two-step process:
@@ -17,13 +20,25 @@ You can implement Email OTP authentication in two ways:
 
 ## Pre-built UI Components
 
-Account Kit provides pre-built UI components that handle the entire Email OTP authentication flow with minimal code. Follow the instructions in the [Pre-built UI](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+Account Kit provides pre-built UI components that handle the entire Email OTP authentication flow with minimal code.
 
-### Configuring Email OTP in UI Components
+### Step 1: Add Authentication Components to Your Page
+
+Before configuring your authentication, first add one of the pre-built components to your application:
+
+<ModalAuthExample />
+
+Or:
+
+<EmbeddedAuthExample />
+
+### Step 2: Configure Email OTP in UI Components
+
+After adding the components, configure the Email OTP authentication in your application config:
 
 To customize the Email OTP authentication experience in your pre-built components, configure the UI as follows:
 
-```tsx
+```tsx twoslash
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -55,7 +70,7 @@ export const config = createConfig(
 
 Email OTP configuration accepts the following options:
 
-```ts
+```ts twoslash
 type EmailAuthType = {
   type: "email";
   emailMode: "otp";
@@ -80,7 +95,7 @@ If you need complete control over the user experience, you can implement your ow
 
 First, prompt your user for their email address and send an OTP:
 
-```tsx
+```tsx twoslash
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
@@ -105,7 +120,12 @@ const handleSendCode = async (email: string) => {
 
 Once the user receives the code, they'll enter it in your application:
 
-```tsx
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
 // When the user submits the OTP code
 const handleVerifyCode = async (otpCode: string) => {
   try {
@@ -124,7 +144,7 @@ const handleVerifyCode = async (otpCode: string) => {
 
 Use the `useSignerStatus` hook to determine if the user is authenticated:
 
-```tsx
+```tsx twoslash
 import { useSignerStatus } from "@account-kit/react";
 
 // Inside your component

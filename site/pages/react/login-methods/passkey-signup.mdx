@@ -3,6 +3,9 @@ title: Passkey Signup Authentication
 description: How to implement Passkey Signup authentication in your React app
 ---
 
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
+import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+
 # Passkey Signup Authentication
 
 Passkeys provide a secure, passwordless authentication method that can be used to create wallets for your users without going through email verification flows. You can implement passkey signup with or without an associated email address.
@@ -18,13 +21,23 @@ You can implement Passkey Signup authentication in two ways:
 
 ## Pre-built UI Components
 
-Account Kit provides pre-built UI components that handle the entire Passkey Signup authentication flow with minimal code. Follow the instructions in the [UI Components](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+Account Kit provides pre-built UI components that handle the entire Passkey Signup authentication flow with minimal code.
 
-### Configuring Passkey Signup in UI Components
+### Step 1: Add Authentication Components to Your Page
 
-To customize the Passkey Signup authentication experience in your pre-built components, configure the UI as follows:
+Before configuring your authentication, first add one of the pre-built components to your application:
 
-```tsx
+<ModalAuthExample />
+
+Or:
+
+<EmbeddedAuthExample />
+
+### Step 2: Configure Passkey Signup in UI Components
+
+After adding the components, configure the Passkey Signup authentication in your application config:
+
+```tsx twoslash
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -55,7 +68,7 @@ export const config = createConfig(
 
 Passkey signup configuration accepts the following options:
 
-```ts
+```ts twoslash
 type PasskeyAuthType = {
   type: "passkey";
 };

@@ -3,6 +3,9 @@ title: Email Magic Link Authentication
 description: How to implement Email Magic Link authentication in your React app
 ---
 
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
+import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+
 # Email Magic Link Authentication
 
 Email magic link authentication is a two-step process:
@@ -21,11 +24,21 @@ You can implement Email Magic Link authentication in two ways:
 
 ## Pre-built UI Components
 
-Account Kit provides pre-built UI components that handle the entire Email Magic Link authentication flow with minimal code. Follow the instructions in the [UI Components](/react/ui-components) documentation to set up the authentication modal or embedded auth card in your application.
+Account Kit provides pre-built UI components that handle the entire Email Magic Link authentication flow with minimal code.
 
-### Configuring Email Magic Link in UI Components
+### Step 1: Add Authentication Components to Your Page
 
-To customize the Email Magic Link authentication experience in your pre-built components, configure the UI as follows:
+Before configuring your authentication, first add one of the pre-built components to your application:
+
+<ModalAuthExample />
+
+Or:
+
+<EmbeddedAuthExample />
+
+### Step 2: Configure Email Magic Link in UI Components
+
+After adding the components, configure the Email Magic Link authentication in your application config:
 
 ```tsx
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";

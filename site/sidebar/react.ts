@@ -16,7 +16,7 @@ export const reactGuides: SidebarItem[] = [
       { text: "Pre-built UI", link: "/react/ui-components" },
       { text: "Custom UI", link: "/react/react-hooks" },
       {
-        text: "Login Methods",
+        text: "Login methods",
         collapsed: true,
         items: [
           { text: "Email OTP", link: "/react/login-methods/email-otp" },
@@ -46,7 +46,7 @@ export const reactGuides: SidebarItem[] = [
         text: "Multi-factor authentication",
         collapsed: true,
         items: [
-          { text: "Setup MFA", link: "/react/mfa/setup-mfa" },
+          { text: "Set up MFA", link: "/react/mfa/setup-mfa" },
           { text: "Email OTP", link: "/react/mfa/email-otp" },
           {
             text: "Email magic-link",
