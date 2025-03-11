@@ -114,6 +114,11 @@ export const createAccountKitStore = (
                 return createInitialStoreState(params);
               }
 
+              // handle the case where the signer config changes
+              if (!deepEquals(current.config, persistedState.config)) {
+                return createInitialStoreState(params);
+              }
+
               return {
                 // this is the default merge behavior
                 ...current,
