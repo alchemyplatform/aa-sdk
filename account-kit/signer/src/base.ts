@@ -83,7 +83,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   inner: TClient;
   private sessionManager: SessionManager;
   private store: InternalStore;
-  private config: SignerConfig | undefined;
+  private config: Promise<SignerConfig>;
 
   /**
    * Initializes an instance with the provided client and session configuration.
@@ -122,7 +122,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     this.registerListeners();
     // then initialize so that we can catch those events
     this.sessionManager.initialize();
-    this.initConfig().catch(console.error);
+    this.config = this.fetchConfig();
   }
 
   /**
@@ -786,12 +786,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const { orgId, otpId } = existingUser
         ? await this.inner.initEmailAuth({
             email: params.email,
+            emailMode: params.emailMode,
             expirationSeconds,
             redirectParams: params.redirectParams,
           })
         : await this.inner.createAccount({
             type: "email",
             email: params.email,
+            emailMode: params.emailMode,
             expirationSeconds,
             redirectParams: params.redirectParams,
           });
@@ -1021,7 +1023,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   protected initConfig = async (): Promise<SignerConfig> => {
-    this.config = await this.fetchConfig();
+    this.config = this.fetchConfig();
     return this.config;
   };
 
