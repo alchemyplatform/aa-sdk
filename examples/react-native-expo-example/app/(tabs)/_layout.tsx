@@ -22,6 +22,15 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="oauth"
+				options={{
+					title: "OAuth",
+					tabBarIcon: ({ color }) => (
+						<FontAwesome6 size={28} name="google" color={color} />
+					),
+				}}
+			/>
 		</Tabs>
 	);
 }

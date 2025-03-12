@@ -3,31 +3,22 @@ import { useEffect, useState } from "react";
 import {
 	View,
 	Text,
-	TextInput,
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
 import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
+
 import { type RNAlchemySignerType } from "@account-kit/react-native-signer";
 
-export default function OTPAuthScreen() {
-	const [email, setEmail] = useState<string>("");
+
+export default function OAuthScreen() {
 	const user = useUser()
 	const { authenticate } = useAuthenticate()
-	const [signerAddress, setSignerAddress] = useState<string | null>(null);
+	const { address} = useSmartAccountClient({})
 	const { logout } = useLogout();
-	const { address } = useSmartAccountClient({})
-	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 	const signer = useSigner<RNAlchemySignerType>();
-	const [otpCode, setOtpCode] = useState<string>("");
-
-	const handleUserAuth = ({ code }: { code: string }) => {
-		setAwaitingOtp(false);
-		authenticate({
-			otpCode: code,
-			type: "otp",
-		})
-	};
+	const [signerAddress, setSignerAddress] = useState<string | null>(null);
+	
 
 	useEffect(() => {
 		if (user) {
@@ -39,41 +30,19 @@ export default function OTPAuthScreen() {
 
 	return (
 		<View style={styles.container}>
-			{awaitingOtp ? (
+			{!user ? (
 				<>
-					<TextInput
-						style={styles.textInput}
-						placeholderTextColor="gray"
-						placeholder="enter your OTP code"
-						onChangeText={setOtpCode}
-						value={otpCode}
-					/>
-					<TouchableOpacity
-						style={styles.button}
-						onPress={() => handleUserAuth({ code: otpCode })}
-					>
-						<Text style={styles.buttonText}>Sign in</Text>
-					</TouchableOpacity>
-				</>
-			) : !user ? (
-				<>
-					<TextInput
-						style={styles.textInput}
-						placeholderTextColor="gray"
-						placeholder="enter your email"
-						onChangeText={setEmail}
-						value={email}
-					/>
 					<TouchableOpacity
 						style={styles.button}
 						onPress={() => {
 							authenticate({
-									email,
-									type: "email",
-									emailMode: "otp",
+									type: "oauth",
+									authProviderId: "google",
+									mode: "redirect",
+									redirectUrl: "aa-rn-expo-example://oauth",
 								})
 					
-							setAwaitingOtp(true);
+							
 						}}
 					>
 						<Text style={styles.buttonText}>Sign in</Text>
