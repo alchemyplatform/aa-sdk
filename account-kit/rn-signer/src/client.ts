@@ -84,7 +84,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const response = await this.request("/v1/signup", {
       email,
-      emailMode: params.emailMode,
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
@@ -101,7 +100,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const response = await this.request("/v1/auth", {
       email: params.email,
-      emailMode: params.emailMode,
       targetPublicKey,
     });
 

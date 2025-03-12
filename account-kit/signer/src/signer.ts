@@ -11,6 +11,7 @@ export type AuthParams =
   | {
       type: "email";
       email: string;
+      /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
       emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
     }
