@@ -44,6 +44,11 @@
     "@account-kit/react": "^4.16.0",
     "@account-kit/react-native-signer": "^4.16.0",
     "@account-kit/signer": "^4.16.0",
+    "crypto-browserify": "^3.12.1",
+    "@noble/hashes": "1.7.1",
+    "node-libs-react-native": "^1.2.1",
+    "react-native-get-random-values": "^1.11.0",
+    "stream-browserify": "^3.0.0",
     "zustand": "^5.0.0-rc.2"
   },
   "publishConfig": {

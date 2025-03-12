@@ -15,6 +15,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
     text: "Functions",
     items: [
       {
+        text: "convertSignerStatusToState",
+        link: "/reference/account-kit/core/functions/convertSignerStatusToState",
+      },
+      {
         text: "cookieStorage",
         link: "/reference/account-kit/core/functions/cookieStorage",
       },
@@ -29,6 +33,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
       {
         text: "createConfig",
         link: "/reference/account-kit/core/functions/createConfig",
+      },
+      {
+        text: "createDefaultAccountState",
+        link: "/reference/account-kit/core/functions/createDefaultAccountState",
       },
       {
         text: "defaultAccountState",
