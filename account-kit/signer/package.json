@@ -51,6 +51,7 @@
   "dependencies": {
     "@aa-sdk/core": "^4.15.3",
     "@account-kit/logging": "^4.15.3",
+    "@solana/web3.js": "^1.98.0",
     "@turnkey/http": "^2.6.2",
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",
