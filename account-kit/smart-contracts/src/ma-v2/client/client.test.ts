@@ -20,6 +20,9 @@ import {
   concat,
   testActions,
   type TestActions,
+  concatHex,
+  toHex,
+  type Hex,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -323,7 +326,10 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("Deferred Actions", async () => {
+  it.only("Deferred Actions", async () => {
+    // TODO FIX: The nonce key used to query the EP does not include the deferred action flag, it only appends the flag after fetching the nonce, this causes a desync and the test to fail.
+    // The fix is to introduce a way to override the `options` byte of the nonceKey, or manually call the entryPoint for the specific Deferred action case.
+
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
@@ -333,11 +339,11 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    // const startingAddressBalance = await getTargetBalance();
-
+    // Test variables
     const sessionKeyEntityId = 1;
     const isGlobalValidation = true;
 
+    // Encode install data to defer
     let encodedInstallData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
@@ -356,28 +362,7 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    const res = await DeferredActionBuilder.createTypedDataObject({
-      client: provider,
-      calldata: encodedInstallData,
-      deadline: 0,
-      entityId: sessionKeyEntityId,
-      isGlobalValidation: isGlobalValidation,
-    });
-    console.log(res);
-
-    const sig = await provider.signTypedData({ typedData: res.typedData });
-
-    console.log("SIGNATURE:\n", sig);
-
-    DeferredActionBuilder.buildDigest({
-      typedData: res.typedData,
-      sig: sig,
-      nonce: res.nonceOverride,
-    });
-
-    // Ideally we have one function which returns the slice of data to prepend to the signature, and a nonce override.
-
-    // connect session key and send tx with session key
+    // Initialize the client (we'll use this to build the deferred validation typed data, as it'll validate the entire UO)
     let sessionKeyClient = await createModularAccountV2Client({
       chain: instance.chain,
       signer: sessionKey,
@@ -385,6 +370,62 @@ describe("MA v2 Tests", async () => {
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
+
+    // Build the typed data we need for the deferred action using the session key client so the nonce uses the session key as the UO validation
+    // this installation will however be validated with the owner (fallback) validation
+    const { typedData, nonceOverride } =
+      await DeferredActionBuilder.createTypedDataObject({
+        client: sessionKeyClient,
+        calldata: encodedInstallData,
+        deadline: 0,
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      });
+
+    // Sign the typed data using the owner (fallback) validation, we must use the inner signTypedData method to bypass 6492 for deferred actions
+    // Prepend 0x00 for the EOA_TYPE_SIGNATURE byte
+    const deferredValidationSig = concatHex([
+      "0x00",
+      await provider.account.signTypedData(typedData),
+    ]);
+
+    // Build the full hex to prepend to the UO signature
+    const signaturePrepend = DeferredActionBuilder.buildDigest({
+      typedData: typedData,
+      sig: deferredValidationSig,
+      nonce: nonceOverride,
+    });
+
+    // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
+    const dummySig = await provider.account.getDummySignature();
+
+    // Override provider.account.getDummySignature() so `provider.buildUserOperation()` uses the prepended hex and the dummy signature during gas estimation
+    provider.account.getDummySignature = () => {
+      return concatHex([signaturePrepend, dummySig as Hex]);
+    };
+
+    // Generate the unsigned UO
+    const unsignedUo = (await provider.buildUserOperation({
+      uo: { target, data: "0x" },
+      overrides: {
+        nonce: nonceOverride, // FIX: Currently, we aren't setting the deferred validation flag in the nonce key, instead we're setting it in
+        // the returned nonce itself. This means sequential nonces will be incorrect.
+      },
+    })) as UserOperationRequest_v7;
+
+    // Sign the UO with the session key
+    const uo = await sessionKeyClient.signUserOperation({
+      uoStruct: unsignedUo,
+    });
+
+    // Prepend the full hex for the deferred action to the new, real signature
+    uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
+
+    // Send the raw UserOp
+    await sessionKeyClient.sendRawUserOperation(
+      uo,
+      provider.account.getEntryPoint().address
+    );
   });
 
   it("uninstalls a session key", async () => {
@@ -1277,6 +1318,7 @@ describe("MA v2 Tests", async () => {
     expect(alchemyClientSpy).toHaveBeenCalled();
     expect(notAlchemyClientSpy).not.toHaveBeenCalled();
   });
+
   it("custom client calls the createAlchemySmartAccountClient", async () => {
     const alchemyClientSpy = vi
       .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
