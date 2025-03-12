@@ -26,6 +26,7 @@
     "@account-kit/core": "^4.0.0-beta.8",
     "@account-kit/infra": "^4.0.0-beta.8",
     "@account-kit/react": "^4.0.0-beta.8",
+    "@account-kit/react-native": "^4.16.0",
     "@account-kit/signer": "^4.0.0-beta.8",
     "@account-kit/smart-contracts": "^4.0.0-beta.8",
     "react": "^18.2.0",

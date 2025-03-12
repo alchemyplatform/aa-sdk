@@ -1,5 +1,6 @@
 import { useConfigStore } from "@/state";
 import { MintCard7702, MintCardDefault } from "./MintCard";
+import { SolanaCard } from "./SolanaCard";
 import {
   TransactionsCard7702,
   TransactionsCardDefault,
@@ -13,11 +14,13 @@ export const SmallCardsWrapper = () => {
       {accountMode === "default" ? (
         <>
           <MintCardDefault />
+          <SolanaCard />
           <TransactionsCardDefault />
         </>
       ) : (
         <>
           <MintCard7702 />
+          <SolanaCard />
           <TransactionsCard7702 />
         </>
       )}

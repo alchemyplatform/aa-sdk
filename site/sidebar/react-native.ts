@@ -15,6 +15,10 @@ export const reactNativeSidebar: SidebarItem[] = [
     link: "/react-native/signer/setup-guide",
   },
   {
+    text: "Setting up the Accounts Provider",
+    link: "/react-native/signer/authenticating-users/setting-up-the-accounts-provider",
+  },
+  {
     text: "Authentication methods",
     items: [
       {
@@ -36,6 +40,10 @@ export const reactNativeSidebar: SidebarItem[] = [
     // it probably makes sense to just share the same guides as the Infra guides here
     text: "Using smart accounts",
     items: [
+      {
+        text: "Setup a smart account client",
+        link: "/react-native/using-smart-accounts/setup-smart-account-client",
+      },
       {
         text: "Send user operations",
         link: "/react-native/using-smart-accounts/send-user-operations",
