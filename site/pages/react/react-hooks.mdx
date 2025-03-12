@@ -43,19 +43,66 @@ function MyAuthComponent() {
 }
 ```
 
+### useUser
+
+The `useUser` hook returns the current user information from either an External Owned Account (EOA) or from a Smart Contract Account (SCA). This is the best way to check if a user is logged in regardless of account type.
+
+```tsx twoslash
+import { useUser } from "@account-kit/react";
+
+function MyComponent() {
+  const user = useUser();
+
+  if (!user) {
+    return <div>Please log in</div>;
+  }
+
+  return (
+    <div>
+      <p>User address: {user.address}</p>
+      <p>Account type: {user.type}</p> {/* "eoa" or "sca" */}
+    </div>
+  );
+}
+```
+
 ### useAccount
 
-The `useAccount` hook provides information about the authenticated user's account.
+The `useAccount` hook retrieves the smart contract account instance for the authenticated user. It's primarily used to get the smart contract account address and interact with the account.
 
 ```tsx twoslash
 import { useAccount } from "@account-kit/react";
 
 function MyComponent() {
   const { account, address, isLoadingAccount } = useAccount({
-    type: "ModularAccountV2",
+    type: "ModularAccountV2", // Specify the account type you're using
   });
+
+  if (isLoadingAccount) {
+    return <div>Loading account...</div>;
+  }
+
+  if (!account) {
+    return <div>Please log in to access your account</div>;
+  }
+
+  return (
+    <div>
+      <p>Smart contract account address: {address}</p>
+      {/* Now you can use the account instance for transactions */}
+    </div>
+  );
 }
 ```
+
+This hook:
+
+- Returns a smart contract account instance (`account`) when the user is logged in
+- Provides the smart contract account address, not the signer address
+- Returns `undefined` for both `account` and `address` when the user is not logged in
+- Includes an `isLoadingAccount` flag to handle loading states
+
+Note: If you just need to check if a user is logged in (regardless of account type), consider using `useUser` instead.
 
 ## Getting Started
 
