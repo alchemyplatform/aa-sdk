@@ -30,10 +30,13 @@ export const EmailAuth = memo(
       onMutate: async (params) => {
         const cfg = await signer?.getConfig();
         if (params.type === "email" && "email" in params) {
-          if (
-            legacyEmailMode === "magicLink" ||
-            cfg?.email.mode === "MAGIC_LINK"
-          ) {
+          const emailMode = legacyEmailMode
+            ? legacyEmailMode === "magicLink"
+              ? "MAGIC_LINK"
+              : "OTP"
+            : cfg?.email.mode;
+
+          if (emailMode === "MAGIC_LINK") {
             setAuthStep({ type: "email_verify", email: params.email });
           } else {
             setAuthStep({ type: "otp_verify", email: params.email });
