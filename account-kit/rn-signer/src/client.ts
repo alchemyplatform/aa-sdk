@@ -172,7 +172,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const error = authResult["alchemy-error"];
 
     if (error) {
-      console.error("error completing oauth", error);
       throw new OauthFailedError(error);
     }
 
