@@ -3,6 +3,8 @@ title: Authentication with UI components
 description: How to use our pre-built authentication component in your React app
 ---
 
+import AuthenticationMethods from "./shared/authentication-methods.mdx";
+
 # Authentication with our UI components
 
 Account Kit allows you to use pre-built, [highly customizable](https://demo.alchemy.com/) UI components to handle authenticating your users. These components provide flexibility to:
@@ -20,12 +22,7 @@ Tailwind CSS is a required dependency for using Alchemy Account Kit UI component
 
 Account Kit supports several authentication methods that you can implement with pre-built UI components:
 
-- [Email OTP](/react/login-methods/email-otp) - One-time password sent via email
-- [Email Magic Link](/react/login-methods/email-magic-link) - Authentication links sent via email
-- [Social Login](/react/login-methods/social-login) - Authentication with providers like Google and Facebook
-- [Custom Social Providers](/react/login-methods/social-providers) - Add custom OAuth providers via Auth0
-- [Passkey Signup](/react/login-methods/passkey-signup) - Create accounts with passkeys
-- [Passkey Login](/react/login-methods/passkey-login) - Authenticate with existing passkeys
+<AuthenticationMethods />
 
 Each authentication method page includes specific configuration options and examples for both pre-built UI components and custom UI implementations.
 
