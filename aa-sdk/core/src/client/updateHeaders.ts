@@ -12,8 +12,17 @@ export type UpdateHeader<T> = {
 export const TRACKER_HEADER = "X-Alchemy-Trace-Id";
 export const TRACKER_BREADCRUMB = "X-Alchemy-Trace-Breadcrumb";
 
+function safeJsonParse(x: string): unknown {
+  try {
+    return JSON.parse(x);
+  } catch (e) {
+    return undefined;
+  }
+}
 function addCrumb(previous: string | undefined, crumb: string): string {
-  return previous ? `${previous} - ${crumb}` : crumb;
+  const previousCrumbs_ = previous && safeJsonParse(previous);
+  const previousCrumbs = Array.isArray(previousCrumbs_) ? previousCrumbs_ : [];
+  return JSON.stringify([...previousCrumbs, crumb]);
 }
 
 function hasUpdateHeader<A extends {}>(a: A): a is A & UpdateHeader<A> {

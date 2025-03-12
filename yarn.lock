@@ -12,6 +12,60 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@account-kit/react-native-signer@4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react-native-signer/-/react-native-signer-4.15.0.tgz#733f6ef4a8541a7c1018e2ed6ae3d2fe01f298f0"
+  integrity sha512-n/u/cBjAyPV62y9NLsK6IjbbWfX1v0maA+F0Yzsgjl4vWy18maYMsFzi5IVsYlMy5NdttkKv9U6ZPINuUnDQQg==
+  dependencies:
+    "@aa-sdk/core" "^4.15.0"
+    "@account-kit/signer" "^4.15.0"
+    viem "^2.21.40"
+
+"@account-kit/react-native@4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react-native/-/react-native-4.15.0.tgz#5fdb877f63028ea41a74a1c62e452967cb86ce6d"
+  integrity sha512-67hbqfEMcw2UqcLlehamU64OilQ+e5ICM9T0C6aO+EZNpQ44OuZURiDoJO6Kqp2mtRe/Ex+2ldXw9ZGB2YzwQA==
+  dependencies:
+    "@account-kit/core" "^4.15.0"
+    "@account-kit/infra" "^4.15.0"
+    "@account-kit/react" "^4.15.0"
+    "@account-kit/react-native-signer" "^4.15.0"
+    "@account-kit/signer" "^4.15.0"
+    zustand "^5.0.0-rc.2"
+
+"@account-kit/react@4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react/-/react-4.15.0.tgz#50b89199131b26ec15907ff42252b96c95f9edf6"
+  integrity sha512-pStPvw093w3FygSrsy6VawWE5yPKv1VEbJIk6Fzt+jTbsT5+y17QN8lYnKFqtAk4jKqkmXZZZQJDaOUAgehAfQ==
+  dependencies:
+    "@account-kit/core" "^4.15.0"
+    "@account-kit/infra" "^4.15.0"
+    "@account-kit/logging" "^4.15.0"
+    "@account-kit/signer" "^4.15.0"
+    "@tanstack/react-form" "^0.33.0"
+    "@tanstack/zod-form-adapter" "^0.33.0"
+    "@wagmi/connectors" "^5.1.15"
+    react-remove-scroll "^2.5.10"
+    tailwindcss "^3.4.3"
+    zod "^3.22.4"
+    zustand "^5.0.0-rc.2"
+  optionalDependencies:
+    alchemy-sdk "^3.0.0"
+
+"@account-kit/signer@4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/signer/-/signer-4.15.0.tgz#8602c766d6deda0b8066b3ce3bc3e68681d2ced0"
+  integrity sha512-TdLtH3sybhIym7QvaU3OTi2anHdBzomNNNP9+zzt6Nl6rTpXhTorur+eLCwHWSbYShs1T6/gi5t/dHOSD3ne1A==
+  dependencies:
+    "@aa-sdk/core" "^4.15.0"
+    "@account-kit/logging" "^4.15.0"
+    "@turnkey/http" "^2.6.2"
+    "@turnkey/iframe-stamper" "^1.0.0"
+    "@turnkey/viem" "^0.4.8"
+    "@turnkey/webauthn-stamper" "^0.4.3"
+    jwt-decode "^4.0.0"
+    zod "^3.22.4"
+
 "@adobe/css-tools@^4.4.0":
   version "4.4.0"
   resolved "https://registry.npmjs.org/@adobe/css-tools/-/css-tools-4.4.0.tgz"
@@ -27033,22 +27087,10 @@ zod@^3.22.4:
   resolved "https://registry.npmjs.org/zod/-/zod-3.22.4.tgz"
   integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
 
-zustand@4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.4.1.tgz#0cd3a3e4756f21811bd956418fdc686877e8b3b0"
-  integrity sha512-QCPfstAS4EBiTQzlaGP1gmorkh/UL1Leaj2tdj+zZCZ/9bm0WS7sI2wnfD5lpOszFqWJ1DcPnGoY8RDL61uokw==
-  dependencies:
-    use-sync-external-store "1.2.0"
-
-zustand@^5.0.0-rc.2:
+zustand@4.4.1, zustand@^5.0.0-rc.2, zustand@^5.0.1:
   version "5.0.0-rc.2"
   resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.0-rc.2.tgz"
   integrity sha512-o2Nwuvnk8vQBX7CcHL8WfFkZNJdxB/VKeWw0tNglw8p4cypsZ3tRT7rTRTDNeUPFS0qaMBRSKe+fVwL5xpcE3A==
-
-zustand@^5.0.1:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.3.tgz#b323435b73d06b2512e93c77239634374b0e407f"
-  integrity sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==
 
 zwitch@^2.0.0, zwitch@^2.0.4:
   version "2.0.4"
