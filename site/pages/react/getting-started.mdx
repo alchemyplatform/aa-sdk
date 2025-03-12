@@ -32,19 +32,39 @@ If you haven't followed the [quickstart guide](/react/quickstart), make sure to 
 
 ...and paste the API key into your app's `config.ts`
 
-```ts [config.ts]
-// ...other stuff in the file
+```ts twoslash [config.ts]
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+// Define UI configuration for authentication components
+// See individual login method pages for detailed configuration options
+const uiConfig: AlchemyAccountsUIConfig = {
+  auth: {
+    sections: [
+      [
+        // Example: Email OTP authentication
+        {
+          type: "email",
+          emailMode: "otp",
+        },
+        // You can add more authentication methods here
+        // See login method pages for available options
+      ],
+    ],
+  },
+};
+
 export const config = createConfig(
   {
     transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
     ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
-    storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
+    // For more about persisting state with cookies, see: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
+    // storage: cookieStorage,
   },
   uiConfig
 );
-// ...other stuff in the file
 ```
 
 # What's next?
