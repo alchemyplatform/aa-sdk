@@ -28,7 +28,6 @@ export const EmailAuth = memo(
     const { authenticateAsync, isPending } = useAuthenticate({
       onMutate: async (params) => {
         const cfg = await signer?.getConfig();
-        console.log(cfg);
         if (params.type === "email" && "email" in params) {
           if (cfg?.email.mode === "MAGIC_LINK") {
             setAuthStep({ type: "email_verify", email: params.email });
