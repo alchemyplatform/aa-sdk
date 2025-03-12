@@ -54,7 +54,9 @@ The `useAccount` hook provides information about the authenticated user's accoun
 import { useAccount } from "@account-kit/react";
 
 function MyComponent() {
-  const { account, address, isLoadingAccount } = useAccount({});
+  const { account, address, isLoadingAccount } = useAccount({
+    type: "ModularAccountV2",
+  });
 }
 ```
 
