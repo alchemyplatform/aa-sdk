@@ -8,7 +8,7 @@ import {
 import { signTypedData as wagmi_signTypedData } from "@wagmi/core";
 import type { Hex, TypedDataDefinition } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -49,7 +49,6 @@ export type UseSignTypedDataResult = {
  * @example
  * ```ts twoslash
  * import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
- *
  * const typedData = {
  *     types: {
  *       Message: [{ name: "content", type: "string" }],
@@ -57,7 +56,7 @@ export type UseSignTypedDataResult = {
  *     primaryType: "Message",
  *     message: { content: "Hello" },
  *   }
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { client } = useSmartAccountClient({});
  * const { signTypedData, signTypedDataAsync, signedTypedData, isSigningTypedData, error } = useSignTypedData({
  *  client,
  *  // these are optional

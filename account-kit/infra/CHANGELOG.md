@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.15.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.1...v4.15.2) (2025-03-07)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Features
+
+- **monad:** add monad for aa ([#1373](https://github.com/alchemyplatform/aa-sdk/issues/1373)) ([e4c12e2](https://github.com/alchemyplatform/aa-sdk/commit/e4c12e2a6a261b44505c55164a4860ae0d4caa16))
+
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Features
+
+- add multi-policy sponsorships ([#1189](https://github.com/alchemyplatform/aa-sdk/issues/1189)) ([024d735](https://github.com/alchemyplatform/aa-sdk/commit/024d73545b03e8ce08485ef2f8252d6ed95e4521))
+- use alchemy_requestGasAndPaymasterAndData when using alchemy paymaster ([#1310](https://github.com/alchemyplatform/aa-sdk/issues/1310)) ([20b80a6](https://github.com/alchemyplatform/aa-sdk/commit/20b80a6bce7b754b7b2e8a64522c2c00e8f5a70c))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

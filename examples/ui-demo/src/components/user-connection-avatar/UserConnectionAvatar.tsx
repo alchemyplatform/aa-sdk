@@ -1,10 +1,8 @@
 import { UserAvatar } from "./UserAvatar";
 import { cn } from "@/lib/utils";
-
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
-import { useAccount, useUser } from "@account-kit/react";
-
+import { useUser } from "@account-kit/react";
 import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
 
@@ -19,15 +17,12 @@ const UserConnectionAvatar = ({
   deploymentStatus,
 }: UserConnectionAvatarProps) => {
   const { theme, primaryColor } = useConfigStore(
-    ({ ui: { theme, primaryColor } }) => ({
+    ({ ui: { theme, primaryColor }, accountMode }) => ({
       theme,
       primaryColor,
     })
   );
   const user = useUser();
-  const { address: SCAUserAddress } = useAccount({
-    type: "LightAccount",
-  });
 
   const isEOAUser = user?.type === "eoa";
 
@@ -38,10 +33,7 @@ const UserConnectionAvatar = ({
   return (
     <div className="flex flex-row items-center min-w-0 overflow-hidden">
       <div className="relative w-[40px] h-[40px]">
-        <UserAvatar
-          address={SCAUserAddress ?? user.address}
-          primaryColor={primaryColor[theme]}
-        />
+        <UserAvatar address={user.address} primaryColor={primaryColor[theme]} />
         {showDeploymentStatus && (
           <div
             className={cn(

@@ -10,20 +10,20 @@ export const reactGuides: SidebarItem[] = [
     link: "/react/quickstart",
   },
   {
-    text: "Server side rendering",
-    link: "/react/ssr",
-  },
-  {
     text: "Authentication",
     items: [
-      { text: "Getting Started", link: "/react/getting-started" },
-      { text: "With UI Components", link: "/react/ui-components" },
-      { text: "With React Hooks", link: "/react/react-hooks" },
+      { text: "Set up", link: "/react/getting-started" },
+      { text: "UI components", link: "/react/ui-components" },
+      { text: "Custom UI", link: "/react/react-hooks" },
     ],
   },
   {
     text: "Using smart accounts",
     items: [
+      {
+        text: "Set up your client",
+        link: "/react/how-to-set-up-smart-account-client",
+      },
       {
         text: "Send user operations",
         link: "/react/send-user-operations",
@@ -34,8 +34,16 @@ export const reactGuides: SidebarItem[] = [
     ],
   },
   {
+    text: "Using EIP-7702",
+    link: "/react/using-7702",
+  },
+  {
     text: "Customizing UI components",
     items: [{ text: "Theme", link: "/react/customization/theme" }],
+  },
+  {
+    text: "Server side rendering",
+    link: "/react/ssr",
   },
   { text: "SDK Reference", link: "/reference/account-kit/react" },
 ];

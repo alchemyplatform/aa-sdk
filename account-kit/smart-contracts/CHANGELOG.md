@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.15.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.1...v4.15.2) (2025-03-07)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Bug Fixes
+
+- time range module tests ([#1379](https://github.com/alchemyplatform/aa-sdk/issues/1379)) ([65b4416](https://github.com/alchemyplatform/aa-sdk/commit/65b441665eafdc224b42862e8b3f748537ff4c8a))
+
+### Features
+
+- add upgrade helpers for ma v2 ([#1382](https://github.com/alchemyplatform/aa-sdk/issues/1382)) ([96d1394](https://github.com/alchemyplatform/aa-sdk/commit/96d13941ec60799a85f9139c7332d1d3bb1b2f71))
+
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Bug Fixes
+
+- update mav2 module tests to use session keys ([#1327](https://github.com/alchemyplatform/aa-sdk/issues/1327)) ([85b563e](https://github.com/alchemyplatform/aa-sdk/commit/85b563e5a8b74c9a5e3744413538c5e134765fe3))
+
+### Features
+
+- eip-7702 ui demo ([#1302](https://github.com/alchemyplatform/aa-sdk/issues/1302)) ([c16b0d5](https://github.com/alchemyplatform/aa-sdk/commit/c16b0d56bacfb4ef410f58021c02e2d6b1818951)), closes [#1294](https://github.com/alchemyplatform/aa-sdk/issues/1294) [#1318](https://github.com/alchemyplatform/aa-sdk/issues/1318) [#1319](https://github.com/alchemyplatform/aa-sdk/issues/1319) [#1346](https://github.com/alchemyplatform/aa-sdk/issues/1346)
+- use alchemy_requestGasAndPaymasterAndData when using alchemy paymaster ([#1310](https://github.com/alchemyplatform/aa-sdk/issues/1310)) ([20b80a6](https://github.com/alchemyplatform/aa-sdk/commit/20b80a6bce7b754b7b2e8a64522c2c00e8f5a70c))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

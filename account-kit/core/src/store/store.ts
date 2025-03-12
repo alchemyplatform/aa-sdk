@@ -26,6 +26,8 @@ import {
   type StoreState,
 } from "./types.js";
 
+export const STORAGE_VERSION = 14;
+
 export const createAccountKitStore = (
   params: CreateAccountKitStoreParams
 ): Store => {
@@ -78,6 +80,13 @@ export const createAccountKitStore = (
                 return storeReviver(key, value);
               },
             }),
+            migrate: (persisted, version) => {
+              if (version < STORAGE_VERSION) {
+                return createInitialStoreState(params);
+              }
+
+              return persisted as StoreState;
+            },
             merge: (persisted, current) => {
               const persistedState = persisted as StoreState;
               if (persistedState.chain == null) {
@@ -86,6 +95,27 @@ export const createAccountKitStore = (
 
               const connectionsMap = createConnectionsMap(connections);
               if (!connectionsMap.has(persistedState.chain.id)) {
+                return createInitialStoreState(params);
+              }
+
+              // simple check to ensure the same chains are present
+              if (persistedState.connections.size !== connectionsMap.size) {
+                return createInitialStoreState(params);
+              }
+
+              // check if all of the connections in the config match the persisted connections
+              if (
+                !connections.every(
+                  (c) =>
+                    persistedState.connections.has(c.chain.id) &&
+                    deepEquals(persistedState.connections.get(c.chain.id), c)
+                )
+              ) {
+                return createInitialStoreState(params);
+              }
+
+              // handle the case where the signer config changes
+              if (!deepEquals(current.config, persistedState.config)) {
                 return createInitialStoreState(params);
               }
 
@@ -107,9 +137,11 @@ export const createAccountKitStore = (
               };
             },
             skipHydration: ssr,
-            partialize: ({ signer, accounts, ...writeableState }) =>
-              writeableState,
-            version: 13,
+            partialize: (state) => {
+              const { signer, accounts, ...writeableState } = state;
+              return writeableState;
+            },
+            version: STORAGE_VERSION,
           })
         : () => createInitialStoreState(params)
     )
@@ -313,6 +345,12 @@ const createEmptyAccountConfigState = (chains: Chain[]) => {
   }, {} as StoreState["accountConfigs"]);
 };
 
+/**
+ * Creates the default account state for the given chains.
+ *
+ * @param {Chain[]} chains The chains to create the account state for
+ * @returns {NoUndefined<StoreState["accounts"]>} The default account state for the given chains
+ */
 export const createDefaultAccountState = (chains: Chain[]) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {
@@ -332,4 +370,18 @@ export const createEmptySmartAccountClientState = (chains: Chain[]) => {
 
     return acc;
   }, {} as StoreState["smartAccountClients"]);
+};
+
+const deepEquals = (obj1: any, obj2: any) => {
+  if (typeof obj1 !== typeof obj2) return false;
+  if (typeof obj1 !== "object") return obj1 === obj2;
+  if (obj1 === null && obj2 === null) return true;
+  if (obj1 === null || obj2 === null) return false;
+  if (obj1.length !== obj2.length) return false;
+
+  for (const key in obj1) {
+    if (!deepEquals(obj1[key], obj2[key])) return false;
+  }
+
+  return true;
 };

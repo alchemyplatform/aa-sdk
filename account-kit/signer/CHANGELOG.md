@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.15.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.1...v4.15.2) (2025-03-07)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Bug Fixes
+
+- disconnect signer when session expires ([#1415](https://github.com/alchemyplatform/aa-sdk/issues/1415)) ([1431168](https://github.com/alchemyplatform/aa-sdk/commit/143116867976bd6005aafa3edafbb80bd1a7e248))
+
+### Features
+
+- add react-native core files ([#1402](https://github.com/alchemyplatform/aa-sdk/issues/1402)) ([060e1ab](https://github.com/alchemyplatform/aa-sdk/commit/060e1ab231db8455a71f25452e1a4cddace60dbd))
+
+# [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
+
+### Bug Fixes
+
+- fb mobile auth ([#1396](https://github.com/alchemyplatform/aa-sdk/issues/1396)) ([c4939ce](https://github.com/alchemyplatform/aa-sdk/commit/c4939ce3dc0e84f1de8fc65575eb9c1c8730a427))
+
 # [4.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.12.0...v4.13.0) (2025-02-11)
 
 ### Features

@@ -1,4 +1,4 @@
-import { Config, DEFAULT_CONFIG } from "@/app/config";
+import { AccountMode, Config, DEFAULT_CONFIG } from "@/app/config";
 import { getSectionsForConfig } from "@/app/sections";
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { cookieStorage, parseCookie } from "@account-kit/core";
@@ -38,7 +38,6 @@ export function convertDemoConfigToUiConfig(
 
 export type DemoState = Config & {
   nftTransferred: boolean;
-  setNftTransferred: (transferred: boolean) => void;
   setIllustrationStyle: (style: Config["ui"]["illustrationStyle"]) => void;
   setBorderRadius: (radius: Config["ui"]["borderRadius"]) => void;
   setAuth: (auth: Partial<Config["auth"]>) => void;
@@ -49,6 +48,7 @@ export type DemoState = Config & {
   ) => void;
   setTheme: (theme: Config["ui"]["theme"]) => void;
   setSupportUrl: (url: string) => void;
+  setAccountMode: (accountMode: AccountMode) => void;
 };
 
 export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
@@ -66,25 +66,21 @@ export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
             setPrimaryColor,
             setSupportUrl,
             setTheme,
-            setNftTransferred,
             nftTransferred,
+            setAccountMode,
             ...config
           }) => config,
           skipHydration: true,
-          version: 2,
+          version: 4,
         })
   );
 };
 
-function createInitialState(
-  initialConfig: Config = DEFAULT_CONFIG
-): StateCreator<DemoState> {
+function createInitialState(initialConfig?: Config): StateCreator<DemoState> {
   return (set, get) => ({
+    ...DEFAULT_CONFIG,
     ...initialConfig,
     nftTransferred: false,
-    setNftTransferred: (transferred) => {
-      set({ nftTransferred: transferred });
-    },
     setTheme: (theme) => {
       set((state) => ({
         ui: {
@@ -139,6 +135,11 @@ function createInitialState(
           ...state.ui,
           borderRadius: radius,
         },
+      }));
+    },
+    setAccountMode: (accountMode: AccountMode) => {
+      set(() => ({
+        accountMode,
       }));
     },
   });

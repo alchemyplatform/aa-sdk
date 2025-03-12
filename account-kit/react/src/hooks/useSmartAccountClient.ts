@@ -14,7 +14,7 @@ import {
 import { useMemo, useSyncExternalStore } from "react";
 import type { Chain } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 export type UseSmartAccountClientProps<
   TChain extends Chain | undefined = Chain | undefined,
@@ -59,15 +59,7 @@ export function useSmartAccountClient<
  * ```ts twoslash
  * import { useSmartAccountClient } from "@account-kit/react";
  *
- * const { client, address, isLoadingClient } = useSmartAccountClient({
- *  type: "LightAccount",
- *  accountParams: {
- *    salt?: 1n,
- *    factoryAddress?: '0x0000000000000000000000000000',
- *    initCode?: "0x0",
- *    accountAddress?: '0x0000000000000000000000000000'
- *   }
- * });
+ * const { client, address, isLoadingClient } = useSmartAccountClient({});
  * ```
  */
 export function useSmartAccountClient({

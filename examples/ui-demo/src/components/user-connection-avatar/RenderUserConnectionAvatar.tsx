@@ -2,57 +2,43 @@ import PopoverMenu from "./UserConnectionMenuPopover";
 import DialogMenu from "./UserConnectionMenuDialog";
 import { UserConnectionAvatar } from "./UserConnectionAvatar";
 import { UserConnectionDetails } from "./UserConnectionDetails";
-import React, { useEffect, useState } from "react";
-import { useAccount } from "@account-kit/react";
-import { useQuery } from "@tanstack/react-query";
-import { useConfigStore } from "@/state";
+import React, { useState } from "react";
+import { Hex } from "viem";
+import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
 type RenderAvatarMenuProps = {
   deploymentStatus: boolean;
+  delegationAddress?: Hex;
 };
 export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
-  const { account } = useAccount({
-    type: "LightAccount",
-  });
-
-  const { nftTransferred } = useConfigStore(({ nftTransferred }) => ({
-    nftTransferred,
-  }));
-
-  const { data: deploymentStatus = false, refetch } = useQuery({
-    queryKey: ["deploymentStatus"],
-    queryFn: async () => {
-      const initCode = await account?.getInitCode();
-      return initCode && initCode === "0x";
-    },
-    enabled: !!account,
-  });
-
-  useEffect(() => {
-    // Refetch the deployment status if the NFT transferred state changes.
-    // Only refetch if this is a user's first NFT Transfer...
-    if (nftTransferred && !deploymentStatus) {
-      refetch();
-    }
-  }, [nftTransferred, deploymentStatus, refetch]);
+  const { isDeployed, delegationAddress } = useDeploymentStatus();
 
   return (
     <div className="overflow-hidden" {...props}>
       {/* Popover - Visible on desktop screens */}
       <div className="hidden lg:block overflow-hidden">
-        <RenderPopoverMenu deploymentStatus={deploymentStatus} />
+        <RenderPopoverMenu
+          deploymentStatus={isDeployed}
+          delegationAddress={delegationAddress}
+        />
       </div>
       {/* Dialog - Visible on mobile screens */}
       <div className="block lg:hidden">
-        <RenderDialogMenu deploymentStatus={deploymentStatus} />
+        <RenderDialogMenu
+          deploymentStatus={isDeployed}
+          delegationAddress={delegationAddress}
+        />
       </div>
     </div>
   );
 };
 
-const RenderPopoverMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
+const RenderPopoverMenu = ({
+  deploymentStatus,
+  delegationAddress,
+}: RenderAvatarMenuProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
@@ -64,13 +50,19 @@ const RenderPopoverMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
         />
       </PopoverMenu.Trigger>
       <PopoverMenu.Content>
-        <UserConnectionDetails deploymentStatus={deploymentStatus} />
+        <UserConnectionDetails
+          deploymentStatus={deploymentStatus}
+          delegationAddress={delegationAddress}
+        />
       </PopoverMenu.Content>
     </PopoverMenu>
   );
 };
 
-const RenderDialogMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
+const RenderDialogMenu = ({
+  deploymentStatus,
+  delegationAddress,
+}: RenderAvatarMenuProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
@@ -87,7 +79,10 @@ const RenderDialogMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
       <DialogMenu isOpen={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogMenu.Content>
           <p className="text-lg font-semibold text-fg-primary mb-5">Profile</p>
-          <UserConnectionDetails deploymentStatus={deploymentStatus} />
+          <UserConnectionDetails
+            deploymentStatus={deploymentStatus}
+            delegationAddress={delegationAddress}
+          />
         </DialogMenu.Content>
       </DialogMenu>
     </div>

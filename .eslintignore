@@ -6,6 +6,7 @@ site/.vitepress/cache/**/*
 
 /examples/*
 !/examples/ui-demo
+/examples/ui-demo/contracts
 /examples/ui-demo/.next/*
 
 **/.turbo/*
@@ -16,3 +17,5 @@ account-kit/rn-signer/lib/*
 **/.cxx/*
 
 **/vendor/*
+**/test-results/*
+**/playwright-report/*

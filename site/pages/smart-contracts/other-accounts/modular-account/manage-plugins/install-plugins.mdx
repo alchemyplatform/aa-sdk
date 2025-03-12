@@ -1,0 +1,115 @@
+---
+title: Extending Smart Accounts • Installing & uninstalling plugins on a Modular
+  Account
+description: Follow this guide to install and uninstall plugins on a Modular
+  Account with Account Kit, a vertically integrated stack for building apps that
+  support ERC-4337 and ERC-6900.
+---
+
+# How to install and uninstall plugins on a Modular Account
+
+[ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) Modular Accounts implements Plugin manager interface [`IPluginManager.sol`](https://eips.ethereum.org/EIPS/eip-6900#ipluginmanagersol) to support installing and uninstalling plugins on a Modular Account. This contract interface defines the method `installPlugin()` and `uninstallPlugin()` that clients can use to install or uninstall plugins on a Modular Account.
+
+Account Kit provides a streamlined experience of interacting with the Modular Account AccoutLoupe interface easily by providing `pluginManagerActions` defined in `@account-kit/smart-contracts` package. When you connect your Modular Account to `SmartAccountClient` you can extend the client with `pluginManagerActions`, which exposes a set of methods available to call the account `AccountLoupe` with the client connected to the account.
+
+There are two ways to install plugins. The first method is to use the `pluginManagerActions`'s generic `installPlugin` method, but this method requires the [`PluginGenConfig`](https://github.com/alchemyplatform/aa-sdk/blob/a9a11ec23b1084fa43edaa3cb933ff36318ca573/packages/accounts/plugindefs/types.ts) configure the correct plugin dependencies and function references for the plugin.
+
+Account Kit provides a more robust, easier way to install plugins with `pluginActions`. Each plugin comes with the its own `pluginActions` that includes already configured install method, named `install<PluginName>`, for installing any plugin of interest. For example, `MultiOwnerPlugin` has `multiOwnerPluginActions` that includes `installMultiOwnerPlugin()` method, and `SessionKeyPlugin` has `sessionKeyPluginActions` that includes `installSessionKeyPlugin()` method, all exported from the `@account-kit/smart-contracts` package.
+
+This guide will use the `SessionKeyPlugin` as an example to show how you can install `SessionKeyPlugin` easily using the `SmartAccountClient` extended with `sessionKeyPluginActions`.
+
+:::warning
+**Please use caution when uninstalling plug-ins to avoid "bricking" your account!**
+
+If the account only has 1 plug-in installed and you uninstall it, there will no longer be a validator on the account (no owner) and you will not be able to use or recover it.
+
+For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
+:::
+
+## 1. Installing the Session Key Plugin
+
+You should first extend the `SmartAccountClient` connected to a Modular Account with `sessionKeyPluginActions`.
+
+Then, you can use the `installSessionKeyPlugin()` method exposed on `sessionKeyPluginActions` extended smart account client to install the session key plugin for the connected account.
+
+:::tip[Note]
+When using `createModularAccountAlchemyClient` in `@account-kit/smart-contracts`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
+:::
+
+:::code-group
+
+```ts [example.ts] twoslash
+import { modularAccountClient } from "./client";
+import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
+
+// [!code focus:99]
+// extend smart account client with sessionKeyPluginActions to call SessionKeyPlugin methods
+const sessionKeyExtendedClient = modularAccountClient.extend(
+  sessionKeyPluginActions
+);
+
+const { hash } = await sessionKeyExtendedClient.installSessionKeyPlugin({
+  // 1st arg is the initial set of session keys
+  // 2nd arg is the tags for the session keys
+  // 3rd arg is the initial set of permissions
+  args: [[], [], []],
+});
+
+await client.waitForUserOperationTransaction({ hash });
+```
+
+```ts [client.ts] twoslash filename="client.ts"
+// [!include ~/shared/smart-contracts/modular-account-client.ts]
+```
+
+:::
+
+Refer to the [Session Key](/smart-contracts/other-accounts/modular-account/session-keys) section to learn more about using the `SessionKeyPlugin`.
+
+## 2. Uninstalling the Session Key Plugin
+
+On the other hand, uninstalling plugins usually does not involve configuring contract dependencies or function references. You can use the `pluginManagerActions`'s generic `uninstallPlugin` method to uninstall a particular plugin of interest.
+First, extend the `SmartAccountClient` connected to a Modular Account with `pluginManagerActions`.
+
+Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
+
+:::warning
+**Please use caution when uninstalling plug-ins to avoid "bricking" your account!**
+
+If the account only has 1 plug-in installed and you uninstall it, there will no longer be a validator on the account (no owner) and you will not be able to use or recover it.
+
+For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
+:::
+
+:::code-group
+
+```ts [example.ts] twoslash
+import { chain, modularAccountClient } from "./client";
+import { SessionKeyPlugin } from "@account-kit/smart-contracts";
+
+const { hash } = await modularAccountClient.uninstallPlugin({
+  pluginAddress: SessionKeyPlugin.meta.addresses[chain.id],
+});
+
+await modularAccountClient.waitForUserOperationTransaction({ hash });
+```
+
+```ts [client.ts] twoslash filename="client.ts"
+// [!include ~/shared/smart-contracts/modular-account-client.ts]
+```
+
+:::
+
+### Extend Modular Account with Multisig
+
+As mentioned above, you should not uninstall the multiowner plugin from a Modular Account in a single action. This will leave your account without a validator, no owner, and therefore will be unusable.
+
+**Recommended flow today**: Rather than switch ownership post creation, use `createModularAccountAlchemyClient` OR the `createMultisigAccountAlchemyClient` on account creation directly depending on if you want multi-owner or multi-sig ownership respectively.
+
+**Problem**: In order to switch from multi-owner (installed in Modular Account by default) to multi-sig, you will need to batch call an uninstall of the multi-owner plugin and an install of the multi-sig plugin. **It is required to batch these steps!** If you uninstall the multi-owner plugin in a single action, the account will no longer have a validation function, and will be bricked (unusable).
+
+**Solution for extending Modular Account AFTER deployment**: You will need to manually encode 1) the uninstall of the multi-owner plugin and 2) the install of the multi-sig plugin and batch those together in one UO (using `encodeFunctionData` and [batching](/infra/send-user-operations#batch-user-operations) using `sendUserOperation`). We are working to make this workflow easier in the next SDK version.
+
+See a working example in this [discussion](https://github.com/alchemyplatform/aa-sdk/discussions/865#discussioncomment-10206160).
+
+After uninstalling and installing successfully, you will then be able to use the Multisig Account Client to [sign and send UOs](/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started/).

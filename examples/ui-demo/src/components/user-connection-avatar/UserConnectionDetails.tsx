@@ -1,36 +1,39 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
-import { UserAddressLink } from "./UserAddressLink";
+import { UserAddressTooltip } from "./UserAddressLink";
 import { useConfigStore } from "@/state";
-import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
-import { useQuery } from "@tanstack/react-query";
+import { useAccount, useLogout, useUser } from "@account-kit/react";
+import { Hex } from "viem";
+import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
+import { useSignerAddress } from "@/hooks/useSignerAddress";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
+  delegationAddress?: Hex;
 };
 export function UserConnectionDetails({
   deploymentStatus,
+  delegationAddress,
 }: UserConnectionDetailsProps) {
   const user = useUser();
-  const signer = useSigner();
+  const signerAddress = useSignerAddress();
   const { logout } = useLogout();
-  const { theme, primaryColor } = useConfigStore(
-    ({ ui: { theme, primaryColor } }) => ({ theme, primaryColor })
+  const { theme, primaryColor, accountMode } = useConfigStore(
+    ({ ui: { theme, primaryColor }, accountMode }) => ({
+      theme,
+      primaryColor,
+      accountMode,
+    })
   );
-  const scaAccount = useAccount({ type: "LightAccount" });
+  const scaAccount = useAccount({
+    type: "ModularAccountV2",
+    accountParams: {
+      mode: accountMode,
+    },
+  });
 
   const isEOAUser = user?.type === "eoa";
-
-  const getSignerAddress = async (): Promise<string | null> => {
-    const signerAddress = await signer?.getAddress();
-    return signerAddress ?? null;
-  };
-
-  const { data: signerAddress = "" } = useQuery({
-    queryKey: ["signerAddress"],
-    queryFn: getSignerAddress,
-  });
 
   if (!user) return null;
 
@@ -42,7 +45,7 @@ export function UserConnectionDetails({
           <span className="text-md md:text-sm text-fg-secondary">
             EOA Address
           </span>
-          <UserAddressLink address={user?.address} />
+          <UserAddressTooltip address={user?.address} linkEnabled />
         </div>
 
         {/* Logout */}
@@ -69,40 +72,72 @@ export function UserConnectionDetails({
       {/* Smart Account */}
       <div className="flex flex-row justify-between">
         <span className="text-md md:text-sm text-fg-secondary">
-          Smart account
+          {accountMode === "default" ? "Smart account" : "Address"}
         </span>
-        <UserAddressLink address={scaAccount.address ?? ""} />
+        <UserAddressTooltip address={scaAccount.address ?? ""} linkEnabled />
       </div>
-      {/* Status */}
-      <div className="flex flex-row justify-between items-center">
-        <span className="text-md md:text-sm text-fg-secondary">Status</span>
-        <div className="flex flex-row items-center">
-          <DeploymentStatusIndicator
-            isDeployed={!!deploymentStatus}
-            className="w-[12px] h-[12px]"
-          />
-          <span className="text-fg-primary block ml-1 text-md md:text-sm">
-            {deploymentStatus ? "Deployed" : "Not deployed"}
-          </span>
-        </div>
-      </div>
-      {/* Signer */}
-      <div className="flex flex-row justify-between items-center mt-[17px]">
-        <a
-          target="_blank"
-          href="https://accountkit.alchemy.com/concepts/smart-account-signer"
-          className="flex justify-center items-center"
-        >
-          <span className="text-md md:text-sm text-fg-secondary mr-1">
-            Signer
-          </span>
-          <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
-            <ExternalLinkIcon className="stroke-fg-secondary" />
-          </div>
-        </a>
 
-        <UserAddressLink address={signerAddress} />
-      </div>
+      {accountMode === "default" ? (
+        <>
+          {/* Status */}
+          <div className="flex flex-row justify-between items-center">
+            <span className="text-md md:text-sm text-fg-secondary">Status</span>
+            <div className="flex flex-row items-center">
+              <DeploymentStatusIndicator
+                isDeployed={!!deploymentStatus}
+                className="w-[12px] h-[12px]"
+              />
+              <span className="text-fg-primary block ml-1 text-md md:text-sm">
+                {deploymentStatus ? "Deployed" : "Not deployed"}
+              </span>
+            </div>
+          </div>
+          {/* Signer */}
+          <div className="flex flex-row justify-between items-center mt-[17px]">
+            <a
+              target="_blank"
+              href="https://accountkit.alchemy.com/concepts/smart-account-signer"
+              className="flex justify-center items-center"
+            >
+              <span className="text-md md:text-sm text-fg-secondary mr-1">
+                Signer
+              </span>
+              <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
+                <ExternalLinkIcon className="stroke-fg-secondary" />
+              </div>
+            </a>
+
+            <UserAddressTooltip address={signerAddress ?? null} />
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-row justify-between items-center">
+          <span className="text-md md:text-sm text-fg-secondary">
+            Delegated to
+          </span>
+          <div className="flex flex-row items-center">
+            <DeploymentStatusIndicator
+              isDeployed={deploymentStatus}
+              className="w-[12px] h-[12px]"
+            />
+            <span className="text-fg-primary block ml-1 text-md md:text-sm">
+              {deploymentStatus && delegationAddress ? (
+                <a
+                  href={`${ODYSSEY_EXPLORER_URL}/address/0x${delegationAddress.slice(
+                    8
+                  )}`}
+                  target="_blank"
+                  className="underline"
+                >
+                  Modular Account
+                </a>
+              ) : (
+                "None"
+              )}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Logout */}
 

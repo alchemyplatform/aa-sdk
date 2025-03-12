@@ -27,8 +27,8 @@ Now you can send a sponsored User Operation with the Policy ID.
 import React, { useState, useEffect } from "react";
 import { View, Button } from "react-native";
 import {
-  createLightAccountClient,
-  LightAccount,
+  createModularAccountV2Client,
+  ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { User } from "@account-kit/signer";
@@ -49,7 +49,7 @@ export default function MyComponent() {
   useEffect(() => {
     if (user) {
       // Create a smart account client for the authenticated user with the policy ID
-      createLightAccountClient({
+      createModularAccountV2Client({
         signer,
         chain: sepolia,
         policyId: "YOUR_GAS_POLICY_ID", // [!code ++]

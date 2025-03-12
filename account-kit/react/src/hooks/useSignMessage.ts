@@ -9,7 +9,7 @@ import { signMessage as wagmi_signMessage } from "@wagmi/core";
 import { useCallback } from "react";
 import type { Hex, SignableMessage } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -55,9 +55,9 @@ export type UseSignMessageResult = {
  * @example
  * ```ts twoslash
  * import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
- *
  * const data = "messageToSign"
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { client } = useSmartAccountClient({});
+ *
  * const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
  *  client,
  *  // these are optional

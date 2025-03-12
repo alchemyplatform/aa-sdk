@@ -16,7 +16,7 @@ import {
 import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
 import type { Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import {
   ClientUndefinedHookError,
   UnsupportedEOAActionError,
@@ -90,9 +90,8 @@ export type UseSendUserOperationResult<
  * } from "@account-kit/react";
  *
  * function ComponentWithSendUserOperation() {
- *   const { client } = useSmartAccountClient({
- *     type: "MultiOwnerModularAccount",
- *   });
+ *   const { client } = useSmartAccountClient({});
+ *
  *   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
  *     client,
  *     // optional parameter that will wait for the transaction to be mined before returning
