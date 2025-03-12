@@ -1,102 +1,102 @@
 {
-	"name": "root",
-	"type": "module",
-	"private": true,
-	"engines": {
-		"node": ">=18.16"
-	},
-	"packageManager": "yarn@1.22.22",
-	"workspaces": {
-		"packages": [
-			"aa-sdk/*",
-			"account-kit/*",
-			"templates/*",
-			"examples/*",
-			"account-kit/rn-signer/example",
-			"site",
-			"doc-gen",
-			".vitest"
-		]
-	},
-	"resolutions": {
-		"wagmi": "2.12.7",
-		"viem": "2.22.6",
-		"zustand": "^5.0.0-rc.2",
-		"react-native": "0.76.5",
-		"react-native-config": "1.5.3",
-		"@react-native-community/cli": "15.0.1"
-	},
-	"scripts": {
-		"generate": "turbo run generate",
-		"postgenerate": "yarn lint:write",
-		"preinstall": "yarn config set ignore-engines true",
-		"postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*'",
-		"build": "yarn build:libs --filter='!@account-kit/react-native-signer' --filter='!@account-kit/react-native-signer-example'",
-		"postbuild": "yarn lint:write",
-		"build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*'",
-		"build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
-		"build:site": "turbo run build --filter=docs",
-		"build:examples": "turbo run build",
-		"clean": "yarn clean:turbo && yarn clean:node_modules",
-		"clean:turbo": "turbo run clean",
-		"clean:node_modules": "lerna clean -y && rm -rf node_modules",
-		"dev:ui": "turbo watch dev --filter='@account-kit/react' --filter=ui-demo",
-		"dev:docs": "turbo watch dev --filter=docs",
-		"docs:gen": "turbo run docs:gen",
-		"test": "vitest dev",
-		"test:ci": "vitest run",
-		"test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
-		"lint:write": "eslint . --fix && yarn docs:gen && prettier --loglevel warn --write --ignore-unknown .",
-		"lint:check": "eslint . && prettier --check .",
-		"prepare": "husky install && yarn turbo prepare",
-		"version": "yarn build:libs"
-	},
-	"devDependencies": {
-		"@commitlint/cli": "^17.6.3",
-		"@commitlint/config-conventional": "^17.6.3",
-		"@types/prettier": "^2.7.3",
-		"add": "^2.0.6",
-		"ak-docgen": "*",
-		"dotenv-cli": "^7.4.2",
-		"eslint": "^8.39.0",
-		"eslint-config-react-app": "^7.0.1",
-		"eslint-formatter-github": "^1.1.4",
-		"eslint-formatter-rdjson": "^1.0.6",
-		"eslint-plugin-eslint-rules": "*",
-		"eslint-plugin-import": "^2.27.5",
-		"eslint-plugin-jsdoc": "^48.2.3",
-		"eslint-plugin-mdx": "^3.1.5",
-		"husky": "^8.0.0",
-		"is-ci": "^3.0.1",
-		"jsdom": "^25.0.1",
-		"lerna": "^8.0.2",
-		"lint-staged": "^13.2.2",
-		"node-fetch": "^3.3.1",
-		"patch-package": "^8.0.0",
-		"postinstall-postinstall": "^2.1.0",
-		"prettier": "^2.8.8",
-		"prool": "^0.0.15",
-		"tsx": "^4.19.2",
-		"turbo": "^2.2.3",
-		"viem": "2.22.6",
-		"vitest": "^2.0.4",
-		"wagmi": "2.12.7",
-		"webauthn-p256": "^0.0.10"
-	},
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "is-ci || lint-staged",
-			"commit-msg": "npx --no -- commitlint --edit ${1}"
-		}
-	},
-	"lint-staged": {
-		"**/src/**/*.{tsx,jsx,ts,js}": [
-			"yarn lint:write"
-		]
-	}
+  "name": "root",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18.16"
+  },
+  "packageManager": "yarn@1.22.22",
+  "workspaces": {
+    "packages": [
+      "aa-sdk/*",
+      "account-kit/*",
+      "templates/*",
+      "examples/*",
+      "account-kit/rn-signer/example",
+      "site",
+      "doc-gen",
+      ".vitest"
+    ]
+  },
+  "resolutions": {
+    "wagmi": "2.12.7",
+    "viem": "2.22.6",
+    "zustand": "^5.0.0-rc.2",
+    "react-native": "0.76.5",
+    "react-native-config": "1.5.3",
+    "@react-native-community/cli": "15.0.1"
+  },
+  "scripts": {
+    "generate": "turbo run generate",
+    "postgenerate": "yarn lint:write",
+    "preinstall": "yarn config set ignore-engines true",
+    "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*'",
+    "build": "yarn build:libs --filter='!@account-kit/react-native-signer' --filter='!@account-kit/react-native-signer-example'",
+    "postbuild": "yarn lint:write",
+    "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*'",
+    "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
+    "build:site": "turbo run build --filter=docs",
+    "build:examples": "turbo run build",
+    "clean": "yarn clean:turbo && yarn clean:node_modules",
+    "clean:turbo": "turbo run clean",
+    "clean:node_modules": "lerna clean -y && rm -rf node_modules",
+    "dev:ui": "turbo watch dev --filter='@account-kit/react' --filter=ui-demo",
+    "dev:docs": "turbo watch dev --filter=docs",
+    "docs:gen": "turbo run docs:gen",
+    "test": "vitest dev",
+    "test:ci": "vitest run",
+    "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
+    "lint:write": "eslint . --fix && yarn docs:gen && prettier --loglevel warn --write --ignore-unknown .",
+    "lint:check": "eslint . && prettier --check .",
+    "prepare": "husky install && yarn turbo prepare",
+    "version": "yarn build:libs"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "@types/prettier": "^2.7.3",
+    "add": "^2.0.6",
+    "ak-docgen": "*",
+    "dotenv-cli": "^7.4.2",
+    "eslint": "^8.39.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-formatter-github": "^1.1.4",
+    "eslint-formatter-rdjson": "^1.0.6",
+    "eslint-plugin-eslint-rules": "*",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^48.2.3",
+    "eslint-plugin-mdx": "^3.1.5",
+    "husky": "^8.0.0",
+    "is-ci": "^3.0.1",
+    "jsdom": "^25.0.1",
+    "lerna": "^8.0.2",
+    "lint-staged": "^13.2.2",
+    "node-fetch": "^3.3.1",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
+    "prettier": "^2.8.8",
+    "prool": "^0.0.15",
+    "tsx": "^4.19.2",
+    "turbo": "^2.2.3",
+    "viem": "2.22.6",
+    "vitest": "^2.0.4",
+    "wagmi": "2.12.7",
+    "webauthn-p256": "^0.0.10"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "is-ci || lint-staged",
+      "commit-msg": "npx --no -- commitlint --edit ${1}"
+    }
+  },
+  "lint-staged": {
+    "**/src/**/*.{tsx,jsx,ts,js}": [
+      "yarn lint:write"
+    ]
+  }
 }

@@ -57,6 +57,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             text: "submitOtpCode",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode",
           },
+          {
+            text: "targetPublicKey",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey",
+          },
         ],
       },
       {
