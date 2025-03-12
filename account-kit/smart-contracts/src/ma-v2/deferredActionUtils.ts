@@ -1,5 +1,5 @@
 import type { Address, SmartAccountClient } from "@aa-sdk/core";
-import { encodePacked, type Hex, toHex } from "viem";
+import { concatHex, encodePacked, type Hex, size, toHex } from "viem";
 
 type DeferredActionTypedData = {
   domain: {
@@ -40,9 +40,11 @@ export const DeferredActionBuilder = {
     if (!args.client.account) {
       throw "Account undefined in client";
     }
-
+    // First, get the normal nonce, which should be the standard fallback validation + 1 for global validation
+    // Then, toggle the flag for "deferred action" (2 << 64)
     const nonceOverride =
-      (await args.client.account.getAccountNonce(args.nonceKeyOverride)) | 2n;
+      (await args.client.account.getAccountNonce(args.nonceKeyOverride)) |
+      (2n << 64n);
 
     return {
       typedData: {
@@ -68,15 +70,13 @@ export const DeferredActionBuilder = {
     };
   },
   // Maybe a better name for this
-  buildDigest: async (args: {
+  buildDigest: (args: {
     typedData: DeferredActionTypedData;
     nonce: bigint;
     sig: Hex;
-  }) => {
+  }): Hex => {
     // nonce used to determine validation locator
-    const validationLocator = ((args.nonce << 88n) >> 88n) & 0xffffffffffn;
-    console.log("LOCATOR:", validationLocator.toString(16));
-    console.log("LOCATOR:", toHex(validationLocator));
+    const validationLocator = 1n; // fallback validation with isGlobal set to true
 
     let encodedData = encodePacked(
       ["uint168", "uint48", "bytes"],
@@ -87,7 +87,41 @@ export const DeferredActionBuilder = {
       ]
     );
 
+    const encodedDataLength = size(encodedData);
+
+    const sigLength = size(args.sig);
+
     console.log("ENCODED DATA:", encodedData);
-    console.log("ENCODED DATA LENGTH:", encodedData.length);
+    console.log("ENCODED DATA LENGTH:", encodedDataLength);
+    console.log("\n\nSIG:\n\n", args.sig);
+    console.log("\n\nSIG LENGTH:\n\n", sigLength);
+
+    encodedData = concatHex([
+      toHex(encodedDataLength, { size: 4 }),
+      encodedData,
+      toHex(sigLength, { size: 4 }),
+      args.sig,
+    ]);
+
+    return encodedData;
   },
 };
+
+// 0x0000013f // Encoded data length (319 bytes)
+// 000000000000000000000000000000000000000001 // Validation locator (fallback + isGlobal)
+// 000000000000 // deadline
+// 1bbf564c // installValidation selector
+// 00000000000099DE0BF6fA90dEB851E2A2df7d83000000010700000000000000 // abi-encoded validation config
+// 0000000000000000000000000000000000000000000000000000000000000080 // Offset of bytes4[] selectors
+// 00000000000000000000000000000000000000000000000000000000000000a0 // Offset of bytes installData
+// 0000000000000000000000000000000000000000000000000000000000000100 // Offset of bytes[] hooks
+// 0000000000000000000000000000000000000000000000000000000000000000 // Length of bytes4[] selectors (0)
+// 0000000000000000000000000000000000000000000000000000000000000040 // Length of bytes installData (40)
+// 0000000000000000000000000000000000000000000000000000000000000001 // InstallData word 1
+// 0000000000000000000000008391de4cacfb91f1cf953cf345948d92e137b6b9 // InstallData word 2
+// 0000000000000000000000000000000000000000000000000000000000000000 // Length of bytes4[] hooks (0)
+
+// sig:
+// 00000041 Sig length (65)
+// a298f66ce1ea79d426a0174efc0e4a4f31f9c51598d0adcfd679ca896a853aab22b32d2c5c8b57ddb5a8da4b2eaba452bb636998e096dc70fef3e4e768d753af1c // Deferred action sig
+// FF005ee15838521cdbba6d691c6b62cc07e6c2bf4b4ddc86d993ccc78fdf41d3e4677ed504d78ed8ed62fe15ef5fa6fa2dd58c1fa67ea8d8135a856c7b6af79de6a71b // UO sig
