@@ -2,7 +2,7 @@ import { AuthType } from "@account-kit/react";
 import { KnownAuthProvider } from "@account-kit/signer";
 import { Config } from "./config";
 
-const isTesting = process.env.NODE_ENV === "test";
+const isTesting = process.env.NEXT_PUBLIC_APP_ENV === "test";
 const auth0TestingConnection = process.env.NEXT_PUBLIC_AUTH0_TESTING_CONNECTION;
 const SocialAuth0Providers = ["twitter", "discord"];
 

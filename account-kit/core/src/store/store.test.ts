@@ -306,6 +306,53 @@ describe("createConfig tests", () => {
     `);
   });
 
+  it("should overwrite the state if the config changed (signer config)", async () => {
+    await givenConfig();
+    expect(getStorageItem("config")).toMatchInlineSnapshot(`
+      {
+        "client": {
+          "connection": {
+            "rpcUrl": "/api/signer",
+          },
+        },
+      }
+    `);
+
+    const config2 = createConfig({
+      chain: sepolia,
+      chains: [
+        {
+          chain: sepolia,
+          transport: alchemy({ rpcUrl: "/api/sepolia" }),
+          policyId: "test-policy-id",
+        },
+        {
+          chain: baseSepolia,
+          // this isn't a typo, I'm testing the chain swap out
+          transport: alchemy({ rpcUrl: "/api/arbitrumSepolia" }),
+        },
+      ],
+      signerConnection: { rpcUrl: "/api/signer" },
+      oauthCallbackUrl: "https://example.com",
+      storage: () => localStorage,
+    });
+
+    await config2.store.persist.rehydrate();
+    config2.store.setState({
+      accounts: createDefaultAccountState([sepolia, arbitrumSepolia]),
+    });
+    expect(getStorageItem("config")).toMatchInlineSnapshot(`
+      {
+        "client": {
+          "connection": {
+            "rpcUrl": "/api/signer",
+          },
+          "oauthCallbackUrl": "https://example.com",
+        },
+      }
+    `);
+  });
+
   it("should overwrite the state if the config changed (transport changed out)", async () => {
     await givenConfig();
     expect(getStorageItem("connections")).toMatchInlineSnapshot(`
