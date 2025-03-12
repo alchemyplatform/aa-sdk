@@ -211,7 +211,10 @@ export function createSmartAccountClient(
                   "cannot sign for address that is not the current account"
                 );
               }
-              return client.signMessage(data);
+              return client.signMessage({
+                message: data,
+                account: client.account,
+              });
             case "personal_sign": {
               if (!client.account) {
                 throw new AccountNotFoundError();
@@ -222,7 +225,10 @@ export function createSmartAccountClient(
                   "cannot sign for address that is not the current account"
                 );
               }
-              return client.signMessage(data);
+              return client.signMessage({
+                message: data,
+                account: client.account,
+              });
             }
             case "eth_signTypedData_v4": {
               if (!client.account) {
