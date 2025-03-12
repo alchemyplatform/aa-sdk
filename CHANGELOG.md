@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+### Bug Fixes
+
+- app env ([#1433](https://github.com/alchemyplatform/aa-sdk/issues/1433)) ([4671b11](https://github.com/alchemyplatform/aa-sdk/commit/4671b11bf736fe5a6c4351c3ee9a00c6f1c2b44c))
+- invalidate state if the local signer config changes ([#1435](https://github.com/alchemyplatform/aa-sdk/issues/1435)) ([9ad59f2](https://github.com/alchemyplatform/aa-sdk/commit/9ad59f2d6673bc6f587e6a57343b1486c92f382f))
+
+### Features
+
+- impl stampler, tek manager, etc ([#1408](https://github.com/alchemyplatform/aa-sdk/issues/1408)) ([fe1f1fc](https://github.com/alchemyplatform/aa-sdk/commit/fe1f1fc2d32d5f4bc4bf17f64989454af98533f5))
+- **signer:** add support for using Solana on new signups ([#1376](https://github.com/alchemyplatform/aa-sdk/issues/1376)) ([e0a092e](https://github.com/alchemyplatform/aa-sdk/commit/e0a092e1e10797a50f99f24cf957cad6153fafad))
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 ### Bug Fixes
