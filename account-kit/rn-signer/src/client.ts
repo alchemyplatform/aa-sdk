@@ -79,12 +79,12 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     }
 
     this.eventEmitter.emit("authenticating", { type: "email" });
-    const { email, expirationSeconds, emailMode } = params;
+    const { email, expirationSeconds } = params;
     const publicKey = await this.stamper.init();
 
     const response = await this.request("/v1/signup", {
       email,
-      emailMode,
+      emailMode: params.emailMode,
       targetPublicKey: publicKey,
       expirationSeconds,
       redirectParams: params.redirectParams?.toString(),
