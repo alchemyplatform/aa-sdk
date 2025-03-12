@@ -32,6 +32,7 @@ The following section provides an overview of the main hooks you'll use when imp
 The `useAuthenticate` hook is the foundation for all authentication methods. It provides the `authenticate` function that handles the authentication process.
 
 ```tsx twoslash
+import React from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 function MyAuthComponent() {
@@ -48,6 +49,7 @@ function MyAuthComponent() {
 The `useUser` hook returns the current user information from either an External Owned Account (EOA) or from a Smart Contract Account (SCA). This is the best way to check if a user is logged in regardless of account type.
 
 ```tsx twoslash
+import React from "react";
 import { useUser } from "@account-kit/react";
 
 function MyComponent() {
@@ -71,6 +73,7 @@ function MyComponent() {
 The `useAccount` hook retrieves the smart contract account instance for the authenticated user. It's primarily used to get the smart contract account address and interact with the account.
 
 ```tsx twoslash
+import React from "react";
 import { useAccount } from "@account-kit/react";
 
 function MyComponent() {
