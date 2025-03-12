@@ -6,20 +6,16 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
-
-import { type RNAlchemySignerType } from "@account-kit/react-native-signer";
-
+import { useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient } from "@account-kit/react-native";
 
 export default function OAuthScreen() {
 	const user = useUser()
 	const { authenticate } = useAuthenticate()
 	const { address} = useSmartAccountClient({})
 	const { logout } = useLogout();
-	const signer = useSigner<RNAlchemySignerType>();
+	const signer = useSigner();
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	
-
 	useEffect(() => {
 		if (user) {
 			signer?.getAddress().then((address) => {

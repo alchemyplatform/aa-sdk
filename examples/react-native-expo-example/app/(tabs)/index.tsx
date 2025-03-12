@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { RNAlchemySignerType } from "@account-kit/react-native-signer";
 import { useEffect, useState } from "react";
 import {
 	View,
@@ -17,7 +16,7 @@ export default function MagicLinkAuthScreen() {
 	const { authenticate } = useAuthenticate()
 	const { logout } = useLogout()
 	const { address } = useSmartAccountClient({})
-	const signer = useSigner<RNAlchemySignerType>()
+	const signer = useSigner()
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
 
@@ -65,7 +64,7 @@ export default function MagicLinkAuthScreen() {
 				setSignerAddress(address);
 			});
 		}
-	}, [user]);
+	}, [user, signer]);
 
 	return (
 		<View style={styles.container}>

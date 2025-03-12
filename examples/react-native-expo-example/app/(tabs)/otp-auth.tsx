@@ -8,7 +8,6 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
-import { type RNAlchemySignerType } from "@account-kit/react-native-signer";
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
@@ -18,7 +17,7 @@ export default function OTPAuthScreen() {
 	const { logout } = useLogout();
 	const { address } = useSmartAccountClient({})
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
-	const signer = useSigner<RNAlchemySignerType>();
+	const signer = useSigner();
 	const [otpCode, setOtpCode] = useState<string>("");
 
 	const handleUserAuth = ({ code }: { code: string }) => {
