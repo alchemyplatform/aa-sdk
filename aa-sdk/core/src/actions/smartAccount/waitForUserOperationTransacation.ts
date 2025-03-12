@@ -4,6 +4,7 @@ import { IncompatibleClientError } from "../../errors/client.js";
 import { FailedToFindTransactionError } from "../../errors/transaction.js";
 import { Logger } from "../../logger.js";
 import type { WaitForUserOperationTxParameters } from "./types.js";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Waits for a user operation transaction to be confirmed by checking the receipt periodically until it is found or a maximum number of retries is reached.
@@ -20,7 +21,7 @@ import type { WaitForUserOperationTxParameters } from "./types.js";
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, any>} client The client instance used to interact with the blockchain
+ * @param {Client<TTransport, TChain, any>} client_ The client instance used to interact with the blockchain
  * @param {WaitForUserOperationTxParameters} args The parameters for the transaction to wait for
  * @param {Hex} args.hash The transaction hash to wait for
  * @param {WaitForUserOperationTxParameters["retries"]} [args.retries] Optional retry parameters
@@ -35,7 +36,8 @@ export const waitForUserOperationTransaction: <
 >(
   client: Client<TTransport, TChain, any>,
   args: WaitForUserOperationTxParameters
-) => Promise<Hex> = async (client, args) => {
+) => Promise<Hex> = async (client_, args) => {
+  const client = clientHeaderTrack(client_, "waitForUserOperationTransaction");
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",

@@ -18,6 +18,7 @@ import type {
 } from "../../types.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 import type { UserOperationContext } from "./types.js";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`
@@ -52,7 +53,7 @@ import type { UserOperationContext } from "./types.js";
  * const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoint: entryPointAddress });
  * ```
  *
- * @param {Client<Transport, TChain, TAccount>} client the smart account client to use for RPC requests
+ * @param {Client<Transport, TChain, TAccount>} client_ the smart account client to use for RPC requests
  * @param {SendTransactionParameters} args the send tx parameters
  * @param {UserOperationOverrides} overrides optional overrides to use for any of the fields
  * @param {TContext} context if the smart account client requires additinoal context for building UOs
@@ -69,11 +70,12 @@ export async function buildUserOperationFromTx<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<Transport, TChain, TAccount>,
+  client_: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
   overrides?: UserOperationOverrides<TEntryPointVersion>,
   context?: TContext
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
+  const client = clientHeaderTrack(client_, "buildUserOperationFromTx");
   const { account = client.account, ...request } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();
