@@ -6,10 +6,10 @@ import lombok.Builder;
 public class AuthJWT {
 
     @Builder
-    public record AuthJWTRequest(String jwt, String authProviderName, String targetPublicKey) {
+    public record Request(String jwt, String authProviderName, String targetPublicKey) {
     }
 
-    public record AuthJWTResponse(boolean isSignUp, String orgId, String credentialBundle, Optional<String> userId,
+    public record Response(boolean isSignUp, String orgId, String credentialBundle, Optional<String> userId,
             Optional<String> address, Optional<String> solanaAddress) {
     }
 }

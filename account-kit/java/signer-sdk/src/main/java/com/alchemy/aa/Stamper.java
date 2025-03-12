@@ -7,25 +7,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.common.primitives.Bytes;
-import com.google.crypto.tink.BinaryKeysetReader;
-import com.google.crypto.tink.CleartextKeysetHandle;
-import com.google.crypto.tink.KeysetHandle;
-import com.google.crypto.tink.hybrid.HpkePrivateKey;
 import com.google.crypto.tink.subtle.Base64;
 import com.google.crypto.tink.subtle.EllipticCurves;
-
 import com.google.crypto.tink.subtle.Hex;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.Security;
+import java.security.Signature;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.security.Signature;
 import java.security.spec.ECPoint;
-import javax.annotation.Nonnull;
 import org.bitcoinj.base.Base58;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -50,45 +43,12 @@ public class Stamper {
         this.tekManager = tekManager;
     }
 
-    /**
-     * @param targetPrivateKeyHex
-     *            Base64 private key
-     */
-    public Stamper(@Nonnull String targetPrivateKeyHex) throws GeneralSecurityException, IOException {
-        this();
-        byte[] keysetBytes = Base64.decode(targetPrivateKeyHex);
-        KeysetHandle privateKeysetHandle = CleartextKeysetHandle.read(BinaryKeysetReader.withBytes(keysetBytes));
-
-        this.tekManager = TEKManager.InitializeTEKManagerFromKeySetHandle(privateKeysetHandle);
-    }
-
-    public Stamper(@Nonnull byte[] targetPrivateKey) throws GeneralSecurityException, IOException {
-        this();
-        KeysetHandle privateKeysetHandle = CleartextKeysetHandle.read(BinaryKeysetReader.withBytes(targetPrivateKey));
-        this.tekManager = TEKManager.InitializeTEKManagerFromKeySetHandle(privateKeysetHandle);
-    }
-
-    public Stamper(@Nonnull KeysetHandle targetKeySet) throws GeneralSecurityException {
-        this();
-        this.tekManager = TEKManager.InitializeTEKManagerFromKeySetHandle(targetKeySet);
-    }
-
     private Stamper() {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
         this.bundlePublicKey = null;
         this.bundlePrivateKey = null;
-    }
-
-    /**
-     * Creates a new TEK via HpkeTEKManager or returns the existing one
-     *
-     * @return TEK public key
-     */
-    public String initTek() throws GeneralSecurityException, InvalidProtocolBufferException {
-        byte[] tekPublicKeyBytes = this.tekManager.createTEK().getPublicKeyBytes().toByteArray();
-        return Hex.encode(tekPublicKeyBytes);
     }
 
     /**

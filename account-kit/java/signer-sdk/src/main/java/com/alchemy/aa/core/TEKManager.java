@@ -1,6 +1,7 @@
 package com.alchemy.aa.core;
 
 import com.alchemy.aa.core.exceptions.NoTEKException;
+import com.google.crypto.tink.CleartextKeysetHandle;
 import com.google.crypto.tink.InsecureSecretKeyAccess;
 import com.google.crypto.tink.KeyTemplate;
 import com.google.crypto.tink.KeysetHandle;
@@ -8,11 +9,9 @@ import com.google.crypto.tink.TinkJsonProtoKeysetFormat;
 import com.google.crypto.tink.hybrid.HpkeParameters;
 import com.google.crypto.tink.hybrid.HpkePrivateKey;
 import com.google.crypto.tink.hybrid.HpkePublicKey;
-import com.google.crypto.tink.CleartextKeysetHandle;
 import com.google.crypto.tink.hybrid.internal.HpkeContext;
 import com.google.crypto.tink.hybrid.internal.HpkeKemKeyFactory;
 import com.google.crypto.tink.hybrid.internal.HpkePrimitiveFactory;
-
 import com.google.crypto.tink.proto.KeyData;
 import com.google.crypto.tink.proto.Keyset;
 import com.google.crypto.tink.util.Bytes;
@@ -22,11 +21,8 @@ import java.security.GeneralSecurityException;
 
 public class TEKManager {
 
-    public TEKManager() throws GeneralSecurityException {
-    }
-
     public static TEKManager InitializeTEKManagerFromHpkeKey(HpkePrivateKey privateKey)
-            throws GeneralSecurityException, InvalidProtocolBufferException {
+            throws GeneralSecurityException {
         KeysetHandle keysetHandle = KeysetHandle.newBuilder()
                 .addEntry(KeysetHandle.importKey(privateKey).makePrimary().withFixedId(0)).build();
         return InitializeTEKManagerFromKeySetHandle(keysetHandle);
@@ -39,6 +35,12 @@ public class TEKManager {
         String serializedKeyset = TinkJsonProtoKeysetFormat.serializeKeyset(keysetHandle,
                 InsecureSecretKeyAccess.get());
         tek.serializedKeyset = serializedKeyset.toCharArray();
+        return tek;
+    }
+
+    public static TEKManager InitializeTekManager() throws GeneralSecurityException, InvalidProtocolBufferException {
+        TEKManager tek = new TEKManager();
+        tek.createTEK();
         return tek;
     }
 
@@ -151,6 +153,9 @@ public class TEKManager {
                 SecretBytes.copyFrom(com.google.crypto.tink.proto.HpkePrivateKey.parseFrom(pkKeyData.getValue())
                         .getPrivateKey().toByteArray(), InsecureSecretKeyAccess.get()));
 
+    }
+
+    private TEKManager() {
     }
 
 }

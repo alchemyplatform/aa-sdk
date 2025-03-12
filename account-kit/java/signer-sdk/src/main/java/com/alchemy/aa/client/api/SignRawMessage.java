@@ -1,6 +1,5 @@
 package com.alchemy.aa.client.api;
 
-import com.alchemy.aa.Stamper;
 import lombok.Builder;
 
 public class SignRawMessage
@@ -13,10 +12,6 @@ public class SignRawMessage
 
     @Builder
     public record SigningBody(String organizationId, String type, String timestampMs, SignParamter parameters) {
-    }
-
-    @Builder
-    public record SignedRequest(String body, Stamper.Stamp stamp, String url) {
     }
 
     @Builder
