@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { useSigner } from "./useSigner.js";
 import { useSignerStatus } from "./useSignerStatus.js";
 import type {
