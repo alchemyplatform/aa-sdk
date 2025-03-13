@@ -1,0 +1,142 @@
+---
+title: Setting Up Multi-Factor Authentication
+description: How to set up TOTP-based multi-factor authentication in your React app
+---
+
+# Setting Up Multi-Factor Authentication
+
+This guide shows you how to implement Time-based One-Time Password (TOTP) multi-factor authentication in your React application using Account Kit hooks.
+
+:::tip
+Multi-Factor Authentication is currently only supported when authenticating with Email OTP or Email Magic Link.
+:::
+
+## Overview
+
+Multi-factor authentication adds an extra layer of security by requiring users to verify their identity using multiple methods. Account Kit supports TOTP-based MFA, which works with authenticator apps like Google Authenticator, Authy, or Microsoft Authenticator.
+
+## Implementation
+
+To implement MFA in your React application, you'll use the `useMFA` hook from Account Kit.
+
+### Step 1: Add a TOTP Factor
+
+First, add a new TOTP factor to the user's account:
+
+```tsx twoslash
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { addMFA } = useMFA();
+
+const handleAddMFA = () => {
+  addMFA(
+    {
+      multiFactorType: "totp",
+    },
+    {
+      onSuccess: (result) => {
+        // Display the QR code or secret to the user using the multiFactorTotpUrl
+        // Store multiFactorId for verification step
+        console.log(result.multiFactorTotpUrl);
+        console.log(result.multiFactorId);
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
+};
+```
+
+### Step 2: Verify the TOTP Setup
+
+After the user scans the QR code with their authenticator app, they need to verify the setup:
+
+```tsx twoslash
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { verifyMFA } = useMFA();
+
+const handleVerifyMFA = (code: string, multiFactorId: string) => {
+  verifyMFA(
+    {
+      multiFactorId,
+      multiFactorCode: code, // 6-digit code from authenticator app
+    },
+    {
+      onSuccess: () => {
+        // MFA setup successful
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
+};
+```
+
+### Step 3: Managing MFA Factors
+
+You can retrieve and remove MFA factors:
+
+```tsx twoslash
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { getMFAFactors, removeMFA } = useMFA();
+
+// Get all MFA factors
+const fetchFactors = () => {
+  getMFAFactors(undefined, {
+    onSuccess: (factors) => {
+      const mfaFactors = factors.multiFactors;
+      // Display factors to user
+    },
+    onError: (error) => {
+      // Handle error
+    },
+  });
+};
+
+// Remove an MFA factor
+const handleRemoveFactor = (multiFactorId: string) => {
+  removeMFA(
+    { multiFactorIds: [multiFactorId] },
+    {
+      onSuccess: () => {
+        // Factor removed successfully
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
+};
+```
+
+## Checking MFA Availability
+
+Before attempting to set up MFA, check if it's available for the current user:
+
+```tsx twoslash
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { isMfaAvailable } = useMFA();
+
+// Only show MFA setup options if available
+if (isMfaAvailable) {
+  // Render MFA setup UI
+} else {
+  // User needs to authenticate first
+}
+```
+
+## Next Steps
+
+After setting up MFA, users will need to provide both their primary authentication factor and the TOTP code when signing in:
+
+- [Email OTP with MFA](/react/mfa/email-otp)
+- [Email Magic Link with MFA](/react/mfa/email-magic-link)

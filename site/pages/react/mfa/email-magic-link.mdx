@@ -1,0 +1,114 @@
+---
+title: Email Magic Link with Multi-Factor Authentication
+description: How to authenticate users with Email Magic Link and MFA in your React app
+---
+
+# Email Magic Link with Multi-Factor Authentication
+
+This guide shows you how to implement authentication with Email Magic Link and TOTP-based multi-factor authentication in your React application.
+
+## Overview
+
+When a user has MFA enabled, the authentication process requires two steps:
+
+1. The user clicks the magic link sent to their email
+2. The user enters the TOTP code from their authenticator app
+
+## Implementation
+
+### Step 1: Send the Magic Link with MFA Handling
+
+When sending a magic link to a user with MFA enabled, you need to handle the MFA requirement:
+
+```tsx twoslash
+import { useAuthenticate } from "@account-kit/react";
+import { MfaRequiredError } from "@account-kit/signer";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
+// When the user submits their email
+const handleSendMagicLink = async (email: string) => {
+  try {
+    await authenticate({
+      type: "email",
+      emailMode: "magicLink",
+      email,
+    });
+    // Success - inform user to check their email
+  } catch (error) {
+    if (error instanceof MfaRequiredError) {
+      // MFA is required - get the factor ID from the error
+      const { multiFactorId } = error.multiFactors[0];
+
+      // Prompt user for TOTP code
+      // Then resubmit with the TOTP code
+      return { email, multiFactorId };
+    }
+    // Handle other errors
+  }
+};
+
+// When the user provides the TOTP code
+const handleMagicLinkWithMFA = async (
+  email: string,
+  multiFactorId: string,
+  totpCode: string
+) => {
+  try {
+    await authenticate({
+      type: "email",
+      emailMode: "magicLink",
+      email,
+      multiFactors: [
+        {
+          multiFactorId,
+          multiFactorCode: totpCode,
+        },
+      ],
+    });
+    // Success - inform user to check their email
+  } catch (error) {
+    // Handle error
+  }
+};
+```
+
+### Step 2: Handle the Magic Link Redirect
+
+When the user clicks the magic link, handle the redirect:
+
+```tsx twoslash
+import { useEffect } from "react";
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
+const handleMagicLinkRedirect = async () => {
+  const url = new URL(window.location.href);
+  const bundle = url.searchParams.get("bundle");
+
+  if (!bundle) return;
+
+  try {
+    await authenticate({
+      type: "email",
+      bundle,
+    });
+    // Authentication successful!
+  } catch (error) {
+    // Handle error
+  }
+};
+
+// Call this function when the component mounts
+useEffect(() => {
+  handleMagicLinkRedirect();
+}, []);
+```
+
+## Next Steps
+
+- [Set up MFA for your users](/react/mfa/setup-mfa)
+- [Implement Email OTP with MFA](/react/mfa/email-otp)

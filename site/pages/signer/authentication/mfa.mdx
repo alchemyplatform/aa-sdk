@@ -1,0 +1,202 @@
+---
+title: Multi-Factor Authentication (MFA)
+description: Learn how to enable TOTP-based multi-factor authentication with Alchemy Signer
+---
+
+# Multi-factor authentication
+
+Alchemy Signer supports Time-based One-Time Passwords (TOTP) multi-factor authentication (MFA).
+This lets you prompt users to set up a TOTP authenticator (e.g. Google Authenticator) as an additional security factor.
+
+:::tip
+Multi-Factor Authentication is currently supported when authenticating with Email OTP or Email Magic-link
+:::
+
+## Setting up Multi-Factor Authentication
+
+- Prerequesit: Your user is already logged in with at least one authentication factor (e.g. [email OTP](/signer/authentication/email-otp), [email magic-link](/signer/authentication/email-magic-link)).
+
+### 1. Add a new TOTP factor
+
+Once the user is authenticated, you can call `addMfa` to enable TOTP. This returns factor details including an ID and setup information that your app can display to the user (e.g. a QR code or `otpauth` link that the user can scan in Google Authenticator).
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const { multiFactors } = await signer.inner.addMFA({
+  multiFactorType: "totp",
+});
+
+// Display the QR code or secret to the user
+const totpUrl = result?.multiFactors[0].multiFactorTotpUrl;
+const multiFactorId = result?.multiFactors[0].multiFactorId;
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+You can show the `multiFactorTotpUrl` in your UI as a QR code or link for the user to add it to their authenticator app.
+
+### 2. Verify the TOTP setup
+
+Once the user has scanned the TOTP secret, have them enter the 6-digit code from their authenticator app. Then call `verifyMfa`:
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+await signer.inner.verifyMfa({
+  multiFactorId, // from addMfa
+  multiFactorCode: "123456",
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+### 3. Remove a TOTP factor
+
+If a user wants to disable TOTP, call `removeMfa` with the `multiFactorId` you want to remove:
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+await signer.inner.removeMfa({
+  multiFactorIds: [multiFactorId],
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+### 4. Get a list of existing MFA factors
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const { multiFactors } = await signer.inner.getMfaFactors();
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+## Authenticating Email OTP with multi-factor TOTP
+
+### Step 1: Send an OTP to user’s email
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+await signer.authenticate({
+  type: "email",
+  emailMode: "otp",
+  email: "user@mail.com",
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+### Step 2: Check if TOTP is required
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const { mfaRequired, mfaFactorId } = signer?.getMfaStatus();
+
+if (mfaRequired) {
+  // Prompt user for the TOTP code
+  // Then pass it to authenticate, along with the email OTP
+  await signer.authenticate({
+    type: "otp",
+    otpCode: "EMAIL_OTP_CODE",
+    multiFactors: [
+      {
+        multiFactorId, // the ID from getMfaStatus()
+        multiFactorCode: "TOTP_CODE",
+      },
+    ],
+  });
+} else {
+  // Normal OTP flow
+  await signer.authenticate({
+    type: "otp",
+    otpCode: "EMAIL_OTP_CODE",
+  });
+}
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+## Authenticating Email magic-link with multi-factor TOTP
+
+When calling `authenticate` with `emailMode="magicLink"`, you can catch a `MfaRequiredError`. Then you can collect the TOTP code and resubmit.
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { MfaRequiredError } from "@account-kit/signer";
+import { signer } from "./signer";
+
+try {
+  await signer.authenticate({
+    type: "email",
+    email: "user@mail.com",
+    emailMode: "magicLink",
+  });
+} catch (err) {
+  if (err instanceof MfaRequiredError) {
+    // Prompt user for TOTP code
+    const { multiFactorId } = err.multiFactors[0];
+    await signer.authenticate({
+      type: "email",
+      emailMode: "magicLink",
+      email: "user@mail.com",
+      multiFactors: [
+        {
+          multiFactorId,
+          multiFactorCode: "TOTP_CODE",
+        },
+      ],
+    });
+  } else {
+    // handle other errors
+  }
+}
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
