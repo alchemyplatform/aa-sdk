@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
 	View,
@@ -8,60 +7,34 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-
-import { API_KEY } from "@env";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-import {
-	createLightAccountAlchemyClient,
-	LightAccount,
-} from "@account-kit/smart-contracts";
-import { sepolia, alchemy } from "@account-kit/infra";
-
-const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY! } },
-});
+import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
-	const [user, setUser] = useState<User | null>(null);
-	const [account, setAccount] = useState<LightAccount | null>(null);
+	const user = useUser()
+	const { authenticate } = useAuthenticate()
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
-
+	const { logout } = useLogout();
+	const { address } = useSmartAccountClient({})
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
-
+	const signer = useSigner();
 	const [otpCode, setOtpCode] = useState<string>("");
 
 	const handleUserAuth = ({ code }: { code: string }) => {
 		setAwaitingOtp(false);
-		signer
-			.authenticate({
-				otpCode: code,
-				type: "otp",
-			})
-			.then(setUser)
-			.catch(console.error);
+		authenticate({
+			otpCode: code,
+			type: "otp",
+		})
 	};
 
 	useEffect(() => {
-		// get the user if already logged in
-		signer.getAuthDetails().then(setUser);
-	}, []);
-
-	useEffect(() => {
 		if (user) {
-			createLightAccountAlchemyClient({
-				signer,
-				chain: sepolia,
-				transport: alchemy({ apiKey: API_KEY! }),
-			}).then((client) => {
-				setAccount(client.account);
-			});
-
-			signer.getAddress().then((address) => {
+			signer?.getAddress().then((address) => {
 				setSignerAddress(address);
 			});
 		}
-	}, [user]);
+	}, [user, signer]);
 
 	return (
 		<View style={styles.container}>
@@ -93,13 +66,12 @@ export default function OTPAuthScreen() {
 					<TouchableOpacity
 						style={styles.button}
 						onPress={() => {
-							signer
-								.authenticate({
+							authenticate({
 									email,
 									type: "email",
 									emailMode: "otp",
 								})
-								.catch(console.error);
+					
 							setAwaitingOtp(true);
 						}}
 					>
@@ -114,7 +86,7 @@ export default function OTPAuthScreen() {
 					<Text style={styles.userText}>OrgId: {user.orgId}</Text>
 					<Text style={styles.userText}>Address: {user.address}</Text>
 					<Text style={styles.userText}>
-						Light Account Address: {account?.address}
+						Light Account Address: {address}
 					</Text>
 					<Text style={styles.userText}>
 						Signer Address: {signerAddress}
@@ -122,9 +94,7 @@ export default function OTPAuthScreen() {
 
 					<TouchableOpacity
 						style={styles.button}
-						onPress={() =>
-							signer.disconnect().then(() => setUser(null))
-						}
+						onPress={() => logout()}
 					>
 						<Text style={styles.buttonText}>Sign out</Text>
 					</TouchableOpacity>

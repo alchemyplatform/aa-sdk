@@ -10,11 +10,38 @@ export const reactGuides: SidebarItem[] = [
     link: "/react/quickstart",
   },
   {
-    text: "Authentication",
+    text: "Login",
     items: [
       { text: "Set up", link: "/react/getting-started" },
-      { text: "UI components", link: "/react/ui-components" },
+      { text: "Pre-built UI", link: "/react/ui-components" },
       { text: "Custom UI", link: "/react/react-hooks" },
+      {
+        text: "Login methods",
+        collapsed: true,
+        items: [
+          { text: "Email OTP", link: "/react/login-methods/email-otp" },
+          {
+            text: "Email magic-link",
+            link: "/react/login-methods/email-magic-link",
+          },
+          {
+            text: "Social login",
+            link: "/react/login-methods/social-login",
+          },
+          {
+            text: "Custom social providers",
+            link: "/react/login-methods/social-providers",
+          },
+          {
+            text: "Passkey signup",
+            link: "/react/login-methods/passkey-signup",
+          },
+          {
+            text: "Passkey login",
+            link: "/react/login-methods/passkey-login",
+          },
+        ],
+      },
     ],
   },
   {

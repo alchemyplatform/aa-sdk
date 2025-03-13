@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.14.0",
+  "version": "4.16.0",
   "description": "React components and hooks for using Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -32,6 +32,21 @@
       "types": "./dist/types/tailwind/index.d.ts",
       "import": "./dist/esm/tailwind/index.js",
       "default": "./dist/esm/tailwind/index.js"
+    },
+    "./alchemy-account-context": {
+      "types": "./dist/types/AlchemyAccountContext.d.ts",
+      "import": "./dist/esm/AlchemyAccountContext.js",
+      "default": "./dist/esm/AlchemyAccountContext.js"
+    },
+    "./hydrate": {
+      "types": "./dist/types/hydrate.d.ts",
+      "import": "./dist/esm/hydrate.js",
+      "default": "./dist/esm/hydrate.js"
+    },
+    "./hooks": {
+      "types": "./dist/types/hooks/index.d.ts",
+      "import": "./dist/esm/hooks/index.js",
+      "default": "./dist/esm/hooks/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -67,10 +82,10 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@account-kit/core": "^4.14.0",
-    "@account-kit/infra": "^4.14.0",
-    "@account-kit/logging": "^4.14.0",
-    "@account-kit/signer": "^4.14.0",
+    "@account-kit/core": "^4.16.0",
+    "@account-kit/infra": "^4.16.0",
+    "@account-kit/logging": "^4.16.0",
+    "@account-kit/signer": "^4.16.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
     "@wagmi/connectors": "^5.1.15",

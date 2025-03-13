@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+### Bug Fixes
+
+- app env ([#1433](https://github.com/alchemyplatform/aa-sdk/issues/1433)) ([4671b11](https://github.com/alchemyplatform/aa-sdk/commit/4671b11bf736fe5a6c4351c3ee9a00c6f1c2b44c))
+- invalidate state if the local signer config changes ([#1435](https://github.com/alchemyplatform/aa-sdk/issues/1435)) ([9ad59f2](https://github.com/alchemyplatform/aa-sdk/commit/9ad59f2d6673bc6f587e6a57343b1486c92f382f))
+
+### Features
+
+- impl stampler, tek manager, etc ([#1408](https://github.com/alchemyplatform/aa-sdk/issues/1408)) ([fe1f1fc](https://github.com/alchemyplatform/aa-sdk/commit/fe1f1fc2d32d5f4bc4bf17f64989454af98533f5))
+- **signer:** add support for using Solana on new signups ([#1376](https://github.com/alchemyplatform/aa-sdk/issues/1376)) ([e0a092e](https://github.com/alchemyplatform/aa-sdk/commit/e0a092e1e10797a50f99f24cf957cad6153fafad))
+
+## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
+
+### Bug Fixes
+
+- docs smart contracts sidebar ([#1423](https://github.com/alchemyplatform/aa-sdk/issues/1423)) ([a8fca06](https://github.com/alchemyplatform/aa-sdk/commit/a8fca0676887f4a9dfded093633bc5efcfa19e8f))
+
+## [4.15.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.1...v4.15.2) (2025-03-07)
+
+**Note:** Version bump only for package root
+
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+### Bug Fixes
+
+- add a check to migrate store versions ([#1420](https://github.com/alchemyplatform/aa-sdk/issues/1420)) ([0990240](https://github.com/alchemyplatform/aa-sdk/commit/099024047f9934b663d91517e1faf7fda9984562))
+- pass eip7702auth fields to alchemyGasAndPaymasterAndDataMiddleware ([#1403](https://github.com/alchemyplatform/aa-sdk/issues/1403)) ([c12e1e4](https://github.com/alchemyplatform/aa-sdk/commit/c12e1e460e4dfb4a2e95fad27f446de255061e61))
+
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Bug Fixes
+
+- **demo:** buggy deployment status ui states ([#1397](https://github.com/alchemyplatform/aa-sdk/issues/1397)) ([a4d0625](https://github.com/alchemyplatform/aa-sdk/commit/a4d06258bb36feae182e2ef10f193661fcd99f94))
+- disconnect signer when session expires ([#1415](https://github.com/alchemyplatform/aa-sdk/issues/1415)) ([1431168](https://github.com/alchemyplatform/aa-sdk/commit/143116867976bd6005aafa3edafbb80bd1a7e248))
+- **docs:** fix docs includes & region syntax ([#1407](https://github.com/alchemyplatform/aa-sdk/issues/1407)) ([1c1759b](https://github.com/alchemyplatform/aa-sdk/commit/1c1759bd610f60b25206f43d9d4ed3f1392111c8))
+- increase card dimensions ([#1399](https://github.com/alchemyplatform/aa-sdk/issues/1399)) ([62bf38e](https://github.com/alchemyplatform/aa-sdk/commit/62bf38e031e0f7f07622e2ba668d5db59155acdf))
+- time range module tests ([#1379](https://github.com/alchemyplatform/aa-sdk/issues/1379)) ([65b4416](https://github.com/alchemyplatform/aa-sdk/commit/65b441665eafdc224b42862e8b3f748537ff4c8a))
+
+### Features
+
+- add react-native core files ([#1402](https://github.com/alchemyplatform/aa-sdk/issues/1402)) ([060e1ab](https://github.com/alchemyplatform/aa-sdk/commit/060e1ab231db8455a71f25452e1a4cddace60dbd))
+- add upgrade helpers for ma v2 ([#1382](https://github.com/alchemyplatform/aa-sdk/issues/1382)) ([96d1394](https://github.com/alchemyplatform/aa-sdk/commit/96d13941ec60799a85f9139c7332d1d3bb1b2f71))
+- initialize java sdk ([#1405](https://github.com/alchemyplatform/aa-sdk/issues/1405)) ([f68b9ef](https://github.com/alchemyplatform/aa-sdk/commit/f68b9ef9650b27bb81c0e27c665ea11f655826b9))
+- **monad:** add monad for aa ([#1373](https://github.com/alchemyplatform/aa-sdk/issues/1373)) ([e4c12e2](https://github.com/alchemyplatform/aa-sdk/commit/e4c12e2a6a261b44505c55164a4860ae0d4caa16))
+
 # [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
 
 ### Bug Fixes

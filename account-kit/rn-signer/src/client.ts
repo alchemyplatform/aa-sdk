@@ -182,6 +182,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const isSignup = authResult["alchemy-is-signup"];
     const error = authResult["alchemy-error"];
 
+    if (error) {
+      throw new OauthFailedError(error);
+    }
+
     if (bundle && orgId && idToken) {
       const user = await this.completeAuthWithBundle({
         bundle,
@@ -199,9 +203,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     }
 
     // Throw the Alchemy error if available, otherwise throw a generic error.
-    throw new OauthFailedError(
-      error ?? "An error occured completing your request"
-    );
+    throw new OauthFailedError("An error occured completing your request");
   };
 
   override oauthWithPopup(
@@ -220,6 +222,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
   override lookupUserWithPasskey(_user?: User): Promise<User> {
     throw new Error("Method not implemented.");
+  }
+
+  override targetPublicKey(): Promise<string> {
+    return this.stamper.init();
   }
 
   protected override getWebAuthnAttestation(

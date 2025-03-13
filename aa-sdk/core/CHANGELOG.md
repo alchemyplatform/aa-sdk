@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.15.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.1...v4.15.2) (2025-03-07)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.15.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.0...v4.15.1) (2025-03-07)
+
+### Bug Fixes
+
+- pass eip7702auth fields to alchemyGasAndPaymasterAndDataMiddleware ([#1403](https://github.com/alchemyplatform/aa-sdk/issues/1403)) ([c12e1e4](https://github.com/alchemyplatform/aa-sdk/commit/c12e1e460e4dfb4a2e95fad27f446de255061e61))
+
+# [4.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.14.0...v4.15.0) (2025-03-06)
+
+### Bug Fixes
+
+- **docs:** fix docs includes & region syntax ([#1407](https://github.com/alchemyplatform/aa-sdk/issues/1407)) ([1c1759b](https://github.com/alchemyplatform/aa-sdk/commit/1c1759bd610f60b25206f43d9d4ed3f1392111c8))
+- time range module tests ([#1379](https://github.com/alchemyplatform/aa-sdk/issues/1379)) ([65b4416](https://github.com/alchemyplatform/aa-sdk/commit/65b441665eafdc224b42862e8b3f748537ff4c8a))
+
 # [4.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.13.0...v4.14.0) (2025-02-27)
 
 **Note:** Version bump only for package @aa-sdk/core

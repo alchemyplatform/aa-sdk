@@ -6,7 +6,7 @@ import {
   type Connection,
 } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 /**
  * A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useConnection.ts) that returns the current connection including chain, policy, and transport that you’re currently using.

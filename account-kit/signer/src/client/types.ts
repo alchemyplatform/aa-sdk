@@ -13,6 +13,7 @@ export type User = {
   orgId: string;
   userId: string;
   address: Address;
+  solanaAddress?: string;
   credentialId?: string;
   idToken?: string;
   claims?: Record<string, unknown>;
