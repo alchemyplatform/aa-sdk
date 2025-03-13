@@ -1,12 +1,4 @@
 import React, { useCallback } from "react";
-
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-import {
-	LightAccount,
-	createLightAccountAlchemyClient,
-} from "@account-kit/smart-contracts";
-import { alchemy, sepolia } from "@account-kit/infra";
-import type { User } from "@account-kit/signer";
 import { useEffect, useState } from "react";
 import {
 	View,
@@ -16,27 +8,23 @@ import {
 	Linking,
 	TouchableOpacity,
 } from "react-native";
-import { API_KEY } from "@env";
-
-const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
-});
+import { useAuthenticate, useLogout, useSigner, useSmartAccountClient, useUser } from "@account-kit/react-native";
 
 export default function MagicLinkAuthScreen() {
 	const [email, setEmail] = useState<string>("");
-	const [user, setUser] = useState<User | null>(null);
-	const [account, setAccount] = useState<LightAccount | null>(null);
+	const user = useUser()
+	const { authenticate } = useAuthenticate()
+	const { logout } = useLogout()
+	const { address } = useSmartAccountClient({})
+	const signer = useSigner()
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
 	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
 
-	const handleUserAuth = ({ bundle }: { bundle: string }) => {
-		signer
-			.authenticate({
-				bundle,
-				type: "email",
-			})
-			.then(setUser)
-			.catch(console.error);
+	const completeUserAuth = ({ bundle }: { bundle: string }) => {
+		authenticate({
+			bundle,
+			type: "email",
+		})
 	};
 
 	const handleIncomingURL = useCallback((event: { url: string }) => {
@@ -57,15 +45,11 @@ export default function MagicLinkAuthScreen() {
 			return;
 		}
 
-		handleUserAuth({
+		completeUserAuth({
 			bundle: params.bundle,
 		});
 	}, []);
 
-	useEffect(() => {
-		// get the user if already logged in
-		signer.getAuthDetails().then(setUser);
-	}, []);
 
 	// Add listener for incoming links
 	useEffect(() => {
@@ -76,19 +60,11 @@ export default function MagicLinkAuthScreen() {
 
 	useEffect(() => {
 		if (user) {
-			createLightAccountAlchemyClient({
-				signer,
-				chain: sepolia,
-				transport: alchemy({ apiKey: API_KEY! }),
-			}).then((client) => {
-				setAccount(client.account);
-			});
-
-			signer.getAddress().then((address) => {
+			signer?.getAddress().then((address) => {
 				setSignerAddress(address);
 			});
 		}
-	}, [user]);
+	}, [user, signer]);
 
 	return (
 		<View style={styles.container}>
@@ -109,13 +85,12 @@ export default function MagicLinkAuthScreen() {
 								style={styles.button}
 								onPress={() => {
 									setAuthRequestSent(true);
-									signer
-										.authenticate({
-											email,
-											type: "email",
-											emailMode: "magicLink",
-										})
-										.catch(console.error);
+									authenticate({
+										email,
+										type: "email",
+										emailMode: "magicLink",
+									})
+									
 								}}
 							>
 								<Text style={styles.buttonText}>Sign in</Text>
@@ -133,7 +108,7 @@ export default function MagicLinkAuthScreen() {
 								Address: {user.address}
 							</Text>
 							<Text style={styles.userText}>
-								Light Account Address: {account?.address}
+								Light Account Address: {address}
 							</Text>
 							<Text style={styles.userText}>
 								Signer Address: {signerAddress}
@@ -141,11 +116,7 @@ export default function MagicLinkAuthScreen() {
 
 							<TouchableOpacity
 								style={styles.button}
-								onPress={() =>
-									signer
-										.disconnect()
-										.then(() => setUser(null))
-								}
+								onPress={() =>	logout()}
 							>
 								<Text style={styles.buttonText}>Sign out</Text>
 							</TouchableOpacity>

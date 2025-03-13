@@ -115,17 +115,17 @@ That's it! Now you can install the packages you want from Account Kit and start 
 :::code-group
 
 ```bash [npm]
-npm install -s @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
+npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
 ```bash [yarn]
-yarn add @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
+yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
 :::
 
 :::tip
-The react-native-signer package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
+The `@account-kit/react-native` package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
 
 ```json
 "module": "NodeNext",
@@ -141,11 +141,11 @@ To ensure the Signer package works correctly, you'll need to add the following d
 :::code-group
 
 ```bash [npm]
-npm install @account-kit/signer react-native-mmkv zustand abitype react-native-inappbrowser-reborn
+npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 ```bash [yarn]
-yarn add @account-kit/signer react-native-mmkv zustand abitype react-native-inappbrowser-reborn
+yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 :::
@@ -176,6 +176,25 @@ Then add the plugin to your `app.json`:
     ]
   }
 }
+```
+
+## Update your metro config
+
+The `account-kit/react-native` and it's supoorting packages leverages package.json `exports` which is not (yet) suported by default in Metro.
+
+Update your `metro.config.js` to add this support using:
+
+```js [metro.config.js]
+// ... rest of metro config
+config.resolver.unstable_enablePackageExports = true;
+
+config.resolver.unstable_conditionNames = [
+  "browser",
+  "require",
+  "react-native",
+];
+// ... rest of metro config
+module.exports = config;
 ```
 
 ## Run a Prebuild!

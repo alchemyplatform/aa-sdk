@@ -1,4 +1,8 @@
+import "react-native-get-random-values";
+// Add Polyfills & global shims
 import "./polyfills/index.js";
+import "node-libs-react-native/globals.js";
+
 export {
   useAccount,
   useAuthenticate,

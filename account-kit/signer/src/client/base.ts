@@ -317,11 +317,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * that result here.
    *
    * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} mode specify if signing should happen for solana or ethereum
    * @returns {Promise<Hex>} the signature over the raw hex
    */
-  public signRawMessage = async (msg: Hex): Promise<Hex> => {
+  public signRawMessage = async (
+    msg: Hex,
+    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+  ): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
+    }
+
+    if (!this.user.solanaAddress && mode === "SOLANA") {
+      // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
+      throw new Error("No Solana address available for the user");
     }
 
     const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
@@ -330,9 +339,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       timestampMs: Date.now().toString(),
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
+        hashFunction:
+          mode === "ETHEREUM"
+            ? "HASH_FUNCTION_NO_OP"
+            : "HASH_FUNCTION_NOT_APPLICABLE",
         payload: msg,
-        signWith: this.user.address,
+        signWith:
+          mode === "ETHEREUM" ? this.user.address : this.user.solanaAddress!,
       },
     });
 
