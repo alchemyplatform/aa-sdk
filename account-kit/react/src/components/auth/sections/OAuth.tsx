@@ -3,6 +3,7 @@ import {
   AppleIcon,
   FacebookIcon,
   GoogleIcon,
+  TwitchIcon,
 } from "../../../icons/auth-icons/index.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
@@ -48,6 +49,17 @@ export const OAuth = memo(({ ...config }: Props) => {
           aria-label="Apple sign in"
         >
           Apple
+        </Button>
+      );
+    case "twitch":
+      return (
+        <Button
+          variant="social"
+          icon={<TwitchIcon />}
+          onClick={authenticate}
+          aria-label="Twitch sign in"
+        >
+          Twitch
         </Button>
       );
     case "auth0":
