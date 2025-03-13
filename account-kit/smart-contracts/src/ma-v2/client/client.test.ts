@@ -326,7 +326,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("Deferred Actions", async () => {
+  it("installs a session key via deferred actions and has it sign the UO", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
@@ -396,19 +396,26 @@ describe("MA v2 Tests", async () => {
     // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
     const dummySig = await provider.account.getDummySignature();
 
+    // Cache the previous dummy signature getter
+    const previousDummySigGetter = provider.account.getDummySignature;
+
     // Override provider.account.getDummySignature() so `provider.buildUserOperation()` uses the prepended hex and the dummy signature during gas estimation
     provider.account.getDummySignature = () => {
       return concatHex([signaturePrepend, dummySig as Hex]);
     };
 
-    // Generate the unsigned UO
+    // Generate the unsigned UO with the overridden dummy signature getter used for gas estimation
     const unsignedUo = (await provider.buildUserOperation({
       uo: { target, data: "0x" },
       overrides: {
         nonce: nonceOverride, // FIX: Currently, we aren't setting the deferred validation flag in the nonce key, instead we're setting it in
         // the returned nonce itself. This means sequential nonces will be incorrect.
+        // dummySignature: "0x",
       },
     })) as UserOperationRequest_v7;
+
+    // Restore the dummy signature getter
+    provider.getDummySignature = previousDummySigGetter;
 
     // Sign the UO with the session key
     const uo = await sessionKeyClient.signUserOperation({
