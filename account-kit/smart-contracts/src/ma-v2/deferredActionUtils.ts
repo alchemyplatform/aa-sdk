@@ -126,11 +126,6 @@ export const DeferredActionBuilder = {
 
     const sigLength = size(args.sig);
 
-    console.log("ENCODED DATA:", encodedData);
-    console.log("ENCODED DATA LENGTH:", encodedDataLength);
-    console.log("\n\nSIG:\n\n", args.sig);
-    console.log("\n\nSIG LENGTH:\n\n", sigLength);
-
     encodedData = concatHex([
       toHex(encodedDataLength, { size: 4 }),
       encodedData,
