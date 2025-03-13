@@ -1,12 +1,19 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
-import { UserAddressTooltip } from "./UserAddressLink";
-import { useConfigStore } from "@/state";
-import { useAccount, useLogout, useUser } from "@account-kit/react";
-import { Hex } from "viem";
 import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
 import { useSignerAddress } from "@/hooks/useSignerAddress";
+import { useConfigStore } from "@/state";
+import {
+  useAccount,
+  useLogout,
+  useSigner,
+  useSignerStatus,
+  useUser,
+} from "@account-kit/react";
+import { useMemo } from "react";
+import { Hex } from "viem";
+import { UserAddressTooltip } from "./UserAddressLink";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
@@ -17,7 +24,9 @@ export function UserConnectionDetails({
   delegationAddress,
 }: UserConnectionDetailsProps) {
   const user = useUser();
+  const signer = useSigner();
   const signerAddress = useSignerAddress();
+  const status = useSignerStatus();
   const { logout } = useLogout();
   const { theme, primaryColor, accountMode } = useConfigStore(
     ({ ui: { theme, primaryColor }, accountMode }) => ({
@@ -32,10 +41,38 @@ export function UserConnectionDetails({
       mode: accountMode,
     },
   });
+  const solanaSigner = useMemo(() => {
+    if (!signer) return;
+    if (!status.isConnected) return;
+    return signer.experimental_toSolanaSigner();
+  }, [signer, status.isConnected]);
+
+  const solanaAddress = useMemo(() => {
+    if (!solanaSigner) return null;
+    if (!user?.solanaAddress) return null;
+
+    return user.solanaAddress ?? null;
+  }, [solanaSigner, user?.solanaAddress]);
 
   const isEOAUser = user?.type === "eoa";
 
   if (!user) return null;
+
+  const SolanaAddressDetails = () => {
+    if (!solanaAddress) return null;
+    return (
+      <div className="flex flex-row justify-between">
+        <span className="text-md md:text-sm text-fg-secondary">
+          Solana Address
+        </span>
+        <UserAddressTooltip
+          linkEnabled
+          address={solanaAddress}
+          href={`https://explorer.solana.com/address/${solanaSigner?.address}?cluster=devnet`}
+        />
+      </div>
+    );
+  };
 
   if (isEOAUser) {
     return (
@@ -47,6 +84,7 @@ export function UserConnectionDetails({
           </span>
           <UserAddressTooltip address={user?.address} linkEnabled />
         </div>
+        <SolanaAddressDetails />
 
         {/* Logout */}
         <button
@@ -107,8 +145,10 @@ export function UserConnectionDetails({
               </div>
             </a>
 
-            <UserAddressTooltip address={signerAddress ?? null} />
+            <UserAddressTooltip address={signerAddress ?? null} linkEnabled />
           </div>
+
+          <SolanaAddressDetails />
         </>
       ) : (
         <div className="flex flex-row justify-between items-center">

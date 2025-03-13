@@ -17,90 +17,66 @@ After [setting up Account Kit](/react-native/signer/setup-guide) in your project
 
 <Snippet />
 
-## Send a sponsored User Operation with the Policy ID
+## Set the Policy ID globally
 
-Now you can send a sponsored User Operation with the Policy ID.
+When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
-:::code-group
+Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
-```tsx twoslash [gas-sponsorship.tsx]
-import React, { useState, useEffect } from "react";
-import { View, Button } from "react-native";
+:::tip
+Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
+:::
+
+```ts twoslash [config.ts]
+// @noErrors
+import { createConfig } from "@account-kit/react-native";
+import { sepolia } from "@account-kit/infra";
+
+export const config = createConfig({
+  apiKey: "ALCHEMY_API_KEY",
+  chain: sepolia,
+  policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+});
+```
+
+Now you can follow the guide for [Sending user operations](/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
+
+## Set the gas policy ID per UserOperation
+
+If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `useSmartAccountClient()` hook.
+
+```tsx twoslash
+import React from "react";
+import { View, Pressable, Text } from "react-native";
 import {
-  createModularAccountV2Client,
-  ModularAccountV2,
-} from "@account-kit/smart-contracts";
-import { sepolia, alchemy } from "@account-kit/infra";
-import { User } from "@account-kit/signer";
-
-// import the signer
-import { signer } from "./signer.ts";
+  useSmartAccountClient,
+  useSendUserOperation,
+} from "@account-kit/react-native";
 
 export default function MyComponent() {
-  const [client, setClient] = useState<SmartAccountClient | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
-
-  // Assume the user is already authenticated
-  useEffect(() => {
-    signer.getAuthDetails().then(setUser);
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      // Create a smart account client for the authenticated user with the policy ID
-      createModularAccountV2Client({
-        signer,
-        chain: sepolia,
-        policyId: "YOUR_GAS_POLICY_ID", // [!code ++]
-        transport: alchemy({ apiKey: "API_KEY" }),
-      }).then((client) => {
-        setClient(client);
-      });
-    }
-  }, [user]);
-
-  const handleSendUserOperation = async () => {
-    if (!client) return;
-    // Send a sponsored User Operation
-    try {
-      setIsSendingUserOperation(true);
-
-      const { hash } = await client.sendUserOperation({
-        uo: {
-          target: "0xTARGET_ADDRESS",
-          data: "0x",
-          value: 0n,
-        },
-        account: client.account,
-      });
-
-      Alert.alert("User Operation Sent", hash);
-    } catch (error) {
-      Alert.alert("Error", "Error sending user operation");
-    } finally {
-      setIsSendingUserOperation(false);
-    }
-  };
+  const { client } = useSmartAccountClient({
+    policyId: "GAS_MANAGER_POLICY_ID",
+  });
+  const { sendUserOperation } = useSendUserOperation({ client });
 
   return (
     <View>
-      <Button
-        onClick={handleSendUserOperation}
-        disabled={isSendingUserOperation}
-        title={
-          isSendingUserOperation
-            ? "Sending..."
-            : "Send Sponsored User Operation"
+      <Pressable
+        onPress={() =>
+          sendUserOperation({
+            uo: {
+              target: "0xTARGET_ADDRESS",
+              data: "0x",
+              value: 0n,
+            },
+          })
         }
-      />
+      >
+        <View>
+          <Text>Send Sponsored User Operation</Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
 ```
-
-```ts twoslash [signer.ts] filename="signer.ts"
-// [!include ~/shared/react-native/signer.ts]
-```
-
-:::

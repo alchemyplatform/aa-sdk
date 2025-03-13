@@ -7,29 +7,17 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import {useAuthenticate, useUser, useSigner, useLogout} from "@account-kit/react-native"
-
-import { API_KEY } from "@env";
-
-import {
-	createLightAccountAlchemyClient,
-	LightAccount,
-} from "@account-kit/smart-contracts";
-import { sepolia, alchemy } from "@account-kit/infra";
-import { type RNAlchemySignerType } from "@account-kit/react-native-signer";
-
+import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
 
 export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
 	const user = useUser()
 	const { authenticate } = useAuthenticate()
-	const [account, setAccount] = useState<LightAccount | null>(null);
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
-	const signer = useSigner<RNAlchemySignerType>();
 	const { logout } = useLogout();
-
+	const { address } = useSmartAccountClient({})
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
-
+	const signer = useSigner();
 	const [otpCode, setOtpCode] = useState<string>("");
 
 	const handleUserAuth = ({ code }: { code: string }) => {
@@ -40,25 +28,13 @@ export default function OTPAuthScreen() {
 		})
 	};
 
-
 	useEffect(() => {
 		if (user) {
-			if (!signer) {
-				return
-			}
-			createLightAccountAlchemyClient({
-				signer,
-				chain: sepolia,
-				transport: alchemy({ apiKey: API_KEY! }),
-			}).then((client) => {
-				setAccount(client.account);
-			});
-
-			signer.getAddress().then((address) => {
+			signer?.getAddress().then((address) => {
 				setSignerAddress(address);
 			});
 		}
-	}, [user]);
+	}, [user, signer]);
 
 	return (
 		<View style={styles.container}>
@@ -110,7 +86,7 @@ export default function OTPAuthScreen() {
 					<Text style={styles.userText}>OrgId: {user.orgId}</Text>
 					<Text style={styles.userText}>Address: {user.address}</Text>
 					<Text style={styles.userText}>
-						Light Account Address: {account?.address}
+						Light Account Address: {address}
 					</Text>
 					<Text style={styles.userText}>
 						Signer Address: {signerAddress}

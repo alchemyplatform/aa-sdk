@@ -23,12 +23,17 @@ config.resolver.disableHierarchicalLookup = true;
 
 config.resolver.extraNodeModules = {
 	...config.resolver.extraNodeModules,
-	...require("node-libs-react-native"),
-	crypto: require.resolve("crypto-browserify"),
+	crypto: require.resolve("react-native-get-random-values"),
 	stream: require.resolve("stream-browserify"),
 };
 
 // Important to allow importing package exports
 config.resolver.unstable_enablePackageExports = true;
+
+config.resolver.unstable_conditionNames = [
+	"browser",
+	"require",
+	"react-native",
+];
 
 module.exports = config;

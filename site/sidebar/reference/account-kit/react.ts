@@ -149,6 +149,10 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     text: "Functions",
     items: [
       {
+        text: "Hydrate",
+        link: "/reference/account-kit/react/functions/Hydrate",
+      },
+      {
         text: "createConfig",
         link: "/reference/account-kit/react/functions/createConfig",
       },
