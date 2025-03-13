@@ -1,5 +1,6 @@
 import com.alchemy.aa.Stamper;
-import com.alchemy.aa.core.TEKManager;
+import com.alchemy.aa.core.TekManager;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.crypto.tink.InsecureSecretKeyAccess;
 import com.google.crypto.tink.config.TinkConfig;
 import com.google.crypto.tink.hybrid.HpkeParameters;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class StamperTests {
-    TEKManager tekManager;
+    TekManager tekManager;
 
     public StamperTests() throws GeneralSecurityException {
         TinkConfig.register();
@@ -32,11 +33,12 @@ public class StamperTests {
                 .setVariant(HpkeParameters.Variant.NO_PREFIX).build();
         HpkePublicKey hpkePublicKey = HpkePublicKey.create(parameters, public_key, /* idRequirement= */null);
         HpkePrivateKey hpkePrivateKey = HpkePrivateKey.create(hpkePublicKey, private_key);
-        tekManager = TEKManager.InitializeTEKManagerFromHpkeKey(hpkePrivateKey);
+        tekManager = TekManager.initializeTekManagerFromHpkeKey(hpkePrivateKey);
     }
 
     @Test
-    public void injectCredentialBundle() throws GeneralSecurityException, InvalidProtocolBufferException {
+    public void injectCredentialBundle()
+            throws GeneralSecurityException, InvalidProtocolBufferException, JsonProcessingException {
         Stamper stamper = new Stamper(tekManager);
         String credentialBundle = "26CDY37MNf4BCXFaTyAhbCndbRKivLjdR69oRf7engwqSnh7bh7TZzg1h8opiHeMEaeHDQJBYk6o3KfS463VAiFCg6s4WamkpTnbKFbp2mbu4sJWcxPF";
         stamper.injectCredentialBundle(credentialBundle);

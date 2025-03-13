@@ -7,11 +7,11 @@ public class SignRawMessage
 {
 
     @Builder
-    public record SignParamter(String encoding, String hashfunction, String payload, String signWith) {
+    public record SignParameters(String encoding, String hashfunction, String payload, String signWith) {
     }
 
     @Builder
-    public record SigningBody(String organizationId, String type, String timestampMs, SignParamter parameters) {
+    public record SigningBody(String organizationId, String type, String timestampMs, SignParameters parameters) {
     }
 
     @Builder

@@ -7,7 +7,7 @@ import com.alchemy.aa.client.api.AuthJWT.Response;
 import com.alchemy.aa.client.api.AuthUser;
 import com.alchemy.aa.client.api.AuthUser.WhoAmIRequest;
 import com.alchemy.aa.client.api.GetUser;
-import com.alchemy.aa.client.api.SignRawMessage.SignParamter;
+import com.alchemy.aa.client.api.SignRawMessage.SignParameters;
 import com.alchemy.aa.client.api.SignRawMessage.SignedResponse;
 import com.alchemy.aa.client.api.SignRawMessage.SigningBody;
 import com.alchemy.aa.client.api.StampedRequest;
@@ -62,7 +62,7 @@ public class SignerClient {
      * @param bundle
      *            bundle from alchemy signer service.
      *
-     * @return
+     * @return authenticated user
      *
      * @throws Exception
      */
@@ -103,11 +103,11 @@ public class SignerClient {
             String address) throws Exception {
         ObjectWriter writer = this.mapper.writerWithDefaultPrettyPrinter();
 
-        SignParamter signParamter = SignParamter.builder().encoding("PAYLOAD_ENCODING_HEXADECIMAL")
+        SignParameters signParameters = SignParameters.builder().encoding("PAYLOAD_ENCODING_HEXADECIMAL")
                 .hashfunction(hashFunction).payload(msg.toString()).signWith(address).build();
 
         SigningBody body = SigningBody.builder().organizationId(user.orgId).type("ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2")
-                .timestampMs(String.valueOf(Instant.now().toEpochMilli())).parameters(signParamter).build();
+                .timestampMs(String.valueOf(Instant.now().toEpochMilli())).parameters(signParameters).build();
 
         String json_body = writer.writeValueAsString(body);
 
@@ -210,6 +210,6 @@ public class SignerClient {
         return response.body();
     }
 
-    private HttpConfig httpConfig;
-    private ObjectMapper mapper;
+    private final HttpConfig httpConfig;
+    private final ObjectMapper mapper;
 }

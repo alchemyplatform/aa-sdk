@@ -1,6 +1,6 @@
 package com.alchemy.aa;
 
-import com.alchemy.aa.core.TEKManager;
+import com.alchemy.aa.core.TekManager;
 import com.alchemy.aa.core.exceptions.NoInjectedBundleException;
 import com.alchemy.aa.core.exceptions.StamperNotInitializedException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,7 +37,12 @@ public class Stamper {
         return ow.writeValueAsString(apiStamp);
     }
 
-    public Stamper(TEKManager tekManager) {
+    private TekManager tekManager;
+
+    private byte[] bundlePrivateKey;
+    private byte[] bundlePublicKey;
+
+    public Stamper(TekManager tekManager) {
         this();
 
         this.tekManager = tekManager;
@@ -58,7 +63,7 @@ public class Stamper {
      *            Base58-encoded credential bundle
      *
      * @throws GeneralSecurityException
-     *             iif initTek is never called.
+     *             if initTek is never called.
      */
     public void injectCredentialBundle(String bundle) throws GeneralSecurityException, InvalidProtocolBufferException {
         // In Kotlin: val tekPublicKey = tekManager.publicKey() ?: throw StamperNotInitializedException()
@@ -104,9 +109,9 @@ public class Stamper {
      * @return signed stamp
      *
      * @throws GeneralSecurityException
-     *             iif the private is malformed
+     *             if the private is malformed
      */
-    public Stamp stamp(String payload) throws GeneralSecurityException {
+    public Stamp stamp(String payload) throws GeneralSecurityException, JsonProcessingException {
         if (this.bundlePrivateKey == null || this.bundlePublicKey == null) {
             throw new NoInjectedBundleException();
         }
@@ -116,25 +121,21 @@ public class Stamper {
                 this.bundlePrivateKey);
 
         // Sign with SHA256withECDSA
-        try {
-            Signature signer = Signature.getInstance("SHA256withECDSA");
-            signer.initSign(ecPrivateKey);
-            signer.update(payload.getBytes());
-            byte[] signatureBytes = signer.sign();
+        Signature signer = Signature.getInstance("SHA256withECDSA");
+        signer.initSign(ecPrivateKey);
+        signer.update(payload.getBytes());
+        byte[] signatureBytes = signer.sign();
 
-            // Prepare the stamp structure
-            APIStamp apiStamp = new APIStamp(String.valueOf(this.bundlePublicKey), "SIGNATURE_SCHEME_TK_API_P256",
-                    Hex.encode(signatureBytes));
+        // Prepare the stamp structure
+        APIStamp apiStamp = new APIStamp(String.valueOf(this.bundlePublicKey), "SIGNATURE_SCHEME_TK_API_P256",
+                Hex.encode(signatureBytes));
 
-            String jsonString = toJson(apiStamp);
+        String jsonString = toJson(apiStamp);
 
-            // URL-safe Base64
-            String encoded = Base64.urlSafeEncode(jsonString.getBytes());
-            return new Stamp("X-Stamp", encoded);
+        // URL-safe Base64
+        String encoded = Base64.urlSafeEncode(jsonString.getBytes());
+        return new Stamp("X-Stamp", encoded);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Error signing payload", e);
-        }
     }
 
     /**
@@ -166,32 +167,22 @@ public class Stamper {
      * @return byte struct key pairs.
      */
     private byte[][] privateKeyToKeyPair(byte[] privateKey) throws GeneralSecurityException {
-        try {
-            // Create the EC private key
-            ECPrivateKey ecPrivateKey = EllipticCurves.getEcPrivateKey(EllipticCurves.CurveType.NIST_P256, privateKey);
+        // Create the EC private key
+        ECPrivateKey ecPrivateKey = EllipticCurves.getEcPrivateKey(EllipticCurves.CurveType.NIST_P256, privateKey);
 
-            // Use BouncyCastle to derive the public key
-            // Multiply base point G by the private scalar s
-            java.math.BigInteger s = ecPrivateKey.getS();
-            org.bouncycastle.jce.spec.ECParameterSpec bcSpec = ECNamedCurveTable.getParameterSpec("secp256r1");
-            ECPublicKeySpec pubSpec = new ECPublicKeySpec(bcSpec.getG().multiply(s).normalize(), bcSpec);
-            KeyFactory keyFactory = KeyFactory.getInstance("EC", BouncyCastleProvider.PROVIDER_NAME);
+        // Use BouncyCastle to derive the public key
+        // Multiply base point G by the private scalar s
+        java.math.BigInteger s = ecPrivateKey.getS();
+        org.bouncycastle.jce.spec.ECParameterSpec bcSpec = ECNamedCurveTable.getParameterSpec("secp256r1");
+        ECPublicKeySpec pubSpec = new ECPublicKeySpec(bcSpec.getG().multiply(s).normalize(), bcSpec);
+        KeyFactory keyFactory = KeyFactory.getInstance("EC", BouncyCastleProvider.PROVIDER_NAME);
 
-            // Convert the result into Tink's EcPublicKey format
-            ECPublicKey ecPublicKey = EllipticCurves.getEcPublicKey(keyFactory.generatePublic(pubSpec).getEncoded());
+        // Convert the result into Tink's EcPublicKey format
+        ECPublicKey ecPublicKey = EllipticCurves.getEcPublicKey(keyFactory.generatePublic(pubSpec).getEncoded());
 
-            // Validate they match
-            EllipticCurves.validatePublicKey(ecPublicKey, ecPrivateKey);
-            // Return both
-            return new byte[][] { convertToCompressed(ecPublicKey), ecPrivateKey.getEncoded() };
-        } catch (Exception e) {
-            throw e;
-        }
+        // Validate they match
+        EllipticCurves.validatePublicKey(ecPublicKey, ecPrivateKey);
+        // Return both
+        return new byte[][] { convertToCompressed(ecPublicKey), ecPrivateKey.getEncoded() };
     }
-
-    private TEKManager tekManager;
-
-    private byte[] bundlePrivateKey;
-    private byte[] bundlePublicKey;
-
 }
