@@ -326,10 +326,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it.only("Deferred Actions", async () => {
-    // TODO FIX: The nonce key used to query the EP does not include the deferred action flag, it only appends the flag after fetching the nonce, this causes a desync and the test to fail.
-    // The fix is to introduce a way to override the `options` byte of the nonceKey, or manually call the entryPoint for the specific Deferred action case.
-
+  it("Deferred Actions", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
