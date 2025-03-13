@@ -5,24 +5,23 @@ import com.alchemy.aa.Stamper.Stamp;
 import com.alchemy.aa.client.api.AuthJWT.Request;
 import com.alchemy.aa.client.api.AuthJWT.Response;
 import com.alchemy.aa.client.api.AuthUser;
+import com.alchemy.aa.client.api.AuthUser.TurnKeyWhoAmIRequest;
 import com.alchemy.aa.client.api.AuthUser.WhoAmIRequest;
-import com.alchemy.aa.client.api.GetUser;
-import com.alchemy.aa.client.api.SignRawMessage.SignParamter;
+import com.alchemy.aa.client.api.SignRawMessage.SignParameters;
+import com.alchemy.aa.client.api.SignRawMessage.SignRawMessageRequest;
 import com.alchemy.aa.client.api.SignRawMessage.SignedResponse;
 import com.alchemy.aa.client.api.SignRawMessage.SigningBody;
 import com.alchemy.aa.client.api.StampedRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.crypto.tink.util.Bytes;
-import com.google.protobuf.InvalidProtocolBufferException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Builder;
 import lombok.Getter;
 import org.bouncycastle.util.encoders.Hex;
@@ -35,7 +34,7 @@ public class SignerClient {
 
     @Getter
     public enum PathName {
-        LOOKUP("lookup"), AUTH("auth"), AUTH_JWT("auth_jwt"), WHOAMI("whoami"), SIGN_PAYLOAD("sign-payload");
+        LOOKUP("lookup"), AUTH("auth"), AUTH_JWT("auth-jwt"), WHOAMI("whoami"), SIGN_PAYLOAD("sign-payload");
 
         private final String name;
 
@@ -48,8 +47,13 @@ public class SignerClient {
         ETHEREUM, SOLANA
     }
 
+    private final HttpConfig httpConfig;
+    private final ObjectMapper mapper;
+    private final Logger logger;
+
     public SignerClient(HttpConfig httpConfig) {
         this.httpConfig = httpConfig;
+        this.logger = Logger.getLogger(getClass().getName());
         this.mapper = new ObjectMapper();
     }
 
@@ -62,7 +66,7 @@ public class SignerClient {
      * @param bundle
      *            bundle from alchemy signer service.
      *
-     * @return
+     * @return authenticated user
      *
      * @throws Exception
      */
@@ -70,15 +74,15 @@ public class SignerClient {
         // inject bundle
         stamper.injectCredentialBundle(bundle);
 
-        return this.authUser(stamper, orgId);
+        return authUser(stamper, orgId);
     }
 
     public User authenticateWithJWT(Stamper stamper, String jwt, String authProviderName, int expirationInSeconds)
             throws Exception {
-        Request request = Request.builder().jwt(jwt).authProviderName(authProviderName)
-                .targetPublicKey(stamper.publicKey()).build();
+        Request request = Request.builder().jwt(jwt).authProvider(authProviderName).targetPublicKey(stamper.publicKey())
+                .build();
 
-        Response response = this.request(PathName.AUTH_JWT.getName(), request, Response.class);
+        Response response = request(PathName.AUTH_JWT.getName(), request, Response.class);
 
         return authenticateWithBundle(stamper, response.orgId(), response.credentialBundle());
     }
@@ -99,24 +103,23 @@ public class SignerClient {
      *
      * @throws Exception
      */
-    public Bytes signRawMessage(Stamper stamper, User user, Bytes msg, SigningMode mode, String hashFunction,
+    public String signRawMessage(Stamper stamper, User user, Bytes msg, SigningMode mode, String hashFunction,
             String address) throws Exception {
-        ObjectWriter writer = this.mapper.writerWithDefaultPrettyPrinter();
 
-        SignParamter signParamter = SignParamter.builder().encoding("PAYLOAD_ENCODING_HEXADECIMAL")
-                .hashfunction(hashFunction).payload(msg.toString()).signWith(address).build();
+        SignParameters signParameters = SignParameters.builder().encoding("PAYLOAD_ENCODING_HEXADECIMAL")
+                .hashFunction(hashFunction).payload(Hex.toHexString(msg.toByteArray())).signWith(address).build();
 
         SigningBody body = SigningBody.builder().organizationId(user.orgId).type("ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2")
-                .timestampMs(String.valueOf(Instant.now().toEpochMilli())).parameters(signParamter).build();
+                .timestampMs(String.valueOf(Instant.now().toEpochMilli())).parameters(signParameters).build();
 
-        String json_body = writer.writeValueAsString(body);
+        String json_body = mapper.writeValueAsString(body);
 
         Stamp stamp = stamper.stamp(json_body);
-        StampedRequest request = StampedRequest.builder()
+        StampedRequest stampedRequest = StampedRequest.builder()
                 .url("https://api.turnkey.com/public/v1/submit/sign_raw_payload").body(json_body).stamp(stamp).build();
-
-        SignedResponse response = this.request(PathName.SIGN_PAYLOAD.getName(), request, SignedResponse.class);
-        return Bytes.copyFrom(Hex.decode(response.signature()));
+        SignRawMessageRequest request = new SignRawMessageRequest(stampedRequest);
+        SignedResponse response = request(PathName.SIGN_PAYLOAD.getName(), request, SignedResponse.class);
+        return (response.signature());
     }
 
     /**
@@ -125,12 +128,12 @@ public class SignerClient {
      * @param txBytes
      *            transaction bytes
      *
-     * @return
+     * @return signature
      *
      * @throws Exception
      */
-    public Bytes signSolanaTx(Stamper stamper, User user, Bytes txBytes) throws Exception {
-        return this.signRawMessage(stamper, user, txBytes, SigningMode.SOLANA, "HASH_FUNCTION_NOT_APPLICABLE",
+    public String signSolanaTx(Stamper stamper, User user, Bytes txBytes) throws Exception {
+        return signRawMessage(stamper, user, txBytes, SigningMode.SOLANA, "HASH_FUNCTION_NOT_APPLICABLE",
                 user.solanaAddress);
     }
 
@@ -144,32 +147,12 @@ public class SignerClient {
      * @param txBytes
      *            keccack256 hashed transaction byte
      *
-     * @return
+     * @return signature
      *
      * @throws Exception
      */
-    public Bytes signEthTx(Stamper stamper, User user, Bytes txBytes) throws Exception {
-        return this.signRawMessage(stamper, user, txBytes, SigningMode.ETHEREUM, "HASH_FUNCTION_NO_OP", user.address);
-    }
-
-    public String targetPublicKeyHex(Stamper stamper) throws GeneralSecurityException, InvalidProtocolBufferException {
-        return stamper.publicKey();
-    }
-
-    public String targetPublicKeyJwtNonce(Stamper stamper)
-            throws GeneralSecurityException, InvalidProtocolBufferException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(stamper.publicKey().getBytes(StandardCharsets.UTF_8));
-        String sha256hex = new String(Hex.encode(hash));
-
-        return stamper.publicKey();
-    }
-
-    private String getUserOrgId(String email) throws Exception {
-        GetUser.Request getUserRequest = new GetUser.Request(email);
-        GetUser.Response getUserResponse = this.request(PathName.LOOKUP.getName(), getUserRequest,
-                GetUser.Response.class);
-        return getUserResponse.orgId();
+    public String signEthTx(Stamper stamper, User user, Bytes txBytes) throws Exception {
+        return signRawMessage(stamper, user, txBytes, SigningMode.ETHEREUM, "HASH_FUNCTION_NO_OP", user.address);
     }
 
     /**
@@ -184,32 +167,32 @@ public class SignerClient {
     private User authUser(Stamper stamper, String orgId) throws Exception {
 
         WhoAmIRequest whoAmIRequest = new WhoAmIRequest(orgId);
-        ObjectWriter writer = this.mapper.writerWithDefaultPrettyPrinter();
+        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
         String json_body = writer.writeValueAsString(whoAmIRequest);
-        Stamp stamped_body = stamper.stamp(json_body);
-        StampedRequest request = StampedRequest.builder().url("https://api.whoami.com/v1/users/").body(json_body)
-                .stamp(stamped_body).build();
-        AuthUser.Response response = this.request(PathName.WHOAMI.getName(), request, AuthUser.Response.class);
+        Stamp stampedBody = stamper.stamp(json_body);
+        StampedRequest stampedRequestrequest = StampedRequest.builder().url("https://api.whoami.com/v1/users/")
+                .body(json_body).stamp(stampedBody).build();
+        TurnKeyWhoAmIRequest request = new TurnKeyWhoAmIRequest(stampedRequestrequest);
+        AuthUser.Response response = request(PathName.WHOAMI.getName(), request, AuthUser.Response.class);
         return User.builder().address(response.address()).orgId(response.orgId()).userId(response.userId())
                 .email(response.email()).solanaAddress(response.solanaAddress()).build();
 
     }
 
     private <Request, Response> Response request(String path, Request request, Class<Response> clazz) throws Exception {
+        URI uri = URI.create(httpConfig.getUrl()).resolve(path);
 
-        URI uri = URI.create(this.httpConfig.getUrl());
-        uri.resolve(path);
         HttpRequest http_request = HttpRequest.newBuilder().uri(uri).header("accept", "application/json")
-                .header("content-type", "application/json")
-                .header("Authorization", "Bearer " + this.httpConfig.getApiKey())
-                .method("POST", HttpRequest.BodyPublishers.ofString(this.mapper.writeValueAsString(request))).build();
-        JacksonBodyHandlers jsonBodyHandler = new JacksonBodyHandlers(this.mapper);
+                .header("content-type", "application/json").header("Authorization", "Bearer " + httpConfig.getApiKey())
+                .method("POST", HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(request))).build();
 
-        HttpResponse<Response> response = HttpClient.newHttpClient().send(http_request,
-                jsonBodyHandler.handlerFor(clazz));
-        return response.body();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(http_request,
+                HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            logger.log(Level.WARNING, "Unexpected response code from server: {0}", response.statusCode());
+            logger.log(Level.INFO, "Response body from server: {0}", response.body());
+            logger.log(Level.INFO, "Request body from server: {0}", request);
+        }
+        return mapper.readValue(response.body(), clazz);
     }
-
-    private HttpConfig httpConfig;
-    private ObjectMapper mapper;
 }

@@ -2,16 +2,18 @@ package com.alchemy.aa.client.api;
 
 import lombok.Builder;
 
-public class SignRawMessage
-
-{
+/// https://docs.alchemy.com/reference/signmessage
+public class SignRawMessage {
 
     @Builder
-    public record SignParamter(String encoding, String hashfunction, String payload, String signWith) {
+    public record SignParameters(String encoding, String hashFunction, String payload, String signWith) {
     }
 
     @Builder
-    public record SigningBody(String organizationId, String type, String timestampMs, SignParamter parameters) {
+    public record SigningBody(String organizationId, String type, String timestampMs, SignParameters parameters) {
+    }
+
+    public record SignRawMessageRequest(StampedRequest stampedRequest) {
     }
 
     @Builder

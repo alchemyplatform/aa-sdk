@@ -14,5 +14,5 @@ public class HttpConfig {
 
     @Getter
     @Setter
-    private String url = "https://api.alchemy.com/v1/signer/v1";
+    private String url = "https://api.g.alchemy.com/signer/v1/";
 }
