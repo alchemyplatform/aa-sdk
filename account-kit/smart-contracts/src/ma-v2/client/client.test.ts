@@ -326,7 +326,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("installs a session key via deferred action and has it sign a UO", async () => {
+  it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
@@ -359,24 +359,12 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    // Initialize the client (we'll use this to build the deferred validation typed data, as it'll validate the entire UO)
-    let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
-      signer: sessionKey,
-      transport: custom(instance.getClient()),
-      accountAddress: provider.getAddress(),
-      signerEntity: {
-        entityId: sessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
-      },
-    });
-
     // Build the typed data we need for the deferred action using the session key client so the nonce uses the session key as the UO validation
     // this installation will however be validated with the owner (fallback) validation
     const { typedData, nonceOverride } =
       await DeferredActionBuilder.createTypedDataObject({
-        client: sessionKeyClient,
-        calldata: encodedInstallData,
+        client: provider,
+        callData: encodedInstallData,
         deadline: 0,
         entityId: sessionKeyEntityId,
         isGlobalValidation: isGlobalValidation,
@@ -403,6 +391,18 @@ describe("MA v2 Tests", async () => {
         signaturePrepend,
         nonceOverride,
       });
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: {
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      },
+    });
 
     // Sign the UO with the session key
     const uo = await sessionKeyClient.signUserOperation({
