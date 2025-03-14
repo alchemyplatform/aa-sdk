@@ -1,4 +1,4 @@
-import { Dialog } from "@account-kit/react";
+import { Dialog, useMFA } from "@account-kit/react";
 import { useEffect, useState, useCallback } from "react";
 import { XIcon } from "../../icons/x";
 import { AlchemyLogo } from "../../icons/alchemy";
@@ -6,7 +6,6 @@ import { AlchemyLogo } from "../../icons/alchemy";
 import { Button } from "../../small-cards/Button";
 
 import { OTPCodeType, initialOTPValue } from "../../ui/OTPInput";
-import { useSigner } from "@account-kit/react";
 
 import { MFAModalStart } from "./stages/MFAModalStart";
 import { MFAModalQR } from "./stages/MFAModalQR";
@@ -36,11 +35,22 @@ export function MFAModal({
   const [totpUrl, setTotpUrl] = useState<string | null>(null);
   const [mfaKey, setMfaKey] = useState<string | null>(null);
   const [multiFactorId, setMultiFactorId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
-  const [isRemoving, setIsRemoving] = useState(false);
   const [systemError, setSystemError] = useState(false);
-  const signer = useSigner();
+
+  const {
+    addMFA,
+    verifyMFA,
+    removeMFA,
+    getMFAFactors,
+    isAddingMFA,
+    isVerifyingMFA,
+    isRemovingMFA,
+    isGettingFactors,
+    isMfaAvailable,
+    error,
+  } = useMFA();
+
   const handleClose = () => setIsModalOpen(false);
 
   const handleInitMFASetup = async () => {
@@ -52,6 +62,7 @@ export function MFAModal({
     setSystemError(false);
     setIsModalOpen(true);
   };
+
   const resetModalState = useCallback(() => {
     setIsModalOpen(false);
     setStage("start");
@@ -62,110 +73,128 @@ export function MFAModal({
     setSystemError(false);
   }, []);
 
-  const startMFASetup = useCallback(async () => {
-    if (!signer) {
+  const startMFASetup = useCallback(() => {
+    if (!isMfaAvailable) {
       setSystemError(true);
-      console.error("Signer not available");
+      console.error("MFA not available");
       return;
     }
-    setIsLoading(true);
-    try {
-      const result = await signer.inner.addMfa({
-        multiFactorType: "totp",
-      });
 
-      if (result?.multiFactorTotpUrl) {
-        setTotpUrl(result.multiFactorTotpUrl);
-        const url = new URL(result.multiFactorTotpUrl);
-        const secret = new URLSearchParams(url.search).get("secret");
-        setMfaKey(secret);
-        setMultiFactorId(result.multiFactorId);
-        setStage("qr");
-      } else {
-        setSystemError(true);
-        console.error("Failed to generate MFA setup");
+    addMFA(
+      { multiFactorType: "totp" },
+      {
+        onSuccess: (result) => {
+          if (result?.multiFactorTotpUrl) {
+            setTotpUrl(result.multiFactorTotpUrl);
+            const url = new URL(result.multiFactorTotpUrl);
+            const secret = new URLSearchParams(url.search).get("secret");
+            setMfaKey(secret);
+            setMultiFactorId(result.multiFactorId);
+            setStage("qr");
+          } else {
+            setSystemError(true);
+            console.error("Failed to generate MFA setup");
+          }
+        },
+        onError: (error) => {
+          console.error("Error adding MFA:", error);
+          setSystemError(true);
+        },
       }
-    } catch (error) {
-      console.error("Error adding MFA:", error);
-      setSystemError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [signer]);
+    );
+  }, [addMFA, isMfaAvailable]);
 
-  const verifyTOTP = useCallback(async () => {
-    if (!multiFactorId || !otp.join("") || !signer) {
+  const verifyTOTP = useCallback(() => {
+    if (!multiFactorId || !otp.join("")) {
       setSystemError(true);
       console.error("Missing required information for verification");
       return;
     }
 
-    setIsLoading(true);
-    try {
-      await signer.inner.verifyMfa({
+    verifyMFA(
+      {
         multiFactorId: multiFactorId,
         multiFactorCode: otp.join(""),
-      });
+      },
+      {
+        onSuccess: () => {
+          setStage("success");
+          onMfaEnabled?.();
+        },
+        onError: (error) => {
+          console.error("Error verifying MFA:", error);
+          setOtpError("The code you entered is incorrect");
+          setOTP(initialOTPValue);
+        },
+      }
+    );
+  }, [multiFactorId, onMfaEnabled, otp, verifyMFA]);
 
-      setStage("success");
-      onMfaEnabled?.();
-    } catch (error) {
-      console.error("Error verifying MFA:", error);
-      setOtpError("The code you entered is incorrect");
-      setOTP(initialOTPValue);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [multiFactorId, onMfaEnabled, otp, signer]);
-
-  const removeMFA = useCallback(async () => {
-    if (!signer) {
+  const handleRemoveMFA = useCallback(() => {
+    if (!isMfaAvailable) {
       setSystemError(true);
-      console.error("Signer not available");
+      console.error("MFA not available");
       return;
     }
-    setIsRemoving(true);
-    try {
-      const factors = await signer.inner.getMfaFactors();
-      const factorId = factors?.multiFactors?.[0]?.multiFactorId;
 
-      if (!factorId) {
+    getMFAFactors(undefined, {
+      onSuccess: (result) => {
+        const factorId = result?.multiFactors?.[0]?.multiFactorId;
+
+        if (!factorId) {
+          setSystemError(true);
+          console.error("No MFA factor ID found");
+          return;
+        }
+
+        removeMFA(
+          { multiFactorIds: [factorId] },
+          {
+            onSuccess: () => {
+              onMfaRemoved?.();
+              resetModalState();
+            },
+            onError: (error) => {
+              console.error("Error removing MFA:", error);
+              setSystemError(true);
+            },
+          }
+        );
+      },
+      onError: (error) => {
+        console.error("Error getting MFA factors:", error);
         setSystemError(true);
-        console.error("No MFA factor ID found");
-        return;
-      }
-
-      await signer.inner.removeMfa({
-        multiFactorIds: [factorId],
-      });
-
-      onMfaRemoved?.();
-      resetModalState();
-    } catch (error) {
-      console.error("Error removing MFA:", error);
-      setSystemError(true);
-    } finally {
-      setIsRemoving(false);
-    }
-  }, [onMfaRemoved, resetModalState, signer]);
+      },
+    });
+  }, [getMFAFactors, isMfaAvailable, onMfaRemoved, removeMFA, resetModalState]);
 
   useEffect(() => {
     if (otp.every((value) => value !== "")) {
       verifyTOTP();
     }
-  }, [otp, verifyTOTP]);
+  }, [otp]);
+
+  useEffect(() => {
+    if (error) {
+      console.error("MFA operation error:", error);
+      setSystemError(true);
+    }
+  }, [error]);
 
   const renderContent = useCallback(() => {
     switch (stage) {
       case "start":
         return (
-          <MFAModalStart startMFASetup={startMFASetup} isLoading={isLoading} />
+          <MFAModalStart
+            startMFASetup={startMFASetup}
+            isLoading={isAddingMFA}
+          />
         );
       case "qr":
         return (
           <MFAModalQR
             totpUrl={totpUrl}
-            isLoading={isLoading}
+            isLoading={isAddingMFA}
             setStage={setStage}
           />
         );
@@ -178,7 +207,7 @@ export function MFAModal({
             setOTP={setOTP}
             setError={setOtpError}
             error={otpError}
-            isLoading={isLoading}
+            isLoading={isVerifyingMFA}
           />
         );
       case "success":
@@ -187,7 +216,8 @@ export function MFAModal({
   }, [
     stage,
     startMFASetup,
-    isLoading,
+    isAddingMFA,
+    isVerifyingMFA,
     totpUrl,
     mfaKey,
     otp,
@@ -195,14 +225,23 @@ export function MFAModal({
     resetModalState,
   ]);
 
+  const isLoading =
+    isAddingMFA || isVerifyingMFA || isRemovingMFA || isGettingFactors;
+
   return (
     <>
       {isMfaActive ? (
-        <Button onClick={removeMFA} disabled={isRemoving || isLoadingClient}>
-          {isRemoving ? "Removing..." : "Remove MFA"}
+        <Button
+          onClick={handleRemoveMFA}
+          disabled={isRemovingMFA || isGettingFactors || isLoadingClient}
+        >
+          {isRemovingMFA || isGettingFactors ? "Removing..." : "Remove MFA"}
         </Button>
       ) : (
-        <Button onClick={handleInitMFASetup} disabled={isLoadingClient}>
+        <Button
+          onClick={handleInitMFASetup}
+          disabled={isLoadingClient || isLoading}
+        >
           {isLoadingClient ? "Loading..." : "Enable Authenticator App"}
         </Button>
       )}
@@ -220,7 +259,7 @@ export function MFAModal({
                 />
               </button>
               {renderContent()}
-              {systemError && (
+              {(systemError || error) && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full">
                   Something went wrong.
                 </div>
