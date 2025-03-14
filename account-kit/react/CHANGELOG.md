@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.16.1-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.16.1-alpha.1) (2025-03-14)
+
+### Features
+
+- add mfa for magic link in the demo ([7e82e4e](https://github.com/alchemyplatform/aa-sdk/commit/7e82e4e6da45fd3a7bfee0427a7fa4901bdd3034))
+- add mfa hook ([#1410](https://github.com/alchemyplatform/aa-sdk/issues/1410)) ([4b7973d](https://github.com/alchemyplatform/aa-sdk/commit/4b7973da80d2a6ebec34ea940db25bdadba13d87))
+- add mfa to email otp authentication ([98f3890](https://github.com/alchemyplatform/aa-sdk/commit/98f38907c3950a07dd5e9e6246e646b74184cf70))
+- cleanup mfa logic in signer ([#1409](https://github.com/alchemyplatform/aa-sdk/issues/1409)) ([bde11ff](https://github.com/alchemyplatform/aa-sdk/commit/bde11ffeb36d509e488e5d57c33317510a3c09d3))
+- fix build and wrap cards ([e9fdbfd](https://github.com/alchemyplatform/aa-sdk/commit/e9fdbfd180fddd1d2c61874481619e7223b25226))
+- minor ui tweaks ([46b3bd7](https://github.com/alchemyplatform/aa-sdk/commit/46b3bd77151bdcc5d1994d4068f9283bec0f3fe3))
+- ui tweaks ([ef174aa](https://github.com/alchemyplatform/aa-sdk/commit/ef174aab22e7d9bc6c7b8ee67d29970a9f6f0bb1))
+
+## [4.16.1-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.16.1-alpha.0) (2025-03-14)
+
+### Features
+
+- add mfa for magic link in the demo ([7e82e4e](https://github.com/alchemyplatform/aa-sdk/commit/7e82e4e6da45fd3a7bfee0427a7fa4901bdd3034))
+- add mfa hook ([#1410](https://github.com/alchemyplatform/aa-sdk/issues/1410)) ([4b7973d](https://github.com/alchemyplatform/aa-sdk/commit/4b7973da80d2a6ebec34ea940db25bdadba13d87))
+- add mfa to email otp authentication ([98f3890](https://github.com/alchemyplatform/aa-sdk/commit/98f38907c3950a07dd5e9e6246e646b74184cf70))
+- cleanup mfa logic in signer ([#1409](https://github.com/alchemyplatform/aa-sdk/issues/1409)) ([bde11ff](https://github.com/alchemyplatform/aa-sdk/commit/bde11ffeb36d509e488e5d57c33317510a3c09d3))
+- fix build and wrap cards ([e9fdbfd](https://github.com/alchemyplatform/aa-sdk/commit/e9fdbfd180fddd1d2c61874481619e7223b25226))
+- minor ui tweaks ([46b3bd7](https://github.com/alchemyplatform/aa-sdk/commit/46b3bd77151bdcc5d1994d4068f9283bec0f3fe3))
+- ui tweaks ([ef174aa](https://github.com/alchemyplatform/aa-sdk/commit/ef174aab22e7d9bc6c7b8ee67d29970a9f6f0bb1))
+
 # [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
 
 **Note:** Version bump only for package @account-kit/react

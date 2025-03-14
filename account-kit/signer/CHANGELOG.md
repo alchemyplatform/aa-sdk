@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.16.1-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.16.1-alpha.1) (2025-03-14)
+
+### Features
+
+- add mfa for magic link in the demo ([7e82e4e](https://github.com/alchemyplatform/aa-sdk/commit/7e82e4e6da45fd3a7bfee0427a7fa4901bdd3034))
+- add mfa to email otp authentication ([98f3890](https://github.com/alchemyplatform/aa-sdk/commit/98f38907c3950a07dd5e9e6246e646b74184cf70))
+- add mfa totp to the email otp flow ([8ca926a](https://github.com/alchemyplatform/aa-sdk/commit/8ca926a326be319e252f11a9639a747320d646d8))
+- cleanup mfa logic in signer ([#1409](https://github.com/alchemyplatform/aa-sdk/issues/1409)) ([bde11ff](https://github.com/alchemyplatform/aa-sdk/commit/bde11ffeb36d509e488e5d57c33317510a3c09d3))
+- pass multiFactorType to api ([7edd6d0](https://github.com/alchemyplatform/aa-sdk/commit/7edd6d01662c5f0d0ec8aec38e4cff0e79fd7e84))
+- support mfa for magic link ([bc887b6](https://github.com/alchemyplatform/aa-sdk/commit/bc887b695f40bff734a7ad649b8d252837cd2bec))
+- update api endpoints for mfa ([c021c79](https://github.com/alchemyplatform/aa-sdk/commit/c021c795778de3d151d3866411054109f0e42011))
+- update mfa request payload ([75fcbed](https://github.com/alchemyplatform/aa-sdk/commit/75fcbed3cb7887ba3c14b9ec889b96ddb436cbb2))
+- update the stampedRequest on mfa calls ([e99325c](https://github.com/alchemyplatform/aa-sdk/commit/e99325c26ea189f2ef5c360f356674b502fe707c))
+
+## [4.16.1-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.16.1-alpha.0) (2025-03-14)
+
+### Features
+
+- add mfa for magic link in the demo ([7e82e4e](https://github.com/alchemyplatform/aa-sdk/commit/7e82e4e6da45fd3a7bfee0427a7fa4901bdd3034))
+- add mfa to email otp authentication ([98f3890](https://github.com/alchemyplatform/aa-sdk/commit/98f38907c3950a07dd5e9e6246e646b74184cf70))
+- add mfa totp to the email otp flow ([8ca926a](https://github.com/alchemyplatform/aa-sdk/commit/8ca926a326be319e252f11a9639a747320d646d8))
+- cleanup mfa logic in signer ([#1409](https://github.com/alchemyplatform/aa-sdk/issues/1409)) ([bde11ff](https://github.com/alchemyplatform/aa-sdk/commit/bde11ffeb36d509e488e5d57c33317510a3c09d3))
+- pass multiFactorType to api ([7edd6d0](https://github.com/alchemyplatform/aa-sdk/commit/7edd6d01662c5f0d0ec8aec38e4cff0e79fd7e84))
+- support mfa for magic link ([bc887b6](https://github.com/alchemyplatform/aa-sdk/commit/bc887b695f40bff734a7ad649b8d252837cd2bec))
+- update api endpoints for mfa ([c021c79](https://github.com/alchemyplatform/aa-sdk/commit/c021c795778de3d151d3866411054109f0e42011))
+- update mfa request payload ([75fcbed](https://github.com/alchemyplatform/aa-sdk/commit/75fcbed3cb7887ba3c14b9ec889b96ddb436cbb2))
+- update the stampedRequest on mfa calls ([e99325c](https://github.com/alchemyplatform/aa-sdk/commit/e99325c26ea189f2ef5c360f356674b502fe707c))
+
 # [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
 
 ### Features

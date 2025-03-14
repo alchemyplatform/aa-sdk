@@ -3,6 +3,78 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.16.1-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.16.1-alpha.1) (2025-03-14)
+
+### Bug Fixes
+
+- fix lint error ([bc22a0d](https://github.com/alchemyplatform/aa-sdk/commit/bc22a0d0dcf40dcc8b8a9969e0c443c5ef8b8da8))
+- image file name ([4f04878](https://github.com/alchemyplatform/aa-sdk/commit/4f048782d51337308799166db65271af7d50dc29))
+- increase card dimensions ([0c20735](https://github.com/alchemyplatform/aa-sdk/commit/0c2073565c044b221b4c9234e7888322accebc58))
+- min height to cards ([af94812](https://github.com/alchemyplatform/aa-sdk/commit/af94812cf855b04b371c92ac171d12fad31788c4))
+- personal_sign [#1427](https://github.com/alchemyplatform/aa-sdk/issues/1427) ([#1428](https://github.com/alchemyplatform/aa-sdk/issues/1428)) ([#1440](https://github.com/alchemyplatform/aa-sdk/issues/1440)) ([fc4b722](https://github.com/alchemyplatform/aa-sdk/commit/fc4b722e1e647d518385d3f68551926a2735774e))
+
+### Features
+
+- add mfa crud functionality to the UI ([f477d36](https://github.com/alchemyplatform/aa-sdk/commit/f477d364796ee7e67e7cdda43c5fe001b21d9b6f))
+- add mfa for magic link in the demo ([7e82e4e](https://github.com/alchemyplatform/aa-sdk/commit/7e82e4e6da45fd3a7bfee0427a7fa4901bdd3034))
+- add mfa hook ([#1410](https://github.com/alchemyplatform/aa-sdk/issues/1410)) ([4b7973d](https://github.com/alchemyplatform/aa-sdk/commit/4b7973da80d2a6ebec34ea940db25bdadba13d87))
+- add mfa to email otp authentication ([98f3890](https://github.com/alchemyplatform/aa-sdk/commit/98f38907c3950a07dd5e9e6246e646b74184cf70))
+- add mfa totp to the email otp flow ([8ca926a](https://github.com/alchemyplatform/aa-sdk/commit/8ca926a326be319e252f11a9639a747320d646d8))
+- add RN hooks docs and guides ([#1437](https://github.com/alchemyplatform/aa-sdk/issues/1437)) ([b749c1a](https://github.com/alchemyplatform/aa-sdk/commit/b749c1a7e9a7978aa0327d408a9c7cc724b8cd0f))
+- check status of mfa in mfa card ([263e202](https://github.com/alchemyplatform/aa-sdk/commit/263e202e363645efaa9ac4b115390aa7a6bf3c1f))
+- cleanup mfa logic in signer ([#1409](https://github.com/alchemyplatform/aa-sdk/issues/1409)) ([bde11ff](https://github.com/alchemyplatform/aa-sdk/commit/bde11ffeb36d509e488e5d57c33317510a3c09d3))
+- dark mode, magic link ([0543c03](https://github.com/alchemyplatform/aa-sdk/commit/0543c03f2776de459ed599a1dd6981d1d79bed5d))
+- fix build and wrap cards ([e9fdbfd](https://github.com/alchemyplatform/aa-sdk/commit/e9fdbfd180fddd1d2c61874481619e7223b25226))
+- med-fi full flow ([901747a](https://github.com/alchemyplatform/aa-sdk/commit/901747a39498d645fb214c26e43ebe26cd1e1df8))
+- minor ui tweaks ([46b3bd7](https://github.com/alchemyplatform/aa-sdk/commit/46b3bd77151bdcc5d1994d4068f9283bec0f3fe3))
+- pass multiFactorType to api ([7edd6d0](https://github.com/alchemyplatform/aa-sdk/commit/7edd6d01662c5f0d0ec8aec38e4cff0e79fd7e84))
+- split mfa, clean up animation, error state ([#1418](https://github.com/alchemyplatform/aa-sdk/issues/1418)) ([c88b569](https://github.com/alchemyplatform/aa-sdk/commit/c88b5692c50251a5f5f5b69373b41e722f0c6d93))
+- support mfa for magic link ([bc887b6](https://github.com/alchemyplatform/aa-sdk/commit/bc887b695f40bff734a7ad649b8d252837cd2bec))
+- ui tweaks ([ef174aa](https://github.com/alchemyplatform/aa-sdk/commit/ef174aab22e7d9bc6c7b8ee67d29970a9f6f0bb1))
+- update api endpoints for mfa ([c021c79](https://github.com/alchemyplatform/aa-sdk/commit/c021c795778de3d151d3866411054109f0e42011))
+- update auto generated docs ([e572159](https://github.com/alchemyplatform/aa-sdk/commit/e572159f516cb2c53794513f1f7f4a6bf9875325))
+- update mfa request payload ([75fcbed](https://github.com/alchemyplatform/aa-sdk/commit/75fcbed3cb7887ba3c14b9ec889b96ddb436cbb2))
+- update the stampedRequest on mfa calls ([e99325c](https://github.com/alchemyplatform/aa-sdk/commit/e99325c26ea189f2ef5c360f356674b502fe707c))
+- use mfa hooks in the mfaModal ([2af3651](https://github.com/alchemyplatform/aa-sdk/commit/2af3651877a566dcb26c86cd0a0be2d5873bb607))
+- verify handler for otp ([3e89cd6](https://github.com/alchemyplatform/aa-sdk/commit/3e89cd655cd00c17f8c3efb0d27dc25029efbdeb))
+- wip mfa card ([180935e](https://github.com/alchemyplatform/aa-sdk/commit/180935e78d2dacefae6352adb5e3316cc5eefc16))
+
+## [4.16.1-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.16.1-alpha.0) (2025-03-14)
+
+### Bug Fixes
+
+- fix lint error ([bc22a0d](https://github.com/alchemyplatform/aa-sdk/commit/bc22a0d0dcf40dcc8b8a9969e0c443c5ef8b8da8))
+- image file name ([4f04878](https://github.com/alchemyplatform/aa-sdk/commit/4f048782d51337308799166db65271af7d50dc29))
+- increase card dimensions ([0c20735](https://github.com/alchemyplatform/aa-sdk/commit/0c2073565c044b221b4c9234e7888322accebc58))
+- min height to cards ([af94812](https://github.com/alchemyplatform/aa-sdk/commit/af94812cf855b04b371c92ac171d12fad31788c4))
+- personal_sign [#1427](https://github.com/alchemyplatform/aa-sdk/issues/1427) ([#1428](https://github.com/alchemyplatform/aa-sdk/issues/1428)) ([#1440](https://github.com/alchemyplatform/aa-sdk/issues/1440)) ([fc4b722](https://github.com/alchemyplatform/aa-sdk/commit/fc4b722e1e647d518385d3f68551926a2735774e))
+
+### Features
+
+- add mfa crud functionality to the UI ([f477d36](https://github.com/alchemyplatform/aa-sdk/commit/f477d364796ee7e67e7cdda43c5fe001b21d9b6f))
+- add mfa for magic link in the demo ([7e82e4e](https://github.com/alchemyplatform/aa-sdk/commit/7e82e4e6da45fd3a7bfee0427a7fa4901bdd3034))
+- add mfa hook ([#1410](https://github.com/alchemyplatform/aa-sdk/issues/1410)) ([4b7973d](https://github.com/alchemyplatform/aa-sdk/commit/4b7973da80d2a6ebec34ea940db25bdadba13d87))
+- add mfa to email otp authentication ([98f3890](https://github.com/alchemyplatform/aa-sdk/commit/98f38907c3950a07dd5e9e6246e646b74184cf70))
+- add mfa totp to the email otp flow ([8ca926a](https://github.com/alchemyplatform/aa-sdk/commit/8ca926a326be319e252f11a9639a747320d646d8))
+- add RN hooks docs and guides ([#1437](https://github.com/alchemyplatform/aa-sdk/issues/1437)) ([b749c1a](https://github.com/alchemyplatform/aa-sdk/commit/b749c1a7e9a7978aa0327d408a9c7cc724b8cd0f))
+- check status of mfa in mfa card ([263e202](https://github.com/alchemyplatform/aa-sdk/commit/263e202e363645efaa9ac4b115390aa7a6bf3c1f))
+- cleanup mfa logic in signer ([#1409](https://github.com/alchemyplatform/aa-sdk/issues/1409)) ([bde11ff](https://github.com/alchemyplatform/aa-sdk/commit/bde11ffeb36d509e488e5d57c33317510a3c09d3))
+- dark mode, magic link ([0543c03](https://github.com/alchemyplatform/aa-sdk/commit/0543c03f2776de459ed599a1dd6981d1d79bed5d))
+- fix build and wrap cards ([e9fdbfd](https://github.com/alchemyplatform/aa-sdk/commit/e9fdbfd180fddd1d2c61874481619e7223b25226))
+- med-fi full flow ([901747a](https://github.com/alchemyplatform/aa-sdk/commit/901747a39498d645fb214c26e43ebe26cd1e1df8))
+- minor ui tweaks ([46b3bd7](https://github.com/alchemyplatform/aa-sdk/commit/46b3bd77151bdcc5d1994d4068f9283bec0f3fe3))
+- pass multiFactorType to api ([7edd6d0](https://github.com/alchemyplatform/aa-sdk/commit/7edd6d01662c5f0d0ec8aec38e4cff0e79fd7e84))
+- split mfa, clean up animation, error state ([#1418](https://github.com/alchemyplatform/aa-sdk/issues/1418)) ([c88b569](https://github.com/alchemyplatform/aa-sdk/commit/c88b5692c50251a5f5f5b69373b41e722f0c6d93))
+- support mfa for magic link ([bc887b6](https://github.com/alchemyplatform/aa-sdk/commit/bc887b695f40bff734a7ad649b8d252837cd2bec))
+- ui tweaks ([ef174aa](https://github.com/alchemyplatform/aa-sdk/commit/ef174aab22e7d9bc6c7b8ee67d29970a9f6f0bb1))
+- update api endpoints for mfa ([c021c79](https://github.com/alchemyplatform/aa-sdk/commit/c021c795778de3d151d3866411054109f0e42011))
+- update auto generated docs ([e572159](https://github.com/alchemyplatform/aa-sdk/commit/e572159f516cb2c53794513f1f7f4a6bf9875325))
+- update mfa request payload ([75fcbed](https://github.com/alchemyplatform/aa-sdk/commit/75fcbed3cb7887ba3c14b9ec889b96ddb436cbb2))
+- update the stampedRequest on mfa calls ([e99325c](https://github.com/alchemyplatform/aa-sdk/commit/e99325c26ea189f2ef5c360f356674b502fe707c))
+- use mfa hooks in the mfaModal ([2af3651](https://github.com/alchemyplatform/aa-sdk/commit/2af3651877a566dcb26c86cd0a0be2d5873bb607))
+- verify handler for otp ([3e89cd6](https://github.com/alchemyplatform/aa-sdk/commit/3e89cd655cd00c17f8c3efb0d27dc25029efbdeb))
+- wip mfa card ([180935e](https://github.com/alchemyplatform/aa-sdk/commit/180935e78d2dacefae6352adb5e3316cc5eefc16))
+
 # [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
 
 ### Bug Fixes
