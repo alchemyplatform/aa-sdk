@@ -9,7 +9,7 @@ export const Button = ({
 >) => {
   return (
     <button
-      className={`border bg-bg-surface-default text-fg-primary rounded-lg px-3 text-sm font-semibold h-10 flex items-center justify-center text-center disabled:bg-bg-surface-disabled disabled:text-fg-disabled ${className}`}
+      className={`border bg-bg-surface-default text-fg-primary rounded-lg px-3 text-sm font-semibold h-10 flex items-center justify-center text-center disabled:bg-bg-surface-disabled ${className} disabled:text-fg-disabled `}
       {...rest}
     >
       {children}
