@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/logging",
-  "version": "4.16.1-alpha.2",
+  "version": "4.16.1-alpha.3",
   "description": "Core logging library for Account Kit packages",
   "author": "Alchemy",
   "license": "MIT",
