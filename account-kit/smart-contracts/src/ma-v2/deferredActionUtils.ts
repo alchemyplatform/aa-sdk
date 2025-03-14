@@ -1,7 +1,10 @@
 import {
   InvalidNonceKeyError,
   type Address,
+  type BatchUserOperationCallData,
   type SmartAccountClient,
+  type UserOperationCallData,
+  type UserOperationRequest_v7,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -12,6 +15,7 @@ import {
   size,
   toHex,
 } from "viem";
+import type { ModularAccountV2Client } from "./client/client";
 
 type DeferredActionTypedData = {
   domain: {
@@ -104,7 +108,6 @@ export const DeferredActionBuilder = {
       nonceOverride: nonceOverride,
     };
   },
-  // Maybe a better name for this
   buildDigest: (args: {
     typedData: DeferredActionTypedData;
     nonce: bigint;
@@ -134,5 +137,41 @@ export const DeferredActionBuilder = {
     ]);
 
     return encodedData;
+  },
+  buildUserOperationWithDeferredAction: async (args: {
+    client: ModularAccountV2Client;
+    uo: UserOperationCallData | BatchUserOperationCallData;
+    signaturePrepend: Hex;
+    nonceOverride: bigint;
+  }): Promise<UserOperationRequest_v7> => {
+    // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
+    if (args.client.account === undefined) {
+      throw "client.account undefined";
+    }
+
+    // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
+    const dummySig = await args.client.account.getDummySignature();
+
+    // Cache the previous dummy signature getter
+    const previousDummySigGetter = args.client.account.getDummySignature;
+
+    // Override provider.account.getDummySignature() so `provider.buildUserOperation()` uses the prepended hex and the dummy signature during gas estimation
+    args.client.account.getDummySignature = () => {
+      return concatHex([args.signaturePrepend, dummySig as Hex]);
+    };
+
+    const unsignedUo = (await args.client.buildUserOperation({
+      uo: args.uo,
+      overrides: {
+        nonce: args.nonceOverride, // FIX: Currently, we aren't setting the deferred validation flag in the nonce key, instead we're setting it in
+        // the returned nonce itself. This means sequential nonces will be incorrect.
+        // dummySignature: "0x",
+      },
+    })) as UserOperationRequest_v7;
+
+    // Restore the dummy signature getter
+    args.client.getDummySignature = previousDummySigGetter;
+
+    return unsignedUo;
   },
 };

@@ -326,7 +326,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("installs a session key via deferred actions and has it sign the UO", async () => {
+  it("installs a session key via deferred action and has it sign a UO", async () => {
     let provider = (await givenConnectedProvider({ signer })).extend(
       installValidationActions
     );
@@ -365,7 +365,10 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      signerEntity: { entityId: 1, isGlobalValidation: true },
+      signerEntity: {
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      },
     });
 
     // Build the typed data we need for the deferred action using the session key client so the nonce uses the session key as the UO validation
@@ -393,29 +396,13 @@ describe("MA v2 Tests", async () => {
       nonce: nonceOverride,
     });
 
-    // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
-    const dummySig = await provider.account.getDummySignature();
-
-    // Cache the previous dummy signature getter
-    const previousDummySigGetter = provider.account.getDummySignature;
-
-    // Override provider.account.getDummySignature() so `provider.buildUserOperation()` uses the prepended hex and the dummy signature during gas estimation
-    provider.account.getDummySignature = () => {
-      return concatHex([signaturePrepend, dummySig as Hex]);
-    };
-
-    // Generate the unsigned UO with the overridden dummy signature getter used for gas estimation
-    const unsignedUo = (await provider.buildUserOperation({
-      uo: { target, data: "0x" },
-      overrides: {
-        nonce: nonceOverride, // FIX: Currently, we aren't setting the deferred validation flag in the nonce key, instead we're setting it in
-        // the returned nonce itself. This means sequential nonces will be incorrect.
-        // dummySignature: "0x",
-      },
-    })) as UserOperationRequest_v7;
-
-    // Restore the dummy signature getter
-    provider.getDummySignature = previousDummySigGetter;
+    const unsignedUo =
+      await DeferredActionBuilder.buildUserOperationWithDeferredAction({
+        client: provider,
+        uo: { target, data: "0x" },
+        signaturePrepend,
+        nonceOverride,
+      });
 
     // Sign the UO with the session key
     const uo = await sessionKeyClient.signUserOperation({
