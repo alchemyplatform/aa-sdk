@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/logging",
-  "version": "4.16.1-alpha.1",
+  "version": "4.16.1-alpha.2",
   "description": "Core logging library for Account Kit packages",
   "author": "Alchemy",
   "license": "MIT",
@@ -61,5 +61,6 @@
   "dependencies": {
     "@segment/analytics-next": "^1.74.0",
     "uuid": "^11.0.2"
-  }
+  },
+  "gitHead": "3738687a1009e800037d008b2262761871a8e08e"
 }
