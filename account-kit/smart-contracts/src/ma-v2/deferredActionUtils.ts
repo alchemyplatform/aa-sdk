@@ -1,4 +1,6 @@
 import {
+  AccountNotFoundError,
+  EntryPointNotFoundError,
   InvalidNonceKeyError,
   type Address,
   type BatchUserOperationCallData,
@@ -63,7 +65,7 @@ export const DeferredActionBuilder = {
     nonceKeyOverride?: bigint;
   }): Promise<DeferredActionReturnData> => {
     if (!args.client.account) {
-      throw "Account undefined in client";
+      throw new AccountNotFoundError();
     }
 
     const baseNonceKey = args.nonceKeyOverride || 0n;
@@ -71,13 +73,9 @@ export const DeferredActionBuilder = {
       throw new InvalidNonceKeyError(baseNonceKey);
     }
 
-    if (args.client.account === undefined) {
-      throw "temp";
-    }
-
     const entryPoint = args.client.account.getEntryPoint();
     if (entryPoint === undefined) {
-      throw "temp";
+      throw new EntryPointNotFoundError(args.client.chain, "0.7.0");
     }
 
     const entryPointContract = getContract({
@@ -181,7 +179,7 @@ export const DeferredActionBuilder = {
   }): Promise<UserOperationRequest_v7> => {
     // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
     if (args.client.account === undefined) {
-      throw "client.account undefined";
+      throw new AccountNotFoundError();
     }
 
     // Pre-fetch the dummy sig so we can override `provider.account.getDummySignature()`
