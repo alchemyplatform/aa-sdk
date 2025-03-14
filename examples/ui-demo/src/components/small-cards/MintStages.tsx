@@ -15,17 +15,14 @@ export const MintStages = ({
     <div>
       <Stage
         icon={status.signing}
-        description="Invisibly signing txs for you..."
+        description="Invisibly signing transactions"
       />
-      <Stage
-        icon={status.gas}
-        description="Sponsoring gas behind the scenes..."
-      />
+      <Stage icon={status.gas} description="Sponsoring gas fees" />
       <Stage
         icon={status.batch}
         description={
           <span className="flex gap-3 justify-between">
-            Deploying your smart account...
+            Deploying smart account
             {status.batch === "success" && transactionUrl && (
               <a
                 href={transactionUrl}
