@@ -172,6 +172,7 @@ export function MFAModal({
     if (otp.every((value) => value !== "")) {
       verifyTOTP();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otp]);
 
   useEffect(() => {
