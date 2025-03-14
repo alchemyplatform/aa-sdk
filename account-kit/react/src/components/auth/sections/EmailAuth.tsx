@@ -32,7 +32,7 @@ export const EmailAuth = memo(
         if (params.type === "email" && "email" in params) {
           const emailMode = cfg?.email.mode
             ? cfg?.email.mode
-            : legacyEmailMode === "magicLink"
+            : params.emailMode === "magicLink"
             ? "MAGIC_LINK"
             : "OTP";
 
