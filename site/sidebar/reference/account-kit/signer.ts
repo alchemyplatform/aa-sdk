@@ -18,6 +18,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
         text: "AlchemySignerWebClient",
         items: [
           {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa",
+          },
+          {
             text: "completeAuthWithBundle",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle",
           },
@@ -38,6 +42,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet",
           },
           {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors",
+          },
+          {
             text: "initEmailAuth",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth",
           },
@@ -54,12 +62,20 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect",
           },
           {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa",
+          },
+          {
             text: "submitOtpCode",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode",
           },
           {
             text: "targetPublicKey",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa",
           },
         ],
       },
@@ -92,6 +108,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect",
           },
           {
+            text: "experimental_toSolanaSigner",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner",
+          },
+          {
             text: "exportWallet",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet",
           },
@@ -102,6 +122,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "getAuthDetails",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getAuthDetails",
+          },
+          {
+            text: "getMfaStatus",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus",
           },
           {
             text: "getUser",
@@ -141,12 +165,20 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
         text: "BaseSignerClient",
         items: [
           {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/addMfa",
+          },
+          {
             text: "addPasskey",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/addPasskey",
           },
           {
             text: "constructor",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/constructor",
+          },
+          {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors",
           },
           {
             text: "getUser",
@@ -165,6 +197,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/on",
           },
           {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/removeMfa",
+          },
+          {
             text: "request",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/request",
           },
@@ -175,6 +211,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "stampWhoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa",
           },
           {
             text: "whoami",

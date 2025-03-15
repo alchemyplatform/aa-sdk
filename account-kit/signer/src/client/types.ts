@@ -52,6 +52,7 @@ export type EmailAuthParams = {
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
+  multiFactors?: VerifyMfaParams[];
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -64,6 +65,7 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
+  multiFactors?: VerifyMfaParams[];
 };
 
 export type SignupResponse = {
@@ -122,10 +124,12 @@ export type SignerEndpoints = [
     Route: "/v1/auth";
     Body: Omit<EmailAuthParams, "redirectParams"> & {
       redirectParams?: string;
+      multiFactors?: VerifyMfaParams[];
     };
     Response: {
       orgId: string;
       otpId?: string;
+      multiFactors?: MfaFactor[];
     };
   },
   {
@@ -156,7 +160,45 @@ export type SignerEndpoints = [
   {
     Route: "/v1/otp";
     Body: OtpParams;
-    Response: { credentialBundle: string };
+    Response: {
+      credentialBundle: string | null;
+    };
+  },
+  {
+    Route: "/v1/auth-list-multi-factors";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/auth-delete-multi-factors";
+    Body: {
+      stampedRequest: TSignedRequest;
+      multiFactorIds: string[];
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/auth-request-multi-factor";
+    Body: {
+      stampedRequest: TSignedRequest;
+      multiFactorType: MultiFactorType;
+    };
+    Response: EnableMfaResult;
+  },
+  {
+    Route: "/v1/auth-verify-multi-factor";
+    Body: VerifyMfaParams & {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
   }
 ];
 
@@ -199,4 +241,39 @@ export type GetOauthProviderUrlArgs = {
   oauthCallbackUrl: string;
   oauthConfig?: OauthConfig;
   usesRelativeUrl?: boolean;
+};
+
+export type MfaFactor = {
+  multiFactorId: string;
+  multiFactorType: string;
+};
+
+type MultiFactorType = "totp";
+
+export type EnableMfaParams = {
+  multiFactorType: MultiFactorType;
+};
+
+export type EnableMfaResult = {
+  multiFactorType: MultiFactorType;
+  multiFactorId: string;
+  multiFactorTotpUrl: string;
+};
+
+export type VerifyMfaParams = {
+  multiFactorId: string;
+  multiFactorCode: string;
+};
+
+export type RemoveMfaParams = {
+  multiFactorIds: string[];
+};
+
+export type MfaChallenge = {
+  multiFactorId: string;
+  multiFactorChallenge:
+    | {
+        code: string;
+      }
+    | Record<string, any>;
 };

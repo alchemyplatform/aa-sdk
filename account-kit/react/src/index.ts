@@ -61,4 +61,5 @@ export { AuthCard } from "./components/auth/card/index.js";
 export type * from "./components/auth/types.js";
 export { useAuthModal } from "./hooks/useAuthModal.js";
 export { useAuthContext } from "./components/auth/context.js";
+export { useMFA } from "./hooks/useMFA.js";
 export { Hydrate } from "./hydrate.js";
