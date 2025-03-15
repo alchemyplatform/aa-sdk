@@ -113,14 +113,6 @@ export type UserOperationOverrides<
     verificationGasLimit:
       | UserOperationStruct<TEntryPointVersion>["verificationGasLimit"]
       | Multiplier;
-    /**
-     * This can be used to override the key used when calling `entryPoint.getNonce`
-     * It is useful when you want to use parallel nonces for user operations
-     *
-     * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
-     * one user operation for your account in a bundle
-     */
-    nonceKey: bigint;
 
     /**
      * The same state overrides for
@@ -132,7 +124,21 @@ export type UserOperationOverrides<
      */
     stateOverride: StateOverride;
   } & UserOperationPaymasterOverrides<TEntryPointVersion>
->;
+> &
+  /**
+   * This can be used to override the nonce or nonce key used when calling `entryPoint.getNonce`
+   * It is useful when you want to use parallel nonces for user operations
+   *
+   * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
+   * one user operation for your account in a bundle
+   */
+  Partial<
+    | {
+        nonceKey: bigint;
+        nonce: never;
+      }
+    | { nonceKey: never; nonce: bigint }
+  >;
 // [!endregion UserOperationOverrides]
 
 // [!region UserOperationRequest_v6]
