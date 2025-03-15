@@ -56,6 +56,7 @@ export const DEFAULT_CONFIG: Config = {
     oAuthMethods: {
       google: true,
       facebook: true,
+      twitch: true,
       auth0: false,
       apple: false,
       discord: true,

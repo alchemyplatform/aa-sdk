@@ -14,6 +14,7 @@ import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
 import { links } from "@/utils/links";
+import { TwitchIcon } from "../icons/twitch";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { auth, setAuth } = useConfigStore(({ auth, setAuth }) => ({
@@ -127,6 +128,22 @@ export const Authentication = ({ className }: { className?: string }) => {
     });
   };
 
+  const setAddTwitchAuth = () => {
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        twitch: !auth.oAuthMethods.twitch,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_twitch",
+        enabled: !auth.oAuthMethods.twitch,
+      },
+    });
+  };
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-row gap-2 items-center">
@@ -176,6 +193,12 @@ export const Authentication = ({ className }: { className?: string }) => {
                     icon={<TwitterIcon />}
                     onClick={setAddTwitterAuth}
                     name="Twitter"
+                  />
+                  <OAuthMethod
+                    active={auth.oAuthMethods.twitch}
+                    icon={<TwitchIcon />}
+                    onClick={setAddTwitchAuth}
+                    name="Twitch"
                   />
                 </div>
                 <div className="w-full pt-3">
