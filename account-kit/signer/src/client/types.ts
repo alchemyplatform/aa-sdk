@@ -29,6 +29,7 @@ export type CreateAccountParams =
   | {
       type: "email";
       email: string;
+      /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
       emailMode?: EmailType;
       expirationSeconds?: number;
       redirectParams?: URLSearchParams;
@@ -48,6 +49,7 @@ export type EmailType = "magicLink" | "otp";
 
 export type EmailAuthParams = {
   email: string;
+  /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
   emailMode?: EmailType;
   expirationSeconds?: number;
   targetPublicKey: string;
@@ -77,6 +79,14 @@ export type OauthConfig = {
   codeChallenge: string;
   requestKey: string;
   authProviders: AuthProviderConfig[];
+};
+
+export type EmailConfig = {
+  mode?: "MAGIC_LINK" | "OTP";
+};
+
+export type SignerConfig = {
+  email: EmailConfig;
 };
 
 export type AuthProviderConfig = {
@@ -157,6 +167,11 @@ export type SignerEndpoints = [
     Route: "/v1/otp";
     Body: OtpParams;
     Response: { credentialBundle: string };
+  },
+  {
+    Route: "/v1/signer-config";
+    Body: {};
+    Response: SignerConfig;
   }
 ];
 
