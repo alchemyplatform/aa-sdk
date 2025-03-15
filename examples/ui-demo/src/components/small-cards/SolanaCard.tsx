@@ -95,7 +95,7 @@ export const SolanaCard = () => {
   });
 
   return (
-    <div className="bg-bg-surface-default rounded-lg p-4 w-full xl:p-6 xl:w-[326px] xl:h-[500px] flex flex-col shadow-smallCard mb-5 xl:mb-0 min-h-[220px]">
+    <div className="bg-bg-surface-default rounded-lg p-4 w-full xl:p-6 xl:w-[326px] flex flex-col shadow-smallCard mb-5 xl:mb-0 min-h-[220px]">
       <div className="flex gap-3 xl:gap-0 xl:flex-col">
         <div className="flex-shrink-0 bg-[#DCFCE7] rounded-xl mb-4 flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
           <p className="absolute top-[-6px] left-[-6px] sm:top-1 sm:left-1 xl:left-auto xl:right-4 xl:top-4 px-2 py-1 font-semibold rounded-md text-xs text-[#F3F3FF] bg-[#16A34A]">
@@ -133,41 +133,44 @@ export const SolanaCard = () => {
           )}
         </div>
       </div>
-      <Button
-        className="mt-auto mb-1"
-        disabled={!solanaSigner || isPending || isBalanceLoading}
-        onClick={() => {
-          if (balance === 0) {
-            window.open("https://faucet.solana.com/", "_blank");
-          } else if (!txHash) {
-            mutate();
-          } else {
-            window.open(
-              `https://explorer.solana.com/tx/${txHash}?cluster=devnet`,
-              "_blank"
-            );
-          }
-        }}
-      >
-        {balance === 0 && solanaSigner
-          ? "Go to Faucet"
-          : isPending
-          ? "Sending..."
-          : txHash
-          ? "View on Explorer"
-          : "Send transaction"}
-      </Button>
-      <Button
-        className="mt-auto"
-        disabled={!solanaSigner || isSigningMessage}
-        onClick={() => signHello()}
-      >
-        {isSigningMessage
-          ? "Signing..."
-          : signature
-          ? "Signed"
-          : `Sign message`}
-      </Button>
+      {/* Button Wrapper */}
+      <div className="flex flex-col mt-auto">
+        <Button
+          className="mb-1"
+          disabled={!solanaSigner || isPending || isBalanceLoading}
+          onClick={() => {
+            if (balance === 0) {
+              window.open("https://faucet.solana.com/", "_blank");
+            } else if (!txHash) {
+              mutate();
+            } else {
+              window.open(
+                `https://explorer.solana.com/tx/${txHash}?cluster=devnet`,
+                "_blank"
+              );
+            }
+          }}
+        >
+          {balance === 0 && solanaSigner
+            ? "Go to Faucet"
+            : isPending
+            ? "Sending..."
+            : txHash
+            ? "View on Explorer"
+            : "Send transaction"}
+        </Button>
+        <Button
+          className="mt-auto"
+          disabled={!solanaSigner || isSigningMessage}
+          onClick={() => signHello()}
+        >
+          {isSigningMessage
+            ? "Signing..."
+            : signature
+            ? "Signed"
+            : `Sign message`}
+        </Button>
+      </div>
     </div>
   );
 };

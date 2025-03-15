@@ -10,7 +10,7 @@ export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center p-6 w-full justify-center max-w-screen-sm xl:max-w-none">
+    <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 p-6 w-full justify-center max-w-screen-sm xl:max-w-none items-stretch">
       {accountMode === "default" ? (
         <>
           <MintCardDefault />
