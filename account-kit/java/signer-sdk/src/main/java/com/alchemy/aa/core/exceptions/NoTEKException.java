@@ -1,8 +1,8 @@
 package com.alchemy.aa.core.exceptions;
 
-public class NoTEKException extends RuntimeException {
+public class NoTekException extends RuntimeException {
 
-    public NoTEKException() {
+    public NoTekException() {
         super();
     }
 }
