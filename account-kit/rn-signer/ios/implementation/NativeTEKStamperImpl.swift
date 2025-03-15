@@ -1,3 +1,4 @@
+
 import CryptoKit
 import Foundation
 
@@ -11,7 +12,7 @@ enum StamperError: Error {
 @objc public class NativeTEKStamperImpl: NSObject {
     // TODO: we probably want to keep this longer term somewhere, because the RN session manager will
     // hold on to the bundle and try to recreate a session if a user is still logged in
-    var ephemeralPrivateKey: P256.KeyAgreement.PrivateKey? = nil;
+    var ephemeralPrivateKey: P256.KeyAgreement.PrivateKey? = KeychainHelper.shared.getPrivateKeyFromKeychain()
     
     // These can be ephemeral and held in memory because the session manager will handle re-authenticating
     var apiPublicKey: P256.Signing.PublicKey? = nil;
@@ -20,6 +21,7 @@ enum StamperError: Error {
     @objc public func create() async throws -> NSString {
         if (ephemeralPrivateKey == nil) {
             ephemeralPrivateKey = P256.KeyAgreement.PrivateKey()
+            KeychainHelper.shared.savePrivateKeyToKeychain(ephemeralPrivateKey!)
         }
         let targetPublicKey = try ephemeralPrivateKey!.publicKey.toString(representation: .x963)
         
@@ -27,6 +29,7 @@ enum StamperError: Error {
     }
     
     @objc public func clear() {
+        KeychainHelper.shared.deletePrivateKeyFromKeychain()
         ephemeralPrivateKey = nil
         apiPublicKey = nil
         apiPrivateKey = nil
@@ -41,18 +44,33 @@ enum StamperError: Error {
         }
     }
     
-    @objc public func injectCredentialBundle(bundle: NSString) async throws -> ObjCBool {
-        if let ephemeralPrivateKey = ephemeralPrivateKey {
-            let (bundlePrivateKey, bundlePublicKey) = try AuthManager.decryptBundle(encryptedBundle: bundle as String, ephemeralPrivateKey: ephemeralPrivateKey)
-            
-            apiPublicKey = bundlePublicKey
-            apiPrivateKey = bundlePrivateKey
-            
-            return true;
-        } else {
-            throw StamperError.notInitialized
-        }
-    }
+     @objc public func injectCredentialBundle(bundle: NSString) async throws -> ObjCBool {
+       if let ephemeralPrivateKey = ephemeralPrivateKey {
+           print("Injecting credential bundle")
+
+           do {
+               let (bundlePrivateKey, bundlePublicKey) = try AuthManager.decryptBundle(
+                   encryptedBundle: bundle as String, 
+                   ephemeralPrivateKey: ephemeralPrivateKey
+               )
+               
+               apiPublicKey = bundlePublicKey
+               apiPrivateKey = bundlePrivateKey
+               
+               print("Successfully decrypted bundle")
+               return true
+           } catch let error as AuthError {
+               print("Auth error: \(error)")
+               throw error
+           } catch {
+               print("Unknown error: \(error)")
+               throw error
+           }
+       } else {
+           print("Ephemeral private key not initialized")
+           throw StamperError.notInitialized
+       }
+   }
     
     // TODO: we should use the turnkey stamper for all of this, but we need it published as a pod
     // and it shouldn't require use_frameworks!
