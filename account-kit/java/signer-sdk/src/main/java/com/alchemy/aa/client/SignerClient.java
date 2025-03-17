@@ -35,7 +35,7 @@ public class SignerClient {
     }
 
     @Getter
-    public enum PathName {
+    private enum PathName {
         LOOKUP("lookup"), AUTH("auth"), AUTH_JWT("auth-jwt"), WHOAMI("whoami"), SIGN_PAYLOAD("sign-payload");
 
         private final String name;
@@ -70,7 +70,7 @@ public class SignerClient {
      */
     public Stamper authenticateWithBundle(TekManager tekManager, String orgId, String bundle) throws Exception {
         // inject bundle
-        CredentialBundle credentialBundle = CredentialBundle.injectCredentialBundle(bundle, tekManager);
+        CredentialBundle credentialBundle = CredentialBundle.fromEncryptedBundle(bundle, tekManager);
 
         Stamper stamper = new Stamper(credentialBundle);
         User user = authUser(stamper, orgId);
@@ -153,10 +153,6 @@ public class SignerClient {
         return signRawMessage(stamper, txBytes, "HASH_FUNCTION_NO_OP", stamper.getUser().address);
     }
 
-    public String targetPublicKeyHex(TekManager tekManager) throws Exception {
-        return tekManager.publicKey();
-    }
-
     /**
      * Auth user with Stamp.
      *
@@ -182,10 +178,10 @@ public class SignerClient {
     }
 
     private <Request, Response> Response request(String path, Request request, Class<Response> clazz) throws Exception {
-        URI uri = URI.create(httpConfig.getUrl()).resolve(path);
+        URI uri = URI.create(httpConfig.url()).resolve(path);
 
         HttpRequest http_request = HttpRequest.newBuilder().uri(uri).header("accept", "application/json")
-                .header("content-type", "application/json").header("Authorization", "Bearer " + httpConfig.getApiKey())
+                .header("content-type", "application/json").header("Authorization", "Bearer " + httpConfig.apiKey())
                 .method("POST", HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(request))).build();
 
         HttpResponse<String> response = HttpClient.newHttpClient().send(http_request,

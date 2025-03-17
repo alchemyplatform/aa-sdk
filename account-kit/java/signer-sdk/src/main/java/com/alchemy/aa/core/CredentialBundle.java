@@ -1,6 +1,5 @@
 package com.alchemy.aa.core;
 
-import com.alchemy.aa.core.exceptions.StamperNotInitializedException;
 import com.google.common.primitives.Bytes;
 import com.google.crypto.tink.subtle.EllipticCurves;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -34,15 +33,12 @@ public record CredentialBundle(
      * @throws GeneralSecurityException
      *             if initTek is never called.
      */
-    public static CredentialBundle injectCredentialBundle(String bundle, TekManager tekManager)
+    public static CredentialBundle fromEncryptedBundle(String bundle, TekManager tekManager)
             throws GeneralSecurityException, InvalidProtocolBufferException {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
 
-        if (tekManager.getPublicKey() == null) {
-            throw new StamperNotInitializedException();
-        }
         // TEK public key in raw bytes
         byte[] tekPublicKeyBytes = tekManager.getPublicKey().getPublicKeyBytes().toByteArray();
 

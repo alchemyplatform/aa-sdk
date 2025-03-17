@@ -21,14 +21,14 @@ import java.security.GeneralSecurityException;
 
 public class TekManager {
 
-    public static TekManager initializeTekManagerFromHpkeKey(HpkePrivateKey privaTekey)
+    public static TekManager fromHpkeKey(HpkePrivateKey privaTekey)
             throws GeneralSecurityException {
         KeysetHandle keysetHandle = KeysetHandle.newBuilder()
                 .addEntry(KeysetHandle.importKey(privaTekey).makePrimary().withFixedId(0)).build();
-        return initializeTekManagerFromKeySetHandle(keysetHandle);
+        return fromKeyetHandle(keysetHandle);
     }
 
-    public static TekManager initializeTekManagerFromKeySetHandle(KeysetHandle keysetHandle)
+    public static TekManager fromKeyetHandle(KeysetHandle keysetHandle)
             throws GeneralSecurityException {
         TekManager Tek = new TekManager();
 
@@ -38,25 +38,14 @@ public class TekManager {
         return Tek;
     }
 
-    public static TekManager initializeTekManager() throws GeneralSecurityException, InvalidProtocolBufferException {
-        TekManager Tek = new TekManager();
-        Tek.createTek();
-        return Tek;
-    }
-
-    private HpkePublicKey createTek() throws GeneralSecurityException, InvalidProtocolBufferException {
-
-        HpkePublicKey existingPublicKey = getPublicKey();
-        if (existingPublicKey != null) {
-            return existingPublicKey;
-        }
-
+    public static TekManager createNew() throws GeneralSecurityException, InvalidProtocolBufferException {
+        TekManager tek = new TekManager();
         KeysetHandle keysetHandle = KeysetHandle.generateNew(KeyTemplate.createFrom(getHpkeParams()));
         String serializedKeyset = TinkJsonProtoKeysetFormat.serializeKeyset(keysetHandle,
-                InsecureSecretKeyAccess.get());
+            InsecureSecretKeyAccess.get());
 
-        this.serializedKeyset = serializedKeyset.toCharArray();
-        return this.toHpkePublicKey(getHpkeParams(), keysetHandle);
+        tek.serializedKeyset = serializedKeyset.toCharArray();
+        return tek;
     }
 
     public KeysetHandle getKeysetHandle() {

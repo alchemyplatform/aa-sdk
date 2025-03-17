@@ -35,14 +35,14 @@ public class StamperTests {
                 .setVariant(HpkeParameters.Variant.NO_PREFIX).build();
         HpkePublicKey hpkePublicKey = HpkePublicKey.create(parameters, public_key, /* idRequirement= */null);
         HpkePrivateKey hpkePrivateKey = HpkePrivateKey.create(hpkePublicKey, private_key);
-        tekManager = TekManager.initializeTekManagerFromHpkeKey(hpkePrivateKey);
+        tekManager = TekManager.fromHpkeKey(hpkePrivateKey);
     }
 
     @Test
     public void injectCredentialBundle()
             throws GeneralSecurityException, InvalidProtocolBufferException, JsonProcessingException {
         String credentialBundle = "2AdeMPFUCZm3ywdNGyVzdTTd7Q15FjzhjkFCQD3rUfxJsaAq5rwcfWPHpLNXSsuPEXc4pUd8jyJ4QY9XAo2JBaLERLgDL2vwHh2psF94vYacf4W1iKre";
-        CredentialBundle cb = CredentialBundle.injectCredentialBundle(credentialBundle, tekManager);
+        CredentialBundle cb = CredentialBundle.fromEncryptedBundle(credentialBundle, tekManager);
         Stamper stamper = new Stamper(cb);
 
         Stamper.Stamp stamp = stamper
