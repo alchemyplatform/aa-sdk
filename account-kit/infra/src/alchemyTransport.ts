@@ -2,7 +2,6 @@ import {
   ChainNotFoundError,
   ConnectionConfigSchema,
   split,
-  tracingHeader,
   type ConnectionConfig,
   type NoUndefined,
 } from "@aa-sdk/core";
@@ -163,25 +162,23 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
         : connectionConfig.rpcUrl;
 
-    const innerTransport = tracingHeader({
-      transport: (() => {
-        if (config.alchemyConnection && config.nodeRpcUrl) {
-          return split({
-            overrides: [
-              {
-                methods: alchemyMethods,
-                transport: http(rpcUrl, { fetchOptions }),
-              },
-            ],
-            fallback: http(config.nodeRpcUrl, {
-              fetchOptions: config.fetchOptions,
-            }),
-          });
-        }
+    const innerTransport = (() => {
+      if (config.alchemyConnection && config.nodeRpcUrl) {
+        return split({
+          overrides: [
+            {
+              methods: alchemyMethods,
+              transport: http(rpcUrl, { fetchOptions }),
+            },
+          ],
+          fallback: http(config.nodeRpcUrl, {
+            fetchOptions: config.fetchOptions,
+          }),
+        });
+      }
 
-        return http(rpcUrl, { fetchOptions });
-      })(),
-    });
+      return http(rpcUrl, { fetchOptions });
+    })();
 
     return createTransport(
       {

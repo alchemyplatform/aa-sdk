@@ -14,18 +14,11 @@ const headerMatcher = {
   "Alchemy-AA-Sdk-Version": expect.any(String),
 };
 
-describe("AlchemySmartAccountClient tests", () => {
-  let ogFetch = fetch;
-  beforeAll(() => {
-    global.fetch = vi.fn();
-  });
+const fetchSpy = vi.spyOn(global, "fetch");
 
+describe("AlchemySmartAccountClient tests", () => {
   beforeEach(() => {
-    // @ts-expect-error - fetch is mocked
-    global.fetch.mockClear();
-  });
-  afterAll(() => {
-    global.fetch = ogFetch;
+    fetchSpy.mockClear();
   });
 
   it("should set the headers when using non-hoisted accounts", async () => {
@@ -33,18 +26,14 @@ describe("AlchemySmartAccountClient tests", () => {
     await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
-    expect(
-      // @ts-expect-error - fetch is mocked
-      fetch.mock.calls.map((x) => x[1].headers)[0]
-    ).toMatchInlineSnapshot(
-      headerMatcher,
-      `
+
+    expect(fetchSpy.mock.calls.map((x) => x[1]?.headers)[0])
+      .toMatchInlineSnapshot(`
       {
-        "Alchemy-AA-Sdk-Version": Any<String>,
+        "Alchemy-AA-Sdk-Version": "4.15.3",
         "Content-Type": "application/json",
       }
-    `
-    );
+    `);
 
     await client.middleware
       // @ts-expect-error this is actually still there
@@ -64,15 +53,13 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     // clear the mock calls so we only get the latest call below
-    // @ts-expect-error - fetch is mocked
-    global.fetch.mockClear();
+    fetchSpy.mockClear();
     await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
     expect(
-      // @ts-expect-error - fetch is mocked
-      fetch.mock.calls.map((x) => x[1].headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
     ).toMatchInlineSnapshot(
       headerMatcher,
       `
@@ -102,8 +89,7 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     expect(
-      // @ts-expect-error - fetch is mocked
-      fetch.mock.calls.map((x) => x[1].headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
     ).toMatchInlineSnapshot(
       headerMatcher,
       `
@@ -152,8 +138,7 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     expect(
-      // @ts-expect-error - fetch is mocked
-      fetch.mock.calls.map((x) => x[1].headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
     ).toMatchInlineSnapshot(
       headerMatcher,
       `

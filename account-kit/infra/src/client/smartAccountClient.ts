@@ -1,6 +1,8 @@
 import {
+  ADD_BREADCRUMB,
   ChainNotFoundError,
   createSmartAccountClient,
+  headersUpdate,
   isSmartAccountWithSigner,
   type Prettify,
   type SmartAccountClient,
@@ -10,11 +12,9 @@ import {
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type UserOperationContext,
-  tracingHeader,
-  ADD_BREADCRUMB,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
-import { type AlchemyTransport } from "../alchemyTransport.js";
+import { alchemy, type AlchemyTransport } from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
@@ -176,19 +176,18 @@ export function createAlchemySmartAccountClient(
     signUserOperation: config.signUserOperation,
   }).extend(alchemyActions);
 
+  if (config.account && isSmartAccountWithSigner(config.account)) {
+    config.transport.updateHeaders(getSignerTypeHeader(config.account));
+  }
+
   return {
     ...scaClient,
     [ADD_BREADCRUMB](breadcrumb: string) {
-      const transport = Object.assign(
-        tracingHeader({
-          transport: config.transport,
-          breadcrumb,
-        }),
-        config.transport
-      );
+      const newTransport = alchemy({ ...config.transport.config });
+      newTransport.updateHeaders(headersUpdate(breadcrumb)({}));
       return createAlchemySmartAccountClient({
         ...config,
-        transport,
+        transport: newTransport,
       });
     },
   };
