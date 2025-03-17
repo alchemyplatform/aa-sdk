@@ -12,6 +12,8 @@ import com.alchemy.aa.client.api.SignRawMessage.SignRawMessageRequest;
 import com.alchemy.aa.client.api.SignRawMessage.SignedResponse;
 import com.alchemy.aa.client.api.SignRawMessage.SigningBody;
 import com.alchemy.aa.client.api.StampedRequest;
+import com.alchemy.aa.core.CredentialBundle;
+import com.alchemy.aa.core.TekManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.crypto.tink.util.Bytes;
@@ -43,10 +45,6 @@ public class SignerClient {
         }
     }
 
-    public enum SigningMode {
-        ETHEREUM, SOLANA
-    }
-
     private final HttpConfig httpConfig;
     private final ObjectMapper mapper;
     private final Logger logger;
@@ -60,8 +58,8 @@ public class SignerClient {
     /**
      * Inject a bunlde to stamper and authenticate the with orgId.
      *
-     * @param stamper
-     *            stamper to stamp during the session.
+     * @param tekManager
+     *            client's tek keys.
      * @param orgId
      * @param bundle
      *            bundle from alchemy signer service.
@@ -70,21 +68,24 @@ public class SignerClient {
      *
      * @throws Exception
      */
-    public User authenticateWithBundle(Stamper stamper, String orgId, String bundle) throws Exception {
+    public Stamper authenticateWithBundle(TekManager tekManager, String orgId, String bundle) throws Exception {
         // inject bundle
-        stamper.injectCredentialBundle(bundle);
+        CredentialBundle credentialBundle = CredentialBundle.injectCredentialBundle(bundle, tekManager);
 
-        return authUser(stamper, orgId);
+        Stamper stamper = new Stamper(credentialBundle);
+        User user = authUser(stamper, orgId);
+        stamper.setUser(user);
+        return stamper;
     }
 
-    public User authenticateWithJWT(Stamper stamper, String jwt, String authProviderName, int expirationInSeconds)
-            throws Exception {
-        Request request = Request.builder().jwt(jwt).authProvider(authProviderName).targetPublicKey(stamper.publicKey())
-                .build();
+    public Stamper authenticateWithJWT(TekManager tekManager, String jwt, String authProviderName,
+            int expirationInSeconds) throws Exception {
+        Request request = Request.builder().jwt(jwt).authProvider(authProviderName)
+                .targetPublicKey(tekManager.publicKey()).build();
 
         Response response = request(PathName.AUTH_JWT.getName(), request, Response.class);
 
-        return authenticateWithBundle(stamper, response.orgId(), response.credentialBundle());
+        return authenticateWithBundle(tekManager, response.orgId(), response.credentialBundle());
     }
 
     /**
@@ -92,8 +93,6 @@ public class SignerClient {
      *
      * @param msg
      *            message to sign
-     * @param mode
-     *            Signing mode, SOLANA or ETHEREUM
      * @param hashFunction
      *            Name of Hashfunction.
      * @param address
@@ -103,14 +102,15 @@ public class SignerClient {
      *
      * @throws Exception
      */
-    public String signRawMessage(Stamper stamper, User user, Bytes msg, SigningMode mode, String hashFunction,
-            String address) throws Exception {
+    public String signRawMessage(Stamper stamper, Bytes msg, String hashFunction, String address)
+            throws Exception {
 
         SignParameters signParameters = SignParameters.builder().encoding("PAYLOAD_ENCODING_HEXADECIMAL")
                 .hashFunction(hashFunction).payload(Hex.toHexString(msg.toByteArray())).signWith(address).build();
 
-        SigningBody body = SigningBody.builder().organizationId(user.orgId).type("ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2")
-                .timestampMs(String.valueOf(Instant.now().toEpochMilli())).parameters(signParameters).build();
+        SigningBody body = SigningBody.builder().organizationId(stamper.getUser().orgId)
+                .type("ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2").timestampMs(String.valueOf(Instant.now().toEpochMilli()))
+                .parameters(signParameters).build();
 
         String json_body = mapper.writeValueAsString(body);
 
@@ -132,9 +132,9 @@ public class SignerClient {
      *
      * @throws Exception
      */
-    public String signSolanaTx(Stamper stamper, User user, Bytes txBytes) throws Exception {
-        return signRawMessage(stamper, user, txBytes, SigningMode.SOLANA, "HASH_FUNCTION_NOT_APPLICABLE",
-                user.solanaAddress);
+    public String signSolanaTx(Stamper stamper, Bytes txBytes) throws Exception {
+        return signRawMessage(stamper, txBytes, "HASH_FUNCTION_NOT_APPLICABLE",
+                stamper.getUser().solanaAddress);
     }
 
     /**
@@ -142,8 +142,6 @@ public class SignerClient {
      *
      * @param stamper
      *            stamper to stamp transaction
-     * @param user
-     *            user info to sign.
      * @param txBytes
      *            keccack256 hashed transaction byte
      *
@@ -151,8 +149,12 @@ public class SignerClient {
      *
      * @throws Exception
      */
-    public String signEthTx(Stamper stamper, User user, Bytes txBytes) throws Exception {
-        return signRawMessage(stamper, user, txBytes, SigningMode.ETHEREUM, "HASH_FUNCTION_NO_OP", user.address);
+    public String signEthTx(Stamper stamper, Bytes txBytes) throws Exception {
+        return signRawMessage(stamper, txBytes, "HASH_FUNCTION_NO_OP", stamper.getUser().address);
+    }
+
+    public String targetPublicKeyHex(TekManager tekManager) throws Exception {
+        return tekManager.publicKey();
     }
 
     /**

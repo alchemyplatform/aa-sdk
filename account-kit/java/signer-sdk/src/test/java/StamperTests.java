@@ -1,4 +1,5 @@
 import com.alchemy.aa.Stamper;
+import com.alchemy.aa.core.CredentialBundle;
 import com.alchemy.aa.core.TekManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.crypto.tink.InsecureSecretKeyAccess;
@@ -40,9 +41,10 @@ public class StamperTests {
     @Test
     public void injectCredentialBundle()
             throws GeneralSecurityException, InvalidProtocolBufferException, JsonProcessingException {
-        Stamper stamper = new Stamper(tekManager);
         String credentialBundle = "2AdeMPFUCZm3ywdNGyVzdTTd7Q15FjzhjkFCQD3rUfxJsaAq5rwcfWPHpLNXSsuPEXc4pUd8jyJ4QY9XAo2JBaLERLgDL2vwHh2psF94vYacf4W1iKre";
-        stamper.injectCredentialBundle(credentialBundle);
+        CredentialBundle cb = CredentialBundle.injectCredentialBundle(credentialBundle, tekManager);
+        Stamper stamper = new Stamper(cb);
+
         Stamper.Stamp stamp = stamper
                 .stamp("{\n" + "  \"organizationId\" : \"e34032d8-d42f-4980-9f07-b7b40f765789\"\n" + "}");
 

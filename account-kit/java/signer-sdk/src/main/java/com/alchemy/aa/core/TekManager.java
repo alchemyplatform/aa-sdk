@@ -56,12 +56,12 @@ public class TekManager {
                 InsecureSecretKeyAccess.get());
 
         this.serializedKeyset = serializedKeyset.toCharArray();
-        return toHpkePublicKey(getHpkeParams(), keysetHandle);
+        return this.toHpkePublicKey(getHpkeParams(), keysetHandle);
     }
 
     public KeysetHandle getKeysetHandle() {
         try {
-            return TinkJsonProtoKeysetFormat.parseKeyset(String.valueOf(serializedKeyset),
+            return TinkJsonProtoKeysetFormat.parseKeyset(String.valueOf(this.serializedKeyset),
                     InsecureSecretKeyAccess.get());
         } catch (Exception e) {
             return null;
@@ -73,13 +73,28 @@ public class TekManager {
      *
      * @return hpke public key or null if createTek is never called.
      */
-    public HpkePublicKey getPublicKey() throws InvalidProtocolBufferException, GeneralSecurityException {
-
-        return toHpkePublicKey(getHpkeParams(), getKeysetHandle());
+    public HpkePublicKey getPublicKey() throws GeneralSecurityException, InvalidProtocolBufferException {
+        KeysetHandle ksHandler = this.getKeysetHandle();
+        if (ksHandler == null) {
+            return null;
+        }
+        return toHpkePublicKey(getHpkeParams(), ksHandler);
     }
 
-    public HpkePrivateKey getPrivateKey() throws InvalidProtocolBufferException, GeneralSecurityException {
-        return toHpkePrivaTekey(getHpkeParams(), getKeysetHandle());
+    public String publicKey() throws GeneralSecurityException, InvalidProtocolBufferException {
+        KeysetHandle ksHandler = this.getKeysetHandle();
+        if (ksHandler == null) {
+            return null;
+        }
+        return org.bouncycastle.util.encoders.Hex.toHexString(getPublicKey().getPublicKeyBytes().toByteArray());
+    }
+
+    public HpkePrivateKey getPrivateKey() throws GeneralSecurityException, InvalidProtocolBufferException {
+        KeysetHandle ksHandler = this.getKeysetHandle();
+        if (ksHandler == null) {
+            return null;
+        }
+        return toHpkePrivaTekey(getHpkeParams(), ksHandler);
     }
 
     /**
@@ -109,7 +124,7 @@ public class TekManager {
         HpkeParameters hpkeParams = getHpkeParams();
 
         HpkeContext recipient = HpkeContext.createRecipientContext(encapsulatePublicKey,
-                HpkeKemKeyFactory.createPrivate(toHpkePrivaTekey(hpkeParams, keyHandle)),
+                HpkeKemKeyFactory.createPrivate(this.toHpkePrivaTekey(hpkeParams, keyHandle)),
                 HpkePrimitiveFactory.createKem(hpkeParams.getKemId()),
                 HpkePrimitiveFactory.createKdf(hpkeParams.getKdfId()),
                 HpkePrimitiveFactory.createAead(hpkeParams.getAeadId()), info);
@@ -141,7 +156,7 @@ public class TekManager {
 
     private HpkePrivateKey toHpkePrivaTekey(HpkeParameters hpkeParams, KeysetHandle keysetHandle)
             throws GeneralSecurityException, InvalidProtocolBufferException {
-        HpkePublicKey publicKey = toHpkePublicKey(hpkeParams, keysetHandle);
+        HpkePublicKey publicKey = this.toHpkePublicKey(hpkeParams, keysetHandle);
         Keyset pkKs = CleartextKeysetHandle.getKeyset(keysetHandle);
         KeyData pkKeyData = pkKs.getKeyList().get(0).getKeyData();
         assert (pkKeyData.getTypeUrl().equals("type.googleapis.com/google.crypto.tink.HpkePrivateKey"))
