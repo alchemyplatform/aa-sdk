@@ -1,13 +1,6 @@
 import { TraceHeader } from "../utils/traceHeader.js";
 
-export const UPDATE_HEADER = Symbol("updateHeader");
-export type UpdateHeaderFn = (
-  previous: Record<string, string>
-) => Record<string, string>;
-
-export type UpdateHeader<T> = {
-  [UPDATE_HEADER]<This extends T>(this: This, update: UpdateHeaderFn): This;
-};
+export const ADD_BREADCRUMB = Symbol("addBreadcrumb");
 
 export const TRACKER_HEADER = "X-Alchemy-Trace-Id";
 export const TRACKER_BREADCRUMB = "X-Alchemy-Trace-Breadcrumb";
@@ -22,27 +15,23 @@ function safeJsonParse(x: string): unknown {
 function addCrumb(previous: string | undefined, crumb: string): string {
   const previousCrumbs_ = previous && safeJsonParse(previous);
   const previousCrumbs = Array.isArray(previousCrumbs_) ? previousCrumbs_ : [];
-  return JSON.stringify([...previousCrumbs, crumb]);
+  return JSON.stringify([crumb, ...previousCrumbs]);
 }
 
-function hasUpdateHeader<A extends {}>(a: A): a is A & UpdateHeader<A> {
-  return UPDATE_HEADER in a;
-}
-
-function maybeUpdateHeader<A extends {}>(
-  a: A,
-  updateHeader: UpdateHeaderFn
-): A {
-  if (hasUpdateHeader(a)) {
-    return a[UPDATE_HEADER](updateHeader);
-  }
-  return a;
+function hasAddBreadcrumb<A extends {}>(
+  a: A
+): a is A & { [ADD_BREADCRUMB]: (breadcrumb: string) => A } {
+  return ADD_BREADCRUMB in a;
 }
 
 export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
-  return maybeUpdateHeader(client, headersUpdate(crumb));
+  if (hasAddBreadcrumb(client)) {
+    return client[ADD_BREADCRUMB](crumb);
+  }
+  return client;
 }
-export function headersUpdate(crumb: string): UpdateHeaderFn {
+
+export function headersUpdate(crumb: string) {
   const headerUpdate_ = (x: Record<string, string>) => {
     const traceHeader = (
       TraceHeader.fromTraceHeader(x) || TraceHeader.default()

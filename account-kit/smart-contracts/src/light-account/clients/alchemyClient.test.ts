@@ -23,35 +23,23 @@ describe("Light Account Client Tests", () => {
   it("should have a JWT property", async () => {
     const spy = vi.spyOn(AACoreModule, "createBundlerClient");
     await givenConnectedProvider({ signer, chain });
-    expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(
-      {
-        fetchOptions: {
-          headers: {
-            "Alchemy-AA-Sdk-Version": expect.any(String),
-            "Alchemy-Aa-Sdk-Signer": "local",
-          },
+    expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot({
+      alchemyRpcUrl: "https://polygon-mumbai.g.alchemy.com/v2/",
+      fetchOptions: {
+        headers: {
+          "Alchemy-Aa-Sdk-Signer": "local",
+          "Alchemy-AA-Sdk-Version": expect.any(String),
+          Authorization: "Bearer test",
         },
       },
-      `
-      {
-        "alchemyRpcUrl": "https://polygon-mumbai.g.alchemy.com/v2/",
-        "fetchOptions": {
-          "headers": {
-            "Alchemy-AA-Sdk-Version": Any<String>,
-            "Alchemy-Aa-Sdk-Signer": "local",
-            "Authorization": "Bearer test",
-          },
-        },
-        "key": "alchemy",
-        "name": "Alchemy Transport",
-        "request": [Function],
-        "retryCount": 3,
-        "retryDelay": 150,
-        "timeout": undefined,
-        "type": "alchemy",
-      }
-    `
-    );
+      key: "alchemy",
+      name: "Alchemy Transport",
+      request: Function,
+      retryCount: 3,
+      retryDelay: 150,
+      timeout: undefined,
+      type: "alchemy",
+    });
   });
 
   it("should correctly encode batch transaction data", async () => {

@@ -28,20 +28,20 @@ export const tracingHeader = (
 ): CustomTransport => {
   return (opts) =>
     custom({
-      request: async (args) => {
+      request: async (args_) => {
         const previousHeaders: Record<string, string> =
-          (opts as any)?.fetchOptions?.headers ?? {};
-        const headers = headersUpdate(params.breadcrumb || args.method)(
+          args_?.fetchOptions?.headers ?? {};
+        const headers = headersUpdate(params.breadcrumb || args_.method)(
           previousHeaders
         );
-        const newOpts = {
-          ...opts,
+        const args = {
+          ...args_,
           fetchOptions: {
-            ...(opts as any)?.fetchOptions,
+            ...args_?.fetchOptions,
             headers,
           },
         };
-        return params.transport(newOpts).request(args);
+        return params.transport(opts).request(args);
       },
     })(opts);
 };

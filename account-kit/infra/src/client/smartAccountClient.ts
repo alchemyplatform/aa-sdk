@@ -2,7 +2,6 @@ import {
   ChainNotFoundError,
   createSmartAccountClient,
   isSmartAccountWithSigner,
-  UPDATE_HEADER,
   type Prettify,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -10,8 +9,9 @@ import {
   type SmartAccountClientRpcSchema,
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
-  type UpdateHeaderFn,
   type UserOperationContext,
+  tracingHeader,
+  ADD_BREADCRUMB,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
 import { type AlchemyTransport } from "../alchemyTransport.js";
@@ -96,7 +96,13 @@ export type AlchemySmartAccountClient<
   context extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined
-> = Prettify<AlchemySmartAccountClient_Base<chain, account, actions, context>>;
+> = Prettify<
+  AlchemySmartAccountClient_Base<chain, account, actions, context> & {
+    [ADD_BREADCRUMB]: (
+      breadcrumb: string
+    ) => AlchemySmartAccountClient_Base<chain, account, actions, context>;
+  }
+>;
 
 export function createAlchemySmartAccountClient<
   TChain extends Chain = Chain,
@@ -172,8 +178,14 @@ export function createAlchemySmartAccountClient(
 
   return {
     ...scaClient,
-    [UPDATE_HEADER](updateFn: UpdateHeaderFn) {
-      const transport = config.transport[UPDATE_HEADER](updateFn);
+    [ADD_BREADCRUMB](breadcrumb: string) {
+      const transport = Object.assign(
+        tracingHeader({
+          transport: config.transport,
+          breadcrumb,
+        }),
+        config.transport
+      );
       return createAlchemySmartAccountClient({
         ...config,
         transport,

@@ -3,11 +3,8 @@ import {
   ConnectionConfigSchema,
   split,
   tracingHeader,
-  UPDATE_HEADER,
   type ConnectionConfig,
   type NoUndefined,
-  type UpdateHeader,
-  type UpdateHeaderFn,
 } from "@aa-sdk/core";
 import {
   createTransport,
@@ -69,7 +66,7 @@ type AlchemyTransportBase = Transport<
 export type AlchemyTransport = AlchemyTransportBase & {
   updateHeaders(newHeaders: HeadersInit): void;
   config: AlchemyTransportConfig;
-} & UpdateHeader<AlchemyTransportBase>;
+};
 
 /**
  * A type guard for the transport to determine if it is an Alchemy transport.
@@ -200,17 +197,6 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
   };
 
   return Object.assign(transport, {
-    [UPDATE_HEADER](updateHeaders: UpdateHeaderFn) {
-      const previous = convertHeadersToObject(config.fetchOptions?.headers);
-      const headers = updateHeaders(previous);
-      return alchemy({
-        ...config,
-        fetchOptions: {
-          ...config.fetchOptions,
-          headers,
-        },
-      });
-    },
     updateHeaders(newHeaders_: HeadersInit) {
       const newHeaders = convertHeadersToObject(newHeaders_);
 
