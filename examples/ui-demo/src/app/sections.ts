@@ -79,7 +79,8 @@ export function getSectionsForConfig(
     midSection.push({
       type: "social",
       authProviderId: "auth0",
-      mode: "popup",
+      mode: "redirect",
+      redirectUrl: window.location.href || "",
       auth0Connection: "Username-Password-Connection",
       displayName: "Test",
       logoUrl: "/images/key.svg",
