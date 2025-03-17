@@ -33,11 +33,6 @@
       "import": "./dist/esm/tailwind/index.js",
       "default": "./dist/esm/tailwind/index.js"
     },
-    "./tailwind/pluginV4": {
-      "types": "./dist/types/tailwind/pluginV4/index.d.ts",
-      "import": "./dist/esm/tailwind/pluginV4/index.js",
-      "default": "./dist/esm/tailwind/pluginV4/index.js"
-    },
     "./alchemy-account-context": {
       "types": "./dist/types/AlchemyAccountContext.d.ts",
       "import": "./dist/esm/AlchemyAccountContext.js",

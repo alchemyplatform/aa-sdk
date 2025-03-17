@@ -19,10 +19,10 @@ export const colorVariables = (theme: AccountKitTheme): ComponentDef => {
     accum[
       `@apply [${getColorVariableName(name)}:${variant.light.replaceAll(
         " ",
-        "_"
+        "_",
       )}] dark:[${getColorVariableName(name)}:${variant.dark.replaceAll(
         " ",
-        "_"
+        "_",
       )}]`
     ] = {};
 

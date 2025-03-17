@@ -182,25 +182,3 @@ export const withAccountKitUi = (
       },
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });
-
-// TODO(jh): try to get this to work w/ tailwind v4...
-// export const withAccountKitUi_tailwindV4 = (
-//   config: TailwindConfig,
-//   themeOverride?: AccountKitThemeOverride,
-// ): TailwindConfig => ({
-//   // darkMode: [
-//   //   "variant",
-//   //   [
-//   //     "@media (prefers-color-scheme: dark) { &:not(.light, .light *) }",
-//   //     "&:is(.dark, .dark *)",
-//   //   ],
-//   // ],
-//   ...config,
-//   content: Array.isArray(config.content)
-//     ? [...config.content, getAccountKitContentPath()]
-//     : {
-//         ...config.content,
-//         files: [...config.content.files, getAccountKitContentPath()],
-//       },
-//   // plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
-// });
