@@ -9,13 +9,24 @@
 
   <groupId>com.alchemy.accountkit</groupId>
   <artifactId>signer-sdk</artifactId>
-  <version>0.0-alpha-</version>
+  <version>0.1.0-alpha-75d8e542</version>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>central</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>central</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <scm>
     <connection>scm:git:git@github.com:alchemyplatform/aa-sdk.git</connection>
