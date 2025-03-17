@@ -24,15 +24,18 @@ public class Stamper {
     }
 
     public record APIStamp(String publicKey, String scheme, String signature) {
+
+        public String toJson() throws JsonProcessingException {
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            return ow.writeValueAsString(this);
+        }
     }
 
-    public static String toJson(APIStamp apiStamp) throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(apiStamp);
-    }
 
 
-    private final CredentialBundle credentialBundle;
+    @Getter
+    @Setter
+    private CredentialBundle credentialBundle;
 
     @Setter
     @Getter
@@ -40,13 +43,16 @@ public class Stamper {
     private User user;
 
     public Stamper(CredentialBundle credentialBundle) {
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        }
-
+        this();
         this.credentialBundle = credentialBundle;
     }
 
+    // This is left for json serialization/deserialization.
+    public Stamper() {
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
+    }
     /**
      * Signs the given payload using the stored private key and returns a Stamp.
      *
@@ -59,14 +65,14 @@ public class Stamper {
      *             if the private is malformed
      */
     public synchronized Stamp stamp(String payload) throws GeneralSecurityException, JsonProcessingException {
-        if (this.credentialBundle.getBundlePrivateKey() == null || this.credentialBundle.getBundlePublicKey() == null) {
+        if (this.credentialBundle.bundlePrivateKey() == null || this.credentialBundle.bundlePublicKey() == null) {
             throw new NoInjectedBundleException();
         }
 
         // Build the EC private key
 
         KeyFactory keyFactory = KeyFactory.getInstance("EC");
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(this.credentialBundle.getBundlePrivateKey());
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(this.credentialBundle.bundlePrivateKey());
         ECPrivateKey ecPrivateKey = (ECPrivateKey) keyFactory.generatePrivate(keySpec);
 
         // Sign with SHA256withECDSA
@@ -77,10 +83,10 @@ public class Stamper {
         byte[] signatureBytes = signer.sign();
 
         // Prepare the stamp structure
-        APIStamp apiStamp = new APIStamp(Hex.encode(this.credentialBundle.getBundlePublicKey()),
+        APIStamp apiStamp = new APIStamp(Hex.encode(this.credentialBundle.bundlePublicKey()),
                 "SIGNATURE_SCHEME_TK_API_P256", Hex.encode(signatureBytes));
 
-        String jsonString = toJson(apiStamp);
+        String jsonString = apiStamp.toJson();
 
         // URL-safe Base64
         String encoded = Base64.urlSafeEncode(jsonString.getBytes());

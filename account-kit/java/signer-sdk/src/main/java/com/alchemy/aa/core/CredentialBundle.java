@@ -4,7 +4,6 @@ import com.alchemy.aa.core.exceptions.StamperNotInitializedException;
 import com.google.common.primitives.Bytes;
 import com.google.crypto.tink.subtle.EllipticCurves;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
@@ -12,27 +11,19 @@ import java.security.Security;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
-import lombok.Getter;
 import org.bitcoinj.base.Base58;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
 
-public class CredentialBundle implements Serializable {
+public record CredentialBundle(
+    byte[] bundlePrivateKey,
+    byte[] bundlePublicKey
+) {
 
     /// Private key deciphered from bundle.
-    @Getter
-    private byte[] bundlePrivateKey;
 
     /// Public key from bundle.
-    @Getter
-    private byte[] bundlePublicKey;
-
-    private CredentialBundle(TekManager tekManager) {
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        }
-    }
 
     /**
      * Injects a credential bundle (Base58-encoded) after decrypting.
@@ -45,7 +36,10 @@ public class CredentialBundle implements Serializable {
      */
     public static CredentialBundle injectCredentialBundle(String bundle, TekManager tekManager)
             throws GeneralSecurityException, InvalidProtocolBufferException {
-        CredentialBundle credentialBundle = new CredentialBundle(tekManager);
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
+
         if (tekManager.getPublicKey() == null) {
             throw new StamperNotInitializedException();
         }
@@ -78,9 +72,7 @@ public class CredentialBundle implements Serializable {
 
         byte[][] keys = privateKeyToKeyPair(decryptedKey);
         // Split out the privateKey/publicKey from the decrypted bytes
-        credentialBundle.bundlePublicKey = keys[0];
-        credentialBundle.bundlePrivateKey = keys[1];
-        return credentialBundle;
+        return  new CredentialBundle(keys[1], keys[0]);
     }
 
     private static byte[] convertToUncompress(byte[] compressedPubKeyBytes) throws GeneralSecurityException {

@@ -7,9 +7,9 @@
   <description>This is an Alchemy signer SDK</description>
   <url>https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/java/signer-sdk</url>
 
-  <groupId>io.github.andysim3d</groupId>
+  <groupId>com.alchemy.accountkit</groupId>
   <artifactId>signer-sdk</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>0.0</version>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
