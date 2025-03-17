@@ -196,9 +196,7 @@ export const DeferredActionBuilder = {
     const unsignedUo = (await args.client.buildUserOperation({
       uo: args.uo,
       overrides: {
-        nonce: args.nonceOverride, // FIX: Currently, we aren't setting the deferred validation flag in the nonce key, instead we're setting it in
-        // the returned nonce itself. This means sequential nonces will be incorrect.
-        // dummySignature: "0x",
+        nonce: args.nonceOverride,
       },
     })) as UserOperationRequest_v7;
 

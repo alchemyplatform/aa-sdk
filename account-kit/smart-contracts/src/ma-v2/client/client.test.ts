@@ -413,10 +413,12 @@ describe("MA v2 Tests", async () => {
     uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
 
     // Send the raw UserOp
-    await sessionKeyClient.sendRawUserOperation(
+    const result = await sessionKeyClient.sendRawUserOperation(
       uo,
       provider.account.getEntryPoint().address
     );
+
+    await provider.waitForUserOperationTransaction({ hash: result });
   });
 
   it("uninstalls a session key", async () => {
