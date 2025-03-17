@@ -44,7 +44,7 @@ export const getAccountKitContentPath = () => {
   const pathToMe = require.resolve("@account-kit/react");
   const contentPath = `${pathToMe.replace(
     "index.js",
-    ""
+    "",
   )}**/*.{js,ts,jsx,tsx,mdx}`;
 
   return contentPath;
@@ -75,20 +75,23 @@ export const getAccountKitContentPath = () => {
  * @returns {TailWindPlugin} a TailwindPlugin to be used within the tailwind.config.js
  */
 export const accountKitUi: (
-  themeOverride?: AccountKitThemeOverride
+  themeOverride?: AccountKitThemeOverride,
 ) => TailWindPlugin = (themeOverride) => {
   const defaultTheme = createDefaultTheme();
   const accountKitTheme = apply(defaultTheme, themeOverride);
   const { colors, borderRadius, ...rest } = accountKitTheme;
+  console.log({ themeOverride, accountKitTheme, colors });
 
   return plugin(
-    ({ addComponents, addUtilities, matchUtilities }) => {
+    ({ addComponents, addUtilities, matchUtilities, addBase }) => {
+      // base
+      addBase(colorVariables(accountKitTheme));
+      addBase(borderRadiusVariables(accountKitTheme));
+
       // utilities
       addUtilities(borderUtilities);
 
       // components
-      addComponents(colorVariables(accountKitTheme));
-      addComponents(borderRadiusVariables(accountKitTheme));
       addComponents(buttonComponents);
       addComponents(inputComponents);
       addComponents(formControlComponents);
@@ -105,10 +108,10 @@ export const accountKitUi: (
             (acc, key) => ({
               ...acc,
               [key]: `var(${getColorVariableName(
-                key as AccountKitThemeColor
+                key as AccountKitThemeColor,
               )})`,
             }),
-            {} as Record<AccountKitThemeColor, string>
+            {} as Record<AccountKitThemeColor, string>,
           ),
           keyframes: {
             "fade-in": {
@@ -148,7 +151,7 @@ export const accountKitUi: (
           },
         },
       },
-    }
+    },
   );
 };
 
@@ -161,7 +164,7 @@ export const accountKitUi: (
  */
 export const withAccountKitUi = (
   config: TailwindConfig,
-  themeOverride?: AccountKitThemeOverride
+  themeOverride?: AccountKitThemeOverride,
 ): TailwindConfig => ({
   darkMode: [
     "variant",
@@ -179,3 +182,25 @@ export const withAccountKitUi = (
       },
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });
+
+// TODO(jh): try to get this to work w/ tailwind v4...
+// export const withAccountKitUi_tailwindV4 = (
+//   config: TailwindConfig,
+//   themeOverride?: AccountKitThemeOverride,
+// ): TailwindConfig => ({
+//   // darkMode: [
+//   //   "variant",
+//   //   [
+//   //     "@media (prefers-color-scheme: dark) { &:not(.light, .light *) }",
+//   //     "&:is(.dark, .dark *)",
+//   //   ],
+//   // ],
+//   ...config,
+//   content: Array.isArray(config.content)
+//     ? [...config.content, getAccountKitContentPath()]
+//     : {
+//         ...config.content,
+//         files: [...config.content.files, getAccountKitContentPath()],
+//       },
+//   // plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
+// });

@@ -2,7 +2,7 @@ import type { AccountKitTheme, ComponentDef } from "../types";
 import { getBorderRadiusBaseVariableName } from "../utils.js";
 
 export function getBorderRadiusValue(
-  borderRadius: AccountKitTheme["borderRadius"]
+  borderRadius: AccountKitTheme["borderRadius"],
 ): string {
   switch (borderRadius) {
     case "lg":
@@ -23,7 +23,7 @@ export function borderRadiusVariables(theme: AccountKitTheme): ComponentDef {
   return {
     ":root": {
       [getBorderRadiusBaseVariableName()]: getBorderRadiusValue(
-        theme.borderRadius
+        theme.borderRadius,
       ),
     },
   };
