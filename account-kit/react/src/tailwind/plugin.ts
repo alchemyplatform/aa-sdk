@@ -178,7 +178,10 @@ export const withAccountKitUi = (
     ? [...config.content, getAccountKitContentPath()]
     : {
         ...config.content,
-        files: [...config.content.files, getAccountKitContentPath()],
+        files: [
+          ...(Array.isArray(config.content?.files) ? config.content.files : []),
+          getAccountKitContentPath(),
+        ],
       },
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });
