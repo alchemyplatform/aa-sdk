@@ -6,11 +6,14 @@ import { useMemo } from "react";
 import { useRecurringTransactions } from "@/hooks/useRecurringTransactions";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
-import { useConfigStore } from "@/state";
 import { Card } from "./Card";
+import { Badge } from "./Badge";
 
-export const TransactionsCard = () => {
-  const { accountMode } = useConfigStore();
+export const TransactionsCard = ({
+  accountMode,
+}: {
+  accountMode: "7702" | "default";
+}) => {
   const { cardStatus, isLoadingClient, transactions, handleTransactions } =
     useRecurringTransactions({
       mode: accountMode === "7702" ? "7702" : "default",
@@ -58,11 +61,9 @@ export const TransactionsCard = () => {
 
   return (
     <Card
+      badgeSlot={<Badge text="New!" className="text-[#7c3AED] bg-[#F3F3FF]" />}
       imageSlot={
-        <div className="flex-shrink-0 bg-[#EAEBFE] rounded-xl sm:mb-3 xl:mb-0 flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
-          <p className="absolute top-[-6px] left-[-6px] sm:top-1 sm:left-1 xl:left-auto xl:right-4 xl:top-4 px-2 py-1 font-semibold rounded-md text-xs text-[#7c3AED] bg-[#F3F3FF]">
-            New!
-          </p>
+        <div className="flex-shrink-0 bg-[#EAEBFE] rounded-xl flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
           <Key className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
         </div>
       }

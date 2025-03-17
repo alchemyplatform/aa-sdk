@@ -5,9 +5,9 @@ import { MintStages } from "./MintStages";
 import { odyssey } from "@/hooks/7702/transportSetup";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { Card } from "./Card";
-import { useConfigStore } from "@/state";
 import { LoadingIcon } from "../icons/loading";
 import Image from "next/image";
+import { AccountMode } from "@/app/config";
 type NFTLoadingState = "initial" | "loading" | "success";
 
 export type MintStatus = {
@@ -16,8 +16,7 @@ export type MintStatus = {
   batch: NFTLoadingState;
 };
 
-export const MintCard = () => {
-  const { accountMode } = useConfigStore();
+export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
   const {
     isLoading,
     status,

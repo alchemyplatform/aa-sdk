@@ -11,6 +11,7 @@ import { createTransfer } from "./solana/createSolanaTransfer";
 import * as solanaNetwork from "./solana/solanaNetwork";
 import { Card } from "./Card";
 import Image from "next/image";
+import { Badge } from "./Badge";
 
 const connection = solanaNetwork.connect();
 
@@ -97,10 +98,7 @@ export const SolanaCard = () => {
   });
 
   const imageSlot = (
-    <div className="flex-shrink-0 bg-[#DCFCE7] rounded-xl mb-4 flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
-      <p className="absolute top-[-6px] left-[-6px] sm:top-1 sm:left-1 xl:left-auto xl:right-4 xl:top-4 px-2 py-1 font-semibold rounded-md text-xs text-[#F3F3FF] bg-[#16A34A]">
-        New!
-      </p>
+    <div className="flex-shrink-0 bg-[#DCFCE7] rounded-xl flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
       <Image
         className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]"
         src="https://static.alchemyapi.io/images/emblems/solana-mainnet.svg"
@@ -195,6 +193,7 @@ export const SolanaCard = () => {
 
   return (
     <Card
+      badgeSlot={<Badge text="New!" className="text-[#F3F3FF] bg-[#16A34A]" />}
       imageSlot={imageSlot}
       heading="Solana wallets"
       content={content}
