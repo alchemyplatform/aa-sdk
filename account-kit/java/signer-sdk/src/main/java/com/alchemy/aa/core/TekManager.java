@@ -1,5 +1,6 @@
 package com.alchemy.aa.core;
 
+import com.alchemy.aa.core.exceptions.InvalidKeyTypeException;
 import com.alchemy.aa.core.exceptions.NoTekException;
 import com.google.crypto.tink.CleartextKeysetHandle;
 import com.google.crypto.tink.InsecureSecretKeyAccess;
@@ -21,21 +22,21 @@ import java.security.GeneralSecurityException;
 
 public class TekManager {
 
-    public static TekManager fromHpkeKey(HpkePrivateKey privaTekey)
+    public static TekManager fromHpkeKey(HpkePrivateKey privateKey)
             throws GeneralSecurityException {
         KeysetHandle keysetHandle = KeysetHandle.newBuilder()
-                .addEntry(KeysetHandle.importKey(privaTekey).makePrimary().withFixedId(0)).build();
-        return fromKeyetHandle(keysetHandle);
+                .addEntry(KeysetHandle.importKey(privateKey).makePrimary().withFixedId(0)).build();
+        return fromKeysetHandle(keysetHandle);
     }
 
-    public static TekManager fromKeyetHandle(KeysetHandle keysetHandle)
+    public static TekManager fromKeysetHandle(KeysetHandle keysetHandle)
             throws GeneralSecurityException {
-        TekManager Tek = new TekManager();
+        TekManager tek = new TekManager();
 
         String serializedKeyset = TinkJsonProtoKeysetFormat.serializeKeyset(keysetHandle,
                 InsecureSecretKeyAccess.get());
-        Tek.serializedKeyset = serializedKeyset.toCharArray();
-        return Tek;
+        tek.serializedKeyset = serializedKeyset.toCharArray();
+        return tek;
     }
 
     public static TekManager createNew() throws GeneralSecurityException, InvalidProtocolBufferException {
@@ -60,7 +61,7 @@ public class TekManager {
     /**
      * Get hpke public key from stored keyset handle.
      *
-     * @return hpke public key or null if createTek is never called.
+     * @return hpke public key.
      */
     public HpkePublicKey getPublicKey() throws GeneralSecurityException, InvalidProtocolBufferException {
         KeysetHandle ksHandler = this.getKeysetHandle();
@@ -78,7 +79,7 @@ public class TekManager {
         return org.bouncycastle.util.encoders.Hex.toHexString(getPublicKey().getPublicKeyBytes().toByteArray());
     }
 
-    public HpkePrivateKey getPrivateKey() throws GeneralSecurityException, InvalidProtocolBufferException {
+    public HpkePrivateKey privateKey() throws GeneralSecurityException, InvalidProtocolBufferException {
         KeysetHandle ksHandler = this.getKeysetHandle();
         if (ksHandler == null) {
             return null;
@@ -148,8 +149,9 @@ public class TekManager {
         HpkePublicKey publicKey = this.toHpkePublicKey(hpkeParams, keysetHandle);
         Keyset pkKs = CleartextKeysetHandle.getKeyset(keysetHandle);
         KeyData pkKeyData = pkKs.getKeyList().get(0).getKeyData();
-        assert (pkKeyData.getTypeUrl().equals("type.googleapis.com/google.crypto.tink.HpkePrivateKey"))
-                : "invalid key type";
+        if (!pkKeyData.getTypeUrl().equals("type.googleapis.com/google.crypto.tink.HpkePrivateKey")){
+            throw new InvalidKeyTypeException("Invalid key type");
+        }
         return HpkePrivateKey.create(
                 HpkePublicKey.create(hpkeParams, Bytes.copyFrom(publicKey.getPublicKeyBytes().toByteArray()), null),
                 SecretBytes.copyFrom(com.google.crypto.tink.proto.HpkePrivateKey.parseFrom(pkKeyData.getValue())

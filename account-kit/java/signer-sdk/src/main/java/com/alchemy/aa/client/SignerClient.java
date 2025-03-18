@@ -56,7 +56,7 @@ public class SignerClient {
     }
 
     /**
-     * Inject a bunlde to stamper and authenticate the with orgId.
+     * Inject a bundle to stamper and authenticate with orgId.
      *
      * @param tekManager
      *            client's tek keys.
@@ -112,14 +112,14 @@ public class SignerClient {
                 .type("ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2").timestampMs(String.valueOf(Instant.now().toEpochMilli()))
                 .parameters(signParameters).build();
 
-        String json_body = mapper.writeValueAsString(body);
+        String jsonBody = mapper.writeValueAsString(body);
 
-        Stamp stamp = stamper.stamp(json_body);
+        Stamp stamp = stamper.stamp(jsonBody);
         StampedRequest stampedRequest = StampedRequest.builder()
-                .url("https://api.turnkey.com/public/v1/submit/sign_raw_payload").body(json_body).stamp(stamp).build();
+                .url("https://api.turnkey.com/public/v1/submit/sign_raw_payload").body(jsonBody).stamp(stamp).build();
         SignRawMessageRequest request = new SignRawMessageRequest(stampedRequest);
         SignedResponse response = request(PathName.SIGN_PAYLOAD.getName(), request, SignedResponse.class);
-        return (response.signature());
+        return response.signature();
     }
 
     /**

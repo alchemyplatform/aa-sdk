@@ -33,14 +33,11 @@ public class Stamper {
         }
     }
 
-
-
-    @Getter
     @Setter
     private final CredentialBundle credentialBundle;
 
-    @Setter
     @Getter
+    @Setter
     // user who owns the stamper
     private User user;
 
@@ -71,7 +68,7 @@ public class Stamper {
      * @throws GeneralSecurityException
      *             if the private is malformed
      */
-    public synchronized Stamp stamp(String payload) throws GeneralSecurityException, JsonProcessingException {
+    public Stamp stamp(String payload) throws GeneralSecurityException, JsonProcessingException {
         if (this.credentialBundle.bundlePrivateKey() == null || this.credentialBundle.bundlePublicKey() == null) {
             throw new NoInjectedBundleException();
         }
