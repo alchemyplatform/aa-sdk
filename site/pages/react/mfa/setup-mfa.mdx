@@ -1,126 +1,30 @@
 ---
 title: Setting Up Multi-Factor Authentication
-description: How to set up TOTP-based multi-factor authentication in your React app
+description: How to set up additional security with authenticator apps in your React application
 ---
 
 # Setting Up Multi-Factor Authentication
 
-This guide shows you how to implement Time-based One-Time Password (TOTP) multi-factor authentication in your React application using Account Kit hooks.
+This guide shows you how to implement multi-factor authentication in your React application using Account Kit hooks and authenticator apps like Google Authenticator or Authy.
 
 :::tip
-Multi-Factor Authentication is currently only supported when authenticating with Email OTP or Email Magic Link.
+Multi-factor authentication is currently only supported when authenticating with Email OTP or Email Magic Link.
 :::
 
 ## Overview
 
-Multi-factor authentication adds an extra layer of security by requiring users to verify their identity using multiple methods. Account Kit supports TOTP-based MFA, which works with authenticator apps like Google Authenticator, Authy, or Microsoft Authenticator.
+Multi-factor authentication adds an extra layer of security by requiring users to verify their identity using multiple methods. With Account Kit, users can use authenticator apps (like Google Authenticator, Authy, or Microsoft Authenticator) as their second security factor.
 
 ## Implementation
 
-To implement MFA in your React application, you'll use the `useMFA` hook from Account Kit.
+To implement authenticator app verification in your React application, you'll use the `useMFA` hook from Account Kit.
 
-### Step 1: Add a TOTP Factor
+### Step 1: Checking if Multi-Factor Authentication is Available
 
-First, add a new TOTP factor to the user's account:
-
-```tsx twoslash
-import { useMFA } from "@account-kit/react";
-
-// Inside your component
-const { addMFA } = useMFA();
-
-const handleAddMFA = () => {
-  addMFA(
-    {
-      multiFactorType: "totp",
-    },
-    {
-      onSuccess: (result) => {
-        // Display the QR code or secret to the user using the multiFactorTotpUrl
-        // Store multiFactorId for verification step
-        console.log(result.multiFactorTotpUrl);
-        console.log(result.multiFactorId);
-      },
-      onError: (error) => {
-        // Handle error
-      },
-    }
-  );
-};
-```
-
-### Step 2: Verify the TOTP Setup
-
-After the user scans the QR code with their authenticator app, they need to verify the setup:
+First, check if the user is logged and able to edit their MFA settings:
 
 ```tsx twoslash
-import { useMFA } from "@account-kit/react";
-
-// Inside your component
-const { verifyMFA } = useMFA();
-
-const handleVerifyMFA = (code: string, multiFactorId: string) => {
-  verifyMFA(
-    {
-      multiFactorId,
-      multiFactorCode: code, // 6-digit code from authenticator app
-    },
-    {
-      onSuccess: () => {
-        // MFA setup successful
-      },
-      onError: (error) => {
-        // Handle error
-      },
-    }
-  );
-};
-```
-
-### Step 3: Managing MFA Factors
-
-You can retrieve and remove MFA factors:
-
-```tsx twoslash
-import { useMFA } from "@account-kit/react";
-
-// Inside your component
-const { getMFAFactors, removeMFA } = useMFA();
-
-// Get all MFA factors
-const fetchFactors = () => {
-  getMFAFactors(undefined, {
-    onSuccess: (factors) => {
-      const mfaFactors = factors.multiFactors;
-      // Display factors to user
-    },
-    onError: (error) => {
-      // Handle error
-    },
-  });
-};
-
-// Remove an MFA factor
-const handleRemoveFactor = (multiFactorId: string) => {
-  removeMFA(
-    { multiFactorIds: [multiFactorId] },
-    {
-      onSuccess: () => {
-        // Factor removed successfully
-      },
-      onError: (error) => {
-        // Handle error
-      },
-    }
-  );
-};
-```
-
-## Checking MFA Availability
-
-Before attempting to set up MFA, check if it's available for the current user:
-
-```tsx twoslash
+import React from "react";
 import { useMFA } from "@account-kit/react";
 
 // Inside your component
@@ -134,9 +38,133 @@ if (isMfaAvailable) {
 }
 ```
 
+### Step 2: Setting Up an Authenticator App
+
+When a user wants to add an authenticator app, you'll generate a QR code for them to scan:
+
+```tsx twoslash
+import React, { useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { useMFA } from "@account-kit/react";
+
+function AuthenticatorSetupComponent() {
+  const { addMFA } = useMFA();
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [factorId, setFactorId] = useState("");
+
+  const handleSetupAuthenticator = () => {
+    addMFA(
+      {
+        multiFactorType: "totp", // Technical name for authenticator apps
+      },
+      {
+        onSuccess: (result) => {
+          // Store the QR code URL and factor ID
+          setQrCodeUrl(result.multiFactorTotpUrl);
+          setFactorId(result.multiFactorId);
+        },
+        onError: (error) => {
+          console.error("Failed to set up authenticator app:", error);
+        },
+      }
+    );
+  };
+
+  return (
+    <div>
+      <button onClick={handleSetupAuthenticator}>
+        Set Up Authenticator App
+      </button>
+
+      {qrCodeUrl && (
+        <div className="qr-container">
+          <h3>Scan this QR code with your authenticator app</h3>
+          <QRCodeSVG value={qrCodeUrl} size={200} />
+          <p>
+            After scanning, enter the 6-digit code from your authenticator app
+            to complete setup.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+This QR code contains the information needed for apps like Google Authenticator or Authy. Once scanned, the app will generate 6-digit codes that users can use as their second verification step.
+
+### Step 3: Confirming the Authenticator App Setup
+
+After the user scans the QR code, they need to prove it worked by entering a code:
+
+```tsx twoslash
+import React from "react";
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { verifyMFA } = useMFA();
+
+const handleVerifyAuthenticator = (code: string, multiFactorId: string) => {
+  verifyMFA(
+    {
+      multiFactorId,
+      multiFactorCode: code, // 6-digit code from authenticator app
+    },
+    {
+      onSuccess: () => {
+        // Authenticator setup successful
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
+};
+```
+
+### Step 4: Managing Authenticator Apps
+
+You can retrieve and remove authenticator app verification:
+
+```tsx twoslash
+import React from "react";
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { getMFAFactors, removeMFA } = useMFA();
+
+// Get all verification methods
+const fetchVerificationMethods = () => {
+  getMFAFactors(undefined, {
+    onSuccess: (factors) => {
+      const verificationMethods = factors.multiFactors;
+      // Display to user
+    },
+    onError: (error) => {
+      // Handle error
+    },
+  });
+};
+
+// Remove an authenticator app
+const handleRemoveAuthenticator = (multiFactorId: string) => {
+  removeMFA(
+    { multiFactorIds: [multiFactorId] },
+    {
+      onSuccess: () => {
+        // Authenticator removed successfully
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
+};
+```
+
 ## Next Steps
 
-After setting up MFA, users will need to provide both their primary authentication factor and the TOTP code when signing in:
+After setting up an authenticator app, users will need to provide both their primary authentication method and a 6-digit code when signing in:
 
-- [Email OTP with MFA](/react/mfa/email-otp)
-- [Email Magic Link with MFA](/react/mfa/email-magic-link)
+- [Email OTP with Multi-Factor Authentication](/react/mfa/email-otp)
+- [Email Magic Link with Multi-Factor Authentication](/react/mfa/email-magic-link)

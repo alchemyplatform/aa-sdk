@@ -9,7 +9,7 @@ Alchemy Signer supports Time-based One-Time Passwords (TOTP) multi-factor authen
 This lets you prompt users to set up a TOTP authenticator (e.g. Google Authenticator) as an additional security factor.
 
 :::tip
-Multi-Factor Authentication is currently supported when authenticating with Email OTP or Email Magic-link
+Multi-factor authentication is currently supported when authenticating with Email OTP or Email Magic-link
 :::
 
 ## Setting up Multi-Factor Authentication
@@ -177,6 +177,8 @@ try {
 } catch (err) {
   if (err instanceof MfaRequiredError) {
     // Prompt user for TOTP code
+    const otpCode = await promptUserForCode();
+
     const { multiFactorId } = err.multiFactors[0];
     await signer.authenticate({
       type: "email",
@@ -185,7 +187,7 @@ try {
       multiFactors: [
         {
           multiFactorId,
-          multiFactorCode: "TOTP_CODE",
+          multiFactorCode: otpCode,
         },
       ],
     });

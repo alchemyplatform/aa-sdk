@@ -41,7 +41,7 @@ export type UseMFAResult = {
 };
 
 /**
- * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useMFA.ts) that provides functions and state for managing Multi-Factor Authentication (MFA) operations.
+ * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useMFA.ts) that provides functions and state for managing multi-factor authentication (MFA) operations.
  * Handles adding, verifying, removing, and getting MFA factors for an authenticated account.
  *
  * The hook checks if the signer is connected before allowing MFA operations and provides an `isMfaAvailable` flag
