@@ -30,13 +30,13 @@ export function MFACard() {
           </p>
         </div>
         <div className="w-full mb-3">
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <h3 className="text-fg-primary xl:text-xl font-semibold">
+          <div className="flex items-center justify-between sm:gap-2 mb-1 flex-col sm:flex-row">
+            <h3 className="text-fg-primary xl:text-xl font-semibold self-start">
               Multi-factor <br />
               Authentication
             </h3>
             {isMfaActive && (
-              <span className="text-sm font-medium self-start px-2 py-0.5 rounded-full flex items-center gap-1 font-inter leading-[21px] tracking-normal">
+              <span className="text-sm font-medium self-start sm:px-2 sm:py-0.5 rounded-full flex items-center gap-1 font-inter leading-[21px] tracking-normal">
                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
                 Active
               </span>
