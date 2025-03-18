@@ -22,10 +22,14 @@ export default function OTPAuthScreen() {
 
 	const handleUserAuth = ({ code }: { code: string }) => {
 		setAwaitingOtp(false);
+		
 		authenticate({
 			otpCode: code,
 			type: "otp",
 		})
+
+		// Clear the OTP code after authentication
+		setOtpCode("");
 	};
 
 	useEffect(() => {
