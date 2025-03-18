@@ -45,3 +45,19 @@ export function headersUpdate(crumb: string) {
   };
   return headerUpdate_;
 }
+
+/**
+ * Remove the tracking headers. This is used in our split transport to ensure that we remove the headers that
+ * are not used by the other systems.
+ *
+ * @param {unknown} x The headers to remove the tracking headers from
+ */
+export function mutateRemoveTrackingHeaders(x?: unknown) {
+  if (!x) return;
+  if (Array.isArray(x)) return;
+  if (typeof x !== "object") return;
+  TRACKER_HEADER in x && delete x[TRACKER_HEADER];
+  TRACKER_BREADCRUMB in x && delete x[TRACKER_BREADCRUMB];
+  "traceheader" in x && delete x["traceheader"];
+  "tracestate" in x && delete x["tracestate"];
+}

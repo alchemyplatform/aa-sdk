@@ -14,7 +14,11 @@ import {
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
-import { alchemy, type AlchemyTransport } from "../alchemyTransport.js";
+import {
+  alchemy,
+  convertHeadersToObject,
+  type AlchemyTransport,
+} from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
@@ -184,7 +188,17 @@ export function createAlchemySmartAccountClient(
     ...scaClient,
     [ADD_BREADCRUMB](breadcrumb: string) {
       const newTransport = alchemy({ ...config.transport.config });
-      newTransport.updateHeaders(headersUpdate(breadcrumb)({}));
+      const newHeaders = headersUpdate(breadcrumb)({
+        ...convertHeadersToObject(
+          config.transport.config.fetchOptions?.headers ?? {}
+        ),
+      });
+      console.log(
+        "BLUJ New breadcrumb",
+        breadcrumb,
+        JSON.stringify(newHeaders)
+      );
+      newTransport.updateHeaders(newHeaders);
       return createAlchemySmartAccountClient({
         ...config,
         transport: newTransport,
