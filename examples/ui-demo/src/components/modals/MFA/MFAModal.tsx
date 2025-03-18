@@ -175,13 +175,6 @@ export function MFAModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otp]);
 
-  useEffect(() => {
-    if (error) {
-      console.error("MFA operation error:", error);
-      setSystemError(true);
-    }
-  }, [error]);
-
   const renderContent = useCallback(() => {
     switch (stage) {
       case "start":
@@ -260,7 +253,7 @@ export function MFAModal({
                 />
               </button>
               {renderContent()}
-              {(systemError || error) && (
+              {systemError && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full">
                   Something went wrong.
                 </div>

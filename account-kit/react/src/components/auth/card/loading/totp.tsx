@@ -30,7 +30,8 @@ export const LoadingTotp = () => {
     onError: (err) => {
       console.error("TOTP verify error", err);
       setIsSubmitting(false);
-      setErrorText("Invalid code.");
+      setErrorText("The code you entered is incorrect");
+      setTotpCode(initialOTPValue);
     },
   });
 
