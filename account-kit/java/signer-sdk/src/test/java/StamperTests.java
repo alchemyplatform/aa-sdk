@@ -1,5 +1,7 @@
 import com.alchemy.aa.Stamper;
-import com.alchemy.aa.core.TEKManager;
+import com.alchemy.aa.core.CredentialBundle;
+import com.alchemy.aa.core.TekManager;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.crypto.tink.InsecureSecretKeyAccess;
 import com.google.crypto.tink.config.TinkConfig;
 import com.google.crypto.tink.hybrid.HpkeParameters;
@@ -14,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class StamperTests {
-    TEKManager tekManager;
+    TekManager tekManager;
 
     public StamperTests() throws GeneralSecurityException {
         TinkConfig.register();
@@ -23,30 +25,29 @@ public class StamperTests {
     @BeforeEach
     public void setUp() throws GeneralSecurityException, InvalidProtocolBufferException {
         SecretBytes private_key = SecretBytes.copyFrom(
-                Hex.decode("dbb5689c93418eb95a0f54a9d56b4af289a00c80a0650c2463c8f9c0803cf52c"),
+                Hex.decode("32528601f4d9a10994b781bd2c1616d96d95b4b2e17116d7fc7003e8a86fc779"),
                 InsecureSecretKeyAccess.get());
         Bytes public_key = Bytes.copyFrom(Hex.decode(
-                "04d22099b7499f03055f540def34f76798bd28df87c111f3503715788f70ea57066b3b45d40ff0801e930d15959c0ba2ec22903685e9005e8add6d1f94c5d68bcb"));
+                "045e0e1f9e7761f87c02d947ab77363b38db79188962ddad15617d7b6e01b0e8f51bee4ca2e4c9ad26dbf9cec5008a83ca84ec7aabb820ada733ed46b4e221a76d"));
+
         HpkeParameters parameters = HpkeParameters.builder().setKemId(HpkeParameters.KemId.DHKEM_P256_HKDF_SHA256)
                 .setKdfId(HpkeParameters.KdfId.HKDF_SHA256).setAeadId(HpkeParameters.AeadId.AES_256_GCM)
                 .setVariant(HpkeParameters.Variant.NO_PREFIX).build();
         HpkePublicKey hpkePublicKey = HpkePublicKey.create(parameters, public_key, /* idRequirement= */null);
         HpkePrivateKey hpkePrivateKey = HpkePrivateKey.create(hpkePublicKey, private_key);
-        tekManager = TEKManager.InitializeTEKManagerFromHpkeKey(hpkePrivateKey);
+        tekManager = TekManager.fromHpkeKey(hpkePrivateKey);
     }
 
     @Test
-    public void injectCredentialBundle() throws GeneralSecurityException, InvalidProtocolBufferException {
-        Stamper stamper = new Stamper(tekManager);
-        String credentialBundle = "26CDY37MNf4BCXFaTyAhbCndbRKivLjdR69oRf7engwqSnh7bh7TZzg1h8opiHeMEaeHDQJBYk6o3KfS463VAiFCg6s4WamkpTnbKFbp2mbu4sJWcxPF";
-        stamper.injectCredentialBundle(credentialBundle);
-        Stamper.Stamp stamp = stamper.stamp("bala");
+    public void injectCredentialBundle()
+            throws GeneralSecurityException, InvalidProtocolBufferException, JsonProcessingException {
+        String credentialBundle = "2AdeMPFUCZm3ywdNGyVzdTTd7Q15FjzhjkFCQD3rUfxJsaAq5rwcfWPHpLNXSsuPEXc4pUd8jyJ4QY9XAo2JBaLERLgDL2vwHh2psF94vYacf4W1iKre";
+        CredentialBundle cb = CredentialBundle.fromEncryptedBundle(credentialBundle, tekManager);
+        Stamper stamper = new Stamper(cb);
+
+        Stamper.Stamp stamp = stamper
+                .stamp("{\n" + "  \"organizationId\" : \"e34032d8-d42f-4980-9f07-b7b40f765789\"\n" + "}");
+
         System.out.println(stamp);
-    }
-
-    @Test
-    public void loadExistingKeyTest() throws InvalidProtocolBufferException, GeneralSecurityException {
-        String result = Hex.toHexString((tekManager.getPublicKey().getPublicKeyBytes().toByteArray()));
-        System.out.println(result);
     }
 }
