@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react-native-signer",
-  "version": "4.16.0",
+  "version": "4.17.0",
   "author": "Alchemy",
   "description": "React Native compatible Account Kit signer",
   "source": "./src/index.tsx",
@@ -149,8 +149,8 @@
     "version": "0.42.2"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.16.0",
-    "@account-kit/signer": "^4.16.0",
+    "@aa-sdk/core": "^4.17.0",
+    "@account-kit/signer": "^4.17.0",
     "viem": "^2.21.40"
   }
 }

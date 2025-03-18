@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/infra",
-  "version": "4.16.0",
+  "version": "4.17.0",
   "description": "adapters for @aa-sdk/core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -45,8 +45,8 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.16.0",
-    "@account-kit/logging": "^4.16.0",
+    "@aa-sdk/core": "^4.17.0",
+    "@account-kit/logging": "^4.17.0",
     "eventemitter3": "^5.0.1",
     "zod": "^3.22.4"
   },
