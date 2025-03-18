@@ -1,62 +1,36 @@
-import React, { useCallback } from "react";
+/* eslint-disable import/extensions */
 import { useEffect, useState } from "react";
 import {
 	View,
 	Text,
 	TextInput,
 	StyleSheet,
-	Linking,
 	TouchableOpacity,
 } from "react-native";
-import { useAuthenticate, useLogout, useSigner, useSmartAccountClient, useUser } from "@account-kit/react-native";
+import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
 
-export default function MagicLinkAuthScreen() {
+export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
 	const user = useUser()
 	const { authenticate } = useAuthenticate()
-	const { logout } = useLogout()
-	const { address } = useSmartAccountClient({})
-	const signer = useSigner()
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
-	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
+	const { logout } = useLogout();
+	const { address } = useSmartAccountClient({})
+	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
+	const signer = useSigner();
+	const [otpCode, setOtpCode] = useState<string>("");
 
-	const completeUserAuth = ({ bundle }: { bundle: string }) => {
+	const handleUserAuth = ({ code }: { code: string }) => {
+		setAwaitingOtp(false);
+		
 		authenticate({
-			bundle,
-			type: "email",
+			otpCode: code,
+			type: "otp",
 		})
+
+		// Clear the OTP code after authentication
+		setOtpCode("");
 	};
-
-	const handleIncomingURL = useCallback((event: { url: string }) => {
-		const regex = /[?&]([^=#]+)=([^&#]*)/g;
-
-		setAuthRequestSent(false);
-
-		let params: Record<string, string> = {};
-		let match: RegExpExecArray | null;
-
-		while ((match = regex.exec(event.url))) {
-			if (match[1] && match[2]) {
-				params[match[1]] = match[2];
-			}
-		}
-
-		if (!params.bundle || !params.orgId) {
-			return;
-		}
-
-		completeUserAuth({
-			bundle: params.bundle,
-		});
-	}, []);
-
-
-	// Add listener for incoming links
-	useEffect(() => {
-		const subscription = Linking.addEventListener("url", handleIncomingURL);
-
-		return () => subscription.remove();
-	}, [handleIncomingURL]);
 
 	useEffect(() => {
 		if (user) {
@@ -68,60 +42,65 @@ export default function MagicLinkAuthScreen() {
 
 	return (
 		<View style={styles.container}>
-			{authRequestSent ? (
-				<Text>Auth request sent. Please check your email.</Text>
+			{awaitingOtp ? (
+				<>
+					<TextInput
+						style={styles.textInput}
+						placeholderTextColor="gray"
+						placeholder="enter your OTP code"
+						onChangeText={setOtpCode}
+						value={otpCode}
+					/>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => handleUserAuth({ code: otpCode })}
+					>
+						<Text style={styles.buttonText}>Sign in</Text>
+					</TouchableOpacity>
+				</>
+			) : !user ? (
+				<>
+					<TextInput
+						style={styles.textInput}
+						placeholderTextColor="gray"
+						placeholder="enter your email"
+						onChangeText={setEmail}
+						value={email}
+					/>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							authenticate({
+									email,
+									type: "email"
+								})
+					
+							setAwaitingOtp(true);
+						}}
+					>
+						<Text style={styles.buttonText}>Sign in</Text>
+					</TouchableOpacity>
+				</>
 			) : (
 				<>
-					{!user ? (
-						<>
-							<TextInput
-								style={styles.textInput}
-								placeholderTextColor="gray"
-								placeholder="enter your email"
-								onChangeText={setEmail}
-								value={email}
-							/>
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() => {
-									setAuthRequestSent(true);
-									authenticate({
-										email,
-										type: "email",
-										emailMode: "magicLink",
-									})
-									
-								}}
-							>
-								<Text style={styles.buttonText}>Sign in</Text>
-							</TouchableOpacity>
-						</>
-					) : (
-						<>
-							<Text style={styles.userText}>
-								Currently logged in as: {user.email}
-							</Text>
-							<Text style={styles.userText}>
-								OrgId: {user.orgId}
-							</Text>
-							<Text style={styles.userText}>
-								Address: {user.address}
-							</Text>
-							<Text style={styles.userText}>
-								Light Account Address: {address}
-							</Text>
-							<Text style={styles.userText}>
-								Signer Address: {signerAddress}
-							</Text>
+					<Text style={styles.userText}>
+						Currently logged in as: {user.email}
+					</Text>
+					<Text style={styles.userText}>OrgId: {user.orgId}</Text>
+					<Text style={styles.userText}>Address: {user.address}</Text>
+					<Text style={styles.userText}>
+						Light Account Address: {address}
+					</Text>
+					<Text style={styles.userText}>
+						Signer Address: {signerAddress}
+					</Text>
 
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() =>	logout()}
-							>
-								<Text style={styles.buttonText}>Sign out</Text>
-							</TouchableOpacity>
-						</>
-					)}
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => logout()}
+					>
+						<Text style={styles.buttonText}>Sign out</Text>
+					</TouchableOpacity>
 				</>
 			)}
 		</View>
