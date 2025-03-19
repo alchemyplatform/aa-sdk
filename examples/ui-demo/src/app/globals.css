@@ -86,26 +86,51 @@
   }
 }
 
-/* Radix Toast Animations */
+/* Radix Toast Animations - Desktop (horizontal slide) */
 @keyframes slideInToast {
   from {
-    transform: translateY(100%);
+    transform: translateX(100%);
     opacity: 0;
   }
   to {
-    transform: translateY(0%);
+    transform: translateX(0%);
     opacity: 1;
   }
 }
 
 @keyframes hideToast {
   from {
-    transform: translateY(0%);
+    transform: translateX(0%);
     opacity: 1;
   }
   to {
-    transform: translateY(100%);
+    transform: translateX(100%);
     opacity: 0;
+  }
+}
+
+/* Mobile animations (vertical slide) */
+@media (max-width: 1024px) {
+  @keyframes slideInToast {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+
+  @keyframes hideToast {
+    from {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
   }
 }
 
