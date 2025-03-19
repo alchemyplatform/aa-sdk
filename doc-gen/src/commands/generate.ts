@@ -24,7 +24,7 @@ export async function generate(options: GenerateOptions) {
   const sourceFilePath = path.resolve(process.cwd(), options.in);
   const outputFilePath = path.resolve(process.cwd(), options.out);
   logger.info(
-    `Generating documentation for ${sourceFilePath} and ouputing to ${outputFilePath}`
+    `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`
   );
 
   const sourceFile = getSourceFile(sourceFilePath);
