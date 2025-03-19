@@ -37,6 +37,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/ethers",
+    "fern:gen": "node ../../fern-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../fern/pages/reference/aa-sdk/ethers",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"

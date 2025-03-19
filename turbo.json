@@ -23,6 +23,10 @@
     "docs:gen": {
       "dependsOn": ["ak-docgen#build"],
       "outputs": ["../../site/pages/reference/**"]
+    },
+    "fern:gen": {
+      "dependsOn": ["ak-ferngen#build"],
+      "outputs": ["../../fern/pages/reference/**"]
     }
   }
 }

@@ -15,6 +15,7 @@
       "account-kit/rn-signer/example",
       "site",
       "doc-gen",
+      "fern-gen",
       ".vitest"
     ]
   },
@@ -43,6 +44,7 @@
     "dev:ui": "turbo watch dev --filter='@account-kit/react' --filter=ui-demo",
     "dev:docs": "turbo watch dev --filter=docs",
     "docs:gen": "turbo run docs:gen",
+    "fern:gen": "turbo run fern:gen",
     "test": "vitest dev",
     "test:ci": "vitest run",
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",

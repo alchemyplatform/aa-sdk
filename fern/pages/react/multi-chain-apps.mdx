@@ -1,0 +1,61 @@
+---
+title: Multi-chain Apps
+description: Learn how to build multi-chain apps with Account Kit.
+---
+
+# Multi-chain Apps
+
+Account Kit supports multi-chain apps, allowing you to build applications that interact with multiple blockchains. This guide will show you how to set up your app to work with multiple chains.
+
+## Update your config
+
+In order to support multiple chains in your app, the first thing you need to do is update your `createConfig` call to include the chains you want to support.
+
+```ts twoslash [config.ts]
+// @noErrors
+import { createConfig } from "@account-kit/react";
+import { sepolia, mainnet } from "@account-kit/infra";
+
+export const config = createConfig({
+  apiKey: "ALCHEMY_API_KEY",
+  // this is the default chain
+  chain: sepolia,
+  chains: [
+    {
+      chain: mainnet, // optional: you can specify a policy ID for this chain, if you want to sponsor gas
+      policyId: "MAINNET_GAS_MANAGER_POLICY_ID",
+    },
+    {
+      chain: sepolia,
+      // optional: you can specify a policy ID for this chain, if you want to sponsor gas
+      policyId: "SEPOLIA_GAS_MANAGER_POLICY_ID",
+    },
+  ],
+});
+```
+
+## Change chains
+
+Once your app is configured to use multiple chains, you can switch between them at any time using the [`useChain`](/reference/account-kit/react/hooks/useChain) hook.
+
+```tsx twoslash
+import React from "react";
+import { useChain } from "@account-kit/react";
+import { mainnet, sepolia } from "@account-kit/infra";
+
+export default function MyComponent() {
+  const { chain, setChain } = useChain();
+
+  return (
+    <div>
+      <p>Current chain: {chain.name}</p>
+      <button onClick={() => setChain({ chain: mainnet })}>
+        Switch to Mainnet
+      </button>
+      <button onClick={() => setChain({ chain: sepolia })}>
+        Switch to Sepolia
+      </button>
+    </div>
+  );
+}
+```

@@ -68,7 +68,7 @@
     {
       "files": ["**/*.mdx"],
       "extends": ["plugin:mdx/recommended"],
-      "settings": {
+      "rules": {
         "import/extensions": ["off", "ignorePackages"]
       }
     }

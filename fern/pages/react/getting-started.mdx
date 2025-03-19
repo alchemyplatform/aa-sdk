@@ -1,0 +1,77 @@
+---
+title: Getting started with authentication
+description: Setting up your React application to use Account Kit authentication
+---
+
+import Snippet from "../../shared/get-api-key.mdx";
+import AuthenticationMethods from "./shared/authentication-methods.mdx";
+
+# Getting started with authentication
+
+Account Kit makes it really easy to authenticate your users using a number of different authentication methods. If you followed the [quickstart](/react/quickstart), then your app is already setup to authenticate users and you can skip this guide!
+
+## Implementation Options
+
+For each authentication method, you have two implementation options:
+
+1. [**Pre-built UI Components**](/react/ui-components) - Ready-to-use components that handle the entire authentication flow with minimal code and customizable styling.
+
+2. [**Custom UI with React Hooks**](/react/react-hooks) - Build your own UI components using our React hooks for complete control over the user experience.
+
+## Authentication Methods
+
+Account Kit supports several authentication methods:
+
+<AuthenticationMethods />
+
+# Setup
+
+If you haven't followed the [quickstart guide](/react/quickstart), make sure to set up the following first:
+
+<Snippet />
+
+...and paste the API key into your app's `config.ts`
+
+```ts twoslash [config.ts]
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+// Define UI configuration for authentication components
+// See individual login method pages for detailed configuration options
+const uiConfig: AlchemyAccountsUIConfig = {
+  auth: {
+    sections: [
+      [
+        // Example: Email OTP authentication
+        {
+          type: "email",
+          emailMode: "otp",
+        },
+        // You can add more authentication methods here
+        // See login method pages for available options
+      ],
+    ],
+  },
+};
+
+export const config = createConfig(
+  {
+    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
+    chain: sepolia,
+    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
+    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
+    // For more about persisting state with cookies, see: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
+    // storage: cookieStorage,
+  },
+  uiConfig
+);
+```
+
+# What's next?
+
+Now you can choose which authentication methods you want to implement and how you want to implement them:
+
+1. [Using our Pre-built UI components](/react/ui-components) to handle the entire authentication flow with minimal code.
+2. [Using our React hooks](/react/react-hooks) to build your own custom UI for complete control.
+
+Each authentication method has dedicated documentation for both implementation approaches.

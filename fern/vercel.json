@@ -1,0 +1,78 @@
+{
+  "installCommand": "cd .. && yarn install --ignore-engines",
+  "buildCommand": "cd .. && yarn build:site",
+  "redirects": [
+    {
+      "source": "/getting-started/setup",
+      "destination": "/react/quickstart",
+      "statusCode": 301
+    },
+    {
+      "source": "/getting-started/overview",
+      "destination": "/react/quickstart",
+      "statusCode": 301
+    },
+    {
+      "source": "/getting-started/introduction",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/packages/aa-alchemy/",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/signers/alchemy-signer",
+      "destination": "/signer/overview",
+      "statusCode": 301
+    },
+    {
+      "source": "/smart-accounts/accounts/guides/light-account",
+      "destination": "/smart-contracts/other-accounts/light-account",
+      "statusCode": 301
+    },
+    {
+      "source": "/overview/getting-started",
+      "destination": "/getting-started/introduction",
+      "statusCode": 301
+    },
+    {
+      "source": "/tutorials/batching-transactions",
+      "destination": "/react/send-user-operations#batch-user-operation",
+      "statusCode": 301
+    },
+    {
+      "source": "/packages",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/infra/third-party/bundlers",
+      "destination": "/third-party/bundlers",
+      "statusCode": 301
+    },
+    {
+      "source": "/infra/third-party/paymasters",
+      "destination": "/third-party/paymasters",
+      "statusCode": 301
+    },
+    {
+      "source": "/signer/custom-signer",
+      "destination": "/third-party/signers",
+      "statusCode": 301
+    },
+    {
+      "source": "/smart-contracts/custom/using-your-own",
+      "destination": "/third-party/smart-contracts",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/:match*.html",
+      "destination": "/:match"
+    }
+  ],
+  "cleanUrls": true
+}

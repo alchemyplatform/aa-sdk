@@ -1,0 +1,122 @@
+---
+title: Upgrade Your EOA with EIP-7702
+description: Learn how to upgrade your existing EOA to a smart account using EIP-7702 with Account Kit.
+---
+
+# Upgrade Your Externally Owned Account (EOA) with EIP-7702
+
+[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) introduces a straightforward way for Externally Owned Accounts (EOAs) to use smart contract account features. This is a major milestone in Ethereum’s account abstraction journey, enabling existing EOAs to benefit from functionality previously exclusive to smart accounts – such as batching actions, sponsoring transactions, and more.
+
+With Account Kit, you can support this upgrade path directly into your app or wallet. Users will seamlessly access advanced features like transaction batching, session keys, and gas sponsorship, while maintaining their existing EOA address and without having to migrate assets.
+
+Below we will guide you through **when to use EIP-7702** and how to leverage Account Kit to **upgrade your existing embedded EOAs to a smart contract account**, specifically to Modular Account v2.
+
+## When to Use EIP-7702?
+
+EIP-7702 is particularly useful in the following scenarios:
+
+1. You have an app using embedded wallets with EOAs
+2. You have a wallet using EOAs
+
+You can upgrade your users' EOAs directly to a smart account at their current address. This means you don’t have to move assets.
+
+See our full recommendations [here](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application).
+
+#### Gain Smart Account Features
+
+By upgrading to a smart account, you immediately unlock features such as:
+
+- **Batching actions**: Execute multiple operations in a single transaction.
+- **Gas sponsorship**: Let your users pay zero gas by using sponsored transactions, or use custom paymaster contracts that allow you to pay gas in other tokens.
+- **Custom session keys**: Provide temporary keys to interact with your app without exposing your primary signer, allowing you to skip transaction confirmations.
+
+## EIP-7702 Compatible Accounts
+
+Account Kit provides an EIP-7702 compatible smart account, [Modular Account v2](#TODO/linktomav2), that you can upgrade existing EOAs to. This ERC-4337 compatible account is the most gas efficient on the market, fully audited, and supports ecosystem modules for advanced functionality.
+
+## Signer Requirements
+
+To use EIP-7702, you need a signer that can generate an authorization signature. Typically, this is implemented as a method called `signAuthorization`. Regardless of which signer you choose, you'll need to create an instance of a [`SmartAccountSigner`](/resources/types#smartaccountsigner) that you can pass to the client.
+
+### Out-of-the-Box Support in Account Kit
+
+**Alchemy Signer**
+
+Alchemy Signer supports signing EIP-7702 authorizations. This means you can create new embedded EOAs with social login that are upgradable to smart accounts seamlessly for your users. See [this guide](#TODO/using-7702-react-doc) for using simple React Hooks.
+
+If you are a developer without existing embedded wallet users, considering [using smart accounts](/react/quickstart) from the start without EIP-7702. [Decide](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application) what's best for you!
+
+**Local Signer**
+
+If you have locally managed private keys (e.g. you are a self-custodial wallet), you can use a local account signer to upgrade your EOAs to smart accounts.
+
+:::note
+Note: viem requires that you generate a [Private Key account](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc) to use `signAuthorization`, meaning you cannot use Mnemonic accounts or Hierarchical Deterministic (HD) accounts yet.
+:::
+
+```ts [types.ts] twoslash
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const privateKey = "0x..."; // Private key
+
+const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+```
+
+### Bring a third party wallet or signer
+
+Account Kit provides support for you to bring your existing custom signer or another third-party embedded wallet provider! As long as your signer supports `signAuthorization` you can connect it to Account Kit and upgrade existing EOAs to smart accounts.
+
+Follow the guide here to understand how to implement the interface: [Third Party Signers](/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+
+## Using EIP-7702
+
+Once your signer is configured and you have a `SmartAccountSigner` instance, you're ready to use EIP-7702 and upgrade EOAs to smart accounts! Account Kit will handle all of the complexity of delegating your account to a smart account and signing transactions correctly.
+
+- The smart account client will automatically detect if your account is not yet delegated with 7702 when you send a user operation.
+  - If it is not yet delegated, it will request an authorization signature and include that in the submitted user operation.
+- The Alchemy ERC-4337 bundler will automatically include the EIP-7702 authorization with the first user op that your account performs.
+
+:::code-group
+
+```ts [example.ts] twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { signer } from "./signer.js";
+
+// Constructing the smart account client
+const smartAccountClient = await createModularAccountV2Client({
+  mode: "7702",
+  transport: alchemy({ apiKey: "your-api-key" }), // Get your API key: https://dashboard.alchemy.com/apps
+  chain: sepolia,
+  signer,
+});
+
+// Sending a user operation
+const uoHash = await smartAccountClient.sendUserOperation({
+  uo: {
+    target: zeroAddress,
+    value: 0n,
+    data: "0x",
+  },
+});
+
+const txnHash = await smartAccountClient.waitForUserOperationTransaction(
+  uoHash
+);
+```
+
+```ts twoslash [signer.ts] filename="signer.ts"
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const privateKey = "0x...";
+
+export const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+```
+
+:::
+
+## When can I use it?
+
+EIP-7702 is live on Sepolia! Start testing today. Mainnet is expected to follow soon. Account Kit will support EIP-7702 integration on Day 1 at both milestones.
+
+Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
