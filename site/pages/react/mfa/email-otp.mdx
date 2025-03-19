@@ -12,7 +12,7 @@ This guide shows you how to implement Email OTP authentication when a user has m
 When MFA is enabled, the authentication process requires two steps:
 
 1. Verify the user's email with a one-time password
-2. Verify the TOTP code from their authenticator app
+2. Verify the 6-digit code (TOTP) from their authenticator app
 
 ## Implementation
 
@@ -24,11 +24,11 @@ First, initiate the email OTP authentication process:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 const handleSendCode = async (email: string) => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "email",
       emailMode: "otp",
       email,
@@ -40,7 +40,7 @@ const handleSendCode = async (email: string) => {
 };
 ```
 
-### Step 2: Check MFA Status
+### Step 2: Check if an Authenticator App is Required
 
 After receiving the email OTP, check if MFA is required:
 
@@ -64,7 +64,7 @@ If MFA is required, you'll need both the email OTP and the TOTP code:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 const handleVerify = async (
   emailOtp: string,
@@ -74,7 +74,7 @@ const handleVerify = async (
   try {
     if (mfaFactorId && totpCode) {
       // MFA is required
-      await authenticate({
+      await authenticateAsync({
         type: "otp",
         otpCode: emailOtp,
         multiFactors: [
@@ -86,7 +86,7 @@ const handleVerify = async (
       });
     } else {
       // No MFA required
-      await authenticate({
+      await authenticateAsync({
         type: "otp",
         otpCode: emailOtp,
       });

@@ -168,6 +168,13 @@ When calling `authenticate` with `emailMode="magicLink"`, you can catch a `MfaRe
 import { MfaRequiredError } from "@account-kit/signer";
 import { signer } from "./signer";
 
+const promptUserForCode = async () => {
+  // Prompt user for TOTP code
+  // const totpCode = await promptUserForCode();
+
+  return "123456";
+};
+
 try {
   await signer.authenticate({
     type: "email",
@@ -177,7 +184,7 @@ try {
 } catch (err) {
   if (err instanceof MfaRequiredError) {
     // Prompt user for TOTP code
-    const otpCode = await promptUserForCode();
+    const totpCode = await promptUserForCode();
 
     const { multiFactorId } = err.multiFactors[0];
     await signer.authenticate({
@@ -187,7 +194,7 @@ try {
       multiFactors: [
         {
           multiFactorId,
-          multiFactorCode: otpCode,
+          multiFactorCode: totpCode,
         },
       ],
     });

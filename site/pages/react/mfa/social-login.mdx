@@ -3,19 +3,19 @@ title: Social Login with Multi-Factor Authentication
 description: How to authenticate users with Social Login when MFA is enabled
 ---
 
-# Social Login with Multi-Factor Authentication
+# Social Login with Multi-Factor Authentication (Authenticator Apps)
 
 This guide shows you how to implement social login authentication when a user has multi-factor authentication (MFA) enabled.
 
 ## Overview
 
-When MFA is enabled, the authentication process for social login works as follows:
+When a user has MFA enabled using an authenticator app (TOTP), the authentication process for social login works as follows:
 
 1. The user initiates authentication with a social provider (Google, Facebook, etc.)
-2. After successful authentication with the social provider
-3. The user is prompted to enter the 6-digit code from their authenticator app in the OAuth callback page
+2. After successful authentication with the provider
+3. The user is prompted to enter the **6-digit TOTP code** from their authenticator app (Google Authenticator, Authy, etc.) on the OAuth callback page
 
-The key advantage of social login with MFA is that the authenticator app verification happens automatically in the OAuth callback flow - your application code doesn't need special handling.
+The key advantage of social login with MFA is that the authenticator app verification happens automatically in the OAuth callback flow—your application code doesn't require special handling beyond enabling MFA.
 
 ## Implementation
 

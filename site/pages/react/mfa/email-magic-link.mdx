@@ -9,10 +9,10 @@ This guide shows you how to implement authentication with Email Magic Link and T
 
 ## Overview
 
-When a user has MFA enabled, the authentication process requires two steps:
+When a user has MFA enabled with an authenticator app (TOTP), the login flow requires two steps:
 
-1. The user clicks the magic link sent to their email
-2. The user enters the TOTP code from their authenticator app
+1. Click the magic link from email
+2. Enter the 6-digit TOTP code from their authenticator app (e.g., Google Authenticator)
 
 ## Implementation
 
@@ -21,57 +21,90 @@ When a user has MFA enabled, the authentication process requires two steps:
 When sending a magic link to a user with MFA enabled, you need to handle the MFA requirement:
 
 ```tsx twoslash
+import React from "react";
 import { useAuthenticate } from "@account-kit/react";
 import { MfaRequiredError } from "@account-kit/signer";
+import { useState } from "react";
 
-// Inside your component
-const { authenticate } = useAuthenticate();
+function MagicLinkWithMFA() {
+  const { authenticateAsync } = useAuthenticate();
+  const [showTotpInput, setShowTotpInput] = useState(false);
+  const [totpCode, setTotpCode] = useState("");
+  const [emailData, setEmailData] = useState({ email: "", multiFactorId: "" });
+  const [emailInputValue, setEmailInputValue] = useState("");
 
-// When the user submits their email
-const handleSendMagicLink = async (email: string) => {
-  try {
-    await authenticate({
-      type: "email",
-      emailMode: "magicLink",
-      email,
-    });
-    // Success - inform user to check their email
-  } catch (error) {
-    if (error instanceof MfaRequiredError) {
-      // MFA is required - get the factor ID from the error
-      const { multiFactorId } = error.multiFactors[0];
+  // When the user submits their email
+  const handleSendMagicLink = async (email: string) => {
+    try {
+      await authenticateAsync({
+        type: "email",
+        emailMode: "magicLink",
+        email,
+      });
+      // Success - inform user to check their email
+    } catch (error) {
+      if (error instanceof MfaRequiredError) {
+        // MFA is required - get the factor ID from the error
+        const { multiFactorId } = error.multiFactors[0];
 
-      // Prompt user for TOTP code
-      // Then resubmit with the TOTP code
-      return { email, multiFactorId };
+        // Store data and show TOTP input field
+        setEmailData({ email, multiFactorId });
+        setShowTotpInput(true);
+      }
+      // Handle other errors
     }
-    // Handle other errors
-  }
-};
+  };
 
-// When the user provides the TOTP code
-const handleMagicLinkWithMFA = async (
-  email: string,
-  multiFactorId: string,
-  totpCode: string
-) => {
-  try {
-    await authenticate({
-      type: "email",
-      emailMode: "magicLink",
-      email,
-      multiFactors: [
-        {
-          multiFactorId,
-          multiFactorCode: totpCode,
-        },
-      ],
-    });
-    // Success - inform user to check their email
-  } catch (error) {
-    // Handle error
-  }
-};
+  // When the user provides the TOTP code
+  const handleMagicLinkWithMFA = async () => {
+    try {
+      await authenticateAsync({
+        type: "email",
+        emailMode: "magicLink",
+        email: emailData.email,
+        multiFactors: [
+          {
+            multiFactorId: emailData.multiFactorId,
+            multiFactorCode: totpCode,
+          },
+        ],
+      });
+      // Success - inform user to check their email
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  // Render TOTP input when needed
+  return (
+    <div>
+      {!showTotpInput ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMagicLink(emailInputValue); // Assuming emailInputValue is defined elsewhere
+          }}
+        >
+          {/* Email input form */}
+          <button type="submit">Send Magic Link</button>
+        </form>
+      ) : (
+        <div>
+          <p>Please enter the 6-digit code from your authenticator app</p>
+          <input
+            type="text"
+            value={totpCode}
+            onChange={(e) => setTotpCode(e.target.value)}
+            maxLength={6}
+            pattern="[0-9]*"
+            inputMode="numeric"
+          />
+          <button onClick={handleMagicLinkWithMFA}>Verify</button>
+        </div>
+      )}
+    </div>
+  );
+}
 ```
 
 ### Step 2: Handle the Magic Link Redirect
@@ -83,7 +116,7 @@ import { useEffect } from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 const handleMagicLinkRedirect = async () => {
   const url = new URL(window.location.href);
@@ -92,7 +125,7 @@ const handleMagicLinkRedirect = async () => {
   if (!bundle) return;
 
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "email",
       bundle,
     });

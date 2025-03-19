@@ -3,9 +3,11 @@ title: Setting Up Multi-Factor Authentication
 description: How to set up additional security with authenticator apps in your React application
 ---
 
-# Setting Up Multi-Factor Authentication
+# Setting Up Multi-Factor Authentication (Authenticator Apps)
 
-This guide shows you how to implement multi-factor authentication in your React application using Account Kit hooks and authenticator apps like Google Authenticator or Authy.
+With Account Kit, multi-factor authentication (MFA) uses authenticator apps—like Google Authenticator, Authy, or Microsoft Authenticator—to generate a Time-based One-Time Password (TOTP).
+
+By requiring both a user’s primary login (e.g., email OTP, magic link, or social login) and a TOTP from their authenticator app, your application gains an extra layer of security.
 
 :::tip
 Multi-factor authentication is currently only supported when authenticating with Email OTP, Email Magic Link, or Social Login.
@@ -40,7 +42,7 @@ if (isMfaAvailable) {
 
 ### Step 2: Setting Up an Authenticator App
 
-When a user wants to add an authenticator app, you'll generate a QR code for them to scan:
+In this step, we generate a QR code (TOTP seed) for the user to scan. Most authenticator apps (Google Authenticator, Authy, 1Password, etc.) can scan this QR code to generate 6-digit time-based codes.
 
 ```tsx twoslash
 import React, { useState } from "react";
@@ -108,7 +110,7 @@ const handleVerifyAuthenticator = (code: string, multiFactorId: string) => {
   verifyMFA(
     {
       multiFactorId,
-      multiFactorCode: code, // 6-digit code from authenticator app
+      multiFactorCode: code, // "multiFactorCode" here is the TOTP code from the user's authenticator app
     },
     {
       onSuccess: () => {
@@ -124,7 +126,7 @@ const handleVerifyAuthenticator = (code: string, multiFactorId: string) => {
 
 ### Step 4: Managing Authenticator Apps
 
-You can retrieve and remove authenticator app verification:
+You can retrieve and remove authenticator app–based MFA from a user's account by using the `useMFA` hook. Each verification method (also called a “factor”) is identified by a unique `multiFactorId`. For example, a TOTP-based authenticator app is one factor.
 
 ```tsx twoslash
 import React from "react";
@@ -133,12 +135,13 @@ import { useMFA } from "@account-kit/react";
 // Inside your component
 const { getMFAFactors, removeMFA } = useMFA();
 
-// Get all verification methods
+// Fetch all MFA verification methods (factors) for the current user
 const fetchVerificationMethods = () => {
   getMFAFactors(undefined, {
     onSuccess: (factors) => {
-      const verificationMethods = factors.multiFactors;
-      // Display to user
+      // factors.multiFactors is an array of verification methods,
+      // each represented by a unique multiFactorId.
+      console.log("User's MFA factors:", factors.multiFactors);
     },
     onError: (error) => {
       // Handle error
@@ -146,13 +149,13 @@ const fetchVerificationMethods = () => {
   });
 };
 
-// Remove an authenticator app
+// Remove a TOTP authenticator app by its multiFactorId
 const handleRemoveAuthenticator = (multiFactorId: string) => {
   removeMFA(
     { multiFactorIds: [multiFactorId] },
     {
       onSuccess: () => {
-        // Authenticator removed successfully
+        console.log("Authenticator removed successfully!");
       },
       onError: (error) => {
         // Handle error

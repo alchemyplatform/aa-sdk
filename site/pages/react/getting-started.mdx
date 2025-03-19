@@ -80,9 +80,6 @@ Each authentication method has dedicated documentation for both implementation a
 
 After implementing your chosen authentication methods, you can add an extra layer of security by enabling multi-factor authentication (MFA):
 
-- [Set up Multi-Factor Authentication](/react/mfa/setup-mfa) - Learn how to implement authenticator app verification for your users
-- MFA works with Email OTP, Email Magic Link, and Social Login methods
-- For pre-built UI components, MFA verification on login is handled automatically
-- For custom UI implementations, additional code is needed to handle the MFA verification step on login
+You can enable [multi-factor authentication (MFA)](/react/mfa/setup-mfa) via authenticator apps (TOTP). These generate time-based one-time passcodes in an app like Google Authenticator or Authy. When users log in via Email OTP, Magic Link, or Social Login, they'll be prompted for their 6-digit TOTP code if MFA is enabled.
 
 Multi-factor authentication significantly improves account security by requiring users to verify their identity using both their primary authentication method and a time-based code from an authenticator app.

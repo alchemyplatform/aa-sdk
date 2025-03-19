@@ -52,6 +52,10 @@ export const reactGuides: SidebarItem[] = [
             text: "Email magic-link",
             link: "/react/mfa/email-magic-link",
           },
+          {
+            text: "Social login",
+            link: "/react/mfa/social-login",
+          },
         ],
       },
     ],
