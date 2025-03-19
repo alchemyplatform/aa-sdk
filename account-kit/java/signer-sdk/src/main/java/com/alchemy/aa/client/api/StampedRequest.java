@@ -4,5 +4,4 @@ import com.alchemy.aa.Stamper;
 import lombok.Builder;
 
 @Builder
-public record StampedRequest(String body, Stamper.Stamp stamp, String url) {
-}
+public record StampedRequest(String body, Stamper.Stamp stamp, String url) {}
