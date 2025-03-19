@@ -5,8 +5,6 @@ title: default7702UserOpSigner
 description: Overview of the default7702UserOpSigner method
 ---
 
-# default7702UserOpSigner
-
 Provides a default middleware function for signing user operations with a client account when using EIP-7702 delegated accounts.
 If the signer doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware.
 This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.

@@ -104,7 +104,6 @@ export function functionTemplate(
     description: Overview of the ${functionName} method
     ---
 
-    # ${functionName}
     ${ts.getTextOfJSDocComment(comment?.comment)}
     ${extendsClause}
 
