@@ -168,12 +168,12 @@ Use the `useAuthenticate` hook to implement Auth0 authentication:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // Option 1: Generic Auth0 login (shows Auth0 provider selection screen)
 const handleAuth0Login = async () => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "oauth",
       authProviderId: "auth0",
       mode: "popup", // or "redirect"
@@ -187,7 +187,7 @@ const handleAuth0Login = async () => {
 // Option 2: Direct provider login (bypasses Auth0 selection screen)
 const handleGitHubLogin = async () => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "oauth",
       authProviderId: "auth0",
       auth0Connection: "github", // Use the connection name from Auth0

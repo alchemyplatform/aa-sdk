@@ -91,7 +91,7 @@ This approach associates an email with the passkey, allowing users to recover th
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user submits their email and wants to create a passkey
 const handlePasskeySignup = async (email: string) => {
@@ -101,7 +101,7 @@ const handlePasskeySignup = async (email: string) => {
       throw new Error("Please enter a valid email address");
     }
 
-    await authenticate({
+    await authenticateAsync({
       type: "passkey",
       email,
     });
@@ -129,12 +129,12 @@ This approach creates a passkey without an associated email. Use this only if yo
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user wants to create a passkey without email
 const handlePasskeyOnlySignup = async (username: string) => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "passkey",
       createNew: true,
       username, // A unique identifier for the passkey

@@ -101,12 +101,12 @@ First, prompt your user for their email address and send a magic link:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user submits their email
 const handleSendMagicLink = async (email: string) => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "email",
       emailMode: "magicLink",
       email,
@@ -127,7 +127,7 @@ import { useEffect } from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // Handle the redirect when the component mounts
 useEffect(() => {
@@ -137,7 +137,7 @@ useEffect(() => {
 
     if (bundle) {
       try {
-        await authenticate({
+        await authenticateAsync({
           type: "email",
           bundle,
         });

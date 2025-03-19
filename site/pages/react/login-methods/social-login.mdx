@@ -123,12 +123,12 @@ Create buttons or UI elements for each social provider you want to support:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate, isPending } = useAuthenticate();
+const { authenticateAsync, isPending } = useAuthenticate();
 
 // For redirect flow
 const handleGoogleRedirectLogin = async () => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "oauth",
       authProviderId: "google",
       mode: "redirect",
@@ -143,7 +143,7 @@ const handleGoogleRedirectLogin = async () => {
 // For popup flow
 const handleGooglePopupLogin = async () => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "oauth",
       authProviderId: "google",
       mode: "popup",

@@ -99,12 +99,12 @@ First, prompt your user for their email address and send an OTP:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user submits their email
 const handleSendCode = async (email: string) => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "email",
       emailMode: "otp",
       email,
@@ -124,12 +124,12 @@ Once the user receives the code, they'll enter it in your application:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user submits the OTP code
 const handleVerifyCode = async (otpCode: string) => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "otp",
       otpCode,
     });

@@ -86,12 +86,12 @@ If the user's passkey is associated with an email, you can use the email to help
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user wants to log in with their passkey and email
 const handlePasskeyLogin = async (email: string) => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "passkey",
       email,
     });
@@ -110,12 +110,12 @@ If you want to authenticate a user with just their passkey (without requiring an
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticate } = useAuthenticate();
+const { authenticateAsync } = useAuthenticate();
 
 // When the user wants to log in with just their passkey
 const handlePasskeyOnlyLogin = async () => {
   try {
-    await authenticate({
+    await authenticateAsync({
       type: "passkey",
       createNew: false, // Important: set to false to prevent creating a new passkey
     });
