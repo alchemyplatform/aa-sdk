@@ -75,3 +75,14 @@ Now you can choose which authentication methods you want to implement and how yo
 2. [Using our React hooks](/react/react-hooks) to build your own custom UI for complete control.
 
 Each authentication method has dedicated documentation for both implementation approaches.
+
+## Enhancing Security with Multi-Factor Authentication
+
+After implementing your chosen authentication methods, you can add an extra layer of security by enabling multi-factor authentication (MFA):
+
+- [Set up Multi-Factor Authentication](/react/mfa/setup-mfa) - Learn how to implement authenticator app verification for your users
+- MFA works with Email OTP, Email Magic Link, and Social Login methods
+- For pre-built UI components, MFA verification on login is handled automatically
+- For custom UI implementations, additional code is needed to handle the MFA verification step on login
+
+Multi-factor authentication significantly improves account security by requiring users to verify their identity using both their primary authentication method and a time-based code from an authenticator app.
