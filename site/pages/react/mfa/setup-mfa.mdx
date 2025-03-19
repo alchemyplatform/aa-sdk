@@ -8,7 +8,7 @@ description: How to set up additional security with authenticator apps in your R
 This guide shows you how to implement multi-factor authentication in your React application using Account Kit hooks and authenticator apps like Google Authenticator or Authy.
 
 :::tip
-Multi-factor authentication is currently only supported when authenticating with Email OTP or Email Magic Link.
+Multi-factor authentication is currently only supported when authenticating with Email OTP, Email Magic Link, or Social Login.
 :::
 
 ## Overview
@@ -166,5 +166,20 @@ const handleRemoveAuthenticator = (multiFactorId: string) => {
 
 After setting up an authenticator app, users will need to provide both their primary authentication method and a 6-digit code when signing in:
 
-- [Email OTP with Multi-Factor Authentication](/react/mfa/email-otp)
-- [Email Magic Link with Multi-Factor Authentication](/react/mfa/email-magic-link)
+### Using Pre-built UI Components
+
+If you're using the [pre-built UI components](/react/ui-components), the MFA verification process is handled automatically:
+
+- The authentication flow will detect when a user has MFA enabled
+- Users will be prompted for their authenticator app code after providing their primary credentials
+- No additional code is required from you
+
+### Using Custom UI with Hooks
+
+If you're implementing [custom UI with hooks](/react/react-hooks), you'll need to update your authentication code to handle the MFA verification step:
+
+- [Email OTP with Multi-Factor Authentication](/react/mfa/email-otp) - See how to implement the two-step verification
+- [Email Magic Link with Multi-Factor Authentication](/react/mfa/email-magic-link) - Learn how to handle magic links with MFA
+- [Social Login with Multi-Factor Authentication](/react/mfa/social-login) - Social login with MFA is handled in the OAuth callback
+
+For custom UI implementations, make sure your authentication logic checks for the MFA requirement and provides UI for users to enter their authenticator app code.
