@@ -5,8 +5,8 @@ import {
 
 export function EOAPostLogin() {
   return (
-    <div className="px-10 py-11 flex flex-col border-none lg:border-solid border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none">
-      <div className="max-w-[486px] w-full bg-bg-surface-default">
+    <div className="px-10 py-11 flex flex-col border-none lg:border-solid border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none bg-bg-surface-default">
+      <div className="max-w-[486px] w-full">
         <EOAPostLoginContents />
         <div className="hidden lg:block">
           <EOAPostLoginActions />
