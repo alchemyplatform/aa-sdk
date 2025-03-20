@@ -27,6 +27,7 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
+import { VERSION } from "../version.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -382,6 +383,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const basePath = "/signer";
 
     const headers = new Headers();
+    headers.append("Alchemy-AA-Sdk-Version", VERSION);
     headers.append("Content-Type", "application/json");
     if (this.connectionConfig.apiKey) {
       headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);
