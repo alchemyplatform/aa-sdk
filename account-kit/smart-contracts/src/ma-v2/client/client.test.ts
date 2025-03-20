@@ -21,7 +21,6 @@ import {
   testActions,
   type TestActions,
   concatHex,
-  toHex,
   type Hex,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
@@ -60,6 +59,7 @@ import {
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { DeferredActionBuilder } from "../deferredActionUtils.js";
+import { deferralActions } from "../actions/DeferralActions.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -364,6 +364,111 @@ describe("MA v2 Tests", async () => {
     const { typedData, nonceOverride } =
       await DeferredActionBuilder.createTypedDataObject({
         client: provider,
+        callData: encodedInstallData,
+        deadline: 0,
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      });
+
+    // Sign the typed data using the owner (fallback) validation, we must use the inner signTypedData method to bypass 6492 for deferred actions
+    // Prepend 0x00 for the EOA_TYPE_SIGNATURE byte
+    const deferredValidationSig = concatHex([
+      "0x00",
+      await provider.account.signTypedData(typedData),
+    ]);
+
+    // Build the full hex to prepend to the UO signature
+    const signaturePrepend = DeferredActionBuilder.buildDigest({
+      typedData: typedData,
+      sig: deferredValidationSig,
+      nonce: nonceOverride,
+    });
+
+    const unsignedUo =
+      await DeferredActionBuilder.buildUserOperationWithDeferredAction({
+        client: provider,
+        uo: { target, data: "0x" },
+        signaturePrepend,
+        nonceOverride,
+      });
+
+    console.log(unsignedUo);
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: {
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      },
+    });
+
+    // Sign the UO with the session key
+    const uo = await sessionKeyClient.signUserOperation({
+      uoStruct: unsignedUo,
+    });
+
+    // Prepend the full hex for the deferred action to the new, real signature
+    uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
+
+    // Send the raw UserOp
+    const result = await sessionKeyClient.sendRawUserOperation(
+      uo,
+      provider.account.getEntryPoint().address
+    );
+
+    await provider.waitForUserOperationTransaction({ hash: result });
+  });
+
+  it.only("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
+    let provider = (await givenConnectedProvider({ signer }))
+      .extend(installValidationActions)
+      .extend(deferralActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // Test variables
+    const sessionKeyEntityId = 1;
+    const isGlobalValidation = true;
+
+    // Encode install data to defer
+    let encodedInstallData = await provider.encodeInstallValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: sessionKeyEntityId,
+        isGlobal: isGlobalValidation,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: sessionKeyEntityId,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+
+    // Build the typed data we need for the deferred action using the session key client so the nonce uses the session key as the UO validation
+    // this installation will however be validated with the owner (fallback) validation
+    // const { typedData, nonceOverride } =
+    //   await DeferredActionBuilder.createTypedDataObject({
+    //     client: provider,
+    //     callData: encodedInstallData,
+    //     deadline: 0,
+    //     entityId: sessionKeyEntityId,
+    //     isGlobalValidation: isGlobalValidation,
+    //   });
+
+    const { typedData, nonceOverride } =
+      await provider.createDeferredActionTypedDataObject({
         callData: encodedInstallData,
         deadline: 0,
         entityId: sessionKeyEntityId,
