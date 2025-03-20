@@ -368,10 +368,10 @@ describe("MA v2 Tests", async () => {
         isGlobalValidation: isGlobalValidation,
       });
 
-    // Sign the typed data using the owner (fallback) validation
-    const deferredValidationSig = await provider.signTypedData({
-      typedData: typedData,
-    });
+    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
 
     // Build the full hex to prepend to the UO signature
     // This MUST be done with the *same* client that has signed the typed data
@@ -503,9 +503,9 @@ describe("MA v2 Tests", async () => {
       });
 
     // Sign the typed data using the first session key
-    const deferredValidationSig = await sessionKeyClient.signTypedData({
-      typedData: typedData,
-    });
+    const deferredValidationSig = await sessionKeyClient.account.signTypedData(
+      typedData
+    );
 
     // Build the full hex to prepend to the UO signature
     // This MUST be done with the *same* client that has signed the typed data
