@@ -7,7 +7,7 @@ description: How to set up additional security with authenticator apps in your R
 
 With Account Kit, multi-factor authentication (MFA) uses authenticator apps—like Google Authenticator, Authy, or Microsoft Authenticator—to generate a Time-based One-Time Password (TOTP).
 
-By requiring both a user’s primary login (e.g., email OTP, magic link, or social login) and a TOTP from their authenticator app, your application gains an extra layer of security.
+By requiring both a user's primary login (e.g., email OTP, magic link, or social login) and a TOTP from their authenticator app, your application gains an extra layer of security.
 
 :::tip
 Multi-factor authentication is currently only supported when authenticating with Email OTP, Email Magic Link, or Social Login.
@@ -23,17 +23,17 @@ To implement authenticator app verification in your React application, you'll us
 
 ### Step 1: Checking if Multi-Factor Authentication is Available
 
-First, check if the user is logged and able to edit their MFA settings:
+First, check if the user is logged in and able to edit their MFA settings:
 
 ```tsx twoslash
 import React from "react";
 import { useMFA } from "@account-kit/react";
 
 // Inside your component
-const { isMfaAvailable } = useMFA();
+const { isReady } = useMFA();
 
 // Only show MFA setup options if available
-if (isMfaAvailable) {
+if (isReady) {
   // Render MFA setup UI
 } else {
   // User needs to authenticate first
@@ -55,7 +55,8 @@ function AuthenticatorSetupComponent() {
   const [factorId, setFactorId] = useState("");
 
   const handleSetupAuthenticator = () => {
-    addMFA(
+    // Use the mutate method from the mutation result
+    addMFA.mutate(
       {
         multiFactorType: "totp", // Technical name for authenticator apps
       },
@@ -72,10 +73,13 @@ function AuthenticatorSetupComponent() {
     );
   };
 
+  // You can also check loading state directly
+  const isLoading = addMFA.isPending;
+
   return (
     <div>
-      <button onClick={handleSetupAuthenticator}>
-        Set Up Authenticator App
+      <button onClick={handleSetupAuthenticator} disabled={isLoading}>
+        {isLoading ? "Setting up..." : "Set Up Authenticator App"}
       </button>
 
       {qrCodeUrl && (
@@ -87,6 +91,11 @@ function AuthenticatorSetupComponent() {
             to complete setup.
           </p>
         </div>
+      )}
+
+      {/* Display errors if they occur */}
+      {addMFA.isError && (
+        <div className="error">Error: {addMFA.error.message}</div>
       )}
     </div>
   );
@@ -100,69 +109,146 @@ This QR code contains the information needed for apps like Google Authenticator 
 After the user scans the QR code, they need to prove it worked by entering a code:
 
 ```tsx twoslash
-import React from "react";
+import React, { useState } from "react";
 import { useMFA } from "@account-kit/react";
 
-// Inside your component
-const { verifyMFA } = useMFA();
+function VerifyAuthenticatorComponent({
+  multiFactorId,
+}: {
+  multiFactorId: string;
+}) {
+  const { verifyMFA } = useMFA();
+  const [code, setCode] = useState("");
 
-const handleVerifyAuthenticator = (code: string, multiFactorId: string) => {
-  verifyMFA(
-    {
-      multiFactorId,
-      multiFactorCode: code, // "multiFactorCode" here is the TOTP code from the user's authenticator app
-    },
-    {
-      onSuccess: () => {
-        // Authenticator setup successful
+  const handleVerifyAuthenticator = () => {
+    verifyMFA.mutate(
+      {
+        multiFactorId,
+        multiFactorCode: code, // The TOTP code from the user's authenticator app
       },
-      onError: (error) => {
-        // Handle error
-      },
+      {
+        onSuccess: () => {
+          // Authenticator setup successful
+          console.log("MFA setup complete!");
+        },
+        onError: (error) => {
+          // Handle error
+          console.error("Verification failed:", error);
+        },
+      }
+    );
+  };
+
+  // For async/await pattern, you can use mutateAsync
+  const handleVerifyAsync = async () => {
+    try {
+      const result = await verifyMFA.mutateAsync({
+        multiFactorId,
+        multiFactorCode: code,
+      });
+      console.log("MFA setup complete!", result);
+    } catch (error) {
+      console.error("Verification failed:", error);
     }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        placeholder="Enter 6-digit code"
+        maxLength={6}
+      />
+      <button
+        onClick={handleVerifyAuthenticator}
+        disabled={verifyMFA.isPending}
+      >
+        {verifyMFA.isPending ? "Verifying..." : "Verify Code"}
+      </button>
+
+      {verifyMFA.isError && (
+        <div className="error">Invalid code. Please try again.</div>
+      )}
+    </div>
   );
-};
+}
 ```
 
 ### Step 4: Managing Authenticator Apps
 
-You can retrieve and remove authenticator app–based MFA from a user's account by using the `useMFA` hook. Each verification method (also called a “factor”) is identified by a unique `multiFactorId`. For example, a TOTP-based authenticator app is one factor.
+You can retrieve and remove authenticator app–based MFA from a user's account by using the `useMFA` hook. Each verification method (also called a "factor") is identified by a unique `multiFactorId`. For example, a TOTP-based authenticator app is one factor.
 
 ```tsx twoslash
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMFA } from "@account-kit/react";
+import type { MfaFactor } from "@account-kit/signer";
 
-// Inside your component
-const { getMFAFactors, removeMFA } = useMFA();
+function ManageMfaComponent() {
+  const { getMFAFactors, removeMFA } = useMFA();
+  const [factors, setFactors] = useState<MfaFactor[]>([]);
 
-// Fetch all MFA verification methods (factors) for the current user
-const fetchVerificationMethods = () => {
-  getMFAFactors(undefined, {
-    onSuccess: (factors) => {
-      // factors.multiFactors is an array of verification methods,
-      // each represented by a unique multiFactorId.
-      console.log("User's MFA factors:", factors.multiFactors);
-    },
-    onError: (error) => {
-      // Handle error
-    },
-  });
-};
-
-// Remove a TOTP authenticator app by its multiFactorId
-const handleRemoveAuthenticator = (multiFactorId: string) => {
-  removeMFA(
-    { multiFactorIds: [multiFactorId] },
-    {
-      onSuccess: () => {
-        console.log("Authenticator removed successfully!");
+  // Fetch all MFA verification methods (factors) for the current user
+  useEffect(() => {
+    // Only fetch when component mounts and we're ready
+    getMFAFactors.mutate(undefined, {
+      onSuccess: (result) => {
+        // factors.multiFactors is an array of verification methods
+        setFactors(result.multiFactors);
       },
-      onError: (error) => {
-        // Handle error
-      },
-    }
+    });
+  }, [getMFAFactors]);
+
+  // Remove a TOTP authenticator app by its multiFactorId
+  const handleRemoveAuthenticator = (multiFactorId: string) => {
+    removeMFA.mutate(
+      { multiFactorIds: [multiFactorId] },
+      {
+        onSuccess: () => {
+          console.log("Authenticator removed successfully!");
+          // Update local state to reflect the removal
+          setFactors(factors.filter((f) => f.multiFactorId !== multiFactorId));
+        },
+      }
+    );
+  };
+
+  // Loading states are available directly from the mutation objects
+  if (getMFAFactors.isPending) return <div>Loading MFA settings...</div>;
+
+  return (
+    <div>
+      <h2>Your Authentication Methods</h2>
+
+      {factors.length === 0 ? (
+        <p>No authenticator apps configured.</p>
+      ) : (
+        <ul>
+          {factors.map((factor) => (
+            <li key={factor.multiFactorId}>
+              {factor.multiFactorType === "totp"
+                ? "Authenticator App"
+                : factor.multiFactorType}
+              <button
+                onClick={() => handleRemoveAuthenticator(factor.multiFactorId)}
+                disabled={removeMFA.isPending}
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {getMFAFactors.isError && (
+        <div className="error">
+          Error loading MFA settings: {getMFAFactors.error.message}
+        </div>
+      )}
+    </div>
   );
-};
+}
 ```
 
 ## Next Steps

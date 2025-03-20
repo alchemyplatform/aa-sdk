@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ThreeStarsIcon } from "../icons/three-stars";
 import { MFAModal } from "../modals/MFA/MFAModal";
 import { useMFA } from "@account-kit/react";
 
 export function MFACard() {
   const [isMfaActive, setIsMfaActive] = useState(false);
-
-  const { getMFAFactors, isGettingFactors, isMfaAvailable } = useMFA();
+  const { getMFAFactors, isReady } = useMFA();
 
   useEffect(() => {
-    if (isMfaAvailable) {
-      getMFAFactors(undefined, {
+    if (isReady) {
+      getMFAFactors.mutate(undefined, {
         onSuccess: (factors) => {
           setIsMfaActive(
             !!factors?.multiFactors && factors.multiFactors.length > 0
@@ -18,7 +17,8 @@ export function MFACard() {
         },
       });
     }
-  }, [isMfaAvailable, getMFAFactors]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady]);
 
   return (
     <div className="bg-bg-surface-default rounded-lg p-4 xl:p-6 w-full xl:w-[326px] xl:h-[500px] flex flex-col justify-between shadow-smallCard min-h-[220px]">
@@ -52,7 +52,7 @@ export function MFACard() {
         isMfaActive={isMfaActive}
         onMfaEnabled={() => setIsMfaActive(true)}
         onMfaRemoved={() => setIsMfaActive(false)}
-        isLoadingClient={!isMfaAvailable || isGettingFactors}
+        isLoadingClient={!isReady || getMFAFactors.isPending}
       />
     </div>
   );

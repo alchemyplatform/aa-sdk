@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
+import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { useSigner } from "./useSigner.js";
 import { useSignerStatus } from "./useSignerStatus.js";
@@ -13,38 +13,26 @@ import type {
 } from "@account-kit/signer";
 
 export type UseMFAResult = {
-  addMFA: UseMutateFunction<EnableMfaResult, Error, EnableMfaParams, unknown>;
-  verifyMFA: UseMutateFunction<
+  addMFA: UseMutationResult<EnableMfaResult, Error, EnableMfaParams>;
+  verifyMFA: UseMutationResult<
     { multiFactors: MfaFactor[] },
     Error,
-    VerifyMfaParams,
-    unknown
+    VerifyMfaParams
   >;
-  removeMFA: UseMutateFunction<
+  removeMFA: UseMutationResult<
     { multiFactors: MfaFactor[] },
     Error,
-    RemoveMfaParams,
-    unknown
+    RemoveMfaParams
   >;
-  getMFAFactors: UseMutateFunction<
-    { multiFactors: MfaFactor[] },
-    Error,
-    void,
-    unknown
-  >;
-  isAddingMFA: boolean;
-  isVerifyingMFA: boolean;
-  isRemovingMFA: boolean;
-  isGettingFactors: boolean;
-  isMfaAvailable: boolean;
-  error: Error | null;
+  getMFAFactors: UseMutationResult<{ multiFactors: MfaFactor[] }, Error, void>;
+  isReady: boolean;
 };
 
 /**
  * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useMFA.ts) that provides functions and state for managing multi-factor authentication (MFA) operations.
  * Handles adding, verifying, removing, and getting MFA factors for an authenticated account.
  *
- * The hook checks if the signer is connected before allowing MFA operations and provides an `isMfaAvailable` flag
+ * The hook checks if the signer is connected before allowing MFA operations and provides an `isReady` flag
  * to indicate whether MFA operations can be performed.
  *
  * @returns {UseMFAResult} An object containing functions and state for handling MFA operations
@@ -58,12 +46,7 @@ export type UseMFAResult = {
  *   verifyMFA,
  *   removeMFA,
  *   getMFAFactors,
- *   isAddingMFA,
- *   isVerifyingMFA,
- *   isRemovingMFA,
- *   isGettingFactors,
- *   isMfaAvailable,
- *   error
+ *   isReady
  * } = useMFA();
  * ```
  */
@@ -72,65 +55,60 @@ export function useMFA(): UseMFAResult {
   const signer = useSigner();
   const { isConnected } = useSignerStatus();
 
-  const isMfaAvailable = isConnected && !!signer?.inner;
+  const isReady = isConnected && !!signer;
   const ensureMfaAvailable = () => {
-    if (!isMfaAvailable) {
+    if (!isReady) {
       throw new Error("Signer not connected or initialized");
     }
   };
 
-  const {
-    mutate: addMFA,
-    isPending: isAddingMFA,
-    error: addError,
-  } = useMutation<EnableMfaResult, Error, EnableMfaParams>(
+  const addMFA = useMutation<EnableMfaResult, Error, EnableMfaParams>(
     {
       mutationKey: ["addMFA"],
-      mutationFn: async (params: EnableMfaParams) => {
-        ensureMfaAvailable();
-        return signer!.inner.addMfa(params);
-      },
-    },
-    queryClient
-  );
-
-  const {
-    mutate: verifyMFA,
-    isPending: isVerifyingMFA,
-    error: verifyError,
-  } = useMutation<{ multiFactors: MfaFactor[] }, Error, VerifyMfaParams>(
-    {
       mutationFn: async (params) => {
         ensureMfaAvailable();
-        return signer!.inner.verifyMfa(params);
+        return signer!.addMfa(params);
       },
     },
     queryClient
   );
 
-  const {
-    mutate: removeMFA,
-    isPending: isRemovingMFA,
-    error: removeError,
-  } = useMutation<{ multiFactors: MfaFactor[] }, Error, RemoveMfaParams>(
+  const verifyMFA = useMutation<
+    { multiFactors: MfaFactor[] },
+    Error,
+    VerifyMfaParams
+  >(
     {
+      mutationKey: ["verifyMFA"],
       mutationFn: async (params) => {
         ensureMfaAvailable();
-        return signer!.inner.removeMfa(params);
+        return signer!.verifyMfa(params);
       },
     },
     queryClient
   );
 
-  const {
-    mutate: getMFAFactors,
-    isPending: isGettingFactors,
-    error: getFactorsError,
-  } = useMutation<{ multiFactors: MfaFactor[] }, Error, void>(
+  const removeMFA = useMutation<
+    { multiFactors: MfaFactor[] },
+    Error,
+    RemoveMfaParams
+  >(
     {
+      mutationKey: ["removeMFA"],
+      mutationFn: async (params) => {
+        ensureMfaAvailable();
+        return signer!.removeMfa(params);
+      },
+    },
+    queryClient
+  );
+
+  const getMFAFactors = useMutation<{ multiFactors: MfaFactor[] }, Error, void>(
+    {
+      mutationKey: ["getMFAFactors"],
       mutationFn: async () => {
         ensureMfaAvailable();
-        return signer!.inner.getMfaFactors();
+        return signer!.getMfaFactors();
       },
     },
     queryClient
@@ -141,11 +119,6 @@ export function useMFA(): UseMFAResult {
     verifyMFA,
     removeMFA,
     getMFAFactors,
-    isAddingMFA,
-    isVerifyingMFA,
-    isRemovingMFA,
-    isGettingFactors,
-    isMfaAvailable,
-    error: addError || verifyError || removeError || getFactorsError,
+    isReady,
   };
 }

@@ -28,6 +28,9 @@ import type {
   OauthParams,
   User,
   VerifyMfaParams,
+  EnableMfaParams,
+  EnableMfaResult,
+  RemoveMfaParams,
 } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
@@ -1122,6 +1125,140 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
     return user;
   }
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const { multiFactors } = await signer.getMfaFactors();
+   * ```
+   *
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<{ multiFactors: Array<MfaFactor> }>} A promise that resolves to an array of configured MFA factors
+   */
+  getMfaFactors: () => Promise<{ multiFactors: MfaFactor[] }> =
+    SignerLogger.profiled("BaseAlchemySigner.getMfaFactors", async () => {
+      return this.inner.getMfaFactors();
+    });
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user.
+   * The factor will need to be verified using verifyMfa before it becomes active.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.addMfa({ multiFactorType: "totp" });
+   * // Result contains multiFactorTotpUrl to display as QR code
+   * ```
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   */
+  addMfa: (params: EnableMfaParams) => Promise<EnableMfaResult> =
+    SignerLogger.profiled("BaseAlchemySigner.addMfa", async (params) => {
+      return this.inner.addMfa(params);
+    });
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.verifyMfa({
+   *   multiFactorId: "factor-id",
+   *   multiFactorCode: "123456" // 6-digit code from authenticator app
+   * });
+   * ```
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  verifyMfa: (
+    params: VerifyMfaParams
+  ) => Promise<{ multiFactors: MfaFactor[] }> = SignerLogger.profiled(
+    "BaseAlchemySigner.verifyMfa",
+    async (params) => {
+      return this.inner.verifyMfa(params);
+    }
+  );
+
+  /**
+   * Removes existing MFA factors by their IDs.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.removeMfa({
+   *   multiFactorIds: ["factor-id-1", "factor-id-2"]
+   * });
+   * ```
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  removeMfa: (
+    params: RemoveMfaParams
+  ) => Promise<{ multiFactors: MfaFactor[] }> = SignerLogger.profiled(
+    "BaseAlchemySigner.removeMfa",
+    async (params) => {
+      return this.inner.removeMfa(params);
+    }
+  );
 }
 
 function toErrorInfo(error: unknown): ErrorInfo {

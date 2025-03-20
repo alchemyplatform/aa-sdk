@@ -25,7 +25,7 @@ Once the user is authenticated, you can call `addMfa` to enable TOTP. This retur
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 
-const { multiFactors } = await signer.inner.addMFA({
+const { multiFactors } = await signer.addMFA({
   multiFactorType: "totp",
 });
 
@@ -51,7 +51,7 @@ Once the user has scanned the TOTP secret, have them enter the 6-digit code from
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 
-await signer.inner.verifyMfa({
+await signer.verifyMfa({
   multiFactorId, // from addMfa
   multiFactorCode: "123456",
 });
@@ -72,7 +72,7 @@ If a user wants to disable TOTP, call `removeMfa` with the `multiFactorId` you w
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 
-await signer.inner.removeMfa({
+await signer.removeMfa({
   multiFactorIds: [multiFactorId],
 });
 ```
@@ -90,7 +90,7 @@ await signer.inner.removeMfa({
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 
-const { multiFactors } = await signer.inner.getMfaFactors();
+const { multiFactors } = await signer.getMfaFactors();
 ```
 
 ```ts twoslash [signer] filename="signer.ts"

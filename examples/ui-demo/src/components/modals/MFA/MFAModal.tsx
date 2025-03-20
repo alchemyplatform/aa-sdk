@@ -38,18 +38,7 @@ export function MFAModal({
   const [otpError, setOtpError] = useState<string | null>(null);
   const [systemError, setSystemError] = useState(false);
 
-  const {
-    addMFA,
-    verifyMFA,
-    removeMFA,
-    getMFAFactors,
-    isAddingMFA,
-    isVerifyingMFA,
-    isRemovingMFA,
-    isGettingFactors,
-    isMfaAvailable,
-    error,
-  } = useMFA();
+  const { addMFA, verifyMFA, removeMFA, getMFAFactors, isReady } = useMFA();
 
   const handleClose = () => setIsModalOpen(false);
 
@@ -74,13 +63,13 @@ export function MFAModal({
   }, []);
 
   const startMFASetup = useCallback(() => {
-    if (!isMfaAvailable) {
+    if (!isReady) {
       setSystemError(true);
       console.error("MFA not available");
       return;
     }
 
-    addMFA(
+    addMFA.mutate(
       { multiFactorType: "totp" },
       {
         onSuccess: (result) => {
@@ -102,7 +91,7 @@ export function MFAModal({
         },
       }
     );
-  }, [addMFA, isMfaAvailable]);
+  }, [addMFA, isReady]);
 
   const verifyTOTP = useCallback(() => {
     if (!multiFactorId || !otp.join("")) {
@@ -111,7 +100,7 @@ export function MFAModal({
       return;
     }
 
-    verifyMFA(
+    verifyMFA.mutate(
       {
         multiFactorId: multiFactorId,
         multiFactorCode: otp.join(""),
@@ -131,13 +120,13 @@ export function MFAModal({
   }, [multiFactorId, onMfaEnabled, otp, verifyMFA]);
 
   const handleRemoveMFA = useCallback(() => {
-    if (!isMfaAvailable) {
+    if (!isReady) {
       setSystemError(true);
       console.error("MFA not available");
       return;
     }
 
-    getMFAFactors(undefined, {
+    getMFAFactors.mutate(undefined, {
       onSuccess: (result) => {
         const factorId = result?.multiFactors?.[0]?.multiFactorId;
 
@@ -147,7 +136,7 @@ export function MFAModal({
           return;
         }
 
-        removeMFA(
+        removeMFA.mutate(
           { multiFactorIds: [factorId] },
           {
             onSuccess: () => {
@@ -166,7 +155,7 @@ export function MFAModal({
         setSystemError(true);
       },
     });
-  }, [getMFAFactors, isMfaAvailable, onMfaRemoved, removeMFA, resetModalState]);
+  }, [getMFAFactors, isReady, onMfaRemoved, removeMFA, resetModalState]);
 
   useEffect(() => {
     if (otp.every((value) => value !== "")) {
@@ -181,14 +170,14 @@ export function MFAModal({
         return (
           <MFAModalStart
             startMFASetup={startMFASetup}
-            isLoading={isAddingMFA}
+            isLoading={addMFA.isPending}
           />
         );
       case "qr":
         return (
           <MFAModalQR
             totpUrl={totpUrl}
-            isLoading={isAddingMFA}
+            isLoading={addMFA.isPending}
             setStage={setStage}
           />
         );
@@ -201,7 +190,7 @@ export function MFAModal({
             setOTP={setOTP}
             setError={setOtpError}
             error={otpError}
-            isLoading={isVerifyingMFA}
+            isLoading={verifyMFA.isPending}
           />
         );
       case "success":
@@ -210,8 +199,8 @@ export function MFAModal({
   }, [
     stage,
     startMFASetup,
-    isAddingMFA,
-    isVerifyingMFA,
+    addMFA.isPending,
+    verifyMFA.isPending,
     totpUrl,
     mfaKey,
     otp,
@@ -220,16 +209,23 @@ export function MFAModal({
   ]);
 
   const isLoading =
-    isAddingMFA || isVerifyingMFA || isRemovingMFA || isGettingFactors;
+    addMFA.isPending ||
+    verifyMFA.isPending ||
+    removeMFA.isPending ||
+    getMFAFactors.isPending;
 
   return (
     <>
       {isMfaActive ? (
         <Button
           onClick={handleRemoveMFA}
-          disabled={isRemovingMFA || isGettingFactors || isLoadingClient}
+          disabled={
+            removeMFA.isPending || getMFAFactors.isPending || isLoadingClient
+          }
         >
-          {isRemovingMFA || isGettingFactors ? "Removing..." : "Remove MFA"}
+          {removeMFA.isPending || getMFAFactors.isPending
+            ? "Removing..."
+            : "Remove MFA"}
         </Button>
       ) : (
         <Button
