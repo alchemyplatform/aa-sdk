@@ -423,7 +423,7 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction({ hash: result });
   });
 
-  it.only("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
+  it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
     let provider = (await givenConnectedProvider({ signer }))
       .extend(installValidationActions)
       .extend(deferralActions);
@@ -483,19 +483,16 @@ describe("MA v2 Tests", async () => {
     ]);
 
     // Build the full hex to prepend to the UO signature
-    const signaturePrepend = DeferredActionBuilder.buildDigest({
+    const signaturePrepend = provider.buildDigest({
       typedData: typedData,
       sig: deferredValidationSig,
-      nonce: nonceOverride,
     });
 
-    const unsignedUo =
-      await DeferredActionBuilder.buildUserOperationWithDeferredAction({
-        client: provider,
-        uo: { target, data: "0x" },
-        signaturePrepend,
-        nonceOverride,
-      });
+    const unsignedUo = await provider.buildUserOperationWithDeferredAction({
+      uo: { target, data: "0x" },
+      signaturePrepend,
+      nonceOverride,
+    });
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let sessionKeyClient = await createModularAccountV2Client({
