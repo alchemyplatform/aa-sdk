@@ -50,24 +50,11 @@ enum StamperError: Error {
     
      @objc public func injectCredentialBundle(bundle: NSString) async throws -> ObjCBool {
        if let ephemeralPrivateKey = ephemeralPrivateKey {
-           
-        do {
-               let (bundlePrivateKey, bundlePublicKey) = try AuthManager.decryptBundle(
-                   encryptedBundle: bundle as String, 
-                   ephemeralPrivateKey: ephemeralPrivateKey
-               )
-               
+       let (bundlePrivateKey, bundlePublicKey) = try AuthManager.decryptBundle(encryptedBundle: bundle as String, ephemeralPrivateKey: ephemeralPrivateKey)
                apiPublicKey = bundlePublicKey
                apiPrivateKey = bundlePrivateKey
             
-               return true
-           } catch let error as AuthError {
-               print("Auth error: \(error)")
-               throw error
-           } catch {
-               print("Unknown error: \(error)")
-               throw error
-           }
+               return true       
        } else {
            throw StamperError.notInitialized
        }
