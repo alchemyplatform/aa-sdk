@@ -15,6 +15,10 @@ export const accountKitReactNativeReferenceSidebar: SidebarItem[] = [
     text: "Functions",
     items: [
       {
+        text: "RNAlchemySigner",
+        link: "/reference/account-kit/react-native/functions/RNAlchemySigner",
+      },
+      {
         text: "createConfig",
         link: "/reference/account-kit/react-native/functions/createConfig",
       },
