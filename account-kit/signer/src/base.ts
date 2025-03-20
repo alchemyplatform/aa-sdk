@@ -78,6 +78,14 @@ type InternalStore = Mutate<
   [["zustand/subscribeWithSelector", never]]
 >;
 
+export type EmailConfig = {
+  mode?: "MAGIC_LINK" | "OTP";
+};
+
+export type SignerConfig = {
+  email: EmailConfig;
+};
+
 /**
  * Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
@@ -89,6 +97,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   inner: TClient;
   private sessionManager: SessionManager;
   private store: InternalStore;
+  private config: Promise<SignerConfig>;
 
   /**
    * Initializes an instance with the provided client and session configuration.
@@ -131,6 +140,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     this.registerListeners();
     // then initialize so that we can catch those events
     this.sessionManager.initialize();
+    this.config = this.fetchConfig();
   }
 
   /**
@@ -1259,6 +1269,27 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       return this.inner.removeMfa(params);
     }
   );
+  protected initConfig = async (): Promise<SignerConfig> => {
+    this.config = this.fetchConfig();
+    return this.config;
+  };
+
+  /**
+   * Returns the signer configuration while fetching it if it's not already initialized.
+   *
+   * @returns {Promise<SignerConfig>} A promise that resolves to the signer configuration
+   */
+  public getConfig = async (): Promise<SignerConfig> => {
+    if (!this.config) {
+      return this.initConfig();
+    }
+
+    return this.config;
+  };
+
+  protected fetchConfig = async (): Promise<SignerConfig> => {
+    return this.inner.request("/v1/signer-config", {});
+  };
 }
 
 function toErrorInfo(error: unknown): ErrorInfo {

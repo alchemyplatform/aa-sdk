@@ -13,7 +13,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
       {/* Don't unmount when showing code preview so that the auth card retains its state */}
       <div
         className={cn(
-          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative lg:p-6",
+          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative p-3 lg:p-6",
           showCode && "hidden"
         )}
       >

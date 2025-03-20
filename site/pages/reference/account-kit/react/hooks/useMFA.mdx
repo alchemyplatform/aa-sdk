@@ -7,10 +7,10 @@ description: Overview of the useMFA method
 
 # useMFA
 
-[Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useMFA.ts) that provides functions and state for managing Multi-Factor Authentication (MFA) operations.
-Handles adding, verifying, removing, and checking MFA status for an authenticated account.
+[Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useMFA.ts) that provides functions and state for managing multi-factor authentication (MFA) operations.
+Handles adding, verifying, removing, and getting MFA factors for an authenticated account.
 
-The hook checks if the signer is connected before allowing MFA operations and provides an `isMfaAvailable` flag
+The hook checks if the signer is connected before allowing MFA operations and provides an `isReady` flag
 to indicate whether MFA operations can be performed.
 
 ## Import
@@ -24,18 +24,7 @@ import { useMFA } from "@account-kit/react";
 ```ts twoslash
 import { useMFA } from "@account-kit/react";
 
-const {
-  addMFA,
-  verifyMFA,
-  removeMFA,
-  getMFAFactors,
-  isAddingMFA,
-  isVerifyingMFA,
-  isRemovingMFA,
-  isGettingFactors,
-  isMfaAvailable,
-  error,
-} = useMFA();
+const { addMFA, verifyMFA, removeMFA, getMFAFactors, isReady } = useMFA();
 ```
 
 ## Returns

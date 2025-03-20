@@ -136,6 +136,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus",
           },
           {
+            text: "getConfig",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig",
+          },
+          {
             text: "getUser",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getUser",
           },

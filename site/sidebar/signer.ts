@@ -13,6 +13,24 @@ export const signerSidebar: SidebarItem[] = [
     ],
   },
   {
+    text: "Policies",
+    items: [
+      { text: "Overview", link: "/signer/policies/overview" },
+      {
+        text: "Key concepts",
+        link: "/signer/policies/key-concepts-and-examples",
+      },
+      {
+        text: "Offchain policies",
+        link: "/signer/policies/offchain-policy-configuration",
+      },
+      {
+        text: "Onchain policies",
+        link: "/signer/policies/onchain-policy-configuration",
+      },
+    ],
+  },
+  {
     text: "Authentication methods",
     items: [
       {

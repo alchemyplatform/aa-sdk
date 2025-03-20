@@ -56,6 +56,7 @@ export const DEFAULT_CONFIG: Config = {
     oAuthMethods: {
       google: true,
       facebook: true,
+      twitch: true,
       auth0: false,
       apple: false,
       discord: true,
@@ -108,7 +109,7 @@ export const alchemyConfig = () =>
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
       auth: {
         sections: [
-          [{ type: "email", emailMode: "otp" }],
+          [{ type: "email" }],
           [
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },

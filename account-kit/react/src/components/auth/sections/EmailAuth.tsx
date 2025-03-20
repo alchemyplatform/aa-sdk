@@ -21,7 +21,7 @@ type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailAuth = memo(
   ({
-    emailMode = "otp",
+    emailMode: legacyEmailMode,
     hideButton = false,
     buttonLabel = ls.login.email.button,
     placeholder = ls.login.email.placeholder,
@@ -31,8 +31,17 @@ export const EmailAuth = memo(
     const signer = useSigner();
     const { authenticateAsync, isPending } = useAuthenticate({
       onMutate: async (params) => {
+        const cfg = await signer?.getConfig();
         if (params.type === "email" && "email" in params) {
-          if (params.emailMode === "otp") {
+          const emailMode = cfg?.email.mode
+            ? cfg?.email.mode
+            : params.emailMode === "magicLink"
+            ? "MAGIC_LINK"
+            : "OTP";
+
+          if (emailMode === "MAGIC_LINK") {
+            setAuthStep({ type: "email_verify", email: params.email });
+          } else {
             setAuthStep({ type: "otp_verify", email: params.email });
           }
         }
@@ -62,10 +71,10 @@ export const EmailAuth = memo(
           await authenticateAsync({
             type: "email",
             email,
-            emailMode,
+            emailMode: legacyEmailMode,
             redirectParams,
           });
-          if (emailMode === "magicLink") {
+          if (legacyEmailMode === "magicLink") {
             setAuthStep({ type: "email_verify", email });
           }
         } catch (e) {
