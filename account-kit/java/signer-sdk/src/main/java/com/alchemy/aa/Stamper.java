@@ -22,79 +22,88 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class Stamper {
 
-    public record Stamp(String stampHeaderName, String stampHeaderValue) {
+  public record Stamp(String stampHeaderName, String stampHeaderValue) {}
+
+  public record APIStamp(String publicKey, String scheme, String signature) {
+    public String toJson() throws JsonProcessingException {
+      ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+      return ow.writeValueAsString(this);
+    }
+  }
+
+  @Setter
+  private final CredentialBundle credentialBundle;
+
+  @Getter
+  @Setter
+  // user who owns the stamper
+  private User user;
+
+  public Stamper(CredentialBundle credentialBundle) {
+    if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+      Security.addProvider(new BouncyCastleProvider());
+    }
+    this.credentialBundle = credentialBundle;
+  }
+
+  // This is left for json serialization/deserialization.
+  @JsonCreator
+  public Stamper(
+    @JsonProperty("credentialBundle") CredentialBundle credentialBundle,
+    @JsonProperty("user") User user
+  ) {
+    this(credentialBundle);
+    this.user = user;
+  }
+
+  /**
+   * Signs the given payload using the stored private key and returns a Stamp.
+   *
+   * @param payload
+   *            payload to sign
+   *
+   * @return signed stamp
+   *
+   * @throws GeneralSecurityException
+   *             if the private is malformed
+   */
+  public Stamp stamp(String payload)
+    throws GeneralSecurityException, JsonProcessingException {
+    if (
+      this.credentialBundle.bundlePrivateKey() == null ||
+      this.credentialBundle.bundlePublicKey() == null
+    ) {
+      throw new NoInjectedBundleException();
     }
 
-    public record APIStamp(String publicKey, String scheme, String signature) {
+    // Build the EC private key
 
-        public String toJson() throws JsonProcessingException {
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            return ow.writeValueAsString(this);
-        }
-    }
+    KeyFactory keyFactory = KeyFactory.getInstance("EC");
+    PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(
+      this.credentialBundle.bundlePrivateKey()
+    );
+    ECPrivateKey ecPrivateKey = (ECPrivateKey) keyFactory.generatePrivate(
+      keySpec
+    );
 
-    @Setter
-    private final CredentialBundle credentialBundle;
+    // Sign with SHA256withECDSA
+    Signature signer = Signature.getInstance("SHA256withECDSA", "SunEC");
+    signer.initSign(ecPrivateKey);
 
-    @Getter
-    @Setter
-    // user who owns the stamper
-    private User user;
+    signer.update(payload.getBytes());
+    byte[] signatureBytes = signer.sign();
 
-    public Stamper(CredentialBundle credentialBundle) {
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        }
-        this.credentialBundle = credentialBundle;
-    }
+    // Prepare the stamp structure
+    APIStamp apiStamp = new APIStamp(
+      Hex.encode(this.credentialBundle.bundlePublicKey()),
+      "SIGNATURE_SCHEME_TK_API_P256",
+      Hex.encode(signatureBytes)
+    );
 
+    String jsonString = apiStamp.toJson();
 
-    // This is left for json serialization/deserialization.
-    @JsonCreator
-    public Stamper(@JsonProperty("credentialBundle") CredentialBundle credentialBundle,
-        @JsonProperty("user") User user
-        ) {
-        this(credentialBundle);
-        this.user = user;
-    }
-    /**
-     * Signs the given payload using the stored private key and returns a Stamp.
-     *
-     * @param payload
-     *            payload to sign
-     *
-     * @return signed stamp
-     *
-     * @throws GeneralSecurityException
-     *             if the private is malformed
-     */
-    public Stamp stamp(String payload) throws GeneralSecurityException, JsonProcessingException {
-        if (this.credentialBundle.bundlePrivateKey() == null || this.credentialBundle.bundlePublicKey() == null) {
-            throw new NoInjectedBundleException();
-        }
-
-        // Build the EC private key
-
-        KeyFactory keyFactory = KeyFactory.getInstance("EC");
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(this.credentialBundle.bundlePrivateKey());
-        ECPrivateKey ecPrivateKey = (ECPrivateKey) keyFactory.generatePrivate(keySpec);
-
-        // Sign with SHA256withECDSA
-        Signature signer = Signature.getInstance("SHA256withECDSA", "SunEC");
-        signer.initSign(ecPrivateKey);
-
-        signer.update(payload.getBytes());
-        byte[] signatureBytes = signer.sign();
-
-        // Prepare the stamp structure
-        APIStamp apiStamp = new APIStamp(Hex.encode(this.credentialBundle.bundlePublicKey()),
-                "SIGNATURE_SCHEME_TK_API_P256", Hex.encode(signatureBytes));
-
-        String jsonString = apiStamp.toJson();
-
-        // URL-safe Base64
-        String encoded = Base64.urlSafeEncode(jsonString.getBytes());
-        return new Stamp("X-Stamp", encoded);
-    }
-
+    // URL-safe Base64
+    String encoded = Base64.urlSafeEncode(jsonString.getBytes());
+    return new Stamp("X-Stamp", encoded);
+  }
 }
