@@ -12,4 +12,5 @@
     mvn javadoc:javadoc
     ```
 2. publish package
-   `mvn deploy`
+   `./deploy.sh` to update version number
+   `mvn deploy` to deploy to maven repo
