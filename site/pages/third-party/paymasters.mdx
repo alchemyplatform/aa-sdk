@@ -97,19 +97,30 @@ We are working on building support for an ERC-20 paymaster!
 If you are looking to pay for gas permissionlessly using USDC, you can use [Circle's Paymaster](https://developers.circle.com/stablecoins/paymaster-overview). Here's an example using Circle Paymaster with the Alchemy SDK:
 
 ```ts twoslash
-import { generatePrivateKey } from 'viem/accounts';
-import { createLightAccount } from '@account-kit/smart-contracts';
-import { createSmartAccountClient, getEntryPoint, LocalAccountSigner } from '@aa-sdk/core';
-import { alchemy, alchemyFeeEstimator, arbitrumSepolia } from '@account-kit/infra';
-import { circlePaymasterMiddleware, getContracts } from 'circle-paymaster-aa-sdk-middleware';
-import fs from 'node:fs';
+import { generatePrivateKey } from "viem/accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import {
+  createSmartAccountClient,
+  getEntryPoint,
+  LocalAccountSigner,
+} from "@aa-sdk/core";
+import {
+  alchemy,
+  alchemyFeeEstimator,
+  arbitrumSepolia,
+} from "@account-kit/infra";
+import {
+  circlePaymasterMiddleware,
+  getContracts,
+} from "circle-paymaster-aa-sdk-middleware";
+import fs from "node:fs";
 
 const ownerKey = (
-  fs.existsSync('.owner_private_key')
-    ? fs.readFileSync('.owner_private_key', 'utf8')
+  fs.existsSync(".owner_private_key")
+    ? fs.readFileSync(".owner_private_key", "utf8")
     : (() => {
         const privateKey = generatePrivateKey();
-        fs.writeFileSync('.owner_private_key', privateKey);
+        fs.writeFileSync(".owner_private_key", privateKey);
         return privateKey;
       })()
 ) as `0x${string}`;
@@ -117,14 +128,14 @@ const ownerKey = (
 const chain = arbitrumSepolia;
 
 const transport = alchemy({
-  apiKey: process.env.ALCHEMY_KEY as string
+  apiKey: process.env.ALCHEMY_KEY as string,
 });
 
 const account = await createLightAccount({
   chain,
   transport,
-  entryPoint: getEntryPoint(arbitrumSepolia, { version: '0.7.0' }),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(ownerKey)
+  entryPoint: getEntryPoint(arbitrumSepolia, { version: "0.7.0" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(ownerKey),
 });
 
 const smartAccountClient = createSmartAccountClient({
@@ -132,12 +143,14 @@ const smartAccountClient = createSmartAccountClient({
   transport,
   account,
   feeEstimator: alchemyFeeEstimator(transport),
-  ...circlePaymasterMiddleware()
+  ...circlePaymasterMiddleware(),
 });
 
 const { usdcContract } = getContracts(smartAccountClient);
 if ((await usdcContract.read.balanceOf([account.address])) < 1000000) {
-  console.log(`Fund ${account.address} with USDC from https://faucet.circle.com, then run this again.`);
+  console.log(
+    `Fund ${account.address} with USDC from https://faucet.circle.com, then run this again.`
+  );
   process.exit();
 }
 
