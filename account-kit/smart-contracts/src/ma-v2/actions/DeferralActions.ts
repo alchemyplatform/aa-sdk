@@ -1,6 +1,5 @@
 import {
   AccountNotFoundError,
-  type SmartAccountSigner,
   InvalidNonceKeyError,
   EntryPointNotFoundError,
   type UserOperationCallData,
@@ -44,7 +43,7 @@ export type DeferredActionReturnData = {
   nonceOverride: bigint;
 };
 
-export type CreateTypedDataParams = {
+export type CreateDeferredActionTypedDataParams = {
   callData: Hex;
   deadline: number;
   entityId: number;
@@ -52,7 +51,7 @@ export type CreateTypedDataParams = {
   nonceKeyOverride?: bigint;
 };
 
-export type BuildDigestParams = {
+export type BuildDeferredActionDigestParams = {
   typedData: DeferredActionTypedData;
   sig: Hex;
 };
@@ -65,9 +64,9 @@ export type BuildUserOperationWithDeferredActionParams = {
 
 export type DeferralActions = {
   createDeferredActionTypedDataObject: (
-    args: CreateTypedDataParams
+    args: CreateDeferredActionTypedDataParams
   ) => Promise<DeferredActionReturnData>;
-  buildDigest: (args: BuildDigestParams) => Hex;
+  buildDeferredActionDigest: (args: BuildDeferredActionDigestParams) => Hex;
   buildUserOperationWithDeferredAction: (
     args: BuildUserOperationWithDeferredActionParams
   ) => Promise<UserOperationRequest_v7>;
@@ -76,13 +75,8 @@ export type DeferralActions = {
 /**
  * Provides deferred action functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
  *
- * @example
- * ```ts
- * // Example usage will be provided
- * ```
- *
  * @param {ModularAccountV2Client} client - The client instance which provides account and sendUserOperation functionality.
- * @returns {object} - An object containing three methods: `createDeferredActionTypedDataObject`, `buildDigest`, and `buildUserOperationWithDeferredAction`.
+ * @returns {object} - An object containing three methods: `createDeferredActionTypedDataObject`, `buildDeferredActionDigest`, and `buildUserOperationWithDeferredAction`.
  */
 export const deferralActions: (
   client: ModularAccountV2Client
@@ -93,7 +87,7 @@ export const deferralActions: (
     entityId,
     isGlobalValidation,
     nonceKeyOverride,
-  }: CreateTypedDataParams): Promise<DeferredActionReturnData> => {
+  }: CreateDeferredActionTypedDataParams): Promise<DeferredActionReturnData> => {
     if (!client.account) {
       throw new AccountNotFoundError();
     }
@@ -153,12 +147,17 @@ export const deferralActions: (
   /**
    * Creates the digest which must be prepended to the userOp signature.
    *
+   * Assumption: The client this extends is used to sign the typed data.
+   *
    * @param {object} args The argument object containing the following:
    * @param {DeferredActionTypedData} args.typedData The typed data object for the deferred action
    * @param {Hex} args.sig The signature to include in the digest
    * @returns {Hex} The encoded digest to be prepended to the userOp signature
    */
-  const buildDigest = ({ typedData, sig }: BuildDigestParams): Hex => {
+  const buildDeferredActionDigest = ({
+    typedData,
+    sig,
+  }: BuildDeferredActionDigestParams): Hex => {
     const signerEntity = client.account.signerEntity;
     const validationLocator =
       (BigInt(signerEntity.entityId) << 8n) |
@@ -227,7 +226,7 @@ export const deferralActions: (
 
   return {
     createDeferredActionTypedDataObject,
-    buildDigest,
+    buildDeferredActionDigest,
     buildUserOperationWithDeferredAction,
   };
 };

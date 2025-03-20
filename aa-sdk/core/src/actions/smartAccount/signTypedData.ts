@@ -38,5 +38,13 @@ export const signTypedData: <
     throw new AccountNotFoundError();
   }
 
+  // We must bypass 6492 if we're signing a deferred action
+  if (
+    typedData.primaryType === "DeferredAction" &&
+    typedData.domain?.verifyingContract === account.address
+  ) {
+    return account.signTypedData(typedData);
+  }
+
   return account.signTypedDataWith6492(typedData);
 };
