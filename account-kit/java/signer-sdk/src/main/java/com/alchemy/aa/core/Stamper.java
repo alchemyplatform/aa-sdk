@@ -1,7 +1,6 @@
-package com.alchemy.aa;
+package com.alchemy.aa.core;
 
 import com.alchemy.aa.client.SignerClient.User;
-import com.alchemy.aa.core.CredentialBundle;
 import com.alchemy.aa.core.exceptions.NoInjectedBundleException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,29 +30,13 @@ public class Stamper {
     }
   }
 
-  @Setter
   private final CredentialBundle credentialBundle;
-
-  @Getter
-  @Setter
-  // user who owns the stamper
-  private User user;
 
   public Stamper(CredentialBundle credentialBundle) {
     if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
       Security.addProvider(new BouncyCastleProvider());
     }
     this.credentialBundle = credentialBundle;
-  }
-
-  // This is left for json serialization/deserialization.
-  @JsonCreator
-  public Stamper(
-    @JsonProperty("credentialBundle") CredentialBundle credentialBundle,
-    @JsonProperty("user") User user
-  ) {
-    this(credentialBundle);
-    this.user = user;
   }
 
   /**
