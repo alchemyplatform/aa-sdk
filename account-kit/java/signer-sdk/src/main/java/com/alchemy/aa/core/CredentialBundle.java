@@ -15,6 +15,11 @@ import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
 
+/**
+ * a credential bundle form kms. used by stamper to stamp message
+ * @param bundlePrivateKey deciphered private key from bundle
+ * @param bundlePublicKey deciphered public key from bundle
+ */
 public record CredentialBundle(
   byte[] bundlePrivateKey,
   byte[] bundlePublicKey
@@ -24,13 +29,15 @@ public record CredentialBundle(
   /// Public key from bundle.
 
   /**
-   * Injects a credential bundle (Base58-encoded) after decrypting.
+   * create a credential bundle (Base58-encoded) with encrypted bundle.
    *
    * @param bundle
    *            Base58-encoded credential bundle
-   *
+   * @param tekManager
+   *            turnkey manager to decipher bundle
+   * @return deciphered credential bundle
    * @throws GeneralSecurityException
-   *             if initTek is never called.
+   *             if you use the wrong key to decipher bundle
    */
   public static CredentialBundle fromEncryptedBundle(
     String bundle,
