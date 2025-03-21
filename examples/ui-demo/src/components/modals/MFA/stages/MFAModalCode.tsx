@@ -53,12 +53,6 @@ export function MFAModalCode({
       </ol>
       <div className="flex flex-row items-start w-full gap-2">
         <button
-          className="rounded-lg h-10  mb-5 mr-2 border p-3 flex justify-center items-center"
-          onClick={() => setStage("qr")}
-        >
-          Back
-        </button>
-        <button
           className="akui-btn akui-btn-primary rounded-lg h-10  mb-5 flex-1 "
           onClick={() => setStage("verify")}
         >
