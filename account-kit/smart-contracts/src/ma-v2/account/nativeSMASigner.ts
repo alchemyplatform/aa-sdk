@@ -8,6 +8,7 @@ import {
   type TypedDataDefinition,
   type Chain,
   type Address,
+  concat,
 } from "viem";
 
 import {
@@ -15,6 +16,7 @@ import {
   pack1271Signature,
   DEFAULT_OWNER_ENTITY_ID,
 } from "../utils.js";
+import { SignatureType } from "../modules/utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
@@ -99,7 +101,10 @@ export const nativeSMASigner = (
         typedDataDefinition?.domain?.verifyingContract === accountAddress;
 
       return isDeferredAction
-        ? signer.signTypedData(typedDataDefinition)
+        ? concat([
+            SignatureType.EOA,
+            await signer.signTypedData(typedDataDefinition),
+          ])
         : pack1271Signature({
             validationSignature: await signer.signTypedData({
               domain: {
