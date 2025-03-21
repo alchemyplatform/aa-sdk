@@ -123,35 +123,43 @@ Create buttons or UI elements for each social provider you want to support:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticateAsync, isPending } = useAuthenticate();
+const { authenticate, isPending } = useAuthenticate();
 
 // For redirect flow
-const handleGoogleRedirectLogin = async () => {
-  try {
-    await authenticateAsync({
+const handleGoogleRedirectLogin = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "google",
       mode: "redirect",
       redirectUrl: "/", // Redirect to this page after authentication
-    });
-    // The page will redirect, so no need for success handling here
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onError: (error) => {
+        // Handle error
+        // The page will redirect on success, so no need for onSuccess handler
+      },
+    }
+  );
 };
 
 // For popup flow
-const handleGooglePopupLogin = async () => {
-  try {
-    await authenticateAsync({
+const handleGooglePopupLogin = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "google",
       mode: "popup",
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 

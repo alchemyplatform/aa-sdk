@@ -101,20 +101,25 @@ First, prompt your user for their email address and send a magic link:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticateAsync } = useAuthenticate();
+const { authenticate } = useAuthenticate();
 
 // When the user submits their email
-const handleSendMagicLink = async (email: string) => {
-  try {
-    await authenticateAsync({
+const handleSendMagicLink = (email: string) => {
+  authenticate(
+    {
       type: "email",
       emailMode: "magicLink",
       email,
-    });
-    // Success - inform user to check their email
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - inform user to check their email
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -127,29 +132,34 @@ import { useEffect } from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticateAsync } = useAuthenticate();
+const { authenticate } = useAuthenticate();
 
 // Handle the redirect when the component mounts
 useEffect(() => {
-  const handleRedirect = async () => {
+  const handleRedirect = () => {
     const url = new URL(window.location.href);
     const bundle = url.searchParams.get("bundle");
 
     if (bundle) {
-      try {
-        await authenticateAsync({
+      authenticate(
+        {
           type: "email",
           bundle,
-        });
-        // Authentication successful!
-      } catch (error) {
-        // Handle error
-      }
+        },
+        {
+          onSuccess: () => {
+            // Authentication successful!
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        }
+      );
     }
   };
 
   handleRedirect();
-}, [authenticateAsync]);
+}, [authenticate]);
 ```
 
 ### Step 3: Track Authentication Status

@@ -99,20 +99,25 @@ First, prompt your user for their email address and send an OTP:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticateAsync } = useAuthenticate();
+const { authenticate } = useAuthenticate();
 
 // When the user submits their email
-const handleSendCode = async (email: string) => {
-  try {
-    await authenticateAsync({
+const handleSendCode = (email: string) => {
+  authenticate(
+    {
       type: "email",
       emailMode: "otp",
       email,
-    });
-    // Success - now show the OTP input form
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - now show the OTP input form
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -124,19 +129,24 @@ Once the user receives the code, they'll enter it in your application:
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticateAsync } = useAuthenticate();
+const { authenticate } = useAuthenticate();
 
 // When the user submits the OTP code
-const handleVerifyCode = async (otpCode: string) => {
-  try {
-    await authenticateAsync({
+const handleVerifyCode = (otpCode: string) => {
+  authenticate(
+    {
       type: "otp",
       otpCode,
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle invalid code error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle invalid code error
+      },
+    }
+  );
 };
 ```
 
