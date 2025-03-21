@@ -19,11 +19,11 @@ enum StamperError: Error {
     var apiPrivateKey: P256.Signing.PrivateKey? = nil;
     
     @objc public func create() async throws -> NSString {
-        var _ephemeralPrivateKey: P256.KeyAgreement.PrivateKey? = KeychainHelper.shared.getPrivateKeyFromKeychain()
+        var _ephemeralPrivateKey: P256.KeyAgreement.PrivateKey? = PrivateKeyChainUtilities.getPrivateKeyFromKeychain()
         
         if (_ephemeralPrivateKey == nil) {
             _ephemeralPrivateKey = P256.KeyAgreement.PrivateKey()
-            KeychainHelper.shared.savePrivateKeyToKeychain(_ephemeralPrivateKey!)
+            PrivateKeyChainUtilities.savePrivateKeyToKeychain(_ephemeralPrivateKey!)
         }
 
         let targetPublicKey = try _ephemeralPrivateKey!.publicKey.toString(representation: .x963)
@@ -33,7 +33,7 @@ enum StamperError: Error {
     }
     
     @objc public func clear() {
-        KeychainHelper.shared.deletePrivateKeyFromKeychain()
+        PrivateKeyChainUtilities.deletePrivateKeyFromKeychain()
         ephemeralPrivateKey = nil
         apiPublicKey = nil
         apiPrivateKey = nil

@@ -2,41 +2,41 @@ import Foundation
 import Security
 import CryptoKit
 
-let account_kit_ephemeral_private_key = "ephemeralPrivateKey"
+let ACCOUNT_KIT_EPHEMERAL_PRIVATE_KEY = "accountKitEphemeralPrivateKey"
 
-// Keep save_ephemeral_private_key_query mutable
-var save_ephemeral_private_key_query: [String: Any] = [
+let save_ephemeral_private_key_query: [String: Any] = [
     kSecClass as String: kSecClassGenericPassword,
-    kSecAttrAccount as String: account_kit_ephemeral_private_key,
+    kSecAttrAccount as String: ACCOUNT_KIT_EPHEMERAL_PRIVATE_KEY,
     kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
 ]
-
+ 
 let get_ephemeral_private_key_query: [String: Any] = [
     kSecClass as String: kSecClassGenericPassword,
-    kSecAttrAccount as String: account_kit_ephemeral_private_key,
+    kSecAttrAccount as String: ACCOUNT_KIT_EPHEMERAL_PRIVATE_KEY,
     kSecReturnData as String: true,
     kSecMatchLimit as String: kSecMatchLimitOne
 ]
 
 let delete_ephemeral_private_key_query: [String: Any] = [
     kSecClass as String: kSecClassGenericPassword,
-    kSecAttrAccount as String: account_kit_ephemeral_private_key
+    kSecAttrAccount as String: ACCOUNT_KIT_EPHEMERAL_PRIVATE_KEY
 ]
 
 
-class KeychainHelper {
-    static let shared = KeychainHelper() // Singleton instance
+struct PrivateKeyChainUtilities {
+    @available(*, unavailable) private init() {}
 
-    private init() {} // Prevent external instantiation
-
-    func savePrivateKeyToKeychain(_ privateKey: P256.KeyAgreement.PrivateKey) {
+    static func savePrivateKeyToKeychain(_ privateKey: P256.KeyAgreement.PrivateKey) {
         let keyData = privateKey.rawRepresentation
-        save_ephemeral_private_key_query.updateValue(keyData, forKey: kSecValueData as String)
-        SecItemDelete(save_ephemeral_private_key_query as CFDictionary)
-        SecItemAdd(save_ephemeral_private_key_query as CFDictionary, nil)
+        
+        var _saveEphemeralPrivateKeyQuery = save_ephemeral_private_key_query
+        _saveEphemeralPrivateKeyQuery.updateValue(keyData, forKey: kSecValueData as String)
+        
+        SecItemDelete(_saveEphemeralPrivateKeyQuery as CFDictionary)
+        SecItemAdd(_saveEphemeralPrivateKeyQuery as CFDictionary, nil)
     }
 
-    func getPrivateKeyFromKeychain() -> P256.KeyAgreement.PrivateKey? {
+    static func getPrivateKeyFromKeychain() -> P256.KeyAgreement.PrivateKey? {
         var result: AnyObject?
         let status = SecItemCopyMatching(get_ephemeral_private_key_query as CFDictionary, &result)
 
@@ -52,7 +52,7 @@ class KeychainHelper {
         return nil
     }
 
-    func deletePrivateKeyFromKeychain() {
+    static func deletePrivateKeyFromKeychain() {
         SecItemDelete(delete_ephemeral_private_key_query as CFDictionary)
     }
 }
