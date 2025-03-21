@@ -1,0 +1,88 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
+plugins {
+    id 'java'
+    id("com.vanniktech.maven.publish") version "0.30.0"
+}
+// Basic project information
+group = 'com.alchemy.accountkit'
+version = '0.2.0-SNAPSHOT'
+description = 'This is an Alchemy signer SDK'
+
+repositories {
+    mavenCentral()
+}
+
+// Set Java compatibility
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+dependencies {
+    implementation 'com.google.crypto.tink:tink:1.16.0'
+    implementation 'org.bitcoinj:bitcoinj-core:0.17'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'com.auth0:java-jwt:4.5.0'
+
+    // Lombok (provided scope in Maven = 'compileOnly' in Gradle + annotationProcessor if needed)
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    // Test dependencies
+    testImplementation 'org.junit.platform:junit-platform-commons:1.12.0'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.12.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.0'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+
+    coordinates("com.alchemy.accountkit", "signer-sdk", "0.1.1-alpha")
+    pom {
+        name = "Signer SDK"
+        description = "Alchemy singer SDK."
+        inceptionYear = "2025"
+        url = "https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/java/signer-sdk"
+        licenses {
+            license {
+                name = "MIT license"
+                url = "https://github.com/alchemyplatform/aa-sdk/blob/main/LICENSE"
+                distribution = "https://github.com/alchemyplatform/aa-sdk/blob/main/LICENSE"
+            }
+        }
+        developers {
+            developer {
+                id = "andysim3d"
+                name = "Pengfei Zhang"
+                url = "https://github.com/username/andysim3d"
+            }
+            developer {
+                id = "moldy530"
+                name = "Michael Moldoveanu"
+                url = "https://github.com/username/moldy530"
+            }
+            developer {
+                id = "dphilipson"
+                name = "David Philipson"
+                url = "https://github.com/username/dphilipson"
+            }
+        }
+        scm {
+            url = "https://github.com/alchemyplatform/aa-sdk"
+            connection = "scm:git:git@github.com:alchemyplatform/aa-sdk.git"
+            developerConnection = "scm:git:git@github.com:alchemyplatform/aa-sdk.git"
+        }
+    }
+}
