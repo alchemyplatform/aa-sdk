@@ -218,6 +218,7 @@ export function MFAModal({
     <>
       {isMfaActive ? (
         <Button
+          className="mt-auto"
           onClick={handleRemoveMFA}
           disabled={
             removeMFA.isPending || getMFAFactors.isPending || isLoadingClient
@@ -229,6 +230,7 @@ export function MFAModal({
         </Button>
       ) : (
         <Button
+          className="mt-auto"
           onClick={handleInitMFASetup}
           disabled={isLoadingClient || isLoading}
         >

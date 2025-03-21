@@ -98,7 +98,7 @@ export const SolanaCard = () => {
   });
 
   const imageSlot = (
-    <div className="flex-shrink-0 bg-[#DCFCE7] rounded-xl flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
+    <div className="w-full h-full bg-[#DCFCE7] flex justify-center items-center relative">
       <Image
         className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]"
         src="https://static.alchemyapi.io/images/emblems/solana-mainnet.svg"

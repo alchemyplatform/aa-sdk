@@ -63,7 +63,7 @@ export const TransactionsCard = ({
     <Card
       badgeSlot={<Badge text="New!" className="text-[#7c3AED] bg-[#F3F3FF]" />}
       imageSlot={
-        <div className="flex-shrink-0 bg-[#EAEBFE] rounded-xl flex justify-center items-center relative h-[67px] w-[60px] sm:h-[154px] sm:w-[140px] xl:h-[222px] xl:w-full">
+        <div className="w-full h-full bg-[#EAEBFE] flex justify-center items-center">
           <Key className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
         </div>
       }
@@ -71,7 +71,7 @@ export const TransactionsCard = ({
       content={content}
       buttons={
         <Button
-          className="mt-auto w-full"
+          className="mt-auto"
           onClick={handleTransactions}
           disabled={
             isLoadingClient || cardStatus === "setup" || cardStatus === "active"
