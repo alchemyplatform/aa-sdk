@@ -7,7 +7,7 @@ import { MFACard } from "./MFACard";
 export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
   return (
-    <div className="flex flex-col xl:flex-row gap-6 lg:mt-6 items-center w-full justify-center max-w-screen-sm xl:max-w-none">
+    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-3 lg:mt-0 items-center w-full">
       <MintCard accountMode={accountMode} key={`mint-card-${accountMode}`} />
       <TransactionsCard
         accountMode={accountMode}
