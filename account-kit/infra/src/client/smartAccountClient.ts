@@ -1,5 +1,4 @@
 import {
-  ADD_BREADCRUMB,
   ChainNotFoundError,
   createSmartAccountClient,
   headersUpdate,
@@ -14,7 +13,11 @@ import {
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
-import { alchemy, type AlchemyTransport } from "../alchemyTransport.js";
+import {
+  alchemy,
+  convertHeadersToObject,
+  type AlchemyTransport,
+} from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
@@ -96,13 +99,7 @@ export type AlchemySmartAccountClient<
   context extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined
-> = Prettify<
-  AlchemySmartAccountClient_Base<chain, account, actions, context> & {
-    [ADD_BREADCRUMB]: (
-      breadcrumb: string
-    ) => AlchemySmartAccountClient_Base<chain, account, actions, context>;
-  }
->;
+> = Prettify<AlchemySmartAccountClient_Base<chain, account, actions, context>>;
 
 export function createAlchemySmartAccountClient<
   TChain extends Chain = Chain,
@@ -174,21 +171,26 @@ export function createAlchemySmartAccountClient(
       ? alchemyUserOperationSimulator(config.transport)
       : undefined,
     signUserOperation: config.signUserOperation,
+    // @ts-expect-error
+    addBreadcrumb(crumb: string) {
+      const oldConfig = config.transport.config;
+      const dynamicFetchOptions = config.transport.dynamicFetchOptions;
+      const newTransport = alchemy({ ...oldConfig });
+      newTransport.updateHeaders(
+        headersUpdate(crumb)(
+          convertHeadersToObject(dynamicFetchOptions?.headers)
+        )
+      );
+      return createAlchemySmartAccountClient({
+        ...config,
+        transport: newTransport,
+      });
+    },
   }).extend(alchemyActions);
 
   if (config.account && isSmartAccountWithSigner(config.account)) {
     config.transport.updateHeaders(getSignerTypeHeader(config.account));
   }
 
-  return {
-    ...scaClient,
-    [ADD_BREADCRUMB](breadcrumb: string) {
-      const newTransport = alchemy({ ...config.transport.config });
-      newTransport.updateHeaders(headersUpdate(breadcrumb)({}));
-      return createAlchemySmartAccountClient({
-        ...config,
-        transport: newTransport,
-      });
-    },
-  };
+  return scaClient;
 }
