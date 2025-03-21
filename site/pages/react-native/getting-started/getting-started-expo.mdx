@@ -78,6 +78,16 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 ```js [metro.config.js]
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
+const path = require("path");
+const projectRoot = __dirname;
+
+// Add aliases for file-system import based modules
+const ALIASES = {
+  "@noble/hashes/crypto": path.resolve(
+    projectRoot, // <-- Adjust this as fits your project setup
+    "node_modules/@noble/hashes/crypto.js"
+  ),
+};
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
@@ -90,6 +100,25 @@ config.resolver.extraNodeModules = {
   crypto: require.resolve("crypto-browserify"),
   stream: require.resolve("stream-browserify"),
 };
+
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (ALIASES[moduleName]) {
+    return {
+      filePath: ALIASES[moduleName],
+      type: "sourceFile",
+    };
+  }
+  return context.resolveRequest(context, moduleName, platform);
+};
+
+// The `account-kit/react-native` and it's supoorting packages leverages package.json `exports` which is not (yet) suported by default in Metro.
+// we can enable this support using:
+config.resolver.unstable_enablePackageExports = true;
+config.resolver.unstable_conditionNames = [
+  "browser",
+  "require",
+  "react-native",
+];
 
 module.exports = config;
 ```
@@ -176,25 +205,6 @@ Then add the plugin to your `app.json`:
     ]
   }
 }
-```
-
-## Update your metro config
-
-The `account-kit/react-native` and it's supoorting packages leverages package.json `exports` which is not (yet) suported by default in Metro.
-
-Update your `metro.config.js` to add this support using:
-
-```js [metro.config.js]
-// ... rest of metro config
-config.resolver.unstable_enablePackageExports = true;
-
-config.resolver.unstable_conditionNames = [
-  "browser",
-  "require",
-  "react-native",
-];
-// ... rest of metro config
-module.exports = config;
 ```
 
 ## Run a Prebuild!
