@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { z } from "zod";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { useSigner } from "../../../hooks/useSigner.js";
@@ -12,6 +12,8 @@ import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
+import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
+import { AlchemySignerStatus, MfaRequiredError } from "@account-kit/signer";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 
@@ -24,6 +26,7 @@ export const EmailAuth = memo(
     buttonLabel = ls.login.email.button,
     placeholder = ls.login.email.placeholder,
   }: EmailAuthProps) => {
+    const { status } = useSignerStatus();
     const { setAuthStep } = useAuthContext();
     const signer = useSigner();
     const { authenticateAsync, isPending } = useAuthenticate({
@@ -71,14 +74,33 @@ export const EmailAuth = memo(
             emailMode: legacyEmailMode,
             redirectParams,
           });
+          if (legacyEmailMode === "magicLink") {
+            setAuthStep({ type: "email_verify", email });
+          }
         } catch (e) {
-          const error = e instanceof Error ? e : new Error("An Unknown error");
+          if (e instanceof MfaRequiredError) {
+            const { multiFactorId } = e.multiFactors[0];
+            setAuthStep({
+              type: "totp_verify",
+              previousStep: "magicLink",
+              factorId: multiFactorId,
+              email,
+            });
+            return;
+          }
 
+          const error = e instanceof Error ? e : new Error("An Unknown error");
           setAuthStep({ type: "initial", error });
         }
       },
       validatorAdapter: zodValidator(),
     });
+
+    useEffect(() => {
+      if (status === AlchemySignerStatus.AWAITING_EMAIL_AUTH) {
+        setAuthStep({ type: "email_verify", email: form.state.values.email });
+      }
+    }, [status]);
 
     return (
       <form

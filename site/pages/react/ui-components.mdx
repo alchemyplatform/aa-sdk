@@ -26,6 +26,9 @@ Account Kit supports several authentication methods that you can implement with 
 
 Each authentication method page includes specific configuration options and examples for both pre-built UI components and custom UI implementations.
 
+**Multi-Factor Authentication (MFA)**  
+If your users have an authenticator app (TOTP) set up, the UI components will automatically prompt them for their 6-digit code after they complete any primary login method (e.g., Email OTP, Email Magic Link, or Social Login). No extra configuration is required in the UI component – just [enable MFA](/react/mfa/setup-mfa) for your users.
+
 ## Modal auth
 
 Assuming your application has been [set up](/react/quickstart), using UI components is the easiest way to authenticate users. All you have to do is leverage the [`useAuthModal`](/reference/account-kit/react/hooks/useAuthModal) hook and provide users a CTA to open the modal.

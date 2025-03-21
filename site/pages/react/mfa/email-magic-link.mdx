@@ -1,0 +1,147 @@
+---
+title: Email Magic Link with Multi-Factor Authentication
+description: How to authenticate users with Email Magic Link and MFA in your React app
+---
+
+# Email Magic Link with Multi-Factor Authentication
+
+This guide shows you how to implement authentication with Email Magic Link and TOTP-based multi-factor authentication in your React application.
+
+## Overview
+
+When a user has MFA enabled with an authenticator app (TOTP), the login flow requires two steps:
+
+1. Click the magic link from email
+2. Enter the 6-digit TOTP code from their authenticator app (e.g., Google Authenticator)
+
+## Implementation
+
+### Step 1: Send the Magic Link with MFA Handling
+
+When sending a magic link to a user with MFA enabled, you need to handle the MFA requirement:
+
+```tsx twoslash
+import React from "react";
+import { useAuthenticate } from "@account-kit/react";
+import { MfaRequiredError } from "@account-kit/signer";
+import { useState } from "react";
+
+function MagicLinkWithMFA() {
+  const { authenticateAsync } = useAuthenticate();
+  const [showTotpInput, setShowTotpInput] = useState(false);
+  const [totpCode, setTotpCode] = useState("");
+  const [emailData, setEmailData] = useState({ email: "", multiFactorId: "" });
+  const [emailInputValue, setEmailInputValue] = useState("");
+
+  // When the user submits their email
+  const handleSendMagicLink = async (email: string) => {
+    try {
+      await authenticateAsync({
+        type: "email",
+        emailMode: "magicLink",
+        email,
+      });
+      // Success - inform user to check their email
+    } catch (error) {
+      if (error instanceof MfaRequiredError) {
+        // MFA is required - get the factor ID from the error
+        const { multiFactorId } = error.multiFactors[0];
+
+        // Store data and show TOTP input field
+        setEmailData({ email, multiFactorId });
+        setShowTotpInput(true);
+      }
+      // Handle other errors
+    }
+  };
+
+  // When the user provides the TOTP code
+  const handleMagicLinkWithMFA = async () => {
+    try {
+      await authenticateAsync({
+        type: "email",
+        emailMode: "magicLink",
+        email: emailData.email,
+        multiFactors: [
+          {
+            multiFactorId: emailData.multiFactorId,
+            multiFactorCode: totpCode,
+          },
+        ],
+      });
+      // Success - inform user to check their email
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  // Render TOTP input when needed
+  return (
+    <div>
+      {!showTotpInput ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMagicLink(emailInputValue); // Assuming emailInputValue is defined elsewhere
+          }}
+        >
+          {/* Email input form */}
+          <button type="submit">Send Magic Link</button>
+        </form>
+      ) : (
+        <div>
+          <p>Please enter the 6-digit code from your authenticator app</p>
+          <input
+            type="text"
+            value={totpCode}
+            onChange={(e) => setTotpCode(e.target.value)}
+            maxLength={6}
+            pattern="[0-9]*"
+            inputMode="numeric"
+          />
+          <button onClick={handleMagicLinkWithMFA}>Verify</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Step 2: Handle the Magic Link Redirect
+
+When the user clicks the magic link, handle the redirect:
+
+```tsx twoslash
+import { useEffect } from "react";
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticateAsync } = useAuthenticate();
+
+const handleMagicLinkRedirect = async () => {
+  const url = new URL(window.location.href);
+  const bundle = url.searchParams.get("bundle");
+
+  if (!bundle) return;
+
+  try {
+    await authenticateAsync({
+      type: "email",
+      bundle,
+    });
+    // Authentication successful!
+  } catch (error) {
+    // Handle error
+  }
+};
+
+// Call this function when the component mounts
+useEffect(() => {
+  handleMagicLinkRedirect();
+}, []);
+```
+
+## Next Steps
+
+- [Set up MFA for your users](/react/mfa/setup-mfa)
+- [Implement Email OTP with MFA](/react/mfa/email-otp)

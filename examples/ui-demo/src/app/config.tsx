@@ -103,6 +103,7 @@ export const alchemyConfig = () =>
       ],
       storage: cookieStorage,
       enablePopupOauth: true,
+      oauthCallbackUrl: "https://signer.alchemypreview.com/callback",
     },
     {
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,

@@ -18,6 +18,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
         text: "AlchemySignerWebClient",
         items: [
           {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa",
+          },
+          {
             text: "completeAuthWithBundle",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle",
           },
@@ -38,6 +42,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet",
           },
           {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors",
+          },
+          {
             text: "initEmailAuth",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth",
           },
@@ -54,12 +62,20 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect",
           },
           {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa",
+          },
+          {
             text: "submitOtpCode",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode",
           },
           {
             text: "targetPublicKey",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa",
           },
         ],
       },
@@ -75,6 +91,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
       {
         text: "BaseAlchemySigner",
         items: [
+          {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/addMfa",
+          },
           {
             text: "addPasskey",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/addPasskey",
@@ -108,6 +128,14 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getAuthDetails",
           },
           {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors",
+          },
+          {
+            text: "getMfaStatus",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus",
+          },
+          {
             text: "getConfig",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig",
           },
@@ -122,6 +150,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "preparePopupOauth",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth",
+          },
+          {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/removeMfa",
           },
           {
             text: "signAuthorization",
@@ -143,11 +175,19 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             text: "toViemAccount",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/toViemAccount",
           },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/verifyMfa",
+          },
         ],
       },
       {
         text: "BaseSignerClient",
         items: [
+          {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/addMfa",
+          },
           {
             text: "addPasskey",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/addPasskey",
@@ -155,6 +195,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "constructor",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/constructor",
+          },
+          {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors",
           },
           {
             text: "getUser",
@@ -173,6 +217,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/on",
           },
           {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/removeMfa",
+          },
+          {
             text: "request",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/request",
           },
@@ -183,6 +231,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "stampWhoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa",
           },
           {
             text: "whoami",

@@ -42,6 +42,22 @@ export const reactGuides: SidebarItem[] = [
           },
         ],
       },
+      {
+        text: "Multi-factor authentication",
+        collapsed: true,
+        items: [
+          { text: "Set up MFA", link: "/react/mfa/setup-mfa" },
+          { text: "Email OTP", link: "/react/mfa/email-otp" },
+          {
+            text: "Email magic-link",
+            link: "/react/mfa/email-magic-link",
+          },
+          {
+            text: "Social login",
+            link: "/react/mfa/social-login",
+          },
+        ],
+      },
     ],
   },
   {

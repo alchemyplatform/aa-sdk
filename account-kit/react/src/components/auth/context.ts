@@ -19,6 +19,20 @@ export type AuthStep =
       error?: Error;
       status?: AuthStepStatus;
     }
+  | {
+      type: "totp_verify";
+      previousStep: "magicLink";
+      factorId: string;
+      email: string;
+      error?: Error;
+    }
+  | {
+      type: "totp_verify";
+      previousStep: "otp";
+      factorId: string;
+      otpCode: string;
+      error?: Error;
+    }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
