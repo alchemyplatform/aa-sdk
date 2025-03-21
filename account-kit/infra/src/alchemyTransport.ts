@@ -65,6 +65,7 @@ type AlchemyTransportBase = Transport<
 export type AlchemyTransport = AlchemyTransportBase & {
   updateHeaders(newHeaders: HeadersInit): void;
   config: AlchemyTransportConfig;
+  dynamicFetchOptions: AlchemyTransportConfig["fetchOptions"];
 };
 
 /**
@@ -202,11 +203,12 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         ...newHeaders,
       };
     },
+    dynamicFetchOptions: fetchOptions,
     config,
   }) as AlchemyTransport;
 }
 
-const convertHeadersToObject = (
+export const convertHeadersToObject = (
   headers?: HeadersInit
 ): Record<string, string> => {
   if (!headers) {

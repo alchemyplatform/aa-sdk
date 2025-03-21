@@ -73,6 +73,10 @@ export class TraceHeader {
   static fromTraceHeader(
     headers: Record<string, string>
   ): TraceHeader | undefined {
+    if (!headers["traceheader"] || !headers["tracestate"]) {
+      return undefined;
+    }
+
     const [version, traceId, parentId, traceFlags] =
       headers["traceheader"]?.split("-");
     const traceState =

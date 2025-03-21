@@ -29,6 +29,7 @@ import {
 } from "./decorators/smartAccountClient.js";
 import { SmartAccountClientOptsSchema } from "./schema.js";
 import type { ClientMiddlewareConfig } from "./types.js";
+import { ADD_BREADCRUMB } from "./updateHeaders.js";
 
 type SmartAccountClientOpts = z.output<typeof SmartAccountClientOptsSchema>;
 
@@ -54,6 +55,7 @@ export type SmartAccountClientConfig<
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountClientOptsSchema>;
+    addBreadcrumb?: <T extends SmartAccountClient>(breadcrumb: string) => T;
   } & ClientMiddlewareConfig<context>
 >;
 
@@ -253,6 +255,7 @@ export function createSmartAccountClient(
   })
     .extend(() => ({
       ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
+      [ADD_BREADCRUMB]: config.addBreadcrumb,
     }))
     .extend(middlewareActions(config))
     .extend(smartAccountClientActions);
