@@ -192,7 +192,6 @@ export function MFAModal({
             setError={setOtpError}
             error={otpError}
             isLoading={verifyMFA.isPending}
-            setStage={setStage}
           />
         );
       case "success":
