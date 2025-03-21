@@ -9,8 +9,12 @@ import {
   type TypedDataDefinition,
   type Chain,
   type Address,
+  concat,
 } from "viem";
-import { getDefaultSingleSignerValidationModuleAddress } from "../utils.js";
+import {
+  getDefaultSingleSignerValidationModuleAddress,
+  SignatureType,
+} from "../utils.js";
 
 import { packUOSignature, pack1271Signature } from "../../utils.js";
 /**
@@ -111,13 +115,14 @@ export const singleSignerMessageSigner = (
           ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
         },
         message: {
-          hash: await hashTypedData(typedDataDefinition),
+          hash: hashTypedData(typedDataDefinition),
         },
         primaryType: "ReplaySafeHash",
       });
 
+      // TODO: Handle non-EOA signer case
       return isDeferredAction
-        ? validationSignature
+        ? concat([SignatureType.EOA, validationSignature])
         : pack1271Signature({
             validationSignature,
             entityId,
