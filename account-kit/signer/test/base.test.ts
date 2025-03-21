@@ -19,6 +19,9 @@ import {
   OTP_BUNDLE_RESPONSE,
   OTP_MFA_BUNDLE_RESPONSE,
   MOCK_BUNDLE_STRING,
+  TEST_EMAILS,
+  TEST_CODES,
+  TEST_DELAYS,
 } from "./fixtures.js";
 
 class TestAlchemySigner extends BaseAlchemySigner<MockAlchemySignerWebClient> {
@@ -30,6 +33,36 @@ class TestAlchemySigner extends BaseAlchemySigner<MockAlchemySignerWebClient> {
 describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
   let mockClient: MockAlchemySignerWebClient;
   let signer: TestAlchemySigner;
+
+  // Helper function to wait for session manager initialization
+  const waitForSessionInitialization = async (): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      const off = signer["sessionManager"].on("initialized", () => {
+        off();
+        resolve();
+      });
+    });
+  };
+
+  // Helper function to wait for microtasks to complete
+  const waitForMicrotasks = async (): Promise<void> => {
+    return new Promise((resolve) => setTimeout(resolve, TEST_DELAYS.MICROTASK));
+  };
+
+  // Helper to emit client event after a delay
+  const emitClientEventAfterDelay = async (
+    event: string,
+    user: any,
+    bundle?: string,
+    delay = TEST_DELAYS.CLIENT_EVENT_STANDARD
+  ): Promise<void> => {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    if (bundle) {
+      mockClient.emitClientEvent(event as any, user, bundle);
+    } else {
+      mockClient.emitClientEvent(event as any, user);
+    }
+  };
 
   beforeEach(async () => {
     // Mock the document.getElementById method
@@ -53,13 +86,8 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
       },
     });
 
-    // IMPORTANT: Wait for session manager to finish initialization.
-    await new Promise<void>((resolve) => {
-      const off = signer["sessionManager"].on("initialized", () => {
-        off();
-        resolve();
-      });
-    });
+    // Wait for session manager to finish initialization
+    await waitForSessionInitialization();
   });
 
   afterEach(() => {
@@ -76,7 +104,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     await expect(
       signer.authenticate({
         type: "email",
-        email: "test@example.com",
+        email: TEST_EMAILS.BASIC,
         emailMode: "magicLink",
       })
     ).rejects.toThrowError("MFA is required for this user");
@@ -96,18 +124,16 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     // Now we do a second authenticate call with the TOTP codes included
     const authPromise = signer.authenticate({
       type: "email",
-      email: "test@example.com",
+      email: TEST_EMAILS.BASIC,
       multiFactors: [TOTP_FACTOR_WITH_CODE],
     });
 
-    // Manually simulate that the client finishes and emits an event.
-    setTimeout(() => {
-      mockClient.emitClientEvent(
-        "connectedEmail",
-        FAKE_USER,
-        MOCK_BUNDLE_STRING
-      );
-    }, 25);
+    // Emit client event after delay
+    await emitClientEventAfterDelay(
+      "connectedEmail",
+      FAKE_USER,
+      MOCK_BUNDLE_STRING
+    );
 
     const finalUser = await authPromise;
     expect(finalUser).toEqual(FAKE_USER);
@@ -124,12 +150,12 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     // or the test forcibly resolves, etc.
     const firstAuth = signer.authenticate({
       type: "email",
-      email: "user@otpflow.com",
+      email: TEST_EMAILS.OTP,
       emailMode: "otp",
     });
 
-    // WAIT a short moment for the internal .initEmailAuth(...) to finish and set store = AWAITING_EMAIL_AUTH
-    await new Promise((r) => setTimeout(r, 0));
+    // Wait for internal .initEmailAuth(...) to finish and update store
+    await waitForMicrotasks();
 
     // Now the store should have updated
     expect(signer["store"].getState().status).toBe(
@@ -142,22 +168,24 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     mockClient.mock_completeAuthWithBundle.mockResolvedValue(OTP_USER);
 
     // Start the OTP authenticate
-    const otpPromise = signer.authenticate({ type: "otp", otpCode: "999999" });
+    const otpPromise = signer.authenticate({
+      type: "otp",
+      otpCode: TEST_CODES.OTP,
+    });
 
     // Simulate the real client's "connectedOtp" event after sign-in completes
-    await new Promise((resolve) => setTimeout(resolve, 10));
-    mockClient.emitClientEvent(
+    await emitClientEventAfterDelay(
       "connectedOtp",
       OTP_USER,
-      OTP_BUNDLE_RESPONSE.bundle
+      OTP_BUNDLE_RESPONSE.bundle,
+      TEST_DELAYS.CLIENT_EVENT_SHORT
     );
 
     const finalUser = await otpPromise;
-
     expect(finalUser).toEqual(OTP_USER);
 
-    // <-- wait a tick so the store can catch up
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    // Wait for store to update
+    await waitForMicrotasks();
 
     expect(signer["store"].getState().status).toBe(
       AlchemySignerStatus.CONNECTED
@@ -175,35 +203,34 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
 
     const firstAuth = signer.authenticate({
       type: "email",
-      email: "multi@mfa.com",
+      email: TEST_EMAILS.MFA,
       emailMode: "otp",
     });
-    // **NEW** Wait a microtask so session/store is updated with orgId & AWAITING_EMAIL_AUTH
-    await new Promise((r) => setTimeout(r, 0));
+
+    // Wait for session/store to update with orgId & AWAITING_EMAIL_AUTH
+    await waitForMicrotasks();
 
     expect(signer.getMfaStatus().mfaRequired).toBe(true);
     expect(signer.getMfaStatus().mfaFactorId).toBe("factor-totp-123");
 
     // Step 2: user calls authenticate again with OTP code and TOTP factor
     mockClient.mock_submitOtpCode.mockResolvedValue(OTP_MFA_BUNDLE_RESPONSE);
-
     mockClient.mock_completeAuthWithBundle.mockResolvedValue(MFA_USER);
 
     // Start the authenticate call
     const authPromise = signer.authenticate({
       type: "otp",
-      otpCode: "555555",
+      otpCode: TEST_CODES.OTP,
       multiFactors: [
         {
           multiFactorId: "factor-totp-123",
-          multiFactorCode: "999111",
+          multiFactorCode: TEST_CODES.MFA_TOTP,
         },
       ],
     });
 
-    // Now we must emit "connectedOtp" so the signer transitions to CONNECTED
-    await new Promise((resolve) => setTimeout(resolve, 25));
-    mockClient.emitClientEvent(
+    // Emit "connectedOtp" so the signer transitions to CONNECTED
+    await emitClientEventAfterDelay(
       "connectedOtp",
       MFA_USER,
       OTP_MFA_BUNDLE_RESPONSE.bundle
