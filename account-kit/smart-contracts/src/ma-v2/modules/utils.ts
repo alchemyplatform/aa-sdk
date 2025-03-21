@@ -15,7 +15,6 @@ import {
 export enum SignatureType {
   EOA = "0x00",
   CONTRACT = "0x01",
-  CONTRACT_WITH_ADDR = "0x02",
 }
 
 /**
