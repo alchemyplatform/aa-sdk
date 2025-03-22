@@ -49,6 +49,49 @@ this package use.
 // [!include ~/shared/core/config.ts]
 ```
 
+## Watch and Hydrate
+
+The next step is to watch for any changes in the client state, and hydrate the account state. This is crucial for ensuring that the signer is properly defined and ready.
+
+1. Watch the client: You need to watch the smart account client to identify changes that could affect the signer and client state.
+2. Hydrate the account state: After detecting state changes, use the hydrate function on your config.
+
+```ts twoslash [example.ts]
+import { config } from "./config.ts";
+import { hydrate, watchSmartAccountClient, getSigner } from "@account-kit/core";
+
+// How you actually store this state variable
+// depends on the framework you're using
+let clientState;
+
+// The watch smart account client will handle all the possible state changes that can impact this client:
+//  - Signer status
+//  - Account instantiation
+//  - Chain changes
+const clientSubscription = watchSmartAccountClient(
+  {
+    type: "LightAccount",
+  },
+  config
+)((clientState_) => {
+  clientState = clientState_;
+
+  const signer = getSigner(config);
+
+  if (!signer) {
+    throw new Error("No signer found");
+  }
+
+  console.log("signer ready", signer);
+});
+
+if (clientState == null || clientState.isLoadingClient) {
+  console.log("Loading...");
+  const { onMount } = hydrate(config);
+  onMount();
+}
+```
+
 ## Authenticate the user
 
 Before you can create a Smart Account instance for your users, you need to authenticate them with the user. Depending on what framework you're using this will look different, but using
