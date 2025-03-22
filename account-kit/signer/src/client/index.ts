@@ -14,8 +14,10 @@ import type {
   CredentialCreationOptionOverrides,
   EmailAuthParams,
   ExportWalletParams,
+  JwtParams,
   OauthConfig,
   OtpParams,
+  JwtResponse,
   User,
 } from "./types.js";
 
@@ -243,6 +245,43 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       targetPublicKey,
     });
     return { bundle: credentialBundle };
+  }
+
+  /**
+   * Authenticates using a custom issued JWT
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.submitJwt({
+   *   jwt: "custom-issued-jwt",
+   *   authProvider: "auth-provider-name",
+   * });
+   * ```
+   *
+   * @param {Omit<JwtParams, "targetPublicKey">} args The parameters for the JWT request, excluding the target public key.
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle.
+   */
+  public override async submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">
+  ): Promise<JwtResponse> {
+    this.eventEmitter.emit("authenticating", { type: "custom-jwt" });
+    const targetPublicKey = await this.initIframeStamper();
+    return this.request("/v1/auth-jwt", {
+      jwt: args.jwt,
+      targetPublicKey,
+      authProvider: args.authProvider,
+    });
   }
 
   /**

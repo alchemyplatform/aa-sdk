@@ -14,8 +14,10 @@ import {
   type OauthConfig,
   type OauthParams,
   type OtpParams,
+  type JwtParams,
   type SignupResponse,
   type User,
+  type JwtResponse,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -69,6 +71,19 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     });
 
     return { bundle: credentialBundle };
+  }
+
+  override async submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">
+  ): Promise<JwtResponse> {
+    this.eventEmitter.emit("authenticating", { type: "custom-jwt" });
+
+    const publicKey = await this.stamper.init();
+    return this.request("/v1/auth-jwt", {
+      jwt: args.jwt,
+      targetPublicKey: publicKey,
+      authProvider: args.authProvider,
+    });
   }
 
   override async createAccount(
