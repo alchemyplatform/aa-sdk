@@ -79,10 +79,10 @@ export function getSectionsForConfig(
     midSection.push({
       type: "social",
       authProviderId: "auth0",
-      mode: "popup",
-      auth0Connection: auth0TestingConnection,
+      mode: "redirect",
+      redirectUrl: window.location.href || "",
+      auth0Connection: "Username-Password-Connection",
       displayName: "Test",
-      // Re-using twitter logo for testing, will not be seen in production
       logoUrl: "/images/key.svg",
       logoUrlDark: "/images/key.svg",
       scope: "openid profile",
