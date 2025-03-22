@@ -23,7 +23,7 @@ import {
   useSmartAccountClient,
 } from "@account-kit/react";
 
-const { client } = useSmartAccountClient({});
+const { client } = useSmartAccountClient({ type: "LightAccount" });
 const {
   waitForUserOperationTransaction,
   waitForUserOperationTransactionResult,
