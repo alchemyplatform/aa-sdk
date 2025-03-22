@@ -89,16 +89,21 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user wants to log in with their passkey and email
-const handlePasskeyLogin = async (email: string) => {
-  try {
-    await authenticate({
+const handlePasskeyLogin = (email: string) => {
+  authenticate(
+    {
       type: "passkey",
       email,
-    });
-    // Success - user authenticated with passkey
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - user authenticated with passkey
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -113,16 +118,21 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user wants to log in with just their passkey
-const handlePasskeyOnlyLogin = async () => {
-  try {
-    await authenticate({
+const handlePasskeyOnlyLogin = () => {
+  authenticate(
+    {
       type: "passkey",
       createNew: false, // Important: set to false to prevent creating a new passkey
-    });
-    // Success - user authenticated with passkey
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - user authenticated with passkey
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 

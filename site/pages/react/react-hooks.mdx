@@ -36,7 +36,7 @@ import React from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 function MyAuthComponent() {
-  const { authenticate, isPending } = useAuthenticate();
+  const { authenticate, authenticateAsync, isPending } = useAuthenticate();
 
   // Use authenticate with different parameters based on auth method
   // The specific parameters depend on the authentication method

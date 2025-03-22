@@ -94,21 +94,27 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits their email and wants to create a passkey
-const handlePasskeySignup = async (email: string) => {
-  try {
-    // Important: Validate the email before proceeding
-    if (!isValidEmail(email)) {
-      throw new Error("Please enter a valid email address");
-    }
+const handlePasskeySignup = (email: string) => {
+  // Important: Validate the email before proceeding
+  if (!isValidEmail(email)) {
+    // Handle validation error
+    return;
+  }
 
-    await authenticate({
+  authenticate(
+    {
       type: "passkey",
       email,
-    });
-    // Success - passkey created and user authenticated
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - passkey created and user authenticated
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 
 // Simple email validation function
@@ -132,17 +138,22 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user wants to create a passkey without email
-const handlePasskeyOnlySignup = async (username: string) => {
-  try {
-    await authenticate({
+const handlePasskeyOnlySignup = (username: string) => {
+  authenticate(
+    {
       type: "passkey",
       createNew: true,
       username, // A unique identifier for the passkey
-    });
-    // Success - passkey created and user authenticated
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - passkey created and user authenticated
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
