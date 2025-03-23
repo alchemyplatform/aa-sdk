@@ -51,10 +51,20 @@ this package use.
 
 ## Watch and Hydrate
 
-The next step is to watch for any changes in the client state, and hydrate the account state. This is crucial for ensuring that the signer is properly defined and ready.
+The next step is to hydrate the account state, which will trigger `watchSmartAccountClient`, which call `getSigner` in its callback. This is crucial for ensuring that the signer is properly defined and ready.
 
-1. Watch the client: You need to watch the smart account client to identify changes that could affect the signer and client state.
-2. Hydrate the account state: After detecting state changes, use the hydrate function on your config.
+If the client state is undefined, `hydrate(config)` is called to initialize the smart account client, updating the store with the necessary data (e.g., accounts, signer, chain).
+This triggers a state update, which in turn calls the callback in `watchSmartAccountClient`.
+Once the state is populated, the callback is executed, and the client data (such as signer status and accounts) becomes available.
+Now, you can safely call `getSigner(config)` to access the signer, as the store state is now ready.
+Without calling `hydrate`, the store might not be properly initialized, causing `getSigner` to return undefined.
+
+To break it down:
+
+- `watchSmartAccountClient` subscribes to state changes and invokes the callback whenever the smart account client's state is updated.
+
+- `hydrate` is responsible for setting up the store and initializing the client.
+- `onMount` performs actions that need to happen only after the client-side component has been mounted and the component is fully ready and rendered.
 
 ```ts twoslash [example.ts]
 import { config } from "./config.ts";
