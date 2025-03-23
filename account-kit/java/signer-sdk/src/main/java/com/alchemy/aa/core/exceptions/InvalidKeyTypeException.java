@@ -6,4 +6,3 @@ public class InvalidKeyTypeException extends RuntimeException {
     super(message);
   }
 }
-
