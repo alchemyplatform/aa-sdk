@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { ThreeStarsIcon } from "../icons/three-stars";
 import { MFAModal } from "../modals/MFA/MFAModal";
 import { useMFA } from "@account-kit/react";

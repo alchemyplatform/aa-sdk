@@ -1,9 +1,8 @@
 import { QRCodeSVG } from "qrcode.react";
 import { MFAStage } from "../MFAModal";
 import { useTheme } from "@/state/useTheme";
-import { AppStore } from "@/components/icons/app-store";
-import { GooglePlay } from "@/components/icons/google-play";
-import { useMemo } from "react";
+import { MobileAuthenticatorLinks } from "@/components/shared/MobileAuthenticatorLinks";
+
 export function MFAModalQR({
   totpUrl,
   isLoading,
@@ -14,40 +13,13 @@ export function MFAModalQR({
   setStage: (stage: MFAStage) => void;
 }) {
   const theme = useTheme();
-  const isIOS = useMemo(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-  }, []);
-  const isAndroid = useMemo(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /android/.test(userAgent);
-  }, []);
 
   return (
     <>
       <h2 className="text-lg font-semibold mb-5 text-fg-primary">
         Set up authenticator app
       </h2>
-      {isIOS && (
-        <a
-          className="relative mb-5"
-          href="https://apps.apple.com/us/app/google-authenticator/id388497605"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <AppStore />
-        </a>
-      )}
-      {isAndroid && (
-        <a
-          className="relative mb-5"
-          href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <GooglePlay />
-        </a>
-      )}
+
       <div className="relative mb-5">
         {/* <AlchemyLogoSmall
     height="40px"
@@ -94,6 +66,7 @@ export function MFAModalQR({
       >
         Next
       </button>
+      <MobileAuthenticatorLinks />
     </>
   );
 }
