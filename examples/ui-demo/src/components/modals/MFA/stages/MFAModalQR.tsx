@@ -23,36 +23,30 @@ export function MFAModalQR({
     return /android/.test(userAgent);
   }, []);
 
-  const openGoogleAuthenticatorPlayStore = () => {
-    const googleAuthenticatorPackageName =
-      "com.google.android.apps.authenticator2";
-    window.location.href = `market://details?id=${googleAuthenticatorPackageName}`;
-  };
-  const openGoogleAuthenticatorAppStore = () => {
-    const googleAuthenticatorPackageName =
-      "com.google.android.apps.authenticator2";
-    window.location.href = `market://details?id=${googleAuthenticatorPackageName}`;
-  };
   return (
     <>
       <h2 className="text-lg font-semibold mb-5 text-fg-primary">
         Set up authenticator app
       </h2>
       {isIOS && (
-        <button
+        <a
           className="relative mb-5"
-          onClick={openGoogleAuthenticatorAppStore}
+          href="https://apps.apple.com/us/app/google-authenticator/id388497605"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <AppStore />
-        </button>
+        </a>
       )}
       {isAndroid && (
-        <button
+        <a
           className="relative mb-5"
-          onClick={openGoogleAuthenticatorPlayStore}
+          href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <GooglePlay />
-        </button>
+        </a>
       )}
       <div className="relative mb-5">
         {/* <AlchemyLogoSmall
