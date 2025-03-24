@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MFAStage } from "../MFAModal";
 import { TooltipComponent } from "@/components/ui/tooltip";
 import { CopyLeftIcon } from "@/components/icons/copy-left";
+import { MobileAuthenticatorLinks } from "@/components/shared/MobileAuthenticatorLinks";
 export function MFAModalCode({
   setStage,
   mfaKey,
@@ -21,7 +22,8 @@ export function MFAModalCode({
       <h2 className="text-lg font-semibold mb-5 text-fg-primary">
         Set up authenticator app
       </h2>
-      <ol className="list-style list-decimal flex flex-col gap-2 ml-6 mb-5">
+      <MobileAuthenticatorLinks />
+      <ol className="list-style list-decimal flex flex-col gap-5 ml-6 mb-5">
         <li className="text-fg-primary">
           In the Google Authenticator app, tap the + button then tap{" "}
           <strong>Enter a setup key</strong>
@@ -52,12 +54,6 @@ export function MFAModalCode({
         </li>
       </ol>
       <div className="flex flex-row items-start w-full gap-2">
-        <button
-          className="rounded-lg h-10  mb-5 mr-2 border p-3 flex justify-center items-center"
-          onClick={() => setStage("qr")}
-        >
-          Back
-        </button>
         <button
           className="akui-btn akui-btn-primary rounded-lg h-10  mb-5 flex-1 "
           onClick={() => setStage("verify")}

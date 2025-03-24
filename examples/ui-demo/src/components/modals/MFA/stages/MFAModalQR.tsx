@@ -1,6 +1,8 @@
 import { QRCodeSVG } from "qrcode.react";
 import { MFAStage } from "../MFAModal";
 import { useTheme } from "@/state/useTheme";
+import { MobileAuthenticatorLinks } from "@/components/shared/MobileAuthenticatorLinks";
+
 export function MFAModalQR({
   totpUrl,
   isLoading,
@@ -11,11 +13,13 @@ export function MFAModalQR({
   setStage: (stage: MFAStage) => void;
 }) {
   const theme = useTheme();
+
   return (
     <>
       <h2 className="text-lg font-semibold mb-5 text-fg-primary">
         Set up authenticator app
       </h2>
+
       <div className="relative mb-5">
         {/* <AlchemyLogoSmall
     height="40px"
@@ -62,6 +66,7 @@ export function MFAModalQR({
       >
         Next
       </button>
+      <MobileAuthenticatorLinks />
     </>
   );
 }

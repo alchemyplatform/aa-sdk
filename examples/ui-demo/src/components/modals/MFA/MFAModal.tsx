@@ -13,6 +13,7 @@ import { MFAModalCode } from "./stages/MFAModalCode";
 import { MFAModalVerify } from "./stages/MFAModalVerify";
 import { MFAModalSuccess } from "./stages/MFAModalSuccess";
 import { DynamicHeight } from "@/components/ui/dynamic-height";
+import { ChevronLeft } from "lucide-react";
 
 export type MFAStage = "start" | "qr" | "code" | "verify" | "success";
 
@@ -213,6 +214,10 @@ export function MFAModal({
     verifyMFA.isPending ||
     removeMFA.isPending ||
     getMFAFactors.isPending;
+  const handleBack = () => {
+    setStage("qr");
+  };
+  const canGoBack = stage === "verify" || stage === "code";
 
   return (
     <>
@@ -243,13 +248,20 @@ export function MFAModal({
         >
           <DynamicHeight>
             <div className="p-6 flex flex-col items-center transition-all duration-300 ease-in-out">
-              <button className="self-end" onClick={handleClose}>
-                <XIcon
-                  height="20px"
-                  width="20px"
-                  className="stroke-fg-primary"
-                />
-              </button>
+              <div className="flex flex-row-reverse justify-between w-full">
+                <button className="self-end" onClick={handleClose}>
+                  <XIcon
+                    height="20px"
+                    width="20px"
+                    className="stroke-fg-primary"
+                  />
+                </button>
+                {canGoBack && (
+                  <button onClick={handleBack}>
+                    <ChevronLeft />
+                  </button>
+                )}
+              </div>
               {renderContent()}
               {systemError && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full">
