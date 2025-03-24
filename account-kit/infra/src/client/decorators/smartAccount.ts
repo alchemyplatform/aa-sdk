@@ -83,11 +83,12 @@ export const alchemyActions: <
   client_
 ) => ({
   simulateUserOperation: async (args) => {
-    const client = clientHeaderTrack(client_, "sendUserOperation");
+    const client = clientHeaderTrack(client_, "simulateUserOperation");
     return simulateUserOperationChanges(client, args);
   },
-  sendUserOperation: async (args) => {
-    const client = clientHeaderTrack(client_, "sendUserOperation");
+  async sendUserOperation(args) {
+    debugger;
+    const client = clientHeaderTrack(client_, "infraSendUserOperation");
     const { account = client.account } = args;
 
     const result = sendUserOperation(client, args);
@@ -95,7 +96,7 @@ export const alchemyActions: <
     return result;
   },
   sendTransaction: async (args, overrides, context) => {
-    const client = clientHeaderTrack(client_, "sendUserOperation");
+    const client = clientHeaderTrack(client_, "sendTransaction");
     const { account = client.account } = args;
 
     const result = await sendTransaction(client, args, overrides, context);
@@ -103,7 +104,7 @@ export const alchemyActions: <
     return result;
   },
   async sendTransactions(args) {
-    const client = clientHeaderTrack(client_, "sendUserOperation");
+    const client = clientHeaderTrack(client_, "sendTransactions");
     const { account = client.account } = args;
 
     const result = sendTransactions(client, args);

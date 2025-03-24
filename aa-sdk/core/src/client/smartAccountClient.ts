@@ -29,6 +29,7 @@ import {
 } from "./decorators/smartAccountClient.js";
 import { SmartAccountClientOptsSchema } from "./schema.js";
 import type { ClientMiddlewareConfig } from "./types.js";
+import { ADD_BREADCRUMB } from "./updateHeaders.js";
 
 type SmartAccountClientOpts = z.output<typeof SmartAccountClientOptsSchema>;
 
@@ -54,6 +55,7 @@ export type SmartAccountClientConfig<
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountClientOptsSchema>;
+    addBreadCrumb?: <T>(crumb: string) => T;
   } & ClientMiddlewareConfig<context>
 >;
 
@@ -163,6 +165,7 @@ export function createSmartAccountClient(
     name = "account provider",
     transport,
     type = "SmartAccountClient",
+    addBreadCrumb,
     ...params
   } = config;
 
@@ -179,6 +182,7 @@ export function createSmartAccountClient(
       const rpcTransport = transport(opts);
 
       return custom({
+        name: "SmartAccountClientTransport",
         async request({ method, params }) {
           switch (method) {
             case "eth_accounts": {
@@ -251,9 +255,17 @@ export function createSmartAccountClient(
       })(opts);
     },
   })
-    .extend(() => ({
-      ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
-    }))
+    .extend(() => {
+      const addBreadCrumbs = addBreadCrumb
+        ? {
+            [ADD_BREADCRUMB]: addBreadCrumb,
+          }
+        : {};
+      return {
+        ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
+        ...addBreadCrumbs,
+      };
+    })
     .extend(middlewareActions(config))
     .extend(smartAccountClientActions);
 

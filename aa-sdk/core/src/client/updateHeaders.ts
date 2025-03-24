@@ -15,7 +15,7 @@ function safeJsonParse(x: string): unknown {
 function addCrumb(previous: string | undefined, crumb: string): string {
   const previousCrumbs_ = previous && safeJsonParse(previous);
   const previousCrumbs = Array.isArray(previousCrumbs_) ? previousCrumbs_ : [];
-  return JSON.stringify([crumb, ...previousCrumbs]);
+  return JSON.stringify([...previousCrumbs, crumb]);
 }
 
 function hasAddBreadcrumb<A extends {}>(
@@ -25,6 +25,7 @@ function hasAddBreadcrumb<A extends {}>(
 }
 
 export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
+  debugger;
   if (hasAddBreadcrumb(client)) {
     return client[ADD_BREADCRUMB](crumb);
   }

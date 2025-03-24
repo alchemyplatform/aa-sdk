@@ -1,4 +1,4 @@
-import type { Chain, Client, Transport } from "viem";
+import { type Chain, type Client, type Transport } from "viem";
 import {
   type GetEntryPointFromAccount,
   type SmartContractAccount,

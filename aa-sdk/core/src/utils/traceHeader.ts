@@ -73,6 +73,9 @@ export class TraceHeader {
   static fromTraceHeader(
     headers: Record<string, string>
   ): TraceHeader | undefined {
+    if (!headers["traceheader"]) {
+      return undefined;
+    }
     const [version, traceId, parentId, traceFlags] =
       headers["traceheader"]?.split("-");
     const traceState =
@@ -93,15 +96,15 @@ export class TraceHeader {
   /**
    * Should be able to convert the trace header to the format that is used in the headers of an http request
    *
-   * @returns {Record<string, string>} The trace header in the format of a record, used in our http client
+   * @returns {{stracheader: string, tracestate: string}} The trace header in the format of a record, used in our http client
    */
-  toTraceHeader(): Record<string, string> {
+  toTraceHeader() {
     return {
       traceheader: `00-${this.traceId}-${this.parentId}-${this.traceFlags}`,
       tracestate: Object.entries(this.traceState)
         .map(([key, value]) => `${key}=${value}`)
         .join(","),
-    };
+    } as const;
   }
 
   /**

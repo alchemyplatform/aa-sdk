@@ -1,5 +1,4 @@
 import {
-  ADD_BREADCRUMB,
   ChainNotFoundError,
   createSmartAccountClient,
   headersUpdate,
@@ -100,13 +99,7 @@ export type AlchemySmartAccountClient<
   context extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined
-> = Prettify<
-  AlchemySmartAccountClient_Base<chain, account, actions, context> & {
-    [ADD_BREADCRUMB]: (
-      breadcrumb: string
-    ) => AlchemySmartAccountClient_Base<chain, account, actions, context>;
-  }
->;
+> = Prettify<AlchemySmartAccountClient_Base<chain, account, actions, context>>;
 
 export function createAlchemySmartAccountClient<
   TChain extends Chain = Chain,
@@ -178,31 +171,31 @@ export function createAlchemySmartAccountClient(
       ? alchemyUserOperationSimulator(config.transport)
       : undefined,
     signUserOperation: config.signUserOperation,
+    addBreadCrumb(breadcrumb: string) {
+      debugger;
+      const oldConfig = config.transport.config;
+      const dynamicFetchOptions = config.transport.dynamicFetchOptions;
+      const newTransport = alchemy({ ...oldConfig });
+      newTransport.updateHeaders(
+        headersUpdate(breadcrumb)(
+          convertHeadersToObject(dynamicFetchOptions?.headers)
+        )
+      );
+      return createAlchemySmartAccountClient({
+        ...config,
+        transport: newTransport,
+      }) as any;
+      // debugger;
+      // return {
+      //   ...this,
+      //   transport: this.transport.withBreadcrumb(breadcrumb),
+      // };
+    },
   }).extend(alchemyActions);
 
   if (config.account && isSmartAccountWithSigner(config.account)) {
     config.transport.updateHeaders(getSignerTypeHeader(config.account));
   }
 
-  return {
-    ...scaClient,
-    [ADD_BREADCRUMB](breadcrumb: string) {
-      const newTransport = alchemy({ ...config.transport.config });
-      const newHeaders = headersUpdate(breadcrumb)({
-        ...convertHeadersToObject(
-          config.transport.config.fetchOptions?.headers ?? {}
-        ),
-      });
-      console.log(
-        "BLUJ New breadcrumb",
-        breadcrumb,
-        JSON.stringify(newHeaders)
-      );
-      newTransport.updateHeaders(newHeaders);
-      return createAlchemySmartAccountClient({
-        ...config,
-        transport: newTransport,
-      });
-    },
-  };
+  return scaClient;
 }

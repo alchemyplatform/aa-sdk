@@ -4,6 +4,7 @@ import {
   split,
   type ConnectionConfig,
   type NoUndefined,
+  headersUpdate,
 } from "@aa-sdk/core";
 import {
   createTransport,
@@ -65,7 +66,10 @@ type AlchemyTransportBase = Transport<
 
 export type AlchemyTransport = AlchemyTransportBase & {
   updateHeaders(newHeaders: HeadersInit): void;
+  withHeaders(newHeaders: HeadersInit): AlchemyTransport;
+  withBreadcrumb(breadcrumb: string): AlchemyTransport;
   config: AlchemyTransportConfig;
+  dynamicFetchOptions: AlchemyTransportConfig["fetchOptions"];
 };
 
 /**
@@ -197,6 +201,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
   };
 
   return Object.assign(transport, {
+    dynamicFetchOptions: fetchOptions,
     updateHeaders(newHeaders_: HeadersInit) {
       const newHeaders = convertHeadersToObject(newHeaders_);
 
@@ -205,8 +210,19 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         ...newHeaders,
       };
     },
+    withHeaders(newHeaders: HeadersInit) {
+      const newTransport = alchemy({ ...config });
+      newTransport.updateHeaders(newHeaders);
+      return newTransport;
+    },
+    withBreadcrumb(breadcrumb: string) {
+      const newHeaders = headersUpdate(breadcrumb)({
+        ...convertHeadersToObject(fetchOptions.headers),
+      });
+      return this.withHeaders(newHeaders);
+    },
     config,
-  }) as AlchemyTransport;
+  });
 }
 
 export const convertHeadersToObject = (
