@@ -78,6 +78,16 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 ```js [metro.config.js]
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
+const path = require("path");
+const projectRoot = __dirname;
+
+// Add aliases for file-system import based modules
+const ALIASES = {
+  "@noble/hashes/crypto": path.resolve(
+    projectRoot, // <-- Adjust this as fits your project setup
+    "node_modules/@noble/hashes/crypto.js"
+  ),
+};
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
@@ -90,6 +100,25 @@ config.resolver.extraNodeModules = {
   crypto: require.resolve("crypto-browserify"),
   stream: require.resolve("stream-browserify"),
 };
+
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (ALIASES[moduleName]) {
+    return {
+      filePath: ALIASES[moduleName],
+      type: "sourceFile",
+    };
+  }
+  return context.resolveRequest(context, moduleName, platform);
+};
+
+// The `account-kit/react-native` and it's supoorting packages leverages package.json `exports` which is not (yet) suported by default in Metro.
+// we can enable this support using:
+config.resolver.unstable_enablePackageExports = true;
+config.resolver.unstable_conditionNames = [
+  "browser",
+  "require",
+  "react-native",
+];
 
 module.exports = config;
 ```
@@ -115,17 +144,17 @@ That's it! Now you can install the packages you want from Account Kit and start 
 :::code-group
 
 ```bash [npm]
-npm install -s @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
+npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
 ```bash [yarn]
-yarn add @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
+yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
 :::
 
 :::tip
-The react-native-signer package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
+The `@account-kit/react-native` package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
 
 ```json
 "module": "NodeNext",
@@ -141,11 +170,11 @@ To ensure the Signer package works correctly, you'll need to add the following d
 :::code-group
 
 ```bash [npm]
-npm install @account-kit/signer react-native-mmkv zustand abitype react-native-inappbrowser-reborn
+npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 ```bash [yarn]
-yarn add @account-kit/signer react-native-mmkv zustand abitype react-native-inappbrowser-reborn
+yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 :::

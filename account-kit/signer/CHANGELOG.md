@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+### Features
+
+- pull email mode from server ([#1441](https://github.com/alchemyplatform/aa-sdk/issues/1441)) ([3034db4](https://github.com/alchemyplatform/aa-sdk/commit/3034db49aab29d1b9bbd8474056a1f9cdfc98ef7))
+
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+### Features
+
+- **signer:** add support for using Solana on new signups ([#1376](https://github.com/alchemyplatform/aa-sdk/issues/1376)) ([e0a092e](https://github.com/alchemyplatform/aa-sdk/commit/e0a092e1e10797a50f99f24cf957cad6153fafad))
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 **Note:** Version bump only for package @account-kit/signer

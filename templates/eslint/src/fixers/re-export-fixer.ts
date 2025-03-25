@@ -10,6 +10,13 @@ export function reExportFixerEslint(
   context: Rule.RuleContext,
   fixBatchSize = 10
 ) {
+  if (process.env.OPENAI_API_KEY == null) {
+    console.warn(
+      "OPENAI_API_KEY is not set, skipping re-export fixer. Set OPENAI_API_KEY to enable this feature."
+    );
+    return null;
+  }
+
   if (fixBatchSize > 0 && numFixes > fixBatchSize) {
     // TODO: add this back to the configuration
     return null;

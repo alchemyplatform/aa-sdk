@@ -1,6 +1,6 @@
 import type { KnownAuthProvider } from "@account-kit/signer";
 import { Spinner } from "./spinner.js";
-import { GoogleIcon, FacebookIcon } from "./auth-icons/index.js";
+import { GoogleIcon, FacebookIcon, TwitchIcon } from "./auth-icons/index.js";
 
 interface ContinueWithOAuthProps {
   provider: KnownAuthProvider;
@@ -19,7 +19,8 @@ export function ContinueWithOAuth({ provider }: ContinueWithOAuthProps) {
     <div className="relative flex flex-col items-center justify-center h-12 w-12">
       <Spinner className="absolute top-0 left-0 right-0 bottom-0" />
       {(provider === "google" && <GoogleIcon />) ||
-        (provider === "facebook" && <FacebookIcon />)}
+        (provider === "facebook" && <FacebookIcon />) ||
+        (provider === "twitch" && <TwitchIcon />)}
     </div>
   );
 }

@@ -115,6 +115,10 @@ export const accountKitSmartContractsReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/smart-contracts/functions/getMAInitializationData",
       },
       {
+        text: "getMAV2UpgradeToData",
+        link: "/reference/account-kit/smart-contracts/functions/getMAV2UpgradeToData",
+      },
+      {
         text: "getMSCAUpgradeToData",
         link: "/reference/account-kit/smart-contracts/functions/getMSCAUpgradeToData",
       },

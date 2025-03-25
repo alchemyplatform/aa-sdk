@@ -4,7 +4,7 @@ import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
-import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
+import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
@@ -27,6 +27,7 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
+import { VERSION } from "../version.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -317,11 +318,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * that result here.
    *
    * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} mode specify if signing should happen for solana or ethereum
    * @returns {Promise<Hex>} the signature over the raw hex
    */
-  public signRawMessage = async (msg: Hex): Promise<Hex> => {
+  public signRawMessage = async (
+    msg: Hex,
+    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+  ): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
+    }
+
+    if (!this.user.solanaAddress && mode === "SOLANA") {
+      // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
+      throw new Error("No Solana address available for the user");
     }
 
     const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
@@ -330,9 +340,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       timestampMs: Date.now().toString(),
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
+        hashFunction:
+          mode === "ETHEREUM"
+            ? "HASH_FUNCTION_NO_OP"
+            : "HASH_FUNCTION_NOT_APPLICABLE",
         payload: msg,
-        signWith: this.user.address,
+        signWith:
+          mode === "ETHEREUM" ? this.user.address : this.user.solanaAddress!,
       },
     });
 
@@ -369,6 +383,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const basePath = "/signer";
 
     const headers = new Headers();
+    headers.append("Alchemy-AA-Sdk-Version", VERSION);
     headers.append("Content-Type", "application/json");
     if (this.connectionConfig.apiKey) {
       headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);
@@ -527,6 +542,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       auth0Connection,
       scope: providedScope,
       claims: providedClaims,
+      otherParameters: providedOtherParameters,
       mode,
       redirectUrl,
       expirationSeconds,
@@ -549,23 +565,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new Error(`No auth provider found with id ${authProviderId}`);
     }
 
-    let scope: string;
-    let claims: string | undefined;
+    let scope: string | undefined = providedScope;
+    let claims: string | undefined = providedClaims;
+    let otherParameters: Record<string, string> | undefined =
+      providedOtherParameters;
 
-    if (providedScope) {
-      scope = addOpenIdIfAbsent(providedScope);
-      claims = providedClaims;
-    } else {
-      if (isCustomProvider) {
-        throw new Error("scope must be provided for a custom provider");
-      }
-      const scopeAndClaims = getDefaultScopeAndClaims(authProviderId);
-      if (!scopeAndClaims) {
-        throw new Error(
-          `Default scope not known for provider ${authProviderId}`
-        );
-      }
-      ({ scope, claims } = scopeAndClaims);
+    if (!isCustomProvider) {
+      const defaultCustomization =
+        getDefaultProviderCustomization(authProviderId);
+      scope ??= defaultCustomization?.scope;
+      claims ??= defaultCustomization?.claims;
+      otherParameters ??= defaultCustomization?.otherParameters;
+    }
+    if (!scope) {
+      throw new Error(`Default scope not known for provider ${authProviderId}`);
     }
     const { authEndpoint, clientId } = authProvider;
 
@@ -598,10 +611,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       prompt: "select_account",
       client_id: clientId,
       nonce,
-      // Fixes Facebook mobile login so that `window.opener` doesn't get nullified.
-      ...(mode === "popup" && authProvider.id === "facebook"
-        ? { sdk: "joey" }
-        : {}),
+      ...otherParameters,
     };
     if (claims) {
       params.claims = claims;

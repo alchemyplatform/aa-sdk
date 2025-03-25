@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+### Bug Fixes
+
+- invalidate state if the local signer config changes ([#1435](https://github.com/alchemyplatform/aa-sdk/issues/1435)) ([9ad59f2](https://github.com/alchemyplatform/aa-sdk/commit/9ad59f2d6673bc6f587e6a57343b1486c92f382f))
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 **Note:** Version bump only for package @account-kit/core

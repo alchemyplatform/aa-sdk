@@ -1,22 +1,24 @@
 import truncateAddress from "@/utils/truncate-address";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipArrow,
-} from "@radix-ui/react-tooltip";
-import { useState, useMemo } from "react";
-import ExternalLink from "../shared/ExternalLink";
 import { useChain } from "@account-kit/react";
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { useMemo, useState } from "react";
+import ExternalLink from "../shared/ExternalLink";
 
 export const UserAddressTooltip = ({
   address,
   linkEnabled,
+  href,
 }: {
   address: string | null;
   /** If link is enabled, clicking the address will open it using the chain's explorer URL. If disabled, clicking it will copy it to the clipboard. */
   linkEnabled?: boolean;
+  href?: string;
 }) => {
   const [showCopied, setShowCopied] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -32,12 +34,14 @@ export const UserAddressTooltip = ({
   };
 
   const explorerLink = useMemo(() => {
+    if (href) return href;
+
     const explorer = chain?.blockExplorers?.default;
     if (!address || !explorer) {
       return undefined;
     }
     return `${explorer.url}/address/${address}`;
-  }, [address, chain]);
+  }, [address, chain, href]);
 
   return (
     <TooltipProvider>
