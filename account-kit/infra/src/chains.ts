@@ -514,3 +514,27 @@ export const mekong: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const openlootSepolia: Chain = defineChain({
+  id: 905905,
+  name: "Openloot Sepolia",
+  nativeCurrency: { name: "Openloot", symbol: "OL", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://openloot-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://openloot-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://openloot-sepolia.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://openloot-sepolia.explorer.alchemy.com",
+    },
+  },
+  testnet: true,
+});
