@@ -19,6 +19,11 @@ export default function Home() {
   const [createdApiKey, setCreatedApiKey] = useState(false);
 
   useEffect(() => {
+    // User logged out, so reset the state.
+    if (!user && createdApiKey) {
+      setCreatedApiKey(false);
+    }
+    // Waiting for user to be logged in.
     if (!user || !signer || !signerStatus.isConnected || createdApiKey) {
       return;
     }

@@ -1,6 +1,7 @@
 import { TurnkeyClient } from "@turnkey/http";
 import { ApiKeyStamper } from "@turnkey/api-key-stamper";
 import { getLatestApiKey, getUser } from "@/app/db";
+import { NextResponse } from "next/server";
 
 const TURNKEY_BASE_URL = "https://api.turnkey.com";
 
@@ -9,19 +10,19 @@ export async function POST(request: Request) {
     .json()
     .catch((err) => {
       console.error(err);
-      return new Response("error", {
+      return NextResponse.json("bad request", {
         status: 400,
       });
     });
   if (!body.orgId || !body.payload) {
-    return new Response("missing requirement parameter", {
+    return NextResponse.json("bad request", {
       status: 400,
     });
   }
 
   const user = getUser(body.orgId);
   if (!user) {
-    return new Response("user not found", {
+    return NextResponse.json("user not found", {
       status: 404,
     });
   }
@@ -68,19 +69,19 @@ export async function POST(request: Request) {
     }
     const respJson = (await alchemyResp.json()) as { signature: string };
 
-    return new Response(
-      JSON.stringify({
+    return NextResponse.json(
+      {
         address: user.address,
         message: body.payload,
         signature: respJson.signature,
-      }),
+      },
       {
         status: 200,
       },
     );
   } catch (err) {
     console.error(err);
-    return new Response("error", {
+    return NextResponse.json("error", {
       status: 500,
     });
   }
