@@ -78,6 +78,7 @@ export class TraceHeader {
     }
     const [version, traceId, parentId, traceFlags] =
       headers["traceheader"]?.split("-");
+
     const traceState =
       headers["tracestate"]?.split(",").reduce((acc, curr) => {
         const [key, value] = curr.split("=");
@@ -119,7 +120,7 @@ export class TraceHeader {
     const breadcrumbs = this.traceState.breadcrumbs
       ? `${this.traceState.breadcrumbs}-${eventName}`
       : eventName;
-    return new TraceHeader(this.traceId, this.traceId, this.traceFlags, {
+    return new TraceHeader(this.traceId, this.parentId, this.traceFlags, {
       ...this.traceState,
       breadcrumbs,
     });

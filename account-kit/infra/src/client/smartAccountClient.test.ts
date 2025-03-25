@@ -2,6 +2,7 @@ import {
   LocalAccountSigner,
   type ClientMiddlewareFn,
   type SmartContractAccount,
+  clientHeaderTrack,
 } from "@aa-sdk/core";
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { http, zeroAddress } from "viem";
@@ -67,6 +68,48 @@ describe("AlchemySmartAccountClient tests", () => {
         "Alchemy-AA-Sdk-Version": Any<String>,
         "Alchemy-Aa-Sdk-Signer": "local",
         "Content-Type": "application/json",
+      }
+    `
+    );
+  });
+
+  it("should set the headers with tracking", async () => {
+    const client_ = givenClient();
+    const client = clientHeaderTrack(
+      clientHeaderTrack(client_, "test"),
+      "afterTest"
+    );
+    await client
+      .request({ method: "eth_supportedEntryPoints", params: [] })
+      .catch(() => {});
+
+    console.log(
+      "BLUJ ",
+      JSON.stringify(
+        fetchSpy.mock.calls.map((x) => x[1]?.headers),
+        null,
+        2
+      )
+    );
+
+    expect(
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+    ).toMatchInlineSnapshot(
+      {
+        "Alchemy-AA-Sdk-Version": expect.any(String),
+        "X-Alchemy-Trace-Id": expect.any(String),
+        traceheader: expect.any(String),
+        "Content-Type": "application/json",
+        tracestate: "breadcrumbs=test-afterTest",
+      },
+      `
+      {
+        "Alchemy-AA-Sdk-Version": Any<String>,
+        "Content-Type": "application/json",
+        "X-Alchemy-Trace-Breadcrumb": "test > afterTest",
+        "X-Alchemy-Trace-Id": Any<String>,
+        "traceheader": Any<String>,
+        "tracestate": "breadcrumbs=test-afterTest",
       }
     `
     );

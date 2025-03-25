@@ -1,5 +1,6 @@
 import {
   ChainNotFoundError,
+  clientHeaderTrack,
   createSmartAccountClient,
   headersUpdate,
   isSmartAccountWithSigner,
@@ -185,7 +186,13 @@ export function createAlchemySmartAccountClient(
         transport: newTransport,
       }) as any;
     },
-  }).extend(alchemyActions);
+  })
+    .extend(alchemyActions)
+    .extend((client_) => ({
+      addBreadcrumb(breadcrumb: string) {
+        return clientHeaderTrack(client_, breadcrumb);
+      },
+    }));
 
   if (config.account && isSmartAccountWithSigner(config.account)) {
     config.transport.updateHeaders(getSignerTypeHeader(config.account));
