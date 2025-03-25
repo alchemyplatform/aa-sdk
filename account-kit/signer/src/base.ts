@@ -40,7 +40,7 @@ import {
   type SessionManagerParams,
 } from "./session/manager.js";
 import type { SessionManagerEvents } from "./session/types";
-import type { AuthParams } from "./signer";
+import type { AuthParams, AuthStepResult } from "./signer";
 import { SolanaSigner } from "./solanaSigner.js";
 import {
   AlchemySignerStatus,
@@ -311,6 +311,34 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       });
     }
   );
+
+  authenticateStep: (params: AuthParams) => Promise<AuthStepResult> =
+    SignerLogger.profiled(
+      "BaseAlchemySigner.authenticateStep",
+      async (params) => {
+        const { type } = params;
+        const result = (() => {
+          switch (type) {
+            case "email":
+              return this.authenticateWithEmailNew(params);
+            case "otp":
+              return this.authenticateWithOtpNew(params);
+            default:
+              throw new Error("type not implemented");
+          }
+        })();
+
+        this.trackAuthenticateType(params);
+
+        return result.catch((error) => {
+          this.store.setState({
+            error: toErrorInfo(error),
+            status: AlchemySignerStatus.DISCONNECTED,
+          });
+          throw error;
+        });
+      }
+    );
 
   private trackAuthenticateType = (params: AuthParams) => {
     const { type } = params;
@@ -836,6 +864,53 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return new SolanaSigner(this.inner);
   };
 
+  private authenticateWithEmailNew = async (
+    params: Extract<AuthParams, { type: "email" }>
+  ): Promise<AuthStepResult> => {
+    if ("bundle" in params) {
+      const user = await this.completeEmailAuth(params);
+      return {
+        status: AlchemySignerStatus.CONNECTED,
+        user,
+      };
+    }
+
+    if (!("email" in params)) {
+      throw new Error("Email is required");
+    }
+
+    const { orgId, otpId, multiFactors, isNewUser } =
+      await this.initOrCreateEmailUser(
+        params.email,
+        params.emailMode ?? "otp",
+        params.multiFactors,
+        params.redirectParams
+      );
+
+    const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
+
+    this.sessionManager.setTemporarySession({
+      orgId,
+      isNewUser,
+      isMfaRequired,
+    });
+
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+      otpId,
+      error: null,
+      mfaStatus: {
+        mfaRequired: isMfaRequired,
+        mfaFactorId: multiFactors?.[0]?.multiFactorId,
+      },
+    });
+
+    return {
+      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+      user: undefined,
+    };
+  };
+
   private authenticateWithEmail = async (
     params: Extract<AuthParams, { type: "email" }>
   ): Promise<User> => {
@@ -991,6 +1066,61 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     }
 
     return user;
+  };
+
+  private authenticateWithOtpNew = async (
+    args: Extract<AuthParams, { type: "otp" }>
+  ): Promise<AuthStepResult> => {
+    const tempSession = this.sessionManager.getTemporarySession();
+    const { orgId, isNewUser, isMfaRequired } = tempSession ?? {};
+    const { otpId } = this.store.getState();
+    if (!orgId) {
+      throw new Error("orgId not found in session");
+    }
+    if (!otpId) {
+      throw new Error("otpId not found in session");
+    }
+    if (isMfaRequired && !args.multiFactors) {
+      throw new Error(`MFA is required.`);
+    }
+
+    const response = await this.inner.submitOtpCode({
+      orgId,
+      otpId,
+      otpCode: args.otpCode,
+      expirationSeconds: this.getExpirationSeconds(),
+      multiFactors: args.multiFactors,
+    });
+
+    if (response.mfaRequired) {
+      this.handleMfaRequired(response.encryptedPayload, response.multiFactors);
+
+      return {
+        status: AlchemySignerStatus.AWAITING_MFA_AUTH,
+        user: undefined,
+        multiFactors: response.multiFactors,
+      };
+    }
+
+    const user = await this.inner.completeAuthWithBundle({
+      bundle: response.bundle,
+      orgId,
+      connectedEventName: "connectedOtp",
+      authenticatingType: "otp",
+    });
+
+    this.emitNewUserEvent(isNewUser);
+    if (tempSession) {
+      this.sessionManager.setTemporarySession({
+        ...tempSession,
+        isNewUser: false,
+      });
+    }
+
+    return {
+      user,
+      status: AlchemySignerStatus.CONNECTED,
+    };
   };
 
   private handleOauthReturn = ({

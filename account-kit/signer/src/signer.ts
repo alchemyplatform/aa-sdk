@@ -7,8 +7,27 @@ import {
 import type {
   CredentialCreationOptionOverrides,
   VerifyMfaParams,
+  User,
+  MfaFactor,
 } from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
+import type { AlchemySignerStatus } from "./types.js";
+
+export type AuthStepResult =
+  | {
+      status: AlchemySignerStatus.CONNECTED;
+      user: User;
+    }
+  | {
+      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH;
+      user: undefined;
+    }
+  | {
+      status: AlchemySignerStatus.AWAITING_MFA_AUTH;
+      user: undefined;
+      multiFactors: MfaFactor[];
+      // encryptedPayload: string; // I don't think we want to expose this to the user
+    };
 
 export type AuthParams =
   | {
