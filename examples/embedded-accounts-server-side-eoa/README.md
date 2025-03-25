@@ -5,20 +5,26 @@ See [accountkit.alchemy.com](https://accountkit.alchemy.com/) for the most up to
 
 ![image](https://github.com/user-attachments/assets/b7a820e7-1927-4bee-8eaa-52ca4af0f87a)
 
-This is a [Next.js](https://nextjs.org/) template bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, download the template:
+This repo demonstrates how you can sign messages and send transactions server-side using an embedded wallet created by the Account Kit SDK.
+
+### Install dependencies
 
 ```bash
-yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
+yarn
 ```
 
-### Get you alchemy api key
+### Get your alchemy api key
 
 - Create a new embedded accounts configuration for an alchemy app in your [dashboard](https://dashboard.alchemy.com/accounts)
-- Replace the api key in the config.ts file
+- Create a `.env` file with your alchemy api key:
+
+```
+NEXT_PUBLIC_ALCHEMY_API_KEY=demo
+```
+
+_Note that prefixing the environment variable with `NEXT_PUBLIC` exposes it to the client. View best practices for protecting your API key [here](https://accountkit.alchemy.com/resources/faqs#how-should-i-protect-my-api-key-and-policy-id-in-the-frontend) before shipping to production._
 
 ### Run the app
 
@@ -26,19 +32,21 @@ yarn create next-app account-kit-app -e https://github.com/avarobinson/account-k
 yarn dev
 ```
 
-Follow this [quick start guide](https://accountkit.alchemy.com/) for more details!
+## Details on server-side signing
 
-## Learn More
+- Once a user is authenticated, the client stamps two requests:
 
-To learn more about Next.js, take a look at the following resources:
+```ts
+const whoamiStamp = await signer.inner.stampWhoami();
+const getOrganizationStamp = await signer.inner.stampGetOrganization();
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- These stamps are submitted to the backend (via `/api/get-api-key`).
+- The backend submits these stamps to Alchemy & Turnkey to get verified information about the user and their organization. Then the backend then creates a new keypair that it can use to sign on behalf of the user. (All of this information can be stored in your database, which is useful not only for access wallet information, but also in order to not generate a new API key each time a user logs in.) The public key (along w/ whether or not it's a new key) is returned to the client.
+- Once the client receives the public key from the server, it calls `signer.inner.createApiKey()` with the public key (if it's a newly created key), along with a name and expiration date. This adds the API key to the user's account. After this is done, the server is able to use the API key on behalf of the user. (See the api routes for `/api/sign` and `/api/send-transaction` for basic examples.)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Further enhancements for server-side signing
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- This demo app writes data to local json files instead of connecting to a database. This is just given as an example and should not be deployed to production. The keys must be securely stored as they provide access to user accounts.
+- The example backend implementations currently require Turnkey packages. In the future, all of these requests should be handled via the Alchemy API, and the Turnkey packages will no longer be required.
+- This example is an early proof of concept. Alchemy plans to update the Account Kit SDK to make it easier for developers to handle these requests on their backend.
