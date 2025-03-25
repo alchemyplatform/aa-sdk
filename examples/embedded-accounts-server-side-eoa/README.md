@@ -43,7 +43,7 @@ const getOrganizationStamp = await signer.inner.stampGetOrganization();
 
 - These stamps are submitted to the backend (via `/api/get-api-key`).
 - The backend submits these stamps to Alchemy & Turnkey to get verified information about the user and their organization. Then the backend then creates a new keypair that it can use to sign on behalf of the user. (All of this information can be stored in your database, which is useful not only for access wallet information, but also in order to not generate a new API key each time a user logs in.) The public key (along w/ whether or not it's a new key) is returned to the client.
-- Once the client receives the public key from the server, it calls `signer.inner.createApiKey()` with the public key (if it's a newly created key), along with a name and expiration date. This adds the API key to the user's account. After this is done, the server is able to use the API key on behalf of the user. (See the api routes for `/api/sign` and `/api/send-transaction` for basic examples.)
+- Once the client receives the public key from the server, it calls `signer.inner.createApiKey()` with the public key (if it's a newly created key), along with a name and expiration date. This adds the API key to the user's account. After this is done, the server is able to use the API key on behalf of the user. (See the api routes for `/api/sign` and `/api/send-transaction` for basic examples. Note that sending a transaction requires a wallet balance to pay for gas fees.)
 
 ## Further enhancements for server-side signing
 
