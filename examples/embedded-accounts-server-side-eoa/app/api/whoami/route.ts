@@ -1,12 +1,11 @@
 import { upsertUser } from "@/app/db";
 import crypto from "crypto";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const body = await request.json().catch((err) => {
     console.error(err);
-    return new Response("error", {
-      status: 400,
-    });
+    return NextResponse.json({ json: "bad request" }, { status: 400 });
   });
 
   try {
@@ -43,17 +42,10 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     });
 
-    return new Response(JSON.stringify({ publicKey }), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return NextResponse.json({ publicKey }, { status: 200 });
   } catch (err) {
     console.error(err);
-    return new Response("error", {
-      status: 500,
-    });
+    return NextResponse.json({ json: "error" }, { status: 500 });
   }
 }
 
