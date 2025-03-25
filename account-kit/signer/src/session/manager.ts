@@ -47,6 +47,8 @@ type TemporarySession = {
   orgId: string;
   isNewUser?: boolean;
   isMfaRequired?: boolean;
+  encryptedPayload?: string;
+  mfaFactorId?: string;
 };
 
 export class SessionManager {

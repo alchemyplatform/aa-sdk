@@ -9,6 +9,7 @@ export type AlchemySignerEvents = {
   mfaStatusChanged(mfaStatus: {
     mfaRequired: boolean;
     mfaFactorId?: string;
+    encryptedPayload?: string;
   }): void;
 };
 
@@ -23,6 +24,7 @@ export enum AlchemySignerStatus {
   AUTHENTICATING_OAUTH = "AUTHENTICATING_OAUTH",
   AWAITING_EMAIL_AUTH = "AWAITING_EMAIL_AUTH",
   AWAITING_OTP_AUTH = "AWAITING_OTP_AUTH",
+  AWAITING_MFA_AUTH = "AWAITING_MFA_AUTH",
 }
 
 export enum AlchemyMfaStatus {

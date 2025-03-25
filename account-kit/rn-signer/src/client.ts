@@ -21,6 +21,7 @@ import {
   type SignupResponse,
   type User,
   type VerifyMfaParams,
+  type SubmitOtpCodeResponse,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -64,22 +65,20 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   override async submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }> {
+  ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const publicKey = await this.stamper.init();
 
-    const { credentialBundle } = await this.request("/v1/otp", {
+    const response = await this.request("/v1/otp", {
       ...args,
       targetPublicKey: publicKey,
     });
 
-    if (!credentialBundle) {
-      throw new Error(
-        "Failed to submit OTP code. Check if multifactor is required."
-      );
+    if (response.status === "MFA_REQUIRED") {
+      throw new Error("Multi-factor authentication is required");
     }
 
-    return { bundle: credentialBundle };
+    return { bundle: response.credentialBundle, mfaRequired: false };
   }
 
   override async createAccount(
@@ -283,5 +282,14 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     multiFactors: MfaFactor[];
   }> {
     throw new Error("disableMfa is not implemented in RNSignerClient");
+  }
+
+  public override validateMultiFactors(_params: {
+    encryptedPayload: string;
+    multiFactors: { multiFactorId: string; multiFactorCode: string }[];
+  }): Promise<{ bundle: string }> {
+    throw new Error(
+      "validateMultiFactors is not implemented in RNSignerClient"
+    );
   }
 }

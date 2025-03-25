@@ -70,6 +70,18 @@ export type OtpParams = {
   multiFactors?: VerifyMfaParams[];
 };
 
+// todo fix this type
+export type OtpResponse =
+  | {
+      status: "SUCCESS";
+      credentialBundle: string;
+    }
+  | {
+      status: "MFA_REQUIRED";
+      encryptedPayload: string;
+      multiFactors: MfaFactor[];
+    };
+
 export type SignupResponse = {
   orgId: string;
   userId?: string;
@@ -170,9 +182,7 @@ export type SignerEndpoints = [
   {
     Route: "/v1/otp";
     Body: OtpParams;
-    Response: {
-      credentialBundle: string | null;
-    };
+    Response: OtpResponse;
   },
   {
     Route: "/v1/auth-list-multi-factors";
@@ -214,6 +224,19 @@ export type SignerEndpoints = [
     Route: "/v1/signer-config";
     Body: {};
     Response: SignerConfig;
+  },
+  {
+    Route: "/v1/auth-validate-multi-factors";
+    Body: {
+      encryptedPayload: string;
+      multiFactors: VerifyMfaParams[];
+    };
+    Response: {
+      payload: {
+        credentialBundle?: string;
+      };
+      multiFactors: MfaFactor[];
+    };
   }
 ];
 
@@ -284,6 +307,11 @@ export type RemoveMfaParams = {
   multiFactorIds: string[];
 };
 
+export type ValidateMultiFactorsParams = {
+  multiFactorId?: string;
+  multiFactorCode: string;
+};
+
 export type MfaChallenge = {
   multiFactorId: string;
   multiFactorChallenge:
@@ -292,3 +320,7 @@ export type MfaChallenge = {
       }
     | Record<string, any>;
 };
+
+export type SubmitOtpCodeResponse =
+  | { bundle: string; mfaRequired: false }
+  | { mfaRequired: true; encryptedPayload: string; multiFactors: MfaFactor[] };

@@ -22,6 +22,7 @@ import type {
   EnableMfaResult,
   VerifyMfaParams,
   RemoveMfaParams,
+  SubmitOtpCodeResponse,
 } from "./types.js";
 import { MfaRequiredError, NotAuthenticatedError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -261,20 +262,38 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override async submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }> {
+  ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const targetPublicKey = await this.initIframeStamper();
-    const { credentialBundle } = await this.request("/v1/otp", {
+    const response = await this.request("/v1/otp", {
       ...args,
       targetPublicKey,
     });
 
-    if (!credentialBundle) {
-      throw new Error(
-        "Failed to submit OTP code. Check if multiFactor is required."
-      );
+    if (response.status === "SUCCESS" && response.credentialBundle) {
+      return {
+        mfaRequired: false,
+        bundle: response.credentialBundle,
+      };
     }
-    return { bundle: credentialBundle };
+
+    // If the server says "MFA_REQUIRED", pass that data back to the caller:
+    if (
+      response.status === "MFA_REQUIRED" &&
+      response.encryptedPayload &&
+      response.multiFactors
+    ) {
+      return {
+        mfaRequired: true,
+        encryptedPayload: response.encryptedPayload,
+        multiFactors: response.multiFactors,
+      };
+    }
+
+    // Otherwise, it's truly an error:
+    throw new Error(
+      "Failed to submit OTP code. Server did not return required fields."
+    );
   }
 
   /**
@@ -837,6 +856,37 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       multiFactorIds: params.multiFactorIds,
     });
   };
+
+  /**
+   * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
+   *
+   * @param {object} args The validation parameters
+   * @param {string} args.encryptedPayload The encrypted payload received during MFA challenge
+   * @param {Array<VerifyMfaParams>} args.multiFactors Array of MFA factors with their verification codes
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
+   * @throws {Error} If no credential bundle is returned from the server
+   */
+  public override async validateMultiFactors(args: {
+    encryptedPayload: string;
+    multiFactors: VerifyMfaParams[];
+  }): Promise<{ bundle: string }> {
+    // Send the encryptedPayload plus TOTP codes, etc:
+    const response = await this.request("/v1/auth-validate-multi-factors", {
+      encryptedPayload: args.encryptedPayload,
+      multiFactors: args.multiFactors,
+    });
+
+    // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
+    if (!response.payload || !response.payload.credentialBundle) {
+      throw new Error(
+        "No credentialBundle returned from /auth-validate-multi-factors"
+      );
+    }
+
+    return {
+      bundle: response.payload.credentialBundle,
+    };
+  }
 }
 
 /**

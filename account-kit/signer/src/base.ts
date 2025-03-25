@@ -31,6 +31,7 @@ import type {
   EnableMfaParams,
   EnableMfaResult,
   RemoveMfaParams,
+  ValidateMultiFactorsParams,
 } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
@@ -64,6 +65,7 @@ type AlchemySignerStore = {
   mfaStatus: {
     mfaRequired: boolean;
     mfaFactorId?: string;
+    encryptedPayload?: string;
   };
 };
 
@@ -951,15 +953,30 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       throw new Error(`MFA is required.`);
     }
 
-    const { bundle } = await this.inner.submitOtpCode({
+    const response = await this.inner.submitOtpCode({
       orgId,
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
       multiFactors: args.multiFactors,
     });
+
+    if (response.mfaRequired) {
+      this.handleMfaRequired(response.encryptedPayload, response.multiFactors);
+
+      return new Promise<User>((resolve) => {
+        const removeListener = this.sessionManager.on(
+          "connected",
+          (session) => {
+            resolve(session.user);
+            removeListener();
+          }
+        );
+      });
+    }
+
     const user = await this.inner.completeAuthWithBundle({
-      bundle,
+      bundle: response.bundle,
       orgId,
       connectedEventName: "connectedOtp",
       authenticatingType: "otp",
@@ -994,6 +1011,31 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
     return user;
   };
+
+  private handleMfaRequired(
+    encryptedPayload: string,
+    multiFactors: MfaFactor[]
+  ) {
+    // Store complete MFA context in the temporary session
+    const tempSession = this.sessionManager.getTemporarySession();
+    if (tempSession) {
+      this.sessionManager.setTemporarySession({
+        ...tempSession,
+        encryptedPayload,
+        mfaFactorId: multiFactors?.[0]?.multiFactorId,
+      });
+    }
+
+    // Keep minimal state in the store for UI updates
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_MFA_AUTH,
+      error: null,
+      mfaStatus: {
+        mfaRequired: true,
+        mfaFactorId: multiFactors?.[0]?.multiFactorId,
+      },
+    });
+  }
 
   private getExpirationSeconds = () =>
     Math.floor(this.sessionManager.expirationTimeMs / 1000);
@@ -1269,6 +1311,98 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       return this.inner.removeMfa(params);
     }
   );
+
+  /**
+   * Validates MFA factors that were required during authentication.
+   * This function should be called after MFA is required and the user has provided their MFA code.
+   * It completes the authentication process by validating the MFA factors and completing the auth bundle.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * // After MFA is required and user provides code
+   * const user = await signer.validateMultiFactors({
+   *   multiFactorCode: "123456", // 6-digit code from authenticator app
+   *   multiFactorId: "factor-id"
+   * });
+   * ```
+   *
+   * @param {ValidateMultiFactorsParams} params - Parameters for validating MFA factors
+   * @throws {Error} If there is no pending MFA context or if orgId is not found
+   * @returns {Promise<User>} A promise that resolves to the authenticated user
+   */
+  public async validateMultiFactors(
+    params: ValidateMultiFactorsParams
+  ): Promise<User> {
+    // Get MFA context from temporary session
+    const tempSession = this.sessionManager.getTemporarySession();
+    if (
+      !tempSession?.orgId ||
+      !tempSession.encryptedPayload ||
+      !tempSession.mfaFactorId
+    ) {
+      throw new Error(
+        "No pending MFA context found. Call submitOtpCode() first."
+      );
+    }
+
+    if (
+      params.multiFactorId &&
+      tempSession.mfaFactorId !== params.multiFactorId
+    ) {
+      throw new Error("MFA factor ID mismatch");
+    }
+
+    // Call the low-level client
+    const { bundle } = await this.inner.validateMultiFactors({
+      encryptedPayload: tempSession.encryptedPayload,
+      multiFactors: [
+        {
+          multiFactorId: tempSession.mfaFactorId,
+          multiFactorCode: params.multiFactorCode,
+        },
+      ],
+    });
+
+    // Complete the authentication
+    const user = await this.inner.completeAuthWithBundle({
+      bundle,
+      orgId: tempSession.orgId,
+      connectedEventName: "connectedOtp",
+      authenticatingType: "otp",
+    });
+
+    // Remove MFA data from temporary session
+    this.sessionManager.setTemporarySession({
+      ...tempSession,
+      isMfaRequired: false,
+      encryptedPayload: undefined,
+      mfaFactorId: undefined,
+    });
+
+    // Update UI state
+    this.store.setState({
+      mfaStatus: {
+        mfaRequired: false,
+        mfaFactorId: undefined,
+      },
+    });
+
+    return user;
+  }
+
   protected initConfig = async (): Promise<SignerConfig> => {
     this.config = this.fetchConfig();
     return this.config;
