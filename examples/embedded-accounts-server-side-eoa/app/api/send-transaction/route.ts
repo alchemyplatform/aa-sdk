@@ -20,21 +20,30 @@ const ALCHEMY_BASE_URL = "https://api.g.alchemy.com";
 export async function POST(request: Request) {
   const body: { orgId: string } = await request.json().catch((err) => {
     console.error(err);
-    return NextResponse.json("bad request", {
-      status: 400,
-    });
+    return NextResponse.json(
+      { error: "bad request" },
+      {
+        status: 400,
+      },
+    );
   });
   if (!body.orgId) {
-    return NextResponse.json("bad request", {
-      status: 400,
-    });
+    return NextResponse.json(
+      { error: "bad request" },
+      {
+        status: 400,
+      },
+    );
   }
 
   const user = getUser(body.orgId);
   if (!user) {
-    return NextResponse.json("user not found", {
-      status: 404,
-    });
+    return NextResponse.json(
+      { error: "user not found" },
+      {
+        status: 404,
+      },
+    );
   }
   const apiKey = getLatestApiKey(body.orgId);
 
@@ -123,9 +132,12 @@ export async function POST(request: Request) {
     );
   } catch (err) {
     console.error(err);
-    return NextResponse.json("error", {
-      status: 500,
-    });
+    return NextResponse.json(
+      { error: "error" },
+      {
+        status: 500,
+      },
+    );
   }
 }
 
