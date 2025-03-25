@@ -310,7 +310,9 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public stampGetOrganization = async (): Promise<TSignedRequest> => {
     if (!this.user) {
-      throw new Error("User must be authenticated to stamp a whoami request");
+      throw new Error(
+        "User must be authenticated to stamp a get organization request",
+      );
     }
 
     return await this.turnkeyClient.stampGetOrganization({
