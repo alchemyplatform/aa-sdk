@@ -12,9 +12,6 @@ const MIN_KEY_DURATION_REMAINING_MS = 3 * 24 * 60 * 60 * 1000 * 1000;
 const TURNKEY_BASE_URL = "https://api.turnkey.com";
 const ALCHEMY_BASE_URL = "https://api.g.alchemy.com";
 
-// Request body contains two stamps from the client:
-// - 1. whoamiStamp
-// - 2. getOrganizationStamp
 export async function POST(request: Request) {
   const body: {
     whoamiStamp: TSignedRequest;

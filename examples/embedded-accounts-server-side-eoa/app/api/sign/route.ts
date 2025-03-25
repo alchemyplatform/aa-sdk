@@ -4,6 +4,7 @@ import { getLatestApiKey, getUser } from "@/app/db";
 import { NextResponse } from "next/server";
 
 const TURNKEY_BASE_URL = "https://api.turnkey.com";
+const ALCHEMY_BASE_URL = "https://api.g.alchemy.com";
 
 export async function POST(request: Request) {
   const body: { orgId: string; payload: string } = await request
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
 
     // Then submit to Alchemy.
     const alchemyResp = await fetch(
-      "https://api.g.alchemy.com/signer/v1/sign-payload",
+      `${ALCHEMY_BASE_URL}/signer/v1/sign-payload`,
       {
         method: "POST",
         headers: {
