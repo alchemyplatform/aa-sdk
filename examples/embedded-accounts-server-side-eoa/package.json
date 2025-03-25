@@ -16,7 +16,6 @@
     "@tanstack/react-query": "^5.50.1",
     "@turnkey/api-key-stamper": "^0.4.4",
     "@turnkey/http": "^2.21.0",
-    "better-sqlite3": "^11.9.1",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
@@ -24,7 +23,6 @@
     "wagmi": "2.12.7"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
