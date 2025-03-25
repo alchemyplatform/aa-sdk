@@ -17,7 +17,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
           showCode && "hidden"
         )}
       >
-        <div className="flex flex-1 justify-center items-start lg:items-center ">
+        <div className="flex flex-1 justify-center items-start">
           <RenderContent />
         </div>
       </div>
