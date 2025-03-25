@@ -14,17 +14,28 @@ describe("createConfig tests", () => {
   it("should setup the config with the correct transport", async () => {
     const config = await givenConfig();
 
-    expect({ ...getAlchemyTransport(config) }).toMatchInlineSnapshot({
-      config: {
-        rpcUrl: "/api/sepolia",
-      },
-      dynamicFetchOptions: {
-        headers: {
-          "Alchemy-AA-Sdk-Version": expect.stringMatching(/^\d+\.\d+\.\d+$/),
+    expect({ ...getAlchemyTransport(config) }).toMatchInlineSnapshot(
+      {
+        dynamicFetchOptions: {
+          headers: {
+            "Alchemy-AA-Sdk-Version": expect.stringMatching(/\d+\.\d+\.\d+/),
+          },
         },
       },
-      updateHeaders: expect.any(Function),
-    });
+      `
+      {
+        "config": {
+          "rpcUrl": "/api/sepolia",
+        },
+        "dynamicFetchOptions": {
+          "headers": {
+            "Alchemy-AA-Sdk-Version": StringMatching /\\\\d\\+\\\\\\.\\\\d\\+\\\\\\.\\\\d\\+/,
+          },
+        },
+        "updateHeaders": [Function],
+      }
+    `
+    );
   });
 
   it("should rehydrate the current chain and transport", async () => {

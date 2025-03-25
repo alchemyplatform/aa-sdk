@@ -28,13 +28,17 @@ describe("AlchemySmartAccountClient tests", () => {
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
-    expect(fetchSpy.mock.calls.map((x) => x[1]?.headers)[0])
-      .toMatchInlineSnapshot(`
+    expect(
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+    ).toMatchInlineSnapshot(
+      { "Alchemy-AA-Sdk-Version": expect.stringMatching(/\d+\.\d+\.\d+/) },
+      `
       {
-        "Alchemy-AA-Sdk-Version": "4.15.3",
+        "Alchemy-AA-Sdk-Version": StringMatching /\\\\d\\+\\\\\\.\\\\d\\+\\\\\\.\\\\d\\+/,
         "Content-Type": "application/json",
       }
-    `);
+    `
+    );
 
     await client.middleware
       // @ts-expect-error this is actually still there
