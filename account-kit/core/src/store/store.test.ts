@@ -19,6 +19,11 @@ describe("createConfig tests", () => {
         "config": {
           "rpcUrl": "/api/sepolia",
         },
+        "dynamicFetchOptions": {
+          "headers": {
+            "Alchemy-AA-Sdk-Version": "4.17.0",
+          },
+        },
         "updateHeaders": [Function],
       }
     `);
