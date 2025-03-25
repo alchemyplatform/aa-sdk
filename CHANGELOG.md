@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.18.0-alpha.4](https://github.com/archit2407/aa-sdk/compare/v4.18.0-alpha.3...v4.18.0-alpha.4) (2025-03-24)
+
+### Bug Fixes
+
+- ensure session persistence on IOS ([#1457](https://github.com/archit2407/aa-sdk/issues/1457)) ([c2fc412](https://github.com/archit2407/aa-sdk/commit/c2fc412d0853b4ba72d7900977912ad78c71e46c)), closes [#1454](https://github.com/archit2407/aa-sdk/issues/1454)
+- pipe through expr seconds ([7528292](https://github.com/archit2407/aa-sdk/commit/7528292dd9aaab493df80107c2e037f53b26d425))
+
+### Features
+
+- add low-level deferred action support ([#1434](https://github.com/archit2407/aa-sdk/issues/1434)) ([c3616c3](https://github.com/archit2407/aa-sdk/commit/c3616c3ce3bf1a2277fcdb6ddb368f924c6c70aa))
+- update expo example project to build out native files ([#1475](https://github.com/archit2407/aa-sdk/issues/1475)) ([d9e22e1](https://github.com/archit2407/aa-sdk/commit/d9e22e193592588c9468c06f551b3ec7643900d5))
+- use resolve aliases to handle crypto package resolution ([#1476](https://github.com/archit2407/aa-sdk/issues/1476)) ([51b0ec2](https://github.com/archit2407/aa-sdk/commit/51b0ec28e32a5c666d414031f288bfc327748c4d))
+
+# [4.18.0-alpha.3](https://github.com/archit2407/aa-sdk/compare/v4.18.0-alpha.2...v4.18.0-alpha.3) (2025-03-21)
+
+**Note:** Version bump only for package root
+
+# [4.18.0-alpha.2](https://github.com/archit2407/aa-sdk/compare/v4.18.0-alpha.1...v4.18.0-alpha.2) (2025-03-21)
+
+**Note:** Version bump only for package root
+
+# [4.18.0-alpha.1](https://github.com/archit2407/aa-sdk/compare/v4.18.0-alpha.0...v4.18.0-alpha.1) (2025-03-21)
+
+**Note:** Version bump only for package root
+
+**Note:** Version bump only for package root
+
+**Note:** Version bump only for package root
+
+# [4.18.0-alpha.0](https://github.com/archit2407/aa-sdk/compare/v4.17.0...v4.18.0-alpha.0) (2025-03-21)
+
+### Bug Fixes
+
+- darkmode eoa wallet bg color ([#1451](https://github.com/archit2407/aa-sdk/issues/1451)) ([dedbc7e](https://github.com/archit2407/aa-sdk/commit/dedbc7e0028aefe9fb32f8df26cc9b054264e335))
+- **demo:** mobile dark mode styling ([#1463](https://github.com/archit2407/aa-sdk/issues/1463)) ([7e4bee9](https://github.com/archit2407/aa-sdk/commit/7e4bee9815896fb25ef514617c637c7d36f61b48))
+- send sdk version on signer ([#1472](https://github.com/archit2407/aa-sdk/issues/1472)) ([0f696d6](https://github.com/archit2407/aa-sdk/commit/0f696d64bbc092e9a249ebdffe6db2cce5c73fcc))
+
+### Features
+
+- add jwt as auth method ([808625a](https://github.com/archit2407/aa-sdk/commit/808625aadd51591e2215f35e2fcb82df061b485c))
+- add twitch integration ([#1443](https://github.com/archit2407/aa-sdk/issues/1443)) ([fcecf39](https://github.com/archit2407/aa-sdk/commit/fcecf3909f9b1ffd6d5294400d054c155e4efa78))
+- refactor code ([#1467](https://github.com/archit2407/aa-sdk/issues/1467)) ([a6f5477](https://github.com/archit2407/aa-sdk/commit/a6f54779320348569d3549b5fa981ececbc44aaf))
+- update RN bare example to use hooks ([#1449](https://github.com/archit2407/aa-sdk/issues/1449)) ([a56fd42](https://github.com/archit2407/aa-sdk/commit/a56fd423ae3cda6ecde5f56202ce307e1f30cf6a))
+- update the react native docs instructions for OTP and magic link auth ([#1468](https://github.com/archit2407/aa-sdk/issues/1468)) ([6a8a770](https://github.com/archit2407/aa-sdk/commit/6a8a7709ad24c0702de43fff16c05198a978dbef))
+
 # [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
 
 ### Bug Fixes

@@ -92,6 +92,7 @@ export class SessionManager {
     switch (existingSession.type) {
       case "email":
       case "oauth":
+      case "custom-jwt":
       case "otp": {
         const connectedEventName = (() => {
           switch (existingSession.type) {
@@ -101,6 +102,8 @@ export class SessionManager {
               return "connectedOauth";
             case "otp":
               return "connectedOtp";
+            case "custom-jwt":
+              return "connectedJwt";
           }
         })();
         const result = await this.client
@@ -203,7 +206,7 @@ export class SessionManager {
   private setSession = (
     session_:
       | Omit<
-          Extract<Session, { type: "email" | "oauth" | "otp" }>,
+          Extract<Session, { type: "email" | "oauth" | "otp" | "custom-jwt" }>,
           "expirationDateMs"
         >
       | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
@@ -276,6 +279,8 @@ export class SessionManager {
       },
       connectedOauth: (user, bundle) =>
         this.setSessionWithUserAndBundle({ type: "oauth", user, bundle }),
+      connectedJwt: (user, bundle) =>
+        this.setSessionWithUserAndBundle({ type: "custom-jwt", user, bundle }),
       connectedOtp: (user, bundle) => {
         this.setSessionWithUserAndBundle({ type: "otp", user, bundle });
       },
@@ -331,7 +336,7 @@ export class SessionManager {
     user,
     bundle,
   }: {
-    type: "email" | "oauth" | "otp";
+    type: "email" | "oauth" | "otp" | "custom-jwt";
     user: User;
     bundle: string;
   }) => {

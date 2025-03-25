@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.18.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0-alpha.3...v4.18.0-alpha.4) (2025-03-24)
+
+### Features
+
+- add low-level deferred action support ([#1434](https://github.com/alchemyplatform/aa-sdk/issues/1434)) ([c3616c3](https://github.com/alchemyplatform/aa-sdk/commit/c3616c3ce3bf1a2277fcdb6ddb368f924c6c70aa))
+
+# [4.18.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0-alpha.2...v4.18.0-alpha.3) (2025-03-21)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.18.0-alpha.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0-alpha.1...v4.18.0-alpha.2) (2025-03-21)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.18.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0-alpha.0...v4.18.0-alpha.1) (2025-03-21)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+**Note:** Version bump only for package @aa-sdk/core
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.18.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0-alpha.0) (2025-03-21)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 # [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
 
 ### Bug Fixes
