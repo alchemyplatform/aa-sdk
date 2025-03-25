@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+### Bug Fixes
+
+- personal_sign [#1427](https://github.com/alchemyplatform/aa-sdk/issues/1427) ([#1428](https://github.com/alchemyplatform/aa-sdk/issues/1428)) ([#1440](https://github.com/alchemyplatform/aa-sdk/issues/1440)) ([fc4b722](https://github.com/alchemyplatform/aa-sdk/commit/fc4b722e1e647d518385d3f68551926a2735774e))
+- support using ui config with tailwind v4 ([#1460](https://github.com/alchemyplatform/aa-sdk/issues/1460)) ([3b969f7](https://github.com/alchemyplatform/aa-sdk/commit/3b969f7285a71f9f0d2dc625a26b72dca7387bff))
+
+### Features
+
+- add initial txn policy docs ([#1456](https://github.com/alchemyplatform/aa-sdk/issues/1456)) ([71153db](https://github.com/alchemyplatform/aa-sdk/commit/71153dbeaddea27c463e5ed08f5d49ba13989438))
+- add RN hooks docs and guides ([#1437](https://github.com/alchemyplatform/aa-sdk/issues/1437)) ([b749c1a](https://github.com/alchemyplatform/aa-sdk/commit/b749c1a7e9a7978aa0327d408a9c7cc724b8cd0f))
+- impl java client for java-sdk ([#1442](https://github.com/alchemyplatform/aa-sdk/issues/1442)) ([04099cf](https://github.com/alchemyplatform/aa-sdk/commit/04099cf06ab144ba3fa30dd6a01a6fd8bb8af462))
+- pull email mode from server ([#1441](https://github.com/alchemyplatform/aa-sdk/issues/1441)) ([3034db4](https://github.com/alchemyplatform/aa-sdk/commit/3034db49aab29d1b9bbd8474056a1f9cdfc98ef7))
+- update expo example to remove use of `emailMode` in OTP auth ([#1459](https://github.com/alchemyplatform/aa-sdk/issues/1459)) ([ea1e5bf](https://github.com/alchemyplatform/aa-sdk/commit/ea1e5bfa8ab4471cc468959610a1acc26b100c9d))
+- update logo ([#1454](https://github.com/alchemyplatform/aa-sdk/issues/1454)) ([cddb1a7](https://github.com/alchemyplatform/aa-sdk/commit/cddb1a7112543581d5409311b07185458205176c))
+
 # [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
 
 ### Bug Fixes

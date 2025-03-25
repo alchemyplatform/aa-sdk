@@ -4,7 +4,7 @@ import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
-import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
+import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
@@ -27,6 +27,7 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
+import { VERSION } from "../version.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -382,6 +383,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const basePath = "/signer";
 
     const headers = new Headers();
+    headers.append("Alchemy-AA-Sdk-Version", VERSION);
     headers.append("Content-Type", "application/json");
     if (this.connectionConfig.apiKey) {
       headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);
@@ -540,6 +542,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       auth0Connection,
       scope: providedScope,
       claims: providedClaims,
+      otherParameters: providedOtherParameters,
       mode,
       redirectUrl,
       expirationSeconds,
@@ -562,23 +565,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new Error(`No auth provider found with id ${authProviderId}`);
     }
 
-    let scope: string;
-    let claims: string | undefined;
+    let scope: string | undefined = providedScope;
+    let claims: string | undefined = providedClaims;
+    let otherParameters: Record<string, string> | undefined =
+      providedOtherParameters;
 
-    if (providedScope) {
-      scope = addOpenIdIfAbsent(providedScope);
-      claims = providedClaims;
-    } else {
-      if (isCustomProvider) {
-        throw new Error("scope must be provided for a custom provider");
-      }
-      const scopeAndClaims = getDefaultScopeAndClaims(authProviderId);
-      if (!scopeAndClaims) {
-        throw new Error(
-          `Default scope not known for provider ${authProviderId}`
-        );
-      }
-      ({ scope, claims } = scopeAndClaims);
+    if (!isCustomProvider) {
+      const defaultCustomization =
+        getDefaultProviderCustomization(authProviderId);
+      scope ??= defaultCustomization?.scope;
+      claims ??= defaultCustomization?.claims;
+      otherParameters ??= defaultCustomization?.otherParameters;
+    }
+    if (!scope) {
+      throw new Error(`Default scope not known for provider ${authProviderId}`);
     }
     const { authEndpoint, clientId } = authProvider;
 
@@ -611,10 +611,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       prompt: "select_account",
       client_id: clientId,
       nonce,
-      // Fixes Facebook mobile login so that `window.opener` doesn't get nullified.
-      ...(mode === "popup" && authProvider.id === "facebook"
-        ? { sdk: "joey" }
-        : {}),
+      ...otherParameters,
     };
     if (claims) {
       params.claims = claims;

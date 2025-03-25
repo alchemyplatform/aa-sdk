@@ -5,8 +5,13 @@ import {createStaticNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Text} from 'react-native';
-import MagicLinkScreen from './screens/magic-link';
 import OTPAuthScreen from './screens/otp';
+import {API_KEY} from '@env';
+import {AlchemyAccountProvider, createConfig } from "@account-kit/react-native";
+import { QueryClient } from "@tanstack/react-query";
+import { sepolia } from '@account-kit/infra';
+import { alchemy } from '@account-kit/infra';
+import OAuthScreen from './screens/oauth';
 
 const linking = {
   enabled: 'auto' as const /* Automatically generate paths for all screens */,
@@ -14,16 +19,9 @@ const linking = {
 };
 
 const RootStack = createBottomTabNavigator({
-  initialRouteName: 'MagicLinkScreen',
+  initialRouteName: 'OTPAuthScreen',
   screens: {
-    MagicLinkScreen: {
-      screen: MagicLinkScreen,
-      linking: {path: 'magic-link'},
-      options: {
-        title: 'Magic Link',
-        tabBarIcon: () => <Text>🪄</Text>,
-      },
-    },
+    
     OTPAuthScreen: {
       screen: OTPAuthScreen,
       linking: {path: 'otp'},
@@ -32,14 +30,40 @@ const RootStack = createBottomTabNavigator({
         tabBarIcon: () => <Text>🔑</Text>,
       },
     },
+    OAuthScreen: {
+      screen: OAuthScreen,
+      linking: {path: 'oauth'},
+      options: {
+        title: 'OAuth',
+        tabBarIcon: () => <Text>🔐</Text>,  
+      },
+    },
   },
 });
 
+const queryClient = new QueryClient()
+
 export default function App() {
   const Navigation = createStaticNavigation(RootStack);
+
+  const alchemyConfig = createConfig({
+    chain: sepolia,
+		transport: alchemy({
+			apiKey: API_KEY!,
+		}),
+		signerConnection: {
+			apiKey: API_KEY!,
+		},
+		sessionConfig: {
+			expirationTimeMs: 1000 * 60 * 60 * 24 , // <-- Adjust the session expiration time as needed (currently 24 hours)
+		}
+  });
+
   return (
-    <SafeAreaProvider>
-      <Navigation linking={linking} />
-    </SafeAreaProvider>
+    <AlchemyAccountProvider config={alchemyConfig} queryClient={queryClient}>
+      <SafeAreaProvider>
+        <Navigation linking={linking} />
+      </SafeAreaProvider>
+    </AlchemyAccountProvider>
   );
 }

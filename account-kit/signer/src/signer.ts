@@ -35,6 +35,7 @@ export type AuthParams =
       type: "oauth";
       scope?: string;
       claims?: string;
+      otherParameters?: Record<string, string>;
     } & OauthProviderConfig &
       OauthRedirectConfig)
   | {
@@ -70,7 +71,12 @@ export type OauthRedirectConfig =
   | { mode: "redirect"; redirectUrl: string }
   | { mode: "popup"; redirectUrl?: never };
 
-export type KnownAuthProvider = "google" | "apple" | "facebook" | "auth0";
+export type KnownAuthProvider =
+  | "google"
+  | "apple"
+  | "facebook"
+  | "twitch"
+  | "auth0";
 
 export type OauthMode = "redirect" | "popup";
 

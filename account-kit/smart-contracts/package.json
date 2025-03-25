@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/smart-contracts",
-  "version": "4.16.0",
+  "version": "4.17.0",
   "description": "aa-sdk compatible interfaces for Alchemy Smart Accounts",
   "author": "Alchemy",
   "license": "MIT",
@@ -52,7 +52,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@account-kit/plugingen": "^4.16.0",
+    "@account-kit/plugingen": "^4.17.0",
     "change-case": "^5.1.2",
     "dedent": "^1.5.1",
     "dotenv": "^16.3.1",
@@ -74,8 +74,8 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
   "dependencies": {
-    "@aa-sdk/core": "^4.16.0",
-    "@account-kit/infra": "^4.16.0"
+    "@aa-sdk/core": "^4.17.0",
+    "@account-kit/infra": "^4.17.0"
   },
   "peerDependencies": {
     "viem": "^2.22.6"

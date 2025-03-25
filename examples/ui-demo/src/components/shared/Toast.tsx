@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { Root, Viewport, Close } from "@radix-ui/react-toast";
+import { Root, Close } from "@radix-ui/react-toast";
 import { XIcon } from "../icons/x";
 import { useToast } from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
@@ -55,7 +55,6 @@ export const Toast = () => {
           />
         </Close>
       </Root>
-      <Viewport className="fixed top-2 right-1/2 translate-x-1/2 z-50 outline-none" />
     </>
   );
 };
