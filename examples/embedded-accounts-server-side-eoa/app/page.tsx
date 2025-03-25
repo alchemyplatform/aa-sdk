@@ -73,22 +73,6 @@ export default function Home() {
           <p>Logged in as {user.email ?? "anon"}.</p>
           <p>{user.address}</p>
 
-          {/* <button
-            className="btn btn-primary mt-6"
-            onClick={async () => {
-              const whoamiStamp = await signer?.inner.stampWhoami();
-              const getOrganizationStamp =
-                await signer?.inner.stampGetOrganization();
-              console.log({ whoamiStamp, getOrganizationStamp });
-              const resp = await fetch("/api/get-api-key", {
-                method: "POST",
-                body: JSON.stringify({ whoamiStamp, getOrganizationStamp }),
-              });
-              console.log({ resp });
-            }}
-          >
-            Submit stamps & get whoami from server
-          </button> */}
           <button
             className="btn btn-primary mt-6 disabled:opacity-70"
             disabled={!createdApiKey}
@@ -104,6 +88,21 @@ export default function Home() {
             }}
           >
             Sign message
+          </button>
+          <button
+            className="btn btn-primary mt-6 disabled:opacity-70"
+            disabled={!createdApiKey}
+            onClick={async () => {
+              const resp = await fetch("/api/send-transaction", {
+                method: "POST",
+                body: JSON.stringify({ orgId: user.orgId }),
+              });
+              const respJson = await resp.json();
+              console.log(respJson);
+              window.alert(JSON.stringify(respJson, null, 2));
+            }}
+          >
+            Send transaction
           </button>
           <button className="btn btn-primary mt-6" onClick={() => logout()}>
             Log out
