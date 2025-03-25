@@ -172,7 +172,7 @@ export type SignerEndpoints = [
     Route: "/v1/signer-config";
     Body: {};
     Response: SignerConfig;
-  }
+  },
 ];
 
 export type AuthenticatingEventMetadata = {
