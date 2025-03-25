@@ -65,7 +65,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     this.connectionConfig = ConnectionConfigSchema.parse(connection);
     this.turnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper
+      stamper,
     );
   }
 
@@ -128,11 +128,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   // #region ABSTRACT METHODS
 
   public abstract createAccount(
-    params: CreateAccountParams
+    params: CreateAccountParams,
   ): Promise<SignupResponse>;
 
   public abstract initEmailAuth(
-    params: Omit<EmailAuthParams, "targetPublicKey">
+    params: Omit<EmailAuthParams, "targetPublicKey">,
   ): Promise<{ orgId: string; otpId?: string }>;
 
   public abstract completeAuthWithBundle(params: {
@@ -144,15 +144,15 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   }): Promise<User>;
 
   public abstract oauthWithRedirect(
-    args: Extract<OauthParams, { mode: "redirect" }>
+    args: Extract<OauthParams, { mode: "redirect" }>,
   ): Promise<User | never>;
 
   public abstract oauthWithPopup(
-    args: Extract<OauthParams, { mode: "popup" }>
+    args: Extract<OauthParams, { mode: "popup" }>,
   ): Promise<User>;
 
   public abstract submitOtpCode(
-    args: Omit<OtpParams, "targetPublicKey">
+    args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<{ bundle: string }>;
 
   public abstract disconnect(): Promise<void>;
@@ -167,7 +167,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   protected abstract getWebAuthnAttestation(
     options: CredentialCreationOptions,
-    userDetails?: { username: string }
+    userDetails?: { username: string },
   ): Promise<GetWebAuthnAttestationResult>;
 
   // #endregion
@@ -183,7 +183,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public on = <E extends AlchemySignerClientEvent>(
     event: E,
-    listener: AlchemySignerClientEvents[E]
+    listener: AlchemySignerClientEvents[E],
   ) => {
     this.eventEmitter.on(event, listener as any);
 
@@ -202,7 +202,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new NotAuthenticatedError();
     }
     const { attestation, challenge } = await this.getWebAuthnAttestation(
-      options
+      options,
     );
 
     const { activity } = await this.turnkeyClient.createAuthenticators({
@@ -224,7 +224,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const { authenticatorIds } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "createAuthenticatorsResult"
+      "createAuthenticatorsResult",
     );
 
     return authenticatorIds;
@@ -240,7 +240,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public whoami = async (
     orgId = this.user?.orgId,
-    idToken?: string
+    idToken?: string,
   ): Promise<User> => {
     if (this.user) {
       return this.user;
@@ -304,19 +304,19 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
-   * Retrieves the organization information for the current user.
+   * Generates a stamped getOrganization request for the current user.
    *
-   * @returns {Promise<unknown>} A promise that resolves to the organization data object
-   * @throws {Error} if there is no authenticated user
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "getOrganization" information for the logged in user
+   * @throws {Error} if no user is authenticated
    */
-  public getOrganization = async () => {
+  public stampGetOrganization = async (): Promise<TSignedRequest> => {
     if (!this.user) {
-      throw new Error("User must be authenticated to get organization");
+      throw new Error("User must be authenticated to stamp a whoami request");
     }
-    const resp = await this.turnkeyClient.getOrganization({
+
+    return await this.turnkeyClient.stampGetOrganization({
       organizationId: this.user.orgId,
     });
-    return resp.organizationData;
   };
 
   /**
@@ -325,13 +325,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @param {object} [params] parameters for creating the api key
    * @param {string} [params.name] name of the api key
    * @param {string} [params.publicKey] public key to be used for the api key
-   * @param {number} [params.expriationSec] number of seconds until the api key expires
-   * @throws {Error} if there is no authenticated user
+   * @param {number} [params.expirationSec] number of seconds until the api key expires
+   * @throws {Error} if there is no authenticated user or the api key creation fails
    */
   public createApiKey = async (params: {
     name: string;
     publicKey: string;
-    expriationSec: number;
+    expirationSec: number;
   }): Promise<void> => {
     if (!this.user) {
       throw new Error("User must be authenticated to create api key");
@@ -345,7 +345,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
           {
             apiKeyName: params.name,
             publicKey: params.publicKey,
-            expirationSeconds: params.expriationSec.toString(),
+            expirationSeconds: params.expirationSec.toString(),
           },
         ],
         userId: this.user.userId,
@@ -431,7 +431,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public signRawMessage = async (
     msg: Hex,
-    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM",
   ): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
@@ -484,7 +484,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public request = async <R extends SignerRoutes>(
     route: R,
-    body: SignerBody<R>
+    body: SignerBody<R>,
   ): Promise<SignerResponse<R>> => {
     const url = this.connectionConfig.rpcUrl ?? "https://api.g.alchemy.com";
 
@@ -531,17 +531,17 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
         this.turnkeyClient.getWalletAccounts({
           organizationId: this.user!.orgId,
           walletId,
-        })
-      )
+        }),
+      ),
     ).then((x) => x.flatMap((x) => x.accounts));
 
     const walletAccount = walletAccounts.find(
-      (x) => x.address === this.user!.address
+      (x) => x.address === this.user!.address,
     );
 
     if (!walletAccount) {
       throw new Error(
-        `Could not find wallet associated with ${this.user.address}`
+        `Could not find wallet associated with ${this.user.address}`,
       );
     }
 
@@ -558,7 +558,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const { exportBundle } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "exportWalletResult"
+      "exportWalletResult",
     );
 
     const result = await stamper.injectWalletExportBundle(exportBundle);
@@ -588,7 +588,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const { exportBundle } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "exportWalletAccountResult"
+      "exportWalletAccountResult",
     );
 
     const result = await stamper.injectKeyExportBundle(exportBundle);
@@ -634,7 +634,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @returns {Promise<string>} returns the Oauth provider's url
    */
   protected getOauthProviderUrl = async (
-    args: GetOauthProviderUrlArgs
+    args: GetOauthProviderUrlArgs,
   ): Promise<string> => {
     const {
       oauthParams,
@@ -666,7 +666,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const authProvider = authProviders.find(
       (provider) =>
         provider.id === authProviderId &&
-        !!provider.isCustomProvider === !!isCustomProvider
+        !!provider.isCustomProvider === !!isCustomProvider,
     );
 
     if (!authProvider) {
@@ -706,7 +706,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       openerOrigin: mode === "popup" ? window.location.origin : undefined,
     };
     const state = base64UrlEncode(
-      new TextEncoder().encode(JSON.stringify(stateObject))
+      new TextEncoder().encode(JSON.stringify(stateObject)),
     );
     const authUrl = new URL(authEndpoint);
     const params: Record<string, string> = {
@@ -738,7 +738,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   private getOauthConfigForMode = async (
-    mode: OauthMode
+    mode: OauthMode,
   ): Promise<OauthConfig> => {
     if (this.oauthConfig) {
       return this.oauthConfig;
@@ -746,7 +746,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       return this.initOauth();
     } else {
       throw new Error(
-        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"
+        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login",
       );
     }
   };
@@ -755,13 +755,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   protected pollActivityCompletion = async <
     T extends keyof Awaited<
       ReturnType<(typeof this.turnkeyClient)["getActivity"]>
-    >["activity"]["result"]
+    >["activity"]["result"],
   >(
     activity: Awaited<
       ReturnType<(typeof this.turnkeyClient)["getActivity"]>
     >["activity"],
     organizationId: string,
-    resultKey: T
+    resultKey: T,
   ): Promise<
     NonNullable<
       Awaited<
@@ -790,7 +790,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       status === "ACTIVITY_STATUS_CONSENSUS_NEEDED"
     ) {
       throw new Error(
-        `Failed to get activity with with id ${id} (status: ${status})`
+        `Failed to get activity with with id ${id} (status: ${status})`,
       );
     }
 
