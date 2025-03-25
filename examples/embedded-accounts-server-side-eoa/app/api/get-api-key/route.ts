@@ -7,7 +7,7 @@ import { TurnkeyApiTypes, TSignedRequest } from "@turnkey/http";
  * Existing API keys will be reused if they have at least this much
  * time until expiration. If not, a new key will be created.
  */
-const MIN_KEY_DURATION_REMAINING_MS = 3 * 24 * 60 * 60 * 1000 * 1000;
+const MIN_KEY_DURATION_REMAINING_MS = 1000 * 60 * 60 * 24 * 7; // 1 week
 
 const TURNKEY_BASE_URL = "https://api.turnkey.com";
 const ALCHEMY_BASE_URL = "https://api.g.alchemy.com";
@@ -18,7 +18,10 @@ export async function POST(request: Request) {
     getOrganizationStamp: TSignedRequest;
   } = await request.json().catch((err) => {
     console.error(err);
-    return NextResponse.json({ json: "bad request" }, { status: 400 });
+    return NextResponse.json(
+      { json: { error: "bad request" } },
+      { status: 400 },
+    );
   });
 
   try {
@@ -111,7 +114,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ publicKey, isNewKey: true }, { status: 200 });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ json: "error" }, { status: 500 });
+    return NextResponse.json({ json: { error: "error" } }, { status: 500 });
   }
 }
 
