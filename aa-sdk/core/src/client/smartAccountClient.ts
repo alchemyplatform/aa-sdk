@@ -55,6 +55,14 @@ export type SmartAccountClientConfig<
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountClientOptsSchema>;
+    /**
+     * A function that adds a breadcrumb to the current context
+     * Note, most implementations will override the client with the default alchemy transport and this
+     * leads to the fact that a transport could be overwritten and not known until later.
+     *
+     * @param crumb A crumb, or span is telling that we are in a next step part of a multi step action
+     * @returns
+     */
     addBreadCrumb?: <T>(crumb: string) => T;
   } & ClientMiddlewareConfig<context>
 >;
