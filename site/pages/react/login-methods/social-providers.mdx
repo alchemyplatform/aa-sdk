@@ -171,32 +171,42 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // Option 1: Generic Auth0 login (shows Auth0 provider selection screen)
-const handleAuth0Login = async () => {
-  try {
-    await authenticate({
+const handleAuth0Login = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "auth0",
       mode: "popup", // or "redirect"
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 
 // Option 2: Direct provider login (bypasses Auth0 selection screen)
-const handleGitHubLogin = async () => {
-  try {
-    await authenticate({
+const handleGitHubLogin = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "auth0",
       auth0Connection: "github", // Use the connection name from Auth0
       mode: "popup", // or "redirect"
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
