@@ -14,6 +14,7 @@ import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
+  CreateApiKeyParams,
   EmailAuthParams,
   experimental_CreateApiKeyParams,
   GetOauthProviderUrlArgs,
@@ -322,19 +323,15 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
-   * Creates an api key that can take any action on behalf of the current user.
+   * Creates an API key that can take any action on behalf of the current user.
    *
-   * @param {object} [params] parameters for creating the api key
-   * @param {string} [params.name] name of the api key
-   * @param {string} [params.publicKey] public key to be used for the api key
-   * @param {number} [params.expirationSec] number of seconds until the api key expires
-   * @throws {Error} if there is no authenticated user or the api key creation fails
+   * @param {CreateApiKeyParams} params Parameters for creating the API key.
+   * @param {string} params.name Name of the API key.
+   * @param {string} params.publicKey Public key to be used for the API key.
+   * @param {number} params.expirationSec Number of seconds until the API key expires.
+   * @throws {Error} If there is no authenticated user or the API key creation fails.
    */
-  public createApiKey = async (params: {
-    name: string;
-    publicKey: string;
-    expirationSec: number;
-  }): Promise<void> => {
+  public createApiKey = async (params: CreateApiKeyParams): Promise<void> => {
     if (!this.user) {
       throw new Error("User must be authenticated to create api key");
     }

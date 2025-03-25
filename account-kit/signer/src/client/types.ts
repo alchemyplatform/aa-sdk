@@ -216,7 +216,7 @@ export type GetOauthProviderUrlArgs = {
   usesRelativeUrl?: boolean;
 };
 
-export type experimental_CreateApiKeyParams = {
+export type CreateApiKeyParams = {
   name: string;
   publicKey: string;
   expirationSec: number;
