@@ -172,7 +172,7 @@ export type SignerEndpoints = [
     Route: "/v1/signer-config";
     Body: {};
     Response: SignerConfig;
-  },
+  }
 ];
 
 export type AuthenticatingEventMetadata = {
@@ -216,7 +216,7 @@ export type GetOauthProviderUrlArgs = {
   usesRelativeUrl?: boolean;
 };
 
-export type CreateApiKeyParams = {
+export type experimental_CreateApiKeyParams = {
   name: string;
   publicKey: string;
   expirationSec: number;
