@@ -172,7 +172,6 @@ export function createAlchemySmartAccountClient(
       : undefined,
     signUserOperation: config.signUserOperation,
     addBreadCrumb(breadcrumb: string) {
-      debugger;
       const oldConfig = config.transport.config;
       const dynamicFetchOptions = config.transport.dynamicFetchOptions;
       const newTransport = alchemy({ ...oldConfig });
@@ -185,11 +184,6 @@ export function createAlchemySmartAccountClient(
         ...config,
         transport: newTransport,
       }) as any;
-      // debugger;
-      // return {
-      //   ...this,
-      //   transport: this.transport.withBreadcrumb(breadcrumb),
-      // };
     },
   }).extend(alchemyActions);
 

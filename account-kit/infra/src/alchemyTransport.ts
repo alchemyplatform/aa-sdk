@@ -4,7 +4,6 @@ import {
   split,
   type ConnectionConfig,
   type NoUndefined,
-  headersUpdate,
 } from "@aa-sdk/core";
 import {
   createTransport,
@@ -66,8 +65,6 @@ type AlchemyTransportBase = Transport<
 
 export type AlchemyTransport = AlchemyTransportBase & {
   updateHeaders(newHeaders: HeadersInit): void;
-  withHeaders(newHeaders: HeadersInit): AlchemyTransport;
-  withBreadcrumb(breadcrumb: string): AlchemyTransport;
   config: AlchemyTransportConfig;
   dynamicFetchOptions: AlchemyTransportConfig["fetchOptions"];
 };
@@ -209,17 +206,6 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         ...fetchOptions.headers,
         ...newHeaders,
       };
-    },
-    withHeaders(newHeaders: HeadersInit) {
-      const newTransport = alchemy({ ...config });
-      newTransport.updateHeaders(newHeaders);
-      return newTransport;
-    },
-    withBreadcrumb(breadcrumb: string) {
-      const newHeaders = headersUpdate(breadcrumb)({
-        ...convertHeadersToObject(fetchOptions.headers),
-      });
-      return this.withHeaders(newHeaders);
     },
     config,
   });

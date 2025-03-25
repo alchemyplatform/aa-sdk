@@ -5,17 +5,9 @@ export const ADD_BREADCRUMB = Symbol("addBreadcrumb");
 export const TRACKER_HEADER = "X-Alchemy-Trace-Id";
 export const TRACKER_BREADCRUMB = "X-Alchemy-Trace-Breadcrumb";
 
-function safeJsonParse(x: string): unknown {
-  try {
-    return JSON.parse(x);
-  } catch (e) {
-    return undefined;
-  }
-}
 function addCrumb(previous: string | undefined, crumb: string): string {
-  const previousCrumbs_ = previous && safeJsonParse(previous);
-  const previousCrumbs = Array.isArray(previousCrumbs_) ? previousCrumbs_ : [];
-  return JSON.stringify([...previousCrumbs, crumb]);
+  if (!previous) return crumb;
+  return `${previous} > ${crumb}`;
 }
 
 function hasAddBreadcrumb<A extends {}>(
@@ -25,7 +17,6 @@ function hasAddBreadcrumb<A extends {}>(
 }
 
 export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
-  debugger;
   if (hasAddBreadcrumb(client)) {
     return client[ADD_BREADCRUMB](crumb);
   }
@@ -38,7 +29,7 @@ export function headersUpdate(crumb: string) {
       TraceHeader.fromTraceHeader(x) || TraceHeader.default()
     ).withEvent(crumb);
     return {
-      [TRACKER_HEADER]: Math.random().toString(36).substring(10),
+      [TRACKER_HEADER]: traceHeader.traceId,
       ...x,
       [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
       ...traceHeader.toTraceHeader(),

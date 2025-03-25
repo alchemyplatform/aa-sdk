@@ -87,7 +87,6 @@ export const alchemyActions: <
     return simulateUserOperationChanges(client, args);
   },
   async sendUserOperation(args) {
-    debugger;
     const client = clientHeaderTrack(client_, "infraSendUserOperation");
     const { account = client.account } = args;
 
