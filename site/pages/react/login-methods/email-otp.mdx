@@ -102,17 +102,22 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits their email
-const handleSendCode = async (email: string) => {
-  try {
-    await authenticate({
+const handleSendCode = (email: string) => {
+  authenticate(
+    {
       type: "email",
       emailMode: "otp",
       email,
-    });
-    // Success - now show the OTP input form
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - now show the OTP input form
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -127,16 +132,21 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits the OTP code
-const handleVerifyCode = async (otpCode: string) => {
-  try {
-    await authenticate({
+const handleVerifyCode = (otpCode: string) => {
+  authenticate(
+    {
       type: "otp",
       otpCode,
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle invalid code error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle invalid code error
+      },
+    }
+  );
 };
 ```
 

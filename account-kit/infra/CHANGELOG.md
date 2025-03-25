@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Features
+
+- **openloot:** add openloot to aa-sdk ([#1481](https://github.com/alchemyplatform/aa-sdk/issues/1481)) ([737d7d7](https://github.com/alchemyplatform/aa-sdk/commit/737d7d79571e6552ee40168b09ef3255d143d361))
+
 # [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
 
 **Note:** Version bump only for package @account-kit/infra
