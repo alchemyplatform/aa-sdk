@@ -323,8 +323,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
               return this.authenticateWithEmailNew(params);
             case "otp":
               return this.authenticateWithOtpNew(params);
+            case "passkey":
+            case "oauth":
+            case "oauthReturn":
+              throw new Error(`Unsupported auth step type: ${type}`);
             default:
-              throw new Error("type not implemented");
+              assertNever(type, `Unknown auth step type: ${type}`);
           }
         })();
 
@@ -875,10 +879,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       };
     }
 
-    if (!("email" in params)) {
-      throw new Error("Email is required");
-    }
-
     const { orgId, otpId, multiFactors, isNewUser } =
       await this.initOrCreateEmailUser(
         params.email,
@@ -930,7 +930,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         params.redirectParams
       );
 
-    const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
+    const isMfaRequired = multiFactors ? multiFactors.length > 0 : false;
 
     this.sessionManager.setTemporarySession({
       orgId,
