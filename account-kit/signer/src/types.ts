@@ -36,3 +36,8 @@ export interface ErrorInfo {
   name: string;
   message: string;
 }
+
+export type ValidateMultiFactorsArgs = {
+  multiFactorId?: string;
+  multiFactorCode: string;
+};

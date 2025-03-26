@@ -23,6 +23,7 @@ import type {
   VerifyMfaParams,
   RemoveMfaParams,
   SubmitOtpCodeResponse,
+  ValidateMultiFactorsParams,
 } from "./types.js";
 import { MfaRequiredError, NotAuthenticatedError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -860,20 +861,17 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   /**
    * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
    *
-   * @param {object} args The validation parameters
-   * @param {string} args.encryptedPayload The encrypted payload received during MFA challenge
-   * @param {Array<VerifyMfaParams>} args.multiFactors Array of MFA factors with their verification codes
+   * @param {ValidateMultiFactorsParams} params The validation parameters
    * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
    * @throws {Error} If no credential bundle is returned from the server
    */
-  public override async validateMultiFactors(args: {
-    encryptedPayload: string;
-    multiFactors: VerifyMfaParams[];
-  }): Promise<{ bundle: string }> {
+  public override async validateMultiFactors(
+    params: ValidateMultiFactorsParams
+  ): Promise<{ bundle: string }> {
     // Send the encryptedPayload plus TOTP codes, etc:
     const response = await this.request("/v1/auth-validate-multi-factors", {
-      encryptedPayload: args.encryptedPayload,
-      multiFactors: args.multiFactors,
+      encryptedPayload: params.encryptedPayload,
+      multiFactors: params.multiFactors,
     });
 
     // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`

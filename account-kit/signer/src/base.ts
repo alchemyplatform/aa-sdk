@@ -31,7 +31,6 @@ import type {
   EnableMfaParams,
   EnableMfaResult,
   RemoveMfaParams,
-  ValidateMultiFactorsParams,
 } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
@@ -47,6 +46,7 @@ import {
   type AlchemySignerEvent,
   type AlchemySignerEvents,
   type ErrorInfo,
+  type ValidateMultiFactorsArgs,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
 
@@ -1339,12 +1339,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * });
    * ```
    *
-   * @param {ValidateMultiFactorsParams} params - Parameters for validating MFA factors
+   * @param {ValidateMultiFactorsArgs} params - Parameters for validating MFA factors
    * @throws {Error} If there is no pending MFA context or if orgId is not found
    * @returns {Promise<User>} A promise that resolves to the authenticated user
    */
   public async validateMultiFactors(
-    params: ValidateMultiFactorsParams
+    params: ValidateMultiFactorsArgs
   ): Promise<User> {
     // Get MFA context from temporary session
     const tempSession = this.sessionManager.getTemporarySession();
