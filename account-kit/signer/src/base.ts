@@ -287,6 +287,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return this.handleOauthReturn(params);
           case "otp":
             return this.authenticateWithOtp(params);
+          case "mfa":
+            throw new Error(
+              `Unsupported auth step type: ${type}, please use the authenticateStep method.`
+            );
           default:
             assertNever(type, `Unknown auth type: ${type}`);
         }
@@ -323,10 +327,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
               return this.authenticateWithEmailNew(params);
             case "otp":
               return this.authenticateWithOtpNew(params);
+            case "mfa":
+              return this.validateMultiFactors(params);
             case "passkey":
             case "oauth":
             case "oauthReturn":
-              throw new Error(`Unsupported auth step type: ${type}`);
+              throw new Error(
+                `Unsupported auth step type: ${type}, please use the authenticate method.`
+              );
             default:
               assertNever(type, `Unknown auth step type: ${type}`);
           }
@@ -382,6 +390,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           name: "signer_authnticate",
           data: { authType: "otp" },
         });
+        break;
+      case "mfa":
         break;
       default:
         assertNever(type, `Unknown auth type: ${type}`);
@@ -1475,7 +1485,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   public async validateMultiFactors(
     params: ValidateMultiFactorsParams
-  ): Promise<User> {
+  ): Promise<AuthStepResult> {
     // Get MFA context from temporary session
     const tempSession = this.sessionManager.getTemporarySession();
     if (
@@ -1530,7 +1540,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       },
     });
 
-    return user;
+    return { user, status: AlchemySignerStatus.CONNECTED };
   }
 
   protected initConfig = async (): Promise<SignerConfig> => {

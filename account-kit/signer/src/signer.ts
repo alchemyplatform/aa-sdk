@@ -72,6 +72,12 @@ export type AuthParams =
       type: "otp";
       otpCode: string;
       multiFactors?: VerifyMfaParams[];
+    }
+  | {
+      type: "mfa";
+      mode: "totp";
+      multiFactorId: string;
+      multiFactorCode: string;
     };
 
 export type OauthProviderConfig =
