@@ -14,7 +14,6 @@ import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
-  experimental_CreateApiKeyParams,
   EmailAuthParams,
   experimental_CreateApiKeyParams,
   GetOauthProviderUrlArgs,
