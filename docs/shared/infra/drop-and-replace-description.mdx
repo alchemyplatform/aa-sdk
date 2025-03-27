@@ -18,7 +18,10 @@ We export a `dropAndReplace` function from `@aa-sdk/core` that you can use to ha
 
 Let's run through an example that uses drop and replace if waiting for a user operation to mine times out.
 
-:::warning
-If sponsoring gas, like in the example below, each call to `sendUserOperation` and `dropAndReplace` will generate pending gas sponsorships in your dashboard. This can result in you hitting your gas manager limit.
-At the moment, pending sponsorships expire after 10 minutes of inactivity, but it is possible that retrying excessively can temporarily exhaust your sponsorship limits.
-:::
+<Warning>
+  If sponsoring gas, like in the example below, each call to `sendUserOperation`
+  and `dropAndReplace` will generate pending gas sponsorships in your dashboard.
+  This can result in you hitting your gas manager limit. At the moment, pending
+  sponsorships expire after 10 minutes of inactivity, but it is possible that
+  retrying excessively can temporarily exhaust your sponsorship limits.
+</Warning>

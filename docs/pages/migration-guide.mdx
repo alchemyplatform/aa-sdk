@@ -25,12 +25,13 @@ All of the v3 packages have been renamed or removed. The new packages are as fol
 The `@alchemy/aa-signers` package has been deprecated. The signers in that package are still compatible with v4, but they will not be receiving future support and the interfaces are not guaranteed to work with future versions of the SDK.
 If you want to integrate a 3rd party signer, it's still very easy if the signer exposes an EIP-1193 interface. See [this guide](/third-party/signers).
 
-:::warning
+<Warning>
 We still support all Signers in the SDK!
 
 `@account-kit/core` and `@account-kit/react` are the only packages that are opinionated on which signer you can attach to a smart account. However, if you're using `@aa-sdk/*` or `@account-kit/infra` with `@account-kit/smart-contracts`, you can
 use the guide above to integrate with any signer of your choice.
-:::
+
+</Warning>
 
 ### Alchemy Transport
 

@@ -25,10 +25,12 @@ const client = createSmartAccountClient({
 You can see that we set the `transport` to `http("https://polygon-mumbai.g.alchemy.com/v2/demo")`. You can swap out that the url in the `http` function to
 any other provider's URL.
 
-:::warning
-Depending on your provider, you may have to pass in custom logic for the `gasEstimator` and `feeEstimator` properties when calling `createSmartAccountClient`. Consult
-with your provider on what the correct logic is.
-:::
+<Warning>
+  Depending on your provider, you may have to pass in custom logic for the
+  `gasEstimator` and `feeEstimator` properties when calling
+  `createSmartAccountClient`. Consult with your provider on what the correct
+  logic is.
+</Warning>
 
 ## Splitting Bundler traffic and Node RPC traffic
 

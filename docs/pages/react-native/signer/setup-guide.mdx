@@ -16,83 +16,87 @@ Setting up the React Native Signer is similar to setting up the [React Signer](/
 ## Dashboard Setup
 
 1.  Get your **API key** by creating a new app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
-    :::warning
-    Make sure **Ethereum** is enabled for your app under the Networks tab
-    :::
+
+    <Warning>
+      Make sure **Ethereum** is enabled for your app under the Networks tab
+    </Warning>
 
 2.  Create a **new account config** in your [Account Kit Dashboard](https://dashboard.alchemy.com/accounts)
 
-    <br />
-    a. Apply the config to your app from step 1
-    <img
-      src="/assets/images/getting-started/apply-config-to-app.png"
-      alt="apply your the config to the app from the first step"
-      style={{ width: "50%" }}
-    />
-    <br />
-    b. Enable authentication methods you want to support.
+        <br />
+        a. Apply the config to your app from step 1
+        <img
+          src="/assets/images/getting-started/apply-config-to-app.png"
+          alt="apply your the config to the app from the first step"
+          style={{ width: "50%" }}
+        />
+        <br />
+        b. Enable authentication methods you want to support.
 
-    <br />
-    <u>**Email auth (OTP)**</u>
-    <br />
-    If you're using OTP Auth, toggle on email fill in the required fields. For **Redirect
-    URL**, you can just pass in the URL of your website (it doesn't get used during
-    OTP flows).
-    <br />
+        <br />
+        <u>**Email auth (OTP)**</u>
+        <br />
+        If you're using OTP Auth, toggle on email fill in the required fields. For **Redirect
+        URL**, you can just pass in the URL of your website (it doesn't get used during
+        OTP flows).
+        <br />
 
-    <Tip>
-If you're only using OTP auth, you can skip to step 3!
-:::
+        <Tip>
 
-    <u>**Email auth (Magic Link)**</u>
+    If you're only using OTP auth, you can skip to step 3!
+    If you're only using OTP auth, you can skip to step 3!
 
-    - To use email auth in your React Native app, your app needs to be set
-      up to handle deep links that can be served via http or https.
+        </Tip>
 
-    - In production
-      scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links)
-      on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app)
-      on iOS to gracefully handle deep links.
+            <u>**Email auth (Magic Link)**</u>
 
-    - For testing, simply setting up a simple
-      server on [http://localhost:3000](http://localhost:3000/) or any other server
-      you control which redirects an incoming request to your app scheme is the easiest
-      way to get started. a sample implementation of this can be found the [`example`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/react-native-expo-example/redirect-server/index.ts)
-      folder of the `React Native Signer` repo.
+            - To use email auth in your React Native app, your app needs to be set
+              up to handle deep links that can be served via http or https.
 
-    - The http or https url you set up
-      in the previous step would need to be added as the **Redirect URL** in the Account
-      Kit Dashboard.
+            - In production
+              scenarios, you would want to set up [Android App Links](https://developer.android.com/training/app-links)
+              on android or [Universal Links](https://developer.apple.com/documentation/xcode/supporting-universal-links-in-your-app)
+              on iOS to gracefully handle deep links.
 
-    - This is the url that the user will be redirected to if you use
-      the magic link email flow to log in your users.
+            - For testing, simply setting up a simple
+              server on [http://localhost:3000](http://localhost:3000/) or any other server
+              you control which redirects an incoming request to your app scheme is the easiest
+              way to get started. a sample implementation of this can be found the [`example`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/react-native-expo-example/redirect-server/index.ts)
+              folder of the `React Native Signer` repo.
 
-    - Optionally stylize ✨ the email
-      with your brand color and logo!
+            - The http or https url you set up
+              in the previous step would need to be added as the **Redirect URL** in the Account
+              Kit Dashboard.
 
-    <br />
-    <img
-      src="/assets/images/getting-started/email-auth-setup.png"
-      alt="configure email auth"
-      style={{ width: "50%" }}
-    />
-    <br />
+            - This is the url that the user will be redirected to if you use
+              the magic link email flow to log in your users.
 
-    <u>**Social auth**</u>
+            - Optionally stylize ✨ the email
+              with your brand color and logo!
 
-    If you want to enable social login, toggle which auth providers
-    you want to support.
+            <br />
+            <img
+              src="/assets/images/getting-started/email-auth-setup.png"
+              alt="configure email auth"
+              style={{ width: "50%" }}
+            />
+            <br />
 
-    - Make sure to add your app's deep link as a **whitelisted origin**. This is necessary to handle redirects from the signer after a user has been authenticated.
-    - Add the link that your dapp will be running on to the **whitelisted origin** list
-    - Optionally enter your own OAuth credentials or use our defaults
+            <u>**Social auth**</u>
 
-    <br />
-    <img
-      src="/assets/images/getting-started/social-auth-setup-mobile.png"
-      alt="configure social auth"
-      style={{ width: "50%" }}
-    />
+            If you want to enable social login, toggle which auth providers
+            you want to support.
+
+            - Make sure to add your app's deep link as a **whitelisted origin**. This is necessary to handle redirects from the signer after a user has been authenticated.
+            - Add the link that your dapp will be running on to the **whitelisted origin** list
+            - Optionally enter your own OAuth credentials or use our defaults
+
+            <br />
+            <img
+              src="/assets/images/getting-started/social-auth-setup-mobile.png"
+              alt="configure social auth"
+              style={{ width: "50%" }}
+            />
 
 3.  Create the config and copy the **API Key**
     <img
@@ -103,9 +107,10 @@ If you're only using OTP auth, you can skip to step 3!
 
 ## Ensure Deep Linking is properly configured
 
-</Tip>tip
-If you're using OTP Auth, skip this step! We recommend starting with OTP flows as they are easier to set up.
-:::
+<Tip>
+  If you're using OTP Auth, skip this step! We recommend starting with OTP flows
+  as they are easier to set up.
+</Tip>
 
 If you plan on using email maigc link auth or social auth, you'll need to ensure deep linking is properly configured in your app.
 

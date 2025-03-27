@@ -9,11 +9,12 @@ description: Getting started with the Modular Account with Multisig Plugin in Ac
 
 Initialize a Multisig Modular Account client and set the `n` accounts as signers.
 
-:::warning
+<Warning>
 It is recommended to use the `createMultisigAccountAlchemyClient` directly to create new accounts with multi-sig ownership, rather than extending the Modular Account client.
 
 If you have an existing Modular Account (which has multi-owner plugin by default), please see details [here](#TODO/smart-contracts/extending-smart-accounts/install-plugins#extend-modular-account-with-multisig) for installing the plugin before proceeding.
-:::
+
+</Warning>
 
 ```ts twoslash
 // [!include ~/shared/smart-contracts/multisig-client.ts]
