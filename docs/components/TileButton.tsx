@@ -1,31 +1,5 @@
 import { ReactNode } from "react";
 
-type TileButtonProps = {
-  icon: ReactNode;
-  title: string;
-  description: string;
-  href: string;
-  target?: string;
-};
-
-export const TileButton = ({
-  icon,
-  title,
-  description,
-  href,
-  target,
-}: TileButtonProps) => {
-  return (
-    <a href={href} target={target}>
-      <div className="flex flex-col gap-2 border border-gray-200 rounded-lg p-6 cursor-pointer">
-        {icon}
-        <div className="font-medium text-lg">{title}</div>
-        <div className="text-md">{description}</div>
-      </div>
-    </a>
-  );
-};
-
 type SmallTileProps = {
   icon: ReactNode;
   title: string;

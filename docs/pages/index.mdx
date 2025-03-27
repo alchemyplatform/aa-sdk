@@ -4,11 +4,10 @@ description: Account Kit is a vertically integrated stack for building apps that
 layout: docs
 ---
 
-import { SmallTileRow, TileButton } from "../components/TileButton";
-import { ClockForwardIcon } from "../components/icons/ClockForwardIcon";
+import { Card, CardGroup } from "@tremor/react";
+import { SmallTileRow } from "../components/TileButton";
 import { DotsIcon } from "../components/icons/DotsIcon";
 import { InfraIcon } from "../components/icons/InfraIcon";
-import { PointerIcon } from "../components/icons/PointerIcon";
 import { ReactNativeIcon } from "../components/icons/ReactNativeIcon";
 import { SignerIcon } from "../components/icons/SignerIcon";
 import { SmartContractIcon } from "../components/icons/SmartContractIcon";
@@ -28,21 +27,18 @@ Build, customize, and scale with embedded wallets powered by smart accounts.
 
 ## React
 
-<div className="flex flex-row gap-4">
-  <TileButton
-    icon={<ClockForwardIcon />}
-    title="Quickstart"
-    description="Start building in minutes with UI components and powerful React hooks."
-    href="/react/quickstart"
-  />
-  <TileButton
-    icon={<PointerIcon />}
+<CardGroup cols={2}>
+  <Card title="Quickstart" href="/react/quickstart" icon="forward">
+    Start building in minutes with UI components and powerful React hooks.
+  </Card>
+  <Card
     title="Try the Demo"
-    description="Customize React components, export your config, and start building."
     href="https://demo.alchemy.com/"
-    target="_blank"
-  />
-</div>
+    icon="bullseye-pointer"
+  >
+    Customize React components, export your config, and start building.
+  </Card>
+</CardGroup>
 
 ## Have an advanced use case?
 
