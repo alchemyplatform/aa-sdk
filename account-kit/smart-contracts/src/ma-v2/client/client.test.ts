@@ -63,6 +63,7 @@ import {
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { deferralActions } from "../actions/deferralActions.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -94,6 +95,62 @@ describe("MA v2 Tests", async () => {
     client.getBalance({
       address: target,
     });
+
+  it.only("Install validation builder", async () => {
+    const provider = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookConfig = {
+      address: zeroAddress,
+      entityId: 69,
+      hookType: HookType.VALIDATION,
+      hasPreHooks: true,
+      hasPostHooks: false,
+    };
+
+    const res = await new PermissionBuilder(provider)
+      .configure({
+        validationConfig: {
+          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+            provider.chain
+          ),
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: 1,
+          signer: await sessionKey.getAddress(),
+        }),
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: {
+            limit: "0x1234",
+          },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.NATIVE_TOKEN_TRANSFER,
+          data: {
+            allowance: "0x1234",
+          },
+        },
+      })
+      .compile_deferred({
+        deadline: 0,
+        uoValidationEntityId: 0,
+        uoValidationIsGlobal: true,
+      });
+    console.log("\n\n FIRST:", res.typedData);
+  });
 
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
@@ -477,32 +534,28 @@ describe("MA v2 Tests", async () => {
     const newSessionKeyEntityId = 2;
     const isGlobalValidation = true;
 
-    // Encode install data to defer
-    let encodedInstallData = await sessionKeyClient.encodeInstallValidation({
-      validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
-        entityId: newSessionKeyEntityId,
-        isGlobal: isGlobalValidation,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: newSessionKeyEntityId,
-        signer: await newSessionKey.getAddress(),
-      }),
-      hooks: [],
-    });
-
-    // Build the typed data we need for the deferred action (provider/client only used for account address & entrypoint)
-    const { typedData, nonceOverride } =
-      await provider.createDeferredActionTypedDataObject({
-        callData: encodedInstallData,
+    // Encode install data to defer and get the deferred action typed data
+    const { typedData, nonceOverride } = await new PermissionBuilder(provider)
+      .configure({
+        validationConfig: {
+          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+            provider.chain
+          ),
+          entityId: newSessionKeyEntityId,
+          isGlobal: isGlobalValidation,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        selectors: [],
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: newSessionKeyEntityId,
+          signer: await newSessionKey.getAddress(),
+        }),
+      })
+      .compile_deferred({
         deadline: 0,
-        entityId: newSessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
+        uoValidationEntityId: newSessionKeyEntityId, // UO signing session key
+        uoValidationIsGlobal: isGlobalValidation, // UO validation is global
       });
 
     // Sign the typed data using the first session key
