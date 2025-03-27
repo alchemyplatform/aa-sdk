@@ -98,10 +98,13 @@ export const alchemyConfig = () =>
         },
       ],
       ssr: true,
-      connectors: [
-        walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
-      ],
+      // connectors: [
+      //   walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
+      // ],
       storage: cookieStorage,
+      sessionConfig: {
+        "expirationTimeMs": 3600000,
+      },
       enablePopupOauth: true,
     },
     {
@@ -113,6 +116,14 @@ export const alchemyConfig = () =>
             { type: "passkey" },
             { type: "social", authProviderId: "google", mode: "popup" },
             { type: "social", authProviderId: "facebook", mode: "popup" },
+          ],
+          [
+            {
+                "type": "external_wallets",
+                "walletConnect": {
+                    "projectId": "b1325d6f7f389be8b69a4729574d9835"
+                }
+            }
           ],
         ],
         addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
@@ -126,3 +137,49 @@ export const alchemyConfig = () =>
       },
     }
   );
+
+
+
+//   {
+//     "ssr": true,
+//     "enablePopupOauth": true,
+//     "sessionConfig": {
+//         "expirationTimeMs": 3600000
+//     }
+// }
+
+// {
+//     "auth": {
+//         "sections": [
+//             [
+//                 {
+//                     "type": "email"
+//                 }
+//             ],
+//             [
+//                 {
+//                     "type": "passkey"
+//                 },
+//                 {
+//                     "type": "social",
+//                     "authProviderId": "google",
+//                     "mode": "popup"
+//                 },
+//                 {
+//                     "type": "social",
+//                     "authProviderId": "facebook",
+//                     "mode": "popup"
+//                 }
+//             ],
+//             [
+//                 {
+//                     "type": "external_wallets",
+//                     "walletConnect": {
+//                         "projectId": "b1325d6f7f389be8b69a4729574d9835"
+//                     }
+//                 }
+//             ]
+//         ],
+//         "addPasskeyOnSignup": true
+//     }
+// }
