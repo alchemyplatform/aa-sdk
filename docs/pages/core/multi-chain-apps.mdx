@@ -41,10 +41,13 @@ export const config = createConfig({
 
 Once your app is configured to use multiple chains, you can switch between them at any time using the [`setChain`](/reference/account-kit/core/functions/setChain) function.
 
-:::tip
-Changing the chain will trigger state changes in your app (eg. the `BundlerClient` returned from `getBundlerClient`, the `SmartAccountClient` returned from `getSmartAccountClient`, etc).
-This is why it's important to use the various `watch*` methods that subscribe to the state changes that impact them.
-:::
+<Tip>
+  Changing the chain will trigger state changes in your app (eg. the
+  `BundlerClient` returned from `getBundlerClient`, the `SmartAccountClient`
+  returned from `getSmartAccountClient`, etc). This is why it's important to use
+  the various `watch*` methods that subscribe to the state changes that impact
+  them.
+</Tip>
 
 <CodeBlocks>
 

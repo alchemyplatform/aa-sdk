@@ -3,8 +3,8 @@ title: Email Magic Link Authentication
 description: How to implement Email Magic Link authentication in your React app
 ---
 
-import ModalAuthExample from "../shared/modal-auth-example.mdx";
 import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
 
 # Email Magic Link Authentication
 
@@ -13,9 +13,11 @@ Email magic link authentication is a two-step process:
 1. The user enters their email address and requests a magic link
 2. The user clicks the link in their email, which redirects them back to your application to complete authentication
 
-:::tip
-Email OTP has been shown to have up to a 3x higher conversion rate and a 10-second faster flow compared to magic links. Consider using [Email OTP](/react/login-methods/email-otp) for better user experience.
-:::
+<Tip>
+  Email OTP has been shown to have up to a 3x higher conversion rate and a
+  10-second faster flow compared to magic links. Consider using [Email
+  OTP](/react/login-methods/email-otp) for better user experience.
+</Tip>
 
 You can implement Email Magic Link authentication in two ways:
 

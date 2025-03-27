@@ -49,11 +49,12 @@ const alchemyAccountClient = await createModularAccountAlchemyClient({
 });
 ```
 
-:::tip[Address calculation]
-For Modular Account, the address of the smart account will be calculated as a combination of [the owners and the salt](https://github.com/alchemyplatform/modular-account/blob/v1.0.x/src/factory/MultiOwnerModularAccountFactory.sol#L79-L82). You will get the same smart account address each time you supply the same `owners`, the signer(s) used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owners` param (the default salt is `0n`).
+<Tip title="Address calculation">
+  For Modular Account, the address of the smart account will be calculated as a combination of [the owners and the salt](https://github.com/alchemyplatform/modular-account/blob/v1.0.x/src/factory/MultiOwnerModularAccountFactory.sol#L79-L82). You will get the same smart account address each time you supply the same `owners`, the signer(s) used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owners` param (the default salt is `0n`).
 
 If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only for signing the operation.
-:::
+
+</Tip>
 
 ## With 3rd-party infra
 

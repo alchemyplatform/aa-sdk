@@ -12,10 +12,14 @@ Middleware allows you to avoid having to write the same flows over and over when
 
 ## Middleware order
 
-:::tip
-When using the [React](/react/overview), [Core](/core/overview), or [Infra](/infra/overview) packages, the Smart Account Clients are already configured to use the appropriate middleware for your needs.
-If you want to sponsor gas, the Smart Account Clients in these packages abstract the relevant middleware away from you since all you need is a `policyId` to sponsor gas with Alchemy.
-:::
+<Tip>
+  When using the [React](/react/overview), [Core](/core/overview), or
+  [Infra](/infra/overview) packages, the Smart Account Clients are already
+  configured to use the appropriate middleware for your needs. If you want to
+  sponsor gas, the Smart Account Clients in these packages abstract the relevant
+  middleware away from you since all you need is a `policyId` to sponsor gas
+  with Alchemy.
+</Tip>
 
 As mentioned above, the client can be configured with a series of middleware that always run in the same order:
 

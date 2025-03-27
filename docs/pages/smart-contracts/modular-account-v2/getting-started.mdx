@@ -32,11 +32,12 @@ npm install @account-kit/infra
 
 </CodeBlocks>
 
-:::tip[Address calculation]
+<Tip title="Address calculation">
 For Modular Account V2, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/modular-account/blob/v2.0.x/src/factory/AccountFactory.sol#L98-L104). You will get the same smart account address each time you supply the same `owner`, the signer(s) used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).
 
 If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only for signing the operation.
-:::
+
+</Tip>
 
 ## Creating a Modular Account V2 client
 
@@ -54,12 +55,12 @@ const accountClient = await createModularAccountV2Client({
 });
 ```
 
-:::tip[Choosing which mode to use]
+<Tip title="Choosing which mode to use">
 We currently offer two variants of Modular Account v2: `default` and `7702`.
 
 - (Recommended) `default` provides you with the cheapest, most flexible and advanced Smart Account
 - `7702` if you are looking for 7702 support, learn about how to set up and take adavantage of our EIP-7702 compliant account [here](/smart-contracts/modular-account-v2/using-7702)
-  :::
+  </Tip>
 
 Want to enable social login methods? Set up your [Alchemy Signer](/signer/quickstart).
 
