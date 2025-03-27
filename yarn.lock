@@ -12,6 +12,66 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@account-kit/react-native-signer@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react-native-signer/-/react-native-signer-4.17.0.tgz#1a9d0c085b5cabe7e19b1f4b996ac4de440ebadd"
+  integrity sha512-AsPWcRgVUZhIfkqiAStH+nFDHlOOLs6VSfPdEenW+sZUtUKjWrE8BPIlmy0fJqDkyNyiTJkCvRDJD2+M+camfw==
+  dependencies:
+    "@aa-sdk/core" "^4.17.0"
+    "@account-kit/signer" "^4.17.0"
+    viem "^2.21.40"
+
+"@account-kit/react-native@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react-native/-/react-native-4.17.0.tgz#28f66cd5a819afc6e66a12697afce04b701ab97d"
+  integrity sha512-Y1u6U6JePVTPA5QBwxgOv5B5nTEKc6s8mmWWtbPDI+F8sIotaf9umH43h8tWt0wvDlusn9mTh45iwZU96KPNRA==
+  dependencies:
+    "@account-kit/core" "^4.17.0"
+    "@account-kit/infra" "^4.17.0"
+    "@account-kit/react" "^4.17.0"
+    "@account-kit/react-native-signer" "^4.17.0"
+    "@account-kit/signer" "^4.17.0"
+    "@noble/hashes" "1.7.1"
+    crypto-browserify "^3.12.1"
+    node-libs-react-native "^1.2.1"
+    react-native-get-random-values "^1.11.0"
+    stream-browserify "^3.0.0"
+    zustand "^5.0.0-rc.2"
+
+"@account-kit/react@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react/-/react-4.17.0.tgz#7789504aec3d63899ad48ecd9d88e26d734bf22c"
+  integrity sha512-/OFpDHPz4H7XR3hH+Z5+5N4Z2gBSNPJ1oe+Q05Z63FU2T9sdRxr2W3yCfLwsbJ4N/gLS8ssKBBUMCVOSAP44Fg==
+  dependencies:
+    "@account-kit/core" "^4.17.0"
+    "@account-kit/infra" "^4.17.0"
+    "@account-kit/logging" "^4.17.0"
+    "@account-kit/signer" "^4.17.0"
+    "@tanstack/react-form" "^0.33.0"
+    "@tanstack/zod-form-adapter" "^0.33.0"
+    "@wagmi/connectors" "^5.1.15"
+    react-remove-scroll "^2.5.10"
+    tailwindcss "^3.4.3"
+    zod "^3.22.4"
+    zustand "^5.0.0-rc.2"
+  optionalDependencies:
+    alchemy-sdk "^3.0.0"
+
+"@account-kit/signer@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/signer/-/signer-4.17.0.tgz#fca992679b042a0a589dd9be4c431ae085d6cceb"
+  integrity sha512-kuJxGx/Fu4LLHRH2miEz5ycKlNFc7y8EEwRvE5OQ7e2cqRp/tOQYKKYDO4TvhcUZeRoFtwW39bmTVoKiihhBcg==
+  dependencies:
+    "@aa-sdk/core" "^4.17.0"
+    "@account-kit/logging" "^4.17.0"
+    "@solana/web3.js" "^1.98.0"
+    "@turnkey/http" "^2.6.2"
+    "@turnkey/iframe-stamper" "^1.0.0"
+    "@turnkey/viem" "^0.4.8"
+    "@turnkey/webauthn-stamper" "^0.4.3"
+    jwt-decode "^4.0.0"
+    zod "^3.22.4"
+
 "@adobe/css-tools@^4.4.0":
   version "4.4.0"
   resolved "https://registry.npmjs.org/@adobe/css-tools/-/css-tools-4.4.0.tgz"
