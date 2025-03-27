@@ -96,6 +96,62 @@ describe("MA v2 Tests", async () => {
       address: target,
     });
 
+  it.only("Install validation builder", async () => {
+    const provider = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const hookConfig = {
+      address: zeroAddress,
+      entityId: 69,
+      hookType: HookType.VALIDATION,
+      hasPreHooks: true,
+      hasPostHooks: false,
+    };
+
+    const res = await new PermissionBuilder(provider)
+      .configure({
+        validationConfig: {
+          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+            provider.chain
+          ),
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: 1,
+          signer: await sessionKey.getAddress(),
+        }),
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: {
+            limit: "0x1234",
+          },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.NATIVE_TOKEN_TRANSFER,
+          data: {
+            allowance: "0x1234",
+          },
+        },
+      })
+      .compile_deferred({
+        deadline: 0,
+        uoValidationEntityId: 0,
+        uoValidationIsGlobal: true,
+      });
+    console.log("\n\n FIRST:", res.typedData);
+  });
+
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
 
