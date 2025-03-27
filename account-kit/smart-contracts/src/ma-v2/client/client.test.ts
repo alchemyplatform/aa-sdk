@@ -1446,34 +1446,6 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  const givenConnectedProvider = async ({
-    signer,
-    signerEntity,
-    accountAddress,
-    paymasterMiddleware,
-  }: {
-    signer: SmartAccountSigner;
-    signerEntity?: SignerEntity;
-    accountAddress?: `0x${string}`;
-    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
-  }) =>
-    createModularAccountV2Client({
-      chain: instance.chain,
-      signer,
-      accountAddress,
-      signerEntity,
-      transport: custom(instance.getClient()),
-      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
-        ? alchemyGasAndPaymasterAndDataMiddleware({
-            policyId: "FAKE_POLICY_ID",
-            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
-          })
-        : paymasterMiddleware === "erc7677"
-        ? erc7677Middleware()
-        : {}),
-    });
-
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {
     const alchemyClientSpy = vi
       .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
@@ -1512,4 +1484,32 @@ describe("MA v2 Tests", async () => {
     expect(alchemyClientSpy).not.toHaveBeenCalled();
     expect(notAlchemyClientSpy).toHaveBeenCalled();
   });
+
+  const givenConnectedProvider = async ({
+    signer,
+    signerEntity,
+    accountAddress,
+    paymasterMiddleware,
+  }: {
+    signer: SmartAccountSigner;
+    signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+  }) =>
+    createModularAccountV2Client({
+      chain: instance.chain,
+      signer,
+      accountAddress,
+      signerEntity,
+      transport: custom(instance.getClient()),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
+    });
 });
