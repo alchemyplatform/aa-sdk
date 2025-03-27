@@ -12,7 +12,7 @@ import type { ModularAccountV2Client } from "./client/client.js";
 import {
   deferralActions,
   type DeferredActionReturnData,
-} from "./actions/DeferralActions.js";
+} from "./actions/deferralActions.js";
 import { NativeTokenLimitModule } from "./modules/native-token-limit-module/module.js";
 import {
   getDefaultAllowlistModuleAddress,
@@ -216,12 +216,6 @@ export class PermissionBuilder {
     return this;
   }
 
-  // Adds a hook, probably should be removed or only marked as low-level, these won't be consolidated
-  // addHook({ hookConfig, initData }: { hookConfig: HookConfig; initData: Hex }): this {
-  //   this.hooks.push({ hookConfig, initData });
-  //   return this;
-  // }
-
   addSelector({ selector }: { selector: Hex }): this {
     this.selectors.push(selector);
     return this;
@@ -237,16 +231,15 @@ export class PermissionBuilder {
       }
       // Set isGlobal to true
       this.validationConfig.isGlobal = true;
+      return this;
     }
 
-    // Check 2: If the permission is NOT ROOT, ensure there is no ROOT permission set
-    if (permission.type !== PermissionType.ROOT) {
-      // Will resolve to undefined if ROOT is not found
-      if (this.permissions.find((p) => p.type === PermissionType.ROOT)) {
-        throw new Error(
-          `PERMISSION: ${permission.type} => Cannot add permissions with ROOT enabled`
-        );
-      }
+    // Check 2: If the permission is NOT ROOT (guaranteed), ensure there is no ROOT permission set
+    // Will resolve to undefined if ROOT is not found
+    if (this.permissions.find((p) => p.type === PermissionType.ROOT)) {
+      throw new Error(
+        `PERMISSION: ${permission.type} => Cannot add permissions with ROOT enabled`
+      );
     }
 
     // Check 3: If the permission is either CONTRACT_ACCESS or FUNCTIONS_ON_CONTRACT, ensure it doesn't collide with another like it.
@@ -316,10 +309,6 @@ export class PermissionBuilder {
       this.addHooks(rawHooks);
     }
 
-    console.log("TRANSLATED PERMISSIONS:");
-
-    // 3. Consolidate hooks to not have repeated hooks
-    console.log("THIS HOOKS:", this.hooks);
     const installValidationCall = await this.compile_raw();
 
     return await deferralActions(
@@ -645,8 +634,3 @@ export function createPermissionBuilder(
 ): PermissionBuilder {
   return new PermissionBuilder(client);
 }
-
-/**
- * Illegal cases:
- * Contract access + functions on contract SAME contract
- */
