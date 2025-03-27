@@ -10,7 +10,8 @@ By default, `AlchemyWebSigner` user sessions are cached in `localStorage` for 15
 You can customize session length by passing a [`sessionConfig`](/reference/account-kit/signer/classes/AlchemyWebSigner/constructor) to your `AlchemyWebSigner` constructor.
 
 You can check if the user has an active session with the following command:
-:::code-group
+
+<CodeBlocks>
 
 ```ts twoslash [getAuthDetails.ts]
 import { signer } from "./signer";
@@ -24,6 +25,6 @@ const user = await signer.getAuthDetails().catch(() => null);
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>
 
 If there is an existing session, then your signer is ready for use! If not, see the section above for logging users in.

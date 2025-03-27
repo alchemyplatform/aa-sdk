@@ -40,7 +40,7 @@ Check out what you can build using our [Demo App](https://demo.alchemy.com/).
 
 For a simple end-to-end example, we will spin up a new NextJS app using our template.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
@@ -50,7 +50,7 @@ yarn create next-app account-kit-app -e https://github.com/avarobinson/account-k
 npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
-:::
+</CodeBlocks>
 
 ### 2. Get your Alchemy API Key
 
@@ -77,7 +77,7 @@ export const config = createConfig(
 
 That's it! Run the NextJS app to see your new auth flow in action ✨
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn dev
@@ -87,7 +87,7 @@ yarn dev
 npm run dev
 ```
 
-:::
+</CodeBlocks>
 
 ## Existing project
 
@@ -106,7 +106,7 @@ To integrate in to your existing dapp and better understand the above demo app, 
 
 Install the React and Infra packages from Account Kit along with [tailwind](https://tailwindcss.com/) for styling and react-query to support react components.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn add @account-kit/infra @account-kit/react @tanstack/react-query
@@ -118,7 +118,7 @@ npm install @account-kit/infra @account-kit/react @tanstack/react-query
 npm install -D tailwindcss postcss autoprefixer
 ```
 
-:::
+</CodeBlocks>
 
 **Tailwind Setup**
 
@@ -146,7 +146,7 @@ See the steps above in the NextJS section to get your API key.
 
 In this step, you'll customize your authentication methods and UI styles.
 
-The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to explore combinations. When you’re all done, click the ‘Code preview’ toggle to export your code! You’ll get two files:
+The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to explore combinations. When you're all done, click the 'Code preview' toggle to export your code! You'll get two files:
 
 1. `tailwind.config.ts`
 2. `config.ts`
@@ -162,7 +162,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 #### 3a. Customize styling with tailwind
 
 1. In the demo app, copy your `tailwind.config.ts` code into the file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
-   1. Logo: logo images are loaded client side for maximum performance, so you’ll need to add the image file to your project and specify the file path in the config where noted.
+   1. Logo: logo images are loaded client side for maximum performance, so you'll need to add the image file to your project and specify the file path in the config where noted.
    2. Light/Dark mode:
       1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: update your tailwindcss config to use `selector` mode for dark and then add the `dark` class to the root of your DOM
    3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6).

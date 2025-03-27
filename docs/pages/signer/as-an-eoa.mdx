@@ -13,7 +13,7 @@ Because the Alchemy Signer has its own `address` and supports signing messages a
 
 If you are using viem, then you can use the `toViemAccount` method which will allow you to use the signer with a [`WalletClient`](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
 
-:::code-group
+<CodeBlocks>
 
 ```ts [createWalletClient.ts] twoslash
 import { signer } from "./signer";
@@ -31,4 +31,4 @@ export const walletClient = createWalletClient({
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>

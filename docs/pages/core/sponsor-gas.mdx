@@ -44,7 +44,7 @@ Now you can follow the guide for [Sending user operations](/core/send-user-opera
 
 If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `watchSmartAccountClient` function.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSmartAccountClient } from "@account-kit/core";
@@ -76,6 +76,6 @@ const clientSubscription = watchSmartAccountClient(
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 This client is now configured to sponsor gas using your gas policy. You can now send sponsored UOs from this client using the `sendUserOperation` method.

@@ -9,7 +9,7 @@ Upgrading a `SmartContractAccount` can be done easily using Account Kit. It just
 
 Using the Light Account as an example, here is an overview of how the upgrade can be executed using a Smart Account Client:
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { lightAccountClient } from "./lightAccountClient";
@@ -41,11 +41,11 @@ export const lightAccountClient = await createLightAccountAlchemyClient({
 });
 ```
 
-:::
+</CodeBlocks>
 
 That is all! Now, you can create a smart account client to connect with the upgraded account as a Modular Account.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
@@ -91,4 +91,4 @@ export const lightAccountClient = await createLightAccountAlchemyClient({
 });
 ```
 
-:::
+</CodeBlocks>

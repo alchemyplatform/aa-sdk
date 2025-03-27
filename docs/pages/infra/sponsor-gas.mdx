@@ -26,7 +26,7 @@ Now you can create a Smart Account Client which is configured to sponsor gas.
 
 ### 3. Send a user operation with gas sponsorship
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { client } from "./client";
@@ -44,7 +44,7 @@ const { hash } = await client.sendUserOperation({
 // [!include ~/shared/infra/client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Sponsor Gas with 3rd-party paymaster
 
@@ -55,7 +55,7 @@ If you're using a 3rd party paymaster to sponsor gas, but our Bundler RPC endpoi
 Because the Smart Account Client exported from `@account-kit/infra` assumes you're using our infra for both gas sponsorship and bundler RPCs, you'll need to install `@aa-sdk/core`
 so you can create more configurable clients.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn add @aa-sdk/core
@@ -65,7 +65,7 @@ yarn add @aa-sdk/core
 npm i -s @aa-sdk/core
 ```
 
-:::
+</CodeBlocks>
 
 ### ERC-7677 compliant paymasters
 

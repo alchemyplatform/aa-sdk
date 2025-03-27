@@ -14,7 +14,7 @@ In the below example, we use `LightAccount` as the underlying Smart Contract typ
 or you can use `MultiOwnerLightAccount` if you want to support an account with multiple owners.
 :::
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSmartAccountClient } from "@account-kit/core";
@@ -57,13 +57,13 @@ await client.sendUserOperation({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Batch user operation
 
 It's also possible to send user operations in batch using the same approach!
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSmartAccountClient } from "@account-kit/core";
@@ -113,4 +113,4 @@ await client.sendUserOperation({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>

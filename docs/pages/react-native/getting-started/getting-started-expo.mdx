@@ -25,7 +25,7 @@ The first thing we need to do is make sure we're on the latest version of Expo (
 
 For more information on upgrading an Expo project, check out the [Expo documentation](https://docs.expo.dev/workflow/upgrading-expo-sdk-walkthrough/).
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npx]
 npx expo install expo@latest
@@ -35,7 +35,7 @@ npx expo install expo@latest
 yarn expo install expo@latest
 ```
 
-:::
+</CodeBlocks>
 
 :::info
 You can also use our [quickstart template](https://github.com/alchemyplatform/account-kit-expo-quickstart) to get started quickly.
@@ -59,7 +59,7 @@ Once we've got our Expo project setup and running, we need to setup a few shims 
 
 ### Install shim dependencies
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npm]
 npm install --save node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
@@ -69,7 +69,7 @@ npm install --save node-libs-react-native crypto-browserify stream-browserify re
 yarn add node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
-:::
+</CodeBlocks>
 
 ### Register shim modules in Metro
 
@@ -112,7 +112,7 @@ import "react-native-get-random-values";
 
 That's it! Now you can install the packages you want from Account Kit and start building your React Native Account Abstraction app.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npm]
 npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
@@ -122,7 +122,7 @@ npm install -s @account-kit/react-native @account-kit/smart-contracts @account-k
 yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
-:::
+</CodeBlocks>
 
 :::tip
 The `@account-kit/react-native` package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
@@ -138,7 +138,7 @@ The `@account-kit/react-native` package is an ESM module. As such, you might hav
 
 To ensure the Signer package works correctly, you'll need to add the following dependencies to your project:
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npm]
 npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
@@ -148,7 +148,7 @@ npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
-:::
+</CodeBlocks>
 
 ## Set iOS minimum deployment target
 
@@ -200,7 +200,8 @@ module.exports = config;
 ## Run a Prebuild!
 
 Now that we've got everything setup, we can run a prebuild to ensure the native modules are properly built and added to your project.
-:::code-group
+
+<CodeBlocks>
 
 ```bash [android]
 npx expo prebuild --platform android
@@ -210,7 +211,7 @@ npx expo prebuild --platform android
 npx expo prebuild --platform ios
 ```
 
-:::
+</CodeBlocks>
 
 ## Next steps
 

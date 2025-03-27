@@ -46,7 +46,7 @@ You can now authenticate with Auth0 in the same way as the other auth providers,
 
 However, you may prefer to send your users directly to the GitHub login without passing through an Auth0 selection screen first. To do this, you can pass the additional parameter `auth0Connection` to your `authenticate` call. The value which should be passed to `auth0Connection` is the string that appeared in the “Name” field of your auth provider connection in the Auth0 dashboard, which in this case was “github”.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
@@ -63,4 +63,4 @@ await authenticate({
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>

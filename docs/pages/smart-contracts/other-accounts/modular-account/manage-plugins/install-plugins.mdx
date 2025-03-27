@@ -36,7 +36,7 @@ Then, you can use the `installSessionKeyPlugin()` method exposed on `sessionKeyP
 When using `createModularAccountAlchemyClient` in `@account-kit/smart-contracts`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
 :::
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { modularAccountClient } from "./client";
@@ -62,7 +62,7 @@ await client.waitForUserOperationTransaction({ hash });
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 Refer to the [Session Key](/smart-contracts/other-accounts/modular-account/session-keys) section to learn more about using the `SessionKeyPlugin`.
 
@@ -81,7 +81,7 @@ If the account only has 1 plug-in installed and you uninstall it, there will no 
 For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
 :::
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { chain, modularAccountClient } from "./client";
@@ -98,7 +98,7 @@ await modularAccountClient.waitForUserOperationTransaction({ hash });
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Extend Modular Account with Multisig
 

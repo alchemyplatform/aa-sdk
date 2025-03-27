@@ -23,7 +23,7 @@ If you have an existing Modular Account (which has multi-owner plugin by default
 
 To propose a new user operation for review by the multisig signers, you will use the `proposeUserOperation` method. This estimates gas, constructs the user operation struct, and if `gasManagerConfig` is used then it attempts to use a paymaster. Lastly, a signature is generated with the pre-provided signer.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { multisigAccountClient } from "./client";
@@ -45,13 +45,13 @@ const {
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## 4. Get the threshold signatures
 
 Next, you have to collect the next k-2 signatures, excluding the first signature which you already provided and the last signature which we'll deal with in step 5 when we send the user operation. Each member of the multisig can sign with the `signMultisigUserOperation` method.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
@@ -78,13 +78,13 @@ const { aggregatedSignature, signatureObj: secondSig } =
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## 5. Send the User Operation
 
 After collecting k-1 signatures, you're ready to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting its parts in ascending order by owner address as expected by the Multisig Plugin smart contract.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
@@ -113,11 +113,11 @@ const result = await multisigAccountClient.sendUserOperation({
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 By default, we use the variable gas feature in the Multisig Plugin smart contract. For this, we need `userOpSignatureType` to be set to "ACTUAL". If you do not wish to use this feature, gas overrides should be passed in `sendUserOperation`, and `userOpSignatureType` should be set to "UPPERLIMIT".
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { multisigAccountClient } from "./client";
@@ -143,7 +143,7 @@ const result = await multisigAccountClient.sendUserOperation({
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Conclusion
 

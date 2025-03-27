@@ -28,7 +28,7 @@ This setting will defer hydration of the account kit state until you can call th
 
 Now that you've set up your config for SSR, you will have to manually hydrate the state on the client. This can be done by calling the `hydrate` method exported by Account Kit core.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [hydrate.ts]
 import { hydrate } from "@account-kit/core";
@@ -48,7 +48,7 @@ if (typeof window !== "undefined") {
 // [!include ~/shared/core/ssr-config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Persisting the Account State
 
@@ -71,7 +71,7 @@ export const config = createConfig({
 
 Now you can get the initial state from cookies and pass it to the `hydrate` method to hydrate the account state on the client or on the server.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [hydrate.ts]
 import { cookieToInitialState, hydrate } from "@account-kit/core";
@@ -100,4 +100,4 @@ export const config = createConfig({
 });
 ```
 
-:::
+</CodeBlocks>
