@@ -3,7 +3,6 @@ import {
   toHex,
   custom,
   encodeFunctionData,
-  maxUint32,
   type Hex,
   type Chain,
   type Address,
