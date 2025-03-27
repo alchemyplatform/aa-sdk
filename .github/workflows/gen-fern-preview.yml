@@ -1,0 +1,44 @@
+name: Generate Fern Docs Preview
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout AA-SDK
+        uses: actions/checkout@v4
+
+      - name: Clone Alchemy Docs Repo
+        run: git clone https://github.com/alchemyplatform/alchemy-docs.git docs-site
+
+    #   - name: Copy MDX Files from AA-SDK to Alchemy Docs
+    #     run: |
+    #       rm -rf docs/pages/reference
+    #       cp -r mdx-files docs-site/pages/reference
+      
+      - name: Install Fern CLI
+        run: npm install -g fern-api
+
+      - name: Generate preview URL
+        id: generate-docs
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+        run: |
+          OUTPUT=$(fern generate --docs --preview 2>&1) || true
+          echo "$OUTPUT"
+          URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
+          echo "Preview URL: $URL"
+          echo "🌿 Preview your docs: $URL" > preview_url.txt
+
+      - name: Comment URL in PR
+        uses: thollander/actions-comment-pull-request@v2.4.3
+        with:
+          filePath: preview_url.txt
