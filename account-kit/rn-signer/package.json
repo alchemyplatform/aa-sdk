@@ -43,7 +43,7 @@
     "build": "yarn typecheck",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react-native-signer",
-    "fern:gen": "node ../../fern-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs-site/pages/reference/account-kit/react-native-signer",
+    "fern:gen": "node ../../fern-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react-native-signer",
     "prepare": "bob build"
   },
   "keywords": [
