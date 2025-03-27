@@ -271,7 +271,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       targetPublicKey,
     });
 
-    if (response.status === "SUCCESS" && response.credentialBundle) {
+    if ("credentialBundle" in response && response.credentialBundle) {
       return {
         mfaRequired: false,
         bundle: response.credentialBundle,

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useSigner } from "../../../../hooks/useSigner.js";
+import { useState, useEffect } from "react";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { ls } from "../../../../strings.js";
 import {
@@ -12,16 +11,16 @@ import { Spinner } from "../../../../icons/spinner.js";
 import { AuthStepStatus, useAuthContext } from "../../context.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
+import { AlchemySignerStatus } from "@account-kit/signer";
 
 const AUTH_DELAY = 1000;
 
 export const LoadingOtp = () => {
-  const { isConnected } = useSignerStatus();
+  const { isConnected, status } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext("otp_verify");
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const [titleText, setTitleText] = useState(ls.loadingOtp.title);
-  const signer = useSigner();
 
   const resetOTP = (errorText = "") => {
     setOtpCode(initialOTPValue);
@@ -55,19 +54,28 @@ export const LoadingOtp = () => {
 
       setAuthStep({ ...authStep, status: AuthStepStatus.verifying });
       setTitleText(ls.loadingOtp.verifying);
-      const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() ?? {};
-      if (mfaRequired) {
-        setAuthStep({
-          type: "totp_verify",
-          previousStep: "otp",
-          factorId: mfaFactorId ?? "",
-          otpCode: otp,
-        });
-      } else {
-        authenticate({ type: "otp", otpCode: otp });
-      }
+      // const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() ?? {};
+      // if (mfaRequired) {
+      //   setAuthStep({
+      //     type: "totp_verify",
+      //     previousStep: "otp",
+      //     factorId: mfaFactorId ?? "",
+      //     otpCode: otp,
+      //   });
+      // } else {
+      authenticate({ type: "otp", otpCode: otp });
+      // }
     }
   };
+
+  useEffect(() => {
+    if (status === AlchemySignerStatus.AWAITING_MFA_AUTH) {
+      setAuthStep({
+        type: "totp_verify",
+        previousStep: "otp",
+      });
+    }
+  }, [status]);
 
   return (
     <div className="flex flex-col items-center">

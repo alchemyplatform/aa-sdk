@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../../context.js";
+import { useSigner } from "../../../../hooks/useSigner.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import {
   OTPInput,
@@ -11,6 +12,7 @@ import { Spinner } from "../../../../icons/spinner.js";
 import { ThreeStarsIcon } from "../../../../icons/threeStars.js";
 
 export const LoadingTotp = () => {
+  const signer = useSigner();
   const { authStep, setAuthStep } = useAuthContext("totp_verify");
   const [totpCode, setTotpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
@@ -61,15 +63,8 @@ export const LoadingTotp = () => {
           ],
         });
       } else if (authStep.previousStep === "otp") {
-        await authenticateAsync({
-          type: "otp",
-          otpCode: authStep.otpCode ?? "",
-          multiFactors: [
-            {
-              multiFactorId: authStep.factorId,
-              multiFactorCode: codeString,
-            },
-          ],
+        signer?.validateMultiFactors({
+          multiFactorCode: codeString,
         });
       } else {
         throw new Error("Invalid previous step");
@@ -86,7 +81,7 @@ export const LoadingTotp = () => {
         <ThreeStarsIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
       <h3 className="text-fg-primary font-semibold text-lg mb-2">
-        Enter authentication code
+        Enter authenticator app code
       </h3>
       <OTPInput
         value={totpCode}

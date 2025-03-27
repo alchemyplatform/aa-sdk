@@ -46,7 +46,6 @@ type Store = Mutate<
 type TemporarySession = {
   orgId: string;
   isNewUser?: boolean;
-  isMfaRequired?: boolean;
   encryptedPayload?: string;
   mfaFactorId?: string;
 };

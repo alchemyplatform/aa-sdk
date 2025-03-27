@@ -843,34 +843,22 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       return this.completeEmailAuth(params);
     }
 
-    if (!("email" in params)) {
-      throw new Error("Email is required");
-    }
-
-    const { orgId, otpId, multiFactors, isNewUser } =
-      await this.initOrCreateEmailUser(
-        params.email,
-        params.emailMode ?? "otp",
-        params.multiFactors,
-        params.redirectParams
-      );
-
-    const isMfaRequired = multiFactors ? multiFactors?.length > 0 : false;
+    const { orgId, otpId, isNewUser } = await this.initOrCreateEmailUser(
+      params.email,
+      params.emailMode,
+      params.multiFactors,
+      params.redirectParams
+    );
 
     this.sessionManager.setTemporarySession({
       orgId,
       isNewUser,
-      isMfaRequired,
     });
 
     this.store.setState({
       status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
       otpId,
       error: null,
-      mfaStatus: {
-        mfaRequired: isMfaRequired,
-        mfaFactorId: multiFactors?.[0]?.multiFactorId,
-      },
     });
 
     // We wait for the session manager to emit a connected event if
@@ -941,16 +929,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     args: Extract<AuthParams, { type: "otp" }>
   ): Promise<User> => {
     const tempSession = this.sessionManager.getTemporarySession();
-    const { orgId, isNewUser, isMfaRequired } = tempSession ?? {};
+    const { orgId, isNewUser } = tempSession ?? {};
     const { otpId } = this.store.getState();
     if (!orgId) {
       throw new Error("orgId not found in session");
     }
     if (!otpId) {
       throw new Error("otpId not found in session");
-    }
-    if (isMfaRequired && !args.multiFactors) {
-      throw new Error(`MFA is required.`);
     }
 
     const response = await this.inner.submitOtpCode({
@@ -1107,24 +1092,19 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
   private async initOrCreateEmailUser(
     email: string,
-    emailMode: EmailType,
+    emailMode?: EmailType,
     multiFactors?: VerifyMfaParams[],
     redirectParams?: URLSearchParams
   ): Promise<{
     orgId: string;
     otpId?: string;
-    multiFactors?: MfaFactor[];
     isNewUser: boolean;
   }> {
     const existingUser = await this.getUser(email);
     const expirationSeconds = this.getExpirationSeconds();
 
     if (existingUser) {
-      const {
-        orgId,
-        otpId,
-        multiFactors: mfaFactors,
-      } = await this.inner.initEmailAuth({
+      const { orgId, otpId } = await this.inner.initEmailAuth({
         email: email,
         emailMode: emailMode,
         expirationSeconds,
@@ -1134,7 +1114,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       return {
         orgId,
         otpId,
-        multiFactors: mfaFactors,
         isNewUser: false,
       };
     }
@@ -1387,7 +1366,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // Remove MFA data from temporary session
     this.sessionManager.setTemporarySession({
       ...tempSession,
-      isMfaRequired: false,
       encryptedPayload: undefined,
       mfaFactorId: undefined,
     });
