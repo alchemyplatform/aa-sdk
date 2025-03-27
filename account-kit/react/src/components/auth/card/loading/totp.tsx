@@ -63,14 +63,21 @@ export const LoadingTotp = () => {
           ],
         });
       } else if (authStep.previousStep === "otp") {
-        signer?.validateMultiFactors({
+        await signer?.validateMultiFactors({
           multiFactorCode: codeString,
         });
+        setIsSubmitting(false);
+        setAuthStep({ type: "complete" });
       } else {
         throw new Error("Invalid previous step");
       }
     } catch (err) {
       console.error("TOTP submission error", err);
+      if ((err as Error).message.includes("Invalid MFA code")) {
+        setIsSubmitting(false);
+        setTotpCode(initialOTPValue);
+        setErrorText("The code you entered is incorrect");
+      }
     }
   };
 

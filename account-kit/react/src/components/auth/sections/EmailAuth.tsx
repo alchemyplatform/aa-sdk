@@ -57,7 +57,6 @@ export const EmailAuth = memo(
             setAuthStep({ type: "email_verify", email: params.email });
             return;
           }
-          setAuthStep({ type: "complete" });
         }
       },
       onError: (e, params) => {

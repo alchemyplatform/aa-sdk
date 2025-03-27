@@ -54,17 +54,8 @@ export const LoadingOtp = () => {
 
       setAuthStep({ ...authStep, status: AuthStepStatus.verifying });
       setTitleText(ls.loadingOtp.verifying);
-      // const { mfaRequired, mfaFactorId } = signer?.getMfaStatus() ?? {};
-      // if (mfaRequired) {
-      //   setAuthStep({
-      //     type: "totp_verify",
-      //     previousStep: "otp",
-      //     factorId: mfaFactorId ?? "",
-      //     otpCode: otp,
-      //   });
-      // } else {
+
       authenticate({ type: "otp", otpCode: otp });
-      // }
     }
   };
 
