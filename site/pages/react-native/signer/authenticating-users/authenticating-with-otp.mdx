@@ -11,6 +11,22 @@ import Snippet from "../../../../shared/react-native/setup-guides-snippet.mdx";
 
 Authenticating a user is easy using the `useAuthenticate()` hook from the `@account-kit/react-native` package.
 
+### Set the Email Mode to `One Time Password (OTP)` in your Account Kit Dashboard
+
+:::tip
+This is the default mode for email authentication. Only follow these steps if you had previously set the email mode to `Magic Link`.
+:::
+
+In your Alchemy Accounts Dashboard:
+
+- Navigate to the **Smart Wallets** tab
+- Select the config you would be using for your project and click the **Edit** button
+- Scroll down to the **Email Mode** options in the **Email** section and select **One Time Password (OTP)**
+
+  <img src="/images/alchemy-dashboard-select-otp.png" alt="Email Mode OTP" />
+
+- Click the **Save Changes** button
+
 ### Send a One-Time Password (OTP) to a User
 
 To send an OTP to a user's email, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `otp`.
@@ -29,7 +45,6 @@ function SignInWithOtp() {
       authenticate({
         email,
         type: "email",
-        emailMode: "otp",
       });
 
       // OTP sent to the user's email. Prompt the user to enter the OTP into your app.

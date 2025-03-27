@@ -31,7 +31,7 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
   const closeToast = () => setToast((prev) => ({ ...prev, open: false }));
   return (
     <ToastContext.Provider value={{ toast, setToast, closeToast }}>
-      <Provider>
+      <Provider duration={3000}>
         <>
           {children}
           <Toast />

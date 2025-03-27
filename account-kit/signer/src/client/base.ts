@@ -15,6 +15,7 @@ import type {
   AuthenticatingEventMetadata,
   CreateAccountParams,
   EmailAuthParams,
+  experimental_CreateApiKeyParams,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   OauthConfig,
@@ -27,6 +28,7 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
+import { VERSION } from "../version.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -302,6 +304,60 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * Generates a stamped getOrganization request for the current user.
+   *
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "getOrganization" information for the logged in user
+   * @throws {Error} if no user is authenticated
+   */
+  public stampGetOrganization = async (): Promise<TSignedRequest> => {
+    if (!this.user) {
+      throw new Error(
+        "User must be authenticated to stamp a get organization request"
+      );
+    }
+
+    return await this.turnkeyClient.stampGetOrganization({
+      organizationId: this.user.orgId,
+    });
+  };
+
+  /**
+   * Creates an API key that can take any action on behalf of the current user.
+   * (Note that this method is currently experimental and is subject to change.)
+   *
+   * @param {CreateApiKeyParams} params Parameters for creating the API key.
+   * @param {string} params.name Name of the API key.
+   * @param {string} params.publicKey Public key to be used for the API key.
+   * @param {number} params.expirationSec Number of seconds until the API key expires.
+   * @throws {Error} If there is no authenticated user or the API key creation fails.
+   */
+  public experimental_createApiKey = async (
+    params: experimental_CreateApiKeyParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new Error("User must be authenticated to create api key");
+    }
+    const resp = await this.turnkeyClient.createApiKeys({
+      type: "ACTIVITY_TYPE_CREATE_API_KEYS",
+      timestampMs: new Date().getTime().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        apiKeys: [
+          {
+            apiKeyName: params.name,
+            publicKey: params.publicKey,
+            expirationSeconds: params.expirationSec.toString(),
+          },
+        ],
+        userId: this.user.userId,
+      },
+    });
+    if (resp.activity.status !== "ACTIVITY_STATUS_COMPLETED") {
+      throw new Error("Failed to create api key");
+    }
+  };
+
+  /**
    * Looks up information based on an email address.
    *
    * @param {string} email the email address to look up
@@ -382,6 +438,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const basePath = "/signer";
 
     const headers = new Headers();
+    headers.append("Alchemy-AA-Sdk-Version", VERSION);
     headers.append("Content-Type", "application/json");
     if (this.connectionConfig.apiKey) {
       headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);

@@ -41,6 +41,7 @@ export {
   inkSepolia,
   mekong,
   monadTestnet,
+  openlootSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";

@@ -8,16 +8,22 @@ import { useState, useEffect } from "react";
 import { SmallCardsWrapper } from "../small-cards/Wrapper";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
+  const user = useUser();
   return (
     <>
       {/* Don't unmount when showing code preview so that the auth card retains its state */}
       <div
         className={cn(
-          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative lg:p-6",
+          "flex flex-col flex-1 overflow-y-auto scrollbar-none relative p-3 lg:p-6 xl:py-0",
           showCode && "hidden"
         )}
       >
-        <div className="flex flex-1 justify-center items-start lg:items-center ">
+        <div
+          className={cn(
+            "flex flex-1 justify-center items-start",
+            !user && "items-center"
+          )}
+        >
           <RenderContent />
         </div>
       </div>

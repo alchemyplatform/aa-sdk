@@ -9,7 +9,20 @@ import Snippet from "../../../../shared/react-native/setup-guides-snippet.mdx";
 
 <Snippet />
 
-## Authenticate a User via Magic Link
+### Set the Email Mode to `Magic Link` in your Account Kit Dashboard
+
+In your Alchemy Accounts Dashboard:
+
+- Navigate to the **Smart Wallets** tab
+- Select the config you would be using for your project and click the **Edit** button
+- Scroll down to the **Email Mode** options in the **Email** section and select **Magic Link**
+
+  <img
+    src="/images/alchemy-dashboard-select-magic-link.png"
+    alt="Email Mode Magic Link"
+  />
+
+- Click the **Save Changes** button
 
 ### Send an Email Magic Link to a User
 
@@ -29,7 +42,6 @@ function SignInWithOtp() {
       authenticate({
         email,
         type: "email",
-        emailMode: "magicLink",
       });
 
       // Magic link sent to the user's email. Prompt the user to click the link in their email.

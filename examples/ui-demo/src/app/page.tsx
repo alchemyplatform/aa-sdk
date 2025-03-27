@@ -9,7 +9,7 @@ import { PreviewWrapper } from "@/components/preview/PreviewWrapper";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
-
+import { Viewport } from "@radix-ui/react-toast";
 const publicSans = Public_Sans({
   subsets: ["latin"],
   display: "swap",
@@ -44,6 +44,8 @@ export default function Home() {
           >
             <PreviewNav showCode={showCode} setShowCode={setShowCode} />
             <PreviewWrapper showCode={showCode} />
+            {/* Toast viewport */}
+            <Viewport className="absolute lg:bottom-10 lg:right-10 bottom-10 right-1/2 translate-x-1/2 lg:translate-x-0 z-50 outline-none" />
           </div>
         </div>
       </div>

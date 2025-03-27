@@ -110,33 +110,41 @@ Install the React and Infra packages from Account Kit along with [tailwind](http
 
 ```bash [yarn]
 yarn add @account-kit/infra @account-kit/react @tanstack/react-query
-yarn add -D tailwindcss postcss autoprefixer
+yarn add -D tailwindcss @tailwindcss/postcss postcss
 ```
 
 ```bash [npm]
 npm install @account-kit/infra @account-kit/react @tanstack/react-query
-npm install -D tailwindcss postcss autoprefixer
+npm install -D tailwindcss @tailwindcss/postcss postcss
 ```
 
 :::
 
 **Tailwind Setup**
 
-If you don't have tailwind setup yet, once you run the above, you can run the following:
+If you don't have tailwind setup yet, create a `postcss.config.mjs` file (if you don't already have one) and add the `@tailwindcss/postcss` plugin.
 
-```bash
-npx tailwindcss init -p
+```js twoslash [postcss.config.mjs]
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
 ```
 
-The above command will generate a `tailwind.config.ts` and `postcss.config.ts` file for you. The only thing left to do is to create a `global.css` file and import it in the root of your app.
+The only thing left to do is to create a global.css file and import it in the root of your app.
 
 ```css [global.css]
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 ```
 
 For more on tailwind setup, see these [steps](https://tailwindcss.com/docs/installation/using-postcss).
+
+:::tip
+**Already using tailwind v3?**
+
+If you're still using tailwind v3, don't fret. Account Kit is still fully compatible. Just skip the above tailwind setup steps since you've already set it up.
+:::
 
 ### 2. Get your Alchemy API Key
 
@@ -161,26 +169,36 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 
 #### 3a. Customize styling with tailwind
 
-1. In the demo app, copy your `tailwind.config.ts` code into the file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
+1. In the demo app, copy your `tailwind.config.ts` code into a file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
    1. Logo: logo images are loaded client side for maximum performance, so you’ll need to add the image file to your project and specify the file path in the config where noted.
    2. Light/Dark mode:
-      1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: update your tailwindcss config to use `selector` mode for dark and then add the `dark` class to the root of your DOM
-   3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6).
-2. Make sure you wrap your existing tailwind config with `withAccountKitUi` :
+      1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: add `@custom-variant dark (&:is(.dark, .dark *));` to your `global.css` file.
+         :::tip
+         (If you are still using **tailwind v3**, follow [this](https://v3.tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide instead. TLDR: update your tailwindcss config to use `selector` mode for dark and then add the `dark` class to the root of your DOM.)
+   3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6)
+2. If your `tailwind.config.ts` already contains any existing config information, be sure to wrap it with `withAccountKitUi` :
 
    ```ts [tailwind.config.ts]
-   // tailwind.config.ts
    import { withAccountKitUi } from "@account-kit/react/tailwind";
 
    export default withAccountKitUi(
      {
-       // 1. (required) your tailwind config generated in setup or existing config including content, theme, plugins, etc. - https://tailwindcss.com/docs/installation/using-postcss
+       // 1. (required) your existing tailwind config
+       // If you are using tailwind v4, this will likely be empty.
+       // If you're still using tailwind v3, this will contain things like content, theme, plugins, etc. - https://v3.tailwindcss.com/docs/installation/using-postcss
      },
      {
-       // 2. (optional) overwrite AccountKit theme
+       // 2. (optional) overwrite AccountKit theme options
      }
    );
    ```
+
+3. Update your `global.css` file to include your `tailwind.config.ts`. _(Skip this step if you're still using **tailwind v3**.)_
+
+```css [global.css]
+@import "tailwindcss";
+@config '../../tailwind.config.ts'; // [!code ++]
+```
 
 #### 3b. Customize authentication methods
 

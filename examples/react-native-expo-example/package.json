@@ -9,10 +9,11 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
-		"@account-kit/react": "4.16.0",
-		"@account-kit/react-native": "4.16.0",
-		"@account-kit/react-native-signer": "4.16.0",
-		"@account-kit/signer": "4.16.0",
+		"@account-kit/react": "4.17.0",
+		"@account-kit/react-native": "4.17.0",
+		"@account-kit/react-native-signer": "4.17.0",
+		"@account-kit/signer": "4.17.0",
+		"@noble/hashes":"1.7.1",
 		"expo": "~52.0.18",
 		"expo-build-properties": "~0.13.2",
 		"expo-constants": "~17.0.3",
