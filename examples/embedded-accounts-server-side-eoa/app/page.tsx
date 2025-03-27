@@ -104,6 +104,21 @@ export default function Home() {
           >
             Send transaction
           </button>
+          <button
+            className="btn btn-primary mt-6 disabled:opacity-70"
+            disabled={!createdApiKey}
+            onClick={async () => {
+              const resp = await fetch("/api/send-uo", {
+                method: "POST",
+                body: JSON.stringify({ orgId: user.orgId }),
+              });
+              const respJson = await resp.json();
+              console.log(respJson);
+              window.alert(JSON.stringify(respJson, null, 2));
+            }}
+          >
+            Send UO
+          </button>
           <button className="btn btn-primary mt-6" onClick={() => logout()}>
             Log out
           </button>
