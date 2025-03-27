@@ -25,7 +25,7 @@ To propose a new user operation for review by the multisig signers, you will use
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { multisigAccountClient } from "./client";
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 
@@ -41,7 +41,7 @@ const {
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash client.ts filename="client.ts"
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
@@ -53,7 +53,7 @@ Next, you have to collect the next k-2 signatures, excluding the first signature
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { signers, owners, threshold } from "./client";
 
@@ -74,7 +74,7 @@ const { aggregatedSignature, signatureObj: secondSig } =
   });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash client.ts filename="client.ts"
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
@@ -86,7 +86,7 @@ After collecting k-1 signatures, you're ready to collect the last signature and 
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { signers, owners, threshold } from "./client";
 
@@ -109,7 +109,7 @@ const result = await multisigAccountClient.sendUserOperation({
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash client.ts filename="client.ts"
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 
@@ -119,7 +119,7 @@ By default, we use the variable gas feature in the Multisig Plugin smart contrac
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { multisigAccountClient } from "./client";
 
 const result = await multisigAccountClient.sendUserOperation({
@@ -139,7 +139,7 @@ const result = await multisigAccountClient.sendUserOperation({
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash client.ts filename="client.ts"
 // [!include ~/shared/smart-contracts/multisig-client.ts]
 ```
 

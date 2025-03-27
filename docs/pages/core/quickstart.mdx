@@ -26,11 +26,11 @@ your a Bundler client.
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/core @account-kit/infra
 ```
 
-```bash [npm]
+```bash npm
 npm i -s @account-kit/core @account-kit/infra
 ```
 
@@ -60,7 +60,7 @@ email based auth as an example you would:
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { config } from "./config";
 import { getSigner } from "@account-kit/core";
 
@@ -86,7 +86,7 @@ if (!bundle) {
 await signer.authenticate({ type: "email", bundle });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 
@@ -98,7 +98,7 @@ Now that you have your config, you can send user operations by leveraging the un
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { watchSmartAccountClient } from "@account-kit/core";
 import { config } from "./config";
 
@@ -133,7 +133,7 @@ await client.sendUserOperation({
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash client.ts filename="client.ts"
 // [!include ~/shared/core/config.ts]
 ```
 

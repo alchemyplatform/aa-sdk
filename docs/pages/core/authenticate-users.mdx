@@ -17,7 +17,7 @@ Email authentication is a two step process. First, a user inputs their email and
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { config } from "./config";
 import { getSigner } from "@account-kit/core";
 
@@ -44,7 +44,7 @@ if (!bundle) {
 await signer.authenticate({ type: "email", bundle });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 
@@ -56,7 +56,7 @@ You can allow users to sign in with an OAuth provider like Google, Facebook, or 
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { config } from "./config";
 import { getSigner } from "@account-kit/core";
 
@@ -85,7 +85,7 @@ await signer.authenticate({
 });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 
@@ -101,7 +101,7 @@ It's important that you verify this email to be correct first! Otherwise, if a u
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { config } from "./config.js";
 import { getSigner } from "@account-kit/core";
 
@@ -119,7 +119,7 @@ await signer.authenticate({
 });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 
@@ -131,7 +131,7 @@ If your user already has a passkey, then you can authenticate with that directly
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { config } from "./config";
 import { getSigner } from "@account-kit/core";
 
@@ -149,7 +149,7 @@ await signer.authenticate({
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash client.ts filename="client.ts"
 // [!include ~/shared/core/config.ts]
 ```
 

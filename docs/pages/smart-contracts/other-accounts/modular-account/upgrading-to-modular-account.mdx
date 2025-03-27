@@ -11,7 +11,7 @@ Using the Light Account as an example, here is an overview of how the upgrade ca
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { lightAccountClient } from "./lightAccountClient";
 import { getMSCAUpgradeToData } from "@account-kit/smart-contracts";
 
@@ -28,7 +28,7 @@ const hash = await lightAccountClient.upgradeAccount({
 const upgradedAccount = await createMAAccount();
 ```
 
-```ts [lightAccountClient.ts] twoslash filename="lightAccountClient.ts"
+```ts lightAccountClient.ts twoslash filename="lightAccountClient.ts"
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -47,7 +47,7 @@ That is all! Now, you can create a smart account client to connect with the upgr
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
 import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
 import { upgradedAccount } from "./upgradedAccount";
@@ -61,7 +61,7 @@ const upgradedAccountClient = await createAlchemySmartAccountClient({
 const owners = await upgradedAccountClient.readOwners();
 ```
 
-```ts [upgradedAccount.ts] twoslash filename="upgradedAccount.ts"
+```ts upgradedAccount.ts twoslash filename="upgradedAccount.ts"
 import { lightAccountClient } from "./lightAccountClient";
 import { getMSCAUpgradeToData } from "@account-kit/smart-contracts";
 
@@ -78,7 +78,7 @@ const hash = await lightAccountClient.upgradeAccount({
 export const upgradedAccount = await createMAAccount();
 ```
 
-```ts [lightAccountClient.ts] twoslash filename="lightAccountClient.ts"
+```ts lightAccountClient.ts twoslash filename="lightAccountClient.ts"
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";

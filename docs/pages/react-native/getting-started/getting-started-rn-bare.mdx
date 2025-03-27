@@ -23,11 +23,11 @@ Once we've got our React Native project setup and running, we need to setup a fe
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install --save node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
@@ -37,7 +37,7 @@ yarn add node-libs-react-native crypto-browserify stream-browserify react-native
 
 Create or edit your `metro.config.js` file in the root of your project so that it includes the following:
 
-```js [metro.config.js]
+```js metro.config.js
 const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 
 const defaultConfig = getDefaultConfig(__dirname);
@@ -62,7 +62,7 @@ module.exports = mergeConfig(defaultConfig, config);
 
 Import the following packages at the top of your `index.js` file so that libraries that depend on globals like `crypto` have access to them.
 
-```js [index.js]
+```js index.js
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
 
@@ -75,11 +75,11 @@ That's it! Now you can install the packages you want from Account Kit and start 
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
@@ -91,11 +91,11 @@ To ensure the Signer package works correctly, you'll need to add the following d
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
@@ -107,7 +107,7 @@ The `account-kit/react-native` and it's supoorting packages leverages package.js
 
 Update your `metro.config.js` to add this support using:
 
-```js [metro.config.js]
+```js metro.config.js
 // ... rest of metro config
 config.resolver.unstable_enablePackageExports = true;
 // ... rest of metro config

@@ -17,7 +17,7 @@ Once the user is authenticated, you can use the `addPasskey` method on the Alche
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { watchSignerStatus, getSigner } from "@account-kit/core";
 import { config } from "./config";
 
@@ -30,7 +30,7 @@ const signerSubscription = watchSignerStatus(config)(async (status) => {
 });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 

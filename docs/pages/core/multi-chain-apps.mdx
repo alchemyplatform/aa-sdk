@@ -48,7 +48,7 @@ This is why it's important to use the various `watch*` methods that subscribe to
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { setChain } from "@account-kit/core";
 import { mainnet } from "@account-kit/infra";
 import { config } from "./config";
@@ -56,7 +56,7 @@ import { config } from "./config";
 await setChain(config, mainnet);
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 import { createConfig } from "@account-kit/core";
 import { sepolia, mainnet, alchemy } from "@account-kit/infra";
 

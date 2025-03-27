@@ -23,7 +23,7 @@ There a number of ways you can call this method using Account Kit.
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { lightAccountClient } from "./client";
 import { createLightAccountClient } from "@account-kit/smart-contracts";
 
@@ -48,7 +48,7 @@ const transferredClient = await createLightAccountClient({
 });
 ```
 
-```ts [client.ts] twoslash filename="client.ts"
+```ts client.ts twoslash filename="client.ts"
 // [!include ~/shared/smart-contracts/light-account-client.ts]
 ```
 
@@ -60,7 +60,7 @@ Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach ma
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { encodeFunctionData } from "viem";
 import { lightAccountClient } from "./client";
 
@@ -77,7 +77,7 @@ const result = await lightAccountClient.sendUserOperation({
 await lightAccountClient.waitForUserOperationTransaction(result);
 ```
 
-```ts [client.ts] twoslash filename="client.ts"
+```ts client.ts twoslash filename="client.ts"
 // [!include ~/shared/smart-contracts/light-account-client.ts]
 ```
 

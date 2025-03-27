@@ -38,7 +38,7 @@ When using `createModularAccountAlchemyClient` in `@account-kit/smart-contracts`
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { modularAccountClient } from "./client";
 import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 
@@ -58,7 +58,7 @@ const { hash } = await sessionKeyExtendedClient.installSessionKeyPlugin({
 await client.waitForUserOperationTransaction({ hash });
 ```
 
-```ts [client.ts] twoslash filename="client.ts"
+```ts client.ts twoslash filename="client.ts"
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
@@ -83,7 +83,7 @@ For example, do not call uninstall plugin of the multi-owner plugin on a Modular
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { chain, modularAccountClient } from "./client";
 import { SessionKeyPlugin } from "@account-kit/smart-contracts";
 
@@ -94,7 +94,7 @@ const { hash } = await modularAccountClient.uninstallPlugin({
 await modularAccountClient.waitForUserOperationTransaction({ hash });
 ```
 
-```ts [client.ts] twoslash filename="client.ts"
+```ts client.ts twoslash filename="client.ts"
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 

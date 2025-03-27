@@ -27,13 +27,13 @@ You can use the `getOwnerAddresses` method on the `MultiOwnerLightAccount` objec
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { multiOwnerLightAccountClient } from "./client";
 
 const owners = await multiOwnerLightAccountClient.account.getOwnerAddresses();
 ```
 
-```ts [client.ts] twoslash filename="client.ts"
+```ts client.ts twoslash filename="client.ts"
 // [!include ~/shared/smart-contracts/multi-owner-light-account-client.ts]
 ```
 
@@ -45,7 +45,7 @@ You can use the `updateOwners` method on the `multiOwnerLightAccountClientAction
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { multiOwnerLightAccountClient } from "./client";
 
 const ownersToAdd = []; // the addresses of owners to be added
@@ -62,7 +62,7 @@ const txHash =
   });
 ```
 
-```ts [client.ts] twoslash filename="client.ts"
+```ts client.ts twoslash filename="client.ts"
 // [!include ~/shared/smart-contracts/multi-owner-light-account-client.ts]
 ```
 

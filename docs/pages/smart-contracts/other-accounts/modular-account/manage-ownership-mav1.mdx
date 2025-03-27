@@ -44,7 +44,7 @@ Then, you can use the `readOwners` method of the `multiOwnerPluginActions` exten
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { modularAccountClient } from "./client";
 
 const ownerToCheck = "0x..."; // the address of the account to check the ownership of
@@ -55,7 +55,7 @@ const isOwner = await modularAccountClient.isOwnerOf({
 });
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
+```ts client.ts filename="client.ts" twoslash
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
@@ -67,14 +67,14 @@ You can use the `readOwners` method on the `multiOwnerPluginActions` extended sm
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { modularAccountClient } from "./client";
 
 // owners is an array of the addresses of the account owners
 const owners = await modularAccountClient.readOwners();
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
+```ts client.ts filename="client.ts" twoslash
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
@@ -86,7 +86,7 @@ You can use the `updateOwners` method on the `multiOwnerPluginActions` extended 
 
 <CodeBlocks>
 
-```ts [example.ts]  twoslash
+```ts example.ts  twoslash
 import { modularAccountClient } from "./client";
 
 const ownersToAdd = []; // the addresses of owners to be added
@@ -101,7 +101,7 @@ const txHash = await modularAccountClient.waitForUserOperationTransaction(
 );
 ```
 
-```ts [client.ts]  filename="client.ts" twoslash
+```ts client.ts  filename="client.ts" twoslash
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 

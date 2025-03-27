@@ -42,11 +42,11 @@ For a simple end-to-end example, we will spin up a new NextJS app using our temp
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
-```bash [npm]
+```bash npm
 npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
@@ -58,7 +58,7 @@ npx create-next-app account-kit-app -e https://github.com/avarobinson/account-ki
 
 …and paste the API key into `config.ts` where you see `ALCHEMY_API_KEY` in the alchemy `transport`
 
-```ts [config.ts]
+```ts config.ts
 // ...other stuff in the file
 export const config = createConfig(
   {
@@ -79,11 +79,11 @@ That's it! Run the NextJS app to see your new auth flow in action ✨
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn dev
 ```
 
-```bash [npm]
+```bash npm
 npm run dev
 ```
 
@@ -108,12 +108,12 @@ Install the React and Infra packages from Account Kit along with [tailwind](http
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/infra @account-kit/react @tanstack/react-query
 yarn add -D tailwindcss postcss autoprefixer
 ```
 
-```bash [npm]
+```bash npm
 npm install @account-kit/infra @account-kit/react @tanstack/react-query
 npm install -D tailwindcss postcss autoprefixer
 ```
@@ -130,7 +130,7 @@ npx tailwindcss init -p
 
 The above command will generate a `tailwind.config.ts` and `postcss.config.ts` file for you. The only thing left to do is to create a `global.css` file and import it in the root of your app.
 
-```css [global.css]
+```css global.css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -168,7 +168,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
    3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6).
 2. Make sure you wrap your existing tailwind config with `withAccountKitUi` :
 
-   ```ts [tailwind.config.ts]
+   ```ts tailwind.config.ts
    // tailwind.config.ts
    import { withAccountKitUi } from "@account-kit/react/tailwind";
 
@@ -206,7 +206,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 
 **Remember to paste in your API Key from step 2**
 
-```ts [src/config.ts]
+```ts src/config.ts
 // @noErrors
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { QueryClient } from "@tanstack/react-query";
@@ -263,7 +263,7 @@ Once you have styling and authentication configs, create a `providers.tsx` file 
 
 The `QueryClientProvider` is also required to handle React Queries within the Alchemy Account Provider.
 
-```tsx [app/providers.tsx]
+```tsx app/providers.tsx
 "use client";
 import { config, queryClient } from "@/config";
 import { AlchemyClientState } from "@account-kit/core";
@@ -296,7 +296,7 @@ Additionally, we recommend using cookies to set the initial state when creating 
 
 For example, wrap your app with the created `Provider` by modifying your `layout.tsx` file.
 
-```tsx [app/layout.tsx]
+```tsx app/layout.tsx
 import { config } from "@/config";
 import { cookieToInitialState } from "@account-kit/core";
 import type { Metadata } from "next";
@@ -339,7 +339,7 @@ Once you have wrapped your app with the Alchemy Provider, you can now use the pr
 
 All you need to do is `useAuthModal`! For example, pop open the auth modal like so:
 
-```tsx [app/page.tsx]
+```tsx app/page.tsx
 "use client";
 import {
   useAuthModal,

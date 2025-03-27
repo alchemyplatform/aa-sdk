@@ -15,7 +15,7 @@ If you are using viem, then you can use the `toViemAccount` method which will al
 
 <CodeBlocks>
 
-```ts [createWalletClient.ts] twoslash
+```ts createWalletClient.ts twoslash
 import { signer } from "./signer";
 import { createWalletClient, http } from "viem";
 import { sepolia } from "viem/chains";
@@ -27,7 +27,7 @@ export const walletClient = createWalletClient({
 });
 ```
 
-```ts twoslash [signer.ts] filename="signer.ts"
+```ts twoslash signer.ts filename="signer.ts"
 // [!include ~/shared/signer/signer.ts]
 ```
 
