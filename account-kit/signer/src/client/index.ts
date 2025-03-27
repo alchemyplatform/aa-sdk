@@ -877,7 +877,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
     if (!response.payload || !response.payload.credentialBundle) {
       throw new Error(
-        "No credentialBundle returned from /auth-validate-multi-factors"
+        "Request to validateMultiFactors did not return a credential bundle"
       );
     }
 

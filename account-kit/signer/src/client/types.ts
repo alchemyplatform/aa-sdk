@@ -70,7 +70,6 @@ export type OtpParams = {
   multiFactors?: VerifyMfaParams[];
 };
 
-// todo fix this type
 export type OtpResponse =
   | {
       status: "SUCCESS";
