@@ -5,12 +5,6 @@ layout: docs
 ---
 
 import { Card, CardGroup } from "@tremor/react";
-import { SmallTileRow } from "../components/TileButton";
-import { DotsIcon } from "../components/icons/DotsIcon";
-import { InfraIcon } from "../components/icons/InfraIcon";
-import { ReactNativeIcon } from "../components/icons/ReactNativeIcon";
-import { SignerIcon } from "../components/icons/SignerIcon";
-import { SmartContractIcon } from "../components/icons/SmartContractIcon";
 
 # Get started with Account Kit
 
@@ -45,35 +39,40 @@ Build, customize, and scale with embedded wallets powered by smart accounts.
 Account Kit is also published as a set of lower level packages that can be used to build custom solutions. This allows you to pick and choose which pieces you want to use, giving you
 utlimate control over your application.
 
-<div className="grid grid-cols-2 gap-8">
-  <SmallTileRow
-    icon={<ReactNativeIcon height={20} width={20} />}
+<CardGroup cols={2}>
+  <Card
     title="React Native"
-    description="Mobile apps with React Native"
     href="/react-native/overview"
-  />
-  <SmallTileRow
-    icon={<DotsIcon />}
+    icon="fa-brands fa-react"
+    iconPosition="left"
+  >
+    Mobile apps with React Native
+  </Card>
+  <Card
     title="Other JS Frameworks"
-    description="Svelte, Vue, etc."
     href="/core/overview"
-  />
-  <SmallTileRow
-    icon={<InfraIcon />}
-    title="Infra"
-    description="Integrate with Alchemy's infra"
-    href="/infra/overview"
-  />
-  <SmallTileRow
-    icon={<SmartContractIcon />}
+    icon="ellipsis"
+    iconPosition="left"
+  >
+    Svelte, Vue, etc.
+  </Card>
+  <Card title="Infra" href="/infra/overview" icon="wrench" iconPosition="left">
+    Integrate with Alchemy's infra
+  </Card>
+  <Card
     title="Smart Contracts"
-    description="Use Alchemy's Smart Contracts"
     href="/smart-contracts/overview"
-  />
-  <SmallTileRow
-    icon={<SignerIcon />}
+    icon="file-contract"
+    iconPosition="left"
+  >
+    Use Alchemy's Smart Contracts
+  </Card>
+  <Card
     title="Signer"
-    description="Use Alchemy's Signer"
     href="/signer/overview"
-  />
-</div>
+    icon="pen-clip"
+    iconPosition="left"
+  >
+    Use Alchemy's Signer
+  </Card>
+</CardGroup>
