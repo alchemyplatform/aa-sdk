@@ -23,6 +23,7 @@ import { getDefaultMAV2FactoryAddress } from "../utils.js";
 import {
   type SignerEntity,
   type ModularAccountV2,
+  type DeferredAction,
   createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
@@ -36,6 +37,7 @@ export type CreateModularAccountV2Params<
 > & {
   signer: TSigner;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  deferredAction?: DeferredAction;
   signerEntity?: SignerEntity;
 }) &
   (
@@ -103,6 +105,7 @@ export async function createModularAccountV2(
       entityId: DEFAULT_OWNER_ENTITY_ID,
     },
     signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
+    deferredAction,
   } = config;
 
   const client = createBundlerClient({
@@ -183,6 +186,7 @@ export async function createModularAccountV2(
     signer,
     entryPoint,
     signerEntity,
+    deferredAction,
     ...accountFunctions,
   });
 }

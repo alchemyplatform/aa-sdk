@@ -595,9 +595,6 @@ describe("MA v2 Tests", async () => {
         uoIsGlobalValidation: isGlobalValidation, // UO validation is global
       });
 
-    console.log(typedData);
-    console.log("Deferred: %s, \n\n Nonce: %s", typedData, nonceOverride);
-
     // Sign the typed data using the first session key
     const deferredValidationSig = await sessionKeyClient.account.signTypedData(
       typedData

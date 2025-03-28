@@ -11,7 +11,7 @@ import {
 import type { ModularAccountV2Client } from "./client/client.js";
 import {
   deferralActions,
-  type DeferredActionReturnData,
+  type DeferredActionTypedData,
 } from "./actions/deferralActions.js";
 import { NativeTokenLimitModule } from "./modules/native-token-limit-module/module.js";
 import {
@@ -208,6 +208,7 @@ export class PermissionBuilder {
   private permissions: Permission[] = [];
   private hooks: Hook[] = [];
   private nonceKeyOverride: bigint = 0n;
+  private hasAssociatedExecHooks: boolean = false;
 
   constructor(client: ModularAccountV2Client) {
     this.client = client;
@@ -335,7 +336,11 @@ export class PermissionBuilder {
     deadline: number;
     uoValidationEntityId: number;
     uoIsGlobalValidation: boolean;
-  }): Promise<DeferredActionReturnData> {
+  }): Promise<{
+    typedData: DeferredActionTypedData;
+    hasAssociatedExecHooks: boolean;
+    nonceOverride: bigint;
+  }> {
     this.validateConfiguration();
 
     // Maybe add checks, like zero address module addr
@@ -363,7 +368,7 @@ export class PermissionBuilder {
 
     const installValidationCall = await this.compile_raw();
 
-    return await deferralActions(
+    const { typedData, nonceOverride } = await deferralActions(
       this.client
     ).createDeferredActionTypedDataObject({
       callData: installValidationCall,
@@ -372,6 +377,12 @@ export class PermissionBuilder {
       uoIsGlobalValidation: uoIsGlobalValidation,
       nonceKeyOverride: this.nonceKeyOverride,
     });
+
+    return {
+      typedData,
+      nonceOverride,
+      hasAssociatedExecHooks: this.hasAssociatedExecHooks,
+    };
   }
 
   // Use for direct `installValidation()` low-level calls (maybe useless)
@@ -454,6 +465,7 @@ export class PermissionBuilder {
               spendLimit: BigInt(permission.data.allowance),
             },
           };
+          this.hasAssociatedExecHooks = true;
           break;
         case PermissionType.ERC20_TOKEN_TRANSFER:
           if (permission.data.address === zeroAddress) {
@@ -485,6 +497,7 @@ export class PermissionBuilder {
               ],
             },
           };
+          this.hasAssociatedExecHooks = true;
           // Also allow `approve` and `transfer` for the erc20
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
