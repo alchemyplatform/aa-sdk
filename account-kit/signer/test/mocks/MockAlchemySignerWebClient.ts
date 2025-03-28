@@ -26,6 +26,7 @@ class MockAlchemySignerWebClient extends AlchemySignerWebClient {
   public mock_addMfa = vi.fn();
   public mock_verifyMfa = vi.fn();
   public mock_removeMfa = vi.fn();
+  public mock_validateMultiFactors = vi.fn();
   public disconnect = vi.fn();
 
   // Authentication method overrides
@@ -76,6 +77,22 @@ class MockAlchemySignerWebClient extends AlchemySignerWebClient {
 
   public override getMfaFactors = async () => {
     return { multiFactors: [] };
+  };
+
+  public override validateMultiFactors = async (args: {
+    encryptedPayload: string;
+    multiFactors: Array<{
+      multiFactorId: string;
+      multiFactorCode: string;
+    }>;
+  }): Promise<{ bundle: string }> => {
+    const result = this.mock_validateMultiFactors(args);
+    if (result && typeof result.then === "function") {
+      return result.then((mockResult: any) => {
+        return { bundle: mockResult?.bundle || "mock-bundle" };
+      });
+    }
+    return { bundle: result?.bundle || "mock-bundle" };
   };
 
   // Network-related method overrides

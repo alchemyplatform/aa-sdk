@@ -195,55 +195,100 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     await firstAuth.catch(() => null);
   });
 
-  it("scenario #3: Email + OTP + TOTP => require user to pass totp code along with OTP code", async () => {
-    // Step 1: user calls authenticate to do email+otp => returns multiFactors
+  it("scenario #3: Email + OTP + TOTP => server returns encryptedPayload; must call validateMultiFactors with TOTP code", async () => {
+    //
+    // STEP 1) Call authenticate({type: "email", emailMode: "otp"})
+    //
+    // Suppose the server sees a user who also has TOTP configured.
+    // So we still get an otpId, but we know TOTP is also required.
     mockClient.mock_initEmailAuth.mockResolvedValue(
       EMAIL_OTP_WITH_MFA_RESPONSE
     );
 
+    // Start the "email" flow
     const firstAuth = signer.authenticate({
       type: "email",
       email: TEST_EMAILS.MFA,
       emailMode: "otp",
     });
 
-    // Wait for session/store to update with orgId & AWAITING_EMAIL_AUTH
+    // Wait for store to reflect AWAITING_EMAIL_AUTH
     await waitForMicrotasks();
 
-    expect(signer.getMfaStatus().mfaRequired).toBe(true);
-    expect(signer.getMfaStatus().mfaFactorId).toBe("factor-totp-123");
+    // At this point, the signer is waiting for you to supply an OTP code.
+    expect(signer["store"].getState().status).toBe(
+      AlchemySignerStatus.AWAITING_EMAIL_AUTH
+    );
 
-    // Step 2: user calls authenticate again with OTP code and TOTP factor
-    mockClient.mock_submitOtpCode.mockResolvedValue(OTP_MFA_BUNDLE_RESPONSE);
-    mockClient.mock_completeAuthWithBundle.mockResolvedValue(MFA_USER);
-
-    // Start the authenticate call
-    const authPromise = signer.authenticate({
-      type: "otp",
-      otpCode: TEST_CODES.OTP,
+    //
+    // STEP 2) Call authenticate({type: "otp"}) with the OTP code only
+    //
+    // The new flow now returns { mfaRequired: true, encryptedPayload, multiFactors }
+    // if TOTP is needed:
+    mockClient.mock_submitOtpCode.mockResolvedValue({
+      mfaRequired: true,
+      encryptedPayload: "test-encrypted-payload",
       multiFactors: [
-        {
-          multiFactorId: "factor-totp-123",
-          multiFactorCode: TEST_CODES.MFA_TOTP,
-        },
+        { multiFactorId: "factor-totp-123", multiFactorType: "totp" },
       ],
     });
 
-    // Emit "connectedOtp" so the signer transitions to CONNECTED
-    await emitClientEventAfterDelay(
-      "connectedOtp",
-      MFA_USER,
-      OTP_MFA_BUNDLE_RESPONSE.bundle
+    // We won't finalize the user in submitOtpCode; we only learn we need TOTP
+    const secondAuth = signer.authenticate({
+      type: "otp",
+      otpCode: TEST_CODES.OTP,
+    });
+
+    // Wait for store to reflect AWAITING_MFA_AUTH
+    await waitForMicrotasks();
+    expect(signer["store"].getState().status).toBe(
+      AlchemySignerStatus.AWAITING_MFA_AUTH
     );
 
-    // If we don't emit the event, `authPromise` never resolves
-    const resultUser = await authPromise;
+    //
+    // STEP 3) Now we call validateMultiFactors to pass the TOTP code
+    //
+    // The server’s new endpoint returns { bundle } once TOTP is validated:
+    mockClient.mock_validateMultiFactors.mockResolvedValue({
+      bundle: OTP_MFA_BUNDLE_RESPONSE.bundle,
+    });
 
-    expect(firstAuth).resolves.toEqual(MFA_USER);
+    // ... and as soon as we do have a final `bundle`, the client calls
+    // `completeAuthWithBundle` which returns the final user:
+    mockClient.mock_completeAuthWithBundle.mockImplementation(
+      async (params) => {
+        // Call the real event so the store sees "connectedOtp"
+        mockClient.emitClientEvent(
+          params.connectedEventName,
+          MFA_USER,
+          params.bundle
+        );
+        return MFA_USER;
+      }
+    );
+
+    // So the final step is:
+    const finalAuth = signer.validateMultiFactors({
+      multiFactorId: "factor-totp-123",
+      multiFactorCode: TEST_CODES.MFA_TOTP,
+    });
+
+    // The final call should yield a fully connected user:
+    const resultUser = await finalAuth;
+
+    // Wait for store to reflect AWAITING_MFA_AUTH
+    await waitForMicrotasks();
+
     expect(resultUser).toEqual(MFA_USER);
     expect(signer["store"].getState().status).toBe(
       AlchemySignerStatus.CONNECTED
     );
+
+    // If you like, also check that the first or second `authenticate()` calls
+    // eventually end up returning the same user (which in practice they do
+    // once finalAuth is complete):
+    await expect(firstAuth).resolves.toEqual(MFA_USER);
+    await expect(secondAuth).resolves.toEqual(MFA_USER);
   });
 
   it("throws if we call signMessage without being authenticated", async () => {
