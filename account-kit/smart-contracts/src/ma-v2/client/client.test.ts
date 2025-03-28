@@ -83,7 +83,7 @@ describe("MA v2 Tests", async () => {
       address: target,
     });
 
-  it.only("Install validation builder", async () => {
+  it("Install validation builder", async () => {
     const provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
@@ -130,7 +130,7 @@ describe("MA v2 Tests", async () => {
         },
       })
       .compile_deferred({
-        deadline: 0,
+        deadline: Math.round(Date.now() / 1000 + 100),
         uoValidationEntityId: 0,
         uoValidationIsGlobal: true,
       });
@@ -353,6 +353,184 @@ describe("MA v2 Tests", async () => {
     await sessionKeyClient.waitForUserOperationTransaction(result);
 
     await expect(getTargetBalance()).resolves.toEqual(startingAddressBalance + sendAmount);
+  });
+
+  it.only("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
+    let provider = (await givenConnectedProvider({ signer }))
+      .extend(installValidationActions)
+      .extend(deferralActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // Test variables
+    const sessionKeyEntityId = 1;
+    const isGlobalValidation = true;
+
+    // const encodedInstallCall = await new PermissionBuilder(provider)
+    //   // const { typedData, nonceOverride } = await new PermissionBuilder(provider)
+    //   .configure({
+    //     validationConfig: {
+    //       moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+    //       entityId: sessionKeyEntityId,
+    //       isGlobal: isGlobalValidation,
+    //       isSignatureValidation: true,
+    //       isUserOpValidation: true,
+    //     },
+    //     installData: SingleSignerValidationModule.encodeOnInstallData({
+    //       entityId: sessionKeyEntityId,
+    //       signer: await sessionKey.getAddress(),
+    //     }),
+    //   })
+    //   .addPermission({
+    //     permission: {
+    //       type: PermissionType.GAS_LIMIT,
+    //       data: {
+    //         limit: "0x1234512",
+    //       },
+    //     },
+    //   })
+    //   .compile_raw();
+
+    // console.log("TYPED DATA:", typedData);
+
+    // console.log("ENCODED INSTALL CALL FROM TEST:", encodedInstallCall);
+
+    // const receipt = await provider.sendUserOperation({
+    //   uo: encodedInstallCall,
+    // });
+
+    // await provider.waitForUserOperationTransaction(receipt);
+
+    // const { typedData, nonceOverride } = await new PermissionBuilder(provider)
+    //   .configure({
+    //     validationConfig: {
+    //       moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+    //       entityId: sessionKeyEntityId,
+    //       isGlobal: isGlobalValidation,
+    //       isSignatureValidation: true,
+    //       isUserOpValidation: true,
+    //     },
+    //     installData: SingleSignerValidationModule.encodeOnInstallData({
+    //       entityId: sessionKeyEntityId,
+    //       signer: await sessionKey.getAddress(),
+    //     }),
+    //   })
+    //   .addPermission({
+    //     permission: {
+    //       type: PermissionType.GAS_LIMIT,
+    //       data: {
+    //         limit: "0x1234512",
+    //       },
+    //     },
+    //   })
+    //   .compile_deferred({
+    //     deadline: 0, //Math.round(Date.now() / 1000 + 100),
+    //     uoValidationEntityId: sessionKeyEntityId,
+    //     uoValidationIsGlobal: isGlobalValidation,
+    //   });
+    const paymaster = paymaster070.getPaymasterDetails().address;
+
+    // // Encode install data to defer
+    let encodedInstallData = await provider.encodeInstallValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: sessionKeyEntityId,
+        isGlobal: isGlobalValidation,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: sessionKeyEntityId,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 1,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: PaymasterGuardModule.encodeOnInstallData({
+            entityId: 1,
+            paymaster: paymaster,
+          }),
+        },
+      ],
+    });
+
+    console.log(
+      "EXPECTED HOOK INIT DATA:",
+      PaymasterGuardModule.encodeOnInstallData({
+        entityId: 1,
+        paymaster: paymaster,
+      })
+    );
+
+    console.log("ACTUAL EXPECTED CALL DATA:", encodedInstallData);
+
+    // // Build the typed data we need for the deferred action (provider/client only used for account address & entrypoint)
+    const { typedData, nonceOverride } =
+      await provider.createDeferredActionTypedDataObject({
+        callData: encodedInstallData,
+        deadline: 0,
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      });
+
+    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
+
+    // Build the full hex to prepend to the UO signature
+    // This MUST be done with the *same* client that has signed the typed data
+    const signaturePrepend = provider.buildDeferredActionDigest({
+      typedData: typedData,
+      sig: deferredValidationSig,
+    });
+
+    // Build the full UO with the deferred action signature prepend (provider/client only used for account address & entrypoint)
+    const unsignedUo = await provider.buildUserOperationWithDeferredAction({
+      uo: { target, data: "0x" },
+      signaturePrepend,
+      nonceOverride,
+    });
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: {
+        entityId: sessionKeyEntityId,
+        isGlobalValidation: isGlobalValidation,
+      },
+    });
+
+    // Sign the UO with the session key
+    const uo = await sessionKeyClient.signUserOperation({
+      uoStruct: unsignedUo,
+    });
+
+    // Prepend the full hex for the deferred action to the new, real signature
+    uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
+
+    // Send the raw UserOp
+    const result = await sessionKeyClient.sendRawUserOperation(
+      uo,
+      provider.account.getEntryPoint().address
+    );
+
+    await provider.waitForUserOperationTransaction({ hash: result });
   });
 
   it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {

@@ -177,20 +177,25 @@ export const deferralActions: (
       (BigInt(signerEntity.entityId) << 8n) |
       (signerEntity.isGlobalValidation ? 1n : 0n);
 
-    let encodedData = encodePacked(
+    const encodedCallData = encodePacked(
       ["uint168", "uint48", "bytes"],
       [validationLocator, typedData.message.deadline, typedData.message.call]
     );
 
-    const encodedDataLength = size(encodedData);
+    const encodedDataLength = size(encodedCallData);
     const sigLength = size(sig);
 
-    encodedData = concatHex([
+    const encodedData = concatHex([
       toHex(encodedDataLength, { size: 4 }),
-      encodedData,
+      encodedCallData,
       toHex(sigLength, { size: 4 }),
       sig,
     ]);
+
+    console.log("Encoded data len:", encodedDataLength);
+    console.log("Encoded call data:", encodedCallData);
+    console.log("Encoded data:", encodedData);
+    console.log("sig len:", sigLength);
 
     return encodedData;
   };
