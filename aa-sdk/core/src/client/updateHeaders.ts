@@ -1,8 +1,24 @@
 import { TraceHeader } from "../utils/traceHeader.js";
 
+/**
+ * The symbol that is used to add a breadcrumb to the headers.
+ *
+ * @see headersUpdate
+ */
 export const ADD_BREADCRUMB = Symbol("addBreadcrumb");
 
+/**
+ * The header that is used to track the trace id.
+ *
+ * @see headersUpdate
+ */
 export const TRACKER_HEADER = "X-Alchemy-Trace-Id";
+
+/**
+ * The header that is used to track the breadcrumb.
+ *
+ * @see headersUpdate
+ */
 export const TRACKER_BREADCRUMB = "X-Alchemy-Trace-Breadcrumb";
 
 function addCrumb(previous: string | undefined, crumb: string): string {
@@ -16,6 +32,15 @@ function hasAddBreadcrumb<A extends {}>(
   return ADD_BREADCRUMB in a;
 }
 
+/**
+ * Add a crumb to the breadcrumb.
+ *
+ * @see headersUpdate
+ *
+ * @param {X} client Clients are somethings like viem, that we are adding breadcrumbs to, and could be owning the transport. Usually a alchemy client.
+ * @param {string} crumb The crumb to add to the breadcrumb
+ * @returns {Function} A function that updates the headers
+ */
 export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
   if (hasAddBreadcrumb(client)) {
     return client[ADD_BREADCRUMB](crumb);
@@ -23,6 +48,17 @@ export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
   return client;
 }
 
+/**
+ * Update the headers with the trace header and breadcrumb.
+ *
+ * These trace headers are used in the imply ingestion pipeline to trace the request.
+ * And the breadcrumb is used to get finer grain details in the trace.
+ *
+ * Then there are the trace headers that are part of the W3C trace context standard.
+ *
+ * @param {string} crumb The crumb to add to the breadcrumb
+ * @returns {Function} A function that updates the headers
+ */
 export function headersUpdate(crumb: string) {
   const headerUpdate_ = (x: Record<string, string>) => {
     const traceHeader = (

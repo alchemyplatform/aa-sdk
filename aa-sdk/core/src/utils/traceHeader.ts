@@ -6,6 +6,9 @@ function generateRandomHexString(numBytes: number) {
 }
 /**
  * Some tools that are useful when dealing with the values
+ * of the trace header. Follows the W3C trace context standard.
+ *
+ * @see https://www.w3.org/TR/trace-context/
  */
 export class TraceHeader {
   readonly traceId: string;
@@ -54,6 +57,10 @@ export class TraceHeader {
   /**
    * Creating a default trace id that is a random setup for both trace id and parent id
    *
+   * @example ```ts
+   * const traceHeader = TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
+   * ```
+   *
    * @returns {TraceHeader} A default trace header
    */
   static default() {
@@ -66,6 +73,10 @@ export class TraceHeader {
   }
   /**
    * Should be able to consume a trace header from the headers of an http request
+   *
+   * @example ```ts
+   * const traceHeader = TraceHeader.fromTraceHeader(headers);
+   * ```
    *
    * @param {Record<string,string>} headers The headers from the http request
    * @returns {TraceHeader | undefined} The trace header object, or nothing if not found
@@ -97,6 +108,11 @@ export class TraceHeader {
   /**
    * Should be able to convert the trace header to the format that is used in the headers of an http request
    *
+   * @example ```ts
+   * const traceHeader = TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
+   * const headers = traceHeader.toTraceHeader();
+   * ```
+   *
    * @returns {{stracheader: string, tracestate: string}} The trace header in the format of a record, used in our http client
    */
   toTraceHeader() {
@@ -112,6 +128,11 @@ export class TraceHeader {
    * Should be able to create a new trace header with a new event in the trace state,
    *  as the key of the eventName as breadcrumbs appending onto previous breadcrumbs with the - infix if exists. And the
    * trace parent gets updated as according to the docs
+   *
+   * @example ```ts
+   * const traceHeader = TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
+   * const newTraceHeader = traceHeader.withEvent("newEvent");
+   * ```
    *
    * @param {string} eventName The key of the new event
    * @returns {TraceHeader} The new trace header
