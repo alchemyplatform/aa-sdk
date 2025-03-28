@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Features
+
+- add low-level deferred action support ([#1434](https://github.com/alchemyplatform/aa-sdk/issues/1434)) ([c3616c3](https://github.com/alchemyplatform/aa-sdk/commit/c3616c3ce3bf1a2277fcdb6ddb368f924c6c70aa))
+
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+### Bug Fixes
+
+- personal_sign [#1427](https://github.com/alchemyplatform/aa-sdk/issues/1427) ([#1428](https://github.com/alchemyplatform/aa-sdk/issues/1428)) ([#1440](https://github.com/alchemyplatform/aa-sdk/issues/1440)) ([fc4b722](https://github.com/alchemyplatform/aa-sdk/commit/fc4b722e1e647d518385d3f68551926a2735774e))
+
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 **Note:** Version bump only for package @aa-sdk/core

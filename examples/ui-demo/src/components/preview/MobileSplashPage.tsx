@@ -14,10 +14,10 @@ export function MobileSplashPage() {
   }, [breakpoint, isAuthenticating, openAuthModal]);
 
   return (
-    <div className="flex lg:hidden flex-col flex-1 max-h-[calc(100svh-100px)] box-content px-4 pt-0 justify-between h-full">
+    <div className="flex lg:hidden flex-col flex-1 max-h-[calc(100svh-100px)] box-content px-4 gap-4 justify-between h-full">
       {/* Header Text */}
       <div>
-        <h3 className="min-[320px]:text-3xl min-[390px]:text-5xl min-[640px]:text-6xl min-[640px]:mt-12 text-center font-semibold tracking-tight mb-4 leading-none">
+        <h3 className="min-[320px]:text-3xl text-fg-primary min-[390px]:text-5xl min-[640px]:text-6xl min-[640px]:mt-12 text-center font-semibold tracking-tight mb-4 leading-none">
           Web2 UX,{" "}
           <span
             className="whitespace-nowrap"
@@ -32,7 +32,7 @@ export function MobileSplashPage() {
             onchain
           </span>
         </h3>
-        <p className="text-base font-normal tracking-tight text-center text-demo-fg-secondary">
+        <p className="text-base font-normal tracking-tight text-center text-fg-secondary">
           Zero-friction onboarding, one-click transactions
         </p>
       </div>

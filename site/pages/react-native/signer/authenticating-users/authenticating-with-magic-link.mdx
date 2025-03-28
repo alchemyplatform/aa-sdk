@@ -1,55 +1,89 @@
 ---
 title: Authenticating Users via Magic Link
-description: Learn how to authenticate users using an emailmagic link using the React Native Signer
+description: Learn how to authenticate users using an email magic link using the React Native Signer
 ---
+
+import Snippet from "../../../../shared/react-native/setup-guides-snippet.mdx";
 
 # Authenticating Users via Magic Link
 
-This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+<Snippet />
 
-:::info
-For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
+### Set the Email Mode to `Magic Link` in your Account Kit Dashboard
 
-- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
-- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+In your Alchemy Accounts Dashboard:
 
-:::
+- Navigate to the **Smart Wallets** tab
+- Select the config you would be using for your project and click the **Edit** button
+- Scroll down to the **Email Mode** options in the **Email** section and select **Magic Link**
 
-## Create a Signer Instance
+  <img
+    src="/images/alchemy-dashboard-select-magic-link.png"
+    alt="Email Mode Magic Link"
+  />
 
-```ts twoslash
-// [!include ~/shared/react-native/signer.ts]
-```
-
-## Authenticate a User
-
-Next, you'll need to authenticate your user before you can use the Signer as an owner on the account
+- Click the **Save Changes** button
 
 ### Send an Email Magic Link to a User
 
-To send an email magic link to a user, you can use the `signer.authenticate()` method.
+To send an email magic link to a user, you can use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `magicLink`.
 
-:::code-group
+```tsx twoslash [sign-in-with-magic-link.tsx]
+import { useAuthenticate } from "@account-kit/react-native";
+import React, { useState } from "react";
+import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
 
-```ts twoslash [example.ts]
-import { signer } from "./signer";
-signer
-  .authenticate({
-    email: "user@example.com",
-    type: "email",
-    // Note: this is the default mode
-    emailMode: "magicLink",
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+function SignInWithOtp() {
+  const { authenticate } = useAuthenticate();
+  const [email, setEmail] = useState("");
+
+  const handleUserSignInWithMagicLink = () => {
+    try {
+      authenticate({
+        email,
+        type: "email",
+      });
+
+      // Magic link sent to the user's email. Prompt the user to click the link in their email.
+    } catch (e) {
+      Alert.alert("Error sending Magic Link. Check logs for more details.");
+
+      console.log("Error sending Magic Link: ", e);
+    }
+  };
+
+  return (
+    <View>
+      <Text>Enter Your Email to Sign In</Text>
+      <View>
+        <TextInput
+          value={email}
+          onChangeText={(val) => setEmail(val.toLowerCase())}
+          placeholder="john@doe.com"
+        />
+        <Pressable onPress={handleUserSignInWithMagicLink}>
+          {({ pressed }) => (
+            <View
+              style={[
+                {
+                  opacity: pressed ? 0.5 : 1,
+                  transform: [
+                    {
+                      scale: pressed ? 0.98 : 1,
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Text>Sign In</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+    </View>
+  );
+}
 ```
-
-```ts twoslash [signer.ts] filename="signer.ts"
-// [!include ~/shared/react-native/signer.ts]
-```
-
-:::
 
 ### Authenticate User via Deep Link
 
@@ -60,33 +94,16 @@ A `bundle` parameter present in the deep link url will be used to authenticate t
 Here's an example of what this might look like:
 
 ```tsx [example.tsx] twoslash
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Linking } from "react-native";
-import { User } from "@account-kit/signer";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-
-const API_KEY = "your-api-key";
-
-const signer = RNAlchemySigner({
-  client: { connection: { apiKey: API_KEY } },
-});
+import { useAuthenticate } from "@account-kit/react-native";
 
 const App = () => {
-  const [user, setUser] = useState<User | null>(null);
-
-  // Make an authentication request to a user's email
-  const performAuthRequest = async () => {
-    const user = await signer.authenticate({
-      email: "user@example.com",
-      type: "email",
-    });
-  };
+  const { authenticate } = useAuthenticate();
 
   // Authenticate a user using a bundle returned from a deep link
   const handleUserAuth = async ({ bundle }: { bundle: string }) => {
-    const user = await signer.authenticate({ bundle, type: "email" });
-
-    return user;
+    authenticate({ bundle, type: "email" });
   };
 
   // Handle incoming deep links and authenticate the user
@@ -108,13 +125,7 @@ const App = () => {
 
     handleUserAuth({
       bundle: params.bundle ?? "",
-    })
-      .then((user) => {
-        setUser(user);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    });
   };
 
   // Create a subscription to handle incoming deep links

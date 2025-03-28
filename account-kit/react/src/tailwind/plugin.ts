@@ -82,13 +82,15 @@ export const accountKitUi: (
   const { colors, borderRadius, ...rest } = accountKitTheme;
 
   return plugin(
-    ({ addComponents, addUtilities, matchUtilities }) => {
+    ({ addComponents, addUtilities, matchUtilities, addBase }) => {
+      // base
+      addBase(colorVariables(accountKitTheme));
+      addBase(borderRadiusVariables(accountKitTheme));
+
       // utilities
       addUtilities(borderUtilities);
 
       // components
-      addComponents(colorVariables(accountKitTheme));
-      addComponents(borderRadiusVariables(accountKitTheme));
       addComponents(buttonComponents);
       addComponents(inputComponents);
       addComponents(formControlComponents);
@@ -160,7 +162,7 @@ export const accountKitUi: (
  * @returns {TailwindConfig} the augmented tailwind config
  */
 export const withAccountKitUi = (
-  config: TailwindConfig,
+  config: Partial<TailwindConfig>,
   themeOverride?: AccountKitThemeOverride
 ): TailwindConfig => ({
   darkMode: [
@@ -175,7 +177,10 @@ export const withAccountKitUi = (
     ? [...config.content, getAccountKitContentPath()]
     : {
         ...config.content,
-        files: [...config.content.files, getAccountKitContentPath()],
+        files: [
+          ...(Array.isArray(config.content?.files) ? config.content.files : []),
+          getAccountKitContentPath(),
+        ],
       },
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });

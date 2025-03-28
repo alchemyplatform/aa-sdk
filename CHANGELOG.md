@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+### Bug Fixes
+
+- auth card center ([#1486](https://github.com/alchemyplatform/aa-sdk/issues/1486)) ([817b2e4](https://github.com/alchemyplatform/aa-sdk/commit/817b2e47c4e07e728d8e38a07814ea985dad1a1d))
+- card size ([#1480](https://github.com/alchemyplatform/aa-sdk/issues/1480)) ([2613aa2](https://github.com/alchemyplatform/aa-sdk/commit/2613aa2fbb8565c6c14fdcbd9548e73e290f9c4a))
+
+### Features
+
+- **networks:** add gensyn testnet ([8c55523](https://github.com/alchemyplatform/aa-sdk/commit/8c55523dd435018ded51d3f7af46fa9f6f6bc261))
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Bug Fixes
+
+- add zustand dependcy to signer sdk ([#1482](https://github.com/alchemyplatform/aa-sdk/issues/1482)) ([3c34d04](https://github.com/alchemyplatform/aa-sdk/commit/3c34d04cd97626f2dabd15572b9526323d1ee89a))
+- darkmode eoa wallet bg color ([#1451](https://github.com/alchemyplatform/aa-sdk/issues/1451)) ([dedbc7e](https://github.com/alchemyplatform/aa-sdk/commit/dedbc7e0028aefe9fb32f8df26cc9b054264e335))
+- **demo:** mobile dark mode styling ([#1463](https://github.com/alchemyplatform/aa-sdk/issues/1463)) ([7e4bee9](https://github.com/alchemyplatform/aa-sdk/commit/7e4bee9815896fb25ef514617c637c7d36f61b48))
+- ensure session persistence on IOS ([#1457](https://github.com/alchemyplatform/aa-sdk/issues/1457)) ([c2fc412](https://github.com/alchemyplatform/aa-sdk/commit/c2fc412d0853b4ba72d7900977912ad78c71e46c)), closes [#1454](https://github.com/alchemyplatform/aa-sdk/issues/1454)
+- send sdk version on signer ([#1472](https://github.com/alchemyplatform/aa-sdk/issues/1472)) ([0f696d6](https://github.com/alchemyplatform/aa-sdk/commit/0f696d64bbc092e9a249ebdffe6db2cce5c73fcc))
+
+### Features
+
+- add low-level deferred action support ([#1434](https://github.com/alchemyplatform/aa-sdk/issues/1434)) ([c3616c3](https://github.com/alchemyplatform/aa-sdk/commit/c3616c3ce3bf1a2277fcdb6ddb368f924c6c70aa))
+- add twitch integration ([#1443](https://github.com/alchemyplatform/aa-sdk/issues/1443)) ([fcecf39](https://github.com/alchemyplatform/aa-sdk/commit/fcecf3909f9b1ffd6d5294400d054c155e4efa78))
+- **openloot:** add openloot to aa-sdk ([#1481](https://github.com/alchemyplatform/aa-sdk/issues/1481)) ([737d7d7](https://github.com/alchemyplatform/aa-sdk/commit/737d7d79571e6552ee40168b09ef3255d143d361))
+- refactor code ([#1467](https://github.com/alchemyplatform/aa-sdk/issues/1467)) ([a6f5477](https://github.com/alchemyplatform/aa-sdk/commit/a6f54779320348569d3549b5fa981ececbc44aaf))
+- update expo example project to build out native files ([#1475](https://github.com/alchemyplatform/aa-sdk/issues/1475)) ([d9e22e1](https://github.com/alchemyplatform/aa-sdk/commit/d9e22e193592588c9468c06f551b3ec7643900d5))
+- update RN bare example to use hooks ([#1449](https://github.com/alchemyplatform/aa-sdk/issues/1449)) ([a56fd42](https://github.com/alchemyplatform/aa-sdk/commit/a56fd423ae3cda6ecde5f56202ce307e1f30cf6a))
+- update the react native docs instructions for OTP and magic link auth ([#1468](https://github.com/alchemyplatform/aa-sdk/issues/1468)) ([6a8a770](https://github.com/alchemyplatform/aa-sdk/commit/6a8a7709ad24c0702de43fff16c05198a978dbef))
+- use resolve aliases to handle crypto package resolution ([#1476](https://github.com/alchemyplatform/aa-sdk/issues/1476)) ([51b0ec2](https://github.com/alchemyplatform/aa-sdk/commit/51b0ec28e32a5c666d414031f288bfc327748c4d))
+
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+### Bug Fixes
+
+- personal_sign [#1427](https://github.com/alchemyplatform/aa-sdk/issues/1427) ([#1428](https://github.com/alchemyplatform/aa-sdk/issues/1428)) ([#1440](https://github.com/alchemyplatform/aa-sdk/issues/1440)) ([fc4b722](https://github.com/alchemyplatform/aa-sdk/commit/fc4b722e1e647d518385d3f68551926a2735774e))
+- support using ui config with tailwind v4 ([#1460](https://github.com/alchemyplatform/aa-sdk/issues/1460)) ([3b969f7](https://github.com/alchemyplatform/aa-sdk/commit/3b969f7285a71f9f0d2dc625a26b72dca7387bff))
+
+### Features
+
+- add initial txn policy docs ([#1456](https://github.com/alchemyplatform/aa-sdk/issues/1456)) ([71153db](https://github.com/alchemyplatform/aa-sdk/commit/71153dbeaddea27c463e5ed08f5d49ba13989438))
+- add RN hooks docs and guides ([#1437](https://github.com/alchemyplatform/aa-sdk/issues/1437)) ([b749c1a](https://github.com/alchemyplatform/aa-sdk/commit/b749c1a7e9a7978aa0327d408a9c7cc724b8cd0f))
+- impl java client for java-sdk ([#1442](https://github.com/alchemyplatform/aa-sdk/issues/1442)) ([04099cf](https://github.com/alchemyplatform/aa-sdk/commit/04099cf06ab144ba3fa30dd6a01a6fd8bb8af462))
+- pull email mode from server ([#1441](https://github.com/alchemyplatform/aa-sdk/issues/1441)) ([3034db4](https://github.com/alchemyplatform/aa-sdk/commit/3034db49aab29d1b9bbd8474056a1f9cdfc98ef7))
+- update expo example to remove use of `emailMode` in OTP auth ([#1459](https://github.com/alchemyplatform/aa-sdk/issues/1459)) ([ea1e5bf](https://github.com/alchemyplatform/aa-sdk/commit/ea1e5bfa8ab4471cc468959610a1acc26b100c9d))
+- update logo ([#1454](https://github.com/alchemyplatform/aa-sdk/issues/1454)) ([cddb1a7](https://github.com/alchemyplatform/aa-sdk/commit/cddb1a7112543581d5409311b07185458205176c))
+
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+### Bug Fixes
+
+- app env ([#1433](https://github.com/alchemyplatform/aa-sdk/issues/1433)) ([4671b11](https://github.com/alchemyplatform/aa-sdk/commit/4671b11bf736fe5a6c4351c3ee9a00c6f1c2b44c))
+- invalidate state if the local signer config changes ([#1435](https://github.com/alchemyplatform/aa-sdk/issues/1435)) ([9ad59f2](https://github.com/alchemyplatform/aa-sdk/commit/9ad59f2d6673bc6f587e6a57343b1486c92f382f))
+
+### Features
+
+- impl stampler, tek manager, etc ([#1408](https://github.com/alchemyplatform/aa-sdk/issues/1408)) ([fe1f1fc](https://github.com/alchemyplatform/aa-sdk/commit/fe1f1fc2d32d5f4bc4bf17f64989454af98533f5))
+- **signer:** add support for using Solana on new signups ([#1376](https://github.com/alchemyplatform/aa-sdk/issues/1376)) ([e0a092e](https://github.com/alchemyplatform/aa-sdk/commit/e0a092e1e10797a50f99f24cf957cad6153fafad))
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 ### Bug Fixes

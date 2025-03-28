@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+### Features
+
+- **networks:** add gensyn testnet ([8c55523](https://github.com/alchemyplatform/aa-sdk/commit/8c55523dd435018ded51d3f7af46fa9f6f6bc261))
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Features
+
+- **openloot:** add openloot to aa-sdk ([#1481](https://github.com/alchemyplatform/aa-sdk/issues/1481)) ([737d7d7](https://github.com/alchemyplatform/aa-sdk/commit/737d7d79571e6552ee40168b09ef3255d143d361))
+
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+**Note:** Version bump only for package @account-kit/infra
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 **Note:** Version bump only for package @account-kit/infra

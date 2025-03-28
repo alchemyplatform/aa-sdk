@@ -74,14 +74,32 @@ import "react-native-get-random-values";
 yarn add @account-kit/react-native-signer @account-kit/signer @account-kit/smart-contracts @account-kit/infra
 ```
 
-7. Add a redirect server to handle the auth request. This is needed to redirect users back to the app after clicking the auth magic link in their email.
+7. Create a `.env` file and update it to have the following value
+
+```
+EXPO_PUBLIC_API_KEY="<Your alchemy public api key>"
+PAYMASTER_POLICY_ID="<Your paymaster policy ID if available>"
+```
 
 ```bash
 yarn add express
 ```
 
-8. Run the redirect server:
+8. Run the app
 
+Prebuild the app if you need to
 ```bash
-yarn start:redirect-server
+npx expo prebuild --clean
+```
+
+Run the app for your desired platform:
+
+IOS
+```
+yarn run ios
+```
+
+Android
+```
+yarn run android
 ```

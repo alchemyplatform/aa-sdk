@@ -6,12 +6,14 @@ import {createConfig, AlchemyAccountProvider} from "@account-kit/react-native"
 
 import {alchemy, sepolia} from '@account-kit/infra'
 import { QueryClient } from "@tanstack/react-query";
-import { API_KEY } from "@env";
+
 
 import React from "react";
 import { Stack } from "expo-router";
 
 const queryClient = new QueryClient()
+
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
 export default function RootLayout() {
 	const configParams = ({

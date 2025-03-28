@@ -11,6 +11,7 @@ export type AuthParams =
   | {
       type: "email";
       email: string;
+      /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
       emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
     }
@@ -34,6 +35,7 @@ export type AuthParams =
       type: "oauth";
       scope?: string;
       claims?: string;
+      otherParameters?: Record<string, string>;
     } & OauthProviderConfig &
       OauthRedirectConfig)
   | {
@@ -69,7 +71,12 @@ export type OauthRedirectConfig =
   | { mode: "redirect"; redirectUrl: string }
   | { mode: "popup"; redirectUrl?: never };
 
-export type KnownAuthProvider = "google" | "apple" | "facebook" | "auth0";
+export type KnownAuthProvider =
+  | "google"
+  | "apple"
+  | "facebook"
+  | "twitch"
+  | "auth0";
 
 export type OauthMode = "redirect" | "popup";
 

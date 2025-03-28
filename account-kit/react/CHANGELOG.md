@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Features
+
+- add twitch integration ([#1443](https://github.com/alchemyplatform/aa-sdk/issues/1443)) ([fcecf39](https://github.com/alchemyplatform/aa-sdk/commit/fcecf3909f9b1ffd6d5294400d054c155e4efa78))
+
+# [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
+
+### Bug Fixes
+
+- support using ui config with tailwind v4 ([#1460](https://github.com/alchemyplatform/aa-sdk/issues/1460)) ([3b969f7](https://github.com/alchemyplatform/aa-sdk/commit/3b969f7285a71f9f0d2dc625a26b72dca7387bff))
+
+### Features
+
+- pull email mode from server ([#1441](https://github.com/alchemyplatform/aa-sdk/issues/1441)) ([3034db4](https://github.com/alchemyplatform/aa-sdk/commit/3034db49aab29d1b9bbd8474056a1f9cdfc98ef7))
+
+# [4.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.3...v4.16.0) (2025-03-12)
+
+**Note:** Version bump only for package @account-kit/react
+
 ## [4.15.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.15.2...v4.15.3) (2025-03-08)
 
 **Note:** Version bump only for package @account-kit/react

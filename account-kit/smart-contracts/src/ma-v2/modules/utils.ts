@@ -12,6 +12,11 @@ import {
   sepolia,
 } from "@account-kit/infra";
 
+export enum SignatureType {
+  EOA = "0x00",
+  CONTRACT = "0x01",
+}
+
 /**
  * Maps a given chain to a specific address of the webauthn validation module by its chain ID. If no direct mapping exists, it defaults to returning a specific address.
  *

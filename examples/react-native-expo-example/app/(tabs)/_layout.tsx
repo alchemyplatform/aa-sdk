@@ -7,18 +7,19 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="index" // Magic Link Auth
 				options={{
-					title: "Magic Link",
-					tabBarIcon: ({ color }) => (
-						<FontAwesome6 size={28} name="magic" color={color} />
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="otp-auth"
-				options={{
 					title: "OTP Auth",
 					tabBarIcon: ({ color }) => (
 						<FontAwesome6 size={28} name="key" color={color} />
+					),
+				}}
+			/>
+			
+			<Tabs.Screen
+				name="oauth"
+				options={{
+					title: "OAuth",
+					tabBarIcon: ({ color }) => (
+						<FontAwesome6 size={28} name="google" color={color} />
 					),
 				}}
 			/>

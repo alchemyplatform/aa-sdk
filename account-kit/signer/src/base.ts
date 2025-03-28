@@ -16,6 +16,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
+import { hashAuthorization, type Authorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -27,7 +28,9 @@ import {
   SessionManager,
   type SessionManagerParams,
 } from "./session/manager.js";
+import type { SessionManagerEvents } from "./session/types";
 import type { AuthParams } from "./signer";
+import { SolanaSigner } from "./solanaSigner.js";
 import {
   AlchemySignerStatus,
   type AlchemySignerEvent,
@@ -35,8 +38,6 @@ import {
   type ErrorInfo,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
-import type { SessionManagerEvents } from "./session/types";
-import { hashAuthorization, type Authorization } from "viem/experimental";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -63,6 +64,14 @@ type InternalStore = Mutate<
   [["zustand/subscribeWithSelector", never]]
 >;
 
+export type EmailConfig = {
+  mode?: "MAGIC_LINK" | "OTP";
+};
+
+export type SignerConfig = {
+  email: EmailConfig;
+};
+
 /**
  * Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
@@ -74,6 +83,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   inner: TClient;
   private sessionManager: SessionManager;
   private store: InternalStore;
+  private config: Promise<SignerConfig>;
 
   /**
    * Initializes an instance with the provided client and session configuration.
@@ -112,6 +122,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     this.registerListeners();
     // then initialize so that we can catch those events
     this.sessionManager.initialize();
+    this.config = this.fetchConfig();
   }
 
   /**
@@ -733,6 +744,38 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     });
   };
 
+  /**
+   * Creates a new instance of `SolanaSigner` using the provided inner value.
+   * This requires the signer to be authenticated first
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const solanaSigner = signer.toSolanaSigner();
+   * ```
+   *
+   * @returns {SolanaSigner} A new instance of `SolanaSigner`
+   */
+  experimental_toSolanaSigner = (): SolanaSigner => {
+    if (!this.inner.getUser()) {
+      throw new NotAuthenticatedError();
+    }
+
+    return new SolanaSigner(this.inner);
+  };
+
   private authenticateWithEmail = async (
     params: Extract<AuthParams, { type: "email" }>
   ): Promise<User> => {
@@ -977,6 +1020,28 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private emitNewUserEvent = (isNewUser?: boolean) => {
     // assumes that if isNewUser is undefined it is a returning user
     if (isNewUser) this.store.setState({ isNewUser });
+  };
+
+  protected initConfig = async (): Promise<SignerConfig> => {
+    this.config = this.fetchConfig();
+    return this.config;
+  };
+
+  /**
+   * Returns the signer configuration while fetching it if it's not already initialized.
+   *
+   * @returns {Promise<SignerConfig>} A promise that resolves to the signer configuration
+   */
+  public getConfig = async (): Promise<SignerConfig> => {
+    if (!this.config) {
+      return this.initConfig();
+    }
+
+    return this.config;
+  };
+
+  protected fetchConfig = async (): Promise<SignerConfig> => {
+    return this.inner.request("/v1/signer-config", {});
   };
 }
 
