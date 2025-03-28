@@ -1,4 +1,5 @@
 import {
+  type Authorization,
   type HDAccount,
   type HDOptions,
   type Hex,
@@ -14,7 +15,6 @@ import {
   privateKeyToAccount,
 } from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
-import type { Authorization } from "viem/experimental";
 
 /**
  * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.

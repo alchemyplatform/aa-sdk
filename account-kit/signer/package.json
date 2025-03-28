@@ -61,7 +61,7 @@
     "zustand": "^5.0.0-rc.2"
   },
   "peerDependencies": {
-    "viem": "^2.22.6"
+    "viem": "^2.24.1"
   },
   "publishConfig": {
     "access": "public",

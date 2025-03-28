@@ -78,6 +78,6 @@
     "@account-kit/infra": "^4.19.0"
   },
   "peerDependencies": {
-    "viem": "^2.22.6"
+    "viem": "^2.24.1"
   }
 }

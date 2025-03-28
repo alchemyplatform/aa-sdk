@@ -1,11 +1,11 @@
 import type { Address } from "abitype";
 import type {
+  Authorization,
   Hex,
   SignableMessage,
   TypedData,
   TypedDataDefinition,
 } from "viem";
-import type { Authorization } from "viem/experimental";
 
 // [!region SmartAccountAuthenticator]
 /**

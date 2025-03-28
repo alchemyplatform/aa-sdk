@@ -4,6 +4,7 @@ import {
   hashTypedData,
   keccak256,
   serializeTransaction,
+  type Authorization,
   type GetTransactionType,
   type Hex,
   type IsNarrowable,
@@ -16,7 +17,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { hashAuthorization, type Authorization } from "viem/experimental";
+import { hashAuthorization } from "viem/utils";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
