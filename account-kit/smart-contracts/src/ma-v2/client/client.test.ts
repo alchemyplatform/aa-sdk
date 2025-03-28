@@ -96,7 +96,7 @@ describe("MA v2 Tests", async () => {
       address: target,
     });
 
-  it.only("Install validation builder", async () => {
+  it("Install validation builder", async () => {
     const provider = await givenConnectedProvider({ signer });
 
     await setBalance(client, {
@@ -145,7 +145,7 @@ describe("MA v2 Tests", async () => {
         },
       })
       .compile_deferred({
-        deadline: 0,
+        deadline: Math.round(Date.now() / 1000 + 100),
         uoValidationEntityId: 0,
         uoValidationIsGlobal: true,
       });
