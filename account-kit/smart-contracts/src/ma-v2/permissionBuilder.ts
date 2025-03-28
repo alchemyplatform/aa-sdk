@@ -17,8 +17,10 @@ import { NativeTokenLimitModule } from "./modules/native-token-limit-module/modu
 import {
   getDefaultAllowlistModuleAddress,
   getDefaultNativeTokenLimitModuleAddress,
+  getDefaultTimeRangeModuleAddress,
 } from "./modules/utils.js";
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
+import { TimeRangeModule } from "./modules/time-range-module/module.js";
 
 export enum PermissionType {
   NATIVE_TOKEN_TRANSFER = "native-token-transfer",
@@ -274,6 +276,7 @@ export class PermissionBuilder {
     }
 
     this.permissions.push(permission);
+
     return this;
   }
 
@@ -300,16 +303,30 @@ export class PermissionBuilder {
 
     // Maybe add checks, like zero address module addr
 
-    // 0. Add time range module hook via expiry
-
-    // 1. Translate all permissions into raw hooks if >0
-    if (this.permissions.length > 0) {
-      const rawHooks = this.translatePermissions(uoValidationEntityId);
-      // Add the translated permissions as hooks
-      this.addHooks(rawHooks);
+    // Add time range module hook via expiry
+    if (deadline !== 0) {
+      if (deadline < Date.now() / 1000) {
+        throw new Error(
+          `PERMISSION: compile_deferred(): Deadline ${deadline} cannot be before now (${
+            Date.now() / 1000
+          })`
+        );
+      }
+      this.hooks.push(
+        TimeRangeModule.buildHook(
+          {
+            entityId: 1, // will be timerange entityId
+            validUntil: deadline,
+            validAfter: 0,
+          },
+          getDefaultTimeRangeModuleAddress(this.client.chain)
+        )
+      );
     }
 
     const installValidationCall = await this.compile_raw();
+
+    console.log("Install validation call:", installValidationCall);
 
     return await deferralActions(
       this.client
@@ -324,6 +341,17 @@ export class PermissionBuilder {
   // Use for direct `installValidation()` low-level calls (maybe useless)
   async compile_raw(): Promise<Hex> {
     this.validateConfiguration();
+
+    // 1. Translate all permissions into raw hooks if >0
+    if (this.permissions.length > 0) {
+      const rawHooks = this.translatePermissions(1);
+      // Add the translated permissions as hooks
+      this.addHooks(rawHooks);
+    }
+
+    console.log("\n\nHOOKS:", this.hooks);
+
+    console.log("COMPILE_RAW: HOOKS:", this.hooks);
 
     return await installValidationActions(this.client).encodeInstallValidation({
       validationConfig: this.validationConfig,
@@ -359,6 +387,7 @@ export class PermissionBuilder {
   }
 
   // Used to translate consolidated permissions into raw unencoded hooks
+  // Note entityId will be a member object later
   private translatePermissions(entityId: number): RawHooks {
     const rawHooks: RawHooks = {
       [HookIdentifier.NATIVE_TOKEN_TRANSFER]: undefined,
