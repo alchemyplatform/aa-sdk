@@ -6,7 +6,7 @@ import {
   useSendUserOperation,
   useChain,
 } from "@account-kit/react";
-import { Address, Chain, encodeFunctionData } from "viem";
+import { Address, encodeFunctionData } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
 import { MintStatus } from "@/components/small-cards/MintCard";
 import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
@@ -29,10 +29,7 @@ export interface UseMintReturn {
 export const useMint = (props: {
   contractAddress: Address;
   mode: "default" | "7702";
-  chain: Chain;
 }): UseMintReturn => {
-  const { chain: activeChain, isSettingChain } = useChain();
-
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
     accountParams: {
@@ -45,10 +42,7 @@ export const useMint = (props: {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);
   const isLoading =
-    Object.values(status).some((x) => x === "loading") ||
-    isLoadingClient ||
-    isSettingChain ||
-    activeChain.id !== props.chain.id;
+    Object.values(status).some((x) => x === "loading") || isLoadingClient;
   const { setToast } = useToast();
 
   const handleSuccess = () => {

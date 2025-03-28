@@ -3,8 +3,8 @@ import { useConfigStore } from "@/state";
 import { useAccount } from "@account-kit/react";
 import { useState } from "react";
 import { createPublicClient, http } from "viem";
-import { odysseyTestnet } from "viem/chains";
 import { useSignerAddress } from "./useSignerAddress";
+import { arbitrumSepolia } from "@account-kit/infra";
 
 export const useDeploymentStatus = () => {
   const { accountMode } = useConfigStore(({ accountMode }) => ({
@@ -20,7 +20,7 @@ export const useDeploymentStatus = () => {
 
   const [publicClient] = useState(() =>
     createPublicClient({
-      chain: odysseyTestnet,
+      chain: arbitrumSepolia,
       transport: http(),
     })
   );

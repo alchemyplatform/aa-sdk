@@ -24,7 +24,7 @@ import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
 import { genEntityId } from "./7702/genEntityId";
 import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 import { useToast } from "@/hooks/useToast";
-import { AlchemyTransport } from "@account-kit/infra";
+import { alchemy, AlchemyTransport, arbitrumSepolia } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
@@ -62,10 +62,10 @@ export interface UseRecurringTransactionReturn {
   handleTransactions: () => void;
 }
 
-export const useRecurringTransactions = (clientOptions: {
+export const useRecurringTransactions = ({
+  mode,
+}: {
   mode: "default" | "7702";
-  chain: Chain;
-  transport: AlchemyTransport;
 }): UseRecurringTransactionReturn => {
   const [transactions, setTransactions] =
     useState<TransactionType[]>(initialTransactions);
@@ -75,6 +75,14 @@ export const useRecurringTransactions = (clientOptions: {
   const [localSessionKey] = useState<Hex>(() => generatePrivateKey());
   const [sessionKeyEntityId] = useState<number>(() => genEntityId());
   const [sessionKeyAdded, setSessionKeyAdded] = useState<boolean>(false);
+
+  const clientOptions = {
+    mode,
+    transport: alchemy({
+      rpcUrl: "/api/rpc",
+    }),
+    chain: arbitrumSepolia,
+  };
 
   const { client, isLoadingClient } = useModularAccountV2Client({
     ...clientOptions,

@@ -4,8 +4,6 @@ import { LoadingIcon } from "@/components/icons/loading";
 import { Transactions } from "./Transactions";
 import { useMemo } from "react";
 import { useRecurringTransactions } from "@/hooks/useRecurringTransactions";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
-import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
 import { Card } from "./Card";
 import { Badge } from "./Badge";
 
@@ -17,13 +15,6 @@ export const TransactionsCard = ({
   const { cardStatus, isLoadingClient, transactions, handleTransactions } =
     useRecurringTransactions({
       mode: accountMode === "7702" ? "7702" : "default",
-      chain: accountMode === "7702" ? odyssey : arbitrumSepolia,
-      transport:
-        accountMode === "7702"
-          ? splitOdysseyTransport
-          : alchemy({
-              rpcUrl: "/api/rpc",
-            }),
     });
   const buttonText = useMemo(() => {
     switch (cardStatus) {
