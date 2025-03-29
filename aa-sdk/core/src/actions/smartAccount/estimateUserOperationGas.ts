@@ -13,6 +13,7 @@ import type {
   SendUserOperationParameters,
   UserOperationContext,
 } from "./types.js";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Description SmartAccountClientAction for estimating the gas cost of a user operation
@@ -23,7 +24,7 @@ import type {
  * @template {SmartContractAccount | undefined} TAccount
  * @template {UserOperationContext | undefined} TContext
  * @template {GetEntryPointFromAccount<TAccount>} TEntryPointVersion
- * @param {Client<TTransport, TChain, TAccount>} client smart account client
+ * @param {Client<TTransport, TChain, TAccount>} client_ smart account client
  * @param {SendUserOperationParameters<TAccount, TContext>} args send user operation parameters
  * @returns {Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>}user operation gas estimate response
  */
@@ -38,9 +39,10 @@ export async function estimateUserOperationGas<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
 ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>> {
+  const client = clientHeaderTrack(client_, "estimateUserOperationGas");
   const { account = client.account, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();

@@ -23,6 +23,7 @@ import type {
   DropAndReplaceUserOperationParameters,
   UserOperationContext,
 } from "./types";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.
@@ -42,7 +43,7 @@ import type {
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client The client instance with the transport, chain, and account information
+ * @param {Client<TTransport, TChain, TAccount>} client_ The client instance with the transport, chain, and account information
  * @param {DropAndReplaceUserOperationParameters<TAccount, TContext>} args The parameters required for dropping and replacing the user operation including the account, operation to drop, overrides, and context
  * @returns {Promise<SendUserOperationResult<TEntryPointVersion>>} A promise that resolves to the result of sending the new user operation
  */
@@ -57,9 +58,10 @@ export async function dropAndReplaceUserOperation<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: DropAndReplaceUserOperationParameters<TAccount, TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
+  const client = clientHeaderTrack(client_, "dropAndReplaceUserOperation");
   const { account = client.account, uoToDrop, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();

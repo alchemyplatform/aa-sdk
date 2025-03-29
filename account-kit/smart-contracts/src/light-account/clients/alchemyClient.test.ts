@@ -25,12 +25,21 @@ describe("Light Account Client Tests", () => {
     await givenConnectedProvider({ signer, chain });
     expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(
       {
+        alchemyRpcUrl: "https://polygon-mumbai.g.alchemy.com/v2/",
         fetchOptions: {
           headers: {
-            "Alchemy-AA-Sdk-Version": expect.any(String),
             "Alchemy-Aa-Sdk-Signer": "local",
+            "Alchemy-AA-Sdk-Version": expect.any(String),
+            Authorization: "Bearer test",
           },
         },
+        key: "alchemy",
+        name: "Alchemy Transport",
+        request: expect.any(Function),
+        retryCount: 3,
+        retryDelay: 150,
+        timeout: undefined,
+        type: "alchemy",
       },
       `
       {
@@ -44,7 +53,7 @@ describe("Light Account Client Tests", () => {
         },
         "key": "alchemy",
         "name": "Alchemy Transport",
-        "request": [Function],
+        "request": Any<Function>,
         "retryCount": 3,
         "retryDelay": 150,
         "timeout": undefined,
