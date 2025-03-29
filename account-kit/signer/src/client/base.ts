@@ -231,6 +231,27 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * Retrieves the status of the passkey for the current user. Requires the user to be authenticated.
+   *
+   * @returns {Promise<{ isPasskeyAdded: boolean }>} A promise that resolves to an object containing the passkey status
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public getPasskeyStatus = async () => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const resp = await this.turnkeyClient.getAuthenticators({
+      organizationId: this.user.orgId,
+      userId: this.user.userId,
+    });
+    return {
+      isPasskeyAdded: resp.authenticators.some((it) =>
+        it.authenticatorName.startsWith("passkey-")
+      ),
+    };
+  };
+
+  /**
    * Retrieves the current user or fetches the user information if not already available.
    *
    * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
