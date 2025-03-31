@@ -14,25 +14,6 @@ Initializes a new instance with the provided trace identifiers and state informa
 import { TraceHeader } from "@aa-sdk/core";
 ```
 
-## Usage
-
-```ts
-function headersUpdate(crumb: string): UpdateHeaderFn {
-  const headerUpdate_ = (x: Record<string, string>) => {
-    const traceHeader = (
-      TraceHeader.fromTraceHeader(x) || TraceHeader.default()
-    ).withEvent(crumb);
-    return {
-      [TRACKER_HEADER]: Math.random().toString(36).substring(10),
-      ...x,
-      [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
-      ...traceHeader.toTraceHeader(),
-    };
-  };
-  return headerUpdate_;
-}
-```
-
 ## Parameters
 
 ### traceId
