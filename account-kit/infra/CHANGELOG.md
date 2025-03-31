@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.21.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.1...v4.21.0) (2025-03-31)
+
+### Features
+
+- add rise support to aa-sdk ([#1498](https://github.com/alchemyplatform/aa-sdk/issues/1498)) ([aaf8b9c](https://github.com/alchemyplatform/aa-sdk/commit/aaf8b9c436e96b43a23fe244649caecea814acb4))
+
 ## [4.20.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.0...v4.20.1) (2025-03-28)
 
 **Note:** Version bump only for package @account-kit/infra
