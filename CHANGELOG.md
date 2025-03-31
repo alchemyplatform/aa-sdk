@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.20.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.0...v4.20.1) (2025-03-28)
+
+### Bug Fixes
+
+- eip1193 account address check [#1430](https://github.com/alchemyplatform/aa-sdk/issues/1430) ([#1493](https://github.com/alchemyplatform/aa-sdk/issues/1493)) ([05d0a63](https://github.com/alchemyplatform/aa-sdk/commit/05d0a632754fdc089a803cd8f2d967c0d6549982))
+- resolve import path immediately for tailwind plugin ([#1494](https://github.com/alchemyplatform/aa-sdk/issues/1494)) ([5abffd2](https://github.com/alchemyplatform/aa-sdk/commit/5abffd2c3b29dd46e79e4c8aed86f7c69723c5c1))
+
 # [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
 
 ### Bug Fixes
