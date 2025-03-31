@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.21.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.1...v4.21.0) (2025-03-31)
+
+### Bug Fixes
+
+- onSignup not call for new user after logging out and back in ([#1492](https://github.com/alchemyplatform/aa-sdk/issues/1492)) ([2ca4926](https://github.com/alchemyplatform/aa-sdk/commit/2ca4926b2fe9bb18a49f211776e8c16cf84fa41f))
+
+### Features
+
+- add rise support to aa-sdk ([#1498](https://github.com/alchemyplatform/aa-sdk/issues/1498)) ([aaf8b9c](https://github.com/alchemyplatform/aa-sdk/commit/aaf8b9c436e96b43a23fe244649caecea814acb4))
+- allow checking passkey status ([#1497](https://github.com/alchemyplatform/aa-sdk/issues/1497)) ([7ec671b](https://github.com/alchemyplatform/aa-sdk/commit/7ec671bb4552c7fe5f6d9e920035c6d1884acc68))
+
+## [4.20.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.0...v4.20.1) (2025-03-28)
+
+### Bug Fixes
+
+- eip1193 account address check [#1430](https://github.com/alchemyplatform/aa-sdk/issues/1430) ([#1493](https://github.com/alchemyplatform/aa-sdk/issues/1493)) ([05d0a63](https://github.com/alchemyplatform/aa-sdk/commit/05d0a632754fdc089a803cd8f2d967c0d6549982))
+- resolve import path immediately for tailwind plugin ([#1494](https://github.com/alchemyplatform/aa-sdk/issues/1494)) ([5abffd2](https://github.com/alchemyplatform/aa-sdk/commit/5abffd2c3b29dd46e79e4c8aed86f7c69723c5c1))
+
 # [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
 
 ### Bug Fixes

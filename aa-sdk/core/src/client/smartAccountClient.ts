@@ -218,7 +218,9 @@ export function createSmartAccountClient(
                 throw new AccountNotFoundError();
               }
               const [address, data] = params!;
-              if (address !== client.account.address) {
+              if (
+                address?.toLowerCase() !== client.account.address.toLowerCase()
+              ) {
                 throw new Error(
                   "cannot sign for address that is not the current account"
                 );
@@ -232,7 +234,9 @@ export function createSmartAccountClient(
                 throw new AccountNotFoundError();
               }
               const [data, address] = params!;
-              if (address !== client.account.address) {
+              if (
+                address?.toLowerCase() !== client.account.address.toLowerCase()
+              ) {
                 throw new Error(
                   "cannot sign for address that is not the current account"
                 );
@@ -247,7 +251,9 @@ export function createSmartAccountClient(
                 throw new AccountNotFoundError();
               }
               const [address, dataParams] = params!;
-              if (address !== client.account.address) {
+              if (
+                address?.toLowerCase() !== client.account.address.toLowerCase()
+              ) {
                 throw new Error(
                   "cannot sign for address that is not the current account"
                 );
