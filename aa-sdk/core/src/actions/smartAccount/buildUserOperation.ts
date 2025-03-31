@@ -13,7 +13,7 @@ import type {
   BuildUserOperationParameters,
   UserOperationContext,
 } from "./types";
-import { clientHeaderTrack } from "../../client/updateHeaders.js";
+import { clientHeaderTrack } from "../../client/addBreadcrumb.js";
 
 const USER_OPERATION_METHOD = "buildUserOperation";
 /**

@@ -14,6 +14,14 @@ Should be able to convert the trace header to the format that is used in the hea
 import { TraceHeader } from "@aa-sdk/core";
 ```
 
+## Usage
+
+```ts
+const traceHeader =
+  TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
+const headers = traceHeader.toTraceHeader();
+```
+
 ## Returns
 
 `{stracheader: string, tracestate: string}`

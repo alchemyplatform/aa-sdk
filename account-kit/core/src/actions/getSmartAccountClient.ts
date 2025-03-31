@@ -251,7 +251,7 @@ export function getSmartAccountClient(
 
   setSmartAccountClientState({
     config,
-    newState: newState as any,
+    newState,
     type,
     connection,
   });

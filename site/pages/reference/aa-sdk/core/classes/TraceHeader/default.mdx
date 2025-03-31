@@ -14,6 +14,13 @@ Creating a default trace id that is a random setup for both trace id and parent 
 import { TraceHeader } from "@aa-sdk/core";
 ```
 
+## Usage
+
+```ts
+const traceHeader =
+  TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
+```
+
 ## Returns
 
 `TraceHeader`

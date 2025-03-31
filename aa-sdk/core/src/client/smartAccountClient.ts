@@ -29,7 +29,7 @@ import {
 } from "./decorators/smartAccountClient.js";
 import { SmartAccountClientOptsSchema } from "./schema.js";
 import type { ClientMiddlewareConfig } from "./types.js";
-import { ADD_BREADCRUMB } from "./updateHeaders.js";
+import { ADD_BREADCRUMB } from "./addBreadcrumb.js";
 
 type SmartAccountClientOpts = z.output<typeof SmartAccountClientOptsSchema>;
 

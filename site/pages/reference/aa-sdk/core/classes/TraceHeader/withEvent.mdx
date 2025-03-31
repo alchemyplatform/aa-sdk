@@ -17,6 +17,14 @@ trace parent gets updated as according to the docs
 import { TraceHeader } from "@aa-sdk/core";
 ```
 
+## Usage
+
+```ts
+const traceHeader =
+  TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
+const newTraceHeader = traceHeader.withEvent("newEvent");
+```
+
 ## Parameters
 
 ### eventName

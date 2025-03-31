@@ -2,7 +2,6 @@ import {
   ChainNotFoundError,
   clientHeaderTrack,
   createSmartAccountClient,
-  headersUpdate,
   isSmartAccountWithSigner,
   type Prettify,
   type SmartAccountClient,
@@ -28,6 +27,7 @@ import {
   type AlchemySmartAccountClientActions,
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
+import { headersUpdate } from "../alchemyTrackerHeaders.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner

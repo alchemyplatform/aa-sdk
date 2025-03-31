@@ -18,7 +18,7 @@ describe("createConfig tests", () => {
       {
         dynamicFetchOptions: {
           headers: {
-            "Alchemy-AA-Sdk-Version": expect.stringMatching(/\d+\.\d+\.\d+/),
+            "Alchemy-AA-Sdk-Version": expect.stringMatching(/^\d+\.\d+\.\d+/),
           },
         },
       },
@@ -29,7 +29,7 @@ describe("createConfig tests", () => {
         },
         "dynamicFetchOptions": {
           "headers": {
-            "Alchemy-AA-Sdk-Version": StringMatching /\\\\d\\+\\\\\\.\\\\d\\+\\\\\\.\\\\d\\+/,
+            "Alchemy-AA-Sdk-Version": StringMatching /\\^\\\\d\\+\\\\\\.\\\\d\\+\\\\\\.\\\\d\\+/,
           },
         },
         "updateHeaders": [Function],

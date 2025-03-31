@@ -4,6 +4,8 @@ function generateRandomHexString(numBytes: number) {
   const hexPairs = array.map((b) => b.toString(16).padStart(2, "0"));
   return hexPairs.join("");
 }
+
+const clientTraceId = generateRandomHexString(16);
 /**
  * Some tools that are useful when dealing with the values
  * of the trace header. Follows the W3C trace context standard.
@@ -18,24 +20,6 @@ export class TraceHeader {
 
   /**
    * Initializes a new instance with the provided trace identifiers and state information.
-   *
-   * @example ```ts
-   * function headersUpdate(crumb: string): UpdateHeaderFn {
-        const headerUpdate_ = (x: Record<string, string>) => {
-            const traceHeader = (
-            TraceHeader.fromTraceHeader(x) || TraceHeader.default()
-            ).withEvent(crumb);
-            return {
-            [TRACKER_HEADER]: Math.random().toString(36).substring(10),
-            ...x,
-            [TRACKER_BREADCRUMB]: addCrumb(x[TRACKER_BREADCRUMB], crumb),
-            ...traceHeader.toTraceHeader(),
-            };
-        };
-        return headerUpdate_;
-    }
-   * 
-   * ```
    *
    * @param {string} traceId The unique identifier for the trace
    * @param {string} parentId The identifier of the parent trace
@@ -65,7 +49,7 @@ export class TraceHeader {
    */
   static default() {
     return new TraceHeader(
-      generateRandomHexString(16),
+      clientTraceId,
       generateRandomHexString(8),
       "00", //Means no flag have been set, and no sampled state https://www.w3.org/TR/trace-context/#trace-flags
       {}
