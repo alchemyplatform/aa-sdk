@@ -1,3 +1,8 @@
+experimental:
+  mdx-components:
+    - account-kit/components
+    - account-kit/shared
+
 navigation:
   - tab: wallets
     layout:

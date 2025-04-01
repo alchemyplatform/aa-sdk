@@ -19,21 +19,14 @@ jobs:
       - name: Download Alchemy Docs Repo
         run: |
           rm -rf docs-site && \
-          curl -L -f -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          curl -L -f -H "Authorization: token ${{ secrets.DOCS_GITHUB_TOKEN }}" \
             -o docs.tar.gz https://api.github.com/repos/alchemyplatform/docs/tarball/main && \
           tar xzf docs.tar.gz && \
           mv alchemyplatform-docs-* docs-site && \
           rm docs.tar.gz
 
       - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
-        run: |
-          sed '1d' docs/docs.yml \
-            | sed -i '' \
-              '/  # Account Kit docs are auto-generated here/r /dev/stdin' \
-              docs-site/fern/docs.yml \
-            && sed -i '' \
-              '/  # Account Kit docs are auto-generated here/d' \
-              docs-site/fern/docs.yml
+        run: docs/scripts/insert-docs.sh
 
       - name: Install Fern CLI
         run: npm install -g fern-api
