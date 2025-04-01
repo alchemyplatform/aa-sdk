@@ -326,3 +326,9 @@ export type MfaChallenge = {
 export type SubmitOtpCodeResponse =
   | { bundle: string; mfaRequired: false }
   | { mfaRequired: true; encryptedPayload: string; multiFactors: MfaFactor[] };
+
+export type experimental_CreateApiKeyParams = {
+  name: string;
+  publicKey: string;
+  expirationSec: number;
+};

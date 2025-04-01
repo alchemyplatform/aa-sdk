@@ -1,18 +1,17 @@
 package com.alchemy.aa.client;
 
-import com.alchemy.aa.Stamper;
-import com.alchemy.aa.Stamper.Stamp;
-import com.alchemy.aa.client.api.AuthJWT.Request;
+import com.alchemy.aa.client.api.AuthJWT;
 import com.alchemy.aa.client.api.AuthJWT.Response;
-import com.alchemy.aa.client.api.AuthUser;
-import com.alchemy.aa.client.api.AuthUser.TurnKeyWhoAmIRequest;
-import com.alchemy.aa.client.api.AuthUser.WhoAmIRequest;
-import com.alchemy.aa.client.api.SignRawMessage.SignParameters;
-import com.alchemy.aa.client.api.SignRawMessage.SignRawMessageRequest;
-import com.alchemy.aa.client.api.SignRawMessage.SignedResponse;
-import com.alchemy.aa.client.api.SignRawMessage.SigningBody;
+import com.alchemy.aa.client.api.SignMessage;
+import com.alchemy.aa.client.api.SignMessage.SignBody;
+import com.alchemy.aa.client.api.SignMessage.SignParameters;
 import com.alchemy.aa.client.api.StampedRequest;
+import com.alchemy.aa.client.api.WhoAmI;
+import com.alchemy.aa.client.api.WhoAmI.RawWhoAmIRequest;
+import com.alchemy.aa.client.api.WhoAmI.Request;
 import com.alchemy.aa.core.CredentialBundle;
+import com.alchemy.aa.core.Stamper;
+import com.alchemy.aa.core.Stamper.Stamp;
 import com.alchemy.aa.core.TekManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -43,7 +42,7 @@ public class SignerClient {
   private enum PathName {
     LOOKUP("lookup"),
     AUTH("auth"),
-    AUTH_JWT("auth-jwt"),
+    AUTH_JWT("auth-JWT"),
     WHOAMI("whoami"),
     SIGN_PAYLOAD("sign-payload");
 
@@ -77,7 +76,7 @@ public class SignerClient {
    *
    * @throws Exception
    */
-  public Stamper authenticateWithBundle(
+  public UserStamper authenticateWithBundle(
     TekManager tekManager,
     String orgId,
     String bundle
@@ -90,18 +89,24 @@ public class SignerClient {
 
     Stamper stamper = new Stamper(credentialBundle);
     User user = authUser(stamper, orgId);
-    stamper.setUser(user);
-    return stamper;
+    return new UserStamper(user, stamper);
   }
 
-  public Stamper authenticateWithJWT(
+  /**
+   * Authticate user with JWT and get a stamper
+   * @param tekManager client's tek keys
+   * @param JWT JWT token
+   * @param authProviderName auth provider
+   * @return authenticated user
+   * @throws Exception if JWT and tekManager mis match
+   */
+  public UserStamper authenticateWithJWT(
     TekManager tekManager,
-    String jwt,
-    String authProviderName,
-    int expirationInSeconds
+    String JWT,
+    String authProviderName
   ) throws Exception {
-    Request request = Request.builder()
-      .jwt(jwt)
+    AuthJWT.Request request = AuthJWT.Request.builder()
+      .jwt(JWT)
       .authProvider(authProviderName)
       .targetPublicKey(tekManager.publicKey())
       .build();
@@ -129,12 +134,12 @@ public class SignerClient {
    * @param address
    *            signer's address.
    *
-   * @return signed data in bytes.
+   * @return signature in string.
    *
    * @throws Exception
    */
   public String signRawMessage(
-    Stamper stamper,
+    UserStamper userStamper,
     Bytes msg,
     String hashFunction,
     String address
@@ -146,8 +151,8 @@ public class SignerClient {
       .signWith(address)
       .build();
 
-    SigningBody body = SigningBody.builder()
-      .organizationId(stamper.getUser().orgId)
+    SignBody body = SignBody.builder()
+      .organizationId(userStamper.user().orgId)
       .type("ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2")
       .timestampMs(String.valueOf(Instant.now().toEpochMilli()))
       .parameters(signParameters)
@@ -155,44 +160,42 @@ public class SignerClient {
 
     String jsonBody = mapper.writeValueAsString(body);
 
-    Stamp stamp = stamper.stamp(jsonBody);
+    Stamp stamp = userStamper.stamper().stamp(jsonBody);
     StampedRequest stampedRequest = StampedRequest.builder()
       .url("https://api.turnkey.com/public/v1/submit/sign_raw_payload")
       .body(jsonBody)
       .stamp(stamp)
       .build();
-    SignRawMessageRequest request = new SignRawMessageRequest(stampedRequest);
-    SignedResponse response = request(
+    SignMessage.Request request = new SignMessage.Request(stampedRequest);
+    SignMessage.Response response = request(
       PathName.SIGN_PAYLOAD.getName(),
       request,
-      SignedResponse.class
+      SignMessage.Response.class
     );
     return response.signature();
   }
 
   /**
    * Sign a Solana transcation.
-   *
-   * @param txBytes
-   *            transaction bytes
-   *
-   * @return signature
-   *
+   * @param stamper stamper to sign
+   * @param txBytes transaction bytes
+   * @return signature in string
    * @throws Exception
    */
-  public String signSolanaTx(Stamper stamper, Bytes txBytes) throws Exception {
+  public String signSolanaTx(UserStamper stamper, Bytes txBytes)
+    throws Exception {
     return signRawMessage(
       stamper,
       txBytes,
       "HASH_FUNCTION_NOT_APPLICABLE",
-      stamper.getUser().solanaAddress
+      stamper.user().solanaAddress
     );
   }
 
   /**
    * Sign an Eth transaction.
    *
-   * @param stamper
+   * @param userStamper
    *            stamper to stamp transaction
    * @param txBytes
    *            keccack256 hashed transaction byte
@@ -201,12 +204,13 @@ public class SignerClient {
    *
    * @throws Exception
    */
-  public String signEthTx(Stamper stamper, Bytes txBytes) throws Exception {
+  public String signEthTx(UserStamper userStamper, Bytes txBytes)
+    throws Exception {
     return signRawMessage(
-      stamper,
+      userStamper,
       txBytes,
       "HASH_FUNCTION_NO_OP",
-      stamper.getUser().address
+      userStamper.user().address
     );
   }
 
@@ -219,23 +223,21 @@ public class SignerClient {
    *
    * @throws Exception
    */
-  private User authUser(Stamper stamper, String orgId) throws Exception {
-    WhoAmIRequest whoAmIRequest = new WhoAmIRequest(orgId);
+  private User authUser(Stamper Stamper, String orgId) throws Exception {
+    RawWhoAmIRequest rawWhoAmIRequest = new RawWhoAmIRequest(orgId);
     ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-    String json_body = writer.writeValueAsString(whoAmIRequest);
-    Stamp stampedBody = stamper.stamp(json_body);
+    String json_body = writer.writeValueAsString(rawWhoAmIRequest);
+    Stamp stampedBody = Stamper.stamp(json_body);
     StampedRequest stampedRequestrequest = StampedRequest.builder()
       .url("https://api.whoami.com/v1/users/")
       .body(json_body)
       .stamp(stampedBody)
       .build();
-    TurnKeyWhoAmIRequest request = new TurnKeyWhoAmIRequest(
-      stampedRequestrequest
-    );
-    AuthUser.Response response = request(
+    Request request = new Request(stampedRequestrequest);
+    WhoAmI.Response response = request(
       PathName.WHOAMI.getName(),
       request,
-      AuthUser.Response.class
+      WhoAmI.Response.class
     );
     return User.builder()
       .address(response.address())

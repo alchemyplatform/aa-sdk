@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.21.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.1...v4.21.0) (2025-03-31)
+
+### Bug Fixes
+
+- onSignup not call for new user after logging out and back in ([#1492](https://github.com/alchemyplatform/aa-sdk/issues/1492)) ([2ca4926](https://github.com/alchemyplatform/aa-sdk/commit/2ca4926b2fe9bb18a49f211776e8c16cf84fa41f))
+
+### Features
+
+- add rise support to aa-sdk ([#1498](https://github.com/alchemyplatform/aa-sdk/issues/1498)) ([aaf8b9c](https://github.com/alchemyplatform/aa-sdk/commit/aaf8b9c436e96b43a23fe244649caecea814acb4))
+- allow checking passkey status ([#1497](https://github.com/alchemyplatform/aa-sdk/issues/1497)) ([7ec671b](https://github.com/alchemyplatform/aa-sdk/commit/7ec671bb4552c7fe5f6d9e920035c6d1884acc68))
+
+## [4.20.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.0...v4.20.1) (2025-03-28)
+
+### Bug Fixes
+
+- eip1193 account address check [#1430](https://github.com/alchemyplatform/aa-sdk/issues/1430) ([#1493](https://github.com/alchemyplatform/aa-sdk/issues/1493)) ([05d0a63](https://github.com/alchemyplatform/aa-sdk/commit/05d0a632754fdc089a803cd8f2d967c0d6549982))
+- resolve import path immediately for tailwind plugin ([#1494](https://github.com/alchemyplatform/aa-sdk/issues/1494)) ([5abffd2](https://github.com/alchemyplatform/aa-sdk/commit/5abffd2c3b29dd46e79e4c8aed86f7c69723c5c1))
+
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+### Bug Fixes
+
+- auth card center ([#1486](https://github.com/alchemyplatform/aa-sdk/issues/1486)) ([817b2e4](https://github.com/alchemyplatform/aa-sdk/commit/817b2e47c4e07e728d8e38a07814ea985dad1a1d))
+- card size ([#1480](https://github.com/alchemyplatform/aa-sdk/issues/1480)) ([2613aa2](https://github.com/alchemyplatform/aa-sdk/commit/2613aa2fbb8565c6c14fdcbd9548e73e290f9c4a))
+
+### Features
+
+- **networks:** add gensyn testnet ([8c55523](https://github.com/alchemyplatform/aa-sdk/commit/8c55523dd435018ded51d3f7af46fa9f6f6bc261))
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Bug Fixes
+
+- add zustand dependcy to signer sdk ([#1482](https://github.com/alchemyplatform/aa-sdk/issues/1482)) ([3c34d04](https://github.com/alchemyplatform/aa-sdk/commit/3c34d04cd97626f2dabd15572b9526323d1ee89a))
+- darkmode eoa wallet bg color ([#1451](https://github.com/alchemyplatform/aa-sdk/issues/1451)) ([dedbc7e](https://github.com/alchemyplatform/aa-sdk/commit/dedbc7e0028aefe9fb32f8df26cc9b054264e335))
+- **demo:** mobile dark mode styling ([#1463](https://github.com/alchemyplatform/aa-sdk/issues/1463)) ([7e4bee9](https://github.com/alchemyplatform/aa-sdk/commit/7e4bee9815896fb25ef514617c637c7d36f61b48))
+- ensure session persistence on IOS ([#1457](https://github.com/alchemyplatform/aa-sdk/issues/1457)) ([c2fc412](https://github.com/alchemyplatform/aa-sdk/commit/c2fc412d0853b4ba72d7900977912ad78c71e46c)), closes [#1454](https://github.com/alchemyplatform/aa-sdk/issues/1454)
+- send sdk version on signer ([#1472](https://github.com/alchemyplatform/aa-sdk/issues/1472)) ([0f696d6](https://github.com/alchemyplatform/aa-sdk/commit/0f696d64bbc092e9a249ebdffe6db2cce5c73fcc))
+
+### Features
+
+- add low-level deferred action support ([#1434](https://github.com/alchemyplatform/aa-sdk/issues/1434)) ([c3616c3](https://github.com/alchemyplatform/aa-sdk/commit/c3616c3ce3bf1a2277fcdb6ddb368f924c6c70aa))
+- add twitch integration ([#1443](https://github.com/alchemyplatform/aa-sdk/issues/1443)) ([fcecf39](https://github.com/alchemyplatform/aa-sdk/commit/fcecf3909f9b1ffd6d5294400d054c155e4efa78))
+- **openloot:** add openloot to aa-sdk ([#1481](https://github.com/alchemyplatform/aa-sdk/issues/1481)) ([737d7d7](https://github.com/alchemyplatform/aa-sdk/commit/737d7d79571e6552ee40168b09ef3255d143d361))
+- refactor code ([#1467](https://github.com/alchemyplatform/aa-sdk/issues/1467)) ([a6f5477](https://github.com/alchemyplatform/aa-sdk/commit/a6f54779320348569d3549b5fa981ececbc44aaf))
+- update expo example project to build out native files ([#1475](https://github.com/alchemyplatform/aa-sdk/issues/1475)) ([d9e22e1](https://github.com/alchemyplatform/aa-sdk/commit/d9e22e193592588c9468c06f551b3ec7643900d5))
+- update RN bare example to use hooks ([#1449](https://github.com/alchemyplatform/aa-sdk/issues/1449)) ([a56fd42](https://github.com/alchemyplatform/aa-sdk/commit/a56fd423ae3cda6ecde5f56202ce307e1f30cf6a))
+- update the react native docs instructions for OTP and magic link auth ([#1468](https://github.com/alchemyplatform/aa-sdk/issues/1468)) ([6a8a770](https://github.com/alchemyplatform/aa-sdk/commit/6a8a7709ad24c0702de43fff16c05198a978dbef))
+- use resolve aliases to handle crypto package resolution ([#1476](https://github.com/alchemyplatform/aa-sdk/issues/1476)) ([51b0ec2](https://github.com/alchemyplatform/aa-sdk/commit/51b0ec28e32a5c666d414031f288bfc327748c4d))
+
 # [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
 
 ### Bug Fixes

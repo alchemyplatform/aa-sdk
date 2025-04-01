@@ -514,3 +514,75 @@ export const mekong: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const openlootSepolia: Chain = defineChain({
+  id: 905905,
+  name: "Openloot Sepolia",
+  nativeCurrency: { name: "Openloot", symbol: "OL", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://openloot-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://openloot-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://openloot-sepolia.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://openloot-sepolia.explorer.alchemy.com",
+    },
+  },
+  testnet: true,
+});
+
+export const gensynTestnet: Chain = defineChain({
+  id: 685685,
+  name: "Gensyn Testnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://gensyn-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://gensyn-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://gensyn-testnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://gensyn-testnet.explorer.alchemy.com",
+    },
+  },
+  testnet: true,
+});
+
+export const riseTestnet: Chain = defineChain({
+  id: 11155931,
+  name: "Rise Testnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://rise-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://rise-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://rise-testnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://testnet-explorer.riselabs.xyz",
+    },
+  },
+  testnet: true,
+});

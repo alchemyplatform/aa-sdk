@@ -104,17 +104,22 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits their email
-const handleSendMagicLink = async (email: string) => {
-  try {
-    await authenticate({
+const handleSendMagicLink = (email: string) => {
+  authenticate(
+    {
       type: "email",
       emailMode: "magicLink",
       email,
-    });
-    // Success - inform user to check their email
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - inform user to check their email
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -131,20 +136,25 @@ const { authenticate } = useAuthenticate();
 
 // Handle the redirect when the component mounts
 useEffect(() => {
-  const handleRedirect = async () => {
+  const handleRedirect = () => {
     const url = new URL(window.location.href);
     const bundle = url.searchParams.get("bundle");
 
     if (bundle) {
-      try {
-        await authenticate({
+      authenticate(
+        {
           type: "email",
           bundle,
-        });
-        // Authentication successful!
-      } catch (error) {
-        // Handle error
-      }
+        },
+        {
+          onSuccess: () => {
+            // Authentication successful!
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        }
+      );
     }
   };
 

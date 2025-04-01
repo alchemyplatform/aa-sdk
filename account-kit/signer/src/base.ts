@@ -726,6 +726,11 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       return this.inner.addPasskey(params ?? {});
     });
 
+  getPasskeyStatus: () => Promise<{ isPasskeyAdded: boolean }> =
+    SignerLogger.profiled("BaseAlchemySigner.getPasskeyStatus", async () => {
+      return this.inner.getPasskeyStatus();
+    });
+
   /**
    * Used to export the wallet for a given user
    * If the user is authenticated with an Email, this will return a seed phrase
