@@ -10,12 +10,24 @@ With Account Kit, multi-factor authentication (MFA) uses authenticator apps—li
 By requiring both a user's primary login (e.g., email OTP, magic link, or social login) and a TOTP from their authenticator app, your application gains an extra layer of security.
 
 :::tip
-Multi-factor authentication is currently only supported when authenticating with Email OTP, Email Magic Link, or Social Login.
+Multi-factor authentication requires a primary authentication method (Email OTP, Email Magic Link, or Social Login) to be already set up. See the [React Quickstart](/react/quickstart) guide to set up your primary authentication method first.
 :::
 
 ## Overview
 
 Multi-factor authentication adds an extra layer of security by requiring users to verify their identity using multiple methods. With Account Kit, users can use authenticator apps (like Google Authenticator, Authy, or Microsoft Authenticator) as their second security factor.
+
+## Prerequisites
+
+Before implementing MFA, you need to have:
+
+1. **Set up primary authentication** - MFA requires a primary authentication method to be already set up. Follow the [React Quickstart](/react/quickstart) guide to configure email (OTP or magic link) or social login.
+2. **Working authentication flow** - Ensure users can successfully sign in with your primary authentication method.
+3. **Proper configuration** - In your `config.ts`, make sure you've enabled email or social login in the authentication sections.
+
+:::info
+MFA is an additional security layer that works with your existing authentication system. If you haven't set up basic authentication yet, you won't be able to implement MFA.
+:::
 
 ## Implementation
 
@@ -42,7 +54,7 @@ if (isReady) {
 
 ### Step 2: Setting Up an Authenticator App
 
-In this step, we generate a QR code (TOTP seed) for the user to scan. Most authenticator apps (Google Authenticator, Authy, 1Password, etc.) can scan this QR code to generate 6-digit time-based codes.
+In this step, we receive a QR code URL from the backend and display it to the user. This URL contains a TOTP seed and necessary metadata. When displayed as a QR code, it can be scanned by most authenticator apps (Google Authenticator, Authy, 1Password, etc.) to set up 6-digit time-based codes. The backend also provides a unique multiFactorId which we'll need to store for the verification step.
 
 ```tsx twoslash
 import React, { useState } from "react";
@@ -64,6 +76,8 @@ function AuthenticatorSetupComponent() {
         onSuccess: (result) => {
           // Store the QR code URL and factor ID
           setQrCodeUrl(result.multiFactorTotpUrl);
+          // Store the factor ID which will be needed for verification in the next step
+          // This ID uniquely identifies the MFA factor being configured
           setFactorId(result.multiFactorId);
         },
         onError: (error) => {

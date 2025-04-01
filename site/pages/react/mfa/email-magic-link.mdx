@@ -11,14 +11,19 @@ This guide shows you how to implement authentication with Email Magic Link and T
 
 When a user has MFA enabled with an authenticator app (TOTP), the login flow requires two steps:
 
-1. Click the magic link from email
-2. Enter the 6-digit TOTP code from their authenticator app (e.g., Google Authenticator)
+1. The user enters their email address to request a magic link
+2. If MFA is enabled for their account, they're prompted to enter the 6-digit TOTP code from their authenticator app (e.g., Google Authenticator)
+3. After entering a valid TOTP code, a magic link is sent to their email
+4. The user clicks the magic link from email to complete authentication
+5. Upon successful verification, the user is authenticated and redirected to the appropriate page
+
+This two-factor approach provides an additional layer of security beyond a standard magic link.
 
 ## Implementation
 
 ### Step 1: Send the Magic Link with MFA Handling
 
-When sending a magic link to a user with MFA enabled, you need to handle the MFA requirement:
+When sending a magic link to a user with MFA enabled, you need to handle both parts of the authentication flow:
 
 ```tsx twoslash
 import React from "react";
@@ -27,112 +32,108 @@ import { MfaRequiredError } from "@account-kit/signer";
 import { useState } from "react";
 
 function MagicLinkWithMFA() {
-  const { authenticateAsync } = useAuthenticate();
+  const [mfaData, setMfaData] = useState({ email: "", multiFactorId: "" });
   const [showTotpInput, setShowTotpInput] = useState(false);
   const [totpCode, setTotpCode] = useState("");
-  const [emailData, setEmailData] = useState({ email: "", multiFactorId: "" });
-  const [emailInputValue, setEmailInputValue] = useState("");
+  const { authenticate } = useAuthenticate();
 
-  // When the user submits their email
-  const handleSendMagicLink = async (email: string) => {
-    try {
-      await authenticateAsync({
+  // When the user submits their email to receive a magic link
+  const handleSendMagicLink = (email: string) => {
+    authenticate(
+      {
         type: "email",
         emailMode: "magicLink",
         email,
-      });
-      // Success - inform user to check their email
-    } catch (error) {
-      if (error instanceof MfaRequiredError) {
-        // MFA is required - get the factor ID from the error
-        const { multiFactorId } = error.multiFactors[0];
+      },
+      {
+        onSuccess: () => {
+          // This callback only fires when the entire auth flow is complete
+          // (user clicked magic link and completed MFA if required)
+          console.log("Authentication successful!");
+        },
+        onError: (error) => {
+          // If MFA is required the attempt will result in an MfaRequiredError
+          if (error instanceof MfaRequiredError) {
+            const { multiFactorId } = error.multiFactors[0];
 
-        // Store data and show TOTP input field
-        setEmailData({ email, multiFactorId });
-        setShowTotpInput(true);
+            // Store this information to use when the user enters their TOTP code
+            setMfaData({ email, multiFactorId });
+            setShowTotpInput(true);
+          }
+          // Handle other errors
+        },
       }
-      // Handle other errors
-    }
+    );
+  };
+
+  // Add a handler for the TOTP input
+  const handleTotpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTotpCode(e.target.value);
   };
 
   // When the user provides the TOTP code
-  const handleMagicLinkWithMFA = async () => {
-    try {
-      await authenticateAsync({
+  const handleMagicLinkWithMFA = () => {
+    authenticate(
+      {
         type: "email",
         emailMode: "magicLink",
-        email: emailData.email,
+        email: mfaData.email,
+        // The multiFactors array tells the authentication system which
+        // factor to verify and what code to use
         multiFactors: [
           {
-            multiFactorId: emailData.multiFactorId,
+            multiFactorId: mfaData.multiFactorId,
             multiFactorCode: totpCode,
           },
         ],
-      });
-      // Success - inform user to check their email
-    } catch (error) {
-      // Handle error
-    }
+      },
+      {
+        onSuccess: () => {
+          // This callback will only fire after the user has clicked the magic link and the email has been verified
+        },
+        onError: (error) => {
+          // Handle error
+        },
+      }
+    );
   };
 
-  // Render TOTP input when needed
-  return (
-    <div>
-      {!showTotpInput ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSendMagicLink(emailInputValue); // Assuming emailInputValue is defined elsewhere
-          }}
-        >
-          {/* Email input form */}
-          <button type="submit">Send Magic Link</button>
-        </form>
-      ) : (
-        <div>
-          <p>Please enter the 6-digit code from your authenticator app</p>
-          <input
-            type="text"
-            value={totpCode}
-            onChange={(e) => setTotpCode(e.target.value)}
-            maxLength={6}
-            pattern="[0-9]*"
-            inputMode="numeric"
-          />
-          <button onClick={handleMagicLinkWithMFA}>Verify</button>
-        </div>
-      )}
-    </div>
-  );
+  return <div>{/* Your UI components here */}</div>;
 }
 ```
 
 ### Step 2: Handle the Magic Link Redirect
 
-When the user clicks the magic link, handle the redirect:
+When the user clicks the magic link in their email, your application needs to handle the redirect and complete the authentication:
 
 ```tsx twoslash
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 // Inside your component
-const { authenticateAsync } = useAuthenticate();
+const { authenticate } = useAuthenticate();
 
-const handleMagicLinkRedirect = async () => {
+const handleMagicLinkRedirect = () => {
   const url = new URL(window.location.href);
   const bundle = url.searchParams.get("bundle");
 
+  // If there's no bundle parameter, this isn't a magic link redirect
   if (!bundle) return;
 
-  try {
-    await authenticateAsync({
+  authenticate(
+    {
       type: "email",
       bundle,
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 
 // Call this function when the component mounts

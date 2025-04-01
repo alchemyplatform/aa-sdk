@@ -49,21 +49,26 @@ When a user with MFA enabled attempts to authenticate using social login:
 import { useAuthenticate } from "@account-kit/react";
 
 // Your social login implementation doesn't change
-const { authenticateAsync } = useAuthenticate();
+const { authenticate } = useAuthenticate();
 
 // For popup flow
-const handleGoogleLogin = async () => {
-  try {
-    await authenticateAsync({
+const handleGoogleLogin = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "google",
       mode: "popup",
-    });
-    // Authentication successful!
-    // If MFA was required, it was handled automatically in the oauth flow
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+        // If MFA was required, it was handled automatically in the oauth flow
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 

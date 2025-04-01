@@ -74,6 +74,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey",
           },
           {
+            text: "validateMultiFactors",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors",
+          },
+          {
             text: "verifyMfa",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa",
           },
@@ -128,16 +132,16 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getAuthDetails",
           },
           {
+            text: "getConfig",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig",
+          },
+          {
             text: "getMfaFactors",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors",
           },
           {
             text: "getMfaStatus",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus",
-          },
-          {
-            text: "getConfig",
-            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig",
           },
           {
             text: "getUser",
@@ -174,6 +178,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "toViemAccount",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/toViemAccount",
+          },
+          {
+            text: "validateMultiFactors",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/validateMultiFactors",
           },
           {
             text: "verifyMfa",
@@ -231,6 +239,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "stampWhoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami",
+          },
+          {
+            text: "validateMultiFactors",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/validateMultiFactors",
           },
           {
             text: "verifyMfa",
