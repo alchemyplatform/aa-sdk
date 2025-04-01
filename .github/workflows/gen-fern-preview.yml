@@ -25,6 +25,11 @@ jobs:
           mv alchemyplatform-docs-* docs-site && \
           rm docs.tar.gz
 
+      - name: Copy docs to docs-site/account-kit
+        run: |
+          mkdir -p docs-site/account-kit
+          cp -r docs/* docs-site/account-kit/
+
       - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
         run: docs/scripts/insert-docs.sh
 
