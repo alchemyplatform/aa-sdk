@@ -1416,7 +1416,7 @@ describe("MA v2 Tests", async () => {
       (s) =>
         prepareEncodeFunctionData({
           abi: semiModularAccountBytecodeAbi,
-          functionName: e as ContractFunctionName<
+          functionName: s as ContractFunctionName<
             typeof semiModularAccountBytecodeAbi
           >,
         }).functionName
