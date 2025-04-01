@@ -50,8 +50,8 @@ export type DeferredActionReturnData = {
 export type CreateDeferredActionTypedDataParams = {
   callData: Hex;
   deadline: number;
-  entityId: number;
-  isGlobalValidation: boolean;
+  uoValidationEntityId: number;
+  uoIsGlobalValidation: boolean;
   nonceKeyOverride?: bigint;
 };
 
@@ -97,8 +97,8 @@ export const deferralActions: (
   const createDeferredActionTypedDataObject = async ({
     callData,
     deadline,
-    entityId,
-    isGlobalValidation,
+    uoValidationEntityId,
+    uoIsGlobalValidation,
     nonceKeyOverride = 0n,
   }: CreateDeferredActionTypedDataParams): Promise<DeferredActionReturnData> => {
     if (!client.account) {
@@ -124,8 +124,8 @@ export const deferralActions: (
     // 1 = isGlobal validation flag 0b01
     const fullNonceKey: bigint = buildFullNonceKey({
       nonceKey: nonceKeyOverride,
-      entityId,
-      isGlobalValidation,
+      entityId: uoValidationEntityId,
+      isGlobalValidation: uoIsGlobalValidation,
       isDeferredAction: true,
     });
 
@@ -191,12 +191,6 @@ export const deferralActions: (
       toHex(sigLength, { size: 4 }),
       sig,
     ]);
-
-    console.log("Encoded data len:", encodedDataLength);
-    console.log("Encoded call data:", encodedCallData);
-    console.log("Encoded data:", encodedData);
-    console.log("sig len:", sigLength);
-
     return encodedData;
   };
 
