@@ -238,6 +238,8 @@ export class PermissionBuilder {
 
     // Check 2: If the permission is NOT ROOT (guaranteed), ensure there is no ROOT permission set
     // Will resolve to undefined if ROOT is not found
+    // NOTE: Technically this could be replaced by checking permissions[0] since it should not be possible
+    // to have >1 permission with root among them
     if (this.permissions.find((p) => p.type === PermissionType.ROOT)) {
       throw new Error(
         `PERMISSION: ${permission.type} => Cannot add permissions with ROOT enabled`
@@ -293,11 +295,11 @@ export class PermissionBuilder {
   async compile_deferred({
     deadline,
     uoValidationEntityId,
-    uoValidationIsGlobal,
+    uoIsGlobalValidation,
   }: {
     deadline: number;
     uoValidationEntityId: number;
-    uoValidationIsGlobal: boolean;
+    uoIsGlobalValidation: boolean;
   }): Promise<DeferredActionReturnData> {
     this.validateConfiguration();
 
@@ -326,15 +328,13 @@ export class PermissionBuilder {
 
     const installValidationCall = await this.compile_raw();
 
-    console.log("Install validation call:", installValidationCall);
-
     return await deferralActions(
       this.client
     ).createDeferredActionTypedDataObject({
       callData: installValidationCall,
       deadline: deadline,
-      entityId: uoValidationEntityId,
-      isGlobalValidation: uoValidationIsGlobal,
+      uoValidationEntityId: uoValidationEntityId,
+      uoIsGlobalValidation: uoIsGlobalValidation,
     });
   }
 
@@ -348,10 +348,6 @@ export class PermissionBuilder {
       // Add the translated permissions as hooks
       this.addHooks(rawHooks);
     }
-
-    console.log("\n\nHOOKS:", this.hooks);
-
-    console.log("COMPILE_RAW: HOOKS:", this.hooks);
 
     return await installValidationActions(this.client).encodeInstallValidation({
       validationConfig: this.validationConfig,
@@ -481,7 +477,6 @@ export class PermissionBuilder {
               "PERMISSION: CONTRACT_ACCESS => Zero address provided"
             );
           }
-          // TODO (consider): Maybe ensure every address in every allowlist input is different?
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
               address: getDefaultAllowlistModuleAddress(this.client.chain),
@@ -655,11 +650,4 @@ export class PermissionBuilder {
       });
     }
   }
-}
-
-// Factory function to create a permission builder
-export function createPermissionBuilder(
-  client: ModularAccountV2Client
-): PermissionBuilder {
-  return new PermissionBuilder(client);
 }
