@@ -32,6 +32,7 @@ jobs:
 
       - name: Move images dir to docs-site/fern/images/account-kit
         run: |
+          mkdir -p docs-site/fern/images/account-kit && \
           mv docs-site/account-kit/images/* docs-site/fern/images/account-kit/
 
       - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
