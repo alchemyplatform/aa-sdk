@@ -356,8 +356,6 @@ export class PermissionBuilder {
 
     const installValidationCall = await this.compile_raw();
 
-    console.log("Install validation call:", installValidationCall);
-
     return await deferralActions(
       this.client
     ).createDeferredActionTypedDataObject({
