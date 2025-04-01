@@ -17,8 +17,10 @@ import { NativeTokenLimitModule } from "./modules/native-token-limit-module/modu
 import {
   getDefaultAllowlistModuleAddress,
   getDefaultNativeTokenLimitModuleAddress,
+  getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
 } from "./modules/utils.js";
+import { SingleSignerValidationModule } from "./modules/single-signer-validation/module.js";
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
 
@@ -115,6 +117,11 @@ type RawHooks = {
 
 type OneOf<T extends {}[]> = T[number];
 
+type Key = {
+  publicKey: Hex;
+  type: "secp256k1" | "contract";
+};
+
 export type Permission = OneOf<
   [
     {
@@ -194,6 +201,7 @@ export class PermissionBuilder {
   private installData: Hex = "0x";
   private permissions: Permission[] = [];
   private hooks: Hook[] = [];
+  private nonce: bigint = 0;
 
   constructor(client: ModularAccountV2Client) {
     this.client = client;
@@ -201,20 +209,34 @@ export class PermissionBuilder {
 
   // Configures the builder
   configure({
-    validationConfig,
+    key,
+    entityId,
+    nonce,
     selectors,
-    installData,
     hooks,
   }: {
-    validationConfig: ValidationConfig;
+    key: Key;
+    entityId: number;
+    nonce: bigint;
     selectors?: Hex[];
-    installData: Hex;
     hooks?: Hook[];
   }): this {
-    this.validationConfig = validationConfig;
+    this.validationConfig = {
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        this.client.chain
+      ),
+      entityId,
+      isUserOpValidation: true,
+      isGlobal: false,
+      isSignatureValidation: false,
+    };
+    this.installData = SingleSignerValidationModule.encodeOnInstallData({
+      entityId: entityId,
+      signer: key.publicKey,
+    });
     if (selectors) this.selectors = selectors;
-    this.installData = installData;
     if (hooks) this.hooks = hooks;
+    this.nonce = nonce;
     return this;
   }
 
@@ -335,6 +357,7 @@ export class PermissionBuilder {
       deadline: deadline,
       uoValidationEntityId: uoValidationEntityId,
       uoIsGlobalValidation: uoIsGlobalValidation,
+      nonceKeyOverride: this.nonce,
     });
   }
 

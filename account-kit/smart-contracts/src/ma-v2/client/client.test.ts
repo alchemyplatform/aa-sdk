@@ -351,19 +351,12 @@ describe("MA v2 Tests", async () => {
 
     const { typedData, nonceOverride } = await new PermissionBuilder(provider)
       .configure({
-        validationConfig: {
-          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-            provider.chain
-          ),
-          entityId: sessionKeyEntityId,
-          isGlobal: isGlobalValidation,
-          isSignatureValidation: true,
-          isUserOpValidation: true,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
         },
-        installData: SingleSignerValidationModule.encodeOnInstallData({
-          entityId: sessionKeyEntityId,
-          signer: await sessionKey.getAddress(),
-        }),
+        entityId: sessionKeyEntityId,
+        nonce: BigInt(sessionKeyEntityId) + (3n << 64n),
       })
       .addPermission({
         permission: {
