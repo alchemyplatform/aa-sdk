@@ -87,15 +87,6 @@ describe("AlchemySmartAccountClient tests", () => {
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
-    console.log(
-      "BLUJ ",
-      JSON.stringify(
-        fetchSpy.mock.calls.map((x) => x[1]?.headers),
-        null,
-        2
-      )
-    );
-
     expect(
       fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
     ).toMatchInlineSnapshot(
