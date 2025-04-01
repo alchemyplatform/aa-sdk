@@ -47,10 +47,15 @@ jobs:
           OUTPUT=$(fern generate --docs --preview 2>&1) || true
           echo "$OUTPUT"
           URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
-          echo "Preview URL: $URL"
-          echo "🌿 Preview your docs: $URL" > preview_url.txt
+          echo "preview_url=$URL" >> $GITHUB_OUTPUT
 
       - name: Comment URL in PR
-        uses: thollander/actions-comment-pull-request@v2.4.3
+        uses: actions/github-script@v7
         with:
-          filePath: preview_url.txt
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🌿 Preview your docs: ${{ steps.generate-docs.outputs.preview_url }}`
+            });
