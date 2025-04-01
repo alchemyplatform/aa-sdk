@@ -1413,7 +1413,7 @@ describe("MA v2 Tests", async () => {
     await newClient.waitForUserOperationTransaction(uo1);
 
     const selectors = ["execute", "executeBatch"].map(
-      (e) =>
+      (s) =>
         prepareEncodeFunctionData({
           abi: semiModularAccountBytecodeAbi,
           functionName: e as ContractFunctionName<
