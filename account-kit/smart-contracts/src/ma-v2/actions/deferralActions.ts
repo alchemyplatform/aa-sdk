@@ -68,7 +68,7 @@ export type BuildUserOperationWithDeferredActionParams = {
 
 export type EntityIdAndNonceParams = {
   entityId: number;
-  nonce: bigint;
+  nonceKey: bigint;
   isGlobalValidation: boolean;
 };
 
@@ -120,8 +120,10 @@ export const deferralActions: (
       client: client,
     });
 
+    // 2 = deferred action flags    0b10
+    // 1 = isGlobal validation flag 0b01
     const fullNonceKey: bigint = buildFullNonce({
-      nonce: nonceKeyOverride,
+      nonceKey: nonceKeyOverride,
       entityId,
       isGlobalValidation,
       isDeferredAction: true,
@@ -238,15 +240,15 @@ export const deferralActions: (
 
   const getEntityIdAndNonce = async ({
     entityId,
-    nonce,
+    nonceKey,
     isGlobalValidation,
   }: EntityIdAndNonceParams) => {
     if (!client.account) {
       throw new AccountNotFoundError();
     }
 
-    if (nonce > maxUint152) {
-      throw new InvalidNonceKeyError(nonce);
+    if (nonceKey > maxUint152) {
+      throw new InvalidNonceKeyError(nonceKey);
     }
 
     const entryPoint = client.account.getEntryPoint();
@@ -261,7 +263,7 @@ export const deferralActions: (
         client.account.address,
         entryPoint.address,
         buildFullNonce({
-          nonce,
+          nonceKey,
           entityId,
           isGlobalValidation,
           isDeferredAction: true,

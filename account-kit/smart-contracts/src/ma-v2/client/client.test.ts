@@ -1370,25 +1370,24 @@ describe("MA v2 Tests", async () => {
       for (let startNonce = 0n; startNonce < 5n; startNonce++) {
         const { entityId, nonce } = await newClient.getEntityIdAndNonce({
           entityId: startEntityId,
-          nonce: startNonce,
+          nonceKey: startNonce,
           isGlobalValidation: true,
         });
 
         const expectedEntityId: number = Math.max(1, startEntityId);
 
         // account not deployed, expect to get 1 when we pass in 0
-        assert(entityId === expectedEntityId);
-        assert(
-          nonce ===
-            (await entryPointContract.read.getNonce([
-              newClient.account.address,
-              buildFullNonce({
-                nonce: startNonce,
-                entityId: expectedEntityId,
-                isDeferredAction: true,
-              }),
-            ]))
-        );
+        expect(entityId).toEqual(expectedEntityId);
+        await expect(
+          entryPointContract.read.getNonce([
+            newClient.account.address,
+            buildFullNonce({
+              nonceKey: startNonce,
+              entityId: expectedEntityId,
+              isDeferredAction: true,
+            }),
+          ])
+        ).resolves.toEqual(nonce);
       }
     }
 
@@ -1412,13 +1411,16 @@ describe("MA v2 Tests", async () => {
     });
     await newClient.waitForUserOperationTransaction(uo1);
 
-    const selectors = ["execute", "executeBatch"].map(
+    const fns: ContractFunctionName<typeof semiModularAccountBytecodeAbi>[] = [
+      "execute",
+      "executeBatch",
+    ];
+
+    const selectors = fns.map(
       (s) =>
         prepareEncodeFunctionData({
           abi: semiModularAccountBytecodeAbi,
-          functionName: s as ContractFunctionName<
-            typeof semiModularAccountBytecodeAbi
-          >,
+          functionName: s,
         }).functionName
     );
 
@@ -1447,25 +1449,24 @@ describe("MA v2 Tests", async () => {
       for (let startNonce = 0n; startNonce < 5n; startNonce++) {
         const { entityId, nonce } = await newClient.getEntityIdAndNonce({
           entityId: startEntityId,
-          nonce: startNonce,
+          nonceKey: startNonce,
           isGlobalValidation: true,
         });
 
         const expectedEntityId: number = Math.max(startEntityId, 3);
 
         // expect to get max(3, startEntityId)
-        assert(entityId === expectedEntityId);
-        assert(
-          nonce ===
-            (await entryPointContract.read.getNonce([
-              newClient.account.address,
-              buildFullNonce({
-                nonce: startNonce,
-                entityId: expectedEntityId,
-                isDeferredAction: true,
-              }),
-            ]))
-        );
+        expect(entityId).toEqual(expectedEntityId);
+        await expect(
+          entryPointContract.read.getNonce([
+            newClient.account.address,
+            buildFullNonce({
+              nonceKey: startNonce,
+              entityId: expectedEntityId,
+              isDeferredAction: true,
+            }),
+          ])
+        ).resolves.toEqual(nonce);
       }
     }
   });
