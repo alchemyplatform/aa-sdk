@@ -7,11 +7,15 @@ description: Learn how to send user operations using Account Kit's core package.
 
 Once your users have been [authenticated](/core/authenticate-users), you can start sending user operations!
 
+To send user operations, you need to first create a `SmartAccountClient` using the [`createModularAccountV2Client`](/reference/account-kit/smart-contracts/functions/createModularAccountV2Client) function.
+Once you have a `SmartAccountClient`, you can use the [`sendUserOperation`](/reference/aa-sdk/core/functions/sendUserOperation#senduseroperation) function to send user operations.
+
+If you want to sponsor the gas for a user, see our [guide](/core/sponsor-gas).
+
 ## Single user operation
 
 :::tip
-In the below example, we use `LightAccount` as the underlying Smart Contract type. You can also use `MultiOwnerModularAccount` if you want to provide your users with an ERC-6900 compliant modular account,
-or you can use `MultiOwnerLightAccount` if you want to support an account with multiple owners.
+In the below example, we use `ModularAccountV2` as the underlying Smart Contract type. You can also use a different account type (see other options [here](/smart-contracts/other-accounts/modular-account)).
 :::
 
 :::code-group
@@ -31,7 +35,7 @@ let clientState;
 //  - Chain changes
 const clientSubscription = watchSmartAccountClient(
   {
-    type: "LightAccount",
+    type: "ModularAccountV2",
   },
   config
 )((clientState_) => {
@@ -80,7 +84,7 @@ let clientState;
 //  - Chain changes
 const clientSubscription = watchSmartAccountClient(
   {
-    type: "LightAccount",
+    type: "ModularAccountV2",
   },
   config
 )((clientState_) => {
