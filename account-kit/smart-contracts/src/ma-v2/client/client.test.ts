@@ -39,7 +39,7 @@ import {
   AllowlistModule,
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
-  buildFullNonce,
+  buildFullNonceKey,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -1381,7 +1381,7 @@ describe("MA v2 Tests", async () => {
         await expect(
           entryPointContract.read.getNonce([
             newClient.account.address,
-            buildFullNonce({
+            buildFullNonceKey({
               nonceKey: startNonce,
               entityId: expectedEntityId,
               isDeferredAction: true,
@@ -1460,7 +1460,7 @@ describe("MA v2 Tests", async () => {
         await expect(
           entryPointContract.read.getNonce([
             newClient.account.address,
-            buildFullNonce({
+            buildFullNonceKey({
               nonceKey: startNonce,
               entityId: expectedEntityId,
               isDeferredAction: true,

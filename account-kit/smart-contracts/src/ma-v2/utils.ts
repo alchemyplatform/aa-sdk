@@ -240,7 +240,7 @@ export type BuildNonceParams = {
   isDirectCallValidation?: boolean;
 };
 
-export const buildFullNonce = ({
+export const buildFullNonceKey = ({
   nonceKey = 0n,
   entityId = 0,
   isGlobalValidation = true,

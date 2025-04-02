@@ -18,7 +18,7 @@ import {
   encodeDeployData,
   hexToNumber,
 } from "viem";
-import { entityIdAndNonceReaderBytecode, buildFullNonce } from "../utils.js";
+import { entityIdAndNonceReaderBytecode, buildFullNonceKey } from "../utils.js";
 import { entityIdAndNonceReaderAbi } from "../abis/entityIdAndNonceReader.js";
 import type { ModularAccountV2Client } from "../client/client.js";
 
@@ -122,7 +122,7 @@ export const deferralActions: (
 
     // 2 = deferred action flags    0b10
     // 1 = isGlobal validation flag 0b01
-    const fullNonceKey: bigint = buildFullNonce({
+    const fullNonceKey: bigint = buildFullNonceKey({
       nonceKey: nonceKeyOverride,
       entityId,
       isGlobalValidation,
@@ -262,7 +262,7 @@ export const deferralActions: (
       args: [
         client.account.address,
         entryPoint.address,
-        buildFullNonce({
+        buildFullNonceKey({
           nonceKey,
           entityId,
           isGlobalValidation,
