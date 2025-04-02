@@ -24,6 +24,13 @@ import { SingleSignerValidationModule } from "./modules/single-signer-validation
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
 
+// We use this to offset the ERC20 spend limit entityId
+const HALF_UINT32 = 2147483647;
+const ERC20_APPROVE_SELECTOR = "0x095ea7b3";
+const ERC20_TRANSFER_SELECTOR = "0xa9059cbb";
+const ACCOUNT_EXECUTE_SELECTOR = "0xb61d27f6";
+const ACCOUNT_EXECUTEBATCH_SELECTOR = "0x34fcd5be";
+
 export enum PermissionType {
   NATIVE_TOKEN_TRANSFER = "native-token-transfer",
   ERC20_TOKEN_TRANSFER = "erc20-token-transfer",
@@ -32,7 +39,6 @@ export enum PermissionType {
   GAS_LIMIT = "gas-limit",
   // CALL_LIMIT = "call-limit", //Unimplemented
   // RATE_LIMIT = "rate-limit", //Unimplemented
-  // Custom MAv2 permissions
   CONTRACT_ACCESS = "contract-access",
   ACCOUNT_FUNCTIONS = "account-functions",
   FUNCTIONS_ON_ALL_CONTRACTS = "functions-on-all-contracts",
@@ -371,9 +377,11 @@ export class PermissionBuilder {
   async compile_raw(): Promise<Hex> {
     this.validateConfiguration();
 
-    // 1. Translate all permissions into raw hooks if >0
+    // Translate all permissions into raw hooks if >0
     if (this.permissions.length > 0) {
-      const rawHooks = this.translatePermissions(1);
+      const rawHooks = this.translatePermissions(
+        this.validationConfig.entityId
+      );
       // Add the translated permissions as hooks
       this.addHooks(rawHooks);
     }
@@ -455,13 +463,13 @@ export class PermissionBuilder {
           rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER] = {
             hookConfig: {
               address: getDefaultAllowlistModuleAddress(this.client.chain),
-              entityId,
+              entityId: entityId + HALF_UINT32,
               hookType: HookType.EXECUTION,
               hasPreHooks: true,
               hasPostHooks: false,
             },
             initData: {
-              entityId, // remember entityIds will be const from an object passed
+              entityId: entityId + HALF_UINT32,
               inputs: [
                 // Add previous inputs if they exist
                 ...(rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER]?.initData
@@ -472,6 +480,31 @@ export class PermissionBuilder {
                   hasERC20SpendLimit: true,
                   erc20SpendLimit: BigInt(permission.data.allowance),
                   selectors: [],
+                },
+              ],
+            },
+          };
+          // Also allow `approve` and `transfer` for the erc20
+          rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
+            hookConfig: {
+              address: getDefaultAllowlistModuleAddress(this.client.chain),
+              entityId,
+              hookType: HookType.VALIDATION,
+              hasPreHooks: true,
+              hasPostHooks: false,
+            },
+            initData: {
+              entityId,
+              inputs: [
+                // Add previous inputs if they exist
+                ...(rawHooks[HookIdentifier.PREVAL_ALLOWLIST]?.initData
+                  .inputs || []),
+                {
+                  target: permission.data.address,
+                  hasSelectorAllowlist: true,
+                  hasERC20SpendLimit: false,
+                  erc20SpendLimit: 0n,
+                  selectors: [ERC20_APPROVE_SELECTOR, ERC20_TRANSFER_SELECTOR], // approve, transfer
                 },
               ],
             },
@@ -537,29 +570,6 @@ export class PermissionBuilder {
               "PERMISSION: ACCOUNT_FUNCTION => No functions provided"
             ); // should be in add perm
           }
-          // rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
-          //   hookConfig: {
-          //     address: getDefaultAllowlistModuleAddress(this.client.chain),
-          //     entityId,
-          //     hookType: HookType.VALIDATION,
-          //     hasPreHooks: true,
-          //     hasPostHooks: false,
-          //   },
-          //   initData: {
-          //     entityId,
-          //     inputs: [
-          //       // Add previous inputs if they exist
-          //       ...(rawHooks[HookIdentifier.PREVAL_ALLOWLIST]?.initData.inputs || []),
-          //       {
-          //         target: this.client.account.address,
-          //         hasSelectorAllowlist: false,
-          //         hasERC20SpendLimit: false,
-          //         erc20SpendLimit: 0n,
-          //         selectors: permission.data.functions,
-          //       },
-          //     ],
-          //   },
-          // };
           break;
         case PermissionType.FUNCTIONS_ON_ALL_CONTRACTS:
           if (permission.data.functions.length === 0) {
@@ -635,6 +645,22 @@ export class PermissionBuilder {
           throw new Error(
             `Unsupported permission type: ${(permission as any).type}`
           );
+      }
+
+      // isGlobal guaranteed to be false since it's only set with root permissions,
+      // we must add access to execute & executeBatch if there's a preVal allowlist hook set.
+      if (rawHooks[HookIdentifier.PREVAL_ALLOWLIST] !== undefined) {
+        const selectorsToAdd: `0x${string}`[] = [
+          ACCOUNT_EXECUTE_SELECTOR,
+          ACCOUNT_EXECUTEBATCH_SELECTOR,
+        ]; // execute, executeBatch
+
+        // Only add the selectors if they aren't already in this.selectors
+        const newSelectors = selectorsToAdd.filter(
+          (selector) => !this.selectors.includes(selector)
+        );
+
+        this.selectors = [...this.selectors, ...newSelectors];
       }
     });
 

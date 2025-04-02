@@ -590,7 +590,7 @@ describe("MA v2 Tests", async () => {
     const { typedData, nonceOverride } = await new PermissionBuilder(provider)
       .configure({
         key: {
-          publicKey: await sessionKey.getAddress(),
+          publicKey: await newSessionKey.getAddress(),
           type: "secp256k1",
         },
         entityId: newSessionKeyEntityId,
