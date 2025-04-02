@@ -13,6 +13,7 @@ import type {
   SendUserOperationParameters,
   UserOperationContext,
 } from "./types.js";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Sends a user operation or batch of user operations using the connected account. Before executing, sendUserOperation will run the user operation through the middleware pipeline.
@@ -31,7 +32,7 @@ import type {
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client the smart account client to use for RPC requests
+ * @param {Client<TTransport, TChain, TAccount>} client_ the smart account client to use for RPC requests
  * @param {SendUserOperationParameters<TAccount, TContext>} args contains the UO or batch to send, context, overrides, and account if not hoisted on the client
  * @returns {Promise<SendUserOperationResult<TEntryPointVersion>>} a Promise containing the result of the user operation
  */
@@ -46,9 +47,10 @@ export async function sendUserOperation<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
+  const client = clientHeaderTrack(client_, "sendUserOperation");
   const { account = client.account, context, overrides } = args;
 
   if (!account) {

@@ -26,10 +26,10 @@ export function isValidRequest<
 ): request is UserOperationRequest<TEntryPointVersion> {
   // These are the only ones marked as optional in the interface above
   return (
-    BigInt(request.callGasLimit || 0n) > 0n &&
-    BigInt(request.maxFeePerGas || 0n) > 0n &&
-    BigInt(request.preVerificationGas || 0n) > 0n &&
-    BigInt(request.verificationGasLimit || 0n) > 0n &&
+    request.callGasLimit != null &&
+    request.preVerificationGas != null &&
+    request.verificationGasLimit != null &&
+    request.maxFeePerGas != null &&
     request.maxPriorityFeePerGas != null &&
     isValidPaymasterAndData(request) &&
     isValidFactoryAndData(request)
