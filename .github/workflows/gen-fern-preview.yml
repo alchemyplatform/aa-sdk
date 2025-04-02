@@ -25,18 +25,14 @@ jobs:
           mv alchemyplatform-docs-* docs-site && \
           rm docs.tar.gz
 
-      - name: Copy docs to docs-site/account-kit
+      - name: Copy docs to docs-site/account-kit and cd into docs-site
         run: |
           mkdir -p docs-site/account-kit
           cp -r docs/* docs-site/account-kit/
-
-      - name: Move images dir to docs-site/fern/images/account-kit
-        run: |
-          mkdir -p docs-site/fern/images/account-kit && \
-          mv docs-site/account-kit/images/* docs-site/fern/images/account-kit/
+          cd docs-site
 
       - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
-        run: docs/scripts/insert-docs.sh
+        run: account-kit/scripts/insert-docs.sh
 
       - name: Install Fern CLI
         run: npm install -g fern-api
@@ -46,13 +42,12 @@ jobs:
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
         run: |
-          cd docs-site && \
           OUTPUT=$(fern generate --docs --preview 2>&1) || true
           echo "$OUTPUT"
           URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
           echo "preview_url=$URL" >> $GITHUB_OUTPUT
 
-      - name: Comment URL in PR
+      - name: Comment Preview URL in PR
         uses: actions/github-script@v7
         with:
           script: |
