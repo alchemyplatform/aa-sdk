@@ -6,31 +6,41 @@ The contents are automatically merged with [Alchemy's Official Docs repo](https:
 
 ## Structure
 
-- `docs.yml` - The main configuration file that defines the documentation structure and navigation
-- `images/` - Directory containing images used in the documentation
+- `docs.yml` - The main configuration file that defines the documentation structure and sidebar navigation
 - `pages/` - Directory containing the documentation markdown files
+- `images/` - Directory containing images used in the documentation
 
 ## Making Updates
 
-### Documentation Content
+### Docs Content
 
-1. To add or modify documentation content:
+To add or modify documentation content:
 
-   - Add/edit markdown files in the `pages/` directory
-   - Follow the existing markdown formatting conventions
-   - You may use any [existing Fern components](https://buildwithfern.com/learn/docs/content/components/overview) without import statements
+- Add/edit markdown files in the `pages/` directory
+- Follow the existing markdown formatting conventions
+- You may use any [existing Fern components](https://buildwithfern.com/learn/docs/content/components/overview) without import statements
 
-2. To add new pages to navigation:
-   - Update the `navigation` section in `docs.yml`
-   - Reference markdown files from `pages/` by path using `../account-kit/pages`
+To add new pages to navigation:
+
+- Update the `navigation` section in `docs.yml`
+- Reference markdown files from `pages/` by path using `../account-kit/pages`
 
 ### Images
 
-1. To add new images:
-   - Place image files in the `images/` directory
-   - Use descriptive filenames
-   - Reference images from the `images/` directory in markdown using `images/account-kit/filename.png`
-   - You may use [markdown syntax or `img` tags](https://buildwithfern.com/learn/docs/content/write-markdown#images)
+To add new images:
+
+- Place image files in the `images/` directory
+- Use descriptive filenames
+- Reference images from the `images/` directory in markdown using `images/account-kit/filename.png`
+- You may use [markdown syntax or `img` tags](https://buildwithfern.com/learn/docs/content/write-markdown#images)
+
+### SDK References
+
+SDK Refernces are automatically generated from relevant projects within the monorepo via `fern-gen`. In the root, run:
+
+```shell
+yarn fern-gen
+```
 
 ### Local Development
 
@@ -50,5 +60,5 @@ Documentation changes are automatically published to [alchemy.com/docs](https://
 
 - The `scripts/insert-docs.sh` script handles:
   - Moving images to the correct location in the main docs site
-  - Inserting Account Kit documentation configuration into the main docs site
+  - Inserting Account Kit documentation configuration into the main docs site config
 - Documentation is built and published using [Fern CLI](https://buildwithfern.com/learn/cli-reference/overview#setting-up-docs)
