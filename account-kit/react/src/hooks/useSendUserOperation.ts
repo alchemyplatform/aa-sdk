@@ -6,7 +6,7 @@ import type {
   SendUserOperationParameters,
   SendUserOperationResult,
 } from "@aa-sdk/core";
-import { WaitForUserOperationError } from "@aa-sdk/core";
+import { WaitForUserOperationError, clientHeaderTrack } from "@aa-sdk/core";
 import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
@@ -132,7 +132,7 @@ export function useSendUserOperation<
 >(
   params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
-  const { client, waitForTxn = false, ...mutationArgs } = params;
+  const { client: _client, waitForTxn = false, ...mutationArgs } = params;
 
   const {
     queryClient,
@@ -182,9 +182,10 @@ export function useSendUserOperation<
           };
         }
 
-        if (!client) {
+        if (!_client) {
           throw new ClientUndefinedHookError("useSendUserOperation");
         }
+        const client = clientHeaderTrack(_client, "reactUseSendUserOperation");
 
         if (!waitForTxn) {
           return client.sendUserOperation(params);
