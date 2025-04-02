@@ -101,14 +101,14 @@ const { multiFactors } = await signer.getMfaFactors();
 
 ## Authenticating Email OTP with multi-factor TOTP
 
-### Step 1: Send an OTP to user’s email
+### Step 1: Send an OTP to user's email
 
 :::code-group
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 
-await signer.authenticate({
+signer.authenticate({
   type: "email",
   emailMode: "otp",
   email: "user@mail.com",
@@ -121,35 +121,33 @@ await signer.authenticate({
 
 :::
 
-### Step 2: Check if TOTP is required
+### Step 2: Submit the email OTP code
 
 :::code-group
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 
-const { mfaRequired, mfaFactorId } = signer?.getMfaStatus();
+signer.authenticate({
+  type: "otp",
+  otpCode: "EMAIL_OTP_CODE",
+});
+```
 
-if (mfaRequired) {
-  // Prompt user for the TOTP code
-  // Then pass it to authenticate, along with the email OTP
-  await signer.authenticate({
-    type: "otp",
-    otpCode: "EMAIL_OTP_CODE",
-    multiFactors: [
-      {
-        multiFactorId, // the ID from getMfaStatus()
-        multiFactorCode: "TOTP_CODE",
-      },
-    ],
-  });
-} else {
-  // Normal OTP flow
-  await signer.authenticate({
-    type: "otp",
-    otpCode: "EMAIL_OTP_CODE",
-  });
-}
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+### Step 3: Submit the TOTP code (authenticator app code)
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const user = await signer?.validateMultiFactors({
+  multiFactorCode: totpCode,
+});
 ```
 
 ```ts twoslash [signer] filename="signer.ts"
@@ -202,6 +200,37 @@ try {
     // handle other errors
   }
 }
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+## Authenticating Social Login with multi-factor TOTP
+
+When a user has MFA enabled using an authenticator app, the authentication process for social login is seamless. Unlike email authentication flows, you don't need to handle the MFA challenge manually in your code.
+
+The TOTP verification happens automatically during the OAuth callback flow:
+
+1. The user authenticates with the social provider (Google, Facebook, etc.)
+2. After successful provider authentication, they're prompted for their TOTP code on the OAuth callback page
+3. Once verified, authentication completes normally
+
+Simply use the standard social login authentication as shown in the [Social Login Authentication](/signer/authentication/social-login) guide:
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+await signer.authenticate({
+  type: "oauth",
+  authProviderId: "google", // Choose between the auth providers you selected to support from your auth policy
+  mode: "redirect", // Alternatively, you can choose "popup" mode
+  redirectUrl: "/", // After logging in, redirect to the index page
+});
 ```
 
 ```ts twoslash [signer] filename="signer.ts"
