@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
+import { AlchemySignerStatus } from "@account-kit/signer";
 import { useAuthContext } from "../../context.js";
 import { useSigner } from "../../../../hooks/useSigner.js";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
@@ -13,29 +15,37 @@ import { ThreeStarsIcon } from "../../../../icons/threeStars.js";
 
 export const LoadingTotp = () => {
   const signer = useSigner();
+  const { status } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext("totp_verify");
   const [totpCode, setTotpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { authenticateAsync } = useAuthenticate({
-    onMutate: async (params) => {
-      if (params.type === "email" && "email" in params) {
-        if (params.emailMode === "magicLink") {
-          setAuthStep({ type: "email_verify", email: params.email });
-        }
-      }
-    },
     onSuccess: () => {
       setIsSubmitting(false);
       setAuthStep({ type: "complete" });
     },
     onError: (err) => {
-      console.error("TOTP verify error", err);
       setIsSubmitting(false);
-      setErrorText("The code you entered is incorrect");
       setTotpCode(initialOTPValue);
+
+      if ((err as Error).message.includes("Invalid MFA code")) {
+        setErrorText("The code you entered is incorrect");
+      } else {
+        setErrorText("An error occurred while verifying the code");
+        console.error("TOTP verify error", err);
+      }
     },
   });
+
+  useEffect(() => {
+    if (
+      authStep.previousStep === "magicLink" &&
+      status === AlchemySignerStatus.AWAITING_EMAIL_AUTH
+    ) {
+      setAuthStep({ type: "email_verify", email: authStep.email });
+    }
+  }, [status]);
 
   const setValue = async (otpCode: OTPCodeType) => {
     setTotpCode(otpCode);
@@ -72,11 +82,12 @@ export const LoadingTotp = () => {
         throw new Error("Invalid previous step");
       }
     } catch (err) {
-      console.error("TOTP submission error", err);
       if ((err as Error).message.includes("Invalid MFA code")) {
         setIsSubmitting(false);
         setTotpCode(initialOTPValue);
         setErrorText("The code you entered is incorrect");
+      } else {
+        console.error("TOTP submission error", err);
       }
     }
   };

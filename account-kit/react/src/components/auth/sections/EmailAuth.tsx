@@ -100,7 +100,10 @@ export const EmailAuth = memo(
     });
 
     useEffect(() => {
-      if (status === AlchemySignerStatus.AWAITING_EMAIL_AUTH) {
+      if (
+        status === AlchemySignerStatus.AWAITING_EMAIL_AUTH &&
+        form.state.values.email
+      ) {
         setAuthStep({ type: "email_verify", email: form.state.values.email });
       }
     }, [status]);
