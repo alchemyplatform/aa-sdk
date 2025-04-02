@@ -10,13 +10,34 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/heads/main') && github.run_number > 1 }}
     steps:
-      - name: Checkout repository
+      - name: Checkout aa-sdk
         uses: actions/checkout@v4
 
-      - name: Install Fern
+      - name: Download Alchemy Docs Repo
+        run: |
+          rm -rf docs-site && \
+          curl -L -f -H "Authorization: token ${{ secrets.DOCS_GITHUB_TOKEN }}" \
+            -o docs.tar.gz https://api.github.com/repos/alchemyplatform/docs/tarball/main && \
+          tar xzf docs.tar.gz && \
+          mv alchemyplatform-docs-* docs-site && \
+          rm docs.tar.gz
+
+      - name: Copy docs to docs-site/account-kit and cd into docs-site
+        run: |
+          mkdir -p docs-site/account-kit
+          cp -r docs/* docs-site/account-kit/
+
+      - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
+        run: |
+          cd docs-site
+          account-kit/scripts/insert-docs.sh
+
+      - name: Install Fern CLI
         run: npm install -g fern-api
 
       - name: Publish Docs
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        run: fern generate --docs --log-level debug
+        run: |
+          cd docs-site
+          fern generate --docs --log-level debug

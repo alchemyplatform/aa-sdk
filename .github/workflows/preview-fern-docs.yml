@@ -57,5 +57,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🌿 Preview your docs: ${{ steps.generate-docs.outputs.preview_url }}`
+              body: '## 🌿 Documentation Preview\n\n| Name | Preview | Updated (UTC) |\n| :--- | :------ | :------ |\n| **Alchemy Docs** | [Visit Preview](${{ steps.generate-docs.outputs.preview_url }}) | ' + new Date().toISOString().replace('T', ' ').replace('Z', '') + ' |\n\n>'
             });
