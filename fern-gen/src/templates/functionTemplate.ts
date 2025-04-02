@@ -33,9 +33,9 @@ export function functionTemplate(
 
     const extendsType = extendsClause.types[0];
     return dedent`
-    :::note
+    <Note>
     \`${importedName}\` extends \`${extendsType.expression.getText()}\`, see the docs for ${extendsType.expression.getText()} for all supported methods.
-    :::
+    </Note>
     `;
   })();
 
