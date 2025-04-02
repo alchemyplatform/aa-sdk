@@ -15,6 +15,7 @@ import type {
   AuthenticatingEventMetadata,
   CreateAccountParams,
   EmailAuthParams,
+  experimental_CreateApiKeyParams,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   OauthConfig,
@@ -230,6 +231,27 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * Retrieves the status of the passkey for the current user. Requires the user to be authenticated.
+   *
+   * @returns {Promise<{ isPasskeyAdded: boolean }>} A promise that resolves to an object containing the passkey status
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public getPasskeyStatus = async () => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const resp = await this.turnkeyClient.getAuthenticators({
+      organizationId: this.user.orgId,
+      userId: this.user.userId,
+    });
+    return {
+      isPasskeyAdded: resp.authenticators.some((it) =>
+        it.authenticatorName.startsWith("passkey-")
+      ),
+    };
+  };
+
+  /**
    * Retrieves the current user or fetches the user information if not already available.
    *
    * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
@@ -300,6 +322,60 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return await this.turnkeyClient.stampGetWhoami({
       organizationId: this.user.orgId,
     });
+  };
+
+  /**
+   * Generates a stamped getOrganization request for the current user.
+   *
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "getOrganization" information for the logged in user
+   * @throws {Error} if no user is authenticated
+   */
+  public stampGetOrganization = async (): Promise<TSignedRequest> => {
+    if (!this.user) {
+      throw new Error(
+        "User must be authenticated to stamp a get organization request"
+      );
+    }
+
+    return await this.turnkeyClient.stampGetOrganization({
+      organizationId: this.user.orgId,
+    });
+  };
+
+  /**
+   * Creates an API key that can take any action on behalf of the current user.
+   * (Note that this method is currently experimental and is subject to change.)
+   *
+   * @param {CreateApiKeyParams} params Parameters for creating the API key.
+   * @param {string} params.name Name of the API key.
+   * @param {string} params.publicKey Public key to be used for the API key.
+   * @param {number} params.expirationSec Number of seconds until the API key expires.
+   * @throws {Error} If there is no authenticated user or the API key creation fails.
+   */
+  public experimental_createApiKey = async (
+    params: experimental_CreateApiKeyParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new Error("User must be authenticated to create api key");
+    }
+    const resp = await this.turnkeyClient.createApiKeys({
+      type: "ACTIVITY_TYPE_CREATE_API_KEYS",
+      timestampMs: new Date().getTime().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        apiKeys: [
+          {
+            apiKeyName: params.name,
+            publicKey: params.publicKey,
+            expirationSeconds: params.expirationSec.toString(),
+          },
+        ],
+        userId: this.user.userId,
+      },
+    });
+    if (resp.activity.status !== "ACTIVITY_STATUS_COMPLETED") {
+      throw new Error("Failed to create api key");
+    }
   };
 
   /**

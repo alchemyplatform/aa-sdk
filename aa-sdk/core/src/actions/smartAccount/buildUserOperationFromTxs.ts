@@ -15,6 +15,7 @@ import type {
   BuildUserOperationFromTransactionsResult,
   UserOperationContext,
 } from "./types";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Performs `buildUserOperationFromTx` in batch and builds into a single,
@@ -66,7 +67,7 @@ import type {
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client the smart account client to use to make RPC calls
+ * @param {Client<TTransport, TChain, TAccount>} client_ the smart account client to use to make RPC calls
  * @param {BuildTransactionParameters} args  an object containing the requests to build as well as, the account if not hoisted, the context, the overrides, and optionally a flag to enable signing of the UO via the underlying middleware
  * @returns {Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>} a Promise containing the built user operation
  */
@@ -81,9 +82,10 @@ export async function buildUserOperationFromTxs<
     | UserOperationContext
     | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: BuildTransactionParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>> {
+  const client = clientHeaderTrack(client_, "buildUserOperationFromTxs");
   const { account = client.account, requests, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();

@@ -10,6 +10,7 @@ import type {
 import {
   bypassPaymasterAndData,
   ChainNotFoundError,
+  clientHeaderTrack,
   deepHexlify,
   defaultGasEstimator,
   erc7677Middleware,
@@ -129,8 +130,9 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
     },
     paymasterAndData: async (
       uo,
-      { account, client, feeOptions, overrides: overrides_ }
+      { account, client: client_, feeOptions, overrides: overrides_ }
     ) => {
+      const client = clientHeaderTrack(client_, "alchemyFeeEstimator");
       if (!client.chain) {
         throw new ChainNotFoundError();
       }

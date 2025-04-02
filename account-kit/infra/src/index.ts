@@ -41,6 +41,9 @@ export {
   inkSepolia,
   mekong,
   monadTestnet,
+  openlootSepolia,
+  gensynTestnet,
+  riseTestnet,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
@@ -56,6 +59,7 @@ export { getDefaultUserOperationFeeOptions } from "./defaults.js";
 export { getAlchemyPaymasterAddress } from "./gas-manager.js";
 export { alchemyFeeEstimator } from "./middleware/feeEstimator.js";
 export type * from "./middleware/gasManager.js";
+export * from "./alchemyTrackerHeaders.js";
 export {
   alchemyGasManagerMiddleware,
   alchemyGasAndPaymasterAndDataMiddleware,
