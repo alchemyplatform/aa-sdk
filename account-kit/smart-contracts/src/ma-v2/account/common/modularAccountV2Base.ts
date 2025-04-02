@@ -21,6 +21,9 @@ import {
   getContract,
   concatHex,
   maxUint152,
+  hexToBigInt,
+  hexToNumber,
+  decodeFunctionData,
 } from "viem";
 import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
@@ -52,10 +55,17 @@ export type ValidationDataParams =
   | {
       validationModuleAddress: Address;
       entityId?: never;
+      deferredActionDigest?: never;
     }
   | {
       validationModuleAddress?: never;
       entityId: number;
+      deferredActionDigest?: never;
+    }
+  | {
+      deferredActionDigest: Hex;
+      validationModuleAddress?: never;
+      entityId?: never;
     };
 
 export type ModularAccountV2<
@@ -85,6 +95,7 @@ export type CreateMAV2BaseParams<
   signer: TSigner;
   signerEntity?: SignerEntity;
   accountAddress: Address;
+  deferredActionDigest?: Hex;
 };
 
 export type CreateMAV2BaseReturnType<
@@ -108,6 +119,7 @@ export async function createMAv2Base<
       entityId = DEFAULT_OWNER_ENTITY_ID,
     } = {},
     accountAddress,
+    deferredActionDigest,
     ...remainingToSmartContractAccountParams
   } = config;
 
@@ -119,6 +131,73 @@ export async function createMAv2Base<
     transport,
     chain,
   });
+
+  const entryPointContract = getContract({
+    address: entryPoint.address,
+    abi: entryPoint.abi,
+    client,
+  });
+
+  let deferredAction:
+    | undefined
+    | { nonce: bigint; data: Hex; hasAssociatedExecHooks: boolean };
+
+  // deferred action format:
+  // 32 bytes nonce | 4 bytes len | 21 bytes valLocator | 8 bytes deadline |
+  // variable bytes calldata | 4 bytes sig length | variable bytes sig
+  if (deferredActionDigest) {
+    // we always infer entityId and isGlobalValidation from the deferred action case
+    // this number here is in the range of [0, 7]
+    if (Number(deferredActionDigest[116]) >= 4) {
+      // TODO: implement > 4 case which is direct validation
+      throw new Error("Direct call validation not supported yet");
+    } else {
+      // 1st bit is isGlobalValidation, 2nd bit is isDeferredAction
+      signerEntity.isGlobalValidation =
+        Number(deferredActionDigest[116]) % 2 === 0 ? false : true;
+      signerEntity.entityId = hexToNumber(
+        `0x${deferredActionDigest.slice(98, 116)}`
+      );
+    }
+
+    // Set these values if the deferred action has not been consumed. We check this with the EP
+    const deferredActionNonce = hexToBigInt(
+      `0x${deferredActionDigest.slice(2, 66)}`
+    );
+    const nextNonceForDeferredActionNonceKey: bigint =
+      (await entryPointContract.read.getNonce([
+        accountAddress,
+        deferredActionNonce >> 64n,
+      ])) as bigint;
+    if (deferredActionNonce === nextNonceForDeferredActionNonceKey) {
+      // parse deferred action to get
+      const callBytesLength =
+        hexToNumber(`0x${deferredActionDigest.slice(66, 74)}`) - 29;
+      if (callBytesLength < 4) {
+        throw new Error("Invalid deferred action calldata length");
+      }
+      const deferredActionCall = decodeFunctionData({
+        abi: modularAccountAbi,
+        data: `0x${deferredActionDigest.slice(132, 132 + callBytesLength * 2)}`,
+      });
+
+      const hooks =
+        deferredActionCall.functionName !== "installValidation"
+          ? []
+          : deferredActionCall.args[3];
+
+      deferredAction = {
+        nonce: deferredActionNonce,
+        data: `0x${deferredActionDigest.slice(66)}`,
+        // get the 25th byte of each hook, execution hooks have the 1st bit empty and val have it set.
+        // for a string, this is 2 (0x) + 2 * 25 = 52
+        // we can just get the single character since we are just checking a single bit
+        hasAssociatedExecHooks: hooks.map((h) => Number(h[52]) % 2).includes(0),
+      };
+    } else if (nextNonceForDeferredActionNonceKey < deferredActionNonce) {
+      throw new Error("Deferred action nonce invalid");
+    }
+  }
 
   const encodeExecute: (tx: AccountOp) => Promise<Hex> = async ({
     target,
@@ -150,17 +229,15 @@ export async function createMAv2Base<
 
   const isAccountDeployed: () => Promise<boolean> = async () =>
     !!(await client.getCode({ address: accountAddress }));
-  // TODO: add deferred action flag
+
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
+    if (deferredAction) {
+      return deferredAction.nonce;
+    }
+
     if (nonceKey > maxUint152) {
       throw new InvalidNonceKeyError(nonceKey);
     }
-
-    const entryPointContract = getContract({
-      address: entryPoint.address,
-      abi: entryPoint.abi,
-      client,
-    });
 
     const fullNonceKey: bigint =
       (nonceKey << 40n) +
@@ -216,7 +293,8 @@ export async function createMAv2Base<
       entityId: Number(entityId),
     });
 
-    return validationData.executionHooks.length
+    return deferredAction?.hasAssociatedExecHooks ||
+      validationData.executionHooks.length
       ? concatHex([executeUserOpSelector, callData])
       : callData;
   };
@@ -231,8 +309,14 @@ export async function createMAv2Base<
     encodeBatchExecute,
     getNonce,
     ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress)
-      : singleSignerMessageSigner(signer, chain, accountAddress, entityId)),
+      ? nativeSMASigner(signer, chain, accountAddress, deferredAction?.data)
+      : singleSignerMessageSigner(
+          signer,
+          chain,
+          accountAddress,
+          entityId,
+          deferredAction?.data
+        )),
   });
 
   return {
