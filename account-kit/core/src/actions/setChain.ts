@@ -1,5 +1,5 @@
 import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
-import { switchChain } from "@wagmi/core";
+import { switchChain, getChainId } from "@wagmi/core";
 import type { Chain } from "viem";
 import { ChainNotFoundError } from "../errors.js";
 import type { AlchemyAccountsConfig } from "../types.js";
@@ -26,7 +26,15 @@ export async function setChain(config: AlchemyAccountsConfig, chain: Chain) {
     throw new ChainNotFoundError(chain);
   }
 
-  await switchChain(config._internal.wagmiConfig, { chainId: chain.id });
+  const chainId = getChainId(config._internal.wagmiConfig);
+
+  // If the wallet's current chainId differs from chain.id, attempt to switch it.
+  // Some wallets (e.g., Safe when making a Safe App) don't allow programmatic chain switching and may throw.
+  // If the wallet is already on chain.id, we skip switchChain and simply update the SDK state.
+  if (chainId !== chain.id) {
+    await switchChain(config._internal.wagmiConfig, { chainId: chain.id });
+  }
+
   const transport = connection.transport;
 
   config.store.setState(() => ({
