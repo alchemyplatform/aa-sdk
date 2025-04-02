@@ -57,5 +57,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '## 🌿 Documentation Preview\n\n| Name | Preview | Updated (UTC) |\n| :--- | :------ | :------ |\n| **Alchemy Docs** | [Visit Preview](${{ steps.generate-docs.outputs.preview_url }}) | ' + new Date().toISOString().replace('T', ' ').replace('Z', '') + ' |\n\n>'
+              body: '## 🌿 Documentation Preview\n\n| Name | Preview | Updated (UTC) |\n| :--- | :------ | :------ |\n| **Alchemy Docs** | [Visit Preview](${{ steps.generate-docs.outputs.preview_url }}) | ' + new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }).replace(',', '') + ' |\n\n>'
             });
