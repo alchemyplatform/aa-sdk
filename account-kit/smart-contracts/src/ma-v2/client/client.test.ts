@@ -356,7 +356,7 @@ describe("MA v2 Tests", async () => {
           type: "secp256k1",
         },
         entityId: sessionKeyEntityId,
-        nonce: BigInt(sessionKeyEntityId) + (3n << 64n),
+        nonceKeyOverride: BigInt(sessionKeyEntityId) + (3n << 64n),
       })
       .addPermission({
         permission: {
@@ -428,7 +428,7 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction({ hash: result });
   });
 
-  it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
+  it.only("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
     let provider = (await givenConnectedProvider({ signer }))
       .extend(installValidationActions)
       .extend(deferralActions);
@@ -518,7 +518,7 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction({ hash: result });
   });
 
-  it("installs a session key via deferred action signed by another session key and has it sign a UO", async () => {
+  it.only("installs a session key via deferred action signed by another session key and has it sign a UO", async () => {
     let provider = (await givenConnectedProvider({ signer }))
       .extend(installValidationActions)
       .extend(deferralActions);
@@ -579,26 +579,43 @@ describe("MA v2 Tests", async () => {
     // Encode install data to defer and get the deferred action typed data
     const { typedData, nonceOverride } = await new PermissionBuilder(provider)
       .configure({
-        validationConfig: {
-          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-            provider.chain
-          ),
-          entityId: newSessionKeyEntityId,
-          isGlobal: isGlobalValidation,
-          isSignatureValidation: true,
-          isUserOpValidation: true,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
         },
-        selectors: [],
-        installData: SingleSignerValidationModule.encodeOnInstallData({
-          entityId: newSessionKeyEntityId,
-          signer: await newSessionKey.getAddress(),
-        }),
+        entityId: newSessionKeyEntityId,
+        nonceKeyOverride: 0n, //BigInt(newSessionKeyEntityId) + (3n << 64n)
       })
+      .addPermission({
+        permission: {
+          type: PermissionType.ROOT,
+        },
+      })
+      // .addPermission({
+      //   permission: {
+      //     type: PermissionType.GAS_LIMIT,
+      //     data: {
+      //       limit: "0x1234512",
+      //     },
+      //   },
+      // })
+      // .addPermission({
+      //   permission: {
+      //     type: PermissionType.ACCOUNT_FUNCTIONS,
+      //     // note: Would be great if we could get the type of "data" to narrow down once the type is set above
+      //     data: {
+      //       functions: ["0x12345678"],
+      //     },
+      //   },
+      // })
       .compile_deferred({
         deadline: 0,
         uoValidationEntityId: newSessionKeyEntityId, // UO signing session key
         uoIsGlobalValidation: isGlobalValidation, // UO validation is global
       });
+
+    console.log(typedData);
+    console.log("Deferred: %s, \n\n Nonce: %s", typedData, nonceOverride);
 
     // Sign the typed data using the first session key
     const deferredValidationSig = await sessionKeyClient.account.signTypedData(

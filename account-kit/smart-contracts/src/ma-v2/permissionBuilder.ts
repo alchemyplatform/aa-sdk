@@ -178,7 +178,7 @@ export type Permission = OneOf<
     {
       // this permission grants full access to everything
       type: PermissionType.ROOT;
-      data: never;
+      data?: never;
     }
   ]
 >;
@@ -201,7 +201,7 @@ export class PermissionBuilder {
   private installData: Hex = "0x";
   private permissions: Permission[] = [];
   private hooks: Hook[] = [];
-  private nonce: bigint = 0;
+  private nonceKeyOverride: bigint = 0n;
 
   constructor(client: ModularAccountV2Client) {
     this.client = client;
@@ -211,13 +211,13 @@ export class PermissionBuilder {
   configure({
     key,
     entityId,
-    nonce,
+    nonceKeyOverride,
     selectors,
     hooks,
   }: {
     key: Key;
     entityId: number;
-    nonce: bigint;
+    nonceKeyOverride: bigint;
     selectors?: Hex[];
     hooks?: Hook[];
   }): this {
@@ -236,7 +236,7 @@ export class PermissionBuilder {
     });
     if (selectors) this.selectors = selectors;
     if (hooks) this.hooks = hooks;
-    this.nonce = nonce;
+    this.nonceKeyOverride = nonceKeyOverride;
     return this;
   }
 
@@ -299,6 +299,12 @@ export class PermissionBuilder {
       }
     }
 
+    // Check 4: If the permission is ACCOUNT_FUNCTIONS, add selectors
+    if (permission.type === PermissionType.ACCOUNT_FUNCTIONS) {
+      this.selectors = [...this.selectors, ...permission.data.functions];
+      return this;
+    }
+
     this.permissions.push(permission);
 
     return this;
@@ -357,7 +363,7 @@ export class PermissionBuilder {
       deadline: deadline,
       uoValidationEntityId: uoValidationEntityId,
       uoIsGlobalValidation: uoIsGlobalValidation,
-      nonceKeyOverride: this.nonce,
+      nonceKeyOverride: this.nonceKeyOverride,
     });
   }
 
@@ -531,30 +537,29 @@ export class PermissionBuilder {
               "PERMISSION: ACCOUNT_FUNCTION => No functions provided"
             ); // should be in add perm
           }
-          rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
-            hookConfig: {
-              address: getDefaultAllowlistModuleAddress(this.client.chain),
-              entityId,
-              hookType: HookType.VALIDATION,
-              hasPreHooks: true,
-              hasPostHooks: false,
-            },
-            initData: {
-              entityId,
-              inputs: [
-                // Add previous inputs if they exist
-                ...(rawHooks[HookIdentifier.PREVAL_ALLOWLIST]?.initData
-                  .inputs || []),
-                {
-                  target: this.client.account.address,
-                  hasSelectorAllowlist: false,
-                  hasERC20SpendLimit: false,
-                  erc20SpendLimit: 0n,
-                  selectors: permission.data.functions,
-                },
-              ],
-            },
-          };
+          // rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
+          //   hookConfig: {
+          //     address: getDefaultAllowlistModuleAddress(this.client.chain),
+          //     entityId,
+          //     hookType: HookType.VALIDATION,
+          //     hasPreHooks: true,
+          //     hasPostHooks: false,
+          //   },
+          //   initData: {
+          //     entityId,
+          //     inputs: [
+          //       // Add previous inputs if they exist
+          //       ...(rawHooks[HookIdentifier.PREVAL_ALLOWLIST]?.initData.inputs || []),
+          //       {
+          //         target: this.client.account.address,
+          //         hasSelectorAllowlist: false,
+          //         hasERC20SpendLimit: false,
+          //         erc20SpendLimit: 0n,
+          //         selectors: permission.data.functions,
+          //       },
+          //     ],
+          //   },
+          // };
           break;
         case PermissionType.FUNCTIONS_ON_ALL_CONTRACTS:
           if (permission.data.functions.length === 0) {
