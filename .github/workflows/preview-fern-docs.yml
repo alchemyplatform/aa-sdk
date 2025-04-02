@@ -13,7 +13,7 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout AA-SDK
+      - name: Checkout aa-sdk
         uses: actions/checkout@v4
 
       - name: Download Alchemy Docs Repo
@@ -29,10 +29,11 @@ jobs:
         run: |
           mkdir -p docs-site/account-kit
           cp -r docs/* docs-site/account-kit/
-          cd docs-site
 
       - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
-        run: account-kit/scripts/insert-docs.sh
+        run: |
+          cd docs-site
+          account-kit/scripts/insert-docs.sh
 
       - name: Install Fern CLI
         run: npm install -g fern-api
@@ -42,6 +43,7 @@ jobs:
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
         run: |
+          cd docs-site
           OUTPUT=$(fern generate --docs --preview 2>&1) || true
           echo "$OUTPUT"
           URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
