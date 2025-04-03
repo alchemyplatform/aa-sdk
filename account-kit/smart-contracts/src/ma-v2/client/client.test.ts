@@ -330,7 +330,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it.only("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
+  it("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
@@ -589,23 +589,6 @@ describe("MA v2 Tests", async () => {
           type: PermissionType.ROOT,
         },
       })
-      // .addPermission({
-      //   permission: {
-      //     type: PermissionType.GAS_LIMIT,
-      //     data: {
-      //       limit: "0x1234512",
-      //     },
-      //   },
-      // })
-      // .addPermission({
-      //   permission: {
-      //     type: PermissionType.ACCOUNT_FUNCTIONS,
-      //     // note: Would be great if we could get the type of "data" to narrow down once the type is set above
-      //     data: {
-      //       functions: ["0x12345678"],
-      //     },
-      //   },
-      // })
       .compile_deferred({
         deadline: 0,
         uoValidationEntityId: newSessionKeyEntityId, // UO signing session key
@@ -1459,7 +1442,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("tests entity id and nonce selection", async () => {
-    let newClient = (await givenConnectedProvider({ signer, salt: 1n }))
+    let newClient = (await givenConnectedProvider({ signer }))
       .extend(deferralActions)
       .extend(installValidationActions);
 
@@ -1668,18 +1651,18 @@ describe("MA v2 Tests", async () => {
     expect(notAlchemyClientSpy).toHaveBeenCalled();
   });
 
+  let salt = 1n;
+
   const givenConnectedProvider = async ({
     signer,
     signerEntity,
     accountAddress,
     paymasterMiddleware,
-    salt = 0n,
   }: {
     signer: SmartAccountSigner;
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
-    salt?: bigint;
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
@@ -1696,6 +1679,6 @@ describe("MA v2 Tests", async () => {
         : paymasterMiddleware === "erc7677"
         ? erc7677Middleware()
         : {}),
-      salt,
+      salt: salt++,
     });
 });
