@@ -92,8 +92,8 @@ describe("AlchemySmartAccountClient tests", () => {
     ).toMatchInlineSnapshot(
       {
         "Alchemy-AA-Sdk-Version": expect.any(String),
-        "X-Alchemy-Trace-Id": expect.any(String),
-        traceheader: expect.any(String),
+        "X-Alchemy-Client-Trace-Id": expect.any(String),
+        traceparent: expect.any(String),
         "Content-Type": "application/json",
         tracestate: "breadcrumbs=test-afterTest",
       },
@@ -101,9 +101,9 @@ describe("AlchemySmartAccountClient tests", () => {
       {
         "Alchemy-AA-Sdk-Version": Any<String>,
         "Content-Type": "application/json",
-        "X-Alchemy-Trace-Breadcrumb": "test > afterTest",
-        "X-Alchemy-Trace-Id": Any<String>,
-        "traceheader": Any<String>,
+        "X-Alchemy-Client-Breadcrumb": "test > afterTest",
+        "X-Alchemy-Client-Trace-Id": Any<String>,
+        "traceparent": Any<String>,
         "tracestate": "breadcrumbs=test-afterTest",
       }
     `
