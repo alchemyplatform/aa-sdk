@@ -20,15 +20,15 @@ export function TopNav() {
   return (
     <div className="fixed lg:sticky left-0 top-0 right-0 flex justify-center py-5 bg-demo-bg lg:bg-demo-nav-bg shadow-sm z-20">
       <div className="flex items-center justify-between h-full w-full max-w-[1440px] mx-6 md:mx-7 lg:mx-10">
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center gap-4">
           {/* This link is used to refresh the page when the user clicks the logo */}
           <a href="/">
             <Wordmark />
           </a>
-          <div className="w-px h-5 bg-gray-500" />
+          <div className="w-px h-6 bg-gray-500" />
           <Image
             src="/images/smart-wallets.svg"
-            width={124}
+            width={200}
             height={26}
             alt="smart wallets"
           />
