@@ -97,14 +97,14 @@ describe("MA v2 deferral actions tests", async () => {
       sig,
     });
 
-    // TODO: need nonce, orig account address, orig account initcode, signer entity
+    // TODO: need nonce, orig account address, orig account initcode
     const sessionKeyClient = await createModularAccountV2Client({
       transport: custom(instance.getClient()),
       chain: instance.chain,
       accountAddress: provider.getAddress(),
       signer: sessionKey,
-      signerEntity: { isGlobalValidation: true, entityId: sessionKeyEntityId },
       initCode: provider.account.getInitCode(),
+      // TODO: change to Hex
       deferredAction: {
         data: deferredActionDigest,
         nonce,
