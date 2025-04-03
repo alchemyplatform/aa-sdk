@@ -26,12 +26,12 @@ export async function setChain(config: AlchemyAccountsConfig, chain: Chain) {
     throw new ChainNotFoundError(chain);
   }
 
-  const chainId = getChainId(config._internal.wagmiConfig);
+  const wagmiChainId = getChainId(config._internal.wagmiConfig);
 
   // If the wallet's current chainId differs from chain.id, attempt to switch it.
   // Some wallets (e.g., Safe when making a Safe App) don't allow programmatic chain switching and may throw.
   // If the wallet is already on chain.id, we skip switchChain and simply update the SDK state.
-  if (chainId !== chain.id) {
+  if (wagmiChainId !== chain.id) {
     await switchChain(config._internal.wagmiConfig, { chainId: chain.id });
   }
 
