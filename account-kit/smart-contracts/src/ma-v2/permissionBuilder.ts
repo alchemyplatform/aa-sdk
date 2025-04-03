@@ -259,6 +259,7 @@ export class PermissionBuilder {
           "PERMISSION: ROOT: Cannot add ROOT permission with other permissions"
         );
       }
+      this.permissions.push(permission);
       // Set isGlobal to true
       this.validationConfig.isGlobal = true;
       return this;
