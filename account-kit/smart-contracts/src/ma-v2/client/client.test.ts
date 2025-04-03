@@ -360,7 +360,7 @@ describe("MA v2 Tests", async () => {
         permission: {
           type: PermissionType.GAS_LIMIT,
           data: {
-            limit: "0x123451222123",
+            limit: toHex(parseEther("1")),
           },
         },
       })

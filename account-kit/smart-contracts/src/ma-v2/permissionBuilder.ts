@@ -1,4 +1,4 @@
-import { zeroAddress, type Address, type Hex } from "viem";
+import { zeroAddress, type Address, type Hex, decodeFunctionData } from "viem";
 import {
   HookType,
   type HookConfig,
@@ -23,6 +23,7 @@ import {
 import { SingleSignerValidationModule } from "./modules/single-signer-validation/module.js";
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
+import { modularAccountAbi } from "./index.js";
 
 // We use this to offset the ERC20 spend limit entityId
 const HALF_UINT32 = 2147483647;
