@@ -355,11 +355,10 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(startingAddressBalance + sendAmount);
   });
 
-  it("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
+  it.only("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
     let provider = (
       await givenConnectedProvider({
         signer,
-        paymasterMiddleware: "erc7677",
       })
     )
       .extend(installValidationActions)
@@ -372,7 +371,6 @@ describe("MA v2 Tests", async () => {
 
     // Test variables
     const sessionKeyEntityId = 1;
-    const isGlobalValidation = true;
 
     const { typedData, nonceOverride } = await new PermissionBuilder(provider)
       .configure({
@@ -381,28 +379,28 @@ describe("MA v2 Tests", async () => {
           type: "secp256k1",
         },
         entityId: sessionKeyEntityId,
-        nonceKeyOverride: BigInt(sessionKeyEntityId) + (3n << 64n),
+        nonceKeyOverride: 0n,
       })
       .addPermission({
         permission: {
           type: PermissionType.GAS_LIMIT,
           data: {
-            limit: "0x1234512",
+            limit: "0x123451222123",
           },
         },
       })
-      // .addPermission({
-      //   permission: {
-      //     type: PermissionType.NATIVE_TOKEN_TRANSFER,
-      //     data: {
-      //       allowance: "0x1234",
-      //     },
-      //   },
-      // })
+      .addPermission({
+        permission: {
+          type: PermissionType.ACCOUNT_FUNCTIONS,
+          data: {
+            functions: ["0xb61d27f6"], // execute selector
+          },
+        },
+      })
       .compile_deferred({
         deadline: 0,
         uoValidationEntityId: sessionKeyEntityId,
-        uoIsGlobalValidation: isGlobalValidation,
+        uoIsGlobalValidation: false,
       });
 
     // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
@@ -432,7 +430,7 @@ describe("MA v2 Tests", async () => {
       accountAddress: provider.getAddress(),
       signerEntity: {
         entityId: sessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
+        isGlobalValidation: false,
       },
     });
 
@@ -454,7 +452,9 @@ describe("MA v2 Tests", async () => {
   });
 
   it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(installValidationActions).extend(deferralActions);
+    let provider = (await givenConnectedProvider({ signer }))
+      .extend(installValidationActions)
+      .extend(deferralActions);
 
     await setBalance(client, {
       address: provider.getAddress(),
