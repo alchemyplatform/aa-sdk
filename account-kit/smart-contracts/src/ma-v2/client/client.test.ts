@@ -50,9 +50,16 @@ import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
-import { packAccountGasLimits, packPaymasterData } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
+import {
+  packAccountGasLimits,
+  packPaymasterData,
+} from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { entryPoint07Abi } from "viem/account-abstraction";
-import { alchemy, arbitrumSepolia, alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
+import {
+  alchemy,
+  arbitrumSepolia,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { deferralActions } from "../actions/deferralActions.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -63,7 +70,9 @@ describe("MA v2 Tests", async () => {
   const instance = local070Instance;
   const isValidSigSuccess = "0x1626ba7e";
 
-  let client: ReturnType<typeof instance.getClient> & ReturnType<typeof publicActions> & TestActions;
+  let client: ReturnType<typeof instance.getClient> &
+    ReturnType<typeof publicActions> &
+    TestActions;
   beforeAll(async () => {
     client = instance
       .getClient()
@@ -71,9 +80,13 @@ describe("MA v2 Tests", async () => {
       .extend(testActions({ mode: "anvil" }));
   });
 
-  const signer: SmartAccountSigner = new LocalAccountSigner(accounts.fundedAccountOwner);
+  const signer: SmartAccountSigner = new LocalAccountSigner(
+    accounts.fundedAccountOwner
+  );
 
-  const sessionKey: SmartAccountSigner = new LocalAccountSigner(accounts.unfundedAccountOwner);
+  const sessionKey: SmartAccountSigner = new LocalAccountSigner(
+    accounts.unfundedAccountOwner
+  );
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -82,60 +95,6 @@ describe("MA v2 Tests", async () => {
     client.getBalance({
       address: target,
     });
-
-  it("Install validation builder", async () => {
-    const provider = await givenConnectedProvider({ signer });
-
-    await setBalance(client, {
-      address: provider.getAddress(),
-      value: parseEther("2"),
-    });
-
-    const hookConfig = {
-      address: zeroAddress,
-      entityId: 69,
-      hookType: HookType.VALIDATION,
-      hasPreHooks: true,
-      hasPostHooks: false,
-    };
-
-    const res = await new PermissionBuilder(provider)
-      .configure({
-        validationConfig: {
-          moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
-          entityId: 1,
-          isGlobal: true,
-          isSignatureValidation: true,
-          isUserOpValidation: true,
-        },
-        installData: SingleSignerValidationModule.encodeOnInstallData({
-          entityId: 1,
-          signer: await sessionKey.getAddress(),
-        }),
-      })
-      .addPermission({
-        permission: {
-          type: PermissionType.GAS_LIMIT,
-          data: {
-            limit: "0x1234",
-          },
-        },
-      })
-      .addPermission({
-        permission: {
-          type: PermissionType.NATIVE_TOKEN_TRANSFER,
-          data: {
-            allowance: "0x1234",
-          },
-        },
-      })
-      .compile_deferred({
-        deadline: Math.round(Date.now() / 1000 + 100),
-        uoValidationEntityId: 0,
-        uoValidationIsGlobal: true,
-      });
-    console.log("\n\n FIRST:", res.typedData);
-  });
 
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
@@ -157,11 +116,15 @@ describe("MA v2 Tests", async () => {
 
     await provider.waitForUserOperationTransaction(result);
 
-    await expect(getTargetBalance()).resolves.toEqual(startingAddressBalance + sendAmount);
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount
+    );
   });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
-    const provider = (await givenConnectedProvider({ signer })).extend(installValidationActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -177,7 +140,9 @@ describe("MA v2 Tests", async () => {
     // UO deploys the account to test 1271 against
     const result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -197,9 +162,9 @@ describe("MA v2 Tests", async () => {
 
     let signature = await provider.signMessage({ message });
 
-    await expect(accountContract.read.isValidSignature([hashMessage(message), signature])).resolves.toEqual(
-      isValidSigSuccess
-    );
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
 
     // connect session key
     let sessionKeyClient = await createModularAccountV2Client({
@@ -212,13 +177,15 @@ describe("MA v2 Tests", async () => {
 
     signature = await sessionKeyClient.signMessage({ message });
 
-    await expect(accountContract.read.isValidSignature([hashMessage(message), signature])).resolves.toEqual(
-      isValidSigSuccess
-    );
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
   });
 
   it("successfully sign + validate typed data messages, for native and single signer validation", async () => {
-    const provider = (await givenConnectedProvider({ signer })).extend(installValidationActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -234,7 +201,9 @@ describe("MA v2 Tests", async () => {
     // UO deploys the account to test 1271 against
     const result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -285,9 +254,9 @@ describe("MA v2 Tests", async () => {
     const hashedMessageTypedData = hashTypedData(typedData);
     let signature = await provider.signTypedData({ typedData });
 
-    await expect(accountContract.read.isValidSignature([hashedMessageTypedData, signature])).resolves.toEqual(
-      isValidSigSuccess
-    );
+    await expect(
+      accountContract.read.isValidSignature([hashedMessageTypedData, signature])
+    ).resolves.toEqual(isValidSigSuccess);
 
     // connect session key
     let sessionKeyClient = await createModularAccountV2Client({
@@ -300,13 +269,15 @@ describe("MA v2 Tests", async () => {
 
     signature = await sessionKeyClient.signTypedData({ typedData });
 
-    await expect(accountContract.read.isValidSignature([hashedMessageTypedData, signature])).resolves.toEqual(
-      isValidSigSuccess
-    );
+    await expect(
+      accountContract.read.isValidSignature([hashedMessageTypedData, signature])
+    ).resolves.toEqual(isValidSigSuccess);
   });
 
   it("adds a session key with no permissions", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(installValidationActions);
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -315,7 +286,9 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -352,7 +325,9 @@ describe("MA v2 Tests", async () => {
 
     await sessionKeyClient.waitForUserOperationTransaction(result);
 
-    await expect(getTargetBalance()).resolves.toEqual(startingAddressBalance + sendAmount);
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount
+    );
   });
 
   it.only("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
@@ -468,7 +443,9 @@ describe("MA v2 Tests", async () => {
     // Encode install data to defer
     let encodedInstallData = await provider.encodeInstallValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: sessionKeyEntityId,
         isGlobal: isGlobalValidation,
         isSignatureValidation: true,
@@ -492,7 +469,9 @@ describe("MA v2 Tests", async () => {
       });
 
     // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
-    const deferredValidationSig = await provider.account.signTypedData(typedData);
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
 
     // Build the full hex to prepend to the UO signature
     // This MUST be done with the *same* client that has signed the typed data
@@ -529,13 +508,18 @@ describe("MA v2 Tests", async () => {
     uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
 
     // Send the raw UserOp
-    const result = await sessionKeyClient.sendRawUserOperation(uo, provider.account.getEntryPoint().address);
+    const result = await sessionKeyClient.sendRawUserOperation(
+      uo,
+      provider.account.getEntryPoint().address
+    );
 
     await provider.waitForUserOperationTransaction({ hash: result });
   });
 
   it("installs a session key via deferred action signed by another session key and has it sign a UO", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(installValidationActions).extend(deferralActions);
+    let provider = (await givenConnectedProvider({ signer }))
+      .extend(installValidationActions)
+      .extend(deferralActions);
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -547,7 +531,9 @@ describe("MA v2 Tests", async () => {
     // First, install a session key
     let sessionKeyInstallResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: sessionKeyEntityId,
         isGlobal: true,
         isSignatureValidation: true,
@@ -580,7 +566,9 @@ describe("MA v2 Tests", async () => {
       .extend(deferralActions);
 
     const randomWallet = privateKeyToAccount(generatePrivateKey());
-    const newSessionKey: SmartAccountSigner = new LocalAccountSigner(randomWallet);
+    const newSessionKey: SmartAccountSigner = new LocalAccountSigner(
+      randomWallet
+    );
 
     // Test variables
     const newSessionKeyEntityId = 2;
@@ -628,7 +616,9 @@ describe("MA v2 Tests", async () => {
     console.log("Deferred: %s, \n\n Nonce: %s", typedData, nonceOverride);
 
     // Sign the typed data using the first session key
-    const deferredValidationSig = await sessionKeyClient.account.signTypedData(typedData);
+    const deferredValidationSig = await sessionKeyClient.account.signTypedData(
+      typedData
+    );
 
     // Build the full hex to prepend to the UO signature
     // This MUST be done with the *same* client that has signed the typed data
@@ -665,13 +655,18 @@ describe("MA v2 Tests", async () => {
     uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
 
     // Send the raw UserOp (provider/client only used for account address & entrypoint)
-    const result = await provider.sendRawUserOperation(uo, provider.account.getEntryPoint().address);
+    const result = await provider.sendRawUserOperation(
+      uo,
+      provider.account.getEntryPoint().address
+    );
 
     await provider.waitForUserOperationTransaction({ hash: result });
   });
 
   it("uninstalls a session key", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(installValidationActions);
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -680,7 +675,9 @@ describe("MA v2 Tests", async () => {
 
     let result = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -697,7 +694,9 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction(result);
 
     result = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -749,7 +748,9 @@ describe("MA v2 Tests", async () => {
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -812,7 +813,9 @@ describe("MA v2 Tests", async () => {
     });
 
     // verify uninstall
-    await expect(provider.waitForUserOperationTransaction(uninstallResult)).resolves.not.toThrowError();
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
   });
 
   it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
@@ -837,7 +840,9 @@ describe("MA v2 Tests", async () => {
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -890,7 +895,9 @@ describe("MA v2 Tests", async () => {
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -899,11 +906,15 @@ describe("MA v2 Tests", async () => {
     });
 
     // verify uninstall
-    await expect(provider.waitForUserOperationTransaction(uninstallResult)).resolves.not.toThrowError();
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult)
+    ).resolves.not.toThrowError();
   });
 
   it("installs allowlist module, uses, then uninstalls", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(installValidationActions);
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -913,7 +924,9 @@ describe("MA v2 Tests", async () => {
     // install validation module
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -939,15 +952,18 @@ describe("MA v2 Tests", async () => {
     ).extend(installValidationActions);
 
     // verify we can call into the zero address before allow list hook is installed
-    const sendResultBeforeHookInstallation = await sessionKeyProvider.sendUserOperation({
-      uo: {
-        target: zeroAddress,
-        value: 0n,
-        data: "0x",
-      },
-    });
+    const sendResultBeforeHookInstallation =
+      await sessionKeyProvider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      });
 
-    await provider.waitForUserOperationTransaction(sendResultBeforeHookInstallation);
+    await provider.waitForUserOperationTransaction(
+      sendResultBeforeHookInstallation
+    );
 
     const hookInstallData = AllowlistModule.encodeOnInstallData({
       entityId: 1,
@@ -965,7 +981,9 @@ describe("MA v2 Tests", async () => {
     // install hook
     const installHookResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1026,7 +1044,9 @@ describe("MA v2 Tests", async () => {
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -1038,7 +1058,9 @@ describe("MA v2 Tests", async () => {
   });
 
   it("installs native token limit module, uses, then uninstalls", async () => {
-    let provider = (await givenConnectedProvider({ signer })).extend(installValidationActions);
+    let provider = (await givenConnectedProvider({ signer })).extend(
+      installValidationActions
+    );
 
     await setBalance(client, {
       address: provider.getAddress(),
@@ -1049,7 +1071,9 @@ describe("MA v2 Tests", async () => {
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1082,7 +1106,9 @@ describe("MA v2 Tests", async () => {
         data: "0x",
       },
     });
-    await provider.waitForUserOperationTransaction(preHookInstallationSendResult);
+    await provider.waitForUserOperationTransaction(
+      preHookInstallationSendResult
+    );
 
     // Let's verify the module's limit is set correctly after installation
     const hookInstallData = NativeTokenLimitModule.encodeOnInstallData({
@@ -1092,7 +1118,9 @@ describe("MA v2 Tests", async () => {
 
     const installHookResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1152,7 +1180,9 @@ describe("MA v2 Tests", async () => {
     });
 
     const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain
+      ),
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -1192,7 +1222,9 @@ describe("MA v2 Tests", async () => {
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1253,7 +1285,9 @@ describe("MA v2 Tests", async () => {
             sender: sessionKeyProvider.account.address,
             nonce: fromHex(signedUO.nonce, "bigint"),
             initCode:
-              signedUO.factory && signedUO.factoryData ? concat([signedUO.factory, signedUO.factoryData]) : "0x",
+              signedUO.factory && signedUO.factoryData
+                ? concat([signedUO.factory, signedUO.factoryData])
+                : "0x",
             callData: signedUO.callData,
             accountGasLimits: packAccountGasLimits({
               verificationGasLimit: signedUO.verificationGasLimit,
@@ -1268,7 +1302,8 @@ describe("MA v2 Tests", async () => {
               signedUO.paymaster && isAddress(signedUO.paymaster)
                 ? packPaymasterData({
                     paymaster: signedUO.paymaster,
-                    paymasterVerificationGasLimit: signedUO.paymasterVerificationGasLimit,
+                    paymasterVerificationGasLimit:
+                      signedUO.paymasterVerificationGasLimit,
                     paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
                     paymasterData: signedUO.paymasterData,
                   })
@@ -1314,7 +1349,9 @@ describe("MA v2 Tests", async () => {
 
     const installResult = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(provider.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          provider.chain
+        ),
         entityId: 2,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1376,13 +1413,18 @@ describe("MA v2 Tests", async () => {
               sender: sessionKeyProvider.account.address,
               nonce: fromHex(signedUO.nonce, "bigint"),
               initCode:
-                signedUO.factory && signedUO.factoryData ? concat([signedUO.factory, signedUO.factoryData]) : "0x",
+                signedUO.factory && signedUO.factoryData
+                  ? concat([signedUO.factory, signedUO.factoryData])
+                  : "0x",
               callData: signedUO.callData,
               accountGasLimits: packAccountGasLimits({
                 verificationGasLimit: signedUO.verificationGasLimit,
                 callGasLimit: signedUO.callGasLimit,
               }),
-              preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
+              preVerificationGas: fromHex(
+                signedUO.preVerificationGas,
+                "bigint"
+              ),
               gasFees: packAccountGasLimits({
                 maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
                 maxFeePerGas: signedUO.maxFeePerGas,
@@ -1391,7 +1433,8 @@ describe("MA v2 Tests", async () => {
                 signedUO.paymaster && isAddress(signedUO.paymaster)
                   ? packPaymasterData({
                       paymaster: signedUO.paymaster,
-                      paymasterVerificationGasLimit: signedUO.paymasterVerificationGasLimit,
+                      paymasterVerificationGasLimit:
+                        signedUO.paymasterVerificationGasLimit,
                       paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
                       paymasterData: signedUO.paymasterData,
                     })
@@ -1405,7 +1448,11 @@ describe("MA v2 Tests", async () => {
       });
     } catch (err: any) {
       // verify that simulation fails due to violation of time range restriction on session key
-      assert(err.metaMessages.some((str: string) => str.includes("AA22 expired or not due")));
+      assert(
+        err.metaMessages.some((str: string) =>
+          str.includes("AA22 expired or not due")
+        )
+      );
     }
 
     client.setAutomine(true);
@@ -1457,7 +1504,9 @@ describe("MA v2 Tests", async () => {
     // deploy the account and install at entity id 1 with global validation
     const uo1 = await newClient.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(newClient.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          newClient.chain
+        ),
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: false,
@@ -1472,7 +1521,10 @@ describe("MA v2 Tests", async () => {
     });
     await newClient.waitForUserOperationTransaction(uo1);
 
-    const fns: ContractFunctionName<typeof semiModularAccountBytecodeAbi>[] = ["execute", "executeBatch"];
+    const fns: ContractFunctionName<typeof semiModularAccountBytecodeAbi>[] = [
+      "execute",
+      "executeBatch",
+    ];
 
     const selectors = fns.map(
       (s) =>
@@ -1485,7 +1537,9 @@ describe("MA v2 Tests", async () => {
     // deploy the account and install some entity ids with selector validation
     const uo2 = await newClient.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(newClient.chain),
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          newClient.chain
+        ),
         entityId: 2,
         isGlobal: false,
         isSignatureValidation: false,
@@ -1540,9 +1594,10 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const { createModularAccountV2FromExisting, ...upgradeToData } = await getMAV2UpgradeToData(lightAccountClient, {
-      account: lightAccountClient.account,
-    });
+    const { createModularAccountV2FromExisting, ...upgradeToData } =
+      await getMAV2UpgradeToData(lightAccountClient, {
+        account: lightAccountClient.account,
+      });
 
     await lightAccountClient.upgradeAccount({
       upgradeTo: upgradeToData,
@@ -1569,7 +1624,9 @@ describe("MA v2 Tests", async () => {
 
     await maV2Client.waitForUserOperationTransaction(result);
 
-    await expect(getTargetBalance()).resolves.toEqual(startingAddressBalance + sendAmount);
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount
+    );
   });
 
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {
