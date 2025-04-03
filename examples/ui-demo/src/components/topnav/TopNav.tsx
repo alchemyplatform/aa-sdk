@@ -25,12 +25,13 @@ export function TopNav() {
           <a href="/">
             <Wordmark />
           </a>
-          <div className="w-px h-6 bg-gray-500" />
+          <div className="hidden sm:block w-px h-6 bg-gray-500" />
           <Image
             src="/images/smart-wallets.svg"
             width={200}
             height={26}
             alt="smart wallets"
+            className="hidden sm:block"
           />
         </div>
         <div className="flex gap-1 md:gap-8 items-center h-8">
