@@ -36,7 +36,9 @@ export type CreateModularAccountV2Params<
 > & {
   signer: TSigner;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  deferredActionDigest?: Hex;
   signerEntity?: SignerEntity;
+  nonce?: bigint;
 }) &
   (
     | {
@@ -103,6 +105,8 @@ export async function createModularAccountV2(
       entityId: DEFAULT_OWNER_ENTITY_ID,
     },
     signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
+    deferredActionDigest,
+    nonce,
   } = config;
 
   const client = createBundlerClient({
@@ -176,15 +180,27 @@ export async function createModularAccountV2(
     }
   })();
 
-  return createMAv2Base({
-    source: "ModularAccountV2",
-    transport,
-    chain,
-    signer,
-    entryPoint,
-    signerEntity,
-    ...accountFunctions,
-  });
+  return nonce && deferredActionDigest
+    ? createMAv2Base({
+        source: "ModularAccountV2",
+        transport,
+        chain,
+        signer,
+        entryPoint,
+        signerEntity,
+        nonce,
+        deferredActionDigest,
+        ...accountFunctions,
+      })
+    : createMAv2Base({
+        source: "ModularAccountV2",
+        transport,
+        chain,
+        signer,
+        entryPoint,
+        signerEntity,
+        ...accountFunctions,
+      });
 }
 
 // If we add more valid modes, the switch case branch's mode will no longer be `never`, which will cause a compile time error here and ensure we handle the new type.

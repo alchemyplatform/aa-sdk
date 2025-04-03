@@ -21,14 +21,20 @@ import {
   getContract,
   concatHex,
   maxUint152,
-  hexToBigInt,
   hexToNumber,
   decodeFunctionData,
+  createCursor,
+  toFunctionSelector,
+  hexToBytes,
+  decodeAbiParameters,
+  AbiConstructorNotFoundError,
+  type DecodeFunctionDataParameters,
 } from "viem";
 import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
 import { nativeSMASigner } from "../nativeSMASigner.js";
 import { singleSignerMessageSigner } from "../../modules/single-signer-validation/signer.js";
+import { formatAbiItem } from "viem/utils";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
 
@@ -55,17 +61,10 @@ export type ValidationDataParams =
   | {
       validationModuleAddress: Address;
       entityId?: never;
-      deferredActionDigest?: never;
     }
   | {
       validationModuleAddress?: never;
       entityId: number;
-      deferredActionDigest?: never;
-    }
-  | {
-      deferredActionDigest: Hex;
-      validationModuleAddress?: never;
-      entityId?: never;
     };
 
 export type ModularAccountV2<
@@ -95,8 +94,16 @@ export type CreateMAV2BaseParams<
   signer: TSigner;
   signerEntity?: SignerEntity;
   accountAddress: Address;
-  deferredActionDigest?: Hex;
-};
+} & (
+    | {
+        deferredActionDigest: Hex;
+        nonce: bigint;
+      }
+    | {
+        deferredActionDigest?: never;
+        nonce?: never;
+      }
+  );
 
 export type CreateMAV2BaseReturnType<
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -120,6 +127,7 @@ export async function createMAv2Base<
     } = {},
     accountAddress,
     deferredActionDigest,
+    nonce,
     ...remainingToSmartContractAccountParams
   } = config;
 
@@ -140,61 +148,54 @@ export async function createMAv2Base<
 
   let deferredAction:
     | undefined
-    | { nonce: bigint; data: Hex; hasAssociatedExecHooks: boolean };
+    | { data: Hex; hasAssociatedExecHooks: boolean };
 
   // deferred action format:
-  // 32 bytes nonce | 4 bytes len | 21 bytes valLocator | 8 bytes deadline |
-  // variable bytes calldata | 4 bytes sig length | variable bytes sig
+  // 4 bytes len | 21 bytes valLocator | 6 bytes deadline | variable bytes calldata |
+  // 4 bytes sig length | variable bytes sig
   if (deferredActionDigest) {
-    // we always infer entityId and isGlobalValidation from the deferred action case
-    // this number here is in the range of [0, 7]
-    if (Number(deferredActionDigest[116]) >= 4) {
-      // TODO: implement > 4 case which is direct validation
-      throw new Error("Direct call validation not supported yet");
-    } else {
-      // 1st bit is isGlobalValidation, 2nd bit is isDeferredAction
-      signerEntity.isGlobalValidation =
-        Number(deferredActionDigest[116]) % 2 === 0 ? false : true;
-      signerEntity.entityId = hexToNumber(
-        `0x${deferredActionDigest.slice(98, 116)}`
-      );
-    }
-
     // Set these values if the deferred action has not been consumed. We check this with the EP
-    const deferredActionNonce = hexToBigInt(
-      `0x${deferredActionDigest.slice(2, 66)}`
-    );
-    const nextNonceForDeferredActionNonceKey: bigint =
+    const nextNonceForDeferredActionNonce: bigint =
       (await entryPointContract.read.getNonce([
         accountAddress,
-        deferredActionNonce >> 64n,
+        nonce >> 64n,
       ])) as bigint;
-    if (deferredActionNonce === nextNonceForDeferredActionNonceKey) {
-      // parse deferred action to get
+
+    if (nonce === nextNonceForDeferredActionNonce) {
+      // parse deferred action to get length. -21 for val locator, -6 for timestamp
+
       const callBytesLength =
-        hexToNumber(`0x${deferredActionDigest.slice(66, 74)}`) - 29;
+        hexToNumber(`0x${deferredActionDigest.slice(2, 10)}`) - 27;
       if (callBytesLength < 4) {
         throw new Error("Invalid deferred action calldata length");
       }
-      const deferredActionCall = decodeFunctionData({
-        abi: modularAccountAbi,
-        data: `0x${deferredActionDigest.slice(132, 132 + callBytesLength * 2)}`,
-      });
+      try {
+        const bytes2: Hex = `0x${deferredActionDigest.slice(
+          64,
+          64 + callBytesLength * 2
+        )}`;
 
-      const hooks =
-        deferredActionCall.functionName !== "installValidation"
-          ? []
-          : deferredActionCall.args[3];
+        const { functionName, args } = decodeFunctionData({
+          abi: modularAccountAbi,
+          data: bytes2 as `0x${string}`,
+        });
 
-      deferredAction = {
-        nonce: deferredActionNonce,
-        data: `0x${deferredActionDigest.slice(66)}`,
-        // get the 25th byte of each hook, execution hooks have the 1st bit empty and val have it set.
-        // for a string, this is 2 (0x) + 2 * 25 = 52
-        // we can just get the single character since we are just checking a single bit
-        hasAssociatedExecHooks: hooks.map((h) => Number(h[52]) % 2).includes(0),
-      };
-    } else if (nextNonceForDeferredActionNonceKey < deferredActionNonce) {
+        if (functionName === "installValidation") {
+          deferredAction = {
+            data: `0x${deferredActionDigest.slice(2)}`,
+            // get the 25th byte of each hook, execution hooks have the 1st bit empty and val have it set.
+            // for a string, this is 2 (0x) + 2 * 25 = 52
+            // we can just get the single character since we are just checking a single bit
+            hasAssociatedExecHooks: args[3]
+              .map((h) => Number(h[52]) % 2)
+              .includes(0),
+          };
+        }
+      } catch {
+        // if the decode fails, it could be because the function is an non-native selector that has been installed
+        // in these cases, we don't do anything.
+      }
+    } else if (nextNonceForDeferredActionNonce < nonce) {
       throw new Error("Deferred action nonce invalid");
     }
   }
@@ -231,8 +232,8 @@ export async function createMAv2Base<
     !!(await client.getCode({ address: accountAddress }));
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
-    if (deferredAction) {
-      return deferredAction.nonce;
+    if (deferredActionDigest) {
+      return nonce;
     }
 
     if (nonceKey > maxUint152) {
