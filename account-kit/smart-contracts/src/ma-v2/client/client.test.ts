@@ -16,12 +16,14 @@ import {
   hashMessage,
   hashTypedData,
   fromHex,
+  prepareEncodeFunctionData,
   isAddress,
   concat,
   testActions,
-  type TestActions,
   concatHex,
+  type TestActions,
   type Hex,
+  type ContractFunctionName,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -37,6 +39,7 @@ import {
   AllowlistModule,
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
+  buildFullNonceKey,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -58,7 +61,7 @@ import {
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
-import { deferralActions } from "../actions/DeferralActions.js";
+import { deferralActions } from "../actions/deferralActions.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -1345,6 +1348,129 @@ describe("MA v2 Tests", async () => {
     client.setAutomine(true);
   });
 
+  it("tests entity id and nonce selection", async () => {
+    let newClient = (await givenConnectedProvider({ signer, salt: 1n }))
+      .extend(deferralActions)
+      .extend(installValidationActions);
+
+    await setBalance(client, {
+      address: newClient.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const entryPoint = newClient.account.getEntryPoint();
+    const entryPointContract = getContract({
+      address: entryPoint.address,
+      abi: entryPoint.abi,
+      client,
+    });
+
+    // entity id and nonce selection for undeployed account
+    for (let startEntityId = 0; startEntityId < 5; startEntityId++) {
+      for (let startNonce = 0n; startNonce < 5n; startNonce++) {
+        const { entityId, nonce } = await newClient.getEntityIdAndNonce({
+          entityId: startEntityId,
+          nonceKey: startNonce,
+          isGlobalValidation: true,
+        });
+
+        const expectedEntityId: number = Math.max(1, startEntityId);
+
+        // account not deployed, expect to get 1 when we pass in 0
+        expect(entityId).toEqual(expectedEntityId);
+        await expect(
+          entryPointContract.read.getNonce([
+            newClient.account.address,
+            buildFullNonceKey({
+              nonceKey: startNonce,
+              entityId: expectedEntityId,
+              isDeferredAction: true,
+            }),
+          ])
+        ).resolves.toEqual(nonce);
+      }
+    }
+
+    // deploy the account and install at entity id 1 with global validation
+    const uo1 = await newClient.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          newClient.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: false,
+        isUserOpValidation: false,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+    await newClient.waitForUserOperationTransaction(uo1);
+
+    const fns: ContractFunctionName<typeof semiModularAccountBytecodeAbi>[] = [
+      "execute",
+      "executeBatch",
+    ];
+
+    const selectors = fns.map(
+      (s) =>
+        prepareEncodeFunctionData({
+          abi: semiModularAccountBytecodeAbi,
+          functionName: s,
+        }).functionName
+    );
+
+    // deploy the account and install some entity ids with selector validation
+    const uo2 = await newClient.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+          newClient.chain
+        ),
+        entityId: 2,
+        isGlobal: false,
+        isSignatureValidation: false,
+        isUserOpValidation: false,
+      },
+      selectors,
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 2,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [],
+    });
+    await newClient.waitForUserOperationTransaction(uo2);
+
+    // entity id and nonce selection for undeployed account
+    for (let startEntityId = 1; startEntityId < 5; startEntityId++) {
+      for (let startNonce = 0n; startNonce < 5n; startNonce++) {
+        const { entityId, nonce } = await newClient.getEntityIdAndNonce({
+          entityId: startEntityId,
+          nonceKey: startNonce,
+          isGlobalValidation: true,
+        });
+
+        const expectedEntityId: number = Math.max(startEntityId, 3);
+
+        // expect to get max(3, startEntityId)
+        expect(entityId).toEqual(expectedEntityId);
+        await expect(
+          entryPointContract.read.getNonce([
+            newClient.account.address,
+            buildFullNonceKey({
+              nonceKey: startNonce,
+              entityId: expectedEntityId,
+              isDeferredAction: true,
+            }),
+          ])
+        ).resolves.toEqual(nonce);
+      }
+    }
+  });
+
   it("upgrade from a lightaccount", async () => {
     const lightAccountClient = await createLightAccountClient({
       chain: instance.chain,
@@ -1398,11 +1524,13 @@ describe("MA v2 Tests", async () => {
     signerEntity,
     accountAddress,
     paymasterMiddleware,
+    salt = 0n,
   }: {
     signer: SmartAccountSigner;
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    salt?: bigint;
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
@@ -1419,6 +1547,7 @@ describe("MA v2 Tests", async () => {
         : paymasterMiddleware === "erc7677"
         ? erc7677Middleware()
         : {}),
+      salt,
     });
 
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {
