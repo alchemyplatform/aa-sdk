@@ -13,6 +13,9 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Checkout aa-sdk
+        uses: actions/checkout@v4
+
       - name: Setup Docs
         uses: ./.github/actions/setup-docs
         with:

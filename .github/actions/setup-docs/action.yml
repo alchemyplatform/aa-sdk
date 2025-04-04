@@ -9,10 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout aa-sdk
-      uses: actions/checkout@v4
-      shell: bash
-
     - name: Download Alchemy Docs Repo
       shell: bash
       run: |
