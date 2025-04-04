@@ -182,6 +182,7 @@ export const deferralActions: (
       [validationLocator, typedData.message.deadline, typedData.message.call]
     );
 
+    // TODO: encoded call data as input
     const encodedDataLength = size(encodedCallData);
     const sigLength = size(sig);
 
