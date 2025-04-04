@@ -510,11 +510,6 @@ describe("MA v2 Tests", async () => {
           },
         },
       })
-      // .addPermission({
-      //   permission: {
-      //     type: PermissionType.ROOT,
-      //   },
-      // })
       .compile_deferred({
         deadline: 0,
         uoValidationEntityId: entityId,
@@ -560,6 +555,9 @@ describe("MA v2 Tests", async () => {
     });
 
     await provider.waitForUserOperationTransaction({ hash: hash.hash });
+
+    // TODO: Validate the transfer
+    // await expect()
   });
 
   it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {

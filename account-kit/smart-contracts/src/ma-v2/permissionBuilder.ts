@@ -366,7 +366,6 @@ export class PermissionBuilder {
     }
 
     const installValidationCall = await this.compile_raw();
-    console.log(installValidationCall);
 
     const { typedData, nonceOverride } = await deferralActions(
       this.client
