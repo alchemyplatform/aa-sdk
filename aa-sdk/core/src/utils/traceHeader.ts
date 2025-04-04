@@ -1,7 +1,9 @@
 function generateRandomHexString(numBytes: number) {
-  const bytes = crypto.getRandomValues(new Uint8Array(numBytes));
-  const array = Array.from(bytes);
-  const hexPairs = array.map((b) => b.toString(16).padStart(2, "0"));
+  const hexPairs = new Array(numBytes).fill(0).map(() =>
+    Math.floor(Math.random() * 32)
+      .toString(16)
+      .padStart(2, "0")
+  );
   return hexPairs.join("");
 }
 
