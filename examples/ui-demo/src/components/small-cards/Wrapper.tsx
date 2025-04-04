@@ -1,8 +1,8 @@
-import { SolanaCard } from "./SolanaCard";
-import { TransactionsCard } from "./TransactionsCard";
-import { MintCard } from "./MintCard";
 import { useConfigStore } from "@/state";
 import { MFACard } from "./MFACard";
+import { MintCard } from "./MintCard";
+import { SolanaCard } from "./SolanaCard";
+import { TransactionsCard } from "./TransactionsCard";
 
 export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
