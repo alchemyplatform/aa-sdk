@@ -136,7 +136,7 @@ export async function createMAv2Base<
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
-    if (deferredAction.slice(3, 5) !== "00") {
+    if (deferredAction.slice(2, 4) !== "00") {
       throw new InvalidDeferredActionMode();
     }
     nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);

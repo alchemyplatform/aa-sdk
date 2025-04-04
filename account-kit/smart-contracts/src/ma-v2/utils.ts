@@ -239,6 +239,7 @@ export const mintableERC20Bytecode =
 export const mintableERC20Abi = parseAbi([
   "function transfer(address to, uint256 amount) external",
   "function mint(address to, uint256 amount) external",
+  "function balanceOf(address target) external returns (uint256)",
 ]);
 
 export type BuildNonceParams = {
