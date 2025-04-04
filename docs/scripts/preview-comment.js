@@ -1,4 +1,4 @@
-module.exports = async ({ github, context, previewUrl }) => {
+const updatePreviewComment = async ({ github, context, previewUrl }) => {
   const { repo, issue } = context;
   const commentTitle = "🌿 Documentation Preview";
   const timeUTC = new Date().toLocaleString("en-US", {
@@ -38,3 +38,5 @@ module.exports = async ({ github, context, previewUrl }) => {
     });
   }
 };
+
+export { updatePreviewComment };

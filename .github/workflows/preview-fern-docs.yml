@@ -36,7 +36,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const updatePreviewComment = require('./docs/scripts/preview-comment.js');
+            const { updatePreviewComment } = await import('./docs/scripts/preview-comment.js');
             await updatePreviewComment({ 
               github,
               context,
