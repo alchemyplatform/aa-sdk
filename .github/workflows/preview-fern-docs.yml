@@ -32,13 +32,13 @@ jobs:
           URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
           echo "preview_url=$URL" >> $GITHUB_OUTPUT
 
-      - name: Comment Preview URL in PR
+      - name: Update or Create Preview Comment
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '## 🌿 Documentation Preview\n\n| Name | Preview | Updated (UTC) |\n| :--- | :------ | :------ |\n| **Alchemy Docs** | [🔗 Visit Preview](${{ steps.generate-docs.outputs.preview_url }}) | ' + new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) + ' |\n\n>'
+            const updatePreviewComment = require('./docs/scripts/preview-comment.js');
+            await updatePreviewComment({ 
+              github,
+              context,
+              previewUrl: '${{ steps.generate-docs.outputs.preview_url }}'
             });
