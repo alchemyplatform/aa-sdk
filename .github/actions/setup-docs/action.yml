@@ -9,15 +9,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Download Alchemy Docs Repo
-      shell: bash
-      run: |
-        rm -rf docs-site && \
-        curl -L -f -H "Authorization: token ${{ inputs.docs-github-token }}" \
-          -o docs.tar.gz https://api.github.com/repos/alchemyplatform/docs/tarball/main && \
-        tar xzf docs.tar.gz && \
-        mv alchemyplatform-docs-* docs-site && \
-        rm docs.tar.gz
+    - name: Checkout Alchemy Docs Repo
+      uses: actions/checkout@v4
+      with:
+        repository: alchemyplatform/docs
+        token: ${{ inputs.docs-github-token }}
+        path: docs-site
 
     - name: Copy docs to docs-site/account-kit and cd into docs-site
       shell: bash
