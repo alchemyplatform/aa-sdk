@@ -11,6 +11,7 @@ import { functionTemplate } from "../templates/functionTemplate.js";
 export type GenerateOptions = {
   in: string;
   out: string;
+  fern?: boolean; // TODO: remove this once Fern docs are live
 };
 
 const generatedDirectories = [
@@ -23,6 +24,7 @@ const generatedDirectories = [
 export async function generate(options: GenerateOptions) {
   const sourceFilePath = path.resolve(process.cwd(), options.in);
   const outputFilePath = path.resolve(process.cwd(), options.out);
+  const isFern = options.fern ?? false;
   logger.info(
     `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`
   );
@@ -72,7 +74,8 @@ export async function generate(options: GenerateOptions) {
         exportedFilePath,
         outputFilePath,
         packageJSON.name,
-        isTsx
+        isTsx,
+        isFern
       );
     });
   });
@@ -83,7 +86,8 @@ async function generateDocumentation(
   sourceFilePath: string,
   outputFilePath: string,
   packageName: string,
-  isTsx: boolean
+  isTsx: boolean,
+  isFern: boolean
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
@@ -95,14 +99,15 @@ async function generateDocumentation(
   }
 
   if (ts.isClassDeclaration(node)) {
-    generateClassDocs(node, outputFilePath, importedName, packageName);
+    generateClassDocs(node, outputFilePath, importedName, packageName, isFern);
   } else {
     generateFunctionDocs(
       node,
       importedName,
       outputFilePath,
       packageName,
-      isTsx
+      isTsx,
+      isFern
     );
   }
 }
@@ -138,9 +143,15 @@ function generateFunctionDocs(
   importedName: string,
   outputFilePath: string,
   packageName: string,
-  isTsx: boolean
+  isTsx: boolean,
+  isFern: boolean
 ) {
-  const documentation = functionTemplate(node, importedName, packageName);
+  const documentation = functionTemplate(
+    node,
+    importedName,
+    packageName,
+    isFern
+  );
   if (!documentation) {
     return;
   }
@@ -169,7 +180,8 @@ function generateClassDocs(
   node: ts.ClassDeclaration,
   outputFilePath: string,
   importedName: string,
-  packageName: string
+  packageName: string,
+  isFern: boolean
 ) {
   const classOutputBasePath = path.resolve(
     outputFilePath,
@@ -203,7 +215,8 @@ function generateClassDocs(
         importedName,
         classOutputBasePath,
         packageName,
-        false
+        false,
+        isFern
       );
     }
   });

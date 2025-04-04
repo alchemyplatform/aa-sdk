@@ -25,7 +25,7 @@
       "outputs": ["../../site/pages/reference/**"]
     },
     "fern:gen": {
-      "dependsOn": ["ak-ferngen#build"],
+      "dependsOn": ["ak-docgen#build"],
       "outputs": ["../../docs/pages/reference/**"]
     }
   }

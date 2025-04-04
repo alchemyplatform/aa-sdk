@@ -13,6 +13,7 @@ cli
     "[string] path to source file containing public exports"
   )
   .option("--out <path>", "[string] path to output directory")
+  .option("--fern", "[boolean] generate Fern documentation")
   .example((name) => `${name} generate --in src/index.ts --out docs`)
   .action(async (options: GenerateOptions) => generate(options));
 
