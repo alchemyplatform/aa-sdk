@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.22.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.21.0...v4.22.0) (2025-04-03)
+
+### Bug Fixes
+
+- allow 0 value inputs for userop fields ([#1447](https://github.com/alchemyplatform/aa-sdk/issues/1447)) ([109a3ec](https://github.com/alchemyplatform/aa-sdk/commit/109a3ecd3963250af5b3df51953e1b44bb0b0c5b))
+- update setChain function to update the sdk state if the wallet is already on a chain ([#1503](https://github.com/alchemyplatform/aa-sdk/issues/1503)) ([76da7cb](https://github.com/alchemyplatform/aa-sdk/commit/76da7cbbf8e6a4fe9d1a72adeebdb3f017304255))
+
+### Features
+
+- add entity id and nonce reader ([#1487](https://github.com/alchemyplatform/aa-sdk/issues/1487)) ([be94492](https://github.com/alchemyplatform/aa-sdk/commit/be94492586258fe350b69fe58648941e71f0c37b))
+- tracing added for imply and open telemetry ([#1424](https://github.com/alchemyplatform/aa-sdk/issues/1424)) ([1caf63b](https://github.com/alchemyplatform/aa-sdk/commit/1caf63bbe4150b7eb66ee7aef7ccf2e228336ba6))
+
 # [4.21.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.1...v4.21.0) (2025-03-31)
 
 ### Bug Fixes

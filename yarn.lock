@@ -84,7 +84,7 @@
 
 "@alchemy/aa-accounts@3.14.1":
   version "3.14.1"
-  resolved "https://registry.npmjs.org/@alchemy/aa-accounts/-/aa-accounts-3.14.1.tgz#8d406c5f928db328b3a96a2d1a800d5a506d9e73"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-accounts/-/aa-accounts-3.14.1.tgz#8d406c5f928db328b3a96a2d1a800d5a506d9e73"
   integrity sha512-2dTnnpBMyT15LCo4NGiVIakqVJhhnv9pivsN5hSE08Vm2crKl9BVQ6MPQHM5qsqzKB5h4csIM9yHBRFbAbp0xQ==
   dependencies:
     "@alchemy/aa-core" "^3.12.3"
@@ -92,7 +92,7 @@
 
 "@alchemy/aa-accounts@^3.14.1":
   version "3.19.0"
-  resolved "https://registry.npmjs.org/@alchemy/aa-accounts/-/aa-accounts-3.19.0.tgz#ad433eaecf53dcb0ebd5c793c44f217fccc60d72"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-accounts/-/aa-accounts-3.19.0.tgz#ad433eaecf53dcb0ebd5c793c44f217fccc60d72"
   integrity sha512-cdR8H9LveeUyBWFkmoqU7hZnFoqmdyPQDYZRtFr9aF+3zWAQYYJ/13Vz7aoVQ4lZ57+JQj7fN5vSVn2gFI47yA==
   dependencies:
     "@alchemy/aa-core" "^3.18.2"
@@ -100,7 +100,7 @@
 
 "@alchemy/aa-alchemy@3.14.1":
   version "3.14.1"
-  resolved "https://registry.npmjs.org/@alchemy/aa-alchemy/-/aa-alchemy-3.14.1.tgz#66a12acd95eddbffe69d15330de1f30dc092d28b"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-alchemy/-/aa-alchemy-3.14.1.tgz#66a12acd95eddbffe69d15330de1f30dc092d28b"
   integrity sha512-s4IlSEm0K8elq08qRvIZn6AQhb7sagpdfSGdpyh5gtr4/bENdk5EM+xVd00G5BwgOCegB8tn08qyqMrz4pVvuA==
   dependencies:
     "@alchemy/aa-core" "^3.12.3"
@@ -122,7 +122,7 @@
 
 "@alchemy/aa-core@3.12.3":
   version "3.12.3"
-  resolved "https://registry.npmjs.org/@alchemy/aa-core/-/aa-core-3.12.3.tgz#25ddd6533f0fe0590c28eba7d0a444c4f168ea64"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-3.12.3.tgz#25ddd6533f0fe0590c28eba7d0a444c4f168ea64"
   integrity sha512-nU2pvGIsWI9Wwo3aNcfke1ZJJiec5rmqkh7McTRK6G8ff1gE0yGZUBzd/73rsdWGmhBN8G5VmX0KN016+amzVQ==
   dependencies:
     abitype "^0.8.3"
@@ -132,7 +132,7 @@
 
 "@alchemy/aa-core@^3.12.3", "@alchemy/aa-core@^3.18.2":
   version "3.19.0"
-  resolved "https://registry.npmjs.org/@alchemy/aa-core/-/aa-core-3.19.0.tgz#e59c0f1832de2b9e6b120022d49f995da3dc34fd"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-3.19.0.tgz#e59c0f1832de2b9e6b120022d49f995da3dc34fd"
   integrity sha512-gVSesLsXORMuiA3w/w+4eQikzrikpj1XN2Sbrcik0v25AKH5QrHn0HddhyrN1aCFW2NoXjyhwxlySiTDVfTgxQ==
   dependencies:
     abitype "^0.8.3"
@@ -7146,7 +7146,7 @@
 
 "@tanstack/form-core@0.19.5":
   version "0.19.5"
-  resolved "https://registry.npmjs.org/@tanstack/form-core/-/form-core-0.19.5.tgz#8741513e5e2914211430c1c22f5aa173b0e9fba1"
+  resolved "https://registry.yarnpkg.com/@tanstack/form-core/-/form-core-0.19.5.tgz#8741513e5e2914211430c1c22f5aa173b0e9fba1"
   integrity sha512-2ocFAnWTY3sxXemJvKArllnPNMmo9LkviSX88iUXcaClKutvJLfAc+a/lM00zhDKY9G3abXuZCp1OvGmeagszA==
   dependencies:
     "@tanstack/store" "^0.3.1"
@@ -7165,7 +7165,7 @@
 
 "@tanstack/react-form@^0.19.4":
   version "0.19.5"
-  resolved "https://registry.npmjs.org/@tanstack/react-form/-/react-form-0.19.5.tgz#9d74f405186fb9dbfa4f6332e15bb85ac9929a0d"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-form/-/react-form-0.19.5.tgz#9d74f405186fb9dbfa4f6332e15bb85ac9929a0d"
   integrity sha512-tvuc++2aBt3vEDtHmDlFJYiynPBZ1S6MPGdG8Zs0rNEBNM3VT1khiafXTzPoWpmI6TIfyD/JBuWizFxty7aCIA==
   dependencies:
     "@tanstack/form-core" "0.19.5"
@@ -7192,7 +7192,7 @@
 
 "@tanstack/react-store@^0.3.1":
   version "0.3.1"
-  resolved "https://registry.npmjs.org/@tanstack/react-store/-/react-store-0.3.1.tgz#f93896da40f91b4385aca9448d3ccf914b314b50"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-store/-/react-store-0.3.1.tgz#f93896da40f91b4385aca9448d3ccf914b314b50"
   integrity sha512-PfV271d345It6FdcX4c9gd+llKGddtvau8iJnybTAWmYVyDeFWfIIkiAJ5iNITJmI02AzqgtcV3QLNBBlpBUjA==
   dependencies:
     "@tanstack/store" "0.3.1"
@@ -7208,7 +7208,7 @@
 
 "@tanstack/store@0.3.1", "@tanstack/store@^0.3.1":
   version "0.3.1"
-  resolved "https://registry.npmjs.org/@tanstack/store/-/store-0.3.1.tgz#317bfb7eedd8cc4ee32c4e52740abbf1bd311d36"
+  resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.3.1.tgz#317bfb7eedd8cc4ee32c4e52740abbf1bd311d36"
   integrity sha512-A49KN8SpLMWaNmZGPa9K982RQ81W+m7W6iStcQVeKeVS70JZRqkF0fDwKByREPq6qz9/kS0aQFOPQ0W6wIeU5g==
 
 "@tanstack/store@0.5.5", "@tanstack/store@^0.5.5":
@@ -7218,7 +7218,7 @@
 
 "@tanstack/zod-form-adapter@^0.19.4":
   version "0.19.5"
-  resolved "https://registry.npmjs.org/@tanstack/zod-form-adapter/-/zod-form-adapter-0.19.5.tgz#2cc18d0b082906848c05c4c49e60185174b5aba6"
+  resolved "https://registry.yarnpkg.com/@tanstack/zod-form-adapter/-/zod-form-adapter-0.19.5.tgz#2cc18d0b082906848c05c4c49e60185174b5aba6"
   integrity sha512-yDucWQgAvDSqy5HuYnHgnW1SWN5MBTl8p+qPw0VK/da8r04LTINGhbwjiZEo3GF4LO9vo9i/ISsO+3mD+Psr5g==
   dependencies:
     "@tanstack/form-core" "0.19.5"
@@ -12164,7 +12164,7 @@ decimal.js@^10.4.3:
 
 decode-formdata@^0.4.0:
   version "0.4.0"
-  resolved "https://registry.npmjs.org/decode-formdata/-/decode-formdata-0.4.0.tgz#485715a37417868435a92d2144b39646fe654aae"
+  resolved "https://registry.yarnpkg.com/decode-formdata/-/decode-formdata-0.4.0.tgz#485715a37417868435a92d2144b39646fe654aae"
   integrity sha512-/OMUlsRLrSgHPOWCwembsFFTT4DY7Ts9GGlwK8v9yeLOyYZSPKIfn/1oOuV9UmpQ9CZi5JeyT8edunRoBOOl5g==
 
 decode-formdata@^0.8.0:
@@ -23174,7 +23174,7 @@ regjsparser@^0.11.0:
 
 rehackt@^0.0.3:
   version "0.0.3"
-  resolved "https://registry.npmjs.org/rehackt/-/rehackt-0.0.3.tgz#1ea454620d4641db8342e2db44595cf0e7ac6aa0"
+  resolved "https://registry.yarnpkg.com/rehackt/-/rehackt-0.0.3.tgz#1ea454620d4641db8342e2db44595cf0e7ac6aa0"
   integrity sha512-aBRHudKhOWwsTvCbSoinzq+Lej/7R8e8UoPvLZo5HirZIIBLGAgdG7SL9QpdcBoQ7+3QYPi3lRLknAzXBlhZ7g==
 
 rehype-autolink-headings@^7.1.0:
@@ -26318,9 +26318,9 @@ use-sync-external-store@1.2.0:
   integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 use-sync-external-store@^1.2.0:
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.4.0.tgz#adbc795d8eeb47029963016cefdf89dc799fcebc"
-  integrity sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz#55122e2a3edd2a6c106174c27485e0fd59bcfca0"
+  integrity sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==
 
 use-sync-external-store@^1.2.2:
   version "1.2.2"

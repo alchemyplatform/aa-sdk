@@ -18,6 +18,7 @@ import {
 import type { AlchemyRpcSchema } from "./client/types.js";
 import { AlchemyChainSchema } from "./schema.js";
 import { VERSION } from "./version.js";
+import { mutateRemoveTrackingHeaders } from "./alchemyTrackerHeaders.js";
 
 type Never<T> = T extends object
   ? {
@@ -65,6 +66,7 @@ type AlchemyTransportBase = Transport<
 export type AlchemyTransport = AlchemyTransportBase & {
   updateHeaders(newHeaders: HeadersInit): void;
   config: AlchemyTransportConfig;
+  dynamicFetchOptions: AlchemyTransportConfig["fetchOptions"];
 };
 
 /**
@@ -163,6 +165,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         : connectionConfig.rpcUrl;
 
     const innerTransport = (() => {
+      mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
       if (config.alchemyConnection && config.nodeRpcUrl) {
         return split({
           overrides: [
@@ -194,6 +197,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
   };
 
   return Object.assign(transport, {
+    dynamicFetchOptions: fetchOptions,
     updateHeaders(newHeaders_: HeadersInit) {
       const newHeaders = convertHeadersToObject(newHeaders_);
 
@@ -206,7 +210,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
   });
 }
 
-const convertHeadersToObject = (
+export const convertHeadersToObject = (
   headers?: HeadersInit
 ): Record<string, string> => {
   if (!headers) {
