@@ -23,7 +23,6 @@ import { getDefaultMAV2FactoryAddress } from "../utils.js";
 import {
   type SignerEntity,
   type ModularAccountV2,
-  type DeferredAction,
   createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
@@ -37,7 +36,7 @@ export type CreateModularAccountV2Params<
 > & {
   signer: TSigner;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
-  deferredAction?: DeferredAction;
+  deferredAction?: Hex;
   signerEntity?: SignerEntity;
 }) &
   (

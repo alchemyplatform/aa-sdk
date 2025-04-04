@@ -58,12 +58,6 @@ export type ValidationDataParams =
       entityId: number;
     };
 
-export type DeferredAction = {
-  data: Hex;
-  hasAssociatedExecHooks: boolean;
-  nonce: bigint;
-};
-
 export type ModularAccountV2<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccountWithSigner<"ModularAccountV2", TSigner, "0.7.0"> & {
@@ -91,7 +85,7 @@ export type CreateMAV2BaseParams<
   signer: TSigner;
   signerEntity?: SignerEntity;
   accountAddress: Address;
-  deferredAction?: DeferredAction;
+  deferredAction?: Hex;
 };
 
 export type CreateMAV2BaseReturnType<
@@ -135,19 +129,28 @@ export async function createMAv2Base<
   });
 
   let useDeferredAction: boolean = false;
+  let nonce: bigint = 0n;
+  let deferredActionData: Hex = "0x";
+  let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
+    if (deferredAction.slice(3, 5) !== "00") {
+      throw new Error("Invalid deferred action version");
+    }
+    nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
     // Set these values if the deferred action has not been consumed. We check this with the EP
     const nextNonceForDeferredActionNonce: bigint =
       (await entryPointContract.read.getNonce([
         accountAddress,
-        deferredAction.nonce >> 64n,
+        nonce >> 64n,
       ])) as bigint;
 
     // we only add the deferred action in if the nonce has not been consumed
-    if (deferredAction.nonce === nextNonceForDeferredActionNonce) {
+    if (nonce === nextNonceForDeferredActionNonce) {
       useDeferredAction = true;
-    } else if (deferredAction.nonce > nextNonceForDeferredActionNonce) {
+      deferredActionData = `0x${deferredAction.slice(70)}`;
+      hasAssociatedExecHooks = deferredAction[6] === "1";
+    } else if (nonce > nextNonceForDeferredActionNonce) {
       throw new Error("Deferred action nonce invalid");
     }
   }
@@ -185,7 +188,7 @@ export async function createMAv2Base<
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
     if (useDeferredAction && deferredAction) {
-      return deferredAction.nonce;
+      return nonce;
     }
 
     if (nonceKey > maxUint152) {
@@ -246,15 +249,11 @@ export async function createMAv2Base<
       entityId: Number(entityId),
     });
 
-    return (useDeferredAction && deferredAction?.hasAssociatedExecHooks) ||
+    return (useDeferredAction && hasAssociatedExecHooks) ||
       validationData.executionHooks.length
       ? concatHex([executeUserOpSelector, callData])
       : callData;
   };
-
-  const deferredActionData = useDeferredAction
-    ? deferredAction?.data
-    : undefined;
 
   const baseAccount = await toSmartContractAccount({
     ...remainingToSmartContractAccountParams,

@@ -8,6 +8,7 @@ import {
   parseEther,
   publicActions,
   testActions,
+  toHex,
   type TestActions,
 } from "viem";
 import { installValidationActions } from "@account-kit/smart-contracts/experimental";
@@ -104,12 +105,12 @@ describe("MA v2 deferral actions tests", async () => {
       accountAddress: provider.getAddress(),
       signer: sessionKey,
       initCode: provider.account.getInitCode(),
-      // TODO: change to Hex
-      deferredAction: {
-        data: deferredActionDigest,
+      deferredAction: `0x00${hasAssociatedExecHooks ? "01" : "00"}${toHex(
         nonce,
-        hasAssociatedExecHooks,
-      },
+        {
+          size: 32,
+        }
+      ).slice(2)}${deferredActionDigest.slice(2)}`,
     });
 
     const uoResult = await sessionKeyClient.sendUserOperation({
