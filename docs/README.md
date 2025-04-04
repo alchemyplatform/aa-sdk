@@ -23,7 +23,7 @@ To add or modify documentation content:
 To add new pages to navigation:
 
 - Update the `navigation` section in `docs.yml`
-- Reference markdown files from `pages/` by path using `../account-kit/pages`
+- Reference markdown files from `pages/` by path using `docs/account-kit/pages`
 
 ### Images
 

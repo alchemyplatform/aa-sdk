@@ -1,7 +1,7 @@
 experimental:
   mdx-components:
-    - ../account-kit/components
-    - ../account-kit/shared
+    - docs/account-kit/components
+    - docs/account-kit/shared
 
 navigation:
   - tab: wallets
@@ -9,7 +9,7 @@ navigation:
       - section: Introduction
         contents:
           - page: Overview
-            path: ../account-kit/pages/index.mdx
+            path: docs/account-kit/pages/index.mdx
       #     - link: Demo
       #       href: https://demo.alchemy.com/
       #     - section: Concepts
