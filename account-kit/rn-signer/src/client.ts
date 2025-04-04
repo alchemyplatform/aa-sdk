@@ -9,13 +9,19 @@ import {
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
+  type RemoveMfaParams,
   type EmailAuthParams,
+  type EnableMfaParams,
+  type EnableMfaResult,
   type GetWebAuthnAttestationResult,
+  type MfaFactor,
   type OauthConfig,
   type OauthParams,
   type OtpParams,
   type SignupResponse,
   type User,
+  type VerifyMfaParams,
+  type SubmitOtpCodeResponse,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -59,16 +65,20 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   override async submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }> {
+  ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const publicKey = await this.stamper.init();
 
-    const { credentialBundle } = await this.request("/v1/otp", {
+    const response = await this.request("/v1/otp", {
       ...args,
       targetPublicKey: publicKey,
     });
 
-    return { bundle: credentialBundle };
+    if (response.status === "MFA_REQUIRED") {
+      throw new Error("Multi-factor authentication is required");
+    }
+
+    return { bundle: response.credentialBundle, mfaRequired: false };
   }
 
   override async createAccount(
@@ -230,4 +240,56 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @throws {Error} This method is not implemented in RNSignerClient
+   */
+  public override getMfaFactors(): Promise<{ multiFactors: MfaFactor[] }> {
+    throw new Error("getMfaFactors is not implemented in RNSignerClient");
+  }
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user.
+   *
+   * @param {EnableMfaParams} _params The parameters required to enable a new MFA factor
+   * @throws {Error} This method is not implemented in RNSignerClient
+   */
+  public override addMfa(_params: EnableMfaParams): Promise<EnableMfaResult> {
+    throw new Error("enableMfa is not implemented in RNSignerClient");
+  }
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} _params The parameters required to verify the MFA factor
+   * @throws {Error} This method is not implemented in RNSignerClient
+   */
+  public override verifyMfa(_params: VerifyMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }> {
+    throw new Error("verifyMfa is not implemented in RNSignerClient");
+  }
+
+  /**
+   * Removes existing MFA factors by ID.
+   *
+   * @param {RemoveMfaParams} _params The parameters specifying which factors to disable
+   * @throws {Error} This method is not implemented in RNSignerClient
+   */
+  public override removeMfa(_params: RemoveMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }> {
+    throw new Error("disableMfa is not implemented in RNSignerClient");
+  }
+
+  public override validateMultiFactors(_params: {
+    encryptedPayload: string;
+    multiFactors: { multiFactorId: string; multiFactorCode: string }[];
+  }): Promise<{ bundle: string }> {
+    throw new Error(
+      "validateMultiFactors is not implemented in RNSignerClient"
+    );
+  }
 }

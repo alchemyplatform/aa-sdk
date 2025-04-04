@@ -54,6 +54,7 @@ export type EmailAuthParams = {
   expirationSeconds?: number;
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
+  multiFactors?: VerifyMfaParams[];
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -66,7 +67,19 @@ export type OtpParams = {
   otpCode: string;
   targetPublicKey: string;
   expirationSeconds?: number;
+  multiFactors?: VerifyMfaParams[];
 };
+
+export type OtpResponse =
+  | {
+      status: "SUCCESS";
+      credentialBundle: string;
+    }
+  | {
+      status: "MFA_REQUIRED";
+      encryptedPayload: string;
+      multiFactors: MfaFactor[];
+    };
 
 export type SignupResponse = {
   orgId: string;
@@ -132,10 +145,12 @@ export type SignerEndpoints = [
     Route: "/v1/auth";
     Body: Omit<EmailAuthParams, "redirectParams"> & {
       redirectParams?: string;
+      multiFactors?: VerifyMfaParams[];
     };
     Response: {
       orgId: string;
       otpId?: string;
+      multiFactors?: MfaFactor[];
     };
   },
   {
@@ -166,12 +181,61 @@ export type SignerEndpoints = [
   {
     Route: "/v1/otp";
     Body: OtpParams;
-    Response: { credentialBundle: string };
+    Response: OtpResponse;
+  },
+  {
+    Route: "/v1/auth-list-multi-factors";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/auth-delete-multi-factors";
+    Body: {
+      stampedRequest: TSignedRequest;
+      multiFactorIds: string[];
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/auth-request-multi-factor";
+    Body: {
+      stampedRequest: TSignedRequest;
+      multiFactorType: MultiFactorType;
+    };
+    Response: EnableMfaResult;
+  },
+  {
+    Route: "/v1/auth-verify-multi-factor";
+    Body: VerifyMfaParams & {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
   },
   {
     Route: "/v1/signer-config";
     Body: {};
     Response: SignerConfig;
+  },
+  {
+    Route: "/v1/auth-validate-multi-factors";
+    Body: {
+      encryptedPayload: string;
+      multiFactors: VerifyMfaParams[];
+    };
+    Response: {
+      payload: {
+        credentialBundle?: string;
+      };
+      multiFactors: MfaFactor[];
+    };
   }
 ];
 
@@ -215,6 +279,53 @@ export type GetOauthProviderUrlArgs = {
   oauthConfig?: OauthConfig;
   usesRelativeUrl?: boolean;
 };
+
+export type MfaFactor = {
+  multiFactorId: string;
+  multiFactorType: string;
+};
+
+type MultiFactorType = "totp";
+
+export type EnableMfaParams = {
+  multiFactorType: MultiFactorType;
+};
+
+export type EnableMfaResult = {
+  multiFactorType: MultiFactorType;
+  multiFactorId: string;
+  multiFactorTotpUrl: string;
+};
+
+export type VerifyMfaParams = {
+  multiFactorId: string;
+  multiFactorCode: string;
+};
+
+export type RemoveMfaParams = {
+  multiFactorIds: string[];
+};
+
+export type ValidateMultiFactorsParams = {
+  encryptedPayload: string;
+  multiFactors: Array<{
+    multiFactorId: string;
+    multiFactorCode: string;
+  }>;
+};
+
+export type MfaChallenge = {
+  multiFactorId: string;
+  multiFactorChallenge:
+    | {
+        code: string;
+      }
+    | Record<string, any>;
+};
+
+export type SubmitOtpCodeResponse =
+  | { bundle: string; mfaRequired: false }
+  | { mfaRequired: true; encryptedPayload: string; multiFactors: MfaFactor[] };
 
 export type experimental_CreateApiKeyParams = {
   name: string;

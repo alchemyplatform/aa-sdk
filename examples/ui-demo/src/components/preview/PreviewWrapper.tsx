@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { SmallCardsWrapper } from "../small-cards/Wrapper";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
-  const user = useUser();
+  const { authStep } = useAuthContext();
   return (
     <>
       {/* Don't unmount when showing code preview so that the auth card retains its state */}
@@ -21,7 +21,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
         <div
           className={cn(
             "flex flex-1 justify-center items-start",
-            !user && "items-center"
+            authStep.type !== "complete" && "items-center"
           )}
         >
           <RenderContent />

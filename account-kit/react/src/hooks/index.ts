@@ -22,3 +22,4 @@ export * from "./useSmartAccountClient.js";
 export * from "./useUiConfig.js";
 export * from "./useUser.js";
 export * from "./useWaitForUserOperationTransaction.js";
+export * from "./useMFA.js";
