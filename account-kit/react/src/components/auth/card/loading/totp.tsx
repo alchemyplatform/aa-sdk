@@ -45,6 +45,7 @@ export const LoadingTotp = () => {
     ) {
       setAuthStep({ type: "email_verify", email: authStep.email });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const setValue = async (otpCode: OTPCodeType) => {
