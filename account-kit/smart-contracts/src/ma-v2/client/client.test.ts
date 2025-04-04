@@ -24,6 +24,10 @@ import {
   type TestActions,
   type Hex,
   toHex,
+  createWalletClient,
+  getContractAddress,
+  encodeFunctionData,
+  type ContractFunctionName,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
 import {
@@ -40,6 +44,7 @@ import {
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
   buildFullNonceKey,
+  modularAccountAbi,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -64,6 +69,7 @@ import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { deferralActions } from "../actions/deferralActions.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
+import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -424,6 +430,136 @@ describe("MA v2 Tests", async () => {
     );
 
     await provider.waitForUserOperationTransaction({ hash: result });
+  });
+
+  it.only("installs a session key via deferred action using PermissionBuilder with ERC20 permission signed by the owner and has it sign a UO", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+      })
+    )
+      .extend(installValidationActions)
+      .extend(deferralActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const walletClient = createWalletClient({
+      chain: provider.chain,
+      transport: custom(instance.getClient()),
+      account: privateKeyToAccount(generatePrivateKey()),
+    });
+
+    await setBalance(client, {
+      address: walletClient.account.address,
+      value: parseEther("2"),
+    });
+
+    const mockErc20Address = getContractAddress({
+      from: walletClient.account.address,
+      nonce: BigInt(
+        await client.getTransactionCount({
+          address: walletClient.account.address,
+        })
+      ),
+    });
+
+    // Deploy mock ERC20
+    const ret = await walletClient.deployContract({
+      abi: mintableERC20Abi,
+      account: walletClient.account,
+      bytecode: mintableERC20Bytecode,
+    });
+
+    // Mint some test tokens
+    await walletClient.writeContract({
+      address: mockErc20Address,
+      abi: mintableERC20Abi,
+      functionName: "mint",
+      args: [provider.getAddress(), 1000n],
+    });
+
+    // Test variables
+    // const sessionKeyEntityId = 1;
+    // these can be default values or from call arguments
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
+      entityId: 0,
+      nonceKey: 0n,
+      isGlobalValidation: false,
+    });
+
+    const { typedData, hasAssociatedExecHooks } = await new PermissionBuilder(
+      provider
+    )
+      .configure({
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonceKeyOverride: 0n,
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.ERC20_TOKEN_TRANSFER,
+          data: {
+            address: mockErc20Address,
+            allowance: toHex(900),
+          },
+        },
+      })
+      // .addPermission({
+      //   permission: {
+      //     type: PermissionType.ROOT,
+      //   },
+      // })
+      .compile_deferred({
+        deadline: 0,
+        uoValidationEntityId: entityId,
+        uoIsGlobalValidation: false,
+      });
+
+    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
+    // Build the full hex to prepend to the UO signature
+    // This MUST be done with the *same* client that has signed the typed data
+    const signaturePrepend = provider.buildDeferredActionDigest({
+      typedData: typedData,
+      sig: deferredValidationSig,
+    });
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      initCode: provider.account.getInitCode(),
+      deferredAction: `0x00${hasAssociatedExecHooks ? "01" : "00"}${toHex(
+        nonce,
+        {
+          size: 32,
+        }
+      ).slice(2)}${signaturePrepend.slice(2)}`,
+    });
+
+    // Build the full UO with the deferred action signature prepend (must be session key client)
+    const hash = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: mockErc20Address,
+        data: encodeFunctionData({
+          abi: mintableERC20Abi,
+          functionName: "transfer",
+          args: [target, 900n],
+        }),
+      },
+    });
+
+    await provider.waitForUserOperationTransaction({ hash: hash.hash });
   });
 
   it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {

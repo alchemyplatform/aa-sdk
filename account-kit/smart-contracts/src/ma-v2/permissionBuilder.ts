@@ -341,9 +341,8 @@ export class PermissionBuilder {
     hasAssociatedExecHooks: boolean;
     nonceOverride: bigint;
   }> {
-    this.validateConfiguration();
-
-    // Maybe add checks, like zero address module addr
+    // Need to remove this because compile_raw may add selectors
+    // this.validateConfiguration();
 
     // Add time range module hook via expiry
     if (deadline !== 0) {
@@ -357,7 +356,7 @@ export class PermissionBuilder {
       this.hooks.push(
         TimeRangeModule.buildHook(
           {
-            entityId: 1, // will be timerange entityId
+            entityId: this.validationConfig.entityId, // will be timerange entityId
             validUntil: deadline,
             validAfter: 0,
           },
@@ -367,6 +366,7 @@ export class PermissionBuilder {
     }
 
     const installValidationCall = await this.compile_raw();
+    console.log(installValidationCall);
 
     const { typedData, nonceOverride } = await deferralActions(
       this.client
@@ -387,8 +387,6 @@ export class PermissionBuilder {
 
   // Use for direct `installValidation()` low-level calls (maybe useless)
   async compile_raw(): Promise<Hex> {
-    this.validateConfiguration();
-
     // Translate all permissions into raw hooks if >0
     if (this.permissions.length > 0) {
       const rawHooks = this.translatePermissions(
@@ -397,6 +395,7 @@ export class PermissionBuilder {
       // Add the translated permissions as hooks
       this.addHooks(rawHooks);
     }
+    this.validateConfiguration();
 
     return await installValidationActions(this.client).encodeInstallValidation({
       validationConfig: this.validationConfig,
