@@ -1,9 +1,25 @@
 function generateRandomHexString(numBytes: number) {
-  const bytes = crypto.getRandomValues(new Uint8Array(numBytes));
-  const array = Array.from(bytes);
-  const hexPairs = array.map((b) => b.toString(16).padStart(2, "0"));
+  const hexPairs = new Array(numBytes).fill(0).map(() =>
+    Math.floor(Math.random() * 16)
+      .toString(16)
+      .padStart(2, "0")
+  );
   return hexPairs.join("");
 }
+
+/**
+ * These are the headers that are used in the trace headers, could be found in the spec
+ *
+ * @see https://www.w3.org/TR/trace-context/#design-overview
+ */
+
+export const TRACE_HEADER_NAME = "traceparent";
+/**
+ * These are the headers that are used in the trace headers, could be found in the spec
+ *
+ * @see https://www.w3.org/TR/trace-context/#design-overview
+ */
+export const TRACE_HEADER_STATE = "tracestate";
 
 const clientTraceId = generateRandomHexString(16);
 /**
@@ -68,21 +84,23 @@ export class TraceHeader {
   static fromTraceHeader(
     headers: Record<string, string>
   ): TraceHeader | undefined {
-    if (!headers["traceheader"]) {
+    if (!headers[TRACE_HEADER_NAME]) {
       return undefined;
     }
     const [version, traceId, parentId, traceFlags] =
-      headers["traceheader"]?.split("-");
+      headers[TRACE_HEADER_NAME]?.split("-");
 
     const traceState =
-      headers["tracestate"]?.split(",").reduce((acc, curr) => {
+      headers[TRACE_HEADER_STATE]?.split(",").reduce((acc, curr) => {
         const [key, value] = curr.split("=");
         acc[key] = value;
         return acc;
       }, {} as Record<string, string>) || {};
     if (version !== "00") {
       console.debug(
-        new Error(`Invalid version for traceheader: ${headers["traceheader"]}`)
+        new Error(
+          `Invalid version for traceheader: ${headers[TRACE_HEADER_NAME]}`
+        )
       );
       return undefined;
     }
@@ -97,12 +115,12 @@ export class TraceHeader {
    * const headers = traceHeader.toTraceHeader();
    * ```
    *
-   * @returns {{stracheader: string, tracestate: string}} The trace header in the format of a record, used in our http client
+   * @returns {{traceparent: string, tracestate: string}} The trace header in the format of a record, used in our http client
    */
   toTraceHeader() {
     return {
-      traceheader: `00-${this.traceId}-${this.parentId}-${this.traceFlags}`,
-      tracestate: Object.entries(this.traceState)
+      [TRACE_HEADER_NAME]: `00-${this.traceId}-${this.parentId}-${this.traceFlags}`,
+      [TRACE_HEADER_STATE]: Object.entries(this.traceState)
         .map(([key, value]) => `${key}=${value}`)
         .join(","),
     } as const;

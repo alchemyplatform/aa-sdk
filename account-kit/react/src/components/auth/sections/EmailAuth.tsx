@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { z } from "zod";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { useSigner } from "../../../hooks/useSigner.js";
@@ -12,6 +12,8 @@ import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
+import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
+import { AlchemySignerStatus, MfaRequiredError } from "@account-kit/signer";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 
@@ -24,10 +26,25 @@ export const EmailAuth = memo(
     buttonLabel = ls.login.email.button,
     placeholder = ls.login.email.placeholder,
   }: EmailAuthProps) => {
+    const { status } = useSignerStatus();
     const { setAuthStep } = useAuthContext();
     const signer = useSigner();
-    const { authenticateAsync, isPending } = useAuthenticate({
+    const { authenticate, isPending } = useAuthenticate({
       onMutate: async (params) => {
+        const cfg = await signer?.getConfig();
+        if (params.type === "email" && "email" in params) {
+          const emailMode = cfg?.email.mode
+            ? cfg?.email.mode
+            : params.emailMode === "magicLink"
+            ? "MAGIC_LINK"
+            : "OTP";
+
+          if (emailMode === "OTP") {
+            setAuthStep({ type: "otp_verify", email: params.email });
+          }
+        }
+      },
+      onSuccess: async (_data, params) => {
         const cfg = await signer?.getConfig();
         if (params.type === "email" && "email" in params) {
           const emailMode = cfg?.email.mode
@@ -38,16 +55,24 @@ export const EmailAuth = memo(
 
           if (emailMode === "MAGIC_LINK") {
             setAuthStep({ type: "email_verify", email: params.email });
-          } else {
-            setAuthStep({ type: "otp_verify", email: params.email });
+            return;
           }
         }
       },
-      onSuccess: () => {
-        setAuthStep({ type: "complete" });
-      },
-      onError: (error) => {
-        console.error(error);
+      onError: (e, params) => {
+        console.error(e);
+        if (e instanceof MfaRequiredError && "email" in params) {
+          const { multiFactorId } = e.multiFactors[0];
+          setAuthStep({
+            type: "totp_verify",
+            previousStep: "magicLink",
+            factorId: multiFactorId,
+            email: params.email,
+          });
+          return;
+        }
+
+        const error = e instanceof Error ? e : new Error("An Unknown error");
         setAuthStep({ type: "initial", error });
       },
     });
@@ -57,28 +82,31 @@ export const EmailAuth = memo(
         email: "",
       },
       onSubmit: async ({ value: { email } }) => {
-        try {
-          const existingUser = await signer?.getUser(email);
-          const redirectParams = new URLSearchParams();
+        const existingUser = await signer?.getUser(email);
+        const redirectParams = new URLSearchParams();
 
-          if (existingUser == null) {
-            redirectParams.set(IS_SIGNUP_QP, "true");
-          }
-
-          await authenticateAsync({
-            type: "email",
-            email,
-            emailMode: legacyEmailMode,
-            redirectParams,
-          });
-        } catch (e) {
-          const error = e instanceof Error ? e : new Error("An Unknown error");
-
-          setAuthStep({ type: "initial", error });
+        if (existingUser == null) {
+          redirectParams.set(IS_SIGNUP_QP, "true");
         }
+
+        authenticate({
+          type: "email",
+          email,
+          emailMode: legacyEmailMode,
+          redirectParams,
+        });
       },
       validatorAdapter: zodValidator(),
     });
+
+    useEffect(() => {
+      if (
+        status === AlchemySignerStatus.AWAITING_EMAIL_AUTH &&
+        form.state.values.email
+      ) {
+        setAuthStep({ type: "email_verify", email: form.state.values.email });
+      }
+    }, [status]);
 
     return (
       <form

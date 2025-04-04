@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
+
+### Bug Fixes
+
+- only reconnect EOAs if they're cached as connected ([#1510](https://github.com/alchemyplatform/aa-sdk/issues/1510)) ([ab38864](https://github.com/alchemyplatform/aa-sdk/commit/ab38864c9cc9150734bbededdc1636c3ca991cfb))
+
+# [4.23.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.22.0...v4.23.0) (2025-04-04)
+
+### Features
+
+- add mfa on sign in with an authenticator app ([#1398](https://github.com/alchemyplatform/aa-sdk/issues/1398)) ([b9315c5](https://github.com/alchemyplatform/aa-sdk/commit/b9315c5cdd9f2674f53cc8d1bebbdb3b569e36ae))
+- update the logo in the demo header and the favicon ([#1504](https://github.com/alchemyplatform/aa-sdk/issues/1504)) ([010383c](https://github.com/alchemyplatform/aa-sdk/commit/010383c81b5502e5a3934aeb3848398bba11b991))
+
 # [4.22.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.21.0...v4.22.0) (2025-04-03)
 
 ### Bug Fixes

@@ -55,6 +55,8 @@ export type * from "./hooks/useWaitForUserOperationTransaction.js";
 export { useWaitForUserOperationTransaction } from "./hooks/useWaitForUserOperationTransaction.js";
 export { type AlchemyAccountsUIConfig } from "./types.js";
 export { Dialog } from "./components/dialog/dialog.js";
+export type * from "./hooks/useMFA.js";
+export { useMFA } from "./hooks/useMFA.js";
 
 // These are the actual components that should be exported later
 export { AuthCard } from "./components/auth/card/index.js";
