@@ -56,7 +56,6 @@ describe("MA v2 deferral actions tests", async () => {
       value: parseEther("2"),
     });
 
-    const sessionKeyEntityId = 1;
     const sessionKey: SmartAccountSigner = new LocalAccountSigner(
       accounts.unfundedAccountOwner
     );
@@ -68,7 +67,6 @@ describe("MA v2 deferral actions tests", async () => {
       isGlobalValidation: true,
     });
 
-    // TODO: remove nonce override here
     const { typedData, hasAssociatedExecHooks } = await new PermissionBuilder(
       provider
     )
@@ -93,7 +91,7 @@ describe("MA v2 deferral actions tests", async () => {
 
     const sig = await provider.account.signTypedData(typedData);
 
-    const deferredActionDigest = await provider.buildDeferredActionDigest({
+    const deferredActionDigest = provider.buildDeferredActionDigest({
       typedData,
       sig,
     });

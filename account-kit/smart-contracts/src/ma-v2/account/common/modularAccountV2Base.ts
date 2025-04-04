@@ -151,7 +151,7 @@ export async function createMAv2Base<
     if (nonce === nextNonceForDeferredActionNonce) {
       useDeferredAction = true;
       deferredActionData = `0x${deferredAction.slice(70)}`;
-      hasAssociatedExecHooks = deferredAction[6] === "1";
+      hasAssociatedExecHooks = deferredAction[5] === "1";
     } else if (nonce > nextNonceForDeferredActionNonce) {
       throw new InvalidDeferredActionNonce();
     }
