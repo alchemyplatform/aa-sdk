@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
+
+### Bug Fixes
+
+- only reconnect EOAs if they're cached as connected ([#1510](https://github.com/alchemyplatform/aa-sdk/issues/1510)) ([ab38864](https://github.com/alchemyplatform/aa-sdk/commit/ab38864c9cc9150734bbededdc1636c3ca991cfb))
+
 # [4.23.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.22.0...v4.23.0) (2025-04-04)
 
 **Note:** Version bump only for package @account-kit/core
