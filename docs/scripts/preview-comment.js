@@ -1,3 +1,12 @@
+/**
+ * Updates or creates a comment on a GitHub pull request with a documentation preview link
+ * Typescript not supported in actions/github-script@v7
+ *
+ * @param {object} params - The parameters object
+ * @param {object} params.github - The GitHub API client instance
+ * @param {object} params.context - The GitHub Actions context object
+ * @param {string} params.previewUrl - The URL of the documentation preview
+ */
 const updatePreviewComment = async ({ github, context, previewUrl }) => {
   const { repo, issue } = context;
   const commentTitle = "🌿 Documentation Preview";
