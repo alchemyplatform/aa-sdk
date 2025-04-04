@@ -1,0 +1,40 @@
+name: 'Setup Docs'
+description: 'Sets up everything needed to generate docs with Fern CLI'
+
+inputs:
+  docs-github-token:
+    description: 'GitHub token for accessing the docs repository'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout aa-sdk
+      uses: actions/checkout@v4
+      shell: bash
+
+    - name: Download Alchemy Docs Repo
+      shell: bash
+      run: |
+        rm -rf docs-site && \
+        curl -L -f -H "Authorization: token ${{ inputs.docs-github-token }}" \
+          -o docs.tar.gz https://api.github.com/repos/alchemyplatform/docs/tarball/main && \
+        tar xzf docs.tar.gz && \
+        mv alchemyplatform-docs-* docs-site && \
+        rm docs.tar.gz
+
+    - name: Copy docs to docs-site/account-kit and cd into docs-site
+      shell: bash
+      run: |
+        mkdir -p docs-site/account-kit
+        cp -r docs/* docs-site/account-kit/
+
+    - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
+      shell: bash
+      run: |
+        cd docs-site
+        account-kit/scripts/insert-docs.sh
+
+    - name: Install Fern CLI
+      shell: bash
+      run: npm install -g fern-api
