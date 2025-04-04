@@ -1,18 +1,21 @@
+import { TRACE_HEADER_NAME } from "@aa-sdk/core";
+import { TRACE_HEADER_STATE } from "@aa-sdk/core";
 import { TraceHeader } from "@aa-sdk/core";
 
 /**
  * The header that is used to track the trace id.
+ * We use a client specific one to not mess with the span tracing of the servers.
  *
  * @see headersUpdate
  */
-const TRACKER_HEADER = "X-Alchemy-Trace-Id";
+const TRACKER_HEADER = "X-Alchemy-Client-Trace-Id";
 
 /**
  * The header that is used to track the breadcrumb.
  *
  * @see headersUpdate
  */
-const TRACKER_BREADCRUMB = "X-Alchemy-Trace-Breadcrumb";
+const TRACKER_BREADCRUMB = "X-Alchemy-Client-Breadcrumb";
 
 /**
  * Remove the tracking headers. This is used in our split transport to ensure that we remove the headers that
@@ -26,8 +29,8 @@ export function mutateRemoveTrackingHeaders(x?: unknown) {
   if (typeof x !== "object") return;
   TRACKER_HEADER in x && delete x[TRACKER_HEADER];
   TRACKER_BREADCRUMB in x && delete x[TRACKER_BREADCRUMB];
-  "traceheader" in x && delete x["traceheader"];
-  "tracestate" in x && delete x["tracestate"];
+  TRACE_HEADER_NAME in x && delete x[TRACE_HEADER_NAME];
+  TRACE_HEADER_STATE in x && delete x[TRACE_HEADER_STATE];
 }
 
 function addCrumb(previous: string | undefined, crumb: string): string {

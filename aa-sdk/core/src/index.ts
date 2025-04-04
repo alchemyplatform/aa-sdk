@@ -115,7 +115,11 @@ export { WalletClientSigner } from "./signer/wallet-client.js";
 export { split, type SplitTransportParams } from "./transport/split.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
-export { TraceHeader } from "./utils/traceHeader.js";
+export {
+  TraceHeader,
+  TRACE_HEADER_NAME,
+  TRACE_HEADER_STATE,
+} from "./utils/traceHeader.js";
 export {
   BigNumberishRangeSchema,
   BigNumberishSchema,
