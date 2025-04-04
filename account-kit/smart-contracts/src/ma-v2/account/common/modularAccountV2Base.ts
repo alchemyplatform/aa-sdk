@@ -3,6 +3,8 @@ import {
   getEntryPoint,
   InvalidEntityIdError,
   InvalidNonceKeyError,
+  InvalidDeferredActionNonce,
+  InvalidDeferredActionMode,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
@@ -135,7 +137,7 @@ export async function createMAv2Base<
 
   if (deferredAction) {
     if (deferredAction.slice(3, 5) !== "00") {
-      throw new Error("Invalid deferred action version");
+      throw new InvalidDeferredActionMode();
     }
     nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
     // Set these values if the deferred action has not been consumed. We check this with the EP
@@ -151,7 +153,7 @@ export async function createMAv2Base<
       deferredActionData = `0x${deferredAction.slice(70)}`;
       hasAssociatedExecHooks = deferredAction[6] === "1";
     } else if (nonce > nextNonceForDeferredActionNonce) {
-      throw new Error("Deferred action nonce invalid");
+      throw new InvalidDeferredActionNonce();
     }
   }
 
