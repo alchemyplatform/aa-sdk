@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.23.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.22.0...v4.23.0) (2025-04-04)
+
+### Features
+
+- add mfa on sign in with an authenticator app ([#1398](https://github.com/alchemyplatform/aa-sdk/issues/1398)) ([b9315c5](https://github.com/alchemyplatform/aa-sdk/commit/b9315c5cdd9f2674f53cc8d1bebbdb3b569e36ae))
+
 # [4.22.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.21.0...v4.22.0) (2025-04-03)
 
 **Note:** Version bump only for package @account-kit/signer
