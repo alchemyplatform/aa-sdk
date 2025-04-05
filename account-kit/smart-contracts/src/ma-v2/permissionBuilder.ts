@@ -1,4 +1,4 @@
-import { zeroAddress, type Address, type Hex } from "viem";
+import { toHex, zeroAddress, type Address, type Hex } from "viem";
 import {
   HookType,
   type HookConfig,
@@ -207,7 +207,7 @@ export class PermissionBuilder {
   private installData: Hex = "0x";
   private permissions: Permission[] = [];
   private hooks: Hook[] = [];
-  private nonceKeyOverride: bigint = 0n;
+  private nonce: bigint = 0n;
   private hasAssociatedExecHooks: boolean = false;
 
   constructor(client: ModularAccountV2Client) {
@@ -218,13 +218,13 @@ export class PermissionBuilder {
   configure({
     key,
     entityId,
-    nonceKeyOverride,
+    nonce,
     selectors,
     hooks,
   }: {
     key: Key;
     entityId: number;
-    nonceKeyOverride: bigint;
+    nonce: bigint;
     selectors?: Hex[];
     hooks?: Hook[];
   }): this {
@@ -243,7 +243,7 @@ export class PermissionBuilder {
     });
     if (selectors) this.selectors = selectors;
     if (hooks) this.hooks = hooks;
-    this.nonceKeyOverride = nonceKeyOverride;
+    this.nonce = nonce;
     return this;
   }
 
@@ -330,16 +330,13 @@ export class PermissionBuilder {
   // Use for building deferred action typed data to sign
   async compile_deferred({
     deadline,
-    uoValidationEntityId,
-    uoIsGlobalValidation,
   }: {
     deadline: number;
     uoValidationEntityId: number;
     uoIsGlobalValidation: boolean;
   }): Promise<{
     typedData: DeferredActionTypedData;
-    hasAssociatedExecHooks: boolean;
-    nonceOverride: bigint;
+    fullPreSignatureDeferredActionDigest: Hex;
   }> {
     // Need to remove this because compile_raw may add selectors
     // this.validateConfiguration();
@@ -367,20 +364,28 @@ export class PermissionBuilder {
 
     const installValidationCall = await this.compile_raw();
 
-    const { typedData, nonceOverride } = await deferralActions(
+    const { typedData } = await deferralActions(
       this.client
     ).createDeferredActionTypedDataObject({
       callData: installValidationCall,
       deadline: deadline,
-      uoValidationEntityId: uoValidationEntityId,
-      uoIsGlobalValidation: uoIsGlobalValidation,
-      nonceKeyOverride: this.nonceKeyOverride,
+      nonce: this.nonce,
     });
+
+    const preSignatureDigest = deferralActions(
+      this.client
+    ).buildPreSignatureDeferredActionDigest({ typedData });
+
+    // Encode additional information to build the full pre-signature digest
+    const fullPreSignatureDeferredActionDigest: `0x${string}` = `0x00${
+      this.hasAssociatedExecHooks ? "01" : "00"
+    }${toHex(this.nonce, {
+      size: 32,
+    }).slice(2)}${preSignatureDigest.slice(2)}`;
 
     return {
       typedData,
-      nonceOverride,
-      hasAssociatedExecHooks: this.hasAssociatedExecHooks,
+      fullPreSignatureDeferredActionDigest,
     };
   }
 
