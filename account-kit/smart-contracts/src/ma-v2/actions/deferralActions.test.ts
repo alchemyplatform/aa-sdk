@@ -67,32 +67,31 @@ describe("MA v2 deferral actions tests", async () => {
       isGlobalValidation: true,
     });
 
-    const { typedData, hasAssociatedExecHooks } = await new PermissionBuilder(
-      provider
-    )
-      .configure({
-        key: {
-          publicKey: await sessionKey.getAddress(),
-          type: "secp256k1",
-        },
-        entityId,
-        nonceKeyOverride: 0n, // TODO: add nonce override here
-      })
-      .addPermission({
-        permission: {
-          type: PermissionType.ROOT,
-        },
-      })
-      .compile_deferred({
-        deadline: 0,
-        uoValidationEntityId: entityId,
-        uoIsGlobalValidation: true,
-      });
+    const { typedData, fullPreSignatureDeferredActionDigest } =
+      await new PermissionBuilder(provider)
+        .configure({
+          key: {
+            publicKey: await sessionKey.getAddress(),
+            type: "secp256k1",
+          },
+          entityId,
+          nonce: nonce,
+        })
+        .addPermission({
+          permission: {
+            type: PermissionType.ROOT,
+          },
+        })
+        .compile_deferred({
+          deadline: 0,
+          uoValidationEntityId: entityId,
+          uoIsGlobalValidation: true,
+        });
 
     const sig = await provider.account.signTypedData(typedData);
 
     const deferredActionDigest = provider.buildDeferredActionDigest({
-      typedData,
+      fullPreSignatureDeferredActionDigest,
       sig,
     });
 
@@ -103,12 +102,7 @@ describe("MA v2 deferral actions tests", async () => {
       accountAddress: provider.getAddress(),
       signer: sessionKey,
       initCode: provider.account.getInitCode(),
-      deferredAction: `0x00${hasAssociatedExecHooks ? "01" : "00"}${toHex(
-        nonce,
-        {
-          size: 32,
-        }
-      ).slice(2)}${deferredActionDigest.slice(2)}`,
+      deferredAction: deferredActionDigest,
     });
 
     const uoResult = await sessionKeyClient.sendUserOperation({
