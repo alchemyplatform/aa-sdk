@@ -382,7 +382,7 @@ describe("MA v2 Tests", async () => {
             },
           },
         })
-        .compile_deferred({
+        .compileDeferred({
           deadline: 0,
           uoValidationEntityId: entityId,
           uoIsGlobalValidation: false,
@@ -498,7 +498,7 @@ describe("MA v2 Tests", async () => {
             },
           },
         })
-        .compile_deferred({
+        .compileDeferred({
           deadline: 0,
           uoValidationEntityId: entityId,
           uoIsGlobalValidation: false,
@@ -735,7 +735,7 @@ describe("MA v2 Tests", async () => {
             type: PermissionType.ROOT,
           },
         })
-        .compile_deferred({
+        .compileDeferred({
           deadline: 0,
           uoValidationEntityId: entityId,
           uoIsGlobalValidation: isGlobalValidation,

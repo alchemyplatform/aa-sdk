@@ -345,7 +345,7 @@ export class PermissionBuilder {
     if (deadline !== 0) {
       if (deadline < Date.now() / 1000) {
         throw new Error(
-          `PERMISSION: compile_deferred(): Deadline ${deadline} cannot be before now (${
+          `PERMISSION: compileDeferred(): Deadline ${deadline} cannot be before now (${
             Date.now() / 1000
           })`
         );

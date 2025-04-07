@@ -84,7 +84,7 @@ describe("MA v2 deferral actions tests", async () => {
             type: PermissionType.ROOT,
           },
         })
-        .compile_deferred({
+        .compileDeferred({
           deadline: 0,
           uoValidationEntityId: entityId,
           uoIsGlobalValidation: true,
