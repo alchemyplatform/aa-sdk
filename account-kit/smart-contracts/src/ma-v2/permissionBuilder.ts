@@ -338,7 +338,7 @@ export class PermissionBuilder {
     typedData: DeferredActionTypedData;
     fullPreSignatureDeferredActionDigest: Hex;
   }> {
-    // Need to remove this because compile_raw may add selectors
+    // Need to remove this because compileRaw may add selectors
     // this.validateConfiguration();
 
     // Add time range module hook via expiry
@@ -362,7 +362,7 @@ export class PermissionBuilder {
       );
     }
 
-    const installValidationCall = await this.compile_raw();
+    const installValidationCall = await this.compileRaw();
 
     const { typedData } = await deferralActions(
       this.client
