@@ -44,9 +44,16 @@ describe("MA v2 deferral actions tests", async () => {
   const sendAmount = parseEther("1");
 
   it("tests the full deferred actions flow", async () => {
-    const provider = (await givenConnectedProvider({ signer })).extend(
-      deferralActions
-    );
+    const provider = await givenConnectedProvider({ signer });
+
+    const serverClient = (
+      await createModularAccountV2Client({
+        chain: instance.chain,
+        accountAddress: provider.getAddress(),
+        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
+        transport: custom(instance.getClient()),
+      })
+    ).extend(deferralActions);
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -58,12 +65,12 @@ describe("MA v2 deferral actions tests", async () => {
     );
 
     // these can be default values or from call arguments
-    const { entityId, nonce } = await provider.getEntityIdAndNonce({
+    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
       isGlobalValidation: true,
     });
 
     const { typedData, fullPreSignatureDeferredActionDigest } =
-      await new PermissionBuilder(provider)
+      await new PermissionBuilder(serverClient)
         .configure({
           key: {
             publicKey: await sessionKey.getAddress(),
@@ -85,12 +92,11 @@ describe("MA v2 deferral actions tests", async () => {
 
     const sig = await provider.account.signTypedData(typedData);
 
-    const deferredActionDigest = await provider.buildDeferredActionDigest({
+    const deferredActionDigest = await serverClient.buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig,
     });
 
-    // TODO: need nonce, orig account address, orig account initcode
     const sessionKeyClient = await createModularAccountV2Client({
       transport: custom(instance.getClient()),
       chain: instance.chain,
