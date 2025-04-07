@@ -62,6 +62,7 @@ runs:
       env:
         FERN_TOKEN: ${{ inputs.fern-token }}
       run: |
+        cd docs-site
         if [[ "${{ inputs.preview }}" == "true" ]]; then
           OUTPUT=$(fern generate --docs --preview 2>&1) || true
         else
