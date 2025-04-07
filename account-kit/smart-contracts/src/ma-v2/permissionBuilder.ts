@@ -328,7 +328,7 @@ export class PermissionBuilder {
   }
 
   // Use for building deferred action typed data to sign
-  async compile_deferred({
+  async compileDeferred({
     deadline,
   }: {
     deadline: number;
