@@ -411,7 +411,7 @@ export class PermissionBuilder {
   }
 
   // Use for compiling args to installValidation
-  async compile_installArgs(): Promise<InstallValidationParams> {
+  async compileInstallArgs(): Promise<InstallValidationParams> {
     this.validateConfiguration();
 
     return {
