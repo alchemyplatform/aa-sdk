@@ -14,12 +14,15 @@ import {
   createModularAccountV2Client,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
+import {
+  deferralActions,
+  PermissionBuilder,
+  PermissionType,
+} from "@account-kit/smart-contracts/experimental";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
-import { deferralActions } from "./deferralActions.js";
-import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {

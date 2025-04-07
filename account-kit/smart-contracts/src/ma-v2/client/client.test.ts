@@ -21,12 +21,11 @@ import {
   concat,
   testActions,
   concatHex,
-  type TestActions,
-  type Hex,
   toHex,
   createWalletClient,
   getContractAddress,
   encodeFunctionData,
+  type TestActions,
   type ContractFunctionName,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
@@ -44,7 +43,9 @@ import {
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
   buildFullNonceKey,
-  modularAccountAbi,
+  deferralActions,
+  PermissionBuilder,
+  PermissionType,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -66,9 +67,7 @@ import {
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
-import { deferralActions } from "../actions/deferralActions.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
