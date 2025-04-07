@@ -10,7 +10,6 @@ import {
   testActions,
   type TestActions,
 } from "viem";
-import { installValidationActions } from "@account-kit/smart-contracts/experimental";
 import {
   createModularAccountV2Client,
   type SignerEntity,
@@ -45,9 +44,9 @@ describe("MA v2 deferral actions tests", async () => {
   const sendAmount = parseEther("1");
 
   it("tests the full deferred actions flow", async () => {
-    const provider = (await givenConnectedProvider({ signer }))
-      .extend(deferralActions)
-      .extend(installValidationActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      deferralActions
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
