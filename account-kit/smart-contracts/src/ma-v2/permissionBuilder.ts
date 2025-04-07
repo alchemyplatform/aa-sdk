@@ -390,7 +390,7 @@ export class PermissionBuilder {
   }
 
   // Use for direct `installValidation()` low-level calls (maybe useless)
-  async compile_raw(): Promise<Hex> {
+  async compileRaw(): Promise<Hex> {
     // Translate all permissions into raw hooks if >0
     if (this.permissions.length > 0) {
       const rawHooks = this.translatePermissions(
