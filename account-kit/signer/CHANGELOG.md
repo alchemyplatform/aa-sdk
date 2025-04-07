@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.23.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.22.0...v4.23.0) (2025-04-04)
+
+### Features
+
+- add mfa on sign in with an authenticator app ([#1398](https://github.com/alchemyplatform/aa-sdk/issues/1398)) ([b9315c5](https://github.com/alchemyplatform/aa-sdk/commit/b9315c5cdd9f2674f53cc8d1bebbdb3b569e36ae))
+
+# [4.22.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.21.0...v4.22.0) (2025-04-03)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.21.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.1...v4.21.0) (2025-03-31)
+
+### Features
+
+- allow checking passkey status ([#1497](https://github.com/alchemyplatform/aa-sdk/issues/1497)) ([7ec671b](https://github.com/alchemyplatform/aa-sdk/commit/7ec671bb4552c7fe5f6d9e920035c6d1884acc68))
+
+## [4.20.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.0...v4.20.1) (2025-03-28)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+### Bug Fixes
+
+- add zustand dependcy to signer sdk ([#1482](https://github.com/alchemyplatform/aa-sdk/issues/1482)) ([3c34d04](https://github.com/alchemyplatform/aa-sdk/commit/3c34d04cd97626f2dabd15572b9526323d1ee89a))
+- send sdk version on signer ([#1472](https://github.com/alchemyplatform/aa-sdk/issues/1472)) ([0f696d6](https://github.com/alchemyplatform/aa-sdk/commit/0f696d64bbc092e9a249ebdffe6db2cce5c73fcc))
+
+### Features
+
+- add twitch integration ([#1443](https://github.com/alchemyplatform/aa-sdk/issues/1443)) ([fcecf39](https://github.com/alchemyplatform/aa-sdk/commit/fcecf3909f9b1ffd6d5294400d054c155e4efa78))
+
 # [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
 
 ### Features

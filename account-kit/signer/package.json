@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/signer",
-  "version": "4.17.0",
+  "version": "4.23.1",
   "description": "Core interfaces and clients for interfacing with the Alchemy Signer API",
   "author": "Alchemy",
   "license": "MIT",
@@ -35,6 +35,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/signer",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/signer --fern",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
@@ -49,15 +50,16 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.17.0",
-    "@account-kit/logging": "^4.17.0",
+    "@aa-sdk/core": "^4.23.1",
+    "@account-kit/logging": "^4.23.1",
     "@solana/web3.js": "^1.98.0",
     "@turnkey/http": "^2.6.2",
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",
     "@turnkey/webauthn-stamper": "^0.4.3",
     "jwt-decode": "^4.0.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^5.0.0-rc.2"
   },
   "peerDependencies": {
     "viem": "^2.22.6"

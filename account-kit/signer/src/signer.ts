@@ -4,7 +4,10 @@ import {
   AlchemySignerClientParamsSchema,
   AlchemySignerWebClient,
 } from "./client/index.js";
-import type { CredentialCreationOptionOverrides } from "./client/types.js";
+import type {
+  CredentialCreationOptionOverrides,
+  VerifyMfaParams,
+} from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AuthParams =
@@ -14,6 +17,7 @@ export type AuthParams =
       /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
       emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
+      multiFactors?: VerifyMfaParams[];
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
@@ -48,6 +52,7 @@ export type AuthParams =
   | {
       type: "otp";
       otpCode: string;
+      multiFactors?: VerifyMfaParams[];
     };
 
 export type OauthProviderConfig =

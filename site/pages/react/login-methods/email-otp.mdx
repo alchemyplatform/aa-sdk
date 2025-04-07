@@ -102,17 +102,22 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits their email
-const handleSendCode = async (email: string) => {
-  try {
-    await authenticate({
+const handleSendCode = (email: string) => {
+  authenticate(
+    {
       type: "email",
       emailMode: "otp",
       email,
-    });
-    // Success - now show the OTP input form
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - now show the OTP input form
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -127,16 +132,21 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits the OTP code
-const handleVerifyCode = async (otpCode: string) => {
-  try {
-    await authenticate({
+const handleVerifyCode = (otpCode: string) => {
+  authenticate(
+    {
       type: "otp",
       otpCode,
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle invalid code error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle invalid code error
+      },
+    }
+  );
 };
 ```
 
@@ -152,3 +162,9 @@ const { isConnected } = useSignerStatus();
 
 // You can use isConnected to conditionally render UI
 ```
+
+## Next Steps
+
+### Add Authenticator App (TOTP) Verification (Optional)
+
+If you’d like to add a **second security step** to Email OTP, you can enable [Multi-Factor Authentication](/react/mfa/setup-mfa). This prompts users for a **6-digit TOTP code** from their authenticator app (e.g. Google Authenticator, Authy) after they verify their email.

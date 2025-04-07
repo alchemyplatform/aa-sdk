@@ -104,17 +104,22 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate } = useAuthenticate();
 
 // When the user submits their email
-const handleSendMagicLink = async (email: string) => {
-  try {
-    await authenticate({
+const handleSendMagicLink = (email: string) => {
+  authenticate(
+    {
       type: "email",
       emailMode: "magicLink",
       email,
-    });
-    // Success - inform user to check their email
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Success - inform user to check their email
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -131,20 +136,25 @@ const { authenticate } = useAuthenticate();
 
 // Handle the redirect when the component mounts
 useEffect(() => {
-  const handleRedirect = async () => {
+  const handleRedirect = () => {
     const url = new URL(window.location.href);
     const bundle = url.searchParams.get("bundle");
 
     if (bundle) {
-      try {
-        await authenticate({
+      authenticate(
+        {
           type: "email",
           bundle,
-        });
-        // Authentication successful!
-      } catch (error) {
-        // Handle error
-      }
+        },
+        {
+          onSuccess: () => {
+            // Authentication successful!
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        }
+      );
     }
   };
 
@@ -164,3 +174,9 @@ const { isConnected } = useSignerStatus();
 
 // You can use isConnected to conditionally render UI
 ```
+
+## Next Steps
+
+### Add Authenticator App (TOTP) Verification (Optional)
+
+Consider enabling [Multi-Factor Authentication](/react/mfa/setup-mfa) to require users to enter a 6-digit TOTP code from their authenticator app after clicking the magic link. This extra layer of security protects user accounts if their email is compromised.

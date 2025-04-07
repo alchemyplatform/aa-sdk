@@ -10,6 +10,7 @@ import {
   type SmartContractAccount,
   type UserOperationContext,
   type UserOperationOverrides,
+  clientHeaderTrack,
 } from "@aa-sdk/core";
 import type {
   Chain,
@@ -64,7 +65,7 @@ export type AlchemySmartAccountClientActions<
  * const clientWithAlchemyActions = client.extend(alchemyActions);
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client The client instance used to perform actions
+ * @param {Client<TTransport, TChain, TAccount>} client_ The client instance used to perform actions
  * @returns {AlchemySmartAccountClientActions<TAccount, TContext>} An object containing Alchemy Smart Account client actions
  */
 export const alchemyActions: <
@@ -79,11 +80,14 @@ export const alchemyActions: <
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => AlchemySmartAccountClientActions<TAccount, TContext, TChain> = (
-  client
+  client_
 ) => ({
-  simulateUserOperation: async (args) =>
-    simulateUserOperationChanges(client, args),
-  sendUserOperation: async (args) => {
+  simulateUserOperation: async (args) => {
+    const client = clientHeaderTrack(client_, "simulateUserOperation");
+    return simulateUserOperationChanges(client, args);
+  },
+  async sendUserOperation(args) {
+    const client = clientHeaderTrack(client_, "infraSendUserOperation");
     const { account = client.account } = args;
 
     const result = sendUserOperation(client, args);
@@ -91,6 +95,7 @@ export const alchemyActions: <
     return result;
   },
   sendTransaction: async (args, overrides, context) => {
+    const client = clientHeaderTrack(client_, "sendTransaction");
     const { account = client.account } = args;
 
     const result = await sendTransaction(client, args, overrides, context);
@@ -98,6 +103,7 @@ export const alchemyActions: <
     return result;
   },
   async sendTransactions(args) {
+    const client = clientHeaderTrack(client_, "sendTransactions");
     const { account = client.account } = args;
 
     const result = sendTransactions(client, args);

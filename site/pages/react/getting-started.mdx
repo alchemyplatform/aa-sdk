@@ -75,3 +75,11 @@ Now you can choose which authentication methods you want to implement and how yo
 2. [Using our React hooks](/react/react-hooks) to build your own custom UI for complete control.
 
 Each authentication method has dedicated documentation for both implementation approaches.
+
+## Enhancing Security with Multi-Factor Authentication
+
+After implementing your chosen authentication methods, you can add an extra layer of security by enabling multi-factor authentication (MFA):
+
+You can enable [multi-factor authentication (MFA)](/react/mfa/setup-mfa) via authenticator apps (TOTP). These generate time-based one-time passcodes in an app like Google Authenticator or Authy. When users log in via Email OTP, Magic Link, or Social Login, they'll be prompted for their 6-digit TOTP code if MFA is enabled.
+
+Multi-factor authentication significantly improves account security by requiring users to verify their identity using both their primary authentication method and a time-based code from an authenticator app.

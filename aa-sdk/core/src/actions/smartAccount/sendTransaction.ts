@@ -19,6 +19,7 @@ import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { UserOperationContext } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Sends a transaction using the provided client, arguments, optional overrides, and context.
@@ -38,7 +39,7 @@ import { waitForUserOperationTransaction } from "./waitForUserOperationTransacat
  * });
  * ```
  *
- * @param {Client<Transport, TChain, TAccount>} client The client to send the transaction through
+ * @param {Client<Transport, TChain, TAccount>} client_ The client to send the transaction through
  * @param {SendTransactionParameters<TChain, TAccount, TChainOverride>} args The parameters required to send the transaction
  * @param {UserOperationOverrides<TEntryPointVersion>} [overrides] Optional overrides for the user operation
  * @param {UserOperationContext} [context] Optional context for the user operation
@@ -55,11 +56,12 @@ export async function sendTransaction<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<Transport, TChain, TAccount>,
+  client_: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
   overrides?: UserOperationOverrides<TEntryPointVersion>,
   context?: TContext
 ): Promise<Hex> {
+  const client = clientHeaderTrack(client_, "estimateUserOperationGas");
   const { account = client.account } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();

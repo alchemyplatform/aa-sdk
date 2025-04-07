@@ -15,7 +15,11 @@ import {
   encodePacked,
   size,
   toHex,
+  encodeDeployData,
+  hexToNumber,
 } from "viem";
+import { entityIdAndNonceReaderBytecode, buildFullNonceKey } from "../utils.js";
+import { entityIdAndNonceReaderAbi } from "../abis/entityIdAndNonceReader.js";
 import type { ModularAccountV2Client } from "../client/client.js";
 
 export type DeferredActionTypedData = {
@@ -62,6 +66,12 @@ export type BuildUserOperationWithDeferredActionParams = {
   nonceOverride: bigint;
 };
 
+export type EntityIdAndNonceParams = {
+  entityId: number;
+  nonceKey: bigint;
+  isGlobalValidation: boolean;
+};
+
 export type DeferralActions = {
   createDeferredActionTypedDataObject: (
     args: CreateDeferredActionTypedDataParams
@@ -70,6 +80,9 @@ export type DeferralActions = {
   buildUserOperationWithDeferredAction: (
     args: BuildUserOperationWithDeferredActionParams
   ) => Promise<UserOperationRequest_v7>;
+  getEntityIdAndNonce: (
+    args: EntityIdAndNonceParams
+  ) => Promise<{ nonce: bigint; entityId: number }>;
 };
 
 /**
@@ -86,15 +99,14 @@ export const deferralActions: (
     deadline,
     entityId,
     isGlobalValidation,
-    nonceKeyOverride,
+    nonceKeyOverride = 0n,
   }: CreateDeferredActionTypedDataParams): Promise<DeferredActionReturnData> => {
     if (!client.account) {
       throw new AccountNotFoundError();
     }
 
-    const baseNonceKey = nonceKeyOverride || 0n;
-    if (baseNonceKey > maxUint152) {
-      throw new InvalidNonceKeyError(baseNonceKey);
+    if (nonceKeyOverride > maxUint152) {
+      throw new InvalidNonceKeyError(nonceKeyOverride);
     }
 
     const entryPoint = client.account.getEntryPoint();
@@ -110,10 +122,12 @@ export const deferralActions: (
 
     // 2 = deferred action flags    0b10
     // 1 = isGlobal validation flag 0b01
-    const fullNonceKey: bigint =
-      ((baseNonceKey << 40n) + (BigInt(entityId) << 8n)) |
-      2n |
-      (isGlobalValidation ? 1n : 0n);
+    const fullNonceKey: bigint = buildFullNonceKey({
+      nonceKey: nonceKeyOverride,
+      entityId,
+      isGlobalValidation,
+      isDeferredAction: true,
+    });
 
     const nonceOverride = (await entryPointContract.read.getNonce([
       client.account.address,
@@ -224,9 +238,54 @@ export const deferralActions: (
     return unsignedUo;
   };
 
+  const getEntityIdAndNonce = async ({
+    entityId,
+    nonceKey,
+    isGlobalValidation,
+  }: EntityIdAndNonceParams) => {
+    if (!client.account) {
+      throw new AccountNotFoundError();
+    }
+
+    if (nonceKey > maxUint152) {
+      throw new InvalidNonceKeyError(nonceKey);
+    }
+
+    const entryPoint = client.account.getEntryPoint();
+    if (entryPoint === undefined) {
+      throw new EntryPointNotFoundError(client.chain, "0.7.0");
+    }
+
+    const bytecode = encodeDeployData({
+      abi: entityIdAndNonceReaderAbi,
+      bytecode: entityIdAndNonceReaderBytecode,
+      args: [
+        client.account.address,
+        entryPoint.address,
+        buildFullNonceKey({
+          nonceKey,
+          entityId,
+          isGlobalValidation,
+          isDeferredAction: true,
+        }),
+      ],
+    });
+
+    const { data } = await client.call({ data: bytecode });
+    if (!data) {
+      throw new Error("No data returned from contract call");
+    }
+
+    return {
+      nonce: BigInt(data),
+      entityId: hexToNumber(`0x${data.slice(40, 48)}`),
+    };
+  };
+
   return {
     createDeferredActionTypedDataObject,
     buildDeferredActionDigest,
     buildUserOperationWithDeferredAction,
+    getEntityIdAndNonce,
   };
 };

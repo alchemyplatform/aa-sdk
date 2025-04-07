@@ -126,32 +126,40 @@ import { useAuthenticate } from "@account-kit/react";
 const { authenticate, isPending } = useAuthenticate();
 
 // For redirect flow
-const handleGoogleRedirectLogin = async () => {
-  try {
-    await authenticate({
+const handleGoogleRedirectLogin = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "google",
       mode: "redirect",
       redirectUrl: "/", // Redirect to this page after authentication
-    });
-    // The page will redirect, so no need for success handling here
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onError: (error) => {
+        // Handle error
+        // The page will redirect on success, so no need for onSuccess handler
+      },
+    }
+  );
 };
 
 // For popup flow
-const handleGooglePopupLogin = async () => {
-  try {
-    await authenticate({
+const handleGooglePopupLogin = () => {
+  authenticate(
+    {
       type: "oauth",
       authProviderId: "google",
       mode: "popup",
-    });
-    // Authentication successful!
-  } catch (error) {
-    // Handle error
-  }
+    },
+    {
+      onSuccess: () => {
+        // Authentication successful!
+      },
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
 ```
 
@@ -186,3 +194,9 @@ useEffect(() => {
   }
 }, [isAuthenticating]);
 ```
+
+## Next Steps
+
+### Enabling Authenticator App (TOTP) MFA
+
+If you want to require a second factor for Social Login, see [Social Login with Multi-Factor Authentication](/react/mfa/social-login). Once users have set up a TOTP-based authenticator app, they'll be prompted for their 6-digit code automatically.

@@ -31,12 +31,16 @@ The following section provides an overview of the main hooks you'll use when imp
 
 The `useAuthenticate` hook is the foundation for all authentication methods. It provides the `authenticate` function that handles the authentication process.
 
+:::tip
+If MFA is required (e.g., the user has added an authenticator app), the authenticate function will throw an MfaRequiredError or request a multiFactorCode. See the MFA docs for a detailed example of handling TOTP codes.
+:::
+
 ```tsx twoslash
 import React from "react";
 import { useAuthenticate } from "@account-kit/react";
 
 function MyAuthComponent() {
-  const { authenticate, isPending } = useAuthenticate();
+  const { authenticate, authenticateAsync, isPending } = useAuthenticate();
 
   // Use authenticate with different parameters based on auth method
   // The specific parameters depend on the authentication method

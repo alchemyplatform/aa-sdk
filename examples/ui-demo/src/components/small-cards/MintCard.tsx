@@ -91,7 +91,7 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
       }
       buttons={
         <Button
-          className="w-full mt-auto"
+          className="mt-auto"
           onClick={handleCollectNFT}
           disabled={isLoading}
         >

@@ -75,7 +75,7 @@ export function hydrate(
     config._internal.wagmiConfig,
     {
       initialState: initialWagmiState,
-      reconnectOnMount: true,
+      reconnectOnMount: (initialWagmiState?.connections?.size ?? 0) > 0,
     }
   );
 

@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
+
+### Bug Fixes
+
+- only reconnect EOAs if they're cached as connected ([#1510](https://github.com/alchemyplatform/aa-sdk/issues/1510)) ([ab38864](https://github.com/alchemyplatform/aa-sdk/commit/ab38864c9cc9150734bbededdc1636c3ca991cfb))
+
+# [4.23.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.22.0...v4.23.0) (2025-04-04)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.22.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.21.0...v4.22.0) (2025-04-03)
+
+### Bug Fixes
+
+- update setChain function to update the sdk state if the wallet is already on a chain ([#1503](https://github.com/alchemyplatform/aa-sdk/issues/1503)) ([76da7cb](https://github.com/alchemyplatform/aa-sdk/commit/76da7cbbf8e6a4fe9d1a72adeebdb3f017304255))
+
+### Features
+
+- tracing added for imply and open telemetry ([#1424](https://github.com/alchemyplatform/aa-sdk/issues/1424)) ([1caf63b](https://github.com/alchemyplatform/aa-sdk/commit/1caf63bbe4150b7eb66ee7aef7ccf2e228336ba6))
+
+# [4.21.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.1...v4.21.0) (2025-03-31)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.20.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.20.0...v4.20.1) (2025-03-28)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.20.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.19.0...v4.20.0) (2025-03-28)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.18.0...v4.19.0) (2025-03-25)
+
+### Features
+
+- allow signer api key creation (experimental) ([#1485](https://github.com/alchemyplatform/aa-sdk/issues/1485)) ([424b27e](https://github.com/alchemyplatform/aa-sdk/commit/424b27e133b5c5c7a9ac08d20e18ce35e705e546))
+
+# [4.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.17.0...v4.18.0) (2025-03-25)
+
+**Note:** Version bump only for package @account-kit/core
+
 # [4.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.16.0...v4.17.0) (2025-03-18)
 
 **Note:** Version bump only for package @account-kit/core
