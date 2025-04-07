@@ -125,7 +125,7 @@ export class InvalidDeferredActionMode extends BaseError {
   override name = "InvalidDeferredActionMode";
 
   /**
-   * Initializes a new instance of the error message with a default message indicating that the provided ma v2 account mode is invalid.
+   * Initializes a new instance of the error message with a default message indicating that the provided deferred action mode is invalid.
    */
   constructor() {
     super(`The provided deferred action mode is invalid`);
