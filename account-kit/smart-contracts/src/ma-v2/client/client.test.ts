@@ -351,8 +351,6 @@ describe("MA v2 Tests", async () => {
     });
 
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      entityId: 0,
-      nonceKey: 0n,
       isGlobalValidation: false,
     });
 
@@ -407,7 +405,7 @@ describe("MA v2 Tests", async () => {
       chain: instance.chain,
       accountAddress: provider.getAddress(),
       signer: sessionKey,
-      initCode: provider.account.getInitCode(), // must be called with the owner provider!
+      initCode: await provider.account.getInitCode(), // must be called with the owner provider!
       deferredAction: deferredActionDigest,
     });
 
@@ -458,7 +456,7 @@ describe("MA v2 Tests", async () => {
     });
 
     // Deploy mock ERC20
-    const ret = await walletClient.deployContract({
+    await walletClient.deployContract({
       abi: mintableERC20Abi,
       account: walletClient.account,
       bytecode: mintableERC20Bytecode,
@@ -476,8 +474,6 @@ describe("MA v2 Tests", async () => {
     // const sessionKeyEntityId = 1;
     // these can be default values or from call arguments
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      entityId: 0,
-      nonceKey: 0n,
       isGlobalValidation: false,
     });
 
@@ -525,7 +521,7 @@ describe("MA v2 Tests", async () => {
       signer: sessionKey,
       transport: custom(instance.getClient()),
       accountAddress: provider.getAddress(),
-      initCode: provider.account.getInitCode(),
+      initCode: await provider.account.getInitCode(),
       deferredAction: deferredActionDigest,
     });
 
@@ -577,8 +573,6 @@ describe("MA v2 Tests", async () => {
     // Test variables
     const isGlobalValidation = true;
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      entityId: 0,
-      nonceKey: 0n,
       isGlobalValidation: isGlobalValidation,
     });
 
@@ -637,7 +631,7 @@ describe("MA v2 Tests", async () => {
       chain: instance.chain,
       accountAddress: provider.getAddress(),
       signer: sessionKey,
-      initCode: provider.account.getInitCode(),
+      initCode: await provider.account.getInitCode(),
       deferredAction: fullDeferredAction,
     });
 
@@ -721,8 +715,6 @@ describe("MA v2 Tests", async () => {
     const isGlobalValidation = true;
 
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      entityId: 0,
-      nonceKey: 0n,
       isGlobalValidation: true,
     });
 
@@ -766,7 +758,7 @@ describe("MA v2 Tests", async () => {
       chain: instance.chain,
       accountAddress: provider.getAddress(),
       signer: newSessionKey,
-      initCode: provider.account.getInitCode(),
+      initCode: await provider.account.getInitCode(),
       deferredAction: deferredActionDigest,
     });
 

@@ -8,12 +8,11 @@ import {
   parseEther,
   publicActions,
   testActions,
-  toHex,
   type TestActions,
 } from "viem";
 import { installValidationActions } from "@account-kit/smart-contracts/experimental";
 import {
-  // createModularAccountV2Client,
+  createModularAccountV2Client,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
 import { local070Instance } from "~test/instances.js";
@@ -22,7 +21,6 @@ import { accounts } from "~test/constants.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 import { deferralActions } from "./deferralActions.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
-import { createModularAccountV2Client } from "../client/client.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
@@ -62,8 +60,6 @@ describe("MA v2 deferral actions tests", async () => {
 
     // these can be default values or from call arguments
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      entityId: 0,
-      nonceKey: 0n,
       isGlobalValidation: true,
     });
 
@@ -90,7 +86,7 @@ describe("MA v2 deferral actions tests", async () => {
 
     const sig = await provider.account.signTypedData(typedData);
 
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = await provider.buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig,
     });
@@ -101,7 +97,7 @@ describe("MA v2 deferral actions tests", async () => {
       chain: instance.chain,
       accountAddress: provider.getAddress(),
       signer: sessionKey,
-      initCode: provider.account.getInitCode(),
+      initCode: await provider.account.getInitCode(),
       deferredAction: deferredActionDigest,
     });
 

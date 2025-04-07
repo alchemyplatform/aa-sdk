@@ -67,9 +67,10 @@ export type BuildUserOperationWithDeferredActionParams = {
 };
 
 export type EntityIdAndNonceParams = {
-  entityId: number;
-  nonceKey: bigint;
+  entityId?: number;
+  nonceKey?: bigint;
   isGlobalValidation: boolean;
+  isDeferredAction?: boolean;
 };
 
 export type DeferralActions = {
@@ -171,8 +172,6 @@ export const deferralActions: (
       [validationLocator, typedData.message.deadline, typedData.message.call]
     );
 
-    console.log(validationLocator);
-
     const encodedDataLength = size(encodedCallData);
     const encodedData = concatHex([
       toHex(encodedDataLength, { size: 4 }),
@@ -225,9 +224,10 @@ export const deferralActions: (
   };
 
   const getEntityIdAndNonce = async ({
-    entityId,
-    nonceKey,
+    entityId = 1,
+    nonceKey = 0n,
     isGlobalValidation,
+    isDeferredAction = true,
   }: EntityIdAndNonceParams) => {
     if (!client.account) {
       throw new AccountNotFoundError();
@@ -252,7 +252,7 @@ export const deferralActions: (
           nonceKey,
           entityId,
           isGlobalValidation,
-          isDeferredAction: true,
+          isDeferredAction,
         }),
       ],
     });

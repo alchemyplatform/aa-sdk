@@ -139,20 +139,20 @@ export async function createMAv2Base<
     if (deferredAction.slice(2, 4) !== "00") {
       throw new InvalidDeferredActionMode();
     }
-    nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
     // Set these values if the deferred action has not been consumed. We check this with the EP
-    const nextNonceForDeferredActionNonce: bigint =
+    const nextNonceForDeferredAction: bigint =
       (await entryPointContract.read.getNonce([
         accountAddress,
         nonce >> 64n,
       ])) as bigint;
 
     // we only add the deferred action in if the nonce has not been consumed
-    if (nonce === nextNonceForDeferredActionNonce) {
+    if (nonce === nextNonceForDeferredAction) {
+      nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
       useDeferredAction = true;
       deferredActionData = `0x${deferredAction.slice(70)}`;
       hasAssociatedExecHooks = deferredAction[5] === "1";
-    } else if (nonce > nextNonceForDeferredActionNonce) {
+    } else if (nonce > nextNonceForDeferredAction) {
       throw new InvalidDeferredActionNonce();
     }
   }
@@ -189,7 +189,7 @@ export async function createMAv2Base<
     !!(await client.getCode({ address: accountAddress }));
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
-    if (useDeferredAction && deferredAction) {
+    if (useDeferredAction) {
       return nonce;
     }
 
