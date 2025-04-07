@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
+
+### Features
+
+- create workflow for generating previews and publishing docs using fern ([#1500](https://github.com/alchemyplatform/aa-sdk/issues/1500)) ([d9ed6bd](https://github.com/alchemyplatform/aa-sdk/commit/d9ed6bd2ed2b3a0f382819bfac6ea5fb3c142f1c))
+- permissions abstractions ([#1506](https://github.com/alchemyplatform/aa-sdk/issues/1506)) ([e9ced74](https://github.com/alchemyplatform/aa-sdk/commit/e9ced74ddaf501527f53e60ab48e7ad704e759f8)), closes [#1505](https://github.com/alchemyplatform/aa-sdk/issues/1505)
+
 ## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
 
 **Note:** Version bump only for package @aa-sdk/core
