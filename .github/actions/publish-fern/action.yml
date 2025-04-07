@@ -1,0 +1,67 @@
+name: "Publish Fern Documentation"
+description: "Generates and publishes Fern documentation with deployment tracking"
+
+inputs:
+  github-token:
+    description: "GitHub token for creating deployments"
+    required: true
+  fern-token:
+    description: "Fern API token for publishing docs"
+    required: true
+  environment:
+    description: "Deployment environment name (e.g. docs-preview, docs-production)"
+    required: true
+  ref:
+    description: "Git ref to create deployment for"
+    required: true
+  preview:
+    description: "Whether to generate preview or production docs"
+    required: false
+    default: "false"
+
+outputs:
+  url:
+    description: "The URL where the Ferns site was published"
+    value: ${{ steps.generate-docs.outputs.url }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Fern
+      shell: bash
+      run: npm install -g fern-api
+
+    - name: Start deployment
+      uses: bobheadxi/deployments@v1
+      id: start-deploy
+      with:
+        step: start
+        token: ${{ inputs.github-token }}
+        env: ${{ inputs.environment }}
+        ref: ${{ inputs.ref }}
+
+    - name: Generate documentation
+      id: generate-docs
+      shell: bash
+      env:
+        FERN_TOKEN: ${{ inputs.fern-token }}
+      run: |
+        if [[ "${{ inputs.preview }}" == "true" ]]; then
+          OUTPUT=$(fern generate --docs --preview 2>&1) || true
+        else
+          OUTPUT=$(fern generate --docs --log-level debug 2>&1) || true
+        fi
+        echo "$OUTPUT"
+        URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
+        echo "url=$URL" >> $GITHUB_OUTPUT
+
+    - name: Update deployment status
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ inputs.github-token }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.start-deploy.outputs.deployment_id }}
+        env_url: ${{ steps.generate-docs.outputs.url }}
+        env: ${{ inputs.environment }}

@@ -17,9 +17,11 @@ jobs:
         with:
           docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
 
-      - name: Publish Docs
-        env:
-          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        run: |
-          cd docs-site
-          fern generate --docs --log-level debug
+      - name: Generate Fern Docs
+        id: publish
+        uses: ./.github/actions/publish-fern
+        with:
+          github-token: ${{ github.token }}
+          fern-token: ${{ secrets.FERN_TOKEN }}
+          environment: docs-production
+          ref: ${{ github.head_ref }}

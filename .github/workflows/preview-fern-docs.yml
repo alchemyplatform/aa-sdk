@@ -21,25 +21,26 @@ jobs:
         with:
           docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
 
-      - name: Generate preview URL
-        id: generate-docs
-        env:
-          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        run: |
-          cd docs-site
-          OUTPUT=$(fern generate --docs --preview 2>&1) || true
-          echo "$OUTPUT"
-          URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
-          echo "preview_url=$URL" >> $GITHUB_OUTPUT
+      - name: Generate Fern Docs Preview
+        id: preview
+        uses: ./.github/actions/publish-fern
+        with:
+          github-token: ${{ github.token }}
+          fern-token: ${{ secrets.FERN_TOKEN }}
+          environment: docs-preview
+          ref: ${{ github.head_ref }}
+          preview: "true"
 
-      - name: Update or Create Preview Comment
+      - name: Comment Preview URL in PR
         uses: actions/github-script@v7
         with:
           script: |
             const workspace = process.env.GITHUB_WORKSPACE;
-            const { updatePreviewComment } = await import(`${workspace}/docs/scripts/preview-comment.js`);
-            await updatePreviewComment({ 
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
               github,
               context,
-              previewUrl: '${{ steps.generate-docs.outputs.preview_url }}'
+              previewUrl: '${{ steps.preview.outputs.url }}',
+              status: '${{ steps.preview.outcome }}',
             });
