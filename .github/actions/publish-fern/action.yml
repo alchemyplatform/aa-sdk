@@ -32,13 +32,29 @@ runs:
       run: npm install -g fern-api
 
     - name: Start deployment
-      uses: bobheadxi/deployments@v1
+      uses: actions/github-script@v7
       id: start-deploy
       with:
-        step: start
-        token: ${{ inputs.github-token }}
-        env: ${{ inputs.environment }}
-        ref: ${{ inputs.ref }}
+        script: |
+          const deployment = await github.rest.repos.createDeployment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: '${{ inputs.ref }}',
+            environment: '${{ inputs.environment }}',
+            auto_merge: false,
+            required_contexts: [],
+            description: 'Starting Fern documentation deployment'
+          });
+
+          await github.rest.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: deployment.data.id,
+            state: 'in_progress',
+            description: 'Deployment in progress'
+          });
+
+          core.setOutput('deployment_id', deployment.data.id);
 
     - name: Generate documentation
       id: generate-docs
@@ -56,12 +72,18 @@ runs:
         echo "url=$URL" >> $GITHUB_OUTPUT
 
     - name: Update deployment status
-      uses: bobheadxi/deployments@v1
+      uses: actions/github-script@v7
       if: always()
       with:
-        step: finish
-        token: ${{ inputs.github-token }}
-        status: ${{ job.status }}
-        deployment_id: ${{ steps.start-deploy.outputs.deployment_id }}
-        env_url: ${{ steps.generate-docs.outputs.url }}
-        env: ${{ inputs.environment }}
+        script: |
+          const status = '${{ job.status }}' === 'success' ? 'success' : 'failure';
+          const envUrl = '${{ steps.generate-docs.outputs.url }}';
+          
+          await github.rest.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: ${{ steps.start-deploy.outputs.deployment_id }},
+            state: status,
+            environment_url: envUrl,
+            description: `Deployment ${status === 'success' ? 'completed successfully' : 'failed'}`
+          });
