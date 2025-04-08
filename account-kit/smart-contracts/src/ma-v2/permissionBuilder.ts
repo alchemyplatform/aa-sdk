@@ -25,7 +25,6 @@ import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
 import {
   AccountAddressAsTargetError,
-  assertNever,
   DeadlineOverLimitError,
   DuplicateTargetAddressError,
   ExpiredDeadlineError,
@@ -33,6 +32,7 @@ import {
   MultipleNativeTokenTransferError,
   NoFunctionsProvidedError,
   RootPermissionOnlyError,
+  UnsupportedPermissionTypeError,
   ValidationConfigUnsetError,
   ZeroAddressError,
 } from "./permissionBuilderErrors.js";
@@ -697,4 +697,8 @@ export class PermissionBuilder {
       });
     }
   }
+}
+
+export function assertNever(_valid: never): never {
+  throw new UnsupportedPermissionTypeError();
 }

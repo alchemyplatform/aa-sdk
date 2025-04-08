@@ -151,7 +151,3 @@ export class UnsupportedPermissionTypeError extends BaseError {
     super(`Unsupported permission type`);
   }
 }
-
-export function assertNever(_valid: never): never {
-  throw new UnsupportedPermissionTypeError();
-}
