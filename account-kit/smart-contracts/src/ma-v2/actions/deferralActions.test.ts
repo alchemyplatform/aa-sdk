@@ -9,6 +9,7 @@ import {
   type SignerEntity,
 } from "@account-kit/smart-contracts";
 import {
+  buildDeferredActionDigest,
   deferralActions,
   PermissionBuilder,
   PermissionType,
@@ -77,7 +78,7 @@ describe("MA v2 deferral actions tests", async () => {
 
     const sig = await provider.account.signTypedData(typedData);
 
-    const deferredActionDigest = await serverClient.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig,
     });
