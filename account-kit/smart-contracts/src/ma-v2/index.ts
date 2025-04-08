@@ -24,6 +24,7 @@ export type * from "./actions/deferralActions.js";
 export { deferralActions } from "./actions/deferralActions.js";
 export type * from "./permissionBuilder.js";
 export { PermissionBuilder, PermissionType } from "./permissionBuilder.js";
+export * from "./permissionBuilderErrors.js";
 
 export {
   getDefaultAllowlistModuleAddress,
