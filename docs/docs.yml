@@ -269,12 +269,47 @@ navigation:
                 path: docs/account-kit/pages/infra/sponsor-gas.mdx
               - page: Retry user operations
                 path: docs/account-kit/pages/infra/drop-and-replace.mdx
-          # TODO: Third party section - links to docs in resources section
-          # - section: Third party
-          #   contents:
-          #     - page: Bundlers
-          #     - page: Paymasters
-          # TODO: SDK reference
+          - section: Third party
+            contents:
+              - page: Bundlers
+                path: docs/account-kit/pages/third-party/bundlers.mdx
+              - page: Paymasters
+                path: docs/account-kit/pages/third-party/paymasters.mdx
+          - section: SDK Reference
+            path: docs/account-kit/pages/reference/account-kit/infra/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: alchemy
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemy.mdx
+                  - page: alchemyActions
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemyActions.mdx
+                  - page: alchemyEnhancedApiActions
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemyEnhancedApiActions.mdx
+                  - page: alchemyFeeEstimator
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemyFeeEstimator.mdx
+                  - page: alchemyGasAndPaymasterAndDataMiddleware
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemyGasAndPaymasterAndDataMiddleware.mdx
+                  - page: alchemyGasManagerMiddleware
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemyGasManagerMiddleware.mdx
+                  - page: alchemyUserOperationSimulator
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/alchemyUserOperationSimulator.mdx
+                  - page: createAlchemyPublicRpcClient
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/createAlchemyPublicRpcClient.mdx
+                  - page: createAlchemySmartAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/createAlchemySmartAccountClient.mdx
+                  - page: defineAlchemyChain
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/defineAlchemyChain.mdx
+                  - page: getAlchemyPaymasterAddress
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/getAlchemyPaymasterAddress.mdx
+                  - page: getDefaultUserOperationFeeOptions
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/getDefaultUserOperationFeeOptions.mdx
+                  - page: isAlchemySmartAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/isAlchemySmartAccountClient.mdx
+                  - page: isAlchemyTransport
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/isAlchemyTransport.mdx
+                  - page: simulateUserOperationChanges
+                    path: docs/account-kit/pages/reference/account-kit/infra/functions/simulateUserOperationChanges.mdx
 
       - section: Signer
         contents:
