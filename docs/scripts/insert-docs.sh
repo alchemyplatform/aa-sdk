@@ -1,6 +1,6 @@
-# Move images docs/images dir to docs-site/fern/images/account-kit/account-kit so they can referenced by Fern
-mkdir -p fern/images/account-kit/account-kit && \
-mv fern/docs/account-kit/images/account-kit/* fern/images/account-kit/account-kit/
+# Move images docs/images dir to docs-site/fern/images/account-kit so they can referenced by Fern
+mkdir -p fern/images/account-kit && \
+mv fern/docs/account-kit/images/* fern/images/account-kit/
 
 # Takes the contents of docs/docs.yml and inserts its contents into the right places in docs-site/fern/docs.yml
 COMPONENTS_PLACEHOLDER="# Account Kit components are auto-generated here"
