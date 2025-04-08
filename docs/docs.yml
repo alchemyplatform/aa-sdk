@@ -42,7 +42,7 @@ navigation:
             contents:
               - page: Set up
                 path: docs/account-kit/pages/react/getting-started.mdx
-              - page: UI Components
+              - page: Pre-built UI
                 path: docs/account-kit/pages/react/ui-components.mdx
               - page: Custom UI
                 path: docs/account-kit/pages/react/react-hooks.mdx
