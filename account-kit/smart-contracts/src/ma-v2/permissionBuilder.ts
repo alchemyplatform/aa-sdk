@@ -369,8 +369,8 @@ export class PermissionBuilder {
     ).buildPreSignatureDeferredActionDigest({ typedData });
 
     // Encode additional information to build the full pre-signature digest
-    const fullPreSignatureDeferredActionDigest: `0x${string}` = `0x00${
-      this.hasAssociatedExecHooks ? "01" : "00"
+    const fullPreSignatureDeferredActionDigest: `0x${string}` = `0x0${
+      this.hasAssociatedExecHooks ? "1" : "0"
     }${toHex(this.nonce, {
       size: 32,
     }).slice(2)}${preSignatureDigest.slice(2)}`;
