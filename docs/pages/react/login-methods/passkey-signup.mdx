@@ -3,15 +3,11 @@ title: Passkey Signup Authentication
 description: How to implement Passkey Signup authentication in your React app
 ---
 
-import PasskeyEmailWarning from "../../../shared/passkey-email-warning.mdx";
-import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
-import ModalAuthExample from "../shared/modal-auth-example.mdx";
-
 # Passkey Signup Authentication
 
 Passkeys provide a secure, passwordless authentication method that can be used to create wallets for your users without going through email verification flows. You can implement passkey signup with or without an associated email address.
 
-<PasskeyEmailWarning />
+<Markdown src="../../../shared/passkey-email-warning.mdx" />
 
 You can implement Passkey Signup authentication in two ways:
 
@@ -26,11 +22,11 @@ Account Kit provides pre-built UI components that handle the entire Passkey Sign
 
 Before configuring your authentication, first add one of the pre-built components to your application:
 
-<ModalAuthExample />
+<Markdown src="../../shared/modal-auth-example.mdx" />
 
 Or:
 
-<EmbeddedAuthExample />
+<Markdown src="../../shared/embedded-auth-example.mdx" />
 
 ### Step 2: Configure Passkey Signup in UI Components
 
