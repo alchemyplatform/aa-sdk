@@ -5,7 +5,6 @@ description: A guide on integrating Account Kit within a React Native applicatio
 
 import { ExpoIcon } from "../../components/icons/ExpoIcon";
 import { ReactNativeIcon } from "../../components/icons/ReactNativeIcon";
-import { TileButton } from "../../components/TileButton";
 
 # Using within React Native applications
 
@@ -37,17 +36,19 @@ This will create a new Expo project with Account Kit setup and ready to go! You 
 
 Whether you're using Expo or a bare React Native app, follow our guides to get started with using Account Kit in your project.
 
-<div className="flex flex-row gap-4">
-  <TileButton
+<CardGroup cols={2}>
+  <Card
     icon={<ExpoIcon width={24} height={24} />}
     title="Expo (recommended)"
-    description="Get started with using Account Kit in your Expo project"
     href="/react-native/getting-started/getting-started-expo"
-  />
-  <TileButton
+  >
+    Get started with using Account Kit in your Expo project
+  </Card>
+  <Card
     icon={<ReactNativeIcon width={24} height={24} />}
     title="Bare React Native"
-    description="Get started with using Account Kit in your bare React Native project"
     href="/react-native/getting-started/getting-started-rn-bare"
-  />
-</div>
+  >
+    Get started with using Account Kit in your bare React Native project
+  </Card>
+</CardGroup>

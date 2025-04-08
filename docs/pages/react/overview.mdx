@@ -4,10 +4,6 @@ title: React Overview
 description: An overview of using React with Account Kit
 ---
 
-import { TileButton } from "../../components/TileButton";
-import { ClockForwardIcon } from "../../components/icons/ClockForwardIcon";
-import { PointerIcon } from "../../components/icons/PointerIcon";
-
 # React Overview
 
 <img
@@ -20,18 +16,15 @@ We provide both React hooks and UI components so you can focus on building the b
 
 Check out the various guides and tutorials, or hop into the demo to customize the experience and start building.
 
-<div className="flex flex-row gap-4 mt-8">
-  <TileButton
-    icon={<ClockForwardIcon />}
-    title="Quickstart"
-    description="Start building in minutes with UI components and powerful React hooks."
-    href="/react/quickstart"
-  />
-  <TileButton
-    icon={<PointerIcon />}
-    title="Demo"
-    description="Customize React components, export your config, and start building."
+<CardGroup cols={2}>
+  <Card title="Quickstart" href="/react/quickstart" icon="forward">
+    Start building in minutes with UI components and powerful React hooks.
+  </Card>
+  <Card
+    title="Try the Demo"
     href="https://demo.alchemy.com/"
-    target="_blank"
-  />
-</div>
+    icon="bullseye-pointer"
+  >
+    > Customize React components, export your config, and start building.
+  </Card>
+</CardGroup>
