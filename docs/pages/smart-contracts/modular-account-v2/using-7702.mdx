@@ -50,9 +50,12 @@ If you are a developer without existing embedded wallet users, considering [usin
 
 If you have locally managed private keys (e.g. you are a self-custodial wallet), you can use a local account signer to upgrade your EOAs to smart accounts.
 
-:::note
-Note: viem requires that you generate a [Private Key account](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc) to use `signAuthorization`, meaning you cannot use Mnemonic accounts or Hierarchical Deterministic (HD) accounts yet.
-:::
+<Note>
+  Note: viem requires that you generate a [Private Key
+  account](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc)
+  to use `signAuthorization`, meaning you cannot use Mnemonic accounts or
+  Hierarchical Deterministic (HD) accounts yet.
+</Note>
 
 ```ts [types.ts] twoslash
 import { LocalAccountSigner } from "@aa-sdk/core";

@@ -174,8 +174,12 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
    1. Logo: logo images are loaded client side for maximum performance, so you’ll need to add the image file to your project and specify the file path in the config where noted.
    2. Light/Dark mode:
       1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: add `@custom-variant dark (&:is(.dark, .dark *));` to your `global.css` file.
-         :::tip
-         (If you are still using **tailwind v3**, follow [this](https://v3.tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide instead. TLDR: update your tailwindcss config to use `selector` mode for dark and then add the `dark` class to the root of your DOM.)
+         <Tip>
+           (If you are still using **tailwind v3**, follow
+           [this](https://v3.tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually)
+           guide instead. TLDR: update your tailwindcss config to use `selector`
+           mode for dark and then add the `dark` class to the root of your DOM.)
+         </Tip>
    3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6)
 2. If your `tailwind.config.ts` already contains any existing config information, be sure to wrap it with `withAccountKitUi` :
 
