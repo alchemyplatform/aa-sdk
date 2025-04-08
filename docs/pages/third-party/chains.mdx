@@ -1,0 +1,36 @@
+---
+title: 3rd Party Chains
+description: Learn how to use a 3rd Party Chain
+---
+
+# AA only chains or non-Alchemy chains
+
+If you're using a chain that isn't supported by us or we only support Account Abstraction methods for those chains, then you can use `createSmartAccountClient` or one of non-alchemy `create*Client` methods from `@account-kit/smart-contracts`
+with a `split` transport to route your traffic accordingly.
+
+## AA only chains example
+
+For AA only chains, the `alchemyTransport` allows you to specify both the Alchemy Connection object as well as pass in a Node RPC URL, allowing you to split traffic between Alchemy's Bundler and Paymaster RPC and your Node RPC provider.
+
+```ts twoslash
+import { zora, alchemy } from "@account-kit/infra";
+import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const smartAccountClient = createLightAccountAlchemyClient({
+  transport: alchemy({
+    alchemyConnection: {
+      apiKey: "ALCHEMY_API_KEY",
+    },
+    nodeRpcUrl: "ZORA_NODE_RPC_URL",
+  }),
+  chain: zora,
+  signer: LocalAccountSigner.generatePrivateKeySigner(),
+});
+```
+
+## Non-Alchemy chains example
+
+To use non-Alchemy supported chains, you can use the `createSmartAccountClient` method from `@aa-sdk/core` or any of the non-Alchemy `create*Client` methods exported from `@account-kit/smart-contracts` with a `chain` definition for your chain and a `transport` pointing to your RPC provider.
+
+See [`createSmartAccountClient`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) for more information.

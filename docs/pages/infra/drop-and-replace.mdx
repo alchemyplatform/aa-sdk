@@ -1,0 +1,46 @@
+---
+title: Drop and Replace
+description: Learn how to use Drop and Replace to retry failing user operations.
+---
+
+import Snippet from "../../shared/infra/drop-and-replace-description.mdx";
+
+# Drop and replace failing user operations
+
+<Snippet />
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { client } from "./client";
+
+// 1. send a user operation
+const { hash, request } = await client.sendUserOperation({
+  uo: {
+    target: "0xTARGET_ADDRESS",
+    data: "0x",
+    value: 0n,
+  },
+});
+
+try {
+  // 2. wait for it to be mined
+  const txHash = await client.waitForUserOperationTransaction({ hash });
+} catch (e) {
+  // 3. if it fails, resubmit the user operation via drop and replace
+  const { hash: newHash } = await client.dropAndReplaceUserOperation({
+    uoToDrop: request,
+  });
+
+  // 4. wait for the new user operation to be mined
+  await client.waitForUserOperationTransaction({ hash: newHash });
+}
+```
+
+```ts twoslash [client.ts] filename="client.ts"
+// [!include ~/shared/infra/client.ts]
+```
+
+</CodeBlocks>
+
+In the above example, we only try to drop and replace once before failing completely, but you can build more complex retry logic using this combination of `waitForUserOperationTransaction` and `dropAndReplace`.

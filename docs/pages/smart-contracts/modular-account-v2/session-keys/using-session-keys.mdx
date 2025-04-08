@@ -1,0 +1,54 @@
+---
+title: Using Session Keys
+description: Using Session Keys with your Modular Account V2
+---
+
+<Tip>
+  Session Keys are currently an experimental feature in the SDK. We are actively
+  working on simplifying the usage, please note that there could be breaking
+  changes as we improve this feature.
+</Tip>
+
+# Using session keys
+
+Once session keys are added, using them is straightforward - just create another client instance with the session key connected along with properties of the session key (session key entityId and global validation is used). These properties were set during the installValidation call.
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey } from "viem/accounts";
+import { type SmartAccountSigner } from "@aa-sdk/core";
+import { parseEther } from "viem";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const client = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+let sessionKeyEntityId = 1;
+const sessionKeySigner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+
+const sessionKeyClient = await createModularAccountV2Client({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+  signer: sessionKeySigner,
+  accountAddress: client.getAddress(client.account),
+  signerEntity: {
+    entityId: sessionKeyEntityId,
+    isGlobalValidation: true,
+  },
+});
+
+await sessionKeyClient.sendUserOperation({
+  uo: {
+    target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // The address to call in the UO
+    data: "0x", // The calldata to send in the UO
+    value: parseEther("1"), // The value to send in the UO
+  },
+});
+```
+
+Note that you have to pass in `accountAddress` to session key clients. By default, the client uses an account address counterfactual that assumes that the connected signer is the owner.

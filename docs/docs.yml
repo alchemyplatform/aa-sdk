@@ -1,3 +1,8 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/docs-yml.json
+
+instances:
+  - url: https://docs.alchemy.com
+
 experimental:
   mdx-components:
     - docs/account-kit/components
@@ -10,246 +15,246 @@ navigation:
         contents:
           - page: Overview
             path: docs/account-kit/pages/index.mdx
-      #     - link: Demo
-      #       href: https://demo.alchemy.com/
-      #     - section: Concepts
-      #       contents:
-      #         - page: Intro to Account Kit
-      #           path: account-kit/pages/concepts/intro-to-account-kit.mdx
-      #         - page: Smart Contract Account
-      #           path: account-kit/pages/concepts/smart-contract-account.mdx
-      #         - page: Smart Account Client
-      #           path: account-kit/pages/concepts/smart-account-client.mdx
-      #         - page: Bundler Client
-      #           path: account-kit/pages/concepts/bundler-client.mdx
-      #         - page: Smart Account Signer
-      #           path: account-kit/pages/concepts/smart-account-signer.mdx
-      #         - page: Middleware
-      #           path: account-kit/pages/concepts/middleware.mdx
+          - link: Demo
+            href: https://demo.alchemy.com/
+          - section: Concepts
+            contents:
+              - page: Intro to Account Kit
+                path: docs/account-kit/pages/concepts/intro-to-account-kit.mdx
+              - page: Smart Contract Account
+                path: docs/account-kit/pages/concepts/smart-contract-account.mdx
+              - page: Smart Account Client
+                path: docs/account-kit/pages/concepts/smart-account-client.mdx
+              - page: Bundler Client
+                path: docs/account-kit/pages/concepts/bundler-client.mdx
+              - page: Smart Account Signer
+                path: docs/account-kit/pages/concepts/smart-account-signer.mdx
+              - page: Middleware
+                path: docs/account-kit/pages/concepts/middleware.mdx
 
-      # - section: React
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/react/overview.mdx
-      #     - page: Quickstart
-      #       path: account-kit/pages/react/quickstart.mdx
-      #     - section: Authentication
-      #       contents:
-      #         - page: Set up
-      #           path: account-kit/pages/react/getting-started.mdx
-      #         - page: UI Components
-      #           path: account-kit/pages/react/ui-components.mdx
-      #         - page: Custom UI
-      #           path: account-kit/pages/react/react-hooks.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Set up your client
-      #           path: account-kit/pages/react/how-to-set-up-smart-account-client.mdx
-      #         - page: Send user operations
-      #           path: account-kit/pages/react/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/react/sponsor-gas.mdx
-      #         - page: Add passkey
-      #           path: account-kit/pages/react/add-passkey.mdx
-      #         - page: Multi-chain apps
-      #           path: account-kit/pages/react/multi-chain-apps.mdx
-      #     - page: Using EIP-7702
-      #       path: account-kit/pages/react/using-7702.mdx
-      #     - section: Customizing UI components
-      #       contents:
-      #         - page: Theme
-      #           path: account-kit/pages/react/customization/theme.mdx
-      #     - page: Server-side rendering
-      #       path: account-kit/pages/react/ssr.mdx
-      #     # - section: SDK Reference
-      #     #   TODO: Add SDK reference content
+      - section: React
+        contents:
+          - page: Overview
+            path: docs/account-kit/pages/react/overview.mdx
+          - page: Quickstart
+            path: docs/account-kit/pages/react/quickstart.mdx
+          - section: Authentication
+            contents:
+              - page: Set up
+                path: docs/account-kit/pages/react/getting-started.mdx
+              - page: UI Components
+                path: docs/account-kit/pages/react/ui-components.mdx
+              - page: Custom UI
+                path: docs/account-kit/pages/react/react-hooks.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Set up your client
+                path: docs/account-kit/pages/react/how-to-set-up-smart-account-client.mdx
+              - page: Send user operations
+                path: docs/account-kit/pages/react/send-user-operations.mdx
+              - page: Sponsor gas
+                path: docs/account-kit/pages/react/sponsor-gas.mdx
+              - page: Add passkey
+                path: docs/account-kit/pages/react/add-passkey.mdx
+              - page: Multi-chain apps
+                path: docs/account-kit/pages/react/multi-chain-apps.mdx
+          - page: Using EIP-7702
+            path: docs/account-kit/pages/react/using-7702.mdx
+          - section: Customizing UI components
+            contents:
+              - page: Theme
+                path: docs/account-kit/pages/react/customization/theme.mdx
+          - page: Server-side rendering
+            path: docs/account-kit/pages/react/ssr.mdx
+          # - section: SDK Reference
+          #   TODO: Add SDK reference content
 
-      # - section: React Native
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/react-native/overview.mdx
-      #     - page: Getting started with Expo
-      #       path: account-kit/pages/react-native/getting-started/getting-started-expo.mdx
-      #     - page: Getting started with Bare React Native
-      #       path: account-kit/pages/react-native/getting-started/getting-started-rn-bare.mdx
-      #     - page: Signer setup
-      #       path: account-kit/pages/react-native/signer/setup-guide.mdx
-      #     - section: Authentication methods
-      #       contents:
-      #         - page: Email OTP
-      #           path: account-kit/pages/react-native/signer/authenticating-users/authenticating-with-otp.mdx
-      #         - page: Social Login
-      #           path: account-kit/pages/react-native/signer/authenticating-users/authenticating-with-social-auth.mdx
-      #         - page: Email Magic Link
-      #           path: account-kit/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Send user operations
-      #           path: account-kit/pages/react-native/using-smart-accounts/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/react-native/using-smart-accounts/sponsor-gas.mdx
-      #         - page: Retry user operations
-      #           path: account-kit/pages/react-native/using-smart-accounts/retry-user-operations.mdx
+      - section: React Native
+        contents:
+          - page: Overview
+            path: docs/account-kit/pages/react-native/overview.mdx
+          - page: Getting started with Expo
+            path: docs/account-kit/pages/react-native/getting-started/getting-started-expo.mdx
+          - page: Getting started with Bare React Native
+            path: docs/account-kit/pages/react-native/getting-started/getting-started-rn-bare.mdx
+          - page: Signer setup
+            path: docs/account-kit/pages/react-native/signer/setup-guide.mdx
+          - section: Authentication methods
+            contents:
+              - page: Email OTP
+                path: docs/account-kit/pages/react-native/signer/authenticating-users/authenticating-with-otp.mdx
+              - page: Social Login
+                path: docs/account-kit/pages/react-native/signer/authenticating-users/authenticating-with-social-auth.mdx
+              - page: Email Magic Link
+                path: docs/account-kit/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Send user operations
+                path: docs/account-kit/pages/react-native/using-smart-accounts/send-user-operations.mdx
+              - page: Sponsor gas
+                path: docs/account-kit/pages/react-native/using-smart-accounts/sponsor-gas.mdx
+              - page: Retry user operations
+                path: docs/account-kit/pages/react-native/using-smart-accounts/retry-user-operations.mdx
 
-      # - section: Other JS Frameworks
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/core/overview.mdx
-      #     - page: Quickstart
-      #       path: account-kit/pages/core/quickstart.mdx
-      #     - page: Server-side rendering
-      #       path: account-kit/pages/core/ssr.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Send user operations
-      #           path: account-kit/pages/core/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/core/sponsor-gas.mdx
-      #         - page: Add passkey
-      #           path: account-kit/pages/core/add-passkey.mdx
-      #         - page: Multi-chain apps
-      #           path: account-kit/pages/core/multi-chain-apps.mdx
-      #         # TODO: SDK reference
+      - section: Other JS Frameworks
+        contents:
+          - page: Overview
+            path: docs/account-kit/pages/core/overview.mdx
+          - page: Quickstart
+            path: docs/account-kit/pages/core/quickstart.mdx
+          - page: Server-side rendering
+            path: docs/account-kit/pages/core/ssr.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Send user operations
+                path: docs/account-kit/pages/core/send-user-operations.mdx
+              - page: Sponsor gas
+                path: docs/account-kit/pages/core/sponsor-gas.mdx
+              - page: Add passkey
+                path: docs/account-kit/pages/core/add-passkey.mdx
+              - page: Multi-chain apps
+                path: docs/account-kit/pages/core/multi-chain-apps.mdx
+              # TODO: SDK reference
 
-      # - section: Infra
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/infra/overview.mdx
-      #     - page: Quickstart
-      #       path: account-kit/pages/infra/quickstart.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Send user operations
-      #           path: account-kit/pages/infra/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/infra/sponsor-gas.mdx
-      #         - page: Retry user operations
-      #           path: account-kit/pages/infra/drop-and-replace.mdx
-      #     # TODO: Third party section - links to docs in resources section
-      #     # - section: Third party
-      #     #   contents:
-      #     #     - page: Bundlers
-      #     #     - page: Paymasters
-      #     # TODO: SDK reference
+      - section: Infra
+        contents:
+          - page: Overview
+            path: docs/account-kit/pages/infra/overview.mdx
+          - page: Quickstart
+            path: docs/account-kit/pages/infra/quickstart.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Send user operations
+                path: docs/account-kit/pages/infra/send-user-operations.mdx
+              - page: Sponsor gas
+                path: docs/account-kit/pages/infra/sponsor-gas.mdx
+              - page: Retry user operations
+                path: docs/account-kit/pages/infra/drop-and-replace.mdx
+          # TODO: Third party section - links to docs in resources section
+          # - section: Third party
+          #   contents:
+          #     - page: Bundlers
+          #     - page: Paymasters
+          # TODO: SDK reference
 
-      # - section: Signer
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/signer/overview.mdx
-      #     - page: What is a signer?
-      #       path: account-kit/pages/signer/what-is-a-signer.mdx
-      #     - page: Getting started
-      #       path: account-kit/pages/signer/quickstart.mdx
-      #     - section: Using Alchemy Signer
-      #       contents:
-      #         - page: User sessions
-      #           path: account-kit/pages/signer/user-sessions.mdx
-      #         - page: Export private key
-      #           path: account-kit/pages/signer/export-private-key.mdx
-      #         - page: As an EOA
-      #           path: account-kit/pages/signer/as-an-eoa.mdx
-      #     - section: Authentication methods
-      #       contents:
-      #         - page: Email OTP
-      #           path: account-kit/pages/signer/authentication/email-otp.mdx
-      #         - page: Email Magic Link
-      #           path: account-kit/pages/signer/authentication/email-magic-link.mdx
-      #         - page: Social Login
-      #           path: account-kit/pages/signer/authentication/social-login.mdx
-      #         - page: Custom social providers
-      #           path: account-kit/pages/signer/authentication/auth0.mdx
-      #         - page: Passkey signup
-      #           path: account-kit/pages/signer/authentication/passkey-signup.mdx
-      #         - page: Passkey login
-      #           path: account-kit/pages/signer/authentication/passkey-login.mdx
-      #         - page: Add passkey
-      #           path: account-kit/pages/signer/authentication/add-passkey.mdx
-      #     # TODO: Third-party signers links to docs in resources section
-      #     # - section: Third-party signers
-      #     #   contents:
-      # - section: Smart Contracts
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/smart-contracts/overview.mdx
-      #     - page: Choosing a smart account
-      #       path: account-kit/pages/smart-contracts/choosing-a-smart-account.mdx
-      #     - section: Modular Account V2
-      #       contents:
-      #         - page: Overview
-      #           path: account-kit/pages/smart-contracts/modular-account-v2/overview.mdx
-      #         - page: Getting started
-      #           path: account-kit/pages/smart-contracts/modular-account-v2/getting-started.mdx
-      #         - page: Using 7702
-      #           path: account-kit/pages/smart-contracts/modular-account-v2/using-7702.mdx
-      #     - section: Other Accounts
-      #       contents:
-      #         - section: Modular Account V1
-      #           contents:
-      #             - page: Overview
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/index.mdx
-      #             - page: Getting started
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
-      #             - page: Manage multiple owners
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
-      #             - page: Upgrade to MAv1
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
-      #             - section: Multisig
-      #               contents:
-      #                 - page: Introduction
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
-      #                 - page: Getting started
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
-      #                 - page: Technical details
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
-      #             - section: Session keys
-      #               contents:
-      #                 - page: Overview
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
-      #                 - page: Getting started
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
-      #                 - page: Supported permissions
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
-      #             - section: Manage plugins
-      #               contents:
-      #                 - page: Install plugins
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/manage-plugins/install-plugins.mdx
-      #                 - page: Get installed plugins
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/manage-plugins/get-installed-plugins.mdx
-      #         - section: Light Account
-      #           contents:
-      #             - page: Overview
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/index.mdx
-      #             - page: Getting started
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
-      #             - page: Transfer ownership
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
-      #             - page: Manage multiple owners
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
-      #         # TODO: Custom accounts links to docs in resources section
-      #         - page: Gas benchmarks
-      #           path: account-kit/pages/smart-contracts/gas-benchmarks.mdx
-      #         - page: Deployed addresses
-      #           path: account-kit/pages/smart-contracts/deployed-addresses.mdx
-      #         # TODO: SDK reference
-      # - section: Resources
-      #   contents:
-      #     - section: Third Party
-      #       contents:
-      #         - page: Bundlers
-      #           path: account-kit/pages/third-party/bundlers.mdx
-      #         - page: Chains
-      #           path: account-kit/pages/third-party/chains.mdx
-      #         - page: Paymasters
-      #           path: account-kit/pages/third-party/paymasters.mdx
-      #         - page: Signers
-      #           path: account-kit/pages/third-party/signers.mdx
-      #         - page: Smart Contracts
-      #           path: account-kit/pages/third-party/smart-contracts.mdx
-      #     - page: Terms
-      #       path: account-kit/pages/resources/terms.mdx
-      #     - page: Types
-      #       path: account-kit/pages/resources/types.mdx
-      #     - page: FAQs
-      #       path: account-kit/pages/resources/faqs.mdx
-      #     - page: Contact us
-      #       path: account-kit/pages/resources/contact-us.mdx
+      - section: Signer
+        contents:
+          - page: Overview
+            path: docs/account-kit/pages/signer/overview.mdx
+          - page: What is a signer?
+            path: docs/account-kit/pages/signer/what-is-a-signer.mdx
+          - page: Getting started
+            path: docs/account-kit/pages/signer/quickstart.mdx
+          - section: Using Alchemy Signer
+            contents:
+              - page: User sessions
+                path: docs/account-kit/pages/signer/user-sessions.mdx
+              - page: Export private key
+                path: docs/account-kit/pages/signer/export-private-key.mdx
+              - page: As an EOA
+                path: docs/account-kit/pages/signer/as-an-eoa.mdx
+          - section: Authentication methods
+            contents:
+              - page: Email OTP
+                path: docs/account-kit/pages/signer/authentication/email-otp.mdx
+              - page: Email Magic Link
+                path: docs/account-kit/pages/signer/authentication/email-magic-link.mdx
+              - page: Social Login
+                path: docs/account-kit/pages/signer/authentication/social-login.mdx
+              - page: Custom social providers
+                path: docs/account-kit/pages/signer/authentication/auth0.mdx
+              - page: Passkey signup
+                path: docs/account-kit/pages/signer/authentication/passkey-signup.mdx
+              - page: Passkey login
+                path: docs/account-kit/pages/signer/authentication/passkey-login.mdx
+              - page: Add passkey
+                path: docs/account-kit/pages/signer/authentication/add-passkey.mdx
+          # TODO: Third-party signers links to docs in resources section
+          # - section: Third-party signers
+          #   contents:
+      - section: Smart Contracts
+        contents:
+          - page: Overview
+            path: docs/account-kit/pages/smart-contracts/overview.mdx
+          - page: Choosing a smart account
+            path: docs/account-kit/pages/smart-contracts/choosing-a-smart-account.mdx
+          - section: Modular Account V2
+            contents:
+              - page: Overview
+                path: docs/account-kit/pages/smart-contracts/modular-account-v2/overview.mdx
+              - page: Getting started
+                path: docs/account-kit/pages/smart-contracts/modular-account-v2/getting-started.mdx
+              - page: Using 7702
+                path: docs/account-kit/pages/smart-contracts/modular-account-v2/using-7702.mdx
+          - section: Other Accounts
+            contents:
+              - section: Modular Account V1
+                contents:
+                  - page: Overview
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/index.mdx
+                  - page: Getting started
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
+                  - page: Manage multiple owners
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
+                  - page: Upgrade to MAv1
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
+                  - section: Multisig
+                    contents:
+                      - page: Introduction
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
+                      - page: Getting started
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
+                      - page: Technical details
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
+                  - section: Session keys
+                    contents:
+                      - page: Overview
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
+                      - page: Getting started
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
+                      - page: Supported permissions
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
+                  - section: Manage plugins
+                    contents:
+                      - page: Install plugins
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/manage-plugins/install-plugins.mdx
+                      - page: Get installed plugins
+                        path: docs/account-kit/pages/smart-contracts/other-accounts/modular-account/manage-plugins/get-installed-plugins.mdx
+              - section: Light Account
+                contents:
+                  - page: Overview
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/light-account/index.mdx
+                  - page: Getting started
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
+                  - page: Transfer ownership
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
+                  - page: Manage multiple owners
+                    path: docs/account-kit/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
+              # TODO: Custom accounts links to docs in resources section
+              - page: Gas benchmarks
+                path: docs/account-kit/pages/smart-contracts/gas-benchmarks.mdx
+              - page: Deployed addresses
+                path: docs/account-kit/pages/smart-contracts/deployed-addresses.mdx
+              # TODO: SDK reference
+      - section: Resources
+        contents:
+          - section: Third Party
+            contents:
+              - page: Bundlers
+                path: docs/account-kit/pages/third-party/bundlers.mdx
+              - page: Chains
+                path: docs/account-kit/pages/third-party/chains.mdx
+              - page: Paymasters
+                path: docs/account-kit/pages/third-party/paymasters.mdx
+              - page: Signers
+                path: docs/account-kit/pages/third-party/signers.mdx
+              - page: Smart Contracts
+                path: docs/account-kit/pages/third-party/smart-contracts.mdx
+          - page: Terms
+            path: docs/account-kit/pages/resources/terms.mdx
+          - page: Types
+            path: docs/account-kit/pages/resources/types.mdx
+          - page: FAQs
+            path: docs/account-kit/pages/resources/faqs.mdx
+          - page: Contact us
+            path: docs/account-kit/pages/resources/contact-us.mdx

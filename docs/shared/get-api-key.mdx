@@ -1,0 +1,54 @@
+1.  Get your **API key** by creating a new app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
+    <Warning>
+      Make sure **Ethereum** is enabled for your app under the Networks tab
+    </Warning>
+2.  Create a **new account config** in your [Account Kit Dashboard](https://dashboard.alchemy.com/accounts)
+
+        1.  Apply the config to your app from step 1
+
+            <img
+              src="/images/account-kit/getting-started/apply-config-to-app.png"
+              alt="apply your the config to the app from the first step"
+              style={{ width: "50%" }}
+            />
+
+        2.  Enable authentication methods you want to support.
+
+            <br />
+            <u>**Email auth**</u>
+
+            If you want to use email auth, toggle on email.
+
+            - For testing, use [http://localhost:3000](http://localhost:3000/)
+              as the **Redirect URL** (Note **http** not https)
+            - The user will be redirected to the **Redirect URL** if you use the magic link email flow
+            - Optionally stylize ✨ the email with your brand color and logo!
+
+            <img
+              src="/images/account-kit/getting-started/email-auth-setup.png"
+              alt="configure email auth"
+              style={{ width: "50%" }}
+            />
+
+            <br />
+            <u>**Social auth**</u>
+
+            If you want to enable social login, toggle which auth providers
+            you want to support.
+
+            - For testing, add [http://localhost:3000](http://localhost:3000/) as a **whitelisted origin**
+            - Add the link that your dapp will be running on to the **whitelisted origin** list
+            - Optionally enter your own OAuth credentials or use our defaults
+
+              <img
+                src="/images/account-kit/getting-started/social-auth-setup.png"
+                alt="configure social auth"
+                style={{ width: "50%" }}
+              />
+
+3.  Create the config and copy the **API Key**
+    <img
+      src="/images/account-kit/getting-started/get-api-key.png"
+      alt="how to copy the api key"
+      style={{ width: "50%" }}
+    />
