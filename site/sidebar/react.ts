@@ -12,6 +12,7 @@ export const reactGuides: SidebarItem[] = [
   {
     text: "Login UI",
     items: [
+      { text: "Set up", link: "/react/getting-started" },
       { text: "Pre-built UI", link: "/react/ui-components" },
       { text: "Custom UI", link: "/react/react-hooks" },
     ],
@@ -19,7 +20,6 @@ export const reactGuides: SidebarItem[] = [
   {
     text: "Login methods",
     items: [
-      { text: "Set up", link: "/react/getting-started" },
       { text: "Email OTP", link: "/react/login-methods/email-otp" },
       {
         text: "Email magic-link",
