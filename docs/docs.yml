@@ -136,7 +136,7 @@ navigation:
               - section: Functions
                 contents:
                   - page: Hydrate
-                    path: docs/account-kit/pages/reference/account-kit/react/functions/hydrate.mdx
+                    path: docs/account-kit/pages/reference/account-kit/react/functions/Hydrate.mdx
                   - page: createConfig
                     path: docs/account-kit/pages/reference/account-kit/react/functions/createConfig.mdx
               - section: Classes
