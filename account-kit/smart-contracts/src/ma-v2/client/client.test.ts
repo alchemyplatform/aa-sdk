@@ -613,7 +613,7 @@ describe("MA v2 Tests", async () => {
 
     // version 00, preExecHooks 00, nonce, deferredActionDigest
     const fullDeferredAction = concatHex([
-      "0x0000",
+      "0x00",
       toHex(nonce, { size: 32 }),
       deferredActionDigest,
     ]);

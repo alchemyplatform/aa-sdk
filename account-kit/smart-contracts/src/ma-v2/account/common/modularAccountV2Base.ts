@@ -4,14 +4,13 @@ import {
   InvalidEntityIdError,
   InvalidNonceKeyError,
   InvalidDeferredActionNonce,
-  InvalidDeferredActionMode,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
 } from "@aa-sdk/core";
-import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
   type Hex,
   type Address,
@@ -136,9 +135,9 @@ export async function createMAv2Base<
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
-    if (deferredAction.slice(2, 4) !== "00") {
-      throw new InvalidDeferredActionMode();
-    }
+    ({ nonce, deferredActionData, hasAssociatedExecHooks } =
+      parseDeferredAction(deferredAction));
+
     // Set these values if the deferred action has not been consumed. We check this with the EP
     const nextNonceForDeferredAction: bigint =
       (await entryPointContract.read.getNonce([
@@ -148,10 +147,7 @@ export async function createMAv2Base<
 
     // we only add the deferred action in if the nonce has not been consumed
     if (nonce === nextNonceForDeferredAction) {
-      nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
       useDeferredAction = true;
-      deferredActionData = `0x${deferredAction.slice(70)}`;
-      hasAssociatedExecHooks = deferredAction[5] === "1";
     } else if (nonce > nextNonceForDeferredAction) {
       throw new InvalidDeferredActionNonce();
     }
