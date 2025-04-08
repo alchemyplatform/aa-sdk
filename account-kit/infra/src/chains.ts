@@ -21,8 +21,6 @@ import {
   arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
-  sonic as vsonic,
-  sonicTestnet as vsonict,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -237,20 +235,6 @@ export const zoraSepolia: Chain = {
   ...vzoras,
   rpcUrls: {
     ...vzoras.rpcUrls,
-  },
-};
-
-export const sonic: Chain = {
-  ...vsonic,
-  rpcUrls: {
-    ...vsonic.rpcUrls,
-  },
-};
-
-export const sonicTestnet: Chain = {
-  ...vsonict,
-  rpcUrls: {
-    ...vsonict.rpcUrls,
   },
 };
 
