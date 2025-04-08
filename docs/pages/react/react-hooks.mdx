@@ -9,9 +9,11 @@ import AuthenticationMethods from "./shared/authentication-methods.mdx";
 
 While Account Kit provides pre-built UI components for authentication, you may want to create your own custom UI to match your application's design system. This section covers how to implement custom authentication flows using Account Kit hooks.
 
-:::tip
-Tailwind CSS is a required dependency for using Alchemy Account Kit UI components. However, Alchemy Account Kit hooks function independently and do not require Tailwind.
-:::
+<Tip>
+  Tailwind CSS is a required dependency for using Alchemy Account Kit UI
+  components. However, Alchemy Account Kit hooks function independently and do
+  not require Tailwind.
+</Tip>
 
 ## Available Authentication Methods
 
@@ -33,9 +35,12 @@ The following section provides an overview of the main hooks you'll use when imp
 
 The `useAuthenticate` hook is the foundation for all authentication methods. It provides the `authenticate` function that handles the authentication process.
 
-:::tip
-If MFA is required (e.g., the user has added an authenticator app), the authenticate function will throw an MfaRequiredError or request a multiFactorCode. See the MFA docs for a detailed example of handling TOTP codes.
-:::
+<Tip>
+  If MFA is required (e.g., the user has added an authenticator app), the
+  authenticate function will throw an MfaRequiredError or request a
+  multiFactorCode. See the MFA docs for a detailed example of handling TOTP
+  codes.
+</Tip>
 
 ```tsx twoslash
 import React from "react";
