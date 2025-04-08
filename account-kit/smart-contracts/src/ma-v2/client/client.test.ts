@@ -704,9 +704,6 @@ describe("MA v2 Tests", async () => {
       randomWallet
     );
 
-    // Test variables
-    const isGlobalValidation = true;
-
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: true,
     });
