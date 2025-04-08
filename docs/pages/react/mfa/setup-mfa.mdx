@@ -1,0 +1,282 @@
+---
+title: Setting Up Multi-Factor Authentication
+description: How to set up additional security with authenticator apps in your React application
+---
+
+# Setting Up Multi-Factor Authentication (Authenticator Apps)
+
+With Account Kit, multi-factor authentication (MFA) uses authenticator apps—like Google Authenticator, Authy, or Microsoft Authenticator—to generate a Time-based One-Time Password (TOTP).
+
+By requiring both a user's primary login (e.g., email OTP, magic link, or social login) and a TOTP from their authenticator app, your application gains an extra layer of security.
+
+<Tip>
+  Multi-factor authentication requires a primary authentication method (Email
+  OTP, Email Magic Link, or Social Login) to be already set up. See the [React
+  Quickstart](/wallets/react/quickstart) guide to set up your primary
+  authentication method first.
+</Tip>
+
+## Prerequisites
+
+Before implementing MFA, you need to have:
+
+1. **Set up primary authentication** - MFA requires a primary authentication method to be already set up. Follow the [React Quickstart](/wallets/react/quickstart) guide to configure email (OTP or magic link) or social login.
+2. **Working authentication flow** - Ensure users can successfully sign in with your primary authentication method.
+
+## Implementation
+
+To implement authenticator app verification in your React application, you'll use the `useMFA` hook from Account Kit.
+
+### Step 1: Checking if Multi-Factor Authentication is Available
+
+First, check if the user is logged in and able to edit their MFA settings:
+
+```tsx twoslash
+import React from "react";
+import { useMFA } from "@account-kit/react";
+
+// Inside your component
+const { isReady } = useMFA();
+
+// Only show MFA setup options if available
+if (isReady) {
+  // Render MFA setup UI
+} else {
+  // User needs to authenticate first
+}
+```
+
+### Step 2: Setting Up an Authenticator App
+
+In this step, we receive a QR code URL from the backend and display it to the user. This URL contains a TOTP seed and necessary metadata. When displayed as a QR code, it can be scanned by most authenticator apps (Google Authenticator, Authy, 1Password, etc.) to set up 6-digit time-based codes. The backend also provides a unique multiFactorId which we'll need to store for the verification step.
+
+```tsx twoslash
+import React, { useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { useMFA } from "@account-kit/react";
+
+function AuthenticatorSetupComponent() {
+  const { addMFA } = useMFA();
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [factorId, setFactorId] = useState("");
+
+  const handleSetupAuthenticator = () => {
+    // Use the mutate method from the mutation result
+    addMFA.mutate(
+      {
+        multiFactorType: "totp", // Technical name for authenticator apps
+      },
+      {
+        onSuccess: (result) => {
+          // Store the QR code URL and factor ID
+          setQrCodeUrl(result.multiFactorTotpUrl);
+          // Store the factor ID which will be needed for verification in the next step
+          // This ID uniquely identifies the MFA factor being configured
+          setFactorId(result.multiFactorId);
+        },
+        onError: (error) => {
+          console.error("Failed to set up authenticator app:", error);
+        },
+      }
+    );
+  };
+
+  // You can also check loading state directly
+  const isLoading = addMFA.isPending;
+
+  return (
+    <div>
+      <button onClick={handleSetupAuthenticator} disabled={isLoading}>
+        {isLoading ? "Setting up..." : "Set Up Authenticator App"}
+      </button>
+
+      {qrCodeUrl && (
+        <div className="qr-container">
+          <h3>Scan this QR code with your authenticator app</h3>
+          <QRCodeSVG value={qrCodeUrl} size={200} />
+          <p>
+            After scanning, enter the 6-digit code from your authenticator app
+            to complete setup.
+          </p>
+        </div>
+      )}
+
+      {/* Display errors if they occur */}
+      {addMFA.isError && (
+        <div className="error">Error: {addMFA.error.message}</div>
+      )}
+    </div>
+  );
+}
+```
+
+This QR code contains the information needed for apps like Google Authenticator or Authy. Once scanned, the app will generate 6-digit codes that users can use as their second verification step.
+
+### Step 3: Confirming the Authenticator App Setup
+
+After the user scans the QR code, they need to prove it worked by entering a code:
+
+```tsx twoslash
+import React, { useState } from "react";
+import { useMFA } from "@account-kit/react";
+
+function VerifyAuthenticatorComponent({
+  multiFactorId,
+}: {
+  multiFactorId: string;
+}) {
+  const { verifyMFA } = useMFA();
+  const [code, setCode] = useState("");
+
+  const handleVerifyAuthenticator = () => {
+    verifyMFA.mutate(
+      {
+        multiFactorId,
+        multiFactorCode: code, // The TOTP code from the user's authenticator app
+      },
+      {
+        onSuccess: () => {
+          // Authenticator setup successful
+          console.log("MFA setup complete!");
+        },
+        onError: (error) => {
+          // Handle error
+          console.error("Verification failed:", error);
+        },
+      }
+    );
+  };
+
+  // For async/await pattern, you can use mutateAsync
+  const handleVerifyAsync = async () => {
+    try {
+      const result = await verifyMFA.mutateAsync({
+        multiFactorId,
+        multiFactorCode: code,
+      });
+      console.log("MFA setup complete!", result);
+    } catch (error) {
+      console.error("Verification failed:", error);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        placeholder="Enter 6-digit code"
+        maxLength={6}
+      />
+      <button
+        onClick={handleVerifyAuthenticator}
+        disabled={verifyMFA.isPending}
+      >
+        {verifyMFA.isPending ? "Verifying..." : "Verify Code"}
+      </button>
+
+      {verifyMFA.isError && (
+        <div className="error">Invalid code. Please try again.</div>
+      )}
+    </div>
+  );
+}
+```
+
+### Step 4: Managing Authenticator Apps
+
+You can retrieve and remove authenticator app–based MFA from a user's account by using the `useMFA` hook. Each verification method (also called a "factor") is identified by a unique `multiFactorId`. For example, a TOTP-based authenticator app is one factor.
+
+```tsx twoslash
+import React, { useEffect, useState } from "react";
+import { useMFA } from "@account-kit/react";
+import type { MfaFactor } from "@account-kit/signer";
+
+function ManageMfaComponent() {
+  const { getMFAFactors, removeMFA } = useMFA();
+  const [factors, setFactors] = useState<MfaFactor[]>([]);
+
+  // Fetch all MFA verification methods (factors) for the current user
+  useEffect(() => {
+    // Only fetch when component mounts and we're ready
+    getMFAFactors.mutate(undefined, {
+      onSuccess: (result) => {
+        // factors.multiFactors is an array of verification methods
+        setFactors(result.multiFactors);
+      },
+    });
+  }, [getMFAFactors]);
+
+  // Remove a TOTP authenticator app by its multiFactorId
+  const handleRemoveAuthenticator = (multiFactorId: string) => {
+    removeMFA.mutate(
+      { multiFactorIds: [multiFactorId] },
+      {
+        onSuccess: () => {
+          console.log("Authenticator removed successfully!");
+          // Update local state to reflect the removal
+          setFactors(factors.filter((f) => f.multiFactorId !== multiFactorId));
+        },
+      }
+    );
+  };
+
+  // Loading states are available directly from the mutation objects
+  if (getMFAFactors.isPending) return <div>Loading MFA settings...</div>;
+
+  return (
+    <div>
+      <h2>Your Authentication Methods</h2>
+
+      {factors.length === 0 ? (
+        <p>No authenticator apps configured.</p>
+      ) : (
+        <ul>
+          {factors.map((factor) => (
+            <li key={factor.multiFactorId}>
+              {factor.multiFactorType === "totp"
+                ? "Authenticator App"
+                : factor.multiFactorType}
+              <button
+                onClick={() => handleRemoveAuthenticator(factor.multiFactorId)}
+                disabled={removeMFA.isPending}
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {getMFAFactors.isError && (
+        <div className="error">
+          Error loading MFA settings: {getMFAFactors.error.message}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Next Steps
+
+After setting up an authenticator app, users will need to provide both their primary authentication method and a 6-digit code when signing in:
+
+### Using Pre-built UI Components
+
+If you're using the [pre-built UI components](/wallets/react/ui-components), the MFA verification process is handled automatically:
+
+- The authentication flow will detect when a user has MFA enabled
+- Users will be prompted for their authenticator app code after providing their primary credentials
+- No additional code is required from you
+
+### Using Custom UI with Hooks
+
+If you're implementing [custom UI with hooks](/wallets/react/react-hooks), you'll need to update your authentication code to handle the MFA verification step:
+
+- [Email OTP with Multi-Factor Authentication](/wallets/react/mfa/email-otp) - See how to implement the two-step verification
+- [Email Magic Link with Multi-Factor Authentication](/wallets/react/mfa/email-magic-link) - Learn how to handle magic links with MFA
+- [Social Login with Multi-Factor Authentication](/wallets/react/mfa/social-login) - Social login with MFA is handled in the OAuth callback
+
+For custom UI implementations, make sure your authentication logic checks for the MFA requirement and provides UI for users to enter their authenticator app code.

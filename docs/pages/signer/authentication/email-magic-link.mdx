@@ -1,0 +1,53 @@
+---
+title: Email Magic Link Authentication
+description: Authenticate a user using an email magic link
+---
+
+# Email Magic Link Authentication
+
+Email magic link authentication allows you to log in and sign up users using an email address. Your users will receive a link in their inbox which will redirect them to your site (configured in the dashboard) to complete login.
+
+<Tip>
+We recommend using the OTP email flow instead, as it is more reliable across different browser environments. OTP flows have also been shown to have up to a 3x higher conversion rate and a 10-second faster flow compared to magic link.
+
+For setting up the OTP flow, see [Email OTP Authentication](/wallets/signer/authentication/email-otp).
+
+</Tip>
+
+<Tip>
+  For setting up an account config, see the [Signer
+  Quickstart](/wallets/signer/quickstart).
+</Tip>
+
+## Authenticate a user
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+// send the email
+await signer.authenticate({
+  type: "email",
+  emailMode: "magicLink",
+  email: "user@mail.com",
+});
+
+// later once the user has clicked the link
+const url = new URL(window.location.href);
+const bundle = url.searchParams.get("bundle");
+if (!bundle) {
+  throw new Error("No bundle found in URL");
+}
+
+await signer.authenticate({
+  type: "email",
+  bundle,
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>

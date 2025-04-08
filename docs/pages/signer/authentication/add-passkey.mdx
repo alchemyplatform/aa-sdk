@@ -1,0 +1,28 @@
+---
+title: Add Passkey
+description: Learn how to add a passkey to a user account
+---
+
+# Add Passkey
+
+If your user has already authenticated with an email or passkey, you can also add a new passkey to their account. This is
+useful in the case that you want to give your users a more convenient method of logging in or if they want to add more devices
+to their account.
+
+## Add a passkey
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+// NOTE: this assumes you have already authenticated the user
+// you can further customize the Credential Creation Options here
+await signer.addPasskey({});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>
