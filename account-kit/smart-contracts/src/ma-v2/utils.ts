@@ -278,7 +278,8 @@ export const parseDeferredAction = (
     nonce: BigInt(`0x${deferredAction.slice(4, 68)}`),
     deferredActionData: `0x${deferredAction.slice(68)}`,
     hasAssociatedExecHooks: deferredAction[3] === "1",
-  };}
+  };
+};
 export type BuildDeferredActionDigestParams = {
   fullPreSignatureDeferredActionDigest: Hex;
   sig: Hex;
