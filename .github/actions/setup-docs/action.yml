@@ -27,7 +27,3 @@ runs:
       run: |
         cd docs-site
         fern/docs/account-kit/scripts/insert-docs.sh
-
-    - name: Install Fern CLI
-      shell: bash
-      run: npm install -g fern-api
