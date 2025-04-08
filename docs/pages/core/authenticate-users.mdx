@@ -15,7 +15,7 @@ Before you can authenticate a user, you'll need to create a static config object
 
 Email authentication is a two step process. First, a user inputs their email and initiates the login flow. The user is sent an email which contains a link that redirects them back to your site with an auth credential called a `bundle`. You then complete the authentication with the bundle.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { config } from "./config";
@@ -48,13 +48,13 @@ await signer.authenticate({ type: "email", bundle });
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Social Login
 
 You can allow users to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { config } from "./config";
@@ -89,7 +89,7 @@ await signer.authenticate({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Passkey auth with email backup
 
@@ -99,7 +99,7 @@ This approach will allow you to log in or sign up users using a passkey as the p
 It's important that you verify this email to be correct first! Otherwise, if a user loses their passkey, they will not be able to recover their account.
 :::
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { config } from "./config.js";
@@ -123,13 +123,13 @@ await signer.authenticate({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Existing passkey
 
 If your user already has a passkey, then you can authenticate with that directly. This is useful if you want to use email as a signup mechanism, but provide easier login methods for your users via passkeys.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { config } from "./config";
@@ -153,4 +153,4 @@ await signer.authenticate({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>

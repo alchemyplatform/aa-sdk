@@ -11,7 +11,7 @@ User operations can be sent either as single user operations or as a batch of us
 
 ## Single User Operation
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { client } from "./client";
@@ -29,13 +29,13 @@ const { hash } = await client.sendUserOperation({
 // [!include ~/shared/infra/client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Batch User Operations
 
 To batch user operations, you can just pass an array of user operations to the `sendUserOperation` method.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { client } from "./client";
@@ -60,4 +60,4 @@ const { hash } = await client.sendUserOperation({
 // [!include ~/shared/infra/client.ts]
 ```
 
-:::
+</CodeBlocks>

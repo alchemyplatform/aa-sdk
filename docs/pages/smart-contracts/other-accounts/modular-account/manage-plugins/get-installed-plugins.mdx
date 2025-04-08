@@ -27,7 +27,7 @@ Then, you can use the `getInstalledPlugins` method of the `accountLoupeActions` 
 When using `createModularAccountAlchemyClient` in `@account-kit/smart-contracts`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
 :::
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { modularAccountClient } from "./client";
@@ -60,6 +60,6 @@ console.log(JSON.stringify(metadata, null, 2));
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 By checking if a certain plugin address exists in the list of installed plugin addresses of a Modular Account, you can check whether a particular plugin is installed or not on a Modular Account.

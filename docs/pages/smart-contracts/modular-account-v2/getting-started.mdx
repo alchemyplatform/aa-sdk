@@ -18,7 +18,7 @@ It is easy to get started with Modular Account v2! Below, you will create a new 
 
 First, install the `@account-kit/smart-contracts` package.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn add @account-kit/smart-contracts
@@ -30,7 +30,7 @@ npm install @account-kit/smart-contracts
 npm install @account-kit/infra
 ```
 
-:::
+</CodeBlocks>
 
 :::tip[Address calculation]
 For Modular Account V2, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/modular-account/blob/v2.0.x/src/factory/AccountFactory.sol#L98-L104). You will get the same smart account address each time you supply the same `owner`, the signer(s) used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).

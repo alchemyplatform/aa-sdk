@@ -24,7 +24,7 @@ In this guide, we'll walk you through how to use this package to send a user ope
 To get started, you'll need to install the required packages. We also install the `infra` package because it contains the necessary `Chain` definitions that makes it easier to setup
 your a Bundler client.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn add @account-kit/core @account-kit/infra
@@ -34,7 +34,7 @@ yarn add @account-kit/core @account-kit/infra
 npm i -s @account-kit/core @account-kit/infra
 ```
 
-:::
+</CodeBlocks>
 
 ## Get your API keys
 
@@ -58,7 +58,7 @@ email based auth as an example you would:
 2. call the `authenticate` method on the signer
 3. handle the redirect from the user's email and pass the bundle to the signer to complete login
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { config } from "./config";
@@ -90,13 +90,13 @@ await signer.authenticate({ type: "email", bundle });
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Send a user operation
 
 Now that you have your config, you can send user operations by leveraging the underlying smart account client.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSmartAccountClient } from "@account-kit/core";
@@ -137,7 +137,7 @@ await client.sendUserOperation({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 The key thing here is the `watchSmartAccountClient` method which allows you to subscribe to the state of signer and underlying account to give you a stable instance of the Smart Account Client. How you store the `clientState` variable will depend largely on
 your framework, but the above example should give you a good starting point.

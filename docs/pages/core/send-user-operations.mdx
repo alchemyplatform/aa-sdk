@@ -17,7 +17,7 @@ Once your users have been [authenticated](/core/authenticate-users), you can sta
   owners.
 </Tip>
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSmartAccountClient } from "@account-kit/core";
@@ -60,13 +60,13 @@ await client.sendUserOperation({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Batch user operation
 
 It's also possible to send user operations in batch using the same approach!
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSmartAccountClient } from "@account-kit/core";
@@ -116,4 +116,4 @@ await client.sendUserOperation({
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>

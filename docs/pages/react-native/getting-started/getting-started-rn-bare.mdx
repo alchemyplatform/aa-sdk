@@ -24,7 +24,7 @@ Once we've got our React Native project setup and running, we need to setup a fe
 
 ### Install shim dependencies
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npm]
 npm install --save node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
@@ -34,7 +34,7 @@ npm install --save node-libs-react-native crypto-browserify stream-browserify re
 yarn add node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
-:::
+</CodeBlocks>
 
 ### Register shim modules in Metro
 
@@ -98,7 +98,7 @@ import "react-native-get-random-values";
 
 That's it! Now you can install the packages you want from Account Kit and start building your React Native Account Abstraction app.
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npm]
 npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
@@ -108,7 +108,7 @@ npm install -s @account-kit/react-native @account-kit/smart-contracts @account-k
 yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
-:::
+</CodeBlocks>
 
 <Tip>
 The `@account-kit/react-native` package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
@@ -124,7 +124,7 @@ The `@account-kit/react-native` package is an ESM module. As such, you might hav
 
 To ensure the Signer package works correctly, you'll need to add the following dependencies to your project:
 
-:::code-group
+<CodeBlocks>
 
 ```bash [npm]
 npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
@@ -134,7 +134,7 @@ npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
-:::
+</CodeBlocks>
 
 ## Build and run your project
 

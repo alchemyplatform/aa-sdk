@@ -76,7 +76,7 @@ Once your signer is configured and you have a `SmartAccountSigner` instance, you
   - If it is not yet delegated, it will request an authorization signature and include that in the submitted user operation.
 - The Alchemy ERC-4337 bundler will automatically include the EIP-7702 authorization with the first user op that your account performs.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
@@ -113,7 +113,7 @@ const privateKey = "0x...";
 export const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 ```
 
-:::
+</CodeBlocks>
 
 ## When can I use it?
 

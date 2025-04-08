@@ -21,7 +21,7 @@ There a number of ways you can call this method using Account Kit.
 
 ### 1. Using `transferOwnership` client action
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { lightAccountClient } from "./client";
@@ -52,13 +52,13 @@ const transferredClient = await createLightAccountClient({
 // [!include ~/shared/smart-contracts/light-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you will see below, however, it is a bit verbose:
 
 ### 2. Using `sendUserOperation`
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { encodeFunctionData } from "viem";
@@ -81,6 +81,6 @@ await lightAccountClient.waitForUserOperationTransaction(result);
 // [!include ~/shared/smart-contracts/light-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 See the [`LightAccount`](/smart-contracts/other-accounts/light-account/) docs for more details about our `LightAccount implementation.

@@ -36,7 +36,7 @@ If you are using backend agent controlled session keys, then the agent should ge
 
 The base `modularAccountClient` and `AlchemymodularAccountClient`, only include base functionality for sending user operations. If you are using a `ModularAccount`, then you will want to extend your client with the various decorators exported by `@account-kit/smart-contracts`.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { modularAccountClient } from "./client";
@@ -49,13 +49,13 @@ const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Check if the Session Key Plugin is installed
 
 Before you can start using session keys, you need to check whether the user’s account has the session key plugin installed. You can perform this check using the account loupe decorator, which lets you inspect the state of installed plugins on a Modular Account.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { modularAccountClient } from "./client.js";
@@ -83,13 +83,13 @@ const isPluginInstalled = await modularAccountClient
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Install the Session Key Plugin
 
 If the Session Key Plugin is not yet installed, you need to install it before it can be used. To simplify the workflow, it is also possible to batch the plugin installation along with creating session keys and performing other actions, which combines all of these steps into one user operation.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { modularAccountClient } from "./client";
@@ -141,7 +141,7 @@ if (!isPluginInstalled) {
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Construct the initial set of permissions
 
@@ -151,7 +151,7 @@ See the [Supported Permissions](/smart-contracts/other-accounts/modular-account/
 
 Let's use the permission builder to build a set of permissions that sets a spend limit:
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { modularAccountClient } from "./client";
@@ -181,7 +181,7 @@ const result = await extendedClient.updateKeyPermissions({
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Managing Session Keys
 
@@ -196,7 +196,7 @@ The Session Key Plugin allows you to:
 
 Session keys can be added either during installation, or using the `addSessionKey` function.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [add-session-key.ts] twoslash
 import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
@@ -215,12 +215,13 @@ const result = await client.addSessionKey({
 // [!include ~/shared/smart-contracts/session-keys/base-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Remove a Session Key
 
 Session keys can be removed using the `removeSessionKey` function.
-:::code-group
+
+<CodeBlocks>
 
 ```ts [remove-session-key.ts] twoslash
 import { client } from "./base-client";
@@ -234,12 +235,13 @@ const result = await client.removeSessionKey({
 // [!include ~/shared/smart-contracts/session-keys/base-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Update a Key's permissions
 
 Session key permissions can be edited after creation using the `updateKeyPermissions` function. Note that you should configure initial permissions when the key is added, and not rely on a second user operation to set the permissions.
-:::code-group
+
+<CodeBlocks>
 
 ```ts [update-session-key.ts] twoslash
 import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
@@ -262,12 +264,13 @@ const result = await client.updateSessionKeyPermissions({
 // [!include ~/shared/smart-contracts/session-keys/base-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### Rotate a Session Key
 
 If the key is no longer available, but there exists a tag identifying a previous session key configured for your application, you may instead choose to rotate the previous key’s permissions. This can be performed using `rotateKey` .
-:::code-group
+
+<CodeBlocks>
 
 ```ts [rotate-session-key.ts] twoslash
 import { client } from "./base-client.js";
@@ -282,4 +285,4 @@ const result = await client.rotateSessionKey({
 // [!include ~/shared/smart-contracts/session-keys/base-client.ts]
 ```
 
-:::
+</CodeBlocks>

@@ -22,7 +22,7 @@ Getting started with the Signer is very similar to [getting started with React](
 
 **Installation**
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn add @account-kit/signer
@@ -32,7 +32,7 @@ yarn add @account-kit/signer
 yarn add @account-kit/signer
 ```
 
-:::
+</CodeBlocks>
 
 ## Create a signer instance
 
@@ -49,7 +49,7 @@ Next, you'll need to authenticate your user before you can use the Signer as an 
   methods. See the other guides for more examples.
 </Tip>
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
@@ -64,13 +64,13 @@ const result = await signer.authenticate({
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Use signer as owner on Smart Account
 
 Now that you have authenticated your user, you can use the signer as an owner on a Smart Contract Account.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { createLightAccount } from "@account-kit/smart-contracts";
@@ -89,4 +89,4 @@ const account = await createLightAccount({
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>

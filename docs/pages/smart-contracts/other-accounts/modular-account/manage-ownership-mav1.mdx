@@ -42,7 +42,7 @@ When using `createModularAccountAlchemyClient` in `@account-kit/smart-contracts`
 
 Then, you can use the `readOwners` method of the `multiOwnerPluginActions` extended smart account client to check if a given address is one of the current owners of a Modular Account.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { modularAccountClient } from "./client";
@@ -59,13 +59,13 @@ const isOwner = await modularAccountClient.isOwnerOf({
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### 2. Get all current owners of a Modular Account
 
 You can use the `readOwners` method on the `multiOwnerPluginActions` extended smart account client to fetch all current owners of the connected Modular Account.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { modularAccountClient } from "./client";
@@ -78,13 +78,13 @@ const owners = await modularAccountClient.readOwners();
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### 3. Add or remove owners for a Modular Account
 
 You can use the `updateOwners` method on the `multiOwnerPluginActions` extended smart account client to add or remove owners from the Modular Account.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts]  twoslash
 import { modularAccountClient } from "./client";
@@ -105,4 +105,4 @@ const txHash = await modularAccountClient.waitForUserOperationTransaction(
 // [!include ~/shared/smart-contracts/modular-account-client.ts]
 ```
 
-:::
+</CodeBlocks>

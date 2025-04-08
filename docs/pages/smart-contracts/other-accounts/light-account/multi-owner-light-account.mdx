@@ -25,7 +25,7 @@ When using `createMultiOwnerLightAccountAlchemyClient` in `@account-kit/smart-co
 
 You can use the `getOwnerAddresses` method on the `MultiOwnerLightAccount` object, which can be accessed from a connected client.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { multiOwnerLightAccountClient } from "./client";
@@ -37,13 +37,13 @@ const owners = await multiOwnerLightAccountClient.account.getOwnerAddresses();
 // [!include ~/shared/smart-contracts/multi-owner-light-account-client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ### 2. Add or remove owners for a `MultiOwnerLightAccount`
 
 You can use the `updateOwners` method on the `multiOwnerLightAccountClientActions` extended smart account client to add or remove owners from the `MultiOwnerLightAccount`.
 
-:::code-group
+<CodeBlocks>
 
 ```ts [example.ts] twoslash
 import { multiOwnerLightAccountClient } from "./client";
@@ -66,4 +66,4 @@ const txHash =
 // [!include ~/shared/smart-contracts/multi-owner-light-account-client.ts]
 ```
 
-:::
+</CodeBlocks>

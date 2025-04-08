@@ -22,7 +22,7 @@ but you're free to use any smart contract you'd like.
 
 **Installation**
 
-:::code-group
+<CodeBlocks>
 
 ```bash [yarn]
 yarn add @account-kit/infra @account-kit/smart-contracts
@@ -32,7 +32,7 @@ yarn add @account-kit/infra @account-kit/smart-contracts
 npm i -s @account-kit/infra @account-kit/smart-contracts
 ```
 
-:::
+</CodeBlocks>
 
 ## Get your Alchemy API Key
 
@@ -61,7 +61,7 @@ Now that you have an API key and a Policy ID, you can create a [Smart Account Cl
 
 The last step is to send a user operation using the client you just created.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { client } from "./client";
@@ -79,4 +79,4 @@ const { hash } = await client.sendUserOperation({
 // [!include ~/shared/infra/client.ts]
 ```
 
-:::
+</CodeBlocks>

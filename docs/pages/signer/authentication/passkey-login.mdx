@@ -15,7 +15,7 @@ If you want to allow sign-up and login with a passkey, you can ask the user for 
 It's important that you validate this email before creating an account for the user. This is to prevent users from losing access to their wallets if they lose their device.
 :::
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
@@ -30,11 +30,11 @@ const result = await signer.authenticate({
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>
 
 ## Authenticate an anonymous user
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
@@ -49,4 +49,4 @@ const result = await signer.authenticate({
 // [!include ~/shared/signer/signer.ts]
 ```
 
-:::
+</CodeBlocks>

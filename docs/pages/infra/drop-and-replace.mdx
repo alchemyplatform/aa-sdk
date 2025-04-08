@@ -9,7 +9,7 @@ import Snippet from "../../shared/infra/drop-and-replace-description.mdx";
 
 <Snippet />
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { client } from "./client";
@@ -41,6 +41,6 @@ try {
 // [!include ~/shared/infra/client.ts]
 ```
 
-:::
+</CodeBlocks>
 
 In the above example, we only try to drop and replace once before failing completely, but you can build more complex retry logic using this combination of `waitForUserOperationTransaction` and `dropAndReplace`.

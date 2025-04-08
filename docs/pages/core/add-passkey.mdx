@@ -15,7 +15,7 @@ See the [Authenticate users](/core/authenticate-users#email-authentication) guid
 
 Once the user is authenticated, you can use the `addPasskey` method on the Alchemy Signer. In the below example, we add the passkey as soon as the signer is connected. However, you can choose to add a passkey when the user clicks a button or at any other time. In this case, use the `watchSignerStatus` method to change your UI based on the signer's connected status.
 
-:::code-group
+<CodeBlocks>
 
 ```ts twoslash [example.ts]
 import { watchSignerStatus, getSigner } from "@account-kit/core";
@@ -34,4 +34,4 @@ const signerSubscription = watchSignerStatus(config)(async (status) => {
 // [!include ~/shared/core/config.ts]
 ```
 
-:::
+</CodeBlocks>
