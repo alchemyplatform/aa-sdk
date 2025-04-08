@@ -74,6 +74,21 @@ export class ExpiredDeadlineError extends BaseError {
   }
 }
 
+export class DeadlineOverLimitError extends BaseError {
+  override name = "PermissionBuilder: DeadlineOverLimitError";
+
+  /**
+   * Constructor for initializing an error message indicating the deadline has expired.
+   *
+   * @param {number} deadline The expired deadline timestamp
+   */
+  constructor(deadline: number) {
+    super(
+      `compileDeferred(): deadline ${deadline} cannot be > max uint48 (2^48 - 1)`
+    );
+  }
+}
+
 export class ValidationConfigUnsetError extends BaseError {
   override name = "PermissionBuilder: ValidationConfigUnsetError";
 
@@ -131,10 +146,12 @@ export class UnsupportedPermissionTypeError extends BaseError {
 
   /**
    * Constructor for initializing an error message indicating an unsupported permission type.
-   *
-   * @param {string} type The unsupported permission type
    */
-  constructor(type: string) {
-    super(`Unsupported permission type: ${type}`);
+  constructor() {
+    super(`Unsupported permission type`);
   }
+}
+
+export function assertNever(_valid: never): never {
+  throw new UnsupportedPermissionTypeError();
 }

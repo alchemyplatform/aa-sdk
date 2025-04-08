@@ -1,4 +1,4 @@
-import { toHex, zeroAddress, type Address, type Hex } from "viem";
+import { maxUint48, toHex, zeroAddress, type Address, type Hex } from "viem";
 import {
   HookType,
   type HookConfig,
@@ -25,13 +25,14 @@ import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
 import {
   AccountAddressAsTargetError,
+  assertNever,
+  DeadlineOverLimitError,
   DuplicateTargetAddressError,
   ExpiredDeadlineError,
   MultipleGasLimitError,
   MultipleNativeTokenTransferError,
   NoFunctionsProvidedError,
   RootPermissionOnlyError,
-  UnsupportedPermissionTypeError,
   ValidationConfigUnsetError,
   ZeroAddressError,
 } from "./permissionBuilderErrors.js";
@@ -343,6 +344,10 @@ export class PermissionBuilder {
       if (this.deadline < Date.now() / 1000) {
         throw new ExpiredDeadlineError(this.deadline, Date.now() / 1000);
       }
+      if (this.deadline > maxUint48) {
+        throw new DeadlineOverLimitError(this.deadline);
+      }
+
       this.hooks.push(
         TimeRangeModule.buildHook(
           {
@@ -632,7 +637,7 @@ export class PermissionBuilder {
           // Root permission handled in addPermission
           break;
         default:
-          throw new UnsupportedPermissionTypeError(permission);
+          assertNever(permission);
       }
 
       // isGlobal guaranteed to be false since it's only set with root permissions,
