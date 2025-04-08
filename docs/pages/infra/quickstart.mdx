@@ -3,8 +3,8 @@ title: Quickstart
 description: Get started with Alchemy's ERC-4337 infrastructure
 ---
 
-import GetApiKeySnippet from "../../shared/get-api-key.mdx";
 import CreateGasManagerPolicySnippet from "../../shared/create-gas-policy.mdx";
+import GetApiKeySnippet from "../../shared/get-api-key.mdx";
 
 # Infra Quickstart
 
@@ -48,9 +48,10 @@ If you want to sponsor gas, then you'll also want to create a gas policy in the 
 
 Now that you have an API key and a Policy ID, you can create a [Smart Account Client](/concepts/smart-account-client) to interact with the infrastructure.
 
-:::warning
-Replace `YOUR_API_KEY` and `YOUR_POLICY_ID` with the key and Policy ID created above.
-:::
+<Warning>
+  Replace `YOUR_API_KEY` and `YOUR_POLICY_ID` with the key and Policy ID created
+  above.
+</Warning>
 
 ```ts twoslash
 // [!include ~/shared/infra/client.ts]

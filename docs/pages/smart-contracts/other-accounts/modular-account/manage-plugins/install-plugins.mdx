@@ -18,13 +18,14 @@ Account Kit provides a more robust, easier way to install plugins with `pluginAc
 
 This guide will use the `SessionKeyPlugin` as an example to show how you can install `SessionKeyPlugin` easily using the `SmartAccountClient` extended with `sessionKeyPluginActions`.
 
-:::warning
+<Warning>
 **Please use caution when uninstalling plug-ins to avoid "bricking" your account!**
 
 If the account only has 1 plug-in installed and you uninstall it, there will no longer be a validator on the account (no owner) and you will not be able to use or recover it.
 
 For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
-:::
+
+</Warning>
 
 ## 1. Installing the Session Key Plugin
 
@@ -73,13 +74,14 @@ First, extend the `SmartAccountClient` connected to a Modular Account with `plug
 
 Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
 
-:::warning
+<Warning>
 **Please use caution when uninstalling plug-ins to avoid "bricking" your account!**
 
 If the account only has 1 plug-in installed and you uninstall it, there will no longer be a validator on the account (no owner) and you will not be able to use or recover it.
 
 For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
-:::
+
+</Warning>
 
 :::code-group
 

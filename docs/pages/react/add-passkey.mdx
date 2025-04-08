@@ -40,9 +40,10 @@ Now, when a user signs up, they will be prompted to create a passkey.
 
 With the above config, the user will only be prompted when they first create their account in your app. If you want to add the ability to add a passkey elsewhere in your app, for example in a settings page, you can use the [`useAddPasskey`](/reference/account-kit/react/hooks/useAddPasskey) hook.
 
-:::warning
-This hook requires that the user already be authenticated or else it will throw an error!
-:::
+<Warning>
+  This hook requires that the user already be authenticated or else it will
+  throw an error!
+</Warning>
 
 ```tsx twoslash
 import React from "react";
