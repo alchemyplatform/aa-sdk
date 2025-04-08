@@ -5,8 +5,6 @@ title: useChain
 description: Overview of the useChain method
 ---
 
-# useChain
-
 A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts) that returns the current chain as well as a function to set the chain.
 Note: when calling `setChain` the chain that's passed in must be defined in
 your initial `createConfig` call. Calling `setChain` causes the chain to change across the board. For example, if you use set chain then use `useSmartAccountClient`, the client will flip to the loading state and address for the account on the changed chain.
