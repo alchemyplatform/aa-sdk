@@ -343,9 +343,144 @@ navigation:
                 path: docs/account-kit/pages/signer/authentication/passkey-login.mdx
               - page: Add passkey
                 path: docs/account-kit/pages/signer/authentication/add-passkey.mdx
-          # TODO: Third-party signers links to docs in resources section
-          # - section: Third-party signers
-          #   contents:
+          - section: Third-party signers
+            contents:
+              - page: Custom signer
+                path: docs/account-kit/pages/third-party/signers.mdx
+          - section: SDK Reference
+            path: docs/account-kit/pages/reference/account-kit/signer/index.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - section: AlchemySignerWebClient
+                    contents:
+                      - page: addMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa.mdx
+                      - page: completeAuthWithBundle
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle.mdx
+                      - page: constructor
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/constructor.mdx
+                      - page: createAccount
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/createAccount.mdx
+                      - page: disconnect
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/disconnect.mdx
+                      - page: exportWallet
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
+                      - page: getMfaFactors
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors.mdx
+                      - page: initEmailAuth
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
+                      - page: lookupUserWithPasskey
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/lookupUserWithPasskey.mdx
+                      - page: oauthWithPopup
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
+                      - page: oauthWithRedirect
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
+                      - page: removeMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa.mdx
+                      - page: submitOtpCode
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
+                      - page: targetPublicKey
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey.mdx
+                      - page: validateMultiFactors
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors.mdx
+                      - page: verifyMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa.mdx
+                  - section: AlchemyWebSigner
+                    contents:
+                      - page: constructor
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/AlchemyWebSigner/constructor.mdx
+                  - section: BaseAlchemySigner
+                    contents:
+                      - page: addMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addMfa.mdx
+                      - page: addPasskey
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addPasskey.mdx
+                      - page: authenticate
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/authenticate.mdx
+                      - page: constructor
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/constructor.mdx
+                      - page: disconnect
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect.mdx
+                      - page: experimental_toSolanaSigner
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner.mdx
+                      - page: exportWallet
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet.mdx
+                      - page: getAddress
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getAddress.mdx
+                      - page: getAuthDetails
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getAuthDetails.mdx
+                      - page: getConfig
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig.mdx
+                      - page: getMfaFactors
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors.mdx
+                      - page: getMfaStatus
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
+                      - page: getUser
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
+                      - page: on
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/on.mdx
+                      - page: preparePopupOauth
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth.mdx
+                      - page: removeMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeMfa.mdx
+                      - page: signAuthorization
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signAuthorization.mdx
+                      - page: signMessage
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signMessage.mdx
+                      - page: signTransaction
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signTransaction.mdx
+                      - page: signTypedData
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signTypedData.mdx
+                      - page: toViemAccount
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toViemAccount.mdx
+                      - page: validateMultiFactors
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/validateMultiFactors.mdx
+                      - page: verifyMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseAlchemySigner/verifyMfa.mdx
+                  - section: BaseSignerClient
+                    contents:
+                      - page: addMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/addMfa.mdx
+                      - page: addPasskey
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/addPasskey.mdx
+                      - page: constructor
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
+                      - page: experimental_createApiKey
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
+                      - page: getMfaFactors
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
+                      - page: getPasskeyStatus
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/getPasskeyStatus.mdx
+                      - page: getUser
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/getUser.mdx
+                      - page: initOauth
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/initOauth.mdx
+                      - page: lookupUserByEmail
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
+                      - page: on
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/on.mdx
+                      - page: removeMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/removeMfa.mdx
+                      - page: request
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/request.mdx
+                      - page: signRawMessage
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage.mdx
+                      - page: stampGetOrganization
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/stampGetOrganization.mdx
+                      - page: stampWhoami
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami.mdx
+                      - page: validateMultiFactors
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/validateMultiFactors.mdx
+                      - page: verifyMfa
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa.mdx
+                      - page: whoami
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/BaseSignerClient/whoami.mdx
+                  - section: OauthCancelledError
+                    contents:
+                      - page: constructor
+                        path: docs/account-kit/pages/reference/account-kit/signer/classes/OauthCancelledError/constructor.mdx
+
       - section: Smart Contracts
         contents:
           - page: Overview
