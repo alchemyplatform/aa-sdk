@@ -33,9 +33,12 @@ You should first extend the `SmartAccountClient` connected to a Modular Account 
 
 Then, you can use the `installSessionKeyPlugin()` method exposed on `sessionKeyPluginActions` extended smart account client to install the session key plugin for the connected account.
 
-:::tip[Note]
-When using `createModularAccountAlchemyClient` in `@account-kit/smart-contracts`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
-:::
+<Note>
+  When using `createModularAccountAlchemyClient` in
+  `@account-kit/smart-contracts`, the `SmartAccountClient` comes automatically
+  extended with `multiOwnerPluginActions`, `pluginManagerActions`, and
+  `accountLoupeActions` decorators as defaults available for use.
+</Note>
 
 <CodeBlocks>
 
