@@ -269,12 +269,13 @@ navigation:
                 path: docs/account-kit/pages/infra/sponsor-gas.mdx
               - page: Retry user operations
                 path: docs/account-kit/pages/infra/drop-and-replace.mdx
-          - section: Third party
-            contents:
-              - page: Bundlers
-                path: docs/account-kit/pages/third-party/bundlers.mdx
-              - page: Paymasters
-                path: docs/account-kit/pages/third-party/paymasters.mdx
+          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
+          # - section: Third party
+          #   contents:
+          #     - link: Bundlers
+          #       href: /wallets/resources/third-party/bundlers
+          #     - link: Paymasters
+          #       href: /wallets/resources/third-party/paymasters
           - section: SDK Reference
             path: docs/account-kit/pages/reference/account-kit/infra/index.mdx
             contents:
@@ -343,10 +344,11 @@ navigation:
                 path: docs/account-kit/pages/signer/authentication/passkey-login.mdx
               - page: Add passkey
                 path: docs/account-kit/pages/signer/authentication/add-passkey.mdx
-          - section: Third-party signers
-            contents:
-              - page: Custom signer
-                path: docs/account-kit/pages/third-party/signers.mdx
+          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
+          # - section: Third-party signers
+          #   contents:
+          #     - link: Custom signer
+          #       href: /wallets/resources/third-party/signers
           - section: SDK Reference
             path: docs/account-kit/pages/reference/account-kit/signer/index.mdx
             contents:
@@ -539,7 +541,9 @@ navigation:
                     path: docs/account-kit/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
                   - page: Manage multiple owners
                     path: docs/account-kit/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
-              # TODO: Custom accounts links to docs in resources section
+                  # TODO: Custom accounts links to docs in resources section - awkward to link to internal pages
+                  # - link: Custom accounts
+                  #   href: /wallets/resources/third-party/smart-contracts
               - page: Gas benchmarks
                 path: docs/account-kit/pages/smart-contracts/gas-benchmarks.mdx
               - page: Deployed addresses
