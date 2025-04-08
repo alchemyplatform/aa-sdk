@@ -544,11 +544,124 @@ navigation:
                   # TODO: Custom accounts links to docs in resources section - awkward to link to internal pages
                   # - link: Custom accounts
                   #   href: /wallets/resources/third-party/smart-contracts
-              - page: Gas benchmarks
-                path: docs/account-kit/pages/smart-contracts/gas-benchmarks.mdx
-              - page: Deployed addresses
-                path: docs/account-kit/pages/smart-contracts/deployed-addresses.mdx
-              # TODO: SDK reference
+          - page: Gas benchmarks
+            path: docs/account-kit/pages/smart-contracts/gas-benchmarks.mdx
+          - page: Deployed addresses
+            path: docs/account-kit/pages/smart-contracts/deployed-addresses.mdx
+          - section: SDK Reference
+            path: docs/account-kit/pages/reference/account-kit/smart-contracts/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: accountLoupeActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/accountLoupeActions.mdx
+                  - page: buildSessionKeysToRemoveStruct
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/buildSessionKeysToRemoveStruct.mdx
+                  - page: combineSignatures
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/combineSignatures.mdx
+                  - page: createLightAccount
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createLightAccount.mdx
+                  - page: createLightAccountAlchemyClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createLightAccountAlchemyClient.mdx
+                  - page: createLightAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createLightAccountClient.mdx
+                  - page: createModularAccountAlchemyClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createModularAccountAlchemyClient.mdx
+                  - page: createModularAccountV2
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createModularAccountV2.mdx
+                  - page: createModularAccountV2Client
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createModularAccountV2Client.mdx
+                  - page: createMultiOwnerLightAccount
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerLightAccount.mdx
+                  - page: createMultiOwnerLightAccountAlchemyClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerLightAccountAlchemyClient.mdx
+                  - page: createMultiOwnerLightAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerLightAccountClient.mdx
+                  - page: createMultiOwnerModularAccount
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerModularAccount.mdx
+                  - page: createMultiOwnerModularAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerModularAccountClient.mdx
+                  - page: createMultisigAccountAlchemyClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultisigAccountAlchemyClient.mdx
+                  - page: createMultisigModularAccount
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultisigModularAccount.mdx
+                  - page: createMultisigModularAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/createMultisigModularAccountClient.mdx
+                  - page: defaultLightAccountVersion
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/defaultLightAccountVersion.mdx
+                  - page: formatSignatures
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/formatSignatures.mdx
+                  - page: getDefaultLightAccountFactoryAddress
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getDefaultLightAccountFactoryAddress.mdx
+                  - page: getDefaultMultiOwnerLightAccountFactoryAddress
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getDefaultMultiOwnerLightAccountFactoryAddress.mdx
+                  - page: getDefaultMultiOwnerModularAccountFactoryAddress
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getDefaultMultiOwnerModularAccountFactoryAddress.mdx
+                  - page: getDefaultMultisigModularAccountFactoryAddress
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getDefaultMultisigModularAccountFactoryAddress.mdx
+                  - page: getLightAccountVersionForAccount
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getLightAccountVersionForAccount.mdx
+                  - page: getMAInitializationData
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getMAInitializationData.mdx
+                  - page: getMAV2UpgradeToData
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getMAV2UpgradeToData.mdx
+                  - page: getMSCAUpgradeToData
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getMSCAUpgradeToData.mdx
+                  - page: getSignerType
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/getSignerType.mdx
+                  - page: installPlugin
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/installPlugin.mdx
+                  - page: lightAccountClientActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/lightAccountClientActions.mdx
+                  - page: multiOwnerLightAccountClientActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/multiOwnerLightAccountClientActions.mdx
+                  - page: multiOwnerPluginActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/multiOwnerPluginActions.mdx
+                  - page: multisigPluginActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/multisigPluginActions.mdx
+                  - page: multisigSignatureMiddleware
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/multisigSignatureMiddleware.mdx
+                  - page: pluginManagerActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/pluginManagerActions.mdx
+                  - page: sessionKeyPluginActions
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/sessionKeyPluginActions.mdx
+                  - page: splitAggregatedSignature
+                    path: docs/account-kit/pages/reference/account-kit/smart-contracts/functions/splitAggregatedSignature.mdx
+              - section: Classes
+                contents:
+                  - section: SessionKeyPermissionsBuilder
+                    contents:
+                      - page: addContractAddressAccessEntry
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addContractAddressAccessEntry.mdx
+                      - page: addContractFunctionAccessEntry
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addContractFunctionAccessEntry.mdx
+                      - page: addErc20TokenSpendLimit
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addErc20TokenSpendLimit.mdx
+                      - page: encode
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/encode.mdx
+                      - page: setContractAccessControlType
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setContractAccessControlType.mdx
+                      - page: setGasSpendLimit
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setGasSpendLimit.mdx
+                      - page: setNativeTokenSpendLimit
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setNativeTokenSpendLimit.mdx
+                      - page: setRequiredPaymaster
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setRequiredPaymaster.mdx
+                      - page: setTimeRange
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setTimeRange.mdx
+                  - section: SessionKeySigner
+                    contents:
+                      - page: constructor
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/constructor.mdx
+                      - page: generateNewKey
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/generateNewKey.mdx
+                      - page: getAddress
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/getAddress.mdx
+                      - page: signMessage
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signMessage.mdx
+                      - page: signTypedData
+                        path: docs/account-kit/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
+
       - section: Resources
         contents:
           - section: Third Party
