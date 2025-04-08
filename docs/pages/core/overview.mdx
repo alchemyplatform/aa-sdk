@@ -1,0 +1,28 @@
+---
+title: Other JS Frameworks
+description: How to use Account Kit with other JS Frameworks
+---
+
+# Other JS Frameworks
+
+We don't currently have plans to support other JS front-end frameworks such as Vue, Angular, or Svelte. However, there are a number of different ways to integrate Account Kit within your application if you're using one of these JS frameworks.
+
+<Tip>
+  If you are using a different JS framework and would like to contribute support
+  for it, we welcome PRs!
+</Tip>
+
+## Using `@account-kit/core`
+
+The [React](/wallets/react/overview) package is built on top of the `@account-kit/core` package. This package is the core state management library for all of the utilities found within the React package. All of the guides in this section will focus on
+how you can leverage this package to build your own integration with Account Kit, while still leveraging all of the reactive utilities that the React package provides.
+
+## Using the lower level SDKs
+
+`@account-kit/core` is itself a higher level wrapper around the three lower level SDKs:
+
+- [`@account-kit/infra`](/wallets/infra/overview) - this package contains all of the Smart Account Client and Gas Manager definitions you need to interact with our Bundler and Paymaster services.
+- [`@account-kit/signer`](/wallets/signer/overview) - this package contains all of the utilities you need to instantiate and interact with our Signer service. This allows you to provision wallets for your users that can be used as owners on Smart Contract Accounts
+- [`@account-kit/smart-contracts`](/wallets/smart-contracts/overview) - this package contains all definitions for the Smart Contracts we have built and allows you to provision and deploy smart contracts for your users seamlessly.
+
+Using these packages directly offers you the most control over your stack, but requires significantly more work to get started.

@@ -1,0 +1,40 @@
+---
+title: Email OTP Authentication
+description: Authenticate a user using an email OTP code
+---
+
+# Email OTP Authentication
+
+Email OTP authentication allows you to log in and sign up users using an email address. Your users will receive six-digit code in their inbox which they can enter in your site to complete login.
+
+<Tip>
+  For setting up an account config, see the [Signer
+  Quickstart](/wallets/signer/quickstart).
+</Tip>
+
+## Authenticate a user
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+// send the email
+await signer.authenticate({
+  type: "email",
+  emailMode: "otp",
+  email: "user@mail.com",
+});
+
+// later once the user has entered the code from their email
+await signer.authenticate({
+  type: "otp",
+  otpCode: "123456",
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>

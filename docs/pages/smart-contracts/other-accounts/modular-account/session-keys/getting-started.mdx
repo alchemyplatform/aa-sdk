@@ -1,0 +1,288 @@
+---
+title: Getting started with Session Keys
+description: Learn how to use Alchemy's Session Key Plugin.
+---
+
+# Getting started with Session Keys
+
+`@account-kit/smart-contracts` exports all of the definitions you need to use session keys with a Modular Account. We provide a simple `SessionKeySigner` class that generates session keys on the client and can be used as the `signer` for the Multi Owner Modular Account.
+We also export the necessary decorators which can be used to extend your `modularAccountClient` to make interacting with session keys easy.
+
+## Usage
+
+Let's take a look at a full example that demonstrates how to use session keys with a Modular Account.
+
+```ts twoslash
+// [!include ~/shared/smart-contracts/session-keys/full-example.ts]
+```
+
+## Breaking it down
+
+### Determine where the session key is stored
+
+Session keys can be held on the client side or on a backend agent. Client side session keys are useful for skipping confirmations, and agent side keys are useful for automations.
+
+In the above example, we use a client-side key using the `SessionKeySigner` exported from `@account-kit/smart-contracts`.
+
+```ts twoslash
+import { SessionKeySigner } from "@account-kit/smart-contracts";
+
+const sessionKeySigner = new SessionKeySigner();
+```
+
+If you are using backend agent controlled session keys, then the agent should generate the private key and send only the address to the client. This protects the private key by not exposing it to the user.
+
+### Extend your client with Modular Account Decorators
+
+The base `modularAccountClient` and `AlchemymodularAccountClient`, only include base functionality for sending user operations. If you are using a `ModularAccount`, then you will want to extend your client with the various decorators exported by `@account-kit/smart-contracts`.
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { modularAccountClient } from "./client";
+import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
+
+const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
+```
+
+```ts [client.ts] filename="client.ts" twoslash
+// [!include ~/shared/smart-contracts/modular-account-client.ts]
+```
+
+</CodeBlocks>
+
+### Check if the Session Key Plugin is installed
+
+Before you can start using session keys, you need to check whether the user’s account has the session key plugin installed. You can perform this check using the account loupe decorator, which lets you inspect the state of installed plugins on a Modular Account.
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { modularAccountClient } from "./client.js";
+import {
+  accountLoupeActions,
+  multiOwnerPluginActions,
+  sessionKeyPluginActions,
+  pluginManagerActions,
+} from "@account-kit/smart-contracts";
+
+const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
+
+//---cut---
+
+import { SessionKeyPlugin } from "@account-kit/smart-contracts";
+
+// 1. check if the plugin is installed
+const isPluginInstalled = await modularAccountClient
+  .getInstalledPlugins({})
+  // This checks using the default address for the chain, but you can always pass in your own plugin address here as an override
+  .then((x) => x.includes(SessionKeyPlugin.meta.addresses[chain.id]));
+```
+
+```ts [client.ts] filename="client.ts" twoslash
+// [!include ~/shared/smart-contracts/modular-account-client.ts]
+```
+
+</CodeBlocks>
+
+### Install the Session Key Plugin
+
+If the Session Key Plugin is not yet installed, you need to install it before it can be used. To simplify the workflow, it is also possible to batch the plugin installation along with creating session keys and performing other actions, which combines all of these steps into one user operation.
+
+<CodeBlocks>
+
+```ts [example.ts] twoslash
+import { modularAccountClient } from "./client";
+import {
+  accountLoupeActions,
+  multiOwnerPluginActions,
+  sessionKeyPluginActions,
+  pluginManagerActions,
+} from "@account-kit/smart-contracts";
+
+const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
+
+import { SessionKeyPlugin } from "@account-kit/smart-contracts";
+
+// 1. check if the plugin is installed
+const isPluginInstalled = await extendedClient
+  .getInstalledPlugins({})
+  // This checks using the default address for the chain, but you can always pass in your own plugin address here as an override
+  .then((x) => x.includes(SessionKeyPlugin.meta.addresses[chain.id]));
+
+//---cut---
+import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+
+// 2. if the plugin is not installed, then install it and set up the session key
+if (!isPluginInstalled) {
+  // lets create an initial permission set for the session key giving it an eth spend limit
+  // if we don't set anything here, then the key will have 0 permissions
+  const initialPermissions =
+    new SessionKeyPermissionsBuilder().setNativeTokenSpendLimit({
+      spendLimit: 1000000n,
+    });
+
+  const { hash } = await extendedClient.installSessionKeyPlugin({
+    // 1st arg is the initial set of session keys
+    // 2nd arg is the tags for the session keys
+    // 3rd arg is the initial set of permissions
+    args: [
+      [await sessionKeySigner.getAddress()],
+      [zeroHash],
+      [initialPermissions.encode()],
+    ],
+  });
+
+  await extendedClient.waitForUserOperationTransaction({ hash });
+}
+```
+
+```ts [client.ts] filename="client.ts" twoslash
+// [!include ~/shared/smart-contracts/modular-account-client.ts]
+```
+
+</CodeBlocks>
+
+### Construct the initial set of permissions
+
+Session keys are powerful because of permissions that limit what actions they can take. When you add a session key, you should also specify the initial permissions that apply over the key.
+
+See the [Supported Permissions](/wallets/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions#using-the-permissionsbuilder) page for more information on how to used the permissions builder.
+
+Let's use the permission builder to build a set of permissions that sets a spend limit:
+
+<CodeBlocks>
+
+```ts [example.ts] twoslash
+import { modularAccountClient } from "./client";
+import {
+  accountLoupeActions,
+  multiOwnerPluginActions,
+  sessionKeyPluginActions,
+  pluginManagerActions,
+} from "@account-kit/smart-contracts";
+
+const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
+
+//---cut---
+import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+
+const initialPermissions =
+  new SessionKeyPermissionsBuilder().setNativeTokenSpendLimit({
+    spendLimit: 1000000n,
+  });
+
+const result = await extendedClient.updateKeyPermissions({
+  args: [sessionKeyAddress, initialPermissions.encode()],
+});
+```
+
+```ts [client.ts] filename="client.ts" twoslash
+// [!include ~/shared/smart-contracts/modular-account-client.ts]
+```
+
+</CodeBlocks>
+
+## Managing Session Keys
+
+The Session Key Plugin allows you to:
+
+- Add session keys, and set the key's initial permissions.
+- Remove session keys.
+- Update key permissions.
+- Rotate session keys. This action replaces the previous session key with a new session key, while keeping the existing permissions.
+
+### Add a Session Key
+
+Session keys can be added either during installation, or using the `addSessionKey` function.
+
+<CodeBlocks>
+
+```ts [add-session-key.ts] twoslash
+import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+import { keccak256 } from "viem";
+import { client } from "./base-client";
+
+const result = await client.addSessionKey({
+  key: "0xSessionKeyAddress",
+  // tag is an identifier for the emitted SessionKeyAdded event
+  tag: keccak256(new TextEncoder().encode("session-key-tag")),
+  permissions: new SessionKeyPermissionsBuilder().encode(),
+});
+```
+
+```ts [base-client.ts] filename="base-client.ts" twoslash
+// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
+```
+
+</CodeBlocks>
+
+### Remove a Session Key
+
+Session keys can be removed using the `removeSessionKey` function.
+
+<CodeBlocks>
+
+```ts [remove-session-key.ts] twoslash
+import { client } from "./base-client";
+
+const result = await client.removeSessionKey({
+  key: "0xSessionKeyAddress",
+});
+```
+
+```ts [base-client.ts] filename="base-client.ts" twoslash
+// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
+```
+
+</CodeBlocks>
+
+### Update a Key's permissions
+
+Session key permissions can be edited after creation using the `updateKeyPermissions` function. Note that you should configure initial permissions when the key is added, and not rely on a second user operation to set the permissions.
+
+<CodeBlocks>
+
+```ts [update-session-key.ts] twoslash
+import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+import { client } from "./base-client";
+
+const result = await client.updateSessionKeyPermissions({
+  key: "0xSessionKeyAddress",
+  // add other permissions to the builder
+  permissions: new SessionKeyPermissionsBuilder()
+    .setTimeRange({
+      validFrom: Math.round(Date.now() / 1000),
+      // valid for 1 hour
+      validUntil: Math.round(Date.now() / 1000 + 60 * 60),
+    })
+    .encode(),
+});
+```
+
+```ts [base-client.ts] filename="base-client.ts" twoslash
+// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
+```
+
+</CodeBlocks>
+
+### Rotate a Session Key
+
+If the key is no longer available, but there exists a tag identifying a previous session key configured for your application, you may instead choose to rotate the previous key’s permissions. This can be performed using `rotateKey` .
+
+<CodeBlocks>
+
+```ts [rotate-session-key.ts] twoslash
+import { client } from "./base-client.js";
+
+const result = await client.rotateSessionKey({
+  oldKey: "0xOldKey",
+  newKey: "0xNewKey",
+});
+```
+
+```ts [base-client.ts] filename="base-client.ts" twoslash
+// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
+```
+
+</CodeBlocks>

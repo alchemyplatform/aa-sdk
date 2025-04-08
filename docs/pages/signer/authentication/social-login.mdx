@@ -1,0 +1,35 @@
+---
+title: OAuth Authentication
+description: Authenticate a user using OAuth
+---
+
+# Social Login Authentication
+
+Social login authentication allows you to log in and sign up users using an OAuth provider, such as Google Sign-In or Facebook Login. You can also configure custom providers through Auth0.
+
+<Tip>
+  To set up configurations to enable social login, see the [Signer
+  Quickstart](/wallets/signer/quickstart) to enable a social policy in the
+  dashboard.
+</Tip>
+
+## Authenticate a user
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+await signer.authenticate({
+  type: "oauth",
+  authProviderId: "google", // Choose between the auth providers you selected to support from your auth policy
+  mode: "redirect", // Alternatively, you can choose "popup" mode
+  redirectUrl: "/", // After logging in, redirect to the index page
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>

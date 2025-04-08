@@ -1,0 +1,140 @@
+---
+title: Authenticating Users via Magic Link
+description: Learn how to authenticate users using an email magic link using the React Native Signer
+---
+
+import Snippet from "../../../../shared/react-native/setup-guides-snippet.mdx";
+
+# Authenticating Users via Magic Link
+
+<Snippet />
+
+### Set the Email Mode to `Magic Link` in your Account Kit Dashboard
+
+In your Alchemy Accounts Dashboard:
+
+- Navigate to the **Smart Wallets** tab
+- Select the config you would be using for your project and click the **Edit** button
+- Scroll down to the **Email Mode** options in the **Email** section and select **Magic Link**
+
+  <img
+    src="/images/account-kit/alchemy-dashboard-select-magic-link.png"
+    alt="Email Mode Magic Link"
+  />
+
+- Click the **Save Changes** button
+
+### Send an Email Magic Link to a User
+
+To send an email magic link to a user, you can use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `magicLink`.
+
+```tsx twoslash [sign-in-with-magic-link.tsx]
+import { useAuthenticate } from "@account-kit/react-native";
+import React, { useState } from "react";
+import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
+
+function SignInWithOtp() {
+  const { authenticate } = useAuthenticate();
+  const [email, setEmail] = useState("");
+
+  const handleUserSignInWithMagicLink = () => {
+    try {
+      authenticate({
+        email,
+        type: "email",
+      });
+
+      // Magic link sent to the user's email. Prompt the user to click the link in their email.
+    } catch (e) {
+      Alert.alert("Error sending Magic Link. Check logs for more details.");
+
+      console.log("Error sending Magic Link: ", e);
+    }
+  };
+
+  return (
+    <View>
+      <Text>Enter Your Email to Sign In</Text>
+      <View>
+        <TextInput
+          value={email}
+          onChangeText={(val) => setEmail(val.toLowerCase())}
+          placeholder="john@doe.com"
+        />
+        <Pressable onPress={handleUserSignInWithMagicLink}>
+          {({ pressed }) => (
+            <View
+              style={[
+                {
+                  opacity: pressed ? 0.5 : 1,
+                  transform: [
+                    {
+                      scale: pressed ? 0.98 : 1,
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Text>Sign In</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+```
+
+### Authenticate User via Deep Link
+
+When a user clicks on the magic link in their email, it should deep link to your app if this has been setup correctly.
+
+A `bundle` parameter present in the deep link url will be used to authenticate the user and save the user's session.
+
+Here's an example of what this might look like:
+
+```tsx [example.tsx] twoslash
+import { useEffect } from "react";
+import { Linking } from "react-native";
+import { useAuthenticate } from "@account-kit/react-native";
+
+const App = () => {
+  const { authenticate } = useAuthenticate();
+
+  // Authenticate a user using a bundle returned from a deep link
+  const handleUserAuth = async ({ bundle }: { bundle: string }) => {
+    authenticate({ bundle, type: "email" });
+  };
+
+  // Handle incoming deep links and authenticate the user
+  const handleIncomingURL = (event: { url: string }) => {
+    const regex = /[?&]([^=#]+)=([^&#]*)/g;
+
+    let params: Record<string, string> = {};
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(event.url))) {
+      if (match[1] && match[2]) {
+        params[match[1]] = match[2];
+      }
+    }
+
+    if (!params.bundle) {
+      return;
+    }
+
+    handleUserAuth({
+      bundle: params.bundle ?? "",
+    });
+  };
+
+  // Create a subscription to handle incoming deep links
+  useEffect(() => {
+    const subscription = Linking.addEventListener("url", handleIncomingURL);
+
+    return () => subscription.remove();
+  }, []);
+
+  return null;
+};
+```
