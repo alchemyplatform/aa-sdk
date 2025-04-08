@@ -263,3 +263,18 @@ export const buildFullNonceKey = ({
     (isGlobalValidation ? 1n : 0n)
   );
 };
+
+// Parses out the 3 components from a deferred action
+export const parseDeferredAction = (
+  deferredAction: Hex
+): {
+  nonce: bigint;
+  deferredActionData: Hex;
+  hasAssociatedExecHooks: boolean;
+} => {
+  return {
+    nonce: BigInt(`0x${deferredAction.slice(4, 68)}`),
+    deferredActionData: `0x${deferredAction.slice(68)}`,
+    hasAssociatedExecHooks: deferredAction[3] === "1",
+  };
+};
