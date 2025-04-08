@@ -3,9 +3,9 @@ title: Passkey Signup Authentication
 description: How to implement Passkey Signup authentication in your React app
 ---
 
-import ModalAuthExample from "../shared/modal-auth-example.mdx";
-import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
 import PasskeyEmailWarning from "../../../shared/passkey-email-warning.mdx";
+import EmbeddedAuthExample from "../shared/embedded-auth-example.mdx";
+import ModalAuthExample from "../shared/modal-auth-example.mdx";
 
 # Passkey Signup Authentication
 
@@ -123,9 +123,11 @@ const isValidEmail = (email: string) => {
 };
 ```
 
-:::danger
-It's important that you validate the email before creating an account for the user. This is to prevent users from losing access to their wallets if they lose their device.
-:::
+<Error>
+  It's important that you validate the email before creating an account for the
+  user. This is to prevent users from losing access to their wallets if they
+  lose their device.
+</Error>
 
 ### Option 2: Passkey Signup without Email
 

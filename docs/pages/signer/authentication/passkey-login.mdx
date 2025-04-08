@@ -11,9 +11,11 @@ If a user has added a passkey to their account, or they initially signed up with
 
 If you want to allow sign-up and login with a passkey, you can ask the user for an email to associate with their passkey. This way, they can log in with their email and passkey in the future. Under the hood, the email is also used to check if an account exists already so you can have a unified sign-up and login flow.
 
-:::danger
-It's important that you validate this email before creating an account for the user. This is to prevent users from losing access to their wallets if they lose their device.
-:::
+<Error>
+  It's important that you validate this email before creating an account for the
+  user. This is to prevent users from losing access to their wallets if they
+  lose their device.
+</Error>
 
 <CodeBlocks>
 
