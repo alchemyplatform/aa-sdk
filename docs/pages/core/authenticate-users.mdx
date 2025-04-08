@@ -9,7 +9,7 @@ Most methods on the Smart Account Client and Smart Contract Account require some
 
 ## Create your config
 
-Before you can authenticate a user, you'll need to create a static config object. This is outlined in the [Core Quickstart](/core/quickstart).
+Before you can authenticate a user, you'll need to create a static config object. This is outlined in the [Core Quickstart](/wallets/core/quickstart).
 
 ## Email authentication
 
@@ -52,7 +52,7 @@ await signer.authenticate({ type: "email", bundle });
 
 ## Social Login
 
-You can allow users to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
+You can allow users to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/wallets/react/quickstart).
 
 <CodeBlocks>
 

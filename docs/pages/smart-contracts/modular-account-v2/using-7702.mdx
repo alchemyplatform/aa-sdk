@@ -36,7 +36,7 @@ Account Kit provides an EIP-7702 compatible smart account, [Modular Account v2](
 
 ## Signer Requirements
 
-To use EIP-7702, you need a signer that can generate an authorization signature. Typically, this is implemented as a method called `signAuthorization`. Regardless of which signer you choose, you'll need to create an instance of a [`SmartAccountSigner`](/resources/types#smartaccountsigner) that you can pass to the client.
+To use EIP-7702, you need a signer that can generate an authorization signature. Typically, this is implemented as a method called `signAuthorization`. Regardless of which signer you choose, you'll need to create an instance of a [`SmartAccountSigner`](/wallets/resources/types#smartaccountsigner) that you can pass to the client.
 
 ### Out-of-the-Box Support in Account Kit
 
@@ -44,7 +44,7 @@ To use EIP-7702, you need a signer that can generate an authorization signature.
 
 Alchemy Signer supports signing EIP-7702 authorizations. This means you can create new embedded EOAs with social login that are upgradable to smart accounts seamlessly for your users. See [this guide](#TODO/using-7702-react-doc) for using simple React Hooks.
 
-If you are a developer without existing embedded wallet users, considering [using smart accounts](/react/quickstart) from the start without EIP-7702. [Decide](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application) what's best for you!
+If you are a developer without existing embedded wallet users, considering [using smart accounts](/wallets/react/quickstart) from the start without EIP-7702. [Decide](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application) what's best for you!
 
 **Local Signer**
 
@@ -69,7 +69,7 @@ const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 
 Account Kit provides support for you to bring your existing custom signer or another third-party embedded wallet provider! As long as your signer supports `signAuthorization` you can connect it to Account Kit and upgrade existing EOAs to smart accounts.
 
-Follow the guide here to understand how to implement the interface: [Third Party Signers](/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+Follow the guide here to understand how to implement the interface: [Third Party Signers](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
 
 ## Using EIP-7702
 

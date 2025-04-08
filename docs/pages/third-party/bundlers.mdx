@@ -34,7 +34,7 @@ any other provider's URL.
 
 ## Splitting Bundler traffic and Node RPC traffic
 
-It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/reference/aa-sdk/core/functions/split) transport and passing it to your `createSmartAccountClient` call. For example:
+It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/wallets/reference/aa-sdk/core/functions/split) transport and passing it to your `createSmartAccountClient` call. For example:
 
 ### Using Alchemy Bundler and Gas Manager with 3rd Party Node RPCs
 
@@ -81,4 +81,4 @@ const clientWithSplit = createPublicClient({
 
 Using a split Bundler and Node RPC setup is required for Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks since Alchemy currently only supports Account Abstraction endpoints for those networks. Please refer to documentation from [Frax](https://docs.frax.com/fraxtal/network/network-information) and [Zora](https://docs.zora.co/docs/zora-network/network) about RPC options.
 
-See [this guide](/third-party/chains) for more information on using AA only chains with Account Kit.
+See [this guide](/wallets/third-party/chains) for more information on using AA only chains with Account Kit.

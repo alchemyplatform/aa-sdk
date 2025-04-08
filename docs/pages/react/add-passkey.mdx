@@ -8,7 +8,7 @@ description: Learn how to add a passkey to your users' accounts with Account Kit
 You may have noticed in the [Demo App](https://demo.alchemy.com/) that you can allow a user to log in with an existing passkey, but there's no way to sign-up with a passkey. This guide will outline
 how to add a passkey to a user's account after they've signed up.
 
-If you're not sure how to authenticate your users, see [this guide](/react/getting-started).
+If you're not sure how to authenticate your users, see [this guide](/wallets/react/getting-started).
 
 ## Add a passkey on sign up
 
@@ -38,7 +38,7 @@ Now, when a user signs up, they will be prompted to create a passkey.
 
 ## Add a passkey later
 
-With the above config, the user will only be prompted when they first create their account in your app. If you want to add the ability to add a passkey elsewhere in your app, for example in a settings page, you can use the [`useAddPasskey`](/reference/account-kit/react/hooks/useAddPasskey) hook.
+With the above config, the user will only be prompted when they first create their account in your app. If you want to add the ability to add a passkey elsewhere in your app, for example in a settings page, you can use the [`useAddPasskey`](/wallets/reference/account-kit/react/hooks/useAddPasskey) hook.
 
 <Warning>
   This hook requires that the user already be authenticated or else it will

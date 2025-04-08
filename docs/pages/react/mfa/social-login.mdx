@@ -21,11 +21,11 @@ The key advantage of social login with MFA is that the authenticator app verific
 
 ### Step 1: Set Up Social Login
 
-First, implement social login as described in the [Social Login Authentication](/react/login-methods/social-login) guide. You can use either the pre-built UI components or custom UI approach.
+First, implement social login as described in the [Social Login Authentication](/wallets/react/login-methods/social-login) guide. You can use either the pre-built UI components or custom UI approach.
 
 ### Step 2: Implement MFA Setup for Users
 
-Before users can authenticate with social login + MFA, they need to set up an authenticator app for their account. Implement the MFA setup flow as described in the [Setting Up Multi-Factor Authentication](/react/mfa/setup-mfa) guide.
+Before users can authenticate with social login + MFA, they need to set up an authenticator app for their account. Implement the MFA setup flow as described in the [Setting Up Multi-Factor Authentication](/wallets/react/mfa/setup-mfa) guide.
 
 Key implementation points:
 
@@ -76,7 +76,7 @@ const handleGoogleLogin = () => {
 
 To test the complete authentication flow:
 
-1. Set up multi-factor authentication for a user using an authenticator app (see [Setting Up Multi-Factor Authentication](/react/mfa/setup-mfa))
+1. Set up multi-factor authentication for a user using an authenticator app (see [Setting Up Multi-Factor Authentication](/wallets/react/mfa/setup-mfa))
 2. Log out the user
 3. Attempt to log in using social login
 4. After authenticating with the social provider, the user should be prompted for their authenticator app code

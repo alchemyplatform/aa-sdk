@@ -32,7 +32,7 @@ There are two scenarios where you would get a different contract address:
   Your smart account will be deployed when the first `UserOperation` (UO) is
   sent from the account. The first UO must be sent with a non-zero `initCode`.
   aa-sdk will handle generation of this `initCode` for you using
-  [`getAccountInitCode`](/reference/aa-sdk/core/functions/toSmartContractAccount).
+  [`getAccountInitCode`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount).
 </Accordion>
 
 ### How can I upgrade a Light Account?
@@ -91,9 +91,9 @@ This can be called on the existing smart contract account by sending a user oper
 <Accordion title="Answer">
 This can happen when `UserOperation`s (UOs) become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the UO is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/reference/aa-sdk/core/functions/waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
+You may experience this when calling the [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/reference/aa-sdk/core/functions/dropAndReplaceUserOperation).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/wallets/reference/aa-sdk/core/functions/dropAndReplaceUserOperation).
 
 </Accordion>
 
@@ -157,8 +157,8 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
 <Accordion title="Answer">
   Currently, we don’t support this, but we are actively exploring. Please [reach
-  out](/resources/contact-us) if you are interested as we would love your input
-  in our spec.
+  out](/wallets/resources/contact-us) if you are interested as we would love
+  your input in our spec.
 </Accordion>
 
 ### How is the Gas Manager protected from DDOS attacks?
@@ -222,11 +222,11 @@ Our gas and fee estimations are just that, estimations, but we are always workin
 ### `waitForUserOperationTransaction` timeout
 
 <Accordion title="Answer">
-[`waitForUserOperationTransaction`](/reference/aa-sdk/core/functions/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
+[`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
-If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/reference/aa-sdk/core/functions/dropAndReplaceUserOperation#usage).
+If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/wallets/reference/aa-sdk/core/functions/dropAndReplaceUserOperation#usage).
 
 </Accordion>
 
@@ -248,7 +248,7 @@ No, the `aa-sdk` repo does not offically support React Native. **It is on our ra
 
 Currently we have a strong dependency on Viem, which requires several global features, such as `TextEncoder` and `crypto`, that are absent in React Native's environment. See more about [Viem's capability here](https://viem.sh/docs/compatibility).
 
-However, we have created a small PoC using Expo that you can find [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). For more information on how to use Account Kit within a React Native application see [the guide](/react-native/overview).
+However, we have created a small PoC using Expo that you can find [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). For more information on how to use Account Kit within a React Native application see [the guide](/wallets/react-native/overview).
 
 ### How should I protect my api key and policy id in the frontend?
 

@@ -23,7 +23,7 @@ All of the v3 packages have been renamed or removed. The new packages are as fol
 ### AA signers
 
 The `@alchemy/aa-signers` package has been deprecated. The signers in that package are still compatible with v4, but they will not be receiving future support and the interfaces are not guaranteed to work with future versions of the SDK.
-If you want to integrate a 3rd party signer, it's still very easy if the signer exposes an EIP-1193 interface. See [this guide](/third-party/signers).
+If you want to integrate a 3rd party signer, it's still very easy if the signer exposes an EIP-1193 interface. See [this guide](/wallets/third-party/signers).
 
 <Warning>
 We still support all Signers in the SDK!
@@ -45,7 +45,7 @@ The `AlchemyTransport` is a type of `viem` transport that makes it easier to con
 
 Creating a config with `@account-kit/core` or `@account-kit/react` has been updated to accept an `AlchemyTransport` and the parameters of `createConfig` have been simplified as a result. You will now need to replace your `rpcUrl` or `apiKey` params with `transport: alchemy({...})`.
 
-For more detailed examples, see the relevant Quickstart guides, depending on which package you are using. If you don't know where to start, checkout the [React Quickstart](/react/quickstart).
+For more detailed examples, see the relevant Quickstart guides, depending on which package you are using. If you don't know where to start, checkout the [React Quickstart](/wallets/react/quickstart).
 
 ### Hooks: `useSendTransaction` and `useSendTransactions` removed
 

@@ -11,7 +11,7 @@ import Snippet from "../../shared/create-gas-policy.mdx";
 
 Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
 
-After [setting up Account Kit](/react/quickstart) in your project, follow these steps to sponsor gas.
+After [setting up Account Kit](/wallets/react/quickstart) in your project, follow these steps to sponsor gas.
 
 ## Create a Gas Manager policy
 
@@ -21,7 +21,7 @@ After [setting up Account Kit](/react/quickstart) in your project, follow these 
 
 When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
-![Policy ID](/images/account-kit/policy-id.png)
+![Policy ID](/wallets/images/account-kit/policy-id.png)
 
 Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
@@ -43,11 +43,11 @@ export const config = createConfig({
 });
 ```
 
-Now you can follow the guide for [Sending user operations](/react/send-user-operations) to send sponsored UOs from your smart account!
+Now you can follow the guide for [Sending user operations](/wallets/react/send-user-operations) to send sponsored UOs from your smart account!
 
 ## Set the gas policy ID per UserOperation
 
-If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the [`useSmartAccountClient`](/reference/account-kit/react/hooks/useSmartAccountClient) hook.
+If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the [`useSmartAccountClient`](/wallets/reference/account-kit/react/hooks/useSmartAccountClient) hook.
 
 ```tsx twoslash
 import React from "react";

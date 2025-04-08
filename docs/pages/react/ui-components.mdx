@@ -12,7 +12,7 @@ Account Kit allows you to use pre-built, [highly customizable](https://demo.alch
 - Use the pre-built [modal](#modal-auth) or [embed](#embedded-auth) the auth card directly in your app
 - Choose from [multiple authentication methods](#available-authentication-methods)
 - Customize [authentication method UI](#customize-authentication-ui)
-- Customize [theme](/react/customization/theme)
+- Customize [theme](/wallets/react/customization/theme)
 
 <Tip>
   Tailwind CSS is a required dependency for using Alchemy Account Kit UI
@@ -29,11 +29,11 @@ Account Kit supports several authentication methods that you can implement with 
 Each authentication method page includes specific configuration options and examples for both pre-built UI components and custom UI implementations.
 
 **Multi-Factor Authentication (MFA)**  
-If your users have an authenticator app (TOTP) set up, the UI components will automatically prompt them for their 6-digit code after they complete any primary login method (e.g., Email OTP, Email Magic Link, or Social Login). No extra configuration is required in the UI component – just [enable MFA](/react/mfa/setup-mfa) for your users.
+If your users have an authenticator app (TOTP) set up, the UI components will automatically prompt them for their 6-digit code after they complete any primary login method (e.g., Email OTP, Email Magic Link, or Social Login). No extra configuration is required in the UI component – just [enable MFA](/wallets/react/mfa/setup-mfa) for your users.
 
 ## Modal auth
 
-Assuming your application has been [set up](/react/quickstart), using UI components is the easiest way to authenticate users. All you have to do is leverage the [`useAuthModal`](/reference/account-kit/react/hooks/useAuthModal) hook and provide users a CTA to open the modal.
+Assuming your application has been [set up](/wallets/react/quickstart), using UI components is the easiest way to authenticate users. All you have to do is leverage the [`useAuthModal`](/wallets/reference/account-kit/react/hooks/useAuthModal) hook and provide users a CTA to open the modal.
 
 ```tsx twoslash
 import React from "react";
@@ -46,7 +46,7 @@ export default function MyPage() {
 }
 ```
 
-That's it! When the user clicks that button, the modal will open and they can complete authentication. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address.
+That's it! When the user clicks that button, the modal will open and they can complete authentication. Once they are authenticated, you can use the [`useAccount`](/wallets/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address.
 
 **Want to display a loading state during authentication?** <br/>
 For authentication with redirects in a modal, you may want to add a loading state when users are waiting for authentication to complete.
@@ -83,7 +83,7 @@ export default function MyLoginPage() {
 }
 ```
 
-That's it! The user can now input their credentials and complete login. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address.
+That's it! The user can now input their credentials and complete login. Once they are authenticated, you can use the [`useAccount`](/wallets/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address.
 
 ## Customize authentication UI
 
@@ -105,11 +105,11 @@ can be passed into sections:**
 
 ### Email
 
-This adds an email login to a section. For detailed information on email authentication, see [Email OTP](/react/login-methods/email-otp) and [Email Magic Link](/react/login-methods/email-magic-link) pages.
+This adds an email login to a section. For detailed information on email authentication, see [Email OTP](/wallets/react/login-methods/email-otp) and [Email Magic Link](/wallets/react/login-methods/email-magic-link) pages.
 
 ### Passkey
 
-This adds a passkey login method to a section. For detailed information on passkey authentication, see [Passkey Login](/react/login-methods/passkey-login) and [Passkey Signup](/react/login-methods/passkey-signup) pages.
+This adds a passkey login method to a section. For detailed information on passkey authentication, see [Passkey Login](/wallets/react/login-methods/passkey-login) and [Passkey Signup](/wallets/react/login-methods/passkey-signup) pages.
 
 ### External wallets
 
@@ -125,7 +125,7 @@ type ExternalWalletsAuthType = {
 
 ### Social
 
-This adds social authentication methods to a section. For detailed information on social authentication, see [Social Login](/react/login-methods/social-login) and [Custom Social Providers](/react/login-methods/social-providers) pages.
+This adds social authentication methods to a section. For detailed information on social authentication, see [Social Login](/wallets/react/login-methods/social-login) and [Custom Social Providers](/wallets/react/login-methods/social-providers) pages.
 
 ### Example
 
@@ -175,4 +175,4 @@ This example would output a modal similar to this image:
 
 ## Need More Control?
 
-If you need complete control over the user experience, you can implement your own custom UI using Account Kit hooks. See the [Authentication with React Hooks](/react/react-hooks) page and the individual authentication method pages for detailed implementations.
+If you need complete control over the user experience, you can implement your own custom UI using Account Kit hooks. See the [Authentication with React Hooks](/wallets/react/react-hooks) page and the individual authentication method pages for detailed implementations.

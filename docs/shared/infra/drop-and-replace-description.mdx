@@ -4,7 +4,7 @@ we'll cover how to use drop and replace to resend failing user operations and en
 ## What is drop and replace?
 
 If fees change and your user operation gets stuck in the mempool, you can use drop and replace to resend the user operation with higher fees. This is most useful
-when used in combination with [`waitForUserOperationTransaction`](/reference/aa-sdk/core/functions/waitForUserOperationTransaction) to ensure the transaction is mined
+when used in combination with [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) to ensure the transaction is mined
 and then resend the user operation with higher fees if waiting times out.
 
 Drop and replace works by resubmitting a user operation with the greater of:

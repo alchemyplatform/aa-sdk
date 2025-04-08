@@ -68,7 +68,7 @@ await client.waitForUserOperationTransaction({ hash });
 
 </CodeBlocks>
 
-Refer to the [Session Key](/smart-contracts/other-accounts/modular-account/session-keys) section to learn more about using the `SessionKeyPlugin`.
+Refer to the [Session Key](/wallets/smart-contracts/other-accounts/modular-account/session-keys) section to learn more about using the `SessionKeyPlugin`.
 
 ## 2. Uninstalling the Session Key Plugin
 
@@ -113,8 +113,8 @@ As mentioned above, you should not uninstall the multiowner plugin from a Modula
 
 **Problem**: In order to switch from multi-owner (installed in Modular Account by default) to multi-sig, you will need to batch call an uninstall of the multi-owner plugin and an install of the multi-sig plugin. **It is required to batch these steps!** If you uninstall the multi-owner plugin in a single action, the account will no longer have a validation function, and will be bricked (unusable).
 
-**Solution for extending Modular Account AFTER deployment**: You will need to manually encode 1) the uninstall of the multi-owner plugin and 2) the install of the multi-sig plugin and batch those together in one UO (using `encodeFunctionData` and [batching](/infra/send-user-operations#batch-user-operations) using `sendUserOperation`). We are working to make this workflow easier in the next SDK version.
+**Solution for extending Modular Account AFTER deployment**: You will need to manually encode 1) the uninstall of the multi-owner plugin and 2) the install of the multi-sig plugin and batch those together in one UO (using `encodeFunctionData` and [batching](/wallets/infra/send-user-operations#batch-user-operations) using `sendUserOperation`). We are working to make this workflow easier in the next SDK version.
 
 See a working example in this [discussion](https://github.com/alchemyplatform/aa-sdk/discussions/865#discussioncomment-10206160).
 
-After uninstalling and installing successfully, you will then be able to use the Multisig Account Client to [sign and send UOs](/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started/).
+After uninstalling and installing successfully, you will then be able to use the Multisig Account Client to [sign and send UOs](/wallets/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started/).

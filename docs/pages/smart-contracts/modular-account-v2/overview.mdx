@@ -25,24 +25,24 @@ As an example, see the gas comparison for deployment execution costs below:
 | **ZeroDev Kernel v3**          | 180,465                              | 84.6%                          |
 | **Safe (with 4337 module)**    | 289,207                              | 195.8%                         |
 
-We have a whole host of open-source benchmarks [here!](/smart-contracts/gas-benchmarks.mdx)
+We have a whole host of open-source benchmarks [here!](/wallets/smart-contracts/gas-benchmarks.mdx)
 
 At scale, these optimizations could save tens of thousands of dollars in gas fees if not more-- all without compromising on features or security.
 
 ## Modularity
 
-Along with Circle, Trust Wallet, Quantstamp and the Ethereum Foundation, we've already developed multiple plug & play modules for use with ERC-6900 accounts like MAv2. Out of the box, on the validation side, MAv2 supports [session keys](/smart-contracts/modular-account-v2/session-keys), Webauthn validation (passkeys/biometrics).
+Along with Circle, Trust Wallet, Quantstamp and the Ethereum Foundation, we've already developed multiple plug & play modules for use with ERC-6900 accounts like MAv2. Out of the box, on the validation side, MAv2 supports [session keys](/wallets/smart-contracts/modular-account-v2/session-keys), Webauthn validation (passkeys/biometrics).
 
 On the permissions front, MAv2 already has first-class support for the following:
 
 - Allowlists, ensuring a validation can only access what you want it to and nothing else.
-- ERC-20 spend limits, think [session keys with spend limits!](/smart-contracts/modular-account-v2/session-keys)
+- ERC-20 spend limits, think [session keys with spend limits!](/wallets/smart-contracts/modular-account-v2/session-keys)
 - Native spend limits, which take gas into account.
 - Enforcing expiries, so your session keys can last as short or as long as you need them to.
 
 Note that these features are only possible thanks to the modular nature of ERC-6900, as they're all separate modules. This also means it's possible to combine any number of modules to perfectly fine-tune your permission set.
 
-Want a session key that's only valid for 24 hours, can only spend up to 0.001 ETH (incl. gas) and 100 USDC, all the while it's only able to authenticate calls to one specific address with one specific function? [Go for it!](/smart-contracts/modular-account-v2/session-keys)
+Want a session key that's only valid for 24 hours, can only spend up to 0.001 ETH (incl. gas) and 100 USDC, all the while it's only able to authenticate calls to one specific address with one specific function? [Go for it!](/wallets/smart-contracts/modular-account-v2/session-keys)
 
 ## Simplicity
 
@@ -56,4 +56,4 @@ The SDK is designed from the ground up to get out of your way so you can focus o
 
 EIP-7702 is an upcoming Ethereum upgrade set to launch in the coming months as part of the Pectra hardfork. Specifically, EIP-7702 enables Externally Owned Accounts (EOAs) to use smart contract account features.
 
-You can create an EIP-7702 compliant version of an MAv2 account, learn how to [here](/smart-contracts/modular-account-v2/using-7702)
+You can create an EIP-7702 compliant version of an MAv2 account, learn how to [here](/wallets/smart-contracts/modular-account-v2/using-7702)
