@@ -3,13 +3,7 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import {
-  custom,
-  parseEther,
-  publicActions,
-  testActions,
-  type TestActions,
-} from "viem";
+import { custom, parseEther } from "viem";
 import {
   createModularAccountV2Client,
   type SignerEntity,
@@ -27,17 +21,6 @@ import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
   const instance = local070Instance;
-
-  let client: ReturnType<typeof instance.getClient> &
-    ReturnType<typeof publicActions> &
-    TestActions;
-
-  beforeAll(async () => {
-    client = instance
-      .getClient()
-      .extend(publicActions)
-      .extend(testActions({ mode: "anvil" }));
-  });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner
@@ -73,25 +56,22 @@ describe("MA v2 deferral actions tests", async () => {
     });
 
     const { typedData, fullPreSignatureDeferredActionDigest } =
-      await new PermissionBuilder(serverClient)
-        .configure({
-          key: {
-            publicKey: await sessionKey.getAddress(),
-            type: "secp256k1",
-          },
-          entityId,
-          nonce: nonce,
-        })
+      await new PermissionBuilder({
+        client: serverClient,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId,
+        nonce: nonce,
+        deadline: 0,
+      })
         .addPermission({
           permission: {
             type: PermissionType.ROOT,
           },
         })
-        .compileDeferred({
-          deadline: 0,
-          uoValidationEntityId: entityId,
-          uoIsGlobalValidation: true,
-        });
+        .compileDeferred();
 
     const sig = await provider.account.signTypedData(typedData);
 
