@@ -62,10 +62,11 @@ const lightAccountClient = await createMultiOwnerLightAccountAlchemyClient({
 
 </CodeBlocks>
 
-:::tip[Address calculation]
+<Tip title="Address calculation">
 For `LightAccount`, the address of the smart account will be calculated as a combination of the version, [the owner, and the salt](https://github.com/alchemyplatform/light-account/blob/v2.0.0/src/LightAccountFactory.sol#L24-L33). You will get the same smart account address each time you supply the same `version` and `owner`. Alternatively, you can supply `salt` if you want a different address for the same `version` and `owner` params (the default salt is `0n`). For `MultiOwnerLightAccount`, the same pattern follows, except that it takes an array of owner addresses instead of a single owner address.
 
 If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only used for signing the operation.
 
 Reference: https://eips.ethereum.org/EIPS/eip-4337#first-time-account-creation
-:::
+
+</Tip>
