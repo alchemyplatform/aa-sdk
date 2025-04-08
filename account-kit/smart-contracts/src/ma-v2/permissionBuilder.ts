@@ -209,25 +209,26 @@ export class PermissionBuilder {
   private hooks: Hook[] = [];
   private nonce: bigint = 0n;
   private hasAssociatedExecHooks: boolean = false;
+  private deadline: number = 0;
 
-  constructor(client: ModularAccountV2Client) {
-    this.client = client;
-  }
-
-  // Configures the builder
-  configure({
+  constructor({
+    client,
     key,
     entityId,
     nonce,
     selectors,
     hooks,
+    deadline,
   }: {
+    client: ModularAccountV2Client;
     key: Key;
     entityId: number;
     nonce: bigint;
     selectors?: Hex[];
     hooks?: Hook[];
-  }): this {
+    deadline?: number;
+  }) {
+    this.client = client;
     this.validationConfig = {
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
         this.client.chain
@@ -241,10 +242,10 @@ export class PermissionBuilder {
       entityId: entityId,
       signer: key.publicKey,
     });
+    this.nonce = nonce;
     if (selectors) this.selectors = selectors;
     if (hooks) this.hooks = hooks;
-    this.nonce = nonce;
-    return this;
+    if (deadline) this.deadline = deadline;
   }
 
   addSelector({ selector }: { selector: Hex }): this {
@@ -328,33 +329,24 @@ export class PermissionBuilder {
   }
 
   // Use for building deferred action typed data to sign
-  async compileDeferred({
-    deadline,
-  }: {
-    deadline: number;
-    uoValidationEntityId: number;
-    uoIsGlobalValidation: boolean;
-  }): Promise<{
+  async compileDeferred(): Promise<{
     typedData: DeferredActionTypedData;
     fullPreSignatureDeferredActionDigest: Hex;
   }> {
-    // Need to remove this because compileRaw may add selectors
-    // this.validateConfiguration();
-
     // Add time range module hook via expiry
-    if (deadline !== 0) {
-      if (deadline < Date.now() / 1000) {
+    if (this.deadline !== 0) {
+      if (this.deadline < Date.now() / 1000) {
         throw new Error(
-          `PERMISSION: compileDeferred(): Deadline ${deadline} cannot be before now (${
-            Date.now() / 1000
-          })`
+          `PERMISSION: compileDeferred(): deadline ${
+            this.deadline
+          } cannot be before now (${Date.now() / 1000})`
         );
       }
       this.hooks.push(
         TimeRangeModule.buildHook(
           {
             entityId: this.validationConfig.entityId, // will be timerange entityId
-            validUntil: deadline,
+            validUntil: this.deadline,
             validAfter: 0,
           },
           getDefaultTimeRangeModuleAddress(this.client.chain)
@@ -368,7 +360,7 @@ export class PermissionBuilder {
       this.client
     ).createDeferredActionTypedDataObject({
       callData: installValidationCall,
-      deadline: deadline,
+      deadline: this.deadline,
       nonce: this.nonce,
     });
 
@@ -377,8 +369,8 @@ export class PermissionBuilder {
     ).buildPreSignatureDeferredActionDigest({ typedData });
 
     // Encode additional information to build the full pre-signature digest
-    const fullPreSignatureDeferredActionDigest: `0x${string}` = `0x00${
-      this.hasAssociatedExecHooks ? "01" : "00"
+    const fullPreSignatureDeferredActionDigest: `0x${string}` = `0x0${
+      this.hasAssociatedExecHooks ? "1" : "0"
     }${toHex(this.nonce, {
       size: 32,
     }).slice(2)}${preSignatureDigest.slice(2)}`;
