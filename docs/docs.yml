@@ -67,7 +67,7 @@ navigation:
           - page: Server-side rendering
             path: docs/account-kit/pages/react/ssr.mdx
           - section: SDK Reference
-            path: docs/account-kit/pages/reference/account-kit/core/index.mdx
+            path: docs/account-kit/pages/reference/account-kit/react/index.mdx
             contents:
               - section: Components
                 contents:
@@ -189,7 +189,71 @@ navigation:
                 path: docs/account-kit/pages/core/add-passkey.mdx
               - page: Multi-chain apps
                 path: docs/account-kit/pages/core/multi-chain-apps.mdx
-              # TODO: SDK reference
+      - section: SDK Reference
+        path: docs/account-kit/pages/reference/account-kit/core/index.mdx
+        contents:
+          - section: Functions
+            contents:
+              - page: convertSignerStatusToState
+                path: docs/account-kit/pages/reference/account-kit/core/functions/convertSignerStatusToState.mdx
+              - page: cookieStorage
+                path: docs/account-kit/pages/reference/account-kit/core/functions/cookieStorage.mdx
+              - page: cookieToInitialState
+                path: docs/account-kit/pages/reference/account-kit/core/functions/cookieToInitialState.mdx
+              - page: createAccount
+                path: docs/account-kit/pages/reference/account-kit/core/functions/createAccount.mdx
+              - page: createConfig
+                path: docs/account-kit/pages/reference/account-kit/core/functions/createConfig.mdx
+              - page: createDefaultAccountState
+                path: docs/account-kit/pages/reference/account-kit/core/functions/createDefaultAccountState.mdx
+              - page: defaultAccountState
+                path: docs/account-kit/pages/reference/account-kit/core/functions/defaultAccountState.mdx
+              - page: disconnect
+                path: docs/account-kit/pages/reference/account-kit/core/functions/disconnect.mdx
+              - page: getAccount
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getAccount.mdx
+              - page: getBundlerClient
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getBundlerClient.mdx
+              - page: getChain
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getChain.mdx
+              - page: getConnection
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getConnection.mdx
+              - page: getSigner
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getSigner.mdx
+              - page: getSignerStatus
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getSignerStatus.mdx
+              - page: getSmartAccountClient
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
+              - page: getUser
+                path: docs/account-kit/pages/reference/account-kit/core/functions/getUser.mdx
+              - page: hydrate
+                path: docs/account-kit/pages/reference/account-kit/core/functions/hydrate.mdx
+              - page: parseCookie
+                path: docs/account-kit/pages/reference/account-kit/core/functions/parseCookie.mdx
+              - page: reconnect
+                path: docs/account-kit/pages/reference/account-kit/core/functions/reconnect.mdx
+              - page: setChain
+                path: docs/account-kit/pages/reference/account-kit/core/functions/setChain.mdx
+              - page: watchAccount
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchAccount.mdx
+              - page: watchBundlerClient
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchBundlerClient.mdx
+              - page: watchChain
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchChain.mdx
+              - page: watchConnection
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchConnection.mdx
+              - page: watchSigner
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchSigner.mdx
+              - page: watchSignerStatus
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
+              - page: watchSmartAccountClient
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
+              - page: watchUser
+                path: docs/account-kit/pages/reference/account-kit/core/functions/watchUser.mdx
+          - section: Classes
+            contents:
+              - page: ClientOnlyPropertyError
+                path: docs/account-kit/pages/reference/account-kit/core/classes/ClientOnlyPropertyError/constructor.mdx
 
       - section: Infra
         contents:
