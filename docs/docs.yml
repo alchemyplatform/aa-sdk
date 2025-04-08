@@ -66,8 +66,83 @@ navigation:
                 path: docs/account-kit/pages/react/customization/theme.mdx
           - page: Server-side rendering
             path: docs/account-kit/pages/react/ssr.mdx
-          # - section: SDK Reference
-          #   TODO: Add SDK reference content
+          - section: SDK Reference
+            path: docs/account-kit/pages/reference/account-kit/core/index.mdx
+            contents:
+              - section: Components
+                contents:
+                  - page: AlchemyAccountProvider
+                    path: docs/account-kit/pages/reference/account-kit/react/components/AlchemyAccountProvider.mdx
+                  - page: AuthCard
+                    path: docs/account-kit/pages/reference/account-kit/react/components/AuthCard.mdx
+                  - page: Dialog
+                    path: docs/account-kit/pages/reference/account-kit/react/components/Dialog.mdx
+              - section: Authentication
+                contents:
+                  - page: useAddPasskey
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
+                  - page: useAuthModal
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useAuthModal.mdx
+                  - page: useAuthenticate
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useAuthenticate.mdx
+                  - page: useConnect
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useConnect.mdx
+                  - page: useExportAccount
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useExportAccount.mdx
+                  - page: useLogout
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useLogout.mdx
+                  - page: useSigner
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useSigner.mdx
+                  - page: useSignerStatus
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useSignerStatus.mdx
+                  - page: useUser
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useUser.mdx
+              - section: Account Client
+                contents:
+                  - page: useAccount
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useAccount.mdx
+                  - page: useSmartAccountClient
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useSmartAccountClient.mdx
+              - section: Smart Account Actions
+                contents:
+                  - page: useChain
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useChain.mdx
+                  - page: useClientActions
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useClientActions.mdx
+                  - page: useDropAndReplaceUserOperation
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
+                  - page: useSendUserOperation
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useSendUserOperation.mdx
+                  - page: useSignMessage
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useSignMessage.mdx
+                  - page: useSignTypedData
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useSignTypedData.mdx
+                  - page: useWaitForUserOperationTransaction
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useWaitForUserOperationTransaction.mdx
+              - section: Bundler/RPC Client
+                contents:
+                  - page: useBundlerClient
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useBundlerClient.mdx
+              - section: Utilities
+                contents:
+                  - page: useAlchemyAccountContext
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useAlchemyAccountContext.mdx
+                  - page: useAuthError
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useAuthError.mdx
+                  - page: useConnection
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useConnection.mdx
+                  - page: useUiConfig
+                    path: docs/account-kit/pages/reference/account-kit/react/hooks/useUiConfig.mdx
+              - section: Functions
+                contents:
+                  - page: Hydrate
+                    path: docs/account-kit/pages/reference/account-kit/react/functions/hydrate.mdx
+                  - page: createConfig
+                    path: docs/account-kit/pages/reference/account-kit/react/functions/createConfig.mdx
+              - section: Classes
+                contents:
+                  - page: NoAlchemyAccountContextError
+                    path: docs/account-kit/pages/reference/account-kit/react/classes/NoAlchemyAccountContextError/constructor.mdx
 
       - section: React Native
         contents:
