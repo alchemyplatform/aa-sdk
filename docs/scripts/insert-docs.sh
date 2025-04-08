@@ -16,7 +16,7 @@ sed -n '/^  mdx-components:/,/^[^ ]/p' fern/docs/account-kit/docs.yml | sed '1d;
     fern/docs.yml && \
 
 # Extract navigation section and insert it into the docs.yml file
-sed -n '/^navigation:/,/^[^ ]/p' fern/docs/account-kit/docs.yml | sed '1d;$d' | \
+sed -n '/^navigation:/,$p' fern/docs/account-kit/docs.yml | sed '1d' | \
   sed -i.bak \
     "/$DOCS_PLACEHOLDER/r /dev/stdin" \
     fern/docs.yml && \
