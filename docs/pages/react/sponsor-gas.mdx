@@ -1,0 +1,79 @@
+---
+title: How to sponsor gas for a User Operation
+description: Follow this guide to sponsor gas for UserOperations from any
+  ERC-4337 smart account. Account Kit is a vertically integrated stack for
+  building apps that support ERC-4337.
+---
+
+import Snippet from "../../shared/create-gas-policy.mdx";
+
+# How to sponsor gas for a User Operation
+
+Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
+
+After [setting up Account Kit](/react/quickstart) in your project, follow these steps to sponsor gas.
+
+## Create a Gas Manager policy
+
+<Snippet />
+
+## Set the Policy ID globally
+
+When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
+
+![Policy ID](/images/policy-id.png)
+
+Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
+
+:::tip
+Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
+:::
+
+```ts twoslash [config.ts]
+// @noErrors
+import { createConfig } from "@account-kit/react";
+import { sepolia } from "@account-kit/infra";
+
+export const config = createConfig({
+  apiKey: "ALCHEMY_API_KEY",
+  chain: sepolia,
+  policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+});
+```
+
+Now you can follow the guide for [Sending user operations](/react/send-user-operations) to send sponsored UOs from your smart account!
+
+## Set the gas policy ID per UserOperation
+
+If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the [`useSmartAccountClient`](/reference/account-kit/react/hooks/useSmartAccountClient) hook.
+
+```tsx twoslash
+import React from "react";
+import {
+  useSmartAccountClient,
+  useSendUserOperation,
+} from "@account-kit/react";
+
+export default function MyComponent() {
+  const { client } = useSmartAccountClient({
+    policyId: "GAS_MANAGER_POLICY_ID",
+  });
+  const { sendUserOperation } = useSendUserOperation({ client });
+
+  return (
+    <button
+      onClick={() =>
+        sendUserOperation({
+          uo: {
+            target: "0xTARGET_ADDRESS",
+            data: "0x",
+            value: 0n,
+          },
+        })
+      }
+    >
+      Send Sponsored User Operation
+    </button>
+  );
+}
+```
