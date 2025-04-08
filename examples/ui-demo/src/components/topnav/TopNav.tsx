@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { GithubLogo } from "../icons/github";
 import { Wordmark } from "../icons/wordmark";
 import ExternalLink from "../shared/ExternalLink";
+import Image from "next/image";
 
 export function TopNav() {
   const onDashboardClick = useCallback((e: React.MouseEvent) => {
@@ -19,15 +20,20 @@ export function TopNav() {
   return (
     <div className="fixed lg:sticky left-0 top-0 right-0 flex justify-center py-5 bg-demo-bg lg:bg-demo-nav-bg shadow-sm z-20">
       <div className="flex items-center justify-between h-full w-full max-w-[1440px] mx-6 md:mx-7 lg:mx-10">
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center gap-4">
           {/* This link is used to refresh the page when the user clicks the logo */}
           <a href="/">
             <Wordmark />
           </a>
-          <div className="w-px h-5 bg-gray-500" />
-          <p className="text-lg align-middle whitespace-nowrap">Account Kit</p>
+          <div className="hidden sm:block w-px h-6 bg-gray-500" />
+          <Image
+            src="/images/smart-wallets.svg"
+            width={200}
+            height={26}
+            alt="smart wallets"
+            className="hidden sm:block"
+          />
         </div>
-
         <div className="flex gap-1 md:gap-8 items-center h-8">
           <ExternalLink
             href={links.quickstartGuide}

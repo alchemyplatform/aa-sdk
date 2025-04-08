@@ -3,6 +3,8 @@ import {
   getEntryPoint,
   InvalidEntityIdError,
   InvalidNonceKeyError,
+  InvalidDeferredActionNonce,
+  InvalidDeferredActionMode,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
@@ -85,6 +87,7 @@ export type CreateMAV2BaseParams<
   signer: TSigner;
   signerEntity?: SignerEntity;
   accountAddress: Address;
+  deferredAction?: Hex;
 };
 
 export type CreateMAV2BaseReturnType<
@@ -108,6 +111,7 @@ export async function createMAv2Base<
       entityId = DEFAULT_OWNER_ENTITY_ID,
     } = {},
     accountAddress,
+    deferredAction,
     ...remainingToSmartContractAccountParams
   } = config;
 
@@ -119,6 +123,39 @@ export async function createMAv2Base<
     transport,
     chain,
   });
+
+  const entryPointContract = getContract({
+    address: entryPoint.address,
+    abi: entryPoint.abi,
+    client,
+  });
+
+  let useDeferredAction: boolean = false;
+  let nonce: bigint = 0n;
+  let deferredActionData: Hex = "0x";
+  let hasAssociatedExecHooks: boolean = false;
+
+  if (deferredAction) {
+    if (deferredAction.slice(2, 4) !== "00") {
+      throw new InvalidDeferredActionMode();
+    }
+    // Set these values if the deferred action has not been consumed. We check this with the EP
+    const nextNonceForDeferredAction: bigint =
+      (await entryPointContract.read.getNonce([
+        accountAddress,
+        nonce >> 64n,
+      ])) as bigint;
+
+    // we only add the deferred action in if the nonce has not been consumed
+    if (nonce === nextNonceForDeferredAction) {
+      nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
+      useDeferredAction = true;
+      deferredActionData = `0x${deferredAction.slice(70)}`;
+      hasAssociatedExecHooks = deferredAction[5] === "1";
+    } else if (nonce > nextNonceForDeferredAction) {
+      throw new InvalidDeferredActionNonce();
+    }
+  }
 
   const encodeExecute: (tx: AccountOp) => Promise<Hex> = async ({
     target,
@@ -150,17 +187,15 @@ export async function createMAv2Base<
 
   const isAccountDeployed: () => Promise<boolean> = async () =>
     !!(await client.getCode({ address: accountAddress }));
-  // TODO: add deferred action flag
+
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
+    if (useDeferredAction) {
+      return nonce;
+    }
+
     if (nonceKey > maxUint152) {
       throw new InvalidNonceKeyError(nonceKey);
     }
-
-    const entryPointContract = getContract({
-      address: entryPoint.address,
-      abi: entryPoint.abi,
-      client,
-    });
 
     const fullNonceKey: bigint =
       (nonceKey << 40n) +
@@ -216,7 +251,8 @@ export async function createMAv2Base<
       entityId: Number(entityId),
     });
 
-    return validationData.executionHooks.length
+    return (useDeferredAction && hasAssociatedExecHooks) ||
+      validationData.executionHooks.length
       ? concatHex([executeUserOpSelector, callData])
       : callData;
   };
@@ -231,8 +267,14 @@ export async function createMAv2Base<
     encodeBatchExecute,
     getNonce,
     ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress)
-      : singleSignerMessageSigner(signer, chain, accountAddress, entityId)),
+      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
+      : singleSignerMessageSigner(
+          signer,
+          chain,
+          accountAddress,
+          entityId,
+          deferredActionData
+        )),
   });
 
   return {

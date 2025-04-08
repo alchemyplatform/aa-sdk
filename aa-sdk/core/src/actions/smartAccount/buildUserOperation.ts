@@ -1,4 +1,4 @@
-import type { Chain, Client, Transport } from "viem";
+import { type Chain, type Client, type Transport } from "viem";
 import {
   type GetEntryPointFromAccount,
   type SmartContractAccount,
@@ -13,7 +13,9 @@ import type {
   BuildUserOperationParameters,
   UserOperationContext,
 } from "./types";
+import { clientHeaderTrack } from "../../client/addBreadcrumb.js";
 
+const USER_OPERATION_METHOD = "buildUserOperation";
 /**
  * Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
  *
@@ -33,7 +35,7 @@ import type {
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client the client instance used to build the user operation
+ * @param {Client<TTransport, TChain, TAccount>} client_ the client instance used to build the user operation
  * @param {BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>} args the parameters required to build the user operation, including account, overrides, and context
  * @returns {Promise<UserOperationStruct<TEntryPointVersion>>} a promise that resolves to a `UserOperationStruct` object containing the built user operation details
  */
@@ -48,9 +50,10 @@ export async function buildUserOperation<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
+  const client = clientHeaderTrack(client_, USER_OPERATION_METHOD);
   const { account = client.account, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -59,7 +62,7 @@ export async function buildUserOperation<
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "buildUserOperation",
+      USER_OPERATION_METHOD,
       client
     );
   }

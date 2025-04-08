@@ -68,8 +68,9 @@
     {
       "files": ["**/*.mdx"],
       "extends": ["plugin:mdx/recommended"],
-      "settings": {
-        "import/extensions": ["off", "ignorePackages"]
+      "rules": {
+        "import/extensions": ["off", "ignorePackages"],
+        "react/jsx-no-undef": "off"
       }
     }
   ]

@@ -117,3 +117,31 @@ export class InvalidModularAccountV2Mode extends BaseError {
     super(`The provided account mode is invalid for ModularAccount V2`);
   }
 }
+
+/**
+ * Error class denoting that the deferred action mode used is invalid.
+ */
+export class InvalidDeferredActionMode extends BaseError {
+  override name = "InvalidDeferredActionMode";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the provided deferred action mode is invalid.
+   */
+  constructor() {
+    super(`The provided deferred action mode is invalid`);
+  }
+}
+
+/**
+ * Error class denoting that the deferred action nonce used is invalid.
+ */
+export class InvalidDeferredActionNonce extends BaseError {
+  override name = "InvalidDeferredActionNonce";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the provided deferred action nonce is invalid.
+   */
+  constructor() {
+    super(`The provided deferred action nonce is invalid`);
+  }
+}

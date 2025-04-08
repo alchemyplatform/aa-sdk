@@ -1,5 +1,6 @@
 import {
   ChainNotFoundError,
+  clientHeaderTrack,
   createSmartAccountClient,
   isSmartAccountWithSigner,
   type Prettify,
@@ -12,7 +13,11 @@ import {
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
-import type { AlchemyTransport } from "../alchemyTransport.js";
+import {
+  alchemy,
+  convertHeadersToObject,
+  type AlchemyTransport,
+} from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
@@ -22,6 +27,7 @@ import {
   type AlchemySmartAccountClientActions,
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
+import { headersUpdate } from "../alchemyTrackerHeaders.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner
@@ -125,58 +131,71 @@ export function createAlchemySmartAccountClient<
  * @param {AlchemySmartAccountClientConfig} config The configuration for creating the Alchemy smart account client
  * @returns {AlchemySmartAccountClient} An instance of `AlchemySmartAccountClient` configured based on the provided options
  */
-export function createAlchemySmartAccountClient({
-  account,
-  policyId,
-  useSimulation,
-  feeEstimator,
-  customMiddleware,
-  gasEstimator,
-  signUserOperation,
-  transport,
-  chain,
-  opts,
-}: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
-  if (!chain) {
+export function createAlchemySmartAccountClient(
+  config: AlchemySmartAccountClientConfig
+): AlchemySmartAccountClient {
+  if (!config.chain) {
     throw new ChainNotFoundError();
   }
 
   const feeOptions =
-    opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
+    config.opts?.feeOptions ?? getDefaultUserOperationFeeOptions(config.chain);
 
   const scaClient = createSmartAccountClient({
-    account,
-    transport,
-    chain,
+    account: config.account,
+    transport: config.transport,
+    chain: config.chain,
     type: "AlchemySmartAccountClient",
     opts: {
-      ...opts,
+      ...config.opts,
       feeOptions,
     },
-    feeEstimator: feeEstimator ?? alchemyFeeEstimator(transport),
-    gasEstimator,
+    feeEstimator: config.feeEstimator ?? alchemyFeeEstimator(config.transport),
+    gasEstimator: config.gasEstimator,
     customMiddleware: async (struct, args) => {
       if (isSmartAccountWithSigner(args.account)) {
-        transport.updateHeaders(getSignerTypeHeader(args.account));
+        config.transport.updateHeaders(getSignerTypeHeader(args.account));
       }
-      return customMiddleware ? customMiddleware(struct, args) : struct;
+      return config.customMiddleware
+        ? config.customMiddleware(struct, args)
+        : struct;
     },
-    ...(policyId
+    ...(config.policyId
       ? alchemyGasAndPaymasterAndDataMiddleware({
-          policyId,
-          transport,
-          gasEstimatorOverride: gasEstimator,
-          feeEstimatorOverride: feeEstimator,
+          policyId: config.policyId,
+          transport: config.transport,
+          gasEstimatorOverride: config.gasEstimator,
+          feeEstimatorOverride: config.feeEstimator,
         })
       : {}),
-    userOperationSimulator: useSimulation
-      ? alchemyUserOperationSimulator(transport)
+    userOperationSimulator: config.useSimulation
+      ? alchemyUserOperationSimulator(config.transport)
       : undefined,
-    signUserOperation,
-  }).extend(alchemyActions);
+    signUserOperation: config.signUserOperation,
+    addBreadCrumb(breadcrumb: string) {
+      const oldConfig = config.transport.config;
+      const dynamicFetchOptions = config.transport.dynamicFetchOptions;
+      const newTransport = alchemy({ ...oldConfig });
+      newTransport.updateHeaders(
+        headersUpdate(breadcrumb)(
+          convertHeadersToObject(dynamicFetchOptions?.headers)
+        )
+      );
+      return createAlchemySmartAccountClient({
+        ...config,
+        transport: newTransport,
+      }) as any;
+    },
+  })
+    .extend(alchemyActions)
+    .extend((client_) => ({
+      addBreadcrumb(breadcrumb: string) {
+        return clientHeaderTrack(client_, breadcrumb);
+      },
+    }));
 
-  if (account && isSmartAccountWithSigner(account)) {
-    transport.updateHeaders(getSignerTypeHeader(account));
+  if (config.account && isSmartAccountWithSigner(config.account)) {
+    config.transport.updateHeaders(getSignerTypeHeader(config.account));
   }
 
   return scaClient;

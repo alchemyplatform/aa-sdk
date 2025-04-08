@@ -4,7 +4,7 @@ import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
-import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
+import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
@@ -14,9 +14,14 @@ import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
+  RemoveMfaParams,
   EmailAuthParams,
+  EnableMfaParams,
+  EnableMfaResult,
+  experimental_CreateApiKeyParams,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
+  MfaFactor,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -26,7 +31,11 @@ import type {
   SignerRoutes,
   SignupResponse,
   User,
+  VerifyMfaParams,
+  SubmitOtpCodeResponse,
+  ValidateMultiFactorsParams,
 } from "./types.js";
+import { VERSION } from "../version.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -131,7 +140,54 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string; otpId?: string }>;
+  ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }>;
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ multiFactors: Array<MfaFactor> }>} A promise that resolves to an array of configured MFA factors
+   */
+  public abstract getMfaFactors(): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   */
+  public abstract addMfa(params: EnableMfaParams): Promise<EnableMfaResult>;
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  public abstract verifyMfa(params: VerifyMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
+
+  /**
+   * Removes existing MFA factors by ID or factor type.
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  public abstract removeMfa(params: RemoveMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }>;
+
+  /**
+   * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
+   *
+   * @param {ValidateMultiFactorsParams} params The validation parameters
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
+   */
+  public abstract validateMultiFactors(
+    params: ValidateMultiFactorsParams
+  ): Promise<{ bundle: string }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;
@@ -151,7 +207,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }>;
+  ): Promise<SubmitOtpCodeResponse>;
 
   public abstract disconnect(): Promise<void>;
 
@@ -229,6 +285,27 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * Retrieves the status of the passkey for the current user. Requires the user to be authenticated.
+   *
+   * @returns {Promise<{ isPasskeyAdded: boolean }>} A promise that resolves to an object containing the passkey status
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public getPasskeyStatus = async () => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const resp = await this.turnkeyClient.getAuthenticators({
+      organizationId: this.user.orgId,
+      userId: this.user.userId,
+    });
+    return {
+      isPasskeyAdded: resp.authenticators.some((it) =>
+        it.authenticatorName.startsWith("passkey-")
+      ),
+    };
+  };
+
+  /**
    * Retrieves the current user or fetches the user information if not already available.
    *
    * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
@@ -299,6 +376,60 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return await this.turnkeyClient.stampGetWhoami({
       organizationId: this.user.orgId,
     });
+  };
+
+  /**
+   * Generates a stamped getOrganization request for the current user.
+   *
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "getOrganization" information for the logged in user
+   * @throws {Error} if no user is authenticated
+   */
+  public stampGetOrganization = async (): Promise<TSignedRequest> => {
+    if (!this.user) {
+      throw new Error(
+        "User must be authenticated to stamp a get organization request"
+      );
+    }
+
+    return await this.turnkeyClient.stampGetOrganization({
+      organizationId: this.user.orgId,
+    });
+  };
+
+  /**
+   * Creates an API key that can take any action on behalf of the current user.
+   * (Note that this method is currently experimental and is subject to change.)
+   *
+   * @param {CreateApiKeyParams} params Parameters for creating the API key.
+   * @param {string} params.name Name of the API key.
+   * @param {string} params.publicKey Public key to be used for the API key.
+   * @param {number} params.expirationSec Number of seconds until the API key expires.
+   * @throws {Error} If there is no authenticated user or the API key creation fails.
+   */
+  public experimental_createApiKey = async (
+    params: experimental_CreateApiKeyParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new Error("User must be authenticated to create api key");
+    }
+    const resp = await this.turnkeyClient.createApiKeys({
+      type: "ACTIVITY_TYPE_CREATE_API_KEYS",
+      timestampMs: new Date().getTime().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        apiKeys: [
+          {
+            apiKeyName: params.name,
+            publicKey: params.publicKey,
+            expirationSeconds: params.expirationSec.toString(),
+          },
+        ],
+        userId: this.user.userId,
+      },
+    });
+    if (resp.activity.status !== "ACTIVITY_STATUS_COMPLETED") {
+      throw new Error("Failed to create api key");
+    }
   };
 
   /**
@@ -382,6 +513,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const basePath = "/signer";
 
     const headers = new Headers();
+    headers.append("Alchemy-AA-Sdk-Version", VERSION);
     headers.append("Content-Type", "application/json");
     if (this.connectionConfig.apiKey) {
       headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);
@@ -540,6 +672,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       auth0Connection,
       scope: providedScope,
       claims: providedClaims,
+      otherParameters: providedOtherParameters,
       mode,
       redirectUrl,
       expirationSeconds,
@@ -562,23 +695,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new Error(`No auth provider found with id ${authProviderId}`);
     }
 
-    let scope: string;
-    let claims: string | undefined;
+    let scope: string | undefined = providedScope;
+    let claims: string | undefined = providedClaims;
+    let otherParameters: Record<string, string> | undefined =
+      providedOtherParameters;
 
-    if (providedScope) {
-      scope = addOpenIdIfAbsent(providedScope);
-      claims = providedClaims;
-    } else {
-      if (isCustomProvider) {
-        throw new Error("scope must be provided for a custom provider");
-      }
-      const scopeAndClaims = getDefaultScopeAndClaims(authProviderId);
-      if (!scopeAndClaims) {
-        throw new Error(
-          `Default scope not known for provider ${authProviderId}`
-        );
-      }
-      ({ scope, claims } = scopeAndClaims);
+    if (!isCustomProvider) {
+      const defaultCustomization =
+        getDefaultProviderCustomization(authProviderId);
+      scope ??= defaultCustomization?.scope;
+      claims ??= defaultCustomization?.claims;
+      otherParameters ??= defaultCustomization?.otherParameters;
+    }
+    if (!scope) {
+      throw new Error(`Default scope not known for provider ${authProviderId}`);
     }
     const { authEndpoint, clientId } = authProvider;
 
@@ -611,10 +741,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       prompt: "select_account",
       client_id: clientId,
       nonce,
-      // Fixes Facebook mobile login so that `window.opener` doesn't get nullified.
-      ...(mode === "popup" && authProvider.id === "facebook"
-        ? { sdk: "joey" }
-        : {}),
+      ...otherParameters,
     };
     if (claims) {
       params.claims = claims;

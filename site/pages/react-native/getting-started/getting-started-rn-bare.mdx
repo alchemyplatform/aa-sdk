@@ -39,23 +39,45 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 
 ```js [metro.config.js]
 const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+const path = require("path");
+const projectRoot = __dirname;
+const config = getDefaultConfig(projectRoot);
 
-const defaultConfig = getDefaultConfig(__dirname);
+// Add aliases for file-system import based modules
+const ALIASES = {
+  "@noble/hashes/crypto": path.resolve(
+    projectRoot, // <-- Adjust this as fits your project setup
+    "node_modules/@noble/hashes/crypto.js"
+  ),
+};
 
-const extraNodeModules = {
-  ...defaultConfig.resolver.extraNodeModules,
+config.resolver.extraNodeModules = {
+  ...config.resolver.extraNodeModules,
   ...require("node-libs-react-native"),
   crypto: require.resolve("crypto-browserify"),
   stream: require.resolve("stream-browserify"),
 };
 
-const config = {
-  resolver: {
-    extraNodeModules,
-  },
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (ALIASES[moduleName]) {
+    return {
+      filePath: ALIASES[moduleName],
+      type: "sourceFile",
+    };
+  }
+  return context.resolveRequest(context, moduleName, platform);
 };
 
-module.exports = mergeConfig(defaultConfig, config);
+// Important to allow importing package exports
+config.resolver.unstable_enablePackageExports = true;
+
+config.resolver.unstable_conditionNames = [
+  "browser",
+  "require",
+  "react-native",
+];
+
+module.exports = config;
 ```
 
 ### Register global shims
@@ -85,6 +107,16 @@ yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/inf
 
 :::
 
+:::tip
+The `@account-kit/react-native` package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
+
+```json
+"module": "NodeNext",
+"moduleResolution": "nodenext",
+```
+
+:::
+
 ### Add supporting dependencies
 
 To ensure the Signer package works correctly, you'll need to add the following dependencies to your project:
@@ -100,19 +132,6 @@ yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
 :::
-
-## Update your metro config
-
-The `account-kit/react-native` and it's supoorting packages leverages package.json `exports` which is not (yet) suported by default in Metro.
-
-Update your `metro.config.js` to add this support using:
-
-```js [metro.config.js]
-// ... rest of metro config
-config.resolver.unstable_enablePackageExports = true;
-// ... rest of metro config
-module.exports = config;
-```
 
 ## Build and run your project
 

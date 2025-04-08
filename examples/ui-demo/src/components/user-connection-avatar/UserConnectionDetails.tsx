@@ -145,7 +145,7 @@ export function UserConnectionDetails({
               </div>
             </a>
 
-            <UserAddressTooltip address={signerAddress ?? null} linkEnabled />
+            <UserAddressTooltip address={signerAddress ?? null} />
           </div>
 
           <SolanaAddressDetails />

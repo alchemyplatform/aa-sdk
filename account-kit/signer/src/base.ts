@@ -21,7 +21,17 @@ import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import type { BaseSignerClient } from "./client/base";
-import type { OauthConfig, OauthParams, User } from "./client/types";
+import type {
+  EmailType,
+  MfaFactor,
+  OauthConfig,
+  OauthParams,
+  User,
+  VerifyMfaParams,
+  EnableMfaParams,
+  EnableMfaResult,
+  RemoveMfaParams,
+} from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
 import {
@@ -36,6 +46,7 @@ import {
   type AlchemySignerEvent,
   type AlchemySignerEvents,
   type ErrorInfo,
+  type ValidateMultiFactorsArgs,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
 
@@ -51,6 +62,11 @@ type AlchemySignerStore = {
   error: ErrorInfo | null;
   otpId?: string;
   isNewUser?: boolean;
+  mfaStatus: {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+    encryptedPayload?: string;
+  };
 };
 
 type UnpackedSignature = {
@@ -64,6 +80,14 @@ type InternalStore = Mutate<
   [["zustand/subscribeWithSelector", never]]
 >;
 
+export type EmailConfig = {
+  mode?: "MAGIC_LINK" | "OTP";
+};
+
+export type SignerConfig = {
+  email: EmailConfig;
+};
+
 /**
  * Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
@@ -75,6 +99,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   inner: TClient;
   private sessionManager: SessionManager;
   private store: InternalStore;
+  private config: Promise<SignerConfig>;
 
   /**
    * Initializes an instance with the provided client and session configuration.
@@ -99,6 +124,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             user: null,
             status: AlchemySignerStatus.INITIALIZING,
             error: initialError ?? null,
+            mfaStatus: {
+              mfaRequired: false,
+              mfaFactorId: undefined,
+            },
           } satisfies AlchemySignerStore)
       )
     );
@@ -113,6 +142,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     this.registerListeners();
     // then initialize so that we can catch those events
     this.sessionManager.initialize();
+    this.config = this.fetchConfig();
   }
 
   /**
@@ -169,6 +199,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           (isNewUser) => {
             if (isNewUser) (listener as AlchemySignerEvents["newUserSignup"])();
           },
+          { fireImmediately: true }
+        );
+      case "mfaStatusChanged":
+        return this.store.subscribe(
+          ({ mfaStatus }) => mfaStatus,
+          (mfaStatus) =>
+            (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus),
           { fireImmediately: true }
         );
       default:
@@ -580,6 +617,39 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     }
   );
 
+  /**
+   * Gets the current MFA status
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const mfaStatus = signer.getMfaStatus();
+   * if (mfaStatus === AlchemyMfaStatus.REQUIRED) {
+   *   // Handle MFA requirement
+   * }
+   * ```
+   *
+   * @returns {{ mfaRequired: boolean; mfaFactorId?: string }} The current MFA status
+   */
+  getMfaStatus = (): {
+    mfaRequired: boolean;
+    mfaFactorId?: string;
+  } => {
+    return this.store.getState().mfaStatus;
+  };
+
   private unpackSignRawMessageBytes = (
     hex: `0x${string}`
   ): UnpackedSignature => {
@@ -654,6 +724,11 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   addPasskey: (params?: CredentialCreationOptions) => Promise<string[]> =
     SignerLogger.profiled("BaseAlchemySigner.addPasskey", async (params) => {
       return this.inner.addPasskey(params ?? {});
+    });
+
+  getPasskeyStatus: () => Promise<{ isPasskeyAdded: boolean }> =
+    SignerLogger.profiled("BaseAlchemySigner.getPasskeyStatus", async () => {
+      return this.inner.getPasskeyStatus();
     });
 
   /**
@@ -769,70 +844,36 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private authenticateWithEmail = async (
     params: Extract<AuthParams, { type: "email" }>
   ): Promise<User> => {
-    if ("email" in params) {
-      const existingUser = await this.getUser(params.email);
-      const expirationSeconds = this.getExpirationSeconds();
-
-      const { orgId, otpId } = existingUser
-        ? await this.inner.initEmailAuth({
-            email: params.email,
-            emailMode: params.emailMode,
-            expirationSeconds,
-            redirectParams: params.redirectParams,
-          })
-        : await this.inner.createAccount({
-            type: "email",
-            email: params.email,
-            emailMode: params.emailMode,
-            expirationSeconds,
-            redirectParams: params.redirectParams,
-          });
-
-      this.sessionManager.setTemporarySession({
-        orgId,
-        isNewUser: !existingUser,
-      });
-      this.store.setState({
-        status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
-        otpId,
-        error: null,
-      });
-
-      // We wait for the session manager to emit a connected event if
-      // cross tab sessions are permitted
-      return new Promise<User>((resolve) => {
-        const removeListener = this.sessionManager.on(
-          "connected",
-          (session) => {
-            resolve(session.user);
-            removeListener();
-          }
-        );
-      });
-    } else {
-      const temporarySession = params.orgId
-        ? { orgId: params.orgId }
-        : this.sessionManager.getTemporarySession();
-
-      if (!temporarySession) {
-        this.store.setState({
-          status: AlchemySignerStatus.DISCONNECTED,
-        });
-        throw new Error("Could not find email auth init session!");
-      }
-
-      const user = await this.inner.completeAuthWithBundle({
-        bundle: params.bundle,
-        orgId: temporarySession.orgId,
-        connectedEventName: "connectedEmail",
-        authenticatingType: "email",
-      });
-
-      // fire new user event
-      this.emitNewUserEvent(params.isNewUser);
-
-      return user;
+    if ("bundle" in params) {
+      return this.completeEmailAuth(params);
     }
+
+    const { orgId, otpId, isNewUser } = await this.initOrCreateEmailUser(
+      params.email,
+      params.emailMode,
+      params.multiFactors,
+      params.redirectParams
+    );
+
+    this.sessionManager.setTemporarySession({
+      orgId,
+      isNewUser,
+    });
+
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+      otpId,
+      error: null,
+    });
+
+    // We wait for the session manager to emit a connected event if
+    // cross tab sessions are permitted
+    return new Promise<User>((resolve) => {
+      const removeListener = this.sessionManager.on("connected", (session) => {
+        resolve(session.user);
+        removeListener();
+      });
+    });
   };
 
   private authenticateWithPasskey = async (
@@ -901,14 +942,31 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if (!otpId) {
       throw new Error("otpId not found in session");
     }
-    const { bundle } = await this.inner.submitOtpCode({
+
+    const response = await this.inner.submitOtpCode({
       orgId,
       otpId,
       otpCode: args.otpCode,
       expirationSeconds: this.getExpirationSeconds(),
+      multiFactors: args.multiFactors,
     });
+
+    if (response.mfaRequired) {
+      this.handleMfaRequired(response.encryptedPayload, response.multiFactors);
+
+      return new Promise<User>((resolve) => {
+        const removeListener = this.sessionManager.on(
+          "connected",
+          (session) => {
+            resolve(session.user);
+            removeListener();
+          }
+        );
+      });
+    }
+
     const user = await this.inner.completeAuthWithBundle({
-      bundle,
+      bundle: response.bundle,
       orgId,
       connectedEventName: "connectedOtp",
       authenticatingType: "otp",
@@ -943,6 +1001,31 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
     return user;
   };
+
+  private handleMfaRequired(
+    encryptedPayload: string,
+    multiFactors: MfaFactor[]
+  ) {
+    // Store complete MFA context in the temporary session
+    const tempSession = this.sessionManager.getTemporarySession();
+    if (tempSession) {
+      this.sessionManager.setTemporarySession({
+        ...tempSession,
+        encryptedPayload,
+        mfaFactorId: multiFactors?.[0]?.multiFactorId,
+      });
+    }
+
+    // Keep minimal state in the store for UI updates
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_MFA_AUTH,
+      error: null,
+      mfaStatus: {
+        mfaRequired: true,
+        mfaFactorId: multiFactors?.[0]?.multiFactorId,
+      },
+    });
+  }
 
   private getExpirationSeconds = () =>
     Math.floor(this.sessionManager.expirationTimeMs / 1000);
@@ -1010,6 +1093,319 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private emitNewUserEvent = (isNewUser?: boolean) => {
     // assumes that if isNewUser is undefined it is a returning user
     if (isNewUser) this.store.setState({ isNewUser });
+  };
+
+  private async initOrCreateEmailUser(
+    email: string,
+    emailMode?: EmailType,
+    multiFactors?: VerifyMfaParams[],
+    redirectParams?: URLSearchParams
+  ): Promise<{
+    orgId: string;
+    otpId?: string;
+    isNewUser: boolean;
+  }> {
+    const existingUser = await this.getUser(email);
+    const expirationSeconds = this.getExpirationSeconds();
+
+    if (existingUser) {
+      const { orgId, otpId } = await this.inner.initEmailAuth({
+        email: email,
+        emailMode: emailMode,
+        expirationSeconds,
+        redirectParams: redirectParams,
+        multiFactors,
+      });
+      return {
+        orgId,
+        otpId,
+        isNewUser: false,
+      };
+    }
+
+    const { orgId, otpId } = await this.inner.createAccount({
+      type: "email",
+      email,
+      emailMode,
+      expirationSeconds,
+      redirectParams,
+    });
+    return {
+      orgId,
+      otpId,
+      isNewUser: true,
+    };
+  }
+
+  private async completeEmailAuth(
+    params: Extract<AuthParams, { type: "email"; bundle: string }>
+  ): Promise<User> {
+    const temporarySession = params.orgId
+      ? { orgId: params.orgId }
+      : this.sessionManager.getTemporarySession();
+
+    if (!temporarySession) {
+      this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
+      throw new Error("Could not find email auth init session!");
+    }
+
+    const user = await this.inner.completeAuthWithBundle({
+      bundle: params.bundle,
+      orgId: temporarySession.orgId,
+      connectedEventName: "connectedEmail",
+      authenticatingType: "email",
+    });
+
+    // fire new user event
+    this.emitNewUserEvent(params.isNewUser);
+
+    return user;
+  }
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const { multiFactors } = await signer.getMfaFactors();
+   * ```
+   *
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<{ multiFactors: Array<MfaFactor> }>} A promise that resolves to an array of configured MFA factors
+   */
+  getMfaFactors: () => Promise<{ multiFactors: MfaFactor[] }> =
+    SignerLogger.profiled("BaseAlchemySigner.getMfaFactors", async () => {
+      return this.inner.getMfaFactors();
+    });
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user.
+   * The factor will need to be verified using verifyMfa before it becomes active.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.addMfa({ multiFactorType: "totp" });
+   * // Result contains multiFactorTotpUrl to display as QR code
+   * ```
+   *
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   */
+  addMfa: (params: EnableMfaParams) => Promise<EnableMfaResult> =
+    SignerLogger.profiled("BaseAlchemySigner.addMfa", async (params) => {
+      return this.inner.addMfa(params);
+    });
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.verifyMfa({
+   *   multiFactorId: "factor-id",
+   *   multiFactorCode: "123456" // 6-digit code from authenticator app
+   * });
+   * ```
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  verifyMfa: (
+    params: VerifyMfaParams
+  ) => Promise<{ multiFactors: MfaFactor[] }> = SignerLogger.profiled(
+    "BaseAlchemySigner.verifyMfa",
+    async (params) => {
+      return this.inner.verifyMfa(params);
+    }
+  );
+
+  /**
+   * Removes existing MFA factors by their IDs.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.removeMfa({
+   *   multiFactorIds: ["factor-id-1", "factor-id-2"]
+   * });
+   * ```
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   */
+  removeMfa: (
+    params: RemoveMfaParams
+  ) => Promise<{ multiFactors: MfaFactor[] }> = SignerLogger.profiled(
+    "BaseAlchemySigner.removeMfa",
+    async (params) => {
+      return this.inner.removeMfa(params);
+    }
+  );
+
+  /**
+   * Validates MFA factors that were required during authentication.
+   * This function should be called after MFA is required and the user has provided their MFA code.
+   * It completes the authentication process by validating the MFA factors and completing the auth bundle.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * // After MFA is required and user provides code
+   * const user = await signer.validateMultiFactors({
+   *   multiFactorCode: "123456", // 6-digit code from authenticator app
+   *   multiFactorId: "factor-id"
+   * });
+   * ```
+   *
+   * @param {ValidateMultiFactorsArgs} params - Parameters for validating MFA factors
+   * @throws {Error} If there is no pending MFA context or if orgId is not found
+   * @returns {Promise<User>} A promise that resolves to the authenticated user
+   */
+  public async validateMultiFactors(
+    params: ValidateMultiFactorsArgs
+  ): Promise<User> {
+    // Get MFA context from temporary session
+    const tempSession = this.sessionManager.getTemporarySession();
+    if (
+      !tempSession?.orgId ||
+      !tempSession.encryptedPayload ||
+      !tempSession.mfaFactorId
+    ) {
+      throw new Error(
+        "No pending MFA context found. Call submitOtpCode() first."
+      );
+    }
+
+    if (
+      params.multiFactorId &&
+      tempSession.mfaFactorId !== params.multiFactorId
+    ) {
+      throw new Error("MFA factor ID mismatch");
+    }
+
+    // Call the low-level client
+    const { bundle } = await this.inner.validateMultiFactors({
+      encryptedPayload: tempSession.encryptedPayload,
+      multiFactors: [
+        {
+          multiFactorId: tempSession.mfaFactorId,
+          multiFactorCode: params.multiFactorCode,
+        },
+      ],
+    });
+
+    // Complete the authentication
+    const user = await this.inner.completeAuthWithBundle({
+      bundle,
+      orgId: tempSession.orgId,
+      connectedEventName: "connectedOtp",
+      authenticatingType: "otp",
+    });
+
+    // Remove MFA data from temporary session
+    this.sessionManager.setTemporarySession({
+      ...tempSession,
+      encryptedPayload: undefined,
+      mfaFactorId: undefined,
+    });
+
+    // Update UI state
+    this.store.setState({
+      mfaStatus: {
+        mfaRequired: false,
+        mfaFactorId: undefined,
+      },
+    });
+
+    return user;
+  }
+
+  protected initConfig = async (): Promise<SignerConfig> => {
+    this.config = this.fetchConfig();
+    return this.config;
+  };
+
+  /**
+   * Returns the signer configuration while fetching it if it's not already initialized.
+   *
+   * @returns {Promise<SignerConfig>} A promise that resolves to the signer configuration
+   */
+  public getConfig = async (): Promise<SignerConfig> => {
+    if (!this.config) {
+      return this.initConfig();
+    }
+
+    return this.config;
+  };
+
+  protected fetchConfig = async (): Promise<SignerConfig> => {
+    return this.inner.request("/v1/signer-config", {});
   };
 }
 

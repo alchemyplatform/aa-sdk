@@ -20,6 +20,10 @@ export {
 } from "./actions/common/utils.js";
 export type * from "./actions/install-validation/installValidation.js";
 export { installValidationActions } from "./actions/install-validation/installValidation.js";
+export type * from "./actions/deferralActions.js";
+export { deferralActions } from "./actions/deferralActions.js";
+export type * from "./permissionBuilder.js";
+export { PermissionBuilder, PermissionType } from "./permissionBuilder.js";
 
 export {
   getDefaultAllowlistModuleAddress,
@@ -29,6 +33,7 @@ export {
   getDefaultTimeRangeModuleAddress,
   getDefaultWebauthnValidationModuleAddress,
 } from "./modules/utils.js";
+export { buildFullNonceKey } from "./utils.js";
 export { allowlistModuleAbi } from "./modules/allowlist-module/abis/allowlistModuleAbi.js";
 export { AllowlistModule } from "./modules/allowlist-module/module.js";
 export { nativeTokenLimitModuleAbi } from "./modules/native-token-limit-module/abis/nativeTokenLimitModuleAbi.js";

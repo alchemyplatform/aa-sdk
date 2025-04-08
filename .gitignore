@@ -129,3 +129,5 @@ Pods
 
 vendor
 
+# pulled in from alchemyplatform/docs
+docs-site/

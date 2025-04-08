@@ -8,6 +8,7 @@ import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters, UserOperationContext } from "./types";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
+import { clientHeaderTrack } from "../../index.js";
 
 /**
  * Sends transactions using the provided client and transaction parameters. This function builds user operations from the transactions, sends them, and waits for the transaction to be mined.
@@ -28,7 +29,7 @@ import { waitForUserOperationTransaction } from "./waitForUserOperationTransacat
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client The client used to send the transactions
+ * @param {Client<TTransport, TChain, TAccount>} client_ The client used to send the transactions
  * @param {SendTransactionsParameters<TAccount, TContext>} args The parameters for sending the transactions, including requests, overrides, account, and context
  * @returns {Promise<Hex>} A promise that resolves to the transaction hash of the sent transactions
  */
@@ -40,9 +41,10 @@ export async function sendTransactions<
     | undefined,
   TContext extends UserOperationContext | undefined = UserOperationContext
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client_: Client<TTransport, TChain, TAccount>,
   args: SendTransactionsParameters<TAccount, TContext>
 ): Promise<Hex> {
+  const client = clientHeaderTrack(client_, "estimateUserOperationGas");
   const { requests, overrides, account = client.account, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
