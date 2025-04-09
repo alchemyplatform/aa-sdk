@@ -38,14 +38,38 @@ navigation:
             path: docs/account-kit/pages/react/overview.mdx
           - page: Quickstart
             path: docs/account-kit/pages/react/quickstart.mdx
-          - section: Authentication
+          - section: Login UI
             contents:
               - page: Set up
                 path: docs/account-kit/pages/react/getting-started.mdx
-              - page: UI Components
+              - page: Pre-built UI
                 path: docs/account-kit/pages/react/ui-components.mdx
               - page: Custom UI
                 path: docs/account-kit/pages/react/react-hooks.mdx
+          - section: Login methods
+            contents:
+              - page: Email OTP
+                path: docs/account-kit/pages/react/login-methods/email-otp.mdx
+              - page: Email magic-link
+                path: docs/account-kit/pages/react/login-methods/email-magic-link.mdx
+              - page: Social login
+                path: docs/account-kit/pages/react/login-methods/social-login.mdx
+              - page: Custom social providers
+                path: docs/account-kit/pages/react/login-methods/social-providers.mdx
+              - page: Passkey signup
+                path: docs/account-kit/pages/react/login-methods/passkey-signup.mdx
+              - page: Passkey login
+                path: docs/account-kit/pages/react/login-methods/passkey-login.mdx
+              - section: Multi-factor authentication
+                contents:
+                  - page: Set up MFA
+                    path: docs/account-kit/pages/react/mfa/setup-mfa.mdx
+                  - page: Email OTP
+                    path: docs/account-kit/pages/react/mfa/email-otp.mdx
+                  - page: Email magic-link
+                    path: docs/account-kit/pages/react/mfa/email-magic-link.mdx
+                  - page: Social login
+                    path: docs/account-kit/pages/react/mfa/social-login.mdx
           - section: Using smart accounts
             contents:
               - page: Set up your client
