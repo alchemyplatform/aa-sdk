@@ -12,8 +12,10 @@ navigation:
   - tab: wallets
     layout:
       - section: Introduction
+        skip-slug: true
         contents:
           - page: Overview
+            slug: /
             path: docs/account-kit/pages/index.mdx
           - link: Demo
             href: https://demo.alchemy.com/
@@ -47,6 +49,7 @@ navigation:
               - page: Custom UI
                 path: docs/account-kit/pages/react/react-hooks.mdx
           - section: Using smart accounts
+            skip-slug: true
             contents:
               - page: Set up your client
                 path: docs/account-kit/pages/react/how-to-set-up-smart-account-client.mdx
