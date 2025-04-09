@@ -68,7 +68,11 @@ import {
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
+import {
+  buildDeferredActionDigest,
+  mintableERC20Abi,
+  mintableERC20Bytecode,
+} from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -390,7 +394,7 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
@@ -503,7 +507,7 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
@@ -606,7 +610,7 @@ describe("MA v2 Tests", async () => {
       });
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
@@ -734,7 +738,7 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = sessionKeyClient.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });

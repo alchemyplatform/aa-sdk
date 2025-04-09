@@ -51,11 +51,6 @@ export type CreateDeferredActionTypedDataParams = {
   nonce: bigint;
 };
 
-export type BuildDeferredActionDigestParams = {
-  fullPreSignatureDeferredActionDigest: Hex;
-  sig: Hex;
-};
-
 export type BuildPreSignatureDeferredActionDigestParams = {
   typedData: DeferredActionTypedData;
 };
@@ -77,7 +72,6 @@ export type DeferralActions = {
   createDeferredActionTypedDataObject: (
     args: CreateDeferredActionTypedDataParams
   ) => Promise<DeferredActionReturnData>;
-  buildDeferredActionDigest: (args: BuildDeferredActionDigestParams) => Hex;
   buildPreSignatureDeferredActionDigest: (
     args: BuildPreSignatureDeferredActionDigestParams
   ) => Hex;
@@ -133,30 +127,6 @@ export const deferralActions: (
         },
       },
     };
-  };
-
-  /**
-   * Creates the digest which must be prepended to the userOp signature.
-   *
-   * Assumption: The client this extends is used to sign the typed data.
-   *
-   * @param {object} args The argument object containing the following:
-   * @param {Hex} args.fullPreSignatureDeferredActionDigest The The data to append the signature and length to
-   * @param {Hex} args.sig The signature to include in the digest
-   * @returns {Hex} The encoded digest to be prepended to the userOp signature
-   */
-  const buildDeferredActionDigest = ({
-    fullPreSignatureDeferredActionDigest,
-    sig,
-  }: BuildDeferredActionDigestParams): Hex => {
-    const sigLength = size(sig);
-
-    const encodedData = concatHex([
-      fullPreSignatureDeferredActionDigest,
-      toHex(sigLength, { size: 4 }),
-      sig,
-    ]);
-    return encodedData;
   };
 
   const buildPreSignatureDeferredActionDigest = ({
@@ -270,7 +240,6 @@ export const deferralActions: (
 
   return {
     createDeferredActionTypedDataObject,
-    buildDeferredActionDigest,
     buildPreSignatureDeferredActionDigest,
     buildUserOperationWithDeferredAction,
     getEntityIdAndNonce,

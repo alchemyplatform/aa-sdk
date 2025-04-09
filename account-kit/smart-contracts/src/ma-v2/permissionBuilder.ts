@@ -1,4 +1,4 @@
-import { toHex, zeroAddress, type Address, type Hex } from "viem";
+import { maxUint48, toHex, zeroAddress, type Address, type Hex } from "viem";
 import {
   HookType,
   type HookConfig,
@@ -23,6 +23,19 @@ import {
 import { SingleSignerValidationModule } from "./modules/single-signer-validation/module.js";
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
+import {
+  AccountAddressAsTargetError,
+  DeadlineOverLimitError,
+  DuplicateTargetAddressError,
+  ExpiredDeadlineError,
+  MultipleGasLimitError,
+  MultipleNativeTokenTransferError,
+  NoFunctionsProvidedError,
+  RootPermissionOnlyError,
+  UnsupportedPermissionTypeError,
+  ValidationConfigUnsetError,
+  ZeroAddressError,
+} from "./permissionBuilderErrors.js";
 
 // We use this to offset the ERC20 spend limit entityId
 const HALF_UINT32 = 2147483647;
@@ -257,9 +270,7 @@ export class PermissionBuilder {
     // Check 1: If we're adding root, we can't have any other permissions
     if (permission.type === PermissionType.ROOT) {
       if (this.permissions.length !== 0) {
-        throw new Error(
-          "PERMISSION: ROOT: Cannot add ROOT permission with other permissions"
-        );
+        throw new RootPermissionOnlyError(permission);
       }
       this.permissions.push(permission);
       // Set isGlobal to true
@@ -272,9 +283,7 @@ export class PermissionBuilder {
     // NOTE: Technically this could be replaced by checking permissions[0] since it should not be possible
     // to have >1 permission with root among them
     if (this.permissions.find((p) => p.type === PermissionType.ROOT)) {
-      throw new Error(
-        `PERMISSION: ${permission.type} => Cannot add permissions with ROOT enabled`
-      );
+      throw new RootPermissionOnlyError(permission);
     }
 
     // Check 3: If the permission is either CONTRACT_ACCESS or FUNCTIONS_ON_CONTRACT, ensure it doesn't collide with another like it.
@@ -284,9 +293,7 @@ export class PermissionBuilder {
     ) {
       // Check 3.1: address must not be the account address, or the user should use the ACCOUNT_FUNCTIONS permission
       if (permission.data.address === this.client.account.address) {
-        throw new Error(
-          `PERMISSION: ${permission.type} => Account address as target, use ACCOUNT_FUNCTIONS for account address`
-        );
+        throw new AccountAddressAsTargetError(permission);
       }
 
       // Check 3.2: there must not be an existing permission with this address as a target
@@ -302,20 +309,19 @@ export class PermissionBuilder {
       );
 
       if (existingPermissionWithSameAddress) {
-        throw new Error(
-          `PERMISSION: ${permission.type} => Address ${targetAddress} already has a permission. Cannot add multiple CONTRACT_ACCESS or FUNCTIONS_ON_CONTRACT permissions for the same target address.`
-        );
+        throw new DuplicateTargetAddressError(permission, targetAddress);
       }
     }
 
     // Check 4: If the permission is ACCOUNT_FUNCTIONS, add selectors
     if (permission.type === PermissionType.ACCOUNT_FUNCTIONS) {
+      if (permission.data.functions.length === 0) {
+        throw new NoFunctionsProvidedError(permission);
+      }
       this.selectors = [...this.selectors, ...permission.data.functions];
-      return this;
     }
 
     this.permissions.push(permission);
-
     return this;
   }
 
@@ -336,16 +342,16 @@ export class PermissionBuilder {
     // Add time range module hook via expiry
     if (this.deadline !== 0) {
       if (this.deadline < Date.now() / 1000) {
-        throw new Error(
-          `PERMISSION: compileDeferred(): deadline ${
-            this.deadline
-          } cannot be before now (${Date.now() / 1000})`
-        );
+        throw new ExpiredDeadlineError(this.deadline, Date.now() / 1000);
       }
+      if (this.deadline > maxUint48) {
+        throw new DeadlineOverLimitError(this.deadline);
+      }
+
       this.hooks.push(
         TimeRangeModule.buildHook(
           {
-            entityId: this.validationConfig.entityId, // will be timerange entityId
+            entityId: this.validationConfig.entityId,
             validUntil: this.deadline,
             validAfter: 0,
           },
@@ -420,9 +426,7 @@ export class PermissionBuilder {
       this.validationConfig.isGlobal === false &&
       this.selectors.length === 0
     ) {
-      throw new Error(
-        "Validation config unset, use permissionBuilder.configure(...)"
-      );
+      throw new ValidationConfigUnsetError();
     }
   }
 
@@ -441,9 +445,7 @@ export class PermissionBuilder {
         case PermissionType.NATIVE_TOKEN_TRANSFER:
           // Should never be added twice, check is on addPermission(s) too
           if (rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER] !== undefined) {
-            throw new Error(
-              "PERMISSION: NATIVE_TOKEN_TRANSFER => Must have at most ONE native token transfer permission"
-            );
+            throw new MultipleNativeTokenTransferError(permission);
           }
           rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER] = {
             hookConfig: {
@@ -464,9 +466,7 @@ export class PermissionBuilder {
           break;
         case PermissionType.ERC20_TOKEN_TRANSFER:
           if (permission.data.address === zeroAddress) {
-            throw new Error(
-              "PERMISSION: ERC20_TOKEN_TRANSFER => Zero address provided"
-            );
+            throw new ZeroAddressError(permission);
           }
           rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER] = {
             hookConfig: {
@@ -522,9 +522,7 @@ export class PermissionBuilder {
         case PermissionType.GAS_LIMIT:
           // Should only ever be added once, check is also on addPermission(s)
           if (rawHooks[HookIdentifier.GAS_LIMIT] !== undefined) {
-            throw new Error(
-              "PERMISSION: GAS_LIMIT => Must have at most ONE gas limit permission"
-            );
+            throw new MultipleGasLimitError(permission);
           }
           rawHooks[HookIdentifier.GAS_LIMIT] = {
             hookConfig: {
@@ -544,9 +542,7 @@ export class PermissionBuilder {
           break;
         case PermissionType.CONTRACT_ACCESS:
           if (permission.data.address === zeroAddress) {
-            throw new Error(
-              "PERMISSION: CONTRACT_ACCESS => Zero address provided"
-            );
+            throw new ZeroAddressError(permission);
           }
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
@@ -574,17 +570,11 @@ export class PermissionBuilder {
           };
           break;
         case PermissionType.ACCOUNT_FUNCTIONS:
-          if (permission.data.functions.length === 0) {
-            throw new Error(
-              "PERMISSION: ACCOUNT_FUNCTION => No functions provided"
-            ); // should be in add perm
-          }
+          // This is handled in add permissions
           break;
         case PermissionType.FUNCTIONS_ON_ALL_CONTRACTS:
           if (permission.data.functions.length === 0) {
-            throw new Error(
-              "PERMISSION: FUNCTIONS_ON_ALL_CONTRACTS => No functions provided"
-            );
+            throw new NoFunctionsProvidedError(permission);
           }
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
@@ -613,14 +603,10 @@ export class PermissionBuilder {
           break;
         case PermissionType.FUNCTIONS_ON_CONTRACT:
           if (permission.data.functions.length === 0) {
-            throw new Error(
-              "PERMISSION: FUNCTIONS_ON_CONTRACT => No functions provided"
-            );
+            throw new NoFunctionsProvidedError(permission);
           }
           if (permission.data.address === zeroAddress) {
-            throw new Error(
-              "PERMISSION: FUNCTIONS_ON_CONTRACT => Zero address provided"
-            );
+            throw new ZeroAddressError(permission);
           }
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
@@ -651,9 +637,7 @@ export class PermissionBuilder {
           // Root permission handled in addPermission
           break;
         default:
-          throw new Error(
-            `Unsupported permission type: ${(permission as any).type}`
-          );
+          assertNever(permission);
       }
 
       // isGlobal guaranteed to be false since it's only set with root permissions,
@@ -713,4 +697,8 @@ export class PermissionBuilder {
       });
     }
   }
+}
+
+export function assertNever(_valid: never): never {
+  throw new UnsupportedPermissionTypeError();
 }
