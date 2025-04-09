@@ -8,6 +8,8 @@ import {
   type Address,
   type Transport,
   parseAbi,
+  size,
+  concatHex,
 } from "viem";
 import {
   arbitrum,
@@ -277,4 +279,32 @@ export const parseDeferredAction = (
     deferredActionData: `0x${deferredAction.slice(68)}`,
     hasAssociatedExecHooks: deferredAction[3] === "1",
   };
+};
+export type BuildDeferredActionDigestParams = {
+  fullPreSignatureDeferredActionDigest: Hex;
+  sig: Hex;
+};
+
+/**
+ * Creates the digest which must be prepended to the userOp signature.
+ *
+ * Assumption: The client this extends is used to sign the typed data.
+ *
+ * @param {object} args The argument object containing the following:
+ * @param {Hex} args.fullPreSignatureDeferredActionDigest The The data to append the signature and length to
+ * @param {Hex} args.sig The signature to include in the digest
+ * @returns {Hex} The encoded digest to be prepended to the userOp signature
+ */
+export const buildDeferredActionDigest = ({
+  fullPreSignatureDeferredActionDigest,
+  sig,
+}: BuildDeferredActionDigestParams): Hex => {
+  const sigLength = size(sig);
+
+  const encodedData = concatHex([
+    fullPreSignatureDeferredActionDigest,
+    toHex(sigLength, { size: 4 }),
+    sig,
+  ]);
+  return encodedData;
 };
