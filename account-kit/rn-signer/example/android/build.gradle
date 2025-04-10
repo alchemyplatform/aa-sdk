@@ -26,3 +26,12 @@ plugins {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+allprojects {
+    // Force a compatible version of androidx.browser
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.browser:browser:1.8.0'
+        }
+    }
+}

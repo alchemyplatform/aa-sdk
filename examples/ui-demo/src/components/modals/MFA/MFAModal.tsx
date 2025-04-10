@@ -2,6 +2,7 @@ import { Dialog, useMFA } from "@account-kit/react";
 import { useEffect, useState, useCallback } from "react";
 import { XIcon } from "../../icons/x";
 import { AlchemyLogo } from "../../icons/alchemy";
+import { BackArrow } from "../../icons/BackArrow";
 
 import { Button } from "../../small-cards/Button";
 
@@ -13,7 +14,6 @@ import { MFAModalCode } from "./stages/MFAModalCode";
 import { MFAModalVerify } from "./stages/MFAModalVerify";
 import { MFAModalSuccess } from "./stages/MFAModalSuccess";
 import { DynamicHeight } from "@/components/ui/dynamic-height";
-import { ChevronLeft } from "lucide-react";
 
 export type MFAStage = "start" | "qr" | "code" | "verify" | "success";
 
@@ -249,16 +249,18 @@ export function MFAModal({
           <DynamicHeight>
             <div className="p-6 flex flex-col items-center transition-all duration-300 ease-in-out">
               <div className="flex flex-row-reverse justify-between w-full">
-                <button className="self-end" onClick={handleClose}>
-                  <XIcon
-                    height="20px"
-                    width="20px"
-                    className="stroke-fg-primary"
-                  />
+                <button
+                  className="self-end text-fg-secondary w-[40px] h-[40px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
+                  onClick={handleClose}
+                >
+                  <XIcon className="w-[24px] h-[24px] lg:w-[16px] lg:h-[16px] stroke-fg-primary" />
                 </button>
                 {canGoBack && (
-                  <button onClick={handleBack}>
-                    <ChevronLeft />
+                  <button
+                    onClick={handleBack}
+                    className="text-fg-secondary w-[40px] h-[40px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
+                  >
+                    <BackArrow className="w-[24px] h-[24px] lg:w-[16px] lg:h-[16px]" />
                   </button>
                 )}
               </div>
