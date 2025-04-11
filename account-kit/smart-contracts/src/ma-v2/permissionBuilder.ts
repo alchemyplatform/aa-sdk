@@ -319,6 +319,7 @@ export class PermissionBuilder {
       if (permission.data.functions.length === 0) {
         throw new NoFunctionsProvidedError(permission);
       }
+      // Explicitly disallow adding execute & executeBatch
       if (permission.data.functions.includes(ACCOUNT_EXECUTE_SELECTOR)) {
         throw new SelectorNotAllowed(ACCOUNT_EXECUTE_SELECTOR);
       } else if (
