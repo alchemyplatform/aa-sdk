@@ -41,6 +41,7 @@ navigation:
           - page: Quickstart
             path: docs/account-kit/pages/react/quickstart.mdx
           - section: Login UI
+            skip-slug: true
             contents:
               - page: Set up
                 path: docs/account-kit/pages/react/getting-started.mdx
@@ -76,6 +77,7 @@ navigation:
             skip-slug: true
             contents:
               - page: Set up your client
+                slug: how-to-set-up-smart-account-client
                 path: docs/account-kit/pages/react/how-to-set-up-smart-account-client.mdx
               - page: Send user operations
                 path: docs/account-kit/pages/react/send-user-operations.mdx
@@ -88,6 +90,7 @@ navigation:
           - page: Using EIP-7702
             path: docs/account-kit/pages/react/using-7702.mdx
           - section: Customizing UI components
+            slug: customization
             contents:
               - page: Theme
                 path: docs/account-kit/pages/react/customization/theme.mdx
