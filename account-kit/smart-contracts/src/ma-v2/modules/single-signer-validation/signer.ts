@@ -49,8 +49,6 @@ export const singleSignerMessageSigner = (
   entityId: number,
   deferredActionData?: Hex
 ) => {
-  let useDeferredActionData: boolean = deferredActionData ? true : false;
-
   return {
     getDummySignature: (): Hex => {
       const sig = packUOSignature({
@@ -59,13 +57,11 @@ export const singleSignerMessageSigner = (
           "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
       });
 
-      return useDeferredActionData && deferredActionData
-        ? concatHex([deferredActionData, sig])
-        : sig;
+      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
     },
 
     signUserOperationHash: async (uoHash: Hex): Promise<Hex> => {
-      const sig = await signer
+      let sig = await signer
         .signMessage({ raw: uoHash })
         .then((signature: Hex) =>
           packUOSignature({
@@ -74,9 +70,9 @@ export const singleSignerMessageSigner = (
           })
         );
 
-      if (useDeferredActionData && deferredActionData) {
-        useDeferredActionData = false;
-        return concatHex([deferredActionData, sig]);
+      if (deferredActionData) {
+        sig = concatHex([deferredActionData, sig]);
+        deferredActionData = undefined;
       }
 
       return sig;
