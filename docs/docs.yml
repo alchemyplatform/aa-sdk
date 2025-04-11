@@ -302,12 +302,14 @@ navigation:
           - page: Quickstart
             path: wallets/pages/infra/quickstart.mdx
           - section: Using smart accounts
+            skip-slug: true
             contents:
               - page: Send user operations
                 path: wallets/pages/infra/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/infra/sponsor-gas.mdx
               - page: Retry user operations
+                slug: drop-and-replace
                 path: wallets/pages/infra/drop-and-replace.mdx
           # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
           # - section: Third party
@@ -359,8 +361,10 @@ navigation:
           - page: What is a signer?
             path: wallets/pages/signer/what-is-a-signer.mdx
           - page: Getting started
+            slug: quickstart
             path: wallets/pages/signer/quickstart.mdx
           - section: Using Alchemy Signer
+            skip-slug: true
             contents:
               - page: User sessions
                 path: wallets/pages/signer/user-sessions.mdx
@@ -368,7 +372,21 @@ navigation:
                 path: wallets/pages/signer/export-private-key.mdx
               - page: As an EOA
                 path: wallets/pages/signer/as-an-eoa.mdx
+          - section: Policies
+            contents:
+              - page: Overview
+                path: wallets/pages/signer/policies/overview.mdx
+              - page: Key Concepts
+                slug: key-concepts-and-examples
+                path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
+              - page: Offchain policies
+                slug: offchain-policy-configuration
+                path: wallets/pages/signer/policies/offchain-policy-configuration.mdx
+              - page: Onchain policies
+                slug: onchain-policy-configuration
+                path: wallets/pages/signer/policies/onchain-policy-configuration.mdx
           - section: Authentication methods
+            slug: authentication
             contents:
               - page: Email OTP
                 path: wallets/pages/signer/authentication/email-otp.mdx
@@ -377,6 +395,7 @@ navigation:
               - page: Social Login
                 path: wallets/pages/signer/authentication/social-login.mdx
               - page: Custom social providers
+                slug: auth0
                 path: wallets/pages/signer/authentication/auth0.mdx
               - page: Passkey signup
                 path: wallets/pages/signer/authentication/passkey-signup.mdx
@@ -384,6 +403,9 @@ navigation:
                 path: wallets/pages/signer/authentication/passkey-login.mdx
               - page: Add passkey
                 path: wallets/pages/signer/authentication/add-passkey.mdx
+              - page: Multi-factor authentication
+                slug: mfa
+                path: wallets/pages/signer/authentication/mfa.mdx
           # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
           # - section: Third-party signers
           #   contents:
