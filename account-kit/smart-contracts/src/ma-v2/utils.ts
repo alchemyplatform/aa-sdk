@@ -10,6 +10,7 @@ import {
   parseAbi,
   size,
   concatHex,
+  hexToNumber,
 } from "viem";
 import {
   arbitrum,
@@ -270,13 +271,19 @@ export const buildFullNonceKey = ({
 export const parseDeferredAction = (
   deferredAction: Hex
 ): {
+  entityId: number;
+  isGlobalValidation: boolean;
   nonce: bigint;
   deferredActionData: Hex;
   hasAssociatedExecHooks: boolean;
 } => {
+  // 2 for 0x, 2 for 00/01, 38 for parallel nonce, 8 for entity id, 2 for options byte, 16 for parallel nonce
   return {
+    entityId: hexToNumber(`0x${deferredAction.slice(42, 50)}`),
+    isGlobalValidation:
+      hexToNumber(`0x${deferredAction.slice(50, 52)}`) % 2 === 1,
     nonce: BigInt(`0x${deferredAction.slice(4, 68)}`),
-    deferredActionData: `0x${deferredAction.slice(68)}`,
+    deferredActionData: `0x${deferredAction.slice(68)}` as `0x${string}`,
     hasAssociatedExecHooks: deferredAction[3] === "1",
   };
 };

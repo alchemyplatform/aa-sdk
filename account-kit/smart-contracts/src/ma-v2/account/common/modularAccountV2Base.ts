@@ -96,7 +96,7 @@ export type CreateMAV2BaseReturnType<
 export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
-  const {
+  let {
     transport,
     chain,
     signer,
@@ -129,14 +129,21 @@ export async function createMAv2Base<
     client,
   });
 
-  let useDeferredAction: boolean = false;
+  let useDeferredActionNonce: boolean = false;
+  let useDeferredActionCalldata: boolean = false;
+  let useDeferredActionData: boolean = false;
   let nonce: bigint = 0n;
   let deferredActionData: Hex = "0x";
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
-    ({ nonce, deferredActionData, hasAssociatedExecHooks } =
-      parseDeferredAction(deferredAction));
+    ({
+      entityId,
+      isGlobalValidation,
+      nonce,
+      deferredActionData,
+      hasAssociatedExecHooks,
+    } = parseDeferredAction(deferredAction));
 
     // Set these values if the deferred action has not been consumed. We check this with the EP
     const nextNonceForDeferredAction: bigint =
@@ -147,7 +154,9 @@ export async function createMAv2Base<
 
     // we only add the deferred action in if the nonce has not been consumed
     if (nonce === nextNonceForDeferredAction) {
-      useDeferredAction = true;
+      useDeferredActionNonce = true;
+      useDeferredActionCalldata = true;
+      useDeferredActionData = true;
     } else if (nonce > nextNonceForDeferredAction) {
       throw new InvalidDeferredActionNonce();
     }
@@ -185,7 +194,8 @@ export async function createMAv2Base<
     !!(await client.getCode({ address: accountAddress }));
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
-    if (useDeferredAction) {
+    if (useDeferredActionNonce) {
+      useDeferredActionNonce = false;
       return nonce;
     }
 
@@ -246,11 +256,16 @@ export async function createMAv2Base<
     const validationData = await getValidationData({
       entityId: Number(entityId),
     });
-
-    return (useDeferredAction && hasAssociatedExecHooks) ||
-      validationData.executionHooks.length
-      ? concatHex([executeUserOpSelector, callData])
-      : callData;
+    if (useDeferredActionCalldata) {
+      useDeferredActionCalldata = false;
+      if (hasAssociatedExecHooks) {
+        return concatHex([executeUserOpSelector, callData]);
+      }
+    }
+    if (validationData.executionHooks.length) {
+      return concatHex([executeUserOpSelector, callData]);
+    }
+    return callData;
   };
 
   const baseAccount = await toSmartContractAccount({
@@ -263,13 +278,18 @@ export async function createMAv2Base<
     encodeBatchExecute,
     getNonce,
     ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
+      ? nativeSMASigner(
+          signer,
+          chain,
+          accountAddress,
+          useDeferredActionData ? deferredActionData : undefined
+        )
       : singleSignerMessageSigner(
           signer,
           chain,
           accountAddress,
           entityId,
-          deferredActionData
+          useDeferredActionData ? deferredActionData : undefined
         )),
   });
 

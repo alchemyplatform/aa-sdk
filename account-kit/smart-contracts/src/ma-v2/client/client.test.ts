@@ -46,6 +46,7 @@ import {
   deferralActions,
   PermissionBuilder,
   PermissionType,
+  buildDeferredActionDigest,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -68,11 +69,7 @@ import {
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import {
-  buildDeferredActionDigest,
-  mintableERC20Abi,
-  mintableERC20Bytecode,
-} from "../utils.js";
+import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {

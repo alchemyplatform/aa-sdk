@@ -101,6 +101,34 @@ describe("MA v2 deferral actions tests", async () => {
     });
 
     await provider.waitForUserOperationTransaction(uoResult);
+
+    const sessionKeyClient2 = await createModularAccountV2Client({
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      accountAddress: provider.getAddress(),
+      signer: sessionKey,
+      initCode: await provider.account.getInitCode(),
+      deferredAction: deferredActionDigest,
+    });
+
+    // TODO: test for revert if value>0
+    const uoResult2 = await sessionKeyClient2.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider.waitForUserOperationTransaction(uoResult2);
+  });
+
+  it("deferred action then send another uo from same client", async () => {
+    // TODO
+  });
+
+  it("deferred action then send another uo from new client", async () => {
+    // TODO
   });
 
   it("PermissionBuilder: Cannot add any permission after root", async () => {

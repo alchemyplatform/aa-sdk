@@ -49,6 +49,8 @@ export const singleSignerMessageSigner = (
   entityId: number,
   deferredActionData?: Hex
 ) => {
+  let useDeferredActionData: boolean = deferredActionData ? true : false;
+
   return {
     getDummySignature: (): Hex => {
       const sig = packUOSignature({
@@ -57,7 +59,9 @@ export const singleSignerMessageSigner = (
           "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
       });
 
-      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
+      return useDeferredActionData && deferredActionData
+        ? concatHex([deferredActionData, sig])
+        : sig;
     },
 
     signUserOperationHash: async (uoHash: Hex): Promise<Hex> => {
@@ -70,7 +74,12 @@ export const singleSignerMessageSigner = (
           })
         );
 
-      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
+      if (useDeferredActionData && deferredActionData) {
+        useDeferredActionData = false;
+        return concatHex([deferredActionData, sig]);
+      }
+
+      return sig;
     },
 
     // we apply the expected 1271 packing here since the account contract will expect it
