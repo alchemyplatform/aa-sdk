@@ -18,7 +18,6 @@ import {
   type Transport,
   encodeFunctionData,
   maxUint32,
-  maxUint256,
   zeroAddress,
   getContract,
   concatHex,
@@ -131,8 +130,8 @@ export async function createMAv2Base<
   });
 
   // These default values signal that we should not use the set deferred action nonce
-  let nonce: bigint = maxUint256 + 1n;
-  let deferredActionData: Hex | undefined = undefined;
+  let nonce: bigint | undefined;
+  let deferredActionData: Hex | undefined;
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
@@ -152,10 +151,10 @@ export async function createMAv2Base<
       ])) as bigint;
 
     if (deferredActionNonce === nextNonceForDeferredAction) {
-      // we only update the local deferred action state in if the nonce has not been consumed
       ({ nonce, deferredActionData, hasAssociatedExecHooks } =
         parseDeferredAction(deferredAction));
     } else if (deferredActionNonce > nextNonceForDeferredAction) {
+      // if nonce is greater than the next nonce, its invalid, so we throw
       throw new InvalidDeferredActionNonce();
     }
   }
@@ -192,9 +191,9 @@ export async function createMAv2Base<
     !!(await client.getCode({ address: accountAddress }));
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
-    if (nonce <= maxUint256) {
+    if (nonce) {
       const tempNonce = nonce;
-      nonce = maxUint256 + 1n; // set to falsy value once used
+      nonce = undefined; // set to falsy value once used
       return tempNonce;
     }
 
@@ -255,11 +254,9 @@ export async function createMAv2Base<
     const validationData = await getValidationData({
       entityId: Number(entityId),
     });
-    if (deferredActionData) {
-      deferredActionData = undefined; // set to falsy value once used
-      if (hasAssociatedExecHooks) {
-        return concatHex([executeUserOpSelector, callData]);
-      }
+    if (hasAssociatedExecHooks) {
+      hasAssociatedExecHooks = false; // set to falsy value once used
+      return concatHex([executeUserOpSelector, callData]);
     }
     if (validationData.executionHooks.length) {
       return concatHex([executeUserOpSelector, callData]);
