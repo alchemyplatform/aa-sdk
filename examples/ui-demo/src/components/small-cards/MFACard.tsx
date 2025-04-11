@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
 import { ThreeStarsIcon } from "../icons/three-stars";
 import { MFAModal } from "../modals/MFA/MFAModal";
-import { useMFA } from "@account-kit/react";
+import { useMFA, useUser } from "@account-kit/react";
 import { Card } from "./Card";
+import { Button } from "./Button";
+import { cn } from "@/lib/utils";
 
 export function MFACard() {
   const [isMfaActive, setIsMfaActive] = useState(false);
   const { getMFAFactors, isReady } = useMFA();
+  const user = useUser();
+  const isPasskeyUser = user?.credentialId;
 
   useEffect(() => {
-    if (isReady) {
+    // This requires a stamp, so don't automatically call it for a
+    // passkey user, since stamping will require user approval.
+    if (isReady && !isPasskeyUser && getMFAFactors.isIdle) {
       getMFAFactors.mutate(undefined, {
-        onSuccess: (factors) => {
-          setIsMfaActive(
-            !!factors?.multiFactors && factors.multiFactors.length > 0
-          );
+        onSuccess: (data) => {
+          setIsMfaActive(!!data?.multiFactors && data.multiFactors.length > 0);
         },
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
+  }, [getMFAFactors, isPasskeyUser, isReady]);
 
   return (
     <Card
@@ -39,11 +42,16 @@ export function MFACard() {
             Multi-factor <br />
             Authentication
           </h3>
-          {isMfaActive && (
-            <span className="text-sm font-medium self-start sm:px-2 sm:py-0.5 rounded-full flex items-center gap-1 font-inter leading-[21px] tracking-normal">
-              <div className="h-3 w-3 rounded-full bg-green-500"></div>
-              Active
-            </span>
+          {!!getMFAFactors.data && (
+            <div className="text-sm font-medium self-start sm:px-2 sm:py-0.5 rounded-full flex items-center gap-1 font-inter leading-[21px] tracking-normal">
+              <div
+                className={cn(
+                  "h-3 w-3 rounded-full bg-green-500",
+                  isMfaActive ? "bg-green-500" : "bg-neutral-400/70"
+                )}
+              />
+              {isMfaActive ? "Active" : "Inactive"}
+            </div>
           )}
         </div>
       }
@@ -54,11 +62,29 @@ export function MFACard() {
         </p>
       }
       buttons={
-        <MFAModal
-          isMfaActive={isMfaActive}
-          onMfaEnabled={() => setIsMfaActive(true)}
-          onMfaRemoved={() => setIsMfaActive(false)}
-        />
+        !getMFAFactors.data ? (
+          <Button
+            className="mt-auto"
+            onClick={() =>
+              getMFAFactors.mutate(undefined, {
+                onSuccess: (data) => {
+                  setIsMfaActive(
+                    !!data?.multiFactors && data.multiFactors.length > 0
+                  );
+                },
+              })
+            }
+            disabled={!isReady || getMFAFactors.isPending}
+          >
+            Check MFA status
+          </Button>
+        ) : (
+          <MFAModal
+            isMfaActive={isMfaActive}
+            onMfaEnabled={() => setIsMfaActive(true)}
+            onMfaRemoved={() => setIsMfaActive(false)}
+          />
+        )
       }
     />
   );
