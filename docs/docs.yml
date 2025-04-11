@@ -209,14 +209,17 @@ navigation:
                 path: wallets/pages/react-native/using-smart-accounts/retry-user-operations.mdx
 
       - section: Other JS Frameworks
+        slug: core
         contents:
           - page: Overview
             path: wallets/pages/core/overview.mdx
           - page: Quickstart
             path: wallets/pages/core/quickstart.mdx
           - page: Server-side rendering
+            slug: ssr
             path: wallets/pages/core/ssr.mdx
           - section: Using smart accounts
+            skip-slug: true
             contents:
               - page: Send user operations
                 path: wallets/pages/core/send-user-operations.mdx
