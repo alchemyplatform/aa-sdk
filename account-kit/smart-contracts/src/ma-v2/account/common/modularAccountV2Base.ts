@@ -18,6 +18,7 @@ import {
   type Transport,
   encodeFunctionData,
   maxUint32,
+  maxUint256,
   zeroAddress,
   getContract,
   concatHex,
@@ -129,35 +130,32 @@ export async function createMAv2Base<
     client,
   });
 
-  let useDeferredActionNonce: boolean = false;
-  let useDeferredActionCalldata: boolean = false;
-  let useDeferredActionData: boolean = false;
-  let nonce: bigint = 0n;
-  let deferredActionData: Hex = "0x";
+  // These default values signal that we should not use the set deferred action nonce
+  let nonce: bigint = maxUint256 + 1n;
+  let deferredActionData: Hex | undefined = undefined;
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
+    let deferredActionNonce: bigint = 0n;
+    // We always update entity id and isGlobalValidation to the deferred action value since the client could be used to send multiple calls
     ({
       entityId,
       isGlobalValidation,
-      nonce,
-      deferredActionData,
-      hasAssociatedExecHooks,
+      nonce: deferredActionNonce,
     } = parseDeferredAction(deferredAction));
 
     // Set these values if the deferred action has not been consumed. We check this with the EP
     const nextNonceForDeferredAction: bigint =
       (await entryPointContract.read.getNonce([
         accountAddress,
-        nonce >> 64n,
+        deferredActionNonce >> 64n,
       ])) as bigint;
 
-    // we only add the deferred action in if the nonce has not been consumed
-    if (nonce === nextNonceForDeferredAction) {
-      useDeferredActionNonce = true;
-      useDeferredActionCalldata = true;
-      useDeferredActionData = true;
-    } else if (nonce > nextNonceForDeferredAction) {
+    if (deferredActionNonce === nextNonceForDeferredAction) {
+      // we only update the local deferred action state in if the nonce has not been consumed
+      ({ nonce, deferredActionData, hasAssociatedExecHooks } =
+        parseDeferredAction(deferredAction));
+    } else if (deferredActionNonce > nextNonceForDeferredAction) {
       throw new InvalidDeferredActionNonce();
     }
   }
@@ -194,9 +192,10 @@ export async function createMAv2Base<
     !!(await client.getCode({ address: accountAddress }));
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
-    if (useDeferredActionNonce) {
-      useDeferredActionNonce = false;
-      return nonce;
+    if (nonce <= maxUint256) {
+      const tempNonce = nonce;
+      nonce = maxUint256 + 1n; // set to falsy value once used
+      return tempNonce;
     }
 
     if (nonceKey > maxUint152) {
@@ -256,8 +255,8 @@ export async function createMAv2Base<
     const validationData = await getValidationData({
       entityId: Number(entityId),
     });
-    if (useDeferredActionCalldata) {
-      useDeferredActionCalldata = false;
+    if (deferredActionData) {
+      deferredActionData = undefined; // set to falsy value once used
       if (hasAssociatedExecHooks) {
         return concatHex([executeUserOpSelector, callData]);
       }
@@ -278,18 +277,13 @@ export async function createMAv2Base<
     encodeBatchExecute,
     getNonce,
     ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(
-          signer,
-          chain,
-          accountAddress,
-          useDeferredActionData ? deferredActionData : undefined
-        )
+      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
       : singleSignerMessageSigner(
           signer,
           chain,
           accountAddress,
           entityId,
-          useDeferredActionData ? deferredActionData : undefined
+          deferredActionData
         )),
   });
 
