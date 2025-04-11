@@ -17,6 +17,11 @@ jobs:
       - name: Checkout aa-sdk
         uses: actions/checkout@v4
 
+      - name: Setup Docs
+        uses: ./.github/actions/setup-docs
+        with:
+          docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
+
       - name: Set Build Comment to In Progress
         uses: actions/github-script@v7
         with:
@@ -29,11 +34,6 @@ jobs:
               context,
               status: 'building',
             });
-
-      - name: Setup Docs
-        uses: ./.github/actions/setup-docs
-        with:
-          docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
 
       - name: Generate Fern Docs Preview
         id: preview
