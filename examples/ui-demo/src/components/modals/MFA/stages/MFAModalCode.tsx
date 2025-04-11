@@ -23,17 +23,21 @@ export function MFAModalCode({
         Set up authenticator app
       </h2>
       <MobileAuthenticatorLinks />
-      <ol className="list-style list-decimal flex flex-col gap-5 ml-6 mb-5">
+      <ol className="text-sm list-style list-decimal flex flex-col gap-5 ml-6 mb-5">
         <li className="text-fg-primary">
           In the Google Authenticator app, tap the + button then tap{" "}
           <strong>Enter a setup key</strong>
         </li>
         <li className="text-fg-primary">
-          <div className="flex flex-row gap-2">
-            <span>
-              Enter your email address and this key (spaces don&apos;t matter):
-              <br />
-            </span>
+          <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-col">
+              <span>
+                Enter your email address and this key (spaces don&apos;t
+                matter):
+                <br />
+              </span>
+              <strong>{mfaKey?.match(/.{1,4}/g)?.join(" ")}</strong>
+            </div>
             <TooltipComponent content="Copied to clipboard" open={copied}>
               <button
                 className="flex flex-row gap-1 items-center bg-bg-primary rounded-lg p-3 w-24 h-10 border "
@@ -44,7 +48,6 @@ export function MFAModalCode({
               </button>
             </TooltipComponent>
           </div>
-          <strong>{mfaKey?.match(/.{1,4}/g)?.join(" ")}</strong>
         </li>
         <li className="text-fg-primary">
           Make sure <strong>Time based</strong> is selected.
@@ -55,7 +58,7 @@ export function MFAModalCode({
       </ol>
       <div className="flex flex-row items-start w-full gap-2">
         <button
-          className="akui-btn akui-btn-primary rounded-lg h-10  mb-5 flex-1 "
+          className="akui-btn akui-btn-primary rounded-lg h-10 mb-5 flex-1 "
           onClick={() => setStage("verify")}
         >
           Next

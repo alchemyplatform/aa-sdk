@@ -18,14 +18,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
           showCode && "hidden"
         )}
       >
-        <div
-          className={cn(
-            "flex flex-1 justify-center items-start",
-            authStep.type !== "complete" && "items-center"
-          )}
-        >
-          <RenderContent />
-        </div>
+        <RenderContent />
       </div>
 
       {showCode && <CodePreview />}
@@ -50,7 +43,7 @@ const RenderContent = () => {
 
   if (showAuthCard) {
     return (
-      <>
+      <div className="flex flex-1 justify-center items-center">
         <div className="hidden lg:flex flex-col gap-2 w-[368px]">
           <div
             className="radius bg-bg-surface-default overflow-hidden"
@@ -63,7 +56,7 @@ const RenderContent = () => {
           </div>
         </div>
         <MobileSplashPage />
-      </>
+      </div>
     );
   }
 
@@ -71,11 +64,17 @@ const RenderContent = () => {
 
   if (isEOAUser) {
     return (
-      <div className="h-full w-full pb-10 pt-5 flex flex-col lg:justify-center items-center">
-        <EOAPostLogin />
+      <div className="flex flex-1 justify-center items-start">
+        <div className="h-full w-full pb-10 pt-5 flex flex-col lg:justify-center items-center">
+          <EOAPostLogin />
+        </div>
       </div>
     );
   }
 
-  return <SmallCardsWrapper />;
+  return (
+    <div className="flex flex-1 justify-center items-start">
+      <SmallCardsWrapper />
+    </div>
+  );
 };
