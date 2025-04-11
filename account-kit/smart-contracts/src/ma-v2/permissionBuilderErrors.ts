@@ -158,9 +158,9 @@ export class SelectorNotAllowed extends BaseError {
   /**
    * Constructor for initializing an error message indicating that the selector being added is not allowed.
    *
-   * @param {string} selector The selector that is being added.
+   * @param {string} functionName The function name of the selector that is being added.
    */
-  constructor(selector: string) {
-    super(`Cannot add ${selector} on the account`);
+  constructor(functionName: string) {
+    super(`Cannot add ${functionName} on the account`);
   }
 }

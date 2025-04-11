@@ -321,11 +321,11 @@ export class PermissionBuilder {
       }
       // Explicitly disallow adding execute & executeBatch
       if (permission.data.functions.includes(ACCOUNT_EXECUTE_SELECTOR)) {
-        throw new SelectorNotAllowed(ACCOUNT_EXECUTE_SELECTOR);
+        throw new SelectorNotAllowed("execute");
       } else if (
         permission.data.functions.includes(ACCOUNT_EXECUTEBATCH_SELECTOR)
       ) {
-        throw new SelectorNotAllowed(ACCOUNT_EXECUTEBATCH_SELECTOR);
+        throw new SelectorNotAllowed("executeBatch");
       }
       this.selectors = [...this.selectors, ...permission.data.functions];
     }
