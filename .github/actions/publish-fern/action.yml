@@ -77,7 +77,7 @@ runs:
       if: always()
       with:
         script: |
-          const status = '${{ job.status }}' === 'success' ? 'success' : 'failure';
+          const status = '${{ steps.generate-docs.outcome }}' === 'success' ? 'success' : 'failure';
           const envUrl = '${{ steps.generate-docs.outputs.url }}';
           
           await github.rest.repos.createDeploymentStatus({
