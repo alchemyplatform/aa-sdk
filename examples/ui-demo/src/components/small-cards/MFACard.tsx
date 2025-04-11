@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { ThreeStarsIcon } from "../icons/three-stars";
 import { MFAModal } from "../modals/MFA/MFAModal";
-import { useMFA } from "@account-kit/react";
+import { useMFA, useUser } from "@account-kit/react";
 import { Card } from "./Card";
 
 export function MFACard() {
   const [isMfaActive, setIsMfaActive] = useState(false);
   const { getMFAFactors, isReady } = useMFA();
+  const user = useUser();
+  const isPasskeyUser = !!user?.credentialId;
 
   useEffect(() => {
-    if (isReady) {
+    if (isReady && !isPasskeyUser) {
       getMFAFactors.mutate(undefined, {
         onSuccess: (factors) => {
           setIsMfaActive(
@@ -54,11 +56,17 @@ export function MFACard() {
         </p>
       }
       buttons={
-        <MFAModal
-          isMfaActive={isMfaActive}
-          onMfaEnabled={() => setIsMfaActive(true)}
-          onMfaRemoved={() => setIsMfaActive(false)}
-        />
+        isPasskeyUser ? (
+          <p className="text-fg-secondary text-xs bg-bg-surface-inset py-2 px-3 rounded-md font-medium mt-auto">
+            MFA is not supported when logged in using a passkey.
+          </p>
+        ) : (
+          <MFAModal
+            isMfaActive={isMfaActive}
+            onMfaEnabled={() => setIsMfaActive(true)}
+            onMfaRemoved={() => setIsMfaActive(false)}
+          />
+        )
       }
     />
   );
