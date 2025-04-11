@@ -219,71 +219,71 @@ navigation:
                 path: wallets/pages/core/add-passkey.mdx
               - page: Multi-chain apps
                 path: wallets/pages/core/multi-chain-apps.mdx
-      - section: SDK Reference
-        path: wallets/pages/reference/account-kit/core/index.mdx
-        contents:
-          - section: Functions
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/core/index.mdx
             contents:
-              - page: convertSignerStatusToState
-                path: wallets/pages/reference/account-kit/core/functions/convertSignerStatusToState.mdx
-              - page: cookieStorage
-                path: wallets/pages/reference/account-kit/core/functions/cookieStorage.mdx
-              - page: cookieToInitialState
-                path: wallets/pages/reference/account-kit/core/functions/cookieToInitialState.mdx
-              - page: createAccount
-                path: wallets/pages/reference/account-kit/core/functions/createAccount.mdx
-              - page: createConfig
-                path: wallets/pages/reference/account-kit/core/functions/createConfig.mdx
-              - page: createDefaultAccountState
-                path: wallets/pages/reference/account-kit/core/functions/createDefaultAccountState.mdx
-              - page: defaultAccountState
-                path: wallets/pages/reference/account-kit/core/functions/defaultAccountState.mdx
-              - page: disconnect
-                path: wallets/pages/reference/account-kit/core/functions/disconnect.mdx
-              - page: getAccount
-                path: wallets/pages/reference/account-kit/core/functions/getAccount.mdx
-              - page: getBundlerClient
-                path: wallets/pages/reference/account-kit/core/functions/getBundlerClient.mdx
-              - page: getChain
-                path: wallets/pages/reference/account-kit/core/functions/getChain.mdx
-              - page: getConnection
-                path: wallets/pages/reference/account-kit/core/functions/getConnection.mdx
-              - page: getSigner
-                path: wallets/pages/reference/account-kit/core/functions/getSigner.mdx
-              - page: getSignerStatus
-                path: wallets/pages/reference/account-kit/core/functions/getSignerStatus.mdx
-              - page: getSmartAccountClient
-                path: wallets/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
-              - page: getUser
-                path: wallets/pages/reference/account-kit/core/functions/getUser.mdx
-              - page: hydrate
-                path: wallets/pages/reference/account-kit/core/functions/hydrate.mdx
-              - page: parseCookie
-                path: wallets/pages/reference/account-kit/core/functions/parseCookie.mdx
-              - page: reconnect
-                path: wallets/pages/reference/account-kit/core/functions/reconnect.mdx
-              - page: setChain
-                path: wallets/pages/reference/account-kit/core/functions/setChain.mdx
-              - page: watchAccount
-                path: wallets/pages/reference/account-kit/core/functions/watchAccount.mdx
-              - page: watchBundlerClient
-                path: wallets/pages/reference/account-kit/core/functions/watchBundlerClient.mdx
-              - page: watchChain
-                path: wallets/pages/reference/account-kit/core/functions/watchChain.mdx
-              - page: watchConnection
-                path: wallets/pages/reference/account-kit/core/functions/watchConnection.mdx
-              - page: watchSigner
-                path: wallets/pages/reference/account-kit/core/functions/watchSigner.mdx
-              - page: watchSignerStatus
-                path: wallets/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
-              - page: watchSmartAccountClient
-                path: wallets/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
-              - page: watchUser
-                path: wallets/pages/reference/account-kit/core/functions/watchUser.mdx
-          - section: Classes
-            contents:
-              - page: ClientOnlyPropertyError
-                path: wallets/pages/reference/account-kit/core/classes/ClientOnlyPropertyError/constructor.mdx
+              - section: Functions
+                contents:
+                  - page: convertSignerStatusToState
+                    path: wallets/pages/reference/account-kit/core/functions/convertSignerStatusToState.mdx
+                  - page: cookieStorage
+                    path: wallets/pages/reference/account-kit/core/functions/cookieStorage.mdx
+                  - page: cookieToInitialState
+                    path: wallets/pages/reference/account-kit/core/functions/cookieToInitialState.mdx
+                  - page: createAccount
+                    path: wallets/pages/reference/account-kit/core/functions/createAccount.mdx
+                  - page: createConfig
+                    path: wallets/pages/reference/account-kit/core/functions/createConfig.mdx
+                  - page: createDefaultAccountState
+                    path: wallets/pages/reference/account-kit/core/functions/createDefaultAccountState.mdx
+                  - page: defaultAccountState
+                    path: wallets/pages/reference/account-kit/core/functions/defaultAccountState.mdx
+                  - page: disconnect
+                    path: wallets/pages/reference/account-kit/core/functions/disconnect.mdx
+                  - page: getAccount
+                    path: wallets/pages/reference/account-kit/core/functions/getAccount.mdx
+                  - page: getBundlerClient
+                    path: wallets/pages/reference/account-kit/core/functions/getBundlerClient.mdx
+                  - page: getChain
+                    path: wallets/pages/reference/account-kit/core/functions/getChain.mdx
+                  - page: getConnection
+                    path: wallets/pages/reference/account-kit/core/functions/getConnection.mdx
+                  - page: getSigner
+                    path: wallets/pages/reference/account-kit/core/functions/getSigner.mdx
+                  - page: getSignerStatus
+                    path: wallets/pages/reference/account-kit/core/functions/getSignerStatus.mdx
+                  - page: getSmartAccountClient
+                    path: wallets/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
+                  - page: getUser
+                    path: wallets/pages/reference/account-kit/core/functions/getUser.mdx
+                  - page: hydrate
+                    path: wallets/pages/reference/account-kit/core/functions/hydrate.mdx
+                  - page: parseCookie
+                    path: wallets/pages/reference/account-kit/core/functions/parseCookie.mdx
+                  - page: reconnect
+                    path: wallets/pages/reference/account-kit/core/functions/reconnect.mdx
+                  - page: setChain
+                    path: wallets/pages/reference/account-kit/core/functions/setChain.mdx
+                  - page: watchAccount
+                    path: wallets/pages/reference/account-kit/core/functions/watchAccount.mdx
+                  - page: watchBundlerClient
+                    path: wallets/pages/reference/account-kit/core/functions/watchBundlerClient.mdx
+                  - page: watchChain
+                    path: wallets/pages/reference/account-kit/core/functions/watchChain.mdx
+                  - page: watchConnection
+                    path: wallets/pages/reference/account-kit/core/functions/watchConnection.mdx
+                  - page: watchSigner
+                    path: wallets/pages/reference/account-kit/core/functions/watchSigner.mdx
+                  - page: watchSignerStatus
+                    path: wallets/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
+                  - page: watchSmartAccountClient
+                    path: wallets/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
+                  - page: watchUser
+                    path: wallets/pages/reference/account-kit/core/functions/watchUser.mdx
+              - section: Classes
+                contents:
+                  - page: ClientOnlyPropertyError
+                    path: wallets/pages/reference/account-kit/core/classes/ClientOnlyPropertyError/constructor.mdx
 
       - section: Infra
         contents:
