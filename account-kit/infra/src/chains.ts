@@ -494,6 +494,12 @@ export const monadTestnet: Chain = defineChain({
       http: ["https://monad-testnet.g.alchemy.com/v2"],
     },
   },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://testnet.monadexplorer.com",
+    },
+  },
   testnet: true,
 });
 
