@@ -146,31 +146,34 @@ function generateFunctionDocs(
   isTsx: boolean,
   isFern: boolean
 ) {
+  // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
+  const outputLocation = ts.isClassElement(node)
+    ? ""
+    : importedName.startsWith("use")
+    ? "/hooks"
+    : isTsx
+    ? "/components"
+    : "/functions";
+
+  const fileName = ts.isClassElement(node)
+    ? node.name?.getText() ?? "constructor"
+    : importedName;
+
+  const outputPath = `${outputFilePath}${outputLocation}/${fileName}`;
+
   const documentation = functionTemplate(
     node,
     importedName,
     packageName,
+    outputPath,
     isFern
   );
   if (!documentation) {
     return;
   }
 
-  // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
-  const outputLocation = ts.isClassElement(node)
-    ? ""
-    : importedName.startsWith("use")
-    ? "./hooks"
-    : isTsx
-    ? "./components"
-    : "./functions";
-
-  const fileName = ts.isClassElement(node)
-    ? node.name?.getText() ?? "constructor"
-    : importedName;
-
   fs.outputFileSync(
-    path.resolve(outputFilePath, outputLocation, `${fileName}.mdx`),
+    path.resolve(`${outputPath}.mdx`),
     // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
     format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
   );
