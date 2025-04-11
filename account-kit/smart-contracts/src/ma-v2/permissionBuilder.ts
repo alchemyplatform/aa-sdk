@@ -32,6 +32,7 @@ import {
   MultipleNativeTokenTransferError,
   NoFunctionsProvidedError,
   RootPermissionOnlyError,
+  SelectorNotAllowed,
   UnsupportedPermissionTypeError,
   ValidationConfigUnsetError,
   ZeroAddressError,
@@ -317,6 +318,13 @@ export class PermissionBuilder {
     if (permission.type === PermissionType.ACCOUNT_FUNCTIONS) {
       if (permission.data.functions.length === 0) {
         throw new NoFunctionsProvidedError(permission);
+      }
+      if (permission.data.functions.includes(ACCOUNT_EXECUTE_SELECTOR)) {
+        throw new SelectorNotAllowed(ACCOUNT_EXECUTE_SELECTOR);
+      } else if (
+        permission.data.functions.includes(ACCOUNT_EXECUTEBATCH_SELECTOR)
+      ) {
+        throw new SelectorNotAllowed(ACCOUNT_EXECUTEBATCH_SELECTOR);
       }
       this.selectors = [...this.selectors, ...permission.data.functions];
     }
