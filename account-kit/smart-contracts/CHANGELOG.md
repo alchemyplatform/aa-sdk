@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+### Bug Fixes
+
+- sending multiple uos with deferred action ([#1529](https://github.com/alchemyplatform/aa-sdk/issues/1529)) ([3446821](https://github.com/alchemyplatform/aa-sdk/commit/3446821f728509223e297950198605c2d7a16b38))
+
+### Features
+
+- remove execute and executebatch from account functions ([#1537](https://github.com/alchemyplatform/aa-sdk/issues/1537)) ([30c84d4](https://github.com/alchemyplatform/aa-sdk/commit/30c84d4b72520ab33eb7672f0a5943c261525a10))
+
 ## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
 
 **Note:** Version bump only for package @account-kit/smart-contracts
