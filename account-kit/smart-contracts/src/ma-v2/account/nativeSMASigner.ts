@@ -59,7 +59,7 @@ export const nativeSMASigner = (
     },
 
     signUserOperationHash: async (uoHash: Hex): Promise<Hex> => {
-      const sig = await signer
+      let sig = await signer
         .signMessage({ raw: uoHash })
         .then((signature: Hex) =>
           packUOSignature({
@@ -68,7 +68,12 @@ export const nativeSMASigner = (
           })
         );
 
-      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
+      if (deferredActionData) {
+        sig = concatHex([deferredActionData, sig]);
+        deferredActionData = undefined;
+      }
+
+      return sig;
     },
 
     // we apply the expected 1271 packing here since the account contract will expect it

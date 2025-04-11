@@ -32,7 +32,16 @@ describe("MA v2 deferral actions tests", async () => {
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
-  it("tests the full deferred actions flow", async () => {
+  const sessionKey: SmartAccountSigner = new LocalAccountSigner(
+    accounts.unfundedAccountOwner
+  );
+
+  let deferredActionDigest: Hex;
+  let accountAddress: Hex;
+  let initCode: Hex;
+
+  beforeEach(async () => {
+    // set up and sign deferred action with client with owner connected
     const provider = await givenConnectedProvider({ signer });
 
     const serverClient = (
@@ -48,10 +57,6 @@ describe("MA v2 deferral actions tests", async () => {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
-
-    const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-      accounts.unfundedAccountOwner
-    );
 
     // these can be default values or from call arguments
     const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
@@ -78,17 +83,22 @@ describe("MA v2 deferral actions tests", async () => {
 
     const sig = await provider.account.signTypedData(typedData);
 
-    const deferredActionDigest = buildDeferredActionDigest({
+    deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig,
     });
 
+    accountAddress = provider.getAddress();
+    initCode = await provider.account.getInitCode();
+  });
+
+  it("tests the full deferred actions flow", async () => {
     const sessionKeyClient = await createModularAccountV2Client({
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      accountAddress: provider.getAddress(),
+      accountAddress,
       signer: sessionKey,
-      initCode: await provider.account.getInitCode(),
+      initCode,
       deferredAction: deferredActionDigest,
     });
 
@@ -100,7 +110,76 @@ describe("MA v2 deferral actions tests", async () => {
       },
     });
 
-    await provider.waitForUserOperationTransaction(uoResult);
+    await sessionKeyClient.waitForUserOperationTransaction(uoResult);
+  });
+
+  it("deferred action then send another uo from same client", async () => {
+    const sessionKeyClient = await createModularAccountV2Client({
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      accountAddress,
+      signer: sessionKey,
+      initCode,
+      deferredAction: deferredActionDigest,
+    });
+
+    const uoResult = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount / 2n,
+        data: "0x",
+      },
+    });
+
+    await sessionKeyClient.waitForUserOperationTransaction(uoResult);
+
+    const uoResult2 = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount / 2n,
+        data: "0x",
+      },
+    });
+    await sessionKeyClient.waitForUserOperationTransaction(uoResult2);
+  });
+
+  it("deferred action then send another uo from new client", async () => {
+    const sessionKeyClient = await createModularAccountV2Client({
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      accountAddress,
+      signer: sessionKey,
+      initCode,
+      deferredAction: deferredActionDigest,
+    });
+
+    const uoResult = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount / 2n,
+        data: "0x",
+      },
+    });
+
+    await sessionKeyClient.waitForUserOperationTransaction(uoResult);
+
+    const sessionKeyClient2 = await createModularAccountV2Client({
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      accountAddress,
+      signer: sessionKey,
+      initCode,
+      deferredAction: deferredActionDigest,
+    });
+
+    const uoResult2 = await sessionKeyClient2.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount / 2n,
+        data: "0x",
+      },
+    });
+    await sessionKeyClient2.waitForUserOperationTransaction(uoResult2);
   });
 
   it("PermissionBuilder: Cannot add any permission after root", async () => {
