@@ -58,7 +58,7 @@ export function MFACard() {
       buttons={
         isPasskeyUser ? (
           <p className="text-fg-secondary text-xs bg-bg-surface-inset py-2 px-3 rounded-md font-medium mt-auto">
-            MFA is not supported when using a passkey.
+            MFA is not supported when logged in using passkey.
           </p>
         ) : (
           <MFAModal
