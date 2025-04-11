@@ -27,4 +27,4 @@ jobs:
           github-token: ${{ github.token }}
           fern-token: ${{ secrets.FERN_TOKEN }}
           environment: docs-production
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.ref }}
