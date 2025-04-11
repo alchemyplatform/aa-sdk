@@ -17,6 +17,19 @@ jobs:
       - name: Checkout aa-sdk
         uses: actions/checkout@v4
 
+      - name: Set Build Comment to In Progress
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              status: 'building',
+            });
+
       - name: Setup Docs
         uses: ./.github/actions/setup-docs
         with:
