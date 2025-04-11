@@ -377,9 +377,9 @@ describe("MA v2 Tests", async () => {
         })
         .addPermission({
           permission: {
-            type: PermissionType.ACCOUNT_FUNCTIONS,
+            type: PermissionType.CONTRACT_ACCESS,
             data: {
-              functions: ["0xb61d27f6"], // execute selector
+              address: target,
             },
           },
         })
