@@ -16,14 +16,14 @@ runs:
         token: ${{ inputs.docs-github-token }}
         path: docs-site
 
-    - name: Copy docs to docs-site/account-kit and cd into docs-site
+    - name: Copy docs to docs-site/fern/wallets
       shell: bash
       run: |
-        mkdir -p docs-site/fern/docs/account-kit
-        cp -r docs/* docs-site/fern/docs/account-kit/
+        mkdir -p docs-site/fern/wallets
+        cp -r docs/* docs-site/fern/wallets/
 
     - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
       shell: bash
       run: |
         cd docs-site
-        fern/docs/account-kit/scripts/insert-docs.sh
+        fern/wallets/scripts/insert-docs.sh
