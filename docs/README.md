@@ -17,13 +17,13 @@ The contents are automatically merged with [Alchemy's Official Docs repo](https:
 To add or modify documentation content:
 
 - Add/edit markdown files in the `pages/` directory
-- Follow the existing markdown formatting conventions
+- Follow the existing markdown formatting conventions. Fern uses [Github-flavored Markdown](https://github.github.com/gfm/)
 - You may use any [existing Fern components](https://buildwithfern.com/learn/docs/content/components/overview) without import statements
 
 To add new pages to navigation:
 
 - Update the `navigation` section in `docs.yml`
-- Reference markdown files from `pages/` by path using `docs/account-kit/pages`
+- Reference markdown files from `pages/` by path using `wallets/pages`
 
 ### Images
 
@@ -31,12 +31,12 @@ To add new images:
 
 - Place image files in the `images/` directory
 - Use descriptive filenames
-- Reference images from the `images/` directory in markdown using `images/account-kit/filename.png`
+- Reference images from the `images/` directory in markdown using `images/wallets/filename.png`
 - You may use [markdown syntax or `img` tags](https://buildwithfern.com/learn/docs/content/write-markdown#images)
 
 ### SDK References
 
-SDK Refernces are automatically generated from relevant projects within the monorepo via `fern-gen`. In the root, run:
+SDK Refernces are automatically generated from relevant projects within the monorepo via the `docs-gen` package. In the root, run:
 
 ```shell
 yarn fern-gen
