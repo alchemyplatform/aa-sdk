@@ -178,15 +178,20 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/react-native/overview.mdx
-          - page: Getting started with Expo
-            path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
-          - page: Getting started with Bare React Native
-            path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
-          - page: Signer setup
+          - section: Getting started
+            contents:
+              - page: Getting started with Expo
+                path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
+              - page: Getting started with Bare React Native
+                slug: getting-started-rn-bare
+                path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
+          - section: Signer setup
             path: wallets/pages/react-native/signer/setup-guide.mdx
           - section: Authentication methods
+            slug: signer/authenticating-users
             contents:
               - page: Email OTP
+                slug: authenticating-with-otp
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-otp.mdx
               - page: Social Login
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-social-auth.mdx
@@ -194,6 +199,8 @@ navigation:
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
           - section: Using smart accounts
             contents:
+              - page: Set up a smart account client
+                path: wallets/pages/react-native/using-smart-accounts/setup-smart-account-client.mdx
               - page: Send user operations
                 path: wallets/pages/react-native/using-smart-accounts/send-user-operations.mdx
               - page: Sponsor gas
