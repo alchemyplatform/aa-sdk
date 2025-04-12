@@ -552,6 +552,44 @@ describe("MA v2 Tests", async () => {
         args: [target],
       })
     ).to.eq(900n);
+
+    let err: any;
+    // Attempt to send more than the allowance, expect revert
+    try {
+      await sessionKeyClient.sendUserOperation({
+        uo: {
+          target: mockErc20Address,
+          data: encodeFunctionData({
+            abi: mintableERC20Abi,
+            functionName: "transfer",
+            args: [target, 1n],
+          }),
+        },
+      });
+    } catch (e: any) {
+      err = e;
+    }
+    // test outside in case to catch cases the call doesn't fail.
+    // erc20 is a execution hook so this should cause an execution revert
+    expect(err.details).to.eq("execution reverted");
+    err = null;
+
+    // attempt to call a different contract, expect execution revert
+    try {
+      // TODO: this should fail
+      await sessionKeyClient.sendUserOperation({
+        uo: {
+          target,
+          data: "0x",
+        },
+      });
+    } catch (e: any) {
+      err = e;
+    }
+
+    // test outside in case to catch cases the call doesn't fail.
+    // allowlist is a execution hook so this should cause an execution revert
+    expect(err.details).to.eq("execution reverted");
   });
 
   it("Low-level installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
