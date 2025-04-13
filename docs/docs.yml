@@ -185,8 +185,11 @@ navigation:
               - page: Getting started with Bare React Native
                 slug: getting-started-rn-bare
                 path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
-          - section: Signer setup
+          - page: Signer setup
             path: wallets/pages/react-native/signer/setup-guide.mdx
+          - page: Setting up the Accounts Provider
+            slug: signer/authenticating-users/setting-up-the-accounts-provider
+            path: wallets/pages/react-native/signer/authenticating-users/setting-up-the-accounts-provider.mdx
           - section: Authentication methods
             slug: signer/authenticating-users
             contents:
