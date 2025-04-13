@@ -944,6 +944,48 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
+      - section: Account Abstraction Ethers
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/aa-sdk/ethers/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: convertEthersSignerToAccountSigner
+                    path: wallets/pages/reference/aa-sdk/ethers/functions/convertEthersSignerToAccountSigner.mdx
+                  - page: convertWalletToAccountSigner
+                    path: wallets/pages/reference/aa-sdk/ethers/functions/convertWalletToAccountSigner.mdx
+              - section: Classes
+                contents:
+                  - section: AccountSigner
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/constructor.mdx
+                      - page: connect
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/connect.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/getAddress.mdx
+                      - page: getBundlerClient
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/getBundlerClient.mdx
+                      - page: sendTransaction
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/sendTransaction.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/signMessage.mdx
+                      - page: signTransaction
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/signTransaction.mdx
+                  - section: EthersProviderAdapter
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/constructor.mdx
+                      - page: connectToAccount
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/connectToAccount.mdx
+                      - page: fromEthersProvider
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/fromEthersProvider.mdx
+                      - page: getBundlerClient
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/getBundlerClient.mdx
+                      - page: send
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
+
       - section: Resources
         contents:
           - section: Third Party
