@@ -867,6 +867,20 @@ navigation:
                     contents:
                       - page: constructor
                         path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/constructor.mdx
+                      - page: generatePrivateKeySigner
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/generatePrivateKeySigner.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/getAddress.mdx
+                      - page: mnemonicToAccountSigner
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/mnemonicToAccountSigner.mdx
+                      - page: privateKeyToAccountSigner
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/privateKeyToAccountSigner.mdx
+                      - page: signAuthorization
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/signAuthorization.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/signMessage.mdx
+                      - page: signTypedData
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/signTypedData.mdx
                   - section: Logger
                     contents:
                       - page: debug
@@ -895,6 +909,14 @@ navigation:
                     contents:
                       - page: constructor
                         path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/constructor.mdx
+                      - page: default
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/default.mdx
+                      - page: fromTraceHeader
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/fromTraceHeader.mdx
+                      - page: toTraceHeader
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/toTraceHeader.mdx
+                      - page: withEvent
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/withEvent.mdx
                   - section: TransactionMissingToParamError
                     contents:
                       - page: constructor
@@ -915,6 +937,12 @@ navigation:
                     contents:
                       - page: constructor
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/constructor.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/getAddress.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signMessage.mdx
+                      - page: signTypedData
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
       - section: Resources
         contents:
