@@ -552,6 +552,7 @@ navigation:
           - page: Choosing a smart account
             path: wallets/pages/smart-contracts/choosing-a-smart-account.mdx
           - section: Modular Account V2
+            slug: modular-account-v2
             contents:
               - page: Overview
                 path: wallets/pages/smart-contracts/modular-account-v2/overview.mdx
@@ -559,29 +560,54 @@ navigation:
                 path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
               - page: Using 7702
                 path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
+              - page: Upgrading to MAv2
+                slug: upgrading-to-MAv2
+                path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-mav2.mdx
+              - section: Session keys
+                contents:
+                  - page: Overview
+                    slug: /
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
+                  - page: Adding session keys
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
+                  - page: Using session keys
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
+                  - page: Removing session keys
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
+              - page: Managing Ownership
+                path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
+
           - section: Other Accounts
             contents:
               - section: Modular Account V1
+                slug: modular-account
                 contents:
                   - page: Overview
+                    slug: /
                     path: wallets/pages/smart-contracts/other-accounts/modular-account/index.mdx
                   - page: Getting started
                     path: wallets/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
                   - page: Manage multiple owners
+                    slug: manage-ownership-mav1
                     path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
                   - page: Upgrade to MAv1
+                    slug: upgrading-to-modular-account
                     path: wallets/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
                   - section: Multisig
+                    slug: multisig-plugin
                     contents:
                       - page: Introduction
+                        slug: /
                         path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
                       - page: Getting started
                         path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
                       - page: Technical details
+                        slug: details
                         path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
                   - section: Session keys
                     contents:
                       - page: Overview
+                        slug: /
                         path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
                       - page: Getting started
                         path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
@@ -596,18 +622,24 @@ navigation:
               - section: Light Account
                 contents:
                   - page: Overview
+                    slug: /
                     path: wallets/pages/smart-contracts/other-accounts/light-account/index.mdx
                   - page: Getting started
                     path: wallets/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
                   - page: Transfer ownership
+                    slug: transfer-ownership-light-account
                     path: wallets/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
                   - page: Manage multiple owners
+                    slug: multi-owner-light-account
                     path: wallets/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
                   # TODO: Custom accounts links to docs in resources section - awkward to link to internal pages
                   # - link: Custom accounts
                   #   href: /wallets/resources/third-party/smart-contracts
-          - page: Gas benchmarks
-            path: wallets/pages/smart-contracts/gas-benchmarks.mdx
+          #   Markdown file exists but curvocs site site links to external repo
+          # - page: Gas benchmarks
+          #   path: wallets/pages/smart-contracts/gas-benchmarks.mdx
+          - link: Gas benchmarks
+            href: https://github.com/alchemyplatform/aa-benchmarks
           - page: Deployed addresses
             path: wallets/pages/smart-contracts/deployed-addresses.mdx
           - section: SDK Reference
@@ -743,6 +775,7 @@ navigation:
           - page: Types
             path: wallets/pages/resources/types.mdx
           - page: FAQs
+            slug: faqs
             path: wallets/pages/resources/faqs.mdx
           - page: Contact us
             path: wallets/pages/resources/contact-us.mdx
