@@ -759,6 +759,306 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
 
+      - section: Account Abstraction Core
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/aa-sdk/core/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: allEqual
+                    path: wallets/pages/reference/aa-sdk/core/functions/allEqual.mdx
+                  - page: asyncPipe
+                    path: wallets/pages/reference/aa-sdk/core/functions/asyncPipe.mdx
+                  - page: buildUserOperation
+                    path: wallets/pages/reference/aa-sdk/core/functions/buildUserOperation.mdx
+                  - page: buildUserOperationFromTx
+                    path: wallets/pages/reference/aa-sdk/core/functions/buildUserOperationFromTx.mdx
+                  - page: buildUserOperationFromTxs
+                    path: wallets/pages/reference/aa-sdk/core/functions/buildUserOperationFromTxs.mdx
+                  - page: bundlerActions
+                    path: wallets/pages/reference/aa-sdk/core/functions/bundlerActions.mdx
+                  - page: checkGasSponsorshipEligibility
+                    path: wallets/pages/reference/aa-sdk/core/functions/checkGasSponsorshipEligibility.mdx
+                  - page: convertChainIdToCoinType
+                    path: wallets/pages/reference/aa-sdk/core/functions/convertChainIdToCoinType.mdx
+                  - page: convertCoinTypeToChain
+                    path: wallets/pages/reference/aa-sdk/core/functions/convertCoinTypeToChain.mdx
+                  - page: convertCoinTypeToChainId
+                    path: wallets/pages/reference/aa-sdk/core/functions/convertCoinTypeToChainId.mdx
+                  - page: createBundlerClient
+                    path: wallets/pages/reference/aa-sdk/core/functions/createBundlerClient.mdx
+                  - page: createBundlerClientFromExisting
+                    path: wallets/pages/reference/aa-sdk/core/functions/createBundlerClientFromExisting.mdx
+                  - page: createSmartAccountClient
+                    path: wallets/pages/reference/aa-sdk/core/functions/createSmartAccountClient.mdx
+                  - page: createSmartAccountClientFromExisting
+                    path: wallets/pages/reference/aa-sdk/core/functions/createSmartAccountClientFromExisting.mdx
+                  - page: deepHexlify
+                    path: wallets/pages/reference/aa-sdk/core/functions/deepHexlify.mdx
+                  - page: default7702GasEstimator
+                    path: wallets/pages/reference/aa-sdk/core/functions/default7702GasEstimator.mdx
+                  - page: default7702UserOpSigner
+                    path: wallets/pages/reference/aa-sdk/core/functions/default7702UserOpSigner.mdx
+                  - page: defaultFeeEstimator
+                    path: wallets/pages/reference/aa-sdk/core/functions/defaultFeeEstimator.mdx
+                  - page: defaultGasEstimator
+                    path: wallets/pages/reference/aa-sdk/core/functions/defaultGasEstimator.mdx
+                  - page: defaultPaymasterAndData
+                    path: wallets/pages/reference/aa-sdk/core/functions/defaultPaymasterAndData.mdx
+                  - page: defaultUserOpSigner
+                    path: wallets/pages/reference/aa-sdk/core/functions/defaultUserOpSigner.mdx
+                  - page: dropAndReplaceUserOperation
+                    path: wallets/pages/reference/aa-sdk/core/functions/dropAndReplaceUserOperation.mdx
+                  - page: erc7677Middleware
+                    path: wallets/pages/reference/aa-sdk/core/functions/erc7677Middleware.mdx
+                  - page: filterUndefined
+                    path: wallets/pages/reference/aa-sdk/core/functions/filterUndefined.mdx
+                  - page: getAccountAddress
+                    path: wallets/pages/reference/aa-sdk/core/functions/getAccountAddress.mdx
+                  - page: getEntryPoint
+                    path: wallets/pages/reference/aa-sdk/core/functions/getEntryPoint.mdx
+                  - page: isEntryPointVersion
+                    path: wallets/pages/reference/aa-sdk/core/functions/isEntryPointVersion.mdx
+                  - page: isSigner
+                    path: wallets/pages/reference/aa-sdk/core/functions/isSigner.mdx
+                  - page: isSmartAccountClient
+                    path: wallets/pages/reference/aa-sdk/core/functions/isSmartAccountClient.mdx
+                  - page: isSmartAccountWithSigner
+                    path: wallets/pages/reference/aa-sdk/core/functions/isSmartAccountWithSigner.mdx
+                  - page: middlewareActions
+                    path: wallets/pages/reference/aa-sdk/core/functions/middlewareActions.mdx
+                  - page: noopMiddleware
+                    path: wallets/pages/reference/aa-sdk/core/functions/noopMiddleware.mdx
+                  - page: parseFactoryAddressFromAccountInitCode
+                    path: wallets/pages/reference/aa-sdk/core/functions/parseFactoryAddressFromAccountInitCode.mdx
+                  - page: pick
+                    path: wallets/pages/reference/aa-sdk/core/functions/pick.mdx
+                  - page: resolveProperties
+                    path: wallets/pages/reference/aa-sdk/core/functions/resolveProperties.mdx
+                  - page: sendTransaction
+                    path: wallets/pages/reference/aa-sdk/core/functions/sendTransaction.mdx
+                  - page: sendTransactions
+                    path: wallets/pages/reference/aa-sdk/core/functions/sendTransactions.mdx
+                  - page: sendUserOperation
+                    path: wallets/pages/reference/aa-sdk/core/functions/sendUserOperation.mdx
+                  - page: smartAccountClientActions
+                    path: wallets/pages/reference/aa-sdk/core/functions/smartAccountClientActions.mdx
+                  - page: split
+                    path: wallets/pages/reference/aa-sdk/core/functions/split.mdx
+                  - page: toRecord
+                    path: wallets/pages/reference/aa-sdk/core/functions/toRecord.mdx
+                  - page: toSmartContractAccount
+                    path: wallets/pages/reference/aa-sdk/core/functions/toSmartContractAccount.mdx
+                  - page: waitForUserOperationTransaction
+                    path: wallets/pages/reference/aa-sdk/core/functions/waitForUserOperationTransaction.mdx
+                  - page: wrapSignatureWith6492
+                    path: wallets/pages/reference/aa-sdk/core/functions/wrapSignatureWith6492.mdx
+              - section: Classes
+                contents:
+                  - section: AccountNotFoundError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/AccountNotFoundError/constructor.mdx
+                  - section: AccountRequiresOwnerError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/AccountRequiresOwnerError/constructor.mdx
+                  - section: BatchExecutionNotSupportedError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/BatchExecutionNotSupportedError/constructor.mdx
+                  - section: ChainNotFoundError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/ChainNotFoundError/constructor.mdx
+                  - section: DefaultFactoryNotDefinedError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/DefaultFactoryNotDefinedError/constructor.mdx
+                  - section: EntityIdOverrideError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/EntityIdOverrideError/constructor.mdx
+                  - section: EntryPointNotFoundError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/EntryPointNotFoundError/constructor.mdx
+                  - section: FailedToFindTransactionError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/FailedToFindTransactionError/constructor.mdx
+                  - section: FailedToGetStorageSlotError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/FailedToGetStorageSlotError/constructor.mdx
+                  - section: GetCounterFactualAddressError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/GetCounterFactualAddressError/constructor.mdx
+                  - section: IncompatibleClientError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/IncompatibleClientError/constructor.mdx
+                  - section: IncorrectAccountType
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/IncorrectAccountType/constructor.mdx
+                  - section: InvalidDeferredActionNonce
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidDeferredActionNonce/constructor.mdx
+                  - section: InvalidEntityIdError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidEntityIdError/constructor.mdx
+                  - section: InvalidEntryPointError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidEntryPointError/constructor.mdx
+                  - section: InvalidModularAccountV2Mode
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidModularAccountV2Mode/constructor.mdx
+                  - section: InvalidNonceKeyError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidNonceKeyError/constructor.mdx
+                  - section: InvalidRpcUrlError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidRpcUrlError/constructor.mdx
+                  - section: InvalidSignerTypeError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidSignerTypeError/constructor.mdx
+                  - section: InvalidUserOperationError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidUserOperationError/constructor.mdx
+                  - section: LocalAccountSigner
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/constructor.mdx
+                      - page: generatePrivateKeySigner
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/generatePrivateKeySigner.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/getAddress.mdx
+                      - page: mnemonicToAccountSigner
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/mnemonicToAccountSigner.mdx
+                      - page: privateKeyToAccountSigner
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/privateKeyToAccountSigner.mdx
+                      - page: signAuthorization
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/signAuthorization.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/signMessage.mdx
+                      - page: signTypedData
+                        path: wallets/pages/reference/aa-sdk/core/classes/LocalAccountSigner/signTypedData.mdx
+                  - section: Logger
+                    contents:
+                      - page: debug
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/debug.mdx
+                      - page: error
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/error.mdx
+                      - page: info
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/info.mdx
+                      - page: setLogFilter
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/setLogFilter.mdx
+                      - page: setLogLevel
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/setLogLevel.mdx
+                      - page: verbose
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/verbose.mdx
+                      - page: warn
+                        path: wallets/pages/reference/aa-sdk/core/classes/Logger/warn.mdx
+                  - section: SignTransactionNotSupportedError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/SignTransactionNotSupportedError/constructor.mdx
+                  - section: SmartAccountWithSignerRequiredError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/SmartAccountWithSignerRequiredError/constructor.mdx
+                  - section: TraceHeader
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/constructor.mdx
+                      - page: default
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/default.mdx
+                      - page: fromTraceHeader
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/fromTraceHeader.mdx
+                      - page: toTraceHeader
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/toTraceHeader.mdx
+                      - page: withEvent
+                        path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/withEvent.mdx
+                  - section: TransactionMissingToParamError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/TransactionMissingToParamError/constructor.mdx
+                  - section: UpgradeToAndCallNotSupportedError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/UpgradeToAndCallNotSupportedError/constructor.mdx
+                  - section: UpgradesNotSupportedError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/UpgradesNotSupportedError/constructor.mdx
+                  - section: WaitForUserOperationError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/WaitForUserOperationError/constructor.mdx
+                  - section: WalletClientSigner
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/constructor.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/getAddress.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signMessage.mdx
+                      - page: signTypedData
+                        path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
+
+      - section: Account Abstraction Ethers
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/aa-sdk/ethers/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: convertEthersSignerToAccountSigner
+                    path: wallets/pages/reference/aa-sdk/ethers/functions/convertEthersSignerToAccountSigner.mdx
+                  - page: convertWalletToAccountSigner
+                    path: wallets/pages/reference/aa-sdk/ethers/functions/convertWalletToAccountSigner.mdx
+              - section: Classes
+                contents:
+                  - section: AccountSigner
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/constructor.mdx
+                      - page: connect
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/connect.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/getAddress.mdx
+                      - page: getBundlerClient
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/getBundlerClient.mdx
+                      - page: sendTransaction
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/sendTransaction.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/signMessage.mdx
+                      - page: signTransaction
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/signTransaction.mdx
+                  - section: EthersProviderAdapter
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/constructor.mdx
+                      - page: connectToAccount
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/connectToAccount.mdx
+                      - page: fromEthersProvider
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/fromEthersProvider.mdx
+                      - page: getBundlerClient
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/getBundlerClient.mdx
+                      - page: send
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
+
       - section: Resources
         contents:
           - section: Third Party
@@ -773,6 +1073,15 @@ navigation:
                 path: wallets/pages/third-party/signers.mdx
               - page: Smart Contracts
                 path: wallets/pages/third-party/smart-contracts.mdx
+          - link: GitHub
+            href: https://github.com/alchemyplatform/aa-sdk
+          - page: Migrating to 4.x.x
+            slug: migration-guide
+            path: wallets/pages/migration-guide.mdx
+          - link: Changelog
+            href: https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md
+          - link: Contributing
+            href: https://github.com/alchemyplatform/aa-sdk/blob/main/CONTRIBUTING.md
           - page: Terms
             path: wallets/pages/resources/terms.mdx
           - page: Types
