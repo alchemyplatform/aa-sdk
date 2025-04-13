@@ -1000,6 +1000,15 @@ navigation:
                 path: wallets/pages/third-party/signers.mdx
               - page: Smart Contracts
                 path: wallets/pages/third-party/smart-contracts.mdx
+          - link: GitHub
+            href: https://github.com/alchemyplatform/aa-sdk
+          - page: Migrating to 4.x.x
+            slug: migration-guide
+            path: wallets/pages/migration-guide.mdx
+          - link: Changelog
+            href: https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md
+          - link: Contributing
+            href: https://github.com/alchemyplatform/aa-sdk/blob/main/CONTRIBUTING.md
           - page: Terms
             path: wallets/pages/resources/terms.mdx
           - page: Types
