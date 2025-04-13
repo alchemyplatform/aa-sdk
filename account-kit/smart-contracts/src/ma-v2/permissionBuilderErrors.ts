@@ -151,3 +151,16 @@ export class UnsupportedPermissionTypeError extends BaseError {
     super(`Unsupported permission type`);
   }
 }
+
+export class SelectorNotAllowed extends BaseError {
+  override name = "SelectorNotAllowed";
+
+  /**
+   * Constructor for initializing an error message indicating that the selector being added is not allowed.
+   *
+   * @param {string} functionName The function name of the selector that is being added.
+   */
+  constructor(functionName: string) {
+    super(`Cannot add ${functionName} on the account`);
+  }
+}

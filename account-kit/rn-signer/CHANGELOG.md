@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+### Bug Fixes
+
+- mfa demo ui feedback updates ([#1527](https://github.com/alchemyplatform/aa-sdk/issues/1527)) ([5caf1d9](https://github.com/alchemyplatform/aa-sdk/commit/5caf1d933c19d5023b4d62ef2784fb3d9dc53224))
+
 ## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
 
 **Note:** Version bump only for package @account-kit/react-native-signer
