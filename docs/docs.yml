@@ -565,7 +565,7 @@ navigation:
                 path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
               - page: Upgrading to MAv2
                 slug: upgrading-to-MAv2
-                path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-mav2.mdx
+                path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-MAv2.mdx
               - section: Session keys
                 contents:
                   - page: Overview
