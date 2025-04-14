@@ -1,0 +1,119 @@
+---
+title: Send User Operations
+description: Learn how to send user operations using Account Kit in a React application.
+---
+
+# Send user operations
+
+Once your users have been [authenticated](/wallets/react/getting-started), you can start sending user operations! Account Kit makes it really easy to send user operations using React hooks.
+
+Sending user operations is really easy, since all you have to do is use the [`useSendUserOperation`](/wallets/reference/account-kit/react/hooks/useSendUserOperation) hook.
+If you want to sponsor the gas for a user, see our [guide](/wallets/react/sponsor-gas).
+
+## Single user operation
+
+<Tip>
+  In the below example, we use `ModularAccountV2` as the underlying Smart
+  Contract type, which is our default and recommended account. To learn more
+  about all the account options, check out our guide [on choosing a smart
+  account](/wallets/smart-contracts/choosing-a-smart-account).
+</Tip>
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseSendUserOperationResult,
+  useSendUserOperation,
+  useSmartAccountClient,
+} from "@account-kit/react";
+
+export default function MyOpSenderComponent() {
+  const { client } = useSmartAccountClient({});
+
+  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    client,
+    // optional parameter that will wait for the transaction to be mined before returning
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      // [optional] Do something with the hash and request
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
+  });
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          sendUserOperation({
+            uo: {
+              target: "0xTARGET_ADDRESS",
+              data: "0x",
+              value: 0n,
+            },
+          })
+        }
+        disabled={isSendingUserOperation}
+      >
+        {isSendingUserOperation ? "Sending..." : "Send UO"}
+      </button>
+    </div>
+  );
+}
+```
+
+## Batch user operation
+
+It's also possible to send user operations in batch using the same hook.
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseSendUserOperationResult,
+  useSendUserOperation,
+  useSmartAccountClient,
+} from "@account-kit/react";
+
+export default function MyOpSenderComponent() {
+  const { client } = useSmartAccountClient({});
+
+  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    client,
+    // optional parameter that will wait for the transaction to be mined before returning
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      // [optional] Do something with the hash and request
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
+  });
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          sendUserOperation({
+            uo: [
+              {
+                target: "0xTARGET_ADDRESS",
+                data: "0x",
+                value: 0n,
+              },
+              {
+                target: "0xTARGET_ADDRESS",
+                data: "0x",
+                value: 0n,
+              },
+            ],
+          })
+        }
+        disabled={isSendingUserOperation}
+      >
+        {isSendingUserOperation ? "Sending..." : "Send UO"}
+      </button>
+    </div>
+  );
+}
+```

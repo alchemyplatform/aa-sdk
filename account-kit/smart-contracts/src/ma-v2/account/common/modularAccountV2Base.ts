@@ -3,13 +3,14 @@ import {
   getEntryPoint,
   InvalidEntityIdError,
   InvalidNonceKeyError,
+  InvalidDeferredActionNonce,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
 } from "@aa-sdk/core";
-import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
   type Hex,
   type Address,
@@ -85,6 +86,7 @@ export type CreateMAV2BaseParams<
   signer: TSigner;
   signerEntity?: SignerEntity;
   accountAddress: Address;
+  deferredAction?: Hex;
 };
 
 export type CreateMAV2BaseReturnType<
@@ -94,7 +96,7 @@ export type CreateMAV2BaseReturnType<
 export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
-  const {
+  let {
     transport,
     chain,
     signer,
@@ -108,6 +110,7 @@ export async function createMAv2Base<
       entityId = DEFAULT_OWNER_ENTITY_ID,
     } = {},
     accountAddress,
+    deferredAction,
     ...remainingToSmartContractAccountParams
   } = config;
 
@@ -119,6 +122,42 @@ export async function createMAv2Base<
     transport,
     chain,
   });
+
+  const entryPointContract = getContract({
+    address: entryPoint.address,
+    abi: entryPoint.abi,
+    client,
+  });
+
+  // These default values signal that we should not use the set deferred action nonce
+  let nonce: bigint | undefined;
+  let deferredActionData: Hex | undefined;
+  let hasAssociatedExecHooks: boolean = false;
+
+  if (deferredAction) {
+    let deferredActionNonce: bigint = 0n;
+    // We always update entity id and isGlobalValidation to the deferred action value since the client could be used to send multiple calls
+    ({
+      entityId,
+      isGlobalValidation,
+      nonce: deferredActionNonce,
+    } = parseDeferredAction(deferredAction));
+
+    // Set these values if the deferred action has not been consumed. We check this with the EP
+    const nextNonceForDeferredAction: bigint =
+      (await entryPointContract.read.getNonce([
+        accountAddress,
+        deferredActionNonce >> 64n,
+      ])) as bigint;
+
+    if (deferredActionNonce === nextNonceForDeferredAction) {
+      ({ nonce, deferredActionData, hasAssociatedExecHooks } =
+        parseDeferredAction(deferredAction));
+    } else if (deferredActionNonce > nextNonceForDeferredAction) {
+      // if nonce is greater than the next nonce, its invalid, so we throw
+      throw new InvalidDeferredActionNonce();
+    }
+  }
 
   const encodeExecute: (tx: AccountOp) => Promise<Hex> = async ({
     target,
@@ -150,17 +189,17 @@ export async function createMAv2Base<
 
   const isAccountDeployed: () => Promise<boolean> = async () =>
     !!(await client.getCode({ address: accountAddress }));
-  // TODO: add deferred action flag
+
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
+    if (nonce) {
+      const tempNonce = nonce;
+      nonce = undefined; // set to falsy value once used
+      return tempNonce;
+    }
+
     if (nonceKey > maxUint152) {
       throw new InvalidNonceKeyError(nonceKey);
     }
-
-    const entryPointContract = getContract({
-      address: entryPoint.address,
-      abi: entryPoint.abi,
-      client,
-    });
 
     const fullNonceKey: bigint =
       (nonceKey << 40n) +
@@ -215,10 +254,14 @@ export async function createMAv2Base<
     const validationData = await getValidationData({
       entityId: Number(entityId),
     });
-
-    return validationData.executionHooks.length
-      ? concatHex([executeUserOpSelector, callData])
-      : callData;
+    if (hasAssociatedExecHooks) {
+      hasAssociatedExecHooks = false; // set to falsy value once used
+      return concatHex([executeUserOpSelector, callData]);
+    }
+    if (validationData.executionHooks.length) {
+      return concatHex([executeUserOpSelector, callData]);
+    }
+    return callData;
   };
 
   const baseAccount = await toSmartContractAccount({
@@ -231,8 +274,14 @@ export async function createMAv2Base<
     encodeBatchExecute,
     getNonce,
     ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress)
-      : singleSignerMessageSigner(signer, chain, accountAddress, entityId)),
+      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
+      : singleSignerMessageSigner(
+          signer,
+          chain,
+          accountAddress,
+          entityId,
+          deferredActionData
+        )),
   });
 
   return {

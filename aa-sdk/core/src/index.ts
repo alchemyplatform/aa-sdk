@@ -77,6 +77,7 @@ export {
   InvalidNonceKeyError,
   EntityIdOverrideError,
   InvalidModularAccountV2Mode,
+  InvalidDeferredActionNonce,
 } from "./errors/client.js";
 export {
   EntryPointNotFoundError,

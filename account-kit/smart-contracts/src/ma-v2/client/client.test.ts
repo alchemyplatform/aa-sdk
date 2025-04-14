@@ -21,8 +21,11 @@ import {
   concat,
   testActions,
   concatHex,
+  toHex,
+  createWalletClient,
+  getContractAddress,
+  encodeFunctionData,
   type TestActions,
-  type Hex,
   type ContractFunctionName,
 } from "viem";
 import { HookType } from "../actions/common/types.js";
@@ -40,6 +43,10 @@ import {
   NativeTokenLimitModule,
   semiModularAccountBytecodeAbi,
   buildFullNonceKey,
+  deferralActions,
+  PermissionBuilder,
+  PermissionType,
+  buildDeferredActionDigest,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -61,8 +68,8 @@ import {
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
-import { deferralActions } from "../actions/deferralActions.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -329,7 +336,225 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
+  it("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+      })
+    )
+      .extend(installValidationActions)
+      .extend(deferralActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
+      isGlobalValidation: false,
+    });
+
+    // Must be built with the client that's going to sign the deferred action
+    // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
+    const { typedData, fullPreSignatureDeferredActionDigest } =
+      await new PermissionBuilder({
+        client: provider,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonce: nonce,
+        deadline: 0,
+      })
+        .addPermission({
+          permission: {
+            type: PermissionType.GAS_LIMIT,
+            data: {
+              limit: toHex(parseEther("1")),
+            },
+          },
+        })
+        .addPermission({
+          permission: {
+            type: PermissionType.CONTRACT_ACCESS,
+            data: {
+              address: target,
+            },
+          },
+        })
+        .compileDeferred();
+
+    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
+
+    // Build the full hex to prepend to the UO signature
+    const deferredActionDigest = buildDeferredActionDigest({
+      fullPreSignatureDeferredActionDigest,
+      sig: deferredValidationSig,
+    });
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    let sessionKeyClient = await createModularAccountV2Client({
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      accountAddress: provider.getAddress(),
+      signer: sessionKey,
+      initCode: await provider.account.getInitCode(), // must be called with the owner provider!
+      deferredAction: deferredActionDigest,
+    });
+
+    // Send the raw UserOp
+    const result = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await provider.waitForUserOperationTransaction(result);
+  });
+
+  it("installs a session key via deferred action using PermissionBuilder with ERC20 permission signed by the owner and has it sign a UO", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+      })
+    )
+      .extend(installValidationActions)
+      .extend(deferralActions);
+
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const walletClient = createWalletClient({
+      chain: provider.chain,
+      transport: custom(instance.getClient()),
+      account: privateKeyToAccount(generatePrivateKey()),
+    });
+
+    await setBalance(client, {
+      address: walletClient.account.address,
+      value: parseEther("2"),
+    });
+
+    const mockErc20Address = getContractAddress({
+      from: walletClient.account.address,
+      nonce: BigInt(
+        await client.getTransactionCount({
+          address: walletClient.account.address,
+        })
+      ),
+    });
+
+    // Deploy mock ERC20
+    await walletClient.deployContract({
+      abi: mintableERC20Abi,
+      account: walletClient.account,
+      bytecode: mintableERC20Bytecode,
+    });
+
+    // Mint some test tokens
+    await walletClient.writeContract({
+      address: mockErc20Address,
+      abi: mintableERC20Abi,
+      functionName: "mint",
+      args: [provider.getAddress(), 1000n],
+    });
+
+    // Test variables
+    // const sessionKeyEntityId = 1;
+    // these can be default values or from call arguments
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
+      isGlobalValidation: false, // assumes the session key is used to sign the UO
+    });
+
+    // Must be built with the client that's going to sign the deferred action
+    // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
+    const { typedData, fullPreSignatureDeferredActionDigest } =
+      await new PermissionBuilder({
+        client: provider,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonce: nonce,
+        deadline: 0,
+      })
+        .addPermission({
+          permission: {
+            type: PermissionType.ERC20_TOKEN_TRANSFER,
+            data: {
+              address: mockErc20Address,
+              allowance: toHex(900),
+            },
+          },
+        })
+        .compileDeferred();
+
+    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
+
+    // Build the full hex to prepend to the UO signature
+    const deferredActionDigest = buildDeferredActionDigest({
+      fullPreSignatureDeferredActionDigest,
+      sig: deferredValidationSig,
+    });
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      initCode: await provider.account.getInitCode(),
+      deferredAction: deferredActionDigest,
+    });
+
+    // Validate the target's balance is zero before the transfer
+    expect(
+      await client.readContract({
+        address: mockErc20Address,
+        abi: mintableERC20Abi,
+        functionName: "balanceOf",
+        args: [target],
+      })
+    ).to.eq(0n);
+
+    // Build the full UO with the deferred action signature prepend (must be session key client)
+    const hash = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: mockErc20Address,
+        data: encodeFunctionData({
+          abi: mintableERC20Abi,
+          functionName: "transfer",
+          args: [target, 900n],
+        }),
+      },
+    });
+
+    await provider.waitForUserOperationTransaction({ hash: hash.hash });
+
+    // Validate the erc20 transfer happened
+    expect(
+      await client.readContract({
+        address: mockErc20Address,
+        abi: mintableERC20Abi,
+        functionName: "balanceOf",
+        args: [target],
+      })
+    ).to.eq(900n);
+  });
+
+  it("Low-level installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
     let provider = (await givenConnectedProvider({ signer }))
       .extend(installValidationActions)
       .extend(deferralActions);
@@ -340,8 +565,10 @@ describe("MA v2 Tests", async () => {
     });
 
     // Test variables
-    const sessionKeyEntityId = 1;
     const isGlobalValidation = true;
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
+      isGlobalValidation: isGlobalValidation,
+    });
 
     // Encode install data to defer
     let encodedInstallData = await provider.encodeInstallValidation({
@@ -349,56 +576,64 @@ describe("MA v2 Tests", async () => {
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
           provider.chain
         ),
-        entityId: sessionKeyEntityId,
+        entityId: entityId,
         isGlobal: isGlobalValidation,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
       selectors: [],
       installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: sessionKeyEntityId,
+        entityId: entityId,
         signer: await sessionKey.getAddress(),
       }),
       hooks: [],
     });
 
     // Build the typed data we need for the deferred action (provider/client only used for account address & entrypoint)
-    const { typedData, nonceOverride } =
-      await provider.createDeferredActionTypedDataObject({
-        callData: encodedInstallData,
-        deadline: 0,
-        entityId: sessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
-      });
+    const { typedData } = await provider.createDeferredActionTypedDataObject({
+      callData: encodedInstallData,
+      deadline: 0,
+      nonce,
+    });
 
     // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
     const deferredValidationSig = await provider.account.signTypedData(
       typedData
     );
 
+    const fullPreSignatureDeferredActionDigest =
+      provider.buildPreSignatureDeferredActionDigest({
+        typedData,
+      });
+
     // Build the full hex to prepend to the UO signature
-    // This MUST be done with the *same* client that has signed the typed data
-    const signaturePrepend = provider.buildDeferredActionDigest({
-      typedData: typedData,
+    const deferredActionDigest = buildDeferredActionDigest({
+      fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
 
-    // Build the full UO with the deferred action signature prepend (provider/client only used for account address & entrypoint)
-    const unsignedUo = await provider.buildUserOperationWithDeferredAction({
-      uo: { target, data: "0x" },
-      signaturePrepend,
-      nonceOverride,
-    });
+    // preExecHooks 00, nonce, deferredActionDigest
+    const fullDeferredAction = concatHex([
+      "0x00",
+      toHex(nonce, { size: 32 }),
+      deferredActionDigest,
+    ]);
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
-      signer: sessionKey,
       transport: custom(instance.getClient()),
+      chain: instance.chain,
       accountAddress: provider.getAddress(),
-      signerEntity: {
-        entityId: sessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
+      signer: sessionKey,
+      initCode: await provider.account.getInitCode(),
+      deferredAction: fullDeferredAction,
+    });
+
+    // Build the full UO with the deferred action signature prepend (provider/client only used for account address & entrypoint)
+    const unsignedUo = await sessionKeyClient.buildUserOperation({
+      uo: { target, data: "0x" },
+      overrides: {
+        nonce: nonce,
       },
     });
 
@@ -406,9 +641,6 @@ describe("MA v2 Tests", async () => {
     const uo = await sessionKeyClient.signUserOperation({
       uoStruct: unsignedUo,
     });
-
-    // Prepend the full hex for the deferred action to the new, real signature
-    uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
 
     // Send the raw UserOp
     const result = await sessionKeyClient.sendRawUserOperation(
@@ -473,37 +705,29 @@ describe("MA v2 Tests", async () => {
       randomWallet
     );
 
-    // Test variables
-    const newSessionKeyEntityId = 2;
-    const isGlobalValidation = true;
-
-    // Encode install data to defer
-    let encodedInstallData = await sessionKeyClient.encodeInstallValidation({
-      validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
-        entityId: newSessionKeyEntityId,
-        isGlobal: isGlobalValidation,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: newSessionKeyEntityId,
-        signer: await newSessionKey.getAddress(),
-      }),
-      hooks: [],
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
+      isGlobalValidation: true,
     });
 
-    // Build the typed data we need for the deferred action (provider/client only used for account address & entrypoint)
-    const { typedData, nonceOverride } =
-      await provider.createDeferredActionTypedDataObject({
-        callData: encodedInstallData,
+    // Must be built with the client that's going to sign the deferred action
+    // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
+    const { typedData, fullPreSignatureDeferredActionDigest } =
+      await new PermissionBuilder({
+        client: sessionKeyClient,
+        key: {
+          publicKey: await newSessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonce: nonce,
         deadline: 0,
-        entityId: newSessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
-      });
+      })
+        .addPermission({
+          permission: {
+            type: PermissionType.ROOT,
+          },
+        })
+        .compileDeferred();
 
     // Sign the typed data using the first session key
     const deferredValidationSig = await sessionKeyClient.account.signTypedData(
@@ -511,46 +735,30 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    // This MUST be done with the *same* client that has signed the typed data
-    const signaturePrepend = sessionKeyClient.buildDeferredActionDigest({
-      typedData: typedData,
+    const deferredActionDigest = buildDeferredActionDigest({
+      fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
-    });
-
-    // Build the full UO with the deferred action signature prepend (provider/client only used for account address & entrypoint)
-    const unsignedUo = await provider.buildUserOperationWithDeferredAction({
-      uo: { target, data: "0x" },
-      signaturePrepend,
-      nonceOverride,
     });
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let newSessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
-      signer: newSessionKey,
       transport: custom(instance.getClient()),
+      chain: instance.chain,
       accountAddress: provider.getAddress(),
-      signerEntity: {
-        entityId: newSessionKeyEntityId,
-        isGlobalValidation: isGlobalValidation,
+      signer: newSessionKey,
+      initCode: await provider.account.getInitCode(),
+      deferredAction: deferredActionDigest,
+    });
+
+    // Send the UserOp (provider/client only used for account address & entrypoint)
+    const result = await newSessionKeyClient.sendUserOperation({
+      uo: {
+        target,
+        data: "0x",
       },
     });
 
-    // Sign the UO with the newly installed session key
-    const uo = await newSessionKeyClient.signUserOperation({
-      uoStruct: unsignedUo,
-    });
-
-    // Prepend the full hex for the deferred action to the new, real signature
-    uo.signature = concatHex([signaturePrepend, uo.signature as Hex]);
-
-    // Send the raw UserOp (provider/client only used for account address & entrypoint)
-    const result = await provider.sendRawUserOperation(
-      uo,
-      provider.account.getEntryPoint().address
-    );
-
-    await provider.waitForUserOperationTransaction({ hash: result });
+    await provider.waitForUserOperationTransaction(result);
   });
 
   it("uninstalls a session key", async () => {
@@ -665,7 +873,7 @@ describe("MA v2 Tests", async () => {
       ],
     });
 
-    // verify hook installtion succeeded
+    // verify hook installation succeeded
     await provider.waitForUserOperationTransaction(installResult);
 
     // create session key client
@@ -1349,7 +1557,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("tests entity id and nonce selection", async () => {
-    let newClient = (await givenConnectedProvider({ signer, salt: 1n }))
+    let newClient = (await givenConnectedProvider({ signer }))
       .extend(deferralActions)
       .extend(installValidationActions);
 
@@ -1519,37 +1727,6 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  const givenConnectedProvider = async ({
-    signer,
-    signerEntity,
-    accountAddress,
-    paymasterMiddleware,
-    salt = 0n,
-  }: {
-    signer: SmartAccountSigner;
-    signerEntity?: SignerEntity;
-    accountAddress?: `0x${string}`;
-    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
-    salt?: bigint;
-  }) =>
-    createModularAccountV2Client({
-      chain: instance.chain,
-      signer,
-      accountAddress,
-      signerEntity,
-      transport: custom(instance.getClient()),
-      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
-        ? alchemyGasAndPaymasterAndDataMiddleware({
-            policyId: "FAKE_POLICY_ID",
-            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
-          })
-        : paymasterMiddleware === "erc7677"
-        ? erc7677Middleware()
-        : {}),
-      salt,
-    });
-
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {
     const alchemyClientSpy = vi
       .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
@@ -1588,4 +1765,35 @@ describe("MA v2 Tests", async () => {
     expect(alchemyClientSpy).not.toHaveBeenCalled();
     expect(notAlchemyClientSpy).toHaveBeenCalled();
   });
+
+  let salt = 1n;
+
+  const givenConnectedProvider = async ({
+    signer,
+    signerEntity,
+    accountAddress,
+    paymasterMiddleware,
+  }: {
+    signer: SmartAccountSigner;
+    signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+  }) =>
+    createModularAccountV2Client({
+      chain: instance.chain,
+      signer,
+      accountAddress,
+      signerEntity,
+      transport: custom(instance.getClient()),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
+      salt: salt++,
+    });
 });

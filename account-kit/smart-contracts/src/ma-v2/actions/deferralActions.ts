@@ -11,7 +11,6 @@ import {
   type Hex,
   concatHex,
   maxUint152,
-  getContract,
   encodePacked,
   size,
   toHex,
@@ -44,20 +43,16 @@ export type DeferredActionTypedData = {
 
 export type DeferredActionReturnData = {
   typedData: DeferredActionTypedData;
-  nonceOverride: bigint;
 };
 
 export type CreateDeferredActionTypedDataParams = {
   callData: Hex;
   deadline: number;
-  entityId: number;
-  isGlobalValidation: boolean;
-  nonceKeyOverride?: bigint;
+  nonce: bigint;
 };
 
-export type BuildDeferredActionDigestParams = {
+export type BuildPreSignatureDeferredActionDigestParams = {
   typedData: DeferredActionTypedData;
-  sig: Hex;
 };
 
 export type BuildUserOperationWithDeferredActionParams = {
@@ -67,16 +62,19 @@ export type BuildUserOperationWithDeferredActionParams = {
 };
 
 export type EntityIdAndNonceParams = {
-  entityId: number;
-  nonceKey: bigint;
+  entityId?: number;
+  nonceKey?: bigint;
   isGlobalValidation: boolean;
+  isDeferredAction?: boolean;
 };
 
 export type DeferralActions = {
   createDeferredActionTypedDataObject: (
     args: CreateDeferredActionTypedDataParams
   ) => Promise<DeferredActionReturnData>;
-  buildDeferredActionDigest: (args: BuildDeferredActionDigestParams) => Hex;
+  buildPreSignatureDeferredActionDigest: (
+    args: BuildPreSignatureDeferredActionDigestParams
+  ) => Hex;
   buildUserOperationWithDeferredAction: (
     args: BuildUserOperationWithDeferredActionParams
   ) => Promise<UserOperationRequest_v7>;
@@ -97,42 +95,16 @@ export const deferralActions: (
   const createDeferredActionTypedDataObject = async ({
     callData,
     deadline,
-    entityId,
-    isGlobalValidation,
-    nonceKeyOverride = 0n,
+    nonce,
   }: CreateDeferredActionTypedDataParams): Promise<DeferredActionReturnData> => {
     if (!client.account) {
       throw new AccountNotFoundError();
-    }
-
-    if (nonceKeyOverride > maxUint152) {
-      throw new InvalidNonceKeyError(nonceKeyOverride);
     }
 
     const entryPoint = client.account.getEntryPoint();
     if (entryPoint === undefined) {
       throw new EntryPointNotFoundError(client.chain, "0.7.0");
     }
-
-    const entryPointContract = getContract({
-      address: entryPoint.address,
-      abi: entryPoint.abi,
-      client: client,
-    });
-
-    // 2 = deferred action flags    0b10
-    // 1 = isGlobal validation flag 0b01
-    const fullNonceKey: bigint = buildFullNonceKey({
-      nonceKey: nonceKeyOverride,
-      entityId,
-      isGlobalValidation,
-      isDeferredAction: true,
-    });
-
-    const nonceOverride = (await entryPointContract.read.getNonce([
-      client.account.address,
-      fullNonceKey,
-    ])) as bigint;
 
     return {
       typedData: {
@@ -149,49 +121,32 @@ export const deferralActions: (
         },
         primaryType: "DeferredAction",
         message: {
-          nonce: nonceOverride,
+          nonce: nonce,
           deadline: deadline,
           call: callData,
         },
       },
-      nonceOverride: nonceOverride,
     };
   };
 
-  /**
-   * Creates the digest which must be prepended to the userOp signature.
-   *
-   * Assumption: The client this extends is used to sign the typed data.
-   *
-   * @param {object} args The argument object containing the following:
-   * @param {DeferredActionTypedData} args.typedData The typed data object for the deferred action
-   * @param {Hex} args.sig The signature to include in the digest
-   * @returns {Hex} The encoded digest to be prepended to the userOp signature
-   */
-  const buildDeferredActionDigest = ({
+  const buildPreSignatureDeferredActionDigest = ({
     typedData,
-    sig,
-  }: BuildDeferredActionDigestParams): Hex => {
+  }: BuildPreSignatureDeferredActionDigestParams): Hex => {
     const signerEntity = client.account.signerEntity;
     const validationLocator =
       (BigInt(signerEntity.entityId) << 8n) |
       (signerEntity.isGlobalValidation ? 1n : 0n);
 
-    let encodedData = encodePacked(
+    const encodedCallData = encodePacked(
       ["uint168", "uint48", "bytes"],
       [validationLocator, typedData.message.deadline, typedData.message.call]
     );
 
-    const encodedDataLength = size(encodedData);
-    const sigLength = size(sig);
-
-    encodedData = concatHex([
+    const encodedDataLength = size(encodedCallData);
+    const encodedData = concatHex([
       toHex(encodedDataLength, { size: 4 }),
-      encodedData,
-      toHex(sigLength, { size: 4 }),
-      sig,
+      encodedCallData,
     ]);
-
     return encodedData;
   };
 
@@ -239,9 +194,10 @@ export const deferralActions: (
   };
 
   const getEntityIdAndNonce = async ({
-    entityId,
-    nonceKey,
+    entityId = 1,
+    nonceKey = 0n,
     isGlobalValidation,
+    isDeferredAction = true,
   }: EntityIdAndNonceParams) => {
     if (!client.account) {
       throw new AccountNotFoundError();
@@ -266,7 +222,7 @@ export const deferralActions: (
           nonceKey,
           entityId,
           isGlobalValidation,
-          isDeferredAction: true,
+          isDeferredAction,
         }),
       ],
     });
@@ -284,7 +240,7 @@ export const deferralActions: (
 
   return {
     createDeferredActionTypedDataObject,
-    buildDeferredActionDigest,
+    buildPreSignatureDeferredActionDigest,
     buildUserOperationWithDeferredAction,
     getEntityIdAndNonce,
   };

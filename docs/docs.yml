@@ -1,7 +1,12 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/docs-yml.json
+
+instances:
+  - url: https://alchemy.com/docs
+
 experimental:
   mdx-components:
-    - docs/account-kit/components
-    - docs/account-kit/shared
+    - wallets/components
+    - wallets/shared
 
 navigation:
   - tab: wallets
@@ -9,247 +14,697 @@ navigation:
       - section: Introduction
         contents:
           - page: Overview
-            path: docs/account-kit/pages/index.mdx
-      #     - link: Demo
-      #       href: https://demo.alchemy.com/
-      #     - section: Concepts
-      #       contents:
-      #         - page: Intro to Account Kit
-      #           path: account-kit/pages/concepts/intro-to-account-kit.mdx
-      #         - page: Smart Contract Account
-      #           path: account-kit/pages/concepts/smart-contract-account.mdx
-      #         - page: Smart Account Client
-      #           path: account-kit/pages/concepts/smart-account-client.mdx
-      #         - page: Bundler Client
-      #           path: account-kit/pages/concepts/bundler-client.mdx
-      #         - page: Smart Account Signer
-      #           path: account-kit/pages/concepts/smart-account-signer.mdx
-      #         - page: Middleware
-      #           path: account-kit/pages/concepts/middleware.mdx
+            path: wallets/pages/index.mdx
+          - link: Demo
+            href: https://demo.alchemy.com/
+          - section: Concepts
+            contents:
+              - page: Intro to Account Kit
+                path: wallets/pages/concepts/intro-to-account-kit.mdx
+              - page: Smart Contract Account
+                path: wallets/pages/concepts/smart-contract-account.mdx
+              - page: Smart Account Client
+                path: wallets/pages/concepts/smart-account-client.mdx
+              - page: Bundler Client
+                path: wallets/pages/concepts/bundler-client.mdx
+              - page: Smart Account Signer
+                path: wallets/pages/concepts/smart-account-signer.mdx
+              - page: Middleware
+                path: wallets/pages/concepts/middleware.mdx
 
-      # - section: React
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/react/overview.mdx
-      #     - page: Quickstart
-      #       path: account-kit/pages/react/quickstart.mdx
-      #     - section: Authentication
-      #       contents:
-      #         - page: Set up
-      #           path: account-kit/pages/react/getting-started.mdx
-      #         - page: UI Components
-      #           path: account-kit/pages/react/ui-components.mdx
-      #         - page: Custom UI
-      #           path: account-kit/pages/react/react-hooks.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Set up your client
-      #           path: account-kit/pages/react/how-to-set-up-smart-account-client.mdx
-      #         - page: Send user operations
-      #           path: account-kit/pages/react/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/react/sponsor-gas.mdx
-      #         - page: Add passkey
-      #           path: account-kit/pages/react/add-passkey.mdx
-      #         - page: Multi-chain apps
-      #           path: account-kit/pages/react/multi-chain-apps.mdx
-      #     - page: Using EIP-7702
-      #       path: account-kit/pages/react/using-7702.mdx
-      #     - section: Customizing UI components
-      #       contents:
-      #         - page: Theme
-      #           path: account-kit/pages/react/customization/theme.mdx
-      #     - page: Server-side rendering
-      #       path: account-kit/pages/react/ssr.mdx
-      #     # - section: SDK Reference
-      #     #   TODO: Add SDK reference content
+      - section: React
+        contents:
+          - page: Overview
+            path: wallets/pages/react/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/react/quickstart.mdx
+          - section: Login UI
+            contents:
+              - page: Set up
+                path: wallets/pages/react/getting-started.mdx
+              - page: Pre-built UI
+                path: wallets/pages/react/ui-components.mdx
+              - page: Custom UI
+                path: wallets/pages/react/react-hooks.mdx
+          - section: Login methods
+            contents:
+              - page: Email OTP
+                path: wallets/pages/react/login-methods/email-otp.mdx
+              - page: Email magic-link
+                path: wallets/pages/react/login-methods/email-magic-link.mdx
+              - page: Social login
+                path: wallets/pages/react/login-methods/social-login.mdx
+              - page: Custom social providers
+                path: wallets/pages/react/login-methods/social-providers.mdx
+              - page: Passkey signup
+                path: wallets/pages/react/login-methods/passkey-signup.mdx
+              - page: Passkey login
+                path: wallets/pages/react/login-methods/passkey-login.mdx
+              - section: Multi-factor authentication
+                contents:
+                  - page: Set up MFA
+                    path: wallets/pages/react/mfa/setup-mfa.mdx
+                  - page: Email OTP
+                    path: wallets/pages/react/mfa/email-otp.mdx
+                  - page: Email magic-link
+                    path: wallets/pages/react/mfa/email-magic-link.mdx
+                  - page: Social login
+                    path: wallets/pages/react/mfa/social-login.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Set up your client
+                path: wallets/pages/react/how-to-set-up-smart-account-client.mdx
+              - page: Send user operations
+                path: wallets/pages/react/send-user-operations.mdx
+              - page: Sponsor gas
+                path: wallets/pages/react/sponsor-gas.mdx
+              - page: Add passkey
+                path: wallets/pages/react/add-passkey.mdx
+              - page: Multi-chain apps
+                path: wallets/pages/react/multi-chain-apps.mdx
+          - page: Using EIP-7702
+            path: wallets/pages/react/using-7702.mdx
+          - section: Customizing UI components
+            contents:
+              - page: Theme
+                path: wallets/pages/react/customization/theme.mdx
+          - page: Server-side rendering
+            path: wallets/pages/react/ssr.mdx
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/react/index.mdx
+            contents:
+              - section: Components
+                contents:
+                  - page: AlchemyAccountProvider
+                    path: wallets/pages/reference/account-kit/react/components/AlchemyAccountProvider.mdx
+                  - page: AuthCard
+                    path: wallets/pages/reference/account-kit/react/components/AuthCard.mdx
+                  - page: Dialog
+                    path: wallets/pages/reference/account-kit/react/components/Dialog.mdx
+              - section: Authentication
+                contents:
+                  - page: useAddPasskey
+                    path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
+                  - page: useAuthModal
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthModal.mdx
+                  - page: useAuthenticate
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthenticate.mdx
+                  - page: useConnect
+                    path: wallets/pages/reference/account-kit/react/hooks/useConnect.mdx
+                  - page: useExportAccount
+                    path: wallets/pages/reference/account-kit/react/hooks/useExportAccount.mdx
+                  - page: useLogout
+                    path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
+                  - page: useSigner
+                    path: wallets/pages/reference/account-kit/react/hooks/useSigner.mdx
+                  - page: useSignerStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useSignerStatus.mdx
+                  - page: useUser
+                    path: wallets/pages/reference/account-kit/react/hooks/useUser.mdx
+              - section: Account Client
+                contents:
+                  - page: useAccount
+                    path: wallets/pages/reference/account-kit/react/hooks/useAccount.mdx
+                  - page: useSmartAccountClient
+                    path: wallets/pages/reference/account-kit/react/hooks/useSmartAccountClient.mdx
+              - section: Smart Account Actions
+                contents:
+                  - page: useChain
+                    path: wallets/pages/reference/account-kit/react/hooks/useChain.mdx
+                  - page: useClientActions
+                    path: wallets/pages/reference/account-kit/react/hooks/useClientActions.mdx
+                  - page: useDropAndReplaceUserOperation
+                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
+                  - page: useSendUserOperation
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendUserOperation.mdx
+                  - page: useSignMessage
+                    path: wallets/pages/reference/account-kit/react/hooks/useSignMessage.mdx
+                  - page: useSignTypedData
+                    path: wallets/pages/reference/account-kit/react/hooks/useSignTypedData.mdx
+                  - page: useWaitForUserOperationTransaction
+                    path: wallets/pages/reference/account-kit/react/hooks/useWaitForUserOperationTransaction.mdx
+              - section: Bundler/RPC Client
+                contents:
+                  - page: useBundlerClient
+                    path: wallets/pages/reference/account-kit/react/hooks/useBundlerClient.mdx
+              - section: Utilities
+                contents:
+                  - page: useAlchemyAccountContext
+                    path: wallets/pages/reference/account-kit/react/hooks/useAlchemyAccountContext.mdx
+                  - page: useAuthError
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthError.mdx
+                  - page: useConnection
+                    path: wallets/pages/reference/account-kit/react/hooks/useConnection.mdx
+                  - page: useUiConfig
+                    path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
+              - section: Functions
+                contents:
+                  - page: Hydrate
+                    path: wallets/pages/reference/account-kit/react/functions/Hydrate.mdx
+                  - page: createConfig
+                    path: wallets/pages/reference/account-kit/react/functions/createConfig.mdx
+              - section: Classes
+                contents:
+                  - page: NoAlchemyAccountContextError
+                    path: wallets/pages/reference/account-kit/react/classes/NoAlchemyAccountContextError/constructor.mdx
 
-      # - section: React Native
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/react-native/overview.mdx
-      #     - page: Getting started with Expo
-      #       path: account-kit/pages/react-native/getting-started/getting-started-expo.mdx
-      #     - page: Getting started with Bare React Native
-      #       path: account-kit/pages/react-native/getting-started/getting-started-rn-bare.mdx
-      #     - page: Signer setup
-      #       path: account-kit/pages/react-native/signer/setup-guide.mdx
-      #     - section: Authentication methods
-      #       contents:
-      #         - page: Email OTP
-      #           path: account-kit/pages/react-native/signer/authenticating-users/authenticating-with-otp.mdx
-      #         - page: Social Login
-      #           path: account-kit/pages/react-native/signer/authenticating-users/authenticating-with-social-auth.mdx
-      #         - page: Email Magic Link
-      #           path: account-kit/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Send user operations
-      #           path: account-kit/pages/react-native/using-smart-accounts/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/react-native/using-smart-accounts/sponsor-gas.mdx
-      #         - page: Retry user operations
-      #           path: account-kit/pages/react-native/using-smart-accounts/retry-user-operations.mdx
+      - section: React Native
+        contents:
+          - page: Overview
+            path: wallets/pages/react-native/overview.mdx
+          - page: Getting started with Expo
+            path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
+          - page: Getting started with Bare React Native
+            path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
+          - page: Signer setup
+            path: wallets/pages/react-native/signer/setup-guide.mdx
+          - section: Authentication methods
+            contents:
+              - page: Email OTP
+                path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-otp.mdx
+              - page: Social Login
+                path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-social-auth.mdx
+              - page: Email Magic Link
+                path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Send user operations
+                path: wallets/pages/react-native/using-smart-accounts/send-user-operations.mdx
+              - page: Sponsor gas
+                path: wallets/pages/react-native/using-smart-accounts/sponsor-gas.mdx
+              - page: Retry user operations
+                path: wallets/pages/react-native/using-smart-accounts/retry-user-operations.mdx
 
-      # - section: Other JS Frameworks
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/core/overview.mdx
-      #     - page: Quickstart
-      #       path: account-kit/pages/core/quickstart.mdx
-      #     - page: Server-side rendering
-      #       path: account-kit/pages/core/ssr.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Send user operations
-      #           path: account-kit/pages/core/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/core/sponsor-gas.mdx
-      #         - page: Add passkey
-      #           path: account-kit/pages/core/add-passkey.mdx
-      #         - page: Multi-chain apps
-      #           path: account-kit/pages/core/multi-chain-apps.mdx
-      #         # TODO: SDK reference
+      - section: Other JS Frameworks
+        contents:
+          - page: Overview
+            path: wallets/pages/core/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/core/quickstart.mdx
+          - page: Server-side rendering
+            path: wallets/pages/core/ssr.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Send user operations
+                path: wallets/pages/core/send-user-operations.mdx
+              - page: Sponsor gas
+                path: wallets/pages/core/sponsor-gas.mdx
+              - page: Add passkey
+                path: wallets/pages/core/add-passkey.mdx
+              - page: Multi-chain apps
+                path: wallets/pages/core/multi-chain-apps.mdx
+      - section: SDK Reference
+        path: wallets/pages/reference/account-kit/core/index.mdx
+        contents:
+          - section: Functions
+            contents:
+              - page: convertSignerStatusToState
+                path: wallets/pages/reference/account-kit/core/functions/convertSignerStatusToState.mdx
+              - page: cookieStorage
+                path: wallets/pages/reference/account-kit/core/functions/cookieStorage.mdx
+              - page: cookieToInitialState
+                path: wallets/pages/reference/account-kit/core/functions/cookieToInitialState.mdx
+              - page: createAccount
+                path: wallets/pages/reference/account-kit/core/functions/createAccount.mdx
+              - page: createConfig
+                path: wallets/pages/reference/account-kit/core/functions/createConfig.mdx
+              - page: createDefaultAccountState
+                path: wallets/pages/reference/account-kit/core/functions/createDefaultAccountState.mdx
+              - page: defaultAccountState
+                path: wallets/pages/reference/account-kit/core/functions/defaultAccountState.mdx
+              - page: disconnect
+                path: wallets/pages/reference/account-kit/core/functions/disconnect.mdx
+              - page: getAccount
+                path: wallets/pages/reference/account-kit/core/functions/getAccount.mdx
+              - page: getBundlerClient
+                path: wallets/pages/reference/account-kit/core/functions/getBundlerClient.mdx
+              - page: getChain
+                path: wallets/pages/reference/account-kit/core/functions/getChain.mdx
+              - page: getConnection
+                path: wallets/pages/reference/account-kit/core/functions/getConnection.mdx
+              - page: getSigner
+                path: wallets/pages/reference/account-kit/core/functions/getSigner.mdx
+              - page: getSignerStatus
+                path: wallets/pages/reference/account-kit/core/functions/getSignerStatus.mdx
+              - page: getSmartAccountClient
+                path: wallets/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
+              - page: getUser
+                path: wallets/pages/reference/account-kit/core/functions/getUser.mdx
+              - page: hydrate
+                path: wallets/pages/reference/account-kit/core/functions/hydrate.mdx
+              - page: parseCookie
+                path: wallets/pages/reference/account-kit/core/functions/parseCookie.mdx
+              - page: reconnect
+                path: wallets/pages/reference/account-kit/core/functions/reconnect.mdx
+              - page: setChain
+                path: wallets/pages/reference/account-kit/core/functions/setChain.mdx
+              - page: watchAccount
+                path: wallets/pages/reference/account-kit/core/functions/watchAccount.mdx
+              - page: watchBundlerClient
+                path: wallets/pages/reference/account-kit/core/functions/watchBundlerClient.mdx
+              - page: watchChain
+                path: wallets/pages/reference/account-kit/core/functions/watchChain.mdx
+              - page: watchConnection
+                path: wallets/pages/reference/account-kit/core/functions/watchConnection.mdx
+              - page: watchSigner
+                path: wallets/pages/reference/account-kit/core/functions/watchSigner.mdx
+              - page: watchSignerStatus
+                path: wallets/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
+              - page: watchSmartAccountClient
+                path: wallets/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
+              - page: watchUser
+                path: wallets/pages/reference/account-kit/core/functions/watchUser.mdx
+          - section: Classes
+            contents:
+              - page: ClientOnlyPropertyError
+                path: wallets/pages/reference/account-kit/core/classes/ClientOnlyPropertyError/constructor.mdx
 
-      # - section: Infra
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/infra/overview.mdx
-      #     - page: Quickstart
-      #       path: account-kit/pages/infra/quickstart.mdx
-      #     - section: Using smart accounts
-      #       contents:
-      #         - page: Send user operations
-      #           path: account-kit/pages/infra/send-user-operations.mdx
-      #         - page: Sponsor gas
-      #           path: account-kit/pages/infra/sponsor-gas.mdx
-      #         - page: Retry user operations
-      #           path: account-kit/pages/infra/drop-and-replace.mdx
-      #     # TODO: Third party section - links to docs in resources section
-      #     # - section: Third party
-      #     #   contents:
-      #     #     - page: Bundlers
-      #     #     - page: Paymasters
-      #     # TODO: SDK reference
+      - section: Infra
+        contents:
+          - page: Overview
+            path: wallets/pages/infra/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/infra/quickstart.mdx
+          - section: Using smart accounts
+            contents:
+              - page: Send user operations
+                path: wallets/pages/infra/send-user-operations.mdx
+              - page: Sponsor gas
+                path: wallets/pages/infra/sponsor-gas.mdx
+              - page: Retry user operations
+                path: wallets/pages/infra/drop-and-replace.mdx
+          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
+          # - section: Third party
+          #   contents:
+          #     - link: Bundlers
+          #       href: /wallets/resources/third-party/bundlers
+          #     - link: Paymasters
+          #       href: /wallets/resources/third-party/paymasters
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/infra/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: alchemy
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemy.mdx
+                  - page: alchemyActions
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyActions.mdx
+                  - page: alchemyEnhancedApiActions
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyEnhancedApiActions.mdx
+                  - page: alchemyFeeEstimator
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyFeeEstimator.mdx
+                  - page: alchemyGasAndPaymasterAndDataMiddleware
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyGasAndPaymasterAndDataMiddleware.mdx
+                  - page: alchemyGasManagerMiddleware
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyGasManagerMiddleware.mdx
+                  - page: alchemyUserOperationSimulator
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyUserOperationSimulator.mdx
+                  - page: createAlchemyPublicRpcClient
+                    path: wallets/pages/reference/account-kit/infra/functions/createAlchemyPublicRpcClient.mdx
+                  - page: createAlchemySmartAccountClient
+                    path: wallets/pages/reference/account-kit/infra/functions/createAlchemySmartAccountClient.mdx
+                  - page: defineAlchemyChain
+                    path: wallets/pages/reference/account-kit/infra/functions/defineAlchemyChain.mdx
+                  - page: getAlchemyPaymasterAddress
+                    path: wallets/pages/reference/account-kit/infra/functions/getAlchemyPaymasterAddress.mdx
+                  - page: getDefaultUserOperationFeeOptions
+                    path: wallets/pages/reference/account-kit/infra/functions/getDefaultUserOperationFeeOptions.mdx
+                  - page: isAlchemySmartAccountClient
+                    path: wallets/pages/reference/account-kit/infra/functions/isAlchemySmartAccountClient.mdx
+                  - page: isAlchemyTransport
+                    path: wallets/pages/reference/account-kit/infra/functions/isAlchemyTransport.mdx
+                  - page: simulateUserOperationChanges
+                    path: wallets/pages/reference/account-kit/infra/functions/simulateUserOperationChanges.mdx
 
-      # - section: Signer
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/signer/overview.mdx
-      #     - page: What is a signer?
-      #       path: account-kit/pages/signer/what-is-a-signer.mdx
-      #     - page: Getting started
-      #       path: account-kit/pages/signer/quickstart.mdx
-      #     - section: Using Alchemy Signer
-      #       contents:
-      #         - page: User sessions
-      #           path: account-kit/pages/signer/user-sessions.mdx
-      #         - page: Export private key
-      #           path: account-kit/pages/signer/export-private-key.mdx
-      #         - page: As an EOA
-      #           path: account-kit/pages/signer/as-an-eoa.mdx
-      #     - section: Authentication methods
-      #       contents:
-      #         - page: Email OTP
-      #           path: account-kit/pages/signer/authentication/email-otp.mdx
-      #         - page: Email Magic Link
-      #           path: account-kit/pages/signer/authentication/email-magic-link.mdx
-      #         - page: Social Login
-      #           path: account-kit/pages/signer/authentication/social-login.mdx
-      #         - page: Custom social providers
-      #           path: account-kit/pages/signer/authentication/auth0.mdx
-      #         - page: Passkey signup
-      #           path: account-kit/pages/signer/authentication/passkey-signup.mdx
-      #         - page: Passkey login
-      #           path: account-kit/pages/signer/authentication/passkey-login.mdx
-      #         - page: Add passkey
-      #           path: account-kit/pages/signer/authentication/add-passkey.mdx
-      #     # TODO: Third-party signers links to docs in resources section
-      #     # - section: Third-party signers
-      #     #   contents:
-      # - section: Smart Contracts
-      #   contents:
-      #     - page: Overview
-      #       path: account-kit/pages/smart-contracts/overview.mdx
-      #     - page: Choosing a smart account
-      #       path: account-kit/pages/smart-contracts/choosing-a-smart-account.mdx
-      #     - section: Modular Account V2
-      #       contents:
-      #         - page: Overview
-      #           path: account-kit/pages/smart-contracts/modular-account-v2/overview.mdx
-      #         - page: Getting started
-      #           path: account-kit/pages/smart-contracts/modular-account-v2/getting-started.mdx
-      #         - page: Using 7702
-      #           path: account-kit/pages/smart-contracts/modular-account-v2/using-7702.mdx
-      #     - section: Other Accounts
-      #       contents:
-      #         - section: Modular Account V1
-      #           contents:
-      #             - page: Overview
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/index.mdx
-      #             - page: Getting started
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
-      #             - page: Manage multiple owners
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
-      #             - page: Upgrade to MAv1
-      #               path: account-kit/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
-      #             - section: Multisig
-      #               contents:
-      #                 - page: Introduction
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
-      #                 - page: Getting started
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
-      #                 - page: Technical details
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
-      #             - section: Session keys
-      #               contents:
-      #                 - page: Overview
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
-      #                 - page: Getting started
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
-      #                 - page: Supported permissions
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
-      #             - section: Manage plugins
-      #               contents:
-      #                 - page: Install plugins
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/manage-plugins/install-plugins.mdx
-      #                 - page: Get installed plugins
-      #                   path: account-kit/pages/smart-contracts/other-accounts/modular-account/manage-plugins/get-installed-plugins.mdx
-      #         - section: Light Account
-      #           contents:
-      #             - page: Overview
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/index.mdx
-      #             - page: Getting started
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
-      #             - page: Transfer ownership
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
-      #             - page: Manage multiple owners
-      #               path: account-kit/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
-      #         # TODO: Custom accounts links to docs in resources section
-      #         - page: Gas benchmarks
-      #           path: account-kit/pages/smart-contracts/gas-benchmarks.mdx
-      #         - page: Deployed addresses
-      #           path: account-kit/pages/smart-contracts/deployed-addresses.mdx
-      #         # TODO: SDK reference
-      # - section: Resources
-      #   contents:
-      #     - section: Third Party
-      #       contents:
-      #         - page: Bundlers
-      #           path: account-kit/pages/third-party/bundlers.mdx
-      #         - page: Chains
-      #           path: account-kit/pages/third-party/chains.mdx
-      #         - page: Paymasters
-      #           path: account-kit/pages/third-party/paymasters.mdx
-      #         - page: Signers
-      #           path: account-kit/pages/third-party/signers.mdx
-      #         - page: Smart Contracts
-      #           path: account-kit/pages/third-party/smart-contracts.mdx
-      #     - page: Terms
-      #       path: account-kit/pages/resources/terms.mdx
-      #     - page: Types
-      #       path: account-kit/pages/resources/types.mdx
-      #     - page: FAQs
-      #       path: account-kit/pages/resources/faqs.mdx
-      #     - page: Contact us
-      #       path: account-kit/pages/resources/contact-us.mdx
+      - section: Signer
+        contents:
+          - page: Overview
+            path: wallets/pages/signer/overview.mdx
+          - page: What is a signer?
+            path: wallets/pages/signer/what-is-a-signer.mdx
+          - page: Getting started
+            path: wallets/pages/signer/quickstart.mdx
+          - section: Using Alchemy Signer
+            contents:
+              - page: User sessions
+                path: wallets/pages/signer/user-sessions.mdx
+              - page: Export private key
+                path: wallets/pages/signer/export-private-key.mdx
+              - page: As an EOA
+                path: wallets/pages/signer/as-an-eoa.mdx
+          - section: Authentication methods
+            contents:
+              - page: Email OTP
+                path: wallets/pages/signer/authentication/email-otp.mdx
+              - page: Email Magic Link
+                path: wallets/pages/signer/authentication/email-magic-link.mdx
+              - page: Social Login
+                path: wallets/pages/signer/authentication/social-login.mdx
+              - page: Custom social providers
+                path: wallets/pages/signer/authentication/auth0.mdx
+              - page: Passkey signup
+                path: wallets/pages/signer/authentication/passkey-signup.mdx
+              - page: Passkey login
+                path: wallets/pages/signer/authentication/passkey-login.mdx
+              - page: Add passkey
+                path: wallets/pages/signer/authentication/add-passkey.mdx
+          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
+          # - section: Third-party signers
+          #   contents:
+          #     - link: Custom signer
+          #       href: /wallets/resources/third-party/signers
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/signer/index.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - section: AlchemySignerWebClient
+                    contents:
+                      - page: addMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa.mdx
+                      - page: completeAuthWithBundle
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/constructor.mdx
+                      - page: createAccount
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/createAccount.mdx
+                      - page: disconnect
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/disconnect.mdx
+                      - page: exportWallet
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
+                      - page: getMfaFactors
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors.mdx
+                      - page: initEmailAuth
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
+                      - page: lookupUserWithPasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/lookupUserWithPasskey.mdx
+                      - page: oauthWithPopup
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
+                      - page: oauthWithRedirect
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
+                      - page: removeMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa.mdx
+                      - page: submitOtpCode
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
+                      - page: targetPublicKey
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey.mdx
+                      - page: validateMultiFactors
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors.mdx
+                      - page: verifyMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa.mdx
+                  - section: AlchemyWebSigner
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemyWebSigner/constructor.mdx
+                  - section: BaseAlchemySigner
+                    contents:
+                      - page: addMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addMfa.mdx
+                      - page: addPasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addPasskey.mdx
+                      - page: authenticate
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/authenticate.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/constructor.mdx
+                      - page: disconnect
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect.mdx
+                      - page: experimental_toSolanaSigner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner.mdx
+                      - page: exportWallet
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getAddress.mdx
+                      - page: getAuthDetails
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getAuthDetails.mdx
+                      - page: getConfig
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig.mdx
+                      - page: getMfaFactors
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors.mdx
+                      - page: getMfaStatus
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
+                      - page: getUser
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
+                      - page: on
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/on.mdx
+                      - page: preparePopupOauth
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth.mdx
+                      - page: removeMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeMfa.mdx
+                      - page: signAuthorization
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signAuthorization.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signMessage.mdx
+                      - page: signTransaction
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signTransaction.mdx
+                      - page: signTypedData
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signTypedData.mdx
+                      - page: toViemAccount
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toViemAccount.mdx
+                      - page: validateMultiFactors
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/validateMultiFactors.mdx
+                      - page: verifyMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/verifyMfa.mdx
+                  - section: BaseSignerClient
+                    contents:
+                      - page: addMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addMfa.mdx
+                      - page: addPasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addPasskey.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
+                      - page: experimental_createApiKey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
+                      - page: getMfaFactors
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
+                      - page: getPasskeyStatus
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getPasskeyStatus.mdx
+                      - page: getUser
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getUser.mdx
+                      - page: initOauth
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/initOauth.mdx
+                      - page: lookupUserByEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
+                      - page: on
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/on.mdx
+                      - page: removeMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeMfa.mdx
+                      - page: request
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/request.mdx
+                      - page: signRawMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage.mdx
+                      - page: stampGetOrganization
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/stampGetOrganization.mdx
+                      - page: stampWhoami
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami.mdx
+                      - page: validateMultiFactors
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/validateMultiFactors.mdx
+                      - page: verifyMfa
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa.mdx
+                      - page: whoami
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/whoami.mdx
+                  - section: OauthCancelledError
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/account-kit/signer/classes/OauthCancelledError/constructor.mdx
+
+      - section: Smart Contracts
+        contents:
+          - page: Overview
+            path: wallets/pages/smart-contracts/overview.mdx
+          - page: Choosing a smart account
+            path: wallets/pages/smart-contracts/choosing-a-smart-account.mdx
+          - section: Modular Account V2
+            contents:
+              - page: Overview
+                path: wallets/pages/smart-contracts/modular-account-v2/overview.mdx
+              - page: Getting started
+                path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
+              - page: Using 7702
+                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
+          - section: Other Accounts
+            contents:
+              - section: Modular Account V1
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/index.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
+                  - page: Manage multiple owners
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
+                  - page: Upgrade to MAv1
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
+                  - section: Multisig
+                    contents:
+                      - page: Introduction
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
+                      - page: Getting started
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
+                      - page: Technical details
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
+                  - section: Session keys
+                    contents:
+                      - page: Overview
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
+                      - page: Getting started
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
+                      - page: Supported permissions
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
+                  - section: Manage plugins
+                    contents:
+                      - page: Install plugins
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-plugins/install-plugins.mdx
+                      - page: Get installed plugins
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-plugins/get-installed-plugins.mdx
+              - section: Light Account
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/index.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
+                  - page: Transfer ownership
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
+                  - page: Manage multiple owners
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
+                  # TODO: Custom accounts links to docs in resources section - awkward to link to internal pages
+                  # - link: Custom accounts
+                  #   href: /wallets/resources/third-party/smart-contracts
+          - page: Gas benchmarks
+            path: wallets/pages/smart-contracts/gas-benchmarks.mdx
+          - page: Deployed addresses
+            path: wallets/pages/smart-contracts/deployed-addresses.mdx
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/smart-contracts/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: accountLoupeActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/accountLoupeActions.mdx
+                  - page: buildSessionKeysToRemoveStruct
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/buildSessionKeysToRemoveStruct.mdx
+                  - page: combineSignatures
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/combineSignatures.mdx
+                  - page: createLightAccount
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createLightAccount.mdx
+                  - page: createLightAccountAlchemyClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createLightAccountAlchemyClient.mdx
+                  - page: createLightAccountClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createLightAccountClient.mdx
+                  - page: createModularAccountAlchemyClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createModularAccountAlchemyClient.mdx
+                  - page: createModularAccountV2
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createModularAccountV2.mdx
+                  - page: createModularAccountV2Client
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createModularAccountV2Client.mdx
+                  - page: createMultiOwnerLightAccount
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerLightAccount.mdx
+                  - page: createMultiOwnerLightAccountAlchemyClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerLightAccountAlchemyClient.mdx
+                  - page: createMultiOwnerLightAccountClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerLightAccountClient.mdx
+                  - page: createMultiOwnerModularAccount
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerModularAccount.mdx
+                  - page: createMultiOwnerModularAccountClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultiOwnerModularAccountClient.mdx
+                  - page: createMultisigAccountAlchemyClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultisigAccountAlchemyClient.mdx
+                  - page: createMultisigModularAccount
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultisigModularAccount.mdx
+                  - page: createMultisigModularAccountClient
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/createMultisigModularAccountClient.mdx
+                  - page: defaultLightAccountVersion
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/defaultLightAccountVersion.mdx
+                  - page: formatSignatures
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/formatSignatures.mdx
+                  - page: getDefaultLightAccountFactoryAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getDefaultLightAccountFactoryAddress.mdx
+                  - page: getDefaultMultiOwnerLightAccountFactoryAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getDefaultMultiOwnerLightAccountFactoryAddress.mdx
+                  - page: getDefaultMultiOwnerModularAccountFactoryAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getDefaultMultiOwnerModularAccountFactoryAddress.mdx
+                  - page: getDefaultMultisigModularAccountFactoryAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getDefaultMultisigModularAccountFactoryAddress.mdx
+                  - page: getLightAccountVersionForAccount
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getLightAccountVersionForAccount.mdx
+                  - page: getMAInitializationData
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getMAInitializationData.mdx
+                  - page: getMAV2UpgradeToData
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getMAV2UpgradeToData.mdx
+                  - page: getMSCAUpgradeToData
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getMSCAUpgradeToData.mdx
+                  - page: getSignerType
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/getSignerType.mdx
+                  - page: installPlugin
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/installPlugin.mdx
+                  - page: lightAccountClientActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/lightAccountClientActions.mdx
+                  - page: multiOwnerLightAccountClientActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/multiOwnerLightAccountClientActions.mdx
+                  - page: multiOwnerPluginActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/multiOwnerPluginActions.mdx
+                  - page: multisigPluginActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/multisigPluginActions.mdx
+                  - page: multisigSignatureMiddleware
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/multisigSignatureMiddleware.mdx
+                  - page: pluginManagerActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/pluginManagerActions.mdx
+                  - page: sessionKeyPluginActions
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/sessionKeyPluginActions.mdx
+                  - page: splitAggregatedSignature
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/splitAggregatedSignature.mdx
+              - section: Classes
+                contents:
+                  - section: SessionKeyPermissionsBuilder
+                    contents:
+                      - page: addContractAddressAccessEntry
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addContractAddressAccessEntry.mdx
+                      - page: addContractFunctionAccessEntry
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addContractFunctionAccessEntry.mdx
+                      - page: addErc20TokenSpendLimit
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addErc20TokenSpendLimit.mdx
+                      - page: encode
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/encode.mdx
+                      - page: setContractAccessControlType
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setContractAccessControlType.mdx
+                      - page: setGasSpendLimit
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setGasSpendLimit.mdx
+                      - page: setNativeTokenSpendLimit
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setNativeTokenSpendLimit.mdx
+                      - page: setRequiredPaymaster
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setRequiredPaymaster.mdx
+                      - page: setTimeRange
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setTimeRange.mdx
+                  - section: SessionKeySigner
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/constructor.mdx
+                      - page: generateNewKey
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/generateNewKey.mdx
+                      - page: getAddress
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/getAddress.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signMessage.mdx
+                      - page: signTypedData
+                        path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
+
+      - section: Resources
+        contents:
+          - section: Third Party
+            contents:
+              - page: Bundlers
+                path: wallets/pages/third-party/bundlers.mdx
+              - page: Chains
+                path: wallets/pages/third-party/chains.mdx
+              - page: Paymasters
+                path: wallets/pages/third-party/paymasters.mdx
+              - page: Signers
+                path: wallets/pages/third-party/signers.mdx
+              - page: Smart Contracts
+                path: wallets/pages/third-party/smart-contracts.mdx
+          - page: Terms
+            path: wallets/pages/resources/terms.mdx
+          - page: Types
+            path: wallets/pages/resources/types.mdx
+          - page: FAQs
+            path: wallets/pages/resources/faqs.mdx
+          - page: Contact us
+            path: wallets/pages/resources/contact-us.mdx

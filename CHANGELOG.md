@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+### Bug Fixes
+
+- ci status issues ([#1531](https://github.com/alchemyplatform/aa-sdk/issues/1531)) ([bee0176](https://github.com/alchemyplatform/aa-sdk/commit/bee01766550c04eaebe2b66bfa256b5f5fb7a83c))
+- **demo:** disable mfa for passkey users ([#1539](https://github.com/alchemyplatform/aa-sdk/issues/1539)) ([707b26e](https://github.com/alchemyplatform/aa-sdk/commit/707b26e0ca29d430bd25075ac6b9eb5c4f8423f7))
+- incorrect github ref in publish script ([#1535](https://github.com/alchemyplatform/aa-sdk/issues/1535)) ([2cbc5ef](https://github.com/alchemyplatform/aa-sdk/commit/2cbc5efc99cea73447558b05ed6336caaeffc339))
+- mfa demo ui feedback updates ([#1527](https://github.com/alchemyplatform/aa-sdk/issues/1527)) ([5caf1d9](https://github.com/alchemyplatform/aa-sdk/commit/5caf1d933c19d5023b4d62ef2784fb3d9dc53224))
+- sending multiple uos with deferred action ([#1529](https://github.com/alchemyplatform/aa-sdk/issues/1529)) ([3446821](https://github.com/alchemyplatform/aa-sdk/commit/3446821f728509223e297950198605c2d7a16b38))
+
+### Features
+
+- remove execute and executebatch from account functions ([#1537](https://github.com/alchemyplatform/aa-sdk/issues/1537)) ([30c84d4](https://github.com/alchemyplatform/aa-sdk/commit/30c84d4b72520ab33eb7672f0a5943c261525a10))
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package root
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+### Bug Fixes
+
+- remove the sonic export as it is not supported with aa infra yet ([#1523](https://github.com/alchemyplatform/aa-sdk/issues/1523)) ([22e6943](https://github.com/alchemyplatform/aa-sdk/commit/22e69431a8861a58b65ef3864dfa580b5c618605))
+- update mdx imports in docs to use Markdown component from Fern ([#1525](https://github.com/alchemyplatform/aa-sdk/issues/1525)) ([2b7df77](https://github.com/alchemyplatform/aa-sdk/commit/2b7df77c07f793469c801df569b452959f781584))
+
+### Features
+
+- add parsing utility, removing deferred action mode from accounts ([#1522](https://github.com/alchemyplatform/aa-sdk/issues/1522)) ([64fa835](https://github.com/alchemyplatform/aa-sdk/commit/64fa835b0976b19c7f822206549d905859155f09))
+
+# [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
+
+### Bug Fixes
+
+- **demo:** signer address should not be explorer link ([#1511](https://github.com/alchemyplatform/aa-sdk/issues/1511)) ([5dfc59e](https://github.com/alchemyplatform/aa-sdk/commit/5dfc59ed89bb11211954373011c476f9441e90e3))
+
+### Features
+
+- create workflow for generating previews and publishing docs using fern ([#1500](https://github.com/alchemyplatform/aa-sdk/issues/1500)) ([d9ed6bd](https://github.com/alchemyplatform/aa-sdk/commit/d9ed6bd2ed2b3a0f382819bfac6ea5fb3c142f1c))
+- permissions abstractions ([#1506](https://github.com/alchemyplatform/aa-sdk/issues/1506)) ([e9ced74](https://github.com/alchemyplatform/aa-sdk/commit/e9ced74ddaf501527f53e60ab48e7ad704e759f8)), closes [#1505](https://github.com/alchemyplatform/aa-sdk/issues/1505)
+
 ## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
 
 ### Bug Fixes

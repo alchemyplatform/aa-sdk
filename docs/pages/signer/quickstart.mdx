@@ -1,0 +1,90 @@
+---
+title: Signer Quickstart
+description: Get started with the Alchemy Signer
+---
+
+# Signer Quickstart
+
+Getting started with the Signer is very similar to [getting started with React](/wallets/react/quickstart).
+
+## Get your API key and create an account config
+
+<Markdown src="../../shared/get-api-key.mdx" />
+
+## Install the Signer package
+
+**Prerequisites**
+
+- minimum Typescript version of 5
+- pin viem to 2.20.0 (`yarn add viem@2.20.0`)
+
+**Installation**
+
+<CodeBlocks>
+
+```bash [yarn]
+yarn add @account-kit/signer
+```
+
+```bash [npm]
+yarn add @account-kit/signer
+```
+
+</CodeBlocks>
+
+## Create a signer instance
+
+```ts twoslash
+// [!include ~/shared/signer/signer.ts]
+```
+
+## Authenticate a user
+
+Next, you'll need to authenticate your user before you can use the Signer as an owner on the account.
+
+<Tip>
+  In this example, we use email auth, but we support a number of other auth
+  methods. See the other guides for more examples.
+</Tip>
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const result = await signer.authenticate({
+  type: "email",
+  email: "example@mail.com",
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>
+
+## Use signer as owner on Smart Account
+
+Now that you have authenticated your user, you can use the signer as an owner on a Smart Contract Account.
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { sepolia } from "@account-kit/infra";
+import { http } from "viem";
+import { signer } from "./signer";
+
+const account = await createLightAccount({
+  signer,
+  chain: sepolia,
+  transport: http(`${sepolia.rpcUrls.alchemy.http[0]}/API_KEY`),
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>

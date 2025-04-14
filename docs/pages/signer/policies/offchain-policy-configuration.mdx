@@ -1,0 +1,104 @@
+---
+title: Offchain Policy Configuration
+description: Offchain Smart Wallet Policy Configuration
+---
+
+# Offchain Policy Configuration
+
+**Offchain policies** are a set of rules enforced by our secure wallet infrastructure that define the allowed or denied transactions on a smart wallet.
+
+An offchain policy is defined by the following schema:
+
+```tsx
+type Policy = {
+  version: "1.0";
+  // Allows you to assign a human readable name
+  // for your policy
+  name: string;
+  vm_kind: "EVM" | "SVM";
+  // This is the account that this policy targets
+  account: string;
+  // This is the list of rules that will be enforced
+  // when the policy is evaluated
+  // The supported rules differ based on the network
+  rules: Rule[];
+};
+```
+
+## Rules
+
+A rule defines the specific conditions that must be met for a given Wallet API method.
+
+```tsx
+type Rule =
+  | {
+      name: string;
+      type: "methods";
+      action: "ALLOW" | "DENY";
+      method:
+        | "eth_signTransaction" // EVM only
+        | "sign_operation" // EVM only
+        | "wallet_prepareCalls" // EVM only https://github.com/ethereum/ERCs/pull/758
+        | "wallet_sendPreparedCalls" // EVM only https://github.com/ethereum/ERCs/pull/758
+        | "signAndSendTransaction" // SVM only
+        | "sendTransaction"; // SVM only
+      conditions: Condition[];
+    }
+  | {
+      type: "recipients";
+      action: "ALLOW" | "DENY";
+      address: string[];
+    }
+  | {
+      type: "contracts";
+      action: "ALLOW" | "DENY";
+      address: string[];
+    };
+```
+
+## Conditions
+
+Conditions give you the flexibility to compose multiple requirements that must be met for a given Rule. All conditions must be met in order for the Rule to be enforced.
+
+```tsx
+type Condition =
+  | {
+      type: "field";
+      // This specifies where to evaluate the condition
+      // for EVM. `call` gives you the most flexibility
+      // on enforcement.
+      field_source:
+        | "call" // EVM only
+        | "user_operation" // EVM only
+        | "eth_transaction" // EVM only
+        | "solana_transaction" // Solana only
+        | "solana_instruction" // Solana only
+        | "spl_transaction"; // Solana only
+      field: string;
+      // should only be set when the field_source is `call`
+      // and field is `data`
+      abi?: JSON;
+      comparator: "==" | "!=" | "<" | "<=" | ">" | ">=" | "in";
+      // the value to compare the field against
+      value: string | number | string[];
+    }
+  | {
+      type: "batch_value";
+      max_batch_value: string;
+    }
+  | {
+      type: "gas_limit";
+      max_gas_limit: string;
+    };
+```
+
+The following Fields are supported for a given `field_source`
+
+| Field Source         | Supported Fields                                                                                                                                                                                                                                                                                                         |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `call`               | `to`, `data`, `value`                                                                                                                                                                                                                                                                                                    |
+| `user_operation`     | The fields here are all of the fields that are defined in a User Operation Request that would be submitted to the bundler. This depends on the EntryPoint version. Most Conditions can be defined by using the above `call` source instead though. This field_source is useful for enforcing gas limits, fee limits, etc |
+| `eth_transaction`    | Any of the fields that are included in an Ethereum Transaction                                                                                                                                                                                                                                                           |
+| `solana_transaction` | Any of the fields that are included in a Solana Transaction                                                                                                                                                                                                                                                              |
+| `solana_instruction` | Any of the fields defined in a Solana instruction                                                                                                                                                                                                                                                                        |
+| `spl_transaction`    | When a Solana transaction is detected to include an SPL token transaction, this allows enforcing the token transaction based on the `spl_transfer_recipient`, `spl_transfer_value`, `spl_token_address`                                                                                                                  |

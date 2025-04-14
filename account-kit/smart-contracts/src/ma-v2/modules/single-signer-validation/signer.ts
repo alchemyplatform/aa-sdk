@@ -39,32 +39,43 @@ import { packUOSignature, pack1271Signature } from "../../utils.js";
  * @param {Chain} chain Chain object for the signer
  * @param {Address} accountAddress address of the smart account using this signer
  * @param {number} entityId the entity id of the signing validation
+ * @param {Hex} deferredActionData optional deferred action data to prepend to the uo signatures
  * @returns {object} an object with methods for signing operations and managing signatures
  */
 export const singleSignerMessageSigner = (
   signer: SmartAccountSigner,
   chain: Chain,
   accountAddress: Address,
-  entityId: number
+  entityId: number,
+  deferredActionData?: Hex
 ) => {
   return {
     getDummySignature: (): Hex => {
-      const dummyEcdsaSignature =
-        "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-
-      return packUOSignature({
+      const sig = packUOSignature({
         // orderedHookData: [],
-        validationSignature: dummyEcdsaSignature,
+        validationSignature:
+          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
       });
+
+      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
     },
 
-    signUserOperationHash: (uoHash: Hex): Promise<Hex> => {
-      return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
-        packUOSignature({
-          // orderedHookData: [],
-          validationSignature: signature,
-        })
-      );
+    signUserOperationHash: async (uoHash: Hex): Promise<Hex> => {
+      let sig = await signer
+        .signMessage({ raw: uoHash })
+        .then((signature: Hex) =>
+          packUOSignature({
+            // orderedHookData: [],
+            validationSignature: signature,
+          })
+        );
+
+      if (deferredActionData) {
+        sig = concatHex([deferredActionData, sig]);
+        deferredActionData = undefined;
+      }
+
+      return sig;
     },
 
     // we apply the expected 1271 packing here since the account contract will expect it

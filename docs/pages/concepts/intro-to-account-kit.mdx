@@ -1,0 +1,117 @@
+---
+title: Intro to Account Kit
+description: Introduction to Account Kit and Account Abstraction
+---
+
+# Intro to Account Kit
+
+Account Kit is your all-in-one toolkit for building zero-friction sign-up and transaction flows. But what’s **really** happening under the hood?
+
+Account Kit abstracts away the complexity of smart accounts, but as a builder it’s useful to have a foundational understanding of how it works. This way, you can make informed decisions and unlock the full potential of account abstraction.
+
+Unlike other embedded wallet providers that only solve sign-up and key management, Account Kit goes further by streamlining the transaction flow with features like gas sponsorship. How? Through **Account Abstraction** and **smart accounts** 🚀 **Let’s break it down.**
+
+## Smart accounts: programmable wallets, not EOAs
+
+<div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
+  <div style={{ flex: "1", marginRight: "10px" }}>
+    With Account Kit, you’ll deploy a **Smart Contract Account (SCA)** for each
+    user instead of an Externally Owned Account (EOA). This smart account will
+    securely store the user's assets, such as tokens or NFTs.
+  </div>
+  <div style={{ flex: "0 0 30%" }}>
+    <img
+      src="/images/wallets/smartaccount.png"
+      alt="Alt text"
+      style={{ width: "100%" }}
+    />
+  </div>
+</div>
+
+#### What is a smart account?
+
+Unlike EOAs, SCAs are programmable and can include logic. When we refer to SCAs, or smart accounts, we are typically talking about [ERC-4337](https://www.alchemy.com/overviews/what-is-account-abstraction) smart accounts.
+
+Account Kit comes with enterprise-grade, audited smart account implementations. We recommend using [Modular Account v2](/wallets/smart-contracts/modular-account-v2/overview). Learn more and [choose](/wallets/smart-contracts/choosing-a-smart-account) the smart account that best fits your needs or bring your own smart account.
+
+#### Why smart accounts?
+
+Smart accounts unlock powerful Account Abstraction features like gas sponsorship and transaction batching enabling you to create seamless transaction experiences (more on this [later](#gas-manager-sponsor-gas)).
+
+Smart accounts provide flexibility, security, and additional functionality over EOAs. Features like social recovery, two-factor authentication, multi-owner support, and ownership transfer become possible with smart accounts.
+
+In Account Kit, this concept will manifest as a [Smart Contract Account](/wallets/concepts/smart-contract-account).
+
+## Signer: web2 login and key management
+
+<div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
+  <div style={{ flex: "1", marginRight: "10px" }}>
+    A **Signer** is a service (e.g., Turnkey or Magic) or application (e.g., MetaMask) that manages a private key and signs transactions. The signature is only valid if the signer is an owner of the smart account.
+
+</div>
+  <div style={{ flex: "0 0 30%" }}>
+    <img
+      src="/images/wallets/smartaccount+signer.png"
+      alt="Alt text"
+      style={{ width: "100%" }}
+    />
+  </div>
+</div>
+[Using Account Kit](/wallets/react/getting-started), you can secure a user’s Smart Account with email, social login, or passkeys, using our non-custodial Signer infrastructure. Smart accounts support advanced use cases, such as multiple owners and ownership transfer, offering more utility than EOAs.
+
+With this setup, users can sign-up, log in, and sign transactions using familiar web2 user experiences.
+
+In Account Kit, this concept will manifest as a [Smart Account Signer](/wallets/concepts/smart-account-signer).
+
+## Bundler: transactions → user operations
+
+<div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
+  <div style={{ flex: "1", marginRight: "10px" }}>
+With Account Kit, [sending transactions](/wallets/react/send-user-operations) is as simple as sending “normal” EOA transactions. However, under the hood, you’re actually sending [**User Operations (UOs)**](https://www.alchemy.com/overviews/user-operations) — a standardized pseudo-transaction object — to a **Bundler**.
+
+</div>
+  <div style={{ flex: "0 0 30%" }}>
+    <img
+      src="/images/wallets/smartaccount+signer+bundler.png"
+      alt="Alt text"
+      style={{ width: "100%" }}
+    />
+  </div>
+</div>
+
+A User Operation (UO) is an ABI-encoded struct that describes a transaction to be sent on behalf of a user. Since SCAs cannot initiate transactions on chains without native account abstraction support, they send UOs instead. The Bundler will gather UOs from multiple smart accounts (senders) and bundle them into a single on-chain transaction.
+
+A huge benefit of smart accounts is the ability to [batch transactions](/wallets/react/send-user-operations#batch-user-operation) in one UO creating simpler user experiences. For example, you can now approve and swap in one click, rather than signing, waiting, and sending multiple transactions.
+
+In Account Kit, this concept will manifest as a [Bundler Client](/wallets/concepts/bundler-client), but for simplicity you may only need a [Smart Account Client](/wallets/concepts/smart-account-client).
+
+## Gas Manager: sponsor gas
+
+<div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
+  <div style={{ flex: "1", marginRight: "10px" }}>
+With gas sponsorship, your users won’t need to worry about having assets in their accounts to pay for gas. Using [Account Kit](/wallets/react/sponsor-gas), simply configure a gas manager policy, insert your policy ID into the SDK, and let our Gas Manager handle the rest.
+
+</div>
+  <div style={{ flex: "0 0 30%" }}>
+    <img
+      src="/images/wallets/smartaccount+signer+bundler+paymaster.png"
+      alt="Alt text"
+      style={{ width: "100%" }}
+    />
+  </div>
+</div>
+
+## Conclusion
+
+Account Kit makes it easy to build a web2 user experience from sign-up to transaction. It includes everything you need to bring users onchain:
+
+- Non-custodial **Signer** to authenticate with web2 login
+- Secure and flexible **smart accounts** to store assets
+- **Gas Manager** to sponsor gas
+- Reliable and scalable **Bundler** to land user operations
+
+Account Abstraction might seem complex, but Account Kit abstracts away the intricacies, allowing you to focus on building great user experiences.
+
+**Now, get started with the [quickstart](/wallets/react/quickstart)!**
+
+Want to learn more? Explore our [Account Abstraction education hub](https://www.alchemy.com/learn/account-abstraction)

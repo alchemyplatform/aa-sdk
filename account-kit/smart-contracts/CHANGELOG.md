@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+### Bug Fixes
+
+- sending multiple uos with deferred action ([#1529](https://github.com/alchemyplatform/aa-sdk/issues/1529)) ([3446821](https://github.com/alchemyplatform/aa-sdk/commit/3446821f728509223e297950198605c2d7a16b38))
+
+### Features
+
+- remove execute and executebatch from account functions ([#1537](https://github.com/alchemyplatform/aa-sdk/issues/1537)) ([30c84d4](https://github.com/alchemyplatform/aa-sdk/commit/30c84d4b72520ab33eb7672f0a5943c261525a10))
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+### Features
+
+- add parsing utility, removing deferred action mode from accounts ([#1522](https://github.com/alchemyplatform/aa-sdk/issues/1522)) ([64fa835](https://github.com/alchemyplatform/aa-sdk/commit/64fa835b0976b19c7f822206549d905859155f09))
+
+# [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
+
+### Features
+
+- create workflow for generating previews and publishing docs using fern ([#1500](https://github.com/alchemyplatform/aa-sdk/issues/1500)) ([d9ed6bd](https://github.com/alchemyplatform/aa-sdk/commit/d9ed6bd2ed2b3a0f382819bfac6ea5fb3c142f1c))
+- permissions abstractions ([#1506](https://github.com/alchemyplatform/aa-sdk/issues/1506)) ([e9ced74](https://github.com/alchemyplatform/aa-sdk/commit/e9ced74ddaf501527f53e60ab48e7ad704e759f8)), closes [#1505](https://github.com/alchemyplatform/aa-sdk/issues/1505)
+
 ## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
 
 **Note:** Version bump only for package @account-kit/smart-contracts

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+### Bug Fixes
+
+- remove the sonic export as it is not supported with aa infra yet ([#1523](https://github.com/alchemyplatform/aa-sdk/issues/1523)) ([22e6943](https://github.com/alchemyplatform/aa-sdk/commit/22e69431a8861a58b65ef3864dfa580b5c618605))
+
+# [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
+
+### Features
+
+- create workflow for generating previews and publishing docs using fern ([#1500](https://github.com/alchemyplatform/aa-sdk/issues/1500)) ([d9ed6bd](https://github.com/alchemyplatform/aa-sdk/commit/d9ed6bd2ed2b3a0f382819bfac6ea5fb3c142f1c))
+
 ## [4.23.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.0...v4.23.1) (2025-04-04)
 
 **Note:** Version bump only for package @account-kit/infra

@@ -1,0 +1,66 @@
+---
+title: Custom Auth Providers with Auth0
+description: Authenticate a user using a custom OAuth provider with Auth0
+---
+
+# Custom Auth Providers with Auth0
+
+You can use Auth0 to integrate an auth provider other than the ones listed in the dashboard. Let’s try using Auth0 to add “Login with GitHub” to our app.
+
+First, create an account or log in to an existing account on [auth0.com](http://auth0.com). In the Auth0 dashboard, select “Authentication → Social” in the sidebar, then “Create Social Connection,” and choose the provider you want:
+
+<img src="/images/wallets/auth0-provider.png" alt="Auth0 provider list" />
+
+You have the option of using Auth0’s dev keys for GitHub or adding your own. If you want to add your own credentials, click the link that says “How to obtain a Client ID” and follow the directions.
+
+You’ll also be able to select the attributes and permissions you will be requesting. It is recommended at the very least to request the user’s email address because it could later be useful for merging accounts from different providers, but you have the option of asking for whatever information will be useful for your app (but note that your users will be prompted for consent to share whatever information you request). After filling out this section, your GitHub configuration in Auth0 might look like this:
+
+<img
+  src="/images/wallets/auth0-config.png"
+  alt="Configure Github auth provider settings Auth0"
+/>
+
+Also on this page, note the “Name” field containing “github”. This will be used later as a variable in adding authentication to your app.
+
+Once you confirm on this page, you’ll be taken to a page where you can choose which of your Auth0 apps will use this login method. Enable it for the app of your choice, which may just be “Default App” if this is a newly created Auth0 account:
+
+<img src="/images/wallets/auth0-app.png" alt="Auth0 app selection page" />
+
+Finally, we need to add your Auth0 credentials to the Alchemy dashboard. To find them, go to “Applications → Applications” in the sidebar and select an application for which you enabled your auth method in the previous step. Take note of the "Domain", "Client ID", and "Client Secret" fields:
+
+<img
+  src="/images/wallets/auth0-app-settings.png"
+  alt="Settings page in Auth0 with relevant fields"
+/>
+
+and add them to the embedded accounts auth config in your Alchemy dashboard:
+
+<img
+  src="/images/wallets/alchemy-auth0-config.png"
+  alt="Copy fields from Auth0 to the Alchemy accounts config"
+/>
+
+In addition to the "Client ID" and "Client Secret" fields needed by the other auth providers, you must also fill in the “Auth0 Domain,” field from the Auth0 dashboard.
+
+You can now authenticate with Auth0 in the same way as the other auth providers, passing in an `authProviderId` of `"auth0"`. If you do this, your users will be taken to an Auth0 login page, in which they can choose the authentication method they want such as GitHub.
+
+However, you may prefer to send your users directly to the GitHub login without passing through an Auth0 selection screen first. To do this, you can pass the additional parameter `auth0Connection` to your `authenticate` call. The value which should be passed to `auth0Connection` is the string that appeared in the “Name” field of your auth provider connection in the Auth0 dashboard, which in this case was “github”.
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+await authenticate({
+  type: "oauth",
+  authProviderId: "auth0",
+  auth0Connection: "github",
+  mode: "popup",
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+</CodeBlocks>
