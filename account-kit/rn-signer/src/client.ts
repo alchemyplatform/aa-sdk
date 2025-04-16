@@ -6,6 +6,7 @@ import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
   OauthFailedError,
+  MfaRequiredError,
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
@@ -26,7 +27,7 @@ import {
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
-import { InAppBrowserUnavailableError, MfaRequiredError } from "./errors";
+import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper.js";
 import { parseSearchParams } from "./utils/parseUrlParams";
 import { parseMfaError } from "./utils/parseMfaError";
