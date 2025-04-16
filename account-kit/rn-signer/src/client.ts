@@ -29,6 +29,14 @@ import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper.js";
 import { parseSearchParams } from "./utils/parseUrlParams";
 
+const MFA_PAYLOAD = {
+  GET: "get_mfa",
+  ADD: "add_mfa",
+  DELETE: "delete_mfas",
+  VERIFY: "verify_mfa",
+  LIST: "list_mfas",
+};
+
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
   rootOrgId: z.string().optional(),
@@ -244,52 +252,165 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   /**
    * Retrieves the list of MFA factors configured for the current user.
    *
-   * @throws {Error} This method is not implemented in RNSignerClient
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
+   * @throws {Error} If no user is authenticated
    */
-  public override getMfaFactors(): Promise<{ multiFactors: MfaFactor[] }> {
-    throw new Error("getMfaFactors is not implemented in RNSignerClient");
-  }
+  public override getMfaFactors = async (): Promise<{
+    multiFactors: MfaFactor[];
+  }> => {
+    if (!this.user) {
+      throw new Error("Not authenticated");
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.LIST,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-list-multi-factors", {
+      stampedRequest,
+    });
+  };
 
   /**
    * Initiates the setup of a new MFA factor for the current user.
    *
-   * @param {EnableMfaParams} _params The parameters required to enable a new MFA factor
-   * @throws {Error} This method is not implemented in RNSignerClient
+   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   * @throws {Error} If no user is authenticated or if an unsupported factor type is provided
    */
-  public override addMfa(_params: EnableMfaParams): Promise<EnableMfaResult> {
-    throw new Error("enableMfa is not implemented in RNSignerClient");
-  }
+  public override addMfa = async (
+    params: EnableMfaParams
+  ): Promise<EnableMfaResult> => {
+    if (!this.user) {
+      throw new Error("Not authenticated");
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.ADD,
+        signWith: this.user.address,
+      },
+    });
+
+    switch (params.multiFactorType) {
+      case "totp":
+        return this.request("/v1/auth-request-multi-factor", {
+          stampedRequest,
+          multiFactorType: params.multiFactorType,
+        });
+      default:
+        throw new Error(
+          `Unsupported MFA factor type: ${params.multiFactorType}`
+        );
+    }
+  };
 
   /**
    * Verifies a newly created MFA factor to complete the setup process.
    *
-   * @param {VerifyMfaParams} _params The parameters required to verify the MFA factor
-   * @throws {Error} This method is not implemented in RNSignerClient
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {Error} If no user is authenticated
    */
-  public override verifyMfa(_params: VerifyMfaParams): Promise<{
-    multiFactors: MfaFactor[];
-  }> {
-    throw new Error("verifyMfa is not implemented in RNSignerClient");
-  }
+  public override verifyMfa = async (
+    params: VerifyMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new Error("Not authenticated");
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.VERIFY,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-verify-multi-factor", {
+      stampedRequest,
+      multiFactorId: params.multiFactorId,
+      multiFactorCode: params.multiFactorCode,
+    });
+  };
 
   /**
    * Removes existing MFA factors by ID.
    *
-   * @param {RemoveMfaParams} _params The parameters specifying which factors to disable
-   * @throws {Error} This method is not implemented in RNSignerClient
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {Error} If no user is authenticated
    */
-  public override removeMfa(_params: RemoveMfaParams): Promise<{
-    multiFactors: MfaFactor[];
-  }> {
-    throw new Error("disableMfa is not implemented in RNSignerClient");
-  }
+  public override removeMfa = async (
+    params: RemoveMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new Error("Not authenticated");
+    }
 
-  public override validateMultiFactors(_params: {
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.DELETE,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-delete-multi-factors", {
+      stampedRequest,
+      multiFactorIds: params.multiFactorIds,
+    });
+  };
+
+  /**
+   * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
+   *
+   * @param {object} params The validation parameters
+   * @param {string} params.encryptedPayload The encrypted payload to validate
+   * @param {Array<{multiFactorId: string, multiFactorCode: string}>} params.multiFactors The MFA factors to validate
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
+   * @throws {Error} If no credential bundle is returned from the server
+   */
+  public override validateMultiFactors = async (params: {
     encryptedPayload: string;
     multiFactors: { multiFactorId: string; multiFactorCode: string }[];
-  }): Promise<{ bundle: string }> {
-    throw new Error(
-      "validateMultiFactors is not implemented in RNSignerClient"
-    );
-  }
+  }): Promise<{ bundle: string }> => {
+    // Send the encryptedPayload plus TOTP codes
+    const response = await this.request("/v1/auth-validate-multi-factors", {
+      encryptedPayload: params.encryptedPayload,
+      multiFactors: params.multiFactors,
+    });
+
+    // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
+    if (!response.payload || !response.payload.credentialBundle) {
+      throw new Error(
+        "Request to validateMultiFactors did not return a credential bundle"
+      );
+    }
+
+    return {
+      bundle: response.payload.credentialBundle,
+    };
+  };
 }
