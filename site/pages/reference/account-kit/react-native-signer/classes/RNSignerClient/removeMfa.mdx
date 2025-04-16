@@ -16,7 +16,12 @@ import { RNSignerClient } from "@account-kit/react-native-signer";
 
 ## Parameters
 
-### \_params
+### params
 
 `RemoveMfaParams`
 The parameters specifying which factors to disable
+
+## Returns
+
+`Promise<{ multiFactors: MfaFactor[] }>`
+A promise that resolves to the updated list of MFA factors

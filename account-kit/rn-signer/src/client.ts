@@ -13,6 +13,7 @@ import {
   type EmailAuthParams,
   type EnableMfaParams,
   type EnableMfaResult,
+  type ValidateMultiFactorsParams,
   type GetWebAuthnAttestationResult,
   type MfaFactor,
   type OauthConfig,
@@ -25,9 +26,10 @@ import {
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
-import { InAppBrowserUnavailableError } from "./errors";
+import { InAppBrowserUnavailableError, MfaRequiredError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper.js";
 import { parseSearchParams } from "./utils/parseUrlParams";
+import { parseMfaError } from "./utils/parseMfaError";
 
 const MFA_PAYLOAD = {
   GET: "get_mfa",
@@ -82,11 +84,30 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       targetPublicKey: publicKey,
     });
 
-    if (response.status === "MFA_REQUIRED") {
-      throw new Error("Multi-factor authentication is required");
+    if ("credentialBundle" in response && response.credentialBundle) {
+      return {
+        mfaRequired: false,
+        bundle: response.credentialBundle,
+      };
     }
 
-    return { bundle: response.credentialBundle, mfaRequired: false };
+    // If the server says "MFA_REQUIRED", pass that data back to the caller:
+    if (
+      response.status === "MFA_REQUIRED" &&
+      response.encryptedPayload &&
+      response.multiFactors
+    ) {
+      return {
+        mfaRequired: true,
+        encryptedPayload: response.encryptedPayload,
+        multiFactors: response.multiFactors,
+      };
+    }
+
+    // Otherwise, it's truly an error:
+    throw new Error(
+      "Failed to submit OTP code. Server did not return required fields."
+    );
   }
 
   override async createAccount(
@@ -113,17 +134,27 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   override async initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string }> {
+  ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }> {
     this.eventEmitter.emit("authenticating", { type: "email" });
-    let targetPublicKey = await this.stamper.init();
+    const targetPublicKey = await this.stamper.init();
 
-    const response = await this.request("/v1/auth", {
-      email: params.email,
-      emailMode: params.emailMode,
-      targetPublicKey,
-    });
+    try {
+      return await this.request("/v1/auth", {
+        email: params.email,
+        emailMode: params.emailMode,
+        targetPublicKey,
+        multiFactors: params.multiFactors,
+      });
+    } catch (error) {
+      const multiFactors = parseMfaError(error);
 
-    return response;
+      // If MFA is required, and emailMode is Magic Link, the user must submit mfa with the request or
+      // the server will return an error with the required mfa factors.
+      if (multiFactors) {
+        throw new MfaRequiredError(multiFactors);
+      }
+      throw error;
+    }
   }
 
   override async completeAuthWithBundle(params: {
@@ -386,16 +417,13 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   /**
    * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
    *
-   * @param {object} params The validation parameters
-   * @param {string} params.encryptedPayload The encrypted payload to validate
-   * @param {Array<{multiFactorId: string, multiFactorCode: string}>} params.multiFactors The MFA factors to validate
+   * @param {ValidateMultiFactorsParams} params The validation parameters
    * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
    * @throws {Error} If no credential bundle is returned from the server
    */
-  public override validateMultiFactors = async (params: {
-    encryptedPayload: string;
-    multiFactors: { multiFactorId: string; multiFactorCode: string }[];
-  }): Promise<{ bundle: string }> => {
+  public override validateMultiFactors = async (
+    params: ValidateMultiFactorsParams
+  ): Promise<{ bundle: string }> => {
     // Send the encryptedPayload plus TOTP codes
     const response = await this.request("/v1/auth-validate-multi-factors", {
       encryptedPayload: params.encryptedPayload,
