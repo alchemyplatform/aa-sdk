@@ -77,7 +77,6 @@ export function useSolanaTransaction(
     mutationFn: async () => {
       if (!signer) throw new Error("Not ready");
       if (!connection) throw new Error("Not ready");
-
       const instructions = [
         SystemProgram.transfer({
           fromPubkey: new PublicKey(signer.address),

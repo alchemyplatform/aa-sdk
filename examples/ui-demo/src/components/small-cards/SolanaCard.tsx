@@ -8,7 +8,7 @@ import {
 } from "@account-kit/react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Hex } from "viem";
 import { LoadingIcon } from "../icons/loading";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
@@ -19,6 +19,8 @@ import Image from "next/image";
 import { Badge } from "./Badge";
 
 export const SolanaCard = () => {
+  const [useSponsorship, setUseSponsorship] = useState(false);
+  const transactionRemoveSponsorship = useSponsorship ? {} : { policyId: "" };
   const signer = useSigner();
   const status = useSignerStatus();
   const queryClient = useQueryClient();
@@ -29,7 +31,6 @@ export const SolanaCard = () => {
   }, [signer, status.isConnected]);
   const web3Context = useContext(AlchemySolanaWeb3Context);
   const { setToast } = useToast();
-
   const { data: balance = 0, isLoading: isBalanceLoading } = useQuery({
     queryKey: ["solanaBalance", solanaSigner?.address],
     queryFn: async () => {
@@ -48,6 +49,7 @@ export const SolanaCard = () => {
     mutate,
     isPending,
     data: { hash: txHash = null } = {},
+    reset: resetTransaction,
   } = useSolanaTransaction({
     transaction: {
       amount: 1000000,
@@ -69,6 +71,7 @@ export const SolanaCard = () => {
         });
       },
     },
+    ...transactionRemoveSponsorship,
   });
 
   const {
@@ -97,13 +100,25 @@ export const SolanaCard = () => {
 
   const imageSlot = (
     <div className="w-full h-full bg-[#DCFCE7] flex justify-center items-center relative">
-      <Image
-        className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]"
-        src="https://static.alchemyapi.io/images/emblems/solana-mainnet.svg"
-        alt="Solana Mainnet"
-        width={94}
-        height={94}
-      />
+      <div className="flex flex-col items-center">
+        <Image
+          className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]"
+          src="https://static.alchemyapi.io/images/emblems/solana-mainnet.svg"
+          alt="Solana Mainnet"
+          width={94}
+          height={94}
+        />
+        <label className="flex items-center gap-2 mt-2">
+          <input
+            type="checkbox"
+            onChange={() => {
+              setUseSponsorship(!useSponsorship);
+              resetTransaction();
+            }}
+          />
+          <span className="text-sm">Use Sponsorship</span>
+        </label>
+      </div>
     </div>
   );
 
