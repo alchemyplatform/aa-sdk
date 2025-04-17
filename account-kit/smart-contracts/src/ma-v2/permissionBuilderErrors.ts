@@ -1,7 +1,9 @@
 import { BaseError, type Address } from "@aa-sdk/core";
 import type { Permission } from "./permissionBuilder";
 
-export class RootPermissionOnlyError extends BaseError {
+export abstract class PermissionBuilderError extends BaseError {}
+
+export class RootPermissionOnlyError extends PermissionBuilderError {
   override name = "PermissionBuilder: RootPermissionOnlyError";
 
   /**
@@ -14,7 +16,7 @@ export class RootPermissionOnlyError extends BaseError {
   }
 }
 
-export class AccountAddressAsTargetError extends BaseError {
+export class AccountAddressAsTargetError extends PermissionBuilderError {
   override name = "PermissionBuilder: AccountAddressAsTargetError";
 
   /**
@@ -29,7 +31,7 @@ export class AccountAddressAsTargetError extends BaseError {
   }
 }
 
-export class DuplicateTargetAddressError extends BaseError {
+export class DuplicateTargetAddressError extends PermissionBuilderError {
   override name = "PermissionBuilder: DuplicateTargetAddressError";
 
   /**
@@ -45,7 +47,7 @@ export class DuplicateTargetAddressError extends BaseError {
   }
 }
 
-export class NoFunctionsProvidedError extends BaseError {
+export class NoFunctionsProvidedError extends PermissionBuilderError {
   override name = "PermissionBuilder: NoFunctionsProvidedError";
 
   /**
@@ -58,7 +60,7 @@ export class NoFunctionsProvidedError extends BaseError {
   }
 }
 
-export class ExpiredDeadlineError extends BaseError {
+export class ExpiredDeadlineError extends PermissionBuilderError {
   override name = "PermissionBuilder: ExpiredDeadlineError";
 
   /**
@@ -74,7 +76,7 @@ export class ExpiredDeadlineError extends BaseError {
   }
 }
 
-export class DeadlineOverLimitError extends BaseError {
+export class DeadlineOverLimitError extends PermissionBuilderError {
   override name = "PermissionBuilder: DeadlineOverLimitError";
 
   /**
@@ -89,7 +91,7 @@ export class DeadlineOverLimitError extends BaseError {
   }
 }
 
-export class ValidationConfigUnsetError extends BaseError {
+export class ValidationConfigUnsetError extends PermissionBuilderError {
   override name = "PermissionBuilder: ValidationConfigUnsetError";
 
   /**
@@ -100,7 +102,7 @@ export class ValidationConfigUnsetError extends BaseError {
   }
 }
 
-export class MultipleNativeTokenTransferError extends BaseError {
+export class MultipleNativeTokenTransferError extends PermissionBuilderError {
   override name = "PermissionBuilder: MultipleNativeTokenTransferError";
 
   /**
@@ -115,7 +117,7 @@ export class MultipleNativeTokenTransferError extends BaseError {
   }
 }
 
-export class ZeroAddressError extends BaseError {
+export class ZeroAddressError extends PermissionBuilderError {
   override name = "PermissionBuilder: ZeroAddressError";
 
   /**
@@ -128,7 +130,7 @@ export class ZeroAddressError extends BaseError {
   }
 }
 
-export class MultipleGasLimitError extends BaseError {
+export class MultipleGasLimitError extends PermissionBuilderError {
   override name = "PermissionBuilder: MultipleGasLimitError";
 
   /**
@@ -141,7 +143,7 @@ export class MultipleGasLimitError extends BaseError {
   }
 }
 
-export class UnsupportedPermissionTypeError extends BaseError {
+export class UnsupportedPermissionTypeError extends PermissionBuilderError {
   override name = "PermissionBuilder: UnsupportedPermissionTypeError";
 
   /**
@@ -152,7 +154,7 @@ export class UnsupportedPermissionTypeError extends BaseError {
   }
 }
 
-export class SelectorNotAllowed extends BaseError {
+export class SelectorNotAllowed extends PermissionBuilderError {
   override name = "SelectorNotAllowed";
 
   /**
