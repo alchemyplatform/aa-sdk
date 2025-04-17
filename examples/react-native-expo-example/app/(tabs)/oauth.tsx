@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -18,7 +18,7 @@ export default function OAuthScreen() {
 	
 	useEffect(() => {
 		if (user) {
-			signer?.getAddress().then((address) => {
+			signer?.getAddress().then((address: string) => {
 				setSignerAddress(address);
 			});
 		}

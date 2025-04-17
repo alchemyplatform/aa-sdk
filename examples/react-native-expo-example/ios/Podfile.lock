@@ -1,5 +1,5 @@
 PODS:
-  - account-kit-react-native-signer (4.17.0):
+  - account-kit-react-native-signer (4.26.0):
     - Base58Swift
     - DoubleConversion
     - glog
@@ -1955,7 +1955,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  account-kit-react-native-signer: c26793a1ea6528e9015df5eac2a2ecddf55961d9
+  account-kit-react-native-signer: 45aa682cbd7b41d0d699217d3b6170ec7ed3352b
   Base58Swift: 53d551f0b33d9478fa63b3445e453a772d6b31a7
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946

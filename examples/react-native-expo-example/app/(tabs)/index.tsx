@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -7,9 +7,11 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
+import {useSignerStatus, useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
+import { AlchemySignerStatus } from "@account-kit/signer";
 
 export default function OTPAuthScreen() {
+	const { status } = useSignerStatus();
 	const [email, setEmail] = useState<string>("");
 	const user = useUser()
 	const { authenticate } = useAuthenticate()
@@ -19,8 +21,9 @@ export default function OTPAuthScreen() {
 	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
 	const signer = useSigner();
 	const [otpCode, setOtpCode] = useState<string>("");
+	const [mfaCode, setMfaCode] = useState<string>("");
 
-	const handleUserAuth = ({ code }: { code: string }) => {
+	const handleUserAuth = async ({ code }: { code: string }) => {
 		setAwaitingOtp(false);
 		
 		authenticate({
@@ -32,17 +35,49 @@ export default function OTPAuthScreen() {
 		setOtpCode("");
 	};
 
+	const handleMfaSubmit = async () => {
+		setAwaitingOtp(false);
+		
+		await signer?.validateMultiFactors({
+			multiFactorCode: mfaCode,
+		});
+	}
+
 	useEffect(() => {
 		if (user) {
-			signer?.getAddress().then((address) => {
+			signer?.getAddress().then((address: string) => {
 				setSignerAddress(address);
 			});
 		}
 	}, [user, signer]);
 
+
 	return (
 		<View style={styles.container}>
-			{awaitingOtp ? (
+			{status === AlchemySignerStatus.AWAITING_MFA_AUTH ? (
+				<>
+					<Text style={styles.title}>Multi-Factor Authentication</Text>
+					<Text style={styles.subtitle}>
+						Enter the 6-digit code from your authenticator app
+					</Text>
+					<TextInput
+						style={styles.textInput}
+						placeholderTextColor="gray"
+						placeholder="Enter authenticator code"
+						onChangeText={setMfaCode}
+						value={mfaCode}
+						keyboardType="number-pad"
+						maxLength={6}
+					/>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={handleMfaSubmit}
+						disabled={mfaCode.length !== 6}
+					>
+						<Text style={styles.buttonText}>Verify</Text>
+					</TouchableOpacity>
+				</>
+			) : awaitingOtp ? (
 				<>
 					<TextInput
 						style={styles.textInput}
@@ -148,5 +183,16 @@ const styles = StyleSheet.create({
 	userText: {
 		marginBottom: 10,
 		fontSize: 18,
+	},
+	title: {
+		fontSize: 24,
+		fontWeight: "bold",
+		marginBottom: 8,
+	},
+	subtitle: {
+		fontSize: 16,
+		color: "#666",
+		marginBottom: 15,
+		textAlign: "center",
 	},
 });
