@@ -38,7 +38,7 @@ const MFA_PAYLOAD = {
   DELETE: "delete_mfas",
   VERIFY: "verify_mfa",
   LIST: "list_mfas",
-};
+} as const;
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
