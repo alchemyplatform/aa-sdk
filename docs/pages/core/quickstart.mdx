@@ -43,9 +43,7 @@ npm i -s @account-kit/core @account-kit/infra
 Now, you're ready to create a config. The config we create should be a static object that you can import anywhere into your application. It contains all of the state that the functions within
 this package use.
 
-```ts twoslash
-// [!include ~/shared/core/config.ts]
-```
+<Markdown src="../../shared/core/config.mdx" />
 
 ## Authenticate the user
 
@@ -84,9 +82,7 @@ if (!bundle) {
 await signer.authenticate({ type: "email", bundle });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
-// [!include ~/shared/core/config.ts]
-```
+<Markdown src="../../shared/core/config.mdx" />
 
 </CodeBlocks>
 
@@ -131,9 +127,7 @@ await client.sendUserOperation({
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
-// [!include ~/shared/core/config.ts]
-```
+<Markdown src="../../shared/core/config.mdx" />
 
 </CodeBlocks>
 
