@@ -16,7 +16,7 @@
     "@account-kit/infra": "^4.2.0",
     "@account-kit/logging": "^4.2.0",
     "@account-kit/react": "^4.2.0",
-    "@account-kit/smart-contracts": "^4.26.0",
+    "@account-kit/smart-contracts": "^4.2.0",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-switch": "^1.0.3",

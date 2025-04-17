@@ -11,8 +11,7 @@ export type SignerEventsSchema = [
             | "passkey_anon"
             | "passkey_email"
             | "otp"
-            | "oauthReturn"
-            | "apiKey";
+            | "oauthReturn";
           provider?: never;
         }
       | { authType: "oauth"; provider: string };
