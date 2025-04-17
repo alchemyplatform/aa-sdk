@@ -23,6 +23,16 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+
+			<Tabs.Screen
+				name="mfa"
+				options={{
+					title: "MFA",
+					tabBarIcon: ({ color }) => (
+						<FontAwesome6 size={28} name="shield" color={color} />
+					),
+				}}
+			/>
 		</Tabs>
 	);
 }
