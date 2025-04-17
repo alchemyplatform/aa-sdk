@@ -29,8 +29,8 @@ interface ApiKeySignerClientParams {
 class ApiKeySignerClient {
   protected turnkeyClient: TurnkeyClient;
   protected alchemyClient: AlchemySignerClient;
-  public orgId: string;
-  public user: User | undefined;
+  private orgId: string;
+  private user: User | undefined;
 
   /**
    * Constructs a new instance of the ApiKeySignerClient.
