@@ -82,7 +82,7 @@ class ApiKeySignerClient {
   public stampWhoami = async (): Promise<TSignedRequest> => {
     const user = await this.whoami();
 
-    return await this.turnkeyClient.stampGetWhoami({
+    return this.turnkeyClient.stampGetWhoami({
       organizationId: user.orgId,
     });
   };
@@ -171,7 +171,7 @@ export class AlchemyApiKeySigner implements SmartAccountSigner {
    */
   signMessage = async (msg: SignableMessage): Promise<Hex> => {
     const messageHash = hashMessage(msg);
-    return await this.inner.signRawMessage(messageHash);
+    return this.inner.signRawMessage(messageHash);
   };
 
   /**
