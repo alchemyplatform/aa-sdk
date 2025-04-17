@@ -9,7 +9,7 @@ import {
   hashMessage,
   hashTypedData,
 } from "viem";
-import { TurnkeyClient } from "@turnkey/http";
+import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import type { SignRawMessageMode, User } from "./client/types.js";
 import { buildStampedSignatureRequestBody } from "./client/base.js";
 import { AlchemySignerClient } from "./client/alchemy.js";
@@ -69,6 +69,22 @@ class ApiKeySignerClient {
     const user = await this.alchemyClient.whoami(stampedRequest);
     this.user = user;
     return user;
+  };
+
+  /**
+   * Generates a stamped whoami request. Using this stamp is the most
+   * trusted way to get the user information since a stamp can only
+   * belong to the user who created it.
+   *
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "whoami" information for the logged in user
+   * @throws {Error} if no organization ID is provided
+   */
+  public stampWhoami = async (): Promise<TSignedRequest> => {
+    const user = await this.whoami();
+
+    return await this.turnkeyClient.stampGetWhoami({
+      organizationId: user.orgId,
+    });
   };
 
   /**
