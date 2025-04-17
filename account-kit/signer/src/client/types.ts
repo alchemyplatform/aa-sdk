@@ -327,8 +327,10 @@ export type SubmitOtpCodeResponse =
   | { bundle: string; mfaRequired: false }
   | { mfaRequired: true; encryptedPayload: string; multiFactors: MfaFactor[] };
 
-export type experimental_CreateApiKeyParams = {
+export type AddApiKeyParams = {
   name: string;
   publicKey: string;
   expirationSec: number;
 };
+
+export type SignRawMessageMode = "SOLANA" | "ETHEREUM";

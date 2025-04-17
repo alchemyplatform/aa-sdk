@@ -1,5 +1,9 @@
 import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
-import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
+import {
+  TurnkeyClient,
+  type TSignedRequest,
+  type TurnkeyApiTypes,
+} from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
@@ -18,7 +22,7 @@ import type {
   EmailAuthParams,
   EnableMfaParams,
   EnableMfaResult,
-  experimental_CreateApiKeyParams,
+  AddApiKeyParams,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   MfaFactor,
@@ -34,8 +38,9 @@ import type {
   VerifyMfaParams,
   SubmitOtpCodeResponse,
   ValidateMultiFactorsParams,
+  SignRawMessageMode,
 } from "./types.js";
-import { VERSION } from "../version.js";
+import { AlchemySignerClient } from "./alchemy.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -55,7 +60,7 @@ export type ExportWalletStamper = TurnkeyClient["stamper"] & {
  */
 export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   private _user: User | undefined;
-  private connectionConfig: ConnectionConfig;
+  private alchemyClient: AlchemySignerClient;
   protected turnkeyClient: TurnkeyClient;
   protected rootOrg: string;
   protected eventEmitter: EventEmitter<AlchemySignerClientEvents>;
@@ -69,7 +74,8 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const { stamper, connection, rootOrgId } = params;
     this.rootOrg = rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830";
     this.eventEmitter = new EventEmitter<AlchemySignerClientEvents>();
-    this.connectionConfig = ConnectionConfigSchema.parse(connection);
+    const connectionConfig = ConnectionConfigSchema.parse(connection);
+    this.alchemyClient = new AlchemySignerClient(connectionConfig);
     this.turnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
       stamper
@@ -329,9 +335,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       organizationId: orgId,
     });
 
-    const user = await this.request("/v1/whoami", {
-      stampedRequest,
-    });
+    const user = await this.alchemyClient.whoami(stampedRequest);
 
     if (idToken) {
       const claims: Record<string, unknown> = jwtDecode(idToken);
@@ -397,20 +401,28 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
-   * Creates an API key that can take any action on behalf of the current user.
-   * (Note that this method is currently experimental and is subject to change.)
+   * Adds a pre-generated API key to the logged in user's account. This
+   * API key will be allowed to take actions on behalf of the user by
+   * stamping with its associated private key.
    *
-   * @param {CreateApiKeyParams} params Parameters for creating the API key.
+   * @example
+   * ```ts
+   * // To generate a new keypair:
+   * const ecdh = createECDH("prime256v1");
+   * ecdh.generateKeys();
+   * const publicKey = ecdh.getPublicKey("hex", "compressed")
+   * const privateKey = ecdh.getPrivateKey("hex")
+   * ```
+   *
+   * @param {AddApiKeyParams} params Parameters for adding the API key.
    * @param {string} params.name Name of the API key.
-   * @param {string} params.publicKey Public key to be used for the API key.
-   * @param {number} params.expirationSec Number of seconds until the API key expires.
-   * @throws {Error} If there is no authenticated user or the API key creation fails.
+   * @param {string} params.publicKey Public key to be used.
+   * @param {number} params.expirationSec Number of seconds until the key expires.
+   * @throws {Error} If there is no authenticated user or the request fails.
    */
-  public experimental_createApiKey = async (
-    params: experimental_CreateApiKeyParams
-  ): Promise<void> => {
+  public addApiKey = async (params: AddApiKeyParams): Promise<void> => {
     if (!this.user) {
-      throw new Error("User must be authenticated to create api key");
+      throw new Error("User must be authenticated to add an api key");
     }
     const resp = await this.turnkeyClient.createApiKeys({
       type: "ACTIVITY_TYPE_CREATE_API_KEYS",
@@ -428,7 +440,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       },
     });
     if (resp.activity.status !== "ACTIVITY_STATUS_COMPLETED") {
-      throw new Error("Failed to create api key");
+      throw new Error("Failed to add api key");
     }
   };
 
@@ -439,7 +451,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @returns {Promise<any>} the result of the lookup request
    */
   public lookupUserByEmail = async (email: string) => {
-    return this.request("/v1/lookup", { email });
+    return this.alchemyClient.lookup(email);
   };
 
   /**
@@ -453,36 +465,17 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public signRawMessage = async (
     msg: Hex,
-    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+    mode: SignRawMessageMode = "ETHEREUM"
   ): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
 
-    if (!this.user.solanaAddress && mode === "SOLANA") {
-      // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
-      throw new Error("No Solana address available for the user");
-    }
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload(
+      buildStampedSignatureRequestBody(this.user, msg, mode)
+    );
 
-    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction:
-          mode === "ETHEREUM"
-            ? "HASH_FUNCTION_NO_OP"
-            : "HASH_FUNCTION_NOT_APPLICABLE",
-        payload: msg,
-        signWith:
-          mode === "ETHEREUM" ? this.user.address : this.user.solanaAddress!,
-      },
-    });
-
-    const { signature } = await this.request("/v1/sign-payload", {
-      stampedRequest,
-    });
+    const { signature } = await this.alchemyClient.signPayload(stampedRequest);
 
     return signature;
   };
@@ -508,32 +501,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     route: R,
     body: SignerBody<R>
   ): Promise<SignerResponse<R>> => {
-    const url = this.connectionConfig.rpcUrl ?? "https://api.g.alchemy.com";
-
-    const basePath = "/signer";
-
-    const headers = new Headers();
-    headers.append("Alchemy-AA-Sdk-Version", VERSION);
-    headers.append("Content-Type", "application/json");
-    if (this.connectionConfig.apiKey) {
-      headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);
-    } else if (this.connectionConfig.jwt) {
-      headers.append("Authorization", `Bearer ${this.connectionConfig.jwt}`);
-    }
-
-    const response = await fetch(`${url}${basePath}${route}`, {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers,
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const json = await response.json();
-
-    return json as SignerResponse<R>;
+    return this.alchemyClient.request(route, body);
   };
 
   // #endregion
@@ -628,7 +596,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @example
    * ```ts
    *
-   * cosnt oauthParams = {
+   * const oauthParams = {
    *  authProviderId: "google",
    *  isCustomProvider: false,
    *  auth0Connection: undefined,
@@ -833,3 +801,29 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return sha256(new TextEncoder().encode(turnkeyPublicKey)).slice(2);
   };
 }
+
+export const buildStampedSignatureRequestBody = (
+  user: User,
+  msg: Hex,
+  mode: SignRawMessageMode = "ETHEREUM"
+): TurnkeyApiTypes["v1SignRawPayloadRequest"] => {
+  if (mode === "SOLANA" && !user.solanaAddress) {
+    // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
+    throw new Error("No Solana address available for the user");
+  }
+
+  return {
+    organizationId: user.orgId,
+    type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+    timestampMs: Date.now().toString(),
+    parameters: {
+      encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+      hashFunction:
+        mode === "ETHEREUM"
+          ? "HASH_FUNCTION_NO_OP"
+          : "HASH_FUNCTION_NOT_APPLICABLE",
+      payload: msg,
+      signWith: mode === "ETHEREUM" ? user.address : user.solanaAddress!,
+    },
+  };
+};
