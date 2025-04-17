@@ -1,0 +1,59 @@
+---
+title: Seamlessly Connect with Your Favorite Web3 Wallets
+description: How to connect to other wallet providers using Account Kit
+---
+
+## Seamlessly Connect with Your Favorite Web3 Wallets
+
+Easily log in using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
+
+Thanks to our built-in wallet connectors, there's no need to integrate external solutions like RainbowKit.
+We automatically detect and display all wallet extensions available in the user's browser—ensuring a smooth and flexible experience.
+
+With Account Kit, users can still connect to their existing wallets without sacrificing compatibility or convenience.
+
+<img src="/images/connect-to-other-wallet-providers.png" />
+
+In order to access these external wallet providers, just make sure to include configure `walletConnect` in your config:
+
+```ts twoslash [src/config.ts]
+// @noErrors
+import { createConfig, cookieStorage } from "@account-kit/react";
+import { alchemy, sepolia } from "@account-kit/infra";
+
+export const config = createConfig(
+  {
+    // alchemy config
+    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
+    chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
+    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
+    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
+    // optional config to override default session manager config
+    sessionConfig: {
+      expirationTimeMs: 1000 * 60 * 60, // 60 minutes (default is 15 min)
+    },
+  },
+  {
+    // authentication ui config - your customizations here
+    auth: {
+      sections: [
+        [{ type: "email" }],
+        [
+          { type: "passkey" },
+          { type: "social", authProviderId: "google", mode: "popup" },
+          { type: "social", authProviderId: "facebook", mode: "popup" },
+        ],
+        [
+          {
+            type: "external_wallets",
+            walletConnect: { projectId: "your-project-id" },
+          },
+        ],
+      ],
+      addPasskeyOnSignup: true,
+      showSignInText: true,
+    },
+  }
+);
+```
