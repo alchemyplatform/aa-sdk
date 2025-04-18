@@ -10,7 +10,7 @@ Easily log in using popular wallet providers like **MetaMask**, **Rabby**, **Pha
 Our SDK supports external wallet connection out of the box, so you can seamlessly support both web2 users with social login and web3 users who want to bring their own EOAs.
 We support enabling users to bring their existing EOA in 2 ways:
 
-1. **Automatically detect and display all wallet extensions available in the user's browser.** (*Note: if the user has no wallet extensions installed, nothing will be displayed*)
+1. **Automatically detect and display all wallet extensions available in the user's browser.** (_Note: if the user has no wallet extensions installed, nothing will be displayed_)
 2. **WalletConnect for all other EOAs**
 
 With Account Kit, users can still connect to their existing wallets without sacrificing compatibility or convenience.
@@ -19,7 +19,10 @@ Our hooks will handle checking if the connected wallet is a smart wallet or an e
 Transactions can be signed and sent in the same way, but external EOA wallets don't have access to Account Abstraction benefits such as gas abstraction, batching, etc.
 These EOAs will simply function as EOAs.
 
-<img src="/images/connect-to-other-wallet-providers.png" alt="Connecting to external Wallets"/>
+<img
+  src="/images/connect-to-other-wallet-providers.png"
+  alt="Connecting to external Wallets"
+/>
 
 In order to access these external wallet providers, just make sure to include configure `type: "external_wallets"` in your config:
 
@@ -66,12 +69,13 @@ export const config = createConfig(
 ```
 
 In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config:
+
 ```ts twoslash [src/config.ts]
 // @noErrors
-        [
-          {
-            type: "external_wallets",
-            walletConnect: { projectId: "your-project-id" },
-          },
-        ]
+[
+  {
+    type: "external_wallets",
+    walletConnect: { projectId: "your-project-id" },
+  },
+];
 ```
