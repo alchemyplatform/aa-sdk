@@ -1,20 +1,27 @@
 ---
-title: Seamlessly Connect with Your Favorite Web3 Wallets
+title: Seamlessly Connect with Existing EOA Wallets
 description: How to connect to other wallet providers using Account Kit
 ---
 
-## Seamlessly Connect with Your Favorite Web3 Wallets
+## Seamlessly Connect with Existing EOA Wallets
 
 Easily log in using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
 
-Thanks to our built-in wallet connectors, there's no need to integrate external solutions like RainbowKit.
-We automatically detect and display all wallet extensions available in the user's browser—ensuring a smooth and flexible experience.
+Our SDK supports external wallet connection out of the box, so you can seamlessly support both web2 users with social login and web3 users who want to bring their own EOAs.
+We support enabling users to bring their existing EOA in 2 ways:
+
+1. **Automatically detect and display all wallet extensions available in the user's browser.** (*Note: if the user has no wallet extensions installed, nothing will be displayed*)
+2. **WalletConnect for all other EOAs**
 
 With Account Kit, users can still connect to their existing wallets without sacrificing compatibility or convenience.
 
-<img src="/images/connect-to-other-wallet-providers.png" />
+Our hooks will handle checking if the connected wallet is a smart wallet or an existing EOA.
+Transactions can be signed and sent in the same way, but external EOA wallets don't have access to Account Abstraction benefits such as gas abstraction, batching, etc.
+These EOAs will simply function as EOAs.
 
-In order to access these external wallet providers, just make sure to include configure `walletConnect` in your config:
+<img src="/images/connect-to-other-wallet-providers.png" alt="Connecting to external Wallets"/>
+
+In order to access these external wallet providers, just make sure to include configure `type: "external_wallets"` in your config:
 
 ```ts twoslash [src/config.ts]
 // @noErrors
@@ -56,4 +63,15 @@ export const config = createConfig(
     },
   }
 );
+```
+
+In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config:
+```ts twoslash [src/config.ts]
+// @noErrors
+        [
+          {
+            type: "external_wallets",
+            walletConnect: { projectId: "your-project-id" },
+          },
+        ]
 ```
