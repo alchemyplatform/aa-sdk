@@ -24,9 +24,8 @@ const {
   mutate: signHello,
   data: signature,
   reset,
-} = useSolanaSignMessage({
-  message: "Hello",
-});
+} = useSolanaSignMessage({});
+mutate({ message: "Hello" });
 ```
 
 ## Parameters

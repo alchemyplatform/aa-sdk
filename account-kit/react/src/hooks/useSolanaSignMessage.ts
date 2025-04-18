@@ -4,6 +4,9 @@ import type { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types";
 import { useSolanaSigner } from "./useSolanaSigner.js";
 
+export type MutationParams = {
+  message: string;
+};
 /**
  * There are cases where we might want to sign a message, used for other
  * messages or anything else. A use case would be sign something for audit reasons?
@@ -19,22 +22,21 @@ export interface SolanaSignedMessage {
   readonly isPending: boolean;
   readonly error: Error | null;
   reset(): void;
-  mutate(): void;
-  mutateAsync(): Promise<Hex>;
+  mutate(args: MutationParams): void;
+  mutateAsync(args: MutationParams): Promise<Hex>;
 }
 
 /**
  * The parameters for the useSolanaSignMessage hook.
  */
 export type UseSolanaSignMessageParams = {
-  message: string;
   signer?: SolanaSigner;
   /**
    * Override the default mutation options
    *
    * @see {@link BaseHookMutationArgs}
    */
-  mutation?: BaseHookMutationArgs<Hex>;
+  mutation?: BaseHookMutationArgs<Hex, MutationParams>;
 };
 
 /**
@@ -49,8 +51,8 @@ export type UseSolanaSignMessageParams = {
  *   data: signature,
  *   reset,
  * } = useSolanaSignMessage({
- *   message: "Hello",
  * });
+ * mutate({ message: "Hello" });
  * ```
  * @param {UseSolanaSignMessageParams} opts - Options for the hook to get setup.
  * @returns {SolanaSignedMessage} This should be hook mutations plus a few more. Used to get the end result of the signing and the callbacks.
@@ -61,9 +63,12 @@ export function useSolanaSignMessage(
   const fallbackSigner = useSolanaSigner({});
   const signer = opts.signer || fallbackSigner;
   const mutation = useMutation({
-    mutationFn: async () => {
-      if (!signer) throw new Error("Not ready");
-      return await signer.signMessage(toBytes(opts.message)).then(toHex);
+    mutationFn: async (args: MutationParams) => {
+      if (!signer)
+        throw new Error(
+          "The signer is null, and should be passed in or put into context"
+        );
+      return await signer.signMessage(toBytes(args.message)).then(toHex);
     },
     ...opts.mutation,
   });

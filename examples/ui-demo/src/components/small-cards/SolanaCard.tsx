@@ -49,11 +49,6 @@ export const SolanaCard = () => {
     isPending,
     data: { hash: txHash = null } = {},
   } = useSolanaTransaction({
-    transaction: {
-      amount: 1000000,
-      toAddress:
-        process.env.NEXT_PUBLIC_SOLANA_ADD2RESS || solanaSigner?.address || "",
-    },
     mutation: {
       onSuccess: async () => {
         await queryClient.invalidateQueries({
@@ -77,7 +72,6 @@ export const SolanaCard = () => {
     data: signature,
     reset,
   } = useSolanaSignMessage({
-    message: "Hello",
     mutation: {
       onSuccess: (signature: Hex) => {
         console.log(
@@ -144,7 +138,15 @@ export const SolanaCard = () => {
             if (balance === 0) {
               window.open("https://faucet.solana.com/", "_blank");
             } else if (!txHash) {
-              mutate();
+              mutate({
+                transfer: {
+                  amount: 1000000,
+                  toAddress:
+                    process.env.NEXT_PUBLIC_SOLANA_ADDRESS ||
+                    solanaSigner?.address ||
+                    "",
+                },
+              });
             } else {
               window.open(
                 `https://explorer.solana.com/tx/${txHash}?cluster=devnet`,
@@ -165,7 +167,7 @@ export const SolanaCard = () => {
           className="w-full"
           disabled={!solanaSigner || isSigningMessage}
           onClick={() => {
-            signHello();
+            signHello({ message: "Hello" });
           }}
         >
           {isSigningMessage

@@ -2,10 +2,25 @@ import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
 import { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types.js";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
+import {
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
 import { useSolanaSigner } from "./useSolanaSigner.js";
 import { useContext } from "react";
 import { AlchemySolanaWeb3Context } from "../AlchemySolanaWeb3Context.js";
+
+export type SolanaTransactionParams =
+  | {
+      transfer: {
+        amount: number;
+        toAddress: string;
+      };
+    }
+  | {
+      instructions: TransactionInstruction[];
+    };
 /**
  * We wanted to make sure that this will be using the same useMutation that the
  * useSendUserOperation does.
@@ -28,19 +43,15 @@ export interface SolanaTransaction {
   readonly error: Error | null;
   reset(): void;
   /** Send the transaction */
-  mutate(): void;
+  mutate(params: SolanaTransactionParams): void;
   /** Send the transaction asynchronously */
-  mutateAsync(): Promise<{ hash: string }>;
+  mutateAsync(params: SolanaTransactionParams): Promise<{ hash: string }>;
 }
 
 /**
  * The parameters for the useSolanaTransaction hook.
  */
-export type SolanaTransactionParams = {
-  transaction: {
-    amount: number;
-    toAddress: string;
-  };
+export type SolanaTransactionHookParams = {
   signer?: SolanaSigner;
   connection?: solanaNetwork.Connection;
   policyId?: string;
@@ -49,7 +60,7 @@ export type SolanaTransactionParams = {
    *
    * @see {@link BaseHookMutationArgs}
    */
-  mutation?: BaseHookMutationArgs<{ hash: string }>;
+  mutation?: BaseHookMutationArgs<{ hash: string }, SolanaTransactionParams>;
 };
 
 /**
@@ -65,26 +76,29 @@ export type SolanaTransactionParams = {
     },
 });
  * ```
- * @param {SolanaTransactionParams} opts Options for the hook to get setup, The transaction is required.
+ * @param {SolanaTransactionHookParams} opts Options for the hook to get setup, The transaction is required.
  * @returns {SolanaTransaction} The transaction hook.
  */
 export function useSolanaTransaction(
-  opts: SolanaTransactionParams
+  opts: SolanaTransactionHookParams
 ): SolanaTransaction {
   const web3Context = useContext(AlchemySolanaWeb3Context);
   const fallbackSigner = useSolanaSigner({});
   const mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (params: SolanaTransactionParams) => {
       if (!signer) throw new Error("Not ready");
       if (!connection) throw new Error("Not ready");
 
-      const instructions = [
-        SystemProgram.transfer({
-          fromPubkey: new PublicKey(signer.address),
-          toPubkey: new PublicKey(opts.transaction.toAddress),
-          lamports: opts.transaction.amount,
-        }),
-      ];
+      const instructions =
+        "instructions" in params
+          ? params.instructions
+          : [
+              SystemProgram.transfer({
+                fromPubkey: new PublicKey(signer.address),
+                toPubkey: new PublicKey(params.transfer.toAddress),
+                lamports: params.transfer.amount,
+              }),
+            ];
       const policyId =
         "policyId" in opts ? opts.policyId : web3Context?.policyId;
       const transaction = policyId
