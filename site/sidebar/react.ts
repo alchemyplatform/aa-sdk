@@ -34,6 +34,10 @@ export const reactGuides: SidebarItem[] = [
         link: "/react/login-methods/social-providers",
       },
       {
+        text: "Connect to Other Wallet Providers",
+        link: "/react/login-methods/connect-to-other-wallet-providers",
+      },
+      {
         text: "Passkey signup",
         link: "/react/login-methods/passkey-signup",
       },
