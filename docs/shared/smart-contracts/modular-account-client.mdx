@@ -1,10 +1,14 @@
+```ts twoslash client.ts
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
-import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
+import { createModularAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { generatePrivateKey } from "viem/accounts";
 
-export const lightAccountClient = await createLightAccountAlchemyClient({
+export const chain = sepolia;
+
+export const modularAccountClient = await createModularAccountAlchemyClient({
   signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-  chain: sepolia,
+  chain,
   transport: alchemy({ apiKey: "YOUR_API_KEY" }),
 });
+```

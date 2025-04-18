@@ -43,9 +43,7 @@ import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -77,9 +75,7 @@ const isPluginInstalled = await modularAccountClient
   .then((x) => x.includes(SessionKeyPlugin.meta.addresses[chain.id]));
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -135,9 +131,7 @@ if (!isPluginInstalled) {
 }
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -162,7 +156,7 @@ import {
 
 const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
 
-//---cut---
+// ---cut---
 import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const initialPermissions =
@@ -175,9 +169,7 @@ const result = await extendedClient.updateKeyPermissions({
 });
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
