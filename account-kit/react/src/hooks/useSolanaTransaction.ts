@@ -1,12 +1,8 @@
 import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
-import { SolanaSigner } from "@account-kit/signer";
+import { SolanaPipe, SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types.js";
-import {
-  PublicKey,
-  SystemProgram,
-  TransactionInstruction,
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { useSolanaSigner } from "./useSolanaSigner.js";
 import { useContext } from "react";
 import { AlchemySolanaWeb3Context } from "../AlchemySolanaWeb3Context.js";
@@ -91,26 +87,21 @@ export function useSolanaTransaction(
       if (!signer) throw new Error("Not ready");
       if (!connection) throw new Error("Not ready");
 
-      const instructions =
-        "instructions" in params
-          ? params.instructions
-          : [
-              SystemProgram.transfer({
-                fromPubkey: new PublicKey(signer.address),
-                toPubkey: new PublicKey(params.transfer.toAddress),
-                lamports: params.transfer.amount,
-              }),
-            ];
       const policyId =
         "policyId" in opts ? opts.policyId : web3Context?.policyId;
-      const transaction = policyId
-        ? await signer.addSponsorship(instructions, connection, policyId)
-        : await signer.createTransfer(instructions, connection);
 
-      await signer.addSignature(transaction);
+      const pipe_ = SolanaPipe.fromSolanaSigner(signer);
 
-      const hash = await solanaNetwork.broadcast(connection, transaction);
-      return { hash };
+      const pipe__ = policyId ? pipe_.withAlchemySponsorship(policyId) : pipe_;
+      const pipe =
+        "instructions" in params
+          ? pipe__.withInstructions(params.instructions)
+          : pipe__.withTransfer({
+              lamports: params.transfer.amount,
+              toPubkey: new PublicKey(params.transfer.toAddress),
+            });
+
+      return { hash: await pipe.broadcast(connection) };
     },
     ...opts.mutation,
   });
