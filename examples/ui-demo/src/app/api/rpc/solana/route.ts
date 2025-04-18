@@ -12,11 +12,7 @@ export async function POST(req: NextRequest) {
     headers[key] = value;
   });
 
-  const isPreview = tryParseJSON(body)?.method === "alchemy_requestFeePayer";
-
-  const rpcUrl =
-    (isPreview && env.ALCHEMY_SOLANA_SPONSOR_URL) ||
-    `https://solana-devnet.g.alchemy.com/v2/${env.API_KEY}`;
+  const rpcUrl = `https://solana-devnet.g.alchemy.com/v2/${env.API_KEY}`;
   const res = await fetch(rpcUrl, {
     method: "POST",
     headers: {

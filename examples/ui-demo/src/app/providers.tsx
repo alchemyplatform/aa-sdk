@@ -9,7 +9,7 @@ import {
   AlchemySolanaWeb3Context,
 } from "@account-kit/react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, Suspense, useMemo, useRef } from "react";
+import { PropsWithChildren, Suspense, useRef } from "react";
 import { ConfigContextProvider, ConfigSync } from "../state";
 import { alchemyConfig, Config, queryClient } from "./config";
 import { Connection } from "@solana/web3.js";
@@ -58,7 +58,6 @@ export const Providers = (
               <AlchemySolanaWeb3Context.Provider
                 value={{
                   connection: connection,
-                  policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
                 }}
               >
                 <ConfigSync />
