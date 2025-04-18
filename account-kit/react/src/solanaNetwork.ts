@@ -4,21 +4,12 @@ import {
   PublicKey,
   sendAndConfirmRawTransaction,
   Transaction,
-  TransactionConfirmationStrategy,
+  type TransactionConfirmationStrategy,
   VersionedTransaction,
 } from "@solana/web3.js";
 import bs58 from "bs58";
 
-export function connect(): Connection {
-  if (typeof window === "undefined") {
-    return null as never;
-  }
-
-  return new Connection(window.location.origin + "/api/rpc/solana", {
-    wsEndpoint: "wss://api.devnet.solana.com",
-    commitment: "confirmed",
-  });
-}
+export { Connection };
 
 export async function balance(
   connection: Connection,

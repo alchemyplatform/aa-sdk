@@ -1,17 +1,28 @@
 import {
+  Connection,
   PublicKey,
   Transaction,
-  type VersionedTransaction,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
 } from "@solana/web3.js";
 import { size, slice, toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { BaseSignerClient } from "./client/base";
 import { NotAuthenticatedError } from "./errors.js";
 
-// TODO: I don't want this to be a class so that the flow is closer to how we do this for `toViemAccount`
+/**
+ * The SolanaSigner class is used to sign transactions and messages for the Solana blockchain.
+ * It provides methods to add signatures to transactions and sign messages.
+ */
 export class SolanaSigner {
-  private alchemyClient: BaseSignerClient;
-  public address: string;
+  readonly alchemyClient: BaseSignerClient;
+  public readonly address: string;
 
+  /**
+   * Constructor for the SolanaSigner class which is a wrapper around the alchemy client, and is more focused on the solana web3
+   *
+   * @param {object} client This is the client that will be used to sign the transaction, and we are just having functions on top of it.
+   */
   constructor(client: BaseSignerClient) {
     this.alchemyClient = client;
     if (!client.getUser()) throw new Error("Must be authenticated!");
@@ -20,8 +31,14 @@ export class SolanaSigner {
     this.address = client.getUser()!.solanaAddress!;
   }
 
+  /**
+   * Adds a signature of the client user to a transaction
+   *
+   * @param {Transaction | VersionedTransaction} transaction - The transaction to add the signature to
+   * @returns {Promise<Transaction | VersionedTransaction >} The transaction with the signature added
+   */
   async addSignature(
-    tx: Transaction | VersionedTransaction
+    transaction: Transaction | VersionedTransaction
   ): Promise<Transaction | VersionedTransaction> {
     const user = this.alchemyClient.getUser();
     if (!user) {
@@ -33,19 +50,25 @@ export class SolanaSigner {
     }
 
     const fromKey = new PublicKey(user.solanaAddress);
-    const messageToSign = this.getMessageToSign(tx);
+    const messageToSign = this.getMessageToSign(transaction);
     const signature = await this.alchemyClient.signRawMessage(
       messageToSign,
       "SOLANA"
     );
 
-    tx.addSignature(
+    transaction.addSignature(
       fromKey,
       Buffer.from(toBytes(this.formatSignatureForSolana(signature)))
     );
-    return tx;
+    return transaction;
   }
 
+  /**
+   * Signs a message
+   *
+   * @param {Uint8Array} message - The message to sign
+   * @returns {Promise<ByteArray>} The signature of the message
+   */
   async signMessage(message: Uint8Array): Promise<ByteArray> {
     const user = this.alchemyClient.getUser();
     if (!user) {
@@ -65,6 +88,127 @@ export class SolanaSigner {
     return toBytes(this.formatSignatureForSolana(signature));
   }
 
+  async createTransfer(
+    instructions: TransactionInstruction[],
+    connection: Connection,
+    version?: "versioned"
+  ): Promise<VersionedTransaction>;
+  async createTransfer(
+    instructions: TransactionInstruction[],
+    connection: Connection,
+    version?: "legacy"
+  ): Promise<Transaction>;
+  async createTransfer(
+    instructions: TransactionInstruction[],
+    connection: Connection
+  ): Promise<VersionedTransaction>;
+
+  /**
+   * Creates a transfer transaction. Used for the SolanaCard example.
+   *
+   * @param {TransactionInstruction[]} instructions - The instructions to add to the transaction
+   * @param {Connection} connection - The connection to use for the transaction
+   * @param {"versioned" | "legacy"} [version] - The version of the transaction
+   * @returns {Promise<Transaction | VersionedTransaction>} The transfer transaction
+   */
+  async createTransfer(
+    instructions: TransactionInstruction[],
+    connection: Connection,
+    version?: string
+  ): Promise<Transaction | VersionedTransaction> {
+    const blockhash = (await connection.getLatestBlockhash()).blockhash;
+
+    let transferTransaction;
+
+    if (version === "legacy") {
+      // Legacy transaction
+      transferTransaction = instructions.reduce(
+        (tx, instruction) => tx.add(instruction),
+        new Transaction()
+      );
+
+      // Get a recent block hash
+      transferTransaction.recentBlockhash = blockhash;
+      // Set the signer
+      transferTransaction.feePayer = new PublicKey(this.address);
+    } else {
+      // VersionedTransaction
+      const txMessage = new TransactionMessage({
+        payerKey: new PublicKey(this.address),
+        recentBlockhash: blockhash,
+        instructions,
+      });
+
+      const versionedTxMessage = txMessage.compileToV0Message();
+      transferTransaction = new VersionedTransaction(versionedTxMessage);
+    }
+
+    return transferTransaction;
+  }
+
+  /**
+   * Adds sponsorship to a transaction. Used to have a party like Alchemy pay for the transaction.
+   *
+   * @param {TransactionInstruction[]} instructions - The instructions to add to the transaction
+   * @param {Connection} connection - The connection to use for the transaction
+   * @param {string} [policyId] - The policy ID to add sponsorship to
+   * @returns {Promise<VersionedTransaction>} The transaction with sponsorship added
+   */
+  async addSponsorship(
+    instructions: TransactionInstruction[],
+    connection: Connection,
+    policyId: string
+  ): Promise<VersionedTransaction> {
+    const { blockhash } = await connection.getLatestBlockhash({
+      commitment: "finalized",
+    });
+    const message = new TransactionMessage({
+      // Right now the backend will rewrite this payer Key to the server's address
+      payerKey: new PublicKey(this.address),
+      recentBlockhash: blockhash,
+      instructions,
+    }).compileToV0Message();
+    const versionedTransaction = new VersionedTransaction(message);
+    const serializedTransaction = Buffer.from(
+      versionedTransaction.serialize()
+    ).toString("base64");
+    const body = JSON.stringify({
+      id: crypto?.randomUUID() ?? Math.floor(Math.random() * 1000000),
+      jsonrpc: "2.0",
+      method: "alchemy_requestFeePayer",
+      params: [
+        {
+          policyId,
+          serializedTransaction,
+        },
+      ],
+    });
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body,
+    };
+
+    const response = await fetch(
+      // TODO: Use the connection??
+      connection.rpcEndpoint,
+      options
+    );
+    const jsonResponse = await response.json();
+    if (!jsonResponse?.result?.serializedTransaction)
+      throw new Error(
+        `Response doesn't include the serializedTransaction ${JSON.stringify(
+          jsonResponse
+        )}`
+      );
+    return VersionedTransaction.deserialize(
+      decodeBase64(jsonResponse.result.serializedTransaction)
+    );
+  }
+
   private formatSignatureForSolana(signature: Hex): Hex {
     if (size(signature) === 64) return signature;
 
@@ -80,4 +224,7 @@ export class SolanaSigner {
     }
     return toHex(messageToSign);
   }
+}
+function decodeBase64(serializedTransaction: string): Uint8Array {
+  return Buffer.from(serializedTransaction, "base64");
 }
