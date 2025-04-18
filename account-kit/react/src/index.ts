@@ -70,4 +70,4 @@ export {
   type SolanaTransaction,
 } from "./hooks/useSolanaTransaction.js";
 
-export { useSolanaMessageSigned } from "./hooks/useSolanaMessageSigned.js";
+export { useSolanaSignMessage } from "./hooks/useSolanaSignMessage.js";

@@ -3,7 +3,7 @@ import {
   useSigner,
   useSignerStatus,
   useSolanaTransaction,
-  useSolanaMessageSigned,
+  useSolanaSignMessage,
   AlchemySolanaWeb3Context,
 } from "@account-kit/react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
@@ -76,7 +76,7 @@ export const SolanaCard = () => {
     mutate: signHello,
     data: signature,
     reset,
-  } = useSolanaMessageSigned({
+  } = useSolanaSignMessage({
     message: "Hello",
     mutation: {
       onSuccess: (signature: Hex) => {

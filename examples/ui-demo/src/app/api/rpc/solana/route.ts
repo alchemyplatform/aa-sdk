@@ -29,10 +29,3 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json(await res.json());
 }
-function tryParseJSON(body: string): any {
-  try {
-    return JSON.parse(body);
-  } catch (_) {
-    return;
-  }
-}

@@ -13,7 +13,7 @@ import { useSolanaSigner } from "./useSolanaSigner.js";
  * @see {@link useSolanaTransaction}
  * @see {@link https://tanstack.com/query/v5/docs/framework/react/reference/useMutation | TanStack Query useMutation}
  */
-export interface SolanaMessageSigned {
+export interface SolanaSignedMessage {
   readonly signer: SolanaSigner | void;
   readonly data: Hex | undefined;
   readonly isPending: boolean;
@@ -24,9 +24,9 @@ export interface SolanaMessageSigned {
 }
 
 /**
- * The parameters for the useSolanaMessageSigned hook.
+ * The parameters for the useSolanaSignMessage hook.
  */
-export type UseSolanaMessageSignedParams = {
+export type UseSolanaSignMessageParams = {
   message: string;
   signer?: SolanaSigner;
   /**
@@ -48,16 +48,16 @@ export type UseSolanaMessageSignedParams = {
  *   mutate: signHello,
  *   data: signature,
  *   reset,
- * } = useSolanaMessageSigned({
+ * } = useSolanaSignMessage({
  *   message: "Hello",
  * });
  * ```
- * @param {UseSolanaMessageSignedParams} opts - Options for the hook to get setup.
- * @returns {SolanaMessageSigned} This should be hook mutations plus a few more. Used to get the end result of the signing and the callbacks.
+ * @param {UseSolanaSignMessageParams} opts - Options for the hook to get setup.
+ * @returns {SolanaSignedMessage} This should be hook mutations plus a few more. Used to get the end result of the signing and the callbacks.
  */
-export function useSolanaMessageSigned(
-  opts: UseSolanaMessageSignedParams
-): SolanaMessageSigned {
+export function useSolanaSignMessage(
+  opts: UseSolanaSignMessageParams
+): SolanaSignedMessage {
   const fallbackSigner = useSolanaSigner({});
   const signer = opts.signer || fallbackSigner;
   const mutation = useMutation({
