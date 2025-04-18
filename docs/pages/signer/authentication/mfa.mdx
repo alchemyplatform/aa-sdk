@@ -35,9 +35,7 @@ const totpUrl = result?.multiFactors[0].multiFactorTotpUrl;
 const multiFactorId = result?.multiFactors[0].multiFactorId;
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -58,9 +56,7 @@ await signer.verifyMfa({
 });
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -78,9 +74,7 @@ await signer.removeMfa({
 });
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -94,9 +88,7 @@ import { signer } from "./signer";
 const { multiFactors } = await signer.getMfaFactors();
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -116,9 +108,7 @@ signer.authenticate({
 });
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -135,9 +125,7 @@ signer.authenticate({
 });
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -153,9 +141,7 @@ const user = await signer?.validateMultiFactors({
 });
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -205,9 +191,7 @@ try {
 }
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>
 
@@ -236,8 +220,6 @@ await signer.authenticate({
 });
 ```
 
-```ts twoslash [signer] filename="signer.ts"
-// [!include ~/shared/signer/signer.ts]
-```
+<Markdown src="../../../shared/signer/signer.mdx" />
 
 </CodeBlocks>

@@ -12,9 +12,7 @@ We also export the necessary decorators which can be used to extend your `modula
 
 Let's take a look at a full example that demonstrates how to use session keys with a Modular Account.
 
-```ts twoslash
-// [!include ~/shared/smart-contracts/session-keys/full-example.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/session-keys/full-example.mdx" />
 
 ## Breaking it down
 
@@ -45,9 +43,7 @@ import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -79,9 +75,7 @@ const isPluginInstalled = await modularAccountClient
   .then((x) => x.includes(SessionKeyPlugin.meta.addresses[chain.id]));
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -137,9 +131,7 @@ if (!isPluginInstalled) {
 }
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -164,7 +156,7 @@ import {
 
 const extendedClient = modularAccountClient.extend(sessionKeyPluginActions);
 
-//---cut---
+// ---cut---
 import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const initialPermissions =
@@ -177,9 +169,7 @@ const result = await extendedClient.updateKeyPermissions({
 });
 ```
 
-```ts [client.ts] filename="client.ts" twoslash
-// [!include ~/shared/smart-contracts/modular-account-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/modular-account-client.mdx" />
 
 </CodeBlocks>
 
@@ -211,9 +201,7 @@ const result = await client.addSessionKey({
 });
 ```
 
-```ts [base-client.ts] filename="base-client.ts" twoslash
-// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/session-keys/base-client.mdx" />
 
 </CodeBlocks>
 
@@ -231,9 +219,7 @@ const result = await client.removeSessionKey({
 });
 ```
 
-```ts [base-client.ts] filename="base-client.ts" twoslash
-// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/session-keys/base-client.mdx" />
 
 </CodeBlocks>
 
@@ -260,9 +246,7 @@ const result = await client.updateSessionKeyPermissions({
 });
 ```
 
-```ts [base-client.ts] filename="base-client.ts" twoslash
-// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/session-keys/base-client.mdx" />
 
 </CodeBlocks>
 
@@ -281,8 +265,6 @@ const result = await client.rotateSessionKey({
 });
 ```
 
-```ts [base-client.ts] filename="base-client.ts" twoslash
-// [!include ~/shared/smart-contracts/session-keys/base-client.ts]
-```
+<Markdown src="../../../../../shared/smart-contracts/session-keys/base-client.mdx" />
 
 </CodeBlocks>
