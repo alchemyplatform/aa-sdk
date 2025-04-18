@@ -135,73 +135,68 @@ type RawHooks = {
     | undefined;
 };
 
-type OneOf<T extends {}[]> = T[number];
-
 type Key = {
   publicKey: Hex;
   type: "secp256k1" | "contract";
 };
 
-export type Permission = OneOf<
-  [
-    {
+export type Permission =
+  | {
       // this permission allows transfer of native tokens from the account
       type: PermissionType.NATIVE_TOKEN_TRANSFER;
       data: {
         allowance: Hex;
       };
-    },
-    {
+    }
+  | {
       // this permission allows transfer or approval of erc20 tokens from the account
       type: PermissionType.ERC20_TOKEN_TRANSFER;
       data: {
         address: Address; // erc20 token contract address
         allowance: Hex;
       };
-    },
-    {
+    }
+  | {
       // this permissions allows the key to spend gas for UOs
       type: PermissionType.GAS_LIMIT;
       data: {
         limit: Hex;
       };
-    },
-    {
+    }
+  | {
       // this permission grants access to all functions in a contract
       type: PermissionType.CONTRACT_ACCESS;
       data: {
         address: Address;
       };
-    },
-    {
+    }
+  | {
       // this permission grants access to functions in the account
       type: PermissionType.ACCOUNT_FUNCTIONS;
       data: {
         functions: Hex[]; // function signatures
       };
-    },
-    {
+    }
+  | {
       // this permission grants access to a function selector in any address or contract
       type: PermissionType.FUNCTIONS_ON_ALL_CONTRACTS;
       data: {
         functions: Hex[]; // function signatures
       };
-    },
-    {
+    }
+  | {
       // this permission grants access to specified functions on a specific contract
       type: PermissionType.FUNCTIONS_ON_CONTRACT;
       data: {
         address: Address;
         functions: Hex[];
       };
-    },
-    {
+    }
+  | {
       // this permission grants full access to everything
       type: PermissionType.ROOT;
       data?: never;
-    }
-  ]
->;
+    };
 
 type Hook = {
   hookConfig: HookConfig;

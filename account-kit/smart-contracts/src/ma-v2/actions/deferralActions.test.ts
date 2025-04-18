@@ -3,7 +3,16 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { custom, parseEther, toHex, type Address, type Hex } from "viem";
+import {
+  custom,
+  parseEther,
+  publicActions,
+  testActions,
+  toHex,
+  zeroAddress,
+  type Address,
+  type Hex,
+} from "viem";
 import {
   createModularAccountV2Client,
   type SignerEntity,
@@ -11,6 +20,7 @@ import {
 import {
   buildDeferredActionDigest,
   deferralActions,
+  ExpiredDeadlineError,
   PermissionBuilder,
   PermissionType,
   RootPermissionOnlyError,
@@ -230,6 +240,57 @@ describe("MA v2 deferral actions tests", async () => {
           .addPermission({ permission });
       }).rejects.toThrow(new RootPermissionOnlyError(permission));
     });
+  });
+
+  it("PermissionBuilder: Cannot compile post expiry ", async () => {
+    const provider = await givenConnectedProvider({ signer });
+
+    const serverClient = (
+      await createModularAccountV2Client({
+        chain: instance.chain,
+        accountAddress: provider.getAddress(),
+        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
+        transport: custom(instance.getClient()),
+      })
+    ).extend(deferralActions);
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const sessionKey: SmartAccountSigner = new LocalAccountSigner(
+      accounts.unfundedAccountOwner
+    );
+
+    // these can be default values or from call arguments
+    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+      isGlobalValidation: false,
+    });
+
+    const deadline = Date.now() / 2 / 1000;
+
+    expect(async () => {
+      await new PermissionBuilder({
+        client: serverClient,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId,
+        nonce,
+        deadline,
+      })
+        .addPermission({
+          permission: {
+            type: PermissionType.CONTRACT_ACCESS,
+            data: {
+              address: target,
+            },
+          },
+        })
+        .compileDeferred();
+    }).rejects.toThrow(new ExpiredDeadlineError(deadline, Date.now() / 1000));
   });
 
   it("PermissionBuilder: Cannot add root after any permission", async () => {
