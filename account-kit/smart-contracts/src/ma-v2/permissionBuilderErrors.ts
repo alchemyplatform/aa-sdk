@@ -12,7 +12,9 @@ export class RootPermissionOnlyError extends PermissionBuilderError {
    * @param {Permission} permission The permission trying to be added atop the root permission
    */
   constructor(permission: Permission) {
-    super(`Adding ${permission}: Cannot add permissions with ROOT permission`);
+    super(
+      `Adding ${permission.type}: Cannot add permissions with ROOT permission`
+    );
   }
 }
 
