@@ -68,13 +68,15 @@ export type SolanaTransactionHookParams = {
  *
  * @example
  * ```ts
-  useSolanaTransaction({
+  const {mutate} = useSolanaTransaction({
     policyId: "<policyId>",
-    transaction: {
-      amount: 1000000,
-      toAddress: "<toAddress>",
-    },
 });
+ 
+mutate({
+  transfer: {
+    amount: <amount:number>,
+    toAddress: "<toAddress>",
+  },
  * ```
  * @param {SolanaTransactionHookParams} opts Options for the hook to get setup, The transaction is required.
  * @returns {SolanaTransaction} The transaction hook.

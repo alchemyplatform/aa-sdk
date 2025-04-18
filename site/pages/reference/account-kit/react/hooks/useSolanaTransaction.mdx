@@ -18,13 +18,15 @@ import { useSolanaTransaction } from "@account-kit/react";
 ## Usage
 
 ```ts
-useSolanaTransaction({
-  policyId: "<policyId>",
-  transaction: {
-    amount: 1000000,
-    toAddress: "<toAddress>",
-  },
+const {mutate} = useSolanaTransaction({
+policyId: "<policyId>",
 });
+
+mutate({
+transfer: {
+amount: <amount:number>,
+toAddress: "<toAddress>",
+},
 ```
 
 ## Parameters
