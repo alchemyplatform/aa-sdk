@@ -205,8 +205,16 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/constructor",
           },
           {
+            text: "experimental_createApiKey",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey",
+          },
+          {
             text: "getMfaFactors",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors",
+          },
+          {
+            text: "getPasskeyStatus",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/getPasskeyStatus",
           },
           {
             text: "getUser",
@@ -235,6 +243,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "signRawMessage",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage",
+          },
+          {
+            text: "stampGetOrganization",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/stampGetOrganization",
           },
           {
             text: "stampWhoami",
