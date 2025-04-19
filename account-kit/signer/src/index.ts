@@ -21,3 +21,4 @@ export type * from "./solanaSigner.js";
 export type * from "./types.js";
 export { AlchemySignerStatus } from "./types.js";
 export { SolanaSigner } from "./solanaSigner.js";
+export { AlchemyApiKeySigner } from "./apiKeySigner.js";
