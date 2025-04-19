@@ -96,6 +96,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const { connection, iframeConfig, rpId, rootOrgId, oauthCallbackUrl } =
       AlchemySignerClientParamsSchema.parse(params);
 
+    // TODO(jh): maybe this can init the apiKeyStamper and skip the rest if api key is given?
+
     const iframeStamper = new IframeStamper({
       iframeElementId: iframeConfig.iframeElementId,
       iframeUrl: "https://auth.turnkey.com",

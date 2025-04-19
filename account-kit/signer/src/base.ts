@@ -95,7 +95,10 @@ export type SignerConfig = {
 export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   implements SmartAccountAuthenticator<AuthParams, User, TClient>
 {
-  signerType: "alchemy-signer" | "rn-alchemy-signer" = "alchemy-signer";
+  signerType:
+    | "alchemy-signer"
+    | "alchemy-api-key-signer"
+    | "rn-alchemy-signer" = "alchemy-signer";
   inner: TClient;
   private sessionManager: SessionManager;
   private store: InternalStore;
