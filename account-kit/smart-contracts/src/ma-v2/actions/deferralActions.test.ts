@@ -2,14 +2,17 @@ import {
   erc7677Middleware,
   LocalAccountSigner,
   type SmartAccountSigner,
+  type UserOperationRequest_v7,
 } from "@aa-sdk/core";
 import {
+  concat,
   custom,
+  fromHex,
+  isAddress,
   parseEther,
   publicActions,
   testActions,
   toHex,
-  zeroAddress,
   type Address,
   type Hex,
 } from "viem";
@@ -30,6 +33,11 @@ import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
+import { entryPoint07Abi } from "viem/account-abstraction";
+import {
+  packAccountGasLimits,
+  packPaymasterData,
+} from "../../../../../aa-sdk/core/src/entrypoint/0.7";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
@@ -268,7 +276,7 @@ describe("MA v2 deferral actions tests", async () => {
       isGlobalValidation: false,
     });
 
-    const deadline = Date.now() / 2 / 1000;
+    const deadline = Math.round(Date.now() / 2 / 1000);
 
     expect(async () => {
       await new PermissionBuilder({
@@ -291,6 +299,138 @@ describe("MA v2 deferral actions tests", async () => {
         })
         .compileDeferred();
     }).rejects.toThrow(new ExpiredDeadlineError(deadline, Date.now() / 1000));
+  });
+
+  it("PermissionBuilder: Cannot install expired deferred action", async () => {
+    const client = instance
+      .getClient()
+      .extend(publicActions)
+      .extend(testActions({ mode: "anvil" }));
+    const provider = await givenConnectedProvider({ signer });
+
+    const serverClient = (
+      await createModularAccountV2Client({
+        chain: instance.chain,
+        accountAddress: provider.getAddress(),
+        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
+        transport: custom(instance.getClient()),
+      })
+    ).extend(deferralActions);
+
+    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+      isGlobalValidation: false,
+    });
+
+    const deadline = Math.round(Date.now() / 1000 + 10);
+
+    const { typedData, fullPreSignatureDeferredActionDigest } =
+      await new PermissionBuilder({
+        client: serverClient,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId,
+        nonce,
+        deadline,
+      })
+        .addPermission({
+          permission: {
+            type: PermissionType.CONTRACT_ACCESS,
+            data: {
+              address: target,
+            },
+          },
+        })
+        .compileDeferred();
+
+    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
+    const deferredValidationSig = await provider.account.signTypedData(
+      typedData
+    );
+
+    // Build the full hex to prepend to the UO signature
+    const deferredActionDigest = buildDeferredActionDigest({
+      fullPreSignatureDeferredActionDigest,
+      sig: deferredValidationSig,
+    });
+
+    // Initialize the session key client corresponding to the session key we will install in the deferred action
+    const sessionKeyClient = await createModularAccountV2Client({
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      accountAddress,
+      signer: sessionKey,
+      initCode,
+      deferredAction: deferredActionDigest,
+    });
+
+    const uo = await sessionKeyClient.buildUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    const signedUO = (await sessionKeyClient.signUserOperation({
+      uoStruct: uo,
+    })) as UserOperationRequest_v7;
+
+    // Advance time
+    await client.setNextBlockTimestamp({
+      timestamp: BigInt(deadline) + 1000n,
+    });
+
+    await client.mine({
+      blocks: 1,
+    });
+
+    expect(async () => {
+      return await client.simulateContract({
+        address: serverClient.account.getEntryPoint().address,
+        abi: entryPoint07Abi,
+        functionName: "handleOps",
+        args: [
+          [
+            {
+              sender: serverClient.account.address,
+              nonce: fromHex(signedUO.nonce, "bigint"),
+              initCode:
+                signedUO.factory && signedUO.factoryData
+                  ? concat([signedUO.factory, signedUO.factoryData])
+                  : "0x",
+              callData: signedUO.callData,
+              accountGasLimits: packAccountGasLimits({
+                verificationGasLimit: signedUO.verificationGasLimit,
+                callGasLimit: signedUO.callGasLimit,
+              }),
+              preVerificationGas: fromHex(
+                signedUO.preVerificationGas,
+                "bigint"
+              ),
+              gasFees: packAccountGasLimits({
+                maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
+                maxFeePerGas: signedUO.maxFeePerGas,
+              }),
+              paymasterAndData:
+                signedUO.paymaster && isAddress(signedUO.paymaster)
+                  ? packPaymasterData({
+                      paymaster: signedUO.paymaster,
+                      paymasterVerificationGasLimit:
+                        signedUO.paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
+                      paymasterData: signedUO.paymasterData,
+                    })
+                  : "0x",
+              signature: signedUO.signature,
+            },
+          ],
+          provider.account.address,
+        ],
+        account: await sessionKeyClient.account.getSigner().getAddress(),
+      });
+    }).rejects.toThrow("AA22 expired or not due");
   });
 
   it("PermissionBuilder: Cannot add root after any permission", async () => {
