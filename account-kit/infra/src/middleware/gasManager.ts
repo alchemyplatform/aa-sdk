@@ -118,15 +118,15 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       return feeEstimatorOverride
         ? feeEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
-        ? alchemyFeeEstimator(transport)(uo, args)
-        : noopMiddleware(uo, args);
+          ? alchemyFeeEstimator(transport)(uo, args)
+          : noopMiddleware(uo, args);
     },
     gasEstimator: (uo, args) => {
       return gasEstimatorOverride
         ? gasEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
-        ? defaultGasEstimator(args.client)(uo, args)
-        : noopMiddleware(uo, args);
+          ? defaultGasEstimator(args.client)(uo, args)
+          : noopMiddleware(uo, args);
     },
     paymasterAndData: async (
       uo,
@@ -172,21 +172,35 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         ),
         ...(account.getEntryPoint().version === "0.7.0"
           ? {
-              paymasterVerificationGasLimit: overrideField<"0.7.0">(
-                "paymasterVerificationGasLimit",
-                overrides_ as UserOperationOverrides<"0.7.0">,
-                feeOptions,
-                userOp
-              ),
-              paymasterPostOpGasLimit: overrideField<"0.7.0">(
-                "paymasterPostOpGasLimit",
-                overrides_ as UserOperationOverrides<"0.7.0">,
-                feeOptions,
-                userOp
-              ),
-            }
+            paymasterVerificationGasLimit: overrideField<"0.7.0">(
+              "paymasterVerificationGasLimit",
+              overrides_ as UserOperationOverrides<"0.7.0">,
+              feeOptions,
+              userOp
+            ),
+            paymasterPostOpGasLimit: overrideField<"0.7.0">(
+              "paymasterPostOpGasLimit",
+              overrides_ as UserOperationOverrides<"0.7.0">,
+              feeOptions,
+              userOp
+            ),
+          }
           : {}),
       });
+
+      if (isHex(overrides.maxFeePerGas)) {
+        userOp.maxFeePerGas = overrides.maxFeePerGas;
+      }
+      if (isHex(overrides.maxPriorityFeePerGas)) {
+        userOp.maxPriorityFeePerGas = overrides.maxPriorityFeePerGas;
+      }
+      if (isHex(overrides.verificationGasLimit)) {
+        userOp.verificationGasLimit = overrides.verificationGasLimit;
+      }
+      if (isHex(overrides.callGasLimit)) {
+        userOp.callGasLimit = overrides.callGasLimit;
+      }
+      // the api below doesn't let the user override absolute values for PVG or paymaster
 
       const result = await (client as AlchemySmartAccountClient).request({
         method: "alchemy_requestGasAndPaymasterAndData",
