@@ -12,6 +12,7 @@ import {
 import type { BaseSignerClient } from "./client/base";
 import { SolanaSigner } from "./solanaSigner";
 import bs58 from "bs58";
+import { z, ZodType } from "zod";
 
 async function getConfirmationStrategy(
   connection: Connection,
@@ -25,6 +26,8 @@ async function getConfirmationStrategy(
     signature,
   };
 }
+
+type GetState = <X>(isX: (x: unknown) => x is X) => Promise<X>;
 //prettier-ignore
 type HasParentData<Parent, Data, ReturnType = Data> = 
   Parent extends SolanaPipe<Data, any, any, any> ? ReturnType :
@@ -38,7 +41,8 @@ function getParentData<P extends SolanaPipe, D>(
 ): HasParentData<P, D> {
   const data = pipe.state;
   if (testFn(data)) return data as HasParentData<P, D>;
-  if (pipe.parent === null) throw new Error("Could not find parent data");
+  if (pipe.parent === null)
+    throw new Error("Could not find state with: " + testFn.name);
   return getParentData(testFn, pipe.parent) as HasParentData<P, D>;
 }
 function isSolanaSigner(x: unknown): x is SolanaSigner {
@@ -57,20 +61,14 @@ export class SolanaPipe<
   private constructor(
     readonly state: State,
     readonly parent: Parent,
-    readonly fn: (
-      input: In,
-      getState: <X>(isX: (x: unknown) => x is X) => Promise<null | X>
-    ) => Promise<Out>
+    readonly fn: (input: In, getState: GetState) => Promise<Out>
   ) {
     this.fn = fn;
   }
 
   andThen<NewData, NewIn extends Out, NewOut>(
     data: NewData,
-    fn: (
-      input: NewIn,
-      getState: <X>(isX: (y: unknown) => y is X) => Promise<null | X>
-    ) => Promise<NewOut>
+    fn: (input: NewIn, getState: GetState) => Promise<NewOut>
   ) {
     return new SolanaPipe<NewData, typeof this, In, NewOut>(
       data,
@@ -80,10 +78,7 @@ export class SolanaPipe<
   }
   beforeThen<NewData, NewIn, NewOut extends In>(
     data: NewData,
-    fn: (
-      input: NewIn,
-      getState: <X>(isX: (y: unknown) => y is X) => Promise<null | X>
-    ) => Promise<NewOut>
+    fn: (input: NewIn, getState: GetState) => Promise<NewOut>
   ) {
     return new SolanaPipe<NewData, typeof this, NewIn, Out>(
       data,
@@ -99,47 +94,20 @@ export class SolanaPipe<
   }
 
   static fromSolanaSigner(client: SolanaSigner) {
-    return new SolanaPipe(
-      client,
-      null,
-      async (transaction: Transaction | VersionedTransaction, getState) => {
-        const signer = await getState(isSolanaSigner);
-        if (!signer) throw new Error("No SolanaSigner found");
-        await signer.addSignature(transaction);
-        return transaction;
-      }
-    );
+    return new SolanaPipe(client, null, fromSolanaSigner);
   }
 
   withTransfer(
     this: SolanaPipe<any, any, any, Transaction | VersionedTransaction>,
     transfer: Omit<TransferParams, "fromPubkey">
   ) {
-    return this.beforeThen(transfer, async (_previous: void, getState) => {
-      const signer = await getState(isSolanaSigner);
-      const connection = await getState(isConnection);
-      if (!signer) throw new Error("No SolanaSigner found");
-      if (!connection) throw new Error("No Connection found");
-      const instructions = [
-        SystemProgram.transfer({
-          ...transfer,
-          fromPubkey: new PublicKey(signer.address),
-        }),
-      ];
-      return signer.createTransfer(instructions, connection);
-    });
+    return this.beforeThen(transfer, withTransfer);
   }
   withInstructions(
     this: SolanaPipe<any, any, any, Transaction | VersionedTransaction>,
     instructions: TransactionInstruction[]
   ) {
-    return this.beforeThen(instructions, async (_previous: void, getState) => {
-      const signer = await getState(isSolanaSigner);
-      const connection = await getState(isConnection);
-      if (!signer) throw new Error("No SolanaSigner found");
-      if (!connection) throw new Error("No Connection found");
-      return signer.createTransfer(instructions, connection);
-    });
+    return this.beforeThen(instructions, withInstructions);
   }
 
   withAlchemySponsorship(
@@ -151,50 +119,106 @@ export class SolanaPipe<
     >,
     policyId: string
   ) {
-    return this.beforeThen(
-      policyId,
-      async (instructions: TransactionInstruction[], getState) => {
-        const signer = await getState(isSolanaSigner);
-        if (!signer) throw new Error("No SolanaSigner found");
-        const connection = await getState(isConnection);
-        if (!connection) throw new Error("No Connection found");
-        return signer.addSponsorship(instructions, connection, policyId);
-      }
-    );
+    return this.beforeThen({ policyId }, withAlchemySponsorship);
   }
 
   broadcast(
     this: SolanaPipe<any, any, void, Transaction | VersionedTransaction>,
     connection: Connection
   ) {
-    return this.andThen(
-      connection,
-      async function broadcast(
-        signedTransaction: Transaction | VersionedTransaction,
-        _getState
-      ) {
-        const signature =
-          "version" in signedTransaction
-            ? signedTransaction.signatures[0]!
-            : signedTransaction.signature!;
-
-        const confirmationStrategy = await getConfirmationStrategy(
-          connection,
-          bs58.encode(signature)
-        );
-        const transactionHash = await sendAndConfirmRawTransaction(
-          connection,
-          Buffer.from(signedTransaction.serialize()),
-          confirmationStrategy,
-          { commitment: "confirmed" }
-        );
-
-        return transactionHash;
-      }
-    ).fn(void 0, this.getState);
+    return this.andThen(connection, broadcast).fn(void 0, this.getState());
   }
 
-  private getState = async <X>(isX: (x: unknown) => x is X) => {
-    return getParentData(isX, this);
+  private getState() {
+    return async <X>(isX: (x: unknown) => x is X) => {
+      return getParentData(isX, this);
+    };
+  }
+}
+
+async function broadcast(
+  signedTransaction: Transaction | VersionedTransaction,
+  getState: GetState
+) {
+  const connection = await getState(isConnection);
+  const signature =
+    "version" in signedTransaction
+      ? signedTransaction.signatures[0]!
+      : signedTransaction.signature!;
+
+  const confirmationStrategy = await getConfirmationStrategy(
+    connection,
+    bs58.encode(signature)
+  );
+  const transactionHash = await sendAndConfirmRawTransaction(
+    connection,
+    Buffer.from(signedTransaction.serialize()),
+    confirmationStrategy,
+    { commitment: "confirmed" }
+  );
+
+  return transactionHash;
+}
+
+const isZod = <A>(zod: ZodType<A>, name: string) => {
+  const fn = (x: unknown): x is A => {
+    return zod.safeParse(x).success;
   };
+  fn.name = name;
+  return fn;
+};
+const isTransfer = isZod(
+  z.object({
+    lamports: z.number(),
+    toPubkey: z.instanceof(PublicKey),
+  }),
+  "isTransfer"
+);
+
+const isInstructions = isZod(
+  z.array(z.instanceof(TransactionInstruction)),
+  "isInstructions"
+);
+async function withTransfer(_: void, getState: GetState) {
+  const signer = await getState(isSolanaSigner);
+  const connection = await getState(isConnection);
+  const transfer = await getState(isTransfer);
+  const instructions = [
+    SystemProgram.transfer({
+      ...transfer,
+      fromPubkey: new PublicKey(signer.address),
+    }),
+  ];
+  return signer.createTransfer(instructions, connection);
+}
+
+async function withInstructions(
+  _: void,
+  getState: GetState
+): Promise<Transaction | VersionedTransaction> {
+  const signer = await getState(isSolanaSigner);
+  const connection = await getState(isConnection);
+  const instructions = await getState(isInstructions);
+  return signer.createTransfer(instructions, connection);
+}
+
+async function fromSolanaSigner(
+  transaction: Transaction | VersionedTransaction,
+  getState: GetState
+): Promise<Transaction | VersionedTransaction> {
+  const signer = await getState(isSolanaSigner);
+  await signer.addSignature(transaction);
+  return transaction;
+}
+
+const isPolicyId = isZod(z.object({ policyId: z.string() }), "isPolicyId");
+
+async function withAlchemySponsorship(
+  input: TransactionInstruction[],
+  getState: GetState
+): Promise<VersionedTransaction> {
+  const { policyId } = await getState(isPolicyId);
+  const signer = await getState(isSolanaSigner);
+  const connection = await getState(isConnection);
+  return signer.addSponsorship(input, connection, policyId);
 }

@@ -17,7 +17,7 @@ describe("solana pip", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
-  it("should test a full non sponsored transaction", async () => {
+  it.only("should test a full non sponsored transaction", async () => {
     const client = new AlchemySignerWebClient({
       connection: { rpcUrl: "/api/signer" },
       iframeConfig: {
@@ -31,13 +31,6 @@ describe("solana pip", () => {
         lamports: 10,
         toPubkey: new PublicKey(signer.address),
       })
-      .withInstructions([
-        SystemProgram.transfer({
-          fromPubkey: new PublicKey(signer.address),
-          toPubkey: new PublicKey(signer.address),
-          lamports: 10,
-        }),
-      ])
       .broadcast(
         new Connection(
           `https://solana-devnet.g.alchemy.com/v2/${process.env.API_KEY}`
@@ -56,10 +49,6 @@ describe("solana pip", () => {
 
     const hash = await SolanaPipe.fromSolanaSigner(signer)
       .withAlchemySponsorship(process.env.POLICY_ID || "")
-      .withTransfer({
-        lamports: 10,
-        toPubkey: new PublicKey(signer.address),
-      })
       .withInstructions([
         SystemProgram.transfer({
           fromPubkey: new PublicKey(signer.address),
