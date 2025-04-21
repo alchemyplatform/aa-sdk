@@ -1,7 +1,5 @@
-import { takeBytes, type SmartAccountAuthenticator } from "@aa-sdk/core";
+import { type SmartAccountAuthenticator } from "@aa-sdk/core";
 import {
-  hashMessage,
-  hashTypedData,
   keccak256,
   serializeTransaction,
   type GetTransactionType,
@@ -16,7 +14,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { hashAuthorization, type Authorization } from "viem/experimental";
+import { type Authorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -49,6 +47,8 @@ import {
   type ValidateMultiFactorsArgs,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
+import { unpackSignRawMessageBytes } from "@aa-sdk/core";
+import { SmartAccountSignerFromClient } from "./smartAccountSigner.js";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -69,12 +69,6 @@ type AlchemySignerStore = {
   };
 };
 
-type UnpackedSignature = {
-  r: `0x${string}`;
-  s: `0x${string}`;
-  v: bigint;
-};
-
 type InternalStore = Mutate<
   StoreApi<AlchemySignerStore>,
   [["zustand/subscribeWithSelector", never]]
@@ -93,10 +87,12 @@ export type SignerConfig = {
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
  */
 export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
+  extends SmartAccountSignerFromClient
   implements SmartAccountAuthenticator<AuthParams, User, TClient>
 {
   signerType: "alchemy-signer" | "rn-alchemy-signer" = "alchemy-signer";
   inner: TClient;
+
   private sessionManager: SessionManager;
   private store: InternalStore;
   private config: Promise<SignerConfig>;
@@ -116,6 +112,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     sessionConfig,
     initialError,
   }: BaseAlchemySignerParams<TClient>) {
+    super(client, "alchemy-signer");
     this.inner = client;
     this.store = createStore(
       subscribeWithSelector(
@@ -459,9 +456,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> =
     SignerLogger.profiled("BaseAlchemySigner.signMessage", async (msg) => {
-      const messageHash = hashMessage(msg);
-
-      const result = await this.inner.signRawMessage(messageHash);
+      const result = await super.signMessage(msg);
 
       SignerLogger.trackEvent({
         name: "signer_sign_message",
@@ -507,9 +502,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ) => Promise<Hex> = SignerLogger.profiled(
     "BaseAlchemySigner.signTypedData",
     async (params) => {
-      const messageHash = hashTypedData(params);
-
-      return this.inner.signRawMessage(messageHash);
+      return super.signTypedData(params);
     }
   );
 
@@ -569,7 +562,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         keccak256(serializedTx)
       );
 
-      const signature = this.unpackSignRawMessageBytes(signatureHex);
+      const signature = unpackSignRawMessageBytes(signatureHex);
 
       return serializeFn(tx, signature);
     }
@@ -608,12 +601,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ) => Promise<Authorization<number, true>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
-      const hashedAuthorization = hashAuthorization(unsignedAuthorization);
-      const signedAuthorizationHex = await this.inner.signRawMessage(
-        hashedAuthorization
-      );
-      const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
-      return { ...unsignedAuthorization, ...signature };
+      if (!super.signAuthorization) {
+        throw new Error(
+          "signAuthorization is not supported by underlying smart account signer"
+        );
+      }
+      return super.signAuthorization(unsignedAuthorization);
     }
   );
 
@@ -648,16 +641,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     mfaFactorId?: string;
   } => {
     return this.store.getState().mfaStatus;
-  };
-
-  private unpackSignRawMessageBytes = (
-    hex: `0x${string}`
-  ): UnpackedSignature => {
-    return {
-      r: takeBytes(hex, { count: 32 }),
-      s: takeBytes(hex, { count: 32, offset: 32 }),
-      v: BigInt(takeBytes(hex, { count: 1, offset: 64 })),
-    };
   };
 
   /**

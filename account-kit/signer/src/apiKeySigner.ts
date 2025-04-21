@@ -1,122 +1,213 @@
 import { type ConnectionConfig, type SmartAccountSigner } from "@aa-sdk/core";
 import { ApiKeyStamper } from "@turnkey/api-key-stamper";
-import type { Address } from "abitype";
-import {
-  type Hex,
-  type SignableMessage,
-  type TypedData,
-  type TypedDataDefinition,
-  hashMessage,
-  hashTypedData,
-} from "viem";
-import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
-import type { SignRawMessageMode, User } from "./client/types.js";
-import { buildStampedSignatureRequestBody } from "./client/base.js";
-import { AlchemySignerClient } from "./client/alchemy.js";
+import type {
+  AlchemySignerClientEvents,
+  AuthenticatingEventMetadata,
+  CreateAccountParams,
+  EmailAuthParams,
+  EnableMfaParams,
+  EnableMfaResult,
+  GetWebAuthnAttestationResult,
+  MfaFactor,
+  OauthConfig,
+  OauthParams,
+  OtpParams,
+  RemoveMfaParams,
+  SignupResponse,
+  SubmitOtpCodeResponse,
+  User,
+  VerifyMfaParams,
+} from "./client/types.js";
+import { BaseSignerClient } from "./client/base.js";
+import { SmartAccountSignerFromClient } from "./smartAccountSigner.js";
 
-interface ApiKeySignerClientParams {
-  orgId: string;
+export interface AlchemyApiKeySignerClientParams {
+  connection: ConnectionConfig;
   apiKey: {
     publicKey: string;
     privateKey: string;
   };
-  connection: ConnectionConfig;
 }
 
 /**
- * ApiKeySignerClient is a client that uses an API key to sign messages.
+ * AlchemyApiKeySignerClient is a client for signing messages using an API key.
+ * It extends the BaseSignerClient and uses the ApiKeyStamper for signing.
+ * Primarily intended to be used server-side.
  */
-class ApiKeySignerClient {
-  protected turnkeyClient: TurnkeyClient;
-  protected alchemyClient: AlchemySignerClient;
-  private orgId: string;
-  private user: User | undefined;
-
+export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
   /**
-   * Constructs a new instance of the ApiKeySignerClient.
+   * Creates an instance of AlchemyApiKeySignerClient.
    *
-   * @param {ApiKeySignerClientParams} params The parameters for the client, including the API key and orgId
+   * @param {AlchemyApiKeySignerClientParams} params The parameters for the client, including the API key and connection config
+   * @param {ConnectionConfig} params.connection The connection configuration for the client
+   * @param {string} params.apiKey.publicKey The public key of the API key
+   * @param {string} params.apiKey.privateKey The private key of the API key
    */
-  constructor(params: ApiKeySignerClientParams) {
+  constructor({ connection, apiKey }: AlchemyApiKeySignerClientParams) {
     const stamper = new ApiKeyStamper({
-      apiPublicKey: params.apiKey.publicKey,
-      apiPrivateKey: params.apiKey.privateKey,
+      apiPrivateKey: apiKey.privateKey,
+      apiPublicKey: apiKey.publicKey,
     });
-    this.turnkeyClient = new TurnkeyClient(
-      {
-        baseUrl: "https://api.turnkey.com",
-      },
-      stamper
-    );
-    this.alchemyClient = new AlchemySignerClient(params.connection);
-    this.orgId = params.orgId;
+    super({ connection, stamper });
   }
 
   /**
-   * Retrieves the current user information.
+   * Sets the user for the client
    *
-   * @returns {Promise<User>} A promise that resolves to the user object
+   * @param {User} user The user object to set
    */
-  public whoami = async (): Promise<User> => {
-    if (this.user) {
-      return this.user;
-    }
-
-    const stampedRequest = await this.turnkeyClient.stampGetWhoami({
-      organizationId: this.orgId,
-    });
-
-    const user = await this.alchemyClient.whoami(stampedRequest);
+  public setUser = (user: User) => {
     this.user = user;
-    return user;
   };
 
   /**
-   * Generates a stamped whoami request. Using this stamp is the most
-   * trusted way to get the user information since a stamp can only
-   * belong to the user who created it.
-   *
-   * @returns {Promise<TSignedRequest>} a promise that resolves to the "whoami" information for the logged in user
-   * @throws {Error} if no organization ID is provided
+   * Unsets the user for the client
    */
-  public stampWhoami = async (): Promise<TSignedRequest> => {
-    const user = await this.whoami();
+  public override disconnect = async (): Promise<void> => {
+    this.user = undefined;
+  };
 
-    return this.turnkeyClient.stampGetWhoami({
-      organizationId: user.orgId,
+  /**
+   * Creates a new user with the given parameters.
+   *
+   * @param {CreateAccountParams} params The parameters for creating the account
+   * @param {string} params.type The type of account to create (only "apiKey" is supported)
+   * @param {string} params.publicKey The public key to use to authenticate on behalf of the user
+   * @param {string} params.email The email address associated with the user (optional)
+   * @returns {Promise<SignupResponse>} A promise that resolves to the signup response
+   */
+  public override createAccount = async (
+    params: CreateAccountParams
+  ): Promise<SignupResponse> => {
+    if (params.type !== "apiKey") {
+      throw new Error(
+        "AlchemyApiKeySignerClient only supports account creation via api key"
+      );
+    }
+    return this.request("/v1/signup", {
+      apiKey: {
+        publicKey: params.publicKey,
+      },
+      email: params.email,
     });
   };
 
-  /**
-   * Signs a raw message
-   *
-   * @param {Hex} msg The message to be signed
-   * @param {SignRawMessageMode} mode The signing mode (default is "ETHEREUM")
-   * @returns {Promise<Hex>} A promise that resolves to the signed message
-   */
-  public signRawMessage = async (
-    msg: Hex,
-    mode: SignRawMessageMode = "ETHEREUM"
-  ): Promise<Hex> => {
-    const user = await this.whoami();
-
-    const stampedRequest = await this.turnkeyClient.stampSignRawPayload(
-      buildStampedSignatureRequestBody(user, msg, mode)
+  override async initEmailAuth(
+    _params: Omit<EmailAuthParams, "targetPublicKey">
+  ): Promise<{ orgId: string }> {
+    throw new Error(
+      "Email auth methods are not supported by AlchemyApiKeySignerClient"
     );
+  }
 
-    const { signature } = await this.alchemyClient.signPayload(stampedRequest);
+  public override async submitOtpCode(
+    _args: Omit<OtpParams, "targetPublicKey">
+  ): Promise<SubmitOtpCodeResponse> {
+    throw new Error(
+      "Email auth methods are not supported by AlchemyApiKeySignerClient"
+    );
+  }
 
-    return signature;
+  override async completeAuthWithBundle(_params: {
+    bundle: string;
+    orgId: string;
+    connectedEventName: keyof AlchemySignerClientEvents;
+    authenticatingType: AuthenticatingEventMetadata["type"];
+    idToken?: string;
+  }): Promise<User> {
+    throw new Error(
+      "Auth with bundle is not supported by AlchemyApiKeySignerClient"
+    );
+  }
+
+  override oauthWithRedirect = async (
+    _args: Extract<OauthParams, { mode: "redirect" }>
+  ): Promise<User> => {
+    throw new Error(
+      "OAuth methods are not supported by AlchemyApiKeySignerClient"
+    );
   };
+
+  override oauthWithPopup(
+    _args: Extract<OauthParams, { mode: "popup" }>
+  ): Promise<User> {
+    throw new Error(
+      "OAuth methods are not supported by AlchemyApiKeySignerClient"
+    );
+  }
+
+  override exportWallet(_params: unknown): Promise<boolean> {
+    throw new Error(
+      "Wallet export is not supported by AlchemyApiKeySignerClient"
+    );
+  }
+
+  override lookupUserWithPasskey(_user?: User): Promise<User> {
+    throw new Error(
+      "WebAuthn methods are not supported by AlchemyApiKeySignerClient"
+    );
+  }
+
+  override targetPublicKey(): Promise<string> {
+    throw new Error(
+      "Target public key is not supported by AlchemyApiKeySignerClient"
+    );
+  }
+
+  override getWebAuthnAttestation(
+    _options: CredentialCreationOptions,
+    _userDetails?: { username: string }
+  ): Promise<GetWebAuthnAttestationResult> {
+    throw new Error(
+      "WebAuthn methods are not supported by AlchemyApiKeySignerClient"
+    );
+  }
+
+  override getOauthConfig = async (): Promise<OauthConfig> => {
+    throw new Error(
+      "OAuth methods are not supported by AlchemyApiKeySignerClient"
+    );
+  };
+
+  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
+  public override getMfaFactors = async () => {
+    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
+  };
+
+  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
+  public override addMfa(_params: EnableMfaParams): Promise<EnableMfaResult> {
+    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
+  }
+
+  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
+  public override verifyMfa(_params: VerifyMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }> {
+    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
+  }
+
+  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
+  public override removeMfa(_params: RemoveMfaParams): Promise<{
+    multiFactors: MfaFactor[];
+  }> {
+    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
+  }
+
+  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
+  public override validateMultiFactors(_params: {
+    encryptedPayload: string;
+    multiFactors: { multiFactorId: string; multiFactorCode: string }[];
+  }): Promise<{ bundle: string }> {
+    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
+  }
 }
 
 /**
- * AlchemyApiKeySigner is a SmartAccountSigner that uses an ApiKeySignerClient to sign messages.
- * Primarily intended to be used server-side.
+ * Creates a SmartAccountSigner using an AlchemyApiKeySignerClient.
  *
  * @example
  * ```ts
- *  const signer = new AlchemyApiKeySigner({
+ *  const signer = await createApiKeySigner({
  *   apiKey: {
  *     privateKey: "private-api-key",
  *     publicKey: "public-api-key",
@@ -124,8 +215,7 @@ class ApiKeySignerClient {
  *   connection: {
  *     apiKey: "alchemy-api-key",
  *   },
- *   orgId: "user-org-id",
- * });
+ * }, "user-org-id");
  *
  * const account = await createModularAccountV2({
  *   transport,
@@ -139,54 +229,18 @@ class ApiKeySignerClient {
  *   chain,
  * });
  * ```
+ *
+ * @param {AlchemyApiKeySignerClientParams} clientParams The parameters for the AlchemyApiKeySignerClient
+ * @param {string} userOrgId The organization ID of the user
+ * @returns {Promise<SmartAccountSigner>} A promise that resolves to a SmartAccountSigner
+ * @throws {Error} If the API key is invalid for the given orgId
  */
-export class AlchemyApiKeySigner implements SmartAccountSigner {
-  signerType = "alchemy-api-key-signer";
-  inner: ApiKeySignerClient;
-
-  /**
-   * Constructs a new instance of the AlchemyApiKeySigner.
-   *
-   * @param {ApiKeySignerClientParams} params The parameters for the client, including the API key and orgId
-   */
-  constructor(params: ApiKeySignerClientParams) {
-    this.inner = new ApiKeySignerClient(params);
-  }
-
-  /**
-   * Retrieves the current user's address.
-   *
-   * @returns {Promise<Address>} A promise that resolves to the user's address
-   */
-  getAddress = async (): Promise<Address> => {
-    const { address } = await this.inner.whoami();
-    return address;
-  };
-
-  /**
-   * Signs a message using the inner client.
-   *
-   * @param {SignableMessage} msg The message to be signed
-   * @returns {Promise<Hex>} A promise that resolves to the signed message
-   */
-  signMessage = async (msg: SignableMessage): Promise<Hex> => {
-    const messageHash = hashMessage(msg);
-    return this.inner.signRawMessage(messageHash);
-  };
-
-  /**
-   * Signs typed data using the inner client.
-   *
-   * @param {TypedDataDefinition<TTypedData, TPrimaryType>} params The typed data to be signed
-   * @returns {Promise<Hex>} A promise that resolves to the signed typed data
-   */
-  signTypedData = async <
-    const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
-  >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
-  ): Promise<Hex> => {
-    const messageHash = hashTypedData(params);
-    return this.inner.signRawMessage(messageHash);
-  };
-}
+export const createApiKeySigner = async (
+  clientParams: AlchemyApiKeySignerClientParams,
+  userOrgId: string
+): Promise<SmartAccountSigner> => {
+  const client = new AlchemyApiKeySignerClient(clientParams);
+  const user = await client.whoami(userOrgId);
+  client.setUser(user);
+  return new SmartAccountSignerFromClient(client, "alchemy-api-key-signer");
+};

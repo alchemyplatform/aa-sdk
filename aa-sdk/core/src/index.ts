@@ -147,5 +147,6 @@ export {
   pick,
   resolveProperties,
   takeBytes,
+  unpackSignRawMessageBytes,
   toRecord,
 } from "./utils/index.js";

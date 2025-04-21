@@ -157,6 +157,20 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       return response;
     }
 
+    if (params.type === "apiKey") {
+      this.eventEmitter.emit("authenticating", { type: "otp" });
+      const { publicKey, email } = params;
+
+      const response = await this.request("/v1/signup", {
+        apiKey: {
+          publicKey,
+        },
+        email,
+      });
+
+      return response;
+    }
+
     this.eventEmitter.emit("authenticating", { type: "passkey" });
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(

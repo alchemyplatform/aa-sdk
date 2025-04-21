@@ -21,3 +21,19 @@ export const takeBytes = (bytes: Hex, opts: TakeBytesOpts = {}): Hex => {
 
   return `0x${bytes.slice(start, end)}`;
 };
+
+export type UnpackedSignature = {
+  r: `0x${string}`;
+  s: `0x${string}`;
+  v: bigint;
+};
+
+export const unpackSignRawMessageBytes = (
+  hex: `0x${string}`
+): UnpackedSignature => {
+  return {
+    r: takeBytes(hex, { count: 32 }),
+    s: takeBytes(hex, { count: 32, offset: 32 }),
+    v: BigInt(takeBytes(hex, { count: 1, offset: 64 })),
+  };
+};
