@@ -497,6 +497,167 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return json as SignerResponse<R>;
   };
 
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public getMfaFactors = async (): Promise<{
+    multiFactors: MfaFactor[];
+  }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.LIST,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-list-multi-factors", {
+      stampedRequest,
+    });
+  };
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
+   *
+   * @param {AddMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<AddMfaResult>} A promise that resolves to the factor setup information
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @throws {Error} If an unsupported factor type is provided
+   */
+  public addMfa = async (params: AddMfaParams): Promise<AddMfaResult> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.ADD,
+        signWith: this.user.address,
+      },
+    });
+
+    switch (params.multiFactorType) {
+      case "totp":
+        return this.request("/v1/auth-request-multi-factor", {
+          stampedRequest,
+          multiFactorType: params.multiFactorType,
+        });
+      default:
+        throw new Error(
+          `Unsupported MFA factor type: ${params.multiFactorType}`
+        );
+    }
+  };
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public verifyMfa = async (
+    params: VerifyMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.VERIFY,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-verify-multi-factor", {
+      stampedRequest,
+      multiFactorId: params.multiFactorId,
+      multiFactorCode: params.multiFactorCode,
+    });
+  };
+
+  /**
+   * Removes existing MFA factors by ID.
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public removeMfa = async (
+    params: RemoveMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.DELETE,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-delete-multi-factors", {
+      stampedRequest,
+      multiFactorIds: params.multiFactorIds,
+    });
+  };
+
+  /**
+   * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
+   *
+   * @param {ValidateMultiFactorsParams} params The validation parameters
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
+   * @throws {Error} If no credential bundle is returned from the server
+   */
+  public validateMultiFactors = async (
+    params: ValidateMultiFactorsParams
+  ): Promise<{ bundle: string }> => {
+    // Send the encryptedPayload plus TOTP codes, etc:
+    const response = await this.request("/v1/auth-validate-multi-factors", {
+      encryptedPayload: params.encryptedPayload,
+      multiFactors: params.multiFactors,
+    });
+
+    // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
+    if (!response.payload || !response.payload.credentialBundle) {
+      throw new Error(
+        "Request to validateMultiFactors did not return a credential bundle"
+      );
+    }
+
+    return {
+      bundle: response.payload.credentialBundle,
+    };
+  };
+
   // #endregion
 
   // #region PRIVATE METHODS
@@ -781,167 +942,6 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     return this.pollActivityCompletion(activity, organizationId, resultKey);
-  };
-
-  /**
-   * Retrieves the list of MFA factors configured for the current user.
-   *
-   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
-   * @throws {NotAuthenticatedError} If no user is authenticated
-   */
-  public getMfaFactors = async (): Promise<{
-    multiFactors: MfaFactor[];
-  }> => {
-    if (!this.user) {
-      throw new NotAuthenticatedError();
-    }
-
-    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: MFA_PAYLOAD.LIST,
-        signWith: this.user.address,
-      },
-    });
-
-    return this.request("/v1/auth-list-multi-factors", {
-      stampedRequest,
-    });
-  };
-
-  /**
-   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
-   *
-   * @param {AddMfaParams} params The parameters required to enable a new MFA factor
-   * @returns {Promise<AddMfaResult>} A promise that resolves to the factor setup information
-   * @throws {NotAuthenticatedError} If no user is authenticated
-   * @throws {Error} If an unsupported factor type is provided
-   */
-  public addMfa = async (params: AddMfaParams): Promise<AddMfaResult> => {
-    if (!this.user) {
-      throw new NotAuthenticatedError();
-    }
-
-    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: MFA_PAYLOAD.ADD,
-        signWith: this.user.address,
-      },
-    });
-
-    switch (params.multiFactorType) {
-      case "totp":
-        return this.request("/v1/auth-request-multi-factor", {
-          stampedRequest,
-          multiFactorType: params.multiFactorType,
-        });
-      default:
-        throw new Error(
-          `Unsupported MFA factor type: ${params.multiFactorType}`
-        );
-    }
-  };
-
-  /**
-   * Verifies a newly created MFA factor to complete the setup process.
-   *
-   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
-   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
-   * @throws {NotAuthenticatedError} If no user is authenticated
-   */
-  public verifyMfa = async (
-    params: VerifyMfaParams
-  ): Promise<{ multiFactors: MfaFactor[] }> => {
-    if (!this.user) {
-      throw new NotAuthenticatedError();
-    }
-
-    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: MFA_PAYLOAD.VERIFY,
-        signWith: this.user.address,
-      },
-    });
-
-    return this.request("/v1/auth-verify-multi-factor", {
-      stampedRequest,
-      multiFactorId: params.multiFactorId,
-      multiFactorCode: params.multiFactorCode,
-    });
-  };
-
-  /**
-   * Removes existing MFA factors by ID.
-   *
-   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
-   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
-   * @throws {NotAuthenticatedError} If no user is authenticated
-   */
-  public removeMfa = async (
-    params: RemoveMfaParams
-  ): Promise<{ multiFactors: MfaFactor[] }> => {
-    if (!this.user) {
-      throw new NotAuthenticatedError();
-    }
-
-    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: MFA_PAYLOAD.DELETE,
-        signWith: this.user.address,
-      },
-    });
-
-    return this.request("/v1/auth-delete-multi-factors", {
-      stampedRequest,
-      multiFactorIds: params.multiFactorIds,
-    });
-  };
-
-  /**
-   * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
-   *
-   * @param {ValidateMultiFactorsParams} params The validation parameters
-   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
-   * @throws {Error} If no credential bundle is returned from the server
-   */
-  public validateMultiFactors = async (
-    params: ValidateMultiFactorsParams
-  ): Promise<{ bundle: string }> => {
-    // Send the encryptedPayload plus TOTP codes, etc:
-    const response = await this.request("/v1/auth-validate-multi-factors", {
-      encryptedPayload: params.encryptedPayload,
-      multiFactors: params.multiFactors,
-    });
-
-    // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
-    if (!response.payload || !response.payload.credentialBundle) {
-      throw new Error(
-        "Request to validateMultiFactors did not return a credential bundle"
-      );
-    }
-
-    return {
-      bundle: response.payload.credentialBundle,
-    };
   };
   // #endregion
 

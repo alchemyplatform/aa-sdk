@@ -308,10 +308,7 @@ export type RemoveMfaParams = {
 
 export type ValidateMultiFactorsParams = {
   encryptedPayload: string;
-  multiFactors: Array<{
-    multiFactorId: string;
-    multiFactorCode: string;
-  }>;
+  multiFactors: VerifyMfaParams[];
 };
 
 export type MfaChallenge = {
