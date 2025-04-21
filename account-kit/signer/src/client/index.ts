@@ -158,24 +158,19 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     }
 
     if (params.type === "apiKey") {
-      this.eventEmitter.emit("authenticating", { type: "otp" });
-      const { publicKey, email } = params;
-
-      const response = await this.request("/v1/signup", {
-        apiKey: {
-          publicKey,
-        },
-        email,
-      });
-
-      return response;
+      // Accounts created with API keys should always be created server-side, otherwise
+      // it opens up a potential risk of users being able to create an account associated
+      // with an email address that is not their own.
+      throw new Error(
+        "Creating a user with an API key is not supported by AlchemySignerWebClient",
+      );
     }
 
     this.eventEmitter.emit("authenticating", { type: "passkey" });
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       params.creationOpts,
-      { username: "email" in params ? params.email : params.username }
+      { username: "email" in params ? params.email : params.username },
     );
 
     const result = await this.request("/v1/signup", {
@@ -222,7 +217,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<any>} The response from the authentication request
    */
   public override initEmailAuth = async (
-    params: Omit<EmailAuthParams, "targetPublicKey">
+    params: Omit<EmailAuthParams, "targetPublicKey">,
   ) => {
     this.eventEmitter.emit("authenticating", { type: "otp" });
     const { email, emailMode, expirationSeconds } = params;
@@ -276,7 +271,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle.
    */
   public override async submitOtpCode(
-    args: Omit<OtpParams, "targetPublicKey">
+    args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const targetPublicKey = await this.initIframeStamper();
@@ -307,7 +302,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     // Otherwise, it's truly an error:
     throw new Error(
-      "Failed to submit OTP code. Server did not return required fields."
+      "Failed to submit OTP code. Server did not return required fields.",
     );
   }
 
@@ -392,7 +387,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<User>} A promise that resolves to the authenticated user object
    */
   public override lookupUserWithPasskey = async (
-    user: User | undefined = undefined
+    user: User | undefined = undefined,
   ) => {
     this.eventEmitter.emit("authenticating", { type: "passkey" });
     await this.initWebauthnStamper(user);
@@ -513,7 +508,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<never>} A promise that will never resolve, only reject if the redirection fails
    */
   public override oauthWithRedirect = async (
-    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>
+    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>,
   ): Promise<never> => {
     const turnkeyPublicKey = await this.initIframeStamper();
 
@@ -526,7 +521,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     window.location.href = providerUrl;
     return new Promise((_, reject) =>
-      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000)
+      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000),
     );
   };
 
@@ -557,7 +552,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<User>} A promise that resolves to a `User` object containing the authenticated user information
    */
   public override oauthWithPopup = async (
-    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>
+    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>,
   ): Promise<User> => {
     const turnkeyPublicKey = await this.initIframeStamper();
     const oauthParams = args;
@@ -569,7 +564,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const popup = window.open(
       providerUrl,
       "_blank",
-      "popup,width=500,height=600"
+      "popup,width=500,height=600",
     );
     const eventEmitter = this.eventEmitter;
     return new Promise((resolve, reject) => {
@@ -676,7 +671,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     options?: CredentialCreationOptionOverrides,
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
-    }
+    },
   ) => {
     const challenge = generateRandomBuffer();
     const authenticatorUserId = generateRandomBuffer();
@@ -776,7 +771,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @throws {Error} If an unsupported factor type is provided
    */
   public override addMfa = async (
-    params: EnableMfaParams
+    params: EnableMfaParams,
   ): Promise<EnableMfaResult> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
@@ -802,7 +797,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
         });
       default:
         throw new Error(
-          `Unsupported MFA factor type: ${params.multiFactorType}`
+          `Unsupported MFA factor type: ${params.multiFactorType}`,
         );
     }
   };
@@ -815,7 +810,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @throws {NotAuthenticatedError} If no user is authenticated
    */
   public override verifyMfa = async (
-    params: VerifyMfaParams
+    params: VerifyMfaParams,
   ): Promise<{ multiFactors: MfaFactor[] }> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
@@ -848,7 +843,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @throws {NotAuthenticatedError} If no user is authenticated
    */
   public override removeMfa = async (
-    params: RemoveMfaParams
+    params: RemoveMfaParams,
   ): Promise<{ multiFactors: MfaFactor[] }> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
@@ -880,7 +875,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @throws {Error} If no credential bundle is returned from the server
    */
   public override async validateMultiFactors(
-    params: ValidateMultiFactorsParams
+    params: ValidateMultiFactorsParams,
   ): Promise<{ bundle: string }> {
     // Send the encryptedPayload plus TOTP codes, etc:
     const response = await this.request("/v1/auth-validate-multi-factors", {
@@ -891,7 +886,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
     if (!response.payload || !response.payload.credentialBundle) {
       throw new Error(
-        "Request to validateMultiFactors did not return a credential bundle"
+        "Request to validateMultiFactors did not return a credential bundle",
       );
     }
 
