@@ -2,9 +2,7 @@ import type { ConnectionConfig } from "@aa-sdk/core";
 import { ApiKeyStamper } from "@turnkey/api-key-stamper";
 import type {
   CreateAccountParams,
-  EnableMfaResult,
   GetWebAuthnAttestationResult,
-  MfaFactor,
   OauthConfig,
   SignupResponse,
   SubmitOtpCodeResponse,
@@ -70,7 +68,6 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
       apiKey: {
         publicKey: params.publicKey,
       },
-      email: params.email,
     });
   };
 
@@ -133,33 +130,4 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
       "OAuth methods are not supported by AlchemyApiKeySignerClient",
     );
   };
-
-  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override getMfaFactors = async () => {
-    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
-  };
-
-  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override addMfa(): Promise<EnableMfaResult> {
-    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
-  }
-
-  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override verifyMfa(): Promise<{
-    multiFactors: MfaFactor[];
-  }> {
-    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
-  }
-
-  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override removeMfa(): Promise<{
-    multiFactors: MfaFactor[];
-  }> {
-    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
-  }
-
-  // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override validateMultiFactors(): Promise<{ bundle: string }> {
-    throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
-  }
 }

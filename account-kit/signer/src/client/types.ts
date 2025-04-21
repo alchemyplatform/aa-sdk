@@ -47,7 +47,6 @@ export type CreateAccountParams =
   | {
       type: "apiKey";
       publicKey: string;
-      email?: string;
     };
 
 export type EmailType = "magicLink" | "otp";
@@ -247,7 +246,7 @@ export type SignerEndpoints = [
       };
       multiFactors: MfaFactor[];
     };
-  }
+  },
 ];
 
 export type AuthenticatingEventMetadata = {
