@@ -218,7 +218,7 @@ export type SignerEndpoints = [
       stampedRequest: TSignedRequest;
       multiFactorType: MultiFactorType;
     };
-    Response: EnableMfaResult;
+    Response: AddMfaResult;
   },
   {
     Route: "/v1/auth-verify-multi-factor";
@@ -297,11 +297,11 @@ export type MfaFactor = {
 
 type MultiFactorType = "totp";
 
-export type EnableMfaParams = {
+export type AddMfaParams = {
   multiFactorType: MultiFactorType;
 };
 
-export type EnableMfaResult = {
+export type AddMfaResult = {
   multiFactorType: MultiFactorType;
   multiFactorId: string;
   multiFactorTotpUrl: string;
@@ -318,10 +318,7 @@ export type RemoveMfaParams = {
 
 export type ValidateMultiFactorsParams = {
   encryptedPayload: string;
-  multiFactors: Array<{
-    multiFactorId: string;
-    multiFactorCode: string;
-  }>;
+  multiFactors: VerifyMfaParams[];
 };
 
 export type MfaChallenge = {

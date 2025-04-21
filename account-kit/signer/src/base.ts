@@ -26,8 +26,8 @@ import type {
   OauthParams,
   User,
   VerifyMfaParams,
-  EnableMfaParams,
-  EnableMfaResult,
+  AddMfaParams,
+  AddMfaResult,
   RemoveMfaParams,
 } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
@@ -1197,11 +1197,11 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * // Result contains multiFactorTotpUrl to display as QR code
    * ```
    *
-   * @param {EnableMfaParams} params The parameters required to enable a new MFA factor
+   * @param {AddMfaParams} params The parameters required to enable a new MFA factor
    * @throws {NotAuthenticatedError} If no user is authenticated
-   * @returns {Promise<EnableMfaResult>} A promise that resolves to the factor setup information
+   * @returns {Promise<AddMfaResult>} A promise that resolves to the factor setup information
    */
-  addMfa: (params: EnableMfaParams) => Promise<EnableMfaResult> =
+  addMfa: (params: AddMfaParams) => Promise<AddMfaResult> =
     SignerLogger.profiled("BaseAlchemySigner.addMfa", async (params) => {
       return this.inner.addMfa(params);
     });
