@@ -7458,6 +7458,14 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/bs58@^4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@types/bs58/-/bs58-4.0.4.tgz#49fbcb0c7db5f7cea26f0e0f61dc4a41a2445aab"
+  integrity sha512-0IEpMFXXQi2zXaXl9GJ3sRwQo0uEkD+yFOv+FnAU5lkPtcu6h61xb7jc2CFPEZ5BUOaiP13ThuGc9HD4R8lR5g==
+  dependencies:
+    "@types/node" "*"
+    base-x "^3.0.6"
+
 "@types/concat-stream@^2.0.0":
   version "2.0.3"
   resolved "https://registry.npmjs.org/@types/concat-stream/-/concat-stream-2.0.3.tgz"
@@ -10182,6 +10190,13 @@ base-x@^3.0.2:
   version "3.0.10"
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.10.tgz#62de58653f8762b5d6f8d9fe30fa75f7b2585a75"
   integrity sha512-7d0s06rR9rYaIWHkpfLIFICM/tkSVdoPC9qYAQRpxn9DdKNWNsKC0uk++akckyLq16Tx2WIinnZ6WRriAt6njQ==
+  dependencies:
+    safe-buffer "^5.0.1"
+
+base-x@^3.0.6:
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.11.tgz#40d80e2a1aeacba29792ccc6c5354806421287ff"
+  integrity sha512-xz7wQ8xDhdyP7tQxwdteLYeFfS68tSMNCZ/Y37WJ4bhGfKPpqEIlmIyueQHqOyoPhE6xNUqjzRr8ra0eF9VRvA==
   dependencies:
     safe-buffer "^5.0.1"
 

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
+
+**Note:** Version bump only for package @account-kit/react-native
+
 # [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
 
 **Note:** Version bump only for package @account-kit/react-native
