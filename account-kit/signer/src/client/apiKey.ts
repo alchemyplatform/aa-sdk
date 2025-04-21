@@ -10,7 +10,7 @@ import type {
   SubmitOtpCodeResponse,
   User,
 } from "./types";
-import { BaseSignerClient } from "./base";
+import { BaseSignerClient } from "./base.js";
 
 export interface AlchemyApiKeySignerClientParams {
   connection: ConnectionConfig;
