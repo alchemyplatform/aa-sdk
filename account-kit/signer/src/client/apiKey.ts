@@ -1,22 +1,14 @@
 import type { ConnectionConfig } from "@aa-sdk/core";
 import { ApiKeyStamper } from "@turnkey/api-key-stamper";
 import type {
-  AlchemySignerClientEvents,
-  AuthenticatingEventMetadata,
   CreateAccountParams,
-  EmailAuthParams,
-  EnableMfaParams,
   EnableMfaResult,
   GetWebAuthnAttestationResult,
   MfaFactor,
   OauthConfig,
-  OauthParams,
-  OtpParams,
-  RemoveMfaParams,
   SignupResponse,
   SubmitOtpCodeResponse,
   User,
-  VerifyMfaParams,
 } from "./types";
 import { BaseSignerClient } from "./base";
 
@@ -82,57 +74,43 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
     });
   };
 
-  override async initEmailAuth(
-    _params: Omit<EmailAuthParams, "targetPublicKey">,
-  ): Promise<{ orgId: string }> {
+  override async initEmailAuth(): Promise<{ orgId: string }> {
     throw new Error(
       "Email auth methods are not supported by AlchemyApiKeySignerClient",
     );
   }
 
-  public override async submitOtpCode(
-    _args: Omit<OtpParams, "targetPublicKey">,
-  ): Promise<SubmitOtpCodeResponse> {
+  public override async submitOtpCode(): Promise<SubmitOtpCodeResponse> {
     throw new Error(
       "Email auth methods are not supported by AlchemyApiKeySignerClient",
     );
   }
 
-  override async completeAuthWithBundle(_params: {
-    bundle: string;
-    orgId: string;
-    connectedEventName: keyof AlchemySignerClientEvents;
-    authenticatingType: AuthenticatingEventMetadata["type"];
-    idToken?: string;
-  }): Promise<User> {
+  override async completeAuthWithBundle(): Promise<User> {
     throw new Error(
       "Auth with bundle is not supported by AlchemyApiKeySignerClient",
     );
   }
 
-  override oauthWithRedirect = async (
-    _args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<User> => {
+  override oauthWithRedirect = async (): Promise<User> => {
     throw new Error(
       "OAuth methods are not supported by AlchemyApiKeySignerClient",
     );
   };
 
-  override oauthWithPopup(
-    _args: Extract<OauthParams, { mode: "popup" }>,
-  ): Promise<User> {
+  override oauthWithPopup(): Promise<User> {
     throw new Error(
       "OAuth methods are not supported by AlchemyApiKeySignerClient",
     );
   }
 
-  override exportWallet(_params: unknown): Promise<boolean> {
+  override exportWallet(): Promise<boolean> {
     throw new Error(
       "Wallet export is not supported by AlchemyApiKeySignerClient",
     );
   }
 
-  override lookupUserWithPasskey(_user?: User): Promise<User> {
+  override lookupUserWithPasskey(): Promise<User> {
     throw new Error(
       "WebAuthn methods are not supported by AlchemyApiKeySignerClient",
     );
@@ -144,10 +122,7 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
     );
   }
 
-  override getWebAuthnAttestation(
-    _options: CredentialCreationOptions,
-    _userDetails?: { username: string },
-  ): Promise<GetWebAuthnAttestationResult> {
+  override getWebAuthnAttestation(): Promise<GetWebAuthnAttestationResult> {
     throw new Error(
       "WebAuthn methods are not supported by AlchemyApiKeySignerClient",
     );
@@ -165,29 +140,26 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
   };
 
   // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override addMfa(_params: EnableMfaParams): Promise<EnableMfaResult> {
+  public override addMfa(): Promise<EnableMfaResult> {
     throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
   }
 
   // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override verifyMfa(_params: VerifyMfaParams): Promise<{
+  public override verifyMfa(): Promise<{
     multiFactors: MfaFactor[];
   }> {
     throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
   }
 
   // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override removeMfa(_params: RemoveMfaParams): Promise<{
+  public override removeMfa(): Promise<{
     multiFactors: MfaFactor[];
   }> {
     throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
   }
 
   // TODO(jh): this will be moved to the base client, see https://github.com/alchemyplatform/aa-sdk/pull/1542#discussion_r2052673181
-  public override validateMultiFactors(_params: {
-    encryptedPayload: string;
-    multiFactors: { multiFactorId: string; multiFactorCode: string }[];
-  }): Promise<{ bundle: string }> {
+  public override validateMultiFactors(): Promise<{ bundle: string }> {
     throw new Error("MFA is not supported by AlchemyApiKeySignerClient");
   }
 }
