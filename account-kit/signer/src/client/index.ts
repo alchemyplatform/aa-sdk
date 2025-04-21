@@ -162,7 +162,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       // it opens up a potential risk of users being able to create an account associated
       // with an email address that is not their own.
       throw new Error(
-        "Creating a user with an API key is not supported by AlchemySignerWebClient",
+        "Creating an account with an API key is not supported by AlchemySignerWebClient",
       );
     }
 
