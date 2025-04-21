@@ -57,11 +57,11 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
    * @returns {Promise<SignupResponse>} A promise that resolves to the signup response
    */
   public override createAccount = async (
-    params: CreateAccountParams,
+    params: CreateAccountParams
   ): Promise<SignupResponse> => {
     if (params.type !== "apiKey") {
       throw new Error(
-        "AlchemyApiKeySignerClient only supports account creation via api key",
+        "AlchemyApiKeySignerClient only supports account creation via api key"
       );
     }
     return this.request("/v1/signup", {
@@ -73,61 +73,61 @@ export class AlchemyApiKeySignerClient extends BaseSignerClient<undefined> {
 
   override async initEmailAuth(): Promise<{ orgId: string }> {
     throw new Error(
-      "Email auth methods are not supported by AlchemyApiKeySignerClient",
+      "Email auth methods are not supported by AlchemyApiKeySignerClient"
     );
   }
 
   public override async submitOtpCode(): Promise<SubmitOtpCodeResponse> {
     throw new Error(
-      "Email auth methods are not supported by AlchemyApiKeySignerClient",
+      "Email auth methods are not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override async completeAuthWithBundle(): Promise<User> {
     throw new Error(
-      "Auth with bundle is not supported by AlchemyApiKeySignerClient",
+      "Auth with bundle is not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override oauthWithRedirect = async (): Promise<User> => {
     throw new Error(
-      "OAuth methods are not supported by AlchemyApiKeySignerClient",
+      "OAuth methods are not supported by AlchemyApiKeySignerClient"
     );
   };
 
   override oauthWithPopup(): Promise<User> {
     throw new Error(
-      "OAuth methods are not supported by AlchemyApiKeySignerClient",
+      "OAuth methods are not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override exportWallet(): Promise<boolean> {
     throw new Error(
-      "Wallet export is not supported by AlchemyApiKeySignerClient",
+      "Wallet export is not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override lookupUserWithPasskey(): Promise<User> {
     throw new Error(
-      "WebAuthn methods are not supported by AlchemyApiKeySignerClient",
+      "WebAuthn methods are not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override targetPublicKey(): Promise<string> {
     throw new Error(
-      "Target public key is not supported by AlchemyApiKeySignerClient",
+      "Target public key is not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override getWebAuthnAttestation(): Promise<GetWebAuthnAttestationResult> {
     throw new Error(
-      "WebAuthn methods are not supported by AlchemyApiKeySignerClient",
+      "WebAuthn methods are not supported by AlchemyApiKeySignerClient"
     );
   }
 
   override getOauthConfig = async (): Promise<OauthConfig> => {
     throw new Error(
-      "OAuth methods are not supported by AlchemyApiKeySignerClient",
+      "OAuth methods are not supported by AlchemyApiKeySignerClient"
     );
   };
 }

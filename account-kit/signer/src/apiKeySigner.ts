@@ -40,7 +40,7 @@ import {
  */
 export const createApiKeySigner = async (
   clientParams: AlchemyApiKeySignerClientParams,
-  userOrgId: string,
+  userOrgId: string
 ): Promise<SmartAccountSigner> => {
   const client = new AlchemyApiKeySignerClient(clientParams);
   // Basically "logs the user in," since calling `whoami` only works if the API
