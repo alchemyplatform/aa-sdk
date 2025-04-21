@@ -7,7 +7,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { recentBlockhash } from "./solanaNetwork";
+import { recentBlockhash } from "../../../../../../account-kit/react/src/solanaNetwork";
 
 export async function createTransfer(input: {
   fromAddress: string;
