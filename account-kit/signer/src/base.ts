@@ -423,8 +423,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   getAddress: () => Promise<`0x${string}`> = SignerLogger.profiled(
     "BaseAlchemySigner.getAddress",
     async () => {
-      const user = await this.inner.whoami();
-      return user.address;
+      const { address } = await this.inner.whoami();
+      return address;
     }
   );
 
@@ -455,12 +455,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> =
     SignerLogger.profiled("BaseAlchemySigner.signMessage", async (msg) => {
       const messageHash = hashMessage(msg);
+      const result = this.inner.signRawMessage(messageHash);
 
       SignerLogger.trackEvent({
         name: "signer_sign_message",
       });
 
-      return this.inner.signRawMessage(messageHash);
+      return result;
     });
 
   /**
