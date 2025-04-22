@@ -140,7 +140,6 @@ export type SignerEndpoints = [
           apiKey: {
             publicKey: string;
           };
-          email?: string;
         };
     Response: SignupResponse;
   },
