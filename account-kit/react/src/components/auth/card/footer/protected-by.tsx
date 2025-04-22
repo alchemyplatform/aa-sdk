@@ -5,7 +5,7 @@ import { ls } from "../../../../strings.js";
 export const ProtectedBy = () => (
   // eslint-disable-next-line react/jsx-no-target-blank
   <a
-    href={`https://alchemy.com?utm_source=account_kit&utm_medium=sdk&utm_campaign=auth_footer`}
+    href={`https://www.alchemy.com/?utm_source=auth_modal_footer&utm_medium=sdk&utm_campaign=smart_wallets`}
     target="_blank"
     className="flex flex-row gap-1 items-center h-[14px] text-fg-disabled"
   >
