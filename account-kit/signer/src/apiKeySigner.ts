@@ -22,9 +22,9 @@ export class AlchemyApiKeySigner implements SmartAccountSigner {
   signerType = "alchemy-api-key-signer";
 
   /**
-   * Creates an instance of SmartAccountSignerFromClient.
+   * Creates an instance of AlchemyApiKeySigner.
    *
-   * @param {BaseSignerClient<unknown>} client The underlying signer client
+   * @param {AlchemyApiKeySignerClient} client The underlying signer client
    */
   constructor(client: AlchemyApiKeySignerClient) {
     this.inner = client;
