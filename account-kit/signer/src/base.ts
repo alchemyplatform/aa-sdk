@@ -12,9 +12,11 @@ import {
   type TransactionSerialized,
   type TypedData,
   type TypedDataDefinition,
+  hashMessage,
+  hashTypedData,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { type Authorization } from "viem/experimental";
+import { type Authorization, hashAuthorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -48,7 +50,6 @@ import {
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
 import { unpackSignRawMessageBytes } from "@aa-sdk/core";
-import { SmartAccountSignerFromClient } from "./smartAccountSigner.js";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -87,7 +88,6 @@ export type SignerConfig = {
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
  */
 export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
-  extends SmartAccountSignerFromClient
   implements SmartAccountAuthenticator<AuthParams, User, TClient>
 {
   signerType: "alchemy-signer" | "rn-alchemy-signer" = "alchemy-signer";
@@ -112,7 +112,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     sessionConfig,
     initialError,
   }: BaseAlchemySignerParams<TClient>) {
-    super(client, "alchemy-signer");
     this.inner = client;
     this.store = createStore(
       subscribeWithSelector(
@@ -424,9 +423,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   getAddress: () => Promise<`0x${string}`> = SignerLogger.profiled(
     "BaseAlchemySigner.getAddress",
     async () => {
-      const { address } = await this.inner.whoami();
-
-      return address;
+      const user = await this.inner.whoami();
+      return user.address;
     }
   );
 
@@ -456,13 +454,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> =
     SignerLogger.profiled("BaseAlchemySigner.signMessage", async (msg) => {
-      const result = await super.signMessage(msg);
+      const messageHash = hashMessage(msg);
 
       SignerLogger.trackEvent({
         name: "signer_sign_message",
       });
 
-      return result;
+      return this.inner.signRawMessage(messageHash);
     });
 
   /**
@@ -502,7 +500,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ) => Promise<Hex> = SignerLogger.profiled(
     "BaseAlchemySigner.signTypedData",
     async (params) => {
-      return super.signTypedData(params);
+      const messageHash = hashTypedData(params);
+      return this.inner.signRawMessage(messageHash);
     }
   );
 
@@ -601,12 +600,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ) => Promise<Authorization<number, true>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
-      if (!super.signAuthorization) {
-        throw new Error(
-          "signAuthorization is not supported by underlying smart account signer"
-        );
-      }
-      return super.signAuthorization(unsignedAuthorization);
+      const hashedAuthorization = hashAuthorization(unsignedAuthorization);
+      const signedAuthorizationHex = await this.inner.signRawMessage(
+        hashedAuthorization
+      );
+      const signature = unpackSignRawMessageBytes(signedAuthorizationHex);
+      return { ...unsignedAuthorization, ...signature };
     }
   );
 
