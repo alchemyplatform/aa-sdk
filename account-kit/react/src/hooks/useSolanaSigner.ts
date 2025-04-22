@@ -23,6 +23,12 @@ export type SignerSet = {
  * This hook is used to create a SolanaSigner instance.
  * It is used to sign transactions and messages for the Solana blockchain.
  *
+ * ```tsx
+ * import { useSolanaSigner } from "@account-kit/react";
+ *
+ * const signer = useSolanaSigner({});
+ * ```
+ *
  * @param {object} opts - The options for the useSolanaSigner hook.
  * @param {SignerSet} [opts.signerSet] - The signer set to use.
  * @returns {object} A SolanaSigner instance.

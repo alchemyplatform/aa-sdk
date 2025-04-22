@@ -53,6 +53,7 @@ const hookGroupings = {
     "useClientActions",
     "useChain",
   ],
+  "Solana Actions": ["useSolanaTransaction", "useSolanaSignMessage"],
   "Bundler/RPC Client": ["useBundlerClient"],
   Utilities: [
     "useAlchemyAccountContext",

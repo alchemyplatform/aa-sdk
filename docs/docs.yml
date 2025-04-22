@@ -149,6 +149,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useSignTypedData.mdx
                   - page: useWaitForUserOperationTransaction
                     path: wallets/pages/reference/account-kit/react/hooks/useWaitForUserOperationTransaction.mdx
+              - section: Solana Actions
+                contents:
+                  - page: useSolanaTransaction
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaTransaction.mdx
+                  - page: useSolanaSigner
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaSigner.mdx
               - section: Bundler/RPC Client
                 contents:
                   - page: useBundlerClient

@@ -18,10 +18,6 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
         text: "AlchemySignerWebClient",
         items: [
           {
-            text: "addMfa",
-            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa",
-          },
-          {
             text: "completeAuthWithBundle",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle",
           },
@@ -42,10 +38,6 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet",
           },
           {
-            text: "getMfaFactors",
-            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors",
-          },
-          {
             text: "initEmailAuth",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth",
           },
@@ -62,24 +54,12 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect",
           },
           {
-            text: "removeMfa",
-            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa",
-          },
-          {
             text: "submitOtpCode",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode",
           },
           {
             text: "targetPublicKey",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey",
-          },
-          {
-            text: "validateMultiFactors",
-            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors",
-          },
-          {
-            text: "verifyMfa",
-            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa",
           },
         ],
       },
@@ -205,8 +185,16 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/constructor",
           },
           {
+            text: "experimental_createApiKey",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey",
+          },
+          {
             text: "getMfaFactors",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors",
+          },
+          {
+            text: "getPasskeyStatus",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/getPasskeyStatus",
           },
           {
             text: "getUser",
@@ -237,6 +225,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage",
           },
           {
+            text: "stampGetOrganization",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/stampGetOrganization",
+          },
+          {
             text: "stampWhoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami",
           },
@@ -260,6 +252,31 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "constructor",
             link: "/reference/account-kit/signer/classes/OauthCancelledError/constructor",
+          },
+        ],
+      },
+      {
+        text: "SolanaSigner",
+        items: [
+          {
+            text: "addSignature",
+            link: "/reference/account-kit/signer/classes/SolanaSigner/addSignature",
+          },
+          {
+            text: "addSponsorship",
+            link: "/reference/account-kit/signer/classes/SolanaSigner/addSponsorship",
+          },
+          {
+            text: "constructor",
+            link: "/reference/account-kit/signer/classes/SolanaSigner/constructor",
+          },
+          {
+            text: "createTransfer",
+            link: "/reference/account-kit/signer/classes/SolanaSigner/createTransfer",
+          },
+          {
+            text: "signMessage",
+            link: "/reference/account-kit/signer/classes/SolanaSigner/signMessage",
           },
         ],
       },

@@ -116,6 +116,19 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     ],
   },
   {
+    text: "Solana Actions",
+    items: [
+      {
+        text: "useSolanaSignMessage",
+        link: "/reference/account-kit/react/hooks/useSolanaSignMessage",
+      },
+      {
+        text: "useSolanaTransaction",
+        link: "/reference/account-kit/react/hooks/useSolanaTransaction",
+      },
+    ],
+  },
+  {
     text: "Bundler/RPC Client",
     items: [
       {

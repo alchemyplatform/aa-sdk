@@ -394,4 +394,69 @@ export default function Home() {
     </main>
   );
 }
+c;
+```
+
+## Other examples
+
+### Sending a solana transaction
+
+This is with the assumption that we have logged in, and we want a component to send a transaction
+
+```tsx twoslash
+import React from "react";
+import { useSolanaTransaction } from "@account-kit/react";
+import { Connection } from "@solana/web3.js";
+
+function MyComponent() {
+  const connection = new Connection(
+    "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
+    {
+      wsEndpoint: "wss://api.devnet.solana.com",
+      commitment: "confirmed",
+    }
+  );
+
+  const {
+    mutate: doTransaction,
+    isPending,
+    signer,
+    reset,
+    data: { hash: txHash = null } = {},
+  } = useSolanaTransaction({
+    connection,
+  });
+
+  if (!signer) {
+    return <div>Loading alchemy signer...</div>;
+  }
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          doTransaction({
+            transfer: {
+              amount: 1000000,
+              toAddress: "<ToSolanaAddress>",
+            },
+          })
+        }
+      >
+        {" "}
+        Go make Transfer{" "}
+      </button>
+      {!!txHash && <button onClick={() => reset()}> Reset </button>}
+      {!!txHash && (
+        <a
+          href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`}
+          target="_blank"
+        >
+          {" "}
+          Go To Tracker{" "}
+        </a>
+      )}
+    </div>
+  );
+}
 ```
