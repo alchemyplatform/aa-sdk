@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
+
+### Features
+
+- add mfa methods to rn-signer ([#1542](https://github.com/alchemyplatform/aa-sdk/issues/1542)) ([c41ba79](https://github.com/alchemyplatform/aa-sdk/commit/c41ba792f78fc71395df0c16bbb8184e51272981))
+
 # [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
 
 ### Features
