@@ -1,3 +1,4 @@
+```ts twoslash base-client.ts
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 import {
@@ -12,3 +13,4 @@ export const client = (
     transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   })
 ).extend(sessionKeyPluginActions);
+```
