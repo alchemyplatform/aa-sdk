@@ -57,6 +57,18 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
   transport: AlchemyTransport;
   gasEstimatorOverride?: ClientMiddlewareFn;
   feeEstimatorOverride?: ClientMiddlewareFn;
+  policyToken?: PolicyToken;
+}
+
+export type PolicyToken = {
+  address: string;
+  approvalMode: ApprovalMode;
+};
+
+export enum ApprovalMode {
+  INJECT_APPROVAL = 2,
+  PERMIT = 1,
+  NONE = 0,
 }
 
 /**
@@ -94,8 +106,13 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
   ClientMiddlewareConfig,
   "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData"
 > {
-  const { policyId, transport, gasEstimatorOverride, feeEstimatorOverride } =
-    params;
+  const {
+    policyId,
+    transport,
+    gasEstimatorOverride,
+    feeEstimatorOverride,
+    policyToken,
+  } = params;
   return {
     dummyPaymasterAndData: async (uo, args) => {
       if (
@@ -197,6 +214,13 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             userOperation: userOp,
             dummySignature: await account.getDummySignature(),
             overrides,
+            ...(policyToken
+              ? {
+                  erc20Context: {
+                    tokenAddress: policyToken.address,
+                  },
+                }
+              : {}),
           },
         ],
       });
