@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/signer",
-  "version": "4.28.1",
+  "version": "4.28.2",
   "description": "Core interfaces and clients for interfacing with the Alchemy Signer API",
   "author": "Alchemy",
   "license": "MIT",
@@ -51,8 +51,8 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.28.1",
-    "@account-kit/logging": "^4.28.1",
+    "@aa-sdk/core": "^4.28.2",
+    "@account-kit/logging": "^4.28.2",
     "@solana/web3.js": "^1.98.0",
     "@turnkey/http": "^2.6.2",
     "@turnkey/iframe-stamper": "^1.0.0",
