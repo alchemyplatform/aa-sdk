@@ -433,6 +433,7 @@ function MyComponent() {
 
   return (
     <div>
+      Solana Address {signer.address}
       <button
         onClick={() =>
           doTransaction({
@@ -443,8 +444,7 @@ function MyComponent() {
           })
         }
       >
-        {" "}
-        Go make Transfer{" "}
+        Go make Transfer
       </button>
       {!!txHash && <button onClick={() => reset()}> Reset </button>}
       {!!txHash && (
@@ -452,8 +452,7 @@ function MyComponent() {
           href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`}
           target="_blank"
         >
-          {" "}
-          Go To Tracker{" "}
+          Go To Tracker
         </a>
       )}
     </div>

@@ -67,61 +67,58 @@ export type SolanaTransactionHookParams = {
  * This is the hook that will be used to send a transaction.
  *
  * @example
- * ```ts twoslash
-import React from "react";
-import { useSolanaTransaction } from "@account-kit/react";
-import { Connection } from "@solana/web3.js";
+ * ```tsx twoslash
+ * import React from "react";
+ * import { useSolanaTransaction } from "@account-kit/react";
+ * import { Connection } from "@solana/web3.js";
+ * 
+ * function MyComponent() {
+ *   const connection = new Connection(
+ *     "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
+ *     {
+ *       wsEndpoint: "wss://api.devnet.solana.com",
+ *       commitment: "confirmed",
+ *     }
+ *   );
+ *   const policyId = "<policyId>";
+ * 
+ *   const {
+ *     mutate: doTransaction,
+ *     isPending,
+ *     signer,
+ *     reset,
+ *     data: { hash: txHash = null } = {},
+ *   } = useSolanaTransaction({
+ *     connection,
+ *     // Used if we have a alchemy sponsor
+ *     policyId,
+ *   });
  
-function MyComponent() {
-  const connection = new Connection(
-    "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
-    {
-      wsEndpoint: "wss://api.devnet.solana.com",
-      commitment: "confirmed",
-    }
-  );
-  const policyId = "<policyId>";
+ *   if (!signer) {
+ *     return <div>Loading alchemy signer...</div>;
+ *   }
  
-  const {
-    mutate: doTransaction,
-    isPending,
-    signer,
-    reset,
-    data: { hash: txHash = null } = {},
-  } = useSolanaTransaction({
-    connection,
-    // Used if we have a alchemy sponsor
-    policyId,
-  });
- 
-  if (!signer) {
-    return <div>Loading alchemy signer...</div>;
-  }
- 
-  return (
-    <div>
-      Solana Address: {signer.address}
-      <button
-        onClick={() =>
-          doTransaction({
-            transfer: {
-              amount: 1000000,
-              toAddress: "<ToSolanaAddress>",
-            },
-          })
-        }
-      >
-        {" "}
-        Go make Transfer{" "}
-      </button>
-      {
-        !!txHash &&
-        <button onClick={() => reset()}> Reset </button>
-      }
-      { !!txHash && <a href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`} target="_blank"> Go To Tracker </a> }
-    </div>
-  );
-}
+ *   return (
+ *     <div>
+ *       Solana Address: { signer.address }
+ *       <button
+ *         onClick={() =>
+ *           doTransaction({
+ *             transfer: {
+ *               amount: 1000000,
+ *               toAddress: "<ToSolanaAddress>",
+ *             },
+ *           })
+ *         }
+ *       >Go make Transfer</button>
+ *       {
+ *         !!txHash &&
+ *         <button onClick={() => reset()}>Reset</button>
+ *       }
+ *       { !!txHash && <a href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`} target="_blank">Go To Tracker</a> }
+ *    </div>
+ *  );
+ * }
  * ``` 
  * 
  * This hook:

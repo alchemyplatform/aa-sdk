@@ -17,7 +17,7 @@ import { useSolanaTransaction } from "@account-kit/react";
 
 ## Usage
 
-```ts twoslash
+```tsx twoslash
 import React from "react";
 import { useSolanaTransaction } from "@account-kit/react";
 import { Connection } from "@solana/web3.js";
@@ -61,17 +61,15 @@ function MyComponent() {
           })
         }
       >
-        {" "}
-        Go make Transfer{" "}
+        Go make Transfer
       </button>
-      {!!txHash && <button onClick={() => reset()}> Reset </button>}
+      {!!txHash && <button onClick={() => reset()}>Reset</button>}
       {!!txHash && (
         <a
           href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`}
           target="_blank"
         >
-          {" "}
-          Go To Tracker{" "}
+          Go To Tracker
         </a>
       )}
     </div>
