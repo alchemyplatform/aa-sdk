@@ -17,77 +17,17 @@ import { useSolanaTransaction } from "@account-kit/react";
 
 ## Usage
 
-```tsx twoslash
-import React from "react";
-import { useSolanaTransaction } from "@account-kit/react";
-import { Connection } from "@solana/web3.js";
+```ts
+const {mutate} = useSolanaTransaction({
+policyId: "<policyId>",
+});
 
-function MyComponent() {
-  const connection = new Connection(
-    "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
-    {
-      wsEndpoint: "wss://api.devnet.solana.com",
-      commitment: "confirmed",
-    }
-  );
-  const policyId = "<policyId>";
-
-  const {
-    mutate: doTransaction,
-    isPending,
-    signer,
-    reset,
-    data: { hash: txHash = null } = {},
-  } = useSolanaTransaction({
-    connection,
-    // Used if we have a alchemy sponsor
-    policyId,
-  });
-
-  if (!signer) {
-    return <div>Loading alchemy signer...</div>;
-  }
-
-  return (
-    <div>
-      Solana Address: {signer.address}
-      <button
-        onClick={() =>
-          doTransaction({
-            transfer: {
-              amount: 1000000,
-              toAddress: "<ToSolanaAddress>",
-            },
-          })
-        }
-      >
-        Go make Transfer
-      </button>
-      {!!txHash && <button onClick={() => reset()}>Reset</button>}
-      {!!txHash && (
-        <a
-          href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`}
-          target="_blank"
-        >
-          Go To Tracker
-        </a>
-      )}
-    </div>
-  );
-}
+mutate({
+transfer: {
+amount: <amount:number>,
+toAddress: "<toAddress>",
+},
 ```
-
-This hook:
-
-- Signs the transaction and broadcasts it to the network via the Connection passed in
-- Returns a mutate to fire and forget a transaction, either a transfer or list of web3 instructions
-- Provides the state for the result of the txHash that results after the broadcast
-- Has an isPending to know if the transaction is currently sending
-- Has the signer, so we can see if we had provided an alchemy signer in the app. (A signer could have been passed in instead of provided)
-- Has other onMutation hooks that could be passed in as the mutation: argument for the hook
-
-Note: This example assumes that the alchemy signer is defined higher up in the React tree. If this is not the case this transaction will not work. Instead, one could pass down the signer as a parameter for the hook
-Note: This example uses the connection passed in, but there is a AlchemySolanaWeb3Context if we would like do input as a provider.
 
 ## Parameters
 

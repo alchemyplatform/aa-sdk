@@ -1,6 +1,6 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
-import { SOLANA_CHAIN_SYMBOL, SOLANA_DEV_CHAIN } from "@account-kit/core";
+import { SOLANA_DEV_CHAIN } from "@account-kit/core";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
@@ -110,6 +110,7 @@ export const alchemyConfig = () => {
         {
           connection: solanaConnection,
           chain: SOLANA_DEV_CHAIN,
+          policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
       ],
       ssr: true,
