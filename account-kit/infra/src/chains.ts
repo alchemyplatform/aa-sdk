@@ -587,7 +587,7 @@ export const riseTestnet: Chain = defineChain({
   blockExplorers: {
     default: {
       name: "Block Explorer",
-      url: "https://testnet-explorer.riselabs.xyz",
+      url: "https://explorer.testnet.riselabs.xyz",
     },
   },
   testnet: true,
