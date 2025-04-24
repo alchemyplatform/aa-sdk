@@ -110,7 +110,7 @@ export const alchemyConfig = () => {
         {
           connection: solanaConnection,
           chain: SOLANA_DEV_CHAIN,
-          policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+          // policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
       ],
       ssr: true,
