@@ -20,7 +20,7 @@ import {
   noopMiddleware,
   resolveProperties,
 } from "@aa-sdk/core";
-import { fromHex, isHex, type Hex } from "viem";
+import { fromHex, isHex, toHex, type Hex } from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
@@ -62,7 +62,10 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 
 export type PolicyToken = {
   address: string;
+  maxTokenAmount: bigint;
   approvalMode: ApprovalMode;
+  erc20Name: string;
+  version: string;
 };
 
 export enum ApprovalMode {
@@ -205,6 +208,79 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           : {}),
       });
 
+      let erc20Context = undefined;
+      if (
+        policyToken !== undefined &&
+        policyToken.approvalMode == ApprovalMode.PERMIT
+      ) {
+        // get a paymaster address
+        let paymasterAddress = "0x";
+        const paymasterData = await (
+          client as AlchemySmartAccountClient
+        ).request({
+          method: "pm_getPaymasterStubData",
+          params: [
+            userOp,
+            account.getEntryPoint().address,
+            toHex(client.chain.id),
+            {
+              policyId: Array.isArray(policyId) ? policyId[0] : policyId,
+            },
+          ],
+        });
+        paymasterAddress = paymasterData.paymaster
+          ? paymasterData.paymaster
+          : paymasterData.paymasterAndData
+          ? paymasterData.paymasterAndData.slice(0, 42)
+          : "0x";
+        const typed_permit_data = {
+          types: {
+            Permit: [
+              {
+                name: "owner",
+                type: "address",
+              },
+              {
+                name: "spender",
+                type: "address",
+              },
+              {
+                name: "value",
+                type: "uint256",
+              },
+              {
+                name: "nonce",
+                type: "uint256",
+              },
+              {
+                name: "deadline",
+                type: "uint256",
+              },
+            ],
+          },
+          primaryType: "Permit",
+          domain: {
+            name: policyToken.erc20Name,
+            version: policyToken.version,
+            chainId: client.chain.id,
+            verifyingContract: policyToken.address as Hex,
+          },
+          message: {
+            owner: account.address as Hex,
+            spender: paymasterAddress as Hex,
+            value: policyToken.maxTokenAmount,
+            nonce: (await account.getAccountNonce()) + BigInt(1),
+            deadline: BigInt(0xffffffffffffffffffffffffffffffff),
+          },
+        } as const;
+
+        erc20Context = {
+          tokenAddress: policyToken.address,
+          permit: client.account?.signTypedData(typed_permit_data),
+          maxTokenAmount: policyToken.maxTokenAmount,
+        };
+      }
+
       const result = await (client as AlchemySmartAccountClient).request({
         method: "alchemy_requestGasAndPaymasterAndData",
         params: [
@@ -214,11 +290,9 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             userOperation: userOp,
             dummySignature: await account.getDummySignature(),
             overrides,
-            ...(policyToken
+            ...(erc20Context
               ? {
-                  erc20Context: {
-                    tokenAddress: policyToken.address,
-                  },
+                  erc20Context: erc20Context,
                 }
               : {}),
           },
