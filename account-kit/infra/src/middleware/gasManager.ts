@@ -211,7 +211,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       let erc20Context = undefined;
       if (
         policyToken !== undefined &&
-        policyToken.approvalMode == ApprovalMode.PERMIT
+        policyToken.approvalMode === ApprovalMode.PERMIT
       ) {
         // get a paymaster address
         let paymasterAddress = "0x";
@@ -276,7 +276,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
 
         erc20Context = {
           tokenAddress: policyToken.address,
-          permit: client.account?.signTypedData(typed_permit_data),
+          permit: account.signTypedData(typed_permit_data),
           maxTokenAmount: policyToken.maxTokenAmount,
         };
       }
