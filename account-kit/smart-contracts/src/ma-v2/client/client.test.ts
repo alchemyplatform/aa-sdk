@@ -47,6 +47,7 @@ import {
   PermissionBuilder,
   PermissionType,
   buildDeferredActionDigest,
+  getDefaultWebauthnValidationModuleAddress,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -70,6 +71,10 @@ import {
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
+import {
+  type P256Credential,
+  createWebAuthnCredential,
+} from "viem/account-abstraction";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -93,6 +98,19 @@ describe("MA v2 Tests", async () => {
   const sessionKey: SmartAccountSigner = new LocalAccountSigner(
     accounts.unfundedAccountOwner
   );
+
+  const webAuthnCredential = await createWebAuthnCredential({ name: "owner" });
+
+  const webAuthnCredentialBackUp = await createWebAuthnCredential({
+    name: "backUp",
+  });
+
+  const webAuthnSigningMethods: SmartAccountSigner = new WebAuthnSigningMethods(
+    webAuthnCredential
+  );
+
+  const webAuthnSigningMethodsSessionKey: SmartAccountSigner =
+    new WebAuthnSigningMethods(webAuthnCredentialBackUp);
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -125,6 +143,67 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
+  });
+
+  it("successfully sign + validate a message, for WebAuthn signer", async () => {
+    const provider = await givenConnectedProvider({
+      signer: webAuthnSigningMethods,
+      credential: webAuthnCredential,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    const result = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          provider.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await webAuthnSigningMethodsSessionKey.getAddress(), // note: signer address DNE
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(result);
+
+    const message = "testmessage";
+
+    let signature = await provider.signMessage({ message });
+
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
+
+    // connect session key
+    let sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: webAuthnSigningMethodsSessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+    });
+
+    signature = await sessionKeyClient.signMessage({ message });
+
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
   });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
@@ -1773,15 +1852,19 @@ describe("MA v2 Tests", async () => {
     signerEntity,
     accountAddress,
     paymasterMiddleware,
+    credential = null,
   }: {
     signer: SmartAccountSigner;
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    credential?: P256Credential;
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
       signer,
+      credential,
+      mode: credential ? "webauthn" : "default",
       accountAddress,
       signerEntity,
       transport: custom(instance.getClient()),
