@@ -13,7 +13,11 @@ import {
 } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
-import type { Connection, SupportedAccountTypes } from "../types.js";
+import {
+  isViemConnection,
+  type Connection,
+  type SupportedAccountTypes,
+} from "../types.js";
 import { storeReplacer } from "../utils/replacer.js";
 import { storeReviver } from "../utils/reviver.js";
 import {
@@ -25,6 +29,7 @@ import {
   type Store,
   type StoreState,
 } from "./types.js";
+import { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 
 export const STORAGE_VERSION = 14;
 
@@ -48,6 +53,9 @@ export const createAccountKitStore = (
               replacer: (key, value) => {
                 if (key === "bundlerClient") return undefined;
 
+                if (value instanceof SolanaWeb3Connection) {
+                  return undefined;
+                }
                 if (key === "user") {
                   const user = value as StoreState["user"];
                   if (!user) return undefined;
@@ -89,7 +97,17 @@ export const createAccountKitStore = (
             },
             merge: (persisted, current) => {
               const persistedState = persisted as StoreState;
+              const transportConnection = persistedState.connections.get(
+                persistedState.chain.id
+              );
               if (persistedState.chain == null) {
+                return createInitialStoreState(params);
+              }
+
+              if (
+                transportConnection == null ||
+                !isViemConnection(transportConnection)
+              ) {
                 return createInitialStoreState(params);
               }
 
@@ -124,15 +142,12 @@ export const createAccountKitStore = (
                 ...current,
                 ...persistedState,
                 smartAccountClients: createEmptySmartAccountClientState(
-                  connections.map((c) => c.chain)
+                  connections.filter(isViemConnection).map((c) => c.chain)
                 ),
                 connections: connectionsMap,
                 bundlerClient: createAlchemyPublicRpcClient({
                   chain: persistedState.chain,
-                  transport: alchemy(
-                    persistedState.connections.get(persistedState.chain.id)!
-                      .transport
-                  ),
+                  transport: alchemy(transportConnection.transport),
                 }),
               };
             },
@@ -157,17 +172,18 @@ const createInitialStoreState = (
 ): StoreState => {
   const { connections, chain, client, sessionConfig } = params;
   const connectionMap = createConnectionsMap(connections);
+  const transportConnection = connectionMap.get(chain.id);
 
-  if (!connectionMap.has(chain.id)) {
+  if (!transportConnection || !isViemConnection(transportConnection)) {
     throw new Error("Chain not found in connections");
   }
 
-  const chains = connections.map((c) => c.chain);
+  const chains = connections.filter(isViemConnection).map((c) => c.chain);
   const accountConfigs = createEmptyAccountConfigState(chains);
   const baseState: StoreState = {
     bundlerClient: createAlchemyPublicRpcClient({
       chain,
-      transport: alchemy(connectionMap.get(chain.id)!.transport),
+      transport: alchemy(transportConnection.transport),
     }),
     chain,
     connections: connectionMap,
@@ -196,7 +212,7 @@ const createConnectionsMap = (connections: Connection[]) => {
   return connections.reduce((acc, connection) => {
     acc.set(connection.chain.id, connection);
     return acc;
-  }, new Map<number, Connection>());
+  }, new Map<number | string, Connection>());
 };
 
 /**
@@ -315,9 +331,9 @@ const addClientSideStoreListeners = (store: Store) => {
       signer.on("connected", (user) => store.setState({ user }));
 
       signer.on("disconnected", () => {
-        const chains = [...store.getState().connections.values()].map(
-          (c) => c.chain
-        );
+        const chains = [...store.getState().connections.values()]
+          .filter(isViemConnection)
+          .map((c) => c.chain);
         store.setState({
           user: undefined,
           accountConfigs: createEmptyAccountConfigState(chains),

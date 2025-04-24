@@ -4,10 +4,12 @@ import { getBundlerClient } from "./actions/getBundlerClient.js";
 import { CoreLogger } from "./metrics.js";
 import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
-import type {
-  AlchemyAccountsConfig,
-  Connection,
-  CreateConfigProps,
+import {
+  isViemConnection,
+  isWeb3ChainConfig,
+  type AlchemyAccountsConfig,
+  type Connection,
+  type CreateConfigProps,
 } from "./types.js";
 import { createSigner as createWebSigner } from "./environments/web/createSigner.js";
 
@@ -61,16 +63,21 @@ export const createConfig = (
       chain,
     });
   } else {
-    connectionConfig.chains.forEach(({ chain, policyId, transport }) => {
-      connections.push({
-        transport: transport?.config ?? connectionConfig.transport!.config,
-        chain,
-        policyId: policyId ?? connectionConfig.policyId,
-      });
+    connectionConfig.chains.forEach((params) => {
+      if (isWeb3ChainConfig(params)) {
+        connections.push({ ...params });
+      } else {
+        const { chain, policyId, transport } = params;
+        connections.push({
+          transport: transport?.config ?? connectionConfig.transport!.config,
+          chain,
+          policyId: policyId ?? connectionConfig.policyId,
+        });
+      }
     });
   }
 
-  const defaultConnection = connections[0].transport;
+  const defaultConnection = connections.filter(isViemConnection)[0].transport;
   const store = createAccountKitStore({
     connections,
     chain,
@@ -98,7 +105,10 @@ export const createConfig = (
 
   const wagmiConfig = createWagmiConfig({
     connectors,
-    chains: [chain, ...connections.map((c) => c.chain)],
+    chains: [
+      chain,
+      ...connections.filter(isViemConnection).map((c) => c.chain),
+    ],
     client: () => getBundlerClient(config),
     storage: createStorage({
       key: `${DEFAULT_STORAGE_KEY}:wagmi`,
@@ -126,7 +136,7 @@ export const createConfig = (
     name: "config_created",
     data: {
       ssr: ssr ?? false,
-      chainIds: connections.map((x) => x.chain.id),
+      chainIds: connections.filter(isViemConnection).map((x) => x.chain.id),
     },
   });
 

@@ -2,7 +2,7 @@
 
 import { AlchemySignerStatus } from "@account-kit/signer";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
 import { AuthModal } from "./components/auth/modal.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
@@ -74,13 +74,12 @@ export const AlchemyAccountProvider = (
     clearSignupParam();
   }, []);
 
-  const initialContext = useMemo(
-    () => ({
+  const initialContext = useMemo(() => {
+    return {
       config,
       queryClient,
-    }),
-    [config, queryClient]
-  );
+    };
+  }, [config, queryClient]);
 
   const { status } = useSignerStatus(initialContext);
 
@@ -95,12 +94,6 @@ export const AlchemyAccountProvider = (
       type: "initial",
     };
   });
-
-  useEffect(() => {
-    if (authStep.type === "complete") {
-      clearSignupParam();
-    }
-  }, [authStep]);
 
   return (
     <Hydrate {...props}>

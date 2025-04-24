@@ -23,10 +23,10 @@ import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
   AlchemySigner,
-  Connection,
   SupportedAccount,
   SupportedAccounts,
   SupportedAccountTypes,
+  ViemConnection,
 } from "../types";
 import { createAccount, isModularV2AccountParams } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
@@ -288,7 +288,7 @@ function setSmartAccountClientState<
   config: AlchemyAccountsConfig;
   type: TAccountType;
   newState: GetSmartAccountClientResult;
-  connection: Connection;
+  connection: ViemConnection;
 }) {
   config.store.setState((state) => ({
     smartAccountClients: {

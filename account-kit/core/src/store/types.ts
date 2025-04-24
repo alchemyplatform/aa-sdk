@@ -105,7 +105,7 @@ export type StoreState = {
   user?: User;
   signerStatus: SignerStatus;
   chain: Chain;
-  connections: Map<number, Connection>;
+  connections: Map<number | string, Connection>;
 };
 
 type Expanded<T> = { [K in keyof T]: T[K] };

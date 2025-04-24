@@ -4,9 +4,8 @@ import {
   useSignerStatus,
   useSolanaTransaction,
   useSolanaSignMessage,
-  AlchemySolanaWeb3Context,
 } from "@account-kit/react";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useMemo } from "react";
 import { Hex } from "viem";
@@ -27,25 +26,11 @@ export const SolanaCard = () => {
     if (!status.isConnected) return;
     return signer.experimental_toSolanaSigner();
   }, [signer, status.isConnected]);
-  const web3Context = useContext(AlchemySolanaWeb3Context);
   const { setToast } = useToast();
-
-  const { data: balance = 0, isLoading: isBalanceLoading } = useQuery({
-    queryKey: ["solanaBalance", solanaSigner?.address],
-    queryFn: async () => {
-      if (!solanaSigner) return 0;
-      if (!web3Context) return 0;
-      return (
-        (await solanaNetwork.balance(
-          web3Context.connection,
-          solanaSigner!.address
-        )) / LAMPORTS_PER_SOL
-      );
-    },
-  });
 
   const {
     mutate,
+    connection,
     isPending,
     data: { hash: txHash = null } = {},
   } = useSolanaTransaction({
@@ -63,6 +48,19 @@ export const SolanaCard = () => {
           open: true,
         });
       },
+    },
+  });
+
+  const { data: balance = 0, isLoading: isBalanceLoading } = useQuery({
+    queryKey: ["solanaBalance", solanaSigner?.address],
+    queryFn: async () => {
+      if (!solanaSigner) return 0;
+      if (!connection) throw new Error("No connection");
+      return (
+        (await (connection as any).getBalance(
+          new PublicKey(solanaSigner!.address)
+        )) / LAMPORTS_PER_SOL
+      );
     },
   });
 

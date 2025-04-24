@@ -8,6 +8,8 @@ export { getBundlerClient } from "./actions/getBundlerClient.js";
 export { getChain } from "./actions/getChain.js";
 export type * from "./actions/getConnection.js";
 export { getConnection } from "./actions/getConnection.js";
+export type * from "./actions/getSolanaConnection.js";
+export { getSolanaConnection } from "./actions/getSolanaConnection.js";
 export type * from "./actions/getSigner.js";
 export { getSigner } from "./actions/getSigner.js";
 export type * from "./actions/getSignerStatus.js";
@@ -26,6 +28,8 @@ export { watchBundlerClient } from "./actions/watchBundlerClient.js";
 export { watchChain } from "./actions/watchChain.js";
 export type * from "./actions/watchConnection.js";
 export { watchConnection } from "./actions/watchConnection.js";
+export type * from "./actions/watchSolanaConnection.js";
+export { watchSolanaConnection } from "./actions/watchSolanaConnection.js";
 export type * from "./actions/watchSigner.js";
 export { watchSigner } from "./actions/watchSigner.js";
 export type * from "./actions/watchSignerStatus.js";
@@ -52,11 +56,14 @@ export type {
   ClientStoreConfig,
 } from "./store/types.js";
 export type * from "./types.js";
+export { isViemConnection, isWeb3Connection } from "./types.js";
 export {
   cookieStorage,
   cookieToInitialState,
   parseCookie,
 } from "./utils/cookies.js";
+export { SOLANA_CHAIN, SOLANA_DEV_CHAIN } from "./chains.js";
+export { SOLANA_CHAIN_SYMBOL, SOLANA_DEVNET_CHAIN_SYMBOL } from "./symbols.js";
 
 /** Re-export core packages to make it easier to use this package without the lower level packages */
 // Accounts

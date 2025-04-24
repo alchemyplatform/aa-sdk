@@ -1,9 +1,11 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
+import { SOLANA_CHAIN_SYMBOL, SOLANA_DEV_CHAIN } from "@account-kit/core";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
+import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
 import { walletConnect } from "wagmi/connectors";
 
@@ -79,9 +81,18 @@ export const DEFAULT_CONFIG: Config = {
 };
 
 export const queryClient = new QueryClient();
+const solanaConnection = new Connection(
+  `${
+    (global || window)?.location?.origin || "http://localhost:3000"
+  }/api/rpc/solana`,
+  {
+    wsEndpoint: "wss://api.devnet.solana.com",
+    commitment: "confirmed",
+  }
+);
 
-export const alchemyConfig = () =>
-  createConfig(
+export const alchemyConfig = () => {
+  return createConfig(
     {
       transport: alchemy({ rpcUrl: "/api/rpc" }),
       chain: arbitrumSepolia,
@@ -95,6 +106,10 @@ export const alchemyConfig = () =>
           chain: odyssey,
           transport: splitOdysseyTransport,
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+        },
+        {
+          connection: solanaConnection,
+          chain: SOLANA_DEV_CHAIN,
         },
       ],
       ssr: true,
@@ -126,3 +141,4 @@ export const alchemyConfig = () =>
       },
     }
   );
+};
