@@ -9,7 +9,6 @@ import {
 } from "./store/store.js";
 import type { AccountState, StoreState, StoredState } from "./store/types.js";
 import {
-  isViemConnection,
   type AlchemyAccountsConfig,
   type SupportedAccountTypes,
 } from "./types.js";
@@ -112,7 +111,6 @@ const hydrateAccountState = (
 ): StoreState["accounts"] => {
   const chains = Array.from(config.store.getState().connections.entries())
     .map(([_, cnx]) => cnx)
-    .filter(isViemConnection)
     .map((cnx) => cnx.chain);
   const initialState = createDefaultAccountState(chains);
   const activeChainId = config.store.getState().chain.id;

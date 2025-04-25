@@ -1,4 +1,4 @@
-import type { AlchemyAccountsConfig, Connection } from "../types";
+import type { AlchemyAccountsConfig, SolanaConnection } from "../types";
 
 /**
  * Subscribe to changes to the solana connection for the id
@@ -9,22 +9,18 @@ import type { AlchemyAccountsConfig, Connection } from "../types";
  * // see createConfig for more information on how to create a config
  * import { config } from "./config";
  *
- * watchSolanaConnection(config, SOLANA_DEVNET_CHAIN_SYMBOL)(console.log);
+ * watchSolanaConnection(config)(console.log);
  * ```
  *
- * @param {AlchemyAccountsConfig} config the account config
- * @param {string} id the id of the connection
+ * @param {AlchemyAccountsConfig} config the account config of the connection
  * @returns {(onChange: (connection: Connection) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the connection changes and returns a function to unsubscribe from the store
  */
-export function watchSolanaConnection(
-  config: AlchemyAccountsConfig,
-  id: string
-) {
-  return (onChange: (connection: Connection) => void) => {
+export function watchSolanaConnection(config: AlchemyAccountsConfig) {
+  return (onChange: (connection: SolanaConnection) => void) => {
     return config.store.subscribe(
       ({ chain }) => chain,
       (_) => {
-        const connection = config.store.getState().connections.get(id);
+        const connection = config.store.getState().solana;
 
         if (connection) {
           onChange(connection);

@@ -1,9 +1,5 @@
 import { ChainNotFoundError } from "../errors.js";
-import {
-  isViemConnection,
-  type AlchemyAccountsConfig,
-  type ViemConnection,
-} from "../types.js";
+import { type AlchemyAccountsConfig, type Connection } from "../types.js";
 import { getChain } from "./getChain.js";
 
 /**
@@ -20,10 +16,10 @@ import { getChain } from "./getChain.js";
  * @param {AlchemyAccountsConfig} config the account config
  * @returns {Connection} a connection object for the current active chain
  */
-export function getConnection(config: AlchemyAccountsConfig): ViemConnection {
+export function getConnection(config: AlchemyAccountsConfig): Connection {
   const chain = getChain(config);
   const connection = config.store.getState().connections.get(chain.id);
-  if (!connection || !isViemConnection(connection)) {
+  if (!connection) {
     throw new ChainNotFoundError(chain);
   }
 

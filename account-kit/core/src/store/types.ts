@@ -15,6 +15,7 @@ import type { GetSmartAccountClientResult } from "../actions/getSmartAccountClie
 import type {
   AlchemySigner,
   Connection,
+  SolanaConnection,
   SupportedAccount,
   SupportedAccountTypes,
 } from "../types";
@@ -74,6 +75,7 @@ export type CreateAccountKitStoreParams = ClientStoreConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"];
   storage?: Storage;
   ssr?: boolean;
+  solana?: SolanaConnection;
 };
 
 export type StoreState = {
@@ -106,6 +108,7 @@ export type StoreState = {
   signerStatus: SignerStatus;
   chain: Chain;
   connections: Map<number | string, Connection>;
+  solana?: SolanaConnection;
 };
 
 type Expanded<T> = { [K in keyof T]: T[K] };

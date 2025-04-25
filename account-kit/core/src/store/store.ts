@@ -13,11 +13,7 @@ import {
 } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
-import {
-  isViemConnection,
-  type Connection,
-  type SupportedAccountTypes,
-} from "../types.js";
+import { type Connection, type SupportedAccountTypes } from "../types.js";
 import { storeReplacer } from "../utils/replacer.js";
 import { storeReviver } from "../utils/reviver.js";
 import {
@@ -104,10 +100,7 @@ export const createAccountKitStore = (
                 return createInitialStoreState(params);
               }
 
-              if (
-                transportConnection == null ||
-                !isViemConnection(transportConnection)
-              ) {
+              if (transportConnection == null) {
                 return createInitialStoreState(params);
               }
 
@@ -142,9 +135,10 @@ export const createAccountKitStore = (
                 ...current,
                 ...persistedState,
                 smartAccountClients: createEmptySmartAccountClientState(
-                  connections.filter(isViemConnection).map((c) => c.chain)
+                  connections.map((c) => c.chain)
                 ),
                 connections: connectionsMap,
+                solana: params.solana,
                 bundlerClient: createAlchemyPublicRpcClient({
                   chain: persistedState.chain,
                   transport: alchemy(transportConnection.transport),
@@ -153,7 +147,7 @@ export const createAccountKitStore = (
             },
             skipHydration: ssr,
             partialize: (state) => {
-              const { signer, accounts, ...writeableState } = state;
+              const { signer, accounts, solana, ...writeableState } = state;
               return writeableState;
             },
             version: STORAGE_VERSION,
@@ -174,11 +168,11 @@ const createInitialStoreState = (
   const connectionMap = createConnectionsMap(connections);
   const transportConnection = connectionMap.get(chain.id);
 
-  if (!transportConnection || !isViemConnection(transportConnection)) {
+  if (!transportConnection) {
     throw new Error("Chain not found in connections");
   }
 
-  const chains = connections.filter(isViemConnection).map((c) => c.chain);
+  const chains = connections.map((c) => c.chain);
   const accountConfigs = createEmptyAccountConfigState(chains);
   const baseState: StoreState = {
     bundlerClient: createAlchemyPublicRpcClient({
@@ -195,6 +189,10 @@ const createInitialStoreState = (
     ),
     smartAccountClients: createEmptySmartAccountClientState(chains),
   };
+
+  if ("solana" in params && params.solana) {
+    baseState.solana = params.solana;
+  }
 
   if (typeof window === "undefined") {
     return baseState;
@@ -331,9 +329,9 @@ const addClientSideStoreListeners = (store: Store) => {
       signer.on("connected", (user) => store.setState({ user }));
 
       signer.on("disconnected", () => {
-        const chains = [...store.getState().connections.values()]
-          .filter(isViemConnection)
-          .map((c) => c.chain);
+        const chains = [...store.getState().connections.values()].map(
+          (c) => c.chain
+        );
         store.setState({
           user: undefined,
           accountConfigs: createEmptyAccountConfigState(chains),

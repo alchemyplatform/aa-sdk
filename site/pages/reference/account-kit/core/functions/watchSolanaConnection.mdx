@@ -21,7 +21,7 @@ import { watchSolanaConnection } from "@account-kit/core";
 // see createConfig for more information on how to create a config
 import { config } from "./config";
 
-watchSolanaConnection(config, SOLANA_DEVNET_CHAIN_SYMBOL)(console.log);
+watchSolanaConnection(config)(console.log);
 ```
 
 ## Parameters
@@ -29,12 +29,7 @@ watchSolanaConnection(config, SOLANA_DEVNET_CHAIN_SYMBOL)(console.log);
 ### config
 
 `AlchemyAccountsConfig`
-the account config
-
-### id
-
-`string`
-the id of the connection
+the account config of the connection
 
 ## Returns
 

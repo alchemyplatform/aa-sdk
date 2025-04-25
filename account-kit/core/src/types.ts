@@ -63,67 +63,28 @@ export type AlchemyAccountsConfig = {
   };
 };
 // [!region CreateCorConfigProps]
-export type ViemConnection = {
+
+export type SolanaConnection = {
+  connection: SolanaWeb3Connection;
+  policyId?: string;
+};
+
+export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
   policyId?: string | string[];
 };
 
-export type Web3Chain = Pick<Chain, "name" | "nativeCurrency"> & { id: string };
-
-export type Web3Connection = {
-  connection: SolanaWeb3Connection;
-  chain: Web3Chain;
-  policyId?: string;
-};
-/**
- * Checks if the connection is a viem/ transport connection
- *
- * @param {Connection} connection - The connection to check
- * @returns {connection is ViemConnect} true if the connection is a Viem connection, false otherwise
- */
-export function isViemConnection(
-  connection: Connection
-): connection is ViemConnection {
-  return "transport" in connection;
-}
-/**
- * Checks if the connection is a web3 connection
- *
- * @param {Connection} connection - The connection to check
- * @returns {connection is Web3Connection} true if the connection is a web3 connection, false otherwise
- */
-export function isWeb3Connection(
-  connection: Connection
-): connection is Web3Connection {
-  return "connection" in connection;
-}
-
-export type Connection = Web3Connection | ViemConnection;
-
-export type Web3ChainConfig = {
-  chain: Web3Chain;
-  connection: SolanaWeb3Connection;
-  policyId?: string;
-};
-
-export function isWeb3ChainConfig(
-  connection: object
-): connection is Web3ChainConfig {
-  return "connection" in connection;
-}
 type RpcConnectionConfig =
   | {
       chain: Chain;
-      chains: (
-        | {
-            chain: Chain;
-            policyId?: string | string[];
-            // optional transport override
-            transport?: AlchemyTransport;
-          }
-        | Web3ChainConfig
-      )[];
+      chains: {
+        chain: Chain;
+        policyId?: string | string[];
+        // optional transport override
+        transport?: AlchemyTransport;
+      }[];
+      solana?: SolanaConnection;
       // optional global transport to use for all chains
       transport: AlchemyTransport;
       // When providing multiple chains and no default transport, the signer connection is required
@@ -132,14 +93,12 @@ type RpcConnectionConfig =
     }
   | {
       chain: Chain;
-      chains: (
-        | {
-            chain: Chain;
-            policyId?: string | string[];
-            transport: AlchemyTransport;
-          }
-        | Web3ChainConfig
-      )[];
+      chains: {
+        chain: Chain;
+        policyId?: string | string[];
+        transport: AlchemyTransport;
+      }[];
+      solana?: SolanaConnection;
       transport?: never;
       // When providing multiple chains, then the signer connection is required
       signerConnection: ConnectionConfig;
@@ -148,6 +107,7 @@ type RpcConnectionConfig =
   | {
       transport: AlchemyTransport;
       chain: Chain;
+      solana?: SolanaConnection;
       policyId?: string | string[];
       signerConnection?: ConnectionConfig;
       chains?: never;

@@ -7,12 +7,11 @@ import {
 } from "@account-kit/react";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { Hex } from "viem";
 import { LoadingIcon } from "../icons/loading";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { Button } from "./Button";
-import * as solanaNetwork from "../../../../../account-kit/react/src/solanaNetwork";
 import { Card } from "./Card";
 import Image from "next/image";
 import { Badge } from "./Badge";
@@ -55,15 +54,13 @@ export const SolanaCard = () => {
     queryKey: ["solanaBalance", solanaSigner?.address],
     queryFn: async () => {
       if (!solanaSigner) return 0;
-      if (!connection) throw new Error("No connection");
+      if (!connection) return 0;
       return (
-        (await (connection as any).getBalance(
-          new PublicKey(solanaSigner!.address)
-        )) / LAMPORTS_PER_SOL
+        (await connection.getBalance(new PublicKey(solanaSigner!.address))) /
+        LAMPORTS_PER_SOL
       );
     },
   });
-
   const {
     isPending: isSigningMessage,
     mutate: signHello,

@@ -56,14 +56,11 @@ export type {
   ClientStoreConfig,
 } from "./store/types.js";
 export type * from "./types.js";
-export { isViemConnection, isWeb3Connection } from "./types.js";
 export {
   cookieStorage,
   cookieToInitialState,
   parseCookie,
 } from "./utils/cookies.js";
-export { SOLANA_CHAIN, SOLANA_DEV_CHAIN } from "./chains.js";
-export { SOLANA_CHAIN_SYMBOL, SOLANA_DEVNET_CHAIN_SYMBOL } from "./symbols.js";
 
 /** Re-export core packages to make it easier to use this package without the lower level packages */
 // Accounts

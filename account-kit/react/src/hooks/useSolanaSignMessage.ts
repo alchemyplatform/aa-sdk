@@ -17,7 +17,7 @@ export type MutationParams = {
  * @see {@link https://tanstack.com/query/v5/docs/framework/react/reference/useMutation | TanStack Query useMutation}
  */
 export interface SolanaSignedMessage {
-  readonly signer: SolanaSigner | void;
+  readonly signer: SolanaSigner | null;
   readonly data: Hex | undefined;
   readonly isPending: boolean;
   readonly error: Error | null;

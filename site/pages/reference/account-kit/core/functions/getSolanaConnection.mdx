@@ -17,10 +17,10 @@ import { getSolanaConnection } from "@account-kit/core";
 ## Usage
 
 ```ts
-import { getConnection } from "@account-kit/core";
+import { getSolanaConnection } from "@account-kit/core";
 import { config } from "./config";
 
-const connection = getConnection(config);
+const connection = getSolanaConnection(config);
 ```
 
 ## Parameters
@@ -30,12 +30,7 @@ const connection = getConnection(config);
 `AlchemyAccountsConfig`
 the account config
 
-### id
-
-`string`
-the id of the connection
-
 ## Returns
 
-`Web3Connection | void`
+`SolanaConnection | void`
 a connection object for the current active chain

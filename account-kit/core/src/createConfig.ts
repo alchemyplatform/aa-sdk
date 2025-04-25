@@ -5,8 +5,6 @@ import { CoreLogger } from "./metrics.js";
 import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
 import {
-  isViemConnection,
-  isWeb3ChainConfig,
   type AlchemyAccountsConfig,
   type Connection,
   type CreateConfigProps,
@@ -64,20 +62,16 @@ export const createConfig = (
     });
   } else {
     connectionConfig.chains.forEach((params) => {
-      if (isWeb3ChainConfig(params)) {
-        connections.push({ ...params });
-      } else {
-        const { chain, policyId, transport } = params;
-        connections.push({
-          transport: transport?.config ?? connectionConfig.transport!.config,
-          chain,
-          policyId: policyId ?? connectionConfig.policyId,
-        });
-      }
+      const { chain, policyId, transport } = params;
+      connections.push({
+        transport: transport?.config ?? connectionConfig.transport!.config,
+        chain,
+        policyId: policyId ?? connectionConfig.policyId,
+      });
     });
   }
 
-  const defaultConnection = connections.filter(isViemConnection)[0].transport;
+  const defaultConnection = connections[0].transport;
   const store = createAccountKitStore({
     connections,
     chain,
@@ -101,14 +95,12 @@ export const createConfig = (
         : undefined
     ),
     ssr,
+    solana: params.solana,
   });
 
   const wagmiConfig = createWagmiConfig({
     connectors,
-    chains: [
-      chain,
-      ...connections.filter(isViemConnection).map((c) => c.chain),
-    ],
+    chains: [chain, ...connections.map((c) => c.chain)],
     client: () => getBundlerClient(config),
     storage: createStorage({
       key: `${DEFAULT_STORAGE_KEY}:wagmi`,
@@ -136,7 +128,7 @@ export const createConfig = (
     name: "config_created",
     data: {
       ssr: ssr ?? false,
-      chainIds: connections.filter(isViemConnection).map((x) => x.chain.id),
+      chainIds: connections.map((x) => x.chain.id),
     },
   });
 

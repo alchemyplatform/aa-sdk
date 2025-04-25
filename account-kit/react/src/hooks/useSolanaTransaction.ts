@@ -10,12 +10,7 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import { useSolanaSigner } from "./useSolanaSigner.js";
-import {
-  getSolanaConnection,
-  SOLANA_CHAIN_SYMBOL,
-  SOLANA_DEVNET_CHAIN_SYMBOL,
-  watchSolanaConnection,
-} from "@account-kit/core";
+import { getSolanaConnection, watchSolanaConnection } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
@@ -40,9 +35,9 @@ export type SolanaTransactionParams =
  */
 export interface SolanaTransaction {
   /** The solana signer used to send the transaction */
-  readonly signer: SolanaSigner | void;
+  readonly signer: SolanaSigner | null;
   /** The solana connection used to send the transaction */
-  readonly connection: solanaNetwork.Connection | void;
+  readonly connection: solanaNetwork.Connection | null;
   /** The result of the transaction */
   readonly data: void | { hash: string };
   /** Is the use sending a transaction */
@@ -93,18 +88,12 @@ export function useSolanaTransaction(
   opts: SolanaTransactionHookParams
 ): SolanaTransaction {
   const { config } = useAlchemyAccountContext();
-  const fallbackSigner: void | SolanaSigner = useSolanaSigner({});
-  const devChainConnection = useSyncExternalStore(
-    watchSolanaConnection(config, SOLANA_DEVNET_CHAIN_SYMBOL),
-    () => getSolanaConnection(config, SOLANA_DEVNET_CHAIN_SYMBOL),
-    () => getSolanaConnection(config, SOLANA_DEVNET_CHAIN_SYMBOL)
+  const fallbackSigner: null | SolanaSigner = useSolanaSigner();
+  const backupConnection = useSyncExternalStore(
+    watchSolanaConnection(config),
+    () => getSolanaConnection(config),
+    () => getSolanaConnection(config)
   );
-  const mainChainConnection = useSyncExternalStore(
-    watchSolanaConnection(config, SOLANA_CHAIN_SYMBOL),
-    () => getSolanaConnection(config, SOLANA_CHAIN_SYMBOL),
-    () => getSolanaConnection(config, SOLANA_CHAIN_SYMBOL)
-  );
-  const backupConnection = devChainConnection || mainChainConnection;
   const mutation = useMutation({
     mutationFn: async (params: SolanaTransactionParams) => {
       if (!signer) throw new Error("Not ready");
@@ -132,8 +121,8 @@ export function useSolanaTransaction(
     },
     ...opts.mutation,
   });
-  const signer: void | SolanaSigner = opts?.signer || fallbackSigner;
-  const connection = opts?.connection || backupConnection?.connection;
+  const signer: null | SolanaSigner = opts?.signer || fallbackSigner;
+  const connection = opts?.connection || backupConnection?.connection || null;
 
   return {
     connection,
