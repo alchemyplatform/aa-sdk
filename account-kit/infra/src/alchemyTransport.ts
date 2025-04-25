@@ -15,10 +15,10 @@ import {
   type Transport,
   type TransportConfig,
 } from "viem";
+import { mutateRemoveTrackingHeaders } from "./alchemyTrackerHeaders.js";
 import type { AlchemyRpcSchema } from "./client/types.js";
 import { AlchemyChainSchema } from "./schema.js";
 import { VERSION } from "./version.js";
-import { mutateRemoveTrackingHeaders } from "./alchemyTrackerHeaders.js";
 
 type Never<T> = T extends object
   ? {
@@ -41,6 +41,16 @@ const alchemyMethods = [
   "pm_getPaymasterData",
   "pm_getPaymasterStubData",
   "alchemy_requestGasAndPaymasterAndData",
+];
+
+const chainAgnosticMethods = [
+  "wallet_prepareCalls",
+  "wallet_sendPreparedCalls",
+  "wallet_requestAccount",
+  "wallet_createAccount",
+  "wallet_listAccounts",
+  "wallet_createSession",
+  "wallet_getCallsStatus",
 ];
 
 export type AlchemyTransportConfig = (
@@ -145,10 +155,12 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
     "Alchemy-AA-Sdk-Version": VERSION,
   };
 
-  if (connectionConfig.jwt != null) {
+  if (connectionConfig.jwt != null || connectionConfig.apiKey != null) {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${connectionConfig.jwt}`,
+      Authorization: `Bearer ${
+        connectionConfig.jwt ?? connectionConfig.apiKey
+      }`,
     };
   }
 
@@ -161,7 +173,12 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
 
     const rpcUrl =
       connectionConfig.rpcUrl == null
-        ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
+        ? `${chain.rpcUrls.alchemy.http[0]}/`
+        : connectionConfig.rpcUrl;
+
+    const chainAgnosticRpcUrl =
+      connectionConfig.rpcUrl == null
+        ? "https://api.g.alchemy.com/v2/"
         : connectionConfig.rpcUrl;
 
     const innerTransport = (() => {
@@ -173,6 +190,10 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
               methods: alchemyMethods,
               transport: http(rpcUrl, { fetchOptions }),
             },
+            {
+              methods: chainAgnosticMethods,
+              transport: http(chainAgnosticRpcUrl, { fetchOptions }),
+            },
           ],
           fallback: http(config.nodeRpcUrl, {
             fetchOptions: config.fetchOptions,
@@ -180,7 +201,15 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         });
       }
 
-      return http(rpcUrl, { fetchOptions });
+      return split({
+        overrides: [
+          {
+            methods: chainAgnosticMethods,
+            transport: http(chainAgnosticRpcUrl, { fetchOptions }),
+          },
+        ],
+        fallback: http(rpcUrl, { fetchOptions }),
+      });
     })();
 
     return createTransport(
