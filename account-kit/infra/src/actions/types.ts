@@ -59,6 +59,8 @@ export type RequestGasAndPaymasterAndDataRequest = [
     entryPoint: Address;
     erc20Context?: {
       tokenAddress: string;
+      permit?: Hex;
+      maxTokenAmount: BigInt;
     };
     dummySignature: Hex;
     userOperation: UserOperationRequest;
@@ -79,7 +81,6 @@ export type RequestGasAndPaymasterAndDataResponse<
   (TEntryPointVersion extends "0.6.0"
     ? {
         paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
-        maxTokenAmount: undefined | string;
       }
     : TEntryPointVersion extends "0.7.0"
     ? Pick<
@@ -88,7 +89,5 @@ export type RequestGasAndPaymasterAndDataResponse<
         | "paymasterData"
         | "paymasterVerificationGasLimit"
         | "paymasterPostOpGasLimit"
-      > & {
-        maxTokenAmount: undefined | string;
-      }
+      >
     : never);
