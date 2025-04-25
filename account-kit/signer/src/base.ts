@@ -1,19 +1,27 @@
 import { takeBytes, type SmartAccountAuthenticator } from "@aa-sdk/core";
 import {
+  custom,
   hashMessage,
   hashTypedData,
+  isHex,
   keccak256,
   serializeTransaction,
+  type Chain,
   type GetTransactionType,
   type Hex,
   type IsNarrowable,
   type LocalAccount,
+  type RpcSchema,
   type SerializeTransactionFn,
   type SignableMessage,
   type TransactionSerializable,
   type TransactionSerialized,
+  type Transport,
   type TypedData,
   type TypedDataDefinition,
+  type WalletClient,
+  type WalletClientConfig,
+  createWalletClient,
 } from "viem";
 import { toAccount } from "viem/accounts";
 import { hashAuthorization, type Authorization } from "viem/experimental";
@@ -806,6 +814,76 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         typedDataDefinition: TypedDataDefinition<typedData, primaryType>
       ) => this.signTypedData<typedData, primaryType>(typedDataDefinition),
       signTransaction: this.signTransaction,
+    });
+  };
+
+  /**
+   * This method lets you adapt your AlchemySigner to a viem WalletClient.
+   *
+   * @param {ToViemWalletClientParams} opts - options
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const client = signer.toViemWalletClient();
+   * ```
+   *
+   * @throws if your signer is not authenticated
+   * @returns {WalletClient} a viem WalletClient object that can be used with viem's wallet client
+   */
+  toViemWalletClient = <
+    TTransport extends Transport,
+    TChain extends Chain | undefined = undefined,
+    TRpcSchema extends RpcSchema | undefined = undefined
+  >(
+    opts: Omit<
+      WalletClientConfig<TTransport, TChain, LocalAccount, TRpcSchema>,
+      "account"
+    >
+  ): WalletClient<TTransport, TChain, LocalAccount, TRpcSchema> => {
+    const viemAccount = this.toViemAccount();
+    const { transport, ...rest } = opts;
+
+    // Construct fallback transport: https://github.com/wevm/viem/blob/59d2c093fe435e97684d34266f72c432dd6a0b3a/src/clients/createClient.ts#L231-L234
+    const fallbackTransport = transport({
+      chain: opts.chain,
+      pollingInterval: opts.pollingInterval,
+    });
+
+    return createWalletClient({
+      ...rest,
+      account: viemAccount,
+      transport: custom({
+        async request({ method, params }) {
+          switch (method) {
+            case "personal_sign":
+              return viemAccount.signMessage(
+                isHex(params[0])
+                  ? { message: { raw: params[0] } }
+                  : { message: params[0] }
+              );
+            case "eth_sign":
+              return viemAccount.signMessage({ message: { raw: params[0] } });
+            case "eth_signTypedData_v4":
+              return viemAccount.signTypedData(params[1]);
+            case "eth_accounts":
+              return [viemAccount.address];
+            default:
+              return fallbackTransport.request({ method, params });
+          }
+        },
+      }),
     });
   };
 
