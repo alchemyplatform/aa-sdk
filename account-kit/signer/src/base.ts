@@ -846,14 +846,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     TTransport extends Transport,
     TChain extends Chain | undefined = undefined,
     TRpcSchema extends RpcSchema | undefined = undefined
-  >(
-    opts: Omit<
-      WalletClientConfig<TTransport, TChain, LocalAccount, TRpcSchema>,
-      "account"
-    >
-  ): WalletClient<TTransport, TChain, LocalAccount, TRpcSchema> => {
+  >({
+    transport,
+    ...opts
+  }: Omit<
+    WalletClientConfig<TTransport, TChain, LocalAccount, TRpcSchema>,
+    "account"
+  >): WalletClient<TTransport, TChain, LocalAccount, TRpcSchema> => {
     const viemAccount = this.toViemAccount();
-    const { transport, ...rest } = opts;
 
     // Construct fallback transport: https://github.com/wevm/viem/blob/59d2c093fe435e97684d34266f72c432dd6a0b3a/src/clients/createClient.ts#L231-L234
     const fallbackTransport = transport({
@@ -862,7 +862,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     });
 
     return createWalletClient({
-      ...rest,
+      ...opts,
       account: viemAccount,
       transport: custom({
         async request({ method, params }) {
@@ -1111,6 +1111,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // handled.
     const listeners: SessionManagerEvents = {
       connected: (session) => {
+        console.log("connected, updating state");
         this.store.setState({
           user: session.user,
           status: AlchemySignerStatus.CONNECTED,
