@@ -141,6 +141,17 @@ export type UserOperationOverrides<
   >;
 // [!endregion UserOperationOverrides]
 
+// [!region PolicyToken]
+//
+export type PolicyToken = {
+  tokenAddress: Hex;
+  approvalMode?: "NONE" | "PERMIT";
+  maxTokenAmount: bigint;
+  erc20Name: string;
+  version: string;
+};
+// [!endregion PolicyToken]
+
 // [!region UserOperationRequest_v6]
 // represents the request as it needs to be formatted for v0.6 RPC requests
 // Reference: https://github.com/ethereum/ERCs/blob/8dd085d159cb123f545c272c0d871a5339550e79/ERCS/erc-4337.md#definitions
