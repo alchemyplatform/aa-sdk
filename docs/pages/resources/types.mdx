@@ -12,7 +12,7 @@ An array of `UserOperationCallData`, representing a sequence of `UserOperations`
 <Accordion title="BatchUserOperationCallData">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:BatchUserOperationCallData]
+export type BatchUserOperationCallData = Exclude<UserOperationCallData, Hex>[];
 ```
 
 </Accordion>
@@ -24,7 +24,7 @@ A type that can be a hexadecimal string prefixed with [`Hex`](https://viem.sh/do
 <Accordion title="BigNumberish">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/utils/schema.ts:BigNumberish]
+export const BigNumberishSchema = z.union([HexSchema, z.number(), z.bigint()]);
 ```
 
 </Accordion>
@@ -36,7 +36,12 @@ An object type that may contain optional `min` and `max` fields, each of which a
 <Accordion title="BigNumberishRange">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/utils/schema.ts:BigNumberishRange]
+export const BigNumberishRangeSchema = z
+  .object({
+    min: BigNumberishSchema.optional(),
+    max: BigNumberishSchema.optional(),
+  })
+  .strict();
 ```
 
 </Accordion>
@@ -48,7 +53,60 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 <Accordion title="BundlerAction">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/client/decorators/bundlerClient.ts:BundlerActions]
+export type BundlerActions = {
+  /**
+   * calls `eth_estimateUserOperationGas` and  returns the result
+   *
+   * @param request - the UserOperationRequest to estimate gas for
+   * @param entryPoint - the entry point address the op will be sent to
+   * @param stateOverride - the state override to use for the estimation
+   * @returns the gas estimates for the given response
+   */
+  estimateUserOperationGas<
+    TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  >(
+    request: UserOperationRequest<TEntryPointVersion>,
+    entryPoint: Address,
+    stateOverride?: StateOverride
+  ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
+
+  /**
+   * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
+   *
+   * @param request - the UserOperationRequest to send
+   * @param entryPoint - the entry point address the op will be sent to
+   * @returns the hash of the sent UserOperation
+   */
+  sendRawUserOperation<
+    TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  >(
+    request: UserOperationRequest<TEntryPointVersion>,
+    entryPoint: Address
+  ): Promise<Hash>;
+
+  /**
+   * calls `eth_getUserOperationByHash` and returns the UserOperationResponse
+   *
+   * @param hash - the hash of the UserOperation to fetch
+   * @returns - the user operation if found or null
+   */
+  getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null>;
+
+  /**
+   * calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
+   *
+   * @param hash - the hash of the UserOperation to get the receipt for
+   * @returns - a user operation receipt or null if not found
+   */
+  getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
+
+  /**
+   * calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
+   *
+   * @returns - an array of the entrypoint addresses supported
+   */
+  getSupportedEntryPoints(): Promise<Address[]>;
+};
 ```
 
 </Accordion>
@@ -60,7 +118,38 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 <Accordion title="BundlerClient">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/client/bundlerClient.ts:BundlerClient]
+export type BundlerClient<T extends Transport = Transport> = Client<
+  T,
+  Chain,
+  undefined,
+  [...PublicRpcSchema, ...BundlerRpcSchema],
+  PublicActions<T, Chain> & BundlerActions
+>;
+
+/**
+ * Creates a bundler client from an existing public client with the provided transport and chain.
+ *
+ * @example
+ * ```ts
+ * import { createPublicClient } from "viem";
+ * import { createBundlerClientFromExisting } from "@aa-sdk/core";
+ *
+ * const publicClient = createPublicClient(...);
+ * const bundlerClient = createBundlerClientFromExisting(publicClient);
+ * ```
+ *
+ * @param {PublicClient<T, Chain>} client The existing public client to be extended with bundler actions
+ * @returns {BundlerClient<T>} A bundler client that extends the functionality of the provided public client
+ */
+export const createBundlerClientFromExisting: <
+  T extends Transport | FallbackTransport = Transport
+>(
+  client: PublicClient<T, Chain>
+) => BundlerClient<T> = <T extends Transport | FallbackTransport = Transport>(
+  client: PublicClient<T, Chain>
+): BundlerClient<T> => {
+  return client.extend(bundlerActions);
+};
 ```
 
 </Accordion>
@@ -72,7 +161,19 @@ Middleware represents different operations involved in the [`SmartAccountClient`
 <Accordion title="ClientMiddleware">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddleware]
+export type ClientMiddleware<
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined
+> = {
+  dummyPaymasterAndData: ClientMiddlewareFn<TContext>;
+  feeEstimator: ClientMiddlewareFn<TContext>;
+  gasEstimator: ClientMiddlewareFn<TContext>;
+  customMiddleware: ClientMiddlewareFn<TContext>;
+  paymasterAndData: ClientMiddlewareFn<TContext>;
+  userOperationSimulator: ClientMiddlewareFn<TContext>;
+  signUserOperation: ClientMiddlewareFn<TContext>;
+};
 ```
 
 </Accordion>
@@ -84,7 +185,11 @@ Configuration object to configure `ClientMiddleware` of the [`SmartAccountClient
 <Accordion title="ClientMiddlewareFn">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/client/types.ts:ClientMiddlewareConfig]
+export type ClientMiddlewareConfig<
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined
+> = Partial<ClientMiddleware<TContext>>;
 ```
 
 </Accordion>
@@ -96,7 +201,18 @@ Each middleware is a function that takes in a user operation object, `UserOperat
 <Accordion title="ClientMiddlewareFn">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddlewareFn]
+export type ClientMiddlewareFn<
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined
+> = <
+  TAccount extends SmartContractAccount,
+  C extends MiddlewareClient,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+>(
+  struct: Deferrable<UserOperationStruct<TEntryPointVersion>>,
+  args: ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion>
+) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
 ```
 
 </Accordion>
@@ -108,7 +224,22 @@ An object type that defines the interface for `EntryPoint` functions for packing
 <Accordion title="EntryPointDef">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/entrypoint/types.ts:EntryPointDef]
+export type EntryPointDef<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TChain extends Chain = Chain,
+  TAbi extends Abi | readonly unknown[] = Abi
+> = {
+  version: TEntryPointVersion;
+  address: Address;
+  chain: TChain;
+  abi: GetContractParameters<Transport, TChain, Account, TAbi>["abi"];
+  getUserOperationHash: (
+    request: UserOperationRequest<TEntryPointVersion>
+  ) => Hex;
+  packUserOperation: (
+    userOperation: UserOperationRequest<TEntryPointVersion>
+  ) => Hex;
+};
 ```
 
 </Accordion>
@@ -120,7 +251,19 @@ An object type with a required `multipler` field, which is a `number` value with
 <Accordion title="Multiplier">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/utils/schema.ts:Multiplier]
+export const MultiplierSchema = z
+  .object({
+    /**
+     * Multiplier value with max precision of 4 decimal places
+     */
+    multiplier: z.number().refine(
+      (n) => {
+        return (n.toString().split(".")[1]?.length ?? 0) <= 4;
+      },
+      { message: "Max precision is 4 decimal places" }
+    ),
+  })
+  .strict();
 ```
 
 </Accordion>
@@ -132,7 +275,19 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 <Accordion title="SmartAccountAuthenticator">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/signer/types.ts:SmartAccountAuthenticator]
+/**
+ * Extends the @interface SmartAccountSigner interface with authentication.
+ *
+ * @template AuthParams - the generic type of the authentication parameters
+ * @template AuthDetails - the generic type of the authentication details
+ * @template Inner - the generic type of the inner client that the signer wraps to provide functionality such as signing, etc.
+ */
+export interface SmartAccountAuthenticator<AuthParams, AuthDetails, Inner = any>
+  extends SmartAccountSigner<Inner> {
+  authenticate: (params: AuthParams) => Promise<AuthDetails>;
+
+  getAuthDetails: () => Promise<AuthDetails>;
+}
 ```
 
 </Accordion>
@@ -144,7 +299,26 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 <Accordion title="SmartAccountClient">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/client/smartAccountClient.ts:SmartAccountClient]
+export type SmartAccountClient<
+  transport extends Transport = Transport,
+  chain extends Chain | undefined = Chain | undefined,
+  account extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  actions extends Record<string, unknown> = Record<string, unknown>,
+  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined
+> = Prettify<
+  Client<
+    transport,
+    chain,
+    account,
+    rpcSchema,
+    actions & SmartAccountClientActions<chain, account, context>
+  >
+>;
 ```
 
 </Accordion>
@@ -156,7 +330,17 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 <Accordion title="SmartAccountClientAction">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/client/smartAccountClient.ts:SmartAccountClientActions]
+export type SmartAccountClientActions<
+  chain extends Chain | undefined = Chain | undefined,
+  account extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined
+> = BaseSmartAccountClientActions<chain, account, context> &
+  BundlerActions &
+  PublicActions;
 ```
 
 </Accordion>
@@ -168,7 +352,30 @@ An interface representing a signer capable of signing messages and typed data. I
 <Accordion title="SmartAccountSigner">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/signer/types.ts:SmartAccountSigner]
+/**
+ * A signer that can sign messages and typed data.
+ *
+ * @template Inner - the generic type of the inner client that the signer wraps to provide functionality such as signing, etc.
+ */
+export interface SmartAccountSigner<Inner = any> {
+  signerType: string;
+  inner: Inner;
+
+  getAddress: () => Promise<Address>;
+
+  signMessage: (message: SignableMessage) => Promise<Hex>;
+
+  signTypedData: <
+    const TTypedData extends TypedData | Record<string, unknown>,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => Promise<Hex>;
+
+  signAuthorization?: (
+    unsignedAuthorization: Authorization<number, false>
+  ) => Promise<Authorization<number, true>>;
+}
 ```
 
 </Accordion>
@@ -180,7 +387,31 @@ As smart contract accounts are essentially the contract codes that operate on th
 <Accordion title="SmartContractAccount">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts:SmartContractAccount]
+export type SmartContractAccount<
+  Name extends string = string,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = LocalAccount<Name> & {
+  source: Name;
+  getDummySignature: () => Hex | Promise<Hex>;
+  encodeExecute: (tx: AccountOp) => Promise<Hex>;
+  encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
+  signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
+  signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
+  signTypedDataWith6492: <
+    const typedData extends TypedData | Record<string, unknown>,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+  >(
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+  ) => Promise<Hex>;
+  encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
+  getAccountNonce(nonceKey?: bigint): Promise<bigint>;
+  getInitCode: () => Promise<Hex>;
+  isAccountDeployed: () => Promise<boolean>;
+  getFactoryAddress: () => Promise<Address>;
+  getFactoryData: () => Promise<Hex>;
+  getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
+  getImplementationAddress: () => Promise<NullAddress | Address>;
+};
 ```
 
 </Accordion>
@@ -197,7 +428,27 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 <Accordion title="ToSmartContractAccountParams">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts:ToSmartContractAccountParams]
+export type ToSmartContractAccountParams<
+  Name extends string = string,
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = {
+  source: Name;
+  transport: TTransport;
+  chain: TChain;
+  entryPoint: EntryPointDef<TEntryPointVersion, TChain>;
+  accountAddress?: Address;
+  getAccountInitCode: () => Promise<Hex>;
+  getDummySignature: () => Hex | Promise<Hex>;
+  encodeExecute: (tx: AccountOp) => Promise<Hex>;
+  encodeBatchExecute?: (txs: AccountOp[]) => Promise<Hex>;
+  getNonce?: (nonceKey?: bigint) => Promise<bigint>;
+  // if not provided, will default to just using signMessage over the Hex
+  signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
+  encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
+  getImplementationAddress?: () => Promise<NullAddress | Address>;
+} & Omit<CustomSource, "signTransaction" | "address">;
 ```
 
 </Accordion>
@@ -209,7 +460,16 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 <Accordion title="User">
 
 ```ts
-// [!include ~/../account-kit/signer/src/client/types.ts:User]
+export type User = {
+  email?: string;
+  orgId: string;
+  userId: string;
+  address: Address;
+  solanaAddress?: string;
+  credentialId?: string;
+  idToken?: string;
+  claims?: Record<string, unknown>;
+};
 ```
 
 </Accordion>
@@ -221,7 +481,16 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 <Accordion title="UserOperationCallData">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationCallData]
+export type UserOperationCallData =
+  | {
+      /* the target of the call */
+      target: Address;
+      /* the data passed to the target */
+      data: Hex;
+      /* the amount of native token to send to the target (default: 0) */
+      value?: bigint;
+    }
+  | Hex;
 ```
 
 </Accordion>
@@ -233,7 +502,24 @@ An interface that defines the structure for the response received from the RPC m
 <Accordion title="UserOperationEstimateGasResponse">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationEstimateGasResponse]
+export interface UserOperationEstimateGasResponse<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> {
+  /* Gas overhead of this UserOperation */
+  preVerificationGas: BigNumberish;
+  /* Actual gas used by the validation of this UserOperation */
+  verificationGasLimit: BigNumberish;
+  /* Value used by inner account execution */
+  callGasLimit: BigNumberish;
+  /*
+   * EntryPoint v0.7.0 operations only.
+   * The amount of gas to allocate for the paymaster validation code.
+   * Note: `eth_estimateUserOperationGas` does not return paymasterPostOpGasLimit.
+   */
+  paymasterVerificationGasLimit: TEntryPointVersion extends "0.7.0"
+    ? BigNumberish | undefined
+    : never;
+}
 ```
 
 </Accordion>
@@ -245,7 +531,51 @@ Partial structure for overriding default values in a `UserOperationStruct`, such
 <Accordion title="UserOperationOverrides">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationOverrides]
+export type UserOperationOverrides<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = Partial<
+  {
+    callGasLimit:
+      | UserOperationStruct<TEntryPointVersion>["callGasLimit"]
+      | Multiplier;
+    maxFeePerGas:
+      | UserOperationStruct<TEntryPointVersion>["maxFeePerGas"]
+      | Multiplier;
+    maxPriorityFeePerGas:
+      | UserOperationStruct<TEntryPointVersion>["maxPriorityFeePerGas"]
+      | Multiplier;
+    preVerificationGas:
+      | UserOperationStruct<TEntryPointVersion>["preVerificationGas"]
+      | Multiplier;
+    verificationGasLimit:
+      | UserOperationStruct<TEntryPointVersion>["verificationGasLimit"]
+      | Multiplier;
+
+    /**
+     * The same state overrides for
+     * [`eth_call`](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call) method.
+     * An address-to-state mapping, where each entry specifies some state to be ephemerally overridden
+     * prior to executing the call. State overrides allow you to customize the network state for
+     * the purpose of the simulation, so this feature is useful when you need to estimate gas
+     * for user operation scenarios under conditions that aren’t currently present on the live network.
+     */
+    stateOverride: StateOverride;
+  } & UserOperationPaymasterOverrides<TEntryPointVersion>
+> &
+  /**
+   * This can be used to override the nonce or nonce key used when calling `entryPoint.getNonce`
+   * It is useful when you want to use parallel nonces for user operations
+   *
+   * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
+   * one user operation for your account in a bundle
+   */
+  Partial<
+    | {
+        nonceKey: bigint;
+        nonce: never;
+      }
+    | { nonceKey: never; nonce: bigint }
+  >;
 ```
 
 </Accordion>
@@ -257,7 +587,30 @@ An interface that defines the structure for the response received from the RPC m
 <Accordion title="UserOperationReceipt">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationReceipt]
+export interface UserOperationReceipt {
+  /* The request hash of the UserOperation. */
+  userOpHash: Hash;
+  /* The entry point address used for the UserOperation. */
+  entryPoint: Address;
+  /* The account initiating the UserOperation. */
+  sender: Address;
+  /* The nonce used in the UserOperation. */
+  nonce: BigNumberish;
+  /* The paymaster used for this UserOperation (or empty). */
+  paymaster?: Address;
+  /* The actual amount paid (by account or paymaster) for this UserOperation. */
+  actualGasCost: BigNumberish;
+  /* The total gas used by this UserOperation (including preVerification, creation, validation, and execution). */
+  actualGasUsed: BigNumberish;
+  /* Indicates whether the execution completed without reverting. */
+  success: boolean;
+  /* In case of revert, this is the revert reason. */
+  reason?: string;
+  /* The logs generated by this UserOperation (not including logs of other UserOperations in the same bundle). */
+  logs: string[];
+  /* The TransactionReceipt object for the entire bundle, not only for this UserOperation. */
+  receipt: TransactionReceipt;
+}
 ```
 
 </Accordion>
@@ -269,7 +622,15 @@ Interface for the request format required for a JSON-RPC request to `eth_sendUse
 <Accordion title="UserOperationRequest">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationRequest]
+// Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
+export type UserOperationRequest<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = (TEntryPointVersion extends "0.6.0"
+  ? UserOperationRequest_v6
+  : TEntryPointVersion extends "0.7.0"
+  ? UserOperationRequest_v7
+  : never) &
+  Eip7702ExtendedFields;
 ```
 
 </Accordion>
@@ -281,7 +642,20 @@ An interface that defines the structure for the response received from the RPC m
 <Accordion title="UserOperationResponse">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationResponse]
+export interface UserOperationResponse<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> {
+  /* the User Operation */
+  userOperation: UserOperationRequest<TEntryPointVersion>;
+  /* the address of the entry point contract that executed the user operation */
+  entryPoint: Address;
+  /* the block number the user operation was included in */
+  blockNumber: BigNumberish;
+  /* the hash of the block the user operation was included in */
+  blockHash: Hash;
+  /* the hash of the transaction that included the user operation */
+  transactionHash: Hash;
+}
 ```
 
 </Accordion>
@@ -293,7 +667,14 @@ Interface for structuring a `UserOperation`, with fields similar to `UserOperati
 <Accordion title="UserOperationStruct">
 
 ```ts
-// [!include ~/../aa-sdk/core/src/types.ts:UserOperationStruct]
+export type UserOperationStruct<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = (TEntryPointVersion extends "0.6.0"
+  ? UserOperationStruct_v6
+  : TEntryPointVersion extends "0.7.0"
+  ? UserOperationStruct_v7
+  : never) &
+  Eip7702ExtendedFields;
 ```
 
 </Accordion>
