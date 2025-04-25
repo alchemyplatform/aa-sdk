@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { toBytes, toHex, type Hex } from "viem";
+import { toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types";
 import { useSolanaSigner } from "./useSolanaSigner.js";
 
 export type MutationParams = {
-  message: string;
+  message: string | ByteArray;
 };
 /**
  * There are cases where we might want to sign a message, used for other
@@ -68,7 +68,13 @@ export function useSolanaSignMessage(
         throw new Error(
           "The signer is null, and should be passed in or put into context"
         );
-      return await signer.signMessage(toBytes(args.message)).then(toHex);
+      return await signer
+        .signMessage(
+          typeof args.message === "string"
+            ? toBytes(args.message)
+            : args.message
+        )
+        .then(toHex);
     },
     ...opts.mutation,
   });

@@ -65,6 +65,7 @@ export const SolanaCard = () => {
     isPending: isSigningMessage,
     mutate: signHello,
     data: signature,
+
     reset,
   } = useSolanaSignMessage({
     mutation: {
