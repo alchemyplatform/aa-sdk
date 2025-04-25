@@ -54,25 +54,19 @@ export function alchemyGasManagerMiddleware(
 
 interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
   policyId: string | string[];
+  policyToken?: PolicyToken;
   transport: AlchemyTransport;
   gasEstimatorOverride?: ClientMiddlewareFn;
   feeEstimatorOverride?: ClientMiddlewareFn;
-  policyToken?: PolicyToken;
 }
 
 export type PolicyToken = {
   address: string;
   maxTokenAmount: bigint;
-  approvalMode: ApprovalMode;
+  approvalMode?: "NONE" | "PERMIT" | "INJECT_APPROVAL";
   erc20Name: string;
   version: string;
 };
-
-export enum ApprovalMode {
-  INJECT_APPROVAL = 2,
-  PERMIT = 1,
-  NONE = 0,
-}
 
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
@@ -111,10 +105,10 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
 > {
   const {
     policyId,
+    policyToken,
     transport,
     gasEstimatorOverride,
     feeEstimatorOverride,
-    policyToken,
   } = params;
   return {
     dummyPaymasterAndData: async (uo, args) => {
@@ -209,10 +203,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       });
 
       let erc20Context = undefined;
-      if (
-        policyToken !== undefined &&
-        policyToken.approvalMode === ApprovalMode.PERMIT
-      ) {
+      if (policyToken !== undefined && policyToken.approvalMode === "PERMIT") {
         // get a paymaster address
         let paymasterAddress = "0x";
         const paymasterData = await (
