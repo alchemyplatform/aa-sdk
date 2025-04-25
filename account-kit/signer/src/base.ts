@@ -873,8 +873,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
                   ? { message: { raw: params[0] } }
                   : { message: params[0] }
               );
-            case "eth_sign":
-              return viemAccount.signMessage({ message: { raw: params[0] } });
             case "eth_signTypedData_v4":
               return viemAccount.signTypedData(params[1]);
             case "eth_accounts":
