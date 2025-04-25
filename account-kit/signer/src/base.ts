@@ -858,7 +858,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // Construct fallback transport: https://github.com/wevm/viem/blob/59d2c093fe435e97684d34266f72c432dd6a0b3a/src/clients/createClient.ts#L231-L234
     const fallbackTransport = transport({
       chain: opts.chain,
-      pollingInterval: opts.pollingInterval,
+      pollingInterval: opts.pollingInterval ?? 4_000,
     });
 
     return createWalletClient({
