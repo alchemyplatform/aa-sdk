@@ -116,8 +116,8 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect",
           },
           {
-            text: "experimental_toSolanaSigner",
-            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner",
+            text: "toSolanaSigner",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/toSolanaSigner",
           },
           {
             text: "exportWallet",
