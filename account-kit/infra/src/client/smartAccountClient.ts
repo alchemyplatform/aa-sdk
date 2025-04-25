@@ -48,6 +48,13 @@ export type AlchemySmartAccountClientConfig<
   account?: account;
   useSimulation?: boolean;
   policyId?: string | string[];
+  policyToken?: {
+    address: string;
+    approvalMode?: "NONE" | "PERMIT" | "INJECT_APPROVAL";
+    maxTokenAmount: bigint;
+    erc20Name: string;
+    version: string;
+  };
 } & Pick<
   SmartAccountClientConfig<AlchemyTransport, chain, account, context>,
   | "customMiddleware"
@@ -163,6 +170,7 @@ export function createAlchemySmartAccountClient(
     ...(config.policyId
       ? alchemyGasAndPaymasterAndDataMiddleware({
           policyId: config.policyId,
+          policyToken: config.policyToken,
           transport: config.transport,
           gasEstimatorOverride: config.gasEstimator,
           feeEstimatorOverride: config.feeEstimator,
