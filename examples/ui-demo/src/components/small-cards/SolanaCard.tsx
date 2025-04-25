@@ -28,7 +28,7 @@ export const SolanaCard = () => {
   const { setToast } = useToast();
 
   const {
-    mutate,
+    sendTransaction,
     connection,
     isPending,
     data: { hash: txHash = null } = {},
@@ -63,7 +63,7 @@ export const SolanaCard = () => {
   });
   const {
     isPending: isSigningMessage,
-    mutate: signHello,
+    signMessage,
     data: signature,
 
     reset,
@@ -134,7 +134,7 @@ export const SolanaCard = () => {
             if (balance === 0) {
               window.open("https://faucet.solana.com/", "_blank");
             } else if (!txHash) {
-              mutate({
+              sendTransaction({
                 transfer: {
                   amount: 1000000,
                   toAddress:
@@ -163,7 +163,7 @@ export const SolanaCard = () => {
           className="w-full"
           disabled={!solanaSigner || isSigningMessage}
           onClick={() => {
-            signHello({ message: "Hello" });
+            signMessage({ message: "Hello" });
           }}
         >
           {isSigningMessage
@@ -179,8 +179,8 @@ export const SolanaCard = () => {
       isBalanceLoading,
       isPending,
       isSigningMessage,
-      mutate,
-      signHello,
+      signMessage,
+      sendTransaction,
       signature,
       solanaSigner,
       txHash,

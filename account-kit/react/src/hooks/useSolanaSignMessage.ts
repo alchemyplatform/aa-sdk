@@ -1,3 +1,5 @@
+"use client";
+
 import { useMutation } from "@tanstack/react-query";
 import { toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { SolanaSigner } from "@account-kit/signer";
@@ -22,8 +24,8 @@ export interface SolanaSignedMessage {
   readonly isPending: boolean;
   readonly error: Error | null;
   reset(): void;
-  mutate(args: MutationParams): void;
-  mutateAsync(args: MutationParams): Promise<Hex>;
+  signMessage(args: MutationParams): void;
+  signMessageAsync(args: MutationParams): Promise<Hex>;
 }
 
 /**
@@ -82,5 +84,7 @@ export function useSolanaSignMessage(
   return {
     signer,
     ...mutation,
+    signMessage: mutation.mutate,
+    signMessageAsync: mutation.mutateAsync,
   };
 }

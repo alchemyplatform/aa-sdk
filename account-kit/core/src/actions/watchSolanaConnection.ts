@@ -4,7 +4,7 @@ import type { AlchemyAccountsConfig, SolanaConnection } from "../types";
  * Subscribe to changes to the solana connection for the id
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { watchSolanaConnection } from "@account-kit/core";
  * // see createConfig for more information on how to create a config
  * import { config } from "./config";

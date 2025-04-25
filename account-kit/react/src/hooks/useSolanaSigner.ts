@@ -1,3 +1,5 @@
+"use client";
+
 import type { AlchemySigner, SignerStatus } from "@account-kit/core";
 import { useSigner } from "./useSigner.js";
 import { useSignerStatus } from "./useSignerStatus.js";

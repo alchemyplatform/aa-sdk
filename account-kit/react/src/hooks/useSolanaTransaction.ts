@@ -46,9 +46,11 @@ export interface SolanaTransaction {
   readonly error: Error | null;
   reset(): void;
   /** Send the transaction */
-  mutate(params: SolanaTransactionParams): void;
+  sendTransaction(params: SolanaTransactionParams): void;
   /** Send the transaction asynchronously */
-  mutateAsync(params: SolanaTransactionParams): Promise<{ hash: string }>;
+  sendTransactionAsync(
+    params: SolanaTransactionParams
+  ): Promise<{ hash: string }>;
 }
 
 /**
@@ -128,5 +130,7 @@ export function useSolanaTransaction(
     connection,
     signer,
     ...mutation,
+    sendTransaction: mutation.mutate,
+    sendTransactionAsync: mutation.mutateAsync,
   };
 }
