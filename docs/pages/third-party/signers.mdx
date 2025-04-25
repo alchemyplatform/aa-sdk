@@ -27,58 +27,7 @@ Please open a PR to add a link to your content in this section.
 Smart accounts in Account Kit expect an implementation of `SmartAccountSigner` to work in Account Kit. We also include a `SmartAccountAuthenticator` interface that extends `SmartAccountSigner` and wraps any SDKs you may wish to use as part of the implementation of your own Signer.
 
 ```ts [types.ts] twoslash
-import type { Address } from "abitype";
-import type {
-  Hex,
-  SignableMessage,
-  TypedData,
-  TypedDataDefinition,
-} from "viem";
-import type { Authorization } from "viem/experimental";
-
-// [!region SmartAccountAuthenticator]
-/**
- * Extends the @interface SmartAccountSigner interface with authentication.
- *
- * @template AuthParams - the generic type of the authentication parameters
- * @template AuthDetails - the generic type of the authentication details
- * @template Inner - the generic type of the inner client that the signer wraps to provide functionality such as signing, etc.
- */
-export interface SmartAccountAuthenticator<AuthParams, AuthDetails, Inner = any>
-  extends SmartAccountSigner<Inner> {
-  authenticate: (params: AuthParams) => Promise<AuthDetails>;
-
-  getAuthDetails: () => Promise<AuthDetails>;
-}
-// [!endregion SmartAccountAuthenticator]
-
-// [!region SmartAccountSigner]
-/**
- * A signer that can sign messages and typed data.
- *
- * @template Inner - the generic type of the inner client that the signer wraps to provide functionality such as signing, etc.
- */
-export interface SmartAccountSigner<Inner = any> {
-  signerType: string;
-  inner: Inner;
-
-  getAddress: () => Promise<Address>;
-
-  signMessage: (message: SignableMessage) => Promise<Hex>;
-
-  signTypedData: <
-    const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
-  >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
-  ) => Promise<Hex>;
-
-  signAuthorization?: (
-    unsignedAuthorization: Authorization<number, false>
-  ) => Promise<Authorization<number, true>>;
-}
-// [!endregion SmartAccountSigner]
-
+// [!include ~/../aa-sdk/core/src/signer/types.ts]
 ```
 
 ## Using `WalletClientSigner`
