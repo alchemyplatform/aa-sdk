@@ -87,7 +87,7 @@ mutate({
  * @returns {SolanaTransaction} The transaction hook.
  */
 export function useSolanaTransaction(
-  opts: SolanaTransactionHookParams
+  opts: SolanaTransactionHookParams = {}
 ): SolanaTransaction {
   const { config } = useAlchemyAccountContext();
   const fallbackSigner: null | SolanaSigner = useSolanaSigner();
