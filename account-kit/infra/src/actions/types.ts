@@ -59,6 +59,8 @@ export type RequestGasAndPaymasterAndDataRequest = [
     entryPoint: Address;
     erc20Context?: {
       tokenAddress: string;
+      permit?: Hex;
+      maxTokenAmount: BigInt;
     };
     dummySignature: Hex;
     userOperation: UserOperationRequest;
