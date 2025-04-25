@@ -1111,7 +1111,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // handled.
     const listeners: SessionManagerEvents = {
       connected: (session) => {
-        console.log("connected, updating state");
         this.store.setState({
           user: session.user,
           status: AlchemySignerStatus.CONNECTED,
