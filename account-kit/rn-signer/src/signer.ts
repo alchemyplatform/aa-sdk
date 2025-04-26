@@ -1,10 +1,9 @@
-import { z } from "zod";
 import {
   BaseAlchemySigner,
   SessionManagerParamsSchema,
 } from "@account-kit/signer";
-// eslint-disable-next-line import/extensions
-import { RNSignerClient, RNSignerClientParamsSchema } from "./client";
+import { z } from "zod";
+import { RNSignerClient, RNSignerClientParamsSchema } from "./client.js";
 
 const RNAlchemySignerParamsSchema = z
   .object({
@@ -42,6 +41,8 @@ export class RNAlchemySignerSingleton extends BaseAlchemySigner<RNSignerClient> 
       client,
       sessionConfig,
     });
+
+    this.signerType = "rn-alchemy-signer";
   }
 
   public static getInstance(params: RNAlchemySignerParams) {
@@ -52,6 +53,29 @@ export class RNAlchemySignerSingleton extends BaseAlchemySigner<RNSignerClient> 
   }
 }
 
+/**
+ * Factory function to create or retrieve a singleton instance of RNAlchemySigner.
+ *
+ * @example
+ * ```ts twoslash
+ * import { RNAlchemySigner } from "@account-kit/react-native-signer";
+ *
+ * const signer = RNAlchemySigner({
+ *  client: {
+ *    connection: {
+ *      apiKey: "YOUR_API_KEY"
+ *    },
+ *  },
+ *  // optional config to override default session manager configs
+ *  sessionConfig: {
+ *    expirationTimeMs: 1000 * 60 * 60 // 60 minutes
+ *  }
+ * });
+ * ```
+ *
+ * @param {RNAlchemySignerParams} params The parameters required to configure the RNAlchemySigner instance.
+ * @returns {RNAlchemySignerSingleton} The singleton instance of RNAlchemySigner configured with the provided parameters.
+ */
 export function RNAlchemySigner(params: RNAlchemySignerParams) {
   const instance = RNAlchemySignerSingleton.getInstance(params);
 

@@ -8,6 +8,8 @@ import {
   type TypedDataDefinition,
   type Chain,
   type Address,
+  concat,
+  concatHex,
 } from "viem";
 
 import {
@@ -15,18 +17,18 @@ import {
   pack1271Signature,
   DEFAULT_OWNER_ENTITY_ID,
 } from "../utils.js";
+import { SignatureType } from "../modules/utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
  * @example
  * ```ts
  * import { nativeSMASigner } from "@account-kit/smart-contracts";
- 
  * import { LocalAccountSigner } from "@aa-sdk/core";
  *
  * const MNEMONIC = "...":
  *
- * const account = createSMAV2Account({ config });
+ * const account = createModularAccountV2({ config });
  *
  * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
  *
@@ -36,31 +38,42 @@ import {
  * @param {SmartAccountSigner} signer Signer to use for signing operations
  * @param {Chain} chain Chain object for the signer
  * @param {Address} accountAddress address of the smart account using this signer
+ * @param {Hex} deferredActionData optional deferred action data to prepend to the uo signatures
  * @returns {object} an object with methods for signing operations and managing signatures
  */
 export const nativeSMASigner = (
   signer: SmartAccountSigner,
   chain: Chain,
-  accountAddress: Address
+  accountAddress: Address,
+  deferredActionData?: Hex
 ) => {
   return {
     getDummySignature: (): Hex => {
-      const dummyEcdsaSignature =
-        "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-
-      return packUOSignature({
+      const sig = packUOSignature({
         // orderedHookData: [],
-        validationSignature: dummyEcdsaSignature,
+        validationSignature:
+          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
       });
+
+      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
     },
 
-    signUserOperationHash: (uoHash: Hex): Promise<Hex> => {
-      return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
-        packUOSignature({
-          // orderedHookData: [],
-          validationSignature: signature,
-        })
-      );
+    signUserOperationHash: async (uoHash: Hex): Promise<Hex> => {
+      let sig = await signer
+        .signMessage({ raw: uoHash })
+        .then((signature: Hex) =>
+          packUOSignature({
+            // orderedHookData: [],
+            validationSignature: signature,
+          })
+        );
+
+      if (deferredActionData) {
+        sig = concatHex([deferredActionData, sig]);
+        deferredActionData = undefined;
+      }
+
+      return sig;
     },
 
     // we apply the expected 1271 packing here since the account contract will expect it
@@ -99,7 +112,10 @@ export const nativeSMASigner = (
         typedDataDefinition?.domain?.verifyingContract === accountAddress;
 
       return isDeferredAction
-        ? signer.signTypedData(typedDataDefinition)
+        ? concat([
+            SignatureType.EOA,
+            await signer.signTypedData(typedDataDefinition),
+          ])
         : pack1271Signature({
             validationSignature: await signer.signTypedData({
               domain: {

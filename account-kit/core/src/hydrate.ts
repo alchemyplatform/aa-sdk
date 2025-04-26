@@ -75,7 +75,7 @@ export function hydrate(
     config._internal.wagmiConfig,
     {
       initialState: initialWagmiState,
-      reconnectOnMount: true,
+      reconnectOnMount: (initialWagmiState?.connections?.size ?? 0) > 0,
     }
   );
 
@@ -110,21 +110,28 @@ const hydrateAccountState = (
     ([, cnx]) => cnx.chain
   );
   const initialState = createDefaultAccountState(chains);
+  const activeChainId = config.store.getState().chain.id;
 
   return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
     const chainId = Number(chainKey);
+    const isActiveChain = chainId === activeChainId;
+    const shouldReconnect = shouldReconnectAccounts && isActiveChain;
     acc[chainId] = {
       LightAccount:
-        config.LightAccount && shouldReconnectAccounts
-          ? reconnectingState(config.LightAccount.accountAddress!)
+        shouldReconnect && config.LightAccount?.accountAddress
+          ? reconnectingState(config.LightAccount.accountAddress)
           : defaultAccountState(),
       MultiOwnerModularAccount:
-        config.MultiOwnerModularAccount && shouldReconnectAccounts
-          ? reconnectingState(config.MultiOwnerModularAccount.accountAddress!)
+        shouldReconnect && config.MultiOwnerModularAccount?.accountAddress
+          ? reconnectingState(config.MultiOwnerModularAccount.accountAddress)
           : defaultAccountState(),
       MultiOwnerLightAccount:
-        config.MultiOwnerLightAccount && shouldReconnectAccounts
-          ? reconnectingState(config.MultiOwnerLightAccount.accountAddress!)
+        shouldReconnect && config.MultiOwnerLightAccount?.accountAddress
+          ? reconnectingState(config.MultiOwnerLightAccount.accountAddress)
+          : defaultAccountState(),
+      ModularAccountV2:
+        shouldReconnect && config.ModularAccountV2?.accountAddress
+          ? reconnectingState(config.ModularAccountV2.accountAddress)
           : defaultAccountState(),
     };
 

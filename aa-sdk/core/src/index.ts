@@ -76,6 +76,8 @@ export {
   InvalidEntityIdError,
   InvalidNonceKeyError,
   EntityIdOverrideError,
+  InvalidModularAccountV2Mode,
+  InvalidDeferredActionNonce,
 } from "./errors/client.js";
 export {
   EntryPointNotFoundError,
@@ -90,8 +92,11 @@ export {
   InvalidUserOperationError,
   WaitForUserOperationError,
 } from "./errors/useroperation.js";
+export * from "./client/addBreadcrumb.js";
 export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
+export { default7702UserOpSigner } from "./middleware/defaults/7702signer.js";
+export { default7702GasEstimator } from "./middleware/defaults/7702gasEstimator.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";
 export { defaultGasEstimator } from "./middleware/defaults/gasEstimator.js";
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
@@ -111,6 +116,11 @@ export { WalletClientSigner } from "./signer/wallet-client.js";
 export { split, type SplitTransportParams } from "./transport/split.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
+export {
+  TraceHeader,
+  TRACE_HEADER_NAME,
+  TRACE_HEADER_STATE,
+} from "./utils/traceHeader.js";
 export {
   BigNumberishRangeSchema,
   BigNumberishSchema,

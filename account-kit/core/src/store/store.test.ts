@@ -1,22 +1,41 @@
-import { alchemy, arbitrumSepolia, sepolia } from "@account-kit/infra";
+import {
+  alchemy,
+  arbitrumSepolia,
+  baseSepolia,
+  sepolia,
+} from "@account-kit/infra";
 import { getAlchemyTransport } from "../actions/getAlchemyTransport.js";
 import { setChain } from "../actions/setChain.js";
 import { createConfig } from "../createConfig.js";
-import { createDefaultAccountState } from "./store.js";
+import { createDefaultAccountState, STORAGE_VERSION } from "./store.js";
 import { DEFAULT_STORAGE_KEY } from "./types.js";
 
 describe("createConfig tests", () => {
   it("should setup the config with the correct transport", async () => {
     const config = await givenConfig();
 
-    expect({ ...getAlchemyTransport(config) }).toMatchInlineSnapshot(`
+    expect({ ...getAlchemyTransport(config) }).toMatchInlineSnapshot(
+      {
+        dynamicFetchOptions: {
+          headers: {
+            "Alchemy-AA-Sdk-Version": expect.stringMatching(/^\d+\.\d+\.\d+/),
+          },
+        },
+      },
+      `
       {
         "config": {
           "rpcUrl": "/api/sepolia",
         },
+        "dynamicFetchOptions": {
+          "headers": {
+            "Alchemy-AA-Sdk-Version": StringMatching /\\^\\\\d\\+\\\\\\.\\\\d\\+\\\\\\.\\\\d\\+/,
+          },
+        },
         "updateHeaders": [Function],
       }
-    `);
+    `
+    );
   });
 
   it("should rehydrate the current chain and transport", async () => {
@@ -43,6 +62,399 @@ describe("createConfig tests", () => {
           "rpcUrl": "/api/arbitrumSepolia",
         }
       `);
+  });
+
+  it("should overwrite the state if the config changed (chain removed)", async () => {
+    await givenConfig();
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            421614,
+            {
+              "chain": {
+                "id": 421614,
+              },
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/arbitrumSepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+
+    const config2 = createConfig({
+      chain: sepolia,
+      chains: [
+        {
+          chain: sepolia,
+          transport: alchemy({ rpcUrl: "/api/sepolia" }),
+          policyId: "test-policy-id",
+        },
+      ],
+      signerConnection: { rpcUrl: "/api/signer" },
+      storage: () => localStorage,
+    });
+
+    await config2.store.persist.rehydrate();
+    config2.store.setState({
+      accounts: createDefaultAccountState([sepolia, arbitrumSepolia]),
+    });
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+  });
+
+  it("should overwrite the state if the config changed (policyId changed)", async () => {
+    await givenConfig();
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            421614,
+            {
+              "chain": {
+                "id": 421614,
+              },
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/arbitrumSepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+
+    const config2 = createConfig({
+      chain: sepolia,
+      chains: [
+        {
+          chain: sepolia,
+          transport: alchemy({ rpcUrl: "/api/sepolia" }),
+          policyId: "test-policy-id2",
+        },
+        {
+          chain: arbitrumSepolia,
+          transport: alchemy({ rpcUrl: "/api/arbitrumSepolia" }),
+        },
+      ],
+      signerConnection: { rpcUrl: "/api/signer" },
+      storage: () => localStorage,
+    });
+
+    await config2.store.persist.rehydrate();
+    config2.store.setState({
+      accounts: createDefaultAccountState([sepolia, arbitrumSepolia]),
+    });
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id2",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            421614,
+            {
+              "chain": {
+                "id": 421614,
+              },
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/arbitrumSepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+  });
+
+  it("should overwrite the state if the config changed (chain swapped out)", async () => {
+    await givenConfig();
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            421614,
+            {
+              "chain": {
+                "id": 421614,
+              },
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/arbitrumSepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+
+    const config2 = createConfig({
+      chain: sepolia,
+      chains: [
+        {
+          chain: sepolia,
+          transport: alchemy({ rpcUrl: "/api/sepolia" }),
+          policyId: "test-policy-id",
+        },
+        {
+          chain: baseSepolia,
+          // this isn't a typo, I'm testing the chain swap out
+          transport: alchemy({ rpcUrl: "/api/arbitrumSepolia" }),
+        },
+      ],
+      signerConnection: { rpcUrl: "/api/signer" },
+      storage: () => localStorage,
+    });
+
+    await config2.store.persist.rehydrate();
+    config2.store.setState({
+      accounts: createDefaultAccountState([sepolia, arbitrumSepolia]),
+    });
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            84532,
+            {
+              "chain": {
+                "id": 84532,
+              },
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/arbitrumSepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+  });
+
+  it("should overwrite the state if the config changed (signer config)", async () => {
+    await givenConfig();
+    expect(getStorageItem("config")).toMatchInlineSnapshot(`
+      {
+        "client": {
+          "connection": {
+            "rpcUrl": "/api/signer",
+          },
+        },
+      }
+    `);
+
+    const config2 = createConfig({
+      chain: sepolia,
+      chains: [
+        {
+          chain: sepolia,
+          transport: alchemy({ rpcUrl: "/api/sepolia" }),
+          policyId: "test-policy-id",
+        },
+        {
+          chain: baseSepolia,
+          // this isn't a typo, I'm testing the chain swap out
+          transport: alchemy({ rpcUrl: "/api/arbitrumSepolia" }),
+        },
+      ],
+      signerConnection: { rpcUrl: "/api/signer" },
+      oauthCallbackUrl: "https://example.com",
+      storage: () => localStorage,
+    });
+
+    await config2.store.persist.rehydrate();
+    config2.store.setState({
+      accounts: createDefaultAccountState([sepolia, arbitrumSepolia]),
+    });
+    expect(getStorageItem("config")).toMatchInlineSnapshot(`
+      {
+        "client": {
+          "connection": {
+            "rpcUrl": "/api/signer",
+          },
+          "oauthCallbackUrl": "https://example.com",
+        },
+      }
+    `);
+  });
+
+  it("should overwrite the state if the config changed (transport changed out)", async () => {
+    await givenConfig();
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            421614,
+            {
+              "chain": {
+                "id": 421614,
+              },
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/arbitrumSepolia",
+              },
+            },
+          ],
+        ],
+      }
+    `);
+
+    const config2 = createConfig({
+      chain: sepolia,
+      chains: [
+        {
+          chain: sepolia,
+          transport: alchemy({ rpcUrl: "/api/sepolia" }),
+          policyId: "test-policy-id",
+        },
+        {
+          chain: arbitrumSepolia,
+          // this isn't a typo, I'm testing the chain swap out
+          transport: alchemy({ apiKey: "test-api-key" }),
+        },
+      ],
+      signerConnection: { rpcUrl: "/api/signer" },
+      storage: () => localStorage,
+    });
+
+    await config2.store.persist.rehydrate();
+    config2.store.setState({
+      accounts: createDefaultAccountState([sepolia, arbitrumSepolia]),
+    });
+    expect(getStorageItem("connections")).toMatchInlineSnapshot(`
+      {
+        "__type": "Map",
+        "value": [
+          [
+            11155111,
+            {
+              "chain": {
+                "id": 11155111,
+              },
+              "policyId": "test-policy-id",
+              "transport": {
+                "__type": "Transport",
+                "rpcUrl": "/api/sepolia",
+              },
+            },
+          ],
+          [
+            421614,
+            {
+              "chain": {
+                "id": 421614,
+              },
+              "transport": {
+                "__type": "Transport",
+                "apiKey": "test-api-key",
+              },
+            },
+          ],
+        ],
+      }
+    `);
   });
 
   it("should correctly serialize the state to storage", async () => {
@@ -104,7 +516,7 @@ describe("createConfig tests", () => {
               "status": "INITIALIZING",
             },
           },
-          "version": 13,
+          "version": ${STORAGE_VERSION},
         }
       `);
   });
@@ -173,7 +585,7 @@ describe("createConfig tests", () => {
               "status": "INITIALIZING",
             },
           },
-          "version": 13,
+          "version": ${STORAGE_VERSION},
         }
       `);
   });

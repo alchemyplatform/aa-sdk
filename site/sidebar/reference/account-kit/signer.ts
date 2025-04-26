@@ -18,6 +18,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
         text: "AlchemySignerWebClient",
         items: [
           {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa",
+          },
+          {
             text: "completeAuthWithBundle",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle",
           },
@@ -38,6 +42,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet",
           },
           {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors",
+          },
+          {
             text: "initEmailAuth",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth",
           },
@@ -54,8 +62,24 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect",
           },
           {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa",
+          },
+          {
             text: "submitOtpCode",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode",
+          },
+          {
+            text: "targetPublicKey",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey",
+          },
+          {
+            text: "validateMultiFactors",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa",
           },
         ],
       },
@@ -71,6 +95,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
       {
         text: "BaseAlchemySigner",
         items: [
+          {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/addMfa",
+          },
           {
             text: "addPasskey",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/addPasskey",
@@ -88,6 +116,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect",
           },
           {
+            text: "experimental_toSolanaSigner",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner",
+          },
+          {
             text: "exportWallet",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet",
           },
@@ -100,6 +132,18 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getAuthDetails",
           },
           {
+            text: "getConfig",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getConfig",
+          },
+          {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors",
+          },
+          {
+            text: "getMfaStatus",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus",
+          },
+          {
             text: "getUser",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/getUser",
           },
@@ -110,6 +154,14 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "preparePopupOauth",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth",
+          },
+          {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/removeMfa",
+          },
+          {
+            text: "signAuthorization",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/signAuthorization",
           },
           {
             text: "signMessage",
@@ -127,11 +179,23 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             text: "toViemAccount",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/toViemAccount",
           },
+          {
+            text: "validateMultiFactors",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/validateMultiFactors",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/verifyMfa",
+          },
         ],
       },
       {
         text: "BaseSignerClient",
         items: [
+          {
+            text: "addMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/addMfa",
+          },
           {
             text: "addPasskey",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/addPasskey",
@@ -139,6 +203,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "constructor",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/constructor",
+          },
+          {
+            text: "getMfaFactors",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors",
           },
           {
             text: "getUser",
@@ -157,6 +225,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/on",
           },
           {
+            text: "removeMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/removeMfa",
+          },
+          {
             text: "request",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/request",
           },
@@ -167,6 +239,14 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "stampWhoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami",
+          },
+          {
+            text: "validateMultiFactors",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/validateMultiFactors",
+          },
+          {
+            text: "verifyMfa",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa",
           },
           {
             text: "whoami",
@@ -188,56 +268,6 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
   {
     text: "Resources",
     items: [
-      {
-        text: "React Native",
-        items: [
-          {
-            text: "Overview",
-            link: "/react-native/overview",
-          },
-          {
-            text: "Getting Started",
-            items: [
-              {
-                text: "Getting started on Expo",
-                link: "/react-native/getting-started/getting-started-expo",
-              },
-              {
-                text: "Getting started on Bare React Native",
-                link: "/react-native/getting-started/getting-started-rn-bare",
-              },
-            ],
-          },
-          {
-            text: "Using the Signer",
-            items: [
-              {
-                text: "Overview",
-                link: "/react-native/signer/overview",
-              },
-              {
-                text: "Setup",
-                link: "/react-native/signer/setup-guide",
-              },
-              {
-                text: "Authenticating Users",
-                items: [
-                  {
-                    text: "Authenticating Users via Magic Link",
-                    link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
-                  },
-                  {
-                    text: "Authenticating Users via One-Time Password (OTP)",
-                    link: "/react-native/signer/authenticating-users/authenticating-with-otp",
-                  },
-                ],
-                collapsed: true,
-              },
-            ],
-          },
-        ],
-        collapsed: true,
-      },
       {
         text: "Third Party",
         items: [

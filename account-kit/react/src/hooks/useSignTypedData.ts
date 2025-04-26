@@ -8,7 +8,7 @@ import {
 import { signTypedData as wagmi_signTypedData } from "@wagmi/core";
 import type { Hex, TypedDataDefinition } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -39,13 +39,24 @@ export type UseSignTypedDataResult = {
 };
 
 /**
- * Hook for signing typed data, supporting both connected accounts and clients.
+ * Similar to `useSignMessage`, [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts) for signing typed data, supporting both connected accounts and clients in EIP 712 format.
+ *
+ * Uses `eth_signTypedData` to sign structured, typed data. Accepts typed, complex data structures as input. Like `useSignMessage`, this hook also handles deployed (1271) and undeployed accounts (6492).
+ *
+ * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L24)
+ * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignTypedData.ts#L28)
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
- *
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const typedData = {
+ *     types: {
+ *       Message: [{ name: "content", type: "string" }],
+ *     },
+ *     primaryType: "Message",
+ *     message: { content: "Hello" },
+ *   }
+ * const { client } = useSmartAccountClient({});
  * const { signTypedData, signTypedDataAsync, signedTypedData, isSigningTypedData, error } = useSignTypedData({
  *  client,
  *  // these are optional
@@ -54,10 +65,9 @@ export type UseSignTypedDataResult = {
  *  },
  *  onError: (error) => console.error(error),
  * });
- * ```
  *
- * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments
- * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process
+ * const result = await signTypedData({ typedData });
+ * ```
  */
 export function useSignTypedData({
   client,

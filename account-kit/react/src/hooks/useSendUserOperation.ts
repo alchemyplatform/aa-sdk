@@ -6,7 +6,7 @@ import type {
   SendUserOperationParameters,
   SendUserOperationResult,
 } from "@aa-sdk/core";
-import { WaitForUserOperationError } from "@aa-sdk/core";
+import { WaitForUserOperationError, clientHeaderTrack } from "@aa-sdk/core";
 import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
@@ -16,7 +16,7 @@ import {
 import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
 import type { Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import {
   ClientUndefinedHookError,
   UnsupportedEOAActionError,
@@ -74,22 +74,28 @@ export type UseSendUserOperationResult<
 };
 
 /**
- * A hook that returns functions for sending user operations.
- * You can also optionally wait for a user operation to be mined before returning.
+ * A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts) that returns functions for sending user operations.
+ * You can also optionally wait for a user operation to be mined and get the transaction hash before returning using `waitForTx`.
+ * Like any method that takes a smart account client, throws an error if client undefined or is signer not authenticated.
+ *
+ * @param {UseSendUserOperationArgs<TEntryPointVersion, TAccount>} params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L45)
+ * @returns {UseSendUserOperationResult<TEntryPointVersion, TAccount>} functions and state for sending UOs. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L53)
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
+ * import React from 'react';
  * import {
  *   useSendUserOperation,
  *   useSmartAccountClient,
  * } from "@account-kit/react";
  *
  * function ComponentWithSendUserOperation() {
- *   const { client } = useSmartAccountClient({
- *     type: "MultiOwnerModularAccount",
- *   });
+ *   const { client } = useSmartAccountClient({});
+ *
  *   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
  *     client,
+ *     // optional parameter that will wait for the transaction to be mined before returning
+ *     waitForTxn: true,
  *     onSuccess: ({ hash, request }) => {
  *       // [optional] Do something with the hash and request
  *     },
@@ -119,9 +125,6 @@ export type UseSendUserOperationResult<
  *   );
  * }
  * ```
- *
- * @param {UseSendUserOperationArgs<TEntryPointVersion, TAccount>} params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args
- * @returns {UseSendUserOperationResult<TEntryPointVersion, TAccount>} functions and state for sending UOs
  */
 export function useSendUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
@@ -129,7 +132,7 @@ export function useSendUserOperation<
 >(
   params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
-  const { client, waitForTxn = false, ...mutationArgs } = params;
+  const { client: _client, waitForTxn = false, ...mutationArgs } = params;
 
   const {
     queryClient,
@@ -179,9 +182,10 @@ export function useSendUserOperation<
           };
         }
 
-        if (!client) {
+        if (!_client) {
           throw new ClientUndefinedHookError("useSendUserOperation");
         }
+        const client = clientHeaderTrack(_client, "reactUseSendUserOperation");
 
         if (!waitForTxn) {
           return client.sendUserOperation(params);

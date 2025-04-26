@@ -1,112 +1,311 @@
----
 title: Authenticating Users via One-Time Password (OTP)
 description: Learn how to authenticate users via a one-time password (OTP), sent to their email
+
 ---
+
+import Snippet from "../../../../shared/react-native/setup-guides-snippet.mdx";
 
 # Authenticating Users via OTP
 
-This guide assumes you have already followed the [Setup Guide](/react-native/signer/setup-guide) and have a basic understanding of how to use the Signer in your project.
+<Snippet />
 
-:::info
-For example code on how to use the Signer in your project, please checkout our example apps in our github repository.
+Authenticating a user is easy using the `useAuthenticate()` hook from the `@account-kit/react-native` package.
 
-- [Bare React Native Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-bare-example)
-- [Expo Example](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/react-native-expo-example)
+### Set the Email Mode to `One Time Password (OTP)` in your Account Kit Dashboard
 
+:::tip
+This is the default mode for email authentication. Only follow these steps if you had previously set the email mode to `Magic Link`.
 :::
 
-## Create a Signer Instance
+In your Alchemy Accounts Dashboard:
 
-```tsx
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
+- Navigate to the **Smart Wallets** tab
+- Select the config you would be using for your project and click the **Edit** button
+- Scroll down to the **Email Mode** options in the **Email** section and select **One Time Password (OTP)**
 
-const signer = RNAlchemySigner({
-  client: { connection: { apiKey: API_KEY } },
-});
-```
+  <img src="/images/alchemy-dashboard-select-otp.png" alt="Email Mode OTP" />
 
-## Authenticate a User
-
-Next, you'll need to authenticate your user before you can use the Signer as an owner on the account
+- Click the **Save Changes** button
 
 ### Send a One-Time Password (OTP) to a User
 
-To send an OTP to a user's email, use the `signer.authenticate()` method with the `emailMode` set to `otp`.
+To send an OTP to a user's email, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `otp`.
 
-```tsx
-signer
-  .authenticate({
-    email: "user@example.com",
-    type: "email",
-    emailMode: "otp",
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+```tsx twoslash [sign-in-with-otp.tsx]
+import { useAuthenticate } from "@account-kit/react-native";
+import React, { useState } from "react";
+import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
+
+function SignInWithOtp() {
+  const { authenticate } = useAuthenticate();
+  const [email, setEmail] = useState("");
+
+  const handleUserSignInWithOtp = () => {
+    try {
+      authenticate({
+        email,
+        type: "email",
+      });
+
+      // OTP sent to the user's email. Prompt the user to enter the OTP into your app.
+    } catch (e) {
+      Alert.alert("Error sending OTP Code. Check logs for more details.");
+
+      console.log("Error seding OTP CODE: ", e);
+    }
+  };
+
+  return (
+    <View>
+      <Text>Enter Your Email to Sign In</Text>
+      <View>
+        <TextInput
+          value={email}
+          onChangeText={(val) => setEmail(val.toLowerCase())}
+          placeholder="john@doe.com"
+        />
+        <Pressable onPress={handleUserSignInWithOtp}>
+          {({ pressed }) => (
+            <View
+              style={[
+                {
+                  opacity: pressed ? 0.5 : 1,
+                  transform: [
+                    {
+                      scale: pressed ? 0.98 : 1,
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Text>Sign In</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+    </View>
+  );
+}
 ```
 
 ### Prompt the User to enter the One-Time Password to complete authentication
 
 The user will receive an email with a one-time password (OTP) to enter into your app.
 
-Provide a means for the user to enter the OTP into your app and then call the `signer.authenticate()` method using the `otpCode` parameter to complete the authentication process.
+Provide a means for the user to enter the OTP into your app and then call the `authenticate()` function from the `useAuthenticate()` hook passing the OTP code to the `otpCode` parameter, and the `type` set to `otp`.
 
-Here's an example of what this might look like:
+```tsx twoslash [verify-otp.tsx]
+import { useAuthenticate } from "@account-kit/react-native";
+import React, { useState } from "react";
+import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
 
-```tsx [example.tsx] twoslash
-import React, { useEffect, useState } from "react";
-import { Linking, View, Text, TextInput, Button } from "react-native";
-import { User } from "@account-kit/signer";
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
+function VerifyOtp() {
+  const { authenticate } = useAuthenticate();
+  const [otpCode, setOtpCode] = useState("");
 
-const API_KEY = "your-api-key";
+  const handleUserVerifyOtp = () => {
+    try {
+      authenticate({
+        otpCode,
+        type: "otp",
+      });
 
-const signer = RNAlchemySigner({
-  client: { connection: { apiKey: API_KEY } },
-});
+      // OTP verified. User is authenticated.
+    } catch (e) {
+      Alert.alert("Error verifying OTP Code. Check logs for more details.");
 
-const App = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [otpCode, setOtpCode] = useState<string>("");
-
-  useEffect(() => {
-    // For example purposes only. Make the performAuthRequest() call on mount
-    performAuthRequest().catch((error) => {
-      console.error(error);
-    });
-  }, []);
-
-  // Make an authentication request to a user's email
-  const performAuthRequest = async () => {
-    const user = await signer.authenticate({
-      email: "user@example.com",
-      type: "email",
-      emailMode: "otp",
-    });
-  };
-
-  // Authenticate a user using a bundle returned from a deep link
-  const handleUserAuth = async ({ otpCode }: { otpCode: string }) => {
-    const user = await signer.authenticate({ otpCode, type: "otp" }); //<-- Pass the user's OTP code to the authenticate method using `otp` as the type value
-
-    return user;
+      console.log("Error verifying OTP CODE: ", e);
+    }
   };
 
   return (
     <View>
-      <Text>Enter OTP</Text>
+      <View>
+        <Text>Enter Your OTP Code</Text>
+        <View>
+          <TextInput
+            value={otpCode}
+            onChangeText={setOtpCode}
+            placeholder="123456"
+          />
+          <Pressable onPress={handleUserVerifyOtp}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  {
+                    opacity: pressed ? 0.5 : 1,
+                    transform: [
+                      {
+                        scale: pressed ? 0.98 : 1,
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <Text>Submit OTP</Text>
+              </View>
+            )}
+          </Pressable>
+        </View>
+      </View>
+    </View>
+  );
+}
+```
+
+<br />
+
+Here's an example of a Sign In component using OTP. Feel free to embed this into your application to give it a try!
+
+:::code-group
+
+```tsx [sign-in-with-otp.tsx] twoslash filename="sign-in-with-otp.tsx"
+// @noErrors
+import React, { useCallback, useState } from "react";
+import { View, Text, TextInput, Button } from "react-native";
+import { useAuthenticate, useUser } from "@account-kit/react-native";
+
+import { OtpPopUp } from "./otp-popup";
+
+export const SignInWithOtp = () => {
+  const [email, setEmail] = useState<string>("");
+  const [showOtp, setShowOtp] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const { authenticate } = useAuthenticate();
+  const { user } = useUser();
+
+  // Make an authentication request to a user's email
+  const performAuthRequest = useCallback(
+    (email: string) => {
+      try {
+        authenticate({
+          email,
+          type: "email",
+          emailMode: "otp",
+        });
+
+        setLoading(true);
+        setShowOtp(true);
+      } catch (e) {
+        Alert.alert("Error sending OTP Code. Check logs for more details.");
+
+        console.log("Error seding OTP CODE: ", e);
+      }
+    },
+    [authenticate]
+  );
+
+  const completeAuth = useCallback(() => {
+    setLoading(false);
+    setShowOtp(false);
+  }, []);
+
+  return (
+    <View>
+      {user && (
+        <>
+          <Text>User Authenticated As: {user.email}</Text>
+          <Text>{user.address}</Text>
+        </>
+      )}
+
+      <Text style={{ fontSize: 16 }}>Enter Email</Text>
       <TextInput
-        value={otpCode}
-        onChangeText={setOtpCode}
-        placeholder="Enter OTP"
+        value={email}
+        style={{ fontSize: 20 }}
+        onChangeText={setEmail}
+        placeholder="Enter Email"
+        autoCapitalize="none"
       />
       <Button
-        title="Authenticate"
-        onPress={() => handleUserAuth({ otpCode })}
+        title={loading ? "Loading" : "Sign In"}
+        disabled={loading}
+        onPress={() => performAuthRequest(email)}
       />
 
-      {/* ... Rest of your app */}
+      <OtpPopUp
+        show={showOtp}
+        completeAuth={completeAuth}
+        close={() => {
+          setShowOtp(false);
+          setLoading(false);
+        }}
+      />
     </View>
   );
 };
 ```
+
+```tsx [otp-popup.tsx] twoslash filename="otp-popup.tsx"
+// @noErrors
+import React, { useCallback, useState } from "react";
+import {
+  Modal,
+  Text,
+  TextInput,
+  Button,
+  SafeAreaView,
+  Alert,
+} from "react-native";
+import { useAuthenticate } from "@account-kit/react-native";
+
+export const OtpPopUp = ({
+  show,
+  completeAuth,
+  close,
+}: {
+  show: boolean;
+  completeAuth: () => void;
+  close: () => void;
+}) => {
+  const { authenticate } = useAuthenticate();
+  const [otpCode, setOtpCode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Authenticate a user using a bundle returned from a deep link
+  const handleUserOtp = useCallback(
+    (otpCode: string) => {
+      try {
+        setLoading(true);
+        authenticate({ otpCode, type: "otp" }); //<-- Pass the user's OTP code to the authenticate method using `otp` as the type value
+
+        completeAuth();
+      } catch (e) {
+        Alert.alert("Error verifying OTP Code. Check logs for more details.");
+
+        console.log("Error verifying OTP CODE: ", e);
+      }
+    },
+    [authenticate]
+  );
+
+  return (
+    <Modal visible={show} style={{ paddingTop: 200 }}>
+      <SafeAreaView style={{ margin: 20 }}>
+        <Text style={{ fontSize: 16 }}>Enter OTP</Text>
+        <TextInput
+          style={{ fontSize: 20 }}
+          value={otpCode}
+          onChangeText={setOtpCode}
+          placeholder="Enter OTP"
+        />
+        <Button
+          title={loading ? "Loading" : "Submit OTP"}
+          disabled={loading}
+          onPress={() => handleUserOtp(otpCode)}
+        />
+        <Button
+          title="Close"
+          onPress={() => {
+            setLoading(false);
+            close();
+          }}
+        />
+      </SafeAreaView>
+    </Modal>
+  );
+};
+```
+
+:::

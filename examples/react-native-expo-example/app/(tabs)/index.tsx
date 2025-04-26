@@ -1,156 +1,106 @@
-import React, { useCallback } from "react";
-
-import { RNAlchemySigner } from "@account-kit/react-native-signer";
-import {
-	LightAccount,
-	createLightAccountAlchemyClient,
-} from "@account-kit/smart-contracts";
-import { alchemy, sepolia } from "@account-kit/infra";
-import type { User } from "@account-kit/signer";
+/* eslint-disable import/extensions */
 import { useEffect, useState } from "react";
 import {
 	View,
 	Text,
 	TextInput,
 	StyleSheet,
-	Linking,
 	TouchableOpacity,
 } from "react-native";
-import { API_KEY } from "@env";
+import {useAuthenticate, useUser, useSigner, useLogout, useSmartAccountClient} from "@account-kit/react-native"
 
-const signer = RNAlchemySigner({
-	client: { connection: { apiKey: API_KEY } },
-});
-
-export default function MagicLinkAuthScreen() {
+export default function OTPAuthScreen() {
 	const [email, setEmail] = useState<string>("");
-	const [user, setUser] = useState<User | null>(null);
-	const [account, setAccount] = useState<LightAccount | null>(null);
+	const user = useUser()
+	const { authenticate } = useAuthenticate()
 	const [signerAddress, setSignerAddress] = useState<string | null>(null);
-	const [authRequestSent, setAuthRequestSent] = useState<boolean>(false);
+	const { logout } = useLogout();
+	const { address } = useSmartAccountClient({})
+	const [awaitingOtp, setAwaitingOtp] = useState<boolean>(false);
+	const signer = useSigner();
+	const [otpCode, setOtpCode] = useState<string>("");
 
-	const handleUserAuth = ({ bundle }: { bundle: string }) => {
-		signer
-			.authenticate({
-				bundle,
-				type: "email",
-			})
-			.then(setUser)
-			.catch(console.error);
+	const handleUserAuth = ({ code }: { code: string }) => {
+		setAwaitingOtp(false);
+		
+		authenticate({
+			otpCode: code,
+			type: "otp",
+		})
+
+		// Clear the OTP code after authentication
+		setOtpCode("");
 	};
-
-	const handleIncomingURL = useCallback((event: { url: string }) => {
-		const regex = /[?&]([^=#]+)=([^&#]*)/g;
-
-		setAuthRequestSent(false);
-
-		let params: Record<string, string> = {};
-		let match: RegExpExecArray | null;
-
-		while ((match = regex.exec(event.url))) {
-			if (match[1] && match[2]) {
-				params[match[1]] = match[2];
-			}
-		}
-
-		if (!params.bundle || !params.orgId) {
-			return;
-		}
-
-		handleUserAuth({
-			bundle: params.bundle,
-		});
-	}, []);
-
-	useEffect(() => {
-		// get the user if already logged in
-		signer.getAuthDetails().then(setUser);
-	}, []);
-
-	// Add listener for incoming links
-	useEffect(() => {
-		const subscription = Linking.addEventListener("url", handleIncomingURL);
-
-		return () => subscription.remove();
-	}, [handleIncomingURL]);
 
 	useEffect(() => {
 		if (user) {
-			createLightAccountAlchemyClient({
-				signer,
-				chain: sepolia,
-				transport: alchemy({ apiKey: API_KEY! }),
-			}).then((client) => {
-				setAccount(client.account);
-			});
-
-			signer.getAddress().then((address) => {
+			signer?.getAddress().then((address) => {
 				setSignerAddress(address);
 			});
 		}
-	}, [user]);
+	}, [user, signer]);
 
 	return (
 		<View style={styles.container}>
-			{authRequestSent ? (
-				<Text>Auth request sent. Please check your email.</Text>
+			{awaitingOtp ? (
+				<>
+					<TextInput
+						style={styles.textInput}
+						placeholderTextColor="gray"
+						placeholder="enter your OTP code"
+						onChangeText={setOtpCode}
+						value={otpCode}
+					/>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => handleUserAuth({ code: otpCode })}
+					>
+						<Text style={styles.buttonText}>Sign in</Text>
+					</TouchableOpacity>
+				</>
+			) : !user ? (
+				<>
+					<TextInput
+						style={styles.textInput}
+						placeholderTextColor="gray"
+						placeholder="enter your email"
+						onChangeText={setEmail}
+						value={email}
+					/>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							authenticate({
+									email,
+									type: "email"
+								})
+					
+							setAwaitingOtp(true);
+						}}
+					>
+						<Text style={styles.buttonText}>Sign in</Text>
+					</TouchableOpacity>
+				</>
 			) : (
 				<>
-					{!user ? (
-						<>
-							<TextInput
-								style={styles.textInput}
-								placeholderTextColor="gray"
-								placeholder="enter your email"
-								onChangeText={setEmail}
-								value={email}
-							/>
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() => {
-									setAuthRequestSent(true);
-									signer
-										.authenticate({
-											email,
-											type: "email",
-											emailMode: "magicLink",
-										})
-										.catch(console.error);
-								}}
-							>
-								<Text style={styles.buttonText}>Sign in</Text>
-							</TouchableOpacity>
-						</>
-					) : (
-						<>
-							<Text style={styles.userText}>
-								Currently logged in as: {user.email}
-							</Text>
-							<Text style={styles.userText}>
-								OrgId: {user.orgId}
-							</Text>
-							<Text style={styles.userText}>
-								Address: {user.address}
-							</Text>
-							<Text style={styles.userText}>
-								Light Account Address: {account?.address}
-							</Text>
-							<Text style={styles.userText}>
-								Signer Address: {signerAddress}
-							</Text>
+					<Text style={styles.userText}>
+						Currently logged in as: {user.email}
+					</Text>
+					<Text style={styles.userText}>OrgId: {user.orgId}</Text>
+					<Text style={styles.userText}>Address: {user.address}</Text>
+					<Text style={styles.userText}>
+						Light Account Address: {address}
+					</Text>
+					<Text style={styles.userText}>
+						Signer Address: {signerAddress}
+					</Text>
 
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() =>
-									signer
-										.disconnect()
-										.then(() => setUser(null))
-								}
-							>
-								<Text style={styles.buttonText}>Sign out</Text>
-							</TouchableOpacity>
-						</>
-					)}
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => logout()}
+					>
+						<Text style={styles.buttonText}>Sign out</Text>
+					</TouchableOpacity>
 				</>
 			)}
 		</View>

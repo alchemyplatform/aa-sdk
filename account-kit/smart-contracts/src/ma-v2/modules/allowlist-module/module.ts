@@ -1,8 +1,37 @@
 import { encodeAbiParameters, type Address, type Hex } from "viem";
 import { allowlistModuleAbi } from "./abis/allowlistModuleAbi.js";
+import { HookType, type HookConfig } from "../../actions/common/types.js";
 
 export const AllowlistModule = {
   abi: allowlistModuleAbi,
+  buildHook: (
+    installArgs: {
+      entityId: number;
+      inputs: Array<{
+        target: Address;
+        hasSelectorAllowlist: boolean;
+        hasERC20SpendLimit: boolean;
+        erc20SpendLimit: bigint;
+        selectors: Array<Hex>;
+      }>;
+    },
+    address: Address
+  ): {
+    hookConfig: HookConfig;
+    initData: Hex;
+  } => {
+    const installData = AllowlistModule.encodeOnInstallData(installArgs);
+    return {
+      hookConfig: {
+        address: address,
+        entityId: installArgs.entityId,
+        hookType: HookType.VALIDATION,
+        hasPreHooks: true,
+        hasPostHooks: false,
+      },
+      initData: installData,
+    };
+  },
   encodeOnInstallData: (args: {
     entityId: number;
     inputs: Array<{

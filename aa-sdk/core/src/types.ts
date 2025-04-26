@@ -113,14 +113,6 @@ export type UserOperationOverrides<
     verificationGasLimit:
       | UserOperationStruct<TEntryPointVersion>["verificationGasLimit"]
       | Multiplier;
-    /**
-     * This can be used to override the key used when calling `entryPoint.getNonce`
-     * It is useful when you want to use parallel nonces for user operations
-     *
-     * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
-     * one user operation for your account in a bundle
-     */
-    nonceKey: bigint;
 
     /**
      * The same state overrides for
@@ -132,7 +124,21 @@ export type UserOperationOverrides<
      */
     stateOverride: StateOverride;
   } & UserOperationPaymasterOverrides<TEntryPointVersion>
->;
+> &
+  /**
+   * This can be used to override the nonce or nonce key used when calling `entryPoint.getNonce`
+   * It is useful when you want to use parallel nonces for user operations
+   *
+   * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
+   * one user operation for your account in a bundle
+   */
+  Partial<
+    | {
+        nonceKey: bigint;
+        nonce: never;
+      }
+    | { nonceKey: never; nonce: bigint }
+  >;
 // [!endregion UserOperationOverrides]
 
 // [!region UserOperationRequest_v6]
@@ -201,15 +207,27 @@ export interface UserOperationRequest_v7 {
 }
 // [!endregion UserOperationRequest_v7]
 
+export type Eip7702ExtendedFields = {
+  eip7702Auth?: {
+    chainId: Hex;
+    nonce: Hex;
+    address: Address;
+    r: Hex;
+    s: Hex;
+    yParity: Hex;
+  };
+};
+
 // [!region UserOperationRequest]
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export type UserOperationRequest<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
-> = TEntryPointVersion extends "0.6.0"
+> = (TEntryPointVersion extends "0.6.0"
   ? UserOperationRequest_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationRequest_v7
-  : never;
+  : never) &
+  Eip7702ExtendedFields;
 
 // [!endregion UserOperationRequest]
 
@@ -347,9 +365,10 @@ export interface UserOperationStruct_v7 {
 // [!region UserOperationStruct]
 export type UserOperationStruct<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
-> = TEntryPointVersion extends "0.6.0"
+> = (TEntryPointVersion extends "0.6.0"
   ? UserOperationStruct_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationStruct_v7
-  : never;
+  : never) &
+  Eip7702ExtendedFields;
 // [!endregion UserOperationStruct]

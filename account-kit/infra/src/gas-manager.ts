@@ -38,6 +38,8 @@ export const AlchemyPaymasterAddressV1 =
  *
  * @param {Chain} chain The chain for which the paymaster address is required
  * @returns {Address} The Alchemy paymaster address corresponding to the specified chain
+ *
+ * @deprecated This chain list in this function is no longer maintained since the ERC-7677 middleware is typically used to resolve the paymaster address
  */
 export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
   switch (chain.id) {

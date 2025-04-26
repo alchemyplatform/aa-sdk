@@ -1,26 +1,31 @@
+import "./utils/buffer-polyfill.js";
+import "./utils/mmkv-localstorage-polyfill.js";
+
 /* eslint-disable import/extensions */
-import "./utils/mmkv-localstorage-polyfill";
-import "./utils/buffer-polyfill";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
   OauthFailedError,
+  MfaRequiredError,
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
   type EmailAuthParams,
   type GetWebAuthnAttestationResult,
+  type MfaFactor,
   type OauthConfig,
   type OauthParams,
   type OtpParams,
   type SignupResponse,
   type User,
+  type SubmitOtpCodeResponse,
 } from "@account-kit/signer";
-import NativeTEKStamper from "./NativeTEKStamper";
-import { z } from "zod";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
-import { parseSearchParams } from "./utils/parseUrlParams";
+import { z } from "zod";
 import { InAppBrowserUnavailableError } from "./errors";
+import NativeTEKStamper from "./NativeTEKStamper.js";
+import { parseSearchParams } from "./utils/parseUrlParams";
+import { parseMfaError } from "./utils/parseMfaError";
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
@@ -58,16 +63,39 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   override async submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }> {
+  ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const publicKey = await this.stamper.init();
 
-    const { credentialBundle } = await this.request("/v1/otp", {
+    const response = await this.request("/v1/otp", {
       ...args,
       targetPublicKey: publicKey,
     });
 
-    return { bundle: credentialBundle };
+    if ("credentialBundle" in response && response.credentialBundle) {
+      return {
+        mfaRequired: false,
+        bundle: response.credentialBundle,
+      };
+    }
+
+    // If the server says "MFA_REQUIRED", pass that data back to the caller:
+    if (
+      response.status === "MFA_REQUIRED" &&
+      response.encryptedPayload &&
+      response.multiFactors
+    ) {
+      return {
+        mfaRequired: true,
+        encryptedPayload: response.encryptedPayload,
+        multiFactors: response.multiFactors,
+      };
+    }
+
+    // Otherwise, it's truly an error:
+    throw new Error(
+      "Failed to submit OTP code. Server did not return required fields."
+    );
   }
 
   override async createAccount(
@@ -94,17 +122,27 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   override async initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string }> {
+  ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }> {
     this.eventEmitter.emit("authenticating", { type: "email" });
-    let targetPublicKey = await this.stamper.init();
+    const targetPublicKey = await this.stamper.init();
 
-    const response = await this.request("/v1/auth", {
-      email: params.email,
-      emailMode: params.emailMode,
-      targetPublicKey,
-    });
+    try {
+      return await this.request("/v1/auth", {
+        email: params.email,
+        emailMode: params.emailMode,
+        targetPublicKey,
+        multiFactors: params.multiFactors,
+      });
+    } catch (error) {
+      const multiFactors = parseMfaError(error);
 
-    return response;
+      // If MFA is required, and emailMode is Magic Link, the user must submit mfa with the request or
+      // the server will return an error with the required mfa factors.
+      if (multiFactors) {
+        throw new MfaRequiredError(multiFactors);
+      }
+      throw error;
+    }
   }
 
   override async completeAuthWithBundle(params: {
@@ -170,6 +208,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const isSignup = authResult["alchemy-is-signup"];
     const error = authResult["alchemy-error"];
 
+    if (error) {
+      throw new OauthFailedError(error);
+    }
+
     if (bundle && orgId && idToken) {
       const user = await this.completeAuthWithBundle({
         bundle,
@@ -187,9 +229,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     }
 
     // Throw the Alchemy error if available, otherwise throw a generic error.
-    throw new OauthFailedError(
-      error ?? "An error occured completing your request"
-    );
+    throw new OauthFailedError("An error occured completing your request");
   };
 
   override oauthWithPopup(
@@ -208,6 +248,10 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
   override lookupUserWithPasskey(_user?: User): Promise<User> {
     throw new Error("Method not implemented.");
+  }
+
+  override targetPublicKey(): Promise<string> {
+    return this.stamper.init();
   }
 
   protected override getWebAuthnAttestation(

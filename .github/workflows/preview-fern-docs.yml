@@ -1,0 +1,61 @@
+name: Generate Fern Docs Preview
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout aa-sdk
+        uses: actions/checkout@v4
+
+      - name: Setup Docs
+        uses: ./.github/actions/setup-docs
+        with:
+          docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
+
+      - name: Set Build Comment to In Progress
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              status: 'building',
+            });
+
+      - name: Generate Fern Docs Preview
+        id: preview
+        uses: ./.github/actions/publish-fern
+        with:
+          github-token: ${{ github.token }}
+          fern-token: ${{ secrets.FERN_TOKEN }}
+          environment: docs-preview
+          ref: ${{ github.head_ref }}
+          preview: "true"
+
+      - name: Comment Preview URL in PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              previewUrl: '${{ steps.preview.outputs.url }}',
+              status: '${{ steps.preview.outcome }}',
+            });

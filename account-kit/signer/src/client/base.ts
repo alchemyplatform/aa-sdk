@@ -4,17 +4,24 @@ import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
 import { sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
+import { getDefaultProviderCustomization } from "../oauth.js";
+import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
-import { assertNever } from "../utils/typeAssertions.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
+import { assertNever } from "../utils/typeAssertions.js";
 import type {
   AlchemySignerClientEvent,
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
   CreateAccountParams,
+  RemoveMfaParams,
   EmailAuthParams,
+  AddMfaParams,
+  AddMfaResult,
+  experimental_CreateApiKeyParams,
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
+  MfaFactor,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -24,9 +31,11 @@ import type {
   SignerRoutes,
   SignupResponse,
   User,
+  VerifyMfaParams,
+  SubmitOtpCodeResponse,
+  ValidateMultiFactorsParams,
 } from "./types.js";
-import type { OauthMode } from "../signer.js";
-import { addOpenIdIfAbsent, getDefaultScopeAndClaims } from "../oauth.js";
+import { VERSION } from "../version.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -40,6 +49,14 @@ export type ExportWalletStamper = TurnkeyClient["stamper"] & {
   injectKeyExportBundle(bundle: string): Promise<boolean>;
   publicKey(): string | null;
 };
+
+const MFA_PAYLOAD = {
+  GET: "get_mfa",
+  ADD: "add_mfa",
+  DELETE: "delete_mfas",
+  VERIFY: "verify_mfa",
+  LIST: "list_mfas",
+} as const;
 
 /**
  * Base class for all Alchemy Signer clients
@@ -131,7 +148,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
-  ): Promise<{ orgId: string; otpId?: string }>;
+  ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;
@@ -151,13 +168,15 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }>;
+  ): Promise<SubmitOtpCodeResponse>;
 
   public abstract disconnect(): Promise<void>;
 
   public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
 
   public abstract lookupUserWithPasskey(user?: User): Promise<User>;
+
+  public abstract targetPublicKey(): Promise<string>;
 
   protected abstract getOauthConfig(): Promise<OauthConfig>;
 
@@ -224,6 +243,27 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     );
 
     return authenticatorIds;
+  };
+
+  /**
+   * Retrieves the status of the passkey for the current user. Requires the user to be authenticated.
+   *
+   * @returns {Promise<{ isPasskeyAdded: boolean }>} A promise that resolves to an object containing the passkey status
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public getPasskeyStatus = async () => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const resp = await this.turnkeyClient.getAuthenticators({
+      organizationId: this.user.orgId,
+      userId: this.user.userId,
+    });
+    return {
+      isPasskeyAdded: resp.authenticators.some((it) =>
+        it.authenticatorName.startsWith("passkey-")
+      ),
+    };
   };
 
   /**
@@ -300,6 +340,60 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * Generates a stamped getOrganization request for the current user.
+   *
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "getOrganization" information for the logged in user
+   * @throws {Error} if no user is authenticated
+   */
+  public stampGetOrganization = async (): Promise<TSignedRequest> => {
+    if (!this.user) {
+      throw new Error(
+        "User must be authenticated to stamp a get organization request"
+      );
+    }
+
+    return await this.turnkeyClient.stampGetOrganization({
+      organizationId: this.user.orgId,
+    });
+  };
+
+  /**
+   * Creates an API key that can take any action on behalf of the current user.
+   * (Note that this method is currently experimental and is subject to change.)
+   *
+   * @param {CreateApiKeyParams} params Parameters for creating the API key.
+   * @param {string} params.name Name of the API key.
+   * @param {string} params.publicKey Public key to be used for the API key.
+   * @param {number} params.expirationSec Number of seconds until the API key expires.
+   * @throws {Error} If there is no authenticated user or the API key creation fails.
+   */
+  public experimental_createApiKey = async (
+    params: experimental_CreateApiKeyParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new Error("User must be authenticated to create api key");
+    }
+    const resp = await this.turnkeyClient.createApiKeys({
+      type: "ACTIVITY_TYPE_CREATE_API_KEYS",
+      timestampMs: new Date().getTime().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        apiKeys: [
+          {
+            apiKeyName: params.name,
+            publicKey: params.publicKey,
+            expirationSeconds: params.expirationSec.toString(),
+          },
+        ],
+        userId: this.user.userId,
+      },
+    });
+    if (resp.activity.status !== "ACTIVITY_STATUS_COMPLETED") {
+      throw new Error("Failed to create api key");
+    }
+  };
+
+  /**
    * Looks up information based on an email address.
    *
    * @param {string} email the email address to look up
@@ -315,11 +409,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * that result here.
    *
    * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} mode specify if signing should happen for solana or ethereum
    * @returns {Promise<Hex>} the signature over the raw hex
    */
-  public signRawMessage = async (msg: Hex): Promise<Hex> => {
+  public signRawMessage = async (
+    msg: Hex,
+    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+  ): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
+    }
+
+    if (!this.user.solanaAddress && mode === "SOLANA") {
+      // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
+      throw new Error("No Solana address available for the user");
     }
 
     const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
@@ -328,9 +431,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       timestampMs: Date.now().toString(),
       parameters: {
         encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
+        hashFunction:
+          mode === "ETHEREUM"
+            ? "HASH_FUNCTION_NO_OP"
+            : "HASH_FUNCTION_NOT_APPLICABLE",
         payload: msg,
-        signWith: this.user.address,
+        signWith:
+          mode === "ETHEREUM" ? this.user.address : this.user.solanaAddress!,
       },
     });
 
@@ -367,6 +474,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const basePath = "/signer";
 
     const headers = new Headers();
+    headers.append("Alchemy-AA-Sdk-Version", VERSION);
     headers.append("Content-Type", "application/json");
     if (this.connectionConfig.apiKey) {
       headers.append("Authorization", `Bearer ${this.connectionConfig.apiKey}`);
@@ -387,6 +495,167 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const json = await response.json();
 
     return json as SignerResponse<R>;
+  };
+
+  /**
+   * Retrieves the list of MFA factors configured for the current user.
+   *
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to an array of configured MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public getMfaFactors = async (): Promise<{
+    multiFactors: MfaFactor[];
+  }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.LIST,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-list-multi-factors", {
+      stampedRequest,
+    });
+  };
+
+  /**
+   * Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active.
+   *
+   * @param {AddMfaParams} params The parameters required to enable a new MFA factor
+   * @returns {Promise<AddMfaResult>} A promise that resolves to the factor setup information
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   * @throws {Error} If an unsupported factor type is provided
+   */
+  public addMfa = async (params: AddMfaParams): Promise<AddMfaResult> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.ADD,
+        signWith: this.user.address,
+      },
+    });
+
+    switch (params.multiFactorType) {
+      case "totp":
+        return this.request("/v1/auth-request-multi-factor", {
+          stampedRequest,
+          multiFactorType: params.multiFactorType,
+        });
+      default:
+        throw new Error(
+          `Unsupported MFA factor type: ${params.multiFactorType}`
+        );
+    }
+  };
+
+  /**
+   * Verifies a newly created MFA factor to complete the setup process.
+   *
+   * @param {VerifyMfaParams} params The parameters required to verify the MFA factor
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public verifyMfa = async (
+    params: VerifyMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.VERIFY,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-verify-multi-factor", {
+      stampedRequest,
+      multiFactorId: params.multiFactorId,
+      multiFactorCode: params.multiFactorCode,
+    });
+  };
+
+  /**
+   * Removes existing MFA factors by ID.
+   *
+   * @param {RemoveMfaParams} params The parameters specifying which factors to disable
+   * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
+   * @throws {NotAuthenticatedError} If no user is authenticated
+   */
+  public removeMfa = async (
+    params: RemoveMfaParams
+  ): Promise<{ multiFactors: MfaFactor[] }> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: MFA_PAYLOAD.DELETE,
+        signWith: this.user.address,
+      },
+    });
+
+    return this.request("/v1/auth-delete-multi-factors", {
+      stampedRequest,
+      multiFactorIds: params.multiFactorIds,
+    });
+  };
+
+  /**
+   * Validates multiple MFA factors using the provided encrypted payload and MFA codes.
+   *
+   * @param {ValidateMultiFactorsParams} params The validation parameters
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle
+   * @throws {Error} If no credential bundle is returned from the server
+   */
+  public validateMultiFactors = async (
+    params: ValidateMultiFactorsParams
+  ): Promise<{ bundle: string }> => {
+    // Send the encryptedPayload plus TOTP codes, etc:
+    const response = await this.request("/v1/auth-validate-multi-factors", {
+      encryptedPayload: params.encryptedPayload,
+      multiFactors: params.multiFactors,
+    });
+
+    // The server is expected to return the *decrypted* payload in `response.payload.credentialBundle`
+    if (!response.payload || !response.payload.credentialBundle) {
+      throw new Error(
+        "Request to validateMultiFactors did not return a credential bundle"
+      );
+    }
+
+    return {
+      bundle: response.payload.credentialBundle,
+    };
   };
 
   // #endregion
@@ -525,6 +794,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       auth0Connection,
       scope: providedScope,
       claims: providedClaims,
+      otherParameters: providedOtherParameters,
       mode,
       redirectUrl,
       expirationSeconds,
@@ -547,23 +817,20 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new Error(`No auth provider found with id ${authProviderId}`);
     }
 
-    let scope: string;
-    let claims: string | undefined;
+    let scope: string | undefined = providedScope;
+    let claims: string | undefined = providedClaims;
+    let otherParameters: Record<string, string> | undefined =
+      providedOtherParameters;
 
-    if (providedScope) {
-      scope = addOpenIdIfAbsent(providedScope);
-      claims = providedClaims;
-    } else {
-      if (isCustomProvider) {
-        throw new Error("scope must be provided for a custom provider");
-      }
-      const scopeAndClaims = getDefaultScopeAndClaims(authProviderId);
-      if (!scopeAndClaims) {
-        throw new Error(
-          `Default scope not known for provider ${authProviderId}`
-        );
-      }
-      ({ scope, claims } = scopeAndClaims);
+    if (!isCustomProvider) {
+      const defaultCustomization =
+        getDefaultProviderCustomization(authProviderId);
+      scope ??= defaultCustomization?.scope;
+      claims ??= defaultCustomization?.claims;
+      otherParameters ??= defaultCustomization?.otherParameters;
+    }
+    if (!scope) {
+      throw new Error(`Default scope not known for provider ${authProviderId}`);
     }
     const { authEndpoint, clientId } = authProvider;
 
@@ -596,6 +863,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       prompt: "select_account",
       client_id: clientId,
       nonce,
+      ...otherParameters,
     };
     if (claims) {
       params.claims = claims;

@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.9.0",
+  "version": "4.29.0",
   "description": "React components and hooks for using Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -33,6 +33,21 @@
       "import": "./dist/esm/tailwind/index.js",
       "default": "./dist/esm/tailwind/index.js"
     },
+    "./alchemy-account-context": {
+      "types": "./dist/types/AlchemyAccountContext.d.ts",
+      "import": "./dist/esm/AlchemyAccountContext.js",
+      "default": "./dist/esm/AlchemyAccountContext.js"
+    },
+    "./hydrate": {
+      "types": "./dist/types/hydrate.d.ts",
+      "import": "./dist/esm/hydrate.js",
+      "default": "./dist/esm/hydrate.js"
+    },
+    "./hooks": {
+      "types": "./dist/types/hooks/index.d.ts",
+      "import": "./dist/esm/hooks/index.js",
+      "default": "./dist/esm/hooks/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -42,39 +57,42 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react --fern",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^8.2.8",
-    "@storybook/addon-interactions": "^8.4.4",
-    "@storybook/core-server": "^8.2.8",
+    "@storybook/addon-essentials": "^8.5.3",
+    "@storybook/addon-interactions": "^8.5.3",
+    "@storybook/core-server": "^8.5.3",
     "@storybook/jest": "^0.2.3",
-    "@storybook/react-vite": "^8.2.8",
-    "@storybook/test": "^8.4.4",
-    "@storybook/test-runner": "^0.13.0",
+    "@storybook/react-vite": "^8.5.3",
+    "@storybook/test": "^8.5.3",
     "@storybook/testing-library": "^0.2.2",
     "@tanstack/react-query": "^5.28.9",
+    "@types/bs58": "^4.0.4",
     "autoprefixer": "^10.4.20",
     "msw": "^2.4.4",
-    "msw-storybook-addon": "^2.0.3",
+    "msw-storybook-addon": "^2.0.4",
     "postcss": "^8.4.45",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "storybook": "^8.2.8",
+    "storybook": "^8.5.3",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@account-kit/core": "^4.9.0",
-    "@account-kit/infra": "^4.9.0",
-    "@account-kit/logging": "^4.9.0",
-    "@account-kit/signer": "^4.9.0",
+    "@account-kit/core": "^4.29.0",
+    "@account-kit/infra": "^4.29.0",
+    "@account-kit/logging": "^4.29.0",
+    "@account-kit/signer": "^4.29.0",
+    "@solana/web3.js": "^1.98.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
     "@wagmi/connectors": "^5.1.15",
+    "bs58": "^6.0.0",
     "react-remove-scroll": "^2.5.10",
     "tailwindcss": "^3.4.3",
     "zod": "^3.22.4",
@@ -85,11 +103,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.4.3",
-    "viem": "^2.20.0",
+    "viem": "^2.22.6",
     "wagmi": "^2.12.7"
   },
   "resolutions": {
-    "viem": "2.20.0"
+    "viem": "2.22.6"
   },
   "publishConfig": {
     "access": "public",

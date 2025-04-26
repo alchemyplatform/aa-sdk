@@ -4,41 +4,123 @@ export const smartContractsSidebar: SidebarItem[] = [
   { text: "Overview", link: "/smart-contracts/overview" },
   {
     text: "Choosing a smart account",
+    link: "/smart-contracts/choosing-a-smart-account",
+  },
+  {
+    text: "Modular Account V2",
     items: [
       {
-        text: "Introduction",
-        link: "/smart-contracts/choosing-a-smart-account",
+        text: "Overview",
+        link: "/smart-contracts/modular-account-v2/overview",
       },
       {
-        text: "Modular Account",
+        text: "Getting started",
+        link: "/smart-contracts/modular-account-v2/getting-started",
+      },
+      {
+        text: "Using 7702",
+        link: "/smart-contracts/modular-account-v2/using-7702",
+      },
+      {
+        text: "Upgrading to MAv2",
+        link: "/smart-contracts/modular-account-v2/upgrading-to-MAv2",
+      },
+      {
+        text: "Session Keys",
         items: [
-          { text: "Overview", link: "/smart-contracts/modular-account" },
+          {
+            text: "Overview",
+            link: "/smart-contracts/modular-account-v2/session-keys",
+          },
+          {
+            text: "Adding session keys",
+            link: "/smart-contracts/modular-account-v2/session-keys/adding-session-keys",
+          },
+          {
+            text: "Using session keys",
+            link: "/smart-contracts/modular-account-v2/session-keys/using-session-keys",
+          },
+          {
+            text: "Removing session keys",
+            link: "/smart-contracts/modular-account-v2/session-keys/removing-session-keys",
+          },
+        ],
+        collapsed: true,
+      },
+      {
+        text: "Managing ownership",
+        link: "/smart-contracts/modular-account-v2/managing-ownership",
+      },
+    ],
+  },
+  {
+    text: "Other Accounts",
+    items: [
+      {
+        text: "Modular Account V1",
+        items: [
+          {
+            text: "Overview",
+            link: "/smart-contracts/other-accounts/modular-account",
+          },
           {
             text: "Getting started",
-            link: "/smart-contracts/modular-account/getting-started",
+            link: "/smart-contracts/other-accounts/modular-account/getting-started",
           },
           {
-            text: "Deployments",
-            link: "/smart-contracts/modular-account/deployments",
+            text: "Manage multiple owners",
+            link: "/smart-contracts/other-accounts/modular-account/manage-ownership-mav1",
           },
           {
-            text: "Upgrade",
-            link: "/smart-contracts/modular-account/upgrading-to-modular-account",
+            text: "Upgrade to MAv1",
+            link: "/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account",
           },
           {
-            text: "Multisig plugin",
+            text: "Multisig",
             items: [
               {
                 text: "Introduction",
-                link: "/smart-contracts/modular-account/multisig-plugin",
+                link: "/smart-contracts/other-accounts/modular-account/multisig-plugin",
               },
               {
                 text: "Getting started",
-                link: "/smart-contracts/modular-account/multisig-plugin/getting-started",
+                link: "/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started",
               },
               {
                 text: "Technical details",
-                link: "/smart-contracts/modular-account/multisig-plugin/details",
+                link: "/smart-contracts/other-accounts/modular-account/multisig-plugin/details",
+              },
+            ],
+            collapsed: true,
+          },
+          {
+            text: "Session keys",
+            items: [
+              {
+                text: "Overview",
+                link: "/smart-contracts/other-accounts/modular-account/session-keys",
+              },
+              {
+                text: "Getting started",
+                link: "/smart-contracts/other-accounts/modular-account/session-keys/getting-started",
+              },
+              {
+                text: "Supported permissions",
+                link: "/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions",
+              },
+            ],
+            collapsed: true,
+          },
+          {
+            text: "Manage plugins",
+            items: [
+              {
+                text: "Install plugins",
+                link: "/smart-contracts/other-accounts/modular-account/manage-plugins/install-plugins",
+              },
+              {
+                text: "Get installed plugins",
+                link: "/smart-contracts/other-accounts/modular-account/manage-plugins/get-installed-plugins",
               },
             ],
             collapsed: true,
@@ -48,14 +130,21 @@ export const smartContractsSidebar: SidebarItem[] = [
       {
         text: "Light Account",
         items: [
-          { text: "Overview", link: "/smart-contracts/light-account" },
           {
-            text: "Getting started",
-            link: "/smart-contracts/light-account/getting-started",
+            text: "Overview",
+            link: "/smart-contracts/other-accounts/light-account",
           },
           {
-            text: "Deployments",
-            link: "/smart-contracts/light-account/deployments",
+            text: "Getting started",
+            link: "/smart-contracts/other-accounts/light-account/getting-started",
+          },
+          {
+            text: "Transfer ownership",
+            link: "/smart-contracts/other-accounts/light-account/transfer-ownership-light-account",
+          },
+          {
+            text: "Manage multiple owners",
+            link: "/smart-contracts/other-accounts/light-account/multi-owner-light-account",
           },
         ],
       },
@@ -63,57 +152,16 @@ export const smartContractsSidebar: SidebarItem[] = [
         text: "Custom accounts",
         link: "../third-party/smart-contracts",
       },
-      {
-        text: "Gas benchmarks",
-        link: "https://github.com/alchemyplatform/aa-benchmarks",
-      },
     ],
+    collapsed: true,
   },
   {
-    text: "Using smart accounts",
-    items: [
-      {
-        text: "Transfer ownership",
-        items: [
-          {
-            text: "Modular Account",
-            link: "/smart-contracts/transfer-ownership/modular-account",
-          },
-          {
-            text: "Light Account",
-            link: "/smart-contracts/transfer-ownership/light-account",
-          },
-          {
-            text: "Multi-Owner LightAccount",
-            link: "/smart-contracts/transfer-ownership/multi-owner-light-account",
-          },
-        ],
-      },
-      {
-        text: "Session keys",
-        items: [
-          { text: "Overview", link: "/smart-contracts/session-keys" },
-          {
-            text: "Getting started",
-            link: "/smart-contracts/session-keys/getting-started",
-          },
-          {
-            text: "Supported permissions",
-            link: "/smart-contracts/session-keys/supported-permissions",
-          },
-        ],
-      },
-    ],
+    text: "Gas benchmarks",
+    link: "https://github.com/alchemyplatform/aa-benchmarks",
   },
   {
-    text: "Extending smart accounts",
-    items: [
-      { text: "Install plugins", link: "/smart-contracts/install-plugins" },
-      {
-        text: "Get installed plugins",
-        link: "/smart-contracts/get-installed-plugins",
-      },
-    ],
+    text: "Deployment addresses",
+    link: "/smart-contracts/deployed-addresses",
   },
   { text: "SDK Reference", link: "/reference/account-kit/smart-contracts" },
 ];

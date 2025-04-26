@@ -43,7 +43,12 @@ type Store = Mutate<
   [["zustand/subscribeWithSelector", never], ["zustand/persist", SessionState]]
 >;
 
-type TemporarySession = { orgId: string; isNewUser?: boolean };
+type TemporarySession = {
+  orgId: string;
+  isNewUser?: boolean;
+  encryptedPayload?: string;
+  mfaFactorId?: string;
+};
 
 export class SessionManager {
   private sessionKey: string;
@@ -140,6 +145,7 @@ export class SessionManager {
 
   public clearSession = () => {
     this.store.setState({ session: null });
+    localStorage.removeItem(`${this.sessionKey}:temporary`);
 
     if (this.clearSessionHandle) {
       clearTimeout(this.clearSessionHandle);
@@ -189,6 +195,7 @@ export class SessionManager {
      * We should revisit this later
      */
     if (session.expirationDateMs < Date.now()) {
+      this.client.disconnect();
       this.clearSession();
       return null;
     }
@@ -319,6 +326,7 @@ export class SessionManager {
     }
 
     this.clearSessionHandle = setTimeout(() => {
+      this.client.disconnect();
       this.clearSession();
     }, Math.min(session.expirationDateMs - Date.now(), Math.pow(2, 31) - 1));
   };

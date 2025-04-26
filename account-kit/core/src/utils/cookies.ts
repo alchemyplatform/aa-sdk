@@ -1,61 +1,70 @@
-import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { cookieToInitialState as wagmiCookieToInitialState } from "@wagmi/core";
 import Cookies from "js-cookie";
 import type { StoredState } from "../store/types.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { deserialize } from "./deserialize.js";
 
+// The maximum duration of a cookie according to the spec is 400 days.
+// https://httpwg.org/http-extensions/draft-ietf-httpbis-rfc6265bis.html#name-cookie-lifetime-limits
+const MAX_COOKIE_DURATION_MS = 1000 * 60 * 60 * 24 * 400;
+
 /**
  * Function to create cookie based Storage
  *
- * @param {{sessionLength: number; domain?: string}} config optional config object that allows you to set the session length
- * @param {number} config.sessionLength the length of the session in milliseconds
+ * @param {{sessionLength: number; domain?: string}} config optional config object
+ * @param {number} config.sessionLength the duration until the cookie expires in milliseconds (deprecated)
  * @param {string} config.domain optional domain to set the cookie on, eg: `example.com` if you want the cookie to work on all subdomains of example.com
  * @returns {Storage} an instance of a browser storage object that leverages cookies
  */
 export const cookieStorage = (config?: {
+  /** @deprecated this option is deprecated and will be ignored */
   sessionLength?: number;
   domain?: string;
-}): Storage => ({
-  // this is unused for now, we should update this if we do need it
-  length: 0,
-
-  clear: function (): void {
-    throw new Error(
-      "clearing cookies is not supported as this could lead to unexpected behaviour.\n" +
-        " Use removeItem instead or you can manually clear cookies with document.cookie = ''"
+}): Storage => {
+  if (config?.sessionLength) {
+    console.warn(
+      "The cookieStorage sessionLength option is deprecated and will be ignored."
     );
-  },
+  }
+  return {
+    // this is unused for now, we should update this if we do need it
+    length: 0,
 
-  getItem: function (key: string): string | null {
-    if (typeof document === "undefined") return null;
+    clear: function (): void {
+      throw new Error(
+        "clearing cookies is not supported as this could lead to unexpected behaviour.\n" +
+          " Use removeItem instead or you can manually clear cookies with document.cookie = ''"
+      );
+    },
 
-    const cookieValue = Cookies.get(key);
-    return cookieValue ? decodeURIComponent(cookieValue) : null;
-  },
+    getItem: function (key: string): string | null {
+      if (typeof document === "undefined") return null;
 
-  // we will not be using this, if we have need for it add it back later
-  key: function (): string | null {
-    throw new Error("Function not implemented.");
-  },
+      const cookieValue = Cookies.get(key);
+      return cookieValue ? decodeURIComponent(cookieValue) : null;
+    },
 
-  removeItem: function (key: string): void {
-    if (typeof document === "undefined") return;
+    // we will not be using this, if we have need for it add it back later
+    key: function (): string | null {
+      throw new Error("Function not implemented.");
+    },
 
-    Cookies.remove(key);
-  },
+    removeItem: function (key: string): void {
+      if (typeof document === "undefined") return;
 
-  setItem: function (key: string, value: string): void {
-    if (typeof document === "undefined") return;
+      Cookies.remove(key);
+    },
 
-    Cookies.set(key, value, {
-      expires: new Date(
-        Date.now() + (config?.sessionLength ?? DEFAULT_SESSION_MS)
-      ),
-      domain: config?.domain,
-    });
-  },
-});
+    setItem: function (key: string, value: string): void {
+      if (typeof document === "undefined") return;
+
+      Cookies.set(key, value, {
+        expires: new Date(Date.now() + MAX_COOKIE_DURATION_MS),
+        domain: config?.domain,
+      });
+    },
+  };
+};
 
 /**
  * Converts a cookie into an initial state object
@@ -76,6 +85,17 @@ export function cookieToInitialState(
   const alchemyClientState = deserialize<{
     state: StoredState["alchemy"];
   }>(state).state;
+
+  // If the expirationTimeMs is changed in the config, we should use the new config
+  // value instead of restoring the value from the cookie, otherwise it can lead
+  // to confusion and unexpected behavior when it seems like the expirationTimeMs
+  // is being ignored.
+  alchemyClientState.config.sessionConfig = {
+    ...alchemyClientState.config.sessionConfig,
+    expirationTimeMs:
+      config.store.getInitialState().config.sessionConfig?.expirationTimeMs ??
+      alchemyClientState.config.sessionConfig?.expirationTimeMs,
+  };
 
   const wagmiClientState = wagmiCookieToInitialState(
     config._internal.wagmiConfig,

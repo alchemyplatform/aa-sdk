@@ -20,7 +20,7 @@ export default defineConfig({
   },
   iconUrl: "/kit-icon.svg",
   rootDir: "./",
-  ogImageUrl: "/images/og-image.jpg",
+  ogImageUrl: "https://accountkit.alchemy.com/images/og-image.png",
   head: (
     <>
       <script
@@ -106,6 +106,7 @@ export default defineConfig({
   sidebar: {
     "/": indexSidebar(),
     "/react": indexSidebar("react"),
+    "/react-native": indexSidebar("react-native"),
     "/core": indexSidebar("core"),
     "/infra": indexSidebar("infra"),
     "/signer": indexSidebar("signer"),

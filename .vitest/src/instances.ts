@@ -23,7 +23,7 @@ export const local060Instance = defineInstance({
 
 export const local070Instance = defineInstance({
   chain: localhost,
-  forkBlockNumber: 7303015,
+  forkBlockNumber: 8168190,
   forkUrl:
     process.env.VITEST_SEPOLIA_FORK_URL ??
     "https://ethereum-sepolia-rpc.publicnode.com",
@@ -52,6 +52,7 @@ const bundlerMethods = [
   "debug_bundler_dumpMempool",
   "debug_bundler_clearState",
   "debug_bundler_setBundlingMode",
+  "rundler_maxPriorityFeePerGas",
 ];
 
 function defineInstance(params: DefineInstanceParams) {
@@ -97,12 +98,23 @@ function defineInstance(params: DefineInstanceParams) {
             transport: http(rpcUrls().bundler),
           },
           {
-            methods: ["pm_getPaymasterStubData", "pm_getPaymasterData"],
+            methods: [
+              "pm_getPaymasterStubData",
+              "pm_getPaymasterData",
+              "alchemy_requestGasAndPaymasterAndData",
+            ],
             transport: paymasterTransport(
               createClient({
                 chain,
                 transport: http(rpcUrls().anvil),
-              }).extend(() => ({ mode: "anvil" }))
+              }).extend(() => ({ mode: "anvil" })),
+              // Paymaster transport needs to be able to send requests
+              // to the bundler in order to estimate gas during the
+              // alchemy_requestGasAndPaymasterAndData method.
+              createClient({
+                chain,
+                transport: http(rpcUrls().bundler),
+              }).extend(() => ({ mode: "bundler" }))
             ),
           },
         ],

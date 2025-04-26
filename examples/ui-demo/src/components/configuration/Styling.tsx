@@ -9,8 +9,8 @@ import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
 
 import { Metrics } from "@/metrics";
-import { CornerRadiusOptions } from "./components/CornerRadiusOptions";
-import { IllustrationStyleOptions } from "./components/IllustrationStyleOptions";
+import { CornerRadiusOptions } from "./CornerRadiusOptions";
+import { IllustrationStyleOptions } from "./IllustrationStyleOptions";
 
 export function Styling({ className }: { className?: string }) {
   const { logo, setSupportUrl, setTheme, supportUrl, theme } = useConfigStore(

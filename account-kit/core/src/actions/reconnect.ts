@@ -1,4 +1,3 @@
-import { createSigner } from "../store/store.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { createAccount } from "./createAccount.js";
 import { getChain } from "./getChain.js";
@@ -22,7 +21,11 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   const signerConfig = store.getState().config;
   const accountConfigs = store.getState().accountConfigs;
 
-  const signer = store.getState().signer ?? createSigner(signerConfig);
+  // If signer isn't already set, create a new signer.
+  // If the createSigner function isn't provided from the config,
+  const signer =
+    store.getState().signer ?? config._internal.createSigner(signerConfig);
+
   if (!store.getState().signer) {
     store.setState({
       signer,
@@ -47,6 +50,16 @@ export async function reconnect(config: AlchemyAccountsConfig) {
         {
           type: "MultiOwnerModularAccount",
           accountParams: accountConfigs[chain.id]["MultiOwnerModularAccount"],
+        },
+        config
+      );
+    }
+
+    if (accountConfigs[chain.id]?.["ModularAccountV2"]) {
+      await createAccount(
+        {
+          type: "ModularAccountV2",
+          accountParams: accountConfigs[chain.id]["ModularAccountV2"],
         },
         config
       );

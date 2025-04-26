@@ -1,0 +1,143 @@
+---
+title: Email OTP with Multi-Factor Authentication
+description: How to authenticate using Email OTP when MFA is enabled
+---
+
+# Email OTP with Multi-Factor Authentication
+
+This guide shows you how to implement Email OTP authentication when a user has multi-factor authentication (MFA) enabled.
+
+## Overview
+
+When MFA is enabled, the authentication process requires two steps:
+
+1. Verify the user's email with a one-time password
+2. Verify the 6-digit code (TOTP) from their authenticator app
+
+## Implementation
+
+### Step 1: Start Email OTP Authentication
+
+First, initiate the email OTP authentication process:
+
+```tsx twoslash
+import React from "react";
+import { useAuthenticate } from "@account-kit/react";
+
+// Inside your component
+const { authenticate } = useAuthenticate();
+
+const handleSendCode = (email: string) => {
+  authenticate(
+    {
+      type: "email",
+      emailMode: "otp",
+      email,
+    },
+    {
+      onSuccess: () => {
+        // This callback will only fire after both email OTP and MFA (if required) are completed
+      },
+      onError: (error) => {
+        // Handle error
+        console.error(error);
+      },
+    }
+  );
+};
+```
+
+### Step 2: Submit the OTP Code
+
+After the user receives the email OTP, they must submit the code to continue.
+
+The signer status will change to `AWAITING_EMAIL_AUTH` when an OTP code needs to be submitted:
+
+```tsx twoslash
+import { useSignerStatus, useAuthenticate } from "@account-kit/react";
+import { AlchemySignerStatus } from "@account-kit/signer";
+import React, { useEffect } from "react";
+
+function EmailOtpVerification() {
+  const { status } = useSignerStatus();
+  const { authenticate, isPending } = useAuthenticate({
+    onError: (error) => {
+      // Handle OTP verification errors
+      console.error("OTP verification failed:", error);
+    },
+  });
+
+  // Called when user enters their OTP code from email
+  const handleVerify = (emailOtp: string) => {
+    authenticate({
+      type: "otp",
+      otpCode: emailOtp,
+    });
+  };
+
+  // Example of prompting user when OTP verification is needed
+  useEffect(() => {
+    if (status === AlchemySignerStatus.AWAITING_EMAIL_AUTH) {
+      // Show OTP input UI to the user
+    }
+  }, [status]);
+
+  return (
+    // Your OTP input UI
+    <div>{/* OTP input component */}</div>
+  );
+}
+```
+
+### Step 3: Complete Authentication
+
+If MFA is required, the signer status will change to `AWAITING_MFA_AUTH`. You'll need to collect and submit the TOTP code from the user's authenticator app:
+
+```tsx twoslash
+import {
+  useSignerStatus,
+  useSigner,
+  useAuthenticate,
+} from "@account-kit/react";
+import { AlchemySignerStatus } from "@account-kit/signer";
+import React, { useEffect, useState } from "react";
+
+function MfaVerification() {
+  const signer = useSigner();
+  const { status } = useSignerStatus();
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  // Called when user enters their TOTP code from authenticator app
+  const handleVerify = async (totpCode: string) => {
+    try {
+      setIsVerifying(true);
+      await signer?.validateMultiFactors({
+        multiFactorCode: totpCode,
+      });
+      // After successful MFA validation, the user will be authenticated
+      // and the onSuccess callback from the initial authenticate call will fire
+    } catch (error) {
+      console.error("MFA verification failed:", error);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  // Example of prompting user when MFA verification is needed
+  useEffect(() => {
+    if (status === AlchemySignerStatus.AWAITING_MFA_AUTH) {
+      // Show TOTP input UI to the user
+    }
+  }, [status]);
+
+  return (
+    // Your TOTP input UI
+    <div>{/* TOTP input component */}</div>
+  );
+}
+```
+
+## Next Steps
+
+- [Set up MFA for your users](/react/mfa/setup-mfa)
+- [Email Magic Link with MFA](/react/mfa/email-magic-link)
