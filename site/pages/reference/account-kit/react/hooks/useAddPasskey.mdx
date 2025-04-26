@@ -7,7 +7,7 @@ description: Overview of the useAddPasskey method
 
 # useAddPasskey
 
-A custom hook to handle the addition of a passkey, which includes executing a mutation with optional parameters.
+A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts) to handle the addition of a passkey to an already authenticated account, which includes executing a mutation with optional parameters.
 
 ## Import
 
@@ -17,7 +17,7 @@ import { useAddPasskey } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { useAddPasskey } from "@account-kit/react";
 
 const { addPasskey, isAddingPasskey, error } = useAddPasskey({
@@ -34,9 +34,9 @@ const { addPasskey, isAddingPasskey, error } = useAddPasskey({
 ### mutationArgs
 
 `UseAddPasskeyMutationArgs`
-Optional arguments for the mutation used for adding a passkey
+Optional arguments for the mutation used for adding a passkey. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L8)
 
 ## Returns
 
 `UseAddPasskeyResult`
-An object containing the `addPasskey` function, a boolean `isAddingPasskey` to track the mutation status, and any error encountered
+An object containing the `addPasskey` function, a boolean `isAddingPasskey` to track the mutation status, and any error encountered. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L13)

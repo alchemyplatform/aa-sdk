@@ -3,7 +3,7 @@
 import type { WaitForUserOperationTxParameters } from "@aa-sdk/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { Hash } from "viem";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -29,13 +29,16 @@ export type UseWaitForUserOperationTransactionResult = {
 };
 
 /**
- * Custom hook to wait for a user operation transaction and manage its state (pending, error, result).
+ * Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts) to wait for a user operation transaction and manage its state (pending, error, result).
+ *
+ * @param {UseWaitForUserOperationTransactionArgs} config Configuration object containing the client. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L15)
+ * @returns {UseWaitForUserOperationTransactionResult} An object containing methods and state related to waiting for a user operation transaction. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L19)
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useWaitForUserOperationTransaction, useSmartAccountClient } from "@account-kit/react";
  *
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { client } = useSmartAccountClient({});
  * const {
  *  waitForUserOperationTransaction,
  *  waitForUserOperationTransactionResult,
@@ -50,9 +53,6 @@ export type UseWaitForUserOperationTransactionResult = {
  *  onError: (error) => console.error(error),
  * });
  * ```
- *
- * @param {UseWaitForUserOperationTransactionArgs} config Configuration object containing the client
- * @returns {UseWaitForUserOperationTransactionResult} An object containing methods and state related to waiting for a user operation transaction
  */
 export function useWaitForUserOperationTransaction({
   client,

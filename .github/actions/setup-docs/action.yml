@@ -1,0 +1,29 @@
+name: 'Setup Docs'
+description: 'Sets up everything needed to generate docs with Fern CLI'
+
+inputs:
+  docs-github-token:
+    description: 'GitHub token for accessing the docs repository'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Alchemy Docs Repo
+      uses: actions/checkout@v4
+      with:
+        repository: alchemyplatform/docs
+        token: ${{ inputs.docs-github-token }}
+        path: docs-site
+
+    - name: Copy docs to docs-site/fern/wallets
+      shell: bash
+      run: |
+        mkdir -p docs-site/fern/wallets
+        cp -r docs/* docs-site/fern/wallets/
+
+    - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
+      shell: bash
+      run: |
+        cd docs-site
+        fern/wallets/scripts/insert-docs.sh

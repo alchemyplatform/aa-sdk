@@ -9,7 +9,7 @@ import { signMessage as wagmi_signMessage } from "@wagmi/core";
 import { useCallback } from "react";
 import type { Hex, SignableMessage } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -40,13 +40,24 @@ export type UseSignMessageResult = {
 };
 
 /**
- * Custom hook to sign a message using the provided client.
+ * Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts) to sign a message using the provided client.
+ * Provides a way to sign messages within the context of an account using Ethereum-specific signature in EIP-191 format. Uses `personal_sign` to sign arbitrary messages (usually strings). Accepts any plain message as input.
+ *
+ * Until the method completes, `isSigningMessage` is true and `signedMessage` is null until eventually returning either a 1271 or 6492 signature (if the smart contract account has not been deployed yet), which is useful if you need to render the signature to the UI. `signedMessageAsync` is useful over `signedMessage` if you need to chain calls together.
+ *
+ * Using 1271 validation, the mechanisms by which you can validate the smart contract account, we verify the message was signed by the smart contract itself rather than the EOA signer.
+ *
+ * To reiterate, the signature that is returned must be verified against the account itself not the signer. The final structure of the signature is dictated by how the account does 1271 validation. You don’t want to be verifying in a different way than the way the account itself structures the signatures to be validated. For example LightAccount has three different ways to validate the account.
+ *
+ * @param {UseSignMessageArgs} config The configuration arguments for the hook, including the client and additional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L25)
+ * @returns {UseSignMessageResult} An object containing methods and state for signing messages. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L29)
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
+ * const data = "messageToSign"
+ * const { client } = useSmartAccountClient({});
  *
- * const { client } = useSmartAccountClient({ type: "LightAccount" });
  * const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
  *  client,
  *  // these are optional
@@ -55,10 +66,9 @@ export type UseSignMessageResult = {
  *  },
  *  onError: (error) => console.error(error),
  * });
- * ```
  *
- * @param {UseSignMessageArgs} config The configuration arguments for the hook, including the client and additional mutation arguments
- * @returns {UseSignMessageResult} An object containing methods and state for signing messages
+ * const result = await signMessage({ message: data });
+ * ```
  */
 export function useSignMessage({
   client,

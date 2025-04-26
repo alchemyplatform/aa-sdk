@@ -4,15 +4,20 @@ import {
   AlchemySignerClientParamsSchema,
   AlchemySignerWebClient,
 } from "./client/index.js";
-import type { CredentialCreationOptionOverrides } from "./client/types.js";
+import type {
+  CredentialCreationOptionOverrides,
+  VerifyMfaParams,
+} from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AuthParams =
   | {
       type: "email";
       email: string;
+      /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
       emailMode?: "magicLink" | "otp";
       redirectParams?: URLSearchParams;
+      multiFactors?: VerifyMfaParams[];
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
@@ -34,6 +39,7 @@ export type AuthParams =
       type: "oauth";
       scope?: string;
       claims?: string;
+      otherParameters?: Record<string, string>;
     } & OauthProviderConfig &
       OauthRedirectConfig)
   | {
@@ -46,6 +52,7 @@ export type AuthParams =
   | {
       type: "otp";
       otpCode: string;
+      multiFactors?: VerifyMfaParams[];
     };
 
 export type OauthProviderConfig =
@@ -69,7 +76,12 @@ export type OauthRedirectConfig =
   | { mode: "redirect"; redirectUrl: string }
   | { mode: "popup"; redirectUrl?: never };
 
-export type KnownAuthProvider = "google" | "apple" | "facebook" | "auth0";
+export type KnownAuthProvider =
+  | "google"
+  | "apple"
+  | "facebook"
+  | "twitch"
+  | "auth0";
 
 export type OauthMode = "redirect" | "popup";
 
@@ -80,7 +92,9 @@ export const AlchemySignerParamsSchema = z
       .or(AlchemySignerClientParamsSchema),
   })
   .extend({
-    sessionConfig: SessionManagerParamsSchema.omit({ client: true }).optional(),
+    sessionConfig: SessionManagerParamsSchema.omit({
+      client: true,
+    }).optional(),
   });
 
 export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
@@ -110,6 +124,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
    *
    * @param {AlchemySignerParams} params The parameters for the Alchemy signer, including the client and session configuration
    */
+
   constructor(params: AlchemySignerParams) {
     const { sessionConfig, ...params_ } =
       AlchemySignerParamsSchema.parse(params);
@@ -146,6 +161,8 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
     super({ client, sessionConfig, initialError });
 
     const isNewUser = isSignup === "true";
+
+    this.signerType = "alchemy-signer";
 
     if (emailBundle) {
       this.authenticate({

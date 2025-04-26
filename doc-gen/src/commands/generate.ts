@@ -11,6 +11,7 @@ import { functionTemplate } from "../templates/functionTemplate.js";
 export type GenerateOptions = {
   in: string;
   out: string;
+  fern?: boolean; // TODO: remove this once Fern docs are live
 };
 
 const generatedDirectories = [
@@ -23,8 +24,9 @@ const generatedDirectories = [
 export async function generate(options: GenerateOptions) {
   const sourceFilePath = path.resolve(process.cwd(), options.in);
   const outputFilePath = path.resolve(process.cwd(), options.out);
+  const isFern = options.fern ?? false;
   logger.info(
-    `Generating documentation for ${sourceFilePath} and ouputing to ${outputFilePath}`
+    `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`
   );
 
   const sourceFile = getSourceFile(sourceFilePath);
@@ -72,7 +74,8 @@ export async function generate(options: GenerateOptions) {
         exportedFilePath,
         outputFilePath,
         packageJSON.name,
-        isTsx
+        isTsx,
+        isFern
       );
     });
   });
@@ -83,7 +86,8 @@ async function generateDocumentation(
   sourceFilePath: string,
   outputFilePath: string,
   packageName: string,
-  isTsx: boolean
+  isTsx: boolean,
+  isFern: boolean
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
@@ -95,14 +99,15 @@ async function generateDocumentation(
   }
 
   if (ts.isClassDeclaration(node)) {
-    generateClassDocs(node, outputFilePath, importedName, packageName);
+    generateClassDocs(node, outputFilePath, importedName, packageName, isFern);
   } else {
     generateFunctionDocs(
       node,
       importedName,
       outputFilePath,
       packageName,
-      isTsx
+      isTsx,
+      isFern
     );
   }
 }
@@ -138,28 +143,37 @@ function generateFunctionDocs(
   importedName: string,
   outputFilePath: string,
   packageName: string,
-  isTsx: boolean
+  isTsx: boolean,
+  isFern: boolean
 ) {
-  const documentation = functionTemplate(node, importedName, packageName);
-  if (!documentation) {
-    return;
-  }
-
   // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
   const outputLocation = ts.isClassElement(node)
     ? ""
     : importedName.startsWith("use")
-    ? "./hooks"
+    ? "/hooks"
     : isTsx
-    ? "./components"
-    : "./functions";
+    ? "/components"
+    : "/functions";
 
   const fileName = ts.isClassElement(node)
     ? node.name?.getText() ?? "constructor"
     : importedName;
 
+  const outputPath = `${outputFilePath}${outputLocation}/${fileName}`;
+
+  const documentation = functionTemplate(
+    node,
+    importedName,
+    packageName,
+    outputPath,
+    isFern
+  );
+  if (!documentation) {
+    return;
+  }
+
   fs.outputFileSync(
-    path.resolve(outputFilePath, outputLocation, `${fileName}.mdx`),
+    path.resolve(`${outputPath}.mdx`),
     // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
     format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
   );
@@ -169,7 +183,8 @@ function generateClassDocs(
   node: ts.ClassDeclaration,
   outputFilePath: string,
   importedName: string,
-  packageName: string
+  packageName: string,
+  isFern: boolean
 ) {
   const classOutputBasePath = path.resolve(
     outputFilePath,
@@ -203,7 +218,8 @@ function generateClassDocs(
         importedName,
         classOutputBasePath,
         packageName,
-        false
+        false,
+        isFern
       );
     }
   });

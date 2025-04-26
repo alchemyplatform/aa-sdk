@@ -7,7 +7,7 @@ import type {
 } from "@aa-sdk/core";
 import type { SupportedAccounts } from "@account-kit/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
@@ -45,10 +45,14 @@ export type UseDropAndReplaceUserOperationResult<
 };
 
 /**
- * Custom hook that handles the drop and replace user operation for a given client and mutation arguments.
+ * Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts) that handles the drop and replace user operation for a given client and mutation arguments.
+ *
+ * @param {UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>} config The configuration parameters including the client and other mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L23)
+ * @returns {UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount>} The result containing the mutation function, result data, loading state, and any error. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L30)
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
+ * import React from 'react';
  * import {
  *   useDropAndReplaceUserOperation,
  *   useSendUserOperation,
@@ -56,9 +60,8 @@ export type UseDropAndReplaceUserOperationResult<
  * } from "@account-kit/react";
  *
  * export function ComponentWithDropAndReplaceUO() {
- *   const { client } = useSmartAccountClient({
- *     type: "MultiOwnerModularAccount",
- *   });
+ *   const { client } = useSmartAccountClient({});
+ *
  *   const { sendUserOperationAsync, isSendingUserOperation } =
  *     useSendUserOperation({
  *       client,
@@ -103,9 +106,6 @@ export type UseDropAndReplaceUserOperationResult<
  *   );
  * }
  * ```
- *
- * @param {UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>} config The configuration parameters including the client and other mutation arguments
- * @returns {UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount>} The result containing the mutation function, result data, loading state, and any error
  */
 export function useDropAndReplaceUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,

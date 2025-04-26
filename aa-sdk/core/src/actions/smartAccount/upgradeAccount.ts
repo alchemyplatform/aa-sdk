@@ -6,6 +6,7 @@ import { IncompatibleClientError } from "../../errors/client.js";
 import { sendUserOperation } from "./sendUserOperation.js";
 import type { UpgradeAccountParams, UserOperationContext } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
+import { clientHeaderTrack } from "../../index.js";
 
 export const upgradeAccount: <
   TTransport extends Transport = Transport,
@@ -19,7 +20,8 @@ export const upgradeAccount: <
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: UpgradeAccountParams<TAccount, TContext>
-) => Promise<Hash> = async (client, args) => {
+) => Promise<Hash> = async (client_, args) => {
+  const client = clientHeaderTrack(client_, "upgradeAccount");
   const {
     account = client.account,
     upgradeTo,

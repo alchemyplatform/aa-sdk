@@ -13,38 +13,49 @@ import type {
   LightAccountVersion,
   MultiOwnerLightAccount,
   MultiOwnerModularAccount,
+  ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
-import type { Store, StoredState } from "./store/types";
+import type { ClientStoreConfig, Store, StoredState } from "./store/types";
+import type {
+  RNAlchemySignerSingleton as RNAlchemySigner,
+  RNSignerClient,
+} from "@account-kit/react-native-signer";
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
-  | "MultiOwnerModularAccount";
+  | "MultiOwnerModularAccount"
+  | "ModularAccountV2";
 
 export type SupportedAccounts =
-  | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
-  | MultiOwnerModularAccount<AlchemyWebSigner>
+  | LightAccount<AlchemySigner, LightAccountVersion<"LightAccount">>
+  | MultiOwnerModularAccount<AlchemySigner>
   | MultiOwnerLightAccount<
-      AlchemyWebSigner,
+      AlchemySigner,
       LightAccountVersion<"MultiOwnerLightAccount">
-    >;
+    >
+  | ModularAccountV2<AlchemySigner>;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
-    ? LightAccount<AlchemyWebSigner>
+    ? LightAccount<AlchemySigner>
     : T extends "MultiOwnerModularAccount"
-    ? MultiOwnerModularAccount<AlchemyWebSigner>
+    ? MultiOwnerModularAccount<AlchemySigner>
     : T extends "MultiOwnerLightAccount"
-    ? MultiOwnerLightAccount<AlchemyWebSigner>
+    ? MultiOwnerLightAccount<AlchemySigner>
+    : T extends "ModularAccountV2"
+    ? ModularAccountV2<AlchemySigner>
     : never;
 
 export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {
+    // if not provided, the default signer will be used
+    createSigner: (config: ClientStoreConfig) => AlchemySigner;
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;
@@ -52,11 +63,11 @@ export type AlchemyAccountsConfig = {
   };
 };
 
-// [!region CreateConfigProps]
+// [!region CreateCorConfigProps]
 export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
-  policyId?: string;
+  policyId?: string | string[];
 };
 
 type RpcConnectionConfig =
@@ -64,7 +75,7 @@ type RpcConnectionConfig =
       chain: Chain;
       chains: {
         chain: Chain;
-        policyId?: string;
+        policyId?: string | string[];
         // optional transport override
         transport?: AlchemyTransport;
       }[];
@@ -78,7 +89,7 @@ type RpcConnectionConfig =
       chain: Chain;
       chains: {
         chain: Chain;
-        policyId?: string;
+        policyId?: string | string[];
         transport: AlchemyTransport;
       }[];
       transport?: never;
@@ -89,12 +100,24 @@ type RpcConnectionConfig =
   | {
       transport: AlchemyTransport;
       chain: Chain;
-      policyId?: string;
+      policyId?: string | string[];
       signerConnection?: ConnectionConfig;
       chains?: never;
     };
 
-export type CreateConfigProps = RpcConnectionConfig & {
+type CreateStorageFn = (config?: {
+  /** @deprecated Use `sessionConfig` to define session length instead. */
+  sessionLength?: number;
+  domain?: string;
+}) => Storage;
+
+export type AlchemyClientState = StoredState;
+
+export type AlchemySigner = AlchemyWebSigner | RNAlchemySigner;
+
+export type AlchemySignerClient = (AlchemyWebSigner | RNSignerClient) & {};
+
+export type BaseCreateConfigProps = RpcConnectionConfig & {
   sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
@@ -102,8 +125,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
    */
   ssr?: boolean;
 
-  // TODO: should probably abstract this out into a function
-  storage?: (config?: { sessionLength?: number; domain?: string }) => Storage;
+  storage?: CreateStorageFn;
 
   connectors?: CreateConnectorFn[];
 
@@ -122,6 +144,9 @@ export type CreateConfigProps = RpcConnectionConfig & {
     >,
     "connection"
   >;
-// [!endregion CreateConfigProps]
 
-export type AlchemyClientState = StoredState;
+export type CreateConfigProps = BaseCreateConfigProps & {
+  _internal?: {
+    createSigner?: (config: ClientStoreConfig) => AlchemySigner;
+  };
+};

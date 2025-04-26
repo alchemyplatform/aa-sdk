@@ -1,23 +1,24 @@
 "use client";
 
-import { getSigner, watchSigner } from "@account-kit/core";
-import type { AlchemyWebSigner } from "@account-kit/signer";
+import { getSigner, watchSigner, type AlchemySigner } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
-import { useAlchemyAccountContext } from "../context.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 /**
- * Hook for accessing the current Alchemy signer within a React component. It uses a synchronous external store for updates.
+ * [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSigner.ts) for accessing the current Alchemy signer within a React component. It uses a synchronous external store for updates.
+ * This is a good use case if you want to use the signer as an EOA, giving you direct access to it. The signer returned from `useSigner` just does a `personal_sign` or `eth_signTypedData` without any additional logic, but a smart contract account might have additional logic for creating signatures for 1271 validation so `useSignMessage` or `useSignTypeData` instead.
+ *
+ * @returns {AlchemySigner | null} The current Alchemy signer or null if none is available. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/index.ts#L50)
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSigner } from "@account-kit/react";
+ * import type { AlchemyWebSigner } from "@account-kit/signer";
  *
- * const signer = useSigner();
+ * const signer : AlchemyWebSigner | null = useSigner();
  * ```
- *
- * @returns {AlchemyWebSigner | null} The current Alchemy signer or null if none is available
  */
-export const useSigner = (): AlchemyWebSigner | null => {
+export const useSigner = <T extends AlchemySigner>(): T | null => {
   const { config } = useAlchemyAccountContext();
 
   // TODO: figure out how to handle this on the server
@@ -25,8 +26,7 @@ export const useSigner = (): AlchemyWebSigner | null => {
   // for all calls
   return useSyncExternalStore(
     watchSigner(config),
-    () => getSigner(config),
-    // We don't want to return null here, should return something of type AlchemySigner
+    () => getSigner<T>(config),
     () => null
   );
 };

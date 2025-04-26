@@ -29,23 +29,11 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     ],
   },
   {
-    text: "Hooks",
+    text: "Authentication",
     items: [
-      {
-        text: "useAccount",
-        link: "/reference/account-kit/react/hooks/useAccount",
-      },
       {
         text: "useAddPasskey",
         link: "/reference/account-kit/react/hooks/useAddPasskey",
-      },
-      {
-        text: "useAlchemyAccountContext",
-        link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
-      },
-      {
-        text: "useAuthError",
-        link: "/reference/account-kit/react/hooks/useAuthError",
       },
       {
         text: "useAuthModal",
@@ -56,9 +44,47 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useAuthenticate",
       },
       {
-        text: "useBundlerClient",
-        link: "/reference/account-kit/react/hooks/useBundlerClient",
+        text: "useConnect",
+        link: "/reference/account-kit/react/hooks/useConnect",
       },
+      {
+        text: "useExportAccount",
+        link: "/reference/account-kit/react/hooks/useExportAccount",
+      },
+      {
+        text: "useLogout",
+        link: "/reference/account-kit/react/hooks/useLogout",
+      },
+      {
+        text: "useSigner",
+        link: "/reference/account-kit/react/hooks/useSigner",
+      },
+      {
+        text: "useSignerStatus",
+        link: "/reference/account-kit/react/hooks/useSignerStatus",
+      },
+      {
+        text: "useUser",
+        link: "/reference/account-kit/react/hooks/useUser",
+      },
+    ],
+  },
+  {
+    text: "Account Client",
+    items: [
+      {
+        text: "useAccount",
+        link: "/reference/account-kit/react/hooks/useAccount",
+      },
+      {
+        text: "useSmartAccountClient",
+        link: "/reference/account-kit/react/hooks/useSmartAccountClient",
+      },
+    ],
+  },
+  {
+    text: "Smart Account Actions",
+    items: [
       {
         text: "useChain",
         link: "/reference/account-kit/react/hooks/useChain",
@@ -68,24 +94,8 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useClientActions",
       },
       {
-        text: "useConnect",
-        link: "/reference/account-kit/react/hooks/useConnect",
-      },
-      {
-        text: "useConnection",
-        link: "/reference/account-kit/react/hooks/useConnection",
-      },
-      {
         text: "useDropAndReplaceUserOperation",
         link: "/reference/account-kit/react/hooks/useDropAndReplaceUserOperation",
-      },
-      {
-        text: "useExportAccount",
-        link: "/reference/account-kit/react/hooks/useExportAccount",
-      },
-      {
-        text: "useLogout",
-        link: "/reference/account-kit/react/hooks/useLogout",
       },
       {
         text: "useSendUserOperation",
@@ -100,34 +110,48 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useSignTypedData",
       },
       {
-        text: "useSigner",
-        link: "/reference/account-kit/react/hooks/useSigner",
-      },
-      {
-        text: "useSignerStatus",
-        link: "/reference/account-kit/react/hooks/useSignerStatus",
-      },
-      {
-        text: "useSmartAccountClient",
-        link: "/reference/account-kit/react/hooks/useSmartAccountClient",
-      },
-      {
-        text: "useUiConfig",
-        link: "/reference/account-kit/react/hooks/useUiConfig",
-      },
-      {
-        text: "useUser",
-        link: "/reference/account-kit/react/hooks/useUser",
-      },
-      {
         text: "useWaitForUserOperationTransaction",
         link: "/reference/account-kit/react/hooks/useWaitForUserOperationTransaction",
       },
     ],
   },
   {
+    text: "Bundler/RPC Client",
+    items: [
+      {
+        text: "useBundlerClient",
+        link: "/reference/account-kit/react/hooks/useBundlerClient",
+      },
+    ],
+  },
+  {
+    text: "Utilities",
+    items: [
+      {
+        text: "useAlchemyAccountContext",
+        link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
+      },
+      {
+        text: "useAuthError",
+        link: "/reference/account-kit/react/hooks/useAuthError",
+      },
+      {
+        text: "useConnection",
+        link: "/reference/account-kit/react/hooks/useConnection",
+      },
+      {
+        text: "useUiConfig",
+        link: "/reference/account-kit/react/hooks/useUiConfig",
+      },
+    ],
+  },
+  {
     text: "Functions",
     items: [
+      {
+        text: "Hydrate",
+        link: "/reference/account-kit/react/functions/Hydrate",
+      },
       {
         text: "createConfig",
         link: "/reference/account-kit/react/functions/createConfig",
@@ -151,56 +175,6 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
   {
     text: "Resources",
     items: [
-      {
-        text: "React Native",
-        items: [
-          {
-            text: "Overview",
-            link: "/react-native/overview",
-          },
-          {
-            text: "Getting Started",
-            items: [
-              {
-                text: "Getting started on Expo",
-                link: "/react-native/getting-started/getting-started-expo",
-              },
-              {
-                text: "Getting started on Bare React Native",
-                link: "/react-native/getting-started/getting-started-rn-bare",
-              },
-            ],
-          },
-          {
-            text: "Using the Signer",
-            items: [
-              {
-                text: "Overview",
-                link: "/react-native/signer/overview",
-              },
-              {
-                text: "Setup",
-                link: "/react-native/signer/setup-guide",
-              },
-              {
-                text: "Authenticating Users",
-                items: [
-                  {
-                    text: "Authenticating Users via Magic Link",
-                    link: "/react-native/signer/authenticating-users/authenticating-with-magic-link",
-                  },
-                  {
-                    text: "Authenticating Users via One-Time Password (OTP)",
-                    link: "/react-native/signer/authenticating-users/authenticating-with-otp",
-                  },
-                ],
-                collapsed: true,
-              },
-            ],
-          },
-        ],
-        collapsed: true,
-      },
       {
         text: "Third Party",
         items: [

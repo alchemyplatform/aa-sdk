@@ -15,8 +15,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Account Kit Demo",
-  description: "Powered by Alchemy",
+  title: "Smart Wallets Demo",
+  description: "Protected by Alchemy",
 };
 
 export default function RootLayout({

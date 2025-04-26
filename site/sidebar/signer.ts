@@ -13,6 +13,24 @@ export const signerSidebar: SidebarItem[] = [
     ],
   },
   {
+    text: "Policies",
+    items: [
+      { text: "Overview", link: "/signer/policies/overview" },
+      {
+        text: "Key concepts",
+        link: "/signer/policies/key-concepts-and-examples",
+      },
+      {
+        text: "Offchain policies",
+        link: "/signer/policies/offchain-policy-configuration",
+      },
+      {
+        text: "Onchain policies",
+        link: "/signer/policies/onchain-policy-configuration",
+      },
+    ],
+  },
+  {
     text: "Authentication methods",
     items: [
       {
@@ -40,6 +58,10 @@ export const signerSidebar: SidebarItem[] = [
         link: "/signer/authentication/passkey-login",
       },
       { text: "Add passkey", link: "/signer/authentication/add-passkey" },
+      {
+        text: "Multi-factor authentication",
+        link: "/signer/authentication/mfa",
+      },
     ],
   },
   {

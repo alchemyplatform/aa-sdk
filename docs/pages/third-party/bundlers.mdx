@@ -1,0 +1,84 @@
+---
+title: 3rd Party Bundlers
+description: Learn how to use a different RPC provider with Account Kit
+---
+
+# Using a different RPC Provider
+
+The `SmartAccountClient` within `@aa-sdk/core` is unopinionated about which bundler you use, so you can connect to any RPC provider really simply.
+
+## Usage
+
+If we look at the example for creating a `SmartAccountClient`:
+
+```ts twoslash
+import { createSmartAccountClient } from "@aa-sdk/core";
+import { http } from "viem";
+import { sepolia } from "viem/chains";
+
+const client = createSmartAccountClient({
+  transport: http("https://polygon-mumbai.g.alchemy.com/v2/demo"),
+  chain: sepolia,
+});
+```
+
+You can see that we set the `transport` to `http("https://polygon-mumbai.g.alchemy.com/v2/demo")`. You can swap out that the url in the `http` function to
+any other provider's URL.
+
+<Warning>
+  Depending on your provider, you may have to pass in custom logic for the
+  `gasEstimator` and `feeEstimator` properties when calling
+  `createSmartAccountClient`. Consult with your provider on what the correct
+  logic is.
+</Warning>
+
+## Splitting Bundler traffic and Node RPC traffic
+
+It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/wallets/reference/aa-sdk/core/functions/split) transport and passing it to your `createSmartAccountClient` call. For example:
+
+### Using Alchemy Bundler and Gas Manager with 3rd Party Node RPCs
+
+If you want to split your node traffic from Alchemy's Bundler traffic, you can do this with the `alchemyTransport`
+
+```ts twoslash
+import { alchemy } from "@account-kit/infra";
+
+const alchemyTransport = alchemy({
+  alchemyConnection: { apiKey: "your-api-key" },
+  nodeRpcUrl: "YOUR_NODE_RPC_URL",
+});
+// now use this transport in a client
+```
+
+### Using two different 3rd Party Bundler and Node RPCs
+
+```ts twoslash
+import { split } from "@aa-sdk/core";
+import { createPublicClient, http } from "viem";
+
+const bundlerMethods = [
+  "eth_sendUserOperation",
+  "eth_estimateUserOperationGas",
+  "eth_getUserOperationReceipt",
+  "eth_getUserOperationByHash",
+  "eth_supportedEntryPoints",
+];
+
+const clientWithSplit = createPublicClient({
+  transport: split({
+    overrides: [
+      {
+        methods: bundlerMethods,
+        transport: http("BUNDLER_RPC_URL"),
+      },
+    ],
+    fallback: http("OTHER_RPC_URL"),
+  }),
+});
+```
+
+## Zora and Fraxtal
+
+Using a split Bundler and Node RPC setup is required for Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks since Alchemy currently only supports Account Abstraction endpoints for those networks. Please refer to documentation from [Frax](https://docs.frax.com/fraxtal/network/network-information) and [Zora](https://docs.zora.co/docs/zora-network/network) about RPC options.
+
+See [this guide](/wallets/third-party/chains) for more information on using AA only chains with Account Kit.

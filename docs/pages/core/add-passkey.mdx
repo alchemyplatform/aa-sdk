@@ -1,0 +1,35 @@
+---
+title: Add Passkey
+description: Learn how to add a passkey to your users' accounts with Account Kit core.
+---
+
+# Add passkey
+
+You may have noticed in the [Authenticate users](/wallets/core/authenticate-users) guide, that it's possible to authenticate users with a passkey they've already created. If you don't want users to have to type in an email to log in with a passkey, this guide will cover how to add a passkey to a user's account once they have already logged in.
+
+## Authenticate the user
+
+See the [Authenticate users](/wallets/core/authenticate-users#email-authentication) guide for more information on how to authenticate a user with email. The user must be authenticated before you can add a passkey to their account
+
+## Add a passkey
+
+Once the user is authenticated, you can use the `addPasskey` method on the Alchemy Signer. In the below example, we add the passkey as soon as the signer is connected. However, you can choose to add a passkey when the user clicks a button or at any other time. In this case, use the `watchSignerStatus` method to change your UI based on the signer's connected status.
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { watchSignerStatus, getSigner } from "@account-kit/core";
+import { config } from "./config";
+
+const signerSubscription = watchSignerStatus(config)(async (status) => {
+  if (status.isConnected) {
+    const signer = getSigner(config);
+
+    await signer.addPasskey();
+  }
+});
+```
+
+<Markdown src="../../shared/core/config.mdx" />
+
+</CodeBlocks>

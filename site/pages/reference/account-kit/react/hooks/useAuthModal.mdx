@@ -7,7 +7,7 @@ description: Overview of the useAuthModal method
 
 # useAuthModal
 
-A hook that returns the open and close functions for the Auth Modal if uiConfig
+A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts) that returns the open and close functions for the Auth Modal if uiConfig
 is enabled on the Account Provider
 
 ## Import
@@ -18,7 +18,8 @@ import { useAuthModal } from "@account-kit/react";
 
 ## Usage
 
-```tsx
+```tsx twoslash
+import React from "react";
 import { useAuthModal } from "@account-kit/react";
 
 const ComponentWithAuthModal = () => {
@@ -35,4 +36,4 @@ const ComponentWithAuthModal = () => {
 ## Returns
 
 `UseAuthModalResult`
-an object containing methods for opening or closing the auth modal
+an object containing methods for opening or closing the auth modal. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts#L4)

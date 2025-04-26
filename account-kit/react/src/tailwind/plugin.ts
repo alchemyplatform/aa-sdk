@@ -17,6 +17,8 @@ import { apply, getColorVariableName } from "./utils.js";
 
 type TailWindPlugin = ReturnType<typeof plugin>;
 
+const pathToMe = require.resolve("@account-kit/react");
+
 /**
  * Get the path to the @account-kit/react package and the tailwind content.
  * This is used within the tailwind.config.js to include the @account-kit content.
@@ -41,7 +43,6 @@ type TailWindPlugin = ReturnType<typeof plugin>;
  * @returns {string} The resolved path to the @account-kit/react package and the tailwind content
  */
 export const getAccountKitContentPath = () => {
-  const pathToMe = require.resolve("@account-kit/react");
   const contentPath = `${pathToMe.replace(
     "index.js",
     ""
@@ -82,13 +83,15 @@ export const accountKitUi: (
   const { colors, borderRadius, ...rest } = accountKitTheme;
 
   return plugin(
-    ({ addComponents, addUtilities, matchUtilities }) => {
+    ({ addComponents, addUtilities, matchUtilities, addBase }) => {
+      // base
+      addBase(colorVariables(accountKitTheme));
+      addBase(borderRadiusVariables(accountKitTheme));
+
       // utilities
       addUtilities(borderUtilities);
 
       // components
-      addComponents(colorVariables(accountKitTheme));
-      addComponents(borderRadiusVariables(accountKitTheme));
       addComponents(buttonComponents);
       addComponents(inputComponents);
       addComponents(formControlComponents);
@@ -160,7 +163,7 @@ export const accountKitUi: (
  * @returns {TailwindConfig} the augmented tailwind config
  */
 export const withAccountKitUi = (
-  config: TailwindConfig,
+  config: Partial<TailwindConfig>,
   themeOverride?: AccountKitThemeOverride
 ): TailwindConfig => ({
   darkMode: [
@@ -175,7 +178,10 @@ export const withAccountKitUi = (
     ? [...config.content, getAccountKitContentPath()]
     : {
         ...config.content,
-        files: [...config.content.files, getAccountKitContentPath()],
+        files: [
+          ...(Array.isArray(config.content?.files) ? config.content.files : []),
+          getAccountKitContentPath(),
+        ],
       },
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });

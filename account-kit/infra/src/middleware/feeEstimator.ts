@@ -1,5 +1,9 @@
 import type { ClientMiddlewareFn } from "@aa-sdk/core";
-import { applyUserOpOverrideOrFeeOption, bigIntMultiply } from "@aa-sdk/core";
+import {
+  applyUserOpOverrideOrFeeOption,
+  bigIntMultiply,
+  clientHeaderTrack,
+} from "@aa-sdk/core";
 import type { AlchemyTransport } from "../alchemyTransport";
 
 /**
@@ -29,7 +33,8 @@ export const alchemyFeeEstimator: (
   transport: AlchemyTransport
 ) => ClientMiddlewareFn =
   (transport) =>
-  async (struct, { overrides, feeOptions, client }) => {
+  async (struct, { overrides, feeOptions, client: client_ }) => {
+    const client = clientHeaderTrack(client_, "alchemyFeeEstimator");
     const transport_ = transport({ chain: client.chain });
     let [block, maxPriorityFeePerGasEstimate] = await Promise.all([
       client.getBlock({ blockTag: "latest" }),

@@ -1,19 +1,33 @@
 ---
-title: Authentication with UI componenets
+title: Authentication with UI components
 description: How to use our pre-built authentication component in your React app
 ---
+
+import AuthenticationMethods from "./shared/authentication-methods.mdx";
 
 # Authentication with our UI components
 
 Account Kit allows you to use pre-built, [highly customizable](https://demo.alchemy.com/) UI components to handle authenticating your users. These components provide flexibility to:
 
-- use the pre-built [modal](#modal-auth) or [embed](#embedded-auth) the auth card directly in your app
-- customize [authentication method ui](#customize-authentication-ui)
-- customize [theme](/react/customization/theme)
+- Use the pre-built [modal](#modal-auth) or [embed](#embedded-auth) the auth card directly in your app
+- Choose from [multiple authentication methods](#available-authentication-methods)
+- Customize [authentication method UI](#customize-authentication-ui)
+- Customize [theme](/react/customization/theme)
 
 :::tip
 Tailwind CSS is a required dependency for using Alchemy Account Kit UI components. However, Alchemy Account Kit hooks function independently and do not require Tailwind.
 :::
+
+## Available Authentication Methods
+
+Account Kit supports several authentication methods that you can implement with pre-built UI components:
+
+<AuthenticationMethods />
+
+Each authentication method page includes specific configuration options and examples for both pre-built UI components and custom UI implementations.
+
+**Multi-Factor Authentication (MFA)**  
+If your users have an authenticator app (TOTP) set up, the UI components will automatically prompt them for their 6-digit code after they complete any primary login method (e.g., Email OTP, Email Magic Link, or Social Login). No extra configuration is required in the UI component – just [enable MFA](/react/mfa/setup-mfa) for your users.
 
 ## Modal auth
 
@@ -67,14 +81,14 @@ export default function MyLoginPage() {
 }
 ```
 
-That's it! The user can now input their credentials and complete login. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address
+That's it! The user can now input their credentials and complete login. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address.
 
 ## Customize authentication UI
 
 When rendering the authentication component to your users, it's possible to customize the various sections a user will see as well as the content of the modal.
 
 :::tip
-The easiest way to configure your UI components, is using the [Demo App](https://demo.alchemy.com/).
+The easiest way to configure your UI components is using the [Demo App](https://demo.alchemy.com/).
 :::
 
 **How does the UI config work?**
@@ -83,42 +97,20 @@ The easiest way to configure your UI components, is using the [Demo App](https:/
 - `sections` object is an array of arrays representing the various sections in descending order, each section (element in the outer array) separated by a divider in the UI
 - each item within a section is an `AuthTypes` objects containing configuration parameters for that authentication method.
 
-  <br />
-
 **The following [`AuthTypes`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts)
 can be passed into sections:**
 
 ### Email
 
-This adds an email login to a section. The shape of this auth type is:
-
-```ts
-type EmailAuthType = {
-  type: "email";
-  // hides the continue button
-  hideButton?: boolean;
-  // changes the button label
-  buttonLabel?: string;
-  // changes the placeholder text in the input
-  placeholder?: string;
-};
-```
+This adds an email login to a section. For detailed information on email authentication, see [Email OTP](/react/login-methods/email-otp) and [Email Magic Link](/react/login-methods/email-magic-link) pages.
 
 ### Passkey
 
-This adds a passkey login method to a section. Passkey login allows users to log in with a passkey they've created else where in your app after logging in, or right after sign-up if you've enabled that setting.
-The shape of this auth type is:
-
-```ts
-type PasskeyAuthType = {
-  type: "passkey";
-};
-```
+This adds a passkey login method to a section. For detailed information on passkey authentication, see [Passkey Login](/react/login-methods/passkey-login) and [Passkey Signup](/react/login-methods/passkey-signup) pages.
 
 ### External wallets
 
 This adds an external wallet login method to a section. This allows users to connect to your app with existing EOAs via browser extension or WalletConnect.
-The shape of this auth type is:
 
 ```ts
 type ExternalWalletsAuthType = {
@@ -130,43 +122,11 @@ type ExternalWalletsAuthType = {
 
 ### Social
 
-This adds social authentication methods to a section. Social login authentication allows you to log in and sign up users using an OAuth provider, such as Google Sign-In or Facebook Login. You can also configure custom providers through Auth0. The shape of this auth type is:
-
-```ts
-type SocialAuthType = {
-  type: "social";
-  // Specifies the requested OAuth scope
-  scope?: string;
-  // Specifies additional claims to be included in the authentication token
-  claims?: string;
-} & (
-  | {
-      // For using the Auth0 authentication provider
-      authProviderId: "auth0";
-      // Indicates whether a custom provider is used (default is false)
-      isCustomProvider?: false;
-      // Auth0-specific connection string
-      auth0Connection?: string;
-      // URL for the provider's logo
-      logoUrl: string;
-    }
-  | {
-      // For using a known authentication provider other than Auth0: "google", "facebook", "apple"
-      authProviderId: KnownAuthProvider;
-      // Indicates whether a custom provider is used (default false)
-      isCustomProvider?: false;
-      // Auth0 connection should not be specified when using other providers
-      auth0Connection?: never;
-      // Logo URL is optional for other providers
-      logoUrl?: never;
-    }
-) &
-  OauthRedirectConfig;
-```
+This adds social authentication methods to a section. For detailed information on social authentication, see [Social Login](/react/login-methods/social-login) and [Custom Social Providers](/react/login-methods/social-providers) pages.
 
 ### Example
 
-Here's an example ui configuration which adds 3 sections to the auth modal. The first section contains an email auth, the second section is for passkey login and 2 social auth logins (google and facebook), and the third section is external wallets.
+Here's an example UI configuration which adds 3 sections to the auth modal. The first section contains an email auth, the second section is for passkey login and 2 social auth logins (google and facebook), and the third section is external wallets.
 
 ```ts twoslash
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
@@ -193,7 +153,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
   },
 };
 
-export const confg = createConfig(
+export const config = createConfig(
   {
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
@@ -209,3 +169,7 @@ This example would output a modal similar to this image:
   alt="Example custom UI config"
   style={{ width: "20%" }}
 />
+
+## Need More Control?
+
+If you need complete control over the user experience, you can implement your own custom UI using Account Kit hooks. See the [Authentication with React Hooks](/react/react-hooks) page and the individual authentication method pages for detailed implementations.

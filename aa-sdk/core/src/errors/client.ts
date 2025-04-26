@@ -103,3 +103,31 @@ export class EntityIdOverrideError extends BaseError {
     super(`EntityId of 0 is reserved for the owner and cannot be used`);
   }
 }
+
+/**
+ * Error class denoting that the provided ma v2 account mode is invalid.
+ */
+export class InvalidModularAccountV2Mode extends BaseError {
+  override name = "InvalidModularAccountV2Mode";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the provided ma v2 account mode is invalid.
+   */
+  constructor() {
+    super(`The provided account mode is invalid for ModularAccount V2`);
+  }
+}
+
+/**
+ * Error class denoting that the deferred action nonce used is invalid.
+ */
+export class InvalidDeferredActionNonce extends BaseError {
+  override name = "InvalidDeferredActionNonce";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that the provided deferred action nonce is invalid.
+   */
+  constructor() {
+    super(`The provided deferred action nonce is invalid`);
+  }
+}

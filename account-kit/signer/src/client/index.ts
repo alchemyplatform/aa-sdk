@@ -17,7 +17,10 @@ import type {
   OauthConfig,
   OtpParams,
   User,
+  SubmitOtpCodeResponse,
 } from "./types.js";
+import { MfaRequiredError } from "../errors.js";
+import { parseMfaError } from "../utils/parseMfaError.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -198,13 +201,25 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const { email, emailMode, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
 
-    return this.request("/v1/auth", {
-      email,
-      emailMode,
-      targetPublicKey: publicKey,
-      expirationSeconds,
-      redirectParams: params.redirectParams?.toString(),
-    });
+    try {
+      return await this.request("/v1/auth", {
+        email,
+        emailMode,
+        targetPublicKey: publicKey,
+        expirationSeconds,
+        redirectParams: params.redirectParams?.toString(),
+        multiFactors: params.multiFactors,
+      });
+    } catch (error) {
+      const multiFactors = parseMfaError(error);
+
+      // If MFA is required, and emailMode is Magic Link, the user must submit mfa with the request or
+      // the the server will return an error with the required mfa factors.
+      if (multiFactors) {
+        throw new MfaRequiredError(multiFactors);
+      }
+      throw error;
+    }
   };
 
   /**
@@ -235,14 +250,38 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override async submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
-  ): Promise<{ bundle: string }> {
+  ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const targetPublicKey = await this.initIframeStamper();
-    const { credentialBundle } = await this.request("/v1/otp", {
+    const response = await this.request("/v1/otp", {
       ...args,
       targetPublicKey,
     });
-    return { bundle: credentialBundle };
+
+    if ("credentialBundle" in response && response.credentialBundle) {
+      return {
+        mfaRequired: false,
+        bundle: response.credentialBundle,
+      };
+    }
+
+    // If the server says "MFA_REQUIRED", pass that data back to the caller:
+    if (
+      response.status === "MFA_REQUIRED" &&
+      response.encryptedPayload &&
+      response.multiFactors
+    ) {
+      return {
+        mfaRequired: true,
+        encryptedPayload: response.encryptedPayload,
+        multiFactors: response.multiFactors,
+      };
+    }
+
+    // Otherwise, it's truly an error:
+    throw new Error(
+      "Failed to submit OTP code. Server did not return required fields."
+    );
   }
 
   /**
@@ -555,6 +594,31 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
         clearInterval(checkCloseIntervalId);
       };
     });
+  };
+
+  /**
+   * Initializes the iframe stamper and returns its public key.
+   *
+   * @example
+   * ```ts twoslash
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const publicKey = await client.targetPublicKey();
+   * ```
+   *
+   * @returns {Promise<string>} A promise that resolves with the target public key when the iframe stamper is successfully initialized, or throws an error if the target public key is not supported.
+   */
+  public override targetPublicKey = async (): Promise<string> => {
+    return this.initIframeStamper();
   };
 
   private initIframeStamper = async () => {

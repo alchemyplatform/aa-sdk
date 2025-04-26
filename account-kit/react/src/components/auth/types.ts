@@ -9,6 +9,7 @@ export type AuthType =
   | {
       // TODO: this should support setting redirectParams which will be added to the email redirect
       type: "email";
+      /** @deprecated This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. */
       emailMode?: "magicLink" | "otp";
       hideButton?: boolean;
       buttonLabel?: string;
@@ -23,6 +24,7 @@ export type AuthType =
           auth0Connection?: string;
           displayName: string;
           logoUrl: string;
+          logoUrlDark?: string;
         }
       | {
           authProviderId: KnownAuthProvider;
@@ -30,6 +32,7 @@ export type AuthType =
           auth0Connection?: never;
           displayName?: never;
           logoUrl?: never;
+          logoUrlDark?: never;
         }
     ) &
       OauthRedirectConfig);
