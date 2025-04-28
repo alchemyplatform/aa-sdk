@@ -4,6 +4,7 @@ import type {
 } from "../account/smartContractAccount";
 import type { UserOperationContext } from "../actions/smartAccount/types";
 import type {
+  PolicyToken,
   UserOperationFeeOptions,
   UserOperationOverrides,
   UserOperationStruct,
@@ -24,6 +25,7 @@ export type ClientMiddlewareArgs<
   feeOptions?: UserOperationFeeOptions;
   account: TAccount;
   client: C;
+  policyToken?: PolicyToken;
 };
 
 // [!region ClientMiddlewareFn]
