@@ -12,7 +12,7 @@ import {
   type SmartContractAccountWithSigner,
   type UserOperationContext,
 } from "@aa-sdk/core";
-import { type Chain } from "viem";
+import { type Address, type Chain } from "viem";
 import {
   alchemy,
   convertHeadersToObject,
@@ -49,11 +49,11 @@ export type AlchemySmartAccountClientConfig<
   useSimulation?: boolean;
   policyId?: string | string[];
   policyToken?: {
-    address: string;
+    address: Address;
     approvalMode?: "NONE" | "PERMIT";
-    maxTokenAmount: bigint;
-    erc20Name: string;
-    version: string;
+    maxTokenAmount?: bigint;
+    erc20Name?: string;
+    version?: string;
   };
 } & Pick<
   SmartAccountClientConfig<AlchemyTransport, chain, account, context>,

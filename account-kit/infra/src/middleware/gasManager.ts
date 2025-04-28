@@ -1,4 +1,5 @@
 import type {
+  Address,
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
@@ -61,12 +62,14 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 }
 
 export type PolicyToken = {
-  address: string;
-  maxTokenAmount: bigint;
+  address: Address;
+  maxTokenAmount?: bigint;
   approvalMode?: "NONE" | "PERMIT";
-  erc20Name: string;
-  version: string;
+  erc20Name?: string;
+  version?: string;
 };
+
+const MaxUint256: bigint = (1n << 256n) - 1n;
 
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
@@ -202,11 +205,21 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           : {}),
       });
 
-      let erc20Context = undefined;
+      let erc20Context:
+        | {
+            tokenAddress: Address;
+            maxTokenAmount: bigint;
+            permit?: Hex;
+          }
+        | undefined = undefined;
       if (policyToken !== undefined) {
+        let maxAmountToken = policyToken.maxTokenAmount
+          ? policyToken.maxTokenAmount
+          : MaxUint256;
+
         erc20Context = {
           tokenAddress: policyToken.address,
-          maxTokenAmount: policyToken.maxTokenAmount,
+          maxTokenAmount: maxAmountToken,
         };
         if (policyToken.approvalMode === "PERMIT") {
           // get a paymaster address
@@ -224,14 +237,13 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
               },
             ],
           });
-          // todo: make a eth_estimateUserOperationGas to avoid client pass
-          // maxAmountToken
+
           paymasterAddress = paymasterData.paymaster
             ? paymasterData.paymaster
             : paymasterData.paymasterAndData
             ? paymasterData.paymasterAndData.slice(0, 42)
             : "0x";
-          const typed_permit_data = {
+          const typedPermitData = {
             types: {
               EIP712Domain: [
                 {
@@ -276,25 +288,21 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             },
             primaryType: "Permit",
             domain: {
-              name: policyToken.erc20Name,
-              version: policyToken.version,
+              name: policyToken.erc20Name ? policyToken.erc20Name : "",
+              version: policyToken.version ? policyToken.version : "",
               chainId: BigInt(client.chain.id),
               verifyingContract: policyToken.address as Hex,
             },
             message: {
               owner: account.address as Hex,
               spender: paymasterAddress as Hex,
-              value: policyToken.maxTokenAmount,
+              value: maxAmountToken,
               nonce: (await account.getAccountNonce()) + BigInt(1),
               deadline: BigInt(0xffffffffffffffffffffffffffffffff),
             },
           } as const;
 
-          erc20Context = {
-            tokenAddress: policyToken.address,
-            permit: await account.signTypedData(typed_permit_data),
-            maxTokenAmount: policyToken.maxTokenAmount,
-          };
+          erc20Context.permit = await account.signTypedData(typedPermitData);
         }
       }
 
