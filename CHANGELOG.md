@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+### Bug Fixes
+
+- **signer-docs:** broken image paths ([#1567](https://github.com/alchemyplatform/aa-sdk/issues/1567)) ([69e5b3e](https://github.com/alchemyplatform/aa-sdk/commit/69e5b3e9155ed37877d8f10ef5bafe0260fce0a7))
+
+### Features
+
+- move to use the alchemy store for web3 communication ([#1562](https://github.com/alchemyplatform/aa-sdk/issues/1562)) ([f86a815](https://github.com/alchemyplatform/aa-sdk/commit/f86a815412cb532de12a405b1cfb143da2e22b77))
+
 # [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
 
 ### Features
