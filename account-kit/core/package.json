@@ -57,6 +57,7 @@
     "@account-kit/react-native-signer": "^4.29.0",
     "@account-kit/signer": "^4.29.0",
     "@account-kit/smart-contracts": "^4.29.0",
+    "@solana/web3.js": "^1.98.0",
     "js-cookie": "^3.0.5",
     "zod": "^3.22.4",
     "zustand": "^5.0.0-rc.2"

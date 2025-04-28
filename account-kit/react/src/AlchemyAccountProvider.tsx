@@ -74,13 +74,12 @@ export const AlchemyAccountProvider = (
     clearSignupParam();
   }, []);
 
-  const initialContext = useMemo(
-    () => ({
+  const initialContext = useMemo(() => {
+    return {
       config,
       queryClient,
-    }),
-    [config, queryClient]
-  );
+    };
+  }, [config, queryClient]);
 
   const { status } = useSignerStatus(initialContext);
 

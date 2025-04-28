@@ -469,8 +469,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/constructor.mdx
                       - page: disconnect
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect.mdx
-                      - page: experimental_toSolanaSigner
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner.mdx
+                      - page: toSolanaSigner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toSolanaSigner.mdx
                       - page: exportWallet
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet.mdx
                       - page: getAddress
