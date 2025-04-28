@@ -9,6 +9,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Extract code snippets
+      shell: bash
+      run: node docs/scripts/extract-include-statements.js
+
     - name: Checkout Alchemy Docs Repo
       uses: actions/checkout@v4
       with:

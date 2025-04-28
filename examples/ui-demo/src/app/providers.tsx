@@ -6,13 +6,11 @@ import { AlchemyClientState } from "@account-kit/core";
 import {
   AlchemyAccountProvider,
   AlchemyAccountsConfigWithUI,
-  AlchemySolanaWeb3Context,
 } from "@account-kit/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useRef } from "react";
 import { ConfigContextProvider, ConfigSync } from "../state";
 import { alchemyConfig, Config, queryClient } from "./config";
-import { Connection } from "@solana/web3.js";
 
 export const Providers = (
   props: PropsWithChildren<{
@@ -33,15 +31,6 @@ export const Providers = (
       };
     })();
   }
-  const connection = new Connection(
-    `${
-      (global || window)?.location?.origin || "http://localhost:3000"
-    }/api/rpc/solana`,
-    {
-      wsEndpoint: "wss://api.devnet.solana.com",
-      commitment: "confirmed",
-    }
-  );
   return (
     <Suspense>
       <QueryClientProvider client={queryClient}>
@@ -55,14 +44,8 @@ export const Providers = (
               initialConfig={props.initialConfig}
               initialState={props.initialState}
             >
-              <AlchemySolanaWeb3Context.Provider
-                value={{
-                  connection: connection,
-                }}
-              >
-                <ConfigSync />
-                {props.children}
-              </AlchemySolanaWeb3Context.Provider>
+              <ConfigSync />
+              {props.children}
             </ConfigContextProvider>
           </ToastProvider>
         </AlchemyAccountProvider>

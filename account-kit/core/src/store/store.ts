@@ -13,7 +13,7 @@ import {
 } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
-import type { Connection, SupportedAccountTypes } from "../types.js";
+import { type Connection, type SupportedAccountTypes } from "../types.js";
 import { storeReplacer } from "../utils/replacer.js";
 import { storeReviver } from "../utils/reviver.js";
 import {
@@ -25,6 +25,7 @@ import {
   type Store,
   type StoreState,
 } from "./types.js";
+import { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 
 export const STORAGE_VERSION = 14;
 
@@ -48,6 +49,9 @@ export const createAccountKitStore = (
               replacer: (key, value) => {
                 if (key === "bundlerClient") return undefined;
 
+                if (value instanceof SolanaWeb3Connection) {
+                  return undefined;
+                }
                 if (key === "user") {
                   const user = value as StoreState["user"];
                   if (!user) return undefined;
@@ -89,7 +93,14 @@ export const createAccountKitStore = (
             },
             merge: (persisted, current) => {
               const persistedState = persisted as StoreState;
+              const transportConnection = persistedState.connections.get(
+                persistedState.chain.id
+              );
               if (persistedState.chain == null) {
+                return createInitialStoreState(params);
+              }
+
+              if (transportConnection == null) {
                 return createInitialStoreState(params);
               }
 
@@ -127,18 +138,16 @@ export const createAccountKitStore = (
                   connections.map((c) => c.chain)
                 ),
                 connections: connectionsMap,
+                solana: params.solana,
                 bundlerClient: createAlchemyPublicRpcClient({
                   chain: persistedState.chain,
-                  transport: alchemy(
-                    persistedState.connections.get(persistedState.chain.id)!
-                      .transport
-                  ),
+                  transport: alchemy(transportConnection.transport),
                 }),
               };
             },
             skipHydration: ssr,
             partialize: (state) => {
-              const { signer, accounts, ...writeableState } = state;
+              const { signer, accounts, solana, ...writeableState } = state;
               return writeableState;
             },
             version: STORAGE_VERSION,
@@ -157,8 +166,9 @@ const createInitialStoreState = (
 ): StoreState => {
   const { connections, chain, client, sessionConfig } = params;
   const connectionMap = createConnectionsMap(connections);
+  const transportConnection = connectionMap.get(chain.id);
 
-  if (!connectionMap.has(chain.id)) {
+  if (!transportConnection) {
     throw new Error("Chain not found in connections");
   }
 
@@ -167,7 +177,7 @@ const createInitialStoreState = (
   const baseState: StoreState = {
     bundlerClient: createAlchemyPublicRpcClient({
       chain,
-      transport: alchemy(connectionMap.get(chain.id)!.transport),
+      transport: alchemy(transportConnection.transport),
     }),
     chain,
     connections: connectionMap,
@@ -179,6 +189,10 @@ const createInitialStoreState = (
     ),
     smartAccountClients: createEmptySmartAccountClientState(chains),
   };
+
+  if ("solana" in params && params.solana) {
+    baseState.solana = params.solana;
+  }
 
   if (typeof window === "undefined") {
     return baseState;
@@ -196,7 +210,7 @@ const createConnectionsMap = (connections: Connection[]) => {
   return connections.reduce((acc, connection) => {
     acc.set(connection.chain.id, connection);
     return acc;
-  }, new Map<number, Connection>());
+  }, new Map<number | string, Connection>());
 };
 
 /**

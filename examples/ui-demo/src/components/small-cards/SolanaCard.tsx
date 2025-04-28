@@ -4,16 +4,14 @@ import {
   useSignerStatus,
   useSolanaTransaction,
   useSolanaSignMessage,
-  AlchemySolanaWeb3Context,
 } from "@account-kit/react";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { Hex } from "viem";
 import { LoadingIcon } from "../icons/loading";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { Button } from "./Button";
-import * as solanaNetwork from "../../../../../account-kit/react/src/solanaNetwork";
 import { Card } from "./Card";
 import Image from "next/image";
 import { Badge } from "./Badge";
@@ -25,27 +23,13 @@ export const SolanaCard = () => {
   const solanaSigner = useMemo(() => {
     if (!signer) return;
     if (!status.isConnected) return;
-    return signer.experimental_toSolanaSigner();
+    return signer.toSolanaSigner();
   }, [signer, status.isConnected]);
-  const web3Context = useContext(AlchemySolanaWeb3Context);
   const { setToast } = useToast();
 
-  const { data: balance = 0, isLoading: isBalanceLoading } = useQuery({
-    queryKey: ["solanaBalance", solanaSigner?.address],
-    queryFn: async () => {
-      if (!solanaSigner) return 0;
-      if (!web3Context) return 0;
-      return (
-        (await solanaNetwork.balance(
-          web3Context.connection,
-          solanaSigner!.address
-        )) / LAMPORTS_PER_SOL
-      );
-    },
-  });
-
   const {
-    mutate,
+    sendTransaction,
+    connection,
     isPending,
     data: { hash: txHash = null } = {},
   } = useSolanaTransaction({
@@ -66,10 +50,22 @@ export const SolanaCard = () => {
     },
   });
 
+  const { data: balance = 0, isLoading: isBalanceLoading } = useQuery({
+    queryKey: ["solanaBalance", solanaSigner?.address],
+    queryFn: async () => {
+      if (!solanaSigner) return 0;
+      if (!connection) return 0;
+      return (
+        (await connection.getBalance(new PublicKey(solanaSigner!.address))) /
+        LAMPORTS_PER_SOL
+      );
+    },
+  });
   const {
     isPending: isSigningMessage,
-    mutate: signHello,
+    signMessage,
     data: signature,
+
     reset,
   } = useSolanaSignMessage({
     mutation: {
@@ -138,7 +134,7 @@ export const SolanaCard = () => {
             if (balance === 0) {
               window.open("https://faucet.solana.com/", "_blank");
             } else if (!txHash) {
-              mutate({
+              sendTransaction({
                 transfer: {
                   amount: 1000000,
                   toAddress:
@@ -167,7 +163,7 @@ export const SolanaCard = () => {
           className="w-full"
           disabled={!solanaSigner || isSigningMessage}
           onClick={() => {
-            signHello({ message: "Hello" });
+            signMessage({ message: "Hello" });
           }}
         >
           {isSigningMessage
@@ -183,8 +179,8 @@ export const SolanaCard = () => {
       isBalanceLoading,
       isPending,
       isSigningMessage,
-      mutate,
-      signHello,
+      signMessage,
+      sendTransaction,
       signature,
       solanaSigner,
       txHash,

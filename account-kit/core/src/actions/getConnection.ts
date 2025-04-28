@@ -1,5 +1,5 @@
 import { ChainNotFoundError } from "../errors.js";
-import type { AlchemyAccountsConfig, Connection } from "../types.js";
+import { type AlchemyAccountsConfig, type Connection } from "../types.js";
 import { getChain } from "./getChain.js";
 
 /**
