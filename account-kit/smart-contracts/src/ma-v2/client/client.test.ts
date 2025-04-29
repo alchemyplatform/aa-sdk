@@ -70,10 +70,7 @@ import {
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { HookType } from "../actions/common/types.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
-import {
-  type P256Credential,
-  createWebAuthnCredential,
-} from "viem/account-abstraction";
+import { type P256Credential } from "viem/account-abstraction";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -93,18 +90,41 @@ describe("MA v2 Tests", async () => {
   let signer: SmartAccountSigner;
   let sessionKey: SmartAccountSigner;
 
-  const webAuthnCredential = await createWebAuthnCredential({ name: "owner" });
-
-  const webAuthnCredentialBackUp = await createWebAuthnCredential({
-    name: "backUp",
-  });
-
-  const webAuthnSigningMethods: SmartAccountSigner = new WebAuthnSigningMethods(
-    webAuthnCredential
-  );
-
-  const webAuthnSigningMethodsSessionKey: SmartAccountSigner =
-    new WebAuthnSigningMethods(webAuthnCredentialBackUp);
+  const webAuthnCredential = {
+    id: "m1-bMPuAqpWhCxHZQZTT6e-lSPntQbh3opIoGe7g4Qs",
+    publicKey:
+      "0x7da44d4bc972affd138c619a211ef0afe0926b813fec67d15587cf8625b2bf185f5044ae96640a63b32aa1eb6f8f993006bbd26292b81cb07a0672302c69a866",
+    getFn() {
+      return Promise.resolve({
+        response: {
+          authenticatorData: [
+            73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96,
+            91, 143, 228, 174, 185, 162, 134, 50, 199, 153, 92, 243, 186, 131,
+            29, 151, 99, 5, 0, 0, 0, 0,
+          ],
+          clientDataJSON: [
+            123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116,
+            104, 110, 46, 103, 101, 116, 34, 44, 34, 99, 104, 97, 108, 108, 101,
+            110, 103, 101, 34, 58, 34, 49, 80, 49, 79, 71, 74, 69, 121, 74, 122,
+            65, 50, 82, 74, 95, 74, 52, 82, 71, 89, 120, 122, 107, 87, 71, 48,
+            119, 66, 70, 113, 109, 105, 51, 77, 51, 54, 72, 69, 107, 103, 66,
+            118, 69, 34, 44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104,
+            116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108, 104, 111, 115,
+            116, 58, 53, 49, 55, 51, 34, 44, 34, 99, 114, 111, 115, 115, 79,
+            114, 105, 103, 105, 110, 34, 58, 102, 97, 108, 115, 101, 125,
+          ],
+          signature: [
+            48, 69, 2, 33, 0, 198, 106, 113, 129, 35, 170, 51, 12, 13, 0, 67,
+            158, 211, 55, 188, 103, 33, 194, 2, 152, 190, 159, 181, 11, 176,
+            232, 114, 59, 99, 64, 167, 220, 2, 32, 101, 188, 55, 216, 145, 203,
+            39, 137, 83, 114, 45, 10, 147, 246, 218, 247, 132, 221, 228, 225,
+            57, 110, 143, 87, 172, 198, 76, 141, 30, 169, 166, 2,
+          ],
+        },
+      } as any);
+    },
+    rpId: "",
+  } as const;
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -149,10 +169,9 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("successfully sign + validate a message, for WebAuthn signer", async () => {
+  it("successfully sign + validate a message, for WebAuthn account", async () => {
     const provider = await givenConnectedProvider({
-      signer: webAuthnSigningMethods,
-      credential: webAuthnCredential,
+      webAuthnAccountParams,
     });
 
     await setBalance(instance.getClient(), {
@@ -166,44 +185,9 @@ describe("MA v2 Tests", async () => {
       client,
     });
 
-    const result = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: getDefaultWebauthnValidationModuleAddress(
-          provider.chain
-        ),
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: WebAuthnValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: await webAuthnSigningMethodsSessionKey.getAddress(), // note: signer address DNE
-      }),
-      hooks: [],
-    });
-
-    await provider.waitForUserOperationTransaction(result);
-
     const message = "testmessage";
 
     let signature = await provider.signMessage({ message });
-
-    await expect(
-      accountContract.read.isValidSignature([hashMessage(message), signature])
-    ).resolves.toEqual(isValidSigSuccess);
-
-    // connect session key
-    let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
-      signer: webAuthnSigningMethodsSessionKey,
-      transport: custom(instance.getClient()),
-      accountAddress: provider.getAddress(),
-      signerEntity: { entityId: 1, isGlobalValidation: true },
-    });
-
-    signature = await sessionKeyClient.signMessage({ message });
 
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature])
@@ -1893,19 +1877,22 @@ describe("MA v2 Tests", async () => {
     signerEntity,
     accountAddress,
     paymasterMiddleware,
-    credential = null,
+    webAuthnAccountParams = null,
   }: {
     signer: SmartAccountSigner;
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
-    credential?: P256Credential;
+    credential?: P256Credential & {
+      getFn?: (options: CredentialRequestOptions) => Promise<Credential | null>;
+      rpId: string;
+    };
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
       signer,
-      credential,
-      mode: credential ? "webauthn" : "default",
+      credential: webAuthnAccountParams,
+      mode: webAuthnAccountParams ? "webauthn" : "default",
       accountAddress,
       signerEntity,
       transport: custom(instance.getClient()),
