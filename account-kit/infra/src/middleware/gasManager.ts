@@ -21,7 +21,16 @@ import {
   noopMiddleware,
   resolveProperties,
 } from "@aa-sdk/core";
-import { fromHex, isHex, toHex, type Hex } from "viem";
+import {
+  fromHex,
+  isHex,
+  toHex,
+  type Hex,
+  encodeAbiParameters,
+  encodeFunctionData,
+  parseAbi,
+  maxUint256,
+} from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
@@ -69,8 +78,6 @@ export type PolicyToken = {
   version?: string;
 };
 
-const MaxUint256: bigint = (1n << 256n) - 1n;
-
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
  * transactions. Uses Alchemy's custom `alchemy_requestGasAndPaymasterAndData`
@@ -98,7 +105,7 @@ const MaxUint256: bigint = (1n << 256n) - 1n;
  * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.transport} params.transport fallback transport to use for fee estimation when not using the paymaster
  * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.gasEstimatorOverride} params.gasEstimatorOverride custom gas estimator middleware
  * @param {AlchemyGasAndPaymasterAndDataMiddlewareParams.feeEstimatorOverride} params.feeEstimatorOverride custom fee estimator middleware
- * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
+ * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData`, `feeEstimator`, `gasEstimator`, and `paymasterAndData`
  */
 export function alchemyGasAndPaymasterAndDataMiddleware(
   params: AlchemyGasAndPaymasterAndDataMiddlewareParams
@@ -208,22 +215,24 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       let erc20Context:
         | {
             tokenAddress: Address;
-            maxTokenAmount: bigint;
+            maxTokenAmount?: bigint;
             permit?: Hex;
           }
         | undefined = undefined;
       if (policyToken !== undefined) {
         let maxAmountToken = policyToken.maxTokenAmount
           ? policyToken.maxTokenAmount
-          : MaxUint256;
+          : maxUint256;
 
         erc20Context = {
           tokenAddress: policyToken.address,
-          maxTokenAmount: maxAmountToken,
+          ...(policyToken.maxTokenAmount
+            ? { maxTokenAmount: maxAmountToken }
+            : {}),
         };
         if (policyToken.approvalMode === "PERMIT") {
           // get a paymaster address
-          let paymasterAddress = "0x";
+          let paymasterAddress: Address | undefined = undefined;
           const paymasterData = await (
             client as AlchemySmartAccountClient
           ).request({
@@ -241,8 +250,28 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           paymasterAddress = paymasterData.paymaster
             ? paymasterData.paymaster
             : paymasterData.paymasterAndData
-            ? paymasterData.paymasterAndData.slice(0, 42)
-            : "0x";
+            ? (paymasterData.paymasterAndData.slice(0, 42) as Address)
+            : undefined;
+
+          if (paymasterAddress === undefined) {
+            throw new Error("no paymaster contract address available");
+          }
+          const deadline = maxUint256;
+          const eip712Abi = [
+            "function nonces(address owner) external view returns (uint)",
+          ];
+          const { data } = await client.call({
+            to: policyToken.address,
+            data: encodeFunctionData({
+              abi: parseAbi(eip712Abi),
+              functionName: "nonces",
+              args: [client.account?.address],
+            }),
+          });
+          if (!data) {
+            throw new Error("No nonces returned from erc20 contract call");
+          }
+          console.log(data);
           const typedPermitData = {
             types: {
               EIP712Domain: [
@@ -288,21 +317,25 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             },
             primaryType: "Permit",
             domain: {
-              name: policyToken.erc20Name ? policyToken.erc20Name : "",
-              version: policyToken.version ? policyToken.version : "",
+              name: policyToken.erc20Name ?? "",
+              version: policyToken.version ?? "",
               chainId: BigInt(client.chain.id),
-              verifyingContract: policyToken.address as Hex,
+              verifyingContract: policyToken.address,
             },
             message: {
               owner: account.address as Hex,
               spender: paymasterAddress as Hex,
               value: maxAmountToken,
-              nonce: (await account.getAccountNonce()) + BigInt(1),
-              deadline: BigInt(0xffffffffffffffffffffffffffffffff),
+              nonce: BigInt(data),
+              deadline,
             },
           } as const;
 
-          erc20Context.permit = await account.signTypedData(typedPermitData);
+          const signedPermit = await account.signTypedData(typedPermitData);
+          erc20Context.permit = encodeAbiParameters(
+            [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
+            [maxAmountToken, deadline, signedPermit]
+          );
         }
       }
 
@@ -317,7 +350,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             overrides,
             ...(erc20Context
               ? {
-                  erc20Context: erc20Context,
+                  erc20Context,
                 }
               : {}),
           },
