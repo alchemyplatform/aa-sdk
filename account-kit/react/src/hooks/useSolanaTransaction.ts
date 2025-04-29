@@ -1,3 +1,5 @@
+"use client";
+
 import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
 import { SolanaSigner } from "@account-kit/signer";
@@ -8,8 +10,9 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import { useSolanaSigner } from "./useSolanaSigner.js";
-import { useContext } from "react";
-import { AlchemySolanaWeb3Context } from "../AlchemySolanaWeb3Context.js";
+import { getSolanaConnection, watchSolanaConnection } from "@account-kit/core";
+import { useSyncExternalStore } from "react";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 export type SolanaTransactionParams =
   | {
@@ -32,9 +35,9 @@ export type SolanaTransactionParams =
  */
 export interface SolanaTransaction {
   /** The solana signer used to send the transaction */
-  readonly signer: SolanaSigner | void;
+  readonly signer: SolanaSigner | null;
   /** The solana connection used to send the transaction */
-  readonly connection: solanaNetwork.Connection | void;
+  readonly connection: solanaNetwork.Connection | null;
   /** The result of the transaction */
   readonly data: void | { hash: string };
   /** Is the use sending a transaction */
@@ -43,9 +46,11 @@ export interface SolanaTransaction {
   readonly error: Error | null;
   reset(): void;
   /** Send the transaction */
-  mutate(params: SolanaTransactionParams): void;
+  sendTransaction(params: SolanaTransactionParams): void;
   /** Send the transaction asynchronously */
-  mutateAsync(params: SolanaTransactionParams): Promise<{ hash: string }>;
+  sendTransactionAsync(
+    params: SolanaTransactionParams
+  ): Promise<{ hash: string }>;
 }
 
 /**
@@ -54,7 +59,7 @@ export interface SolanaTransaction {
 export type SolanaTransactionHookParams = {
   signer?: SolanaSigner;
   connection?: solanaNetwork.Connection;
-  policyId?: string;
+  policyId?: string | void;
   /**
    * Override the default mutation options
    *
@@ -82,15 +87,19 @@ mutate({
  * @returns {SolanaTransaction} The transaction hook.
  */
 export function useSolanaTransaction(
-  opts: SolanaTransactionHookParams
+  opts: SolanaTransactionHookParams = {}
 ): SolanaTransaction {
-  const web3Context = useContext(AlchemySolanaWeb3Context);
-  const fallbackSigner = useSolanaSigner({});
+  const { config } = useAlchemyAccountContext();
+  const fallbackSigner: null | SolanaSigner = useSolanaSigner();
+  const backupConnection = useSyncExternalStore(
+    watchSolanaConnection(config),
+    () => getSolanaConnection(config),
+    () => getSolanaConnection(config)
+  );
   const mutation = useMutation({
     mutationFn: async (params: SolanaTransactionParams) => {
       if (!signer) throw new Error("Not ready");
       if (!connection) throw new Error("Not ready");
-
       const instructions =
         "instructions" in params
           ? params.instructions
@@ -102,7 +111,7 @@ export function useSolanaTransaction(
               }),
             ];
       const policyId =
-        "policyId" in opts ? opts.policyId : web3Context?.policyId;
+        "policyId" in opts ? opts.policyId : backupConnection?.policyId;
       const transaction = policyId
         ? await signer.addSponsorship(instructions, connection, policyId)
         : await signer.createTransfer(instructions, connection);
@@ -114,12 +123,14 @@ export function useSolanaTransaction(
     },
     ...opts.mutation,
   });
-  const signer: void | SolanaSigner = opts?.signer || fallbackSigner;
-  const connection = opts?.connection || web3Context?.connection;
+  const signer: null | SolanaSigner = opts?.signer || fallbackSigner;
+  const connection = opts?.connection || backupConnection?.connection || null;
 
   return {
     connection,
     signer,
     ...mutation,
+    sendTransaction: mutation.mutate,
+    sendTransactionAsync: mutation.mutateAsync,
   };
 }

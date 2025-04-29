@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+### Features
+
+- move to use the alchemy store for web3 communication ([#1562](https://github.com/alchemyplatform/aa-sdk/issues/1562)) ([f86a815](https://github.com/alchemyplatform/aa-sdk/commit/f86a815412cb532de12a405b1cfb143da2e22b77))
+
+# [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.28.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.2...v4.28.3) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.28.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.1...v4.28.2) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.28.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.0...v4.28.1) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/core
+
 # [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
 
 **Note:** Version bump only for package @account-kit/core

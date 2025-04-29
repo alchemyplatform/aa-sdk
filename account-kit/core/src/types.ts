@@ -24,7 +24,7 @@ import type {
   RNAlchemySignerSingleton as RNAlchemySigner,
   RNSignerClient,
 } from "@account-kit/react-native-signer";
-
+import type { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
@@ -62,8 +62,13 @@ export type AlchemyAccountsConfig = {
     sessionLength: number;
   };
 };
-
 // [!region CreateCorConfigProps]
+
+export type SolanaConnection = {
+  connection: SolanaWeb3Connection;
+  policyId?: string;
+};
+
 export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
@@ -79,6 +84,7 @@ type RpcConnectionConfig =
         // optional transport override
         transport?: AlchemyTransport;
       }[];
+      solana?: SolanaConnection;
       // optional global transport to use for all chains
       transport: AlchemyTransport;
       // When providing multiple chains and no default transport, the signer connection is required
@@ -92,6 +98,7 @@ type RpcConnectionConfig =
         policyId?: string | string[];
         transport: AlchemyTransport;
       }[];
+      solana?: SolanaConnection;
       transport?: never;
       // When providing multiple chains, then the signer connection is required
       signerConnection: ConnectionConfig;
@@ -100,6 +107,7 @@ type RpcConnectionConfig =
   | {
       transport: AlchemyTransport;
       chain: Chain;
+      solana?: SolanaConnection;
       policyId?: string | string[];
       signerConnection?: ConnectionConfig;
       chains?: never;
