@@ -30,10 +30,14 @@ import {
   encodeFunctionData,
   parseAbi,
   maxUint256,
+  sliceHex,
 } from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
+import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
+import { PermitTypes, EIP712NoncesAbi } from "../gas-manager.js";
+import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
@@ -212,22 +216,15 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           : {}),
       });
 
-      let erc20Context:
-        | {
-            tokenAddress: Address;
-            maxTokenAmount?: bigint;
-            permit?: Hex;
-          }
-        | undefined = undefined;
+      let erc20Context: RequestGasAndPaymasterAndDataRequest[0]["erc20Context"] =
+        undefined;
       if (policyToken !== undefined) {
-        let maxAmountToken = policyToken.maxTokenAmount
-          ? policyToken.maxTokenAmount
-          : maxUint256;
+        const maxAmountToken = policyToken.maxTokenAmount || maxUint256;
 
         erc20Context = {
           tokenAddress: policyToken.address,
           ...(policyToken.maxTokenAmount
-            ? { maxTokenAmount: maxAmountToken }
+            ? { maxTokenAmount: policyToken.maxTokenAmount }
             : {}),
         };
         if (policyToken.approvalMode === "PERMIT") {
@@ -250,22 +247,19 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           paymasterAddress = paymasterData.paymaster
             ? paymasterData.paymaster
             : paymasterData.paymasterAndData
-            ? (paymasterData.paymasterAndData.slice(0, 42) as Address)
+            ? sliceHex(paymasterData.paymasterAndData, 0, 20)
             : undefined;
 
-          if (paymasterAddress === undefined) {
+          if (paymasterAddress === undefined || paymasterAddress === "0x") {
             throw new Error("no paymaster contract address available");
           }
           const deadline = maxUint256;
-          const eip712Abi = [
-            "function nonces(address owner) external view returns (uint)",
-          ];
           const { data } = await client.call({
             to: policyToken.address,
             data: encodeFunctionData({
-              abi: parseAbi(eip712Abi),
+              abi: parseAbi(EIP712NoncesAbi),
               functionName: "nonces",
-              args: [client.account?.address],
+              args: [account.address],
             }),
           });
           if (!data) {
@@ -273,62 +267,21 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           }
           console.log(data);
           const typedPermitData = {
-            types: {
-              EIP712Domain: [
-                {
-                  name: "name",
-                  type: "string",
-                },
-                {
-                  name: "version",
-                  type: "string",
-                },
-                {
-                  name: "chainId",
-                  type: "uint256",
-                },
-                {
-                  name: "verifyingContract",
-                  type: "address",
-                },
-              ],
-              Permit: [
-                {
-                  name: "owner",
-                  type: "address",
-                },
-                {
-                  name: "spender",
-                  type: "address",
-                },
-                {
-                  name: "value",
-                  type: "uint256",
-                },
-                {
-                  name: "nonce",
-                  type: "uint256",
-                },
-                {
-                  name: "deadline",
-                  type: "uint256",
-                },
-              ],
-            },
-            primaryType: "Permit",
+            types: PermitTypes,
+            primaryType: "Permit" as const,
             domain: {
               name: policyToken.erc20Name ?? "",
               version: policyToken.version ?? "",
               chainId: BigInt(client.chain.id),
               verifyingContract: policyToken.address,
-            },
+            } as PermitDomain,
             message: {
-              owner: account.address as Hex,
-              spender: paymasterAddress as Hex,
+              owner: account.address,
+              spender: paymasterAddress,
               value: maxAmountToken,
               nonce: BigInt(data),
               deadline,
-            },
+            } as PermitMessage,
           } as const;
 
           const signedPermit = await account.signTypedData(typedPermitData);
