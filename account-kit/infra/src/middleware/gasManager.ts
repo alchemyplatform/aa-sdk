@@ -62,7 +62,7 @@ import type { PermitMessage, PermitDomain } from "../gas-manager.js";
  */
 export function alchemyGasManagerMiddleware(
   policyId: string | string[],
-  policyToken: PolicyToken | undefined
+  policyToken?: PolicyToken
 ): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
   let _context: {
     policyId: string | string[];
