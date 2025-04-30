@@ -1882,7 +1882,7 @@ describe("MA v2 Tests", async () => {
     paymasterMiddleware,
     webAuthnAccountParams = null,
   }: {
-    signer: SmartAccountSigner; // TO DO: make
+    signer: SmartAccountSigner; // TO DO: make createModularAccountV2Client not require a signer for a webauthn account
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
