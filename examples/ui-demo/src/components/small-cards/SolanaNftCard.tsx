@@ -71,7 +71,6 @@ export const SolanaNftCard = () => {
                 <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
               )}
               {!isComplete && <LoadingIcon className="h-4 w-4" />}
-              {/* <div className="h-4 w-4" />} */}
               <p className="text-sm text-fg-secondary">{text}</p>
             </div>
           );
