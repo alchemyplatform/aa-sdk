@@ -12,7 +12,7 @@ import {
   type SmartContractAccountWithSigner,
   type UserOperationContext,
 } from "@aa-sdk/core";
-import { type Chain } from "viem";
+import { type Address, type Chain } from "viem";
 import {
   alchemy,
   convertHeadersToObject,
@@ -48,6 +48,13 @@ export type AlchemySmartAccountClientConfig<
   account?: account;
   useSimulation?: boolean;
   policyId?: string | string[];
+  policyToken?: {
+    address: Address;
+    approvalMode?: "NONE" | "PERMIT";
+    maxTokenAmount?: bigint;
+    erc20Name?: string;
+    version?: string;
+  };
 } & Pick<
   SmartAccountClientConfig<AlchemyTransport, chain, account, context>,
   | "customMiddleware"
@@ -163,6 +170,7 @@ export function createAlchemySmartAccountClient(
     ...(config.policyId
       ? alchemyGasAndPaymasterAndDataMiddleware({
           policyId: config.policyId,
+          policyToken: config.policyToken,
           transport: config.transport,
           gasEstimatorOverride: config.gasEstimator,
           feeEstimatorOverride: config.feeEstimator,

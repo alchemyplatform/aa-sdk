@@ -5,15 +5,15 @@ import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { useSigner } from "./useSigner.js";
 import { useSignerStatus } from "./useSignerStatus.js";
 import type {
-  EnableMfaParams,
-  EnableMfaResult,
+  AddMfaParams,
+  AddMfaResult,
   MfaFactor,
   RemoveMfaParams,
   VerifyMfaParams,
 } from "@account-kit/signer";
 
 export type UseMFAResult = {
-  addMFA: UseMutationResult<EnableMfaResult, Error, EnableMfaParams>;
+  addMFA: UseMutationResult<AddMfaResult, Error, AddMfaParams>;
   verifyMFA: UseMutationResult<
     { multiFactors: MfaFactor[] },
     Error,
@@ -62,7 +62,7 @@ export function useMFA(): UseMFAResult {
     }
   };
 
-  const addMFA = useMutation<EnableMfaResult, Error, EnableMfaParams>(
+  const addMFA = useMutation<AddMfaResult, Error, AddMfaParams>(
     {
       mutationKey: ["addMFA"],
       mutationFn: async (params) => {

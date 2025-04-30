@@ -19,6 +19,7 @@ export const Providers = (
   }>
 ) => {
   const configRef = useRef<AlchemyAccountsConfigWithUI>();
+
   if (!configRef.current) {
     configRef.current = (() => {
       const innerConfig = alchemyConfig();
@@ -30,7 +31,6 @@ export const Providers = (
       };
     })();
   }
-
   return (
     <Suspense>
       <QueryClientProvider client={queryClient}>

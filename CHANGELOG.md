@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+### Bug Fixes
+
+- **signer-docs:** broken image paths ([#1567](https://github.com/alchemyplatform/aa-sdk/issues/1567)) ([69e5b3e](https://github.com/alchemyplatform/aa-sdk/commit/69e5b3e9155ed37877d8f10ef5bafe0260fce0a7))
+
+### Features
+
+- move to use the alchemy store for web3 communication ([#1562](https://github.com/alchemyplatform/aa-sdk/issues/1562)) ([f86a815](https://github.com/alchemyplatform/aa-sdk/commit/f86a815412cb532de12a405b1cfb143da2e22b77))
+
+# [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
+
+### Features
+
+- extend alchemy transport to support wallet apis ([#1564](https://github.com/alchemyplatform/aa-sdk/issues/1564)) ([71d3e61](https://github.com/alchemyplatform/aa-sdk/commit/71d3e611f89ccb920a0ac494aa01a2b13be2982f))
+
+## [4.28.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.2...v4.28.3) (2025-04-25)
+
+**Note:** Version bump only for package root
+
+## [4.28.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.1...v4.28.2) (2025-04-23)
+
+**Note:** Version bump only for package root
+
+## [4.28.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.0...v4.28.1) (2025-04-23)
+
+**Note:** Version bump only for package root
+
+# [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
+
+### Features
+
+- add mfa methods to rn-signer ([#1542](https://github.com/alchemyplatform/aa-sdk/issues/1542)) ([c41ba79](https://github.com/alchemyplatform/aa-sdk/commit/c41ba792f78fc71395df0c16bbb8184e51272981))
+
+# [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
+
+### Features
+
+- create common base error for permission builder errors ([#1546](https://github.com/alchemyplatform/aa-sdk/issues/1546)) ([15fdae8](https://github.com/alchemyplatform/aa-sdk/commit/15fdae888f0618d040dd64c1347931bd73000115))
+- solana hooks ([#1543](https://github.com/alchemyplatform/aa-sdk/issues/1543)) ([0157185](https://github.com/alchemyplatform/aa-sdk/commit/015718534c77813e36a20323b22a83b4fbd1b260))
+
 # [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
 
 ### Bug Fixes
