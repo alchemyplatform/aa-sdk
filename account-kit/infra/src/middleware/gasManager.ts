@@ -265,7 +265,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           if (!data) {
             throw new Error("No nonces returned from erc20 contract call");
           }
-          console.log(data);
+
           const typedPermitData = {
             types: PermitTypes,
             primaryType: "Permit" as const,
@@ -274,14 +274,14 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
               version: policyToken.version ?? "",
               chainId: BigInt(client.chain.id),
               verifyingContract: policyToken.address,
-            } as PermitDomain,
+            } satisfies PermitDomain,
             message: {
               owner: account.address,
               spender: paymasterAddress,
               value: maxAmountToken,
               nonce: BigInt(data),
               deadline,
-            } as PermitMessage,
+            } satisfies PermitMessage,
           } as const;
 
           const signedPermit = await account.signTypedData(typedPermitData);
