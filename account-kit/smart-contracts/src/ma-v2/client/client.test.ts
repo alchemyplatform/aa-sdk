@@ -71,6 +71,7 @@ import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 import { type P256Credential } from "viem/account-abstraction";
+import { webauthnGasEstimator } from "@aa-sdk/core";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -190,6 +191,51 @@ describe("MA v2 Tests", async () => {
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature])
     ).resolves.toEqual(isValidSigSuccess);
+  });
+
+  // TO DO: test this for a chain with RIP 7212 and a chain without RIP 7212
+  it("estimates gas for sending UOs with a webauthn account with a 2000 gas buffer", async () => {
+    const provider = await givenConnectedProvider({
+      webAuthnAccountParams,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // send UO with webauthn gas estimator
+    const builtUO = await provider.buildUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
+
+    await provider.sendRawUserOperation(
+      signedUO,
+      provider.account.getEntryPoint().address
+    );
+
+    // modify gas estimate to be 2000 gas less
+    const modifiedGasUO = {
+      ...builtUO,
+      verificationGasLimit: builtUO.verificationGasLimit
+        ? BigInt(builtUO.verificationGasLimit) - (2000 as unknown as bigint)
+        : 0, // verificationGasLimit should be set by webauthnGasEstimator!
+    };
+
+    const signedModifiedGasUO = await provider.signUserOperation({
+      uoStruct: modifiedGasUO,
+    });
+
+    await provider.sendRawUserOperation(
+      signedModifiedGasUO,
+      provider.account.getEntryPoint().address
+    );
   });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
