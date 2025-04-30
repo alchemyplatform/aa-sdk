@@ -40,6 +40,14 @@ import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
 import { PermitTypes, EIP712NoncesAbi } from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 
+type Context = {
+  policyId: string | string[];
+  erc20Context?: {
+    tokenAddress: Address;
+    maxTokenAmount?: BigInt;
+    permit?: Hex;
+  };
+};
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
  * transactions. Adheres to the ERC-7677 standardized communication protocol.
@@ -66,83 +74,49 @@ export function alchemyGasManagerMiddleware(
 ): Required<
   Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
 > {
-  const context: {
-    policyId: string | string[];
-    erc20Context?: {
-      tokenAddress: Address;
-      maxTokenAmount?: BigInt;
-      permit?: Hex;
-    };
-  } = { policyId: policyId };
+  const buildContext = async (
+    uo: Parameters<ClientMiddlewareFn>[0],
+    args: Parameters<ClientMiddlewareFn>[1]
+  ): Promise<Context> => {
+    const context: Context = { policyId };
+
+    const { account, client } = args;
+    if (!client.chain) {
+      throw new ChainNotFoundError();
+    }
+
+    if (policyToken !== undefined) {
+      const userOp = await deepHexlify(await resolveProperties(uo));
+      context.erc20Context = {
+        tokenAddress: policyToken.address,
+        ...(policyToken.maxTokenAmount
+          ? { maxTokenAmount: policyToken.maxTokenAmount }
+          : {}),
+      };
+
+      if (policyToken.approvalMode === "PERMIT") {
+        context.erc20Context.permit = await generateSignedPermit(
+          userOp,
+          client as AlchemySmartAccountClient,
+          account,
+          policyId,
+          policyToken
+        );
+      }
+    }
+
+    return context;
+  };
   return {
     dummyPaymasterAndData: async (uo, args) => {
-      const { account, client } = args;
-      if (!client.chain) {
-        throw new ChainNotFoundError();
-      }
-      if (policyToken !== undefined) {
-        const userOp = await deepHexlify(await resolveProperties(uo));
-        context.erc20Context = {
-          tokenAddress: policyToken.address,
-          ...(policyToken.maxTokenAmount
-            ? { maxTokenAmount: policyToken.maxTokenAmount }
-            : {}),
-        };
-
-        if (policyToken.approvalMode === "PERMIT") {
-          context.erc20Context.permit = await generalSignedPermit(
-            userOp,
-            client as AlchemySmartAccountClient,
-            account,
-            policyId,
-            policyToken
-          );
-        }
-      }
-
-      const baseMiddleware = erc7677Middleware<{
-        policyId: string | string[];
-        erc20Context?: RequestGasAndPaymasterAndDataRequest[0]["erc20Context"];
-      }>({
-        context,
-      });
+      const context = await buildContext(uo, args);
+      const baseMiddleware = erc7677Middleware({ context });
       return baseMiddleware.dummyPaymasterAndData(uo, args);
     },
 
     paymasterAndData: async (uo, args) => {
-      const { account, client } = args;
-
-      if (!client.chain) {
-        throw new ChainNotFoundError();
-      }
-      // if erc20Context already exist, could skip re-generate it.
-      if (!context.erc20Context) {
-        if (policyToken !== undefined) {
-          const userOp = await deepHexlify(await resolveProperties(uo));
-          context.erc20Context = {
-            tokenAddress: policyToken.address,
-            ...(policyToken.maxTokenAmount
-              ? { maxTokenAmount: policyToken.maxTokenAmount }
-              : {}),
-          };
-
-          if (policyToken.approvalMode === "PERMIT") {
-            context.erc20Context.permit = await generalSignedPermit(
-              userOp,
-              client as AlchemySmartAccountClient,
-              account,
-              policyId,
-              policyToken
-            );
-          }
-        }
-      }
-      const baseMiddleware = erc7677Middleware<{
-        policyId: string | string[];
-        erc20Context?: RequestGasAndPaymasterAndDataRequest[0]["erc20Context"];
-      }>({
-        context,
-      });
+      const context = await buildContext(uo, args);
+      const baseMiddleware = erc7677Middleware({ context });
       return baseMiddleware.paymasterAndData(uo, args);
     },
   };
@@ -306,7 +280,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             : {}),
         };
         if (policyToken.approvalMode === "PERMIT") {
-          erc20Context.permit = await generalSignedPermit(
+          erc20Context.permit = await generateSignedPermit(
             userOp,
             client as AlchemySmartAccountClient,
             account,
@@ -405,7 +379,7 @@ const overrideField = <
  * @param {string} [policyToken.version] - EIP2612 specified ERC20 contract version
  * @returns {Promise<Hex>} Returns a Promise containing the signed EIP2612 permit
  */
-const generalSignedPermit = async <
+const generateSignedPermit = async <
   TAccount extends SmartContractAccount,
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
