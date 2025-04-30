@@ -76,7 +76,7 @@ export function alchemyGasManagerMiddleware(
   } = { policyId: policyId };
   return {
     dummyPaymasterAndData: async (uo, args) => {
-      const { account, client } = await resolveProperties(args);
+      const { account, client } = args;
       if (!client.chain) {
         throw new ChainNotFoundError();
       }
@@ -110,6 +110,33 @@ export function alchemyGasManagerMiddleware(
     },
 
     paymasterAndData: async (uo, args) => {
+      const { account, client } = args;
+
+      if (!client.chain) {
+        throw new ChainNotFoundError();
+      }
+      // if erc20Context already exist, could skip re-generate it.
+      if (!context.erc20Context) {
+        if (policyToken !== undefined) {
+          const userOp = await deepHexlify(await resolveProperties(uo));
+          context.erc20Context = {
+            tokenAddress: policyToken.address,
+            ...(policyToken.maxTokenAmount
+              ? { maxTokenAmount: policyToken.maxTokenAmount }
+              : {}),
+          };
+
+          if (policyToken.approvalMode === "PERMIT") {
+            context.erc20Context.permit = await generalSignedPermit(
+              userOp,
+              client as AlchemySmartAccountClient,
+              account,
+              policyId,
+              policyToken
+            );
+          }
+        }
+      }
       const baseMiddleware = erc7677Middleware<{
         policyId: string | string[];
         erc20Context?: RequestGasAndPaymasterAndDataRequest[0]["erc20Context"];
