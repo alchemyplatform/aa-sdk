@@ -63,11 +63,13 @@ import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 export function alchemyGasManagerMiddleware(
   policyId: string | string[],
   policyToken?: PolicyToken
-): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
-  let _context: {
+): Required<
+  Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
+> {
+  const context: {
     policyId: string | string[];
     erc20Context?: {
-      tokenAddress: string;
+      tokenAddress: Address;
       maxTokenAmount?: BigInt;
       permit?: Hex;
     };
@@ -80,7 +82,7 @@ export function alchemyGasManagerMiddleware(
       }
       if (policyToken !== undefined) {
         const userOp = await deepHexlify(await resolveProperties(uo));
-        _context.erc20Context = {
+        context.erc20Context = {
           tokenAddress: policyToken.address,
           ...(policyToken.maxTokenAmount
             ? { maxTokenAmount: policyToken.maxTokenAmount }
@@ -88,7 +90,7 @@ export function alchemyGasManagerMiddleware(
         };
 
         if (policyToken.approvalMode === "PERMIT") {
-          _context.erc20Context.permit = await generalSignedPermit(
+          context.erc20Context.permit = await generalSignedPermit(
             userOp,
             client as AlchemySmartAccountClient,
             account,
@@ -98,21 +100,23 @@ export function alchemyGasManagerMiddleware(
         }
       }
 
-      const baseMiddleware = erc7677Middleware<{ policyId: string | string[] }>(
-        {
-          context: _context,
-        }
-      );
-      return baseMiddleware.dummyPaymasterAndData!(uo, args);
+      const baseMiddleware = erc7677Middleware<{
+        policyId: string | string[];
+        erc20Context?: RequestGasAndPaymasterAndDataRequest[0]["erc20Context"];
+      }>({
+        context,
+      });
+      return baseMiddleware.dummyPaymasterAndData(uo, args);
     },
 
     paymasterAndData: async (uo, args) => {
-      const baseMiddleware = erc7677Middleware<{ policyId: string | string[] }>(
-        {
-          context: _context,
-        }
-      );
-      return baseMiddleware.paymasterAndData!(uo, args);
+      const baseMiddleware = erc7677Middleware<{
+        policyId: string | string[];
+        erc20Context?: RequestGasAndPaymasterAndDataRequest[0]["erc20Context"];
+      }>({
+        context,
+      });
+      return baseMiddleware.paymasterAndData(uo, args);
     },
   };
 }
@@ -398,7 +402,6 @@ const generalSignedPermit = async <
   }
   // get a paymaster address
   const maxAmountToken = policyToken.maxTokenAmount || maxUint256;
-  let paymasterAddress: Address | undefined = undefined;
   const paymasterData = await (client as AlchemySmartAccountClient).request({
     method: "pm_getPaymasterStubData",
     params: [
@@ -411,7 +414,7 @@ const generalSignedPermit = async <
     ],
   });
 
-  paymasterAddress = paymasterData.paymaster
+  const paymasterAddress = paymasterData.paymaster
     ? paymasterData.paymaster
     : paymasterData.paymasterAndData
     ? sliceHex(paymasterData.paymasterAndData, 0, 20)
