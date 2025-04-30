@@ -39,7 +39,7 @@ export { watchSmartAccountClient } from "./actions/watchSmartAccountClient.js";
 export type * from "./actions/watchUser.js";
 export { watchUser } from "./actions/watchUser.js";
 export type * from "./environments/web/createSigner.js";
-export { createSigner as createWebSigner } from "./environments/web/createSigner.js";
+export { createSigner as internalCreateWebSigner } from "./environments/web/createSigner.js";
 export type * from "./createConfig.js";
 export { DEFAULT_IFRAME_CONTAINER_ID, createConfig } from "./createConfig.js";
 export { ClientOnlyPropertyError } from "./errors.js";
