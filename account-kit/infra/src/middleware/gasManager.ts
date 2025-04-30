@@ -394,7 +394,7 @@ const generalSignedPermit = async <
     throw new ChainNotFoundError();
   }
   if (!policyToken.erc20Name || !policyToken.version) {
-    throw new Error("erc20Name and version is missing");
+    throw new Error("erc20Name or version is missing");
   }
   // get a paymaster address
   const maxAmountToken = policyToken.maxTokenAmount || maxUint256;
