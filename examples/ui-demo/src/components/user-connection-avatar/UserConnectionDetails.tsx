@@ -44,7 +44,7 @@ export function UserConnectionDetails({
   const solanaSigner = useMemo(() => {
     if (!signer) return;
     if (!status.isConnected) return;
-    return signer.experimental_toSolanaSigner();
+    return signer.toSolanaSigner();
   }, [signer, status.isConnected]);
 
   const solanaAddress = useMemo(() => {

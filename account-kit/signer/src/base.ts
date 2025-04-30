@@ -833,7 +833,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    *
    * @returns {SolanaSigner} A new instance of `SolanaSigner`
    */
-  experimental_toSolanaSigner = (): SolanaSigner => {
+  toSolanaSigner = (): SolanaSigner => {
     if (!this.inner.getUser()) {
       throw new NotAuthenticatedError();
     }

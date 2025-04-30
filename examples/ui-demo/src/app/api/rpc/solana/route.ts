@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     headers[key] = value;
   });
 
-  const rpcUrl = `https://solana-devnet.g.alchemy.com/v2/${env.API_KEY}`;
+  const rpcUrl = env.ALCHEMY_SOLANA_URL;
   const res = await fetch(rpcUrl, {
     method: "POST",
     headers: {
