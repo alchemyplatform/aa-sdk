@@ -95,7 +95,7 @@ describe("MA v2 Tests", async () => {
     accounts.unfundedAccountOwner
   );
 
-  const webAuthnCredential = {
+  const webAuthnAccountParams = {
     id: "QXFDX0-o2ca8W08eKlWacDWYOmUxs6UCLHk-SjpmVJw",
     publicKey:
       "pQECAyYgASFYIBdKn_7nh3NiMKOXJBsIzZ1JmRoips8egLC76kEyKx0uIlgg2-jfyYk9lq-HgHCPQOAS-vXVmBzaDXWeLFIzskfYIEc",
@@ -1840,13 +1840,13 @@ describe("MA v2 Tests", async () => {
     paymasterMiddleware,
     webAuthnAccountParams = null,
   }: {
-    signer: SmartAccountSigner;
+    signer: SmartAccountSigner; // TO DO: make
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
     credential?: P256Credential & {
       getFn?: (options: CredentialRequestOptions) => Promise<Credential | null>;
-      rpId: string;
+      rpId?: string;
     };
   }) =>
     createModularAccountV2Client({
