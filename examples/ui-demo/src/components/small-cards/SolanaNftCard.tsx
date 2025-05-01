@@ -1,22 +1,16 @@
 import { useToast } from "@/hooks/useToast";
 import {
-  useSigner,
   useSignerStatus,
   useSolanaConnection,
+  useSolanaTransaction,
 } from "@account-kit/react";
 import {
-  Authorized,
   Connection,
   Keypair,
-  LAMPORTS_PER_SOL,
   PublicKey,
-  sendAndConfirmRawTransaction,
-  sendAndConfirmTransaction,
-  StakeProgram,
   SystemProgram,
-  Transaction,
   TransactionConfirmationStrategy,
-  TransactionMessage,
+  VersionedTransaction,
 } from "@solana/web3.js";
 
 import {
@@ -39,7 +33,6 @@ import { Card } from "./Card";
 import Image from "next/image";
 import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
-import bs58 from "bs58";
 
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
@@ -59,7 +52,7 @@ async function getConfirmationStrategy(
 export const SolanaNftCard = () => {
   const status = useSignerStatus();
   const queryClient = useQueryClient();
-  const [isPending, setIsPending] = useState(false);
+  const { sendTransactionAsync, data, isPending } = useSolanaTransaction({});
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
 
@@ -67,35 +60,38 @@ export const SolanaNftCard = () => {
   const { setToast } = useToast();
 
   const handleCollectNFT = async () => {
-    setIsPending(true);
-    try {
-      if (!solanaSigner) throw new Error("No signer found");
-      if (!connection) throw new Error("No connection found");
-      setTransactionState("signing");
-      setTransactionState("sponsoring");
-      const stakeAccount = Keypair.generate();
-      const publicKey = new PublicKey(solanaSigner.address);
-      const tokenMetadata: TokenMetadata = {
-        updateAuthority: publicKey,
-        mint: stakeAccount.publicKey,
-        name: "QN Pixel",
-        symbol: "QNPIX",
-        uri: "https://qn-shared.quicknode-ipfs.com/ipfs/QmQFh6WuQaWAMLsw9paLZYvTsdL5xJESzcoSxzb6ZU3Gjx",
-        additionalMetadata: [
-          ["Background", "Blue"],
-          ["WrongData", "DeleteMe!"],
-          ["Points", "0"],
-        ],
-      };
-      const decimals = 6;
-      const mintLen = getMintLen([ExtensionType.MetadataPointer]);
-      const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
-      const mintLamports = await connection.getMinimumBalanceForRentExemption(
-        mintLen + metadataLen
-      );
+    if (!solanaSigner) throw new Error("No signer found");
+    if (!connection) throw new Error("No connection found");
+    setTransactionState("signing");
+    setTransactionState("sponsoring");
+    const stakeAccount = Keypair.generate();
+    const publicKey = new PublicKey(solanaSigner.address);
+    const tokenMetadata: TokenMetadata = {
+      updateAuthority: publicKey,
+      mint: stakeAccount.publicKey,
+      name: "QN Pixel",
+      symbol: "QNPIX",
+      uri: "https://qn-shared.quicknode-ipfs.com/ipfs/QmQFh6WuQaWAMLsw9paLZYvTsdL5xJESzcoSxzb6ZU3Gjx",
+      additionalMetadata: [
+        ["Background", "Blue"],
+        ["WrongData", "DeleteMe!"],
+        ["Points", "0"],
+      ],
+    };
+    const decimals = 6;
+    const mintLen = getMintLen([ExtensionType.MetadataPointer]);
+    const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
+    const mintLamports = await connection.getMinimumBalanceForRentExemption(
+      mintLen + metadataLen
+    );
 
-      const mint = stakeAccount.publicKey;
-      let createStakeAccountTransaction = new Transaction().add(
+    const mint = stakeAccount.publicKey;
+    await sendTransactionAsync({
+      preSend: async (transaction: VersionedTransaction) => {
+        transaction.sign([stakeAccount]);
+        return transaction;
+      },
+      instructions: [
         SystemProgram.createAccount({
           fromPubkey: publicKey,
           newAccountPubkey: mint,
@@ -146,68 +142,11 @@ export const SolanaNftCard = () => {
           updateAuthority: publicKey,
           field: tokenMetadata.additionalMetadata[2][0],
           value: tokenMetadata.additionalMetadata[2][1],
-        })
-      );
-      createStakeAccountTransaction.recentBlockhash = (
-        await connection.getLatestBlockhash()
-      ).blockhash;
+        }),
+      ],
+    });
 
-      createStakeAccountTransaction.feePayer = publicKey;
-
-      await solanaSigner.addSignature(createStakeAccountTransaction);
-      createStakeAccountTransaction.partialSign(stakeAccount);
-
-      const signature =
-        "version" in createStakeAccountTransaction
-          ? createStakeAccountTransaction.signatures[0]!
-          : createStakeAccountTransaction.signature!;
-
-      const confirmationStrategy = await getConfirmationStrategy(
-        connection,
-        bs58.encode(signature as any)
-      );
-      const transactionHash = await sendAndConfirmRawTransaction(
-        connection,
-        Buffer.from(createStakeAccountTransaction.serialize() as any),
-        confirmationStrategy,
-        { commitment: "confirmed" }
-      );
-
-      // const votePubkey = new PublicKey(solanaSigner.address);
-      // let delegateInstruction = StakeProgram.delegate({
-      //   stakePubkey: stakeAccount.publicKey,
-      //   authorizedPubkey: publicKey,
-      //   votePubkey,
-      // });
-
-      // let delegateTransaction = new Transaction().add(delegateInstruction);
-      // delegateTransaction.recentBlockhash = (
-      //   await connection.getRecentBlockhash()
-      // ).blockhash;
-      // delegateTransaction.feePayer = publicKey;
-      // await solanaSigner.addSignature(delegateTransaction);
-
-      // const finalTransaction = await sendAndConfirmRawTransaction(
-      //   connection,
-      //   Buffer.from(delegateTransaction.serialize() as any),
-      //   confirmationStrategy,
-      //   { commitment: "confirmed" }
-      // );
-
-      console.log({ transactionHash });
-      debugger;
-      setTransactionState("complete");
-    } finally {
-      setIsPending(false);
-    }
-
-    // await sendTransaction({
-    //   transfer: {
-    //     amount: 1000000,
-    //     toAddress:
-    //       process.env.NEXT_PUBLIC_SOLANA_ADDRESS || solanaSigner.address || "",
-    //   },
-    // });
+    setTransactionState("complete");
   };
 
   const imageSlot = (
