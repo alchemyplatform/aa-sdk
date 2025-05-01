@@ -1,15 +1,9 @@
 import { useToast } from "@/hooks/useToast";
+import { useSolanaTransaction } from "@account-kit/react";
 import {
-  useSignerStatus,
-  useSolanaConnection,
-  useSolanaTransaction,
-} from "@account-kit/react";
-import {
-  Connection,
   Keypair,
   PublicKey,
   SystemProgram,
-  TransactionConfirmationStrategy,
   VersionedTransaction,
 } from "@solana/web3.js";
 
@@ -25,39 +19,38 @@ import {
   getMintLen,
 } from "@solana/spl-token";
 import { pack, TokenMetadata } from "@solana/spl-token-metadata";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
 import { LoadingIcon } from "../icons/loading";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import Image from "next/image";
 import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
+import { useState } from "react";
 
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
-async function getConfirmationStrategy(
-  connection: Connection,
-  signature: string
-): Promise<TransactionConfirmationStrategy> {
-  const latestBlockHash = await connection.getLatestBlockhash();
-
-  return {
-    blockhash: latestBlockHash.blockhash,
-    lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-    signature,
-  };
-}
-
 export const SolanaNftCard = () => {
-  const status = useSignerStatus();
-  const queryClient = useQueryClient();
-  const { sendTransactionAsync, data, isPending } = useSolanaTransaction({});
+  const [txHash, setTxHash] = useState<[string, string] | null>(null);
+  const { setToast } = useToast();
+  const {
+    sendTransactionAsync,
+    isPending,
+    connection,
+    signer: solanaSigner,
+  } = useSolanaTransaction({
+    mutation: {
+      onError(error) {
+        console.log(error);
+        setToast({
+          type: "error",
+          text: "Error sending transaction",
+          open: true,
+        });
+      },
+    },
+  });
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
-
-  const { connection, signer: solanaSigner } = useSolanaConnection();
-  const { setToast } = useToast();
 
   const handleCollectNFT = async () => {
     if (!solanaSigner) throw new Error("No signer found");
@@ -66,17 +59,18 @@ export const SolanaNftCard = () => {
     setTransactionState("sponsoring");
     const stakeAccount = Keypair.generate();
     const publicKey = new PublicKey(solanaSigner.address);
+    const metaData: (readonly [string, string])[] = [
+      ["Background", "Blue"],
+      ["WrongData", "DeleteMe!"],
+      ["Points", "0"],
+    ];
     const tokenMetadata: TokenMetadata = {
       updateAuthority: publicKey,
       mint: stakeAccount.publicKey,
-      name: "QN Pixel",
-      symbol: "QNPIX",
+      name: "Alchemy Duck",
+      symbol: "ALCHDUCK",
       uri: "https://qn-shared.quicknode-ipfs.com/ipfs/QmQFh6WuQaWAMLsw9paLZYvTsdL5xJESzcoSxzb6ZU3Gjx",
-      additionalMetadata: [
-        ["Background", "Blue"],
-        ["WrongData", "DeleteMe!"],
-        ["Points", "0"],
-      ],
+      additionalMetadata: metaData,
     };
     const decimals = 6;
     const mintLen = getMintLen([ExtensionType.MetadataPointer]);
@@ -86,7 +80,7 @@ export const SolanaNftCard = () => {
     );
 
     const mint = stakeAccount.publicKey;
-    await sendTransactionAsync({
+    const tx = await sendTransactionAsync({
       preSend: async (transaction: VersionedTransaction) => {
         transaction.sign([stakeAccount]);
         return transaction;
@@ -122,29 +116,18 @@ export const SolanaNftCard = () => {
           symbol: tokenMetadata.symbol,
           uri: tokenMetadata.uri,
         }),
-        createUpdateFieldInstruction({
-          programId: TOKEN_2022_PROGRAM_ID,
-          metadata: mint,
-          updateAuthority: publicKey,
-          field: tokenMetadata.additionalMetadata[0][0],
-          value: tokenMetadata.additionalMetadata[0][1],
-        }),
-        createUpdateFieldInstruction({
-          programId: TOKEN_2022_PROGRAM_ID,
-          metadata: mint,
-          updateAuthority: publicKey,
-          field: tokenMetadata.additionalMetadata[1][0],
-          value: tokenMetadata.additionalMetadata[1][1],
-        }),
-        createUpdateFieldInstruction({
-          programId: TOKEN_2022_PROGRAM_ID,
-          metadata: mint,
-          updateAuthority: publicKey,
-          field: tokenMetadata.additionalMetadata[2][0],
-          value: tokenMetadata.additionalMetadata[2][1],
-        }),
+        ...metaData.map(([key, value]) =>
+          createUpdateFieldInstruction({
+            programId: TOKEN_2022_PROGRAM_ID,
+            metadata: mint,
+            updateAuthority: publicKey,
+            field: key,
+            value: value,
+          })
+        ),
       ],
     });
+    setTxHash([tx.hash, mint.toBase58()]);
 
     setTransactionState("complete");
   };
@@ -161,65 +144,59 @@ export const SolanaNftCard = () => {
     </div>
   );
 
-  const renderTransactionStates = () => {
-    const states = [
-      {
-        state: "signing",
-        text: "Signing transaction...",
-        isCompleteStates: ["complete", "sponsoring"],
-      },
-      {
-        state: "sponsoring",
-        text: "Sponsoring gas & minting NFT...",
-        isCompleteStates: ["complete"],
-      },
-    ];
+  const states = [
+    {
+      state: "signing",
+      text: "Signing transaction...",
+      isCompleteStates: ["complete", "sponsoring"],
+    },
+    {
+      state: "sponsoring",
+      text: "Sponsoring gas & minting NFT...",
+      isCompleteStates: ["complete"],
+    },
+  ];
 
-    return (
-      <div className="flex flex-col gap-3">
-        {states.map(({ state, text, isCompleteStates }) => {
-          const isComplete = isCompleteStates.includes(transactionState);
-          return (
-            <div key={state} className="flex items-center gap-2">
-              {isComplete && (
-                <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
-              )}
-              {!isComplete && <LoadingIcon className="h-4 w-4" />}
-              <p className="text-sm text-fg-secondary">{text}</p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const content = useMemo(
-    () => (
-      <>
-        {transactionState === "idle" ? (
-          <>
-            <p className="text-fg-primary text-sm mb-3">
-              Transact with one click using gas sponsorship and background
-              signing.
+  const renderTransactionStates = (
+    <div className="flex flex-col gap-3">
+      {states.map(({ state, text, isCompleteStates }) => {
+        const isComplete = isCompleteStates.includes(transactionState);
+        return (
+          <div key={state} className="flex items-center gap-2">
+            {isComplete && (
+              <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
+            )}
+            {!isComplete && <LoadingIcon className="h-4 w-4" />}
+            <p className="text-sm text-fg-secondary">{text}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+  const content = (
+    <>
+      {transactionState === "idle" ? (
+        <>
+          <p className="text-fg-primary text-sm mb-3">
+            Transact with one click using gas sponsorship and background
+            signing.
+          </p>
+          <div className="flex justify-between items-center">
+            <p className="text-fg-secondary text-sm">Gas Fee</p>
+            <p>
+              <span className="line-through mr-1 text-sm text-fg-primary">
+                $0.02
+              </span>
+              <span className="text-sm bg-gradient-to-r from-[#FF9C27] to-[#FD48CE] bg-clip-text text-transparent">
+                Free
+              </span>
             </p>
-            <div className="flex justify-between items-center">
-              <p className="text-fg-secondary text-sm">Gas Fee</p>
-              <p>
-                <span className="line-through mr-1 text-sm text-fg-primary">
-                  $0.02
-                </span>
-                <span className="text-sm bg-gradient-to-r from-[#FF9C27] to-[#FD48CE] bg-clip-text text-transparent">
-                  Free
-                </span>
-              </p>
-            </div>
-          </>
-        ) : (
-          renderTransactionStates()
-        )}
-      </>
-    ),
-    [transactionState]
+          </div>
+        </>
+      ) : (
+        renderTransactionStates
+      )}
+    </>
   );
 
   return (
@@ -229,17 +206,46 @@ export const SolanaNftCard = () => {
       heading="Solana Gasless Transactions"
       content={content}
       buttons={
-        <Button
-          className="mt-auto w-full"
-          onClick={handleCollectNFT}
-          disabled={!solanaSigner || isPending}
-        >
-          {transactionState === "idle"
-            ? "Collect NFT"
-            : transactionState === "complete"
-            ? "Re-collect NFT"
-            : "Collecting NFT..."}
-        </Button>
+        <>
+          {txHash && (
+            <>
+              <Button
+                className="mb-2 w-full"
+                onClick={() => {
+                  window.open(
+                    `https://explorer.solana.com/tx/${txHash[0]}?cluster=devnet`,
+                    "_blank"
+                  );
+                }}
+              >
+                View on Explorer
+              </Button>
+
+              <Button
+                className="mb-2 w-full"
+                onClick={() => {
+                  window.open(
+                    `https://explorer.solana.com/address/${txHash[1]}?cluster=devnet`,
+                    "_blank"
+                  );
+                }}
+              >
+                View Token on Explorer
+              </Button>
+            </>
+          )}
+          <Button
+            className="mt-auto w-full"
+            onClick={handleCollectNFT}
+            disabled={!solanaSigner || isPending}
+          >
+            {transactionState === "idle"
+              ? "Collect NFT"
+              : transactionState === "complete"
+              ? "Re-collect NFT"
+              : "Collecting NFT..."}
+          </Button>
+        </>
       }
     />
   );

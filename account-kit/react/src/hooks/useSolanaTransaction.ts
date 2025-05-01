@@ -123,7 +123,6 @@ export function useSolanaTransaction(
         ? await signer.addSponsorship(instructions, connection, policyId)
         : await signer.createTransfer(instructions, connection);
 
-      console.log("Testing if preSend");
       if (params.preSend) {
         transaction = await params.preSend(transaction);
       }
