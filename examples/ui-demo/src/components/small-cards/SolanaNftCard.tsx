@@ -30,7 +30,6 @@ import { useState } from "react";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
 export const SolanaNftCard = () => {
-  const [txHash, setTxHash] = useState<[string, string] | null>(null);
   const { setToast } = useToast();
   const {
     sendTransactionAsync,
@@ -55,7 +54,6 @@ export const SolanaNftCard = () => {
   const handleCollectNFT = async () => {
     if (!solanaSigner) throw new Error("No signer found");
     if (!connection) throw new Error("No connection found");
-    setTxHash(null);
     setTransactionState("signing");
     setTransactionState("sponsoring");
     const stakeAccount = Keypair.generate();
@@ -128,7 +126,11 @@ export const SolanaNftCard = () => {
         ),
       ],
     });
-    setTxHash([tx.hash, mint.toBase58()]);
+
+    console.log(`Created transaction: ${tx.hash} 
+      https://explorer.solana.com/tx/${tx.hash}?cluster=devnet 
+      https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
+    `);
 
     setTransactionState("complete");
   };
@@ -176,7 +178,7 @@ export const SolanaNftCard = () => {
   );
   const content = (
     <>
-      {transactionState === "idle" ? (
+      {transactionState === "idle" || transactionState === "complete" ? (
         <>
           <p className="text-fg-primary text-sm mb-3">
             Transact with one click using gas sponsorship and background
@@ -208,33 +210,6 @@ export const SolanaNftCard = () => {
       content={content}
       buttons={
         <>
-          {txHash && (
-            <>
-              <Button
-                className="mb-2 w-full"
-                onClick={() => {
-                  window.open(
-                    `https://explorer.solana.com/tx/${txHash[0]}?cluster=devnet`,
-                    "_blank"
-                  );
-                }}
-              >
-                View on Explorer
-              </Button>
-
-              <Button
-                className="mb-2 w-full"
-                onClick={() => {
-                  window.open(
-                    `https://explorer.solana.com/address/${txHash[1]}?cluster=devnet`,
-                    "_blank"
-                  );
-                }}
-              >
-                View Token on Explorer
-              </Button>
-            </>
-          )}
           <Button
             className="mt-auto w-full"
             onClick={handleCollectNFT}
