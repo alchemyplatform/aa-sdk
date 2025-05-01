@@ -193,8 +193,10 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       }
 
       // Fall back to the default 7677 dummyPaymasterAndData middleware.
-      return alchemyGasManagerMiddleware(policyId, policyToken)
-        .dummyPaymasterAndData(uo, args);
+      return alchemyGasManagerMiddleware(
+        policyId,
+        policyToken
+      ).dummyPaymasterAndData(uo, args);
     },
     feeEstimator: (uo, args) => {
       return feeEstimatorOverride
