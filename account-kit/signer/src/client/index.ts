@@ -18,6 +18,7 @@ import type {
   OtpParams,
   User,
   SubmitOtpCodeResponse,
+  AuthLinkingPrompt,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -531,7 +532,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithPopup = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>
-  ): Promise<User> => {
+  ): Promise<User | AuthLinkingPrompt> => {
     const turnkeyPublicKey = await this.initIframeStamper();
     const oauthParams = args;
     const providerUrl = await this.getOauthProviderUrl({
@@ -551,32 +552,54 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           return;
         }
         const {
+          alchemyStatus: status,
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
           alchemyIsSignup: isSignup,
           alchemyError,
+          alchemyOtpId: otpId,
+          alchemyEmail: email,
+          alchemyAuthProvider: providerName,
         } = event.data;
-        if (bundle && orgId && idToken) {
-          cleanup();
-          popup?.close();
-          this.completeAuthWithBundle({
-            bundle,
-            orgId,
-            connectedEventName: "connectedOauth",
-            idToken,
-            authenticatingType: "oauth",
-          }).then((user) => {
-            if (isSignup) {
-              eventEmitter.emit("newUserSignup");
-            }
-
-            resolve(user);
-          }, reject);
-        } else if (alchemyError) {
+        if (alchemyError) {
           cleanup();
           popup?.close();
           reject(new OauthFailedError(alchemyError));
+        }
+        if (!status) {
+          // This message isn't meant for us.
+          return;
+        }
+        cleanup();
+        popup?.close();
+        switch (status) {
+          case "SUCCESS":
+            this.completeAuthWithBundle({
+              bundle,
+              orgId,
+              connectedEventName: "connectedOauth",
+              idToken,
+              authenticatingType: "oauth",
+            }).then((user) => {
+              if (isSignup) {
+                eventEmitter.emit("newUserSignup");
+              }
+              resolve(user);
+            }, reject);
+            break;
+          case "ACCOUNT_LINKING_CONFIRMATION_REQUIRED":
+            resolve({
+              status,
+              idToken,
+              email,
+              providerName,
+              otpId,
+              orgId,
+            } satisfies AuthLinkingPrompt);
+            break;
+          default:
+            reject(new Error(`Unknown status: ${status}`));
         }
       };
 

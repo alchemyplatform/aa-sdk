@@ -21,17 +21,18 @@ import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import type { BaseSignerClient } from "./client/base";
-import type {
-  EmailType,
-  MfaFactor,
-  OauthConfig,
-  OauthParams,
-  User,
-  VerifyMfaParams,
-  AddMfaParams,
-  AddMfaResult,
-  RemoveMfaParams,
-} from "./client/types";
+import {
+  type EmailType,
+  type MfaFactor,
+  type OauthConfig,
+  type OauthParams,
+  type User,
+  type VerifyMfaParams,
+  type AddMfaParams,
+  type AddMfaResult,
+  type RemoveMfaParams,
+  type AuthLinkingPrompt,
+} from "./client/types.js";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
 import {
@@ -66,6 +67,11 @@ type AlchemySignerStore = {
     mfaRequired: boolean;
     mfaFactorId?: string;
     encryptedPayload?: string;
+  };
+  authLinkingStatus?: {
+    email: string;
+    providerName: string;
+    idToken: string;
   };
 };
 
@@ -207,6 +213,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           ({ mfaStatus }) => mfaStatus,
           (mfaStatus) =>
             (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus)
+        );
+      case "emailAuthLinkingRequired":
+        return this.store.subscribe(
+          ({ authLinkingStatus }) => authLinkingStatus,
+          (authLinkingStatus) => {
+            if (authLinkingStatus) {
+              (listener as AlchemySignerEvents["emailAuthLinkingRequired"])(
+                authLinkingStatus.email
+              );
+            }
+          },
+          { fireImmediately: true }
         );
       default:
         assertNever(event, `Unknown event type ${event}`);
@@ -855,25 +873,19 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       params.redirectParams
     );
 
-    this.sessionManager.setTemporarySession({
-      orgId,
-      isNewUser,
-    });
+    this.setAwaitingEmailAuth({ orgId, otpId, isNewUser });
 
-    this.store.setState({
-      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
-      otpId,
-      error: null,
-    });
+    // Clear the auth linking status if the email has changed. This would mean
+    // that the previously initiated social login is not associated with the
+    // email which is now being used to login.
+    const { authLinkingStatus } = this.store.getState();
+    if (authLinkingStatus && authLinkingStatus.email !== params.email) {
+      this.store.setState({ authLinkingStatus: undefined });
+    }
 
     // We wait for the session manager to emit a connected event if
     // cross tab sessions are permitted
-    return new Promise<User>((resolve) => {
-      const removeListener = this.sessionManager.on("connected", (session) => {
-        resolve(session.user);
-        removeListener();
-      });
-    });
+    return this.waitForConnected();
   };
 
   private authenticateWithPasskey = async (
@@ -925,9 +937,24 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     };
     if (params.mode === "redirect") {
       return this.inner.oauthWithRedirect(params);
-    } else {
-      return this.inner.oauthWithPopup(params);
     }
+    const result = await this.inner.oauthWithPopup(params);
+    if (!isAuthLinkingPrompt(result)) {
+      return result;
+    }
+    this.setAwaitingEmailAuth({
+      orgId: result.orgId,
+      otpId: result.otpId,
+      isNewUser: false,
+    });
+    this.store.setState({
+      authLinkingStatus: {
+        email: result.email,
+        providerName: result.providerName,
+        idToken: result.idToken,
+      },
+    });
+    return this.waitForConnected();
   };
 
   private authenticateWithOtp = async (
@@ -953,16 +980,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
     if (response.mfaRequired) {
       this.handleMfaRequired(response.encryptedPayload, response.multiFactors);
-
-      return new Promise<User>((resolve) => {
-        const removeListener = this.sessionManager.on(
-          "connected",
-          (session) => {
-            resolve(session.user);
-            removeListener();
-          }
-        );
-      });
+      return this.waitForConnected();
     }
 
     const user = await this.inner.completeAuthWithBundle({
@@ -980,7 +998,37 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       });
     }
 
+    const { authLinkingStatus } = this.store.getState();
+    if (authLinkingStatus) {
+      (async () => {
+        this.inner.addOauthProvider({
+          providerName: authLinkingStatus.providerName,
+          oidcToken: authLinkingStatus.idToken,
+        });
+      })();
+    }
+
     return user;
+  };
+
+  private setAwaitingEmailAuth = ({
+    orgId,
+    otpId,
+    isNewUser,
+  }: {
+    orgId: string;
+    otpId?: string;
+    isNewUser?: boolean;
+  }): void => {
+    this.sessionManager.setTemporarySession({
+      orgId,
+      isNewUser,
+    });
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+      otpId,
+      error: null,
+    });
   };
 
   private handleOauthReturn = ({
@@ -1407,6 +1455,15 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   protected fetchConfig = async (): Promise<SignerConfig> => {
     return this.inner.request("/v1/signer-config", {});
   };
+
+  private waitForConnected = (): Promise<User> => {
+    return new Promise<User>((resolve) => {
+      const removeListener = this.sessionManager.on("connected", (session) => {
+        resolve(session.user);
+        removeListener();
+      });
+    });
+  };
 }
 
 function toErrorInfo(error: unknown): ErrorInfo {
@@ -1455,4 +1512,11 @@ function subscribeWithDelayedFireImmediately<T>(
   );
   subscribeHasReturned = true;
   return unsubscribe;
+}
+
+function isAuthLinkingPrompt(result: unknown): result is AuthLinkingPrompt {
+  return (
+    (result as AuthLinkingPrompt)?.status ===
+    "ACCOUNT_LINKING_CONFIRMATION_REQUIRED"
+  );
 }
