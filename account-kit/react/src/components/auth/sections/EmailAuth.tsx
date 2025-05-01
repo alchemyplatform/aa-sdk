@@ -106,6 +106,7 @@ export const EmailAuth = memo(
       ) {
         setAuthStep({ type: "email_verify", email: form.state.values.email });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status]);
 
     return (

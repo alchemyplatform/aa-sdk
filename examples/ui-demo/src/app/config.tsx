@@ -113,6 +113,8 @@ export const alchemyConfig = () => {
       ],
       storage: cookieStorage,
       enablePopupOauth: true,
+      // dphiltodo: remove this line
+      oauthCallbackUrl: "http://localhost:6288/callback",
       solana: {
         connection: solanaConnection,
         // policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
