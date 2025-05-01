@@ -55,6 +55,7 @@ export const SolanaNftCard = () => {
   const handleCollectNFT = async () => {
     if (!solanaSigner) throw new Error("No signer found");
     if (!connection) throw new Error("No connection found");
+    setTxHash(null);
     setTransactionState("signing");
     setTransactionState("sponsoring");
     const stakeAccount = Keypair.generate();
@@ -69,7 +70,7 @@ export const SolanaNftCard = () => {
       mint: stakeAccount.publicKey,
       name: "Alchemy Duck",
       symbol: "ALCHDUCK",
-      uri: "https://qn-shared.quicknode-ipfs.com/ipfs/QmQFh6WuQaWAMLsw9paLZYvTsdL5xJESzcoSxzb6ZU3Gjx",
+      uri: "https://bafybeigtvzjqalevyw67xdhr7am5r3jxe5kjbg4pi2jv3nxvhelptwksoe.ipfs.dweb.link?filename=duckImage.png",
       additionalMetadata: metaData,
     };
     const decimals = 6;
