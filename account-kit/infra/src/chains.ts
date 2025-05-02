@@ -640,3 +640,27 @@ export const storyAeneid: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const wylerSepolia: Chain = defineChain({
+  id: 1712,
+  name: "Wylerchain Sepolia",
+  nativeCurrency: { name: "WYLER", symbol: "WYLER", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://wylerchain-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://wylerchain-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://wylerchain-sepolia.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://wylerchain-sepolia.explorer.alchemy.com",
+    },
+  },
+  testnet: true,
+});
