@@ -49,9 +49,7 @@ export const SolanaNftCard = () => {
       const stakeAccount = Keypair.generate();
       const publicKey = new PublicKey(solanaSigner.address);
       const metaData: (readonly [string, string])[] = [
-        ["Background", "Blue"],
-        ["WrongData", "DeleteMe!"],
-        ["Points", "0"],
+        ["SampleData", "ChangeMe"],
       ];
       const tokenMetadata: TokenMetadata = {
         updateAuthority: publicKey,
@@ -125,6 +123,7 @@ export const SolanaNftCard = () => {
       setTransactionState("complete");
     } catch (error) {
       console.log(error);
+      setTransactionState("idle");
       setToast({
         type: "error",
         text: "Error sending transaction",
@@ -182,13 +181,13 @@ export const SolanaNftCard = () => {
             Transact with one click using gas sponsorship and background
             signing.
           </p>
-          <div className="flex justify-between items-center">
-            <p className="text-fg-secondary text-sm">Gas Fee</p>
+          <div className="flex justify-between items-center hidden xl:flex">
+            <p className="text-fg-secondary text-base">Gas Fee</p>
             <p>
-              <span className="line-through mr-1 text-sm text-fg-primary">
+              <span className="line-through mr-1 text-base text-fg-primary">
                 $0.02
               </span>
-              <span className="text-sm bg-gradient-to-r from-[#FF9C27] to-[#FD48CE] bg-clip-text text-transparent">
+              <span className="text-base bg-gradient-to-r from-[#FF9C27] to-[#FD48CE] bg-clip-text text-transparent">
                 Free
               </span>
             </p>
