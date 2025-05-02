@@ -25,7 +25,7 @@ export type SolanaConnectionHookParams = {
 };
 
 /**
- * This is the hook that will be used to send to the solana connection.
+ * This hook is used for establishing a connection to Solana and returns the connection object and the signer object.
  *
  * @example
  * ```ts
