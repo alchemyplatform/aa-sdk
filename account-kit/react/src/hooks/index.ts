@@ -22,7 +22,6 @@ export * from "./useSignTypedData.js";
 export * from "./useSmartAccountClient.js";
 export * from "./useSolanaSigner.js";
 export * from "./useSolanaTransaction.js";
-export * from "./useSolanaConnection.js";
 export * from "./useUiConfig.js";
 export * from "./useUser.js";
 export * from "./useWaitForUserOperationTransaction.js";
