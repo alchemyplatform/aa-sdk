@@ -3,6 +3,7 @@ import type {
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
+  Erc7677Client,
   Multiplier,
   SmartContractAccount,
   UserOperationFeeOptions,
@@ -39,6 +40,7 @@ import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
 import { PermitTypes, EIP712NoncesAbi } from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
+import type { MiddlewareClient } from "../../../../aa-sdk/core/dist/types/middleware/actions.js";
 
 type Context = {
   policyId: string | string[];
@@ -284,7 +286,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         if (policyToken.approvalMode === "PERMIT") {
           erc20Context.permit = await generateSignedPermit(
             userOp,
-            client as AlchemySmartAccountClient,
+            client,
             account,
             policyId,
             policyToken
@@ -370,11 +372,11 @@ const overrideField = <
  * Utility function to generate a signed Permit for erc20 transaction
  *
  * @param {UserOperationRequest<TEntryPointVersion>} userOp - The user operation request
- * @param {AlchemySmartAccountClient} client - The Alchemy smart account client
+ * @param {MiddlewareClient} client - The Alchemy smart account client
  * @param {TAccount} account - The smart account instance
  * @param {string | string[]} policyId - The policy ID or array of policy IDs
  * @param {PolicyToken} policyToken - The policy token configuration
- * @param {Address} policyToken.address - ERC20 contract address
+ * @param {Address} policyToken.address - ERC20 contract addressya
  * @param {bigint} [policyToken.maxTokenAmount] - Optional ERC20 token limit
  * @param {"NONE" | "PERMIT"} [policyToken.approvalMode] - ERC20 approve mode
  * @param {string} [policyToken.erc20Name] - EIP2612 specified ERC20 contract name
@@ -386,7 +388,7 @@ const generateSignedPermit = async <
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
   userOp: UserOperationRequest<TEntryPointVersion>,
-  client: AlchemySmartAccountClient,
+  client: MiddlewareClient,
   account: TAccount,
   policyId: string | string[],
   policyToken: {
@@ -405,7 +407,7 @@ const generateSignedPermit = async <
   }
   // get a paymaster address
   const maxAmountToken = policyToken.maxTokenAmount || maxUint256;
-  const paymasterData = await (client as AlchemySmartAccountClient).request({
+  const paymasterData = await (client as Erc7677Client).request({
     method: "pm_getPaymasterStubData",
     params: [
       userOp,
