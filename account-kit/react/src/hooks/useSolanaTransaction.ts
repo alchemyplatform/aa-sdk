@@ -8,7 +8,6 @@ import {
   PublicKey,
   SystemProgram,
   TransactionInstruction,
-  VersionedTransaction,
 } from "@solana/web3.js";
 import { useSolanaSigner } from "./useSolanaSigner.js";
 import { getSolanaConnection, watchSolanaConnection } from "@account-kit/core";
@@ -21,15 +20,9 @@ export type SolanaTransactionParams =
         amount: number;
         toAddress: string;
       };
-      preSend?: (
-        transaction: VersionedTransaction
-      ) => Promise<VersionedTransaction>;
     }
   | {
       instructions: TransactionInstruction[];
-      preSend?: (
-        transaction: VersionedTransaction
-      ) => Promise<VersionedTransaction>;
     };
 /**
  * We wanted to make sure that this will be using the same useMutation that the
@@ -119,13 +112,9 @@ export function useSolanaTransaction(
             ];
       const policyId =
         "policyId" in opts ? opts.policyId : backupConnection?.policyId;
-      let transaction = policyId
+      const transaction = policyId
         ? await signer.addSponsorship(instructions, connection, policyId)
         : await signer.createTransfer(instructions, connection);
-
-      if (params.preSend) {
-        transaction = await params.preSend(transaction);
-      }
 
       await signer.addSignature(transaction);
 
