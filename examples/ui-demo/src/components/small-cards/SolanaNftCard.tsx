@@ -36,103 +36,101 @@ export const SolanaNftCard = () => {
     isPending,
     connection,
     signer: solanaSigner,
-  } = useSolanaTransaction({
-    mutation: {
-      onError(error) {
-        console.log(error);
-        setToast({
-          type: "error",
-          text: "Error sending transaction",
-          open: true,
-        });
-      },
-    },
-  });
+  } = useSolanaTransaction();
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
 
   const handleCollectNFT = async () => {
-    if (!solanaSigner) throw new Error("No signer found");
-    if (!connection) throw new Error("No connection found");
-    setTransactionState("signing");
-    setTransactionState("sponsoring");
-    const stakeAccount = Keypair.generate();
-    const publicKey = new PublicKey(solanaSigner.address);
-    const metaData: (readonly [string, string])[] = [
-      ["Background", "Blue"],
-      ["WrongData", "DeleteMe!"],
-      ["Points", "0"],
-    ];
-    const tokenMetadata: TokenMetadata = {
-      updateAuthority: publicKey,
-      mint: stakeAccount.publicKey,
-      name: "Alchemy Duck",
-      symbol: "ALCHDUCK",
-      uri: "https://bafybeigtvzjqalevyw67xdhr7am5r3jxe5kjbg4pi2jv3nxvhelptwksoe.ipfs.dweb.link?filename=duckImage.png",
-      additionalMetadata: metaData,
-    };
-    const decimals = 6;
-    const mintLen = getMintLen([ExtensionType.MetadataPointer]);
-    const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
-    const mintLamports = await connection.getMinimumBalanceForRentExemption(
-      mintLen + metadataLen
-    );
+    try {
+      if (!solanaSigner) throw new Error("No signer found");
+      if (!connection) throw new Error("No connection found");
+      setTransactionState("signing");
+      setTransactionState("sponsoring");
+      const stakeAccount = Keypair.generate();
+      const publicKey = new PublicKey(solanaSigner.address);
+      const metaData: (readonly [string, string])[] = [
+        ["Background", "Blue"],
+        ["WrongData", "DeleteMe!"],
+        ["Points", "0"],
+      ];
+      const tokenMetadata: TokenMetadata = {
+        updateAuthority: publicKey,
+        mint: stakeAccount.publicKey,
+        name: "Alchemy Duck",
+        symbol: "ALCHDUCK",
+        uri: "https://bafybeigtvzjqalevyw67xdhr7am5r3jxe5kjbg4pi2jv3nxvhelptwksoe.ipfs.dweb.link?filename=duckImage.png",
+        additionalMetadata: metaData,
+      };
+      const decimals = 6;
+      const mintLen = getMintLen([ExtensionType.MetadataPointer]);
+      const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
+      const mintLamports = await connection.getMinimumBalanceForRentExemption(
+        mintLen + metadataLen
+      );
 
-    const mint = stakeAccount.publicKey;
-    const tx = await sendTransactionAsync({
-      preSend: async (transaction: VersionedTransaction) => {
-        transaction.sign([stakeAccount]);
-        return transaction;
-      },
-      instructions: [
-        SystemProgram.createAccount({
-          fromPubkey: publicKey,
-          newAccountPubkey: mint,
-          space: mintLen,
-          lamports: mintLamports,
-          programId: TOKEN_2022_PROGRAM_ID,
-        }),
-        createInitializeMetadataPointerInstruction(
-          mint,
-          publicKey,
-          mint,
-          TOKEN_2022_PROGRAM_ID
-        ),
-        createInitializeMintInstruction(
-          mint,
-          decimals,
-          publicKey,
-          null,
-          TOKEN_2022_PROGRAM_ID
-        ),
-        createInitializeInstruction({
-          programId: TOKEN_2022_PROGRAM_ID,
-          metadata: mint,
-          updateAuthority: publicKey,
-          mint: mint,
-          mintAuthority: publicKey,
-          name: tokenMetadata.name,
-          symbol: tokenMetadata.symbol,
-          uri: tokenMetadata.uri,
-        }),
-        ...metaData.map(([key, value]) =>
-          createUpdateFieldInstruction({
+      const mint = stakeAccount.publicKey;
+      const tx = await sendTransactionAsync({
+        preSend: async (transaction: VersionedTransaction) => {
+          transaction.sign([stakeAccount]);
+          return transaction;
+        },
+        instructions: [
+          SystemProgram.createAccount({
+            fromPubkey: publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports: mintLamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+          }),
+          createInitializeMetadataPointerInstruction(
+            mint,
+            publicKey,
+            mint,
+            TOKEN_2022_PROGRAM_ID
+          ),
+          createInitializeMintInstruction(
+            mint,
+            decimals,
+            publicKey,
+            null,
+            TOKEN_2022_PROGRAM_ID
+          ),
+          createInitializeInstruction({
             programId: TOKEN_2022_PROGRAM_ID,
             metadata: mint,
             updateAuthority: publicKey,
-            field: key,
-            value: value,
-          })
-        ),
-      ],
-    });
+            mint: mint,
+            mintAuthority: publicKey,
+            name: tokenMetadata.name,
+            symbol: tokenMetadata.symbol,
+            uri: tokenMetadata.uri,
+          }),
+          ...metaData.map(([key, value]) =>
+            createUpdateFieldInstruction({
+              programId: TOKEN_2022_PROGRAM_ID,
+              metadata: mint,
+              updateAuthority: publicKey,
+              field: key,
+              value: value,
+            })
+          ),
+        ],
+      });
 
-    console.log(`Created transaction: ${tx.hash} 
+      console.log(`Created transaction: ${tx.hash} 
       https://explorer.solana.com/tx/${tx.hash}?cluster=devnet 
       https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
     `);
 
-    setTransactionState("complete");
+      setTransactionState("complete");
+    } catch (error) {
+      console.log(error);
+      setToast({
+        type: "error",
+        text: "Error sending transaction",
+        open: true,
+      });
+    }
   };
 
   const imageSlot = (
