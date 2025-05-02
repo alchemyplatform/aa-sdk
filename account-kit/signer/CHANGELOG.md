@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add replace state filter ([#1579](https://github.com/alchemyplatform/aa-sdk/issues/1579)) ([f243b80](https://github.com/alchemyplatform/aa-sdk/commit/f243b80be5144cfcbe7d961709a022219c3fdd3d))
+
 # [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
 
 ### Features

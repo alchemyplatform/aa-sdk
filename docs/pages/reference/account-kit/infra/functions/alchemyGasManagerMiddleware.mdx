@@ -33,9 +33,16 @@ const client = createSmartAccountClient({
 ### policyId
 
 `string | string[]`
-the policyId (or list of policyIds) for Alchemy's gas manager
+
+- The policyId (or list of policyIds) for Alchemy's gas manager
+
+### policyToken
+
+`PolicyToken | undefined`
+
+- The policy token configuration
 
 ## Returns
 
 `Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">`
-partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
+Partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
