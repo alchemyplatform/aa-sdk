@@ -2,6 +2,7 @@ import { useToast } from "@/hooks/useToast";
 import { useSolanaTransaction } from "@account-kit/react";
 import {
   Keypair,
+  LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
   VersionedTransaction,
@@ -26,12 +27,32 @@ import Image from "next/image";
 import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
 import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
+import { ExternalLinkIcon } from "lucide-react";
 
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
+async function PK<T>(t: T) {
+  return t;
+}
 
+const states = [
+  {
+    state: "signing",
+    text: "Signing transaction...",
+    isCompleteStates: ["complete", "sponsoring"],
+  },
+  {
+    state: "sponsoring",
+    text: "Sponsoring gas & minting NFT...",
+    isCompleteStates: ["complete"],
+  },
+];
 export const SolanaNftCard = () => {
   const { setToast } = useToast();
+  const queryClient = useQueryClient();
   const {
+    data: tx,
     sendTransactionAsync,
     isPending,
     connection,
@@ -39,6 +60,18 @@ export const SolanaNftCard = () => {
   } = useSolanaTransaction();
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
+
+  const { data: balance = 0 } = useQuery({
+    queryKey: ["solanaBalance", solanaSigner?.address],
+    queryFn: async () => {
+      if (!solanaSigner) return 0;
+      if (!connection) return 0;
+      return (
+        (await connection.getBalance(new PublicKey(solanaSigner!.address))) /
+        LAMPORTS_PER_SOL
+      );
+    },
+  });
 
   const handleCollectNFT = async () => {
     try {
@@ -68,9 +101,12 @@ export const SolanaNftCard = () => {
 
       const mint = stakeAccount.publicKey;
       const tx = await sendTransactionAsync({
-        preSend: async (transaction: VersionedTransaction) => {
-          transaction.sign([stakeAccount]);
-          return transaction;
+        preSend: async (transaction, next) => {
+          if ("version" in transaction) {
+            transaction.sign([stakeAccount]);
+          } else {
+          }
+          return next(transaction, PK);
         },
         instructions: [
           SystemProgram.createAccount({
@@ -129,6 +165,10 @@ export const SolanaNftCard = () => {
         text: "Error sending transaction",
         open: true,
       });
+    } finally {
+      queryClient.invalidateQueries({
+        queryKey: ["solanaBalance", solanaSigner?.address],
+      });
     }
   };
 
@@ -144,22 +184,19 @@ export const SolanaNftCard = () => {
     </div>
   );
 
-  const states = [
-    {
-      state: "signing",
-      text: "Signing transaction...",
-      isCompleteStates: ["complete", "sponsoring"],
-    },
-    {
-      state: "sponsoring",
-      text: "Sponsoring gas & minting NFT...",
-      isCompleteStates: ["complete"],
-    },
-  ];
-
+  const goToTransaction = tx?.hash && (
+    <a
+      href={`https://explorer.solana.com/tx/${tx.hash}?cluster=devnet`}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="View transaction"
+    >
+      <ExternalLinkIcon className="stroke-fg-secondary w-4 h-4" />
+    </a>
+  );
   const renderTransactionStates = (
     <div className="flex flex-col gap-3">
-      {states.map(({ state, text, isCompleteStates }) => {
+      {states.map(({ state, text, isCompleteStates }, stateIndex) => {
         const isComplete = isCompleteStates.includes(transactionState);
         return (
           <div key={state} className="flex items-center gap-2">
@@ -167,37 +204,68 @@ export const SolanaNftCard = () => {
               <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
             )}
             {!isComplete && <LoadingIcon className="h-4 w-4" />}
-            <p className="text-sm text-fg-secondary">{text}</p>
+            <p className="text-sm text-fg-secondary">
+              {text} {stateIndex === states.length - 1 && goToTransaction}
+            </p>
           </div>
         );
       })}
     </div>
   );
-  const content = (
+  const renderIdleContent = (
     <>
-      {transactionState === "idle" || transactionState === "complete" ? (
+      <p className="text-fg-primary text-sm mb-3">
+        Transact with one click using gas sponsorship and background signing.
+      </p>
+
+      {solanaSigner && (
         <>
           <p className="text-fg-primary text-sm mb-3">
-            Transact with one click using gas sponsorship and background
-            signing.
+            <span className="font-semibold">Address</span>:{" "}
+            <UserAddressTooltip address={solanaSigner.address} />
           </p>
-          <div className="flex justify-between items-center hidden xl:flex">
-            <p className="text-fg-secondary text-base">Gas Fee</p>
-            <p>
-              <span className="line-through mr-1 text-base text-fg-primary">
-                $0.02
-              </span>
-              <span className="text-base bg-gradient-to-r from-[#FF9C27] to-[#FD48CE] bg-clip-text text-transparent">
-                Free
-              </span>
-            </p>
-          </div>
         </>
-      ) : (
-        renderTransactionStates
       )}
+      <p className="text-fg-primary text-sm"></p>
+      <div className="flex justify-between items-center hidden xl:flex">
+        <p className="text-fg-secondary text-base">Gas Fee</p>
+        <p>
+          <span className="line-through mr-1 text-base text-fg-primary">
+            $0.02
+          </span>
+          <span className="text-base bg-gradient-to-r from-[#FF9C27] to-[#FD48CE] bg-clip-text text-transparent">
+            Free
+          </span>
+        </p>
+      </div>
     </>
   );
+  const content = (
+    <>
+      {transactionState === "idle"
+        ? renderIdleContent
+        : renderTransactionStates}
+    </>
+  );
+
+  const nextButton =
+    balance < 0.05 ? (
+      <Button className="mt-auto w-full" onClick={openToSol}>
+        Get SOL
+      </Button>
+    ) : (
+      <Button
+        className="mt-auto w-full"
+        onClick={handleCollectNFT}
+        disabled={!solanaSigner || isPending}
+      >
+        {transactionState === "idle"
+          ? "Collect NFT"
+          : transactionState === "complete"
+          ? "Re-collect NFT"
+          : "Collecting NFT..."}
+      </Button>
+    );
 
   return (
     <Card
@@ -205,21 +273,10 @@ export const SolanaNftCard = () => {
       imageSlot={imageSlot}
       heading="Solana Gasless Transactions"
       content={content}
-      buttons={
-        <>
-          <Button
-            className="mt-auto w-full"
-            onClick={handleCollectNFT}
-            disabled={!solanaSigner || isPending}
-          >
-            {transactionState === "idle"
-              ? "Collect NFT"
-              : transactionState === "complete"
-              ? "Re-collect NFT"
-              : "Collecting NFT..."}
-          </Button>
-        </>
-      }
+      buttons={nextButton}
     />
   );
 };
+function openToSol() {
+  window.open("https://faucet.solana.com/", "_blank");
+}

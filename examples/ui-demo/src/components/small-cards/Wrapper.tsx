@@ -1,7 +1,6 @@
 import { useConfigStore } from "@/state";
 import { MFACard } from "./MFACard";
 import { MintCard } from "./MintCard";
-import { SolanaCard } from "./SolanaCard";
 import { SolanaNftCard } from "./SolanaNftCard";
 import { TransactionsCard } from "./TransactionsCard";
 
@@ -14,7 +13,6 @@ export const SmallCardsWrapper = () => {
         accountMode={accountMode}
         key={`transactions-card-${accountMode}`}
       />
-      <SolanaCard />
       <SolanaNftCard />
       <MFACard />
     </div>

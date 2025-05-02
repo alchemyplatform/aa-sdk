@@ -7,6 +7,7 @@ import type { BaseHookMutationArgs } from "../types.js";
 import {
   PublicKey,
   SystemProgram,
+  Transaction,
   TransactionInstruction,
   VersionedTransaction,
 } from "@solana/web3.js";
@@ -14,22 +15,23 @@ import { useSolanaSigner } from "./useSolanaSigner.js";
 import { getSolanaConnection, watchSolanaConnection } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import type { PromiseOrValue } from "../../../../aa-sdk/core/dist/types/types.js";
 
+export type PreSend = (
+  transaction: VersionedTransaction | Transaction,
+  next: PreSend
+) => PromiseOrValue<VersionedTransaction | Transaction>;
 export type SolanaTransactionParams =
   | {
       transfer: {
         amount: number;
         toAddress: string;
       };
-      preSend?: (
-        transaction: VersionedTransaction
-      ) => Promise<VersionedTransaction>;
+      preSend?: PreSend;
     }
   | {
       instructions: TransactionInstruction[];
-      preSend?: (
-        transaction: VersionedTransaction
-      ) => Promise<VersionedTransaction>;
+      preSend?: PreSend;
     };
 /**
  * We wanted to make sure that this will be using the same useMutation that the
@@ -119,15 +121,16 @@ export function useSolanaTransaction(
             ];
       const policyId =
         "policyId" in opts ? opts.policyId : backupConnection?.policyId;
-      let transaction = policyId
+      let transaction: VersionedTransaction | Transaction = policyId
         ? await signer.addSponsorship(instructions, connection, policyId)
         : await signer.createTransfer(instructions, connection);
 
-      if (params.preSend) {
-        transaction = await params.preSend(transaction);
-      }
-
-      await signer.addSignature(transaction);
+      const iSign: PreSend = async (t) => {
+        await signer.addSignature(t);
+        return t;
+      };
+      const preSend = params.preSend || iSign;
+      transaction = await preSend(transaction, iSign);
 
       const hash = await solanaNetwork.broadcast(connection, transaction);
       return { hash };
