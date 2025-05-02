@@ -98,7 +98,9 @@ export function erc7677Middleware<
     | undefined
 >(
   params?: Erc7677MiddlewareParams<TContext>
-): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
+): Required<
+  Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
+> {
   const dummyPaymasterAndData: ClientMiddlewareFn = async (
     uo,
     { client, account, feeOptions, overrides }
