@@ -5,7 +5,6 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
-  VersionedTransaction,
 } from "@solana/web3.js";
 
 import {
@@ -32,9 +31,6 @@ import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { ExternalLinkIcon } from "lucide-react";
 
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
-async function PK<T>(t: T) {
-  return t;
-}
 
 const states = [
   {
@@ -57,6 +53,7 @@ export const SolanaNftCard = () => {
     isPending,
     connection,
     signer: solanaSigner,
+    signers,
   } = useSolanaTransaction();
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
@@ -101,12 +98,13 @@ export const SolanaNftCard = () => {
 
       const mint = stakeAccount.publicKey;
       const tx = await sendTransactionAsync({
-        preSend: async (transaction, next) => {
-          if ("version" in transaction) {
-            transaction.sign([stakeAccount]);
-          } else {
-          }
-          return next(transaction, PK);
+        transactionComponents: {
+          preSend: async (transaction) => {
+            if ("version" in transaction) {
+              transaction.sign([stakeAccount]);
+            }
+            return signers.fromSigner(transaction);
+          },
         },
         instructions: [
           SystemProgram.createAccount({
