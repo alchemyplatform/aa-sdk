@@ -1,26 +1,6 @@
 import { useToast } from "@/hooks/useToast";
 import { useSolanaTransaction } from "@account-kit/react";
-import {
-  Connection,
-  Keypair,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  SystemProgram,
-  TransactionInstruction,
-} from "@solana/web3.js";
-import { sol } from "@metaplex-foundation/umi";
-import {
-  ExtensionType,
-  LENGTH_SIZE,
-  TOKEN_2022_PROGRAM_ID,
-  TYPE_SIZE,
-  createInitializeInstruction,
-  createInitializeMetadataPointerInstruction,
-  createInitializeMintInstruction,
-  createUpdateFieldInstruction,
-  getMintLen,
-} from "@solana/spl-token";
-import { pack, TokenMetadata } from "@solana/spl-token-metadata";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { LoadingIcon } from "../icons/loading";
 import { Button } from "./Button";
 import { Card } from "./Card";
@@ -28,10 +8,8 @@ import Image from "next/image";
 import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { ExternalLinkIcon } from "lucide-react";
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
 const states = [
@@ -42,35 +20,21 @@ const states = [
   },
   {
     state: "sponsoring",
-    text: "Sponsoring gas & minting NFT...",
+    text: "Sponsoring gas & poking duck (custom program)...",
     isCompleteStates: ["complete"],
   },
 ];
 export const SolanaNftCard = () => {
   const { setToast } = useToast();
-  const queryClient = useQueryClient();
   const {
     data: tx,
     sendTransactionAsync,
     isPending,
     connection,
     signer: solanaSigner,
-    signers,
   } = useSolanaTransaction();
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
-
-  const { data: balance = 0 } = useQuery({
-    queryKey: ["solanaBalance", solanaSigner?.address],
-    queryFn: async () => {
-      if (!solanaSigner) return 0;
-      if (!connection) return 0;
-      return (
-        (await connection.getBalance(new PublicKey(solanaSigner!.address))) /
-        LAMPORTS_PER_SOL
-      );
-    },
-  });
 
   const handleCollectNFT = async () => {
     try {
@@ -91,7 +55,10 @@ export const SolanaNftCard = () => {
       const instruction = new TransactionInstruction({
         programId: duckProgramId,
         keys: [{ pubkey: pokeStatePda, isSigner: false, isWritable: true }],
-        data: Buffer.from([]), // poke() has no arguments, so empty buffer
+        data: Buffer.from(
+          // poke discriminator
+          [46, 24, 16, 107, 212, 9, 17, 5]
+        ),
       });
       const tx = await sendTransactionAsync({
         transactionComponents: {
@@ -99,16 +66,6 @@ export const SolanaNftCard = () => {
           preSend: (transaction) => transaction,
         },
         instructions: [instruction],
-      });
-      console.log({
-        programId: duckProgramId.toBase58(),
-        keys: instruction.keys.map((key) => key.pubkey.toBase58()),
-        isSigner: instruction.keys[0].isSigner,
-        isWritable: instruction.keys[0].isWritable,
-        data: instruction.data.toString("hex"),
-        dataLength: instruction.data.length,
-        keysLength: instruction.keys.length,
-        programIdLength: duckProgramId.toBase58().length,
       });
 
       console.log(`Created transaction: ${tx.hash} 
@@ -124,33 +81,8 @@ export const SolanaNftCard = () => {
         text: "Error sending transaction",
         open: true,
       });
-    } finally {
-      queryClient.invalidateQueries({
-        queryKey: ["solanaBalance", solanaSigner?.address],
-      });
     }
   };
-
-  async function fundSol() {
-    try {
-      const publicKey = solanaSigner?.address;
-      if (!publicKey) throw new Error("No public key found");
-      const umi = createUmi(new Connection("https://api.devnet.solana.com"));
-      await umi.rpc.airdrop(publicKey as any, sol(0.5));
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await queryClient.invalidateQueries({
-        queryKey: ["solanaBalance", solanaSigner?.address],
-      });
-      setToast({
-        type: "success",
-        text: "Funded SOL",
-        open: true,
-      });
-    } catch (error) {
-      console.log(error);
-      window.open("https://faucet.solana.com/", "_blank");
-    }
-  }
 
   const imageSlot = (
     <div className="w-full h-full bg-[#DCFCE7] flex justify-center items-center relative">
@@ -229,21 +161,16 @@ export const SolanaNftCard = () => {
   );
 
   const nextButton = (
-    // balance < 0.05 ? (
-    //   <Button className="mt-auto w-full" onClick={fundSol}>
-    //     Get SOL
-    //   </Button>
-    // ) :
     <Button
       className="mt-auto w-full"
       onClick={handleCollectNFT}
       disabled={!solanaSigner || isPending}
     >
       {transactionState === "idle"
-        ? "Collect NFT"
+        ? "Poke The Duck"
         : transactionState === "complete"
-        ? "Re-collect NFT"
-        : "Collecting NFT..."}
+        ? "Re-Poke The Duck"
+        : "Poking the Duck..."}
     </Button>
   );
 
