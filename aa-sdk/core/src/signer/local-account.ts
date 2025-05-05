@@ -54,7 +54,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const signature = await signer.signMessage("Hello, world!");
    * ```
    *
@@ -75,7 +75,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const signature = await signer.signTypedData({
    *  domain: {},
    *  types: {},
@@ -131,7 +131,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const address = await signer.getAddress();
    * ```
    *
@@ -172,7 +172,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * ```
    *
    * @param {Hex} key The private key in hexadecimal format
