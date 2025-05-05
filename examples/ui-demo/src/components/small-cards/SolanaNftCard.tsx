@@ -1,12 +1,13 @@
 import { useToast } from "@/hooks/useToast";
 import { useSolanaTransaction } from "@account-kit/react";
 import {
+  Connection,
   Keypair,
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
 } from "@solana/web3.js";
-
+import { sol } from "@metaplex-foundation/umi";
 import {
   ExtensionType,
   LENGTH_SIZE,
@@ -29,7 +30,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { ExternalLinkIcon } from "lucide-react";
-
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
 const states = [
@@ -170,6 +171,22 @@ export const SolanaNftCard = () => {
     }
   };
 
+  async function fundSol() {
+    try {
+      const publicKey = solanaSigner?.address;
+      if (!publicKey) throw new Error("No public key found");
+      const umi = createUmi(new Connection("https://api.devnet.solana.com"));
+      await umi.rpc.airdrop(publicKey as any, sol(0.5));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await queryClient.invalidateQueries({
+        queryKey: ["solanaBalance", solanaSigner?.address],
+      });
+    } catch (error) {
+      console.log(error);
+      window.open("https://faucet.solana.com/", "_blank");
+    }
+  }
+
   const imageSlot = (
     <div className="w-full h-full bg-[#DCFCE7] flex justify-center items-center relative">
       <Image
@@ -248,7 +265,7 @@ export const SolanaNftCard = () => {
 
   const nextButton =
     balance < 0.05 ? (
-      <Button className="mt-auto w-full" onClick={openToSol}>
+      <Button className="mt-auto w-full" onClick={fundSol}>
         Get SOL
       </Button>
     ) : (
@@ -275,6 +292,3 @@ export const SolanaNftCard = () => {
     />
   );
 };
-function openToSol() {
-  window.open("https://faucet.solana.com/", "_blank");
-}
