@@ -259,10 +259,7 @@ export function createSmartAccountClient(
                 );
               }
               try {
-                return client.signTypedData({
-                  typedData: JSON.parse(dataParams),
-                  account: client.account,
-                });
+                return client.signTypedData(dataParams);
               } catch {
                 throw new Error("invalid JSON data params");
               }
