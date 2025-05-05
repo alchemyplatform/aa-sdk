@@ -55,7 +55,9 @@ export type AlchemyAccountsConfig = {
   store: Store;
   _internal: {
     // if not provided, the default signer will be used
-    createSigner: (config: ClientStoreConfig) => AlchemySigner;
+    createSigner: (
+      config: ClientStoreConfig
+    ) => Promise<AlchemySigner> | AlchemySigner;
     wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;

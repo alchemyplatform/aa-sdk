@@ -24,7 +24,8 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   // If signer isn't already set, create a new signer.
   // If the createSigner function isn't provided from the config,
   const signer =
-    store.getState().signer ?? config._internal.createSigner(signerConfig);
+    store.getState().signer ??
+    (await config._internal.createSigner(signerConfig));
 
   if (!store.getState().signer) {
     store.setState({
