@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- solana nft demo ([#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578)) ([7ad9c20](https://github.com/alchemyplatform/aa-sdk/commit/7ad9c20d5c005ddaad542ba3aaf31d6d795b88f2))
+
+### Reverts
+
+- Revert "feat: solana nft demo (#1578)" (#1582) ([4691730](https://github.com/alchemyplatform/aa-sdk/commit/469173054560a558b2b705374cc484226b368cf3)), closes [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1582](https://github.com/alchemyplatform/aa-sdk/issues/1582)
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+### Features
+
+- move to use the alchemy store for web3 communication ([#1562](https://github.com/alchemyplatform/aa-sdk/issues/1562)) ([f86a815](https://github.com/alchemyplatform/aa-sdk/commit/f86a815412cb532de12a405b1cfb143da2e22b77))
+
+# [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.28.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.2...v4.28.3) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.28.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.1...v4.28.2) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.28.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.0...v4.28.1) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
+
+### Features
+
+- add mfa methods to rn-signer ([#1542](https://github.com/alchemyplatform/aa-sdk/issues/1542)) ([c41ba79](https://github.com/alchemyplatform/aa-sdk/commit/c41ba792f78fc71395df0c16bbb8184e51272981))
+
+# [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
+
+### Features
+
+- solana hooks ([#1543](https://github.com/alchemyplatform/aa-sdk/issues/1543)) ([0157185](https://github.com/alchemyplatform/aa-sdk/commit/015718534c77813e36a20323b22a83b4fbd1b260))
+
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+**Note:** Version bump only for package @account-kit/react
+
 # [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
 
 ### Features

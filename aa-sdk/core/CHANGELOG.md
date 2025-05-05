@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add erc20 to alchemyGasManagerMiddleware ([#1574](https://github.com/alchemyplatform/aa-sdk/issues/1574)) ([8a0ce97](https://github.com/alchemyplatform/aa-sdk/commit/8a0ce97d5464930a2c21db9aed9b7273d57c783f))
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.28.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.2...v4.28.3) (2025-04-25)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.28.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.1...v4.28.2) (2025-04-23)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.28.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.0...v4.28.1) (2025-04-23)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+### Features
+
+- add parsing utility, removing deferred action mode from accounts ([#1522](https://github.com/alchemyplatform/aa-sdk/issues/1522)) ([64fa835](https://github.com/alchemyplatform/aa-sdk/commit/64fa835b0976b19c7f822206549d905859155f09))
+
 # [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
 
 ### Features

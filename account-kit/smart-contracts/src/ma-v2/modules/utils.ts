@@ -213,6 +213,6 @@ export const getDefaultAllowlistModuleAddress = (chain: Chain): Address => {
     case arbitrumSepolia.id:
     case base.id:
     default:
-      return "0x0000000000002311EEE9A2B887af1F144dbb4F6e";
+      return "0x00000000003e826473a313e600b5b9b791f5a59a";
   }
 };

@@ -75,6 +75,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/core/functions/getSmartAccountClient",
       },
       {
+        text: "getSolanaConnection",
+        link: "/reference/account-kit/core/functions/getSolanaConnection",
+      },
+      {
         text: "getUser",
         link: "/reference/account-kit/core/functions/getUser",
       },
@@ -121,6 +125,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
       {
         text: "watchSmartAccountClient",
         link: "/reference/account-kit/core/functions/watchSmartAccountClient",
+      },
+      {
+        text: "watchSolanaConnection",
+        link: "/reference/account-kit/core/functions/watchSolanaConnection",
       },
       {
         text: "watchUser",

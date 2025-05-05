@@ -64,3 +64,9 @@ export type * from "./components/auth/types.js";
 export { useAuthModal } from "./hooks/useAuthModal.js";
 export { useAuthContext } from "./components/auth/context.js";
 export { Hydrate } from "./hydrate.js";
+export {
+  useSolanaTransaction,
+  type SolanaTransaction,
+} from "./hooks/useSolanaTransaction.js";
+
+export { useSolanaSignMessage } from "./hooks/useSolanaSignMessage.js";

@@ -1,0 +1,53 @@
+---
+title: Authenticating Users via Social Auth
+description: Learn how to authenticate users via social auth
+---
+
+# Authenticating Users via Social Auth
+
+<Markdown src="../../../../shared/react-native/setup-guides-snippet.mdx" />
+
+## Authenticate a User via Social Auth
+
+To authenticate a user via **social auth**, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `OAuth`, the `redirectUrl` set to your app's deep link, the `mode` set to `redirect` and the `authProviderId` set to the social auth provider you want to use.
+
+Here is an example, authenticating a user via Google:
+
+```tsx twoslash [example.tsx]
+import React from "react";
+import { View, Text, Pressable, Alert } from "react-native";
+import { useAuthenticate } from "@account-kit/react-native";
+
+function SignInWithSocialAuth() {
+  const { authenticate } = useAuthenticate();
+
+  const handleUserSignInWithGoogle = () => {
+    try {
+      authenticate({
+        type: "oauth",
+        redirectUrl: "<your-app-scheme>://<your-auth-callback-route>",
+        mode: "redirect",
+        authProviderId: "google",
+      });
+    } catch (e) {
+      Alert.alert("Error authenticating user. Check logs for more details.");
+
+      console.log("Error authenticating user: ", e);
+    }
+  };
+
+  return (
+    <View>
+      <Text>Sign In with Google</Text>
+      <Pressable onPress={handleUserSignInWithGoogle}>
+        <Text>Sign In</Text>
+      </Pressable>
+    </View>
+  );
+}
+```
+
+<Tip>
+  Ensure that you have added your app's scheme to your `Whitelisted Origins` in
+  the [Alchemy Dashboard](https://dashboard.alchemy.com/).
+</Tip>

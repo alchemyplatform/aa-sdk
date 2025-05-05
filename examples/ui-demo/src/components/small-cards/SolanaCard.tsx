@@ -1,19 +1,20 @@
 import { useToast } from "@/hooks/useToast";
-import { useSigner, useSignerStatus } from "@account-kit/react";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useSigner,
+  useSignerStatus,
+  useSolanaTransaction,
+  useSolanaSignMessage,
+} from "@account-kit/react";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { toBytes, toHex } from "viem";
+import { Hex } from "viem";
 import { LoadingIcon } from "../icons/loading";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { Button } from "./Button";
-import { createTransfer } from "./solana/createSolanaTransfer";
-import * as solanaNetwork from "./solana/solanaNetwork";
 import { Card } from "./Card";
 import Image from "next/image";
 import { Badge } from "./Badge";
-
-const connection = solanaNetwork.connect();
 
 export const SolanaCard = () => {
   const signer = useSigner();
@@ -22,78 +23,65 @@ export const SolanaCard = () => {
   const solanaSigner = useMemo(() => {
     if (!signer) return;
     if (!status.isConnected) return;
-    return signer.experimental_toSolanaSigner();
+    return signer.toSolanaSigner();
   }, [signer, status.isConnected]);
   const { setToast } = useToast();
+
+  const {
+    sendTransaction,
+    connection,
+    isPending,
+    data: { hash: txHash = null } = {},
+  } = useSolanaTransaction({
+    mutation: {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ["solanaBalance", solanaSigner?.address],
+        });
+      },
+      onError: (error: unknown) => {
+        console.log(error);
+        setToast({
+          type: "error",
+          text: "Error sending transaction",
+          open: true,
+        });
+      },
+    },
+  });
 
   const { data: balance = 0, isLoading: isBalanceLoading } = useQuery({
     queryKey: ["solanaBalance", solanaSigner?.address],
     queryFn: async () => {
       if (!solanaSigner) return 0;
+      if (!connection) return 0;
       return (
-        (await solanaNetwork.balance(connection, solanaSigner!.address)) /
+        (await connection.getBalance(new PublicKey(solanaSigner!.address))) /
         LAMPORTS_PER_SOL
       );
     },
   });
-
-  const {
-    mutate,
-    isPending,
-    data: txHash,
-  } = useMutation({
-    mutationFn: async () => {
-      if (!solanaSigner) return;
-
-      const tx = await createTransfer({
-        fromAddress: solanaSigner.address!,
-        amount: 1000000,
-        toAddress: "tkhqC9QX2gkqJtUFk2QKhBmQfFyyqZXSpr73VFRi35C",
-        version: "legacy",
-        connection,
-      });
-
-      await solanaSigner.addSignature(tx);
-      return solanaNetwork.broadcast(connection, tx);
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["solanaBalance", solanaSigner?.address],
-      });
-    },
-    onError: (error) => {
-      console.log(error);
-      setToast({
-        type: "error",
-        text: "Error sending transaction",
-        open: true,
-      });
-    },
-  });
-
   const {
     isPending: isSigningMessage,
-    mutate: signHello,
+    signMessage,
     data: signature,
+
     reset,
-  } = useMutation({
-    mutationFn: async () => {
-      if (!solanaSigner) return;
-
-      const message = "Hello";
-
-      return await solanaSigner.signMessage(toBytes(message)).then(toHex);
-    },
-    onSuccess: (signature) => {
-      console.log(`"Hello" signed with ${solanaSigner?.address}: ${signature}`);
-      setToast({
-        type: "success",
-        text: `Message signed!`,
-        open: true,
-      });
-      setTimeout(() => {
-        reset();
-      }, 2500);
+  } = useSolanaSignMessage({
+    mutation: {
+      onSuccess: (signature: Hex) => {
+        console.log(
+          `"Hello" signed with ${solanaSigner?.address}: ${signature}`
+        );
+        setToast({
+          type: "success",
+          text: `Message signed!`,
+          open: true,
+        });
+        setTimeout(() => {
+          reset();
+        }, 2500);
+      },
     },
   });
 
@@ -146,7 +134,15 @@ export const SolanaCard = () => {
             if (balance === 0) {
               window.open("https://faucet.solana.com/", "_blank");
             } else if (!txHash) {
-              mutate();
+              sendTransaction({
+                transfer: {
+                  amount: 1000000,
+                  toAddress:
+                    process.env.NEXT_PUBLIC_SOLANA_ADDRESS ||
+                    solanaSigner?.address ||
+                    "",
+                },
+              });
             } else {
               window.open(
                 `https://explorer.solana.com/tx/${txHash}?cluster=devnet`,
@@ -167,7 +163,7 @@ export const SolanaCard = () => {
           className="w-full"
           disabled={!solanaSigner || isSigningMessage}
           onClick={() => {
-            signHello();
+            signMessage({ message: "Hello" });
           }}
         >
           {isSigningMessage
@@ -183,8 +179,8 @@ export const SolanaCard = () => {
       isBalanceLoading,
       isPending,
       isSigningMessage,
-      mutate,
-      signHello,
+      signMessage,
+      sendTransaction,
       signature,
       solanaSigner,
       txHash,

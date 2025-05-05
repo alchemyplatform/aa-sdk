@@ -1,0 +1,31 @@
+---
+title: Middleware
+description: What is Middleware?
+---
+
+# Middleware
+
+The [Smart Account Client](/wallets/concepts/smart-account-client) is extended with a series of middleware. When building user operations for signing and sending, the flow can be pretty involved.
+Sending a UO requires you to get the latest nonce for an account, check if the account is deployed to set the `initCode` or `factory` and `factoryData` in the user operation, estimate fees, estimate gas, and then sign the user operation.
+If you want to use a paymaster, you need to generate some `dummyPaymasterAndData` to use during gas estimation, and after estimating gas you can request gas sponsorship from your paymaster.
+Middleware allows you to avoid having to write the same flows over and over when all you want to do is call a contract with some data or send some ETH to a destination.
+
+## Middleware order
+
+<Tip>
+  When using the [React](/wallets/react/overview),
+  [Core](/wallets/core/overview), or [Infra](/wallets/infra/overview) packages,
+  the Smart Account Clients are already configured to use the appropriate
+  middleware for your needs. If you want to sponsor gas, the Smart Account
+  Clients in these packages abstract the relevant middleware away from you since
+  all you need is a `policyId` to sponsor gas with Alchemy.
+</Tip>
+
+As mentioned above, the client can be configured with a series of middleware that always run in the same order:
+
+1. `dummyPaymasterAndData` - Generates a dummy paymaster and data for gas estimation if using a paymaster (default: noop)
+2. `feeEstimator` - Estimates the fees for a user operation. If you are using our RPCs, it's important to use the [`alchemyFeeEstimator`](/wallets/reference/account-kit/infra/functions/alchemyFeeEstimator) middleware.
+3. `gasEstimator` - Estimates the gas limits for a user operation. The default middleware calls the underlying bundler RPC to `eth_estimateUserOperationGas`.
+4. `customMiddleware` - Allows you define custom middleware to run before requesting sponsorship if there are any additional steps you need to take before requesting sponsorship. (default: noop)
+5. `paymasterAndData` - Requests a gas sponsorship from a paymaster. (default: noop)
+6. `userOperationSimulator` - Simulates a user operation to check if it will be successful. (default: noop)

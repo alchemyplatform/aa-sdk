@@ -46,6 +46,7 @@ import {
   deferralActions,
   PermissionBuilder,
   PermissionType,
+  buildDeferredActionDigest,
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
@@ -356,15 +357,16 @@ describe("MA v2 Tests", async () => {
     // Must be built with the client that's going to sign the deferred action
     // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
     const { typedData, fullPreSignatureDeferredActionDigest } =
-      await new PermissionBuilder(provider)
-        .configure({
-          key: {
-            publicKey: await sessionKey.getAddress(),
-            type: "secp256k1",
-          },
-          entityId: entityId,
-          nonce: nonce,
-        })
+      await new PermissionBuilder({
+        client: provider,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonce: nonce,
+        deadline: 0,
+      })
         .addPermission({
           permission: {
             type: PermissionType.GAS_LIMIT,
@@ -375,17 +377,13 @@ describe("MA v2 Tests", async () => {
         })
         .addPermission({
           permission: {
-            type: PermissionType.ACCOUNT_FUNCTIONS,
+            type: PermissionType.CONTRACT_ACCESS,
             data: {
-              functions: ["0xb61d27f6"], // execute selector
+              address: target,
             },
           },
         })
-        .compileDeferred({
-          deadline: 0,
-          uoValidationEntityId: entityId,
-          uoIsGlobalValidation: false,
-        });
+        .compileDeferred();
 
     // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
     const deferredValidationSig = await provider.account.signTypedData(
@@ -393,7 +391,7 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
@@ -473,21 +471,22 @@ describe("MA v2 Tests", async () => {
     // const sessionKeyEntityId = 1;
     // these can be default values or from call arguments
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      isGlobalValidation: false,
+      isGlobalValidation: false, // assumes the session key is used to sign the UO
     });
 
     // Must be built with the client that's going to sign the deferred action
     // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
     const { typedData, fullPreSignatureDeferredActionDigest } =
-      await new PermissionBuilder(provider)
-        .configure({
-          key: {
-            publicKey: await sessionKey.getAddress(),
-            type: "secp256k1",
-          },
-          entityId: entityId,
-          nonce: nonce,
-        })
+      await new PermissionBuilder({
+        client: provider,
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonce: nonce,
+        deadline: 0,
+      })
         .addPermission({
           permission: {
             type: PermissionType.ERC20_TOKEN_TRANSFER,
@@ -497,11 +496,7 @@ describe("MA v2 Tests", async () => {
             },
           },
         })
-        .compileDeferred({
-          deadline: 0,
-          uoValidationEntityId: entityId,
-          uoIsGlobalValidation: false,
-        });
+        .compileDeferred();
 
     // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
     const deferredValidationSig = await provider.account.signTypedData(
@@ -509,7 +504,7 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
@@ -612,14 +607,14 @@ describe("MA v2 Tests", async () => {
       });
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = provider.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });
 
-    // version 00, preExecHooks 00, nonce, deferredActionDigest
+    // preExecHooks 00, nonce, deferredActionDigest
     const fullDeferredAction = concatHex([
-      "0x0000",
+      "0x00",
       toHex(nonce, { size: 32 }),
       deferredActionDigest,
     ]);
@@ -710,9 +705,6 @@ describe("MA v2 Tests", async () => {
       randomWallet
     );
 
-    // Test variables
-    const isGlobalValidation = true;
-
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: true,
     });
@@ -720,25 +712,22 @@ describe("MA v2 Tests", async () => {
     // Must be built with the client that's going to sign the deferred action
     // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
     const { typedData, fullPreSignatureDeferredActionDigest } =
-      await new PermissionBuilder(sessionKeyClient)
-        .configure({
-          key: {
-            publicKey: await newSessionKey.getAddress(),
-            type: "secp256k1",
-          },
-          entityId: entityId,
-          nonce: nonce,
-        })
+      await new PermissionBuilder({
+        client: sessionKeyClient,
+        key: {
+          publicKey: await newSessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        entityId: entityId,
+        nonce: nonce,
+        deadline: 0,
+      })
         .addPermission({
           permission: {
             type: PermissionType.ROOT,
           },
         })
-        .compileDeferred({
-          deadline: 0,
-          uoValidationEntityId: entityId,
-          uoIsGlobalValidation: isGlobalValidation,
-        });
+        .compileDeferred();
 
     // Sign the typed data using the first session key
     const deferredValidationSig = await sessionKeyClient.account.signTypedData(
@@ -746,7 +735,7 @@ describe("MA v2 Tests", async () => {
     );
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = sessionKeyClient.buildDeferredActionDigest({
+    const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
       sig: deferredValidationSig,
     });

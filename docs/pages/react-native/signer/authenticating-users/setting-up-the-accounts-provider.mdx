@@ -1,0 +1,25 @@
+---
+title: Setting up the Alchemy Accounts Provider
+description: Instructions on how to properly set up and configure the Alchemy Accounts Provider for your React Native application.
+slug: wallets/react-native/signer/authenticating-users/setting-up-the-accounts-provider
+---
+
+# Setting up the Alchemy Accounts Provider
+
+<Markdown src="../../../../shared/react-native/setup-guides-snippet.mdx" />
+
+Once you have followed the [Signer Setup Guide](/wallets/react-native/signer/setup-guide), set up and configure the Alchemy Accounts Provider in your project.
+
+You can do this by wrapping the top level component (e.g. `_layout.tsx` in Expo or `App.tsx` in Bare React Native) in your app with the `AlchemyAccountsProvider` component from the `@account-kit/react-native` package.
+
+Here's an example of how to do this:
+
+<CodeBlocks>
+
+<Markdown src="../../../../shared/react-native/account-provider-setup.mdx" />
+
+</CodeBlocks>
+
+## Next Steps
+
+Now that you have set up the Alchemy Accounts Provider, you can follow the [Authentication Guides](/wallets/react-native/signer/authenticating-users/authenticating-with-otp) to learn how to authenticate users.

@@ -8,7 +8,10 @@ import {
   defaultAccountState,
 } from "./store/store.js";
 import type { AccountState, StoreState, StoredState } from "./store/types.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
+import {
+  type AlchemyAccountsConfig,
+  type SupportedAccountTypes,
+} from "./types.js";
 
 export type HydrateResult = {
   onMount: () => Promise<void>;
@@ -106,9 +109,9 @@ const hydrateAccountState = (
   shouldReconnectAccounts: boolean,
   config: AlchemyAccountsConfig
 ): StoreState["accounts"] => {
-  const chains = Array.from(config.store.getState().connections.entries()).map(
-    ([, cnx]) => cnx.chain
-  );
+  const chains = Array.from(config.store.getState().connections.entries())
+    .map(([_, cnx]) => cnx)
+    .map((cnx) => cnx.chain);
   const initialState = createDefaultAccountState(chains);
   const activeChainId = config.store.getState().chain.id;
 

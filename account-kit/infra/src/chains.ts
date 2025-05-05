@@ -21,8 +21,6 @@ import {
   arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
-  sonic as vsonic,
-  sonicTestnet as vsonict,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -237,20 +235,6 @@ export const zoraSepolia: Chain = {
   ...vzoras,
   rpcUrls: {
     ...vzoras.rpcUrls,
-  },
-};
-
-export const sonic: Chain = {
-  ...vsonic,
-  rpcUrls: {
-    ...vsonic.rpcUrls,
-  },
-};
-
-export const sonicTestnet: Chain = {
-  ...vsonict,
-  rpcUrls: {
-    ...vsonict.rpcUrls,
   },
 };
 
@@ -510,6 +494,12 @@ export const monadTestnet: Chain = defineChain({
       http: ["https://monad-testnet.g.alchemy.com/v2"],
     },
   },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://testnet.monadexplorer.com",
+    },
+  },
   testnet: true,
 });
 
@@ -597,7 +587,55 @@ export const riseTestnet: Chain = defineChain({
   blockExplorers: {
     default: {
       name: "Block Explorer",
-      url: "https://testnet-explorer.riselabs.xyz",
+      url: "https://explorer.testnet.riselabs.xyz",
+    },
+  },
+  testnet: true,
+});
+
+export const storyMainnet: Chain = defineChain({
+  id: 1514,
+  name: "Story Mainnet",
+  nativeCurrency: { name: "IP", symbol: "IP", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://story-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://story-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://story-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://www.storyscan.io",
+    },
+  },
+  testnet: false,
+});
+
+export const storyAeneid: Chain = defineChain({
+  id: 1315,
+  name: "Story Aeneid",
+  nativeCurrency: { name: "IP", symbol: "IP", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://story-aeneid.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://story-aeneid.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://story-aeneid.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://aeneid.storyscan.io",
     },
   },
   testnet: true,

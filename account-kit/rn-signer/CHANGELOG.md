@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.28.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.2...v4.28.3) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.28.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.1...v4.28.2) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.28.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.0...v4.28.1) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
+
+### Features
+
+- add mfa methods to rn-signer ([#1542](https://github.com/alchemyplatform/aa-sdk/issues/1542)) ([c41ba79](https://github.com/alchemyplatform/aa-sdk/commit/c41ba792f78fc71395df0c16bbb8184e51272981))
+
+# [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+### Bug Fixes
+
+- mfa demo ui feedback updates ([#1527](https://github.com/alchemyplatform/aa-sdk/issues/1527)) ([5caf1d9](https://github.com/alchemyplatform/aa-sdk/commit/5caf1d933c19d5023b4d62ef2784fb3d9dc53224))
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
 # [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
 
 ### Features

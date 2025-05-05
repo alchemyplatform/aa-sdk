@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add erc20 to alchemyGasManagerMiddleware ([#1574](https://github.com/alchemyplatform/aa-sdk/issues/1574)) ([8a0ce97](https://github.com/alchemyplatform/aa-sdk/commit/8a0ce97d5464930a2c21db9aed9b7273d57c783f))
+- add erc20Context to sdk ([#1561](https://github.com/alchemyplatform/aa-sdk/issues/1561)) ([56ddda0](https://github.com/alchemyplatform/aa-sdk/commit/56ddda0bcd0eb760bad607be5d3050fabc0c71e3))
+- add story mainnet and aeneid testnet ([#1580](https://github.com/alchemyplatform/aa-sdk/issues/1580)) ([dc27322](https://github.com/alchemyplatform/aa-sdk/commit/dc273221abb6818af5f911d9786e2f660b6c9f7b))
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
+
+### Features
+
+- extend alchemy transport to support wallet apis ([#1564](https://github.com/alchemyplatform/aa-sdk/issues/1564)) ([71d3e61](https://github.com/alchemyplatform/aa-sdk/commit/71d3e611f89ccb920a0ac494aa01a2b13be2982f))
+
+## [4.28.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.2...v4.28.3) (2025-04-25)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.28.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.1...v4.28.2) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.28.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.0...v4.28.1) (2025-04-23)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.28.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.27.0...v4.28.0) (2025-04-22)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.27.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.26.0...v4.27.0) (2025-04-18)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.26.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.1...v4.26.0) (2025-04-11)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.25.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.25.0...v4.25.1) (2025-04-09)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.25.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.24.0...v4.25.0) (2025-04-08)
+
+### Bug Fixes
+
+- remove the sonic export as it is not supported with aa infra yet ([#1523](https://github.com/alchemyplatform/aa-sdk/issues/1523)) ([22e6943](https://github.com/alchemyplatform/aa-sdk/commit/22e69431a8861a58b65ef3864dfa580b5c618605))
+
 # [4.24.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.23.1...v4.24.0) (2025-04-07)
 
 ### Features

@@ -4,14 +4,13 @@ import {
   InvalidEntityIdError,
   InvalidNonceKeyError,
   InvalidDeferredActionNonce,
-  InvalidDeferredActionMode,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
 } from "@aa-sdk/core";
-import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
+import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
   type Hex,
   type Address,
@@ -97,7 +96,7 @@ export type CreateMAV2BaseReturnType<
 export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
-  const {
+  let {
     transport,
     chain,
     signer,
@@ -130,29 +129,32 @@ export async function createMAv2Base<
     client,
   });
 
-  let useDeferredAction: boolean = false;
-  let nonce: bigint = 0n;
-  let deferredActionData: Hex = "0x";
+  // These default values signal that we should not use the set deferred action nonce
+  let nonce: bigint | undefined;
+  let deferredActionData: Hex | undefined;
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
-    if (deferredAction.slice(2, 4) !== "00") {
-      throw new InvalidDeferredActionMode();
-    }
+    let deferredActionNonce: bigint = 0n;
+    // We always update entity id and isGlobalValidation to the deferred action value since the client could be used to send multiple calls
+    ({
+      entityId,
+      isGlobalValidation,
+      nonce: deferredActionNonce,
+    } = parseDeferredAction(deferredAction));
+
     // Set these values if the deferred action has not been consumed. We check this with the EP
     const nextNonceForDeferredAction: bigint =
       (await entryPointContract.read.getNonce([
         accountAddress,
-        nonce >> 64n,
+        deferredActionNonce >> 64n,
       ])) as bigint;
 
-    // we only add the deferred action in if the nonce has not been consumed
-    if (nonce === nextNonceForDeferredAction) {
-      nonce = BigInt(`0x${deferredAction.slice(6, 70)}`);
-      useDeferredAction = true;
-      deferredActionData = `0x${deferredAction.slice(70)}`;
-      hasAssociatedExecHooks = deferredAction[5] === "1";
-    } else if (nonce > nextNonceForDeferredAction) {
+    if (deferredActionNonce === nextNonceForDeferredAction) {
+      ({ nonce, deferredActionData, hasAssociatedExecHooks } =
+        parseDeferredAction(deferredAction));
+    } else if (deferredActionNonce > nextNonceForDeferredAction) {
+      // if nonce is greater than the next nonce, its invalid, so we throw
       throw new InvalidDeferredActionNonce();
     }
   }
@@ -189,8 +191,10 @@ export async function createMAv2Base<
     !!(await client.getCode({ address: accountAddress }));
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
-    if (useDeferredAction) {
-      return nonce;
+    if (nonce) {
+      const tempNonce = nonce;
+      nonce = undefined; // set to falsy value once used
+      return tempNonce;
     }
 
     if (nonceKey > maxUint152) {
@@ -250,11 +254,14 @@ export async function createMAv2Base<
     const validationData = await getValidationData({
       entityId: Number(entityId),
     });
-
-    return (useDeferredAction && hasAssociatedExecHooks) ||
-      validationData.executionHooks.length
-      ? concatHex([executeUserOpSelector, callData])
-      : callData;
+    if (hasAssociatedExecHooks) {
+      hasAssociatedExecHooks = false; // set to falsy value once used
+      return concatHex([executeUserOpSelector, callData]);
+    }
+    if (validationData.executionHooks.length) {
+      return concatHex([executeUserOpSelector, callData]);
+    }
+    return callData;
   };
 
   const baseAccount = await toSmartContractAccount({

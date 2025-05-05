@@ -1,0 +1,79 @@
+---
+title: Smart Account Client
+description: What is the Smart Account Client?
+---
+
+# Smart Account Client
+
+The [`SmartAccountClient`](https://github.com/alchemyplatform/aa-sdk/blob/main/aa-sdk/core/src/account/smartContractAccount.ts#L102-L128) is an extension of `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-own-client) which allows you to interact
+with [Smart Contract Accounts](/wallets/concepts/smart-contract-account). You can use the Smart Account Client to send User Operations, sign messages with your account, sponsor gas,
+and other account-related actions.
+
+The client is also EIP-1193 compliant, meaning it can easily be swapped out in place of other web3 providers (eg. `window.ethereum`).
+
+## Account hoisting
+
+<Tip>
+  If you're using the [React](/wallets/react/overview) or
+  [Core](/wallets/core/overview) packages, the Smart Account Clients already
+  handle hoisting and creation of account instances. The [Smart
+  Contracts](/wallets/smart-contracts/overview) package exports client
+  definitions for hoisted instances of the Smart Contract Accounts.
+</Tip>
+
+When creating a Smart Account Client, you have two options:
+
+1. You can pass an account instance directly into the client constructor. Doing so will use that account for all of the actions you perform with the client, and you won't have to
+   pass in the account each time you call a method. This is known as **"account hoisting"**.
+2. You can create a client without passing in an account. As a result, you'll have to pass in an account instance to each method you call on the client. This is really useful if you
+   want to manage multiple instances of an account in your app, and want to use one client for all of them.
+
+Let's see an example:
+
+```ts twoslash
+import {
+  createAlchemySmartAccountClient,
+  sepolia,
+  alchemy,
+} from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { http } from "viem";
+import { generatePrivateKey } from "viem/accounts";
+
+// with account hoisting
+const transport = alchemy({ apiKey: "your-api-key" });
+const hoistedClient = createAlchemySmartAccountClient({
+  transport,
+  chain: sepolia,
+  account: await createLightAccount({
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+    chain: sepolia,
+    transport,
+  }),
+});
+
+const signature = await hoistedClient.signMessage({ message: "Hello world! " });
+
+// without account hoisting
+const nonHoistedClient = createAlchemySmartAccountClient({
+  transport,
+  chain: sepolia,
+});
+
+const lightAccount = await createLightAccount({
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  chain: sepolia,
+  transport,
+});
+
+const signature2 = await nonHoistedClient.signMessage({
+  message: "Hello world! ",
+  account: lightAccount,
+});
+```
+
+## Smart Account Client actions
+
+Because the Smart Account Clients are extensions of viem's clients, they support extensions via the `.extend` method. The base client already includes a [number of actions](https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x/aa-sdk/core/src/actions/smartAccount) by default.
+You can find additional details about these actions in the [`@aa-sdk/core` documentation](/wallets/reference/aa-sdk/core).
