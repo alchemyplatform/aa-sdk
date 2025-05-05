@@ -5,6 +5,7 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
+  TransactionInstruction,
 } from "@solana/web3.js";
 
 import {
@@ -76,82 +77,41 @@ export const SolanaNftCard = () => {
       if (!connection) throw new Error("No connection found");
       setTransactionState("signing");
       setTransactionState("sponsoring");
-      const stakeAccount = Keypair.generate();
-      const publicKey = new PublicKey(solanaSigner.address);
-      const metaData: (readonly [string, string])[] = [
-        ["SampleData", "ChangeMe"],
-      ];
-      const tokenMetadata: TokenMetadata = {
-        updateAuthority: publicKey,
-        mint: stakeAccount.publicKey,
-        name: "Alchemy Duck",
-        symbol: "ALCHDUCK",
-        uri: "https://bafybeigtvzjqalevyw67xdhr7am5r3jxe5kjbg4pi2jv3nxvhelptwksoe.ipfs.dweb.link?filename=duckImage.png",
-        additionalMetadata: metaData,
-      };
-      const decimals = 6;
-      const mintLen = getMintLen([ExtensionType.MetadataPointer]);
-      const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
-      const mintLamports = await connection.getMinimumBalanceForRentExemption(
-        mintLen + metadataLen
+
+      const duckProgramId = new PublicKey(
+        "duckptkvZCZbnssqEQUSHEkzhL9Gb7mFmsmip3JrNf8"
       );
 
-      const mint = stakeAccount.publicKey;
+      // Derive PDA for poke_state
+      const [pokeStatePda] = await PublicKey.findProgramAddressSync(
+        [Buffer.from("poke_state")],
+        duckProgramId
+      );
+      const instruction = new TransactionInstruction({
+        programId: duckProgramId,
+        keys: [{ pubkey: pokeStatePda, isSigner: false, isWritable: true }],
+        data: Buffer.from([]), // poke() has no arguments, so empty buffer
+      });
       const tx = await sendTransactionAsync({
         transactionComponents: {
-          preSend: async (transaction) => {
-            if ("version" in transaction) {
-              transaction.sign([stakeAccount]);
-            }
-            return signers.fromSigner(transaction);
-          },
+          // Don't do signing, just use the fee payer? Other signing fails
+          preSend: (transaction) => transaction,
         },
-        instructions: [
-          SystemProgram.createAccount({
-            fromPubkey: publicKey,
-            newAccountPubkey: mint,
-            space: mintLen,
-            lamports: mintLamports,
-            programId: TOKEN_2022_PROGRAM_ID,
-          }),
-          createInitializeMetadataPointerInstruction(
-            mint,
-            publicKey,
-            mint,
-            TOKEN_2022_PROGRAM_ID
-          ),
-          createInitializeMintInstruction(
-            mint,
-            decimals,
-            publicKey,
-            null,
-            TOKEN_2022_PROGRAM_ID
-          ),
-          createInitializeInstruction({
-            programId: TOKEN_2022_PROGRAM_ID,
-            metadata: mint,
-            updateAuthority: publicKey,
-            mint: mint,
-            mintAuthority: publicKey,
-            name: tokenMetadata.name,
-            symbol: tokenMetadata.symbol,
-            uri: tokenMetadata.uri,
-          }),
-          ...metaData.map(([key, value]) =>
-            createUpdateFieldInstruction({
-              programId: TOKEN_2022_PROGRAM_ID,
-              metadata: mint,
-              updateAuthority: publicKey,
-              field: key,
-              value: value,
-            })
-          ),
-        ],
+        instructions: [instruction],
+      });
+      console.log({
+        programId: duckProgramId.toBase58(),
+        keys: instruction.keys.map((key) => key.pubkey.toBase58()),
+        isSigner: instruction.keys[0].isSigner,
+        isWritable: instruction.keys[0].isWritable,
+        data: instruction.data.toString("hex"),
+        dataLength: instruction.data.length,
+        keysLength: instruction.keys.length,
+        programIdLength: duckProgramId.toBase58().length,
       });
 
       console.log(`Created transaction: ${tx.hash} 
       https://explorer.solana.com/tx/${tx.hash}?cluster=devnet 
-      https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
     `);
 
       setTransactionState("complete");
