@@ -228,24 +228,24 @@ export const SolanaNftCard = () => {
     </>
   );
 
-  const nextButton =
-    balance < 0.05 ? (
-      <Button className="mt-auto w-full" onClick={fundSol}>
-        Get SOL
-      </Button>
-    ) : (
-      <Button
-        className="mt-auto w-full"
-        onClick={handleCollectNFT}
-        disabled={!solanaSigner || isPending}
-      >
-        {transactionState === "idle"
-          ? "Collect NFT"
-          : transactionState === "complete"
-          ? "Re-collect NFT"
-          : "Collecting NFT..."}
-      </Button>
-    );
+  const nextButton = (
+    // balance < 0.05 ? (
+    //   <Button className="mt-auto w-full" onClick={fundSol}>
+    //     Get SOL
+    //   </Button>
+    // ) :
+    <Button
+      className="mt-auto w-full"
+      onClick={handleCollectNFT}
+      disabled={!solanaSigner || isPending}
+    >
+      {transactionState === "idle"
+        ? "Collect NFT"
+        : transactionState === "complete"
+        ? "Re-collect NFT"
+        : "Collecting NFT..."}
+    </Button>
+  );
 
   return (
     <Card
