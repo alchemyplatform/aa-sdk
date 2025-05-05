@@ -11,6 +11,14 @@ export function useNewUserSignup(onSignup: () => void, enabled?: boolean) {
     });
     return stopListening;
   }, [signer]);
+
+  useEffect(() => {
+    const stopListening = signer?.on("disconnected", () => {
+      hasHandled.current = false;
+    });
+    return stopListening;
+  }, [signer]);
+
   useEffect(() => {
     if (!enabled) return;
     if (!signer) return;

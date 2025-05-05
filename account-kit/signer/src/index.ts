@@ -6,7 +6,11 @@ export {
   OauthFailedError,
 } from "./client/index.js";
 export type * from "./client/types.js";
-export { NotAuthenticatedError, OAuthProvidersError } from "./errors.js";
+export {
+  NotAuthenticatedError,
+  OAuthProvidersError,
+  MfaRequiredError,
+} from "./errors.js";
 export {
   DEFAULT_SESSION_MS,
   SessionManagerParamsSchema,
@@ -16,3 +20,4 @@ export { AlchemyWebSigner } from "./signer.js";
 export type * from "./solanaSigner.js";
 export type * from "./types.js";
 export { AlchemySignerStatus } from "./types.js";
+export { SolanaSigner } from "./solanaSigner.js";

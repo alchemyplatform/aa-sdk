@@ -23,10 +23,10 @@ import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
   AlchemySigner,
-  Connection,
   SupportedAccount,
   SupportedAccounts,
   SupportedAccountTypes,
+  Connection,
 } from "../types";
 import { createAccount, isModularV2AccountParams } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";

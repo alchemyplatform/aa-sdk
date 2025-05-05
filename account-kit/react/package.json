@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.20.0",
+  "version": "4.31.1",
   "description": "React components and hooks for using Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -57,6 +57,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react --fern",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
@@ -70,6 +71,7 @@
     "@storybook/test": "^8.5.3",
     "@storybook/testing-library": "^0.2.2",
     "@tanstack/react-query": "^5.28.9",
+    "@types/bs58": "^4.0.4",
     "autoprefixer": "^10.4.20",
     "msw": "^2.4.4",
     "msw-storybook-addon": "^2.0.4",
@@ -82,13 +84,15 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@account-kit/core": "^4.20.0",
-    "@account-kit/infra": "^4.20.0",
-    "@account-kit/logging": "^4.20.0",
-    "@account-kit/signer": "^4.20.0",
+    "@account-kit/core": "^4.31.1",
+    "@account-kit/infra": "^4.31.1",
+    "@account-kit/logging": "^4.31.1",
+    "@account-kit/signer": "^4.31.1",
+    "@solana/web3.js": "^1.98.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
     "@wagmi/connectors": "^5.1.15",
+    "bs58": "^6.0.0",
     "react-remove-scroll": "^2.5.10",
     "tailwindcss": "^3.4.3",
     "zod": "^3.22.4",

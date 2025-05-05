@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/infra",
-  "version": "4.20.0",
+  "version": "4.31.1",
   "description": "adapters for @aa-sdk/core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -35,6 +35,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/infra",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/infra --fern",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"
@@ -45,8 +46,8 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.20.0",
-    "@account-kit/logging": "^4.20.0",
+    "@aa-sdk/core": "^4.31.1",
+    "@account-kit/logging": "^4.31.1",
     "eventemitter3": "^5.0.1",
     "zod": "^3.22.4"
   },

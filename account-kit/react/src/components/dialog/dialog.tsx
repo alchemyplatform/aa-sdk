@@ -77,7 +77,7 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
           <div
             aria-modal
             role="dialog"
-            className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] transition-opacity ${
+            className={`fixed inset-0 backdrop-blur-sm bg-black/30 flex items-end md:items-center justify-center z-[999999] transition-opacity ${
               isOpen ? "opacity-100" : "opacity-0 delay-75"
             }`}
             onClick={handleBackgroundClick}

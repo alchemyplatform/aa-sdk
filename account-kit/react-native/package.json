@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react-native",
-  "version": "4.20.0",
+  "version": "4.31.1",
   "description": "React Native Components and Hooks for using Account Kit",
   "license": "MIT",
   "author": "Alchemy",
@@ -30,6 +30,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react-native",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react-native --fern",
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
@@ -39,11 +40,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/core": "^4.20.0",
-    "@account-kit/infra": "^4.20.0",
-    "@account-kit/react": "^4.20.0",
-    "@account-kit/react-native-signer": "^4.20.0",
-    "@account-kit/signer": "^4.20.0",
+    "@account-kit/core": "^4.31.1",
+    "@account-kit/infra": "^4.31.1",
+    "@account-kit/react": "^4.31.1",
+    "@account-kit/react-native-signer": "^4.31.1",
+    "@account-kit/signer": "^4.31.1",
     "@noble/hashes": "1.7.1",
     "crypto-browserify": "^3.12.1",
     "node-libs-react-native": "^1.2.1",

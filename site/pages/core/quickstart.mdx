@@ -49,6 +49,59 @@ this package use.
 // [!include ~/shared/core/config.ts]
 ```
 
+## Watch and Hydrate
+
+The next step is to hydrate the account state, which will trigger `watchSmartAccountClient`, which call `getSigner` in its callback. This is crucial for ensuring that the signer is properly defined and ready.
+
+If the client state is undefined, `hydrate(config)` is called to initialize the smart account client, updating the store with the necessary data (e.g., accounts, signer, chain).
+This triggers a state update, which in turn calls the callback in `watchSmartAccountClient`.
+Once the state is populated, the callback is executed, and the client data (such as signer status and accounts) becomes available.
+Now, you can safely call `getSigner(config)` to access the signer, as the store state is now ready.
+Without calling `hydrate`, the store might not be properly initialized, causing `getSigner` to return undefined.
+
+To break it down:
+
+- `watchSmartAccountClient` subscribes to state changes and invokes the callback whenever the smart account client's state is updated.
+
+- `hydrate` is responsible for setting up the store and initializing the client.
+- `onMount` performs actions that need to happen only after the client-side component has been mounted and the component is fully ready and rendered.
+
+```ts twoslash [example.ts]
+import { config } from "./config.ts";
+import { hydrate, watchSmartAccountClient, getSigner } from "@account-kit/core";
+
+// How you actually store this state variable
+// depends on the framework you're using
+let clientState;
+
+// The watch smart account client will handle all the possible state changes that can impact this client:
+//  - Signer status
+//  - Account instantiation
+//  - Chain changes
+const clientSubscription = watchSmartAccountClient(
+  {
+    type: "LightAccount",
+  },
+  config
+)((clientState_) => {
+  clientState = clientState_;
+
+  const signer = getSigner(config);
+
+  if (!signer) {
+    throw new Error("No signer found");
+  }
+
+  console.log("signer ready", signer);
+});
+
+if (clientState == null || clientState.isLoadingClient) {
+  console.log("Loading...");
+  const { onMount } = hydrate(config);
+  onMount();
+}
+```
+
 ## Authenticate the user
 
 Before you can create a Smart Account instance for your users, you need to authenticate them with the user. Depending on what framework you're using this will look different, but using

@@ -58,6 +58,10 @@ export const signerSidebar: SidebarItem[] = [
         link: "/signer/authentication/passkey-login",
       },
       { text: "Add passkey", link: "/signer/authentication/add-passkey" },
+      {
+        text: "Multi-factor authentication",
+        link: "/signer/authentication/mfa",
+      },
     ],
   },
   {

@@ -304,6 +304,15 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         ],
       },
       {
+        text: "InvalidDeferredActionNonce",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidDeferredActionNonce/constructor",
+          },
+        ],
+      },
+      {
         text: "InvalidEntityIdError",
         items: [
           {
@@ -451,6 +460,31 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
           {
             text: "constructor",
             link: "/reference/aa-sdk/core/classes/SmartAccountWithSignerRequiredError/constructor",
+          },
+        ],
+      },
+      {
+        text: "TraceHeader",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/TraceHeader/constructor",
+          },
+          {
+            text: "default",
+            link: "/reference/aa-sdk/core/classes/TraceHeader/default",
+          },
+          {
+            text: "fromTraceHeader",
+            link: "/reference/aa-sdk/core/classes/TraceHeader/fromTraceHeader",
+          },
+          {
+            text: "toTraceHeader",
+            link: "/reference/aa-sdk/core/classes/TraceHeader/toTraceHeader",
+          },
+          {
+            text: "withEvent",
+            link: "/reference/aa-sdk/core/classes/TraceHeader/withEvent",
           },
         ],
       },

@@ -1,0 +1,35 @@
+---
+title: Passkey Signup
+description: Authenticate a new user using a passkey
+---
+
+# Passkey Signup
+
+It is possible to create wallets for users using just a passkey. This is useful for creating wallets for users if you don't want to go through the email OTP or magic link flow.
+
+<Markdown src="../../../shared/passkey-email-warning.mdx" />
+
+## Authenticate a user with email and passkey
+
+If you want to allow sign-up and login with a passkey, you can ask the user for an email to associate with their passkey. This way, they can log in with their email or passkey in the future. Under the hood, the email is also used to check if an account exists already so you can have a unified sign-up and login flow.
+
+<Error>
+  It's important that you validate this email before creating an account for the
+  user. This is to prevent users from losing access to their wallets if they
+  lose their device.
+</Error>
+
+<CodeBlocks>
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const result = await signer.authenticate({
+  type: "passkey",
+  email: "user@mail.com",
+});
+```
+
+<Markdown src="../../../shared/signer/signer.mdx" />
+
+</CodeBlocks>

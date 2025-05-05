@@ -1,0 +1,108 @@
+---
+outline: deep
+title: Export Private Key
+description: Learn how to enable a user to export their private key with the Alchemy Signer
+---
+
+# Export private key
+
+The Alchemy Signer allows you to export a user's private key, allowing them a right to exit at any time. It is considered a best practice to allow your users to export their private key, as it gives them full control over their account. The private key export method does not rely on Alchemy's infrastructure, so even if Alchemy is down, a user can still export their private key.
+
+## Using [useExportAccount](/wallets/reference/account-kit/react/hooks/useExportAccount)
+
+A hook use to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
+
+### Import
+
+```ts
+import { useExportAccount } from "@account-kit/react";
+```
+
+### Usage
+
+```ts
+import { useExportAccount } from "@account-kit/react";
+
+const {
+  exportAccount,
+  isExported,
+  isExporting,
+  error,
+  ExportAccountComponent,
+} = useExportAccount({
+  params: {
+    iframeContainerId: "my-iframe-container",
+  },
+});
+```
+
+## Using the signer
+
+To add export private key functionality to your app, you can use the `exportPrivateKey` method on the signer.
+
+<CodeBlocks>
+
+```tsx twoslash [ExportPrivateKey.tsx]
+import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import { signer } from "./signer";
+
+const TurnkeyExportWalletContainerId = "turnkey-export-wallet-container-id";
+const TurnkeyExportWalletElementId = "turnkey-export-wallet-element-id";
+
+// This allows us to style the embedded iframe
+const iframeCss = `
+iframe {
+    box-sizing: border-box;
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(216, 219, 227, 1);
+    padding: 20px;
+}
+`;
+
+export const ExportPrivateKeyView = () => {
+  // we are using react-query to handle loading states more easily, but feel free to use w/e state management library you prefer
+  const {
+    mutate: exportWallet,
+    isLoading,
+    data,
+  } = useMutation({
+    mutationFn: () =>
+      signer.exportWallet({
+        iframeContainerId: TurnkeyExportWalletContainerId,
+        iframeElementId: TurnkeyExportWalletElementId,
+      }),
+  });
+
+  // Once the user clicks the button, a request will be sent to initialize private key export
+  // once the request is complete, the iframe will be rendered with either
+  // 1. the private key if the user is logged in with a passkey
+  // 2. the seed phrase if the user is logged in with email
+  return (
+    <div className="flex flex-col gap-2">
+      {!data ? (
+        <button onClick={() => exportWallet()} disabled={isLoading}>
+          Export Wallet
+        </button>
+      ) : (
+        <strong>Seed Phrase</strong>
+      )}
+      <div
+        className="w-full"
+        style={{ display: !data ? "none" : "block" }}
+        id={TurnkeyExportWalletContainerId}
+      >
+        <style>{iframeCss}</style>
+      </div>
+    </div>
+  );
+};
+```
+
+<Markdown src="../../shared/signer/signer.mdx" />
+
+</CodeBlocks>
