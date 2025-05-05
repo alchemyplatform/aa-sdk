@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+### Bug Fixes
+
+- make eth_signTypedData_v4 compliant w/ EIP1193 ([#1444](https://github.com/alchemyplatform/aa-sdk/issues/1444)) ([#1445](https://github.com/alchemyplatform/aa-sdk/issues/1445)) ([301d3b7](https://github.com/alchemyplatform/aa-sdk/commit/301d3b7e824466fa5c23fef19cb4427afc562524))
+
 # [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
 
 ### Features
