@@ -6,6 +6,7 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
+  TransactionInstruction,
 } from "@solana/web3.js";
 import { sol } from "@metaplex-foundation/umi";
 import {
@@ -54,7 +55,6 @@ export const SolanaNftCard = () => {
     isPending,
     connection,
     signer: solanaSigner,
-    signers,
   } = useSolanaTransaction();
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
@@ -104,7 +104,7 @@ export const SolanaNftCard = () => {
             if ("version" in transaction) {
               transaction.sign([stakeAccount]);
             }
-            return signers.fromSigner(transaction);
+            return transaction;
           },
         },
         instructions: [

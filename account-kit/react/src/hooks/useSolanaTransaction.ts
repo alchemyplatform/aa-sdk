@@ -65,10 +65,6 @@ export interface SolanaTransaction {
   readonly isPending: boolean;
   /** The error that occurred */
   readonly error: Error | null;
-  /** The signers that can be used to sign the transaction */
-  signers: Record<string, PreSend>;
-  /** The map of transform instructions that can be used to transform the instructions */
-  mapTransformInstructions: Record<string, TransformInstruction>;
   reset(): void;
   /** Send the transaction */
   sendTransaction(params: SolanaTransactionParams): void;
@@ -124,7 +120,7 @@ export function useSolanaTransaction(
   const mutation = useMutation({
     mutationFn: async ({
       transactionComponents: {
-        preSend = signers.fromSigner,
+        preSend,
         transformInstruction = mapTransformInstructions.default,
       } = {},
       ...params
@@ -144,7 +140,16 @@ export function useSolanaTransaction(
       let transaction: VersionedTransaction | Transaction =
         await transformInstruction(instructions);
 
-      transaction = await preSend(transaction);
+      transaction = (await preSend?.(transaction)) || transaction;
+
+      if (
+        "message" in transaction &&
+        transaction.message.staticAccountKeys.find(
+          (key) => key.toBase58() === signer?.address
+        )
+      ) {
+        await signer?.addSignature(transaction);
+      }
 
       const hash = await solanaNetwork.broadcast(
         connection || missing("connection"),
@@ -154,12 +159,6 @@ export function useSolanaTransaction(
     },
     ...opts.mutation,
   });
-  const signers: Record<string, PreSend> = {
-    async fromSigner(t) {
-      await signer?.addSignature(t);
-      return t;
-    },
-  };
   const signer: null | SolanaSigner = opts?.signer || fallbackSigner;
   const connection = opts?.connection || backupConnection?.connection || null;
   const policyId =
@@ -188,8 +187,6 @@ export function useSolanaTransaction(
   return {
     connection,
     signer,
-    signers,
-    mapTransformInstructions,
     ...mutation,
     sendTransaction: mutation.mutate,
     sendTransactionAsync: mutation.mutateAsync,
