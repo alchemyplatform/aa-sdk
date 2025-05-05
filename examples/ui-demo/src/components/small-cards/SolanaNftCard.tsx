@@ -5,7 +5,6 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
-  VersionedTransaction,
 } from "@solana/web3.js";
 
 import {
