@@ -177,9 +177,14 @@ export const SolanaNftCard = () => {
       if (!publicKey) throw new Error("No public key found");
       const umi = createUmi(new Connection("https://api.devnet.solana.com"));
       await umi.rpc.airdrop(publicKey as any, sol(0.5));
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       await queryClient.invalidateQueries({
         queryKey: ["solanaBalance", solanaSigner?.address],
+      });
+      setToast({
+        type: "success",
+        text: "Funded SOL",
+        open: true,
       });
     } catch (error) {
       console.log(error);
