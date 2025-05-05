@@ -417,7 +417,7 @@ const generateSignedPermit = async <
         args: [],
       }),
     });
-    let decimals = 10n ** (data ? BigInt(data) : 18n);
+    const decimals = 10n ** (data ? BigInt(data) : 18n);
     maxAmountToken = policyToken.maxTokenAmount * decimals;
   }
   const paymasterData = await (client as Erc7677Client).request({
