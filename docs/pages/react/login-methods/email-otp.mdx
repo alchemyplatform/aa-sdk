@@ -124,20 +124,19 @@ const handleSendCode = (email: string) => {
 Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
 
 ```tsx twoslash
-import { useEffect } from "react";
 import { useSignerStatus } from "@account-kit/react";
 import { AlchemySignerStatus } from "@account-kit/signer";
 
-const trackingStatus = () => {
+const TrackStatus = () => {
   const { status } = useSignerStatus();
 
-  useEffect(() => {
-    if (status === AlchemySignerStatus.AWAITING_EMAIL_AUTH) {
-      // Show your OTP input UI
-    }
-  }, [status]);
-
-  return null;
+  return (
+    <>
+      {status === AlchemySignerStatus.AWAITING_EMAIL_AUTH && (
+        <div>Prompt the user to enter the OTP code</div>
+      )}
+    </>
+  );
 };
 ```
 
