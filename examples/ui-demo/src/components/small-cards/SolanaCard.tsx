@@ -14,7 +14,6 @@ import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import Image from "next/image";
-import { Badge } from "./Badge";
 
 export const SolanaCard = () => {
   const signer = useSigner();
@@ -189,7 +188,6 @@ export const SolanaCard = () => {
 
   return (
     <Card
-      badgeSlot={<Badge text="New!" className="text-[#F3F3FF] bg-[#16A34A]" />}
       imageSlot={imageSlot}
       heading="Solana wallets"
       content={content}
