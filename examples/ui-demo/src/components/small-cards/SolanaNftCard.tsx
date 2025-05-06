@@ -1,6 +1,12 @@
 import { useToast } from "@/hooks/useToast";
 import { useSolanaTransaction } from "@account-kit/react";
-import { Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
+import {
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  VersionedTransaction,
+  Transaction,
+} from "@solana/web3.js";
 import {
   ExtensionType,
   LENGTH_SIZE,
@@ -134,12 +140,8 @@ export const SolanaNftCard = () => {
       });
     }
 
-    function addStakeSignature(
-      stakeAccount: Keypair
-    ):
-      | import("/Users/jade/projects/aa-sdk/account-kit/react/dist/types/hooks/useSolanaTransaction").PreSend
-      | undefined {
-      return async (transaction) => {
+    function addStakeSignature(stakeAccount: Keypair) {
+      return async (transaction: Transaction | VersionedTransaction) => {
         if ("version" in transaction) transaction.sign([stakeAccount]);
 
         return transaction;
