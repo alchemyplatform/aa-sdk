@@ -9,6 +9,7 @@ import {
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
+  type SmartContractAccount,
 } from "@aa-sdk/core";
 import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
@@ -27,6 +28,8 @@ import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
 import { nativeSMASigner } from "../nativeSMASigner.js";
 import { singleSignerMessageSigner } from "../../modules/single-signer-validation/signer.js";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
+import { webauthnSigningFunctions } from "../../modules/webauthn-validation/signer.js";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
 
@@ -70,9 +73,24 @@ export type ModularAccountV2<
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
 
+export type ModularAccountV2NoSigner = SmartContractAccount<
+  "ModularAccountV2",
+  "0.7.0"
+> & {
+  params: ToWebAuthnAccountParameters;
+  signerEntity: SignerEntity;
+  getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
+  getValidationData: (
+    args: ValidationDataParams
+  ) => Promise<ValidationDataView>;
+  encodeCallData: (callData: Hex) => Promise<Hex>;
+};
+
 export type CreateMAV2BaseParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
+  TTransport extends Transport = Transport
 > = Omit<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   // Implements the following methods required by `toSmartContractAccount`, and passes through any other parameters.
@@ -95,13 +113,27 @@ export type CreateMAV2BaseReturnType<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Promise<ModularAccountV2<TSigner>>;
 
+export type CreateMAV2BaseReturnTypeNoSigner = ModularAccountV2NoSigner;
+
+// function overload
+export async function createMAv2Base(
+  config: Omit<CreateMAV2BaseParams, "signer"> & {
+    params: ToWebAuthnAccountParameters;
+  }
+): Promise<CreateMAV2BaseReturnTypeNoSigner>;
+
 export async function createMAv2Base<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
->(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(config: CreateMAV2BaseParams): CreateMAV2BaseReturnType<TSigner>;
+
+export async function createMAv2Base<
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(
+  config: CreateMAV2BaseParams<TSigner> | Omit<CreateMAV2BaseParams, "signer">
+): Promise<CreateMAV2BaseReturnTypeNoSigner | ModularAccountV2<TSigner>> {
   let {
     transport,
     chain,
-    signer,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     signerEntity = {
       isGlobalValidation: true,
@@ -115,6 +147,11 @@ export async function createMAv2Base<
     deferredAction,
     ...remainingToSmartContractAccountParams
   } = config;
+
+  const { signer = undefined } = config as CreateMAV2BaseParams<TSigner>; // this may fail if signer is not provided
+
+  const { params = undefined } =
+    config as unknown as CreateMAV2BaseReturnTypeNoSigner;
 
   if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
@@ -275,16 +312,35 @@ export async function createMAv2Base<
     encodeExecute,
     encodeBatchExecute,
     getNonce,
-    ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
-      : singleSignerMessageSigner(
-          signer,
+    ...(signer
+      ? entityId === DEFAULT_OWNER_ENTITY_ID
+        ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
+        : singleSignerMessageSigner(
+            signer,
+            chain,
+            accountAddress,
+            entityId,
+            deferredActionData
+          )
+      : webauthnSigningFunctions(
+          // TO DO: integrate with the webAuthn signer
+          params as ToWebAuthnAccountParameters,
           chain,
           accountAddress,
           entityId,
           deferredActionData,
         )),
   });
+
+  if (!signer) {
+    return {
+      ...baseAccount,
+      signerEntity,
+      getExecutionData,
+      getValidationData,
+      encodeCallData,
+    } as ModularAccountV2NoSigner; // TO DO: figure out when this breaks! we shouldn't have to cast
+  }
 
   return {
     ...baseAccount,
@@ -293,5 +349,5 @@ export async function createMAv2Base<
     getExecutionData,
     getValidationData,
     encodeCallData,
-  };
+  } as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
 }
