@@ -171,7 +171,7 @@ export const SolanaNftCard = () => {
       />
       <Stage
         icon={getIcon(transactionState, ["complete"])}
-        description="Sponsoring gas..."
+        description="Sponsoring gas and rent..."
       />
       <Stage
         icon={getIcon(transactionState, ["complete"])}
