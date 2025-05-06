@@ -1,7 +1,6 @@
 import { useToast } from "@/hooks/useToast";
 import { useSolanaTransaction } from "@account-kit/react";
 import { Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
-import { sol } from "@metaplex-foundation/umi";
 import {
   ExtensionType,
   LENGTH_SIZE,
@@ -21,22 +20,10 @@ import Image from "next/image";
 import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
 import { useState } from "react";
-import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { ExternalLinkIcon } from "lucide-react";
+import { Stage } from "./Stage";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
-const states = [
-  {
-    state: "signing",
-    text: "Signing transaction...",
-    isCompleteStates: ["complete", "sponsoring"],
-  },
-  {
-    state: "sponsoring",
-    text: "Sponsoring gas & minting NFT...",
-    isCompleteStates: ["complete"],
-  },
-];
 export const SolanaNftCard = () => {
   const { setToast } = useToast();
   const {
@@ -172,32 +159,36 @@ export const SolanaNftCard = () => {
     </div>
   );
 
-  const goToTransaction = tx?.hash && (
-    <a
-      href={`https://explorer.solana.com/tx/${tx.hash}?cluster=devnet`}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="View transaction"
-    >
-      <ExternalLinkIcon className="stroke-fg-secondary w-4 h-4" />
-    </a>
-  );
+  const transactionUrl =
+    tx?.hash && `https://explorer.solana.com/tx/${tx.hash}?cluster=devnet`;
   const renderTransactionStates = (
     <div className="flex flex-col gap-3">
-      {states.map(({ state, text, isCompleteStates }, stateIndex) => {
-        const isComplete = isCompleteStates.includes(transactionState);
-        return (
-          <div key={state} className="flex items-center gap-2">
-            {isComplete && (
-              <CheckCircleFilledIcon className="h-4 w-4 fill-demo-surface-success" />
+      <Stage
+        icon={getIcon(transactionState, ["complete", "sponsoring"])}
+        description="Signing transaction..."
+      />
+      <Stage
+        icon={getIcon(transactionState, ["complete"])}
+        description="Sponsoring gas..."
+      />
+      <Stage
+        icon={getIcon(transactionState, ["complete"])}
+        description={
+          <span className="flex gap-3 justify-between">
+            Deploying NFT...
+            {transactionUrl && (
+              <a
+                href={transactionUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="View transaction"
+              >
+                <ExternalLinkIcon className="stroke-fg-secondary w-4 h-4" />
+              </a>
             )}
-            {!isComplete && <LoadingIcon className="h-4 w-4" />}
-            <p className="text-sm text-fg-secondary">
-              {text} {stateIndex === states.length - 1 && goToTransaction}
-            </p>
-          </div>
-        );
-      })}
+          </span>
+        }
+      />
     </div>
   );
   const renderIdleContent = (
@@ -252,3 +243,12 @@ export const SolanaNftCard = () => {
     />
   );
 };
+
+function getIcon(state: TransactionState, loadingStates: TransactionState[]) {
+  if (!loadingStates.includes(state)) {
+    return <LoadingIcon className="h-4 w-4" />;
+  }
+  return (
+    <CheckCircleFilledIcon className=" h-4 w-4 fill-demo-surface-success" />
+  );
+}
