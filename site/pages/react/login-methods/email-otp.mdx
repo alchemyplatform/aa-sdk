@@ -111,7 +111,8 @@ const handleSendCode = (email: string) => {
     },
     {
       onSuccess: () => {
-        // Success - now show the OTP input form
+        // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+        // It still runs even if the final step completes in another tab/window.
       },
       onError: (error) => {
         // Handle error
@@ -121,7 +122,28 @@ const handleSendCode = (email: string) => {
 };
 ```
 
-### Step 2: Verify the OTP
+### Step 2: Track Authentication Status to know when to show the OTP input form
+
+Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
+
+```tsx twoslash
+import { useSignerStatus } from "@account-kit/react";
+import { AlchemySignerStatus } from "@account-kit/signer";
+
+const trackingStatus = () => {
+  const { status } = useSignerStatus();
+
+  useEffect(() => {
+    if (status === AlchemySignerStatus.AWAITING_EMAIL_AUTH) {
+      // Show your OTP input UI
+    }
+  }, [status]);
+
+  return null;
+};
+```
+
+### Step 3: Verify the OTP
 
 Once the user receives the code, they'll enter it in your application:
 
@@ -140,7 +162,8 @@ const handleVerifyCode = (otpCode: string) => {
     },
     {
       onSuccess: () => {
-        // Authentication successful!
+        // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+        // It still runs even if the final step completes in another tab/window.
       },
       onError: (error) => {
         // Handle invalid code error
@@ -150,7 +173,7 @@ const handleVerifyCode = (otpCode: string) => {
 };
 ```
 
-### Step 3: Track Authentication Status
+### Step 4: Check authentication status
 
 Use the `useSignerStatus` hook to determine if the user is authenticated:
 

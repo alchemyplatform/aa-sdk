@@ -113,7 +113,8 @@ const handleSendMagicLink = (email: string) => {
     },
     {
       onSuccess: () => {
-        // Success - inform user to check their email
+        // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+        // It still runs even if the final step completes in another tab/window.
       },
       onError: (error) => {
         // Handle error

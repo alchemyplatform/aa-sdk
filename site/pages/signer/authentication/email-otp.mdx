@@ -19,6 +19,7 @@ For setting up an account config, see the [Signer Quickstart](/signer/quickstart
 import { signer } from "./signer";
 
 // send the email
+// resolves when the user is fully authenticated (OTP + optional MFA), even if final step completes in another tab/window
 await signer.authenticate({
   type: "email",
   emailMode: "otp",
@@ -26,9 +27,39 @@ await signer.authenticate({
 });
 
 // later once the user has entered the code from their email
+// resolves when the user is fully authenticated (OTP + optional MFA), even if final step completes in another tab/window
 await signer.authenticate({
   type: "otp",
   otpCode: "123456",
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+### Track Authentication Status
+
+Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to OTP/MFA prompts and completion:
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+import { AlchemySignerStatus } from "@account-kit/signer";
+
+signer.on("statusChanged", (status) => {
+  switch (status) {
+    case AlchemySignerStatus.AWAITING_EMAIL_AUTH:
+      // show OTP input UI
+      break;
+    case AlchemySignerStatus.AWAITING_MFA_AUTH:
+      // show TOTP input UI
+      break;
+    case AlchemySignerStatus.CONNECTED:
+      // authentication complete
+      break;
+  }
 });
 ```
 
