@@ -127,6 +127,7 @@ const handleSendCode = (email: string) => {
 Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
 
 ```tsx twoslash
+import { useEffect } from "react";
 import { useSignerStatus } from "@account-kit/react";
 import { AlchemySignerStatus } from "@account-kit/signer";
 
