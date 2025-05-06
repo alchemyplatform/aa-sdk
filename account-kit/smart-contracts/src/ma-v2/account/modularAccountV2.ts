@@ -31,37 +31,6 @@ import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
 import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 
-// export type CreateModularAccountV2Params<
-//   TTransport extends Transport = Transport,
-//   TSigner extends SmartAccountSigner | undefined =
-//     | SmartAccountSigner
-//     | undefined
-// > = Pick<
-//   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
-//   "transport" | "chain" | "accountAddress"
-// > & {
-//   entryPoint?: EntryPointDef<"0.7.0", Chain>;
-//   deferredAction?: Hex;
-//   signerEntity?: SignerEntity;
-// } & ([TSigner] extends [undefined]
-//     ? {
-//         mode: "webauthn";
-//         signer?: never;
-//         params: ToWebAuthnAccountParameters;
-//       }
-//     :
-//         | {
-//             mode?: "default";
-//             salt?: bigint;
-//             factoryAddress?: Address;
-//             initCode?: Hex;
-//             signer: TSigner;
-//           }
-//         | {
-//             mode: "7702";
-//             signer: TSigner;
-//           });
-
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
