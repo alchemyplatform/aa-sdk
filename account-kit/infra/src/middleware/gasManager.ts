@@ -405,8 +405,21 @@ const generateSignedPermit = async <
   if (!policyToken.erc20Name || !policyToken.version) {
     throw new Error("erc20Name or version is missing");
   }
-  // get a paymaster address
-  const maxAmountToken = policyToken.maxTokenAmount || maxUint256;
+
+  let maxAmountToken = maxUint256;
+
+  if (policyToken.maxTokenAmount) {
+    let { data } = await client.call({
+      to: policyToken.address,
+      data: encodeFunctionData({
+        abi: parseAbi(EIP712NoncesAbi),
+        functionName: "decimals",
+        args: [],
+      }),
+    });
+    const decimals = 10n ** (data ? BigInt(data) : 18n);
+    maxAmountToken = policyToken.maxTokenAmount * decimals;
+  }
   const paymasterData = await (client as Erc7677Client).request({
     method: "pm_getPaymasterStubData",
     params: [
