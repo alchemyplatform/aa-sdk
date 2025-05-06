@@ -6,7 +6,6 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
-  TransactionInstruction,
 } from "@solana/web3.js";
 import { sol } from "@metaplex-foundation/umi";
 import {
@@ -70,7 +69,6 @@ export const SolanaNftCard = () => {
       );
     },
   });
-
   const handleCollectNFT = async () => {
     try {
       if (!solanaSigner) throw new Error("No signer found");
@@ -155,6 +153,11 @@ export const SolanaNftCard = () => {
       https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
     `);
 
+      setToast({
+        type: "success",
+        text: "Transaction sent",
+        open: true,
+      });
       setTransactionState("complete");
     } catch (error) {
       console.log(error);

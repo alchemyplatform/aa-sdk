@@ -125,40 +125,54 @@ export function useSolanaTransaction(
       } = {},
       ...params
     }: SolanaTransactionParams) => {
-      const instructions =
-        "instructions" in params
-          ? params.instructions
-          : [
-              SystemProgram.transfer({
-                fromPubkey: new PublicKey(
-                  signer?.address || missing("signer.address")
-                ),
-                toPubkey: new PublicKey(params.transfer.toAddress),
-                lamports: params.transfer.amount,
-              }),
-            ];
+      const instructions = getInstructions();
       let transaction: VersionedTransaction | Transaction =
         await transformInstruction(instructions);
 
       transaction = (await preSend?.(transaction)) || transaction;
 
-      if (
-        "message" in transaction
-          ? transaction.message.staticAccountKeys.some(
-              (key) => key.toBase58() === signer?.address
-            )
-          : transaction.instructions.some((x) =>
-              x.keys.some((x) => x.pubkey.toBase58() === signer?.address)
-            )
-      ) {
+      if (needsSignerToSign()) {
         await signer?.addSignature(transaction);
       }
 
-      const hash = await solanaNetwork.broadcast(
-        connection || missing("connection"),
-        transaction
-      );
+      const localConnection = connection || missing("connection");
+      const hash = await solanaNetwork.broadcast(localConnection, transaction);
       return { hash };
+
+      function getInstructions() {
+        if ("instructions" in params) {
+          return params.instructions;
+        }
+        return [
+          SystemProgram.transfer({
+            fromPubkey: new PublicKey(
+              signer?.address || missing("signer.address")
+            ),
+            toPubkey: new PublicKey(params.transfer.toAddress),
+            lamports: params.transfer.amount,
+          }),
+        ];
+      }
+
+      function needsSignerToSign() {
+        if ("message" in transaction) {
+          const message = transaction.message;
+          return message.staticAccountKeys.some(
+            (key, index) =>
+              (() => {
+                debugger;
+                return false;
+              })() ||
+              (key.toBase58() === signer?.address &&
+                message?.isAccountSigner(index))
+          );
+        }
+        return transaction.instructions.some((x) =>
+          x.keys.some(
+            (x) => x.pubkey.toBase58() === signer?.address && x.isSigner
+          )
+        );
+      }
     },
     ...opts.mutation,
   });
