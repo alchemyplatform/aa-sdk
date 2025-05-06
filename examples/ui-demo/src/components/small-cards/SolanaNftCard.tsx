@@ -21,7 +21,7 @@ import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
 import { useState } from "react";
 import { ExternalLinkIcon } from "lucide-react";
-import { Stage } from "./Stage";
+import { Stage } from "./Stage.js";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
 export const SolanaNftCard = () => {

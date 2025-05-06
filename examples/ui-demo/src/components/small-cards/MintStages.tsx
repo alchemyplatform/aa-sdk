@@ -3,7 +3,7 @@ import { LoadingIcon } from "@/components/icons/loading";
 import { loadingState } from "./Transactions";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { MintStatus } from "../small-cards/MintCard";
-import { Stage } from "./Stage";
+import { Stage } from "./Stage.js";
 
 export const MintStages = ({
   status,
