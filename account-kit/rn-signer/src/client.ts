@@ -5,11 +5,12 @@ import "./utils/mmkv-localstorage-polyfill.js";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
-  OauthFailedError,
   MfaRequiredError,
+  OauthFailedError,
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
   type CreateAccountParams,
+  type CredentialCreationOptionOverrides,
   type EmailAuthParams,
   type GetWebAuthnAttestationResult,
   type MfaFactor,
@@ -17,15 +18,21 @@ import {
   type OauthParams,
   type OtpParams,
   type SignupResponse,
-  type User,
   type SubmitOtpCodeResponse,
+  type User,
 } from "@account-kit/signer";
+import {
+  AuthenticatorTransport,
+  createPasskey,
+  PasskeyStamper,
+} from "@turnkey/react-native-passkey-stamper";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
 import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper.js";
-import { parseSearchParams } from "./utils/parseUrlParams";
+import { base64UrlEncode } from "./utils/base64UrlEncode.js";
 import { parseMfaError } from "./utils/parseMfaError";
+import { parseSearchParams } from "./utils/parseUrlParams";
 
 export const RNSignerClientParamsSchema = z.object({
   connection: z.custom<ConnectionConfig>(),
@@ -34,6 +41,13 @@ export const RNSignerClientParamsSchema = z.object({
     .string()
     .optional()
     .default("https://signer.alchemy.com/callback"),
+  // TODO: make this required in v5
+  rp: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .optional(),
 });
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
@@ -41,6 +55,10 @@ export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
+  private webauthnStamper: PasskeyStamper;
+  private rpId: string;
+  private rpName: string;
+
   oauthCallbackUrl: string;
   private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
     "email",
@@ -49,7 +67,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   ];
 
   constructor(params: RNSignerClientParams) {
-    const { connection, rootOrgId, oauthCallbackUrl } =
+    const { connection, rootOrgId, oauthCallbackUrl, rp } =
       RNSignerClientParamsSchema.parse(params);
 
     super({
@@ -57,6 +75,12 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       rootOrgId: rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830",
       connection,
     });
+
+    this.webauthnStamper = new PasskeyStamper({
+      rpId: rp?.id ?? "localhost",
+    });
+    this.rpId = rp?.id ?? "localhost";
+    this.rpName = rp?.name ?? "localhost";
 
     this.oauthCallbackUrl = oauthCallbackUrl;
   }
@@ -101,23 +125,47 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   override async createAccount(
     params: CreateAccountParams
   ): Promise<SignupResponse> {
-    if (params.type !== "email") {
-      throw new Error("Only email account creation is supported");
+    // TODO: this implementation looks exactly the same as the one for web now
+    if (params.type === "email") {
+      this.eventEmitter.emit("authenticating", { type: "email" });
+      const { email, expirationSeconds } = params;
+      const publicKey = await this.stamper.init();
+
+      const response = await this.request("/v1/signup", {
+        email,
+        targetPublicKey: publicKey,
+        expirationSeconds,
+        redirectParams: params.redirectParams?.toString(),
+      });
+
+      return response;
     }
 
-    this.eventEmitter.emit("authenticating", { type: "email" });
-    const { email, expirationSeconds } = params;
-    const publicKey = await this.stamper.init();
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
+    // Passkey account creation flow
+    const { attestation, challenge } = await this.getWebAuthnAttestation(
+      params.creationOpts,
+      { username: "email" in params ? params.email : params.username }
+    );
 
-    const response = await this.request("/v1/signup", {
-      email,
-      emailMode: params.emailMode,
-      targetPublicKey: publicKey,
-      expirationSeconds,
-      redirectParams: params.redirectParams?.toString(),
+    const result = await this.request("/v1/signup", {
+      passkey: {
+        challenge: base64UrlEncode(challenge),
+        attestation,
+      },
+      email: "email" in params ? params.email : undefined,
     });
 
-    return response;
+    this.user = {
+      orgId: result.orgId,
+      address: result.address!,
+      userId: result.userId!,
+      credentialId: attestation.credentialId,
+    };
+    this.initWebauthnStamper(this.user);
+    this.eventEmitter.emit("connectedPasskey", this.user);
+
+    return result;
   }
 
   override async initEmailAuth(
@@ -246,19 +294,55 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   override exportWallet(_params: unknown): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  override lookupUserWithPasskey(_user?: User): Promise<User> {
-    throw new Error("Method not implemented.");
+  override async lookupUserWithPasskey(user?: User): Promise<User> {
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
+    this.initWebauthnStamper(user);
+    if (user) {
+      this.user = user;
+      this.eventEmitter.emit("connectedPasskey", user);
+      return user;
+    }
+
+    const result = await this.whoami(this.rootOrg);
+    this.initWebauthnStamper(result);
+    this.eventEmitter.emit("connectedPasskey", result);
+
+    return result;
   }
 
   override targetPublicKey(): Promise<string> {
     return this.stamper.init();
   }
 
-  protected override getWebAuthnAttestation(
-    _options: CredentialCreationOptions,
-    _userDetails?: { username: string }
+  protected override async getWebAuthnAttestation(
+    options?: CredentialCreationOptionOverrides,
+    userDetails: { username: string } = {
+      username: this.user?.email ?? "anonymous",
+    }
   ): Promise<GetWebAuthnAttestationResult> {
-    throw new Error("Method not implemented.");
+    const authenticatorUserId = generateRandomBuffer();
+    const challenge = generateRandomBuffer();
+
+    const foo = await createPasskey({
+      authenticatorName: "End-User Passkey",
+      challenge: Buffer.from(challenge).toString("base64"),
+      rp: {
+        id: this.rpId,
+        name: this.rpName,
+        ...options?.publicKey?.rp,
+      },
+      user: {
+        id: Buffer.from(authenticatorUserId).toString("base64"),
+        name: userDetails?.username,
+        displayName: userDetails?.username,
+      },
+    });
+
+    return {
+      attestation: foo.attestation,
+      authenticatorUserId,
+      challenge,
+    };
   }
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
@@ -267,4 +351,27 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
+
+  private initWebauthnStamper = (user: User | undefined = this.user) => {
+    this.setStamper(this.webauthnStamper);
+    if (user && user.credentialId) {
+      // The goal here is to allow us to cache the allowed credential, but this doesn't work with hybrid transport :(
+      this.webauthnStamper.allowCredentials = [
+        {
+          id: user.credentialId,
+          type: "public-key",
+          transports: [
+            AuthenticatorTransport.internal,
+            AuthenticatorTransport.hybrid,
+          ],
+        },
+      ];
+    }
+  };
 }
+
+const generateRandomBuffer = (): ArrayBuffer => {
+  const arr = new Uint8Array(32);
+  crypto.getRandomValues(arr);
+  return arr.buffer;
+};

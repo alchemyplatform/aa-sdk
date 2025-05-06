@@ -7346,10 +7346,24 @@
     "@turnkey/encoding" "0.1.0"
     sha256-uint8array "^0.10.7"
 
+"@turnkey/api-key-stamper@0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.5.tgz#a5b75297d38ef20ac5d0891732ee342955ec64b5"
+  integrity sha512-8UeYt/2WtMrK2uSFzjiRXdCVc9SmKlMVuA4f1Z+SlxcsW0wlEpNM/7bd8N4VVVAjoE8Yy50Vhk3ylfQFtlaKsQ==
+  dependencies:
+    "@noble/curves" "^1.3.0"
+    "@turnkey/encoding" "0.4.0"
+    sha256-uint8array "^0.10.7"
+
 "@turnkey/encoding@0.1.0":
   version "0.1.0"
   resolved "https://registry.npmjs.org/@turnkey/encoding/-/encoding-0.1.0.tgz"
   integrity sha512-aLmLrWtvV1k9UyGzuzMpBFdwleCH8VpzXIriusVMrFLiQp+4uHCS9cwrEG1glg3207ewWFDtvgj31qLoJS29pg==
+
+"@turnkey/encoding@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.4.0.tgz#9d06efe6447322bcc9eb4d51b48961054a3c102d"
+  integrity sha512-ptLgcpWVt34KTPx0omF2QLJrosW6I//clCJ4G2+yngYFCzrdR0yBchV/BOcfME67mK1v3MmauyXl9AAnQTmB4Q==
 
 "@turnkey/http@2.7.1", "@turnkey/http@^2.6.2":
   version "2.7.1"
@@ -7361,10 +7375,31 @@
     "@turnkey/webauthn-stamper" "0.5.0"
     cross-fetch "^3.1.5"
 
+"@turnkey/http@3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-3.2.0.tgz#265efa0e3cbb483ec2412fddc6b0b8c9a4fcb85a"
+  integrity sha512-O8VbAyHqzdVEEJ0/h3BKng1AM6AC+IpHwOhDEnX0LIFdp5ny+9aMwI44jzIugXcmIWKSEAH3JYvTuKIT4vsFwA==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.5"
+    "@turnkey/encoding" "0.4.0"
+    "@turnkey/webauthn-stamper" "0.5.0"
+    cross-fetch "^3.1.5"
+
 "@turnkey/iframe-stamper@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@turnkey/iframe-stamper/-/iframe-stamper-1.0.0.tgz"
   integrity sha512-hdHrqNQMO2YtmyF06qNsFWB+CF/0SfmZb5P7e8F8YaSkQUYfGGuwl7ld8SIml6ZEAmw9xl2aypbUMRm1/juIpA==
+
+"@turnkey/react-native-passkey-stamper@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@turnkey/react-native-passkey-stamper/-/react-native-passkey-stamper-1.0.12.tgz#16ebd43414c5b72dd66cf2ec48b8cd68c25b28d8"
+  integrity sha512-XsOi6gN1UtKBwKoD1kaOSb0lLqg9a24sMLMYVeAGDVTKC7N+KuVwSiOYGsCY2bnu+HKh25Khy5/9UZBvhrEsvw==
+  dependencies:
+    "@turnkey/encoding" "0.4.0"
+    "@turnkey/http" "3.2.0"
+    buffer "^6.0.3"
+    react-native-passkey "^3.0.0"
+    sha256-uint8array "^0.10.7"
 
 "@turnkey/viem@^0.4.8":
   version "0.4.10"
@@ -22642,6 +22677,11 @@ react-native-mmkv@3.1.0, react-native-mmkv@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/react-native-mmkv/-/react-native-mmkv-3.1.0.tgz#4b2c321cf11bde2f9da32acf76e0178ecd332ccc"
   integrity sha512-HDh89nYVSufHMweZ3TVNUHQp2lsEh1ApaoV08bUOU1nrlmGgC3I7tGUn1Uy40Hs7yRMPKx5NWKE5Dh86jTVrwg==
+
+react-native-passkey@^3.0.0, react-native-passkey@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-passkey/-/react-native-passkey-3.1.0.tgz#26617ed0cc115c6037e2537d264955d852395168"
+  integrity sha512-qOJ0q7AqbUOGXDOObcfiOJo1BOnG+lIQMEgltgeqmyMC+2XDlr7YrOQZgLwZbXheGC7BXPpwMSev/gxkgbt3xw==
 
 react-native-randombytes@^3.5.1:
   version "3.6.1"
