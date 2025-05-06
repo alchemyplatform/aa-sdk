@@ -17,21 +17,33 @@ import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { PromiseOrValue } from "../../../../aa-sdk/core/dist/types/types.js";
 
+/** Used right before we send the transaction out, this is going to be the signer. */
 export type PreSend = (
-  transaction: VersionedTransaction | Transaction,
-  next: PreSend
+  this: void,
+  transaction: VersionedTransaction | Transaction
 ) => PromiseOrValue<VersionedTransaction | Transaction>;
+/**
+ * Used in the sendTransaction, will transform either the instructions (or the transfer -> instructions) into a transaction
+ */
+export type TransformInstruction = (
+  this: void,
+  instructions: TransactionInstruction[]
+) => PromiseOrValue<Transaction | VersionedTransaction>;
+export type SolanaTransactionParamOptions = {
+  preSend?: PreSend;
+  transformInstruction?: TransformInstruction;
+};
 export type SolanaTransactionParams =
   | {
       transfer: {
         amount: number;
         toAddress: string;
       };
-      preSend?: PreSend;
+      transactionComponents?: SolanaTransactionParamOptions;
     }
   | {
       instructions: TransactionInstruction[];
-      preSend?: PreSend;
+      transactionComponents?: SolanaTransactionParamOptions;
     };
 /**
  * We wanted to make sure that this will be using the same useMutation that the
@@ -106,39 +118,88 @@ export function useSolanaTransaction(
     () => getSolanaConnection(config)
   );
   const mutation = useMutation({
-    mutationFn: async (params: SolanaTransactionParams) => {
-      if (!signer) throw new Error("Not ready");
-      if (!connection) throw new Error("Not ready");
-      const instructions =
-        "instructions" in params
-          ? params.instructions
-          : [
-              SystemProgram.transfer({
-                fromPubkey: new PublicKey(signer.address),
-                toPubkey: new PublicKey(params.transfer.toAddress),
-                lamports: params.transfer.amount,
-              }),
-            ];
-      const policyId =
-        "policyId" in opts ? opts.policyId : backupConnection?.policyId;
-      let transaction: VersionedTransaction | Transaction = policyId
-        ? await signer.addSponsorship(instructions, connection, policyId)
-        : await signer.createTransfer(instructions, connection);
+    mutationFn: async ({
+      transactionComponents: {
+        preSend,
+        transformInstruction = mapTransformInstructions.default,
+      } = {},
+      ...params
+    }: SolanaTransactionParams) => {
+      const instructions = getInstructions();
+      let transaction: VersionedTransaction | Transaction =
+        await transformInstruction(instructions);
 
-      const iSign: PreSend = async (t) => {
-        await signer.addSignature(t);
-        return t;
-      };
-      const preSend = params.preSend || iSign;
-      transaction = await preSend(transaction, iSign);
+      transaction = (await preSend?.(transaction)) || transaction;
 
-      const hash = await solanaNetwork.broadcast(connection, transaction);
+      if (needsSignerToSign()) {
+        await signer?.addSignature(transaction);
+      }
+
+      const localConnection = connection || missing("connection");
+      const hash = await solanaNetwork.broadcast(localConnection, transaction);
       return { hash };
+
+      function getInstructions() {
+        if ("instructions" in params) {
+          return params.instructions;
+        }
+        return [
+          SystemProgram.transfer({
+            fromPubkey: new PublicKey(
+              signer?.address || missing("signer.address")
+            ),
+            toPubkey: new PublicKey(params.transfer.toAddress),
+            lamports: params.transfer.amount,
+          }),
+        ];
+      }
+
+      function needsSignerToSign() {
+        if ("message" in transaction) {
+          const message = transaction.message;
+          return message.staticAccountKeys.some(
+            (key, index) =>
+              (() => {
+                debugger;
+                return false;
+              })() ||
+              (key.toBase58() === signer?.address &&
+                message?.isAccountSigner(index))
+          );
+        }
+        return transaction.instructions.some((x) =>
+          x.keys.some(
+            (x) => x.pubkey.toBase58() === signer?.address && x.isSigner
+          )
+        );
+      }
     },
     ...opts.mutation,
   });
   const signer: null | SolanaSigner = opts?.signer || fallbackSigner;
   const connection = opts?.connection || backupConnection?.connection || null;
+  const policyId =
+    "policyId" in opts ? opts.policyId : backupConnection?.policyId;
+  const mapTransformInstructions: Record<string, TransformInstruction> = {
+    async addSponsorship(instructions: TransactionInstruction[]) {
+      return await (signer || missing("signer")).addSponsorship(
+        instructions,
+        connection || missing("connection"),
+        policyId || missing("policyId")
+      );
+    },
+    async createTransfer(instructions: TransactionInstruction[]) {
+      return await (signer || missing("signer")).createTransfer(
+        instructions,
+        connection || missing("connection")
+      );
+    },
+    get default() {
+      return policyId
+        ? mapTransformInstructions.addSponsorship
+        : mapTransformInstructions.createTransfer;
+    },
+  };
 
   return {
     connection,
@@ -147,4 +208,8 @@ export function useSolanaTransaction(
     sendTransaction: mutation.mutate,
     sendTransactionAsync: mutation.mutateAsync,
   };
+}
+
+function missing(message: string): never {
+  throw new Error(message);
 }

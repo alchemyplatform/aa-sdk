@@ -32,9 +32,6 @@ import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { ExternalLinkIcon } from "lucide-react";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
-async function PK<T>(t: T) {
-  return t;
-}
 
 const states = [
   {
@@ -72,7 +69,6 @@ export const SolanaNftCard = () => {
       );
     },
   });
-
   const handleCollectNFT = async () => {
     try {
       if (!solanaSigner) throw new Error("No signer found");
@@ -101,12 +97,13 @@ export const SolanaNftCard = () => {
 
       const mint = stakeAccount.publicKey;
       const tx = await sendTransactionAsync({
-        preSend: async (transaction, next) => {
-          if ("version" in transaction) {
-            transaction.sign([stakeAccount]);
-          } else {
-          }
-          return next(transaction, PK);
+        transactionComponents: {
+          preSend: async (transaction) => {
+            if ("version" in transaction) {
+              transaction.sign([stakeAccount]);
+            }
+            return transaction;
+          },
         },
         instructions: [
           SystemProgram.createAccount({
@@ -156,6 +153,11 @@ export const SolanaNftCard = () => {
       https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
     `);
 
+      setToast({
+        type: "success",
+        text: "Transaction sent",
+        open: true,
+      });
       setTransactionState("complete");
     } catch (error) {
       console.log(error);
