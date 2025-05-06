@@ -19,7 +19,8 @@ For setting up an account config, see the [Signer Quickstart](/signer/quickstart
 import { signer } from "./signer";
 
 // send the email
-// resolves when the user is fully authenticated (OTP + optional MFA), even if final step completes in another tab/window
+// Promise resolves when the user is fully authenticated (OTP + optional MFA),
+// even if final step completes in another tab/window
 await signer.authenticate({
   type: "email",
   emailMode: "otp",
@@ -27,7 +28,9 @@ await signer.authenticate({
 });
 
 // later once the user has entered the code from their email
-// resolves when the user is fully authenticated (OTP + optional MFA), even if final step completes in another tab/window
+
+// Promise resolves when the user is fully authenticated (OTP + optional MFA),
+// even if final step completes in another tab/window
 await signer.authenticate({
   type: "otp",
   otpCode: "123456",
@@ -43,6 +46,8 @@ await signer.authenticate({
 ### Track Authentication Status
 
 Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to OTP/MFA prompts and completion:
+
+:::code-group
 
 ```ts twoslash [example.ts]
 import { signer } from "./signer";

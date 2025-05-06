@@ -20,7 +20,8 @@ Email OTP authentication allows you to log in and sign up users using an email a
 import { signer } from "./signer";
 
 // send the email
-// resolves when the user is fully authenticated (OTP + optional MFA), even if final step completes in another tab/window
+// Promise resolves when the user is fully authenticated (OTP + optional MFA),
+// even if final step completes in another tab/window
 await signer.authenticate({
   type: "email",
   emailMode: "otp",
@@ -28,7 +29,8 @@ await signer.authenticate({
 });
 
 // later once the user has entered the code from their email
-// resolves when the user is fully authenticated (OTP + optional MFA), even if final step completes in another tab/window
+// Promise resolves when the user is fully authenticated (OTP + optional MFA),
+// even if final step completes in another tab/window
 await signer.authenticate({
   type: "otp",
   otpCode: "123456",

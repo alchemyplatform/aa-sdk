@@ -56,6 +56,8 @@ await signer.authenticate({
 
 Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to magic link/MFA prompts and completion:
 
+:::code-group
+
 ```ts twoslash [example.ts]
 import { signer } from "./signer";
 import { AlchemySignerStatus } from "@account-kit/signer";
