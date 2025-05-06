@@ -24,8 +24,41 @@ import {
   type SignerEntity,
   type ModularAccountV2,
   createMAv2Base,
+  type ModularAccountV2NoSigner,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
+
+// export type CreateModularAccountV2Params<
+//   TTransport extends Transport = Transport,
+//   TSigner extends SmartAccountSigner | undefined =
+//     | SmartAccountSigner
+//     | undefined
+// > = Pick<
+//   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
+//   "transport" | "chain" | "accountAddress"
+// > & {
+//   entryPoint?: EntryPointDef<"0.7.0", Chain>;
+//   deferredAction?: Hex;
+//   signerEntity?: SignerEntity;
+// } & ([TSigner] extends [undefined]
+//     ? {
+//         mode: "webauthn";
+//         signer?: never;
+//         params: ToWebAuthnAccountParameters;
+//       }
+//     :
+//         | {
+//             mode?: "default";
+//             salt?: bigint;
+//             factoryAddress?: Address;
+//             initCode?: Hex;
+//             signer: TSigner;
+//           }
+//         | {
+//             mode: "7702";
+//             signer: TSigner;
+//           });
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
@@ -51,12 +84,32 @@ export type CreateModularAccountV2Params<
       }
   );
 
+// currently the only ModularAccountV2 mode that doesn't require a signer is "webauthn"
+export type CreateModularAccountV2ParamsNoSigner<
+  TTransport extends Transport = Transport
+> = Pick<
+  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
+  "transport" | "chain" | "accountAddress"
+> & {
+  mode: "webauthn";
+  params: ToWebAuthnAccountParameters;
+  entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  deferredAction?: Hex;
+  signerEntity?: SignerEntity;
+};
+
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   config: CreateModularAccountV2Params<TTransport, TSigner>
 ): Promise<ModularAccountV2<TSigner>>;
+
+export async function createModularAccountV2<
+  TTransport extends Transport = Transport
+>(
+  config: CreateModularAccountV2ParamsNoSigner<TTransport>
+): Promise<ModularAccountV2NoSigner>;
 
 /**
  * Creates a ModularAccount V2 account, with the mode depending on the provided "mode" field.
@@ -87,38 +140,69 @@ export async function createModularAccountV2<
  * });
  * ```
  *
- * @param {CreateModularAccountV2Params} config Configuration parameters for creating a Modular Account V2.
- * @returns {Promise<ModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
+ * @param {CreateModularAccountV2Params | CreateModularAccountV2ParamsNoSigner} config Configuration parameters for creating a Modular Account V2.
+ * @returns {Promise<ModularAccountV2 | ModularAccountV2NoSigner>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
  */
-export async function createModularAccountV2(
-  config: CreateModularAccountV2Params
-): Promise<ModularAccountV2> {
+export async function createModularAccountV2<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(
+  config:
+    | CreateModularAccountV2Params<TTransport, TSigner>
+    | CreateModularAccountV2ParamsNoSigner<TTransport>
+): Promise<ModularAccountV2<TSigner> | ModularAccountV2NoSigner> {
   const {
     transport,
     chain,
-    signer,
     accountAddress: _accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     signerEntity = {
       isGlobalValidation: true,
       entityId: DEFAULT_OWNER_ENTITY_ID,
     },
-    signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
     deferredAction,
   } = config;
+
+  const { signer = undefined } = config as CreateModularAccountV2Params; // this may fail if signer is not provided
+
+  const { params = undefined } =
+    config as unknown as CreateModularAccountV2ParamsNoSigner;
 
   const client = createBundlerClient({
     transport,
     chain,
   });
 
+  const { isGlobalValidation, entityId } = signerEntity;
+
   const accountFunctions = await (async () => {
     switch (config.mode) {
+      case "webauthn": {
+        // TO DO: replace with correct values for webauthn
+        const getAccountInitCode = async (): Promise<Hex> => {
+          return "0x";
+        };
+        const signerAddress = "0x";
+        const accountAddress = _accountAddress ?? signerAddress;
+        if (
+          entityId === DEFAULT_OWNER_ENTITY_ID &&
+          signerAddress !== accountAddress
+        ) {
+          throw new EntityIdOverrideError();
+        }
+        const implementation: Address = "0x";
+        const getImplementationAddress = async () => implementation;
+        return {
+          getAccountInitCode,
+          accountAddress,
+          getImplementationAddress,
+        };
+      }
       case "7702": {
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
         };
-        const signerAddress = await signer.getAddress();
+        const signerAddress = await signer!.getAddress(); // TO DO: guarantee signer exists here without use of `!`
         const accountAddress = _accountAddress ?? signerAddress;
         if (
           entityId === DEFAULT_OWNER_ENTITY_ID &&
@@ -156,7 +240,7 @@ export async function createModularAccountV2(
             encodeFunctionData({
               abi: accountFactoryAbi,
               functionName: "createSemiModularAccount",
-              args: [await signer.getAddress(), salt],
+              args: [await signer!.getAddress(), salt], // TO DO: guarantee signer exists here without use of `!`
             }),
           ]);
         };
@@ -178,8 +262,21 @@ export async function createModularAccountV2(
     }
   })();
 
+  if (!signer) {
+    return createMAv2Base({
+      source: "ModularAccountV2", // TO DO: remove need to pass in source?
+      transport,
+      chain,
+      entryPoint,
+      signerEntity,
+      deferredAction,
+      params: params as ToWebAuthnAccountParameters, // this may fail if params is not provided
+      ...accountFunctions,
+    }) as unknown as ModularAccountV2NoSigner; // TO DO: figure out when this breaks! we shouldn't have to cast
+  }
+
   return createMAv2Base({
-    source: "ModularAccountV2",
+    source: "ModularAccountV2", // TO DO: remove need to pass in source?
     transport,
     chain,
     signer,
@@ -187,7 +284,7 @@ export async function createModularAccountV2(
     signerEntity,
     deferredAction,
     ...accountFunctions,
-  });
+  }) as unknown as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
 }
 
 // If we add more valid modes, the switch case branch's mode will no longer be `never`, which will cause a compile time error here and ensure we handle the new type.
