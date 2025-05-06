@@ -106,7 +106,8 @@ function MagicLinkWithMFA() {
       },
       {
         onSuccess: () => {
-          // This callback will only fire after the user has clicked the magic link and the email has been verified
+          // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+          // It still runs even if the final step completes in another tab/window.
         },
         onError: (error) => {
           // Handle error
@@ -145,7 +146,8 @@ function MagicLinkRedirect() {
       },
       {
         onSuccess: () => {
-          // Authentication successful!
+          // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+          // It still runs even if the final step completes in another tab/window.
         },
         onError: (error) => {
           // Handle error
