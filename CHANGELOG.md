@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+### Bug Fixes
+
+- eip1193 compatible eth_signTypedData_v4 calls + ethers compatibility ([#1592](https://github.com/alchemyplatform/aa-sdk/issues/1592)) ([838a4fa](https://github.com/alchemyplatform/aa-sdk/commit/838a4fa5c94b78fd476f2c7ef8702ffc89c29cfa))
+- use rawtoken for permit, token value for erc20Context ([#1591](https://github.com/alchemyplatform/aa-sdk/issues/1591)) ([78f6728](https://github.com/alchemyplatform/aa-sdk/commit/78f67289ed52787b3038a10ef9e813872071524c))
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+### Bug Fixes
+
+- make eth_signTypedData_v4 compliant w/ EIP1193 ([#1444](https://github.com/alchemyplatform/aa-sdk/issues/1444)) ([#1445](https://github.com/alchemyplatform/aa-sdk/issues/1445)) ([301d3b7](https://github.com/alchemyplatform/aa-sdk/commit/301d3b7e824466fa5c23fef19cb4427afc562524))
+
 # [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
 
 ### Features

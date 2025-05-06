@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+### Bug Fixes
+
+- use rawtoken for permit, token value for erc20Context ([#1591](https://github.com/alchemyplatform/aa-sdk/issues/1591)) ([78f6728](https://github.com/alchemyplatform/aa-sdk/commit/78f67289ed52787b3038a10ef9e813872071524c))
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/infra
+
 # [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
 
 ### Features

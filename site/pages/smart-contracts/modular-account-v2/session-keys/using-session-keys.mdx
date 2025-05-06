@@ -27,7 +27,7 @@ const client = await createModularAccountV2Client({
 
 let sessionKeyEntityId = 1;
 const sessionKeySigner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+  LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 
 const sessionKeyClient = await createModularAccountV2Client({
   chain: sepolia,

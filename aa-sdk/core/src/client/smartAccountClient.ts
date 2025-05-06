@@ -258,7 +258,17 @@ export function createSmartAccountClient(
                   "cannot sign for address that is not the current account"
                 );
               }
-              return client.signTypedData(dataParams);
+              try {
+                return client.signTypedData({
+                  account: client.account,
+                  typedData:
+                    typeof dataParams === "string"
+                      ? JSON.parse(dataParams)
+                      : dataParams,
+                });
+              } catch {
+                throw new Error("invalid JSON data params");
+              }
             }
             case "eth_chainId":
               if (!opts.chain) {
