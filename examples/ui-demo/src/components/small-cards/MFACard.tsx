@@ -30,11 +30,6 @@ export function MFACard() {
           <ThreeStarsIcon className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
         </div>
       }
-      badgeSlot={
-        <p className="px-2 py-1 font-semibold rounded-md text-xs text-[#7c3AED] bg-[#F3F3FF]">
-          New!
-        </p>
-      }
       heading={
         <div className="flex items-center justify-between flex-col sm:flex-row">
           <h3 className="text-fg-primary xl:text-xl font-semibold mb-2 xl:mb-3 self-start">
