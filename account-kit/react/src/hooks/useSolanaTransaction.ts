@@ -159,12 +159,8 @@ export function useSolanaTransaction(
           const message = transaction.message;
           return message.staticAccountKeys.some(
             (key, index) =>
-              (() => {
-                debugger;
-                return false;
-              })() ||
-              (key.toBase58() === signer?.address &&
-                message?.isAccountSigner(index))
+              key.toBase58() === signer?.address &&
+              message?.isAccountSigner(index)
           );
         }
         return transaction.instructions.some((x) =>

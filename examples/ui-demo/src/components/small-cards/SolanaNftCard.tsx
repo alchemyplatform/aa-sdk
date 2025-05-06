@@ -1,12 +1,6 @@
 import { useToast } from "@/hooks/useToast";
 import { useSolanaTransaction } from "@account-kit/react";
-import {
-  Connection,
-  Keypair,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  SystemProgram,
-} from "@solana/web3.js";
+import { Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
 import { sol } from "@metaplex-foundation/umi";
 import {
   ExtensionType,
@@ -27,10 +21,8 @@ import Image from "next/image";
 import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserAddressTooltip } from "../user-connection-avatar/UserAddressLink";
 import { ExternalLinkIcon } from "lucide-react";
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 type TransactionState = "idle" | "signing" | "sponsoring" | "complete";
 
 const states = [
@@ -47,7 +39,6 @@ const states = [
 ];
 export const SolanaNftCard = () => {
   const { setToast } = useToast();
-  const queryClient = useQueryClient();
   const {
     data: tx,
     sendTransactionAsync,
@@ -58,17 +49,6 @@ export const SolanaNftCard = () => {
   const [transactionState, setTransactionState] =
     useState<TransactionState>("idle");
 
-  const { data: balance = 0 } = useQuery({
-    queryKey: ["solanaBalance", solanaSigner?.address],
-    queryFn: async () => {
-      if (!solanaSigner) return 0;
-      if (!connection) return 0;
-      return (
-        (await connection.getBalance(new PublicKey(solanaSigner!.address))) /
-        LAMPORTS_PER_SOL
-      );
-    },
-  });
   const handleCollectNFT = async () => {
     try {
       if (!solanaSigner) throw new Error("No signer found");
@@ -96,62 +76,60 @@ export const SolanaNftCard = () => {
       );
 
       const mint = stakeAccount.publicKey;
-      const tx = await sendTransactionAsync({
-        transactionComponents: {
-          preSend: async (transaction) => {
-            if ("version" in transaction) {
-              transaction.sign([stakeAccount]);
-            }
-            return transaction;
-          },
-        },
-        instructions: [
-          SystemProgram.createAccount({
-            fromPubkey: publicKey,
-            newAccountPubkey: mint,
-            space: mintLen,
-            lamports: mintLamports,
-            programId: TOKEN_2022_PROGRAM_ID,
-          }),
-          createInitializeMetadataPointerInstruction(
-            mint,
-            publicKey,
-            mint,
-            TOKEN_2022_PROGRAM_ID
-          ),
-          createInitializeMintInstruction(
-            mint,
-            decimals,
-            publicKey,
-            null,
-            TOKEN_2022_PROGRAM_ID
-          ),
-          createInitializeInstruction({
+      const instructions = [
+        SystemProgram.createAccount({
+          fromPubkey: publicKey,
+          newAccountPubkey: mint,
+          space: mintLen,
+          lamports: mintLamports,
+          programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeMetadataPointerInstruction(
+          mint,
+          publicKey,
+          mint,
+          TOKEN_2022_PROGRAM_ID
+        ),
+        createInitializeMintInstruction(
+          mint,
+          decimals,
+          publicKey,
+          null,
+          TOKEN_2022_PROGRAM_ID
+        ),
+        createInitializeInstruction({
+          programId: TOKEN_2022_PROGRAM_ID,
+          metadata: mint,
+          updateAuthority: publicKey,
+          mint: mint,
+          mintAuthority: publicKey,
+          name: tokenMetadata.name,
+          symbol: tokenMetadata.symbol,
+          uri: tokenMetadata.uri,
+        }),
+        ...metaData.map(([key, value]) =>
+          createUpdateFieldInstruction({
             programId: TOKEN_2022_PROGRAM_ID,
             metadata: mint,
             updateAuthority: publicKey,
-            mint: mint,
-            mintAuthority: publicKey,
-            name: tokenMetadata.name,
-            symbol: tokenMetadata.symbol,
-            uri: tokenMetadata.uri,
-          }),
-          ...metaData.map(([key, value]) =>
-            createUpdateFieldInstruction({
-              programId: TOKEN_2022_PROGRAM_ID,
-              metadata: mint,
-              updateAuthority: publicKey,
-              field: key,
-              value: value,
-            })
-          ),
-        ],
+            field: key,
+            value: value,
+          })
+        ),
+      ];
+      const tx = await sendTransactionAsync({
+        // Need to do some modification to the regular signing of the transaction, and in this
+        // case, we need to add the stake account signature to the transaction.
+        transactionComponents: {
+          preSend: addStakeSignature(stakeAccount),
+        },
+        instructions,
       });
 
       console.log(`Created transaction: ${tx.hash} 
-      https://explorer.solana.com/tx/${tx.hash}?cluster=devnet 
-      https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
-    `);
+        https://explorer.solana.com/tx/${tx.hash}?cluster=devnet 
+        https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet
+      `);
 
       setToast({
         type: "success",
@@ -167,33 +145,20 @@ export const SolanaNftCard = () => {
         text: "Error sending transaction",
         open: true,
       });
-    } finally {
-      queryClient.invalidateQueries({
-        queryKey: ["solanaBalance", solanaSigner?.address],
-      });
+    }
+
+    function addStakeSignature(
+      stakeAccount: Keypair
+    ):
+      | import("/Users/jade/projects/aa-sdk/account-kit/react/dist/types/hooks/useSolanaTransaction").PreSend
+      | undefined {
+      return async (transaction) => {
+        if ("version" in transaction) transaction.sign([stakeAccount]);
+
+        return transaction;
+      };
     }
   };
-
-  async function fundSol() {
-    try {
-      const publicKey = solanaSigner?.address;
-      if (!publicKey) throw new Error("No public key found");
-      const umi = createUmi(new Connection("https://api.devnet.solana.com"));
-      await umi.rpc.airdrop(publicKey as any, sol(0.5));
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await queryClient.invalidateQueries({
-        queryKey: ["solanaBalance", solanaSigner?.address],
-      });
-      setToast({
-        type: "success",
-        text: "Funded SOL",
-        open: true,
-      });
-    } catch (error) {
-      console.log(error);
-      window.open("https://faucet.solana.com/", "_blank");
-    }
-  }
 
   const imageSlot = (
     <div className="w-full h-full bg-[#DCFCE7] flex justify-center items-center relative">
@@ -241,14 +206,6 @@ export const SolanaNftCard = () => {
         Transact with one click using gas sponsorship and background signing.
       </p>
 
-      {solanaSigner && (
-        <>
-          <p className="text-fg-primary text-sm mb-3">
-            <span className="font-semibold">Address</span>:{" "}
-            <UserAddressTooltip address={solanaSigner.address} />
-          </p>
-        </>
-      )}
       <p className="text-fg-primary text-sm"></p>
       <div className="flex justify-between items-center hidden xl:flex">
         <p className="text-fg-secondary text-base">Gas Fee</p>
@@ -271,24 +228,19 @@ export const SolanaNftCard = () => {
     </>
   );
 
-  const nextButton =
-    balance < 0.05 ? (
-      <Button className="mt-auto w-full" onClick={fundSol}>
-        Get SOL
-      </Button>
-    ) : (
-      <Button
-        className="mt-auto w-full"
-        onClick={handleCollectNFT}
-        disabled={!solanaSigner || isPending}
-      >
-        {transactionState === "idle"
-          ? "Collect NFT"
-          : transactionState === "complete"
-          ? "Re-collect NFT"
-          : "Collecting NFT..."}
-      </Button>
-    );
+  const nextButton = (
+    <Button
+      className="mt-auto w-full"
+      onClick={handleCollectNFT}
+      disabled={!solanaSigner || isPending}
+    >
+      {transactionState === "idle"
+        ? "Collect NFT"
+        : transactionState === "complete"
+        ? "Re-collect NFT"
+        : "Collecting NFT..."}
+    </Button>
+  );
 
   return (
     <Card
