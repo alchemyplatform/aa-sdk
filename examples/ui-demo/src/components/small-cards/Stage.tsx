@@ -1,6 +1,3 @@
-import { getMintIcon } from "./MintStages";
-import { loadingState } from "./Transactions";
-
 export const Stage = ({
   icon,
   description,
