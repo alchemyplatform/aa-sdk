@@ -184,8 +184,8 @@ export function useSolanaTransaction(
         policyId || missing("policyId")
       );
     },
-    async createTransfer(instructions: TransactionInstruction[]) {
-      return await (signer || missing("signer")).createTransfer(
+    async createTransaction(instructions: TransactionInstruction[]) {
+      return await (signer || missing("signer")).createTransaction(
         instructions,
         connection || missing("connection")
       );
@@ -193,7 +193,7 @@ export function useSolanaTransaction(
     get default() {
       return policyId
         ? mapTransformInstructions.addSponsorship
-        : mapTransformInstructions.createTransfer;
+        : mapTransformInstructions.createTransaction;
     },
   };
 

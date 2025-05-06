@@ -88,17 +88,17 @@ export class SolanaSigner {
     return toBytes(this.formatSignatureForSolana(signature));
   }
 
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection,
     version?: "versioned"
   ): Promise<VersionedTransaction>;
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection,
     version?: "legacy"
   ): Promise<Transaction>;
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection
   ): Promise<VersionedTransaction>;
@@ -111,7 +111,7 @@ export class SolanaSigner {
    * @param {"versioned" | "legacy"} [version] - The version of the transaction
    * @returns {Promise<Transaction | VersionedTransaction>} The transfer transaction
    */
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection,
     version?: string
