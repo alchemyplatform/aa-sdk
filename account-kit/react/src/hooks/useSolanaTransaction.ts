@@ -143,10 +143,13 @@ export function useSolanaTransaction(
       transaction = (await preSend?.(transaction)) || transaction;
 
       if (
-        "message" in transaction &&
-        transaction.message.staticAccountKeys.find(
-          (key) => key.toBase58() === signer?.address
-        )
+        "message" in transaction
+          ? transaction.message.staticAccountKeys.some(
+              (key) => key.toBase58() === signer?.address
+            )
+          : transaction.instructions.some((x) =>
+              x.keys.some((x) => x.pubkey.toBase58() === signer?.address)
+            )
       ) {
         await signer?.addSignature(transaction);
       }
