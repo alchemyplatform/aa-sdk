@@ -129,20 +129,18 @@ export async function createModularAccountV2<
       isGlobalValidation: true,
       entityId: DEFAULT_OWNER_ENTITY_ID,
     },
+    signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
     deferredAction,
   } = config;
 
-  const { signer = undefined } = config as CreateModularAccountV2Params; // this may fail if signer is not provided
+  const params = "params" in config ? config.params : undefined;
 
-  const { params = undefined } =
-    config as unknown as CreateModularAccountV2ParamsNoSigner;
+  const signer = "signer" in config ? config.signer : undefined;
 
   const client = createBundlerClient({
     transport,
     chain,
   });
-
-  const { isGlobalValidation, entityId } = signerEntity;
 
   const accountFunctions = await (async () => {
     switch (config.mode) {
@@ -171,7 +169,8 @@ export async function createModularAccountV2<
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
         };
-        const signerAddress = await signer!.getAddress(); // TO DO: guarantee signer exists here without use of `!`
+        if (!signer) throw new Error("Missing signer for MAV2 mode 7022");
+        const signerAddress = await signer.getAddress();
         const accountAddress = _accountAddress ?? signerAddress;
         if (
           entityId === DEFAULT_OWNER_ENTITY_ID &&
@@ -193,6 +192,7 @@ export async function createModularAccountV2<
       }
       case "default":
       case undefined: {
+        if (!signer) throw new Error("Missing signer for MAV2 mode default");
         const {
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
@@ -209,7 +209,7 @@ export async function createModularAccountV2<
             encodeFunctionData({
               abi: accountFactoryAbi,
               functionName: "createSemiModularAccount",
-              args: [await signer!.getAddress(), salt], // TO DO: guarantee signer exists here without use of `!`
+              args: [await signer.getAddress(), salt], // TO DO: guarantee signer exists here without use of `!`
             }),
           ]);
         };
@@ -232,7 +232,7 @@ export async function createModularAccountV2<
   })();
 
   if (!signer) {
-    return createMAv2Base({
+    return await createMAv2Base({
       source: "ModularAccountV2", // TO DO: remove need to pass in source?
       transport,
       chain,
@@ -241,10 +241,10 @@ export async function createModularAccountV2<
       deferredAction,
       params: params as ToWebAuthnAccountParameters, // this may fail if params is not provided
       ...accountFunctions,
-    }) as unknown as ModularAccountV2NoSigner; // TO DO: figure out when this breaks! we shouldn't have to cast
+    });
   }
 
-  return createMAv2Base({
+  return await createMAv2Base({
     source: "ModularAccountV2", // TO DO: remove need to pass in source?
     transport,
     chain,
@@ -253,7 +253,7 @@ export async function createModularAccountV2<
     signerEntity,
     deferredAction,
     ...accountFunctions,
-  }) as unknown as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
+  });
 }
 
 // If we add more valid modes, the switch case branch's mode will no longer be `never`, which will cause a compile time error here and ensure we handle the new type.
