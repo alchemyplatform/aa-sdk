@@ -164,20 +164,20 @@ export const SolanaNftCard = () => {
   const transactionUrl =
     tx?.hash && `https://explorer.solana.com/tx/${tx.hash}?cluster=devnet`;
   const renderTransactionStates = (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       <Stage
         icon={getIcon(transactionState, ["complete", "sponsoring"])}
-        description="Signing transaction..."
+        description="Signing transaction"
       />
       <Stage
         icon={getIcon(transactionState, ["complete"])}
-        description="Sponsoring gas and rent..."
+        description="Sponsoring gas and rent"
       />
       <Stage
         icon={getIcon(transactionState, ["complete"])}
         description={
           <span className="flex gap-3 justify-between">
-            Deploying NFT...
+            Deploying NFT
             {transactionUrl && (
               <a
                 href={transactionUrl}
