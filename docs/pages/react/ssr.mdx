@@ -4,9 +4,6 @@ description: An overview on how to use React Hooks with Server Side Rendering
 slug: wallets/react/ssr
 ---
 
-
-
-
 When using the React hooks exported by Account Kit in a server-side rendered setting, you will see inconsistencies of the user state between the server and the client. This will lead to flashes of content when a user is logged in. To avoid this, the account state can be optimistically loaded on the server and passed to the client.
 
 To enable this setting, you can set `ssr: true` when creating a config. We also make the config a function, so that we can call it once per request which allows for request-based isolation of the account state.

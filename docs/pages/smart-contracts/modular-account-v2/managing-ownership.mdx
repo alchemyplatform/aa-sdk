@@ -4,9 +4,6 @@ description: Managing ownership on your Modular Account V2
 slug: wallets/smart-contracts/modular-account-v2/managing-ownership
 ---
 
-
-
-
 You can add an owner to your account, or transfer ownership of your account with Modular Account V2.
 
 To transfer ownership, we call the `updateFallbackSignerData` function. Modular Account V2s achieve huge savings on creation because we cache the owner address in immutable bytecode on account creation. When transferring ownership, we set the fallback signer to the new owner address and this will be used during validation. We set the boolean to false for the account to check this value in storage instead of the immutable cached owner address.
