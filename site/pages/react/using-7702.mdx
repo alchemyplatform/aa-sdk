@@ -7,7 +7,7 @@ description: Learn how to use EIP-7702 to enable smart account features for EOAs
 
 ## What is EIP-7702?
 
-[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) is an upcoming upgrade set to launch as part of the Ethereum Pectra hardfork (already live on Sepolia!). Specifically, EIP-7702 enables Externally Owned Accounts (EOAs) to use smart contract account features.
+[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) is live as part of the Ethereum Pectra hardfork on testnet and mainnet! Specifically, EIP-7702 enables Externally Owned Accounts (EOAs) to use smart contract account features.
 
 This upgrade marks a pivotal moment in Ethereum’s journey toward account abstraction, a breakthrough designed to make onchain experiences smoother, smarter, and more accessible. EIP-7702 doesn’t replace Ethereum’s existing AA standard, ERC-4337. EIP-7702 was designed to be complementary to ERC-4337 and make it easier for those account abstraction features to reach users.
 
@@ -38,7 +38,7 @@ In this example, we will upgrade a **new** embedded EOA to a smart contract acco
 
 The following sets up a Smart Account Client using the EIP-7702 supported version of a Modular Account v2. Make sure to first go through the [authentication setup](/react/getting-started) to generate a signer.
 
-Currently, this is only supported on **Sepolia**. Make sure to enable Sepolia on the app you are using and set Sepolia as the chain in your authentication config.
+Currently, this is support on Ethereum Mainnet and Sepolia. Make sure to enable a supported chain on the app you are using and set it as the chain in your authentication config.
 
 ```tsx twoslash
 import { useSmartAccountClient } from "@account-kit/react";
@@ -59,7 +59,7 @@ Continue on to [sending user operations](/react/send-user-operations) (aka smart
 
 ## When can I use it?
 
-EIP-7702 is live on Sepolia! Start testing today. Mainnet is expected to follow soon. Account Kit will support EIP-7702 integration on Day 1 at both milestones.
+Today! EIP-7702 is live on Ethereum Mainnet and Sepolia. Account Kit will support EIP-7702 integration on more chains as they roll out EIP-7702 support.
 
 Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
 
