@@ -163,6 +163,8 @@ const promptUserForCode = async () => {
 };
 
 try {
+  // Promise resolves when the user is fully authenticated (email magic link + optional MFA),
+  // even if completion happens in another tab/window
   await signer.authenticate({
     type: "email",
     email: "user@mail.com",
@@ -174,6 +176,9 @@ try {
     const totpCode = await promptUserForCode();
 
     const { multiFactorId } = err.multiFactors[0];
+
+    // Promise resolves when the user is fully authenticated (email magic link + optional MFA),
+    // even if completion happens in another tab/window
     await signer.authenticate({
       type: "email",
       emailMode: "magicLink",
