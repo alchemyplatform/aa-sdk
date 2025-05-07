@@ -69,7 +69,7 @@ const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 
 Account Kit provides support for you to bring your existing custom signer or another third-party embedded wallet provider! As long as your signer supports `signAuthorization` you can connect it to Account Kit and upgrade existing EOAs to smart accounts.
 
-Follow the guide here to understand how to implement the interface: [Third Party Signers](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+To bring your own signer, you'll need to define a `SmartAccountSigner` interface that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
 
 ## Using EIP-7702
 
@@ -92,6 +92,7 @@ const smartAccountClient = await createModularAccountV2Client({
   transport: alchemy({ apiKey: "your-api-key" }), // Get your API key: https://dashboard.alchemy.com/apps
   chain: sepolia,
   signer,
+  policyId: "policy-id", // Sponsor gas with your sponsorship policy id: https://dashboard.alchemy.com/gas-manager
 });
 
 // Sending a user operation
