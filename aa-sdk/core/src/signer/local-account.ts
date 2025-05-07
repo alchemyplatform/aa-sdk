@@ -120,7 +120,7 @@ export class LocalAccountSigner<
     this: LocalAccountSigner<PrivateKeyAccount>,
     unsignedAuthorization: Authorization<number, false>
   ): Promise<Authorization<number, true>> {
-    return this.inner.experimental_signAuthorization(unsignedAuthorization);
+    return this.inner.signAuthorization(unsignedAuthorization);
   }
 
   /**
