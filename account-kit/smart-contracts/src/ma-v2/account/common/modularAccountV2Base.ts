@@ -148,10 +148,9 @@ export async function createMAv2Base<
     ...remainingToSmartContractAccountParams
   } = config;
 
-  const { signer = undefined } = config as CreateMAV2BaseParams<TSigner>; // this may fail if signer is not provided
+  const signer = "signer" in config ? config.signer : undefined;
 
-  const { params = undefined } =
-    config as unknown as CreateMAV2BaseReturnTypeNoSigner;
+  const params = "params" in config ? config.params : undefined;
 
   if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
