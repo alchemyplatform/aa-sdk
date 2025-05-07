@@ -55,6 +55,7 @@ export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
   sessionConfig?: Omit<SessionManagerParams, "client">;
   initialError?: ErrorInfo;
+  initialAuthLinkingPrompt?: AuthLinkingPrompt;
 }
 
 type AlchemySignerStore = {
@@ -121,6 +122,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     client,
     sessionConfig,
     initialError,
+    initialAuthLinkingPrompt,
   }: BaseAlchemySignerParams<TClient>) {
     this.inner = client;
     this.store = createStore(
@@ -149,6 +151,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // then initialize so that we can catch those events
     this.sessionManager.initialize();
     this.config = this.fetchConfig();
+    if (initialAuthLinkingPrompt) {
+      this.setAuthLinkingPrompt(initialAuthLinkingPrompt);
+    }
   }
 
   /**
@@ -215,7 +220,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus)
         );
       case "emailAuthLinkingRequired":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ authLinkingStatus }) => authLinkingStatus,
           (authLinkingStatus) => {
             if (authLinkingStatus) {
@@ -223,8 +229,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
                 authLinkingStatus.email
               );
             }
-          },
-          { fireImmediately: true }
+          }
         );
       default:
         assertNever(event, `Unknown event type ${event}`);
@@ -931,6 +936,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private authenticateWithOauth = async (
     args: Extract<AuthParams, { type: "oauth" }>
   ): Promise<User> => {
+    this.store.setState({ authLinkingStatus: undefined });
     const params: OauthParams = {
       ...args,
       expirationSeconds: this.getExpirationSeconds(),
@@ -942,18 +948,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     if (!isAuthLinkingPrompt(result)) {
       return result;
     }
-    this.setAwaitingEmailAuth({
-      orgId: result.orgId,
-      otpId: result.otpId,
-      isNewUser: false,
-    });
-    this.store.setState({
-      authLinkingStatus: {
-        email: result.email,
-        providerName: result.providerName,
-        idToken: result.idToken,
-      },
-    });
+    this.setAuthLinkingPrompt(result);
     return this.waitForConnected();
   };
 
@@ -1454,6 +1449,21 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
   protected fetchConfig = async (): Promise<SignerConfig> => {
     return this.inner.request("/v1/signer-config", {});
+  };
+
+  private setAuthLinkingPrompt = (prompt: AuthLinkingPrompt) => {
+    this.setAwaitingEmailAuth({
+      orgId: prompt.orgId,
+      otpId: prompt.otpId,
+      isNewUser: false,
+    });
+    this.store.setState({
+      authLinkingStatus: {
+        email: prompt.email,
+        providerName: prompt.providerName,
+        idToken: prompt.idToken,
+      },
+    });
   };
 
   private waitForConnected = (): Promise<User> => {

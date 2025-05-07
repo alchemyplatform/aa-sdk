@@ -5,6 +5,7 @@ import {
   AlchemySignerWebClient,
 } from "./client/index.js";
 import type {
+  AuthLinkingPrompt,
   CredentialCreationOptionOverrides,
   VerifyMfaParams,
 } from "./client/types.js";
@@ -141,20 +142,28 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       emailBundle: "bundle",
       // We don't need this, but we still want to remove it from the URL.
       emailOrgId: "orgId",
+      status: "alchemy-status",
       oauthBundle: "alchemy-bundle",
       oauthOrgId: "alchemy-org-id",
-      oauthError: "alchemy-error",
       idToken: "alchemy-id-token",
       isSignup: "aa-is-signup",
+      otpId: "alchemy-otp-id",
+      email: "alchemy-email",
+      authProvider: "alchemy-auth-provider",
+      oauthError: "alchemy-error",
     };
 
     const {
       emailBundle,
+      status,
       oauthBundle,
       oauthOrgId,
-      oauthError,
       idToken,
       isSignup,
+      otpId,
+      email,
+      authProvider,
+      oauthError,
     } = getAndRemoveQueryParams(qpStructure);
 
     if (!AlchemyWebSigner.replaceStateFilterInstalled) {
@@ -167,7 +176,31 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
         ? { name: "OauthError", message: oauthError }
         : undefined;
 
-    super({ client, sessionConfig, initialError });
+    const initialAuthLinkingPrompt: AuthLinkingPrompt | undefined = (() => {
+      if (status !== "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
+        return undefined;
+      }
+      if (
+        idToken == null ||
+        email == null ||
+        authProvider == null ||
+        otpId == null ||
+        oauthOrgId == null
+      ) {
+        console.error("Missing required query params for auth linking prompt");
+        return undefined;
+      }
+      return {
+        status,
+        idToken,
+        email,
+        providerName: authProvider,
+        otpId,
+        orgId: oauthOrgId,
+      };
+    })();
+
+    super({ client, sessionConfig, initialError, initialAuthLinkingPrompt });
 
     const isNewUser = isSignup === "true";
 
