@@ -27,7 +27,7 @@ export function MFACard() {
     <Card
       imageSlot={
         <div className="w-full h-full bg-[#DCE9FF] flex justify-center items-center">
-          <ThreeStarsIcon className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
+          <ThreeStarsIcon className="h-8 w-8 sm:h-[74px] sm:w-[74px] xl:h-[86px] xl:w-[86px]" />
         </div>
       }
       badgeSlot={
