@@ -16,7 +16,7 @@ All of the v3 packages have been renamed or removed. The new packages are as fol
 
 - `@alchemy/aa-core` -> `@aa-sdk/core`
 - `@alchemy/aa-ethers` -> `@aa-sdk/ethers`
-- `@alchmey/aa-alchemy` -> split into `@account-kit/signer`, `@account-kit/infra`, `@account-kit/core`, `@account-kit/react`
+- `@alchemy/aa-alchemy` -> split into `@account-kit/signer`, `@account-kit/infra`, `@account-kit/core`, `@account-kit/react`
 - `@alchemy/aa-accounts` -> `@account-kit/smart-contracts`
 - `@alchemy/aa-signers` -> removed
 
@@ -115,7 +115,7 @@ The `signMessageWith6492` and `signTypedDataWith6492` methods have been removed 
 
 ### Client: `checkGasSponsorshipEligibility` return type updated
 
-The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorhip doesn't cause you to use up your
+The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorship doesn't cause you to use up your
 gas sponsorship limits. If your User Operation is eligible, then you can sign the UO with `client.signUserOperation` and send it with `client.sendRawUserOperation`.
 
 ```ts
@@ -358,7 +358,7 @@ createModularAccountAlchemyClient({
     ...
     opts: {
       ...
-      // The maxFeePerGas and maxPriorityFeePerGas estimated values will now be multipled by 1.5
+      // The maxFeePerGas and maxPriorityFeePerGas estimated values will now be multiplied by 1.5
       feeOptions: {
         // This was previously { percent: 50n }
         maxFeePerGas: { multiplier: 1.5 },
