@@ -5,7 +5,7 @@ description: Key Concepts and Examples of Smart Wallet Policies
 
 # **Key Concepts & Examples**
 
-Smart Wallet Policies are programmatic rules enforced through the offchain policy engine and/or onchain smart contract modules. They govern how a smart wallet interacts with the blockchain, from transaction execution to signer permissions. Unlike traditional embedded wallets, Alchemy Smart Wallets allow you to embed logic that restricts or automates behavior verifiably onchain.
+Smart Wallet Policies are programmatic rules enforced through onchain smart contract modules. They govern how a smart wallet interacts with the blockchain, from transaction execution to signer permissions. Unlike traditional embedded wallets, Alchemy Smart Wallets allow you to embed logic that restricts or automates behavior verifiably onchain.
 
 ## **Core Concepts**
 
@@ -24,26 +24,20 @@ Here are practical examples of policies adapted for Smart Wallets, showcasing ho
    - **Description**: Only permit interactions with a predefined set of smart contracts (e.g., Uniswap, Aave).
    - **Use Case:** Limit the user journeys to trusted DeFi protocols in an application.
 3. **Gas Sponsorship Rules**
-   - **Description**: Only enable transactions if an ERC-20 paymaster is used
+   - **Description**: Only enable transactions if an ERC-20 paymaster is used. (onchain or offchain)
    - **Use Case**: Require users to use your token as the gas token for all transactions.
-4. **Multi-Signature Requirements**
-   - **Description:** Require m-of-n signers to approve transactions (e.g. require the standard social login as well as onchain passkey signatures when spending over 5 ETH).
-   - **Use Case:** Secure high value transactions.
-5. **Time Restrictions**
+4. **Time Restrictions**
    - Description: Enable time based restrictions for transactions through a wallet.
    - Use Case: Creating a temporary signer than can be used by offchain agents and that expires after a pre-defined period.
-6. **Gas Sponsorship Rules**
-   - Description: Only enable transactions if an ERC-20 paymaster (e.g., USDC) covers gas (on-chain or off-chain).
-   - Use Case: Require users to pay gas with your app’s token, boosting its adoption.
-7. **Asset-Specific Caps**
-   - Description: Limit ERC-20 transfers to 500 USDC per transaction (on-chain or off-chain).
+5. **Asset-Specific Caps**
+   - Description: Limit ERC-20 transfers to 500 USDC per transaction (onchain or offchain).
    - Use Case: Control in-game purchases to prevent overspending in a gaming economy.
-8. **Deny Lists**
-   - Description: Block transactions to a flagged phishing contract address (on-chain or off-chain).
+6. **Deny Lists**
+   - Description: Block transactions to a flagged phishing contract address (onchain or offchain).
    - Use Case: Protect users from known scams in a wallet interface.
-9. **Multi-Factor Authentication (Offchain)**
-   - Description: Mandate MFA via an authenticator app like Authy (off-chain).
+7. **Multi-Factor Authentication (Offchain)**
+   - Description: Mandate MFA via an authenticator app like Authy (offchain).
    - Use Case: Add an extra security layer for user logins in a wallet.
-10. **Chain Restrictions (Offchain)**
-    - Description: Restrict wallet to only transact on a limited set of chains.
-    - Use Case: Enforce a curated chain list for multi-chain application consistency.
+8. **Chain Restrictions (Offchain)**
+   - Description: Restrict wallet to only transact on a limited set of chains.
+   - Use Case: Enforce a curated chain list for multi-chain application consistency.

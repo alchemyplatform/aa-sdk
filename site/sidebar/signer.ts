@@ -21,12 +21,8 @@ export const signerSidebar: SidebarItem[] = [
         link: "/signer/policies/key-concepts-and-examples",
       },
       {
-        text: "Offchain policies",
-        link: "/signer/policies/offchain-policy-configuration",
-      },
-      {
         text: "Onchain policies",
-        link: "/signer/policies/onchain-policy-configuration",
+        link: "/smart-contracts/modular-account-v2/session-keys",
       },
     ],
   },
