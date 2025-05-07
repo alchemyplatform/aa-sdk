@@ -7,7 +7,6 @@ import { useRecurringTransactions } from "@/hooks/useRecurringTransactions";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
 import { Card } from "./Card";
-import { Badge } from "./Badge";
 
 export const TransactionsCard = ({
   accountMode,
@@ -63,7 +62,7 @@ export const TransactionsCard = ({
     <Card
       imageSlot={
         <div className="w-full h-full bg-[#EAEBFE] flex justify-center items-center">
-          <Key className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
+          <Key className="h-8 w-8 sm:h-[74px] sm:w-[74px] xl:h-[86px] xl:w-[86px]" />
         </div>
       }
       heading="Recurring transactions"
