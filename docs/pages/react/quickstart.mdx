@@ -270,6 +270,19 @@ export const config = createConfig(
 export const queryClient = new QueryClient();
 ```
 
+Note:
+This is set up allows you to connect to other existing external EOAs such as MetaMask using our built-in connectors and WalletConnect. Learn more [here](/react/login-methods/connect-to-other-wallet-providers.mdx)
+
+```ts twoslash [src/config.ts]
+// @noErrors
+[
+  {
+    type: "external_wallets",
+    walletConnect: { projectId: "your-project-id" },
+  },
+];
+```
+
 ### 4. Set up the Alchemy Provider
 
 This example assumes you are using the NextJS app [router](https://nextjs.org/docs/getting-started/project-structure#app-routing-conventions).
