@@ -105,8 +105,6 @@ export const useMint = (props: {
     },
   });
 
-  // Note: Temporarily hardcoding the URI to update the image for the demo.
-  // We will need to deploy a new NFT contract with a new URI to update the image officially.
   const { data: uri } = useQuery({
     queryKey: ["contractURI", props.contractAddress],
     queryFn: async () => {
