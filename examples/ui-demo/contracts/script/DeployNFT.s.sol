@@ -9,9 +9,9 @@ contract DeployNFTScript is Script {
     
     function run() public {
         
-        string memory name = "Account Kit Demo NFT";
-        string memory symbol = "AKD";
-        string memory baseURI = "https://static.alchemyapi.io/assets/accountkit/accountkit.jpg";
+        string memory name = "Smart Wallets Demo NFT";
+        string memory symbol = "SWD";
+        string memory baseURI = "https://static.alchemyapi.io/assets/accountkit/smartwallet.png";
 
         vm.startBroadcast();
 

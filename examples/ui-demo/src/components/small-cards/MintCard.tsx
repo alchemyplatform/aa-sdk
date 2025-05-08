@@ -1,9 +1,8 @@
-import { nftContractAddress, nftContractAddressOdyssey } from "@/utils/config";
+import { nftContractAddress } from "@/utils/config";
 import { useMint } from "@/hooks/useMint";
 import { Button } from "./Button";
 import { MintStages } from "./MintStages";
-import { odyssey } from "@/hooks/7702/transportSetup";
-import { arbitrumSepolia } from "@account-kit/infra";
+import { arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { Card } from "./Card";
 import { LoadingIcon } from "../icons/loading";
 import Image from "next/image";
@@ -26,9 +25,8 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
     transactionUrl,
   } = useMint({
     mode: accountMode === "7702" ? "7702" : "default",
-    contractAddress:
-      accountMode === "7702" ? nftContractAddressOdyssey : nftContractAddress,
-    chain: accountMode === "7702" ? odyssey : arbitrumSepolia,
+    contractAddress: nftContractAddress,
+    chain: accountMode === "7702" ? baseSepolia : arbitrumSepolia,
   });
   const buttonText = !mintStarted
     ? "Collect NFT"
