@@ -30,6 +30,7 @@ import {
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
 import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
+import { parsePublicKey } from "webauthn-p256";
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
@@ -68,6 +69,9 @@ export type CreateModularAccountV2ParamsNoSigner<
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
   deferredAction?: Hex;
   signerEntity?: SignerEntity;
+  salt?: bigint;
+  factoryAddress?: Address;
+  initCode?: Hex;
 };
 
 export async function createModularAccountV2<
@@ -148,24 +152,40 @@ export async function createModularAccountV2<
   const accountFunctions = await (async () => {
     switch (config.mode) {
       case "webauthn": {
-        // TO DO: replace with correct values for webauthn
-        const getAccountInitCode = async (): Promise<Hex> => {
-          return "0x";
+        if (!params) throw new Error("Missing params for MAV2 webauthn mode");
+        const publicKey = params.credential.publicKey;
+        const { x, y } = parsePublicKey(publicKey);
+        const {
+          salt = 0n,
+          factoryAddress = getDefaultMAV2FactoryAddress(chain),
+          initCode,
+        } = config;
+
+        const getAccountInitCode = async () => {
+          if (initCode) {
+            return initCode;
+          }
+
+          return concatHex([
+            factoryAddress,
+            encodeFunctionData({
+              abi: accountFactoryAbi,
+              functionName: "createWebAuthnAccount",
+              args: [x, y, salt, entityId],
+            }),
+          ]);
         };
-        const signerAddress = "0x";
-        const accountAddress = _accountAddress ?? signerAddress;
-        if (
-          entityId === DEFAULT_OWNER_ENTITY_ID &&
-          signerAddress !== accountAddress
-        ) {
-          throw new EntityIdOverrideError();
-        }
-        const implementation: Address = "0x";
-        const getImplementationAddress = async () => implementation;
+
+        const accountAddress = await getAccountAddress({
+          client,
+          entryPoint,
+          accountAddress: _accountAddress,
+          getAccountInitCode,
+        });
+
         return {
           getAccountInitCode,
           accountAddress,
-          getImplementationAddress,
         };
       }
       case "7702": {
@@ -215,7 +235,7 @@ export async function createModularAccountV2<
             encodeFunctionData({
               abi: accountFactoryAbi,
               functionName: "createSemiModularAccount",
-              args: [await signer.getAddress(), salt], // TO DO: guarantee signer exists here without use of `!`
+              args: [await signer.getAddress(), salt],
             }),
           ]);
         };
