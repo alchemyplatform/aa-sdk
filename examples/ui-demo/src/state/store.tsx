@@ -33,6 +33,7 @@ export function convertDemoConfigToUiConfig(
     },
     illustrationStyle: config.ui.illustrationStyle,
     supportUrl: config.supportUrl,
+    uiMode: "embedded",
   };
 }
 

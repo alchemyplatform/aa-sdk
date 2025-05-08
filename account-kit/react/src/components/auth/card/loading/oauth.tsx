@@ -10,10 +10,8 @@ import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 import { ls } from "../../../../strings.js";
 import { getSocialProviderDisplayName } from "../../types.js";
-import { useSigner } from "../../../../hooks/useSigner.js";
 
 export const CompletingOAuth = () => {
-  const signer = useSigner();
   const { isConnected } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
@@ -26,16 +24,6 @@ export const CompletingOAuth = () => {
       setAuthStep({ type: "initial" });
     }
   }, [isConnected, oauthWasCancelled, setAuthStep]);
-
-  useEffect(() => {
-    const cancel = signer?.on("emailAuthLinkingRequired", (email) => {
-      setAuthStep({ type: "otp_verify", email });
-      cancel?.();
-    });
-    return () => {
-      cancel?.();
-    };
-  }, [signer, setAuthStep]);
 
   if (authStep.error && !oauthWasCancelled) {
     return (
