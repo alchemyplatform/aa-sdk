@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
-import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
+import { BASE_SEPOLIA_EXPLORER_URL } from "@/hooks/7702/constants";
 import { useSignerAddress } from "@/hooks/useSignerAddress";
 import { useConfigStore } from "@/state";
 import {
@@ -163,7 +163,7 @@ export function UserConnectionDetails({
             <span className="text-fg-primary block ml-1 text-md md:text-sm">
               {deploymentStatus && delegationAddress ? (
                 <a
-                  href={`${ODYSSEY_EXPLORER_URL}/address/0x${delegationAddress.slice(
+                  href={`${BASE_SEPOLIA_EXPLORER_URL}/address/0x${delegationAddress.slice(
                     8
                   )}`}
                   target="_blank"

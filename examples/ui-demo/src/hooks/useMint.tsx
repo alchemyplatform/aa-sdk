@@ -107,20 +107,20 @@ export const useMint = (props: {
 
   // Note: Temporarily hardcoding the URI to update the image for the demo.
   // We will need to deploy a new NFT contract with a new URI to update the image officially.
-  // const { data: uri } = useQuery({
-  //   queryKey: ["contractURI", props.contractAddress],
-  //   queryFn: async () => {
-  //     if (!client) {
-  //       throw new Error("no client");
-  //     }
-  //     return client.readContract({
-  //       address: props.contractAddress,
-  //       abi: AccountKitNftMinterABI,
-  //       functionName: "baseURI",
-  //     });
-  //   },
-  //   enabled: !!client && !!client?.readContract,
-  // });
+  const { data: uri } = useQuery({
+    queryKey: ["contractURI", props.contractAddress],
+    queryFn: async () => {
+      if (!client) {
+        throw new Error("no client");
+      }
+      return client.readContract({
+        address: props.contractAddress,
+        abi: AccountKitNftMinterABI,
+        functionName: "baseURI",
+      });
+    },
+    enabled: !!client && !!client?.readContract,
+  });
 
   const handleCollectNFT = useCallback(async () => {
     if (!client) {
@@ -158,7 +158,7 @@ export const useMint = (props: {
     status,
     mintStarted,
     handleCollectNFT,
-    uri: "/images/nft-image.png",
+    uri,
     transactionUrl,
   };
 };
