@@ -382,12 +382,9 @@ navigation:
               - page: Key Concepts
                 slug: key-concepts-and-examples
                 path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
-              - page: Offchain policies
-                slug: offchain-policy-configuration
-                path: wallets/pages/signer/policies/offchain-policy-configuration.mdx
               - page: Onchain policies
                 slug: onchain-policy-configuration
-                path: wallets/pages/signer/policies/onchain-policy-configuration.mdx
+                path: wallets/pages/smart-contracts/modular-account-v2/session-keys.mdx
           - section: Authentication methods
             slug: authentication
             contents:
