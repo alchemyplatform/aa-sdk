@@ -1,6 +1,7 @@
 ---
 title: Adding Session Keys to your Modular Account V2
 description: Adding Session Keys to your Modular Account V2
+slug: wallets/smart-contracts/modular-account-v2/session-keys/adding-session-keys
 ---
 
 <Tip>
@@ -8,8 +9,6 @@ description: Adding Session Keys to your Modular Account V2
   working on simplifying the usage, please note that there could be breaking
   changes as we improve this feature.
 </Tip>
-
-# Adding session keys
 
 Adding a session key is simple with Account Kit! To add a session key, you need to 1) decide what permissions you want to grant the new key and 2) call the [`installValidation`](/wallets/smart-contracts/modular-account-v2/session-keys/adding-session-keys#install-validation-method) method on the account. This method will send a single user operation that will add the session key with scoped permission to your smart contract account on-chain. You can then use that session key to sign transactions for your account within the defined permissions!
 

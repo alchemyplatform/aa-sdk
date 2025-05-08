@@ -1,9 +1,8 @@
 ---
 title: Middleware
 description: What is Middleware?
+slug: wallets/concepts/middleware
 ---
-
-# Middleware
 
 The [Smart Account Client](/wallets/concepts/smart-account-client) is extended with a series of middleware. When building user operations for signing and sending, the flow can be pretty involved.
 Sending a UO requires you to get the latest nonce for an account, check if the account is deployed to set the `initCode` or `factory` and `factoryData` in the user operation, estimate fees, estimate gas, and then sign the user operation.
