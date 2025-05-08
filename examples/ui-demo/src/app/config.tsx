@@ -114,7 +114,7 @@ export const alchemyConfig = () => {
       enablePopupOauth: true,
       solana: {
         connection: solanaConnection,
-        // policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+        policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,
       },
     },
     {
