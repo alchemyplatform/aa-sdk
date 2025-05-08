@@ -97,18 +97,6 @@ export function cookieToInitialState(
       alchemyClientState.config.sessionConfig?.expirationTimeMs,
   };
 
-  // If the persisted chainId is not in the config, we should fall back to a configured chain.
-  const persistedChainId = alchemyClientState.chain.id;
-  const configuredChainIds = Array.from(
-    config.store.getInitialState().connections.keys()
-  );
-  if (!configuredChainIds.includes(persistedChainId)) {
-    console.warn(
-      "The persisted chainId is not in the config. Defaulting to configured chain."
-    );
-    alchemyClientState.chain = config.store.getInitialState().chain;
-  }
-
   const wagmiClientState = wagmiCookieToInitialState(
     config._internal.wagmiConfig,
     decodeURIComponent(cookie)
