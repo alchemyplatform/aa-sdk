@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+### Bug Fixes
+
+- eip1193 compatible eth_signTypedData_v4 calls + ethers compatibility ([#1592](https://github.com/alchemyplatform/aa-sdk/issues/1592)) ([838a4fa](https://github.com/alchemyplatform/aa-sdk/commit/838a4fa5c94b78fd476f2c7ef8702ffc89c29cfa))
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+### Bug Fixes
+
+- make eth_signTypedData_v4 compliant w/ EIP1193 ([#1444](https://github.com/alchemyplatform/aa-sdk/issues/1444)) ([#1445](https://github.com/alchemyplatform/aa-sdk/issues/1445)) ([301d3b7](https://github.com/alchemyplatform/aa-sdk/commit/301d3b7e824466fa5c23fef19cb4427afc562524))
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add erc20 to alchemyGasManagerMiddleware ([#1574](https://github.com/alchemyplatform/aa-sdk/issues/1574)) ([8a0ce97](https://github.com/alchemyplatform/aa-sdk/commit/8a0ce97d5464930a2c21db9aed9b7273d57c783f))
+
 # [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
 
 **Note:** Version bump only for package @aa-sdk/core

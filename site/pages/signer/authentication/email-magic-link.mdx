@@ -25,6 +25,7 @@ For setting up an account config, see the [Signer Quickstart](/signer/quickstart
 import { signer } from "./signer";
 
 // send the email
+// resolves when the user is fully authenticated (magic link + optional MFA), even if completion happens in another tab/window
 await signer.authenticate({
   type: "email",
   emailMode: "magicLink",
@@ -38,9 +39,41 @@ if (!bundle) {
   throw new Error("No bundle found in URL");
 }
 
+// resolves when the user is fully authenticated (magic link + optional MFA), even if completion happens in another tab/window
 await signer.authenticate({
   type: "email",
   bundle,
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
+
+### Track Authentication Status
+
+Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to magic link/MFA prompts and completion:
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+import { AlchemySignerStatus } from "@account-kit/signer";
+
+signer.on("statusChanged", (status) => {
+  switch (status) {
+    case AlchemySignerStatus.AWAITING_EMAIL_AUTH:
+      // show waiting for magic link confirmation UI
+      break;
+    case AlchemySignerStatus.AWAITING_MFA_AUTH:
+      // show TOTP input UI
+      break;
+    case AlchemySignerStatus.CONNECTED:
+      // authentication complete
+      break;
+  }
 });
 ```
 

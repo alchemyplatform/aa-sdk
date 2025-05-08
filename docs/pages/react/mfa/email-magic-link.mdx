@@ -4,8 +4,6 @@ description: How to authenticate users with Email Magic Link and MFA in your Rea
 slug: wallets/react/mfa/email-magic-link
 ---
 
-# Email Magic Link with Multi-Factor Authentication
-
 This guide shows you how to implement authentication with Email Magic Link and TOTP-based multi-factor authentication in your React application.
 
 ## Overview
@@ -146,7 +144,8 @@ function MagicLinkRedirect() {
       },
       {
         onSuccess: () => {
-          // Authentication successful!
+          // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+          // It still runs even if the final step completes in another tab/window.
         },
         onError: (error) => {
           // Handle error

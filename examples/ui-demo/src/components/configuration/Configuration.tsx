@@ -10,15 +10,14 @@ import {
   useSmartAccountClient,
   useUser,
 } from "@account-kit/react";
-import { arbitrumSepolia } from "@account-kit/infra";
-import { odyssey } from "@/hooks/7702/transportSetup";
+import { arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { useEffect, useMemo } from "react";
 import { AccountMode } from "@/app/config";
 import { Chain } from "viem";
 
 const chainForAccountMode: Record<AccountMode, Chain> = {
   default: arbitrumSepolia,
-  "7702": odyssey,
+  "7702": baseSepolia,
 };
 
 export const Configuration = ({ className }: { className?: string }) => {

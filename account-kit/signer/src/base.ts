@@ -161,52 +161,52 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // is fired. In the Client and SessionManager we use EventEmitter because it's easier to handle internally
     switch (event) {
       case "connected":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ status }) => status,
           (status) =>
             status === AlchemySignerStatus.CONNECTED &&
             (listener as AlchemySignerEvents["connected"])(
               this.store.getState().user!
-            ),
-          { fireImmediately: true }
+            )
         );
       case "disconnected":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ status }) => status,
           (status) =>
             status === AlchemySignerStatus.DISCONNECTED &&
-            (listener as AlchemySignerEvents["disconnected"])(),
-          { fireImmediately: true }
+            (listener as AlchemySignerEvents["disconnected"])()
         );
       case "statusChanged":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ status }) => status,
-          listener as AlchemySignerEvents["statusChanged"],
-          { fireImmediately: true }
+          listener as AlchemySignerEvents["statusChanged"]
         );
       case "errorChanged":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ error }) => error,
           (error) =>
             (listener as AlchemySignerEvents["errorChanged"])(
               error ?? undefined
-            ),
-          { fireImmediately: true }
+            )
         );
       case "newUserSignup":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ isNewUser }) => isNewUser,
           (isNewUser) => {
             if (isNewUser) (listener as AlchemySignerEvents["newUserSignup"])();
-          },
-          { fireImmediately: true }
+          }
         );
       case "mfaStatusChanged":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ mfaStatus }) => mfaStatus,
           (mfaStatus) =>
-            (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus),
-          { fireImmediately: true }
+            (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus)
         );
       default:
         assertNever(event, `Unknown event type ${event}`);
@@ -1413,4 +1413,46 @@ function toErrorInfo(error: unknown): ErrorInfo {
   return error instanceof Error
     ? { name: error.name, message: error.message }
     : { name: "Error", message: "Unknown error" };
+}
+
+// eslint-disable-next-line jsdoc/require-param, jsdoc/require-returns
+/**
+ * Zustand's `fireImmediately` option calls the listener before
+ * `store.subscribe` has returned, which breaks listeners which call
+ * unsubscribe, e.g.
+ *
+ * ```ts
+ * const unsubscribe = store.subscribe(
+ *   selector,
+ *   (update) => {
+ *     handleUpdate(update);
+ *     unsubscribe();
+ *   },
+ *   { fireImmediately: true },
+ * )
+ * ```
+ *
+ * since `unsubscribe` is still undefined at the time the listener is called. To
+ * prevent this, if the listener triggers before `subscribe` has returned, delay
+ * the callback to a later run of the event loop.
+ */
+function subscribeWithDelayedFireImmediately<T>(
+  store: InternalStore,
+  selector: (state: AlchemySignerStore) => T,
+  listener: (selectedState: T, previousSelectedState: T) => void
+): () => void {
+  let subscribeHasReturned = false;
+  const unsubscribe = store.subscribe(
+    selector,
+    (...args) => {
+      if (subscribeHasReturned) {
+        listener(...args);
+      } else {
+        setTimeout(() => listener(...args), 0);
+      }
+    },
+    { fireImmediately: true }
+  );
+  subscribeHasReturned = true;
+  return unsubscribe;
 }
