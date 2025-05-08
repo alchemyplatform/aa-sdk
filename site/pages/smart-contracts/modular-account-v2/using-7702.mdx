@@ -66,7 +66,44 @@ const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 
 Account Kit provides support for you to bring your existing custom signer or another third-party embedded wallet provider! As long as your signer supports `signAuthorization` you can connect it to Account Kit and upgrade existing EOAs to smart accounts.
 
-Follow the guide here to understand how to implement the interface: [Third Party Signers](/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+To bring your own signer, you'll need to define a `SmartAccountSigner` interface that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner). For example, you can extend a Wallet Client to include signAuthorization, if supported by the signer, like so:
+
+```tsx
+import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+
+const embeddedWallet = window.ethereum; // or any other EIP-1193 provider
+const baseSigner = new WalletClientSigner(
+    createWalletClient({
+      account: embeddedWallet!.address as Hex,
+      chain: sepolia
+      transport: custom(embeddedWallet),
+  }),
+  "test"
+);
+
+const signer: SmartAccountSigner = {
+  getAddress: baseSigner.getAddress,
+  signMessage: baseSigner.signMessage,
+  signTypedData: baseSigner.signTypedData,
+  signerType: baseSigner.signerType,
+  inner: baseSigner.inner,
+  signAuthorization: async (
+    unsignedAuth: Authorization<number, false>
+  ): Promise<Authorization<number, true>> => {
+    const signature = await signAuthorization(unsignedAuth);
+    return {
+      ...unsignedAuth,
+      ...{
+        r: signature.r!,
+        s: signature.s!,
+        v: signature.v!,
+      },
+    };
+  },
+};
+```
 
 ## Using EIP-7702
 
