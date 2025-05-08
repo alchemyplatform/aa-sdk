@@ -4,7 +4,10 @@ import type {
   UserOperationStruct,
 } from "../../types.js";
 import { deepHexlify, resolveProperties } from "../../utils/index.js";
-import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
+import {
+  applyGasAndFeeOverrides,
+  applyUserOpOverrideOrFeeOption,
+} from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions.js";
 import type { ClientMiddlewareFn } from "../types.js";
 
@@ -21,7 +24,9 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
 ) => ClientMiddlewareFn =
   (client: MiddlewareClient): ClientMiddlewareFn =>
   async (struct, { account, overrides, feeOptions }) => {
-    const request = deepHexlify(await resolveProperties(struct));
+    const request = deepHexlify(
+      await resolveProperties(await applyGasAndFeeOverrides(struct, overrides))
+    );
 
     const estimates = await client.estimateUserOperationGas(
       request,

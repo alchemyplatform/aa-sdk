@@ -3,11 +3,11 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
 import { local060Instance } from "~test/instances.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("Modular Account Multi Owner Account Tests", async () => {
   const instance = local060Instance;
@@ -151,35 +151,35 @@ describe("Modular Account Multi Owner Account Tests", async () => {
             data: "0x",
           },
           overrides: {
-            maxFeePerGas: 1n,
-            maxPriorityFeePerGas: 1n,
-            callGasLimit: 1n,
-            verificationGasLimit: 1n,
-            preVerificationGas: 1n,
+            maxFeePerGas: 10000000n,
+            maxPriorityFeePerGas: 10000000n,
+            callGasLimit: 10000000n,
+            verificationGasLimit: 10000000n,
+            preVerificationGas: 10000000n,
           },
         })
         .then(
           ({
-            maxFeePerGas,
-            maxPriorityFeePerGas,
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
+            maxFeePerGas,
+            maxPriorityFeePerGas,
           }) => ({
-            maxFeePerGas,
-            maxPriorityFeePerGas,
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
+            maxFeePerGas,
+            maxPriorityFeePerGas,
           })
         )
     ).resolves.toMatchInlineSnapshot(`
       {
-        "callGasLimit": 1n,
-        "maxFeePerGas": 1n,
-        "maxPriorityFeePerGas": 1n,
-        "preVerificationGas": 1n,
-        "verificationGasLimit": 1n,
+        "callGasLimit": 10000000n,
+        "maxFeePerGas": 10000000n,
+        "maxPriorityFeePerGas": 10000000n,
+        "preVerificationGas": 10000000n,
+        "verificationGasLimit": 10000000n,
       }
     `);
   }, 100000);
@@ -199,35 +199,35 @@ describe("Modular Account Multi Owner Account Tests", async () => {
             data: "0x",
           },
           overrides: {
-            maxFeePerGas: 1n,
-            maxPriorityFeePerGas: 1n,
-            callGasLimit: 1n,
-            verificationGasLimit: 1n,
-            preVerificationGas: 1n,
+            maxFeePerGas: 10000000n,
+            maxPriorityFeePerGas: 10000000n,
+            callGasLimit: 10000000n,
+            verificationGasLimit: 10000000n,
+            preVerificationGas: 10000000n,
           },
         })
         .then(
           ({
-            maxFeePerGas,
-            maxPriorityFeePerGas,
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
+            maxFeePerGas,
+            maxPriorityFeePerGas,
           }) => ({
-            maxFeePerGas,
-            maxPriorityFeePerGas,
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
+            maxFeePerGas,
+            maxPriorityFeePerGas,
           })
         )
     ).resolves.toMatchInlineSnapshot(`
       {
-        "callGasLimit": "0x1",
-        "maxFeePerGas": "0x1",
-        "maxPriorityFeePerGas": "0x1",
-        "preVerificationGas": "0x1",
-        "verificationGasLimit": "0x1",
+        "callGasLimit": "0x989680",
+        "maxFeePerGas": "0x7f0a872d",
+        "maxPriorityFeePerGas": "0x3b9aca00",
+        "preVerificationGas": "0x989680",
+        "verificationGasLimit": "0x989680",
       }
     `);
   }, 100000);

@@ -11,6 +11,7 @@ import type {
   UserOperationRequest,
 } from "@aa-sdk/core";
 import {
+  applyGasAndFeeOverrides,
   bypassPaymasterAndData,
   ChainNotFoundError,
   clientHeaderTrack,
@@ -24,23 +25,23 @@ import {
   resolveProperties,
 } from "@aa-sdk/core";
 import {
-  fromHex,
-  isHex,
-  toHex,
-  type Hex,
   encodeAbiParameters,
   encodeFunctionData,
-  parseAbi,
+  fromHex,
+  isHex,
   maxUint256,
+  parseAbi,
   sliceHex,
+  toHex,
+  type Hex,
 } from "viem";
-import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
-import type { AlchemyTransport } from "../alchemyTransport.js";
-import { alchemyFeeEstimator } from "./feeEstimator.js";
-import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
-import { PermitTypes, EIP712NoncesAbi } from "../gas-manager.js";
-import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 import type { MiddlewareClient } from "../../../../aa-sdk/core/dist/types/middleware/actions.js";
+import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
+import type { AlchemyTransport } from "../alchemyTransport.js";
+import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
+import type { PermitDomain, PermitMessage } from "../gas-manager.js";
+import { EIP712NoncesAbi, PermitTypes } from "../gas-manager.js";
+import { alchemyFeeEstimator } from "./feeEstimator.js";
 
 type Context = {
   policyId: string | string[];
@@ -119,6 +120,7 @@ export function alchemyGasManagerMiddleware(
     paymasterAndData: async (uo, args) => {
       const context = await buildContext(uo, args);
       const baseMiddleware = erc7677Middleware({ context });
+      uo = await applyGasAndFeeOverrides(uo, args.overrides);
       return baseMiddleware.paymasterAndData(uo, args);
     },
   };
@@ -223,39 +225,11 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         throw new ChainNotFoundError();
       }
 
-      const userOp = deepHexlify(await resolveProperties(uo));
+      const userOp = deepHexlify(
+        await resolveProperties(await applyGasAndFeeOverrides(uo, overrides_))
+      );
 
       const overrides: UserOperationOverrides = filterUndefined({
-        maxFeePerGas: overrideField(
-          "maxFeePerGas",
-          overrides_ as UserOperationOverrides,
-          feeOptions,
-          userOp
-        ),
-        maxPriorityFeePerGas: overrideField(
-          "maxPriorityFeePerGas",
-          overrides_ as UserOperationOverrides,
-          feeOptions,
-          userOp
-        ),
-        callGasLimit: overrideField(
-          "callGasLimit",
-          overrides_ as UserOperationOverrides,
-          feeOptions,
-          userOp
-        ),
-        verificationGasLimit: overrideField(
-          "verificationGasLimit",
-          overrides_ as UserOperationOverrides,
-          feeOptions,
-          userOp
-        ),
-        preVerificationGas: overrideField(
-          "preVerificationGas",
-          overrides_ as UserOperationOverrides,
-          feeOptions,
-          userOp
-        ),
         ...(account.getEntryPoint().version === "0.7.0"
           ? {
               paymasterVerificationGasLimit: overrideField<"0.7.0">(
