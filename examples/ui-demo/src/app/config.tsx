@@ -102,7 +102,7 @@ export const alchemyConfig = () => {
         },
         {
           chain: baseSepolia,
-          transport: alchemy({ rpcUrl: "/api/bundler-base-sepolia" }),
+          transport: alchemy({ rpcUrl: "/api/rpc-base-sepolia" }),
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
       ],

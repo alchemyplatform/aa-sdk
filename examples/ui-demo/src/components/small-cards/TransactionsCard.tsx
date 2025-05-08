@@ -17,8 +17,7 @@ export const TransactionsCard = ({
       mode: accountMode === "7702" ? "7702" : "default",
       chain: accountMode === "7702" ? baseSepolia : arbitrumSepolia,
       transport: alchemy({
-        rpcUrl:
-          accountMode === "7702" ? "/api/bundler-base-sepolia" : "/api/rpc",
+        rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
       }),
     });
   const buttonText = useMemo(() => {
