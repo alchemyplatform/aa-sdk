@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- export create signer ([#1577](https://github.com/alchemyplatform/aa-sdk/issues/1577)) ([5325b31](https://github.com/alchemyplatform/aa-sdk/commit/5325b313ade16aecce6dc4a2d381a0e462dc0e38))
+
 # [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
 
 ### Features

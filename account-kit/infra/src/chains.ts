@@ -592,3 +592,51 @@ export const riseTestnet: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const storyMainnet: Chain = defineChain({
+  id: 1514,
+  name: "Story Mainnet",
+  nativeCurrency: { name: "IP", symbol: "IP", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://story-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://story-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://story-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://www.storyscan.io",
+    },
+  },
+  testnet: false,
+});
+
+export const storyAeneid: Chain = defineChain({
+  id: 1315,
+  name: "Story Aeneid",
+  nativeCurrency: { name: "IP", symbol: "IP", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://story-aeneid.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://story-aeneid.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://story-aeneid.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://aeneid.storyscan.io",
+    },
+  },
+  testnet: true,
+});

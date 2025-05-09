@@ -68,5 +68,5 @@ custom fee estimator middleware
 
 ## Returns
 
-`Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">`
-partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
+`Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData">`
+partial client middleware configuration containing `dummyPaymasterAndData`, `feeEstimator`, `gasEstimator`, and `paymasterAndData`

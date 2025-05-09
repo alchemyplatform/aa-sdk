@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     headers[key] = value;
   });
 
-  const res = await fetch(env.ALCHEMY_RPC_URL_ODYSSEY, {
+  const res = await fetch(env.ALCHEMY_RPC_URL_BASE_SEPOLIA, {
     method: "POST",
     headers: {
       ...headers,

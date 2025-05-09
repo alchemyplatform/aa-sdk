@@ -1,9 +1,8 @@
 ---
 title: Email Magic Link Authentication
 description: How to implement Email Magic Link authentication in your React app
+slug: wallets/react/login-methods/email-magic-link
 ---
-
-# Email Magic Link Authentication
 
 Email magic link authentication is a two-step process:
 
@@ -112,7 +111,8 @@ const handleSendMagicLink = (email: string) => {
     },
     {
       onSuccess: () => {
-        // Success - inform user to check their email
+        // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+        // It still runs even if the final step completes in another tab/window.
       },
       onError: (error) => {
         // Handle error
@@ -147,7 +147,8 @@ useEffect(() => {
         },
         {
           onSuccess: () => {
-            // Authentication successful!
+            // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+            // It still runs even if the final step completes in another tab/window.
           },
           onError: (error) => {
             // Handle error

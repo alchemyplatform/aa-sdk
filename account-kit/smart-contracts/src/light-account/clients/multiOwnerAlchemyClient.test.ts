@@ -116,7 +116,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
       [ZodError: [
         {
           "code": "custom",
-          "message": "chain must include an alchemy rpc url. See \`createAlchemyChain\` or import a chain from \`@account-kit/infra\`.",
+          "message": "chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@account-kit/infra\`.",
           "fatal": true,
           "path": []
         }
