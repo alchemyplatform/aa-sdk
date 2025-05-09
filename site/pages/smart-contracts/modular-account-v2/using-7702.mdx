@@ -77,10 +77,10 @@ import { sepolia } from "viem/chains";
 
 const embeddedWallet = window.ethereum; // or any other EIP-1193 provider
 const baseSigner = new WalletClientSigner(
-    createWalletClient({
-      account: embeddedWallet!.address as Hex,
-      chain: sepolia
-      transport: custom(embeddedWallet),
+  createWalletClient({
+    account: embeddedWallet!.address as Hex,
+    chain: sepolia
+    transport: custom(embeddedWallet),
   }),
   "test"
 );
