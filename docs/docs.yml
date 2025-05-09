@@ -421,8 +421,6 @@ navigation:
                 contents:
                   - section: AlchemySignerWebClient
                     contents:
-                      - page: addMfa
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa.mdx
                       - page: completeAuthWithBundle
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle.mdx
                       - page: constructor
@@ -433,8 +431,6 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/disconnect.mdx
                       - page: exportWallet
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
-                      - page: getMfaFactors
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors.mdx
                       - page: initEmailAuth
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
                       - page: lookupUserWithPasskey
@@ -443,16 +439,10 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
-                      - page: removeMfa
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey.mdx
-                      - page: validateMultiFactors
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors.mdx
-                      - page: verifyMfa
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa.mdx
                   - section: AlchemyWebSigner
                     contents:
                       - page: constructor
