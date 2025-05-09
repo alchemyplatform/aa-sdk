@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import { SmallCardsWrapper } from "../small-cards/Wrapper";
 
 export function PreviewWrapper({ showCode }: { showCode: boolean }) {
-  const { authStep } = useAuthContext();
   return (
     <>
       {/* Don't unmount when showing code preview so that the auth card retains its state */}
