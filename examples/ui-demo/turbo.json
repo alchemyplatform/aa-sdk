@@ -8,7 +8,7 @@
         "API_KEY",
         "ALCHEMY_API_URL",
         "ALCHEMY_RPC_URL",
-        "ALCHEMY_RPC_URL_ODYSSEY"
+        "ALCHEMY_RPC_URL_BASE_SEPOLIA"
       ]
     },
     "dev": {
