@@ -68,7 +68,47 @@ const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 
 Account Kit provides support for you to bring your existing custom signer or another third-party embedded wallet provider! As long as your signer supports `signAuthorization` you can connect it to Account Kit and upgrade existing EOAs to smart accounts.
 
-Follow the guide here to understand how to implement the interface: [Third Party Signers](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+To bring your own signer, you'll need to define a `SmartAccountSigner` interface that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner). For example, you can extend a Wallet Client to include signAuthorization, if supported by the signer, like so:
+
+<Accordion title="Example">
+```tsx
+import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+
+const embeddedWallet = window.ethereum; // or any other EIP-1193 provider
+const baseSigner = new WalletClientSigner(
+createWalletClient({
+account: embeddedWallet!.address as Hex,
+chain: sepolia
+transport: custom(embeddedWallet),
+}),
+"test"
+);
+
+const signer: SmartAccountSigner = {
+getAddress: baseSigner.getAddress,
+signMessage: baseSigner.signMessage,
+signTypedData: baseSigner.signTypedData,
+signerType: baseSigner.signerType,
+inner: baseSigner.inner,
+signAuthorization: async (
+unsignedAuth: Authorization<number, false>
+): Promise<Authorization<number, true>> => {
+const signature = await signAuthorization(unsignedAuth);
+return {
+...unsignedAuth,
+...{
+r: signature.r!,
+s: signature.s!,
+v: signature.v!,
+},
+};
+},
+};
+
+````
+</Accordion>
 
 ## Using EIP-7702
 
@@ -91,6 +131,7 @@ const smartAccountClient = await createModularAccountV2Client({
   transport: alchemy({ apiKey: "your-api-key" }), // Get your API key: https://dashboard.alchemy.com/apps
   chain: sepolia,
   signer,
+  policyId: "policy-id", // Sponsor gas with your sponsorship policy id: https://dashboard.alchemy.com/gas-manager
 });
 
 // Sending a user operation
@@ -105,7 +146,7 @@ const uoHash = await smartAccountClient.sendUserOperation({
 const txnHash = await smartAccountClient.waitForUserOperationTransaction(
   uoHash
 );
-```
+````
 
 ```ts twoslash [signer.ts] filename="signer.ts"
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -119,6 +160,6 @@ export const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
 
 ## When can I use it?
 
-EIP-7702 is live on Sepolia! Start testing today. Mainnet is expected to follow soon. Account Kit will support EIP-7702 integration on Day 1 at both milestones.
+Today! EIP-7702 is live on Ethereum Mainnet and Sepolia. Account Kit will support EIP-7702 integration on more chains as they roll out EIP-7702 support.
 
 Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
