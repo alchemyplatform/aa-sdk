@@ -640,3 +640,51 @@ export const storyAeneid: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const bnbTestnet: Chain = defineChain({
+  id: 97,
+  name: "BNB Testnet",
+  nativeCurrency: { name: "tBNB", symbol: "tBNB", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://bnb-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://bnb-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://bnb-testnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://testnet.bscscan.com/",
+    },
+  },
+  testnet: true,
+});
+
+export const bnbMainnet: Chain = defineChain({
+  id: 56,
+  name: "BNB Mainnet",
+  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://bnb-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://bnb-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://bnb-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://bscscan.com/",
+    },
+  },
+  testnet: true,
+});
