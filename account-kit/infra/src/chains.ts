@@ -686,5 +686,5 @@ export const bnbMainnet: Chain = defineChain({
       url: "https://bscscan.com/",
     },
   },
-  testnet: true,
+  testnet: false,
 });
