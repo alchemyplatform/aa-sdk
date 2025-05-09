@@ -172,6 +172,13 @@ export type SignerEndpoints = [
     };
   },
   {
+    Route: "/v1/add-oauth-provider";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
     Route: "/v1/prepare-oauth";
     Body: {
       nonce: string;
@@ -262,6 +269,15 @@ export type GetWebAuthnAttestationResult = {
   authenticatorUserId: ArrayBuffer;
 };
 
+export type AuthLinkingPrompt = {
+  status: "ACCOUNT_LINKING_CONFIRMATION_REQUIRED";
+  idToken: string;
+  email: string;
+  providerName: string;
+  otpId: string;
+  orgId: string;
+};
+
 export type OauthState = {
   authProviderId: string;
   isCustomProvider?: boolean;
@@ -323,6 +339,11 @@ export type MfaChallenge = {
 export type SubmitOtpCodeResponse =
   | { bundle: string; mfaRequired: false }
   | { mfaRequired: true; encryptedPayload: string; multiFactors: MfaFactor[] };
+
+export type AddOauthProviderParams = {
+  providerName: string;
+  oidcToken: string;
+};
 
 export type experimental_CreateApiKeyParams = {
   name: string;

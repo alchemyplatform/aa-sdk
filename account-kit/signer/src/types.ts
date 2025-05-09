@@ -11,6 +11,7 @@ export type AlchemySignerEvents = {
     mfaFactorId?: string;
     encryptedPayload?: string;
   }): void;
+  emailAuthLinkingRequired(email: string): void;
 };
 
 export type AlchemySignerEvent = keyof AlchemySignerEvents;

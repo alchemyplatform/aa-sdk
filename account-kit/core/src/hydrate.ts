@@ -48,8 +48,17 @@ export function hydrate(
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
 
+    // If the persisted chainId is not in the config, we should fall back to the default chain.
+    const configuredChains = Array.from(
+      config.store.getInitialState().connections.keys()
+    );
+    const chain = configuredChains.includes(rest.chain.id)
+      ? rest.chain
+      : config.store.getInitialState().chain;
+
     config.store.setState({
       ...rest,
+      chain,
       user: initialAlchemyState.user,
       accountConfigs,
       signerStatus: convertSignerStatusToState(

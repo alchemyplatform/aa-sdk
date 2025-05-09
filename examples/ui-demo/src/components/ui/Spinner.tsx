@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Image from "next/image";
 
 // This spinner icon has to be in png format because svg does not support angular gradients
 const SpinnerLightModeBase64 =
