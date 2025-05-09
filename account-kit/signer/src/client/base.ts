@@ -34,6 +34,8 @@ import type {
   VerifyMfaParams,
   SubmitOtpCodeResponse,
   ValidateMultiFactorsParams,
+  AuthLinkingPrompt,
+  AddOauthProviderParams,
 } from "./types.js";
 import { VERSION } from "../version.js";
 
@@ -99,13 +101,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   }
 
   protected set user(user: User | undefined) {
-    if (user && !this._user) {
+    const previousUser = this._user;
+    this._user = user;
+    if (user && !previousUser) {
       this.eventEmitter.emit("connected", user);
-    } else if (!user && this._user) {
+    } else if (!user && previousUser) {
       this.eventEmitter.emit("disconnected");
     }
-
-    this._user = user;
   }
 
   /**
@@ -160,11 +162,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract oauthWithRedirect(
     args: Extract<OauthParams, { mode: "redirect" }>
-  ): Promise<User | never>;
+  ): Promise<User>;
 
   public abstract oauthWithPopup(
     args: Extract<OauthParams, { mode: "popup" }>
-  ): Promise<User>;
+  ): Promise<User | AuthLinkingPrompt>;
 
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">
@@ -264,6 +266,32 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
         it.authenticatorName.startsWith("passkey-")
       ),
     };
+  };
+
+  /**
+   * Adds an OAuth provider for the authenticated user using the provided parameters. Throws an error if the user is not authenticated.
+   *
+   * @param {AddOauthProviderParams} params The parameters for adding an OAuth provider, including `providerName` and `oidcToken`.
+   * @throws {NotAuthenticatedError} Throws if the user is not authenticated.
+   * @returns {Promise<void>} A Promise that resolves when the OAuth provider is added.
+   */
+  public addOauthProvider = async (
+    params: AddOauthProviderParams
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const { providerName, oidcToken } = params;
+    const stampedRequest = await this.turnkeyClient.stampCreateOauthProviders({
+      type: "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        oauthProviders: [{ providerName, oidcToken }],
+      },
+    });
+    await this.request("/v1/add-oauth-provider", { stampedRequest });
   };
 
   /**
@@ -374,7 +402,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new Error("User must be authenticated to create api key");
     }
     const resp = await this.turnkeyClient.createApiKeys({
-      type: "ACTIVITY_TYPE_CREATE_API_KEYS",
+      type: "ACTIVITY_TYPE_CREATE_API_KEYS_V2",
       timestampMs: new Date().getTime().toString(),
       organizationId: this.user.orgId,
       parameters: {
@@ -382,6 +410,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
           {
             apiKeyName: params.name,
             publicKey: params.publicKey,
+            curveType: "API_KEY_CURVE_P256",
             expirationSeconds: params.expirationSec.toString(),
           },
         ],
