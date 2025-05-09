@@ -38,6 +38,7 @@ export const DEFAULT_UI_CONFIG: AlchemyAccountsUIConfigWithDefaults = {
   },
   modalBaseClassName: "",
   supportUrl: "",
+  uiMode: "modal",
 };
 
 export function createUiConfigStore(

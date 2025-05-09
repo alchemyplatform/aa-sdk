@@ -137,6 +137,7 @@ export const alchemyConfig = () => {
           />
         ),
       },
+      uiMode: "embedded",
     }
   );
 };
