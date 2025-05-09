@@ -112,6 +112,8 @@ export const alchemyConfig = () => {
       ],
       storage: cookieStorage,
       enablePopupOauth: true,
+      // Please.
+      oauthCallbackUrl: "https://signer.alchemypreview.com/callback",
       solana: {
         connection: solanaConnection,
         policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,

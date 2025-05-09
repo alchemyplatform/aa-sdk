@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-import { env } from "../../../../../env.mjs";
-
 export async function POST(
   req: Request,
   { params }: { params: { routes: string[] } }
@@ -9,7 +7,7 @@ export async function POST(
   const body = await req.text();
 
   const headers: Record<string, string> = {
-    Authorization: `Bearer ${env.API_KEY}`,
+    Authorization: `Bearer Company-Strict-Weaken-Few-6`,
   };
   req.headers.forEach((value: string, key: string) => {
     // don't pass the cookie because it doesn't get used downstream
@@ -18,14 +16,17 @@ export async function POST(
     headers[key] = value;
   });
 
-  const res = await fetch(env.ALCHEMY_API_URL + `/${params.routes.join("/")}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.API_KEY}`,
-      ...headers,
-    },
-    body,
-  });
+  const res = await fetch(
+    `https://api.g.alchemypreview.com/${params.routes.join("/")}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer Company-Strict-Weaken-Few-6`,
+        ...headers,
+      },
+      body,
+    }
+  );
 
   if (!res.ok) {
     return NextResponse.json(await res.json().catch((e) => ({})), {
