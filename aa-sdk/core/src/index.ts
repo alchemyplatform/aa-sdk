@@ -23,6 +23,7 @@ export { sendTransactions } from "./actions/smartAccount/sendTransactions.js";
 export { sendUserOperation } from "./actions/smartAccount/sendUserOperation.js";
 export type * from "./actions/smartAccount/types.js";
 export { waitForUserOperationTransaction } from "./actions/smartAccount/waitForUserOperationTransacation.js";
+export * from "./client/addBreadcrumb.js";
 export type * from "./client/bundlerClient.js";
 export {
   createBundlerClient,
@@ -65,19 +66,19 @@ export {
   IncorrectAccountType,
   SignTransactionNotSupportedError,
   SmartAccountWithSignerRequiredError,
-  UpgradeToAndCallNotSupportedError,
   UpgradesNotSupportedError,
+  UpgradeToAndCallNotSupportedError,
 } from "./errors/account.js";
 export { BaseError } from "./errors/base.js";
 export {
   ChainNotFoundError,
-  IncompatibleClientError,
-  InvalidRpcUrlError,
-  InvalidEntityIdError,
-  InvalidNonceKeyError,
   EntityIdOverrideError,
-  InvalidModularAccountV2Mode,
+  IncompatibleClientError,
   InvalidDeferredActionNonce,
+  InvalidEntityIdError,
+  InvalidModularAccountV2Mode,
+  InvalidNonceKeyError,
+  InvalidRpcUrlError,
 } from "./errors/client.js";
 export {
   EntryPointNotFoundError,
@@ -92,11 +93,10 @@ export {
   InvalidUserOperationError,
   WaitForUserOperationError,
 } from "./errors/useroperation.js";
-export * from "./client/addBreadcrumb.js";
-export { LogLevel, Logger } from "./logger.js";
+export { Logger, LogLevel } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
-export { default7702UserOpSigner } from "./middleware/defaults/7702signer.js";
 export { default7702GasEstimator } from "./middleware/defaults/7702gasEstimator.js";
+export { default7702UserOpSigner } from "./middleware/defaults/7702signer.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";
 export { defaultGasEstimator } from "./middleware/defaults/gasEstimator.js";
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
@@ -106,7 +106,7 @@ export { erc7677Middleware } from "./middleware/erc7677middleware.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
 export type * from "./middleware/types.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
-export { SignerSchema, isSigner } from "./signer/schema.js";
+export { isSigner, SignerSchema } from "./signer/schema.js";
 export type {
   SmartAccountAuthenticator,
   SmartAccountSigner,
@@ -117,35 +117,36 @@ export { split, type SplitTransportParams } from "./transport/split.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
-  TraceHeader,
-  TRACE_HEADER_NAME,
-  TRACE_HEADER_STATE,
-} from "./utils/traceHeader.js";
-export {
-  BigNumberishRangeSchema,
-  BigNumberishSchema,
-  ChainSchema,
-  HexSchema,
-  MultiplierSchema,
   allEqual,
+  applyGasAndFeeOverrides,
   applyUserOpFeeOption,
   applyUserOpOverride,
   applyUserOpOverrideOrFeeOption,
   asyncPipe,
   bigIntMax,
   bigIntMultiply,
+  BigNumberishRangeSchema,
+  BigNumberishSchema,
   bypassPaymasterAndData,
   bypassPaymasterAndDataEmptyHex,
+  ChainSchema,
   concatPaymasterAndData,
   deepHexlify,
   filterUndefined,
   getDefaultUserOperationFeeOptions,
+  HexSchema,
   isBigNumberish,
   isMultiplier,
   isValidRequest,
+  MultiplierSchema,
   parsePaymasterAndData,
   pick,
   resolveProperties,
   takeBytes,
   toRecord,
 } from "./utils/index.js";
+export {
+  TRACE_HEADER_NAME,
+  TRACE_HEADER_STATE,
+  TraceHeader,
+} from "./utils/traceHeader.js";

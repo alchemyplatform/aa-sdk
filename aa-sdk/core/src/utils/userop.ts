@@ -1,4 +1,4 @@
-import { concat, type Address, type Hex } from "viem";
+import { concat, type Address, type Hex, type IsUndefined } from "viem";
 import type { EntryPointVersion } from "../entrypoint/types";
 import type {
   BigNumberish,
@@ -11,7 +11,12 @@ import type {
   UserOperationStruct_v7,
 } from "../types";
 import { bigIntClamp, bigIntMultiply } from "./bigint.js";
-import { allEqual, isBigNumberish } from "./index.js";
+import {
+  allEqual,
+  isBigNumberish,
+  resolveProperties,
+  type Deferrable,
+} from "./index.js";
 
 /**
  * Utility method for asserting a UserOperationStruct has valid fields for the given entry point version
@@ -103,6 +108,52 @@ export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
   else {
     return value != null ? bigIntMultiply(value, override.multiplier) : value;
   }
+}
+
+function keysOf<
+  T extends Record<string, unknown>,
+  Filter extends (keyof T)[] | undefined = undefined
+>(
+  obj?: T,
+  filterBy?: Filter
+): IsUndefined<Filter> extends true ? (keyof T)[] : NonNullable<Filter> {
+  if (obj == null) {
+    return [] as any;
+  }
+
+  const keys = Object.keys(obj);
+  if (filterBy == null) {
+    return keys as any;
+  }
+
+  return keys.filter((key) => filterBy.includes(key)) as any;
+}
+
+export async function applyGasAndFeeOverrides<
+  TEntryPointVersion extends EntryPointVersion
+>(
+  uo: Deferrable<UserOperationStruct<TEntryPointVersion>>,
+  overrides?: UserOperationOverrides<TEntryPointVersion>
+): Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>> {
+  const awaitedUo = await resolveProperties(uo);
+
+  for (const override of keysOf(overrides, [
+    "callGasLimit",
+    "maxFeePerGas",
+    "maxPriorityFeePerGas",
+    "preVerificationGas",
+    "verificationGasLimit",
+  ])) {
+    const overrideValue = applyUserOpOverride(
+      awaitedUo[override],
+      overrides?.[override]
+    );
+    if (overrideValue != null) {
+      awaitedUo[override] = overrideValue;
+    }
+  }
+
+  return awaitedUo;
 }
 
 /**
