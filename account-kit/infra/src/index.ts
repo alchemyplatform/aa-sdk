@@ -46,6 +46,8 @@ export {
   riseTestnet,
   storyMainnet,
   storyAeneid,
+  bnbTestnet,
+  bnbMainnet,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
