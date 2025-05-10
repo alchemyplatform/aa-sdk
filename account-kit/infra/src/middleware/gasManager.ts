@@ -408,7 +408,7 @@ const generateSignedPermit = async <
 
   let maxAmountToken = maxUint256;
 
-  if (policyToken.maxTokenAmount) {
+  if (policyToken.maxTokenAmount !== undefined) {
     let { data } = await client.call({
       to: policyToken.address,
       data: encodeFunctionData({
