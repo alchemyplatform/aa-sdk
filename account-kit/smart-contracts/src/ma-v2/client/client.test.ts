@@ -70,6 +70,7 @@ import {
 import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
+import { type P256Credential } from "viem/account-abstraction";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -93,6 +94,45 @@ describe("MA v2 Tests", async () => {
   const sessionKey: SmartAccountSigner = new LocalAccountSigner(
     accounts.unfundedAccountOwner
   );
+
+  const webAuthnAccountParams = {
+    id: "QXFDX0-o2ca8W08eKlWacDWYOmUxs6UCLHk-SjpmVJw",
+    publicKey:
+      "pQECAyYgASFYIBdKn_7nh3NiMKOXJBsIzZ1JmRoips8egLC76kEyKx0uIlgg2-jfyYk9lq-HgHCPQOAS-vXVmBzaDXWeLFIzskfYIEc",
+    getFn() {
+      return Promise.resolve({
+        response: {
+          clientDataJSON: [
+            123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116,
+            104, 110, 46, 103, 101, 116, 34, 44, 34, 99, 104, 97, 108, 108, 101,
+            110, 103, 101, 34, 58, 34, 107, 87, 97, 80, 120, 54, 54, 116, 79,
+            86, 77, 80, 113, 81, 90, 108, 68, 83, 73, 107, 69, 49, 54, 50, 118,
+            120, 79, 67, 105, 101, 114, 103, 50, 74, 79, 52, 113, 65, 105, 113,
+            48, 67, 48, 34, 44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34,
+            104, 116, 116, 112, 115, 58, 47, 47, 116, 114, 121, 45, 119, 101,
+            98, 97, 117, 116, 104, 110, 46, 97, 112, 112, 115, 112, 111, 116,
+            46, 99, 111, 109, 34, 44, 34, 99, 114, 111, 115, 115, 79, 114, 105,
+            103, 105, 110, 34, 58, 102, 97, 108, 115, 101, 125,
+          ],
+
+          authenticatorData: [
+            13, 117, 252, 197, 99, 253, 167, 121, 219, 46, 52, 62, 234, 72, 152,
+            136, 117, 139, 120, 84, 157, 73, 58, 79, 219, 234, 28, 217, 106,
+            163, 28, 196, 1, 0, 0, 0,
+          ],
+
+          signature: [
+            48, 68, 2, 32, 126, 94, 74, 25, 169, 252, 214, 249, 129, 182, 232,
+            230, 186, 28, 62, 201, 29, 244, 147, 95, 217, 38, 143, 80, 130, 101,
+            116, 150, 103, 237, 36, 199, 2, 32, 90, 133, 124, 139, 174, 229,
+            207, 113, 218, 134, 85, 225, 82, 1, 224, 242, 176, 113, 84, 143,
+            254, 98, 139, 6, 144, 123, 55, 220, 193, 69, 154, 32,
+          ],
+        },
+      } as any);
+    },
+    rpId: "",
+  } as const;
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -125,6 +165,31 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
     );
+  });
+
+  it("successfully sign + validate a message, for WebAuthn account", async () => {
+    const provider = await givenConnectedProvider({
+      webAuthnAccountParams,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    const message = "testmessage";
+
+    let signature = await provider.signMessage({ message });
+
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidSigSuccess);
   });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
@@ -1773,15 +1838,22 @@ describe("MA v2 Tests", async () => {
     signerEntity,
     accountAddress,
     paymasterMiddleware,
+    webAuthnAccountParams = null,
   }: {
-    signer: SmartAccountSigner;
+    signer: SmartAccountSigner; // TO DO: make createModularAccountV2Client not require a signer for a webauthn account
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    credential?: P256Credential & {
+      getFn?: (options: CredentialRequestOptions) => Promise<Credential | null>;
+      rpId?: string;
+    };
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
       signer,
+      credential: webAuthnAccountParams,
+      mode: webAuthnAccountParams ? "webauthn" : "default",
       accountAddress,
       signerEntity,
       transport: custom(instance.getClient()),
