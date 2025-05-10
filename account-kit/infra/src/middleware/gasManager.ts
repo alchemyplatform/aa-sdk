@@ -91,9 +91,7 @@ export function alchemyGasManagerMiddleware(
       const userOp = await deepHexlify(await resolveProperties(uo));
       context.erc20Context = {
         tokenAddress: policyToken.address,
-        ...(policyToken.maxTokenAmount
-          ? { maxTokenAmount: policyToken.maxTokenAmount }
-          : {}),
+        maxTokenAmount: policyToken.maxTokenAmount,
       };
 
       if (policyToken.approvalMode === "PERMIT") {
@@ -134,7 +132,7 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 
 export type PolicyToken = {
   address: Address;
-  maxTokenAmount?: bigint;
+  maxTokenAmount: bigint;
   approvalMode?: "NONE" | "PERMIT";
   erc20Name?: string;
   version?: string;
@@ -279,9 +277,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       if (policyToken !== undefined) {
         erc20Context = {
           tokenAddress: policyToken.address,
-          ...(policyToken.maxTokenAmount
-            ? { maxTokenAmount: policyToken.maxTokenAmount }
-            : {}),
+          maxTokenAmount: policyToken.maxTokenAmount,
         };
         if (policyToken.approvalMode === "PERMIT") {
           erc20Context.permit = await generateSignedPermit(
@@ -393,7 +389,7 @@ const generateSignedPermit = async <
   policyId: string | string[],
   policyToken: {
     address: Address;
-    maxTokenAmount?: bigint;
+    maxTokenAmount: bigint;
     approvalMode?: "NONE" | "PERMIT";
     erc20Name?: string;
     version?: string;
@@ -406,21 +402,25 @@ const generateSignedPermit = async <
     throw new Error("erc20Name or version is missing");
   }
 
-  let maxAmountToken = maxUint256;
+  let decimals_future = client.call({
+    to: policyToken.address,
+    data: encodeFunctionData({
+      abi: parseAbi(EIP712NoncesAbi),
+      functionName: "decimals",
+      args: [],
+    }),
+  });
 
-  if (policyToken.maxTokenAmount) {
-    let { data } = await client.call({
-      to: policyToken.address,
-      data: encodeFunctionData({
-        abi: parseAbi(EIP712NoncesAbi),
-        functionName: "decimals",
-        args: [],
-      }),
-    });
-    const decimals = 10n ** (data ? BigInt(data) : 18n);
-    maxAmountToken = policyToken.maxTokenAmount * decimals;
-  }
-  const paymasterData = await (client as Erc7677Client).request({
+  let nonce_future = client.call({
+    to: policyToken.address,
+    data: encodeFunctionData({
+      abi: parseAbi(EIP712NoncesAbi),
+      functionName: "nonces",
+      args: [account.address],
+    }),
+  });
+
+  let paymasterData_future = (client as Erc7677Client).request({
     method: "pm_getPaymasterStubData",
     params: [
       userOp,
@@ -432,6 +432,23 @@ const generateSignedPermit = async <
     ],
   });
 
+  const [decimals_response, nonce_response, paymasterData] = await Promise.all([
+    decimals_future,
+    nonce_future,
+    paymasterData_future,
+  ]);
+  if (!decimals_response.data) {
+    throw new Error("No decimals returned from erc20 contract call");
+  }
+  if (!nonce_response.data) {
+    throw new Error("No nonces returned from erc20 contract call");
+  }
+
+  const decimals =
+    10n ** (decimals_response.data ? BigInt(decimals_response.data) : 18n);
+  const maxAmountToken = policyToken.maxTokenAmount * decimals;
+  const nonce = BigInt(nonce_response.data);
+
   const paymasterAddress = paymasterData.paymaster
     ? paymasterData.paymaster
     : paymasterData.paymasterAndData
@@ -441,18 +458,8 @@ const generateSignedPermit = async <
   if (paymasterAddress === undefined || paymasterAddress === "0x") {
     throw new Error("no paymaster contract address available");
   }
+  // TODO: set a shorter deadline
   const deadline = maxUint256;
-  const { data } = await client.call({
-    to: policyToken.address,
-    data: encodeFunctionData({
-      abi: parseAbi(EIP712NoncesAbi),
-      functionName: "nonces",
-      args: [account.address],
-    }),
-  });
-  if (!data) {
-    throw new Error("No nonces returned from erc20 contract call");
-  }
 
   const typedPermitData = {
     types: PermitTypes,
@@ -467,7 +474,7 @@ const generateSignedPermit = async <
       owner: account.address,
       spender: paymasterAddress,
       value: maxAmountToken,
-      nonce: BigInt(data),
+      nonce: nonce,
       deadline,
     } satisfies PermitMessage,
   } as const;
