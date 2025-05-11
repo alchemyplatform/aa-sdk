@@ -6,12 +6,14 @@ import {
   createSmartAccountClient,
   default7702GasEstimator,
   default7702UserOpSigner,
+  webauthnGasEstimator,
 } from "@aa-sdk/core";
 import { type Chain, type Transport } from "viem";
 
 import {
   createModularAccountV2,
   type CreateModularAccountV2Params,
+  type CreateModularAccountV2ParamsNoSigner,
 } from "../account/modularAccountV2.js";
 
 import {
@@ -23,7 +25,11 @@ import {
 } from "@account-kit/infra";
 import type { LightAccount } from "../../light-account/accounts/account.js";
 
-import type { ModularAccountV2 } from "../account/common/modularAccountV2Base.js";
+import type {
+  ModularAccountV2,
+  ModularAccountV2NoSigner,
+} from "../account/common/modularAccountV2Base.js";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 
 export type ModularAccountV2Client<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -31,11 +37,25 @@ export type ModularAccountV2Client<
   TTransport extends Transport | AlchemyTransport = Transport,
 > = SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
 
+export type ModularAccountV2ClientNoSigner<
+  TChain extends Chain = Chain,
+  TTransport extends Transport | AlchemyTransport = Transport
+> = SmartAccountClient<TTransport, TChain, ModularAccountV2NoSigner>;
+
 export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = CreateModularAccountV2Params<TTransport, TSigner> &
+  Omit<
+    SmartAccountClientConfig<TTransport, TChain>,
+    "transport" | "account" | "chain"
+  >;
+
+export type CreateModularAccountV2ClientParamsNoSigner<
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain
+> = CreateModularAccountV2ParamsNoSigner<TTransport> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
@@ -50,7 +70,7 @@ export type CreateModularAccountV2AlchemyClientParams<
   "transport"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<TChain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<TChain, LightAccount<TSigner>>, // TO DO: split this type so that it doesn't require a signer
     "account"
   > & { paymasterAndData?: never; dummyPaymasterAndData?: never };
 
@@ -74,6 +94,15 @@ export function createModularAccountV2Client<
     NotType<TTransport, AlchemyTransport>,
 ): Promise<ModularAccountV2Client<TSigner, TChain>>;
 
+export function createModularAccountV2Client<
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain
+>(
+  args: CreateModularAccountV2ClientParamsNoSigner<TTransport, TChain> &
+    NotType<TTransport, AlchemyTransport> & {
+      params: ToWebAuthnAccountParameters;
+    }
+): Promise<ModularAccountV2ClientNoSigner<TChain>>;
 /**
  * Creates a Modular Account V2 client using the provided configuration parameters.
  *
@@ -108,19 +137,39 @@ export function createModularAccountV2Client<
 export async function createModularAccountV2Client(
   config:
     | CreateModularAccountV2ClientParams
-    | CreateModularAccountV2AlchemyClientParams,
+    | CreateModularAccountV2ClientParamsNoSigner
+    | CreateModularAccountV2AlchemyClientParams
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
 
-  const account = await createModularAccountV2(config);
+  let account;
 
-  const middlewareToAppend =
-    config.mode === "7702"
-      ? {
+  if (config.mode === "webauthn") {
+    account = await createModularAccountV2(
+      config as CreateModularAccountV2ParamsNoSigner<Transport>
+    );
+  } else {
+    account = await createModularAccountV2(
+      config as CreateModularAccountV2Params
+    );
+  }
+
+  const middlewareToAppend = await (async () => {
+    switch (config.mode) {
+      case "7702":
+        return {
           gasEstimator: default7702GasEstimator(config.gasEstimator),
           signUserOperation: default7702UserOpSigner(config.signUserOperation),
-        }
-      : {};
+        };
+      case "webauthn":
+        return {
+          gasEstimator: webauthnGasEstimator(),
+        };
+      case "default":
+      case undefined:
+        return {};
+    }
+  });
 
   if (isAlchemyTransport(transport, chain)) {
     return createAlchemySmartAccountClient({
