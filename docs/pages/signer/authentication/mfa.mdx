@@ -22,7 +22,7 @@ Once the user is authenticated, you can call `addMfa` to enable TOTP. This retur
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 const { multiFactors } = await signer.addMFA({
@@ -46,7 +46,7 @@ Once the user has scanned the TOTP secret, have them enter the 6-digit code from
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 await signer.verifyMfa({
@@ -65,7 +65,7 @@ If a user wants to disable TOTP, call `removeMfa` with the `multiFactorId` you w
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 await signer.removeMfa({
@@ -81,7 +81,7 @@ await signer.removeMfa({
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 const { multiFactors } = await signer.getMfaFactors();
@@ -97,7 +97,7 @@ const { multiFactors } = await signer.getMfaFactors();
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 signer.authenticate({
@@ -115,7 +115,7 @@ signer.authenticate({
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 signer.authenticate({
@@ -132,7 +132,7 @@ signer.authenticate({
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 const user = await signer?.validateMultiFactors({
@@ -150,7 +150,7 @@ When calling `authenticate` with `emailMode="magicLink"`, you can catch a `MfaRe
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { MfaRequiredError } from "@account-kit/signer";
 import { signer } from "./signer";
 
@@ -213,7 +213,7 @@ Simply use the standard social login authentication as shown in the [Social Logi
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 await signer.authenticate({

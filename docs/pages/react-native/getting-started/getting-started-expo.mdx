@@ -24,11 +24,11 @@ For more information on upgrading an Expo project, check out the [Expo documenta
 
 <CodeBlocks>
 
-```bash [npx]
+```bash npx
 npx expo install expo@latest
 ```
 
-```bash [yarn]
+```bash yarn
 yarn expo install expo@latest
 ```
 
@@ -58,11 +58,11 @@ Once we've got our Expo project setup and running, we need to setup a few shims 
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install --save node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
@@ -72,7 +72,7 @@ yarn add node-libs-react-native crypto-browserify stream-browserify react-native
 
 Create or edit your `metro.config.js` file in the root of your project so that it includes the following:
 
-```js [metro.config.js]
+```js metro.config.js
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
 const path = require("path");
@@ -127,7 +127,7 @@ Import the following packages at the topmost entry point of your app so that lib
 If you are using `expo-router`, add the imports in your topmost `_layout.tsx` file in the `app` directory. However if you are using a different navigation library (e.g. `react-navigation`),
 add the imports in your topmost `App.tsx` file.
 
-```tsx [App.tsx or app/_layout.tsx]
+```tsx App.tsx or app/_layout.tsx
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
 
@@ -140,11 +140,11 @@ That's it! Now you can install the packages you want from Account Kit and start 
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
@@ -166,11 +166,11 @@ To ensure the Signer package works correctly, you'll need to add the following d
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
@@ -210,11 +210,11 @@ Now that we've got everything setup, we can run a prebuild to ensure the native 
 
 <CodeBlocks>
 
-```bash [android]
+```bash android
 npx expo prebuild --platform android
 ```
 
-```bash [ios]
+```bash ios
 npx expo prebuild --platform ios
 ```
 
