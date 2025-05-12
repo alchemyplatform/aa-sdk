@@ -85,6 +85,7 @@ export const PermitTypes = {
 
 export const EIP712NoncesAbi = [
   "function nonces(address owner) external view returns (uint)",
+  "function decimals() public view returns (uint8)",
 ] as const;
 
 export type PermitMessage = {

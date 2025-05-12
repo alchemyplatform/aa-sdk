@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- don't trigger signer subscriptions before subscribe returns ([#1593](https://github.com/alchemyplatform/aa-sdk/issues/1593)) ([6060ca0](https://github.com/alchemyplatform/aa-sdk/commit/6060ca02c7758d975a83379483c3e03cf15424d5))
+
+### Features
+
+- link auth when a user logs in with Google with an existing email ([#1581](https://github.com/alchemyplatform/aa-sdk/issues/1581)) ([dd44ea9](https://github.com/alchemyplatform/aa-sdk/commit/dd44ea9be47b1e8cdd29999e80b81d5d3ccb8077))
+- solana demo ([#1583](https://github.com/alchemyplatform/aa-sdk/issues/1583)) ([d471359](https://github.com/alchemyplatform/aa-sdk/commit/d471359104d0ad55f1c3d4e26d694edc88acffec)), closes [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1582](https://github.com/alchemyplatform/aa-sdk/issues/1582) [#1584](https://github.com/alchemyplatform/aa-sdk/issues/1584)
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add replace state filter ([#1579](https://github.com/alchemyplatform/aa-sdk/issues/1579)) ([f243b80](https://github.com/alchemyplatform/aa-sdk/commit/f243b80be5144cfcbe7d961709a022219c3fdd3d))
+
 # [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
 
 ### Features

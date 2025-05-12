@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- fix error message ([#1595](https://github.com/alchemyplatform/aa-sdk/issues/1595)) ([1d655e0](https://github.com/alchemyplatform/aa-sdk/commit/1d655e067b147f01e7ed1821ff2491275a46aa71))
+
+### Features
+
+- adds WebAuthnValidationModule ([#1572](https://github.com/alchemyplatform/aa-sdk/issues/1572)) ([a236f5f](https://github.com/alchemyplatform/aa-sdk/commit/a236f5ff874f466f836edee5383d43b0b156c764))
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
 # [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
 
 **Note:** Version bump only for package @account-kit/smart-contracts

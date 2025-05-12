@@ -26,8 +26,10 @@ type Never<T> = T extends object
     }
   : never;
 
+type AlchemyConnectionConfig = ConnectionConfig;
+
 type SplitTransportConfig = {
-  alchemyConnection: ConnectionConfig;
+  alchemyConnection: AlchemyConnectionConfig;
   nodeRpcUrl: string;
 };
 
@@ -54,8 +56,8 @@ const chainAgnosticMethods = [
 ];
 
 export type AlchemyTransportConfig = (
-  | (ConnectionConfig & Never<SplitTransportConfig>)
-  | (SplitTransportConfig & Never<ConnectionConfig>)
+  | (AlchemyConnectionConfig & Never<SplitTransportConfig>)
+  | (SplitTransportConfig & Never<AlchemyConnectionConfig>)
 ) & {
   /** The max number of times to retry. */
   retryCount?: TransportConfig["retryCount"] | undefined;
@@ -179,7 +181,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
     const chainAgnosticRpcUrl =
       connectionConfig.rpcUrl == null
         ? "https://api.g.alchemy.com/v2/"
-        : connectionConfig.rpcUrl;
+        : connectionConfig.chainAgnosticUrl ?? connectionConfig.rpcUrl;
 
     const innerTransport = (() => {
       mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);

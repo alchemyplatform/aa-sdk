@@ -2,7 +2,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NotAuthenticatedError, MfaRequiredError } from "../src/errors.js";
 import { BaseAlchemySigner } from "../src/base.js";
-import type { BaseAlchemySignerParams } from "../src/base.js";
 import { AlchemySignerStatus } from "../src/types.js";
 import type { MfaFactor } from "../src/client/types.js";
 
@@ -24,11 +23,7 @@ import {
   TEST_DELAYS,
 } from "./fixtures.js";
 
-class TestAlchemySigner extends BaseAlchemySigner<MockAlchemySignerWebClient> {
-  constructor(params: BaseAlchemySignerParams<MockAlchemySignerWebClient>) {
-    super(params);
-  }
-}
+class TestAlchemySigner extends BaseAlchemySigner<MockAlchemySignerWebClient> {}
 
 describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
   let mockClient: MockAlchemySignerWebClient;
