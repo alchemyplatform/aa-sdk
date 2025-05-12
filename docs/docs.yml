@@ -95,9 +95,9 @@ navigation:
               - page: Get started
                 path: wallets/pages/react/solana-wallets/get-started.mdx
               - page: Signing and sending
-                path: wallets/pages/react/solana-wallets/sign-and-send-solana.mdx
+                path: wallets/pages/react/solana-wallets/signing-and-sending-solana.mdx
               - page: Sponsor gas
-                path: wallets/pages/react/solana-wallets/sponsoring-gas.mdx
+                path: wallets/pages/react/solana-wallets/sponsor-solana-gas.mdx
           - section: Customizing UI components
             slug: customization
             contents:
