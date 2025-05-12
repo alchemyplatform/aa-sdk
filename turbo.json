@@ -20,13 +20,10 @@
       "dependsOn": ["^build"],
       "cache": false
     },
-    "docs:gen": {
-      "dependsOn": ["ak-docgen#build"],
-      "outputs": ["../../site/pages/reference/**"]
-    },
     "fern:gen": {
       "dependsOn": ["ak-docgen#build"],
-      "outputs": ["../../docs/pages/reference/**"]
+      "outputs": ["../../docs/pages/reference/**"],
+      "cache": false
     }
   }
 }
