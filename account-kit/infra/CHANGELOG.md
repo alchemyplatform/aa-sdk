@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- fix error message ([#1595](https://github.com/alchemyplatform/aa-sdk/issues/1595)) ([1d655e0](https://github.com/alchemyplatform/aa-sdk/commit/1d655e067b147f01e7ed1821ff2491275a46aa71))
+
+### Features
+
+- support chain agnostic rpc url override ([#1613](https://github.com/alchemyplatform/aa-sdk/issues/1613)) ([6e4eee6](https://github.com/alchemyplatform/aa-sdk/commit/6e4eee668bf7c6c0f9aa4b43df67bd1e36b43d4f))
+
 ## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
 
 ### Bug Fixes

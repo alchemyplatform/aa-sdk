@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- add slugs for correct urls and remove H1 tags to fix double title in fern ([#1602](https://github.com/alchemyplatform/aa-sdk/issues/1602)) ([b831341](https://github.com/alchemyplatform/aa-sdk/commit/b8313411949b7fa597d194754dafed91b9f7afa5))
+- don't trigger signer subscriptions before subscribe returns ([#1593](https://github.com/alchemyplatform/aa-sdk/issues/1593)) ([6060ca0](https://github.com/alchemyplatform/aa-sdk/commit/6060ca02c7758d975a83379483c3e03cf15424d5))
+- don't use unconfigured chain during hydration ([#1608](https://github.com/alchemyplatform/aa-sdk/issues/1608)) ([b31947d](https://github.com/alchemyplatform/aa-sdk/commit/b31947d1cf7f74c79b94377791ed5a4dfae27e4f))
+- fix error message ([#1595](https://github.com/alchemyplatform/aa-sdk/issues/1595)) ([1d655e0](https://github.com/alchemyplatform/aa-sdk/commit/1d655e067b147f01e7ed1821ff2491275a46aa71))
+
+### Features
+
+- adds WebAuthnValidationModule ([#1572](https://github.com/alchemyplatform/aa-sdk/issues/1572)) ([a236f5f](https://github.com/alchemyplatform/aa-sdk/commit/a236f5ff874f466f836edee5383d43b0b156c764))
+- link auth when a user logs in with Google with an existing email ([#1581](https://github.com/alchemyplatform/aa-sdk/issues/1581)) ([dd44ea9](https://github.com/alchemyplatform/aa-sdk/commit/dd44ea9be47b1e8cdd29999e80b81d5d3ccb8077))
+- remove odyssey and use base sepolia for 7702 ([#1604](https://github.com/alchemyplatform/aa-sdk/issues/1604)) ([582bb94](https://github.com/alchemyplatform/aa-sdk/commit/582bb94e0730fbc025aa82b6ed8dd99060d61be4))
+- solana demo ([#1583](https://github.com/alchemyplatform/aa-sdk/issues/1583)) ([d471359](https://github.com/alchemyplatform/aa-sdk/commit/d471359104d0ad55f1c3d4e26d694edc88acffec)), closes [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1582](https://github.com/alchemyplatform/aa-sdk/issues/1582) [#1584](https://github.com/alchemyplatform/aa-sdk/issues/1584)
+- support chain agnostic rpc url override ([#1613](https://github.com/alchemyplatform/aa-sdk/issues/1613)) ([6e4eee6](https://github.com/alchemyplatform/aa-sdk/commit/6e4eee668bf7c6c0f9aa4b43df67bd1e36b43d4f))
+- update nft image for the demo ([#1599](https://github.com/alchemyplatform/aa-sdk/issues/1599)) ([f2ba241](https://github.com/alchemyplatform/aa-sdk/commit/f2ba24121a511a60246e0231fb60844bd52227e9))
+
 ## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
 
 ### Bug Fixes
