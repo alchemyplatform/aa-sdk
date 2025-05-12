@@ -19,28 +19,34 @@ export const createPublicErc4337ClientSchema = <
   });
 
 // [!region ConnectionConfigSchema]
-export const ConnectionConfigSchema = z.union([
+// TODO: in v5 either remove this or simplify it (either way this should be moved out of aa-sdk/core)
+export const ConnectionConfigSchema = z.intersection(
+  z.union([
+    z.object({
+      rpcUrl: z.never().optional(),
+      apiKey: z.string(),
+      jwt: z.never().optional(),
+    }),
+    z.object({
+      rpcUrl: z.never().optional(),
+      apiKey: z.never().optional(),
+      jwt: z.string(),
+    }),
+    z.object({
+      rpcUrl: z.string(),
+      apiKey: z.never().optional(),
+      jwt: z.never().optional(),
+    }),
+    z.object({
+      rpcUrl: z.string(),
+      apiKey: z.never().optional(),
+      jwt: z.string(),
+    }),
+  ]),
   z.object({
-    rpcUrl: z.never().optional(),
-    apiKey: z.string(),
-    jwt: z.never().optional(),
-  }),
-  z.object({
-    rpcUrl: z.never().optional(),
-    apiKey: z.never().optional(),
-    jwt: z.string(),
-  }),
-  z.object({
-    rpcUrl: z.string(),
-    apiKey: z.never().optional(),
-    jwt: z.never().optional(),
-  }),
-  z.object({
-    rpcUrl: z.string(),
-    apiKey: z.never().optional(),
-    jwt: z.string(),
-  }),
-]);
+    chainAgnosticUrl: z.string().optional(),
+  })
+);
 // [!endregion ConnectionConfigSchema]
 
 export const UserOperationFeeOptionsFieldSchema =
