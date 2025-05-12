@@ -384,7 +384,7 @@ navigation:
                 path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
               - page: Onchain policies
                 slug: onchain-policy-configuration
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys.mdx
+                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
           - section: Authentication methods
             slug: authentication
             contents:
