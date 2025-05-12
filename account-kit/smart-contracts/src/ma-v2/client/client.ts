@@ -166,7 +166,7 @@ export async function createModularAccountV2Client(
           gasEstimator: webauthnGasEstimator(),
         };
       case "default":
-      case undefined:
+      default:
         return {};
     }
   });
