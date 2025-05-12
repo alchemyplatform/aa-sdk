@@ -1,0 +1,83 @@
+---
+title: Gas sponsorship
+description: How to sponsor gas on Solana
+text: How to sponsor gas on Solana
+link: /react/solana-wallets/sponsoring-gas
+slug: wallets/react/solana-wallets/sponsoring-gas
+---
+
+Account Kit supports fees and rent sponsorship for Solana wallets, enabling users to transact without holding SOL — removing a major barrier to entry for new users of your app.
+
+You can sponsor gas either globally (for all transactions) or on a per-transaction basis.
+
+- **Fees** cover the cost of executing transactions.
+- **Rent** is required to store data on-chain.
+  - _We support rent sponsorship for `SystemProgram.createAccount` . If you need support for sponsoring rent in custom programs, please contact us at [account-abstraction@alchemy.com](mailto:account-abstraction@alchemy.com)._
+- See our [recommendations](https://www.alchemy.com/support/best-practices-to-limit-gas-manager-spend) for gas manager spending.
+
+## Setup
+
+On your gas manager [dashboard](https://dashboard.alchemy.com/gas-manager), create a new Solana sponsorship policy. You can customize this policy to set rules on sponsorship like max spend per transaction, max spend per policy, or max transactions per policy.
+
+Make sure you select Solana as the chain type and apply this policy to the app corresponding to the API key you’re using.
+
+## Global sponsorship
+
+If you want to apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure gas sponsorship at the Alchemy configuration level by passing a policyId in to your Solana config.
+
+```tsx [config.ts]
+import { cookieStorage, createConfig } from "@account-kit/react";
+import { Connection } from "@solana/web3.js";
+
+createConfig({
+	...otherConfig
+	solana: {
+	  connection: new Connection(
+	    "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
+	    {
+	      wsEndpoint: "wss://api.devnet.solana.com",
+	      commitment: "confirmed",
+	    }
+	  ),
+	  policyId: "<PolicyId>"
+	}
+}
+```
+
+This setup applies sponsorship to all Solana transactions sent from wallets created with this configuration (e.g. this will be applied to usage of the useSolana… hooks).
+
+### Per transaction sponsorship
+
+If instead, you want to apply sponsorship conditionally for each transaction, you can pass a `policyId` to the `useSolanaTransaction` hook.
+
+```tsx [sponsor-solana-gas.ts]
+import { useSolanaTransaction } from "@account-kit/react";
+import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
+
+function MyComponent() {
+  const policyId = "<YourPolicyId>";
+
+  const { sendTransaction, signer } = useSolanaTransaction({
+    policyId,
+  });
+
+  if (!signer) {
+    return <div>Loading signer...</div>;
+  }
+
+  return (
+    <button
+      onClick={() =>
+        sendTransaction({
+          transfer: {
+            toAddress: "<ToAddress>",
+            amount: 1000000,
+          },
+        })
+      }
+    >
+      Send Sponsored Transaction
+    </button>
+  );
+}
+```

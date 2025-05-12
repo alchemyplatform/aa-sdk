@@ -89,6 +89,15 @@ navigation:
                 path: wallets/pages/react/multi-chain-apps.mdx
           - page: Using EIP-7702
             path: wallets/pages/react/using-7702.mdx
+          - section: Using Solana wallets
+            skip-slug: true
+            contents:
+              - page: Get started
+                path: wallets/react/solana-wallets/get-started.mdx
+              - page: Signing and sending
+                path: wallets/react/solana-wallets/sign-and-send-solana.mdx
+              - page: Sponsor gas
+                path: wallets/react/solana-wallets/sponsoring-gas.mdx
           - section: Customizing UI components
             slug: customization
             contents:
