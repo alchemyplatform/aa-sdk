@@ -8,7 +8,7 @@ slug: wallets/react/solana-wallets/sign-and-send-solana
 
 # Sign and send on Solana
 
-After [creating a Solana wallet](/wallet/react/solana-wallets/get-started), you can use Account Kit to sign messages and send trasnactions on Solana.
+After [creating a Solana wallet](/wallet/react/solana-wallets/get-started), you can use Account Kit to sign messages and send transactions on Solana.
 
 # Sending Solana transactions with useSolanaTransaction
 
@@ -164,7 +164,7 @@ sendTransaction({
 
 # Sign messages with useSolanaSignMessage
 
-To sign a message, either a strin or a byte array, using your Solana wallet, simply use the `useSolanaSignMessage` hook.
+To sign a message, either a string or a byte array, using your Solana wallet, simply use the `useSolanaSignMessage` hook.
 
 ```tsx [sign-solana-message.tsx]
 import { useSolanaSignMessage } from "@account-kit/react";
@@ -238,7 +238,9 @@ To enable multi-signature functionality, we attach additional signers to the tra
 - Tokens can exist at a shared account address with controlled access.
 - Coordination between signers happens off-chain via pre-signed approvals.
 
-This pattern is useful for collaborative workflows, DAO interactions, or shared treasury use cases.
+For collaborative workflows, DAO interactions, and shared treasury use cases, please refer to the documentation for PDA construction on the Squad Wallet website:
+[Squad Wallet Documentation For PDA](https://docs.squads.so/squads-v3-docs/development/pdas/multisig) or [Squad NPM SDK ](https://www.npmjs.com/package/@sqds/sdk?activeTab=readme#built-instructions)
+These wallets like Squad, Snowflake, and others have their own methods and integrations.
 
 **Example flow:**
 
@@ -249,7 +251,56 @@ This pattern is useful for collaborative workflows, DAO interactions, or shared 
 [Learn more about Solana multisig.](https://blog.keyst.one/a-deep-dive-into-understanding-solana-multisig)
 
 ```tsx [add-solana-signer.ts]
-import { Transaction, VersionedTransaction } from "@solana/web3.js";
+import {
+  Transaction,
+  VersionedTransaction,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+} from "@solana/web3.js";
+
+import {
+  ExtensionType,
+  LENGTH_SIZE,
+  TOKEN_2022_PROGRAM_ID,
+  TYPE_SIZE,
+  createInitializeMetadataPointerInstruction,
+  getMintLen,
+} from "@solana/spl-token";
+import { pack, TokenMetadata } from "@solana/spl-token-metadata";
+const stakeAccount = Keypair.generate();
+const publicKey = new PublicKey(signer.address);
+const metaData: (readonly [string, string])[] = [];
+const tokenMetadata: TokenMetadata = {
+  updateAuthority: publicKey,
+  mint: stakeAccount.publicKey,
+  name: "Alchemy Duck",
+  symbol: "ALCHDUCK",
+  uri: "https://bafybeigtvzjqalevyw67xdhr7am5r3jxe5kjbg4pi2jv3nxvhelptwksoe.ipfs.dweb.link?filename=duckImage.png",
+  additionalMetadata: metaData,
+};
+const mintLen = getMintLen([ExtensionType.MetadataPointer]);
+const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
+const mintLamports = await connection.getMinimumBalanceForRentExemption(
+  mintLen + metadataLen
+);
+
+const mint = stakeAccount.publicKey;
+const instructions = [
+  SystemProgram.createAccount({
+    fromPubkey: publicKey,
+    newAccountPubkey: mint,
+    space: mintLen,
+    lamports: mintLamports,
+    programId: TOKEN_2022_PROGRAM_ID,
+  }),
+  createInitializeMetadataPointerInstruction(
+    mint,
+    publicKey,
+    mint,
+    TOKEN_2022_PROGRAM_ID
+  ),
+];
 /**
  * Send a transaction with a custom `preSend` hook to add an extra signer.
  */

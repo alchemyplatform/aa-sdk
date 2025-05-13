@@ -8,7 +8,7 @@ slug: wallets/react/solana-wallets/get-started
 
 <Warning>
   Solana Wallet support is in beta. Please [reach
-  out](mailto:support@alchemy.com) if you run in to any issues or need support
+  out](mailto:support@alchemy.com) if you run into any issues or need support
   integrating.
 </Warning>
 
@@ -57,18 +57,18 @@ import { Connection } from "@solana/web3.js";
 import { sepolia } from "@account-kit/infra";
 ...
 createConfig({
-	...otherConfig
-    chain: sepolia,
-	solana: {
-	  connection: new Connection(
-	    "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
-	    {
-	      wsEndpoint: "wss://api.devnet.solana.com",
-	      commitment: "confirmed",
-	    }
-	  ),
-	  policyId: "<PolicyId>" // Optional - gas/rent sponsorship policy ID: https://dashboard.alchemy.com/gas-manager
-	}
+  ...otherConfig
+  chain: sepolia,
+  solana: {
+    connection: new Connection(
+      "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
+      {
+        wsEndpoint: "wss://api.devnet.solana.com",
+        commitment: "confirmed",
+      }
+    ),
+    policyId: "<PolicyId>" // Optional - gas/rent sponsorship policy ID: https://dashboard.alchemy.com/gas-manager
+  }
 }
 ```
 
@@ -96,7 +96,7 @@ function MyComponent() {
 
 ## Using `useSolanaTransaction` hook
 
-If you want to connect to a user’s Solana Wallet and send transactions, you should use the [`useSolanaTransaction`](TODO:linktosolanatrxns) hook for simplicty. This hook also exposes the Solana wallet address.
+If you want to connect to a user’s Solana Wallet and send transactions, you should use the [`useSolanaTransaction`](TODO:linktosolanatrxns) hook for simplicity. This hook also exposes the Solana wallet address.
 
 **Not using React hooks?**
 
