@@ -4,6 +4,9 @@ import {
   erc7677Middleware,
   LocalAccountSigner,
   createSmartAccountClient,
+  isValidRequest,
+  InvalidUserOperationError,
+  deepHexlify,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
@@ -78,6 +81,8 @@ import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
   const isValidSigSuccess = "0x1626ba7e";
+  const isValidWebAuthnSigSuccess =
+    "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001c66a718123aa330c0d00439ed337bc6721c20298be9fb50bb0e8723b6340a7dc65bc37d891cb278953722d0a93f6daf784dde4e1396e8f57acc64c8d1ea9a602000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000867b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a223150314f474a45794a7a4132524a5f4a34524759787a6b574730774246716d69334d333648456b67427645222c226f726967696e223a22687474703a2f2f6c6f63616c686f73743a35313733222c2263726f73734f726967696e223a66616c73657d0000000000000000000000000000000000000000000000000000";
 
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions> &
@@ -169,7 +174,45 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it.only("successfully sign + validate a message, for WebAuthn account", async () => {
+  it.only("sends a simple UO with webauthn account", async () => {
+    const provider = await givenConnectedProviderNoSigner({
+      params: webAuthnAccountParams,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // send UO with webauthn gas estimator
+    const builtUO = await provider.buildUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    const request = deepHexlify(builtUO);
+    if (!isValidRequest(request)) {
+      throw new InvalidUserOperationError(builtUO);
+    }
+
+    let signedUOHash = await provider.account.signUserOperationHash(
+      provider.account.getEntryPoint().getUserOperationHash(request)
+    );
+
+    const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
+
+    signedUO.signature = signedUOHash;
+
+    await provider.sendRawUserOperation(
+      signedUO,
+      provider.account.getEntryPoint().address
+    );
+  });
+
+  it("successfully sign + validate a message, for WebAuthn account", async () => {
     const provider = await givenConnectedProviderNoSigner({
       params: webAuthnAccountParams,
     });
@@ -185,13 +228,15 @@ describe("MA v2 Tests", async () => {
       client,
     });
 
-    const message = "testmessage";
+    const message = "0xdeadbeef";
 
     let signature = await provider.signMessage({ message });
 
+    console.log("signature", signature);
+
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature])
-    ).resolves.toEqual(isValidSigSuccess);
+    ).resolves.toEqual(isValidWebAuthnSigSuccess);
   });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
