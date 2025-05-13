@@ -50,7 +50,9 @@ export const SolanaNftCard = () => {
       setTransactionState("sponsoring");
       const stakeAccount = Keypair.generate();
       const publicKey = new PublicKey(solanaSigner.address);
-      const metaData: (readonly [string, string])[] = [];
+      const metaData: (readonly [string, string])[] = [
+        ["SampleData", "ChangeMe"],
+      ];
       const tokenMetadata: TokenMetadata = {
         updateAuthority: publicKey,
         mint: stakeAccount.publicKey,
