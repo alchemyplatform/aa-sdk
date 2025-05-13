@@ -10,12 +10,12 @@ slug: wallets/react/solana-wallets/sign-and-send-solana
 
 After [creating a Solana wallet](/wallet/react/solana-wallets/get-started), you can use Account Kit to sign messages and send transactions on Solana.
 
-# Sending Solana transactions with useSolanaTransaction
+# Sending Solana transactions with `useSolanaTransaction`
 
 To send a transaction from an embedded Solana wallet, use the `sendTransaction` method from the `useSolanaTransaction` hook.
 
-- This method supports signing both single and **batched** transactions and integrates seamlessly with popular web3 libraries like @solana/web3js.
-- You’ll need to use a web3 library to construct and submit transactions.
+- This method supports signing both single and **batched** transactions and integrates seamlessly with popular web3 libraries like `@solana/web3js`.
+- You'll need to use a web3 library to construct and submit transactions.
 
 <Tip>
   Want to sponsor gas for Solana transactions? Skip to [this
@@ -73,7 +73,7 @@ function MyComponent() {
 
 ## Send a batched transaction
 
-Account Kit supports batching multiple Solana instructions into a single transaction. For example, here’s how you could sign a batch of 2 transaction instructions.
+Account Kit supports batching multiple Solana instructions into a single transaction. For example, here's how you could sign a batch of 2 transaction instructions.
 
 ```tsx [batched-solana-transaction.tsx]
 import React from "react";
@@ -130,7 +130,7 @@ function MyComponent() {
 }
 ```
 
-## How does sendTransaction work?
+## How does `sendTransaction` work?
 
 The `sendTransaction` method will construct and send a Solana transaction using the connection you provide. You can either construct a transaction using simple parameters or instructions for finer grained control.
 
@@ -148,7 +148,7 @@ sendTransaction({
 
 Using instructions:
 
-If you want finer grained control like transfer and nonceAdvance you can pass instructions by using the exposed [web3 SystemProgram](https://solana-foundation.github.io/solana-web3.js/classes/SystemProgram.html).
+If you want finer grained control like transfer and `nonceAdvance` you can pass instructions by using the exposed [web3 SystemProgram](https://solana-foundation.github.io/solana-web3.js/classes/SystemProgram.html).
 
 ```tsx
 sendTransaction({
@@ -162,7 +162,7 @@ sendTransaction({
 });
 ```
 
-# Sign messages with useSolanaSignMessage
+# Sign messages with `useSolanaSignMessage`
 
 To sign a message, either a string or a byte array, using your Solana wallet, simply use the `useSolanaSignMessage` hook.
 
@@ -186,8 +186,7 @@ function MyComponent() {
   return (
     <div>
       <button onClick={() => signMessage({ message: "Here is my message" })}>
-        {" "}
-        Sign{" "}
+        {" Sign "}
       </button>
       Message Signed: {signedMessage}
     </div>
@@ -224,9 +223,9 @@ function MyComponent() {
 }
 ```
 
-# Multi-signature support using PreSign
+# Multi-signature support using custom signers
 
-You can implement multi-signature behavior using the `PreSign` feature to authorize multiple signers on a transaction before execution.
+You can implement multi-signature behavior using the `preSign` feature to authorize multiple signers on a transaction before execution.
 
 ### Example use case: adding additional signers
 
@@ -238,7 +237,7 @@ To enable multi-signature functionality, we attach additional signers to the tra
 - Tokens can exist at a shared account address with controlled access.
 - Coordination between signers happens off-chain via pre-signed approvals.
 
-For collaborative workflows, DAO interactions, and shared treasury use cases, please refer to the documentation for PDA construction on the Squad Wallet website:
+For collaborative workflows and DAO interactions, please refer to the documentation for PDA construction on the Squad Wallet website. For shared treasury use cases, see the Squad Wallet documentation or NPM SDK.
 [Squad Wallet Documentation For PDA](https://docs.squads.so/squads-v3-docs/development/pdas/multisig) or [Squad NPM SDK ](https://www.npmjs.com/package/@sqds/sdk?activeTab=readme#built-instructions)
 These wallets like Squad, Snowflake, and others have their own methods and integrations.
 
@@ -307,7 +306,7 @@ const instructions = [
 const tx = await sendTransactionAsync({
   instructions, // Standard transaction instructions
   transactionComponents: {
-    preSend: addStakeSignature(stakeAccount), // Add secondary signer before sending
+    preSend: getAddStakeSignatureFn(stakeAccount), // Add secondary signer before sending
   },
 });
 
@@ -317,7 +316,7 @@ const tx = await sendTransactionAsync({
  * @param stakeAccount - The Keypair used to sign the transaction
  * @returns A function that accepts a transaction and returns a signed transaction
  */
-function addStakeSignature(stakeAccount: Keypair) {
+function getAddStakeSignatureFn(stakeAccount: Keypair) {
   return async (transaction: Transaction | VersionedTransaction) => {
     if ("version" in transaction) {
       transaction.sign([stakeAccount]); // Add stake account's signature for v0 transactions

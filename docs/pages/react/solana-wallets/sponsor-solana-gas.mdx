@@ -8,7 +8,7 @@ slug: wallets/react/solana-wallets/sponsoring-gas
 
 Account Kit supports fees and rent sponsorship for Solana wallets, enabling users to transact without holding SOL — removing a major barrier to entry for new users of your app.
 
-You can sponsor gas either globally (for all transactions) or on a per-transaction basis.
+You can sponsor transaction fees or rent either globally (for all transactions) or on a per-transaction basis.
 
 - **Fees** cover the cost of executing transactions.
 - **Rent** is required to store data on-chain.
@@ -23,7 +23,7 @@ Make sure you select Solana as the chain type and apply this policy to the app c
 
 ## Global sponsorship
 
-If you want to apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure gas sponsorship at the Alchemy configuration level by passing a policyId in to your Solana config.
+If you want to apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config.
 
 ```tsx [config.ts]
 import { cookieStorage, createConfig } from "@account-kit/react";
@@ -44,7 +44,7 @@ createConfig({
 }
 ```
 
-This setup applies sponsorship to all Solana transactions sent from wallets created with this configuration (e.g. this will be applied to usage of the useSolana… hooks).
+This setup applies sponsorship to all Solana transactions sent from wallets created with this configuration (e.g. this will be applied to usage of the `useSolana…` hooks).
 
 ### Per transaction sponsorship
 
