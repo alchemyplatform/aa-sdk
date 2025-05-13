@@ -8,7 +8,7 @@ When using the React hooks exported by Account Kit in a server-side rendered set
 
 To enable this setting, you can set `ssr: true` when creating a config. We also make the config a function, so that we can call it once per request which allows for request-based isolation of the account state.
 
-```ts twoslash [config.ts]
+```ts twoslash config.ts
 import { createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -29,7 +29,7 @@ This setting will defer hydration of the account state to the client after the i
 
 To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
 
-```ts twoslash [config.ts]
+```ts twoslash config.ts
 import {
   createConfig,
   cookieStorage, // [!code ++]
@@ -58,7 +58,7 @@ If you are using NextJS App Directory, you can read the cookie state and pass it
 
 <CodeBlocks>
 
-```tsx twoslash [layout.tsx] filename=layout.tsx
+```tsx twoslash layout.tsx filename=layout.tsx
 // @noErrors
 import React from "react";
 import { cookieToInitialState } from "@account-kit/core";
@@ -98,7 +98,7 @@ export default function RootLayout({
 }
 ```
 
-```tsx twoslash [providers.tsx] filename=providers.tsx
+```tsx twoslash providers.tsx filename=providers.tsx
 // @noErrors
 "use client";
 
@@ -136,7 +136,7 @@ export const Providers = (
 };
 ```
 
-```tsx twoslash [config.ts] filename=config.ts
+```tsx twoslash config.ts filename=config.ts
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";

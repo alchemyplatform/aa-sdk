@@ -29,7 +29,7 @@ Now that you've set up your config for SSR, you will have to manually hydrate th
 
 <CodeBlocks>
 
-```ts twoslash [hydrate.ts]
+```ts twoslash hydrate.ts
 import { hydrate } from "@account-kit/core";
 import { config } from "./config";
 
@@ -70,7 +70,7 @@ Now you can get the initial state from cookies and pass it to the `hydrate` meth
 
 <CodeBlocks>
 
-```ts twoslash [hydrate.ts]
+```ts twoslash hydrate.ts
 import { cookieToInitialState, hydrate } from "@account-kit/core";
 import { config } from "./config";
 
@@ -85,7 +85,7 @@ if (typeof window !== "undefined") {
 }
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 import { createConfig, cookieStorage } from "@account-kit/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 
