@@ -98,8 +98,6 @@ navigation:
                 path: wallets/pages/react/solana-wallets/signing-and-sending-solana.mdx
               - page: Sponsor gas
                 path: wallets/pages/react/solana-wallets/sponsor-solana-gas.mdx
-              - page: Signer package
-                path: wallets/pages/react/solana-wallets/solana-signer-package.mdx
           - section: Customizing UI components
             slug: customization
             contents:
@@ -243,6 +241,11 @@ navigation:
                 path: wallets/pages/core/add-passkey.mdx
               - page: Multi-chain apps
                 path: wallets/pages/core/multi-chain-apps.mdx
+          - section: Using Solana wallets
+            skip-slug: true
+            contents:
+              - page: Signer package
+                path: wallets/pages/core/solana-wallets/solana-signer-package.mdx
           - section: SDK Reference
             path: wallets/pages/reference/account-kit/core/index.mdx
             contents:
