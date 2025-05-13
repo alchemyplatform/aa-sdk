@@ -31,7 +31,6 @@ import {
   encodeAbiParameters,
   encodeFunctionData,
   parseAbi,
-  maxUint256,
   sliceHex,
 } from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
@@ -402,7 +401,7 @@ const generateSignedPermit = async <
     throw new Error("erc20Name or version is missing");
   }
 
-  let decimals_future = client.call({
+  let decimalsFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
       abi: parseAbi(EIP712NoncesAbi),
@@ -411,7 +410,7 @@ const generateSignedPermit = async <
     }),
   });
 
-  let nonce_future = client.call({
+  let nonceFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
       abi: parseAbi(EIP712NoncesAbi),
@@ -420,7 +419,7 @@ const generateSignedPermit = async <
     }),
   });
 
-  let paymasterData_future = (client as Erc7677Client).request({
+  let paymasterDataFuture = (client as Erc7677Client).request({
     method: "pm_getPaymasterStubData",
     params: [
       userOp,
@@ -432,22 +431,22 @@ const generateSignedPermit = async <
     ],
   });
 
-  const [decimals_response, nonce_response, paymasterData] = await Promise.all([
-    decimals_future,
-    nonce_future,
-    paymasterData_future,
+  const [decimalsResponse, nonceResponse, paymasterData] = await Promise.all([
+    decimalsFuture,
+    nonceFuture,
+    paymasterDataFuture,
   ]);
-  if (!decimals_response.data) {
+  if (!decimalsResponse.data) {
     throw new Error("No decimals returned from erc20 contract call");
   }
-  if (!nonce_response.data) {
+  if (!nonceResponse.data) {
     throw new Error("No nonces returned from erc20 contract call");
   }
 
   const decimals =
-    10n ** (decimals_response.data ? BigInt(decimals_response.data) : 18n);
+    10n ** (decimalsResponse.data ? BigInt(decimalsResponse.data) : 18n);
   const maxAmountToken = policyToken.maxTokenAmount * decimals;
-  const nonce = BigInt(nonce_response.data);
+  const nonce = BigInt(nonceResponse.data);
 
   const paymasterAddress = paymasterData.paymaster
     ? paymasterData.paymaster
@@ -458,8 +457,8 @@ const generateSignedPermit = async <
   if (paymasterAddress === undefined || paymasterAddress === "0x") {
     throw new Error("no paymaster contract address available");
   }
-  // TODO: set a shorter deadline
-  const deadline = maxUint256;
+
+  const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 10);
 
   const typedPermitData = {
     types: PermitTypes,
