@@ -1,40 +1,59 @@
 ---
-title: Signing Package
+title: How to sign messages and send transactions on Solana
 description: How to sign messages and send transactions on Solana
 text: How to sign messages and send transactions on Solana
-link: /signer/solana-wallets/solana-signer-package
-slug: wallets/signer/solana-wallets/solana-signer-package
+link: /signer/solana-wallets/get-started
+slug: wallets/signer/solana-wallets/get-started
 ---
 
-# Create Signer
+If you're not using React, use the `@account-kit/signer` package to create smart wallets on Solana, sign messages, sign transactions, and sponsor transaction fees.
 
-You can convert an `AlchemyWebSigner` to a Solana signer using either of these methods:
+If you're using React, get started with Solana wallets [here](/docs/wallets/signer/solana-wallets/solana-signer-package).
 
-```ts [creating-solana-signer-package.tsx]
-// Let the `alchemySigner` be the previous `AlchemyWebSigner`
-const signer = alchemySigner.toSolanaSigner();
-// OR
+# Create a Solana signer
+
+Once you've [authenticated users](/docs/wallets/signer/quickstart), convert the `AlchemyWebSigner` to a Solana compatible signer using either of these methods:
+
+<CodeBlocks>
+
+```ts twoslash example.ts
+import { signer } from "./signer";
 import { SolanaSigner } from "@account-kit/signer";
-const signer = new SolanaSigner(alchemySigner);
+
+const solanaSigner = signer.toSolanaSigner();
+// OR
+const solanaSigner2 = new SolanaSigner(signer);
 ```
+
+<Markdown src="../../shared/signer/signer.mdx" />
+
+</CodeBlocks>
 
 # Sign Message
 
-Use the `signMessage` method to sign either a string or byte array. The method accepts a `UInt8Array` as input:
+To sign either a string or byte array with your Solana wallet use the `signMessage` method. The method accepts a `UInt8Array` as input:
 
-```ts [sign-message-solana-signer.tsx]
+<CodeBlocks>
+
+```ts twoslash example.ts
+import { signer } from "./signer";
 import { toBytes } from "viem";
-// Initialize signer as shown above
-const signedMessage = await signer.signMessage(
+
+const solanaSigner = signer.toSolanaSigner();
+const signedMessage = await solanaSigner.signMessage(
   toBytes("Message as a string converted into UInt8Array")
 );
 ```
 
+<Markdown src="../../shared/signer/signer.mdx" />
+
+</CodeBlocks>
+
 # Sign Transaction
 
-To sign a prepared transaction without broadcasting it to the network, use the `addSignature` method. The following example demonstrates signing a transfer transaction:
+To sign a prepared transaction with your Solana wallet use the `addSignature` method. The following example demonstrates signing a transfer transaction:
 
-```ts [signing-transaction-solana-signer.tsx]
+```ts signing-transaction-solana-signer.tsx
 import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 
 async function signTransaction(
@@ -58,8 +77,8 @@ async function signTransaction(
 
   return transaction;
 }
-const signedTransaction = await signTransaction(signer, "<ToAddress>", 1234);
 
+const signedTransaction = await signTransaction(signer, "<ToAddress>", 1234);
 // Broadcast the signed transaction to the network using @solana/web3.js
 const connection = new Connection(
   "https://solana-devnet.g.alchemy.com/v2/<API_KEY>"
@@ -67,11 +86,14 @@ const connection = new Connection(
 await connection.sendTransaction(signedTransaction);
 ```
 
-# Sign Transaction With Sponsorship
+# Sponsor transaction fees
 
-Same as the above, but this time we are adding in the sponsorship
+To sponsor transaction fees on Solana:
 
-```ts [signing-transaction-solana-signer.tsx]
+1. Set up your [sponsorship policy](https://dashboard.alchemy.com/services/gas-manager/configuration) in the dashboard to retrieve a **policy ID**
+2. Add sponsorship to the preparred transaction before signing and sending
+
+```ts sponsored-solana-transaction-signer.tsx
 import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 
 async function signTransaction(
@@ -87,23 +109,25 @@ async function signTransaction(
     }),
   ];
 
-  // Going to send this to the sponsorship to get our first signature
+  // First - add sponsorship to the preparred transaction
   const transaction = await signer.addSponsorship(
     instructions,
     connection,
-    "<policyId>"
-  ); // TODO: Substitute the policy here
+    "<policyId>" // Replace with your solana sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+  );
 
   // Sign the transaction using the Solana wallet
   await signer.addSignature(transaction);
 
   return transaction;
 }
+
 const signedTransaction = await signTransaction(signer, "<ToAddress>", 1234);
 
 // Broadcast the signed transaction to the network using @solana/web3.js
 const connection = new Connection(
-  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>"
+  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>" // Replace with your Alchemy API key
 );
+
 await connection.sendTransaction(signedTransaction);
 ```
