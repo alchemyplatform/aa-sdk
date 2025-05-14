@@ -1,31 +1,32 @@
 ---
-title: Gas sponsorship
-description: How to sponsor gas on Solana
-text: How to sponsor gas on Solana
-link: /react/solana-wallets/sponsoring-gas
-slug: wallets/react/solana-wallets/sponsoring-gas
+title: How to sponsor fees on Solana
+description: How to sponsor fees on Solana
+text: How to sponsor fees on Solana
+link: /react/solana-wallets/sponsoring-fees
+slug: wallets/react/solana-wallets/sponsoring-fees
 ---
 
-Account Kit supports fees and rent sponsorship for Solana wallets, enabling users to transact without holding SOL — removing a major barrier to entry for new users of your app.
+Once you've [created](/docs/wallets/react/solana-wallets/get-started) a smart wallet on Solana, sponsor Solana transaction fees with your Smart Wallets to enable users to transact without holding SOL. Powered by Smart Wallets, this removes a major barrier to entry for new users of your app.
 
-You can implement sponsorship either globally (applying to all transactions) or on a per-transaction basis.
+Implement sponsorship either globally (applying to all transactions) or on a per-transaction basis with policies defining what you want to sponsor for users:
 
 - **Fees** cover the cost of executing transactions.
 - **Rent** is required to store data on-chain.
   - _We support rent sponsorship for `SystemProgram.createAccount` . If you need support for sponsoring rent in custom programs, please contact us at [account-abstraction@alchemy.com](mailto:account-abstraction@alchemy.com)._
-- See our [recommendations](https://www.alchemy.com/support/best-practices-to-limit-gas-manager-spend) for gas manager spending.
+
+See our [recommendations](https://www.alchemy.com/support/best-practices-to-limit-gas-manager-spend) for gas manager spending.
 
 ## Setup
 
-On your gas manager [dashboard](https://dashboard.alchemy.com/gas-manager), create a new Solana sponsorship policy. You can customize this policy to set rules on sponsorship like max spend per transaction, max spend per policy, or max transactions per policy.
+On your gas manager [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration), create a new Solana sponsorship policy. You can customize this policy to set rules on sponsorship like max spend per transaction, max spend per policy, or max transactions per policy.
 
-Make sure you select Solana as the chain type and apply this policy to the app corresponding to the API key you’re using.
+Select Solana as the chain type and apply this policy to the app corresponding to the API key you’re using.
 
 ## Global sponsorship
 
-If you want to apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config.
+To apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config. Replace the API key and Policy Id with your keys from the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration).
 
-```tsx [config.ts]
+```tsx config.ts
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { Connection } from "@solana/web3.js";
 
@@ -48,7 +49,7 @@ This setup applies sponsorship to all Solana transactions sent from wallets crea
 
 ### Per transaction sponsorship
 
-If instead, you want to apply sponsorship conditionally for each transaction, you can pass a `policyId` to the `useSolanaTransaction` hook.
+Alternatively, to apply sponsorship conditionally for each transaction, you can pass a `policyId` to the `useSolanaTransaction` hook.
 
 ```tsx [sponsor-solana-gas.ts]
 import { useSolanaTransaction } from "@account-kit/react";
@@ -81,3 +82,5 @@ function MyComponent() {
   );
 }
 ```
+
+Congrats! You're now creating smart wallets on Solana with social login and sending sponsored transactions to create a zero-friction experience from sign-up to transaction. Reach out with any feature request or questions.

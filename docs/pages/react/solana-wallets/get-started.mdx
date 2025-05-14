@@ -1,7 +1,7 @@
 ---
-title: Get started
-description: Learn how to get started with Solana wallets using social login
-text: Get started with Solana Wallets
+title: Getting started with Solana Smart Wallets
+description: Learn how to use Smart Wallets on Solana
+text: Getting started with Solana Smart Wallets
 link: /react/solana-wallets/get-started
 slug: wallets/react/solana-wallets/get-started
 ---
@@ -12,46 +12,51 @@ slug: wallets/react/solana-wallets/get-started
   integrating.
 </Warning>
 
-Account Kit supports Solana Smart Wallets, enabling developers to create embedded wallets, sign transactions, sponsor gas, and batch transactions on Solana. This integration allows developers to create both EVM and Solana wallets with social login and use those wallets alongside existing Solana libraries like `@solana/web3.js` to build seamless, gas-less user experiences.
+We support Smart Wallets on Solana, enabling developers to create embedded wallets, sign transactions, sponsor gas, and batch transactions on Solana. Create both EVM and Solana wallets with social login and use those wallets alongside existing Solana libraries like `@solana/web3.js` to build seamless, gas-less user experiences!
 
-Check out the [demo](https://demo.alchemy.com/) to see Solana wallets with gas sponsorship in action.
+Check out the [demo](https://demo.alchemy.com/) to see Smart Wallets with gasless transactions on Solana in action.
 
-Key features:
+**Key features:**
 
-- Create Solana wallets with [email, social login, passkeys, etc](https://accountkit.alchemy.com/react/getting-started).
-- Sign messages and transactions
-- Send transactions
-- Sponsor gas for Solana transactions
+- Create Solana wallets with [email, social login, passkeys, etc](/docs/wallets/react/getting-started).
+- Sign Solana messages and transactions
+- Send Solana transactions
+- Sponsor gas and rent for Solana transactions
 - Batch multiple Solana instructions in a single transaction
 
-This guide will walk you through setting up and using Solana Smart Wallets with Alchemy Account Kit.
+This guide will walk you through setting up and using Smart Wallets on Solana.
 
-Prerequisites
+### Prerequisites
 
-Before you begin, ensure you have:
-
-- Set up your login methods and user [authentication](https://accountkit.alchemy.com/react/getting-started)
-- Installed a Solana library, such as `@solana/web3.js` to handle transaction construction and submission
+- Set up social login methods and user [authentication](/docs/wallets/react/getting-started)
+- Install a Solana library, such as `@solana/web3.js` to handle transaction construction and submission
   ```bash
   npm install @solana/web3.js
   ```
-- A Solana RPC endpoint (e.g. `https://solana-devnet.g.alchemy.com/v2/<YOUR_API_KEY>`). Create an app on your [dashboard](https://dashboard.alchemy.com/apps) and enable Solana AND EVM networks (you'll need both).
-- The latest `@account-kit/react` package installed:
-  ```bash
-  npm install @account-kit/react
-  ```
+- Get an API key from Alchemy. Create an app on your [dashboard](https://dashboard.alchemy.com/apps) and enable Solana **and** EVM networks (you'll need both).
+- Install the latest `@account-kit` packages:
+
+<CodeBlocks>
+
+```bash yarn
+yarn add @account-kit/infra @account-kit/react
+```
+
+```bash npm
+npm i -s @account-kit/infra @account-kit/react
+```
+
+</CodeBlocks>
 
 # Creating a Solana Wallet
 
-With Account Kit, you can generate a Solana wallet using familiar auth methods (ex: email, Google, or passkeys). All users get both an EVM and a Solana address after authenticating.
+First, set up user login and [authentication](/docs/wallets/react/getting-started) if you haven't already.
 
-First, make sure you have already set up login methods and completed user [authentication](https://accountkit.alchemy.com/react/getting-started).
+Next, add Solana to your configuration by using the `solana` parameter when calling `createConfig` in the config.ts file and replace the API key with your key.
 
-Adjust your config to add Solana support. Set up your Solana connection using the `solana` parameter in `createConfig`. This is where you’ll add your Alchemy RPC URL.
+_Note: It is required to set the chain parameter in the config. You can choose any EVM chain that your app has enabled like `sepolia`._
 
-Note that you’ll still need to set a chain parameter. You can choose any random EVM chain that your app has enabled like `sepolia`.
-
-```ts [config.tsx]
+```ts config.ts
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { Connection } from "@solana/web3.js";
 import { sepolia } from "@account-kit/infra";
@@ -76,9 +81,9 @@ createConfig({
 
 Once a user has been authenticated, you can retrieve their Solana wallet address in 2 ways:
 
-## Using `useSolanaSigner` hook
+## Usin the `useSolanaSigner` hook
 
-If you just want the Solana wallet address and signer, you can use this hook.
+If you just want the Solana wallet address and signer, we recommending using this hook.
 
 ```jsx
 import { useSolanaSigner } from "@account-kit/react";
@@ -94,10 +99,10 @@ function MyComponent() {
 }
 ```
 
-## Using `useSolanaTransaction` hook
+## Using the `useSolanaTransaction` hook
 
-If you want to connect to a user’s Solana Wallet and send transactions, you should use the [`useSolanaTransaction`](/docs/wallets/react/solana-wallets/sign-and-send-solana#sending-solana-transactions-with-usesolanatransaction) hook for simplicity. This hook also exposes the Solana wallet address.
+If you want to connect to a user’s Solana Wallet and send transactions, you should use the [`useSolanaTransaction`](/docs/wallets/react/solana-wallets/sign-and-send-solana#sending-solana-transactions-with-usesolanatransaction) hook. This hook also exposes the Solana wallet address through the `signer.address` parameter.
 
-**Not using React hooks?**
+## Not using React hooks?
 
-You can convert any Alchemy [signer](https://accountkit.alchemy.com/signer/quickstart) instance into a Solana-compatible signer using the `SolanaSigner` class. [See Signer Solana docs](/docs/wallets/signer/solana-wallets/solana-signer-package).
+If you're not using React, use lower level libraries to convert your Alchemy signer instance into a Solana-compatible signer using the `SolanaSigner` class. [See Signer Solana docs](/docs/wallets/signer/solana-wallets/solana-signer-package).
