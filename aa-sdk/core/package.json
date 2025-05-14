@@ -55,7 +55,7 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "viem": "^2.22.6"
+    "viem": "^2.29.2"
   },
   "repository": {
     "type": "git",

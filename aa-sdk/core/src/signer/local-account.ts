@@ -1,10 +1,13 @@
 import {
+  type Address,
   type HDAccount,
   type HDOptions,
   type Hex,
   type LocalAccount,
+  type OneOf,
   type PrivateKeyAccount,
   type SignableMessage,
+  type SignedAuthorization,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -14,7 +17,21 @@ import {
   privateKeyToAccount,
 } from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
-import type { Authorization } from "viem/experimental";
+
+// TODO: This is a temporary type to be removed when viem is updated
+type AuthorizationRequest<uint32 = number> = OneOf<
+  | {
+      address: Address;
+    }
+  | {
+      contractAddress: Address;
+    }
+> & {
+  /** Chain ID. */
+  chainId: uint32;
+  /** Nonce of the EOA to delegate to. */
+  nonce: uint32;
+};
 
 /**
  * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
@@ -118,9 +135,9 @@ export class LocalAccountSigner<
 
   signAuthorization(
     this: LocalAccountSigner<PrivateKeyAccount>,
-    unsignedAuthorization: Authorization<number, false>
-  ): Promise<Authorization<number, true>> {
-    return this.inner.experimental_signAuthorization(unsignedAuthorization);
+    unsignedAuthorization: AuthorizationRequest<number>
+  ): Promise<SignedAuthorization<number>> {
+    return this.inner.signAuthorization(unsignedAuthorization);
   }
 
   /**
