@@ -152,7 +152,7 @@ export async function createLightAccount({
     predictLightAccountAddress({
       factoryAddress,
       salt,
-      signerAddress,
+      ownerAddress: signerAddress,
       version,
     });
 
