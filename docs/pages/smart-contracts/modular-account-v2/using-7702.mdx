@@ -56,7 +56,7 @@ If you have locally managed private keys (e.g. you are a self-custodial wallet),
   Hierarchical Deterministic (HD) accounts yet.
 </Note>
 
-```ts [types.ts] twoslash
+```ts types.ts twoslash
 import { LocalAccountSigner } from "@aa-sdk/core";
 
 const privateKey = "0x..."; // Private key
@@ -120,7 +120,7 @@ Once your signer is configured and you have a `SmartAccountSigner` instance, you
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { signer } from "./signer.js";
@@ -148,7 +148,7 @@ const txnHash = await smartAccountClient.waitForUserOperationTransaction(
 );
 ````
 
-```ts twoslash [signer.ts] filename="signer.ts"
+```ts twoslash signer.ts filename="signer.ts"
 import { LocalAccountSigner } from "@aa-sdk/core";
 
 const privateKey = "0x...";

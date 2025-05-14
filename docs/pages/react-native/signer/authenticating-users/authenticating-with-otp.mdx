@@ -32,7 +32,7 @@ In your Alchemy Accounts Dashboard:
 
 To send an OTP to a user's email, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `otp`.
 
-```tsx twoslash [sign-in-with-otp.tsx]
+```tsx twoslash sign-in-with-otp.tsx
 import { useAuthenticate } from "@account-kit/react-native";
 import React, { useState } from "react";
 import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
@@ -95,7 +95,7 @@ The user will receive an email with a one-time password (OTP) to enter into your
 
 Provide a means for the user to enter the OTP into your app and then call the `authenticate()` function from the `useAuthenticate()` hook passing the OTP code to the `otpCode` parameter, and the `type` set to `otp`.
 
-```tsx twoslash [verify-otp.tsx]
+```tsx twoslash verify-otp.tsx
 import { useAuthenticate } from "@account-kit/react-native";
 import React, { useState } from "react";
 import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
@@ -160,7 +160,7 @@ Here's an example of a Sign In component using OTP. Feel free to embed this into
 
 <CodeBlocks>
 
-```tsx [sign-in-with-otp.tsx] twoslash filename="sign-in-with-otp.tsx"
+```tsx sign-in-with-otp.tsx twoslash filename="sign-in-with-otp.tsx"
 // @noErrors
 import React, { useCallback, useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
@@ -238,7 +238,7 @@ export const SignInWithOtp = () => {
 };
 ```
 
-```tsx [otp-popup.tsx] twoslash filename="otp-popup.tsx"
+```tsx otp-popup.tsx twoslash filename="otp-popup.tsx"
 // @noErrors
 import React, { useCallback, useState } from "react";
 import {

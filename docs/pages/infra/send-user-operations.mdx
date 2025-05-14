@@ -12,7 +12,7 @@ User operations can be sent either as single user operations or as a batch of us
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { client } from "./client";
 
 const { hash } = await client.sendUserOperation({
@@ -34,7 +34,7 @@ To batch user operations, you can just pass an array of user operations to the `
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { client } from "./client";
 
 const { hash } = await client.sendUserOperation({
