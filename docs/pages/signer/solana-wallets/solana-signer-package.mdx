@@ -66,3 +66,44 @@ const connection = new Connection(
 );
 await connection.sendTransaction(signedTransaction);
 ```
+
+# Sign Transaction With Sponsorship
+
+Same as the above, but this time we are adding in the sponsorship
+
+```ts [signing-transaction-solana-signer.tsx]
+import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
+
+async function signTransaction(
+  signer: SolanaSigner,
+  toAddress: string,
+  value: number
+) {
+  const instructions = [
+    SystemProgram.transfer({
+      fromPubkey: new PublicKey(signer.address),
+      toPubkey: new PublicKey(params.transfer.toAddress),
+      lamports: params.transfer.amount,
+    }),
+  ];
+
+  // Going to send this to the sponsorship to get our first signature
+  const transaction = await signer.addSponsorship(
+    instructions,
+    connection,
+    "<policyId>"
+  ); // TODO: Substitute the policy here
+
+  // Sign the transaction using the Solana wallet
+  await signer.addSignature(transaction);
+
+  return transaction;
+}
+const signedTransaction = await signTransaction(signer, "<ToAddress>", 1234);
+
+// Broadcast the signed transaction to the network using @solana/web3.js
+const connection = new Connection(
+  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>"
+);
+await connection.sendTransaction(signedTransaction);
+```
