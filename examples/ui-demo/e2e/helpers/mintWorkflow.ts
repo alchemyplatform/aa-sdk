@@ -42,7 +42,7 @@ export async function mintWithGoogleAuthWorkflow(
   await expect(page.locator("a[aria-label='View transaction']")).toBeVisible();
   await expect(page.getByRole("link", { name: "Quickstart" })).toHaveAttribute(
     "href",
-    "https://accountkit.alchemy.com/react/quickstart"
+    "https://www.alchemy.com/docs/wallets/react/quickstart"
   );
   await expect(page.locator("a[aria-label='GitHub']")).toHaveAttribute(
     "href",
