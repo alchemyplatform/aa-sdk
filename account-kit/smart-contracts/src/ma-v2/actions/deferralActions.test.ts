@@ -276,8 +276,8 @@ describe("MA v2 deferral actions tests", async () => {
       isGlobalValidation: false,
     });
 
-    const now = Date.now();
-    const deadline = Math.round(now / 2 / 1000);
+    const now = Date.now() / 1000;
+    const deadline = Math.round(now / 2);
 
     expect(async () => {
       await new PermissionBuilder({
@@ -299,7 +299,7 @@ describe("MA v2 deferral actions tests", async () => {
           },
         })
         .compileDeferred();
-    }).rejects.toThrow(new ExpiredDeadlineError(deadline, now / 1000));
+    }).rejects.toThrow(new ExpiredDeadlineError(deadline, now));
   });
 
   it("PermissionBuilder: Cannot install expired deferred action", async () => {
