@@ -114,7 +114,7 @@ export const SolanaNftCard = () => {
         // Need to do some modification to the regular signing of the transaction, and in this
         // case, we need to add the stake account signature to the transaction.
         transactionComponents: {
-          preSend: addStakeSignature(stakeAccount),
+          preSend: getAddStakeSignatureFn(stakeAccount),
         },
         instructions,
       });
@@ -140,7 +140,7 @@ export const SolanaNftCard = () => {
       });
     }
 
-    function addStakeSignature(stakeAccount: Keypair) {
+    function getAddStakeSignatureFn(stakeAccount: Keypair) {
       return async (transaction: Transaction | VersionedTransaction) => {
         if ("version" in transaction) transaction.sign([stakeAccount]);
 
