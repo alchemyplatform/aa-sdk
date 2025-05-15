@@ -112,7 +112,7 @@ export class LocalAccountSigner<
    * });
    * ```
    *
-   * @param {Authorization<number, false>} unsignedAuthorization - The unsigned authorization to be signed.
+   * @param {AuthorizationRequest<number>} unsignedAuthorization - The unsigned authorization to be signed.
    * @returns {Promise<SignedAuthorization<number>>} A promise that resolves to the signed authorization.
    */
 

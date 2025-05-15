@@ -628,7 +628,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * });
    * ```
    *
-   * @param {Authorization<number, false>} unsignedAuthorization the authorization to be signed
+   * @param {AuthorizationRequest<number>} unsignedAuthorization the authorization to be signed
    * @returns {Promise<SignedAuthorization<number>> | undefined} a promise that resolves to the authorization with the signature
    */
   signAuthorization: (
