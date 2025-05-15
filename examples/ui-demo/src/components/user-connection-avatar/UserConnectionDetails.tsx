@@ -3,6 +3,7 @@ import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
 import { useSignerAddress } from "@/hooks/useSignerAddress";
 import { useConfigStore } from "@/state";
+import { baseSepolia } from "@account-kit/infra";
 import {
   useAccount,
   useLogout,
@@ -13,7 +14,6 @@ import {
 import { useMemo } from "react";
 import { Hex } from "viem";
 import { UserAddressTooltip } from "./UserAddressLink";
-import { baseSepolia } from "@account-kit/infra";
 
 type UserConnectionDetailsProps = {
   deploymentStatus: boolean;
@@ -134,7 +134,7 @@ export function UserConnectionDetails({
           <div className="flex flex-row justify-between items-center mt-[17px]">
             <a
               target="_blank"
-              href="https://accountkit.alchemy.com/concepts/smart-account-signer"
+              href="https://www.alchemy.com/docs/wallets/concepts/smart-account-signer"
               className="flex justify-center items-center"
             >
               <span className="text-md md:text-sm text-fg-secondary mr-1">

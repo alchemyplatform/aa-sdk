@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import path from "path";
 test.beforeEach(async ({ page, baseURL }) => {
   await page.goto(baseURL!);
@@ -167,7 +167,7 @@ test("code preview", async ({ page }) => {
     page.getByRole("link", { name: "Fully customize styling here." })
   ).toHaveAttribute(
     "href",
-    "https://accountkit.alchemy.com/react/customization/theme"
+    "https://www.alchemy.com/docs/wallets/react/customization/theme"
   );
   await codePreviewSwitch.click();
   await expect(codePreviewSwitch).not.toBeChecked();
