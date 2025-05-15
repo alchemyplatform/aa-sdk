@@ -5,6 +5,7 @@ import {
   type LocalAccount,
   type PrivateKeyAccount,
   type SignableMessage,
+  type SignedAuthorization,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -13,8 +14,7 @@ import {
   mnemonicToAccount,
   privateKeyToAccount,
 } from "viem/accounts";
-import type { SmartAccountSigner } from "./types.js";
-import type { Authorization } from "viem/experimental";
+import type { AuthorizationRequest, SmartAccountSigner } from "./types.js";
 
 /**
  * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
@@ -112,15 +112,15 @@ export class LocalAccountSigner<
    * });
    * ```
    *
-   * @param {Authorization<number, false>} unsignedAuthorization - The unsigned authorization to be signed.
-   * @returns {Promise<Authorization<number, true>>} A promise that resolves to the signed authorization.
+   * @param {AuthorizationRequest<number>} unsignedAuthorization - The unsigned authorization to be signed.
+   * @returns {Promise<SignedAuthorization<number>>} A promise that resolves to the signed authorization.
    */
 
   signAuthorization(
     this: LocalAccountSigner<PrivateKeyAccount>,
-    unsignedAuthorization: Authorization<number, false>
-  ): Promise<Authorization<number, true>> {
-    return this.inner.experimental_signAuthorization(unsignedAuthorization);
+    unsignedAuthorization: AuthorizationRequest<number>
+  ): Promise<SignedAuthorization<number>> {
+    return this.inner.signAuthorization(unsignedAuthorization);
   }
 
   /**

@@ -1,4 +1,8 @@
-import { takeBytes, type SmartAccountAuthenticator } from "@aa-sdk/core";
+import {
+  takeBytes,
+  type SmartAccountAuthenticator,
+  type AuthorizationRequest,
+} from "@aa-sdk/core";
 import {
   hashMessage,
   hashTypedData,
@@ -10,13 +14,13 @@ import {
   type LocalAccount,
   type SerializeTransactionFn,
   type SignableMessage,
+  type SignedAuthorization,
   type TransactionSerializable,
   type TransactionSerialized,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { hashAuthorization, type Authorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -50,6 +54,7 @@ import {
   type ValidateMultiFactorsArgs,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
+import { hashAuthorization } from "viem/utils";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -623,12 +628,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * });
    * ```
    *
-   * @param {Authorization<number, false>} unsignedAuthorization the authorization to be signed
-   * @returns {Promise<Authorization<number, true>> | undefined} a promise that resolves to the authorization with the signature
+   * @param {AuthorizationRequest<number>} unsignedAuthorization the authorization to be signed
+   * @returns {Promise<SignedAuthorization<number>> | undefined} a promise that resolves to the authorization with the signature
    */
   signAuthorization: (
-    unsignedAuthorization: Authorization<number, false>
-  ) => Promise<Authorization<number, true>> = SignerLogger.profiled(
+    unsignedAuthorization: AuthorizationRequest<number>
+  ) => Promise<SignedAuthorization<number>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
       const hashedAuthorization = hashAuthorization(unsignedAuthorization);
@@ -636,7 +641,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         hashedAuthorization
       );
       const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
-      return { ...unsignedAuthorization, ...signature };
+      const { address, contractAddress, ...unsignedAuthorizationRest } =
+        unsignedAuthorization;
+
+      return {
+        ...unsignedAuthorizationRest,
+        ...signature,
+        address: address ?? contractAddress,
+      };
     }
   );
 
