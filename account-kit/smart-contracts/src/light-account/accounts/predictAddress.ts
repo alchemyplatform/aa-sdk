@@ -72,8 +72,6 @@ export function predictLightAccountAddress({
         )
       );
 
-      // Bytecode from https://github.com/Vectorized/solady/blob/c6e5238e5f3b621789c59e1a443f43b6606394b2/src/utils/LibClone.sol#L721
-
       const initCode: Hex = getLAv2ProxyBytecode(implementationAddress);
 
       return getContractAddress({
@@ -130,6 +128,8 @@ export function predictMultiOwnerLightAccountAddress({
     bytecode: initCode,
   });
 }
+
+// Bytecode from https://github.com/Vectorized/solady/blob/c6e5238e5f3b621789c59e1a443f43b6606394b2/src/utils/LibClone.sol#L721
 
 function getLAv2ProxyBytecode(implementationAddress: Address): Hex {
   return `0x603d3d8160223d3973${implementationAddress.slice(

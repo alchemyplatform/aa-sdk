@@ -75,7 +75,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
         // Then, compute the address using the predictLightAccountAddress function:
 
-        const locallyComputedAddress = await predictLightAccountAddress({
+        const locallyComputedAddress = predictLightAccountAddress({
           factoryAddress: await lightAccountV1.getFactoryAddress(),
           salt,
           ownerAddress: await localSigner.getAddress(),
@@ -120,7 +120,7 @@ describe("Light Account Counterfactual Address Tests", () => {
       });
 
       // Then, compute the address using the predictLightAccountAddress function:
-      const locallyComputedAddress = await predictLightAccountAddress({
+      const locallyComputedAddress = predictLightAccountAddress({
         factoryAddress: await lightAccountV2.getFactoryAddress(),
         salt,
         ownerAddress: await localSigner.getAddress(),
