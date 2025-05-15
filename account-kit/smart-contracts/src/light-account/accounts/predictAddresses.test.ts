@@ -3,11 +3,22 @@ import {
   getEntryPoint,
   LocalAccountSigner,
 } from "@aa-sdk/core";
-import { concatHex, custom, encodeFunctionData, publicActions } from "viem";
-import { predictLightAccountAddress } from "./predictAddress.js";
+import {
+  concatHex,
+  custom,
+  encodeFunctionData,
+  hexToBigInt,
+  publicActions,
+  type Address,
+} from "viem";
+import {
+  predictLightAccountAddress,
+  predictMultiOwnerLightAccountAddress,
+} from "./predictAddress.js";
 import { local060Instance, local070Instance } from "~test/instances.js";
 import { createLightAccount } from "./account.js";
-import { generatePrivateKey } from "viem/accounts";
+import { createMultiOwnerLightAccount } from "./multiOwner.js";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
 import type { LightAccountVersion } from "../types.js";
 
@@ -64,10 +75,10 @@ describe("Light Account Counterfactual Address Tests", () => {
 
         // Then, compute the address using the predictLightAccountAddress function:
 
-        const locallyComputedAddress = await predictLightAccountAddress({
+        const locallyComputedAddress = predictLightAccountAddress({
           factoryAddress: await lightAccountV1.getFactoryAddress(),
           salt,
-          signerAddress: await localSigner.getAddress(),
+          ownerAddress: await localSigner.getAddress(),
           version,
         });
 
@@ -109,11 +120,74 @@ describe("Light Account Counterfactual Address Tests", () => {
       });
 
       // Then, compute the address using the predictLightAccountAddress function:
-      const locallyComputedAddress = await predictLightAccountAddress({
+      const locallyComputedAddress = predictLightAccountAddress({
         factoryAddress: await lightAccountV2.getFactoryAddress(),
         salt,
-        signerAddress: await localSigner.getAddress(),
+        ownerAddress: await localSigner.getAddress(),
         version: "v2.0.0",
+      });
+
+      expect(entryPointComputedAddress).toEqual(locallyComputedAddress);
+    }
+  });
+
+  it("MOLAv2 should match the entrypoint generated counterfactual address", async () => {
+    // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
+
+    for (let i = 0; i < 20; i++) {
+      const localSigner = LocalAccountSigner.privateKeyToAccountSigner(
+        generatePrivateKey()
+      );
+
+      const signerAddress = await localSigner.getAddress();
+
+      // Generate `i` random other owners.
+      const otherOwners: Address[] = Array.from(
+        { length: i },
+        () => privateKeyToAccount(generatePrivateKey()).address
+      );
+
+      // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
+      const salt = BigInt(generatePrivateKey());
+
+      const chain = instanceV070.chain;
+      const entryPoint = getEntryPoint(chain, {
+        version: "0.7.0", // EP version, not LA version
+      });
+
+      const multiOwnerLightAccount = await createMultiOwnerLightAccount({
+        transport: custom(instanceV070.getClient()),
+        signer: localSigner,
+        owners: otherOwners,
+        chain,
+        salt,
+        accountAddress: undefined,
+      });
+
+      // First, compute the address using the EntryPoint utility function:
+      const entryPointComputedAddress = await getAccountAddress({
+        client: instanceV070.getClient().extend(publicActions),
+        entryPoint,
+        // Can use the lightAccountV2.getInitCode, because it is replay-safe.
+        getAccountInitCode: multiOwnerLightAccount.getInitCode,
+      });
+
+      // Then, compute the address using the predictLightAccountAddress function.
+      // We must first run the logic to include the signer address, dedepe, and sort.
+
+      const owners_ = Array.from(new Set([...otherOwners, signerAddress]))
+        .filter((x) => hexToBigInt(x) !== 0n)
+        .sort((a, b) => {
+          const bigintA = hexToBigInt(a);
+          const bigintB = hexToBigInt(b);
+
+          return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
+        });
+
+      const locallyComputedAddress = predictMultiOwnerLightAccountAddress({
+        factoryAddress: await multiOwnerLightAccount.getFactoryAddress(),
+        salt,
+        ownerAddresses: owners_,
       });
 
       expect(entryPointComputedAddress).toEqual(locallyComputedAddress);

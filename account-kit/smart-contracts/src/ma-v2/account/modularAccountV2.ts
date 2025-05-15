@@ -4,9 +4,7 @@ import type {
   ToSmartContractAccountParams,
 } from "@aa-sdk/core";
 import {
-  createBundlerClient,
   getEntryPoint,
-  getAccountAddress,
   EntityIdOverrideError,
   InvalidModularAccountV2Mode,
 } from "@aa-sdk/core";
@@ -19,13 +17,17 @@ import {
   type Transport,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
-import { getDefaultMAV2FactoryAddress } from "../utils.js";
+import {
+  getDefaultMAV2FactoryAddress,
+  getDefaultSMAV2BytecodeAddress,
+} from "../utils.js";
 import {
   type SignerEntity,
   type ModularAccountV2,
   createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
+import { predictModularAccountV2Address } from "./predictAddress.js";
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
@@ -44,6 +46,7 @@ export type CreateModularAccountV2Params<
         mode?: "default";
         salt?: bigint;
         factoryAddress?: Address;
+        implementationAddress?: Address;
         initCode?: Hex;
       }
     | {
@@ -107,11 +110,6 @@ export async function createModularAccountV2(
     deferredAction,
   } = config;
 
-  const client = createBundlerClient({
-    transport,
-    chain,
-  });
-
   const accountFunctions = await (async () => {
     switch (config.mode) {
       case "7702": {
@@ -143,8 +141,11 @@ export async function createModularAccountV2(
         const {
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
+          implementationAddress = getDefaultSMAV2BytecodeAddress(chain),
           initCode,
         } = config;
+
+        const signerAddress = await signer.getAddress();
 
         const getAccountInitCode = async () => {
           if (initCode) {
@@ -156,17 +157,20 @@ export async function createModularAccountV2(
             encodeFunctionData({
               abi: accountFactoryAbi,
               functionName: "createSemiModularAccount",
-              args: [await signer.getAddress(), salt],
+              args: [signerAddress, salt],
             }),
           ]);
         };
 
-        const accountAddress = await getAccountAddress({
-          client,
-          entryPoint,
-          accountAddress: _accountAddress,
-          getAccountInitCode,
-        });
+        const accountAddress =
+          _accountAddress ??
+          predictModularAccountV2Address({
+            factoryAddress,
+            implementationAddress,
+            salt,
+            type: "SMA",
+            ownerAddress: signerAddress,
+          });
 
         return {
           getAccountInitCode,

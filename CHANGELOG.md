@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
+
+### Bug Fixes
+
+- deploy swap venue contract ([#1621](https://github.com/alchemyplatform/aa-sdk/issues/1621)) ([7db7d12](https://github.com/alchemyplatform/aa-sdk/commit/7db7d124e15fe3730238e9537cf596d220ce0771))
+- parallel eth_calls, make maxTokenAmount requried ([#1609](https://github.com/alchemyplatform/aa-sdk/issues/1609)) ([0de0b90](https://github.com/alchemyplatform/aa-sdk/commit/0de0b9071f0f80a94ab08ba57f41c63f7154456f))
+
+### Features
+
+- compute light account counterfactual address locally ([#1616](https://github.com/alchemyplatform/aa-sdk/issues/1616)) ([dbaa3fa](https://github.com/alchemyplatform/aa-sdk/commit/dbaa3faa7fb0ae59ba5199bfdb73d413eb10fb82))
+- support for latest viem version ([#1619](https://github.com/alchemyplatform/aa-sdk/issues/1619)) ([f894102](https://github.com/alchemyplatform/aa-sdk/commit/f894102e113154e40b2f20ae998922764c628d6e))
+
 # [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
 
 ### Bug Fixes
