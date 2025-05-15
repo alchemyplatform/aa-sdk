@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
+
+### Features
+
+- local counterfactual address computation for MoLA and MAv2 ([#1622](https://github.com/alchemyplatform/aa-sdk/issues/1622)) ([f4a7cc4](https://github.com/alchemyplatform/aa-sdk/commit/f4a7cc4c2da77827d22bb433123bce57763e25fa))
+
 # [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
 
 ### Features
