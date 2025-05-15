@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.33.0",
+  "version": "4.34.0",
   "description": "React components and hooks for using Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -83,10 +83,10 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@account-kit/core": "^4.33.0",
-    "@account-kit/infra": "^4.33.0",
-    "@account-kit/logging": "^4.33.0",
-    "@account-kit/signer": "^4.33.0",
+    "@account-kit/core": "^4.34.0",
+    "@account-kit/infra": "^4.34.0",
+    "@account-kit/logging": "^4.34.0",
+    "@account-kit/signer": "^4.34.0",
     "@solana/web3.js": "^1.98.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
