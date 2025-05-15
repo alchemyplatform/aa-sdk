@@ -1,9 +1,14 @@
-import { takeBytes, type SmartAccountAuthenticator } from "@aa-sdk/core";
+import {
+  takeBytes,
+  type SmartAccountAuthenticator,
+  type AuthorizationRequest,
+} from "@aa-sdk/core";
 import {
   hashMessage,
   hashTypedData,
   keccak256,
   serializeTransaction,
+  type Authorization,
   type GetTransactionType,
   type Hex,
   type IsNarrowable,
@@ -16,7 +21,6 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { hashAuthorization, type Authorization } from "viem/experimental";
 import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
@@ -50,6 +54,7 @@ import {
   type ValidateMultiFactorsArgs,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
+import { hashAuthorization } from "viem/utils";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -627,7 +632,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<Authorization<number, true>> | undefined} a promise that resolves to the authorization with the signature
    */
   signAuthorization: (
-    unsignedAuthorization: Authorization<number, false>
+    unsignedAuthorization: AuthorizationRequest<number>
   ) => Promise<Authorization<number, true>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
@@ -635,8 +640,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const signedAuthorizationHex = await this.inner.signRawMessage(
         hashedAuthorization
       );
+
+      console.log(unsignedAuthorization);
+
       const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
-      return { ...unsignedAuthorization, ...signature };
+      const { address, contractAddress, ...unsignedAuthorizationRest } =
+        unsignedAuthorization;
+
+      return {
+        ...unsignedAuthorizationRest,
+        ...signature,
+        address: address ?? contractAddress,
+      };
     }
   );
 
