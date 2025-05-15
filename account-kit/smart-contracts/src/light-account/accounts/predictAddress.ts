@@ -16,14 +16,14 @@ import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
 export type PredictLightAccountAddressParams = {
   factoryAddress: Address;
   salt: bigint;
-  signerAddress: Address;
+  ownerAddress: Address;
   version: keyof LightAccountVersionConfigs["LightAccount"];
 };
 
 export function predictLightAccountAddress({
   factoryAddress,
   salt,
-  signerAddress,
+  ownerAddress,
   version,
 }: PredictLightAccountAddressParams): Address {
   const implementationAddress =
@@ -57,7 +57,7 @@ export function predictLightAccountAddress({
             encodeFunctionData({
               abi: LightAccountAbi_v1,
               functionName: "initialize",
-              args: [signerAddress],
+              args: [ownerAddress],
             }),
           ],
         }),
@@ -68,15 +68,11 @@ export function predictLightAccountAddress({
       const combinedSalt = keccak256(
         encodeAbiParameters(
           [{ type: "address" }, { type: "uint256" }],
-          [signerAddress, salt]
+          [ownerAddress, salt]
         )
       );
 
-      // Bytecode from https://github.com/Vectorized/solady/blob/c6e5238e5f3b621789c59e1a443f43b6606394b2/src/utils/LibClone.sol#L721
-
-      const initCode: Hex = `0x603d3d8160223d3973${implementationAddress.slice(
-        2
-      )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3`;
+      const initCode: Hex = getLAv2ProxyBytecode(implementationAddress);
 
       return getContractAddress({
         from: factoryAddress,
@@ -88,6 +84,57 @@ export function predictLightAccountAddress({
     default:
       assertNeverLightAccountVersion(version);
   }
+}
+
+export type PredictMultiOwnerLightAccountAddressParams = {
+  factoryAddress: Address;
+  salt: bigint;
+  ownerAddresses: Address[];
+  // There's just one version of the MultiOwnerLightAccount for now, so skip requiring the version as a parameter.
+};
+
+// Note: assumes the owner addresses are already deduped, sorted in ascending order, and have the signer address included.
+export function predictMultiOwnerLightAccountAddress({
+  factoryAddress,
+  salt,
+  ownerAddresses,
+}: PredictMultiOwnerLightAccountAddressParams): Address {
+  const implementationAddress =
+    // If we aren't using the default factory address, we compute the implementation address from the factory's `create` deployment.
+    // This is accurate for both LA v1 and v2 factories. If we are using the default factory address, we use the implementation address from the registry.
+    factoryAddress !==
+    AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses.default
+      .factory
+      ? getContractAddress({
+          from: factoryAddress,
+          nonce: 1n,
+        })
+      : AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses
+          .default.impl;
+
+  const combinedSalt = keccak256(
+    encodeAbiParameters(
+      [{ type: "address[]" }, { type: "uint256" }],
+      [ownerAddresses, salt]
+    )
+  );
+
+  const initCode: Hex = getLAv2ProxyBytecode(implementationAddress);
+
+  return getContractAddress({
+    from: factoryAddress,
+    opcode: "CREATE2",
+    salt: combinedSalt,
+    bytecode: initCode,
+  });
+}
+
+// Bytecode from https://github.com/Vectorized/solady/blob/c6e5238e5f3b621789c59e1a443f43b6606394b2/src/utils/LibClone.sol#L721
+
+function getLAv2ProxyBytecode(implementationAddress: Address): Hex {
+  return `0x603d3d8160223d3973${implementationAddress.slice(
+    2
+  )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3`;
 }
 
 function assertNeverLightAccountVersion(version: never): never {
