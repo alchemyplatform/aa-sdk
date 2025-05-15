@@ -5,7 +5,7 @@ import type {
   SignableMessage,
   TypedData,
   TypedDataDefinition,
-  Authorization,
+  SignedAuthorization,
 } from "viem";
 
 // [!region SmartAccountAuthenticator]
@@ -62,6 +62,6 @@ export interface SmartAccountSigner<Inner = any> {
 
   signAuthorization?: (
     unsignedAuthorization: AuthorizationRequest<number>
-  ) => Promise<Authorization<number, true>>;
+  ) => Promise<SignedAuthorization<number>>;
 }
 // [!endregion SmartAccountSigner]

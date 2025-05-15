@@ -8,13 +8,13 @@ import {
   hashTypedData,
   keccak256,
   serializeTransaction,
-  type Authorization,
   type GetTransactionType,
   type Hex,
   type IsNarrowable,
   type LocalAccount,
   type SerializeTransactionFn,
   type SignableMessage,
+  type SignedAuthorization,
   type TransactionSerializable,
   type TransactionSerialized,
   type TypedData,
@@ -629,11 +629,11 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * ```
    *
    * @param {Authorization<number, false>} unsignedAuthorization the authorization to be signed
-   * @returns {Promise<Authorization<number, true>> | undefined} a promise that resolves to the authorization with the signature
+   * @returns {Promise<SignedAuthorization<number>> | undefined} a promise that resolves to the authorization with the signature
    */
   signAuthorization: (
     unsignedAuthorization: AuthorizationRequest<number>
-  ) => Promise<Authorization<number, true>> = SignerLogger.profiled(
+  ) => Promise<SignedAuthorization<number>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
       const hashedAuthorization = hashAuthorization(unsignedAuthorization);
