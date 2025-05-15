@@ -60,7 +60,7 @@ export function MobileSplashPage() {
             Try it
           </button>
           <a
-            href="https://accountkit.alchemy.com/"
+            href="https://www.alchemy.com/docs/wallets/"
             target="_blank"
             className="akui-btn akui-btn-secondary mb-6 h-10 w-full lg:w-auto flex-1 m-0"
           >
