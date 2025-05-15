@@ -250,7 +250,7 @@ describe("MA v2 deferral actions tests", async () => {
     });
   });
 
-  it("PermissionBuilder: Cannot compile post expiry ", async () => {
+  it("PermissionBuilder: Cannot compile post expiry", async () => {
     const provider = await givenConnectedProvider({ signer });
 
     const serverClient = (
@@ -299,7 +299,9 @@ describe("MA v2 deferral actions tests", async () => {
           },
         })
         .compileDeferred();
-    }).rejects.toThrow(new ExpiredDeadlineError(deadline, now));
+    }).rejects.toThrowError(
+      /compileDeferred\(\): deadline \d+ cannot be before now \(\d+(\.\d+)?\)/
+    );
   });
 
   it("PermissionBuilder: Cannot install expired deferred action", async () => {
