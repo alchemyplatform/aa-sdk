@@ -89,7 +89,7 @@ export const default7702UserOpSigner: (
 
     const authSignature = await signer.signAuthorization({
       chainId: client.chain.id,
-      address: implAddress,
+      contractAddress: implAddress,
       nonce: accountNonce,
     });
 
