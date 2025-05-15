@@ -83,11 +83,9 @@ export const webauthnSigningFunctions = (
       if (deferredActionData) {
         sig = concatHex([deferredActionData, sig]);
         deferredActionData = undefined;
-      } else {
-        sig = concatHex(["0xff", sig]);
       }
 
-      return sig;
+      return concatHex(["0xff", sig]);
     },
 
     async signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
