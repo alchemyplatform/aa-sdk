@@ -640,9 +640,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const signedAuthorizationHex = await this.inner.signRawMessage(
         hashedAuthorization
       );
-
-      console.log(unsignedAuthorization);
-
       const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
       const { address, contractAddress, ...unsignedAuthorizationRest } =
         unsignedAuthorization;
