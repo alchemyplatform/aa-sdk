@@ -110,6 +110,7 @@ export { SignerSchema, isSigner } from "./signer/schema.js";
 export type {
   SmartAccountAuthenticator,
   SmartAccountSigner,
+  AuthorizationRequest,
 } from "./signer/types.js";
 export { wrapSignatureWith6492 } from "./signer/utils.js";
 export { WalletClientSigner } from "./signer/wallet-client.js";

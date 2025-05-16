@@ -1,6 +1,5 @@
 import {
   createBundlerClient,
-  getAccountAddress,
   getEntryPoint,
   type Address,
   type EntryPointDef,
@@ -32,6 +31,7 @@ import {
   type CreateLightAccountBaseParams,
   type LightAccountBase,
 } from "./base.js";
+import { predictLightAccountAddress } from "./predictAddress.js";
 
 export type LightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -126,31 +126,35 @@ export async function createLightAccount({
       ? LightAccountFactoryAbi_v1
       : LightAccountFactoryAbi_v2;
 
+  const signerAddress = await signer.getAddress();
+
+  const salt = LightAccountUnsupported1271Factories.has(
+    factoryAddress.toLowerCase() as Address
+  )
+    ? 0n
+    : salt_;
+
   const getAccountInitCode = async () => {
     if (initCode) return initCode;
-
-    const salt = LightAccountUnsupported1271Factories.has(
-      factoryAddress.toLowerCase() as Address
-    )
-      ? 0n
-      : salt_;
 
     return concatHex([
       factoryAddress,
       encodeFunctionData({
         abi: factoryAbi,
         functionName: "createAccount",
-        args: [await signer.getAddress(), salt],
+        args: [signerAddress, salt],
       }),
     ]);
   };
 
-  const address = await getAccountAddress({
-    client,
-    entryPoint,
-    accountAddress,
-    getAccountInitCode,
-  });
+  const address =
+    accountAddress ??
+    predictLightAccountAddress({
+      factoryAddress,
+      salt,
+      ownerAddress: signerAddress,
+      version,
+    });
 
   const account = await createLightAccountBase<
     "LightAccount",

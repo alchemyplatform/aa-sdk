@@ -54,9 +54,9 @@ export const config = createConfig(
   {
     transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
-    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
+    ssr: true, // more about ssr: https://www.alchemy.com/docs/wallets/react/ssr
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
-    // For more about persisting state with cookies, see: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
+    // For more about persisting state with cookies, see: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state
     // storage: cookieStorage,
   },
   uiConfig

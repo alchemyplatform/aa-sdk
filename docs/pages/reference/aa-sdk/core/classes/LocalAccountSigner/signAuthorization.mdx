@@ -34,11 +34,11 @@ const signedAuthorization = await signer.signAuthorization({
 
 ### unsignedAuthorization
 
-`Authorization<number, false>`
+`AuthorizationRequest<number>`
 
 - The unsigned authorization to be signed.
 
   ## Returns
 
-  `Promise<Authorization<number, true>>`
+  `Promise<SignedAuthorization<number>>`
   A promise that resolves to the signed authorization.
