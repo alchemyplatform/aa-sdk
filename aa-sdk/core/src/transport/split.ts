@@ -56,17 +56,14 @@ export const split = (params: SplitTransportParams): CustomTransport => {
   }, new Map<string, Transport>());
 
   return (opts) =>
-    custom(
-      {
-        request: async (args) => {
-          const transportOverride = overrideMap.get(args.method);
-          if (transportOverride != null) {
-            return transportOverride(opts).request(args);
-          }
+    custom({
+      request: async (args) => {
+        const transportOverride = overrideMap.get(args.method);
+        if (transportOverride != null) {
+          return transportOverride(opts).request(args);
+        }
 
-          return params.fallback(opts).request(args);
-        },
+        return params.fallback(opts).request(args);
       },
-      { retryCount: 0 }
-    )(opts);
+    })(opts);
 };

@@ -140,7 +140,7 @@ export function isAlchemyTransport(
  * @returns {AlchemyTransport} The configured Alchemy transport object.
  */
 export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
-  const { retryDelay, retryCount = 0 } = config;
+  const { retryDelay, retryCount } = config;
   // we create a copy here in case we create a split transport down below
   // we don't want to add alchemy headers to 3rd party nodes
   const fetchOptions = { ...config.fetchOptions };
@@ -190,22 +190,15 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
           overrides: [
             {
               methods: alchemyMethods,
-              transport: http(rpcUrl, {
-                fetchOptions,
-                retryCount: 0,
-              }),
+              transport: http(rpcUrl, { fetchOptions }),
             },
             {
               methods: chainAgnosticMethods,
-              transport: http(chainAgnosticRpcUrl, {
-                fetchOptions,
-                retryCount: 0,
-              }),
+              transport: http(chainAgnosticRpcUrl, { fetchOptions }),
             },
           ],
           fallback: http(config.nodeRpcUrl, {
             fetchOptions: config.fetchOptions,
-            retryCount: 0,
           }),
         });
       }
@@ -214,13 +207,10 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         overrides: [
           {
             methods: chainAgnosticMethods,
-            transport: http(chainAgnosticRpcUrl, {
-              fetchOptions,
-              retryCount: 0,
-            }),
+            transport: http(chainAgnosticRpcUrl, { fetchOptions }),
           },
         ],
-        fallback: http(rpcUrl, { fetchOptions, retryCount: 0 }),
+        fallback: http(rpcUrl, { fetchOptions }),
       });
     })();
 
