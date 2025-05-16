@@ -1,11 +1,12 @@
 import type { Address } from "abitype";
 import type {
   Hex,
+  OneOf,
   SignableMessage,
   TypedData,
   TypedDataDefinition,
+  SignedAuthorization,
 } from "viem";
-import type { Authorization } from "viem/experimental";
 
 // [!region SmartAccountAuthenticator]
 /**
@@ -24,6 +25,21 @@ export interface SmartAccountAuthenticator<AuthParams, AuthDetails, Inner = any>
 // [!endregion SmartAccountAuthenticator]
 
 // [!region SmartAccountSigner]
+// TODO: This is a temporary type to be removed when viem is updated
+export type AuthorizationRequest<uint32 = number> = OneOf<
+  | {
+      address: Address;
+    }
+  | {
+      contractAddress: Address;
+    }
+> & {
+  /** Chain ID. */
+  chainId: uint32;
+  /** Nonce of the EOA to delegate to. */
+  nonce: uint32;
+};
+
 /**
  * A signer that can sign messages and typed data.
  *
@@ -45,7 +61,7 @@ export interface SmartAccountSigner<Inner = any> {
   ) => Promise<Hex>;
 
   signAuthorization?: (
-    unsignedAuthorization: Authorization<number, false>
-  ) => Promise<Authorization<number, true>>;
+    unsignedAuthorization: AuthorizationRequest<number>
+  ) => Promise<SignedAuthorization<number>>;
 }
 // [!endregion SmartAccountSigner]

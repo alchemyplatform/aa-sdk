@@ -39,7 +39,7 @@ export class BaseError extends ViemBaseError {
       ...(args.metaMessages ? [...args.metaMessages, ""] : []),
       ...(docsPath
         ? [
-            `Docs: https://accountkit.alchemy.com${docsPath}${
+            `Docs: https://www.alchemy.com/docs/wallets${docsPath}${
               args.docsSlug ? `#${args.docsSlug}` : ""
             }`,
           ]

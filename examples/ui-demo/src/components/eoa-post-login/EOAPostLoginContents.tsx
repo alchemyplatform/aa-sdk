@@ -35,7 +35,7 @@ export const EOAPostLoginActions = () => {
           Switch Login
         </button>
         <a
-          href="https://accountkit.alchemy.com/"
+          href="https://www.alchemy.com/docs/wallets/"
           target="_blank"
           className="akui-btn akui-btn-secondary w-full lg:w-auto flex-1 m-0 lg:ml-2"
         >

@@ -38,11 +38,11 @@ For a simple end-to-end example, we will spin up a new NextJS app using our temp
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
-```bash [npm]
+```bash npm
 npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
@@ -54,14 +54,14 @@ npx create-next-app account-kit-app -e https://github.com/avarobinson/account-ki
 
 …and paste the API key into `config.ts` where you see `ALCHEMY_API_KEY` in the alchemy `transport`
 
-```ts [config.ts]
+```ts config.ts
 // ...other stuff in the file
 export const config = createConfig(
   {
     transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
-    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
-    storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
+    ssr: true, // more about ssr: https://www.alchemy.com/docs/wallets/react/ssr
+    storage: cookieStorage, // more about persisting state with cookies: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
   uiConfig
@@ -75,11 +75,11 @@ That's it! Run the NextJS app to see your new auth flow in action ✨
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn dev
 ```
 
-```bash [npm]
+```bash npm
 npm run dev
 ```
 
@@ -104,12 +104,12 @@ Install the React and Infra packages from Account Kit along with [tailwind](http
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/infra @account-kit/react @tanstack/react-query
 yarn add -D tailwindcss @tailwindcss/postcss postcss
 ```
 
-```bash [npm]
+```bash npm
 npm install @account-kit/infra @account-kit/react @tanstack/react-query
 npm install -D tailwindcss @tailwindcss/postcss postcss
 ```
@@ -120,7 +120,7 @@ npm install -D tailwindcss @tailwindcss/postcss postcss
 
 If you don't have tailwind setup yet, create a `postcss.config.mjs` file (if you don't already have one) and add the `@tailwindcss/postcss` plugin.
 
-```js twoslash [postcss.config.mjs]
+```js twoslash postcss.config.mjs
 export default {
   plugins: {
     "@tailwindcss/postcss": {},
@@ -130,7 +130,7 @@ export default {
 
 The only thing left to do is to create a global.css file and import it in the root of your app.
 
-```css [global.css]
+```css global.css
 @import "tailwindcss";
 ```
 
@@ -179,7 +179,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
    3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6)
 2. If your `tailwind.config.ts` already contains any existing config information, be sure to wrap it with `withAccountKitUi` :
 
-   ```ts [tailwind.config.ts]
+   ```ts tailwind.config.ts
    import { withAccountKitUi } from "@account-kit/react/tailwind";
 
    export default withAccountKitUi(
@@ -196,7 +196,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 
 3. Update your `global.css` file to include your `tailwind.config.ts`. _(Skip this step if you're still using **tailwind v3**.)_
 
-```css [global.css]
+```css global.css
 @import "tailwindcss";
 @config '../../tailwind.config.ts'; // [!code ++]
 ```
@@ -225,7 +225,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 
 **Remember to paste in your API Key from step 2**
 
-```ts twoslash [src/config.ts]
+```ts twoslash src/config.ts
 // @noErrors
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { QueryClient } from "@tanstack/react-query";
@@ -236,8 +236,8 @@ export const config = createConfig(
     // alchemy config
     transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
     chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
-    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
-    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://www.alchemy.com/docs/wallets/react/ssr)
+    storage: cookieStorage, // persist the account state using cookies (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
     // optional config to override default session manager config
     sessionConfig: {
@@ -282,7 +282,7 @@ Once you have styling and authentication configs, create a `providers.tsx` file 
 
 The `QueryClientProvider` is also required to handle React Queries within the Alchemy Account Provider.
 
-```tsx [app/providers.tsx]
+```tsx app/providers.tsx
 "use client";
 import { config, queryClient } from "@/config";
 import { AlchemyClientState } from "@account-kit/core";
@@ -315,7 +315,7 @@ Additionally, we recommend using cookies to set the initial state when creating 
 
 For example, wrap your app with the created `Provider` by modifying your `layout.tsx` file.
 
-```tsx [app/layout.tsx]
+```tsx app/layout.tsx
 import { config } from "@/config";
 import { cookieToInitialState } from "@account-kit/core";
 import type { Metadata } from "next";
@@ -336,7 +336,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // This will allow us to persist state across page boundaries (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+  // This will allow us to persist state across page boundaries (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
   const initialState = cookieToInitialState(
     config,
     headers().get("cookie") ?? undefined
@@ -358,7 +358,7 @@ Once you have wrapped your app with the Alchemy Provider, you can now use the pr
 
 All you need to do is `useAuthModal`! For example, pop open the auth modal like so:
 
-```tsx [app/page.tsx]
+```tsx app/page.tsx
 "use client";
 import {
   useAuthModal,

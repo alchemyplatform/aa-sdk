@@ -4,7 +4,12 @@ description: Get started with the Alchemy Signer
 slug: wallets/signer/quickstart
 ---
 
-Getting started with the Signer is very similar to [getting started with React](/wallets/react/quickstart).
+<Tip>
+  Using React? Follow [this](/docs/wallets/react/quickstart) quickstart guide
+  instead for easy-to-use React hooks and integration with Smart Wallets.
+</Tip>
+
+If you're not using React, use the `@account-kit/signer` package to create and use Smart Wallets.
 
 ## Get your API key and create an account config
 
@@ -21,11 +26,11 @@ Getting started with the Signer is very similar to [getting started with React](
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/signer
 ```
 
-```bash [npm]
+```bash npm
 yarn add @account-kit/signer
 ```
 
@@ -46,7 +51,7 @@ Next, you'll need to authenticate your user before you can use the Signer as an 
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 const result = await signer.authenticate({
@@ -65,7 +70,7 @@ Now that you have authenticated your user, you can use the signer as an owner on
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { sepolia } from "@account-kit/infra";
 import { http } from "viem";
