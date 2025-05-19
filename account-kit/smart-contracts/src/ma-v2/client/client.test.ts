@@ -53,9 +53,9 @@ import {
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
-  createModularAccountV2Client,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
+import { createModularAccountV2Client } from "./client.js";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
