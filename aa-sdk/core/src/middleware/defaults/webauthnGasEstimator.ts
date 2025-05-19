@@ -1,7 +1,7 @@
 import { AccountNotFoundError } from "../../errors/account.js";
 import type { ClientMiddlewareFn } from "../types";
 import { defaultGasEstimator } from "./gasEstimator.js";
-import { type Hex, hexToString } from "viem";
+import { type Hex } from "viem";
 
 export const rip7212CheckBytecode =
   "0x60806040526040517f532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25815260056020820152600160408201527f4a03ef9f92eb268cafa601072489a56380fa0dc43171d7712813b3a19a1eb5e560608201527f3e213e28a608ce9a2f4a17fd830c6654018a79b3e0263d91a8ba90622df6f2f0608082015260208160a0836101005afa503d5f823e3d81f3fe";
@@ -61,14 +61,14 @@ export const webauthnGasEstimator: (
     const uo = await gasEstimator_(struct, params);
 
     const pvg: bigint | number | Hex | undefined =
-      uo.preVerificationGas instanceof Promise
-        ? await uo.preVerificationGas
-        : uo?.preVerificationGas ?? 0n;
-    console.log("preverification gas", uo.preVerificationGas);
+      uo.verificationGasLimit instanceof Promise
+        ? await uo.verificationGasLimit
+        : uo?.verificationGasLimit ?? 0n;
+    console.log("verificationGasLimit gas", uo.verificationGasLimit);
 
     if (!pvg) {
       throw new Error(
-        "WebauthnGasEstimator: preVerificationGas is 0 or not defined"
+        "WebauthnGasEstimator: verificationGasLimit is 0 or not defined"
       );
     }
 
@@ -78,11 +78,19 @@ export const webauthnGasEstimator: (
     const chainHas7212: boolean = data ? BigInt(data) === 1n : false;
     console.log({ chainHas7212 });
 
+    console.log("...");
+    console.log(BigInt(typeof pvg === "string" ? BigInt(pvg) : pvg));
+    console.log(chainHas7212 ? 10000n : 300000n);
+    console.log(
+      BigInt(typeof pvg === "string" ? BigInt(pvg) : pvg) +
+        (chainHas7212 ? 10000n : 300000n)
+    );
+
     // TODO: iterate numbers. Aim to have ~1000 gas buffer to account for longer authenticatorDatas and clientDataJSONs
     return {
       ...uo,
-      preVerificationGas:
-        BigInt(typeof pvg === "string" ? hexToString(pvg) : pvg) +
+      verificationGasLimit:
+        BigInt(typeof pvg === "string" ? BigInt(pvg) : pvg) +
         (chainHas7212 ? 10000n : 300000n),
     };
   };
