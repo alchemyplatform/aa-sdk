@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Features
+
+- add celo and tea to aa-sdk ([#1627](https://github.com/alchemyplatform/aa-sdk/issues/1627)) ([515a302](https://github.com/alchemyplatform/aa-sdk/commit/515a30210a6106490f1132a447651889769db4b3))
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
 ## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
 
 ### Bug Fixes
