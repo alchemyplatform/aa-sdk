@@ -5,8 +5,13 @@ import { Button } from "./Button";
 import { ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { Erc20Modal } from "../modals/Erc20";
+import { AccountMode } from "@/app/config";
 
-export const Erc20SponsorshipCard = () => {
+export const Erc20SponsorshipCard = ({
+  accountMode,
+}: {
+  accountMode: AccountMode;
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -60,6 +65,7 @@ export const Erc20SponsorshipCard = () => {
         onClose={handleCloseModal}
         onGetUSDC={() => console.log("Get USDC clicked")}
         onBuyNFT={() => console.log("Buy NFT clicked")}
+        accountMode={accountMode}
       />
     </>
   );
