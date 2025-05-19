@@ -154,6 +154,8 @@ export async function createModularAccountV2Client(
     );
   }
 
+  console.log("\n\n\n\n\n a \n\n\n\n\n");
+
   const middlewareToAppend = await (async () => {
     switch (config.mode) {
       case "7702":
@@ -164,14 +166,14 @@ export async function createModularAccountV2Client(
       case "webauthn":
         console.log("USING THE CORRECT GAS ESTIMATOR");
         return {
-          gasEstimator: webauthnGasEstimator(),
+          gasEstimator: webauthnGasEstimator(config.gasEstimator),
         };
       case "default":
       default:
-        console.log("USING THE CORRECT GAS ESTIMATOR");
+        console.log("USING THE CORRECT GAS ESTIMATOR2");
         return {};
     }
-  });
+  })();
 
   if (isAlchemyTransport(transport, chain)) {
     return createAlchemySmartAccountClient({
