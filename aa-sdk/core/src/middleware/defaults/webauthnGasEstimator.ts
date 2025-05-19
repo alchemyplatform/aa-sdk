@@ -64,6 +64,7 @@ export const webauthnGasEstimator: (
       uo.preVerificationGas instanceof Promise
         ? await uo.preVerificationGas
         : uo?.preVerificationGas ?? 0n;
+    console.log("preverification gas", uo.preVerificationGas);
 
     if (!pvg) {
       throw new Error(
@@ -75,6 +76,7 @@ export const webauthnGasEstimator: (
     const { data } = await params.client.call({ data: rip7212CheckBytecode });
 
     const chainHas7212: boolean = data ? BigInt(data) === 1n : false;
+    console.log({ chainHas7212 });
 
     // TODO: iterate numbers. Aim to have ~1000 gas buffer to account for longer authenticatorDatas and clientDataJSONs
     return {
