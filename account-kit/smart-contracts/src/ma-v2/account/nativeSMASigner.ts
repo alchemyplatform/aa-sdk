@@ -1,4 +1,8 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
+import type {
+  SmartAccountSigner,
+  SigningMethods,
+  SignatureRequest,
+} from "@aa-sdk/core";
 import {
   type Address,
   type Chain,
@@ -11,13 +15,13 @@ import {
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
-
-import { SignatureType } from "../modules/utils.js";
 import {
-  DEFAULT_OWNER_ENTITY_ID,
-  pack1271Signature,
   packUOSignature,
+  pack1271Signature,
+  DEFAULT_OWNER_ENTITY_ID,
 } from "../utils.js";
+import { SignatureType } from "../modules/utils.js";
+
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
@@ -47,7 +51,55 @@ export const nativeSMASigner = (
   accountAddress: Address,
   deferredActionData?: Hex,
 ) => {
+  const signingMethods: SigningMethods = {
+    prepareSign: async (
+      request: SignatureRequest
+    ): Promise<SignatureRequest> => {
+      let ret: SignatureRequest = {
+        type: "eth_signTypedData_v4",
+        data: {
+          domain: {
+            chainId: Number(chain.id),
+            verifyingContract: accountAddress,
+          },
+          types: {
+            ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
+          },
+          message: {
+            hash: "",
+          },
+          primaryType: "ReplaySafeHash",
+        },
+      };
+
+      if (request.type === "personal_sign") {
+        ret.data.message.hash = hashMessage(request.data);
+      } else if (request.type === "eth_signTypedData_v4") {
+        const isDeferredAction =
+          request.data?.primaryType === "DeferredAction" &&
+          request.data?.domain?.verifyingContract === accountAddress;
+
+        if (isDeferredAction) {
+          ret.data = request.data;
+        } else {
+          ret.data.message.hash = hashTypedData(request.data);
+        }
+      } else {
+        throw new Error(`Unsupported signature request type`);
+      }
+
+      return ret;
+    },
+    formatSign: async (signature: Hex) => {
+      return pack1271Signature({
+        validationSignature: signature,
+        entityId: DEFAULT_OWNER_ENTITY_ID,
+      });
+    },
+  };
+
   return {
+    ...signingMethods,
     getDummySignature: (): Hex => {
       const sig = packUOSignature({
         // orderedHookData: [],
@@ -78,24 +130,18 @@ export const nativeSMASigner = (
 
     // we apply the expected 1271 packing here since the account contract will expect it
     async signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
-      const hash = hashMessage(message);
-
-      return pack1271Signature({
-        validationSignature: await signer.signTypedData({
-          domain: {
-            chainId: Number(chain.id),
-            verifyingContract: accountAddress,
-          },
-          types: {
-            ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-          },
-          message: {
-            hash,
-          },
-          primaryType: "ReplaySafeHash",
-        }),
-        entityId: DEFAULT_OWNER_ENTITY_ID,
+      const { type, data } = await signingMethods.prepareSign({
+        type: "personal_sign",
+        data: message,
       });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const sig = await signer.signTypedData(data);
+
+      return signingMethods.formatSign(sig);
     },
 
     // TODO: maybe move "sign deferred actions" to a separate function?
@@ -106,7 +152,17 @@ export const nativeSMASigner = (
     >(
       typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
-      // the accounts domain already gives replay protection across accounts for deferred actions, so we don't need to apply another wrapping
+      const { type, data } = await signingMethods.prepareSign({
+        type: "eth_signTypedData_v4",
+        data: typedDataDefinition as TypedDataDefinition,
+      });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const sig = await signer.signTypedData(data);
+
       const isDeferredAction =
         typedDataDefinition.primaryType === "DeferredAction" &&
         typedDataDefinition.domain != null &&
@@ -115,26 +171,8 @@ export const nativeSMASigner = (
         typedDataDefinition.domain.verifyingContract === accountAddress;
 
       return isDeferredAction
-        ? concat([
-            SignatureType.EOA,
-            await signer.signTypedData(typedDataDefinition),
-          ])
-        : pack1271Signature({
-            validationSignature: await signer.signTypedData({
-              domain: {
-                chainId: Number(chain.id),
-                verifyingContract: accountAddress,
-              },
-              types: {
-                ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-              },
-              message: {
-                hash: await hashTypedData(typedDataDefinition),
-              },
-              primaryType: "ReplaySafeHash",
-            }),
-            entityId: DEFAULT_OWNER_ENTITY_ID,
-          });
+        ? concat([SignatureType.EOA, sig])
+        : signingMethods.formatSign(sig);
     },
   };
 };
