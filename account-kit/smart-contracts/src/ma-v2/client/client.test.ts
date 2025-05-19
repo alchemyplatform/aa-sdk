@@ -91,12 +91,123 @@ describe("MA v2 Tests", async () => {
   let signer: SmartAccountSigner;
   let sessionKey: SmartAccountSigner;
 
+  const publicKey = {
+    "0": 48,
+    "1": 89,
+    "2": 48,
+    "3": 19,
+    "4": 6,
+    "5": 7,
+    "6": 42,
+    "7": -122,
+    "8": 72,
+    "9": -50,
+    "10": 61,
+    "11": 2,
+    "12": 1,
+    "13": 6,
+    "14": 8,
+    "15": 42,
+    "16": -122,
+    "17": 72,
+    "18": -50,
+    "19": 61,
+    "20": 3,
+    "21": 1,
+    "22": 7,
+    "23": 3,
+    "24": 66,
+    "25": 0,
+    "26": 4,
+    "27": -1,
+    "28": -58,
+    "29": 27,
+    "30": -42,
+    "31": -128,
+    "32": 8,
+    "33": 89,
+    "34": 1,
+    "35": 123,
+    "36": 84,
+    "37": -23,
+    "38": -58,
+    "39": 38,
+    "40": -21,
+    "41": 10,
+    "42": 127,
+    "43": 20,
+    "44": 73,
+    "45": -30,
+    "46": 72,
+    "47": 27,
+    "48": 93,
+    "49": -11,
+    "50": 61,
+    "51": 66,
+    "52": 56,
+    "53": -21,
+    "54": 63,
+    "55": -69,
+    "56": -16,
+    "57": -40,
+    "58": -116,
+    "59": 13,
+    "60": -1,
+    "61": 89,
+    "62": -3,
+    "63": -110,
+    "64": -46,
+    "65": 47,
+    "66": 42,
+    "67": 15,
+    "68": 53,
+    "69": 88,
+    "70": 39,
+    "71": 28,
+    "72": 9,
+    "73": 70,
+    "74": 60,
+    "75": 29,
+    "76": 63,
+    "77": 72,
+    "78": -54,
+    "79": 39,
+    "80": -63,
+    "81": 19,
+    "82": 52,
+    "83": 25,
+    "84": -51,
+    "85": -40,
+    "86": -9,
+    "87": -128,
+    "88": -104,
+    "89": -54,
+    "90": 27,
+  };
+
+  const authenticatorResponse = {
+    authenticatorAttachment: "platform",
+    clientExtensionResults: {},
+    id: "3w3VTecptI96R3R07TfMs9PhIFY9UHzcdhIFbfsAH30",
+    rawId: "3w3VTecptI96R3R07TfMs9PhIFY9UHzcdhIFbfsAH30",
+    response: {
+      authenticatorData: "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA",
+      clientDataJSON:
+        "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiMHhiMmM4YmFkYjgwMDQ5NDU0ZjY1NjZmZGU2NjEyMDlhNjcyMmQ5Y2RlNmE2N2Y5MWVmMmE4NDFhNzdjZTZhNDV3Iiwib3JpZ2luIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiY3Jvc3NPcmlnaW4iOmZhbHNlfQ",
+      signature:
+        "MEUCICQqwB4arSWxbl6MKffUEJ41fL5sHLKhpuhG1f7cYg9wAiEAkuhJitSY4luRJFpdufL1uz0cc4Jwx-biiBla1uHdep4",
+      userHandle: "dXNlcklEMTIzNDU2",
+    },
+    type: "public-key",
+  };
+
   const credential = {
-    id: "m1-bMPuAqpWhCxHZQZTT6e-lSPntQbh3opIoGe7g4Qs",
+    id: "3w3VTecptI96R3R07TfMs9PhIFY9UHzcdhIFbfsAH30",
     publicKey:
-      "0x7da44d4bc972affd138c619a211ef0afe0926b813fec67d15587cf8625b2bf185f5044ae96640a63b32aa1eb6f8f993006bbd26292b81cb07a0672302c69a866",
+      "0x3059301306072a8648ce3d020106082a8648ce3d03010703420004ffc61bd6800859017b54e9c626eb0a7f1449e2481b5df53d4238eb3fbdf0d88c0dff59fd92d22f2a0f3558271c09463c1d3f48ca27c1133419cdd8f78098ca1b",
   } as const;
-  const webAuthnAccountParams = {
+
+  const webAuthnAccountParams: ToWebAuthnAccountParameters = {
     credential,
     getFn() {
       return Promise.resolve({
@@ -109,20 +220,22 @@ describe("MA v2 Tests", async () => {
           clientDataJSON: [
             123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116,
             104, 110, 46, 103, 101, 116, 34, 44, 34, 99, 104, 97, 108, 108, 101,
-            110, 103, 101, 34, 58, 34, 49, 80, 49, 79, 71, 74, 69, 121, 74, 122,
-            65, 50, 82, 74, 95, 74, 52, 82, 71, 89, 120, 122, 107, 87, 71, 48,
-            119, 66, 70, 113, 109, 105, 51, 77, 51, 54, 72, 69, 107, 103, 66,
-            118, 69, 34, 44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104,
-            116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108, 104, 111, 115,
-            116, 58, 53, 49, 55, 51, 34, 44, 34, 99, 114, 111, 115, 115, 79,
-            114, 105, 103, 105, 110, 34, 58, 102, 97, 108, 115, 101, 125,
+            110, 103, 101, 34, 58, 34, 48, 120, 98, 50, 99, 56, 98, 97, 100, 98,
+            56, 48, 48, 52, 57, 52, 53, 52, 102, 54, 53, 54, 54, 102, 100, 101,
+            54, 54, 49, 50, 48, 57, 97, 54, 55, 50, 50, 100, 57, 99, 100, 101,
+            54, 97, 54, 55, 102, 57, 49, 101, 102, 50, 97, 56, 52, 49, 97, 55,
+            55, 99, 101, 54, 97, 52, 53, 119, 34, 44, 34, 111, 114, 105, 103,
+            105, 110, 34, 58, 34, 104, 116, 116, 112, 58, 47, 47, 108, 111, 99,
+            97, 108, 104, 111, 115, 116, 58, 51, 48, 48, 48, 34, 44, 34, 99,
+            114, 111, 115, 115, 79, 114, 105, 103, 105, 110, 34, 58, 102, 97,
+            108, 115, 101, 125,
           ],
           signature: [
-            48, 69, 2, 33, 0, 198, 106, 113, 129, 35, 170, 51, 12, 13, 0, 67,
-            158, 211, 55, 188, 103, 33, 194, 2, 152, 190, 159, 181, 11, 176,
-            232, 114, 59, 99, 64, 167, 220, 2, 32, 101, 188, 55, 216, 145, 203,
-            39, 137, 83, 114, 45, 10, 147, 246, 218, 247, 132, 221, 228, 225,
-            57, 110, 143, 87, 172, 198, 76, 141, 30, 169, 166, 2,
+            48, 69, 2, 32, 36, 42, 192, 30, 26, 173, 37, 177, 110, 94, 140, 41,
+            247, 212, 16, 158, 53, 124, 190, 108, 28, 178, 161, 166, 232, 70,
+            213, 254, 220, 98, 15, 112, 2, 33, 0, 146, 232, 73, 138, 212, 152,
+            226, 91, 145, 36, 90, 93, 185, 242, 245, 187, 61, 28, 115, 130, 112,
+            199, 230, 226, 136, 25, 90, 214, 225, 221, 122, 158,
           ],
         },
       } as any);
@@ -197,9 +310,13 @@ describe("MA v2 Tests", async () => {
       throw new InvalidUserOperationError(builtUO);
     }
 
-    let signedUOHash = await provider.account.signUserOperationHash(
-      provider.account.getEntryPoint().getUserOperationHash(request)
-    );
+    const uoHash = provider.account
+      .getEntryPoint()
+      .getUserOperationHash(request);
+
+    console.log("uoHash", uoHash);
+
+    let signedUOHash = await provider.account.signUserOperationHash(uoHash);
 
     const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
 
