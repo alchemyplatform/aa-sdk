@@ -52,24 +52,27 @@ export const webauthnSigningFunctions = (
       rpId,
     });
 
-    return encodeAbiParameters(
-      [
-        { name: "authenticatorData", type: "bytes" },
-        { name: "clientDataJSON", type: "string" },
-        { name: "challengeIndex", type: "uint256" },
-        { name: "typeIndex", type: "uint256" },
-        { name: "r", type: "uint256" },
-        { name: "s", type: "uint256" },
-      ],
-      [
-        metadata.authenticatorData,
-        metadata.clientDataJSON,
-        BigInt(metadata.challengeIndex),
-        BigInt(metadata.typeIndex),
-        signature.r,
-        signature.s,
-      ]
-    );
+    return concatHex([
+      "0x0000000000000000000000000000000000000000000000000000000000000020",
+      encodeAbiParameters(
+        [
+          { name: "authenticatorData", type: "bytes" },
+          { name: "clientDataJSON", type: "string" },
+          { name: "challengeIndex", type: "uint256" },
+          { name: "typeIndex", type: "uint256" },
+          { name: "r", type: "uint256" },
+          { name: "s", type: "uint256" },
+        ],
+        [
+          metadata.authenticatorData,
+          metadata.clientDataJSON,
+          BigInt(metadata.challengeIndex),
+          BigInt(metadata.typeIndex),
+          signature.r,
+          signature.s,
+        ]
+      ),
+    ]);
   };
 
   return {
