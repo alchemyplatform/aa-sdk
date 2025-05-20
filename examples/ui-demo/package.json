@@ -12,10 +12,11 @@
     "playwright": "playwright test --ui"
   },
   "dependencies": {
-    "@account-kit/core": "^4.2.0",
-    "@account-kit/infra": "^4.2.0",
-    "@account-kit/logging": "^4.2.0",
-    "@account-kit/react": "^4.2.0",
+    "@account-kit/core": "^4.35.0",
+    "@account-kit/infra": "^4.35.0",
+    "@account-kit/logging": "^4.35.0",
+    "@account-kit/react": "^4.35.0",
+    "@headlessui/react": "^2.2.3",
     "@metaplex-foundation/umi": "^1.2.0",
     "@metaplex-foundation/umi-bundle-defaults": "^1.2.0",
     "@metaplex-foundation/umi-rpc-web3js": "^1.2.0",

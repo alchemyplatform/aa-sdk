@@ -33,6 +33,7 @@ export const useMintErc20 = (
   const { client, isLoadingClient } = useModularAccountV2Client({
     ...clientOptions,
   });
+  console.log("client address", client?.account?.address);
 
   const {
     mutate: mint,
