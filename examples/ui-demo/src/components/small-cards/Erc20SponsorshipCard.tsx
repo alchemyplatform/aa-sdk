@@ -25,11 +25,11 @@ export const Erc20SponsorshipCard = ({
   const imageSlot = (
     <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
       <Image
-        src="/images/duckImage.png"
+        src="/images/erc-20-sponsorship.jpg"
         alt="Cute character with hat"
         width={300}
         height={300}
-        className="w-full h-full object-cover object-top"
+        className="w-full h-full object-cover object-[25%_75%]"
       />
     </div>
   );

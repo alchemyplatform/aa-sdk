@@ -64,6 +64,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     isMinting: isMintingNft,
     isLoadingClient: isLoadingNftClient,
     txHash: mintNftTxHash,
+    reset: resetMintNft,
   } = useMintNftWithErc20Sponsorship({
     clientOptions: { mode: accountMode, chain, transport },
   });
@@ -95,6 +96,12 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
 
   const handleBuyNFT = async () => {
     if (!accountAddress) return;
+
+    if (mintNftTxHash) {
+      resetMintNft();
+      return;
+    }
+
     try {
       await mintNftAsync();
       await refetchBalance();
@@ -108,6 +115,9 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
       refetchBalance();
     }
   }, [isOpen, accountAddress, refetchBalance]);
+
+  const buyNftButtonEnabled =
+    readyToBuyNft && !isMintingNft && !isLoadingNftClient;
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
@@ -228,7 +238,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                   <div
                     className={cn(
                       "flex flex-col gap-2 pt-4 border-t border-bg-separator transition-all duration-500",
-                      readyToBuyNft && "transform -translate-y-16" // Animation: move up when busy
+                      readyToBuyNft && "transform -translate-y-16"
                     )}
                   >
                     <div className="flex justify-between items-center">
@@ -279,17 +289,23 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
             <button
               className={cn(
                 "flex h-[38px] py-2 px-2.5 justify-center items-center gap-1.5 self-stretch rounded-md w-full transition-all duration-300",
-                readyToBuyNft && !isMintingNft && !isLoadingNftClient
-                  ? "bg-[#363FF9] text-white cursor-pointer"
-                  : "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1] cursor-not-allowed"
+                buyNftButtonEnabled && "bg-[#363FF9] text-white cursor-pointer",
+                !buyNftButtonEnabled &&
+                  "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1] cursor-not-allowed",
+                (mintNftTxHash || "").length > 0 &&
+                  "bg-white border border-[#E2E8F0] text-secondary cursor-pointer"
               )}
-              disabled={!readyToBuyNft || isMintingNft || isLoadingNftClient}
+              disabled={!buyNftButtonEnabled && !mintNftTxHash}
               onClick={handleBuyNFT}
             >
               {isMintingNft && <LoadingIcon className="w-4 h-4" />}
               {!isMintingNft && <BagIcon className="w-4 h-4" />}
               <span className="font-medium">
-                {isLoadingNftClient ? "Loading Client..." : "Buy NFT"}
+                {isLoadingNftClient
+                  ? "Loading Client..."
+                  : (mintNftTxHash || "").length > 0
+                  ? "Buy NFT again"
+                  : "Buy NFT"}
               </span>
             </button>
           </div>

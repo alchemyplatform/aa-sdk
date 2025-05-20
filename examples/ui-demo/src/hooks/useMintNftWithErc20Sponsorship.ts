@@ -42,6 +42,7 @@ export interface UseMintNftWithErc20SponsorshipReturn {
   error?: Error | null;
   mintNft: () => void;
   mintNftAsync: () => Promise<Hex | undefined>;
+  reset: () => void;
 }
 
 export const useMintNftWithErc20Sponsorship = (
@@ -65,6 +66,7 @@ export const useMintNftWithErc20Sponsorship = (
     data: txHash,
     isPending: isMinting,
     error,
+    reset,
   } = useMutation<Hex | undefined, Error, void>({
     mutationFn: async () => {
       if (!client) {
@@ -136,5 +138,6 @@ export const useMintNftWithErc20Sponsorship = (
     error,
     mintNft,
     mintNftAsync,
+    reset,
   };
 };
