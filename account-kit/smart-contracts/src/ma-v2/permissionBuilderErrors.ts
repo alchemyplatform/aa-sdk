@@ -100,7 +100,9 @@ export class ValidationConfigUnsetError extends PermissionBuilderError {
    * Constructor for initializing an error message indicating the validation config is unset.
    */
   constructor() {
-    super("Validation config unset, use permissionBuilder.configure(...)");
+    super(
+      "Missing permission among: functions on contract, functions on all contracts, account functions, contract access, or erc20 token transfer"
+    );
   }
 }
 
