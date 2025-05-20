@@ -63,8 +63,6 @@ export const Erc20SponsorshipCard = ({
       <Erc20Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onGetUSDC={() => console.log("Get USDC clicked")}
-        onBuyNFT={() => console.log("Buy NFT clicked")}
         accountMode={accountMode}
       />
     </>

@@ -3,7 +3,6 @@ import { Dialog, useAccount } from "@account-kit/react";
 import { Transition } from "@headlessui/react";
 import { XIcon } from "../../icons/x";
 import Image from "next/image";
-import { Button } from "../../small-cards/Button";
 import { DynamicHeight } from "@/components/ui/dynamic-height";
 import BagIcon from "../components/BagIcon";
 import { cn } from "@/lib/utils";
@@ -14,31 +13,25 @@ import { DEMO_USDC_ADDRESS } from "../../../hooks/7702/dca/constants";
 import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { AccountMode } from "@/app/config";
 import { LoadingIcon } from "../../icons/loading";
-import { formatEther, parseEther } from "viem";
+import { MintStages } from "@/components/small-cards/MintStages";
 
 type Erc20ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onGetUSDC?: () => void;
-  onBuyNFT?: () => void;
   accountMode: AccountMode;
 };
 
-const AMOUNT_OF_USDC_TO_MINT = 100;
-const NFT_TOTAL_PRICE = 4;
+const AMOUNT_OF_USDC_TO_MINT = 10;
+const MINIMUM_USDC_BALANCE = 2;
+const networkFee = 0.02;
+const nftPrice = 1;
 
-export function Erc20Modal({
-  isOpen,
-  onClose,
-  onGetUSDC = () => {},
-  onBuyNFT = () => {},
-  accountMode,
-}: Erc20ModalProps) {
+export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
   const { address: accountAddress } = useAccount({
     type: "ModularAccountV2",
     accountParams: { mode: accountMode },
   });
-  console.log("accountAddress", accountAddress);
+
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
   const rpcUrl = chain.rpcUrls.default.http[0];
   const transport = alchemy({
@@ -70,41 +63,33 @@ export function Erc20Modal({
     mintNftAsync,
     isMinting: isMintingNft,
     isLoadingClient: isLoadingNftClient,
+    txHash: mintNftTxHash,
   } = useMintNftWithErc20Sponsorship({
     clientOptions: { mode: accountMode, chain, transport },
   });
-  console.log("balance", balance);
-  // Derived flags
-  console.log(balance);
-  const n = parseFloat(balance ?? "0");
-
-  const numericBalance = Math.floor(n * 100) / 100;
-
-  const readyToBuyNft = numericBalance >= NFT_TOTAL_PRICE;
+  const num = parseFloat(balance ?? "0");
+  const numericBalance = Math.floor(num * 100) / 100;
+  const readyToBuyNft = numericBalance >= MINIMUM_USDC_BALANCE;
 
   const balanceDisplay = isLoadingBalance
     ? "Loading..."
     : isErrorBalance
     ? "Error"
-    : `${numericBalance.toFixed(2)} USDC`;
+    : `${numericBalance === 0 ? "0" : numericBalance.toFixed(2)} USDC`;
 
   // Handlers
   const handleGetUSDC = async () => {
     if (!accountAddress) return;
-    // setIsRefreshingAfterMint(true);
+
     try {
       await mintAsync();
       await refetchBalance();
-      onGetUSDC();
     } catch (e) {
       console.error("Failed to get USDC:", e);
-    } finally {
-      // setIsRefreshingAfterMint(false);
     }
   };
 
   const handleClose = () => {
-    // setIsRefreshingAfterMint(false);
     onClose();
   };
 
@@ -113,7 +98,6 @@ export function Erc20Modal({
     try {
       await mintNftAsync();
       await refetchBalance();
-      onBuyNFT();
     } catch (e) {
       console.error("Failed to buy NFT:", e);
     }
@@ -129,7 +113,7 @@ export function Erc20Modal({
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <div className="akui-modal md:w-[607px] rounded-lg overflow-hidden">
         <DynamicHeight>
-          <div className="p-6 flex flex-col gap-6">
+          <div className="p-5 flex flex-col gap-6">
             {/* Header */}
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-1.5">
@@ -150,7 +134,7 @@ export function Erc20Modal({
             </div>
 
             {/* Body */}
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-6">
               {/* Image */}
               <div className="md:w-1/2 rounded-lg overflow-hidden">
                 <div className="relative aspect-square">
@@ -164,131 +148,148 @@ export function Erc20Modal({
               </div>
 
               {/* Details */}
-              <div className="md:w-1/2 flex flex-col">
-                {/* 1) Warning */}
-                <div className="flex flex-col gap-4 pb-2">
-                  <div className="h-12">
-                    <Transition
-                      as={Fragment}
-                      show={!readyToBuyNft}
-                      enter="transition-opacity duration-500"
-                      enterFrom="opacity-0"
-                      enterTo="opacity-100"
-                      leave="transition-opacity duration-500"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <div className="bg-demo-surface-critical-subtle text-fg-critical py-1.5 px-2 rounded-lg w-[271px]">
-                        <p className="font-medium text-xs leading-[18px]">
-                          Insufficient funds. You need {NFT_TOTAL_PRICE} USDC to
-                          complete this purchase.
-                        </p>
-                      </div>
-                    </Transition>
-                  </div>
-                  {/* Wallet Balance */}
-                  <div
-                    className={cn(
-                      "flex justify-between items-center transition-all duration-500",
-                      readyToBuyNft && "transform -translate-y-16" // Animation: move up when busy
-                    )}
-                  >
-                    <span className="text-fg-secondary font-medium text-sm leading-relaxed">
-                      Wallet Balance
-                    </span>
-                    <div className="flex items-center">
-                      <span
-                        className={cn(
-                          "text-fg-primary font-medium text-sm leading-5 transition-all duration-500",
-                          !isLoadingBalance &&
-                            !readyToBuyNft &&
-                            "text-demo-surface-critical mr-2",
-                          readyToBuyNft && "transform translate-x-20 mr-0" // Animation: move text right when busy
-                        )}
+              {!isMintingNft && !mintNftTxHash && (
+                <div className="md:w-1/2 flex flex-col">
+                  {/* 1) Warning */}
+                  <div className="flex flex-col gap-4 pb-2">
+                    <div className="h-12">
+                      <Transition
+                        as={Fragment}
+                        show={!readyToBuyNft}
+                        enter="transition-opacity duration-500"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="transition-opacity duration-500"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
                       >
-                        {balanceDisplay}
+                        <div className="bg-demo-surface-critical-subtle text-fg-critical py-1.5 px-2 rounded-lg w-[271px]">
+                          <p className="font-medium text-xs leading-[18px]">
+                            Insufficient funds. You need {MINIMUM_USDC_BALANCE}{" "}
+                            USDC to complete this purchase.
+                          </p>
+                        </div>
+                      </Transition>
+                    </div>
+                    {/* Wallet Balance */}
+                    <div
+                      className={cn(
+                        "flex justify-between items-center transition-all duration-500 whitespace-nowrap",
+                        readyToBuyNft && "transform -translate-y-16" // Animation: move up when busy
+                      )}
+                    >
+                      <span className="text-fg-secondary font-medium text-sm leading-relaxed">
+                        Wallet Balance
                       </span>
-                      <div className="min-w-[80px]">
-                        <Transition
-                          as={Fragment}
-                          show={!readyToBuyNft}
-                          enter="transition-opacity duration-500"
-                          enterFrom="opacity-0"
-                          enterTo="opacity-100"
-                          leave="transition-opacity duration-500"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
+                      <div className="flex items-center">
+                        <span
+                          className={cn(
+                            "text-fg-primary font-medium text-sm leading-5 transition-all duration-500",
+                            !isLoadingBalance &&
+                              !readyToBuyNft &&
+                              "text-demo-surface-critical mr-2",
+                            readyToBuyNft && "transform translate-x-20 mr-0" // Animation: move text right when busy
+                          )}
                         >
-                          <button
-                            className={cn(
-                              "akui-btn-auth akui-btn font-medium text-xs leading-[18px] py-2 px-2.5 rounded-lg",
-                              isMinting &&
-                                "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1]",
-                              !isMinting && "bg-[#27272A] text-demo-text-invert"
-                            )}
-                            onClick={handleGetUSDC}
-                            disabled={isMinting}
+                          {balanceDisplay}
+                        </span>
+                        <div className="min-w-[80px] h-8">
+                          <Transition
+                            as={Fragment}
+                            show={!readyToBuyNft}
+                            enter="transition-opacity duration-500"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity duration-500"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
                           >
-                            {isMinting && <LoadingIcon />}
-                            Get USDC
-                          </button>
-                        </Transition>
+                            <button
+                              className={cn(
+                                "akui-btn-auth akui-btn font-medium text-xs leading-[18px] py-2 px-2.5 rounded-lg h-8 disabled:opacity-100",
+                                isMinting &&
+                                  "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1]",
+                                !isMinting &&
+                                  "bg-[#27272A] text-demo-text-invert"
+                              )}
+                              onClick={handleGetUSDC}
+                              disabled={isMinting}
+                            >
+                              {isMinting && <LoadingIcon className="w-4 h-4" />}
+                              Get USDC
+                            </button>
+                          </Transition>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Price Details */}
-                <div
-                  className={cn(
-                    "flex flex-col gap-2 pt-4 border-t border-bg-separator transition-all duration-500",
-                    readyToBuyNft && "transform -translate-y-16" // Animation: move up when busy
-                  )}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="text-fg-primary text-sm font-medium leading-5">
-                      NFT price
-                    </span>
-                    <span className="text-fg-primary text-sm leading-relaxed">
-                      1.00 USDC
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-fg-primary text-sm font-medium leading-5">
-                      Network fee
-                    </span>
-                    <span className="text-fg-primary text-sm leading-relaxed">
-                      0.02 USDC
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-fg-primary font-bold">Total</span>
-                    <span className="text-fg-primary font-bold">
-                      {NFT_TOTAL_PRICE.toFixed(2)} USDC
-                    </span>
+                  {/* Price Details */}
+                  <div
+                    className={cn(
+                      "flex flex-col gap-2 pt-4 border-t border-bg-separator transition-all duration-500",
+                      readyToBuyNft && "transform -translate-y-16" // Animation: move up when busy
+                    )}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-fg-primary text-sm font-medium leading-5">
+                        NFT price
+                      </span>
+                      <span className="text-fg-primary text-sm leading-relaxed">
+                        1.00 USDC
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-fg-primary text-sm font-medium leading-5">
+                        Network fee
+                      </span>
+                      <span className="text-fg-primary text-sm leading-relaxed">
+                        {networkFee.toFixed(2)} USDC
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-fg-primary font-bold">Total</span>
+                      <span className="text-fg-primary font-bold">
+                        {(nftPrice + networkFee).toFixed(2)} USDC
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+              {(isMintingNft || mintNftTxHash) && (
+                <div className="md:w-1/2 flex flex-col justify-center">
+                  <MintStages
+                    status={{
+                      signing: "success",
+                      gas: "success",
+                      batch: !mintNftTxHash ? "loading" : "success",
+                    }}
+                    transactionUrl={`${chain.blockExplorers?.default?.url}/tx/${mintNftTxHash}`}
+                    stageDescriptions={[
+                      "Invisibly signing transactions",
+                      "Paying gas with USDC",
+                      "Buying NFT",
+                    ]}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Buy Button */}
             <button
               className={cn(
-                "flex h-[38px] py-2 px-2.5 justify-center items-center gap-1.5 self-stretch rounded-md mt-6 w-full transition-all duration-300",
+                "flex h-[38px] py-2 px-2.5 justify-center items-center gap-1.5 self-stretch rounded-md w-full transition-all duration-300",
                 readyToBuyNft && !isMintingNft && !isLoadingNftClient
-                  ? "bg-[#27272A] text-white border-[#27272A] cursor-pointer"
+                  ? "bg-[#363FF9] text-white cursor-pointer"
                   : "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1] cursor-not-allowed"
               )}
               disabled={!readyToBuyNft || isMintingNft || isLoadingNftClient}
               onClick={handleBuyNFT}
             >
-              <BagIcon />
+              {isMintingNft && <LoadingIcon className="w-4 h-4" />}
+              {!isMintingNft && <BagIcon className="w-4 h-4" />}
               <span className="font-medium">
-                {isMintingNft
-                  ? "Buying..."
-                  : isLoadingNftClient
-                  ? "Loading Client..."
-                  : "Buy NFT"}
+                {isLoadingNftClient ? "Loading Client..." : "Buy NFT"}
               </span>
             </button>
           </div>

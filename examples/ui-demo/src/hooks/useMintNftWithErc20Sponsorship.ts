@@ -11,30 +11,25 @@ import { useToast } from "@/hooks/useToast";
 import { type AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
 
-// This is the Staging Sepolia PostOp mode policy ID from the documentation
-const ERC20_SPONSORSHIP_POLICY_ID = "c9fadff3-a3aa-496b-8705-6d52c44e9ecb";
-// Alchemy Paymaster address for Sepolia v0.7, from the documentation
+const ERC20_SPONSORSHIP_POLICY_ID =
+  process.env.NEXT_PUBLIC_ERC20_SPONSORSHIP_POLICY_ID;
+// Alchemy Paymaster address for entrypoint v0.7
 const ALCHEMY_PAYMASTER_ADDRESS: Address =
   "0x2cc0c7981D846b9F2a16276556f6e8cb52BfB633";
 
-// ABI for ERC20 approve function
+// ABI
 const erc20Abi = parseAbi([
   "function approve(address spender, uint256 amount) returns (bool)",
 ]);
-
-// Assumed ABI for the NFT mint function.
-// IMPORTANT: Adjust this if your NFT contract's mint function is different
-// (e.g., different name, different parameters).
 const nftAbi = parseAbi(["function mintTo(address to)"]);
 
-// Amount of USDC to approve for gas payment (e.g., 100 USDC, assuming 6 decimals)
-// Adjust if DEMO_USDC_ADDRESS has different decimals or if more/less approval is needed.
-const USDC_GAS_APPROVAL_AMOUNT = BigInt(1000000000000000000); // 1 USDC for gas, adjust as needed
-const NFT_MINT_PRICE = BigInt(1000000000000000000); // 1 USDC for mint price (1 * 10^18)
+// Amount of USDC to approve for gas payment (e.g., 100 USDC, assuming 18 decimals)
+const USDC_GAS_APPROVAL_AMOUNT = BigInt(100_000_000_000_000_000_000); // 100 USDC for gas, adjust as needed
+const NFT_MINT_PRICE = BigInt(1_000_000_000_000_000_000); // 1 USDC for mint price (1 * 10^18)
 
 export interface UseMintNftWithErc20SponsorshipParams {
   clientOptions: {
-    mode: "default" | "7702"; // Assuming this mode is still relevant
+    mode: "default" | "7702";
     chain: Chain;
     transport: AlchemyTransport;
   };
@@ -60,7 +55,7 @@ export const useMintNftWithErc20Sponsorship = (
     policyId: ERC20_SPONSORSHIP_POLICY_ID,
     policyToken: {
       address: DEMO_USDC_ADDRESS,
-      maxTokenAmount: USDC_GAS_APPROVAL_AMOUNT, // Max amount for gas sponsorship
+      maxTokenAmount: USDC_GAS_APPROVAL_AMOUNT,
     },
   });
 
@@ -98,7 +93,7 @@ export const useMintNftWithErc20Sponsorship = (
       const mintCallData = encodeFunctionData({
         abi: nftAbi,
         functionName: "mintTo",
-        args: [accountAddress], // Minting to the smart account itself
+        args: [accountAddress],
       });
 
       const userOpHash = await client.sendUserOperation({
@@ -106,17 +101,14 @@ export const useMintNftWithErc20Sponsorship = (
           {
             target: DEMO_USDC_ADDRESS,
             data: approveGasSponsorshipCallData,
-            // value: BigInt(0), // fixed BigInt literal
           },
           {
-            target: DEMO_USDC_ADDRESS, // Still USDC contract
-            data: approveNftMintCallData, // Data for approving NFT contract
-            // value: BigInt(0),
+            target: DEMO_USDC_ADDRESS,
+            data: approveNftMintCallData,
           },
           {
             target: DEMO_ERC20NFT_ADDRESS,
             data: mintCallData,
-            // value: BigInt(0), // fixed BigInt literal // Assuming NFT minting itself doesn\'t require ETH value
           },
         ],
       });
@@ -133,11 +125,6 @@ export const useMintNftWithErc20Sponsorship = (
       });
     },
     onSuccess: (hash: Hex | undefined) => {
-      setToast({
-        type: "success",
-        open: true,
-        text: "Successfully submitted NFT mint transaction!",
-      });
       console.log("NFT Mint Transaction Hash:", hash);
     },
   });

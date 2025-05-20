@@ -83,7 +83,15 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
           {!mintStarted ? (
             renderContent
           ) : (
-            <MintStages status={status} transactionUrl={transactionUrl} />
+            <MintStages
+              status={status}
+              transactionUrl={transactionUrl}
+              stageDescriptions={[
+                "Invisibly signing transactions",
+                "Sponsoring gas fees",
+                "Deploying smart account",
+              ]}
+            />
           )}
         </>
       }
