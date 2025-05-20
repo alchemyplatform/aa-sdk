@@ -29,7 +29,7 @@ export const Erc20SponsorshipCard = ({
         alt="Cute character with hat"
         width={300}
         height={300}
-        className="w-full h-full object-cover object-[25%_75%]"
+        className="w-full h-full object-cover object-[0_40%]"
       />
     </div>
   );
