@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { useReadErc20Balance } from "../../../hooks/useReadErc20Balance";
 import { useMintErc20 } from "../../../hooks/useMintErc20";
 import { useSendUOsErc20Sponsorship } from "../../../hooks/useSendUOsErc20Sponsorship";
-import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../hooks/7702/dca/constants";
 import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { AccountMode } from "@/app/config";
 import { LoadingIcon } from "../../icons/loading";
@@ -18,6 +17,7 @@ import { ModalCTAButton } from "../../shared/ModalCTAButton";
 import { getNftMintBatchUOs } from "./utils";
 import { useEstimateGasErc20Sponsorship } from "../../../hooks/useEstimateGasErc20Sponsorship";
 import { useGetEthPrice } from "../../../hooks/useGetEthPrice";
+import { DEMO_USDC_ADDRESS_6_DECIMALS } from "@/lib/constants";
 
 type Erc20ModalProps = {
   isOpen: boolean;

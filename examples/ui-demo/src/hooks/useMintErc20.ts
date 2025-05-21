@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { encodeFunctionData, parseUnits, type Chain, type Hex } from "viem";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
-import { DEMO_USDC_ADDRESS_6_DECIMALS } from "./7702/dca/constants";
 import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
+import { DEMO_USDC_ADDRESS_6_DECIMALS } from "@/lib/constants";
 
 export interface UseMintErc20Params {
   amount: number | string;

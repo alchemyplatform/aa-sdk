@@ -8,10 +8,10 @@ contract Swap {
     ERC20Mintable public weth;
 
     constructor() {
-        usdc = new ERC20Mintable("DemoUSDC", "USDC", 18);
+        usdc = new ERC20Mintable("DemoUSDC", "USDC");
         usdc.mint(address(this), type(uint160).max);
 
-        weth = new ERC20Mintable("DemoWETH", "WETH", 18);
+        weth = new ERC20Mintable("DemoWETH", "WETH");
         weth.mint(address(this), type(uint160).max);
     }
 

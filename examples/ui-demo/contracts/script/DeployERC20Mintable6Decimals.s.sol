@@ -2,20 +2,19 @@
 pragma solidity ^0.8.26;
 
 import {Script, console} from "forge-std/Script.sol";
-import {ERC20Mintable} from "../src/ERC20Mintable.sol";
+import {ERC20Mintable6Decimals} from "../src/ERC20Mintable6Decimals.sol";
 
-contract DeployERC20MintableScript is Script {
+contract DeployERC20Mintable6DecimalsScript is Script {
     function run() public {
         // ---- Configuration ----
         string memory name = "Smart Wallets Demo USD Coin";
         string memory symbol = "SWUSDC";
-        uint8 decimals_ = 6; // change to 6 if you want USDC-style 6 decimals
 
         vm.startBroadcast();
 
-        ERC20Mintable token = new ERC20Mintable{salt: 0}(name, symbol, decimals_);
+        ERC20Mintable6Decimals token = new ERC20Mintable6Decimals{salt: 0}(name, symbol);
 
-        console.log("ERC20Mintable deployed at address: ", address(token));
+        console.log("ERC20Mintable6Decimals deployed at address: ", address(token));
 
         vm.stopBroadcast();
     }

@@ -1,7 +1,7 @@
 import {
   DEMO_NFT_USDC_MINTABLE_ADDRESS,
   DEMO_USDC_ADDRESS_6_DECIMALS,
-} from "@/hooks/7702/dca/constants";
+} from "@/lib/constants";
 import { Address, encodeFunctionData, parseAbi } from "viem";
 
 // Alchemy Paymaster address for entrypoint v0.7
