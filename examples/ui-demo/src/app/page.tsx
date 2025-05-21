@@ -45,7 +45,7 @@ export default function Home() {
             <PreviewNav showCode={showCode} setShowCode={setShowCode} />
             <PreviewWrapper showCode={showCode} />
             {/* Toast viewport */}
-            <Viewport className="absolute lg:bottom-10 lg:right-10 bottom-10 right-1/2 translate-x-1/2 lg:translate-x-0 z-51 outline-none" />
+            <Viewport className="fixed lg:bottom-10 lg:right-10 bottom-10 right-1/2 translate-x-1/2 lg:translate-x-0 z-[1000000] outline-none" />
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { AccountMode } from "@/app/config";
 import { useQuery, type QueryObserverResult } from "@tanstack/react-query";
 import { useMemo } from "react";
 import {
@@ -15,6 +16,7 @@ export interface UseReadErc20BalanceParams {
   tokenAddress?: Hex;
   chain?: Chain;
   rpcUrl?: string;
+  accountMode?: AccountMode;
 }
 
 export interface UseReadErc20BalanceReturn {
@@ -42,7 +44,7 @@ export const useReadErc20Balance = (
 
   const queryKey = useMemo(
     () => ["erc20Balance", tokenAddress, accountAddress, chain?.id, rpcUrl],
-    [tokenAddress, accountAddress, chain, rpcUrl]
+    [tokenAddress, accountAddress, chain, rpcUrl, params.accountMode]
   );
 
   const {

@@ -4,16 +4,20 @@ import { Transition } from "@headlessui/react";
 import { XIcon } from "../../icons/x";
 import Image from "next/image";
 import { DynamicHeight } from "@/components/ui/dynamic-height";
-import BagIcon from "../components/BagIcon";
+import BagIcon from "./BagIcon";
 import { cn } from "@/lib/utils";
 import { useReadErc20Balance } from "../../../hooks/useReadErc20Balance";
 import { useMintErc20 } from "../../../hooks/useMintErc20";
-import { useMintNftWithErc20Sponsorship } from "../../../hooks/useMintNftWithErc20Sponsorship";
+import { useSendUOsErc20Sponsorship } from "../../../hooks/useSendUOsErc20Sponsorship";
 import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../hooks/7702/dca/constants";
 import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { AccountMode } from "@/app/config";
 import { LoadingIcon } from "../../icons/loading";
 import { MintStages } from "@/components/small-cards/MintStages";
+import { ModalCTAButton } from "../../shared/ModalCTAButton";
+import { getNftMintBatchUOs } from "./utils";
+import { useEstimateGasErc20Sponsorship } from "../../../hooks/useEstimateGasErc20Sponsorship";
+import { useGetEthPrice } from "../../../hooks/useGetEthPrice";
 
 type Erc20ModalProps = {
   isOpen: boolean;
@@ -23,7 +27,6 @@ type Erc20ModalProps = {
 
 const AMOUNT_OF_USDC_TO_MINT = 10;
 const MINIMUM_USDC_BALANCE = 2;
-const ethereumPrice = 2550;
 const nftPrice = 1;
 
 export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
@@ -32,6 +35,8 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     type: "ModularAccountV2",
     accountParams: { mode: accountMode },
   });
+
+  const { data: ethPriceData, isLoading: isLoadingEthPrice } = useGetEthPrice();
 
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
   const rpcUrl = chain.rpcUrls.default.http[0];
@@ -49,31 +54,38 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     tokenAddress: DEMO_USDC_ADDRESS_6_DECIMALS,
     chain,
     rpcUrl,
+    accountMode,
   });
 
   const {
     mintAsync,
     isMinting,
-    isLoadingClient: isLoadingMintClient,
+    reset: resetMint,
   } = useMintErc20({
     amount: String(AMOUNT_OF_USDC_TO_MINT),
     clientOptions: { mode: accountMode, chain, transport },
   });
 
   const {
-    mintNftAsync,
-    isMinting: isMintingNft,
+    sendUOsAsync: mintNftAsync,
+    isSending: isMintingNft,
     isLoadingClient: isLoadingNftClient,
     txHash: mintNftTxHash,
     reset: resetMintNft,
-    estimateFee: estimateMintNftFee,
-  } = useMintNftWithErc20Sponsorship({
+  } = useSendUOsErc20Sponsorship({
     clientOptions: { mode: accountMode, chain, transport },
+    toastText: "NFT minted successfully",
   });
-  const num = parseFloat(balance ?? "0");
-  const numericBalance = Math.floor(num * 100) / 100;
-  const readyToBuyNft = numericBalance >= MINIMUM_USDC_BALANCE;
 
+  const { estimateGasAsync: estimateMintNftFee } =
+    useEstimateGasErc20Sponsorship({
+      clientOptions: { mode: accountMode, chain, transport },
+    });
+
+  const balanceFloat = parseFloat(balance ?? "0");
+  const readyToBuyNft = balanceFloat >= MINIMUM_USDC_BALANCE;
+
+  const numericBalance = Math.floor(balanceFloat * 100) / 100;
   const balanceDisplay = isLoadingBalance
     ? "Loading..."
     : isErrorBalance
@@ -105,7 +117,8 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     }
 
     try {
-      await mintNftAsync();
+      const uos = await getNftMintBatchUOs(accountAddress);
+      await mintNftAsync(uos);
       await refetchBalance();
     } catch (e) {
       console.error("Failed to buy NFT:", e);
@@ -119,16 +132,60 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
   }, [isOpen, accountAddress, refetchBalance]);
 
   useEffect(() => {
-    if (isOpen && accountAddress) {
-      // estimateMintNftFee().then((fee) => {
-      //   const networkFee = ethereumPrice * Number(fee.feeEth);
-      //   setNetworkFee(networkFee);
-      // });
-    }
-  }, [isOpen, accountAddress, estimateMintNftFee]);
+    const fetchAndEstimateFee = async () => {
+      if (
+        isOpen &&
+        accountAddress &&
+        ethPriceData?.price &&
+        !isLoadingEthPrice
+      ) {
+        try {
+          const uos = await getNftMintBatchUOs(accountAddress);
+          const feeResult = await estimateMintNftFee(uos);
+          if (feeResult && feeResult.feeEth) {
+            const calculatedNetworkFee =
+              parseFloat(feeResult.feeEth) * ethPriceData.price;
+            setNetworkFee(calculatedNetworkFee);
+          } else {
+            console.warn("Fee estimation did not return expected data.");
+            setNetworkFee(0);
+          }
+        } catch (error) {
+          setNetworkFee(0);
+        }
+      } else if (isOpen && accountAddress && !isLoadingEthPrice) {
+        setNetworkFee(0);
+        if (!ethPriceData?.price) {
+          console.warn("ETH price not available for fee estimation.");
+        }
+      }
+    };
+
+    fetchAndEstimateFee();
+  }, [
+    isOpen,
+    accountAddress,
+    estimateMintNftFee,
+    ethPriceData?.price,
+    isLoadingEthPrice,
+    balance,
+  ]);
+
+  useEffect(() => {
+    resetMintNft();
+    resetMint();
+  }, [accountMode, resetMintNft, resetMint]);
 
   const buyNftButtonEnabled =
     readyToBuyNft && !isMintingNft && !isLoadingNftClient;
+
+  // Determine BagIcon color
+  let bagIconColor = "#CBD5E1";
+  if (mintNftTxHash) {
+    bagIconColor = "#475569";
+  } else if (buyNftButtonEnabled) {
+    bagIconColor = "white";
+  }
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
@@ -184,8 +241,8 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                       >
-                        <div className="bg-demo-surface-critical-subtle text-fg-critical py-1.5 px-2 rounded-lg w-[271px]">
-                          <p className="font-medium text-xs leading-[18px]">
+                        <div className="bg-demo-surface-critical-subtle text-fg-critical py-1.5 px-2 rounded-lg w-full">
+                          <p className="font-medium text-xs leading-[18px] w-full">
                             Insufficient funds. You need {MINIMUM_USDC_BALANCE}{" "}
                             USDC to complete this purchase.
                           </p>
@@ -265,13 +322,18 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                         Network fee est.
                       </span>
                       <span className="text-fg-primary text-sm leading-relaxed">
-                        {networkFee.toFixed(2)} USDC
+                        {networkFee === 0
+                          ? "-"
+                          : networkFee < 0.01
+                          ? "< 0.01"
+                          : networkFee.toFixed(2)}
+                        &nbsp;USDC
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-fg-primary font-bold">Total</span>
                       <span className="text-fg-primary font-bold">
-                        {(nftPrice + networkFee).toFixed(2)} USDC
+                        {(nftPrice + networkFee).toFixed(2)}&nbsp;USDC
                       </span>
                     </div>
                   </div>
@@ -297,33 +359,20 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
             </div>
 
             {/* Buy Button */}
-            <button
-              className={cn(
-                "flex h-[38px] py-2 px-2.5 justify-center items-center gap-1.5 self-stretch rounded-md w-full transition-all duration-300",
-                buyNftButtonEnabled && "bg-[#363FF9] text-white cursor-pointer",
-                !buyNftButtonEnabled &&
-                  "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1] cursor-not-allowed",
-                (mintNftTxHash || "").length > 0 &&
-                  "bg-white border border-[#E2E8F0] text-secondary cursor-pointer"
-              )}
-              disabled={!buyNftButtonEnabled && !mintNftTxHash}
+            <ModalCTAButton
               onClick={handleBuyNFT}
+              isLoading={isMintingNft || isLoadingNftClient}
+              loadingText={isLoadingNftClient ? "Loading Client..." : "Buy NFT"}
+              disabled={!buyNftButtonEnabled && !mintNftTxHash}
+              variant={mintNftTxHash ? "secondary" : "primary"}
+              icon={
+                !isMintingNft ? (
+                  <BagIcon className="w-4 h-4" color={bagIconColor} />
+                ) : undefined
+              }
             >
-              {isMintingNft && <LoadingIcon className="w-4 h-4" />}
-              {!isMintingNft && (
-                <BagIcon
-                  className="w-4 h-4"
-                  color={`${mintNftTxHash ? "#475569" : "#CBD5E1"}`}
-                />
-              )}
-              <span className="font-medium">
-                {isLoadingNftClient
-                  ? "Loading Client..."
-                  : (mintNftTxHash || "").length > 0
-                  ? "Buy NFT again"
-                  : "Buy NFT"}
-              </span>
-            </button>
+              {mintNftTxHash ? "Buy NFT again" : "Buy NFT"}
+            </ModalCTAButton>
           </div>
         </DynamicHeight>
       </div>

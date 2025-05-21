@@ -22,6 +22,7 @@ export interface UseMintErc20Return {
   error?: Error | null;
   mint: () => void;
   mintAsync: () => Promise<Hex | undefined>;
+  reset: () => void;
 }
 
 export const useMintErc20 = (
@@ -40,6 +41,7 @@ export const useMintErc20 = (
     data: txHash,
     isPending: isMinting,
     error,
+    reset,
   } = useMutation<Hex | undefined, Error, void>({
     mutationFn: async () => {
       if (!client) {
@@ -54,13 +56,12 @@ export const useMintErc20 = (
           data: encodeFunctionData({
             abi: erc20MintableAbi,
             functionName: "mint",
-            args: [client.getAddress(), amountInTokenUnits],
+            args: [client.account.address, amountInTokenUnits],
           }),
         },
       });
 
-      const txnHash = await client.waitForUserOperationTransaction(userOpHash);
-      return txnHash;
+      return client.waitForUserOperationTransaction(userOpHash);
     },
     onError: (err: Error) => {
       console.error(err);
@@ -86,5 +87,6 @@ export const useMintErc20 = (
     error,
     mint,
     mintAsync,
+    reset,
   };
 };
