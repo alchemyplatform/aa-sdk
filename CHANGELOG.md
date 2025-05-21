@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- permission builder validation error ([#1630](https://github.com/alchemyplatform/aa-sdk/issues/1630)) ([64f5d92](https://github.com/alchemyplatform/aa-sdk/commit/64f5d9298f7cbeeeeeceb011c873d09df917a826))
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
 # [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
 
 ### Features
