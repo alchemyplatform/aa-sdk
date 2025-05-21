@@ -43,7 +43,14 @@ export const useReadErc20Balance = (
   }, [chain, rpcUrl]);
 
   const queryKey = useMemo(
-    () => ["erc20Balance", tokenAddress, accountAddress, chain?.id, rpcUrl],
+    () => [
+      "erc20Balance",
+      tokenAddress,
+      accountAddress,
+      chain?.id,
+      rpcUrl,
+      params.accountMode,
+    ],
     [tokenAddress, accountAddress, chain, rpcUrl, params.accountMode]
   );
 

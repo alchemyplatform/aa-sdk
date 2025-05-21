@@ -14,7 +14,6 @@ import { Chain, Hex, Address, PrivateKeyAccount } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
 
-// Define PolicyToken type locally based on usage
 interface PolicyToken {
   address: Address;
   maxTokenAmount: bigint;
