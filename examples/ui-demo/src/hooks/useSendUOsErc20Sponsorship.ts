@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/useToast";
 import { type AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { USDC_GAS_APPROVAL_AMOUNT } from "@/components/modals/Erc20/utils";
-import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../lib/constants";
+import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../utils/constants";
 
 const ERC20_SPONSORSHIP_POLICY_ID =
   process.env.NEXT_PUBLIC_ERC20_SPONSORSHIP_POLICY_ID;
