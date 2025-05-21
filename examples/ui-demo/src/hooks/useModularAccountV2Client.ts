@@ -14,6 +14,15 @@ import { Chain, Hex, Address, PrivateKeyAccount } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
 
+// Define PolicyToken type locally based on usage
+interface PolicyToken {
+  address: Address;
+  maxTokenAmount: bigint;
+  approvalMode?: "PERMIT" | "NONE";
+  erc20Name?: string;
+  version?: string;
+}
+
 type Client = ModularAccountV2Client<
   AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
 > &
@@ -28,6 +37,8 @@ export const useModularAccountV2Client = ({
   chain,
   transport,
   localKeyOverride,
+  policyId: policyIdProp,
+  policyToken: policyTokenProp,
 }: {
   mode: "7702" | "default";
   chain: Chain;
@@ -37,6 +48,8 @@ export const useModularAccountV2Client = ({
     readonly entityId: number;
     readonly accountAddress?: Address;
   };
+  policyId?: string;
+  policyToken?: PolicyToken;
 }): {
   client: Client | undefined;
   isLoadingClient: boolean;
@@ -51,6 +64,11 @@ export const useModularAccountV2Client = ({
 
   // Must destructure the inner fields to use as dependencies in the useEffect hook, otherwise the object reference will be compared and cause an infinite render loop
   const { key, entityId, accountAddress } = localKeyOverride ?? {};
+
+  useEffect(() => {
+    setClient(undefined);
+    setIsLoadingClient(true);
+  }, [mode]);
 
   useEffect(() => {
     let isMounted = true;
@@ -82,7 +100,9 @@ export const useModularAccountV2Client = ({
                 }
               : undefined,
             feeEstimator: alchemyFeeEstimator(transport),
-            policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
+            policyId:
+              policyIdProp ?? process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
+            policyToken: policyTokenProp,
           })
         ).extend(installValidationActions);
 
@@ -119,6 +139,8 @@ export const useModularAccountV2Client = ({
     isConnected,
     key,
     mode,
+    policyIdProp,
+    policyTokenProp,
     signer,
     transport,
   ]);
