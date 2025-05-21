@@ -17,7 +17,7 @@ import { ModalCTAButton } from "../../shared/ModalCTAButton";
 import { getNftMintBatchUOs } from "./utils";
 import { useEstimateGasErc20Sponsorship } from "../../../hooks/useEstimateGasErc20Sponsorship";
 import { useGetEthPrice } from "../../../hooks/useGetEthPrice";
-import { DEMO_USDC_ADDRESS_6_DECIMALS } from "@/lib/constants";
+import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../lib/constants";
 
 type Erc20ModalProps = {
   isOpen: boolean;
