@@ -111,18 +111,17 @@ export const useEstimateGasErc20Sponsorship = (
     );
 
     const latestBlock = await client.getBlock();
-    const baseFee = latestBlock.baseFeePerGas
-      ? BigInt(latestBlock.baseFeePerGas)
-      : null;
-    const maxFee = toBig(uoStruct.maxFeePerGas);
-    const maxPrio = toBig(uoStruct.maxPriorityFeePerGas);
+    const baseFee = latestBlock.baseFeePerGas;
+
+    const { maxFeePerGas, maxPriorityFeePerGas } =
+      await client.estimateFeesPerGas();
 
     const gasPrice =
-      baseFee !== null
-        ? BigInt(baseFee + maxPrio) < maxFee
-          ? baseFee + maxPrio
-          : maxFee
-        : maxFee;
+      baseFee != null
+        ? baseFee + maxPriorityFeePerGas < maxFeePerGas
+          ? baseFee + maxPriorityFeePerGas
+          : maxFeePerGas
+        : maxFeePerGas;
 
     const feeWei = totalGas * gasPrice;
     const feeEth = formatEther(feeWei);
