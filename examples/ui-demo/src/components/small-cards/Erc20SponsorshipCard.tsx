@@ -49,7 +49,15 @@ export const Erc20SponsorshipCard = ({
   return (
     <>
       <Card
-        badgeSlot={<Badge text="New!" className="text-white bg-[#F97066]" />}
+        badgeSlot={
+          <Badge
+            text="New!"
+            className="text-white"
+            style={{
+              background: "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
+            }}
+          />
+        }
         imageSlot={imageSlot}
         heading="Pay gas with any token"
         content={content}
