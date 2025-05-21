@@ -2,7 +2,7 @@ function generateRandomHexString(numBytes: number) {
   const hexPairs = new Array(numBytes).fill(0).map(() =>
     Math.floor(Math.random() * 16)
       .toString(16)
-      .padStart(2, "0")
+      .padStart(2, "0"),
   );
   return hexPairs.join("");
 }
@@ -46,7 +46,7 @@ export class TraceHeader {
     traceId: string,
     parentId: string,
     traceFlags: string,
-    traceState: TraceHeader["traceState"]
+    traceState: TraceHeader["traceState"],
   ) {
     this.traceId = traceId;
     this.parentId = parentId;
@@ -68,7 +68,7 @@ export class TraceHeader {
       clientTraceId,
       generateRandomHexString(8),
       "00", //Means no flag have been set, and no sampled state https://www.w3.org/TR/trace-context/#trace-flags
-      {}
+      {},
     );
   }
   /**
@@ -82,7 +82,7 @@ export class TraceHeader {
    * @returns {TraceHeader | undefined} The trace header object, or nothing if not found
    */
   static fromTraceHeader(
-    headers: Record<string, string>
+    headers: Record<string, string>,
   ): TraceHeader | undefined {
     if (!headers[TRACE_HEADER_NAME]) {
       return undefined;
@@ -91,16 +91,19 @@ export class TraceHeader {
       headers[TRACE_HEADER_NAME]?.split("-");
 
     const traceState =
-      headers[TRACE_HEADER_STATE]?.split(",").reduce((acc, curr) => {
-        const [key, value] = curr.split("=");
-        acc[key] = value;
-        return acc;
-      }, {} as Record<string, string>) || {};
+      headers[TRACE_HEADER_STATE]?.split(",").reduce(
+        (acc, curr) => {
+          const [key, value] = curr.split("=");
+          acc[key] = value;
+          return acc;
+        },
+        {} as Record<string, string>,
+      ) || {};
     if (version !== "00") {
       console.debug(
         new Error(
-          `Invalid version for traceheader: ${headers[TRACE_HEADER_NAME]}`
-        )
+          `Invalid version for traceheader: ${headers[TRACE_HEADER_NAME]}`,
+        ),
       );
       return undefined;
     }

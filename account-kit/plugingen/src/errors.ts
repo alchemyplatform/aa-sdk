@@ -2,13 +2,13 @@ import { type z } from "zod";
 
 // from https://github.com/wevm/wagmi/blob/main/packages/cli/src/errors.ts
 class ValidationError extends Error {
-  details: Zod.ZodIssue[];
+  details: z.ZodIssue[];
 
   constructor(
     message: string,
     options: {
-      details: Zod.ZodIssue[];
-    }
+      details: z.ZodIssue[];
+    },
   ) {
     super(message);
     this.details = options.details;
@@ -28,10 +28,10 @@ export function fromZodError(
     issueSeparator?: string;
     prefixSeparator?: string;
     prefix?: string;
-  } = {}
+  } = {},
 ): ValidationError {
-  function joinPath(arr: Array<string | number>): string {
-    return arr.reduce<string>((acc, value) => {
+  function joinPath(arr: (string | number)[]): string {
+    return arr.reduce<string>((acc: string, value: string | number) => {
       if (typeof value === "number") return `${acc}[${value}]`;
       const separator = acc === "" ? "" : ".";
       return acc + separator + value;

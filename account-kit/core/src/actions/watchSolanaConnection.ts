@@ -25,7 +25,7 @@ export function watchSolanaConnection(config: AlchemyAccountsConfig) {
         if (connection) {
           onChange(connection);
         }
-      }
+      },
     );
   };
 }

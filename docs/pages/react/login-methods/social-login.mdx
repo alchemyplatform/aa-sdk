@@ -72,7 +72,7 @@ export const config = createConfig(
     // Required for popup flow
     enablePopupOauth: true,
   },
-  uiConfig
+  uiConfig,
 );
 ```
 
@@ -136,7 +136,7 @@ const handleGoogleRedirectLogin = () => {
         // Handle error
         // The page will redirect on success, so no need for onSuccess handler
       },
-    }
+    },
   );
 };
 
@@ -155,7 +155,7 @@ const handleGooglePopupLogin = () => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 ```

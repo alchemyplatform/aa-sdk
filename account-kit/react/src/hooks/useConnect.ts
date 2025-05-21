@@ -32,7 +32,7 @@ import { ReactLogger } from "../metrics.js";
  * ```
  */
 export const useConnect = (
-  params?: UseConnectParameters<Config>["mutation"]
+  params?: UseConnectParameters<Config>["mutation"],
 ): UseConnectReturnType<Config> => {
   const {
     config: {

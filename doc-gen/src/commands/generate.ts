@@ -26,7 +26,7 @@ export async function generate(options: GenerateOptions) {
   const outputFilePath = path.resolve(process.cwd(), options.out);
   const isFern = options.fern ?? false;
   logger.info(
-    `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`
+    `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`,
   );
 
   const sourceFile = getSourceFile(sourceFilePath);
@@ -58,11 +58,11 @@ export async function generate(options: GenerateOptions) {
     }
     const exportedFilePathTs = path.resolve(
       path.dirname(sourceFilePath),
-      node.moduleSpecifier.text.replace(".js", ".ts")
+      node.moduleSpecifier.text.replace(".js", ".ts"),
     );
     const exportedFilePathTsx = path.resolve(
       path.dirname(sourceFilePath),
-      node.moduleSpecifier.text.replace(".js", ".tsx")
+      node.moduleSpecifier.text.replace(".js", ".tsx"),
     );
 
     const isTsx = fs.existsSync(exportedFilePathTsx);
@@ -75,7 +75,7 @@ export async function generate(options: GenerateOptions) {
         outputFilePath,
         packageJSON.name,
         isTsx,
-        isFern
+        isFern,
       );
     });
   });
@@ -87,7 +87,7 @@ async function generateDocumentation(
   outputFilePath: string,
   packageName: string,
   isTsx: boolean,
-  isFern: boolean
+  isFern: boolean,
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
@@ -107,7 +107,7 @@ async function generateDocumentation(
       outputFilePath,
       packageName,
       isTsx,
-      isFern
+      isFern,
     );
   }
 }
@@ -122,12 +122,12 @@ function getSourceFile(filePath: string) {
     filePath,
     fileContent,
     ts.ScriptTarget.Latest,
-    true
+    true,
   );
 }
 
 async function getPackageJson(
-  sourcePath: string
+  sourcePath: string,
 ): Promise<{ name: string } | null> {
   const rootDir = resolve(sourcePath);
   const path = await findUp("package.json", { cwd: rootDir });
@@ -138,25 +138,25 @@ async function getPackageJson(
   return JSON.parse(fs.readFileSync(path, "utf-8"));
 }
 
-function generateFunctionDocs(
+async function generateFunctionDocs(
   node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
   importedName: string,
   outputFilePath: string,
   packageName: string,
   isTsx: boolean,
-  isFern: boolean
+  isFern: boolean,
 ) {
   // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
   const outputLocation = ts.isClassElement(node)
     ? ""
     : importedName.startsWith("use")
-    ? "/hooks"
-    : isTsx
-    ? "/components"
-    : "/functions";
+      ? "/hooks"
+      : isTsx
+        ? "/components"
+        : "/functions";
 
   const fileName = ts.isClassElement(node)
-    ? node.name?.getText() ?? "constructor"
+    ? (node.name?.getText() ?? "constructor")
     : importedName;
 
   const outputPath = `${outputFilePath}${outputLocation}/${fileName}`;
@@ -166,7 +166,7 @@ function generateFunctionDocs(
     importedName,
     packageName,
     outputPath,
-    isFern
+    isFern,
   );
   if (!documentation) {
     return;
@@ -174,8 +174,9 @@ function generateFunctionDocs(
 
   fs.outputFileSync(
     path.resolve(`${outputPath}.mdx`),
-    // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
-    format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
+    await format(await format(documentation, { parser: "mdx" }), {
+      parser: "mdx",
+    }),
   );
 }
 
@@ -184,11 +185,11 @@ function generateClassDocs(
   outputFilePath: string,
   importedName: string,
   packageName: string,
-  isFern: boolean
+  isFern: boolean,
 ) {
   const classOutputBasePath = path.resolve(
     outputFilePath,
-    `./classes/${importedName}`
+    `./classes/${importedName}`,
   );
 
   node.members.forEach((member) => {
@@ -197,7 +198,7 @@ function generateClassDocs(
       member.modifiers?.some(
         (modifier) =>
           modifier.kind === ts.SyntaxKind.PrivateKeyword ||
-          modifier.kind === ts.SyntaxKind.ProtectedKeyword
+          modifier.kind === ts.SyntaxKind.ProtectedKeyword,
       )
     ) {
       // skip properties that aren't public functions
@@ -219,7 +220,7 @@ function generateClassDocs(
         classOutputBasePath,
         packageName,
         false,
-        isFern
+        isFern,
       );
     }
   });

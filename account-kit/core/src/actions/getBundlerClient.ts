@@ -16,7 +16,7 @@ import type { AlchemyAccountsConfig } from "../types";
  * @returns {ClientWithAlchemyMethods} The BundlerClient from the core store.
  */
 export const getBundlerClient = (
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): ClientWithAlchemyMethods => {
   const { bundlerClient } = config.store.getState();
 

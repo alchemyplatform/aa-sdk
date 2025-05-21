@@ -77,13 +77,14 @@ export async function buildUserOperationFromTxs<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
   client_: Client<TTransport, TChain, TAccount>,
-  args: BuildTransactionParameters<TAccount, TContext, TEntryPointVersion>
+  args: BuildTransactionParameters<TAccount, TContext, TEntryPointVersion>,
 ): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>> {
   const client = clientHeaderTrack(client_, "buildUserOperationFromTxs");
   const { account = client.account, requests, overrides, context } = args;
@@ -95,7 +96,7 @@ export async function buildUserOperationFromTxs<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "buildUserOperationFromTxs",
-      client
+      client,
     );
   }
 
@@ -119,8 +120,8 @@ export async function buildUserOperationFromTxs<
     overrides?.maxFeePerGas != null
       ? overrides?.maxFeePerGas
       : mfpgOverridesInTx().length > 0
-      ? bigIntMax(...mfpgOverridesInTx())
-      : undefined;
+        ? bigIntMax(...mfpgOverridesInTx())
+        : undefined;
 
   const mpfpgOverridesInTx = () =>
     requests
@@ -130,8 +131,8 @@ export async function buildUserOperationFromTxs<
     overrides?.maxPriorityFeePerGas != null
       ? overrides?.maxPriorityFeePerGas
       : mpfpgOverridesInTx().length > 0
-      ? bigIntMax(...mpfpgOverridesInTx())
-      : undefined;
+        ? bigIntMax(...mpfpgOverridesInTx())
+        : undefined;
 
   const _overrides = {
     maxFeePerGas,

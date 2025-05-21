@@ -92,7 +92,7 @@ Steps:
 ```ts
 const { createMAV2Account, ...upgradeToData } = await getMAV2UpgradeToData(
   lightAccountclient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 await lightAccountClient.upgradeAccount({

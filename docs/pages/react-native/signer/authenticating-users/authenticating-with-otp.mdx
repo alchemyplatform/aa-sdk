@@ -194,7 +194,7 @@ export const SignInWithOtp = () => {
         console.log("Error seding OTP CODE: ", e);
       }
     },
-    [authenticate]
+    [authenticate],
   );
 
   const completeAuth = useCallback(() => {
@@ -278,7 +278,7 @@ export const OtpPopUp = ({
         console.log("Error verifying OTP CODE: ", e);
       }
     },
-    [authenticate]
+    [authenticate],
   );
 
   return (

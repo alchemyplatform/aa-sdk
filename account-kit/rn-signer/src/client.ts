@@ -62,7 +62,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   override async submitOtpCode(
-    args: Omit<OtpParams, "targetPublicKey">
+    args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const publicKey = await this.stamper.init();
@@ -94,12 +94,12 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     // Otherwise, it's truly an error:
     throw new Error(
-      "Failed to submit OTP code. Server did not return required fields."
+      "Failed to submit OTP code. Server did not return required fields.",
     );
   }
 
   override async createAccount(
-    params: CreateAccountParams
+    params: CreateAccountParams,
   ): Promise<SignupResponse> {
     if (params.type !== "email") {
       throw new Error("Only email account creation is supported");
@@ -121,7 +121,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   override async initEmailAuth(
-    params: Omit<EmailAuthParams, "targetPublicKey">
+    params: Omit<EmailAuthParams, "targetPublicKey">,
   ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }> {
     this.eventEmitter.emit("authenticating", { type: "email" });
     const targetPublicKey = await this.stamper.init();
@@ -174,7 +174,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     return user;
   }
   override oauthWithRedirect = async (
-    args: Extract<OauthParams, { mode: "redirect" }>
+    args: Extract<OauthParams, { mode: "redirect" }>,
   ): Promise<User> => {
     // Ensure the In-App Browser required for authentication is available
     if (!(await InAppBrowser.isAvailable())) {
@@ -233,7 +233,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   };
 
   override oauthWithPopup(
-    _args: Extract<OauthParams, { mode: "popup" }>
+    _args: Extract<OauthParams, { mode: "popup" }>,
   ): Promise<User> {
     throw new Error("Method not implemented");
   }
@@ -256,7 +256,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   protected override getWebAuthnAttestation(
     _options: CredentialCreationOptions,
-    _userDetails?: { username: string }
+    _userDetails?: { username: string },
   ): Promise<GetWebAuthnAttestationResult> {
     throw new Error("Method not implemented.");
   }

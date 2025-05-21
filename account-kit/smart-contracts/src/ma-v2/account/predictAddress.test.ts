@@ -20,9 +20,8 @@ describe("MAv2 Counterfactual Address Tests", () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const localSigner = LocalAccountSigner.privateKeyToAccountSigner(
-        generatePrivateKey()
-      );
+      const localSigner =
+        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
       const salt = BigInt(generatePrivateKey());

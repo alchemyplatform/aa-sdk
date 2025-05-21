@@ -45,9 +45,7 @@
     "@account-kit/smart-contracts": "^4.35.0",
     "alchemy-sdk": "^3.0.0",
     "dotenv": "^16.0.3",
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
+    "typescript-template": "*"
   },
   "dependencies": {
     "@aa-sdk/core": "^4.35.0",

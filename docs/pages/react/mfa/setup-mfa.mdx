@@ -76,7 +76,7 @@ function AuthenticatorSetupComponent() {
         onError: (error) => {
           console.error("Failed to set up authenticator app:", error);
         },
-      }
+      },
     );
   };
 
@@ -142,7 +142,7 @@ function VerifyAuthenticatorComponent({
           // Handle error
           console.error("Verification failed:", error);
         },
-      }
+      },
     );
   };
 
@@ -217,7 +217,7 @@ function ManageMfaComponent() {
           // Update local state to reflect the removal
           setFactors(factors.filter((f) => f.multiFactorId !== multiFactorId));
         },
-      }
+      },
     );
   };
 

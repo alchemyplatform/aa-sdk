@@ -5,7 +5,7 @@
 export const ADD_BREADCRUMB = Symbol("addBreadcrumb");
 
 function hasAddBreadcrumb<A extends {}>(
-  a: A
+  a: A,
 ): a is A & { [ADD_BREADCRUMB]: (breadcrumb: string) => A } {
   return ADD_BREADCRUMB in a;
 }

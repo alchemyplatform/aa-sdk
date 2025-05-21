@@ -45,7 +45,7 @@ export const split = (params: SplitTransportParams): CustomTransport => {
     curr.methods.forEach((method) => {
       if (accum.has(method) && accum.get(method) !== curr.transport) {
         throw new Error(
-          "A method cannot be handled by more than one transport"
+          "A method cannot be handled by more than one transport",
         );
       }
 

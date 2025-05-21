@@ -8,13 +8,13 @@ export const ExecutionAbiGenPhase: Phase = async (input) => {
   const { executionFunctions } = await contract.read.pluginManifest();
   const executionAbi = extractExecutionAbi(
     executionFunctions,
-    pluginConfig.abi
+    pluginConfig.abi,
   );
 
   content.push(dedent`
     export const ${executionAbiConst(pluginConfig.name)} = ${JSON.stringify(
-    executionAbi
-  )} as const;
+      executionAbi,
+    )} as const;
   `);
   return input;
 };

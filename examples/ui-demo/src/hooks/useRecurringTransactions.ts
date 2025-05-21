@@ -115,13 +115,13 @@ export const useRecurringTransactions = (clientOptions: {
         idx === transactionIndex
           ? { ...txn, state: "initiating" }
           : idx === transactionIndex + 1
-          ? {
-              ...txn,
-              state: "next",
-              timeToBuy: Date.now() + RECURRING_TXN_INTERVAL,
-            }
-          : txn
-      )
+            ? {
+                ...txn,
+                state: "next",
+                timeToBuy: Date.now() + RECURRING_TXN_INTERVAL,
+              }
+            : txn,
+      ),
     );
 
     const usdcInAmount = transactions[transactionIndex].buyAmountUsdc;
@@ -157,8 +157,8 @@ export const useRecurringTransactions = (clientOptions: {
                 ? `${clientOptions.chain.blockExplorers.default.url}/tx/${txnHash}`
                 : undefined,
             }
-          : txn
-      )
+          : txn,
+      ),
     );
   };
 
@@ -203,7 +203,7 @@ export const useRecurringTransactions = (clientOptions: {
                 validationConfig: {
                   moduleAddress:
                     await getDefaultSingleSignerValidationModuleAddress(
-                      clientOptions.chain
+                      clientOptions.chain,
                     ),
                   entityId: sessionKeyEntityId,
                   isGlobal: false,
@@ -215,7 +215,7 @@ export const useRecurringTransactions = (clientOptions: {
                     getAbiItem({
                       abi: semiModularAccountBytecodeAbi,
                       name: "execute",
-                    })
+                    }),
                   ),
                 ],
                 installData: SingleSignerValidationModule.encodeOnInstallData({
@@ -237,13 +237,13 @@ export const useRecurringTransactions = (clientOptions: {
                               getAbiItem({
                                 abi: swapAbi,
                                 name: "swapUSDCtoWETH",
-                              })
+                              }),
                             ),
                           ],
                         },
                       ],
                     },
-                    getDefaultAllowlistModuleAddress(clientOptions.chain)
+                    getDefaultAllowlistModuleAddress(clientOptions.chain),
                   ),
                   TimeRangeModule.buildHook(
                     {
@@ -253,7 +253,7 @@ export const useRecurringTransactions = (clientOptions: {
                         SESSION_KEY_VALIDITY_TIME_SECONDS,
                       validAfter: 0,
                     },
-                    getDefaultTimeRangeModuleAddress(clientOptions.chain)
+                    getDefaultTimeRangeModuleAddress(clientOptions.chain),
                   ),
                 ],
               }),
@@ -287,7 +287,7 @@ export const useRecurringTransactions = (clientOptions: {
         ...(i < transactions.length - 1
           ? [
               new Promise((resolve) =>
-                setTimeout(resolve, RECURRING_TXN_INTERVAL)
+                setTimeout(resolve, RECURRING_TXN_INTERVAL),
               ),
             ]
           : []),

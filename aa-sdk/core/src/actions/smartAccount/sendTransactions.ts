@@ -39,10 +39,10 @@ export async function sendTransactions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends UserOperationContext | undefined = UserOperationContext
+  TContext extends UserOperationContext | undefined = UserOperationContext,
 >(
   client_: Client<TTransport, TChain, TAccount>,
-  args: SendTransactionsParameters<TAccount, TContext>
+  args: SendTransactionsParameters<TAccount, TContext>,
 ): Promise<Hex> {
   const client = clientHeaderTrack(client_, "estimateUserOperationGas");
   const { requests, overrides, account = client.account, context } = args;
@@ -54,7 +54,7 @@ export async function sendTransactions<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "sendTransactions",
-      client
+      client,
     );
   }
 

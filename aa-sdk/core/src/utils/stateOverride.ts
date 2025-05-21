@@ -18,7 +18,7 @@ import {
 type SerializeStateMappingParameters = StateMapping | undefined;
 
 function serializeStateMapping(
-  stateMapping: SerializeStateMappingParameters
+  stateMapping: SerializeStateMappingParameters,
 ): RpcStateMapping | undefined {
   if (!stateMapping || stateMapping.length === 0) return undefined;
   return stateMapping.reduce((acc, { slot, value }) => {
@@ -33,7 +33,7 @@ function validateBytes32HexLength(value: Address): void {
   if (value.length !== 66) {
     // This is the error message from Viem's non-exported InvalidBytesLengthError.
     throw new Error(
-      `Hex is expected to be 66 hex long, but is ${value.length} hex long.`
+      `Hex is expected to be 66 hex long, but is ${value.length} hex long.`,
     );
   }
 }
@@ -44,7 +44,7 @@ type SerializeAccountStateOverrideParameters = Omit<
 >;
 
 function serializeAccountStateOverride(
-  parameters: SerializeAccountStateOverrideParameters
+  parameters: SerializeAccountStateOverrideParameters,
 ): RpcAccountStateOverride {
   const { balance, nonce, state, stateDiff, code } = parameters;
   const rpcAccountStateOverride: RpcAccountStateOverride = {};
@@ -65,7 +65,7 @@ type SerializeStateOverrideParameters = StateOverride | undefined;
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export function serializeStateOverride(
-  parameters?: SerializeStateOverrideParameters
+  parameters?: SerializeStateOverrideParameters,
 ): RpcStateOverride | undefined {
   if (!parameters) return undefined;
   const rpcStateOverride: RpcStateOverride = {};

@@ -37,7 +37,7 @@ import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
 
 export type GetSmartAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes = SupportedAccountTypes
+  TAccount extends SupportedAccountTypes = SupportedAccountTypes,
 > = Omit<
   AlchemySmartAccountClientConfig<TChain, SupportedAccount<TAccount>>,
   "transport" | "account" | "chain"
@@ -45,22 +45,22 @@ export type GetSmartAccountClientParams<
   GetAccountParams<TAccount>;
 
 export type ClientActions<
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
 > = TAccount extends LightAccount
   ? LightAccountClientActions<AlchemySigner>
   : TAccount extends MultiOwnerModularAccount
-  ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemySigner>> &
-      PluginManagerActions<MultiOwnerModularAccount<AlchemySigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<AlchemySigner>>
-  : TAccount extends MultiOwnerLightAccount
-  ? MultiOwnerLightAccountClientActions<AlchemySigner>
-  : TAccount extends ModularAccountV2
-  ? {} // no ma v2 actions
-  : never;
+    ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemySigner>> &
+        PluginManagerActions<MultiOwnerModularAccount<AlchemySigner>> &
+        AccountLoupeActions<MultiOwnerModularAccount<AlchemySigner>>
+    : TAccount extends MultiOwnerLightAccount
+      ? MultiOwnerLightAccountClientActions<AlchemySigner>
+      : TAccount extends ModularAccountV2
+        ? {} // no ma v2 actions
+        : never;
 
 export type GetSmartAccountClientResult<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
 > = {
   client?: AlchemySmartAccountClient<TChain, TAccount, ClientActions<TAccount>>;
   address?: Address;
@@ -70,10 +70,10 @@ export type GetSmartAccountClientResult<
 
 export function getSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SupportedAccountTypes = SupportedAccountTypes
+  TAccount extends SupportedAccountTypes = SupportedAccountTypes,
 >(
   params: GetSmartAccountClientParams<TChain, TAccount>,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
 
 /**
@@ -97,7 +97,7 @@ export function getSmartAccountClient<
  */
 export function getSmartAccountClient(
   params: GetSmartAccountClientParams,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): GetSmartAccountClientResult {
   const { accountParams, type, ...clientParams } = params;
   const { account, status, error } = getAccount(
@@ -105,7 +105,7 @@ export function getSmartAccountClient(
       type,
       accountParams,
     },
-    config
+    config,
   );
   const signerStatus = getSignerStatus(config);
   const transport = getAlchemyTransport(config);
@@ -232,10 +232,10 @@ export function getSmartAccountClient(
             ...(is7702
               ? {
                   gasEstimator: default7702GasEstimator(
-                    clientParams.gasEstimator
+                    clientParams.gasEstimator,
                   ),
                   signUserOperation: default7702UserOpSigner(
-                    clientParams.signUserOperation
+                    clientParams.signUserOperation,
                   ),
                 }
               : {}),
@@ -264,7 +264,7 @@ export function getSmartAccountClient(
 }
 
 function getSmartAccountClientState<
-  TAccountType extends SupportedAccountTypes
+  TAccountType extends SupportedAccountTypes,
 >({
   config,
   chainId,
@@ -278,7 +278,7 @@ function getSmartAccountClientState<
 }
 
 function setSmartAccountClientState<
-  TAccountType extends SupportedAccountTypes
+  TAccountType extends SupportedAccountTypes,
 >({
   config,
   newState,

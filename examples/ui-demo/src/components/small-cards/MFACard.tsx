@@ -15,7 +15,7 @@ export function MFACard() {
       getMFAFactors.mutate(undefined, {
         onSuccess: (factors) => {
           setIsMfaActive(
-            !!factors?.multiFactors && factors.multiFactors.length > 0
+            !!factors?.multiFactors && factors.multiFactors.length > 0,
           );
         },
       });

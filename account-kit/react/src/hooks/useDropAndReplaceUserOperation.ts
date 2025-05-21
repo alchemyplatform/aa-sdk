@@ -14,7 +14,7 @@ import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
 export type UseDropAndReplaceUserOperationMutationArgs<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
 > = BaseHookMutationArgs<
   SendUserOperationResult<TEntryPointVersion>,
   DropAndReplaceUserOperationParameters<TAccount>
@@ -22,14 +22,14 @@ export type UseDropAndReplaceUserOperationMutationArgs<
 
 export type UseDropAndReplaceUserOperationArgs<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
 > = {
   client: UseSmartAccountClientResult["client"] | undefined;
 } & UseDropAndReplaceUserOperationMutationArgs<TEntryPointVersion, TAccount>;
 
 export type UseDropAndReplaceUserOperationResult<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
 > = {
   dropAndReplaceUserOperation: UseMutateFunction<
     SendUserOperationResult<TEntryPointVersion>,
@@ -109,7 +109,7 @@ export type UseDropAndReplaceUserOperationResult<
  */
 export function useDropAndReplaceUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
 >({
   client,
   ...mutationArgs
@@ -127,7 +127,7 @@ export function useDropAndReplaceUserOperation<
   } = useMutation(
     {
       mutationFn: async (
-        params: DropAndReplaceUserOperationParameters<TAccount>
+        params: DropAndReplaceUserOperationParameters<TAccount>,
       ) => {
         if (!client) {
           throw new ClientUndefinedHookError("useDropAndReplaceUserOperation");
@@ -137,7 +137,7 @@ export function useDropAndReplaceUserOperation<
       },
       ...mutationArgs,
     },
-    queryClient
+    queryClient,
   );
 
   return {

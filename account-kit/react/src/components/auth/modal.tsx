@@ -15,7 +15,7 @@ export const AuthModal = () => {
       modalBaseClassName,
       addPasskeyOnSignup: auth?.addPasskeyOnSignup,
       uiMode,
-    })
+    }),
   );
 
   const { setAuthStep, authStep } = useAuthContext();
@@ -33,7 +33,7 @@ export const AuthModal = () => {
     handleSignup,
     isConnected &&
       (authStep.type === "complete" || authStep.type === "initial") &&
-      !isOpen
+      !isOpen,
   );
 
   useEmailAuthLinkingRequired((email) => {

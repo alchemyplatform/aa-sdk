@@ -21,7 +21,7 @@ const findFiles = (dir, pattern) => {
 
     if (stat.isDirectory()) {
       results = results.concat(findFiles(filePath, pattern));
-    } else if (file.endsWith(pattern.replace("*", ""))) {
+    } else if (file.endsWith(pattern.replaceAll("*", ""))) {
       results.push(filePath);
     }
   }
@@ -56,7 +56,7 @@ for (const mdxFile of mdxFiles) {
         fileContent = fileContent
           .substring(
             regionStart + `// [!region ${region.trim()}]`.length,
-            regionEnd
+            regionEnd,
           )
           .trim();
       } else {

@@ -10,7 +10,7 @@ type Prettify<T> = {
 export type TrackEventParameters<Schema extends EventsSchema> = {
   [K in keyof Schema]: Prettify<
     { name: Schema[K]["EventName"] } & ([undefined] extends [
-      Schema[K]["EventData"]
+      Schema[K]["EventData"],
     ]
       ? { data?: undefined }
       : { data: Schema[K]["EventData"] })
@@ -19,11 +19,11 @@ export type TrackEventParameters<Schema extends EventsSchema> = {
 
 export interface EventLogger<Schema extends EventsSchema = []> {
   trackEvent(
-    params: TrackEventParameters<[...Schema, PerformanceEvent]>
+    params: TrackEventParameters<[...Schema, PerformanceEvent]>,
   ): Promise<void>;
   profiled<TArgs extends any[], TRet>(
     name: string,
-    func: (...args: TArgs) => TRet
+    func: (...args: TArgs) => TRet,
   ): (...args: TArgs) => TRet;
   _internal: {
     ready: Promise<unknown>;

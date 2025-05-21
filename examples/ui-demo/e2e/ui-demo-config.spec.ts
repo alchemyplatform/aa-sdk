@@ -27,22 +27,22 @@ test("Toggle auth methods", async ({ page }) => {
 
   const googleButton = page.locator("button[aria-label='Google sign in']");
   const googleAuthToggle = page.locator(
-    "button[aria-label='Google social authentication toggle']"
+    "button[aria-label='Google social authentication toggle']",
   );
 
   const facebookButton = page.locator("button[aria-label='Facebook sign in']");
   const facebookAuthToggle = page.locator(
-    "button[aria-label='Facebook social authentication toggle']"
+    "button[aria-label='Facebook social authentication toggle']",
   );
 
   const discordButton = page.locator("button[aria-label='Discord sign in']");
   const discordAuthToggle = page.locator(
-    "button[aria-label='Discord social authentication toggle']"
+    "button[aria-label='Discord social authentication toggle']",
   );
 
   const twitterButton = page.locator("button[aria-label='Twitter sign in']");
   const twitterAuthToggle = page.locator(
-    "button[aria-label='Twitter social authentication toggle']"
+    "button[aria-label='Twitter social authentication toggle']",
   );
 
   await expect(socialAuthToggle).toBeChecked();
@@ -102,19 +102,19 @@ test("Branding config", async ({ page }) => {
   await expect(darkModeToggle).not.toBeChecked();
   await expect(page.locator(".bg-bg-surface-default")).toHaveCSS(
     "background-color",
-    "rgb(255, 255, 255)"
+    "rgb(255, 255, 255)",
   );
   darkModeToggle.click();
   await expect(darkModeToggle).toBeChecked();
   await expect(page.locator("html")).toHaveClass("dark");
   await expect(page.locator(".bg-bg-surface-default")).toHaveCSS(
     "background-color",
-    "rgb(2, 6, 23)"
+    "rgb(2, 6, 23)",
   );
   // Brand color
   await expect(page.locator(".akui-btn-primary").first()).toHaveCSS(
     "background-color",
-    "rgb(255, 102, 204)"
+    "rgb(255, 102, 204)",
   );
   const brandColorButton = page.locator("button[id='color-picker']");
   await brandColorButton.click();
@@ -125,7 +125,7 @@ test("Branding config", async ({ page }) => {
   await colorPicker.fill("#000000");
   await expect(page.locator(".akui-btn-primary").first()).toHaveCSS(
     "background-color",
-    "rgb(0, 0, 0)"
+    "rgb(0, 0, 0)",
   );
   // Logo
   const logoInput = page.locator('input[type="file"]');
@@ -138,22 +138,22 @@ test("Branding config", async ({ page }) => {
   // Border radius
   await expect(page.locator(".radius-2").first()).toHaveCSS(
     "border-radius",
-    "16px"
+    "16px",
   );
   await page.getByRole("button", { name: "Medium" }).click();
   await expect(page.locator(".radius-2").first()).toHaveCSS(
     "border-radius",
-    "32px"
+    "32px",
   );
   await page.getByRole("button", { name: "Large" }).click();
   await expect(page.locator(".radius-2").first()).toHaveCSS(
     "border-radius",
-    "48px"
+    "48px",
   );
   await page.getByRole("button", { name: "None" }).click();
   await expect(page.locator(".radius-2").first()).toHaveCSS(
     "border-radius",
-    "0px"
+    "0px",
   );
 });
 
@@ -164,10 +164,10 @@ test("code preview", async ({ page }) => {
   await expect(codePreviewSwitch).toBeChecked();
   await expect(page.getByText("Export configuration")).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Fully customize styling here." })
+    page.getByRole("link", { name: "Fully customize styling here." }),
   ).toHaveAttribute(
     "href",
-    "https://www.alchemy.com/docs/wallets/react/customization/theme"
+    "https://www.alchemy.com/docs/wallets/react/customization/theme",
   );
   await codePreviewSwitch.click();
   await expect(codePreviewSwitch).not.toBeChecked();

@@ -60,19 +60,19 @@ export type ValidationDataParams =
     };
 
 export type ModularAccountV2<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = SmartContractAccountWithSigner<"ModularAccountV2", TSigner, "0.7.0"> & {
   signerEntity: SignerEntity;
   getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
   getValidationData: (
-    args: ValidationDataParams
+    args: ValidationDataParams,
   ) => Promise<ValidationDataView>;
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
 
 export type CreateMAV2BaseParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 > = Omit<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   // Implements the following methods required by `toSmartContractAccount`, and passes through any other parameters.
@@ -90,11 +90,11 @@ export type CreateMAV2BaseParams<
 };
 
 export type CreateMAV2BaseReturnType<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Promise<ModularAccountV2<TSigner>>;
 
 export async function createMAv2Base<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
   let {
     transport,
@@ -169,7 +169,7 @@ export async function createMAv2Base<
         abi: modularAccountAbi,
         functionName: "execute",
         args: [target, value ?? 0n, data],
-      })
+      }),
     );
 
   const encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex> = async (txs) =>
@@ -184,7 +184,7 @@ export async function createMAv2Base<
             value: tx.value ?? 0n,
           })),
         ],
-      })
+      }),
     );
 
   const isAccountDeployed: () => Promise<boolean> = async () =>
@@ -280,7 +280,7 @@ export async function createMAv2Base<
           chain,
           accountAddress,
           entityId,
-          deferredActionData
+          deferredActionData,
         )),
   });
 

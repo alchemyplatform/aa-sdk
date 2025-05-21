@@ -64,7 +64,7 @@ type DemoEvents = [
   },
   {
     EventName: "get_api_key_clicked";
-  }
+  },
 ];
 
 export const Metrics = createLogger<DemoEvents>({

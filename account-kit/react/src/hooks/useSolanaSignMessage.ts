@@ -60,7 +60,7 @@ export type UseSolanaSignMessageParams = {
  * @returns {SolanaSignedMessage} This should be hook mutations plus a few more. Used to get the end result of the signing and the callbacks.
  */
 export function useSolanaSignMessage(
-  opts: UseSolanaSignMessageParams
+  opts: UseSolanaSignMessageParams,
 ): SolanaSignedMessage {
   const fallbackSigner = useSolanaSigner({});
   const signer = opts.signer || fallbackSigner;
@@ -68,13 +68,13 @@ export function useSolanaSignMessage(
     mutationFn: async (args: MutationParams) => {
       if (!signer)
         throw new Error(
-          "The signer is null, and should be passed in or put into context"
+          "The signer is null, and should be passed in or put into context",
         );
       return await signer
         .signMessage(
           typeof args.message === "string"
             ? toBytes(args.message)
-            : args.message
+            : args.message,
         )
         .then(toHex);
     },

@@ -30,7 +30,7 @@ export const Configuration = ({ className }: { className?: string }) => {
         mode: accountMode,
       },
     }),
-    [accountMode]
+    [accountMode],
   );
   const { isLoadingAccount } = useAccount(clientParams);
   const { isLoadingClient } = useSmartAccountClient(clientParams);

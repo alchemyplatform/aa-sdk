@@ -31,14 +31,13 @@ describe("Types: MultiOwner Light Account Tests", () => {
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner
+    accounts.fundedAccountOwner,
   );
 
   it("should upgrade a deployed multi owner light account to msca successfully", async () => {
     // create a owner signer to create the account
-    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
-      generatePrivateKey()
-    );
+    const throwawaySigner =
+      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
     const throwawayClient = await givenConnectedProvider({
       signer: throwawaySigner,
     });
@@ -57,7 +56,7 @@ describe("Types: MultiOwner Light Account Tests", () => {
       {
         account: throwawayClient.account,
         multiOwnerPluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-      }
+      },
     );
 
     await throwawayClient.upgradeAccount({

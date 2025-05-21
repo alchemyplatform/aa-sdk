@@ -17,14 +17,14 @@ import type {
 export type AccountLoupeActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = {
   /// @notice Gets the validation functions and plugin address for a selector
   /// @dev If the selector is a native function, the plugin address will be the address of the account
   /// @param selector The selector to get the configuration for
   /// @return The configuration for this selector
   getExecutionFunctionConfig(
-    args: { selector: FunctionReference } & GetAccountParameter<TAccount>
+    args: { selector: FunctionReference } & GetAccountParameter<TAccount>,
   ): Promise<ExecutionFunctionConfig>;
 
   /// @notice Gets the pre and post execution hooks for a selector
@@ -33,7 +33,7 @@ export type AccountLoupeActions<
   getExecutionHooks(
     args: {
       selector: FunctionReference;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount>,
   ): Promise<ReadonlyArray<ExecutionHooks>>;
 
   /// @notice Gets the pre user op and runtime validation hooks associated with a selector
@@ -41,13 +41,13 @@ export type AccountLoupeActions<
   /// @return preUserOpValidationHooks The pre user op validation hooks for this selector
   /// @return preRuntimeValidationHooks The pre runtime validation hooks for this selector
   getPreValidationHooks(
-    args: { selector: Hash } & GetAccountParameter<TAccount>
+    args: { selector: Hash } & GetAccountParameter<TAccount>,
   ): Promise<Readonly<PreValidationHooks>>;
 
   /// @notice Gets an array of all installed plugins
   /// @return The addresses of all installed plugins
   getInstalledPlugins(
-    args: GetAccountParameter<TAccount>
+    args: GetAccountParameter<TAccount>,
   ): Promise<ReadonlyArray<Address>>;
 };
 
@@ -71,9 +71,9 @@ export const accountLoupeActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => AccountLoupeActions<TAccount> = (client) => ({
   getExecutionFunctionConfig: async ({
     selector,
@@ -87,7 +87,7 @@ export const accountLoupeActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "getExecutionFunctionConfig",
-        client
+        client,
       );
     }
 
@@ -108,7 +108,7 @@ export const accountLoupeActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "getExecutionHooks",
-        client
+        client,
       );
     }
 
@@ -129,7 +129,7 @@ export const accountLoupeActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "getPreValidationHooks",
-        client
+        client,
       );
     }
 
@@ -150,7 +150,7 @@ export const accountLoupeActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "getInstalledPlugins",
-        client
+        client,
       );
     }
 

@@ -268,14 +268,14 @@ export class SessionKeyPermissionsBuilder {
           abi: SessionKeyPermissionsUpdatesAbi,
           functionName: "updateAccessListAddressEntry",
           args: [entry.contractAddress, entry.isOnList, entry.checkSelectors],
-        })
+        }),
       ),
       ...this._contractMethodAccessEntrys.map((entry) =>
         encodeFunctionData({
           abi: SessionKeyPermissionsUpdatesAbi,
           functionName: "updateAccessListFunctionEntry",
           args: [entry.contractAddress, entry.methodSelector, entry.isOnList],
-        })
+        }),
       ),
       this.encodeIfDefined(
         (timeRange) =>
@@ -284,7 +284,7 @@ export class SessionKeyPermissionsBuilder {
             functionName: "updateTimeRange",
             args: [timeRange.validFrom, timeRange.validUntil],
           }),
-        this._timeRange
+        this._timeRange,
       ),
       this.encodeIfDefined(
         (nativeSpendLimit) =>
@@ -296,7 +296,7 @@ export class SessionKeyPermissionsBuilder {
               nativeSpendLimit.refreshInterval ?? 0,
             ],
           }),
-        this._nativeTokenSpendLimit
+        this._nativeTokenSpendLimit,
       ),
       ...this._erc20TokenSpendLimits.map((erc20SpendLimit) =>
         encodeFunctionData({
@@ -307,7 +307,7 @@ export class SessionKeyPermissionsBuilder {
             erc20SpendLimit.spendLimit,
             erc20SpendLimit.refreshInterval ?? 0,
           ],
-        })
+        }),
       ),
       this.encodeIfDefined(
         (spendLimit) =>
@@ -316,7 +316,7 @@ export class SessionKeyPermissionsBuilder {
             functionName: "setGasSpendLimit",
             args: [spendLimit.spendLimit, spendLimit.refreshInterval ?? 0],
           }),
-        this._gasSpendLimit
+        this._gasSpendLimit,
       ),
       this.encodeIfDefined(
         (paymaster) =>
@@ -325,7 +325,7 @@ export class SessionKeyPermissionsBuilder {
             functionName: "setRequiredPaymaster",
             args: [paymaster],
           }),
-        this._requiredPaymaster
+        this._requiredPaymaster,
       ),
     ].filter((x) => x !== "0x");
   }

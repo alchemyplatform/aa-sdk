@@ -163,9 +163,8 @@ const uoHash = await smartAccountClient.sendUserOperation({
   },
 });
 
-const txnHash = await smartAccountClient.waitForUserOperationTransaction(
-  uoHash
-);
+const txnHash =
+  await smartAccountClient.waitForUserOperationTransaction(uoHash);
 ```
 
 ```ts twoslash signer.ts filename="signer.ts"

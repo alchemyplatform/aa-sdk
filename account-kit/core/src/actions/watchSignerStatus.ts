@@ -22,6 +22,6 @@ export const watchSignerStatus =
     return config.store.subscribe(
       ({ signerStatus }) => signerStatus,
       onChange,
-      { equalityFn: (a, b) => a.status === b.status && a.error === b.error }
+      { equalityFn: (a, b) => a.status === b.status && a.error === b.error },
     );
   };
