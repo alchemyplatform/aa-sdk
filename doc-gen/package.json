@@ -60,7 +60,7 @@
     "change-case": "^5.4.3",
     "chokidar": "^3.6.0",
     "dedent": "^1.5.1",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.25.4",
     "eslint-plugin-eslint-rules": "*",
     "find-up": "^7.0.0",
     "fs-extra": "^11.2.0",
