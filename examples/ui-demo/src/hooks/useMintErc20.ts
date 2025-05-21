@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { encodeFunctionData, parseEther, type Chain, type Hex } from "viem";
+import { encodeFunctionData, parseUnits, type Chain, type Hex } from "viem";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
-import { DEMO_USDC_ADDRESS } from "./7702/dca/constants";
+import { DEMO_USDC_ADDRESS_6_DECIMALS } from "./7702/dca/constants";
 import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
@@ -33,7 +33,6 @@ export const useMintErc20 = (
   const { client, isLoadingClient } = useModularAccountV2Client({
     ...clientOptions,
   });
-  console.log("client address", client?.account?.address);
 
   const {
     mutate: mint,
@@ -47,15 +46,15 @@ export const useMintErc20 = (
         throw new Error("Smart account client not ready");
       }
 
-      const amountInWei = parseEther(String(amount));
+      const amountInTokenUnits = parseUnits(String(amount), 6);
 
       const userOpHash = await client.sendUserOperation({
         uo: {
-          target: DEMO_USDC_ADDRESS,
+          target: DEMO_USDC_ADDRESS_6_DECIMALS,
           data: encodeFunctionData({
             abi: erc20MintableAbi,
             functionName: "mint",
-            args: [client.getAddress(), amountInWei],
+            args: [client.getAddress(), amountInTokenUnits],
           }),
         },
       });
@@ -71,7 +70,7 @@ export const useMintErc20 = (
         text: err.message ?? "Mint failed",
       });
     },
-    onSuccess: (hash: Hex | undefined) => {
+    onSuccess: () => {
       setToast({
         type: "success",
         open: true,

@@ -13,7 +13,7 @@ export const Toast = () => {
   const { type, text, open } = toast;
 
   return (
-    <>
+    <div className="relative z-[9999999999]">
       <Root
         id="toast"
         open={open}
@@ -55,6 +55,6 @@ export const Toast = () => {
           />
         </Close>
       </Root>
-    </>
+    </div>
   );
 };

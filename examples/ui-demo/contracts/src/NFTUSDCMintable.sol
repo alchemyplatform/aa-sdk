@@ -8,13 +8,13 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 error NonExistentTokenURI();
 error USDCTransferFailed();
 
-contract ERC20NFT is ERC721 {
+contract NFTUSDCMintable is ERC721 {
 
     using Strings for uint256;
     string public baseURI;
     uint256 public currentTokenId;
     IERC20 public usdcToken;
-    uint256 public mintPrice = 1 * 10**18;
+    uint256 public mintPrice = 1 * 10**6;
 
     constructor(
         string memory _name,

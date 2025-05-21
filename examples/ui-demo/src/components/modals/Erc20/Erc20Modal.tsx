@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useReadErc20Balance } from "../../../hooks/useReadErc20Balance";
 import { useMintErc20 } from "../../../hooks/useMintErc20";
 import { useMintNftWithErc20Sponsorship } from "../../../hooks/useMintNftWithErc20Sponsorship";
-import { DEMO_USDC_ADDRESS } from "../../../hooks/7702/dca/constants";
+import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../hooks/7702/dca/constants";
 import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { AccountMode } from "@/app/config";
 import { LoadingIcon } from "../../icons/loading";
@@ -23,10 +23,11 @@ type Erc20ModalProps = {
 
 const AMOUNT_OF_USDC_TO_MINT = 10;
 const MINIMUM_USDC_BALANCE = 2;
-const networkFee = 0.02;
+const ethereumPrice = 2550;
 const nftPrice = 1;
 
 export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
+  const [networkFee, setNetworkFee] = useState(0);
   const { address: accountAddress } = useAccount({
     type: "ModularAccountV2",
     accountParams: { mode: accountMode },
@@ -45,7 +46,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     refetch: refetchBalance,
   } = useReadErc20Balance({
     accountAddress,
-    tokenAddress: DEMO_USDC_ADDRESS,
+    tokenAddress: DEMO_USDC_ADDRESS_6_DECIMALS,
     chain,
     rpcUrl,
   });
@@ -65,6 +66,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     isLoadingClient: isLoadingNftClient,
     txHash: mintNftTxHash,
     reset: resetMintNft,
+    estimateFee: estimateMintNftFee,
   } = useMintNftWithErc20Sponsorship({
     clientOptions: { mode: accountMode, chain, transport },
   });
@@ -115,6 +117,15 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
       refetchBalance();
     }
   }, [isOpen, accountAddress, refetchBalance]);
+
+  useEffect(() => {
+    if (isOpen && accountAddress) {
+      // estimateMintNftFee().then((fee) => {
+      //   const networkFee = ethereumPrice * Number(fee.feeEth);
+      //   setNetworkFee(networkFee);
+      // });
+    }
+  }, [isOpen, accountAddress, estimateMintNftFee]);
 
   const buyNftButtonEnabled =
     readyToBuyNft && !isMintingNft && !isLoadingNftClient;
@@ -251,7 +262,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-fg-primary text-sm font-medium leading-5">
-                        Network fee
+                        Network fee est.
                       </span>
                       <span className="text-fg-primary text-sm leading-relaxed">
                         {networkFee.toFixed(2)} USDC
@@ -299,7 +310,12 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
               onClick={handleBuyNFT}
             >
               {isMintingNft && <LoadingIcon className="w-4 h-4" />}
-              {!isMintingNft && <BagIcon className="w-4 h-4" />}
+              {!isMintingNft && (
+                <BagIcon
+                  className="w-4 h-4"
+                  color={`${mintNftTxHash ? "#475569" : "#CBD5E1"}`}
+                />
+              )}
               <span className="font-medium">
                 {isLoadingNftClient
                   ? "Loading Client..."
