@@ -14,14 +14,6 @@ export const Erc20SponsorshipCard = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const imageSlot = (
     <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
       <Image
@@ -62,7 +54,10 @@ export const Erc20SponsorshipCard = ({
         heading="Pay gas with any token"
         content={content}
         buttons={
-          <Button className="mt-auto w-full" onClick={handleOpenModal}>
+          <Button
+            className="mt-auto w-full"
+            onClick={() => setIsModalOpen(true)}
+          >
             <ShoppingBag className="w-4 h-4 mr-2" />
             Buy NFT
           </Button>
@@ -70,7 +65,7 @@ export const Erc20SponsorshipCard = ({
       />
       <Erc20Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalOpen(false)}
         accountMode={accountMode}
       />
     </>

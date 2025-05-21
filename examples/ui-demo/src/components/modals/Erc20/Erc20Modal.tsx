@@ -92,7 +92,6 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     ? "Error"
     : `${numericBalance === 0 ? "0" : numericBalance.toFixed(2)} USDC`;
 
-  // Handlers
   const handleGetUSDC = async () => {
     if (!accountAddress) return;
 
@@ -179,7 +178,6 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
   const buyNftButtonEnabled =
     readyToBuyNft && !isMintingNft && !isLoadingNftClient;
 
-  // Determine BagIcon color
   let bagIconColor = "#CBD5E1";
   if (mintNftTxHash) {
     bagIconColor = "#475569";
@@ -253,7 +251,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                     <div
                       className={cn(
                         "flex justify-between items-center transition-all duration-500 whitespace-nowrap",
-                        readyToBuyNft && "transform -translate-y-16" // Animation: move up when busy
+                        readyToBuyNft && "transform -translate-y-16"
                       )}
                     >
                       <span className="text-fg-secondary font-medium text-sm leading-relaxed">
@@ -266,7 +264,7 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                             !isLoadingBalance &&
                               !readyToBuyNft &&
                               "text-demo-surface-critical mr-2",
-                            readyToBuyNft && "transform translate-x-20 mr-0" // Animation: move text right when busy
+                            readyToBuyNft && "transform translate-x-20 mr-0"
                           )}
                         >
                           {balanceDisplay}

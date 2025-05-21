@@ -11,15 +11,14 @@ const aggregatorV3InterfaceABI = parseAbi([
   "function decimals() external view returns (uint8)",
 ]);
 
-// Create a public client (could be instantiated once outside the hook if preferred)
 const publicClient = createPublicClient({
   chain: mainnet,
   transport: http(), // Uses default RPC for mainnet
 });
 
 interface EthPriceData {
-  price: number; // The ETH price in USD
-  updatedAt: Date; // Timestamp of the last update
+  price: number;
+  updatedAt: Date;
 }
 
 export interface UseGetEthPriceReturn {
@@ -50,21 +49,18 @@ export const useGetEthPrice = (): UseGetEthPriceReturn => {
         }),
       ]);
 
-      // latestRoundData returns: roundId, answer, startedAt, updatedAt, answeredInRound
-      // The price is the 'answer' (index 1)
       const priceRaw = roundData[1];
-      // The timestamp is 'updatedAt' (index 3)
       const updatedAtTimestamp = Number(roundData[3]);
 
       const priceFormatted = parseFloat(formatUnits(priceRaw, feedDecimals));
 
       return {
         price: priceFormatted,
-        updatedAt: new Date(updatedAtTimestamp * 1000), // Convert Unix seconds to JS Date
+        updatedAt: new Date(updatedAtTimestamp * 1000),
       };
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes: ETH price doesn't change every second, but we want it reasonably fresh
-    refetchInterval: 1000 * 60 * 10, // Refetch every 10 minutes
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 10,
   });
 
   return {
