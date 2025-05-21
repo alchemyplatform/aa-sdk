@@ -141,8 +141,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
               mfaRequired: false,
               mfaFactorId: undefined,
             },
-          } satisfies AlchemySignerStore)
-      )
+          }) satisfies AlchemySignerStore,
+      ),
     );
     // NOTE: it's important that the session manager share a client
     // with the signer. The SessionManager leverages the Signer's client
@@ -170,7 +170,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   on = <E extends AlchemySignerEvent>(
     event: E,
-    listener: AlchemySignerEvents[E]
+    listener: AlchemySignerEvents[E],
   ) => {
     // NOTE: we're using zustand here to handle this because we are able to use the fireImmediately
     // option which deals with a possible race condition where the listener is added after the event
@@ -183,8 +183,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           (status) =>
             status === AlchemySignerStatus.CONNECTED &&
             (listener as AlchemySignerEvents["connected"])(
-              this.store.getState().user!
-            )
+              this.store.getState().user!,
+            ),
         );
       case "disconnected":
         return subscribeWithDelayedFireImmediately(
@@ -192,13 +192,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           ({ status }) => status,
           (status) =>
             status === AlchemySignerStatus.DISCONNECTED &&
-            (listener as AlchemySignerEvents["disconnected"])()
+            (listener as AlchemySignerEvents["disconnected"])(),
         );
       case "statusChanged":
         return subscribeWithDelayedFireImmediately(
           this.store,
           ({ status }) => status,
-          listener as AlchemySignerEvents["statusChanged"]
+          listener as AlchemySignerEvents["statusChanged"],
         );
       case "errorChanged":
         return subscribeWithDelayedFireImmediately(
@@ -206,8 +206,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           ({ error }) => error,
           (error) =>
             (listener as AlchemySignerEvents["errorChanged"])(
-              error ?? undefined
-            )
+              error ?? undefined,
+            ),
         );
       case "newUserSignup":
         return subscribeWithDelayedFireImmediately(
@@ -215,14 +215,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           ({ isNewUser }) => isNewUser,
           (isNewUser) => {
             if (isNewUser) (listener as AlchemySignerEvents["newUserSignup"])();
-          }
+          },
         );
       case "mfaStatusChanged":
         return subscribeWithDelayedFireImmediately(
           this.store,
           ({ mfaStatus }) => mfaStatus,
           (mfaStatus) =>
-            (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus)
+            (listener as AlchemySignerEvents["mfaStatusChanged"])(mfaStatus),
         );
       case "emailAuthLinkingRequired":
         return subscribeWithDelayedFireImmediately(
@@ -231,10 +231,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           (authLinkingStatus) => {
             if (authLinkingStatus) {
               (listener as AlchemySignerEvents["emailAuthLinkingRequired"])(
-                authLinkingStatus.email
+                authLinkingStatus.email,
               );
             }
-          }
+          },
         );
       default:
         assertNever(event, `Unknown event type ${event}`);
@@ -337,7 +337,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         });
         throw error;
       });
-    }
+    },
   );
 
   private trackAuthenticateType = (params: AuthParams) => {
@@ -458,7 +458,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const { address } = await this.inner.whoami();
 
       return address;
-    }
+    },
   );
 
   /**
@@ -529,16 +529,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   signTypedData: <
     const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ) => Promise<Hex> = SignerLogger.profiled(
     "BaseAlchemySigner.signTypedData",
     async (params) => {
       const messageHash = hashTypedData(params);
 
       return this.inner.signRawMessage(messageHash);
-    }
+    },
   );
 
   /**
@@ -572,15 +572,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<string>} a promise that resolves to the serialized transaction with the signature
    */
   signTransaction: <
-    serializer extends SerializeTransactionFn<TransactionSerializable> = SerializeTransactionFn<TransactionSerializable>,
-    transaction extends Parameters<serializer>[0] = Parameters<serializer>[0]
+    serializer extends
+      SerializeTransactionFn<TransactionSerializable> = SerializeTransactionFn<TransactionSerializable>,
+    transaction extends Parameters<serializer>[0] = Parameters<serializer>[0],
   >(
     transaction: transaction,
     options?:
       | {
           serializer?: serializer | undefined;
         }
-      | undefined
+      | undefined,
   ) => Promise<
     IsNarrowable<
       TransactionSerialized<GetTransactionType<transaction>>,
@@ -594,13 +595,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const serializeFn = args?.serializer ?? serializeTransaction;
       const serializedTx = serializeFn(tx);
       const signatureHex = await this.inner.signRawMessage(
-        keccak256(serializedTx)
+        keccak256(serializedTx),
       );
 
       const signature = this.unpackSignRawMessageBytes(signatureHex);
 
       return serializeFn(tx, signature);
-    }
+    },
   );
 
   /**
@@ -632,14 +633,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<SignedAuthorization<number>> | undefined} a promise that resolves to the authorization with the signature
    */
   signAuthorization: (
-    unsignedAuthorization: AuthorizationRequest<number>
+    unsignedAuthorization: AuthorizationRequest<number>,
   ) => Promise<SignedAuthorization<number>> = SignerLogger.profiled(
     "BaseAlchemySigner.signAuthorization",
     async (unsignedAuthorization) => {
       const hashedAuthorization = hashAuthorization(unsignedAuthorization);
-      const signedAuthorizationHex = await this.inner.signRawMessage(
-        hashedAuthorization
-      );
+      const signedAuthorizationHex =
+        await this.inner.signRawMessage(hashedAuthorization);
       const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
       const { address, contractAddress, ...unsignedAuthorizationRest } =
         unsignedAuthorization;
@@ -649,7 +649,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         ...signature,
         address: address ?? contractAddress,
       };
-    }
+    },
   );
 
   /**
@@ -686,7 +686,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   private unpackSignRawMessageBytes = (
-    hex: `0x${string}`
+    hex: `0x${string}`,
   ): UnpackedSignature => {
     return {
       r: takeBytes(hex, { count: 32 }),
@@ -794,7 +794,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {boolean} true if the wallet was exported successfully
    */
   exportWallet: (
-    params: Parameters<(typeof this.inner)["exportWallet"]>[0]
+    params: Parameters<(typeof this.inner)["exportWallet"]>[0],
   ) => Promise<boolean> = async (params) => {
     return this.inner.exportWallet(params);
   };
@@ -836,9 +836,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       signMessage: (msg) => this.signMessage(msg.message),
       signTypedData: <
         const typedData extends TypedData | Record<string, unknown>,
-        primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+        primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
       >(
-        typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+        typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
       ) => this.signTypedData<typedData, primaryType>(typedDataDefinition),
       signTransaction: this.signTransaction,
     });
@@ -877,7 +877,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   private authenticateWithEmail = async (
-    params: Extract<AuthParams, { type: "email" }>
+    params: Extract<AuthParams, { type: "email" }>,
   ): Promise<User> => {
     if ("bundle" in params) {
       return this.completeEmailAuth(params);
@@ -887,7 +887,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       params.email,
       params.emailMode,
       params.multiFactors,
-      params.redirectParams
+      params.redirectParams,
     );
 
     this.setAwaitingEmailAuth({ orgId, otpId, isNewUser });
@@ -906,7 +906,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   private authenticateWithPasskey = async (
-    args: Extract<AuthParams, { type: "passkey" }>
+    args: Extract<AuthParams, { type: "passkey" }>,
   ): Promise<User> => {
     let user: User;
     const shouldCreateNew = async () => {
@@ -923,7 +923,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         args as Extract<
           AuthParams,
           { type: "passkey" } & ({ email: string } | { createNew: true })
-        >
+        >,
       );
       // account creation for passkeys returns the whoami response so we don't have to
       // call it again after signup
@@ -946,7 +946,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   private authenticateWithOauth = async (
-    args: Extract<AuthParams, { type: "oauth" }>
+    args: Extract<AuthParams, { type: "oauth" }>,
   ): Promise<User> => {
     this.store.setState({ authLinkingStatus: undefined });
     const params: OauthParams = {
@@ -965,7 +965,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   private authenticateWithOtp = async (
-    args: Extract<AuthParams, { type: "otp" }>
+    args: Extract<AuthParams, { type: "otp" }>,
   ): Promise<User> => {
     const tempSession = this.sessionManager.getTemporarySession();
     const { orgId, isNewUser } = tempSession ?? {};
@@ -1059,7 +1059,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
   private handleMfaRequired(
     encryptedPayload: string,
-    multiFactors: MfaFactor[]
+    multiFactors: MfaFactor[],
   ) {
     // Store complete MFA context in the temporary session
     const tempSession = this.sessionManager.getTemporarySession();
@@ -1154,7 +1154,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     email: string,
     emailMode?: EmailType,
     multiFactors?: VerifyMfaParams[],
-    redirectParams?: URLSearchParams
+    redirectParams?: URLSearchParams,
   ): Promise<{
     orgId: string;
     otpId?: string;
@@ -1193,7 +1193,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   }
 
   private async completeEmailAuth(
-    params: Extract<AuthParams, { type: "email"; bundle: string }>
+    params: Extract<AuthParams, { type: "email"; bundle: string }>,
   ): Promise<User> {
     const temporarySession = params.orgId
       ? { orgId: params.orgId }
@@ -1307,12 +1307,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
    */
   verifyMfa: (
-    params: VerifyMfaParams
+    params: VerifyMfaParams,
   ) => Promise<{ multiFactors: MfaFactor[] }> = SignerLogger.profiled(
     "BaseAlchemySigner.verifyMfa",
     async (params) => {
       return this.inner.verifyMfa(params);
-    }
+    },
   );
 
   /**
@@ -1343,12 +1343,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<{ multiFactors: MfaFactor[] }>} A promise that resolves to the updated list of MFA factors
    */
   removeMfa: (
-    params: RemoveMfaParams
+    params: RemoveMfaParams,
   ) => Promise<{ multiFactors: MfaFactor[] }> = SignerLogger.profiled(
     "BaseAlchemySigner.removeMfa",
     async (params) => {
       return this.inner.removeMfa(params);
-    }
+    },
   );
 
   /**
@@ -1383,7 +1383,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<User>} A promise that resolves to the authenticated user
    */
   public async validateMultiFactors(
-    params: ValidateMultiFactorsArgs
+    params: ValidateMultiFactorsArgs,
   ): Promise<User> {
     // Get MFA context from temporary session
     const tempSession = this.sessionManager.getTemporarySession();
@@ -1393,7 +1393,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       !tempSession.mfaFactorId
     ) {
       throw new Error(
-        "No pending MFA context found. Call submitOtpCode() first."
+        "No pending MFA context found. Call submitOtpCode() first.",
       );
     }
 
@@ -1518,7 +1518,7 @@ function toErrorInfo(error: unknown): ErrorInfo {
 function subscribeWithDelayedFireImmediately<T>(
   store: InternalStore,
   selector: (state: AlchemySignerStore) => T,
-  listener: (selectedState: T, previousSelectedState: T) => void
+  listener: (selectedState: T, previousSelectedState: T) => void,
 ): () => void {
   let subscribeHasReturned = false;
   const unsubscribe = store.subscribe(
@@ -1530,7 +1530,7 @@ function subscribeWithDelayedFireImmediately<T>(
         setTimeout(() => listener(...args), 0);
       }
     },
-    { fireImmediately: true }
+    { fireImmediately: true },
   );
   subscribeHasReturned = true;
   return unsubscribe;

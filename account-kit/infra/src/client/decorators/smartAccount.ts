@@ -31,25 +31,26 @@ export type AlchemySmartAccountClientActions<
     | UserOperationContext
     | undefined,
   TChain extends Chain | undefined = Chain | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   simulateUserOperation: (
-    args: SendUserOperationParameters<TAccount, TContext>
+    args: SendUserOperationParameters<TAccount, TContext>,
   ) => Promise<SimulateUserOperationAssetChangesResponse>;
   sendUserOperation: (
     args: SendUserOperationParameters<
       TAccount,
       TContext,
       GetEntryPointFromAccount<TAccount>
-    >
+    >,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
     overrides?: UserOperationOverrides<TEntryPointVersion>,
-    context?: TContext
+    context?: TContext,
   ) => Promise<Hex>;
   sendTransactions: (
-    args: SendTransactionsParameters<TAccount, TContext>
+    args: SendTransactionsParameters<TAccount, TContext>,
   ) => Promise<Hex>;
 };
 
@@ -76,11 +77,11 @@ export const alchemyActions: <
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => AlchemySmartAccountClientActions<TAccount, TContext, TChain> = (
-  client_
+  client_,
 ) => ({
   simulateUserOperation: async (args) => {
     const client = clientHeaderTrack(client_, "simulateUserOperation");

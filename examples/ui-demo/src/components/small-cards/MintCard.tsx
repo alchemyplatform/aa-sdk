@@ -31,8 +31,8 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
   const buttonText = !mintStarted
     ? "Collect NFT"
     : isLoading
-    ? "Collecting NFT..."
-    : "Re-collect NFT";
+      ? "Collecting NFT..."
+      : "Re-collect NFT";
 
   const renderContent = (
     <>

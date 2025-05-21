@@ -11,7 +11,7 @@ export async function getIsUsingTypeScript() {
       ["plugingenConfig.config.ts", "plugingenConfig.config.mts"],
       {
         cwd,
-      }
+      },
     );
     if (plugingenConfig) return true;
 

@@ -40,9 +40,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
+    "typescript-template": "*"
   },
   "dependencies": {
     "@aa-sdk/core": "^4.35.0",

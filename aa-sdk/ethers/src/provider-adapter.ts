@@ -88,7 +88,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @returns {AccountSigner} an AccountSigner that can be used to sign and send user operations
    */
   connectToAccount<TAccount extends SmartContractAccount>(
-    account: TAccount
+    account: TAccount,
   ): AccountSigner<TAccount> {
     return new AccountSigner<TAccount>(this, account);
   }
@@ -125,7 +125,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
       createPublicClient({
         transport: custom(this.accountProvider.transport),
         chain: this.accountProvider.chain!,
-      })
+      }),
     );
   }
 
@@ -138,7 +138,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    */
   static fromEthersProvider(
     provider: JsonRpcProvider,
-    chain: Chain
+    chain: Chain,
   ): EthersProviderAdapter {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,

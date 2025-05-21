@@ -30,8 +30,8 @@ export class InvalidUserOperationError extends BaseError {
                 value: value.toString(),
               }
             : value,
-        2
-      )}`
+        2,
+      )}`,
     );
   }
 }
@@ -47,7 +47,10 @@ export class WaitForUserOperationError extends BaseError {
    * @param {UserOperationRequest} request the user operation request that failed
    * @param {Error} error the underlying error that caused the failure
    */
-  constructor(public request: UserOperationRequest, error: Error) {
+  constructor(
+    public request: UserOperationRequest,
+    error: Error,
+  ) {
     super(`Failed to find User Operation: ${error.message}`);
   }
 }

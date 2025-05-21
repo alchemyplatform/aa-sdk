@@ -10,7 +10,7 @@ export type InfraEventsSchema = [
       chainId: number;
       entryPoint: Address;
     };
-  }
+  },
 ];
 
 export const InfraLogger = createLogger<InfraEventsSchema>({

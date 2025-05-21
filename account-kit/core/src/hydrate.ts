@@ -36,7 +36,7 @@ export type HydrateResult = {
  */
 export function hydrate(
   config: AlchemyAccountsConfig,
-  initialState?: StoredState
+  initialState?: StoredState,
 ): HydrateResult {
   const initialAlchemyState =
     initialState != null && "alchemy" in initialState
@@ -50,7 +50,7 @@ export function hydrate(
 
     // If the persisted chainId is not in the config, we should fall back to the default chain.
     const configuredChains = Array.from(
-      config.store.getInitialState().connections.keys()
+      config.store.getInitialState().connections.keys(),
     );
     const chain = configuredChains.includes(rest.chain.id)
       ? rest.chain
@@ -63,12 +63,12 @@ export function hydrate(
       accountConfigs,
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.INITIALIZING,
-        undefined
+        undefined,
       ),
       accounts: hydrateAccountState(
         accountConfigs,
         shouldReconnectAccounts,
-        config
+        config,
       ),
     });
   } else if (!config.store.persist.hasHydrated()) {
@@ -88,7 +88,7 @@ export function hydrate(
     {
       initialState: initialWagmiState,
       reconnectOnMount: (initialWagmiState?.connections?.size ?? 0) > 0,
-    }
+    },
   );
 
   return {
@@ -105,7 +105,7 @@ export function hydrate(
 }
 
 const reconnectingState = <T extends SupportedAccountTypes>(
-  address: Address
+  address: Address,
 ): AccountState<T> => ({
   status: "RECONNECTING",
   account: {
@@ -116,7 +116,7 @@ const reconnectingState = <T extends SupportedAccountTypes>(
 const hydrateAccountState = (
   accountConfigs: StoreState["accountConfigs"],
   shouldReconnectAccounts: boolean,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): StoreState["accounts"] => {
   const chains = Array.from(config.store.getState().connections.entries())
     .map(([_, cnx]) => cnx)

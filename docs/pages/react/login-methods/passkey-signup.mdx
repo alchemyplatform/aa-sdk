@@ -56,7 +56,7 @@ export const config = createConfig(
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
   },
-  uiConfig
+  uiConfig,
 );
 ```
 
@@ -108,7 +108,7 @@ const handlePasskeySignup = (email: string) => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 
@@ -149,7 +149,7 @@ const handlePasskeyOnlySignup = (username: string) => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 ```

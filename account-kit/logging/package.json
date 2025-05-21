@@ -42,9 +42,7 @@
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "jsdom": "^25.0.1",
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
+    "typescript-template": "*"
   },
   "publishConfig": {
     "access": "public",
@@ -59,7 +57,7 @@
   },
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "dependencies": {
-    "@segment/analytics-next": "^1.74.0",
+    "@segment/analytics-next": "1.74.0",
     "uuid": "^11.0.2"
   }
 }

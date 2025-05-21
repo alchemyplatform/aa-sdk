@@ -20,14 +20,14 @@ import type { PromiseOrValue } from "../../../../aa-sdk/core/dist/types/types.js
 /** Used right before we send the transaction out, this is going to be the signer. */
 export type PreSend = (
   this: void,
-  transaction: VersionedTransaction | Transaction
+  transaction: VersionedTransaction | Transaction,
 ) => PromiseOrValue<VersionedTransaction | Transaction>;
 /**
  * Used in the sendTransaction, will transform either the instructions (or the transfer -> instructions) into a transaction
  */
 export type TransformInstruction = (
   this: void,
-  instructions: TransactionInstruction[]
+  instructions: TransactionInstruction[],
 ) => PromiseOrValue<Transaction | VersionedTransaction>;
 export type SolanaTransactionParamOptions = {
   preSend?: PreSend;
@@ -70,7 +70,7 @@ export interface SolanaTransaction {
   sendTransaction(params: SolanaTransactionParams): void;
   /** Send the transaction asynchronously */
   sendTransactionAsync(
-    params: SolanaTransactionParams
+    params: SolanaTransactionParams,
   ): Promise<{ hash: string }>;
 }
 
@@ -108,14 +108,14 @@ mutate({
  * @returns {SolanaTransaction} The transaction hook.
  */
 export function useSolanaTransaction(
-  opts: SolanaTransactionHookParams = {}
+  opts: SolanaTransactionHookParams = {},
 ): SolanaTransaction {
   const { config } = useAlchemyAccountContext();
   const fallbackSigner: null | SolanaSigner = useSolanaSigner();
   const backupConnection = useSyncExternalStore(
     watchSolanaConnection(config),
     () => getSolanaConnection(config),
-    () => getSolanaConnection(config)
+    () => getSolanaConnection(config),
   );
   const mutation = useMutation({
     mutationFn: async ({
@@ -146,7 +146,7 @@ export function useSolanaTransaction(
         return [
           SystemProgram.transfer({
             fromPubkey: new PublicKey(
-              signer?.address || missing("signer.address")
+              signer?.address || missing("signer.address"),
             ),
             toPubkey: new PublicKey(params.transfer.toAddress),
             lamports: params.transfer.amount,
@@ -160,13 +160,13 @@ export function useSolanaTransaction(
           return message.staticAccountKeys.some(
             (key, index) =>
               key.toBase58() === signer?.address &&
-              message?.isAccountSigner(index)
+              message?.isAccountSigner(index),
           );
         }
         return transaction.instructions.some((x) =>
           x.keys.some(
-            (x) => x.pubkey.toBase58() === signer?.address && x.isSigner
-          )
+            (x) => x.pubkey.toBase58() === signer?.address && x.isSigner,
+          ),
         );
       }
     },
@@ -181,13 +181,13 @@ export function useSolanaTransaction(
       return await (signer || missing("signer")).addSponsorship(
         instructions,
         connection || missing("connection"),
-        policyId || missing("policyId")
+        policyId || missing("policyId"),
       );
     },
     async createTransaction(instructions: TransactionInstruction[]) {
       return await (signer || missing("signer")).createTransaction(
         instructions,
-        connection || missing("connection")
+        connection || missing("connection"),
       );
     },
     get default() {

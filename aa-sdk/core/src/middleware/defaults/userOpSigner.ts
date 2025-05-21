@@ -20,7 +20,7 @@ import type { ClientMiddlewareFn } from "../types";
  */
 export const defaultUserOpSigner: ClientMiddlewareFn = async (
   struct,
-  { client, account = client.account }
+  { client, account = client.account },
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -39,7 +39,7 @@ export const defaultUserOpSigner: ClientMiddlewareFn = async (
   return {
     ...resolvedStruct,
     signature: await account.signUserOperationHash(
-      account.getEntryPoint().getUserOperationHash(request)
+      account.getEntryPoint().getUserOperationHash(request),
     ),
   };
 };

@@ -18,6 +18,6 @@ export function useConnection(): Connection {
   return useSyncExternalStore(
     watchConnection(config),
     () => getConnection(config),
-    () => getConnection(config)
+    () => getConnection(config),
   );
 }

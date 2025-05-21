@@ -243,7 +243,7 @@ export type SignerEndpoints = [
       };
       multiFactors: MfaFactor[];
     };
-  }
+  },
 ];
 
 export type AuthenticatingEventMetadata = {

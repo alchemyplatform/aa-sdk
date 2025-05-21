@@ -30,7 +30,7 @@ import { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 export const STORAGE_VERSION = 14;
 
 export const createAccountKitStore = (
-  params: CreateAccountKitStoreParams
+  params: CreateAccountKitStoreParams,
 ): Store => {
   const {
     connections,
@@ -77,7 +77,7 @@ export const createAccountKitStore = (
               reviver: (key, value) => {
                 if (key === "chain") {
                   return connections.find(
-                    (c) => c.chain.id === (value as { id: number }).id
+                    (c) => c.chain.id === (value as { id: number }).id,
                   )?.chain;
                 }
 
@@ -94,7 +94,7 @@ export const createAccountKitStore = (
             merge: (persisted, current) => {
               const persistedState = persisted as StoreState;
               const transportConnection = persistedState.connections.get(
-                persistedState.chain.id
+                persistedState.chain.id,
               );
               if (persistedState.chain == null) {
                 return createInitialStoreState(params);
@@ -119,7 +119,7 @@ export const createAccountKitStore = (
                 !connections.every(
                   (c) =>
                     persistedState.connections.has(c.chain.id) &&
-                    deepEquals(persistedState.connections.get(c.chain.id), c)
+                    deepEquals(persistedState.connections.get(c.chain.id), c),
                 )
               ) {
                 return createInitialStoreState(params);
@@ -135,7 +135,7 @@ export const createAccountKitStore = (
                 ...current,
                 ...persistedState,
                 smartAccountClients: createEmptySmartAccountClientState(
-                  connections.map((c) => c.chain)
+                  connections.map((c) => c.chain),
                 ),
                 connections: connectionsMap,
                 solana: params.solana,
@@ -152,8 +152,8 @@ export const createAccountKitStore = (
             },
             version: STORAGE_VERSION,
           })
-        : () => createInitialStoreState(params)
-    )
+        : () => createInitialStoreState(params),
+    ),
   );
 
   addClientSideStoreListeners(store);
@@ -162,7 +162,7 @@ export const createAccountKitStore = (
 };
 
 const createInitialStoreState = (
-  params: CreateAccountKitStoreParams
+  params: CreateAccountKitStoreParams,
 ): StoreState => {
   const { connections, chain, client, sessionConfig } = params;
   const connectionMap = createConnectionsMap(connections);
@@ -185,7 +185,7 @@ const createInitialStoreState = (
     config: { client, sessionConfig },
     signerStatus: convertSignerStatusToState(
       AlchemySignerStatus.INITIALIZING,
-      undefined
+      undefined,
     ),
     smartAccountClients: createEmptySmartAccountClientState(chains),
   };
@@ -272,7 +272,7 @@ const AUTHENTICATING_STATUSES: AlchemySignerStatus[] = [
  */
 export const convertSignerStatusToState = (
   alchemySignerStatus: AlchemySignerStatus,
-  error: ErrorInfo | undefined
+  error: ErrorInfo | undefined,
 ): SignerStatus => ({
   status: alchemySignerStatus,
   error,
@@ -302,7 +302,7 @@ const staticState: AccountState<SupportedAccountTypes> = {
  * @returns {AccountState<T>} The default state for the specified account type
  */
 export const defaultAccountState = <
-  T extends SupportedAccountTypes
+  T extends SupportedAccountTypes,
 >(): AccountState<T> => staticState;
 
 const addClientSideStoreListeners = (store: Store) => {
@@ -318,7 +318,7 @@ const addClientSideStoreListeners = (store: Store) => {
         store.setState((state) => ({
           signerStatus: convertSignerStatusToState(
             status,
-            state.signerStatus.error
+            state.signerStatus.error,
           ),
         }));
       });
@@ -330,7 +330,7 @@ const addClientSideStoreListeners = (store: Store) => {
 
       signer.on("disconnected", () => {
         const chains = [...store.getState().connections.values()].map(
-          (c) => c.chain
+          (c) => c.chain,
         );
         store.setState({
           user: undefined,
@@ -343,20 +343,23 @@ const addClientSideStoreListeners = (store: Store) => {
         store.setState((state) => ({
           signerStatus: convertSignerStatusToState(
             state.signerStatus.status,
-            error
+            error,
           ),
-        }))
+        })),
       );
     },
-    { fireImmediately: true }
+    { fireImmediately: true },
   );
 };
 
 const createEmptyAccountConfigState = (chains: Chain[]) => {
-  return chains.reduce((acc, chain) => {
-    acc[chain.id] = {};
-    return acc;
-  }, {} as StoreState["accountConfigs"]);
+  return chains.reduce(
+    (acc, chain) => {
+      acc[chain.id] = {};
+      return acc;
+    },
+    {} as StoreState["accountConfigs"],
+  );
 };
 
 /**
@@ -366,24 +369,30 @@ const createEmptyAccountConfigState = (chains: Chain[]) => {
  * @returns {NoUndefined<StoreState["accounts"]>} The default account state for the given chains
  */
 export const createDefaultAccountState = (chains: Chain[]) => {
-  return chains.reduce((acc, chain) => {
-    acc[chain.id] = {
-      LightAccount: defaultAccountState<"LightAccount">(),
-      MultiOwnerModularAccount:
-        defaultAccountState<"MultiOwnerModularAccount">(),
-      MultiOwnerLightAccount: defaultAccountState<"MultiOwnerLightAccount">(),
-      ModularAccountV2: defaultAccountState<"ModularAccountV2">(),
-    };
-    return acc;
-  }, {} as NoUndefined<StoreState["accounts"]>);
+  return chains.reduce(
+    (acc, chain) => {
+      acc[chain.id] = {
+        LightAccount: defaultAccountState<"LightAccount">(),
+        MultiOwnerModularAccount:
+          defaultAccountState<"MultiOwnerModularAccount">(),
+        MultiOwnerLightAccount: defaultAccountState<"MultiOwnerLightAccount">(),
+        ModularAccountV2: defaultAccountState<"ModularAccountV2">(),
+      };
+      return acc;
+    },
+    {} as NoUndefined<StoreState["accounts"]>,
+  );
 };
 
 export const createEmptySmartAccountClientState = (chains: Chain[]) => {
-  return chains.reduce((acc, chain) => {
-    acc[chain.id] = {};
+  return chains.reduce(
+    (acc, chain) => {
+      acc[chain.id] = {};
 
-    return acc;
-  }, {} as StoreState["smartAccountClients"]);
+      return acc;
+    },
+    {} as StoreState["smartAccountClients"],
+  );
 };
 
 const deepEquals = (obj1: any, obj2: any) => {

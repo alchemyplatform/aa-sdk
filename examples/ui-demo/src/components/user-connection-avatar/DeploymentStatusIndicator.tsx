@@ -25,7 +25,7 @@ const DeploymentStatusIndicator = ({
       className={cn(
         "w-[16px] h-[16px] rounded-full",
         indicatorBackgroundColor,
-        className
+        className,
       )}
       {...props}
     >

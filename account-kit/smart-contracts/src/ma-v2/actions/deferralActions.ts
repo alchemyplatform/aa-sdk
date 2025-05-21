@@ -30,7 +30,7 @@ export type DeferredActionTypedData = {
     DeferredAction: [
       { name: "nonce"; type: "uint256" },
       { name: "deadline"; type: "uint48" },
-      { name: "call"; type: "bytes" }
+      { name: "call"; type: "bytes" },
     ];
   };
   primaryType: "DeferredAction";
@@ -70,16 +70,16 @@ export type EntityIdAndNonceParams = {
 
 export type DeferralActions = {
   createDeferredActionTypedDataObject: (
-    args: CreateDeferredActionTypedDataParams
+    args: CreateDeferredActionTypedDataParams,
   ) => Promise<DeferredActionReturnData>;
   buildPreSignatureDeferredActionDigest: (
-    args: BuildPreSignatureDeferredActionDigestParams
+    args: BuildPreSignatureDeferredActionDigestParams,
   ) => Hex;
   buildUserOperationWithDeferredAction: (
-    args: BuildUserOperationWithDeferredActionParams
+    args: BuildUserOperationWithDeferredActionParams,
   ) => Promise<UserOperationRequest_v7>;
   getEntityIdAndNonce: (
-    args: EntityIdAndNonceParams
+    args: EntityIdAndNonceParams,
   ) => Promise<{ nonce: bigint; entityId: number }>;
 };
 
@@ -90,7 +90,7 @@ export type DeferralActions = {
  * @returns {object} - An object containing three methods: `createDeferredActionTypedDataObject`, `buildDeferredActionDigest`, and `buildUserOperationWithDeferredAction`.
  */
 export const deferralActions: (
-  client: ModularAccountV2Client
+  client: ModularAccountV2Client,
 ) => DeferralActions = (client: ModularAccountV2Client): DeferralActions => {
   const createDeferredActionTypedDataObject = async ({
     callData,
@@ -139,7 +139,7 @@ export const deferralActions: (
 
     const encodedCallData = encodePacked(
       ["uint168", "uint48", "bytes"],
-      [validationLocator, typedData.message.deadline, typedData.message.call]
+      [validationLocator, typedData.message.deadline, typedData.message.call],
     );
 
     const encodedDataLength = size(encodedCallData);

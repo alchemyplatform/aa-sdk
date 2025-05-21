@@ -36,9 +36,8 @@ describe("Light Account Counterfactual Address Tests", () => {
       // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
       for (let i = 0; i < 20; i++) {
-        const localSigner = LocalAccountSigner.privateKeyToAccountSigner(
-          generatePrivateKey()
-        );
+        const localSigner =
+          LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 
         // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
         const salt = BigInt(generatePrivateKey());
@@ -84,16 +83,15 @@ describe("Light Account Counterfactual Address Tests", () => {
 
         expect(entryPointComputedAddress).toEqual(locallyComputedAddress);
       }
-    }
+    },
   );
 
   it("LAv2 should match the entrypoint generated counterfactual address", async () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const localSigner = LocalAccountSigner.privateKeyToAccountSigner(
-        generatePrivateKey()
-      );
+      const localSigner =
+        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
       const salt = BigInt(generatePrivateKey());
@@ -135,16 +133,15 @@ describe("Light Account Counterfactual Address Tests", () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const localSigner = LocalAccountSigner.privateKeyToAccountSigner(
-        generatePrivateKey()
-      );
+      const localSigner =
+        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 
       const signerAddress = await localSigner.getAddress();
 
       // Generate `i` random other owners.
       const otherOwners: Address[] = Array.from(
         { length: i },
-        () => privateKeyToAccount(generatePrivateKey()).address
+        () => privateKeyToAccount(generatePrivateKey()).address,
       );
 
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.

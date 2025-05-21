@@ -9,7 +9,7 @@ export const WebAuthnValidationModule = {
     const { entityId, x, y } = args;
     return encodeAbiParameters(
       [{ type: "uint32" }, { type: "uint256" }, { type: "uint256" }],
-      [entityId, x, y]
+      [entityId, x, y],
     );
   },
 
@@ -22,7 +22,7 @@ export const WebAuthnValidationModule = {
           type: "uint32",
         },
       ],
-      [entityId]
+      [entityId],
     );
   },
 };

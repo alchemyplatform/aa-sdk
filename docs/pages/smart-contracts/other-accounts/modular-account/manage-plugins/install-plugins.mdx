@@ -45,7 +45,7 @@ import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 // [!code focus:99]
 // extend smart account client with sessionKeyPluginActions to call SessionKeyPlugin methods
 const sessionKeyExtendedClient = modularAccountClient.extend(
-  sessionKeyPluginActions
+  sessionKeyPluginActions,
 );
 
 const { hash } = await sessionKeyExtendedClient.installSessionKeyPlugin({

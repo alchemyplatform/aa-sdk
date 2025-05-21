@@ -39,7 +39,7 @@ class MockAlchemySignerWebClient extends AlchemySignerWebClient {
   };
 
   public override submitOtpCode = async (
-    params: Omit<OtpParams, "targetPublicKey">
+    params: Omit<OtpParams, "targetPublicKey">,
   ) => {
     if ("otpId" in params && "otpCode" in params) {
       const { otpId, otpCode, multiFactors = [] } = params;

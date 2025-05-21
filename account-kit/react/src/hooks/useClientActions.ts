@@ -12,7 +12,7 @@ export type UseClientActionsProps<
   TChain extends Chain | undefined = Chain | undefined,
   TActions extends { [x: string]: (...args: any[]) => unknown } = {
     [x: string]: (...args: any[]) => unknown;
-  }
+  },
 > = {
   client?: UseSmartAccountClientResult<TChain, SupportedAccounts>["client"];
   actions: (client: Client<TTransport, TChain, SupportedAccounts>) => TActions;
@@ -21,13 +21,13 @@ export type UseClientActionsProps<
 export type UseClientActionsResult<
   TActions extends { [x: string]: (...args: any[]) => unknown } = {
     [x: string]: (...args: any[]) => unknown;
-  }
+  },
 > = {
   executeAction: <TFunctionName extends ExecutableFunctionName<TActions>>(
-    params: ClientActionParameters<TActions, TFunctionName>
+    params: ClientActionParameters<TActions, TFunctionName>,
   ) => void;
   executeActionAsync: <TFunctionName extends ExecutableFunctionName<TActions>>(
-    params: ClientActionParameters<TActions, TFunctionName>
+    params: ClientActionParameters<TActions, TFunctionName>,
   ) => Promise<ExecuteableFunctionResult<TFunctionName>>;
   data: ReturnType<TActions[keyof TActions]> | undefined;
   isExecutingAction: boolean;
@@ -37,7 +37,7 @@ export type UseClientActionsResult<
 export type ExecutableFunctionName<
   TActions extends { [x: string]: (...args: any[]) => unknown } = {
     [x: string]: (...args: any[]) => unknown;
-  }
+  },
 > = keyof TActions extends infer functionName extends string
   ? [functionName] extends [never]
     ? string
@@ -48,14 +48,15 @@ export type ExecuteableFunctionResult<
   TFunctionName extends ExecutableFunctionName<TActions>,
   TActions extends { [x: string]: (...args: any[]) => unknown } = {
     [x: string]: (...args: any[]) => unknown;
-  }
+  },
 > = ReturnType<TActions[TFunctionName]>;
 
 export type ExecutableFunctionArgs<
   TActions extends { [x: string]: (...args: any[]) => unknown } = {
     [x: string]: (...args: any[]) => unknown;
   },
-  TFunctionName extends ExecutableFunctionName<TActions> = ExecutableFunctionName<TActions>
+  TFunctionName extends
+    ExecutableFunctionName<TActions> = ExecutableFunctionName<TActions>,
 > = Parameters<TActions[TFunctionName]>;
 
 // All of this is based one how viem's `encodeFunctionData` works
@@ -63,13 +64,14 @@ export type ClientActionParameters<
   TActions extends { [x: string]: (...args: any[]) => unknown } = {
     [x: string]: (...args: any[]) => unknown;
   },
-  TFunctionName extends ExecutableFunctionName<TActions> = ExecutableFunctionName<TActions>,
+  TFunctionName extends
+    ExecutableFunctionName<TActions> = ExecutableFunctionName<TActions>,
   allArgs = ExecutableFunctionArgs<
     TActions,
     TFunctionName extends ExecutableFunctionName<TActions>
       ? TFunctionName
       : ExecutableFunctionName<TActions>
-  >
+  >,
 > = {
   functionName: TFunctionName;
   args: allArgs;
@@ -111,9 +113,9 @@ export function useClientActions<
   TChain extends Chain | undefined = Chain | undefined,
   TActions extends { [x: string]: (...args: any[]) => any } = {
     [x: string]: (...args: any[]) => any;
-  }
+  },
 >(
-  args: UseClientActionsProps<TTransport, TChain, TActions>
+  args: UseClientActionsProps<TTransport, TChain, TActions>,
 ): UseClientActionsResult<TActions> {
   const { client, actions } = args;
 
@@ -143,22 +145,22 @@ export function useClientActions<
 
   const executeAction = useCallback(
     <TFunctionName extends ExecutableFunctionName<TActions>>(
-      params: ClientActionParameters<TActions, TFunctionName>
+      params: ClientActionParameters<TActions, TFunctionName>,
     ) => {
       const { functionName, args } = params;
       return mutate({ functionName, args });
     },
-    [mutate]
+    [mutate],
   );
 
   const executeActionAsync = useCallback(
     async <TFunctionName extends ExecutableFunctionName<TActions>>(
-      params: ClientActionParameters<TActions, TFunctionName>
+      params: ClientActionParameters<TActions, TFunctionName>,
     ) => {
       const { functionName, args } = params;
       return mutateAsync({ functionName, args });
     },
-    [mutateAsync]
+    [mutateAsync],
   );
 
   return {

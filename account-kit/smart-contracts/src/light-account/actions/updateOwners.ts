@@ -15,7 +15,8 @@ export type UpdateMultiOwnerLightAccountOwnersParams<
   TAccount extends MultiOwnerLightAccount<TSigner> | undefined =
     | MultiOwnerLightAccount<TSigner>
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   ownersToAdd: Address[];
   ownersToRemove: Address[];
@@ -53,10 +54,10 @@ export const updateOwners: <
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends MultiOwnerLightAccount<TSigner> | undefined =
     | MultiOwnerLightAccount<TSigner>
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: UpdateMultiOwnerLightAccountOwnersParams<TSigner, TAccount>
+  args: UpdateMultiOwnerLightAccountOwnersParams<TSigner, TAccount>,
 ) => Promise<Hex> = async (
   client,
   {
@@ -65,7 +66,7 @@ export const updateOwners: <
     waitForTxn,
     overrides,
     account = client.account,
-  }
+  },
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -75,7 +76,7 @@ export const updateOwners: <
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "updateOwners",
-      client
+      client,
     );
   }
 

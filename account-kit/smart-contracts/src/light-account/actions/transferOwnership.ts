@@ -15,7 +15,8 @@ export type TransferLightAccountOwnershipParams<
   TAccount extends LightAccount<TSigner> | undefined =
     | LightAccount<TSigner>
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   newOwner: TSigner;
   waitForTxn?: boolean;
@@ -53,10 +54,10 @@ export const transferOwnership = async <
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends LightAccount<TSigner> | undefined =
     | LightAccount<TSigner>
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: TransferLightAccountOwnershipParams<TSigner, TAccount>
+  args: TransferLightAccountOwnershipParams<TSigner, TAccount>,
 ): Promise<Hex> => {
   const { newOwner, waitForTxn, overrides, account = client.account } = args;
   if (!account) {
@@ -67,7 +68,7 @@ export const transferOwnership = async <
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "transferOwnership",
-      client
+      client,
     );
   }
 

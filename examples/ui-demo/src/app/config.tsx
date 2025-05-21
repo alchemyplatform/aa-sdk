@@ -86,7 +86,7 @@ const solanaConnection = new Connection(
   {
     wsEndpoint: "wss://api.devnet.solana.com",
     commitment: "confirmed",
-  }
+  },
 );
 
 export const alchemyConfig = () => {
@@ -107,9 +107,10 @@ export const alchemyConfig = () => {
         },
       ],
       ssr: true,
-      connectors: [
-        walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
-      ],
+      connectors:
+        typeof window === "undefined"
+          ? undefined
+          : [walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" })],
       storage: cookieStorage,
       enablePopupOauth: true,
       solana: {
@@ -138,6 +139,6 @@ export const alchemyConfig = () => {
         ),
       },
       uiMode: "embedded",
-    }
+    },
   );
 };

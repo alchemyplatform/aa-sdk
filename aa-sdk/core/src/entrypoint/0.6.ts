@@ -40,7 +40,7 @@ const packUserOperation = (request: UserOperationRequest<"0.6.0">): Hex => {
       hexToBigInt(request.maxFeePerGas),
       hexToBigInt(request.maxPriorityFeePerGas),
       hashedPaymasterAndData,
-    ]
+    ],
   );
 };
 
@@ -56,7 +56,7 @@ export default {
   getUserOperationHash: (
     request: UserOperationRequest<"0.6.0">,
     entryPointAddress: Address,
-    chainId: number
+    chainId: number,
   ): Hash => {
     const encoded = encodeAbiParameters(
       [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
@@ -64,7 +64,7 @@ export default {
         keccak256(packUserOperation(request)),
         entryPointAddress,
         BigInt(chainId),
-      ]
+      ],
     );
 
     return keccak256(encoded);

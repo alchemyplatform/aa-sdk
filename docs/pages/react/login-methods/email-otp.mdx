@@ -60,7 +60,7 @@ export const config = createConfig(
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
   },
-  uiConfig
+  uiConfig,
 );
 ```
 
@@ -113,7 +113,7 @@ const handleSendCode = (email: string) => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 ```
@@ -165,7 +165,7 @@ const handleVerifyCode = (otpCode: string) => {
       onError: (error) => {
         // Handle invalid code error
       },
-    }
+    },
   );
 };
 ```

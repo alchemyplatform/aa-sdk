@@ -14,13 +14,13 @@ import { createStore, StateCreator } from "zustand/vanilla";
 const STATE_KEY = "account-kit-demo-config-store";
 
 export function convertDemoConfigToUiConfig(
-  config: Config
+  config: Config,
 ): AlchemyAccountsUIConfig {
   return {
     auth: {
       sections: getSectionsForConfig(
         config,
-        "30e7ffaff99063e68cc9870c105d905b"
+        "30e7ffaff99063e68cc9870c105d905b",
       ),
       addPasskeyOnSignup: config.auth.addPasskey && config.auth.showPasskey,
       header: (
@@ -45,7 +45,7 @@ export type DemoState = Config & {
   setPrimaryColor: (theme: "dark" | "light", color: string) => void;
   setLogo: <TTheme extends "logoDark" | "logoLight">(
     theme: TTheme,
-    logo: Config["ui"][TTheme]
+    logo: Config["ui"][TTheme],
   ) => void;
   setTheme: (theme: Config["ui"]["theme"]) => void;
   setSupportUrl: (url: string) => void;
@@ -73,7 +73,7 @@ export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
           }) => config,
           skipHydration: true,
           version: 4,
-        })
+        }),
   );
 };
 

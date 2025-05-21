@@ -9,5 +9,5 @@ export default mergeConfig(
       name: "account-kit/signer",
       environment: "jsdom",
     },
-  })
+  }),
 );

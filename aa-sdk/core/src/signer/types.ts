@@ -55,13 +55,13 @@ export interface SmartAccountSigner<Inner = any> {
 
   signTypedData: <
     const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ) => Promise<Hex>;
 
   signAuthorization?: (
-    unsignedAuthorization: AuthorizationRequest<number>
+    unsignedAuthorization: AuthorizationRequest<number>,
   ) => Promise<SignedAuthorization<number>>;
 }
 // [!endregion SmartAccountSigner]

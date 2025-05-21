@@ -26,7 +26,7 @@ import { standardExecutor } from "./standardExecutor.js";
 export const MULTISIG_ACCOUNT_SOURCE = "MultisigModularAccount";
 
 export type MultisigModularAccount<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = SmartContractAccountWithSigner<
   typeof MULTISIG_ACCOUNT_SOURCE,
   TSigner,
@@ -38,7 +38,7 @@ export type MultisigModularAccount<
 export type CreateMultisigModularAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TEntryPointVersion extends "0.6.0" = "0.6.0",
 > = Pick<
   ToSmartContractAccountParams<
     "MultisigModularAccount",
@@ -59,9 +59,9 @@ export type CreateMultisigModularAccountParams<
 
 export async function createMultisigModularAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  config: CreateMultisigModularAccountParams<TTransport, TSigner>
+  config: CreateMultisigModularAccountParams<TTransport, TSigner>,
 ): Promise<MultisigModularAccount<TSigner>>;
 
 /**
@@ -87,7 +87,7 @@ export async function createMultisigModularAccount<
  * @returns {Promise<MultisigModularAccount>} A promise that resolves to a `MultisigModularAccount` object containing the created account information and methods.
  */
 export async function createMultisigModularAccount(
-  config: CreateMultisigModularAccountParams
+  config: CreateMultisigModularAccountParams,
 ): Promise<MultisigModularAccount> {
   const {
     transport,
@@ -166,7 +166,7 @@ export async function createMultisigModularAccount(
 }
 
 export const isMultisigModularAccount = (
-  acct: SmartContractAccount
+  acct: SmartContractAccount,
 ): acct is MultisigModularAccount => {
   return acct.source === MULTISIG_ACCOUNT_SOURCE;
 };

@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 export const FacebookIcon = (
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
 ) => {
   return (
     <svg

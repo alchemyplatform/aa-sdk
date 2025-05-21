@@ -64,7 +64,7 @@ export const config = createConfig(
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
   },
-  uiConfig
+  uiConfig,
 );
 ```
 
@@ -117,7 +117,7 @@ const handleSendMagicLink = (email: string) => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 ```
@@ -153,7 +153,7 @@ useEffect(() => {
           onError: (error) => {
             // Handle error
           },
-        }
+        },
       );
     }
   };

@@ -32,14 +32,14 @@ export type AlchemyEnhancedApis = {
  * @returns {(client: AlchemySmartAccountClient) => AlchemyEnhancedApis} A client decorator for Alchemy Smart Account clients that adds the enhanced API methods
  */
 export function alchemyEnhancedApiActions(
-  alchemy: Alchemy
+  alchemy: Alchemy,
 ): <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: AlchemySmartAccountClient<TChain, TAccount>
+  client: AlchemySmartAccountClient<TChain, TAccount>,
 ) => AlchemyEnhancedApis {
   return (client) => {
     const alchemySdk = AlchemySdkClientSchema.parse(alchemy);
@@ -49,7 +49,7 @@ export function alchemyEnhancedApiActions(
       alchemy.config.url !== client.transport.alchemyRpcUrl
     ) {
       throw new Error(
-        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
+        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL",
       );
     }
 

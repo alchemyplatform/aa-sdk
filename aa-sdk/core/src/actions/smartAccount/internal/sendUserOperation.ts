@@ -24,14 +24,15 @@ export async function _sendUserOperation<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uoStruct: UserOperationStruct<TEntryPointVersion>;
     overrides?: UserOperationOverrides<TEntryPointVersion>;
   } & GetAccountParameter<TAccount> &
-    GetContextParameter<TContext>
+    GetContextParameter<TContext>,
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account, uoStruct, context, overrides } = args;
   if (!account) {

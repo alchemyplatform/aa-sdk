@@ -68,8 +68,8 @@ export function predictLightAccountAddress({
       const combinedSalt = keccak256(
         encodeAbiParameters(
           [{ type: "address" }, { type: "uint256" }],
-          [ownerAddress, salt]
-        )
+          [ownerAddress, salt],
+        ),
       );
 
       const initCode: Hex = getLAv2ProxyBytecode(implementationAddress);
@@ -115,8 +115,8 @@ export function predictMultiOwnerLightAccountAddress({
   const combinedSalt = keccak256(
     encodeAbiParameters(
       [{ type: "address[]" }, { type: "uint256" }],
-      [ownerAddresses, salt]
-    )
+      [ownerAddresses, salt],
+    ),
   );
 
   const initCode: Hex = getLAv2ProxyBytecode(implementationAddress);
@@ -133,7 +133,7 @@ export function predictMultiOwnerLightAccountAddress({
 
 function getLAv2ProxyBytecode(implementationAddress: Address): Hex {
   return `0x603d3d8160223d3973${implementationAddress.slice(
-    2
+    2,
   )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3`;
 }
 

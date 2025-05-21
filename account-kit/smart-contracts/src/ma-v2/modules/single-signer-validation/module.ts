@@ -5,7 +5,7 @@ export const SingleSignerValidationModule = {
     const { entityId, signer } = args;
     return encodeAbiParameters(
       [{ type: "uint32" }, { type: "address" }],
-      [entityId, signer]
+      [entityId, signer],
     );
   },
 
@@ -18,7 +18,7 @@ export const SingleSignerValidationModule = {
           type: "uint32",
         },
       ],
-      [entityId]
+      [entityId],
     );
   },
 };

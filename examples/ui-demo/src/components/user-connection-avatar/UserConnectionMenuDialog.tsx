@@ -28,7 +28,7 @@ const UserConnectionDialogMenu = ({
 
 export const MenuTrigger = (
   props: UserConnectionDialogMenuTriggerProps &
-    ComponentPropsWithoutRef<"button">
+    ComponentPropsWithoutRef<"button">,
 ) => {
   return (
     <button className={props.className} onClick={() => props.toggleOpenState()}>
@@ -38,13 +38,13 @@ export const MenuTrigger = (
 };
 
 export const MenuContent = (
-  props: PropsWithChildren & ComponentPropsWithoutRef<"div">
+  props: PropsWithChildren & ComponentPropsWithoutRef<"div">,
 ) => {
   return (
     <div
       className={cn(
         "w-full bg-bg-surface-default radius-t-2 md:radius-2 md:min-w-96 p-6",
-        props.className
+        props.className,
       )}
     >
       {props.children}

@@ -44,9 +44,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
+    "typescript-template": "*"
   },
   "publishConfig": {
     "access": "public",
@@ -73,7 +71,7 @@
     "ora": "^8.0.1",
     "pathe": "^1.1.2",
     "picocolors": "^1.0.0",
-    "prettier": "^3.2.5",
+    "prettier": "3.3.3",
     "zod": "^3.22.4"
   },
   "peerDependencies": {

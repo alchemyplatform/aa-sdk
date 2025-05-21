@@ -35,7 +35,7 @@ export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
  * @returns {AlchemyAccountsConfig} An alchemy account config object containing the core and client store
  */
 export const createConfig = (
-  params: CreateConfigProps
+  params: CreateConfigProps,
 ): AlchemyAccountsConfig => {
   const {
     chain,
@@ -92,7 +92,7 @@ export const createConfig = (
         ? {
             domain: sessionConfig.domain,
           }
-        : undefined
+        : undefined,
     ),
     ssr,
     solana: params.solana,
@@ -107,8 +107,8 @@ export const createConfig = (
       storage: storage
         ? storage()
         : typeof window !== "undefined"
-        ? localStorage
-        : undefined,
+          ? localStorage
+          : undefined,
     }),
     ssr,
   });

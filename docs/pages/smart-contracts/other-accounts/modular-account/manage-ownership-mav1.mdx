@@ -92,9 +92,8 @@ const result = await modularAccountClient.updateOwners({
   args: [ownersToAdd, ownersToRemove],
 });
 
-const txHash = await modularAccountClient.waitForUserOperationTransaction(
-  result
-);
+const txHash =
+  await modularAccountClient.waitForUserOperationTransaction(result);
 ```
 
 <Markdown src="../../../../shared/smart-contracts/modular-account-client.mdx" />

@@ -41,7 +41,7 @@ import { toBytes } from "viem";
 
 const solanaSigner = signer.toSolanaSigner();
 const signedMessage = await solanaSigner.signMessage(
-  toBytes("Message as a string converted into UInt8Array")
+  toBytes("Message as a string converted into UInt8Array"),
 );
 ```
 
@@ -59,7 +59,7 @@ import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 async function signTransaction(
   signer: SolanaSigner,
   toAddress: string,
-  value: number
+  value: number,
 ) {
   const instructions = [
     SystemProgram.transfer({
@@ -81,7 +81,7 @@ async function signTransaction(
 const signedTransaction = await signTransaction(signer, "<ToAddress>", 1234);
 // Broadcast the signed transaction to the network using @solana/web3.js
 const connection = new Connection(
-  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>"
+  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
 );
 await connection.sendTransaction(signedTransaction);
 ```
@@ -99,7 +99,7 @@ import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 async function signTransaction(
   signer: SolanaSigner,
   toAddress: string,
-  value: number
+  value: number,
 ) {
   const instructions = [
     SystemProgram.transfer({
@@ -113,7 +113,7 @@ async function signTransaction(
   const transaction = await signer.addSponsorship(
     instructions,
     connection,
-    "<policyId>" // Replace with your solana sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+    "<policyId>", // Replace with your solana sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
   );
 
   // Sign the transaction using the Solana wallet
@@ -126,7 +126,7 @@ const signedTransaction = await signTransaction(signer, "<ToAddress>", 1234);
 
 // Broadcast the signed transaction to the network using @solana/web3.js
 const connection = new Connection(
-  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>" // Replace with your Alchemy API key
+  "https://solana-devnet.g.alchemy.com/v2/<API_KEY>", // Replace with your Alchemy API key
 );
 
 await connection.sendTransaction(signedTransaction);

@@ -27,7 +27,7 @@
     "react-native-safe-area-context": "4.14.0",
     "react-native-screens": "4.2.0",
     "util": "^0.12.5",
-    "viem": "^2.21.41",
+    "viem": "2.29.2",
     "zustand": "^5.0.1"
   },
   "peerDependencies": {

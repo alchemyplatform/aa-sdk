@@ -48,7 +48,7 @@ export type UseAuthenticateResult = {
  * ```
  */
 export function useAuthenticate(
-  mutationArgs?: UseAuthenticateMutationArgs
+  mutationArgs?: UseAuthenticateMutationArgs,
 ): UseAuthenticateResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
@@ -70,14 +70,14 @@ export function useAuthenticate(
       mutationKey: ["authenticate"],
       ...mutationArgs,
     },
-    queryClient
+    queryClient,
   );
 
   return {
     authenticate: ReactLogger.profiled("authenticate", authenticate),
     authenticateAsync: ReactLogger.profiled(
       "authenticateAsync",
-      authenticateAsync
+      authenticateAsync,
     ),
     isPending,
     error,

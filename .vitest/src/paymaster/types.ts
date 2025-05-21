@@ -11,12 +11,12 @@ export type Paymaster = {
     | { paymaster: Address; paymasterData: Hex };
   getPaymasterData: (
     uo: UserOperationRequest,
-    client: Client & { mode: "anvil" }
+    client: Client & { mode: "anvil" },
   ) => Promise<
     { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex }
   >;
   deployPaymasterContract: (
-    client: Client & { mode: "anvil" }
+    client: Client & { mode: "anvil" },
   ) => Promise<Address>;
   getPaymasterDetails: () => {
     salt: Hex;
