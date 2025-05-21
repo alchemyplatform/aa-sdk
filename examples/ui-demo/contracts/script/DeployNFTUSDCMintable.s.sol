@@ -11,7 +11,7 @@ contract DeployNFTUSDCMintableScript is Script {
         
         string memory name = "Smart Wallets Demo NFT USDC Mintable";
         string memory symbol = "SWDNFT";
-        string memory baseURI = "https://static.alchemyapi.io/assets/accountkit/smartwallet.png";
+        string memory baseURI = "https://static.alchemyapi.io/assets/accountkit/capy-beanie.png";
         address usdcTokenAddress = vm.parseAddress("0xf0b7B49aDa5BA5D75e24a54D35C378863b87109f"); 
 
         vm.startBroadcast();
