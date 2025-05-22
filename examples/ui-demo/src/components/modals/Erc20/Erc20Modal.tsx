@@ -23,13 +23,19 @@ type Erc20ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   accountMode: AccountMode;
+  imageUri?: string;
 };
 
 const AMOUNT_OF_USDC_TO_MINT = 10;
 const MINIMUM_USDC_BALANCE = 2;
 const nftPrice = 1;
 
-export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
+export function Erc20Modal({
+  isOpen,
+  onClose,
+  accountMode,
+  imageUri,
+}: Erc20ModalProps) {
   const [networkFee, setNetworkFee] = useState(0);
   const { address: accountAddress } = useAccount({
     type: "ModularAccountV2",
@@ -77,10 +83,12 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
     toastText: "NFT minted successfully",
   });
 
-  const { estimateGasAsync: estimateMintNftFee } =
-    useEstimateGasErc20Sponsorship({
-      clientOptions: { mode: accountMode, chain, transport },
-    });
+  const {
+    estimateGasAsync: estimateMintNftFee,
+    isEstimating: isEstimatingGas,
+  } = useEstimateGasErc20Sponsorship({
+    clientOptions: { mode: accountMode, chain, transport },
+  });
 
   const balanceFloat = parseFloat(balance ?? "0");
   const readyToBuyNft = balanceFloat >= MINIMUM_USDC_BALANCE;
@@ -214,12 +222,16 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
               {/* Image */}
               <div className="md:w-1/2 rounded-lg overflow-hidden">
                 <div className="relative aspect-square">
-                  <Image
-                    src="/images/erc-20-sponsorship.jpg"
-                    alt="NFT"
-                    fill
-                    className="object-cover rounded-lg"
-                  />
+                  {imageUri ? (
+                    <Image
+                      src={imageUri}
+                      alt="NFT"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  ) : (
+                    <LoadingIcon />
+                  )}
                 </div>
               </div>
 
@@ -319,12 +331,16 @@ export function Erc20Modal({ isOpen, onClose, accountMode }: Erc20ModalProps) {
                       <span className="text-fg-primary text-sm font-medium leading-5">
                         Network fee est.
                       </span>
-                      <span className="text-fg-primary text-sm leading-relaxed">
-                        {networkFee === 0
-                          ? "-"
-                          : networkFee < 0.01
-                          ? "< 0.01"
-                          : networkFee.toFixed(2)}
+                      <span className="text-fg-primary text-sm leading-relaxed flex">
+                        {isEstimatingGas ? (
+                          <div className="inline-block w-12 h-6 bg-gray-200 rounded animate-pulse" />
+                        ) : networkFee === 0 ? (
+                          "-"
+                        ) : networkFee < 0.01 ? (
+                          "< 0.01"
+                        ) : (
+                          networkFee.toFixed(2)
+                        )}
                         &nbsp;USDC
                       </span>
                     </div>

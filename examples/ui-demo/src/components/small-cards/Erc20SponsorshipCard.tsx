@@ -6,6 +6,10 @@ import { ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { Erc20Modal } from "../modals/Erc20";
 import { AccountMode } from "@/app/config";
+import { DEMO_NFT_USDC_MINTABLE_ADDRESS } from "@/utils/constants";
+import { useReadNFTUri } from "@/hooks/useReadNFTUri";
+import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
+import { LoadingIcon } from "../icons/loading";
 
 export const Erc20SponsorshipCard = ({
   accountMode,
@@ -13,16 +17,30 @@ export const Erc20SponsorshipCard = ({
   accountMode: AccountMode;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
+  const transport = alchemy({
+    rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
+  });
+
+  const { uri } = useReadNFTUri({
+    contractAddress: DEMO_NFT_USDC_MINTABLE_ADDRESS,
+    clientOptions: { mode: accountMode, chain, transport },
+  });
 
   const imageSlot = (
     <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
-      <Image
-        src="/images/erc-20-sponsorship.jpg"
-        alt="Cute character with hat"
-        width={300}
-        height={300}
-        className="w-full h-full object-cover object-[0_40%]"
-      />
+      {uri ? (
+        <Image
+          src={uri}
+          alt="Cute character with hat"
+          width={300}
+          height={300}
+          className="w-full h-full object-cover object-[0_40%]"
+          priority
+        />
+      ) : (
+        <LoadingIcon />
+      )}
     </div>
   );
 
@@ -67,6 +85,7 @@ export const Erc20SponsorshipCard = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         accountMode={accountMode}
+        imageUri={uri}
       />
     </>
   );
