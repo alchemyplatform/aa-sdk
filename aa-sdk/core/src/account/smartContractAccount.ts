@@ -46,6 +46,21 @@ export enum DeploymentState {
   DEPLOYED = "0x2",
 }
 
+export type SignatureRequest =
+  | {
+      type: "personal_sign";
+      data: SignableMessage;
+    }
+  | {
+      type: "eth_signTypedData_v4";
+      data: TypedDataDefinition;
+    };
+
+export type SigningMethods = {
+  prepareSign: (request: SignatureRequest) => Promise<SignatureRequest>;
+  formatSign: (signature: Hex) => Promise<Hex>;
+};
+
 export type GetEntryPointFromAccount<
   TAccount extends SmartContractAccount | undefined,
   TAccountOverride extends SmartContractAccount = SmartContractAccount,
@@ -104,7 +119,7 @@ export const isSmartAccountWithSigner = (
 // [!region SmartContractAccount]
 export type SmartContractAccount<
   Name extends string = string,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex | Promise<Hex>;
@@ -114,9 +129,9 @@ export type SmartContractAccount<
   signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
   signTypedDataWith6492: <
     const typedData extends TypedData | Record<string, unknown>,
-    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
   >(
-    typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
   ) => Promise<Hex>;
   encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getAccountNonce(nonceKey?: bigint): Promise<bigint>;
@@ -126,7 +141,7 @@ export type SmartContractAccount<
   getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
-};
+} & (SigningMethods | {});
 // [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
