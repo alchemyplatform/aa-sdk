@@ -4,6 +4,9 @@ import {
   erc7677Middleware,
   LocalAccountSigner,
   createSmartAccountClient,
+  isValidRequest,
+  InvalidUserOperationError,
+  deepHexlify,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
@@ -50,9 +53,9 @@ import {
 } from "@account-kit/smart-contracts/experimental";
 import {
   createLightAccountClient,
-  createModularAccountV2Client,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
+import { createModularAccountV2Client } from "./client.js";
 import { local070Instance } from "~test/instances.js";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
@@ -61,7 +64,10 @@ import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
-import { entryPoint07Abi } from "viem/account-abstraction";
+import {
+  entryPoint07Abi,
+  type ToWebAuthnAccountParameters,
+} from "viem/account-abstraction";
 import {
   alchemy,
   arbitrumSepolia,
@@ -75,6 +81,8 @@ import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 describe("MA v2 Tests", async () => {
   const instance = local070Instance;
   const isValidSigSuccess = "0x1626ba7e";
+  const isValidWebAuthnSigSuccess =
+    "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001c66a718123aa330c0d00439ed337bc6721c20298be9fb50bb0e8723b6340a7dc65bc37d891cb278953722d0a93f6daf784dde4e1396e8f57acc64c8d1ea9a602000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000867b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a223150314f474a45794a7a4132524a5f4a34524759787a6b574730774246716d69334d333648456b67427645222c226f726967696e223a22687474703a2f2f6c6f63616c686f73743a35313733222c2263726f73734f726967696e223a66616c73657d0000000000000000000000000000000000000000000000000000";
 
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions> &
@@ -93,6 +101,152 @@ describe("MA v2 Tests", async () => {
   const sessionKey: SmartAccountSigner = new LocalAccountSigner(
     accounts.unfundedAccountOwner,
   );
+
+  const publicKey = {
+    "0": 48,
+    "1": 89,
+    "2": 48,
+    "3": 19,
+    "4": 6,
+    "5": 7,
+    "6": 42,
+    "7": 134,
+    "8": 72,
+    "9": 206,
+    "10": 61,
+    "11": 2,
+    "12": 1,
+    "13": 6,
+    "14": 8,
+    "15": 42,
+    "16": 134,
+    "17": 72,
+    "18": 206,
+    "19": 61,
+    "20": 3,
+    "21": 1,
+    "22": 7,
+    "23": 3,
+    "24": 66,
+    "25": 0,
+    "26": 4,
+    "27": 77,
+    "28": 74,
+    "29": 167,
+    "30": 46,
+    "31": 217,
+    "32": 7,
+    "33": 53,
+    "34": 40,
+    "35": 195,
+    "36": 14,
+    "37": 64,
+    "38": 77,
+    "39": 119,
+    "40": 201,
+    "41": 49,
+    "42": 179,
+    "43": 249,
+    "44": 220,
+    "45": 38,
+    "46": 159,
+    "47": 154,
+    "48": 15,
+    "49": 105,
+    "50": 254,
+    "51": 119,
+    "52": 195,
+    "53": 45,
+    "54": 250,
+    "55": 63,
+    "56": 170,
+    "57": 53,
+    "58": 142,
+    "59": 97,
+    "60": 37,
+    "61": 239,
+    "62": 119,
+    "63": 80,
+    "64": 217,
+    "65": 237,
+    "66": 76,
+    "67": 99,
+    "68": 143,
+    "69": 174,
+    "70": 121,
+    "71": 14,
+    "72": 88,
+    "73": 151,
+    "74": 36,
+    "75": 57,
+    "76": 57,
+    "77": 204,
+    "78": 182,
+    "79": 14,
+    "80": 82,
+    "81": 141,
+    "82": 137,
+    "83": 32,
+    "84": 204,
+    "85": 244,
+    "86": 81,
+    "87": 70,
+    "88": 239,
+    "89": 210,
+    "90": 109,
+  };
+
+  const response = {
+    authenticatorAttachment: "platform",
+    clientExtensionResults: {},
+    id: "td1jv8YThj_WsRpD7I7Y0UX7h7nilwhiOL-RxzjBsS8",
+    rawId: "td1jv8YThj_WsRpD7I7Y0UX7h7nilwhiOL-RxzjBsS8",
+    response: {
+      authenticatorData: "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA",
+      clientDataJSON:
+        "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiRWQ1dlVEMVdCcmdPOFhPbzlzNjdBUHVaNkc0Z1ZaR0dnS0Jkd2pQRlhhUSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+      signature:
+        "MEUCIARF5zemXQ034TvN8TYVu1qerivMNBX4pQliG7Yjhjr4AiEAxspHdeCMOzE18gqrBdQ_nbIiTrMgFznJzaYn-bKG54o",
+      userHandle: "dXNlcklEMTIzNDU2",
+    },
+    type: "public-key",
+  } as const;
+
+  const credential = {
+    id: response.id,
+    publicKey:
+      "0x3059301306072a8648ce3d020106082a8648ce3d030107034200044d4aa72ed9073528c30e404d77c931b3f9dc269f9a0f69fe77c32dfa3faa358e6125ef7750d9ed4c638fae790e5897243939ccb60e528d8920ccf45146efd26d",
+  } as const;
+
+  function base64urlToUint8Array(base64url: string): Uint8Array {
+    const base64 = base64url
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .padEnd(Math.ceil(base64url.length / 4) * 4, "=");
+
+    const binaryString = atob(base64);
+    return Uint8Array.from([...binaryString].map((char) => char.charCodeAt(0)));
+  }
+
+  const webAuthnAccountParams: ToWebAuthnAccountParameters = {
+    credential,
+    getFn() {
+      return Promise.resolve({
+        response: {
+          authenticatorData: base64urlToUint8Array(
+            response.response.authenticatorData
+          ),
+          clientDataJSON: base64urlToUint8Array(
+            response.response.clientDataJSON
+          ),
+          signature: base64urlToUint8Array(response.response.signature),
+        },
+      } as any);
+    },
+    rpId: "",
+  } as const;
+
+  console.log(webAuthnAccountParams);
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -125,6 +279,75 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount,
     );
+  });
+
+  it.only("sends a simple UO with webauthn account", async () => {
+    const provider = await givenConnectedProviderNoSigner({
+      params: webAuthnAccountParams,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // send UO with webauthn gas estimator
+    const builtUO = await provider.buildUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    const request = deepHexlify(builtUO);
+    if (!isValidRequest(request)) {
+      throw new InvalidUserOperationError(builtUO);
+    }
+
+    const uoHash = provider.account
+      .getEntryPoint()
+      .getUserOperationHash(request);
+
+    console.log("uoHash", uoHash);
+
+    let signedUOHash = await provider.account.signUserOperationHash(uoHash);
+
+    const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
+
+    signedUO.signature = signedUOHash;
+
+    await provider.sendRawUserOperation(
+      signedUO,
+      provider.account.getEntryPoint().address
+    );
+  });
+
+  it("successfully sign + validate a message, for WebAuthn account", async () => {
+    const provider = await givenConnectedProviderNoSigner({
+      params: webAuthnAccountParams,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    const message = "0xdeadbeef";
+
+    let signature = await provider.signMessage({ message });
+
+    console.log("signature", signature);
+
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature])
+    ).resolves.toEqual(isValidWebAuthnSigSuccess);
   });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
@@ -1769,6 +1992,36 @@ describe("MA v2 Tests", async () => {
   });
 
   let salt = 1n;
+
+  const givenConnectedProviderNoSigner = async ({
+    signerEntity,
+    accountAddress,
+    paymasterMiddleware,
+    params,
+  }: {
+    signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    params: ToWebAuthnAccountParameters;
+  }) =>
+    createModularAccountV2Client({
+      chain: instance.chain,
+      accountAddress,
+      signerEntity,
+      params,
+      mode: "webauthn",
+      transport: custom(instance.getClient()),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+        ? erc7677Middleware()
+        : {}),
+      salt: salt++,
+    });
 
   const givenConnectedProvider = async ({
     signer,

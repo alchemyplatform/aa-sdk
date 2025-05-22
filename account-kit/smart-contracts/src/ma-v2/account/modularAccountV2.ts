@@ -25,9 +25,12 @@ import {
   type SignerEntity,
   type ModularAccountV2,
   createMAv2Base,
+  type ModularAccountV2NoSigner,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
+import { parsePublicKey } from "webauthn-p256";
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
@@ -54,12 +57,35 @@ export type CreateModularAccountV2Params<
       }
   );
 
+// currently the only ModularAccountV2 mode that doesn't require a signer is "webauthn"
+export type CreateModularAccountV2ParamsNoSigner<
+  TTransport extends Transport = Transport
+> = Pick<
+  ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
+  "transport" | "chain" | "accountAddress"
+> & {
+  mode: "webauthn";
+  params: ToWebAuthnAccountParameters;
+  entryPoint?: EntryPointDef<"0.7.0", Chain>;
+  deferredAction?: Hex;
+  signerEntity?: SignerEntity;
+  salt?: bigint;
+  factoryAddress?: Address;
+  initCode?: Hex;
+};
+
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
   config: CreateModularAccountV2Params<TTransport, TSigner>,
 ): Promise<ModularAccountV2<TSigner>>;
+
+export async function createModularAccountV2<
+  TTransport extends Transport = Transport
+>(
+  config: CreateModularAccountV2ParamsNoSigner<TTransport>
+): Promise<ModularAccountV2NoSigner>;
 
 /**
  * Creates a ModularAccount V2 account, with the mode depending on the provided "mode" field.
@@ -90,16 +116,20 @@ export async function createModularAccountV2<
  * });
  * ```
  *
- * @param {CreateModularAccountV2Params} config Configuration parameters for creating a Modular Account V2.
- * @returns {Promise<ModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
+ * @param {CreateModularAccountV2Params | CreateModularAccountV2ParamsNoSigner} config Configuration parameters for creating a Modular Account V2.
+ * @returns {Promise<ModularAccountV2 | ModularAccountV2NoSigner>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
  */
-export async function createModularAccountV2(
-  config: CreateModularAccountV2Params,
-): Promise<ModularAccountV2> {
+export async function createModularAccountV2<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(
+  config:
+    | CreateModularAccountV2Params<TTransport, TSigner>
+    | CreateModularAccountV2ParamsNoSigner<TTransport>
+): Promise<ModularAccountV2<TSigner> | ModularAccountV2NoSigner> {
   const {
     transport,
     chain,
-    signer,
     accountAddress: _accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     signerEntity = {
@@ -110,12 +140,59 @@ export async function createModularAccountV2(
     deferredAction,
   } = config;
 
+  const params = "params" in config ? config.params : undefined;
+
+  const signer = "signer" in config ? config.signer : undefined;
+
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
+
   const accountFunctions = await (async () => {
     switch (config.mode) {
+      case "webauthn": {
+        if (!params) throw new Error("Missing params for MAV2 webauthn mode");
+        const publicKey = params.credential.publicKey;
+        const { x, y } = parsePublicKey(publicKey);
+        const {
+          salt = 0n,
+          factoryAddress = getDefaultMAV2FactoryAddress(chain),
+          initCode,
+        } = config;
+
+        const getAccountInitCode = async () => {
+          if (initCode) {
+            return initCode;
+          }
+
+          return concatHex([
+            factoryAddress,
+            encodeFunctionData({
+              abi: accountFactoryAbi,
+              functionName: "createWebAuthnAccount",
+              args: [x, y, salt, entityId],
+            }),
+          ]);
+        };
+
+        const accountAddress = await getAccountAddress({
+          client,
+          entryPoint,
+          accountAddress: _accountAddress,
+          getAccountInitCode,
+        });
+
+        return {
+          getAccountInitCode,
+          accountAddress,
+        };
+      }
       case "7702": {
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
         };
+        if (!signer) throw new Error("Missing signer for MAV2 mode 7022");
         const signerAddress = await signer.getAddress();
         const accountAddress = _accountAddress ?? signerAddress;
         if (
@@ -138,6 +215,7 @@ export async function createModularAccountV2(
       }
       case "default":
       case undefined: {
+        if (!signer) throw new Error("Missing signer for MAV2 mode default");
         const {
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
@@ -157,7 +235,7 @@ export async function createModularAccountV2(
             encodeFunctionData({
               abi: accountFactoryAbi,
               functionName: "createSemiModularAccount",
-              args: [signerAddress, salt],
+              args: [await signer.getAddress(), salt],
             }),
           ]);
         };
@@ -182,8 +260,21 @@ export async function createModularAccountV2(
     }
   })();
 
-  return createMAv2Base({
-    source: "ModularAccountV2",
+  if (!signer) {
+    return await createMAv2Base({
+      source: "ModularAccountV2", // TO DO: remove need to pass in source?
+      transport,
+      chain,
+      entryPoint,
+      signerEntity,
+      deferredAction,
+      params: params as ToWebAuthnAccountParameters, // this may fail if params is not provided
+      ...accountFunctions,
+    });
+  }
+
+  return await createMAv2Base({
+    source: "ModularAccountV2", // TO DO: remove need to pass in source?
     transport,
     chain,
     signer,
