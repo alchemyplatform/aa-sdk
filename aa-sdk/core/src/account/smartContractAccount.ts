@@ -120,29 +120,28 @@ export const isSmartAccountWithSigner = (
 export type SmartContractAccount<
   Name extends string = string,
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
-> = LocalAccount<Name> &
-  Partial<SigningMethods> & {
-    source: Name;
-    getDummySignature: () => Hex | Promise<Hex>;
-    encodeExecute: (tx: AccountOp) => Promise<Hex>;
-    encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
-    signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
-    signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
-    signTypedDataWith6492: <
-      const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
-    >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
-    ) => Promise<Hex>;
-    encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
-    getAccountNonce(nonceKey?: bigint): Promise<bigint>;
-    getInitCode: () => Promise<Hex>;
-    isAccountDeployed: () => Promise<boolean>;
-    getFactoryAddress: () => Promise<Address>;
-    getFactoryData: () => Promise<Hex>;
-    getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
-    getImplementationAddress: () => Promise<NullAddress | Address>;
-  };
+> = LocalAccount<Name> & {
+  source: Name;
+  getDummySignature: () => Hex | Promise<Hex>;
+  encodeExecute: (tx: AccountOp) => Promise<Hex>;
+  encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
+  signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
+  signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
+  signTypedDataWith6492: <
+    const typedData extends TypedData | Record<string, unknown>,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+  >(
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+  ) => Promise<Hex>;
+  encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
+  getAccountNonce(nonceKey?: bigint): Promise<bigint>;
+  getInitCode: () => Promise<Hex>;
+  isAccountDeployed: () => Promise<boolean>;
+  getFactoryAddress: () => Promise<Address>;
+  getFactoryData: () => Promise<Hex>;
+  getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
+  getImplementationAddress: () => Promise<NullAddress | Address>;
+} & (SigningMethods | {});
 // [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
