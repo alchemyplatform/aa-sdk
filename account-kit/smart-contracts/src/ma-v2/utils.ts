@@ -315,3 +315,7 @@ export const buildDeferredActionDigest = ({
   ]);
   return encodedData;
 };
+
+export const assertNeverSignatureRequestType = (): never => {
+  throw new Error("Invalid signature request type ");
+};

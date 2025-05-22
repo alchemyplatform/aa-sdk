@@ -19,8 +19,12 @@ import {
   getDefaultSingleSignerValidationModuleAddress,
   SignatureType,
 } from "../utils.js";
+import {
+  packUOSignature,
+  pack1271Signature,
+  assertNeverSignatureRequestType,
+} from "../../utils.js";
 
-import { pack1271Signature, packUOSignature } from "../../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
@@ -57,7 +61,22 @@ export const singleSignerMessageSigner = (
     prepareSign: async (
       request: SignatureRequest
     ): Promise<SignatureRequest> => {
-      let ret: SignatureRequest = {
+      let hash;
+
+      switch (request.type) {
+        case "personal_sign":
+          hash = hashMessage(request.data);
+          break;
+
+        case "eth_signTypedData_v4":
+          hash = await hashTypedData(request.data);
+          break;
+
+        default:
+          assertNeverSignatureRequestType();
+      }
+
+      return {
         type: "eth_signTypedData_v4",
         data: {
           domain: {
@@ -70,21 +89,11 @@ export const singleSignerMessageSigner = (
             ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
           },
           message: {
-            hash: "",
+            hash,
           },
           primaryType: "ReplaySafeHash",
         },
       };
-
-      if (request.type === "personal_sign") {
-        ret.data.message.hash = hashMessage(request.data);
-      } else if (request.type === "eth_signTypedData_v4") {
-        ret.data.message.hash = hashTypedData(request.data);
-      } else {
-        throw new Error(`Unsupported signature request type`);
-      }
-
-      return ret;
     },
     formatSign: async (signature: Hex) => {
       return pack1271Signature({
