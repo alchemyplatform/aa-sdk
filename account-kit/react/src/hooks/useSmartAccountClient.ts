@@ -88,7 +88,6 @@ export function useSmartAccountClient({
 
   const eoaClient = useMemo(() => {
     if (!isConnected) return null;
-    console.warn("EOA is connected, will not return an SCA client");
 
     return {
       client: undefined,
