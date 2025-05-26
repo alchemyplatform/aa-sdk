@@ -41,14 +41,14 @@ export const bigIntMin = (...args: bigint[]): bigint => {
 export const bigIntClamp = (
   value: BigNumberish,
   lower: BigNumberish | null | undefined,
-  upper: BigNumberish | null | undefined
+  upper: BigNumberish | null | undefined,
 ): bigint => {
   lower = lower != null ? BigInt(lower) : null;
   upper = upper != null ? BigInt(upper) : null;
 
   if (upper != null && lower != null && upper < lower) {
     throw new Error(
-      `invalid range: upper bound ${upper} is less than lower bound ${lower}`
+      `invalid range: upper bound ${upper} is less than lower bound ${lower}`,
     );
   }
 
@@ -79,11 +79,11 @@ export enum RoundingMode {
 export const bigIntMultiply = (
   base: BigNumberish,
   multiplier: Multiplier["multiplier"],
-  roundingMode: RoundingMode = RoundingMode.ROUND_UP
+  roundingMode: RoundingMode = RoundingMode.ROUND_UP,
 ) => {
   if (!isMultiplier({ multiplier })) {
     throw new Error(
-      "bigIntMultiply requires a multiplier validated number as the second argument"
+      "bigIntMultiply requires a multiplier validated number as the second argument",
     );
   }
 

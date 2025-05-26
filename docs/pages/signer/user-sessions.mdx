@@ -1,9 +1,8 @@
 ---
 title: Manage user sessions
 description: Learn how to configure and leverage sessions for you users with the Alchemy Signer
+slug: wallets/signer/user-sessions
 ---
-
-# User sessions
 
 By default, `AlchemyWebSigner` user sessions are cached in `localStorage` for 15 minutes.
 
@@ -13,7 +12,7 @@ You can check if the user has an active session with the following command:
 
 <CodeBlocks>
 
-```ts twoslash [getAuthDetails.ts]
+```ts twoslash getAuthDetails.ts
 import { signer } from "./signer";
 
 // NOTE: this method throws if there is no authenticated user

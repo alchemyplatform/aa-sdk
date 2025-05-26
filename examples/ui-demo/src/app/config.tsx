@@ -1,9 +1,9 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
-import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
+import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
 import { walletConnect } from "wagmi/connectors";
 
@@ -79,9 +79,18 @@ export const DEFAULT_CONFIG: Config = {
 };
 
 export const queryClient = new QueryClient();
+const solanaConnection = new Connection(
+  `${
+    (global || window)?.location?.origin || "http://localhost:3000"
+  }/api/rpc/solana`,
+  {
+    wsEndpoint: "wss://api.devnet.solana.com",
+    commitment: "confirmed",
+  },
+);
 
-export const alchemyConfig = () =>
-  createConfig(
+export const alchemyConfig = () => {
+  return createConfig(
     {
       transport: alchemy({ rpcUrl: "/api/rpc" }),
       chain: arbitrumSepolia,
@@ -92,17 +101,22 @@ export const alchemyConfig = () =>
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
         {
-          chain: odyssey,
-          transport: splitOdysseyTransport,
+          chain: baseSepolia,
+          transport: alchemy({ rpcUrl: "/api/rpc-base-sepolia" }),
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
       ],
       ssr: true,
-      connectors: [
-        walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" }),
-      ],
+      connectors:
+        typeof window === "undefined"
+          ? undefined
+          : [walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" })],
       storage: cookieStorage,
       enablePopupOauth: true,
+      solana: {
+        connection: solanaConnection,
+        policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,
+      },
     },
     {
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
@@ -124,5 +138,7 @@ export const alchemyConfig = () =>
           />
         ),
       },
-    }
+      uiMode: "embedded",
+    },
   );
+};

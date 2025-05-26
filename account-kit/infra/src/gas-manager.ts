@@ -1,4 +1,4 @@
-import type { Address, Chain } from "viem";
+import type { Address, Chain, Hex } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -65,4 +65,42 @@ export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
     default:
       throw new Error(`Unsupported chain: ${chain}`);
   }
+};
+
+export const PermitTypes = {
+  EIP712Domain: [
+    { name: "name", type: "string" },
+    { name: "version", type: "string" },
+    { name: "chainId", type: "uint256" },
+    { name: "verifyingContract", type: "address" },
+  ],
+  Permit: [
+    { name: "owner", type: "address" },
+    { name: "spender", type: "address" },
+    { name: "value", type: "uint256" },
+    { name: "nonce", type: "uint256" },
+    { name: "deadline", type: "uint256" },
+  ],
+} as const;
+
+export const EIP712NoncesAbi = [
+  "function nonces(address owner) external view returns (uint)",
+  "function decimals() public view returns (uint8)",
+  "function balanceOf(address owner) external view returns (uint256)",
+  "function allowance(address owner, address spender) external view returns (uint256)",
+] as const;
+
+export type PermitMessage = {
+  owner: Hex;
+  spender: Hex;
+  value: bigint;
+  nonce: bigint;
+  deadline: bigint;
+};
+
+export type PermitDomain = {
+  name: string;
+  version: string;
+  chainId: bigint;
+  verifyingContract: Hex;
 };

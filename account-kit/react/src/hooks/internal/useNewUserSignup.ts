@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSigner } from "../useSigner.js";
 
-export function useNewUserSignup(onSignup: () => void, enabled?: boolean) {
+export function useNewUserSignup(onSignup: () => void, enabled = true) {
   const hasHandled = useRef(false);
   const [isNewUser, setIsNewUser] = useState(false);
   const signer = useSigner();

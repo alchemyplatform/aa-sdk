@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+### Bug Fixes
+
+- let outter transport dictate retries ([#1625](https://github.com/alchemyplatform/aa-sdk/issues/1625)) ([6d291bd](https://github.com/alchemyplatform/aa-sdk/commit/6d291bd83e09e0b4e98baf1608e9451d3fba792d))
+
+# [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
+
+### Features
+
+- support for latest viem version ([#1619](https://github.com/alchemyplatform/aa-sdk/issues/1619)) ([f894102](https://github.com/alchemyplatform/aa-sdk/commit/f894102e113154e40b2f20ae998922764c628d6e))
+
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Features
+
+- support chain agnostic rpc url override ([#1613](https://github.com/alchemyplatform/aa-sdk/issues/1613)) ([6e4eee6](https://github.com/alchemyplatform/aa-sdk/commit/6e4eee668bf7c6c0f9aa4b43df67bd1e36b43d4f))
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+### Bug Fixes
+
+- eip1193 compatible eth_signTypedData_v4 calls + ethers compatibility ([#1592](https://github.com/alchemyplatform/aa-sdk/issues/1592)) ([838a4fa](https://github.com/alchemyplatform/aa-sdk/commit/838a4fa5c94b78fd476f2c7ef8702ffc89c29cfa))
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+### Bug Fixes
+
+- make eth_signTypedData_v4 compliant w/ EIP1193 ([#1444](https://github.com/alchemyplatform/aa-sdk/issues/1444)) ([#1445](https://github.com/alchemyplatform/aa-sdk/issues/1445)) ([301d3b7](https://github.com/alchemyplatform/aa-sdk/commit/301d3b7e824466fa5c23fef19cb4427afc562524))
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add erc20 to alchemyGasManagerMiddleware ([#1574](https://github.com/alchemyplatform/aa-sdk/issues/1574)) ([8a0ce97](https://github.com/alchemyplatform/aa-sdk/commit/8a0ce97d5464930a2c21db9aed9b7273d57c783f))
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 # [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
 
 **Note:** Version bump only for package @aa-sdk/core

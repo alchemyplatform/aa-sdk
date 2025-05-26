@@ -1,9 +1,8 @@
 ---
 title: Passkey Login Authentication
 description: How to implement Passkey Login authentication in your React app
+slug: wallets/react/login-methods/passkey-login
 ---
-
-# Passkey Login Authentication
 
 If a user has added a passkey to their account, or they initially signed up with a passkey, you can easily authenticate them using that passkey. This provides a secure, passwordless authentication experience.
 
@@ -55,7 +54,7 @@ export const config = createConfig(
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
   },
-  uiConfig
+  uiConfig,
 );
 ```
 
@@ -99,7 +98,7 @@ const handlePasskeyLogin = (email: string) => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 ```
@@ -128,7 +127,7 @@ const handlePasskeyOnlyLogin = () => {
       onError: (error) => {
         // Handle error
       },
-    }
+    },
   );
 };
 ```

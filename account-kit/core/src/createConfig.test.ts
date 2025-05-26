@@ -11,7 +11,7 @@ describe("createConfig", () => {
   it("should set the session config expiration time", async () => {
     const config = await givenConfig();
     expect(config.store.getState().config.sessionConfig?.expirationTimeMs).toBe(
-      5000
+      5000,
     );
   });
 

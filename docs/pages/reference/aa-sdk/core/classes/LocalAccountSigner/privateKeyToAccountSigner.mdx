@@ -19,7 +19,8 @@ import { LocalAccountSigner } from "@aa-sdk/core";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { generatePrivateKey } from "viem";
 
-const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+const signer =
+  LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 ```
 
 ## Parameters

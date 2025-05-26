@@ -2,7 +2,7 @@ import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
 import { switchChain, getChainId } from "@wagmi/core";
 import type { Chain } from "viem";
 import { ChainNotFoundError } from "../errors.js";
-import type { AlchemyAccountsConfig } from "../types.js";
+import { type AlchemyAccountsConfig } from "../types.js";
 
 /**
  * Allows you to change the current chain in the core store. Note, this chain

@@ -44,6 +44,11 @@ export {
   openlootSepolia,
   gensynTestnet,
   riseTestnet,
+  storyMainnet,
+  storyAeneid,
+  celoAlfajores,
+  celoMainnet,
+  teaSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";

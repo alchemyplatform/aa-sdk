@@ -14,6 +14,8 @@ export type * from "./actions/getSignerStatus.js";
 export { getSignerStatus } from "./actions/getSignerStatus.js";
 export type * from "./actions/getSmartAccountClient.js";
 export { getSmartAccountClient } from "./actions/getSmartAccountClient.js";
+export type * from "./actions/getSolanaConnection.js";
+export { getSolanaConnection } from "./actions/getSolanaConnection.js";
 export type * from "./actions/getUser.js";
 export { getUser } from "./actions/getUser.js";
 export type * from "./actions/reconnect.js";
@@ -32,24 +34,28 @@ export type * from "./actions/watchSignerStatus.js";
 export { watchSignerStatus } from "./actions/watchSignerStatus.js";
 export type * from "./actions/watchSmartAccountClient.js";
 export { watchSmartAccountClient } from "./actions/watchSmartAccountClient.js";
+export type * from "./actions/watchSolanaConnection.js";
+export { watchSolanaConnection } from "./actions/watchSolanaConnection.js";
 export type * from "./actions/watchUser.js";
 export { watchUser } from "./actions/watchUser.js";
 export type * from "./createConfig.js";
-export { DEFAULT_IFRAME_CONTAINER_ID, createConfig } from "./createConfig.js";
+export { createConfig, DEFAULT_IFRAME_CONTAINER_ID } from "./createConfig.js";
+export type * from "./environments/web/createSigner.js";
+export { createSigner as internalCreateWebSigner } from "./environments/web/createSigner.js";
 export { ClientOnlyPropertyError } from "./errors.js";
 export { hydrate } from "./hydrate.js";
 export {
-  defaultAccountState,
   convertSignerStatusToState,
   createDefaultAccountState,
+  defaultAccountState,
 } from "./store/store.js";
 export type {
-  SignerStatus,
-  StoreState,
-  StoredState,
-  Store,
   AccountState,
   ClientStoreConfig,
+  SignerStatus,
+  Store,
+  StoredState,
+  StoreState,
 } from "./store/types.js";
 export type * from "./types.js";
 export {
@@ -62,16 +68,6 @@ export {
 // Accounts
 export type * from "@account-kit/smart-contracts";
 export {
-  MultiOwnerPlugin,
-  MultisigPlugin,
-  MultisigPluginAbi,
-  MultisigPluginExecutionFunctionAbi,
-  SessionKeyAccessListType,
-  SessionKeyPermissionsBuilder,
-  SessionKeyPlugin,
-  SessionKeyPluginAbi,
-  SessionKeyPluginExecutionFunctionAbi,
-  SessionKeySigner,
   accountLoupeActions,
   createLightAccount,
   createMultiOwnerModularAccount as createModularAccount,
@@ -81,11 +77,21 @@ export {
   getMSCAUpgradeToData,
   lightAccountClientActions,
   multiOwnerLightAccountClientActions,
+  MultiOwnerPlugin,
   multiOwnerPluginActions,
+  MultisigPlugin,
+  MultisigPluginAbi,
   multisigPluginActions,
+  MultisigPluginExecutionFunctionAbi,
   multisigSignatureMiddleware,
   pluginManagerActions,
+  SessionKeyAccessListType,
+  SessionKeyPermissionsBuilder,
+  SessionKeyPlugin,
+  SessionKeyPluginAbi,
   sessionKeyPluginActions,
+  SessionKeyPluginExecutionFunctionAbi,
+  SessionKeySigner,
 } from "@account-kit/smart-contracts";
 
 // Infra

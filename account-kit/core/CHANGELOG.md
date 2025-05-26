@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
+
+### Features
+
+- support for latest viem version ([#1619](https://github.com/alchemyplatform/aa-sdk/issues/1619)) ([f894102](https://github.com/alchemyplatform/aa-sdk/commit/f894102e113154e40b2f20ae998922764c628d6e))
+
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- don't use unconfigured chain during hydration ([#1608](https://github.com/alchemyplatform/aa-sdk/issues/1608)) ([b31947d](https://github.com/alchemyplatform/aa-sdk/commit/b31947d1cf7f74c79b94377791ed5a4dfae27e4f))
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- export create signer ([#1577](https://github.com/alchemyplatform/aa-sdk/issues/1577)) ([5325b31](https://github.com/alchemyplatform/aa-sdk/commit/5325b313ade16aecce6dc4a2d381a0e462dc0e38))
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+### Features
+
+- move to use the alchemy store for web3 communication ([#1562](https://github.com/alchemyplatform/aa-sdk/issues/1562)) ([f86a815](https://github.com/alchemyplatform/aa-sdk/commit/f86a815412cb532de12a405b1cfb143da2e22b77))
+
 # [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
 
 **Note:** Version bump only for package @account-kit/core

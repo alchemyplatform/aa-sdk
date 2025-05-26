@@ -16,9 +16,6 @@
 [submodule "examples/contracts/AccountKitToken/lib/openzeppelin-contracts"]
 	path = examples/contracts/AccountKitToken/lib/openzeppelin-contracts
 	url = https://github.com/openzeppelin/openzeppelin-contracts
-[submodule "examples/embedded-accounts-quickstart"]
-	path = examples/embedded-accounts-quickstart
-	url = https://github.com/alchemyplatform/embedded-accounts-quickstart
 [submodule "examples/ui-demo/contracts/lib/openzeppelin-contracts"]
 	path = examples/ui-demo/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts

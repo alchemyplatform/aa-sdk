@@ -38,7 +38,7 @@ export class SolanaSigner {
    * @returns {Promise<Transaction | VersionedTransaction >} The transaction with the signature added
    */
   async addSignature(
-    transaction: Transaction | VersionedTransaction
+    transaction: Transaction | VersionedTransaction,
   ): Promise<Transaction | VersionedTransaction> {
     const user = this.alchemyClient.getUser();
     if (!user) {
@@ -53,12 +53,12 @@ export class SolanaSigner {
     const messageToSign = this.getMessageToSign(transaction);
     const signature = await this.alchemyClient.signRawMessage(
       messageToSign,
-      "SOLANA"
+      "SOLANA",
     );
 
     transaction.addSignature(
       fromKey,
-      Buffer.from(toBytes(this.formatSignatureForSolana(signature)))
+      Buffer.from(toBytes(this.formatSignatureForSolana(signature))),
     );
     return transaction;
   }
@@ -82,25 +82,25 @@ export class SolanaSigner {
     const messageToSign = toHex(message);
     const signature = await this.alchemyClient.signRawMessage(
       messageToSign,
-      "SOLANA"
+      "SOLANA",
     );
 
     return toBytes(this.formatSignatureForSolana(signature));
   }
 
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection,
-    version?: "versioned"
+    version?: "versioned",
   ): Promise<VersionedTransaction>;
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection,
-    version?: "legacy"
+    version?: "legacy",
   ): Promise<Transaction>;
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
-    connection: Connection
+    connection: Connection,
   ): Promise<VersionedTransaction>;
 
   /**
@@ -111,10 +111,10 @@ export class SolanaSigner {
    * @param {"versioned" | "legacy"} [version] - The version of the transaction
    * @returns {Promise<Transaction | VersionedTransaction>} The transfer transaction
    */
-  async createTransfer(
+  async createTransaction(
     instructions: TransactionInstruction[],
     connection: Connection,
-    version?: string
+    version?: string,
   ): Promise<Transaction | VersionedTransaction> {
     const blockhash = (await connection.getLatestBlockhash()).blockhash;
 
@@ -124,7 +124,7 @@ export class SolanaSigner {
       // Legacy transaction
       transferTransaction = instructions.reduce(
         (tx, instruction) => tx.add(instruction),
-        new Transaction()
+        new Transaction(),
       );
 
       // Get a recent block hash
@@ -157,7 +157,7 @@ export class SolanaSigner {
   async addSponsorship(
     instructions: TransactionInstruction[],
     connection: Connection,
-    policyId: string
+    policyId: string,
   ): Promise<VersionedTransaction> {
     const { blockhash } = await connection.getLatestBlockhash({
       commitment: "finalized",
@@ -170,7 +170,7 @@ export class SolanaSigner {
     }).compileToV0Message();
     const versionedTransaction = new VersionedTransaction(message);
     const serializedTransaction = Buffer.from(
-      versionedTransaction.serialize()
+      versionedTransaction.serialize(),
     ).toString("base64");
     const body = JSON.stringify({
       id: crypto?.randomUUID() ?? Math.floor(Math.random() * 1000000),
@@ -195,17 +195,17 @@ export class SolanaSigner {
     const response = await fetch(
       // TODO: Use the connection??
       connection.rpcEndpoint,
-      options
+      options,
     );
     const jsonResponse = await response.json();
     if (!jsonResponse?.result?.serializedTransaction)
       throw new Error(
         `Response doesn't include the serializedTransaction ${JSON.stringify(
-          jsonResponse
-        )}`
+          jsonResponse,
+        )}`,
       );
     return VersionedTransaction.deserialize(
-      decodeBase64(jsonResponse.result.serializedTransaction)
+      decodeBase64(jsonResponse.result.serializedTransaction),
     );
   }
 

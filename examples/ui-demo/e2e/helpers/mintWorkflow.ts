@@ -4,7 +4,7 @@ import { Page, expect } from "@playwright/test";
 export async function mintWithGoogleAuthWorkflow(
   page: Page,
   googleEmail: string,
-  googlePassword: string
+  googlePassword: string,
 ) {
   // Google sign in
   await page.locator("button[aria-label='Google sign in']").click();
@@ -42,14 +42,14 @@ export async function mintWithGoogleAuthWorkflow(
   await expect(page.locator("a[aria-label='View transaction']")).toBeVisible();
   await expect(page.getByRole("link", { name: "Quickstart" })).toHaveAttribute(
     "href",
-    "https://accountkit.alchemy.com/react/quickstart"
+    "https://www.alchemy.com/docs/wallets/react/quickstart",
   );
   await expect(page.locator("a[aria-label='GitHub']")).toHaveAttribute(
     "href",
-    "https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x"
+    "https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x",
   );
   await expect(page.getByRole("link", { name: "CSS" })).toHaveAttribute(
     "href",
-    "https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6"
+    "https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6",
   );
 }

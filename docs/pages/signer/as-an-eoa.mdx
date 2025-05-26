@@ -1,9 +1,8 @@
 ---
 title: Using the Signer as an EOA
 description: Learn how to use the Alchemy Signer as an EOA
+slug: wallets/signer/as-an-eoa
 ---
-
-# Using the Signer as an EOA
 
 <Warning>
   Note that EOA wallets will not have access to smart account features like gas
@@ -21,7 +20,7 @@ If you are using viem, then you can use the `toViemAccount` method which will al
 
 <CodeBlocks>
 
-```ts [createWalletClient.ts] twoslash
+```ts createWalletClient.ts twoslash
 import { signer } from "./signer";
 import { createWalletClient, http } from "viem";
 import { sepolia } from "viem/chains";

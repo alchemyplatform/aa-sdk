@@ -68,7 +68,7 @@ import "react-native-get-random-values";
 // rest of _layout.tsx
 ```
 
-6. Install [Account Kit](https://accountkit.alchemy.com) Packages. At this point you're ready to use the aa-sdk in your project.
+6. Install [Account Kit](https://www.alchemy.com/docs/wallets) Packages. At this point you're ready to use the aa-sdk in your project.
 
 ```bash
 yarn add @account-kit/react-native-signer @account-kit/signer @account-kit/smart-contracts @account-kit/infra

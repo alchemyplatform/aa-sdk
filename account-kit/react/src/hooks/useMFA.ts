@@ -70,7 +70,7 @@ export function useMFA(): UseMFAResult {
         return signer!.addMfa(params);
       },
     },
-    queryClient
+    queryClient,
   );
 
   const verifyMFA = useMutation<
@@ -85,7 +85,7 @@ export function useMFA(): UseMFAResult {
         return signer!.verifyMfa(params);
       },
     },
-    queryClient
+    queryClient,
   );
 
   const removeMFA = useMutation<
@@ -100,7 +100,7 @@ export function useMFA(): UseMFAResult {
         return signer!.removeMfa(params);
       },
     },
-    queryClient
+    queryClient,
   );
 
   const getMFAFactors = useMutation<{ multiFactors: MfaFactor[] }, Error, void>(
@@ -111,7 +111,7 @@ export function useMFA(): UseMFAResult {
         return signer!.getMfaFactors();
       },
     },
-    queryClient
+    queryClient,
   );
 
   return {

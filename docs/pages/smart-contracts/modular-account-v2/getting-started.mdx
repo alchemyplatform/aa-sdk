@@ -1,9 +1,8 @@
 ---
 title: Modular Account V2 • Getting started
 description: Getting started with Modular Account V2 in Account Kit
+slug: wallets/smart-contracts/modular-account-v2/getting-started
 ---
-
-# Getting started with Modular Account V2
 
 It is easy to get started with Modular Account v2! Below, you will create a new Modular Account v2 client that will be used to send user operations. Your MAv2 smart account will be deployed on-chain when you send the first User Operation from a unique signer.
 
@@ -20,12 +19,12 @@ First, install the `@account-kit/smart-contracts` package.
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/smart-contracts
 yarn add @account-kit/infra
 ```
 
-```bash [npm]
+```bash npm
 npm install @account-kit/smart-contracts
 npm install @account-kit/infra
 ```
@@ -41,7 +40,7 @@ If you want to use a signer to connect to an account whose address does not map 
 
 ## Creating a Modular Account V2 client
 
-```ts twoslash [modular-account-v2.ts]
+```ts twoslash modular-account-v2.ts
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";
@@ -98,6 +97,6 @@ console.log(
   "User operation sent! \nUO hash: ",
   operation.hash,
   "\nModular Account v2 Address: ",
-  operation.request.sender
+  operation.request.sender,
 );
 ```

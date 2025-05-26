@@ -48,22 +48,24 @@ export enum DeploymentState {
 
 export type GetEntryPointFromAccount<
   TAccount extends SmartContractAccount | undefined,
-  TAccountOverride extends SmartContractAccount = SmartContractAccount
-> = GetAccountParameter<
-  TAccount,
-  TAccountOverride
-> extends SmartContractAccount<string, infer TEntryPointVersion>
-  ? TEntryPointVersion
-  : EntryPointVersion;
+  TAccountOverride extends SmartContractAccount = SmartContractAccount,
+> =
+  GetAccountParameter<TAccount, TAccountOverride> extends SmartContractAccount<
+    string,
+    infer TEntryPointVersion
+  >
+    ? TEntryPointVersion
+    : EntryPointVersion;
 
 export type GetAccountParameter<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TAccountOverride extends SmartContractAccount = SmartContractAccount
-> = IsUndefined<TAccount> extends true
-  ? { account: TAccountOverride }
-  : { account?: TAccountOverride };
+  TAccountOverride extends SmartContractAccount = SmartContractAccount,
+> =
+  IsUndefined<TAccount> extends true
+    ? { account: TAccountOverride }
+    : { account?: TAccountOverride };
 
 export type UpgradeToAndCallParams = {
   upgradeToAddress: Address;
@@ -73,7 +75,7 @@ export type UpgradeToAndCallParams = {
 export type SmartContractAccountWithSigner<
   Name extends string = string,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = SmartContractAccount<Name, TEntryPointVersion> & {
   getSigner: () => TSigner;
 };
@@ -94,7 +96,7 @@ export type SmartContractAccountWithSigner<
  * @returns {boolean} true if the account has a signer, otherwise false.
  */
 export const isSmartAccountWithSigner = (
-  account: SmartContractAccount
+  account: SmartContractAccount,
 ): account is SmartContractAccountWithSigner => {
   return "getSigner" in account;
 };
@@ -102,7 +104,7 @@ export const isSmartAccountWithSigner = (
 // [!region SmartContractAccount]
 export type SmartContractAccount<
   Name extends string = string,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex | Promise<Hex>;
@@ -112,9 +114,9 @@ export type SmartContractAccount<
   signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
   signTypedDataWith6492: <
     const typedData extends TypedData | Record<string, unknown>,
-    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
   >(
-    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
   ) => Promise<Hex>;
   encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getAccountNonce(nonceKey?: bigint): Promise<bigint>;
@@ -140,7 +142,7 @@ export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = {
   source: Name;
   transport: TTransport;
@@ -173,7 +175,7 @@ export type ToSmartContractAccountParams<
  * @returns {[Address, Hex]} A tuple containing the parsed factory address and factory calldata
  */
 export const parseFactoryAddressFromAccountInitCode = (
-  initCode: Hex
+  initCode: Hex,
 ): [Address, Hex] => {
   const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
   const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
@@ -230,12 +232,12 @@ export const getAccountAddress = async ({
   } catch (err: any) {
     Logger.verbose(
       "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
-      err
+      err,
     );
     if (err.cause?.data?.errorName === "SenderAddressResult") {
       Logger.verbose(
         "[BaseSmartContractAccount](getAddress) entryPoint.getSenderAddress result:",
-        err.cause.data.args[0]
+        err.cause.data.args[0],
       );
 
       return err.cause.data.args[0] as Address;
@@ -254,7 +256,7 @@ export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 >({
   transport,
   chain,
@@ -331,7 +333,7 @@ export async function toSmartContractAccount<
  * @returns {Promise<SmartContractAccount>} a promise that resolves to a SmartContractAccount object with methods and properties for interacting with the smart contract account
  */
 export async function toSmartContractAccount(
-  params: ToSmartContractAccountParams
+  params: ToSmartContractAccountParams,
 ): Promise<SmartContractAccount> {
   const {
     transport,
@@ -463,9 +465,9 @@ export async function toSmartContractAccount(
 
   const signTypedDataWith6492 = async <
     const typedData extends TypedData | Record<string, unknown>,
-    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
   >(
-    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
   ): Promise<Hex> => {
     const [isDeployed, signature] = await Promise.all([
       isAccountDeployed(),
@@ -487,7 +489,7 @@ export async function toSmartContractAccount(
       if (storage == null) {
         throw new FailedToGetStorageSlotError(
           "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-          "Proxy Implementation Address"
+          "Proxy Implementation Address",
         );
       }
 

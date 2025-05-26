@@ -1,9 +1,8 @@
 ---
 title: Email Magic Link Authentication
 description: Authenticate a user using an email magic link
+slug: wallets/signer/authentication/email-magic-link
 ---
-
-# Email Magic Link Authentication
 
 Email magic link authentication allows you to log in and sign up users using an email address. Your users will receive a link in their inbox which will redirect them to your site (configured in the dashboard) to complete login.
 
@@ -23,10 +22,11 @@ For setting up the OTP flow, see [Email OTP Authentication](/wallets/signer/auth
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 // send the email
+// resolves when the user is fully authenticated (magic link + optional MFA), even if completion happens in another tab/window
 await signer.authenticate({
   type: "email",
   emailMode: "magicLink",
@@ -40,9 +40,39 @@ if (!bundle) {
   throw new Error("No bundle found in URL");
 }
 
+// resolves when the user is fully authenticated (magic link + optional MFA), even if completion happens in another tab/window
 await signer.authenticate({
   type: "email",
   bundle,
+});
+```
+
+<Markdown src="../../../shared/signer/signer.mdx" />
+
+</CodeBlocks>
+
+### Track Authentication Status
+
+Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to OTP/MFA prompts and completion:
+
+<CodeBlocks>
+
+```ts twoslash example.ts
+import { signer } from "./signer";
+import { AlchemySignerStatus } from "@account-kit/signer";
+
+signer.on("statusChanged", (status) => {
+  switch (status) {
+    case AlchemySignerStatus.AWAITING_EMAIL_AUTH:
+      // show OTP input UI
+      break;
+    case AlchemySignerStatus.AWAITING_MFA_AUTH:
+      // show TOTP input UI
+      break;
+    case AlchemySignerStatus.CONNECTED:
+      // authentication complete
+      break;
+  }
 });
 ```
 

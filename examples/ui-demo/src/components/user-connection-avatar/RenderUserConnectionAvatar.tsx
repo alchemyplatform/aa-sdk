@@ -11,7 +11,7 @@ type RenderAvatarMenuProps = {
   delegationAddress?: Hex;
 };
 export const RenderUserConnectionAvatar = (
-  props: React.HTMLAttributes<HTMLDivElement>
+  props: React.HTMLAttributes<HTMLDivElement>,
 ) => {
   const { isDeployed, delegationAddress } = useDeploymentStatus();
 

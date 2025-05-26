@@ -4,9 +4,7 @@ import type {
   ToSmartContractAccountParams,
 } from "@aa-sdk/core";
 import {
-  createBundlerClient,
   getEntryPoint,
-  getAccountAddress,
   EntityIdOverrideError,
   InvalidModularAccountV2Mode,
 } from "@aa-sdk/core";
@@ -19,17 +17,21 @@ import {
   type Transport,
 } from "viem";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
-import { getDefaultMAV2FactoryAddress } from "../utils.js";
+import {
+  getDefaultMAV2FactoryAddress,
+  getDefaultSMAV2BytecodeAddress,
+} from "../utils.js";
 import {
   type SignerEntity,
   type ModularAccountV2,
   createMAv2Base,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
+import { predictModularAccountV2Address } from "./predictAddress.js";
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = (Pick<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   "transport" | "chain" | "accountAddress"
@@ -44,6 +46,7 @@ export type CreateModularAccountV2Params<
         mode?: "default";
         salt?: bigint;
         factoryAddress?: Address;
+        implementationAddress?: Address;
         initCode?: Hex;
       }
     | {
@@ -53,9 +56,9 @@ export type CreateModularAccountV2Params<
 
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  config: CreateModularAccountV2Params<TTransport, TSigner>
+  config: CreateModularAccountV2Params<TTransport, TSigner>,
 ): Promise<ModularAccountV2<TSigner>>;
 
 /**
@@ -91,7 +94,7 @@ export async function createModularAccountV2<
  * @returns {Promise<ModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
  */
 export async function createModularAccountV2(
-  config: CreateModularAccountV2Params
+  config: CreateModularAccountV2Params,
 ): Promise<ModularAccountV2> {
   const {
     transport,
@@ -106,11 +109,6 @@ export async function createModularAccountV2(
     signerEntity: { entityId = DEFAULT_OWNER_ENTITY_ID } = {},
     deferredAction,
   } = config;
-
-  const client = createBundlerClient({
-    transport,
-    chain,
-  });
 
   const accountFunctions = await (async () => {
     switch (config.mode) {
@@ -143,8 +141,11 @@ export async function createModularAccountV2(
         const {
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
+          implementationAddress = getDefaultSMAV2BytecodeAddress(chain),
           initCode,
         } = config;
+
+        const signerAddress = await signer.getAddress();
 
         const getAccountInitCode = async () => {
           if (initCode) {
@@ -156,17 +157,20 @@ export async function createModularAccountV2(
             encodeFunctionData({
               abi: accountFactoryAbi,
               functionName: "createSemiModularAccount",
-              args: [await signer.getAddress(), salt],
+              args: [signerAddress, salt],
             }),
           ]);
         };
 
-        const accountAddress = await getAccountAddress({
-          client,
-          entryPoint,
-          accountAddress: _accountAddress,
-          getAccountInitCode,
-        });
+        const accountAddress =
+          _accountAddress ??
+          predictModularAccountV2Address({
+            factoryAddress,
+            implementationAddress,
+            salt,
+            type: "SMA",
+            ownerAddress: signerAddress,
+          });
 
         return {
           getAccountInitCode,

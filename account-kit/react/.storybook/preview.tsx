@@ -24,7 +24,7 @@ const config = createConfig(
       sections: [[{ type: "email" as const }], [{ type: "passkey" as const }]],
       addPasskeyOnSignup: true,
     },
-  }
+  },
 );
 
 const preview: Preview = {

@@ -1,9 +1,8 @@
 ---
 title: Send User Operations
 description: Learn how to send user operations using Account Kit's core package.
+slug: wallets/core/send-user-operations
 ---
-
-# Send user operations
 
 Once your users have been [authenticated](/wallets/core/authenticate-users), you can start sending user operations!
 
@@ -19,7 +18,7 @@ Once your users have been [authenticated](/wallets/core/authenticate-users), you
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { watchSmartAccountClient } from "@account-kit/core";
 import { config } from "./config.js";
 
@@ -36,7 +35,7 @@ const clientSubscription = watchSmartAccountClient(
   {
     type: "LightAccount",
   },
-  config
+  config,
 )((clientState_) => {
   clientState = clientState_;
 });
@@ -66,7 +65,7 @@ It's also possible to send user operations in batch using the same approach!
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { watchSmartAccountClient } from "@account-kit/core";
 import { config } from "./config.js";
 
@@ -83,7 +82,7 @@ const clientSubscription = watchSmartAccountClient(
   {
     type: "LightAccount",
   },
-  config
+  config,
 )((clientState_) => {
   clientState = clientState_;
 });

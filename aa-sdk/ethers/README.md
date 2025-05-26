@@ -2,13 +2,13 @@
 
 This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the [`JsonRpcProvider`](https://docs.ethers.org/v5/api/providers/jsonrpc-provider/) and [`Signer`](https://docs.ethers.org/v5/api/signer/) classes defined in [`ethers.js`](https://docs.ethers.org/v5/) external library.
 
-If you currently rely `ethers.js` for web3 development, you can use these `ethers.js`-compatible `JsonRpcProvider` and `Signer` to integrate Account Abstraction into your dApp. You may also find the [`util`](https://accountkit.alchemy.com/packages/aa-ethers/utils/introduction.html) methods helpful.
+If you currently rely `ethers.js` for web3 development, you can use these `ethers.js`-compatible `JsonRpcProvider` and `Signer` to integrate Account Abstraction into your dApp. You may also find the [`util`](https://www.alchemy.com/docs/wallets/packages/aa-ethers/utils/introduction) methods helpful.
 
 This repo is community maintained and we welcome contributions!
 
 ## Getting started
 
-If you are already using the `@aa-sdk/core` package, you can simply install this package and start using the `EthersProviderAdapter` and `AccountSigner`. If you are not using `@aa-sdk/core`, you can install it and follow the instructions in the ["Getting started"](https://accountkit.alchemy.com/packages/aa-ethers/) docs to get started.
+If you are already using the `@aa-sdk/core` package, you can simply install this package and start using the `EthersProviderAdapter` and `AccountSigner`. If you are not using `@aa-sdk/core`, you can install it and follow the instructions in the ["Getting started"](https://www.alchemy.com/docs/wallets/packages/aa-ethers/) docs to get started.
 
 ```bash [yarn]
 yarn add @aa-sdk/ethers
@@ -48,7 +48,7 @@ const ethersProvider = await alchemy.config.getProvider();
 const provider = EthersProviderAdapter.fromEthersProvider(ethersProvider);
 
 const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  process.env.YOUR_OWNER_MNEMONIC!
+  process.env.YOUR_OWNER_MNEMONIC!,
 );
 
 // 2. Connect the provider to the smart account signer
@@ -59,6 +59,6 @@ export const signer = provider.connectToAccount(
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
       signer,
-    })
+    }),
 );
 ```

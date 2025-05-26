@@ -1,9 +1,9 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/DeploymentStatusIndicator";
-import { ODYSSEY_EXPLORER_URL } from "@/hooks/7702/constants";
 import { useSignerAddress } from "@/hooks/useSignerAddress";
 import { useConfigStore } from "@/state";
+import { baseSepolia } from "@account-kit/infra";
 import {
   useAccount,
   useLogout,
@@ -33,7 +33,7 @@ export function UserConnectionDetails({
       theme,
       primaryColor,
       accountMode,
-    })
+    }),
   );
   const scaAccount = useAccount({
     type: "ModularAccountV2",
@@ -44,7 +44,7 @@ export function UserConnectionDetails({
   const solanaSigner = useMemo(() => {
     if (!signer) return;
     if (!status.isConnected) return;
-    return signer.experimental_toSolanaSigner();
+    return signer.toSolanaSigner();
   }, [signer, status.isConnected]);
 
   const solanaAddress = useMemo(() => {
@@ -134,7 +134,7 @@ export function UserConnectionDetails({
           <div className="flex flex-row justify-between items-center mt-[17px]">
             <a
               target="_blank"
-              href="https://accountkit.alchemy.com/concepts/smart-account-signer"
+              href="https://www.alchemy.com/docs/wallets/concepts/smart-account-signer"
               className="flex justify-center items-center"
             >
               <span className="text-md md:text-sm text-fg-secondary mr-1">
@@ -163,9 +163,9 @@ export function UserConnectionDetails({
             <span className="text-fg-primary block ml-1 text-md md:text-sm">
               {deploymentStatus && delegationAddress ? (
                 <a
-                  href={`${ODYSSEY_EXPLORER_URL}/address/0x${delegationAddress.slice(
-                    8
-                  )}`}
+                  href={`${
+                    baseSepolia.blockExplorers?.default.url
+                  }/address/0x${delegationAddress.slice(8)}`}
                   target="_blank"
                   className="underline"
                 >

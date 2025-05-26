@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   const orgId = req.query.orgId;
 
   res.redirect(
-    `${appScheme}://magic-link-auth?bundle=${bundle}&orgId=${orgId}`
+    `${appScheme}://magic-link-auth?bundle=${bundle}&orgId=${orgId}`,
   );
 });
 

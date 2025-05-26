@@ -8,7 +8,10 @@ import {
   defaultAccountState,
 } from "./store/store.js";
 import type { AccountState, StoreState, StoredState } from "./store/types.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
+import {
+  type AlchemyAccountsConfig,
+  type SupportedAccountTypes,
+} from "./types.js";
 
 export type HydrateResult = {
   onMount: () => Promise<void>;
@@ -33,7 +36,7 @@ export type HydrateResult = {
  */
 export function hydrate(
   config: AlchemyAccountsConfig,
-  initialState?: StoredState
+  initialState?: StoredState,
 ): HydrateResult {
   const initialAlchemyState =
     initialState != null && "alchemy" in initialState
@@ -45,18 +48,27 @@ export function hydrate(
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
 
+    // If the persisted chainId is not in the config, we should fall back to the default chain.
+    const configuredChains = Array.from(
+      config.store.getInitialState().connections.keys(),
+    );
+    const chain = configuredChains.includes(rest.chain.id)
+      ? rest.chain
+      : config.store.getInitialState().chain;
+
     config.store.setState({
       ...rest,
+      chain,
       user: initialAlchemyState.user,
       accountConfigs,
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.INITIALIZING,
-        undefined
+        undefined,
       ),
       accounts: hydrateAccountState(
         accountConfigs,
         shouldReconnectAccounts,
-        config
+        config,
       ),
     });
   } else if (!config.store.persist.hasHydrated()) {
@@ -76,7 +88,7 @@ export function hydrate(
     {
       initialState: initialWagmiState,
       reconnectOnMount: (initialWagmiState?.connections?.size ?? 0) > 0,
-    }
+    },
   );
 
   return {
@@ -93,7 +105,7 @@ export function hydrate(
 }
 
 const reconnectingState = <T extends SupportedAccountTypes>(
-  address: Address
+  address: Address,
 ): AccountState<T> => ({
   status: "RECONNECTING",
   account: {
@@ -104,11 +116,11 @@ const reconnectingState = <T extends SupportedAccountTypes>(
 const hydrateAccountState = (
   accountConfigs: StoreState["accountConfigs"],
   shouldReconnectAccounts: boolean,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): StoreState["accounts"] => {
-  const chains = Array.from(config.store.getState().connections.entries()).map(
-    ([, cnx]) => cnx.chain
-  );
+  const chains = Array.from(config.store.getState().connections.entries())
+    .map(([_, cnx]) => cnx)
+    .map((cnx) => cnx.chain);
   const initialState = createDefaultAccountState(chains);
   const activeChainId = config.store.getState().chain.id;
 

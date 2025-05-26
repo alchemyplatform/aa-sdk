@@ -32,7 +32,7 @@ import type { AlchemyTransport } from "../alchemyTransport";
 export function alchemyUserOperationSimulator<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(transport: AlchemyTransport): ClientMiddlewareFn<TContext> {
   return async (struct, { account, client }) => {
     const uoSimResult = await transport({ chain: client.chain }).request({

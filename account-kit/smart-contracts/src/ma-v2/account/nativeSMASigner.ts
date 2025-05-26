@@ -1,23 +1,23 @@
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
+  type Address,
+  type Chain,
+  concat,
+  concatHex,
   hashMessage,
   hashTypedData,
   type Hex,
   type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
-  type Chain,
-  type Address,
-  concat,
-  concatHex,
 } from "viem";
 
-import {
-  packUOSignature,
-  pack1271Signature,
-  DEFAULT_OWNER_ENTITY_ID,
-} from "../utils.js";
 import { SignatureType } from "../modules/utils.js";
+import {
+  DEFAULT_OWNER_ENTITY_ID,
+  pack1271Signature,
+  packUOSignature,
+} from "../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
@@ -45,7 +45,7 @@ export const nativeSMASigner = (
   signer: SmartAccountSigner,
   chain: Chain,
   accountAddress: Address,
-  deferredActionData?: Hex
+  deferredActionData?: Hex,
 ) => {
   return {
     getDummySignature: (): Hex => {
@@ -65,7 +65,7 @@ export const nativeSMASigner = (
           packUOSignature({
             // orderedHookData: [],
             validationSignature: signature,
-          })
+          }),
         );
 
       if (deferredActionData) {
@@ -102,14 +102,17 @@ export const nativeSMASigner = (
     // we don't apply the expected 1271 packing since deferred sigs use typed data sigs and don't expect the 1271 packing
     signTypedData: async <
       const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
     >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
       // the accounts domain already gives replay protection across accounts for deferred actions, so we don't need to apply another wrapping
       const isDeferredAction =
-        typedDataDefinition?.primaryType === "DeferredAction" &&
-        typedDataDefinition?.domain?.verifyingContract === accountAddress;
+        typedDataDefinition.primaryType === "DeferredAction" &&
+        typedDataDefinition.domain != null &&
+        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
+        "verifyingContract" in typedDataDefinition.domain &&
+        typedDataDefinition.domain.verifyingContract === accountAddress;
 
       return isDeferredAction
         ? concat([

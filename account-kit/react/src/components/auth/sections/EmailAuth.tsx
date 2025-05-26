@@ -36,8 +36,8 @@ export const EmailAuth = memo(
           const emailMode = cfg?.email.mode
             ? cfg?.email.mode
             : params.emailMode === "magicLink"
-            ? "MAGIC_LINK"
-            : "OTP";
+              ? "MAGIC_LINK"
+              : "OTP";
 
           if (emailMode === "OTP") {
             setAuthStep({ type: "otp_verify", email: params.email });
@@ -50,8 +50,8 @@ export const EmailAuth = memo(
           const emailMode = cfg?.email.mode
             ? cfg?.email.mode
             : params.emailMode === "magicLink"
-            ? "MAGIC_LINK"
-            : "OTP";
+              ? "MAGIC_LINK"
+              : "OTP";
 
           if (emailMode === "MAGIC_LINK") {
             setAuthStep({ type: "email_verify", email: params.email });
@@ -106,6 +106,7 @@ export const EmailAuth = memo(
       ) {
         setAuthStep({ type: "email_verify", email: form.state.values.email });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status]);
 
     return (
@@ -160,7 +161,7 @@ export const EmailAuth = memo(
                   type="submit"
                   variant="primary"
                   disabled={Boolean(
-                    isPending || !canSubmit || isSubmitting || !email
+                    isPending || !canSubmit || isSubmitting || !email,
                   )}
                 >
                   {buttonLabel}
@@ -171,5 +172,5 @@ export const EmailAuth = memo(
         </div>
       </form>
     );
-  }
+  },
 );

@@ -6,14 +6,16 @@ import { useSignerStatus } from "../../hooks/useSignerStatus.js";
 import { Dialog } from "../dialog/dialog.js";
 import { AuthCardContent } from "./card/index.js";
 import { useAuthContext } from "./context.js";
+import { useEmailAuthLinkingRequired } from "../../hooks/internal/useEmailAuthLinkingRequired.js";
 
 export const AuthModal = () => {
   const { isConnected } = useSignerStatus();
-  const { modalBaseClassName, addPasskeyOnSignup } = useUiConfig(
-    ({ modalBaseClassName, auth }) => ({
+  const { modalBaseClassName, addPasskeyOnSignup, uiMode } = useUiConfig(
+    ({ modalBaseClassName, auth, uiMode = "modal" }) => ({
       modalBaseClassName,
       addPasskeyOnSignup: auth?.addPasskeyOnSignup,
-    })
+      uiMode,
+    }),
   );
 
   const { setAuthStep, authStep } = useAuthContext();
@@ -31,8 +33,15 @@ export const AuthModal = () => {
     handleSignup,
     isConnected &&
       (authStep.type === "complete" || authStep.type === "initial") &&
-      !isOpen
+      !isOpen,
   );
+
+  useEmailAuthLinkingRequired((email) => {
+    if (uiMode === "modal") {
+      openAuthModal();
+    }
+    setAuthStep({ type: "otp_verify", email });
+  });
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>

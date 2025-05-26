@@ -5,6 +5,7 @@ import {
   type LocalAccount,
   type PrivateKeyAccount,
   type SignableMessage,
+  type SignedAuthorization,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -13,14 +14,13 @@ import {
   mnemonicToAccount,
   privateKeyToAccount,
 } from "viem/accounts";
-import type { SmartAccountSigner } from "./types.js";
-import type { Authorization } from "viem/experimental";
+import type { AuthorizationRequest, SmartAccountSigner } from "./types.js";
 
 /**
  * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
  */
 export class LocalAccountSigner<
-  T extends HDAccount | PrivateKeyAccount | LocalAccount
+  T extends HDAccount | PrivateKeyAccount | LocalAccount,
 > implements SmartAccountSigner<T>
 {
   inner: T;
@@ -54,7 +54,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const signature = await signer.signMessage("Hello, world!");
    * ```
    *
@@ -62,7 +62,7 @@ export class LocalAccountSigner<
    * @returns {Promise<any>} A promise that resolves to the signed message
    */
   readonly signMessage: (message: SignableMessage) => Promise<`0x${string}`> = (
-    message
+    message,
   ) => {
     return this.inner.signMessage({ message });
   };
@@ -75,7 +75,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const signature = await signer.signTypedData({
    *  domain: {},
    *  types: {},
@@ -89,9 +89,9 @@ export class LocalAccountSigner<
    */
   readonly signTypedData = async <
     const TTypedData extends TypedData | Record<string, unknown>,
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ): Promise<Hex> => {
     return this.inner.signTypedData(params);
   };
@@ -112,15 +112,15 @@ export class LocalAccountSigner<
    * });
    * ```
    *
-   * @param {Authorization<number, false>} unsignedAuthorization - The unsigned authorization to be signed.
-   * @returns {Promise<Authorization<number, true>>} A promise that resolves to the signed authorization.
+   * @param {AuthorizationRequest<number>} unsignedAuthorization - The unsigned authorization to be signed.
+   * @returns {Promise<SignedAuthorization<number>>} A promise that resolves to the signed authorization.
    */
 
   signAuthorization(
     this: LocalAccountSigner<PrivateKeyAccount>,
-    unsignedAuthorization: Authorization<number, false>
-  ): Promise<Authorization<number, true>> {
-    return this.inner.experimental_signAuthorization(unsignedAuthorization);
+    unsignedAuthorization: AuthorizationRequest<number>,
+  ): Promise<SignedAuthorization<number>> {
+    return this.inner.signAuthorization(unsignedAuthorization);
   }
 
   /**
@@ -131,7 +131,7 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * const address = await signer.getAddress();
    * ```
    *
@@ -158,7 +158,7 @@ export class LocalAccountSigner<
    */
   static mnemonicToAccountSigner(
     key: string,
-    opts?: HDOptions
+    opts?: HDOptions,
   ): LocalAccountSigner<HDAccount> {
     const signer = mnemonicToAccount(key, opts);
     return new LocalAccountSigner(signer);
@@ -172,14 +172,14 @@ export class LocalAccountSigner<
    * import { LocalAccountSigner } from "@aa-sdk/core";
    * import { generatePrivateKey } from "viem";
    *
-   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
    * ```
    *
    * @param {Hex} key The private key in hexadecimal format
    * @returns {LocalAccountSigner<PrivateKeyAccount>} An instance of `LocalAccountSigner` initialized with the provided private key
    */
   static privateKeyToAccountSigner(
-    key: Hex
+    key: Hex,
   ): LocalAccountSigner<PrivateKeyAccount> {
     const signer = privateKeyToAccount(key);
     return new LocalAccountSigner(signer);

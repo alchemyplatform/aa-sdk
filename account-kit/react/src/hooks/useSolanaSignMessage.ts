@@ -1,11 +1,13 @@
+"use client";
+
 import { useMutation } from "@tanstack/react-query";
-import { toBytes, toHex, type Hex } from "viem";
+import { toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types";
 import { useSolanaSigner } from "./useSolanaSigner.js";
 
 export type MutationParams = {
-  message: string;
+  message: string | ByteArray;
 };
 /**
  * There are cases where we might want to sign a message, used for other
@@ -17,13 +19,13 @@ export type MutationParams = {
  * @see {@link https://tanstack.com/query/v5/docs/framework/react/reference/useMutation | TanStack Query useMutation}
  */
 export interface SolanaSignedMessage {
-  readonly signer: SolanaSigner | void;
+  readonly signer: SolanaSigner | null;
   readonly data: Hex | undefined;
   readonly isPending: boolean;
   readonly error: Error | null;
   reset(): void;
-  mutate(args: MutationParams): void;
-  mutateAsync(args: MutationParams): Promise<Hex>;
+  signMessage(args: MutationParams): void;
+  signMessageAsync(args: MutationParams): Promise<Hex>;
 }
 
 /**
@@ -58,7 +60,7 @@ export type UseSolanaSignMessageParams = {
  * @returns {SolanaSignedMessage} This should be hook mutations plus a few more. Used to get the end result of the signing and the callbacks.
  */
 export function useSolanaSignMessage(
-  opts: UseSolanaSignMessageParams
+  opts: UseSolanaSignMessageParams,
 ): SolanaSignedMessage {
   const fallbackSigner = useSolanaSigner({});
   const signer = opts.signer || fallbackSigner;
@@ -66,9 +68,15 @@ export function useSolanaSignMessage(
     mutationFn: async (args: MutationParams) => {
       if (!signer)
         throw new Error(
-          "The signer is null, and should be passed in or put into context"
+          "The signer is null, and should be passed in or put into context",
         );
-      return await signer.signMessage(toBytes(args.message)).then(toHex);
+      return await signer
+        .signMessage(
+          typeof args.message === "string"
+            ? toBytes(args.message)
+            : args.message,
+        )
+        .then(toHex);
     },
     ...opts.mutation,
   });
@@ -76,5 +84,7 @@ export function useSolanaSignMessage(
   return {
     signer,
     ...mutation,
+    signMessage: mutation.mutate,
+    signMessageAsync: mutation.mutateAsync,
   };
 }

@@ -9,7 +9,6 @@ export {
 } from "./createConfig.js";
 export { NoAlchemyAccountContextError } from "./errors.js";
 
-export { AlchemySolanaWeb3Context } from "./AlchemySolanaWeb3Context.js";
 // Hooks
 export { useAlchemyAccountContext } from "./hooks/useAlchemyAccountContext.js";
 export type * from "./hooks/useAccount.js";
@@ -69,5 +68,9 @@ export {
   useSolanaTransaction,
   type SolanaTransaction,
 } from "./hooks/useSolanaTransaction.js";
+export {
+  useSolanaConnection,
+  type SolanaConnection,
+} from "./hooks/useSolanaConnection.js";
 
 export { useSolanaSignMessage } from "./hooks/useSolanaSignMessage.js";

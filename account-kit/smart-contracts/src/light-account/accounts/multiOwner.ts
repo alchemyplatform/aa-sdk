@@ -1,6 +1,5 @@
 import {
   createBundlerClient,
-  getAccountAddress,
   getEntryPoint,
   type EntryPointDef,
   type SmartAccountSigner,
@@ -29,10 +28,12 @@ import {
   type CreateLightAccountBaseParams,
   type LightAccountBase,
 } from "./base.js";
+import { predictMultiOwnerLightAccountAddress } from "./predictAddress.js";
 
 export type MultiOwnerLightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
+  TLightAccountVersion extends
+    LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
 > = LightAccountBase<
   TSigner,
   "MultiOwnerLightAccount",
@@ -40,7 +41,7 @@ export type MultiOwnerLightAccount<
 > & {
   encodeUpdateOwners: (
     ownersToAdd: Address[],
-    ownersToRemove: Address[]
+    ownersToRemove: Address[],
   ) => Hex;
   getOwnerAddresses: () => Promise<readonly Address[]>;
 };
@@ -48,7 +49,8 @@ export type MultiOwnerLightAccount<
 export type CreateMultiOwnerLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
+  TLightAccountVersion extends
+    LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
 > = Omit<
   CreateLightAccountBaseParams<
     "MultiOwnerLightAccount",
@@ -81,13 +83,14 @@ export type CreateMultiOwnerLightAccountParams<
 export async function createMultiOwnerLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
+  TLightAccountVersion extends
+    LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
 >(
   config: CreateMultiOwnerLightAccountParams<
     TTransport,
     TSigner,
     TLightAccountVersion
-  >
+  >,
 ): Promise<MultiOwnerLightAccount<TSigner, TLightAccountVersion>>;
 
 /**
@@ -122,7 +125,7 @@ export async function createMultiOwnerLightAccount({
   accountAddress,
   factoryAddress = getDefaultMultiOwnerLightAccountFactoryAddress(
     chain,
-    version
+    version,
   ),
   salt: salt_ = 0n,
   owners = [],
@@ -132,20 +135,20 @@ export async function createMultiOwnerLightAccount({
     chain,
   });
 
+  // NOTE: the current signer connected will be one of the owners as well
+  const ownerAddress = await signer.getAddress();
+  // owners need to be dedupe + ordered in ascending order and not == to zero address
+  const owners_ = Array.from(new Set([...owners, ownerAddress]))
+    .filter((x) => hexToBigInt(x) !== 0n)
+    .sort((a, b) => {
+      const bigintA = hexToBigInt(a);
+      const bigintB = hexToBigInt(b);
+
+      return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
+    });
+
   const getAccountInitCode = async () => {
     if (initCode) return initCode;
-
-    // NOTE: the current signer connected will be one of the owners as well
-    const ownerAddress = await signer.getAddress();
-    // owners need to be dedupe + ordered in ascending order and not == to zero address
-    const owners_ = Array.from(new Set([...owners, ownerAddress]))
-      .filter((x) => hexToBigInt(x) !== 0n)
-      .sort((a, b) => {
-        const bigintA = hexToBigInt(a);
-        const bigintB = hexToBigInt(b);
-
-        return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
-      });
 
     return concatHex([
       factoryAddress,
@@ -157,12 +160,13 @@ export async function createMultiOwnerLightAccount({
     ]);
   };
 
-  const address = await getAccountAddress({
-    client,
-    entryPoint,
-    accountAddress,
-    getAccountInitCode,
-  });
+  const address =
+    accountAddress ??
+    predictMultiOwnerLightAccountAddress({
+      factoryAddress,
+      salt: salt_,
+      ownerAddresses: owners_,
+    });
 
   const account = await createLightAccountBase<
     "MultiOwnerLightAccount",

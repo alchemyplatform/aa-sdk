@@ -101,14 +101,14 @@ export function useSignTypedData({
       },
       ...mutationArgs,
     },
-    queryClient
+    queryClient,
   );
 
   return {
     signTypedData: ReactLogger.profiled("signTypedData", signTypedData),
     signTypedDataAsync: ReactLogger.profiled(
       "signTypedDataAsync",
-      signTypedDataAsync
+      signTypedDataAsync,
     ),
     signedTypedData,
     isSigningTypedData,

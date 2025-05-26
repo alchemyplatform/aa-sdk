@@ -6,7 +6,7 @@ import type { EventLogger, EventsSchema, LoggerContext } from "./types";
 export type * from "./types.js";
 
 export function createLogger<Schema extends EventsSchema = []>(
-  context: LoggerContext
+  context: LoggerContext,
 ): EventLogger<Schema>;
 
 export function createLogger(context: LoggerContext): EventLogger {
@@ -25,7 +25,7 @@ export function createLogger(context: LoggerContext): EventLogger {
     ...innerLogger,
     profiled<TArgs extends any[], TRet>(
       name: string,
-      func: (...args: TArgs) => TRet
+      func: (...args: TArgs) => TRet,
     ): (...args: TArgs) => TRet {
       return function (this: any, ...args: TArgs): TRet {
         const start = Date.now();

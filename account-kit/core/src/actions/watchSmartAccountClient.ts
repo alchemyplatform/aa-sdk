@@ -32,15 +32,15 @@ import {
  * @returns {(onChange: (client: GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>) => void) => (() => void)} a function that accepts a callback to be called when the client changes and returns a function to unsubscribe from the store
  */ export function watchSmartAccountClient<
   TAccount extends SupportedAccountTypes,
-  TChain extends Chain | undefined = Chain | undefined
+  TChain extends Chain | undefined = Chain | undefined,
 >(
   params: GetSmartAccountClientParams<TChain, TAccount>,
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ) {
   return (
     onChange: (
-      client: GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>
-    ) => void
+      client: GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>,
+    ) => void,
   ) => {
     const accounts_ = config.store.getState().accounts;
     if (!accounts_) {
@@ -64,7 +64,7 @@ import {
             a.chain === b.chain
           );
         },
-      }
+      },
     );
   };
 }

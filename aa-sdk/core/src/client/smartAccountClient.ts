@@ -41,7 +41,7 @@ export type SmartAccountClientConfig<
     | undefined,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = Prettify<
   Pick<
     ClientConfig<transport, chain, account>,
@@ -69,7 +69,7 @@ export type SmartAccountClientConfig<
 
 export type SmartAccountClientRpcSchema = [
   ...BundlerRpcSchema,
-  ...PublicRpcSchema
+  ...PublicRpcSchema,
 ];
 
 // [!region SmartAccountClientActions]
@@ -80,7 +80,7 @@ export type SmartAccountClientActions<
     | undefined,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = BaseSmartAccountClientActions<chain, account, context> &
   BundlerActions &
   PublicActions;
@@ -97,7 +97,7 @@ export type SmartAccountClient<
   rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = Prettify<
   Client<
     transport,
@@ -117,7 +117,7 @@ export type BaseSmartAccountClient<
     | undefined,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = Prettify<
   Client<
     transport,
@@ -140,9 +140,9 @@ export function createSmartAccountClient<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
-  config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
+  config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>,
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
 /**
@@ -166,7 +166,7 @@ export function createSmartAccountClient<
  * @returns {SmartAccountClient} A smart account client capable of handling transactions, message signing, and other operations on a smart account
  */
 export function createSmartAccountClient(
-  config: SmartAccountClientConfig
+  config: SmartAccountClientConfig,
 ): SmartAccountClient {
   const {
     key = "account",
@@ -222,7 +222,7 @@ export function createSmartAccountClient(
                 address?.toLowerCase() !== client.account.address.toLowerCase()
               ) {
                 throw new Error(
-                  "cannot sign for address that is not the current account"
+                  "cannot sign for address that is not the current account",
                 );
               }
               return client.signMessage({
@@ -238,7 +238,7 @@ export function createSmartAccountClient(
                 address?.toLowerCase() !== client.account.address.toLowerCase()
               ) {
                 throw new Error(
-                  "cannot sign for address that is not the current account"
+                  "cannot sign for address that is not the current account",
                 );
               }
               return client.signMessage({
@@ -255,10 +255,20 @@ export function createSmartAccountClient(
                 address?.toLowerCase() !== client.account.address.toLowerCase()
               ) {
                 throw new Error(
-                  "cannot sign for address that is not the current account"
+                  "cannot sign for address that is not the current account",
                 );
               }
-              return client.signTypedData(dataParams);
+              try {
+                return client.signTypedData({
+                  account: client.account,
+                  typedData:
+                    typeof dataParams === "string"
+                      ? JSON.parse(dataParams)
+                      : dataParams,
+                });
+              } catch {
+                throw new Error("invalid JSON data params");
+              }
             }
             case "eth_chainId":
               if (!opts.chain) {
@@ -307,12 +317,12 @@ export function createSmartAccountClientFromExisting<
   TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
   config: Omit<
     SmartAccountClientConfig<Transport, TChain, TAccount, TContext>,
     "transport" | "chain"
-  > & { client: TClient }
+  > & { client: TClient },
 ): SmartAccountClient<
   CustomTransport,
   TChain,
@@ -346,7 +356,7 @@ export function createSmartAccountClientFromExisting<
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
     client: BundlerClient;
-  }
+  },
 ): SmartAccountClient {
   return createSmartAccountClient({
     ...config,

@@ -3,7 +3,7 @@ import { useConfigStore } from "@/state";
 import { useAccount } from "@account-kit/react";
 import { useState } from "react";
 import { createPublicClient, http } from "viem";
-import { odysseyTestnet } from "viem/chains";
+import { baseSepolia } from "@account-kit/infra";
 import { useSignerAddress } from "./useSignerAddress";
 
 export const useDeploymentStatus = () => {
@@ -20,9 +20,9 @@ export const useDeploymentStatus = () => {
 
   const [publicClient] = useState(() =>
     createPublicClient({
-      chain: odysseyTestnet,
+      chain: baseSepolia,
       transport: http(),
-    })
+    }),
   );
   const signerAddress = useSignerAddress();
 
@@ -30,9 +30,9 @@ export const useDeploymentStatus = () => {
     queryKey: ["deploymentStatus7702", signerAddress ?? "0x"],
     queryFn: async () => {
       const delegationAddress = signerAddress
-        ? (await publicClient.getCode({
+        ? ((await publicClient.getCode({
             address: signerAddress,
-          })) ?? "0x"
+          })) ?? "0x")
         : "0x";
       const delegationStatus = delegationAddress !== "0x";
       return {

@@ -36,11 +36,15 @@ To add new images:
 
 ### SDK References
 
-SDK Refernces are automatically generated from relevant projects within the monorepo via the `docs-gen` package. In the root, run:
+SDK References are automatically generated from relevant projects within the monorepo via the `docs-gen` package. In the root, to generate references from code you can run:
 
 ```shell
 yarn fern-gen
 ```
+
+### Injected Code Snippets
+
+You can reference production code directly in code snippets using `[!include]` statements. The syntax is the same as Physical File Snippets from Vocs, so you can reference [their documentation](https://vocs.dev/docs/guides/code-snippets#physical-file-snippets).
 
 ### Local Development
 

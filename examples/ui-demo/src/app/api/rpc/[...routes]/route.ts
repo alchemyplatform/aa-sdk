@@ -4,7 +4,7 @@ import { env } from "../../../../../env.mjs";
 
 export async function POST(
   req: Request,
-  { params }: { params: { routes: string[] } }
+  { params }: { params: { routes: string[] } },
 ) {
   const body = await req.text();
 

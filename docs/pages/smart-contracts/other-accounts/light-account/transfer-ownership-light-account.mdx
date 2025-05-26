@@ -1,11 +1,8 @@
 ---
 title: How to transfer ownership of a Light Account
 description: Follow this guide to transfer ownership of a Light Account with
-  Account Kit, a vertically integrated stack for building apps that support
-  ERC-4337 and ERC-6900.
+slug: wallets/smart-contracts/other-accounts/light-account/transfer-ownership-light-account
 ---
-
-# How to transfer ownership of `LightAccount`
 
 Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our `LightAccount`! Let's see a few different ways we can transfer ownership of an Account (using `LightAccount` as an example).
 
@@ -23,7 +20,7 @@ There a number of ways you can call this method using Account Kit.
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { lightAccountClient } from "./client";
 import { createLightAccountClient } from "@account-kit/smart-contracts";
 
@@ -58,7 +55,7 @@ Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach ma
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { encodeFunctionData } from "viem";
 import { lightAccountClient } from "./client";
 

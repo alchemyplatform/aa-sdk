@@ -9,7 +9,7 @@ test.beforeEach(async ({ page, baseURL }) => {
 test("Google sign in", async ({ page }) => {
   if (!googleEmail || !googlePassword) {
     throw new Error(
-      "PLAYWRIGHT_GOOGLE_EMAIL and PLAYWRIGHT_GOOGLE_PASSWORD must be set"
+      "PLAYWRIGHT_GOOGLE_EMAIL and PLAYWRIGHT_GOOGLE_PASSWORD must be set",
     );
   }
   await expect(page).toHaveTitle(/Account Kit/);

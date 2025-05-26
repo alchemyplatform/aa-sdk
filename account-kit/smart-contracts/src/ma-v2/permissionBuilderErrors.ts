@@ -13,7 +13,7 @@ export class RootPermissionOnlyError extends PermissionBuilderError {
    */
   constructor(permission: Permission) {
     super(
-      `Adding ${permission.type}: Cannot add permissions with ROOT permission`
+      `Adding ${permission.type}: Cannot add permissions with ROOT permission`,
     );
   }
 }
@@ -28,7 +28,7 @@ export class AccountAddressAsTargetError extends PermissionBuilderError {
    */
   constructor(permission: Permission) {
     super(
-      `${permission.type}: Account address as target, use ACCOUNT_FUNCTIONS for account address`
+      `${permission.type}: Account address as target, use ACCOUNT_FUNCTIONS for account address`,
     );
   }
 }
@@ -44,7 +44,7 @@ export class DuplicateTargetAddressError extends PermissionBuilderError {
    */
   constructor(permission: Permission, targetAddress: Address) {
     super(
-      `${permission.type}: Address ${targetAddress} already has a permission. Cannot add multiple CONTRACT_ACCESS or FUNCTIONS_ON_CONTRACT permissions for the same target address.`
+      `${permission.type}: Address ${targetAddress} already has a permission. Cannot add multiple CONTRACT_ACCESS or FUNCTIONS_ON_CONTRACT permissions for the same target address.`,
     );
   }
 }
@@ -73,7 +73,7 @@ export class ExpiredDeadlineError extends PermissionBuilderError {
    */
   constructor(deadline: number, currentTime: number) {
     super(
-      `compileDeferred(): deadline ${deadline} cannot be before now (${currentTime})`
+      `compileDeferred(): deadline ${deadline} cannot be before now (${currentTime})`,
     );
   }
 }
@@ -88,7 +88,7 @@ export class DeadlineOverLimitError extends PermissionBuilderError {
    */
   constructor(deadline: number) {
     super(
-      `compileDeferred(): deadline ${deadline} cannot be > max uint48 (2^48 - 1)`
+      `compileDeferred(): deadline ${deadline} cannot be > max uint48 (2^48 - 1)`,
     );
   }
 }
@@ -100,7 +100,9 @@ export class ValidationConfigUnsetError extends PermissionBuilderError {
    * Constructor for initializing an error message indicating the validation config is unset.
    */
   constructor() {
-    super("Validation config unset, use permissionBuilder.configure(...)");
+    super(
+      "Missing permission among: functions on contract, functions on all contracts, account functions, contract access, or erc20 token transfer",
+    );
   }
 }
 
@@ -114,7 +116,7 @@ export class MultipleNativeTokenTransferError extends PermissionBuilderError {
    */
   constructor(permission: Permission) {
     super(
-      `${permission.type}: Must have at most ONE native token transfer permission`
+      `${permission.type}: Must have at most ONE native token transfer permission`,
     );
   }
 }

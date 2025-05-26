@@ -35,6 +35,11 @@ export type AlchemyAccountsUIConfig = {
    * This is the URL that will be used to link to the support page
    */
   supportUrl?: string | undefined;
+  /**
+   * Set to "embedded" if the auth component will be rendered within a parent
+   * component in your UI. The default "modal" should be used if the auth component will be rendered in a modal overlay.
+   */
+  uiMode?: "modal" | "embedded";
 };
 
 export type AuthIllustrationStyle = NonNullable<
@@ -49,7 +54,7 @@ export type AuthIllustrationStyle = NonNullable<
  */
 export type BaseHookMutationArgs<
   TData extends any = void,
-  TVariable extends any = void
+  TVariable extends any = void,
 > = Partial<
   Omit<
     UseMutationOptions<TData, Error, TVariable, unknown>,

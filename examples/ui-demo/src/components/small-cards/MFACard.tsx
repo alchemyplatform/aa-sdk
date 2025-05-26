@@ -15,7 +15,7 @@ export function MFACard() {
       getMFAFactors.mutate(undefined, {
         onSuccess: (factors) => {
           setIsMfaActive(
-            !!factors?.multiFactors && factors.multiFactors.length > 0
+            !!factors?.multiFactors && factors.multiFactors.length > 0,
           );
         },
       });
@@ -27,13 +27,8 @@ export function MFACard() {
     <Card
       imageSlot={
         <div className="w-full h-full bg-[#DCE9FF] flex justify-center items-center">
-          <ThreeStarsIcon className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
+          <ThreeStarsIcon className="h-8 w-8 sm:h-[74px] sm:w-[74px] xl:h-[86px] xl:w-[86px]" />
         </div>
-      }
-      badgeSlot={
-        <p className="px-2 py-1 font-semibold rounded-md text-xs text-[#7c3AED] bg-[#F3F3FF]">
-          New!
-        </p>
       }
       heading={
         <div className="flex items-center justify-between flex-col sm:flex-row">

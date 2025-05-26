@@ -17,7 +17,7 @@ export type CoreEventsSchema = [
       accountType: string;
       accountVersion: string;
     };
-  }
+  },
 ];
 
 export const CoreLogger = createLogger<CoreEventsSchema>({

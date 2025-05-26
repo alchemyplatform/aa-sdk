@@ -3,6 +3,74 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Features
+
+- add celo and tea to aa-sdk ([#1627](https://github.com/alchemyplatform/aa-sdk/issues/1627)) ([515a302](https://github.com/alchemyplatform/aa-sdk/commit/515a30210a6106490f1132a447651889769db4b3))
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+### Bug Fixes
+
+- let outter transport dictate retries ([#1625](https://github.com/alchemyplatform/aa-sdk/issues/1625)) ([6d291bd](https://github.com/alchemyplatform/aa-sdk/commit/6d291bd83e09e0b4e98baf1608e9451d3fba792d))
+
+# [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
+
+### Bug Fixes
+
+- parallel eth_calls, make maxTokenAmount requried ([#1609](https://github.com/alchemyplatform/aa-sdk/issues/1609)) ([0de0b90](https://github.com/alchemyplatform/aa-sdk/commit/0de0b9071f0f80a94ab08ba57f41c63f7154456f))
+
+### Features
+
+- support for latest viem version ([#1619](https://github.com/alchemyplatform/aa-sdk/issues/1619)) ([f894102](https://github.com/alchemyplatform/aa-sdk/commit/f894102e113154e40b2f20ae998922764c628d6e))
+
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- fix error message ([#1595](https://github.com/alchemyplatform/aa-sdk/issues/1595)) ([1d655e0](https://github.com/alchemyplatform/aa-sdk/commit/1d655e067b147f01e7ed1821ff2491275a46aa71))
+
+### Features
+
+- support chain agnostic rpc url override ([#1613](https://github.com/alchemyplatform/aa-sdk/issues/1613)) ([6e4eee6](https://github.com/alchemyplatform/aa-sdk/commit/6e4eee668bf7c6c0f9aa4b43df67bd1e36b43d4f))
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+### Bug Fixes
+
+- use rawtoken for permit, token value for erc20Context ([#1591](https://github.com/alchemyplatform/aa-sdk/issues/1591)) ([78f6728](https://github.com/alchemyplatform/aa-sdk/commit/78f67289ed52787b3038a10ef9e813872071524c))
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- add erc20 to alchemyGasManagerMiddleware ([#1574](https://github.com/alchemyplatform/aa-sdk/issues/1574)) ([8a0ce97](https://github.com/alchemyplatform/aa-sdk/commit/8a0ce97d5464930a2c21db9aed9b7273d57c783f))
+- add erc20Context to sdk ([#1561](https://github.com/alchemyplatform/aa-sdk/issues/1561)) ([56ddda0](https://github.com/alchemyplatform/aa-sdk/commit/56ddda0bcd0eb760bad607be5d3050fabc0c71e3))
+- add story mainnet and aeneid testnet ([#1580](https://github.com/alchemyplatform/aa-sdk/issues/1580)) ([dc27322](https://github.com/alchemyplatform/aa-sdk/commit/dc273221abb6818af5f911d9786e2f660b6c9f7b))
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+**Note:** Version bump only for package @account-kit/infra
+
 # [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
 
 ### Features

@@ -16,7 +16,7 @@ export class InvalidSignerTypeError extends BaseError {
       [
         "Invalid signer type parameter passed to SmartAccountSigner.",
         signerType ?? "A signerType must be provided.",
-      ].join("\n")
+      ].join("\n"),
     );
   }
 }

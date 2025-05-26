@@ -1,9 +1,8 @@
 ---
 title: Authenticating Users via Magic Link
 description: Learn how to authenticate users using an email magic link using the React Native Signer
+slug: wallets/react-native/signer/authenticating-users/authenticating-with-magic-link
 ---
-
-# Authenticating Users via Magic Link
 
 <Markdown src="../../../../shared/react-native/setup-guides-snippet.mdx" />
 
@@ -26,7 +25,7 @@ In your Alchemy Accounts Dashboard:
 
 To send an email magic link to a user, you can use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `magicLink`.
 
-```tsx twoslash [sign-in-with-magic-link.tsx]
+```tsx twoslash sign-in-with-magic-link.tsx
 import { useAuthenticate } from "@account-kit/react-native";
 import React, { useState } from "react";
 import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
@@ -91,7 +90,7 @@ A `bundle` parameter present in the deep link url will be used to authenticate t
 
 Here's an example of what this might look like:
 
-```tsx [example.tsx] twoslash
+```tsx example.tsx twoslash
 import { useEffect } from "react";
 import { Linking } from "react-native";
 import { useAuthenticate } from "@account-kit/react-native";

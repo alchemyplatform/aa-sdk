@@ -1,9 +1,8 @@
 ---
 title: Multi-chain Apps
 description: Learn how to build multi-chain apps with Account Kit.
+slug: wallets/react/multi-chain-apps
 ---
-
-# Multi-chain Apps
 
 Account Kit supports multi-chain apps, allowing you to build applications that interact with multiple blockchains. This guide will show you how to set up your app to work with multiple chains.
 
@@ -11,7 +10,7 @@ Account Kit supports multi-chain apps, allowing you to build applications that i
 
 In order to support multiple chains in your app, the first thing you need to do is update your `createConfig` call to include the chains you want to support.
 
-```ts twoslash [config.ts]
+```ts twoslash config.ts
 // @noErrors
 import { createConfig } from "@account-kit/react";
 import { sepolia, mainnet } from "@account-kit/infra";

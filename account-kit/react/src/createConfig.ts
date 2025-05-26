@@ -48,11 +48,11 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  */
 export const createConfig = (
   props: CreateConfigProps,
-  ui?: AlchemyAccountsUIConfig
+  ui?: AlchemyAccountsUIConfig,
 ): AlchemyAccountsConfigWithUI => {
   if (
     ui?.auth?.sections.some((x) =>
-      x.some((y) => y.type === "social" && y.mode === "popup")
+      x.some((y) => y.type === "social" && y.mode === "popup"),
     )
   ) {
     props.enablePopupOauth = true;
@@ -70,7 +70,7 @@ export const createConfig = (
   ) {
     const walletConnectAuthConfig = externalWalletSection?.walletConnect;
     const walletConnectParams = getWalletConnectParams(
-      walletConnectAuthConfig
+      walletConnectAuthConfig,
     )!;
 
     props.connectors ??= [];

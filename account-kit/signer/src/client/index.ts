@@ -18,6 +18,7 @@ import type {
   OtpParams,
   User,
   SubmitOtpCodeResponse,
+  AuthLinkingPrompt,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -148,7 +149,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       params.creationOpts,
-      { username: "email" in params ? params.email : params.username }
+      { username: "email" in params ? params.email : params.username },
     );
 
     const result = await this.request("/v1/signup", {
@@ -195,7 +196,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<any>} The response from the authentication request
    */
   public override initEmailAuth = async (
-    params: Omit<EmailAuthParams, "targetPublicKey">
+    params: Omit<EmailAuthParams, "targetPublicKey">,
   ) => {
     this.eventEmitter.emit("authenticating", { type: "otp" });
     const { email, emailMode, expirationSeconds } = params;
@@ -249,7 +250,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle.
    */
   public override async submitOtpCode(
-    args: Omit<OtpParams, "targetPublicKey">
+    args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const targetPublicKey = await this.initIframeStamper();
@@ -280,7 +281,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     // Otherwise, it's truly an error:
     throw new Error(
-      "Failed to submit OTP code. Server did not return required fields."
+      "Failed to submit OTP code. Server did not return required fields.",
     );
   }
 
@@ -365,7 +366,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<User>} A promise that resolves to the authenticated user object
    */
   public override lookupUserWithPasskey = async (
-    user: User | undefined = undefined
+    user: User | undefined = undefined,
   ) => {
     this.eventEmitter.emit("authenticating", { type: "passkey" });
     await this.initWebauthnStamper(user);
@@ -486,7 +487,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<never>} A promise that will never resolve, only reject if the redirection fails
    */
   public override oauthWithRedirect = async (
-    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>
+    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>,
   ): Promise<never> => {
     const turnkeyPublicKey = await this.initIframeStamper();
 
@@ -499,7 +500,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     window.location.href = providerUrl;
     return new Promise((_, reject) =>
-      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000)
+      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000),
     );
   };
 
@@ -530,8 +531,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<User>} A promise that resolves to a `User` object containing the authenticated user information
    */
   public override oauthWithPopup = async (
-    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>
-  ): Promise<User> => {
+    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>,
+  ): Promise<User | AuthLinkingPrompt> => {
     const turnkeyPublicKey = await this.initIframeStamper();
     const oauthParams = args;
     const providerUrl = await this.getOauthProviderUrl({
@@ -542,7 +543,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const popup = window.open(
       providerUrl,
       "_blank",
-      "popup,width=500,height=600"
+      "popup,width=500,height=600",
     );
     const eventEmitter = this.eventEmitter;
     return new Promise((resolve, reject) => {
@@ -551,32 +552,54 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           return;
         }
         const {
+          alchemyStatus: status,
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
           alchemyIsSignup: isSignup,
           alchemyError,
+          alchemyOtpId: otpId,
+          alchemyEmail: email,
+          alchemyAuthProvider: providerName,
         } = event.data;
-        if (bundle && orgId && idToken) {
-          cleanup();
-          popup?.close();
-          this.completeAuthWithBundle({
-            bundle,
-            orgId,
-            connectedEventName: "connectedOauth",
-            idToken,
-            authenticatingType: "oauth",
-          }).then((user) => {
-            if (isSignup) {
-              eventEmitter.emit("newUserSignup");
-            }
-
-            resolve(user);
-          }, reject);
-        } else if (alchemyError) {
+        if (alchemyError) {
           cleanup();
           popup?.close();
           reject(new OauthFailedError(alchemyError));
+        }
+        if (!status) {
+          // This message isn't meant for us.
+          return;
+        }
+        cleanup();
+        popup?.close();
+        switch (status) {
+          case "SUCCESS":
+            this.completeAuthWithBundle({
+              bundle,
+              orgId,
+              connectedEventName: "connectedOauth",
+              idToken,
+              authenticatingType: "oauth",
+            }).then((user) => {
+              if (isSignup) {
+                eventEmitter.emit("newUserSignup");
+              }
+              resolve(user);
+            }, reject);
+            break;
+          case "ACCOUNT_LINKING_CONFIRMATION_REQUIRED":
+            resolve({
+              status,
+              idToken,
+              email,
+              providerName,
+              otpId,
+              orgId,
+            } satisfies AuthLinkingPrompt);
+            break;
+          default:
+            reject(new Error(`Unknown status: ${status}`));
         }
       };
 
@@ -649,7 +672,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     options?: CredentialCreationOptionOverrides,
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
-    }
+    },
   ) => {
     const challenge = generateRandomBuffer();
     const authenticatorUserId = generateRandomBuffer();

@@ -1,6 +1,7 @@
 ---
 title: Getting started with Account Kit on bare React Native
 description: A guide on integrating Account Kit within a Bare React Native application
+slug: wallets/react-native/getting-started/getting-started-rn-bare
 ---
 
 <Info>
@@ -9,8 +10,6 @@ description: A guide on integrating Account Kit within a Bare React Native appli
   recommend following the [Expo
   guide](/wallets/react-native/getting-started/getting-started-expo) instead.
 </Info>
-
-# Getting Started on a Bare React Native project
 
 We would go through the steps to get your environment setup for using Account Kit within a Bare React Native application.
 
@@ -24,11 +23,11 @@ Once we've got our React Native project setup and running, we need to setup a fe
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install --save node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
 ```
 
@@ -38,7 +37,7 @@ yarn add node-libs-react-native crypto-browserify stream-browserify react-native
 
 Create or edit your `metro.config.js` file in the root of your project so that it includes the following:
 
-```js [metro.config.js]
+```js metro.config.js
 const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 const path = require("path");
 const projectRoot = __dirname;
@@ -48,7 +47,7 @@ const config = getDefaultConfig(projectRoot);
 const ALIASES = {
   "@noble/hashes/crypto": path.resolve(
     projectRoot, // <-- Adjust this as fits your project setup
-    "node_modules/@noble/hashes/crypto.js"
+    "node_modules/@noble/hashes/crypto.js",
   ),
 };
 
@@ -85,7 +84,7 @@ module.exports = config;
 
 Import the following packages at the top of your `index.js` file so that libraries that depend on globals like `crypto` have access to them.
 
-```js [index.js]
+```js index.js
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
 
@@ -98,11 +97,11 @@ That's it! Now you can install the packages you want from Account Kit and start 
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
 ```
 
@@ -124,11 +123,11 @@ To ensure the Signer package works correctly, you'll need to add the following d
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
 ```
 

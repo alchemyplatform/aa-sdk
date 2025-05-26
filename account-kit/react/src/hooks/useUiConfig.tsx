@@ -38,10 +38,11 @@ export const DEFAULT_UI_CONFIG: AlchemyAccountsUIConfigWithDefaults = {
   },
   modalBaseClassName: "",
   supportUrl: "",
+  uiMode: "modal",
 };
 
 export function createUiConfigStore(
-  initialConfig: AlchemyAccountsUIConfig = DEFAULT_UI_CONFIG
+  initialConfig: AlchemyAccountsUIConfig = DEFAULT_UI_CONFIG,
 ) {
   return create<UiConfigStore>((set) => ({
     ...initialConfig,
@@ -56,11 +57,11 @@ export function createUiConfigStore(
 }
 
 const UiConfigContext = createContext<StoreApi<UiConfigStore> | undefined>(
-  undefined
+  undefined,
 );
 
 export function useUiConfig<T = UiConfigStore>(
-  selector?: (state: UiConfigStore) => T
+  selector?: (state: UiConfigStore) => T,
 ): T;
 
 /**
@@ -79,7 +80,7 @@ export function useUiConfig<T = UiConfigStore>(
  * ```
  */
 export function useUiConfig(
-  selector?: (state: UiConfigStore) => UiConfigStore
+  selector?: (state: UiConfigStore) => UiConfigStore,
 ): UiConfigStore {
   const store = useContext(UiConfigContext);
 

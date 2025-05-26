@@ -5,7 +5,7 @@ import { BigNumberishRangeSchema, MultiplierSchema } from "../utils/index.js";
 import type { BundlerClient } from "./bundlerClient.js";
 
 export const createPublicErc4337ClientSchema = <
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 >() =>
   z.custom<BundlerClient<TTransport>>((provider) => {
     return (
@@ -19,28 +19,34 @@ export const createPublicErc4337ClientSchema = <
   });
 
 // [!region ConnectionConfigSchema]
-export const ConnectionConfigSchema = z.union([
+// TODO: in v5 either remove this or simplify it (either way this should be moved out of aa-sdk/core)
+export const ConnectionConfigSchema = z.intersection(
+  z.union([
+    z.object({
+      rpcUrl: z.never().optional(),
+      apiKey: z.string(),
+      jwt: z.never().optional(),
+    }),
+    z.object({
+      rpcUrl: z.never().optional(),
+      apiKey: z.never().optional(),
+      jwt: z.string(),
+    }),
+    z.object({
+      rpcUrl: z.string(),
+      apiKey: z.never().optional(),
+      jwt: z.never().optional(),
+    }),
+    z.object({
+      rpcUrl: z.string(),
+      apiKey: z.never().optional(),
+      jwt: z.string(),
+    }),
+  ]),
   z.object({
-    rpcUrl: z.never().optional(),
-    apiKey: z.string(),
-    jwt: z.never().optional(),
+    chainAgnosticUrl: z.string().optional(),
   }),
-  z.object({
-    rpcUrl: z.never().optional(),
-    apiKey: z.never().optional(),
-    jwt: z.string(),
-  }),
-  z.object({
-    rpcUrl: z.string(),
-    apiKey: z.never().optional(),
-    jwt: z.never().optional(),
-  }),
-  z.object({
-    rpcUrl: z.string(),
-    apiKey: z.never().optional(),
-    jwt: z.string(),
-  }),
-]);
+);
 // [!endregion ConnectionConfigSchema]
 
 export const UserOperationFeeOptionsFieldSchema =

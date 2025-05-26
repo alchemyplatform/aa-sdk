@@ -1,9 +1,8 @@
 ---
 title: Sponsor Gas
 description: Learn how to sponsor gas using Alchemy's infrastructure
+slug: wallets/infra/sponsor-gas
 ---
-
-# Sponsor Gas
 
 In the [Quickstart](/wallets/infra/quickstart), we covered an example that sends a user operation with gas sponsorship using our Gas Manager. In this guide, we'll recap how to sponsor gas using the Gas Manager, and also show you
 how to use other paymaster providers as well.
@@ -24,7 +23,7 @@ Now you can create a Smart Account Client which is configured to sponsor gas.
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { client } from "./client";
 
 const { hash } = await client.sendUserOperation({
@@ -51,11 +50,11 @@ so you can create more configurable clients.
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @aa-sdk/core
 ```
 
-```bash [npm]
+```bash npm
 npm i -s @aa-sdk/core
 ```
 

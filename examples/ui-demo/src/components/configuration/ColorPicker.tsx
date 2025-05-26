@@ -15,7 +15,7 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
     ({ ui: { primaryColor }, setPrimaryColor }) => ({
       primaryColor,
       setPrimaryColor,
-    })
+    }),
   );
 
   const [innerColor, setInnerColor] = useState(primaryColor[theme]);
@@ -37,14 +37,14 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
       onSetThemeColor(innerColor);
     },
     [innerColor],
-    250
+    250,
   );
 
   return (
     <Popover>
       <PopoverTrigger
         className={cn(
-          "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         )}
         id="color-picker"
       >

@@ -14,5 +14,5 @@ export default mergeConfig(
         join(__dirname, "setupTests.ts"),
       ],
     },
-  })
+  }),
 );

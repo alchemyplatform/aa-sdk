@@ -1,4 +1,6 @@
-# Upgrade LA to MAv2
+---
+slug: wallets/smart-contracts/modular-account-v2/upgrading-to-MAv2
+---
 
 ## **0. Construct your clients**
 
@@ -90,7 +92,7 @@ Steps:
 ```ts
 const { createMAV2Account, ...upgradeToData } = await getMAV2UpgradeToData(
   lightAccountclient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 await lightAccountClient.upgradeAccount({
@@ -116,7 +118,7 @@ If the implementation slot is empty, this means that the account doesn’t exist
 1. **New user with no account**.
 2. **New user with an existing but un-deployed account**.
 
-```ts twoslash [modular-account-v2.ts]
+```ts twoslash modular-account-v2.ts
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia, alchemy } from "@account-kit/infra";

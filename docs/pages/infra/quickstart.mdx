@@ -1,9 +1,8 @@
 ---
 title: Quickstart
 description: Get started with Alchemy's ERC-4337 infrastructure
+slug: wallets/infra/quickstart
 ---
-
-# Infra Quickstart
 
 Account Kit is composed of some lower-level libraries if you're looking for further customization of your stack or want more control over how you build your application.
 One of these libraries is `@account-kit/infra` which allows you to interact with our infrastructure directly, while bringing your own smart contracts or signer.
@@ -21,11 +20,11 @@ but you're free to use any smart contract you'd like.
 
 <CodeBlocks>
 
-```bash [yarn]
+```bash yarn
 yarn add @account-kit/infra @account-kit/smart-contracts
 ```
 
-```bash [npm]
+```bash npm
 npm i -s @account-kit/infra @account-kit/smart-contracts
 ```
 
@@ -58,7 +57,7 @@ The last step is to send a user operation using the client you just created.
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { client } from "./client";
 
 const { hash } = await client.sendUserOperation({

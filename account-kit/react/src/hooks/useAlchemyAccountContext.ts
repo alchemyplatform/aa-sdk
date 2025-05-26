@@ -19,7 +19,7 @@ import type { AlchemyAccountContextProps } from "../AlchemyAccountContext.js";
  * @throws if used outside of the AlchemyAccountProvider
  */
 export const useAlchemyAccountContext = (
-  override?: AlchemyAccountContextProps
+  override?: AlchemyAccountContextProps,
 ): AlchemyAccountContextProps => {
   const context = useContext(AlchemyAccountContext);
   if (override != null) return override;

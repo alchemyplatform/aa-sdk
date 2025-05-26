@@ -1,9 +1,8 @@
 ---
 title: Modular Account with Multisig Plugin • Getting started
 description: Getting started with the Modular Account with Multisig Plugin in Account Kit
+slug: wallets/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started
 ---
-
-# Getting started with the Multisig Plugin
 
 ## 1. Create a Multisig Account Client
 
@@ -24,7 +23,7 @@ To propose a new user operation for review by the multisig signers, you will use
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { multisigAccountClient } from "./client";
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 
@@ -50,7 +49,7 @@ Next, you have to collect the next k-2 signatures, excluding the first signature
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { signers, owners, threshold } from "./client";
 
@@ -81,7 +80,7 @@ After collecting k-1 signatures, you're ready to collect the last signature and 
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { signers, owners, threshold } from "./client";
 
@@ -112,7 +111,7 @@ By default, we use the variable gas feature in the Multisig Plugin smart contrac
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { multisigAccountClient } from "./client";
 
 const result = await multisigAccountClient.sendUserOperation({

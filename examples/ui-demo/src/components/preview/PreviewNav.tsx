@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
-import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
-import { useUser } from "@account-kit/react";
-import ExternalLink from "@/components/shared/ExternalLink";
-import { Metrics } from "@/metrics";
 import { CodePreviewSwitch } from "@/components/shared/CodePreviewSwitch";
+import ExternalLink from "@/components/shared/ExternalLink";
+import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
+import { useUser } from "@account-kit/react";
+import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 
 export function PreviewNav({
   showCode,
@@ -18,13 +18,13 @@ export function PreviewNav({
       className={cn(
         `w-full p-6 top-0 left-0 border-border z-10 relative lg:sticky lg:after:hidden after:content-[''] after:absolute after:bottom-0 after:left-6 after:right-6 after:h-[1px] after:bg-border`,
         !user && !showCode && "hidden lg:block lg:absolute",
-        (user || showCode) && "lg:border-b"
+        (user || showCode) && "lg:border-b",
       )}
     >
       <div
         className={cn(
           "flex justify-between items-start",
-          !showCode && !user && "justify-end"
+          !showCode && !user && "justify-end",
         )}
       >
         {!showCode && user && <RenderUserConnectionAvatar />}
@@ -46,7 +46,7 @@ export function PreviewNav({
                 name: "codepreview_theme_customization_clicked",
               })
             }
-            href="https://accountkit.alchemy.com/react/customization/theme"
+            href="https://www.alchemy.com/docs/wallets/react/customization/theme"
             className="font-semibold text-blue-600"
           >
             Fully customize styling here.

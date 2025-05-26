@@ -1,9 +1,8 @@
 ---
 title: Sponsor Gas
 description: Learn how to sponsor gas for UserOperations from any ERC-4337 smart account using Account Kit core.
+slug: wallets/core/sponsor-gas
 ---
-
-# How to sponsor gas for a User Operation
 
 Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
 
@@ -46,7 +45,7 @@ If you want more control over which UOs are sponsored, then you can set the poli
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { watchSmartAccountClient } from "@account-kit/core";
 import { config } from "./config";
 
@@ -64,7 +63,7 @@ const clientSubscription = watchSmartAccountClient(
     type: "LightAccount",
     policyId: "GAS_MANAGER_POLICY_ID",
   },
-  config
+  config,
 )((clientState_) => {
   clientState = clientState_;
 });

@@ -1,9 +1,8 @@
 ---
 title: Passkey Login
 description: Authenticate a user using a passkey
+slug: wallets/signer/authentication/passkey-login
 ---
-
-# Passkey Login
 
 If a user has added a passkey to their account, or they initially signed up with a passkey, you can easily log them in with that passkey.
 
@@ -19,7 +18,7 @@ If you want to allow sign-up and login with a passkey, you can ask the user for 
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 const result = await signer.authenticate({
@@ -36,7 +35,7 @@ const result = await signer.authenticate({
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { signer } from "./signer";
 
 const result = await signer.authenticate({

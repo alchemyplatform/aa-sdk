@@ -2,7 +2,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NotAuthenticatedError, MfaRequiredError } from "../src/errors.js";
 import { BaseAlchemySigner } from "../src/base.js";
-import type { BaseAlchemySignerParams } from "../src/base.js";
 import { AlchemySignerStatus } from "../src/types.js";
 import type { MfaFactor } from "../src/client/types.js";
 
@@ -24,11 +23,7 @@ import {
   TEST_DELAYS,
 } from "./fixtures.js";
 
-class TestAlchemySigner extends BaseAlchemySigner<MockAlchemySignerWebClient> {
-  constructor(params: BaseAlchemySignerParams<MockAlchemySignerWebClient>) {
-    super(params);
-  }
-}
+class TestAlchemySigner extends BaseAlchemySigner<MockAlchemySignerWebClient> {}
 
 describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
   let mockClient: MockAlchemySignerWebClient;
@@ -54,7 +49,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     event: string,
     user: any,
     bundle?: string,
-    delay = TEST_DELAYS.CLIENT_EVENT_STANDARD
+    delay = TEST_DELAYS.CLIENT_EVENT_STANDARD,
   ): Promise<void> => {
     await new Promise((resolve) => setTimeout(resolve, delay));
     if (bundle) {
@@ -106,12 +101,12 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
         type: "email",
         email: TEST_EMAILS.BASIC,
         emailMode: "magicLink",
-      })
+      }),
     ).rejects.toThrowError("MFA is required for this user");
 
     // The status should now be DISCONNECTED (the test user flow ended in an error)
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.DISCONNECTED
+      AlchemySignerStatus.DISCONNECTED,
     );
 
     // Step 2: now pass in TOTP codes
@@ -132,13 +127,13 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     await emitClientEventAfterDelay(
       "connectedEmail",
       FAKE_USER,
-      MOCK_BUNDLE_STRING
+      MOCK_BUNDLE_STRING,
     );
 
     const finalUser = await authPromise;
     expect(finalUser).toEqual(FAKE_USER);
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.CONNECTED
+      AlchemySignerStatus.CONNECTED,
     );
   });
 
@@ -159,7 +154,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
 
     // Now the store should have updated
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.AWAITING_EMAIL_AUTH
+      AlchemySignerStatus.AWAITING_EMAIL_AUTH,
     );
     expect(signer["store"].getState().otpId).toBe("otp-123");
 
@@ -178,7 +173,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
       "connectedOtp",
       OTP_USER,
       OTP_BUNDLE_RESPONSE.bundle,
-      TEST_DELAYS.CLIENT_EVENT_SHORT
+      TEST_DELAYS.CLIENT_EVENT_SHORT,
     );
 
     const finalUser = await otpPromise;
@@ -188,7 +183,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     await waitForMicrotasks();
 
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.CONNECTED
+      AlchemySignerStatus.CONNECTED,
     );
 
     // Clean up the first authenticate call if it's still pending
@@ -202,7 +197,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     // Suppose the server sees a user who also has TOTP configured.
     // So we still get an otpId, but we know TOTP is also required.
     mockClient.mock_initEmailAuth.mockResolvedValue(
-      EMAIL_OTP_WITH_MFA_RESPONSE
+      EMAIL_OTP_WITH_MFA_RESPONSE,
     );
 
     // Start the "email" flow
@@ -217,7 +212,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
 
     // At this point, the signer is waiting for you to supply an OTP code.
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.AWAITING_EMAIL_AUTH
+      AlchemySignerStatus.AWAITING_EMAIL_AUTH,
     );
 
     //
@@ -242,7 +237,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
     // Wait for store to reflect AWAITING_MFA_AUTH
     await waitForMicrotasks();
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.AWAITING_MFA_AUTH
+      AlchemySignerStatus.AWAITING_MFA_AUTH,
     );
 
     //
@@ -261,10 +256,10 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
         mockClient.emitClientEvent(
           params.connectedEventName,
           MFA_USER,
-          params.bundle
+          params.bundle,
         );
         return MFA_USER;
-      }
+      },
     );
 
     // So the final step is:
@@ -281,7 +276,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
 
     expect(resultUser).toEqual(MFA_USER);
     expect(signer["store"].getState().status).toBe(
-      AlchemySignerStatus.CONNECTED
+      AlchemySignerStatus.CONNECTED,
     );
 
     // If you like, also check that the first or second `authenticate()` calls
@@ -294,7 +289,7 @@ describe("BaseAlchemySigner Integration Tests (MFA scenarios)", () => {
   it("throws if we call signMessage without being authenticated", async () => {
     // By default, the signer is not connected until authenticate is called.
     await expect(signer.signMessage("Hello")).rejects.toThrow(
-      NotAuthenticatedError
+      NotAuthenticatedError,
     );
   });
 });

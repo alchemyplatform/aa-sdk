@@ -4,10 +4,10 @@ import { getBundlerClient } from "./actions/getBundlerClient.js";
 import { CoreLogger } from "./metrics.js";
 import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
-import type {
-  AlchemyAccountsConfig,
-  Connection,
-  CreateConfigProps,
+import {
+  type AlchemyAccountsConfig,
+  type Connection,
+  type CreateConfigProps,
 } from "./types.js";
 import { createSigner as createWebSigner } from "./environments/web/createSigner.js";
 
@@ -35,7 +35,7 @@ export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
  * @returns {AlchemyAccountsConfig} An alchemy account config object containing the core and client store
  */
 export const createConfig = (
-  params: CreateConfigProps
+  params: CreateConfigProps,
 ): AlchemyAccountsConfig => {
   const {
     chain,
@@ -61,7 +61,8 @@ export const createConfig = (
       chain,
     });
   } else {
-    connectionConfig.chains.forEach(({ chain, policyId, transport }) => {
+    connectionConfig.chains.forEach((params) => {
+      const { chain, policyId, transport } = params;
       connections.push({
         transport: transport?.config ?? connectionConfig.transport!.config,
         chain,
@@ -91,9 +92,10 @@ export const createConfig = (
         ? {
             domain: sessionConfig.domain,
           }
-        : undefined
+        : undefined,
     ),
     ssr,
+    solana: params.solana,
   });
 
   const wagmiConfig = createWagmiConfig({
@@ -105,8 +107,8 @@ export const createConfig = (
       storage: storage
         ? storage()
         : typeof window !== "undefined"
-        ? localStorage
-        : undefined,
+          ? localStorage
+          : undefined,
     }),
     ssr,
   });

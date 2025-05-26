@@ -29,7 +29,7 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     expect(
-      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0],
     ).toMatchInlineSnapshot(
       { "Alchemy-AA-Sdk-Version": expect.stringMatching(/\d+\.\d+\.\d+/) },
       `
@@ -37,7 +37,7 @@ describe("AlchemySmartAccountClient tests", () => {
         "Alchemy-AA-Sdk-Version": StringMatching /\\\\d\\+\\\\\\.\\\\d\\+\\\\\\.\\\\d\\+/,
         "Content-Type": "application/json",
       }
-    `
+    `,
     );
 
     await client.middleware
@@ -48,12 +48,13 @@ describe("AlchemySmartAccountClient tests", () => {
           account: await createLightAccount({
             chain: sepolia,
             transport: http(),
-            signer: LocalAccountSigner.privateKeyToAccountSigner(
-              generatePrivateKey()
-            ),
+            signer:
+              LocalAccountSigner.privateKeyToAccountSigner(
+                generatePrivateKey(),
+              ),
             accountAddress: zeroAddress,
           }),
-        }
+        },
       )
       .catch(() => {});
 
@@ -64,7 +65,7 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     expect(
-      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0],
     ).toMatchInlineSnapshot(
       headerMatcher,
       `
@@ -73,7 +74,7 @@ describe("AlchemySmartAccountClient tests", () => {
         "Alchemy-Aa-Sdk-Signer": "local",
         "Content-Type": "application/json",
       }
-    `
+    `,
     );
   });
 
@@ -81,14 +82,14 @@ describe("AlchemySmartAccountClient tests", () => {
     const client_ = givenClient();
     const client = clientHeaderTrack(
       clientHeaderTrack(client_, "test"),
-      "afterTest"
+      "afterTest",
     );
     await client
       .request({ method: "eth_supportedEntryPoints", params: [] })
       .catch(() => {});
 
     expect(
-      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0],
     ).toMatchInlineSnapshot(
       {
         "Alchemy-AA-Sdk-Version": expect.any(String),
@@ -106,7 +107,7 @@ describe("AlchemySmartAccountClient tests", () => {
         "traceparent": StringMatching /\\^00-\\[0-9a-f\\]\\{32\\}-\\[0-9a-f\\]\\{16\\}-00\\$/,
         "tracestate": "breadcrumbs=test-afterTest",
       }
-    `
+    `,
     );
   });
 
@@ -115,9 +116,8 @@ describe("AlchemySmartAccountClient tests", () => {
       account: await createLightAccount({
         chain: sepolia,
         transport: http(),
-        signer: LocalAccountSigner.privateKeyToAccountSigner(
-          generatePrivateKey()
-        ),
+        signer:
+          LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
         accountAddress: zeroAddress,
       }),
     });
@@ -127,7 +127,7 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     expect(
-      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0],
     ).toMatchInlineSnapshot(
       headerMatcher,
       `
@@ -136,7 +136,7 @@ describe("AlchemySmartAccountClient tests", () => {
         "Alchemy-Aa-Sdk-Signer": "local",
         "Content-Type": "application/json",
       }
-    `
+    `,
     );
   });
 
@@ -158,13 +158,14 @@ describe("AlchemySmartAccountClient tests", () => {
           account: await createLightAccount({
             chain: sepolia,
             transport: http(),
-            signer: LocalAccountSigner.privateKeyToAccountSigner(
-              generatePrivateKey()
-            ),
+            signer:
+              LocalAccountSigner.privateKeyToAccountSigner(
+                generatePrivateKey(),
+              ),
             accountAddress: zeroAddress,
           }),
-        }
-      )
+        },
+      ),
     ).toMatchInlineSnapshot(`
       {
         "callGasLimit": "0xdeadbeef",
@@ -176,7 +177,7 @@ describe("AlchemySmartAccountClient tests", () => {
       .catch(() => {});
 
     expect(
-      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0]
+      fetchSpy.mock.calls.map((x) => x[1]?.headers)[0],
     ).toMatchInlineSnapshot(
       headerMatcher,
       `
@@ -185,7 +186,7 @@ describe("AlchemySmartAccountClient tests", () => {
         "Alchemy-Aa-Sdk-Signer": "local",
         "Content-Type": "application/json",
       }
-    `
+    `,
     );
   });
 

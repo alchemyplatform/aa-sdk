@@ -25,11 +25,11 @@ There are currently 2 SDKs that are part of the `aa-sdk` suite:
 
 The core SDK also implements an EIP-1193 provider interface to easily plug into any popular dapp or wallet connect libraries such as RainbowKit, Wagmi, and Web3Modal. It also includes [`ethers.js`](https://docs.ethers.org/v5/) adapters to provide full support for `ethers.js`` apps.
 
-The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](https://accountkit.alchemy.com/smart-accounts/custom/using-your-own) implementation, [Signer](https://accountkit.alchemy.com/what-is-a-signer), [Gas Manager API](https://accountkit.alchemy.com/react/sponsor-gas) and RPC Provider.
+The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](https://www.alchemy.com/docs/wallets/smart-contracts/choosing-a-smart-account#bring-your-own-smart-account) implementation, [Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer), [Gas Manager API](https://www.alchemy.com/docs/wallets/react/sponsor-gas) and RPC Provider.
 
 ## Getting started
 
-Check out this [quickstart guide](https://accountkit.alchemy.com/react/quickstart) to get started.
+Check out this [quickstart guide](https://www.alchemy.com/docs/wallets/react/quickstart) to get started.
 
 ## Contributing
 

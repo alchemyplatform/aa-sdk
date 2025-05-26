@@ -48,7 +48,8 @@ export class ChainNotFoundError extends BaseError {
    */
   constructor(chain: Chain) {
     super(`Chain (${chain.name}) not found in connections config object`, {
-      docsPath: "https://accountkit.alchemy.com/react/createConfig",
+      docsPath:
+        "https://www.alchemy.com/docs/wallets/reference/account-kit/react/functions/createConfig",
     });
   }
 }

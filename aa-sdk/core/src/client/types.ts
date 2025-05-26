@@ -15,7 +15,7 @@ export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
 // [!region SendUserOperationResult]
 export type SendUserOperationResult<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = {
   hash: Hash;
   request: UserOperationRequest<TEntryPointVersion>;
@@ -33,6 +33,6 @@ export type UpgradeToData = {
 export type ClientMiddlewareConfig<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = Partial<ClientMiddleware<TContext>>;
 // [!endregion ClientMiddlewareConfig]

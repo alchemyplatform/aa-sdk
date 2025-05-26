@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- permission builder validation error ([#1630](https://github.com/alchemyplatform/aa-sdk/issues/1630)) ([64f5d92](https://github.com/alchemyplatform/aa-sdk/commit/64f5d9298f7cbeeeeeceb011c873d09df917a826))
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+### Bug Fixes
+
+- let outter transport dictate retries ([#1625](https://github.com/alchemyplatform/aa-sdk/issues/1625)) ([6d291bd](https://github.com/alchemyplatform/aa-sdk/commit/6d291bd83e09e0b4e98baf1608e9451d3fba792d))
+
+# [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
+
+### Features
+
+- local counterfactual address computation for MoLA and MAv2 ([#1622](https://github.com/alchemyplatform/aa-sdk/issues/1622)) ([f4a7cc4](https://github.com/alchemyplatform/aa-sdk/commit/f4a7cc4c2da77827d22bb433123bce57763e25fa))
+
+# [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
+
+### Features
+
+- compute light account counterfactual address locally ([#1616](https://github.com/alchemyplatform/aa-sdk/issues/1616)) ([dbaa3fa](https://github.com/alchemyplatform/aa-sdk/commit/dbaa3faa7fb0ae59ba5199bfdb73d413eb10fb82))
+- support for latest viem version ([#1619](https://github.com/alchemyplatform/aa-sdk/issues/1619)) ([f894102](https://github.com/alchemyplatform/aa-sdk/commit/f894102e113154e40b2f20ae998922764c628d6e))
+
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Bug Fixes
+
+- fix error message ([#1595](https://github.com/alchemyplatform/aa-sdk/issues/1595)) ([1d655e0](https://github.com/alchemyplatform/aa-sdk/commit/1d655e067b147f01e7ed1821ff2491275a46aa71))
+
+### Features
+
+- adds WebAuthnValidationModule ([#1572](https://github.com/alchemyplatform/aa-sdk/issues/1572)) ([a236f5f](https://github.com/alchemyplatform/aa-sdk/commit/a236f5ff874f466f836edee5383d43b0b156c764))
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
 # [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
 
 **Note:** Version bump only for package @account-kit/smart-contracts

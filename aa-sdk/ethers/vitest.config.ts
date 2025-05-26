@@ -8,5 +8,5 @@ export default mergeConfig(
     test: {
       name: "aa-sdk/ethers",
     },
-  })
+  }),
 );

@@ -1,11 +1,8 @@
 ---
 title: How to manage ownership of a Modular Account
 description: Follow this guide to manage ownership of a Modular Account with
-  Account Kit, a vertically integrated stack for building apps that support
-  ERC-4337 and ERC-6900.
+slug: wallets/smart-contracts/other-accounts/modular-account/manage-ownership-mav1
 ---
-
-# How to manage ownership of a Modular Account
 
 The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA owners. This lets your account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
 
@@ -47,7 +44,7 @@ Then, you can use the `readOwners` method of the `multiOwnerPluginActions` exten
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { modularAccountClient } from "./client";
 
 const ownerToCheck = "0x..."; // the address of the account to check the ownership of
@@ -68,7 +65,7 @@ You can use the `readOwners` method on the `multiOwnerPluginActions` extended sm
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { modularAccountClient } from "./client";
 
 // owners is an array of the addresses of the account owners
@@ -85,7 +82,7 @@ You can use the `updateOwners` method on the `multiOwnerPluginActions` extended 
 
 <CodeBlocks>
 
-```ts [example.ts]  twoslash
+```ts example.ts  twoslash
 import { modularAccountClient } from "./client";
 
 const ownersToAdd = []; // the addresses of owners to be added
@@ -95,9 +92,8 @@ const result = await modularAccountClient.updateOwners({
   args: [ownersToAdd, ownersToRemove],
 });
 
-const txHash = await modularAccountClient.waitForUserOperationTransaction(
-  result
-);
+const txHash =
+  await modularAccountClient.waitForUserOperationTransaction(result);
 ```
 
 <Markdown src="../../../../shared/smart-contracts/modular-account-client.mdx" />

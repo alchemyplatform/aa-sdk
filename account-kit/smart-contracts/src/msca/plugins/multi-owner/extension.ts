@@ -15,20 +15,20 @@ import {
 export type MultiOwnerPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = MultiOwnerPluginActions_<TAccount, undefined> & {
   readOwners: (
-    params: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    params: GetPluginAddressParameter & GetAccountParameter<TAccount>,
   ) => Promise<ReadonlyArray<Address>>;
 
   isOwnerOf: (
     params: { address: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount>,
   ) => Promise<boolean>;
 } & (IsUndefined<TAccount> extends false
     ? {
         readOwners: (
-          params?: GetPluginAddressParameter & GetAccountParameter<TAccount>
+          params?: GetPluginAddressParameter & GetAccountParameter<TAccount>,
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
@@ -53,21 +53,21 @@ export const multiOwnerPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => MultiOwnerPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => ({
   ...multiOwnerPluginActions_(client),
   async readOwners(
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
   ) {
     const account = args?.account ?? client.account;
     if (!account) {
@@ -81,7 +81,7 @@ export const multiOwnerPluginActions: <
 
   async isOwnerOf(
     args: { address: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount>,
   ) {
     const account = args.account ?? client.account;
     if (!account) {

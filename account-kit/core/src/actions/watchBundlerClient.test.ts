@@ -18,7 +18,7 @@ describe("watchBundlerClient", () => {
     config.store.setState({
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.AWAITING_EMAIL_AUTH,
-        undefined
+        undefined,
       ),
     });
 

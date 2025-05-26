@@ -1,9 +1,8 @@
 ---
 title: Light Account • Getting started
 description: Getting started with Light Account in Account Kit
+slug: wallets/smart-contracts/other-accounts/light-account/getting-started
 ---
-
-# Getting started with Light Account
 
 It is easy to get started with Light Account! We will show you how to create and send user operations for both `LightAccount` and `MultiOwnerLightAccount` using `@alchemy/aa-alchemy`.
 
@@ -18,11 +17,11 @@ It is easy to get started with Light Account! We will show you how to create and
 
 <CodeBlocks>
 
-```bash [npm]
+```bash npm
 npm i @account-kit/smart-contracts
 ```
 
-```bash [yarn]
+```bash yarn
 yarn add@account-kit/smart-contracts
 ```
 
@@ -34,7 +33,7 @@ The code snippets below demonstrate how to use `LightAccount` and `MultiOwnerLig
 
 <CodeBlocks>
 
-```ts [light-account.ts]
+```ts light-account.ts
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -47,7 +46,7 @@ const lightAccountClient = await createLightAccountAlchemyClient({
 });
 ```
 
-```ts [multi-owner-light-account.ts]
+```ts multi-owner-light-account.ts
 import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";

@@ -4,10 +4,8 @@ import { LoadingIcon } from "@/components/icons/loading";
 import { Transactions } from "./Transactions";
 import { useMemo } from "react";
 import { useRecurringTransactions } from "@/hooks/useRecurringTransactions";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
-import { odyssey, splitOdysseyTransport } from "@/hooks/7702/transportSetup";
+import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { Card } from "./Card";
-import { Badge } from "./Badge";
 
 export const TransactionsCard = ({
   accountMode,
@@ -17,13 +15,10 @@ export const TransactionsCard = ({
   const { cardStatus, isLoadingClient, transactions, handleTransactions } =
     useRecurringTransactions({
       mode: accountMode === "7702" ? "7702" : "default",
-      chain: accountMode === "7702" ? odyssey : arbitrumSepolia,
-      transport:
-        accountMode === "7702"
-          ? splitOdysseyTransport
-          : alchemy({
-              rpcUrl: "/api/rpc",
-            }),
+      chain: accountMode === "7702" ? baseSepolia : arbitrumSepolia,
+      transport: alchemy({
+        rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
+      }),
     });
   const buttonText = useMemo(() => {
     switch (cardStatus) {
@@ -56,15 +51,14 @@ export const TransactionsCard = ({
         )}
       </>
     ),
-    [cardStatus, transactions]
+    [cardStatus, transactions],
   );
 
   return (
     <Card
-      badgeSlot={<Badge text="New!" className="text-[#7c3AED] bg-[#F3F3FF]" />}
       imageSlot={
         <div className="w-full h-full bg-[#EAEBFE] flex justify-center items-center">
-          <Key className="h-9 w-9 sm:h-[74px] sm:w-[74px] xl:h-[94px] xl:w-[94px]" />
+          <Key className="h-8 w-8 sm:h-[74px] sm:w-[74px] xl:h-[86px] xl:w-[86px]" />
         </div>
       }
       heading="Recurring transactions"

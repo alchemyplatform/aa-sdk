@@ -89,6 +89,15 @@ navigation:
                 path: wallets/pages/react/multi-chain-apps.mdx
           - page: Using EIP-7702
             path: wallets/pages/react/using-7702.mdx
+          - section: Using Solana wallets
+            skip-slug: true
+            contents:
+              - page: Get started
+                path: wallets/pages/react/solana-wallets/get-started.mdx
+              - page: Signing and sending
+                path: wallets/pages/react/solana-wallets/signing-and-sending-solana.mdx
+              - page: Sponsor gas
+                path: wallets/pages/react/solana-wallets/sponsor-solana-gas.mdx
           - section: Customizing UI components
             slug: customization
             contents:
@@ -375,6 +384,11 @@ navigation:
                 path: wallets/pages/signer/export-private-key.mdx
               - page: As an EOA
                 path: wallets/pages/signer/as-an-eoa.mdx
+          - section: Using Solana Signer
+            skip-slug: true
+            contents:
+              - page: Signer package
+                path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
           - section: Policies
             contents:
               - page: Overview
@@ -421,8 +435,6 @@ navigation:
                 contents:
                   - section: AlchemySignerWebClient
                     contents:
-                      - page: addMfa
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/addMfa.mdx
                       - page: completeAuthWithBundle
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle.mdx
                       - page: constructor
@@ -433,8 +445,6 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/disconnect.mdx
                       - page: exportWallet
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
-                      - page: getMfaFactors
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/getMfaFactors.mdx
                       - page: initEmailAuth
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
                       - page: lookupUserWithPasskey
@@ -443,16 +453,10 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
-                      - page: removeMfa
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/removeMfa.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey.mdx
-                      - page: validateMultiFactors
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/validateMultiFactors.mdx
-                      - page: verifyMfa
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/verifyMfa.mdx
                   - section: AlchemyWebSigner
                     contents:
                       - page: constructor
@@ -469,8 +473,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/constructor.mdx
                       - page: disconnect
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect.mdx
-                      - page: experimental_toSolanaSigner
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/experimental_toSolanaSigner.mdx
+                      - page: toSolanaSigner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toSolanaSigner.mdx
                       - page: exportWallet
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet.mdx
                       - page: getAddress

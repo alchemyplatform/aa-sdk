@@ -1,9 +1,8 @@
 ---
 title: Modular Account • Upgrading to a Modular Account using Account Kit
 description: Upgrading to a Modular Account using Account Kit
+slug: wallets/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account
 ---
-
-# Upgrading to a Modular Account
 
 Upgrading a `SmartContractAccount` can be done easily using Account Kit. It just involves a simple call to a single function on the `SmartAccountClient`, namely `upgradeAccount`, along with the necessary call data, `UpgradeToData`, for the account targeted for the upgrade. For upgrading to a Modular Account, you can use the utility function `getMSCAUpgradeToData` provided by the `@account-kit/smart-contracts` package to retrieve the call data for the upgrade. This process applies to any account with upgrade capabilities.
 
@@ -11,13 +10,13 @@ Using the Light Account as an example, here is an overview of how the upgrade ca
 
 <CodeBlocks>
 
-```ts [example.ts] twoslash
+```ts example.ts twoslash
 import { lightAccountClient } from "./lightAccountClient";
 import { getMSCAUpgradeToData } from "@account-kit/smart-contracts";
 
 const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
   lightAccountClient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 const hash = await lightAccountClient.upgradeAccount({
@@ -28,7 +27,7 @@ const hash = await lightAccountClient.upgradeAccount({
 const upgradedAccount = await createMAAccount();
 ```
 
-```ts [lightAccountClient.ts] twoslash filename="lightAccountClient.ts"
+```ts lightAccountClient.ts twoslash filename="lightAccountClient.ts"
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -47,7 +46,7 @@ That is all! Now, you can create a smart account client to connect with the upgr
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
 import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
 import { upgradedAccount } from "./upgradedAccount";
@@ -61,13 +60,13 @@ const upgradedAccountClient = await createAlchemySmartAccountClient({
 const owners = await upgradedAccountClient.readOwners();
 ```
 
-```ts [upgradedAccount.ts] twoslash filename="upgradedAccount.ts"
+```ts upgradedAccount.ts twoslash filename="upgradedAccount.ts"
 import { lightAccountClient } from "./lightAccountClient";
 import { getMSCAUpgradeToData } from "@account-kit/smart-contracts";
 
 const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
   lightAccountClient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 const hash = await lightAccountClient.upgradeAccount({
@@ -78,7 +77,7 @@ const hash = await lightAccountClient.upgradeAccount({
 export const upgradedAccount = await createMAAccount();
 ```
 
-```ts [lightAccountClient.ts] twoslash filename="lightAccountClient.ts"
+```ts lightAccountClient.ts twoslash filename="lightAccountClient.ts"
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";

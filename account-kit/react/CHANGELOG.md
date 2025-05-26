@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.33.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.32.0...v4.33.0) (2025-05-15)
+
+### Features
+
+- support for latest viem version ([#1619](https://github.com/alchemyplatform/aa-sdk/issues/1619)) ([f894102](https://github.com/alchemyplatform/aa-sdk/commit/f894102e113154e40b2f20ae998922764c628d6e))
+
+# [4.32.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.2...v4.32.0) (2025-05-09)
+
+### Features
+
+- link auth when a user logs in with Google with an existing email ([#1581](https://github.com/alchemyplatform/aa-sdk/issues/1581)) ([dd44ea9](https://github.com/alchemyplatform/aa-sdk/commit/dd44ea9be47b1e8cdd29999e80b81d5d3ccb8077))
+- solana demo ([#1583](https://github.com/alchemyplatform/aa-sdk/issues/1583)) ([d471359](https://github.com/alchemyplatform/aa-sdk/commit/d471359104d0ad55f1c3d4e26d694edc88acffec)), closes [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1582](https://github.com/alchemyplatform/aa-sdk/issues/1582) [#1584](https://github.com/alchemyplatform/aa-sdk/issues/1584)
+
+## [4.31.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.1...v4.31.2) (2025-05-06)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.31.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.31.0...v4.31.1) (2025-05-05)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.31.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.30.0...v4.31.0) (2025-05-02)
+
+### Features
+
+- solana nft demo ([#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578)) ([7ad9c20](https://github.com/alchemyplatform/aa-sdk/commit/7ad9c20d5c005ddaad542ba3aaf31d6d795b88f2))
+
+### Reverts
+
+- Revert "feat: solana nft demo (#1578)" (#1582) ([4691730](https://github.com/alchemyplatform/aa-sdk/commit/469173054560a558b2b705374cc484226b368cf3)), closes [#1578](https://github.com/alchemyplatform/aa-sdk/issues/1578) [#1582](https://github.com/alchemyplatform/aa-sdk/issues/1582)
+
+# [4.30.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.29.0...v4.30.0) (2025-04-28)
+
+### Features
+
+- move to use the alchemy store for web3 communication ([#1562](https://github.com/alchemyplatform/aa-sdk/issues/1562)) ([f86a815](https://github.com/alchemyplatform/aa-sdk/commit/f86a815412cb532de12a405b1cfb143da2e22b77))
+
 # [4.29.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.28.3...v4.29.0) (2025-04-25)
 
 **Note:** Version bump only for package @account-kit/react

@@ -1,9 +1,8 @@
 ---
 title: Multi-chain Apps
 description: Learn how to build multi-chain apps with Account Kit core.
+slug: wallets/core/multi-chain-apps
 ---
-
-# Multi-chain Apps
 
 Account Kit supports multi-chain apps, allowing you to build applications that interact with multiple blockchains. This guide will show you how to set up your app to work with multiple chains.
 
@@ -51,7 +50,7 @@ Once your app is configured to use multiple chains, you can switch between them 
 
 <CodeBlocks>
 
-```ts twoslash [example.ts]
+```ts twoslash example.ts
 import { setChain } from "@account-kit/core";
 import { mainnet } from "@account-kit/infra";
 import { config } from "./config";
@@ -59,7 +58,7 @@ import { config } from "./config";
 await setChain(config, mainnet);
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
+```ts twoslash config.ts filename="config.ts"
 import { createConfig } from "@account-kit/core";
 import { sepolia, mainnet, alchemy } from "@account-kit/infra";
 
