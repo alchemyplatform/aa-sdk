@@ -39,7 +39,7 @@ export type ModularAccountV2Client<
 
 export type ModularAccountV2ClientNoSigner<
   TChain extends Chain = Chain,
-  TTransport extends Transport | AlchemyTransport = Transport
+  TTransport extends Transport | AlchemyTransport = Transport,
 > = SmartAccountClient<TTransport, TChain, ModularAccountV2NoSigner>;
 
 export type CreateModularAccountV2ClientParams<
@@ -54,7 +54,7 @@ export type CreateModularAccountV2ClientParams<
 
 export type CreateModularAccountV2ClientParamsNoSigner<
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain
+  TChain extends Chain = Chain,
 > = CreateModularAccountV2ParamsNoSigner<TTransport> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
@@ -96,12 +96,12 @@ export function createModularAccountV2Client<
 
 export function createModularAccountV2Client<
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain
+  TChain extends Chain = Chain,
 >(
   args: CreateModularAccountV2ClientParamsNoSigner<TTransport, TChain> &
     NotType<TTransport, AlchemyTransport> & {
       params: ToWebAuthnAccountParameters;
-    }
+    },
 ): Promise<ModularAccountV2ClientNoSigner<TChain>>;
 /**
  * Creates a Modular Account V2 client using the provided configuration parameters.
@@ -138,7 +138,7 @@ export async function createModularAccountV2Client(
   config:
     | CreateModularAccountV2ClientParams
     | CreateModularAccountV2ClientParamsNoSigner
-    | CreateModularAccountV2AlchemyClientParams
+    | CreateModularAccountV2AlchemyClientParams,
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
 
@@ -146,11 +146,11 @@ export async function createModularAccountV2Client(
 
   if (config.mode === "webauthn") {
     account = await createModularAccountV2(
-      config as CreateModularAccountV2ParamsNoSigner<Transport>
+      config as CreateModularAccountV2ParamsNoSigner<Transport>,
     );
   } else {
     account = await createModularAccountV2(
-      config as CreateModularAccountV2Params
+      config as CreateModularAccountV2Params,
     );
   }
 
