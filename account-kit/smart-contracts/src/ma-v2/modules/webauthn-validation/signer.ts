@@ -39,7 +39,7 @@ export const webauthnSigningFunctions = (
   chain: Chain,
   accountAddress: Address,
   entityId: number,
-  deferredActionData?: Hex
+  deferredActionData?: Hex,
 ) => {
   const { getFn, rpId } = params;
   const { id, publicKey } = params.credential;
@@ -70,7 +70,7 @@ export const webauthnSigningFunctions = (
           BigInt(metadata.typeIndex),
           signature.r,
           signature.s,
-        ]
+        ],
       ),
     ]);
   };
@@ -115,13 +115,15 @@ export const webauthnSigningFunctions = (
 
     signTypedData: async <
       const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
     >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
       const isDeferredAction =
         typedDataDefinition?.primaryType === "DeferredAction" &&
-        typedDataDefinition?.domain?.verifyingContract === accountAddress;
+        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
+        "verifyingContract" in typedDataDefinition.domain &&
+        typedDataDefinition.domain.verifyingContract === accountAddress;
 
       const hash = await hashTypedData({
         domain: {

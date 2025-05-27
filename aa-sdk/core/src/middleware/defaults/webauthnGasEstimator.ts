@@ -41,7 +41,7 @@ export const rip7212CheckBytecode =
  * @returns {Function} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
  */
 export const webauthnGasEstimator: (
-  gasEstimator?: ClientMiddlewareFn
+  gasEstimator?: ClientMiddlewareFn,
 ) => ClientMiddlewareFn =
   (gasEstimator?: ClientMiddlewareFn) => async (struct, params) => {
     const gasEstimator_ = gasEstimator ?? defaultGasEstimator(params.client);
@@ -54,7 +54,7 @@ export const webauthnGasEstimator: (
     const entryPoint = account.getEntryPoint();
     if (entryPoint.version !== "0.7.0") {
       throw new Error(
-        "This middleware is only compatible with EntryPoint v0.7.0"
+        "This middleware is only compatible with EntryPoint v0.7.0",
       );
     }
 
@@ -63,12 +63,12 @@ export const webauthnGasEstimator: (
     const pvg: bigint | number | Hex | undefined =
       uo.verificationGasLimit instanceof Promise
         ? await uo.verificationGasLimit
-        : uo?.verificationGasLimit ?? 0n;
+        : (uo?.verificationGasLimit ?? 0n);
     console.log("verificationGasLimit gas", uo.verificationGasLimit);
 
     if (!pvg) {
       throw new Error(
-        "WebauthnGasEstimator: verificationGasLimit is 0 or not defined"
+        "WebauthnGasEstimator: verificationGasLimit is 0 or not defined",
       );
     }
 
@@ -83,7 +83,7 @@ export const webauthnGasEstimator: (
     console.log(chainHas7212 ? 10000n : 300000n);
     console.log(
       BigInt(typeof pvg === "string" ? BigInt(pvg) : pvg) +
-        (chainHas7212 ? 10000n : 300000n)
+        (chainHas7212 ? 10000n : 300000n),
     );
 
     // TODO: iterate numbers. Aim to have ~1000 gas buffer to account for longer authenticatorDatas and clientDataJSONs
