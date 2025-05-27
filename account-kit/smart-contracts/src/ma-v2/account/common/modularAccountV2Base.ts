@@ -81,7 +81,7 @@ export type ModularAccountV2NoSigner = SmartContractAccount<
   signerEntity: SignerEntity;
   getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
   getValidationData: (
-    args: ValidationDataParams
+    args: ValidationDataParams,
   ) => Promise<ValidationDataView>;
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
@@ -90,7 +90,7 @@ export type CreateMAV2BaseParams<
   TSigner extends SmartAccountSigner | undefined =
     | SmartAccountSigner
     | undefined,
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 > = Omit<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   // Implements the following methods required by `toSmartContractAccount`, and passes through any other parameters.
@@ -119,17 +119,17 @@ export type CreateMAV2BaseReturnTypeNoSigner = ModularAccountV2NoSigner;
 export async function createMAv2Base(
   config: Omit<CreateMAV2BaseParams, "signer"> & {
     params: ToWebAuthnAccountParameters;
-  }
+  },
 ): Promise<CreateMAV2BaseReturnTypeNoSigner>;
 
 export async function createMAv2Base<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(config: CreateMAV2BaseParams): CreateMAV2BaseReturnType<TSigner>;
 
 export async function createMAv2Base<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  config: CreateMAV2BaseParams<TSigner> | Omit<CreateMAV2BaseParams, "signer">
+  config: CreateMAV2BaseParams<TSigner> | Omit<CreateMAV2BaseParams, "signer">,
 ): Promise<CreateMAV2BaseReturnTypeNoSigner | ModularAccountV2<TSigner>> {
   let {
     transport,
@@ -319,7 +319,7 @@ export async function createMAv2Base<
             chain,
             accountAddress,
             entityId,
-            deferredActionData
+            deferredActionData,
           )
       : webauthnSigningFunctions(
           // TO DO: integrate with the webAuthn signer
