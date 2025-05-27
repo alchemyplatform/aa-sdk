@@ -150,3 +150,4 @@ export {
   takeBytes,
   toRecord,
 } from "./utils/index.js";
+export { getUserOperationError } from "./actions/smartAccount/getUserOperationError.js";

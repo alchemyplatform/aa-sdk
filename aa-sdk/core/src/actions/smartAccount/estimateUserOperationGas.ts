@@ -14,6 +14,7 @@ import type {
   UserOperationContext,
 } from "./types.js";
 import { clientHeaderTrack } from "../../index.js";
+import { getUserOperationError } from "./getUserOperationError.js";
 
 /**
  * Description SmartAccountClientAction for estimating the gas cost of a user operation
@@ -59,10 +60,15 @@ export async function estimateUserOperationGas<
 
   return _initUserOperation(client, args).then(async (struct) => {
     const request = deepHexlify(await resolveProperties(struct));
-    return client.estimateUserOperationGas(
-      request,
-      account.getEntryPoint().address,
-      overrides?.stateOverride,
-    );
+    try {
+      return client.estimateUserOperationGas(
+        request,
+        account.getEntryPoint().address,
+        overrides?.stateOverride,
+      );
+    } catch (err) {
+      getUserOperationError(client, request, account.getEntryPoint());
+      throw err;
+    }
   });
 }
