@@ -54,12 +54,15 @@ const accountClient = await createModularAccountV2Client({
 });
 ```
 
-:::tip[Choosing which mode to use]
+<Tip>
+### Choosing which mode to use
+
 We currently offer two variants of Modular Account v2: `default` and `7702`.
 
 - (Recommended) `default` provides you with the cheapest, most flexible and advanced Smart Account
 - `7702` if you are looking for 7702 support, learn about how to set up and take adavantage of our EIP-7702 compliant account [here](/wallets/smart-contracts/modular-account-v2/using-7702)
-  :::
+
+</Tip>
 
 Want to enable social login methods? Set up your [Alchemy Signer](/wallets/signer/quickstart).
 
@@ -97,6 +100,6 @@ console.log(
   "User operation sent! \nUO hash: ",
   operation.hash,
   "\nModular Account v2 Address: ",
-  operation.request.sender,
+  operation.request.sender
 );
 ```
