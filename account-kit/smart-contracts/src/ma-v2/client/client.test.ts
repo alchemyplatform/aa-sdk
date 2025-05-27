@@ -130,83 +130,83 @@ describe("MA v2 Tests", async () => {
     "24": 66,
     "25": 0,
     "26": 4,
-    "27": 77,
-    "28": 74,
-    "29": 167,
-    "30": 46,
-    "31": 217,
-    "32": 7,
-    "33": 53,
-    "34": 40,
-    "35": 195,
-    "36": 14,
-    "37": 64,
-    "38": 77,
-    "39": 119,
-    "40": 201,
-    "41": 49,
-    "42": 179,
-    "43": 249,
-    "44": 220,
-    "45": 38,
-    "46": 159,
-    "47": 154,
-    "48": 15,
-    "49": 105,
-    "50": 254,
-    "51": 119,
-    "52": 195,
-    "53": 45,
-    "54": 250,
-    "55": 63,
-    "56": 170,
-    "57": 53,
-    "58": 142,
-    "59": 97,
-    "60": 37,
-    "61": 239,
-    "62": 119,
-    "63": 80,
-    "64": 217,
-    "65": 237,
-    "66": 76,
-    "67": 99,
-    "68": 143,
-    "69": 174,
-    "70": 121,
-    "71": 14,
-    "72": 88,
-    "73": 151,
-    "74": 36,
-    "75": 57,
-    "76": 57,
-    "77": 204,
-    "78": 182,
-    "79": 14,
-    "80": 82,
-    "81": 141,
-    "82": 137,
-    "83": 32,
-    "84": 204,
-    "85": 244,
-    "86": 81,
-    "87": 70,
-    "88": 239,
-    "89": 210,
-    "90": 109,
+    "27": 213,
+    "28": 3,
+    "29": 58,
+    "30": 178,
+    "31": 116,
+    "32": 152,
+    "33": 169,
+    "34": 159,
+    "35": 190,
+    "36": 53,
+    "37": 212,
+    "38": 224,
+    "39": 98,
+    "40": 110,
+    "41": 150,
+    "42": 103,
+    "43": 149,
+    "44": 107,
+    "45": 198,
+    "46": 194,
+    "47": 179,
+    "48": 78,
+    "49": 176,
+    "50": 169,
+    "51": 94,
+    "52": 144,
+    "53": 223,
+    "54": 174,
+    "55": 130,
+    "56": 238,
+    "57": 29,
+    "58": 224,
+    "59": 152,
+    "60": 226,
+    "61": 26,
+    "62": 99,
+    "63": 135,
+    "64": 12,
+    "65": 15,
+    "66": 57,
+    "67": 17,
+    "68": 212,
+    "69": 192,
+    "70": 124,
+    "71": 157,
+    "72": 57,
+    "73": 228,
+    "74": 187,
+    "75": 254,
+    "76": 133,
+    "77": 106,
+    "78": 226,
+    "79": 79,
+    "80": 44,
+    "81": 133,
+    "82": 70,
+    "83": 245,
+    "84": 167,
+    "85": 184,
+    "86": 196,
+    "87": 78,
+    "88": 195,
+    "89": 135,
+    "90": 128,
   };
 
   const response = {
     authenticatorAttachment: "platform",
     clientExtensionResults: {},
-    id: "td1jv8YThj_WsRpD7I7Y0UX7h7nilwhiOL-RxzjBsS8",
-    rawId: "td1jv8YThj_WsRpD7I7Y0UX7h7nilwhiOL-RxzjBsS8",
+    id: "zC6QsoTcYkJM-jg0KytjKkScZqBhvOBldJ7ApqOVzNI",
+    rawId: "zC6QsoTcYkJM-jg0KytjKkScZqBhvOBldJ7ApqOVzNI",
     response: {
       authenticatorData: "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA",
       clientDataJSON:
-        "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiRWQ1dlVEMVdCcmdPOFhPbzlzNjdBUHVaNkc0Z1ZaR0dnS0Jkd2pQRlhhUSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+        "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiaUIxRU9wYUZCVGw5V3lrZ1BxUWxiSXFMOXp6MHF2Q0d3bWZ3d3JvQmtRcyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9",
       signature:
-        "MEUCIARF5zemXQ034TvN8TYVu1qerivMNBX4pQliG7Yjhjr4AiEAxspHdeCMOzE18gqrBdQ_nbIiTrMgFznJzaYn-bKG54o",
+        "MEUCIQDLu4Hr1BxN_bDTB_xftoD7Oc4-U2Xesstg65gXVhhCtAIgZ8JHG-ZsPC1xagTFvA8ME5Sp4rNDIG4_xrC6L-QG_rA",
       userHandle: "dXNlcklEMTIzNDU2",
     },
     type: "public-key",
@@ -215,7 +215,7 @@ describe("MA v2 Tests", async () => {
   const credential = {
     id: response.id,
     publicKey:
-      "0x3059301306072a8648ce3d020106082a8648ce3d030107034200044d4aa72ed9073528c30e404d77c931b3f9dc269f9a0f69fe77c32dfa3faa358e6125ef7750d9ed4c638fae790e5897243939ccb60e528d8920ccf45146efd26d",
+      "0x3059301306072a8648ce3d020106082a8648ce3d03010703420004d5033ab27498a99fbe35d4e0626e9667956bc6c2b34eb0a95e90dfae82ee1de098e21a63870c0f3911d4c07c9d39e4bbfe856ae24f2c8546f5a7b8c44ec38780",
   } as const;
 
   function base64urlToUint8Array(base64url: string): Uint8Array {
@@ -234,10 +234,10 @@ describe("MA v2 Tests", async () => {
       return Promise.resolve({
         response: {
           authenticatorData: base64urlToUint8Array(
-            response.response.authenticatorData
+            response.response.authenticatorData,
           ),
           clientDataJSON: base64urlToUint8Array(
-            response.response.clientDataJSON
+            response.response.clientDataJSON,
           ),
           signature: base64urlToUint8Array(response.response.signature),
         },
@@ -319,7 +319,7 @@ describe("MA v2 Tests", async () => {
 
     await provider.sendRawUserOperation(
       signedUO,
-      provider.account.getEntryPoint().address
+      provider.account.getEntryPoint().address,
     );
   });
 
@@ -346,7 +346,7 @@ describe("MA v2 Tests", async () => {
     console.log("signature", signature);
 
     await expect(
-      accountContract.read.isValidSignature([hashMessage(message), signature])
+      accountContract.read.isValidSignature([hashMessage(message), signature]),
     ).resolves.toEqual(isValidWebAuthnSigSuccess);
   });
 
@@ -2018,8 +2018,8 @@ describe("MA v2 Tests", async () => {
             transport: custom(instance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
-        ? erc7677Middleware()
-        : {}),
+          ? erc7677Middleware()
+          : {}),
       salt: salt++,
     });
 

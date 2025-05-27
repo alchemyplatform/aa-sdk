@@ -7,6 +7,8 @@ import {
   getEntryPoint,
   EntityIdOverrideError,
   InvalidModularAccountV2Mode,
+  createBundlerClient,
+  getAccountAddress,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -59,7 +61,7 @@ export type CreateModularAccountV2Params<
 
 // currently the only ModularAccountV2 mode that doesn't require a signer is "webauthn"
 export type CreateModularAccountV2ParamsNoSigner<
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 > = Pick<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
   "transport" | "chain" | "accountAddress"
@@ -82,9 +84,9 @@ export async function createModularAccountV2<
 ): Promise<ModularAccountV2<TSigner>>;
 
 export async function createModularAccountV2<
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 >(
-  config: CreateModularAccountV2ParamsNoSigner<TTransport>
+  config: CreateModularAccountV2ParamsNoSigner<TTransport>,
 ): Promise<ModularAccountV2NoSigner>;
 
 /**
@@ -121,11 +123,11 @@ export async function createModularAccountV2<
  */
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
   config:
     | CreateModularAccountV2Params<TTransport, TSigner>
-    | CreateModularAccountV2ParamsNoSigner<TTransport>
+    | CreateModularAccountV2ParamsNoSigner<TTransport>,
 ): Promise<ModularAccountV2<TSigner> | ModularAccountV2NoSigner> {
   const {
     transport,
