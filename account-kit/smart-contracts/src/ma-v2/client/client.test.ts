@@ -30,6 +30,7 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
@@ -57,8 +58,12 @@ import {
   testActions,
   toHex,
   zeroAddress,
+  keccak256,
+  encodePacked,
   type ContractFunctionName,
   type TestActions,
+  encodeAbiParameters,
+  stringToBytes,
 } from "viem";
 import {
   createWebAuthnCredential,
@@ -177,32 +182,77 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it.fails(
-    "successfully sign + validate a message, for WebAuthn account",
-    async () => {
-      const provider = await givenWebAuthnProvider();
+  it.only("successfully sign + validate a message, for WebAuthn account", async () => {
+    const provider = await givenWebAuthnProvider();
 
-      await setBalance(instance.getClient(), {
-        address: provider.getAddress(),
-        value: parseEther("2"),
-      });
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
 
-      const message = "0xdeadbeef";
+    const message = "0xdeadbeef";
 
-      let signature = await provider.signMessage({ message });
+    let signature = await provider.signMessage({ message });
 
-      const publicClient = instance.getClient().extend(publicActions);
+    console.log("signature", signature);
 
-      const isValid = await publicClient.verifyMessage({
-        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
-        message,
-        address: provider.getAddress(),
-        signature,
-      });
+    const publicClient = instance.getClient().extend(publicActions);
 
-      expect(isValid).toBe(true);
-    },
-  );
+    const domain = {
+      name: keccak256(stringToBytes("MyDapp")),
+      version: keccak256(stringToBytes("1")),
+      chainId: provider.chain.id,
+      verifyingContract: getDefaultWebauthnValidationModuleAddress(
+        provider.chain,
+      ),
+    };
+
+    const typeHash = keccak256(
+      //ethers.utils.toUtf8Bytes
+      stringToBytes(
+        "EIP712Domain(string name,string version,number chainId,address verifyingContract)",
+      ),
+    );
+
+    // format message to EIP-712 format (https://github.dev/fractional-company/contracts/blob/master/src/OpenZeppelin/drafts/EIP712.sol)
+    const messageEIP712 = keccak256(
+      encodePacked(
+        ["bytes32", "bytes32", "bytes32"],
+        [
+          keccak256(stringToBytes("\x19\x01")),
+          keccak256(
+            encodeAbiParameters(
+              [
+                { name: "typeHash", type: "bytes32" },
+                { name: "name", type: "bytes32" },
+                { name: "version", type: "bytes32" },
+                { name: "chainId", type: "uint256" },
+                { name: "verifyingContract", type: "address" },
+              ],
+              [
+                typeHash,
+                domain.name,
+                domain.version,
+                BigInt(domain.chainId),
+                domain.verifyingContract,
+              ],
+            ),
+          ),
+          keccak256(stringToBytes(message)),
+        ],
+      ),
+    );
+    console.log("messageEIP712", messageEIP712);
+
+    const isValid = await publicClient.verifyMessage({
+      // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
+      message: messageEIP712,
+      address: provider.getAddress(),
+      signature,
+    });
+
+    expect(isValid).toBe(true);
+  });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
