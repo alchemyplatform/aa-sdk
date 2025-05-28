@@ -41,7 +41,6 @@ export async function getUserOperationError<
   }
 
   const uo = deepHexlify(request);
-  console.log(request);
 
   try {
     switch (entryPoint.version) {

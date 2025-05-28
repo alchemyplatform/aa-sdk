@@ -61,7 +61,7 @@ export async function estimateUserOperationGas<
   return _initUserOperation(client, args).then(async (struct) => {
     const request = deepHexlify(await resolveProperties(struct));
     try {
-      return client.estimateUserOperationGas(
+      return await client.estimateUserOperationGas(
         request,
         account.getEntryPoint().address,
         overrides?.stateOverride,
