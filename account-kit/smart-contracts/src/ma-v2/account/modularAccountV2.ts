@@ -33,6 +33,11 @@ import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
 import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import { parsePublicKey } from "webauthn-p256";
+import {
+  SignerRequiredFor7702Error,
+  SignerRequiredForDefaultError,
+  WebauthnCredentialsRequiredError,
+} from "../errors.js";
 
 export type CreateModularAccountV2Params<
   TTransport extends Transport = Transport,
@@ -159,8 +164,7 @@ export async function createModularAccountV2<
   const accountFunctions = await (async () => {
     switch (config.mode) {
       case "webauthn": {
-        if (!credential)
-          throw new Error("Missing params for MAV2 webauthn mode");
+        if (!credential) throw new WebauthnCredentialsRequiredError();
         const publicKey = credential.publicKey;
         const { x, y } = parsePublicKey(publicKey);
         const {
@@ -200,7 +204,7 @@ export async function createModularAccountV2<
         const getAccountInitCode = async (): Promise<Hex> => {
           return "0x";
         };
-        if (!signer) throw new Error("Missing signer for MAV2 mode 7022");
+        if (!signer) throw new SignerRequiredFor7702Error();
         const signerAddress = await signer.getAddress();
         const accountAddress = _accountAddress ?? signerAddress;
         if (
@@ -223,7 +227,7 @@ export async function createModularAccountV2<
       }
       case "default":
       case undefined: {
-        if (!signer) throw new Error("Missing signer for MAV2 mode default");
+        if (!signer) throw new SignerRequiredForDefaultError();
         const {
           salt = 0n,
           factoryAddress = getDefaultMAV2FactoryAddress(chain),
@@ -269,8 +273,7 @@ export async function createModularAccountV2<
   })();
 
   if (!signer) {
-    if (!credential)
-      throw new Error("Missing credential for MAV2 mode webauthn");
+    if (!credential) throw new WebauthnCredentialsRequiredError();
     return await createMAv2Base({
       source: "ModularAccountV2", // TO DO: remove need to pass in source?
       transport,
