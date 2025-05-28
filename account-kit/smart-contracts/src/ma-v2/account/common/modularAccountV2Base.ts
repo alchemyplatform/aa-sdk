@@ -73,7 +73,7 @@ export type ModularAccountV2<
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
 
-export type ModularAccountV2NoSigner = SmartContractAccount<
+export type WebauthnModularAccountV2 = SmartContractAccount<
   "ModularAccountV2",
   "0.7.0"
 > & {
@@ -113,14 +113,14 @@ export type CreateMAV2BaseReturnType<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Promise<ModularAccountV2<TSigner>>;
 
-export type CreateMAV2BaseReturnTypeNoSigner = ModularAccountV2NoSigner;
+export type CreateWebauthnMAV2BaseReturnType = WebauthnModularAccountV2;
 
 // function overload
 export async function createMAv2Base(
   config: Omit<CreateMAV2BaseParams, "signer"> & {
     params: ToWebAuthnAccountParameters;
   },
-): Promise<CreateMAV2BaseReturnTypeNoSigner>;
+): Promise<CreateWebauthnMAV2BaseReturnType>;
 
 export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -130,7 +130,7 @@ export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
   config: CreateMAV2BaseParams<TSigner> | Omit<CreateMAV2BaseParams, "signer">,
-): Promise<CreateMAV2BaseReturnTypeNoSigner | ModularAccountV2<TSigner>> {
+): Promise<CreateWebauthnMAV2BaseReturnType | ModularAccountV2<TSigner>> {
   let {
     transport,
     chain,
@@ -338,7 +338,7 @@ export async function createMAv2Base<
       getExecutionData,
       getValidationData,
       encodeCallData,
-    } as ModularAccountV2NoSigner; // TO DO: figure out when this breaks! we shouldn't have to cast
+    } as WebauthnModularAccountV2; // TO DO: figure out when this breaks! we shouldn't have to cast
   }
 
   return {
