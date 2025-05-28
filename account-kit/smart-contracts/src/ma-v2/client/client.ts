@@ -37,7 +37,7 @@ export type ModularAccountV2Client<
   TTransport extends Transport | AlchemyTransport = Transport,
 > = SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
 
-export type ModularAccountV2ClientNoSigner<
+export type WebauthnModularAccountV2Client<
   TChain extends Chain = Chain,
   TTransport extends Transport | AlchemyTransport = Transport,
 > = SmartAccountClient<TTransport, TChain, WebauthnModularAccountV2>;
@@ -52,14 +52,18 @@ export type CreateModularAccountV2ClientParams<
     "transport" | "account" | "chain"
   >;
 
-export type CreateModularAccountV2ClientParamsNoSigner<
+export type CreateWebauthnModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
 > = CreateWebauthnModularAccountV2Params<TTransport> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
-  >;
+  > & {
+    credential: ToWebAuthnAccountParameters["credential"];
+    getFn?: ToWebAuthnAccountParameters["getFn"];
+    rpId?: ToWebAuthnAccountParameters["rpId"];
+  };
 
 export type CreateModularAccountV2AlchemyClientParams<
   TTransport extends Transport = Transport,
@@ -98,11 +102,9 @@ export function createModularAccountV2Client<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
 >(
-  args: CreateModularAccountV2ClientParamsNoSigner<TTransport, TChain> &
-    NotType<TTransport, AlchemyTransport> & {
-      params: ToWebAuthnAccountParameters;
-    },
-): Promise<ModularAccountV2ClientNoSigner<TChain>>;
+  args: CreateWebauthnModularAccountV2ClientParams<TTransport, TChain> &
+    NotType<TTransport, AlchemyTransport>,
+): Promise<WebauthnModularAccountV2Client<TChain>>;
 /**
  * Creates a Modular Account V2 client using the provided configuration parameters.
  *
@@ -137,7 +139,7 @@ export function createModularAccountV2Client<
 export async function createModularAccountV2Client(
   config:
     | CreateModularAccountV2ClientParams
-    | CreateModularAccountV2ClientParamsNoSigner
+    | CreateWebauthnModularAccountV2ClientParams
     | CreateModularAccountV2AlchemyClientParams,
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
@@ -153,8 +155,6 @@ export async function createModularAccountV2Client(
       config as CreateModularAccountV2Params,
     );
   }
-
-  console.log("\n\n\n\n\n a \n\n\n\n\n");
 
   const middlewareToAppend = await (async () => {
     switch (config.mode) {
