@@ -286,7 +286,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       value: parseEther("1"),
     });
 
-    const uo = await client1.buildUserOperation({
+    const result = await client1.sendUserOperation({
       uo: {
         target: client1.getAddress(),
         data: "0x",
@@ -296,17 +296,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       },
     });
 
-    const signedUO = await client1.signUserOperation({
-      uoStruct: uo,
-      context: {
-        userOpSignatureType: "ACTUAL",
-      },
-    });
-
-    await client1.sendRawUserOperation(
-      signedUO,
-      client1.account.getEntryPoint().address,
-    );
+    await client1.waitForUserOperationTransaction(result);
   });
 
   it("should test 2/2 multisig", async () => {
