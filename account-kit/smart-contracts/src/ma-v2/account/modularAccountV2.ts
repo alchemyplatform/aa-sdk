@@ -66,7 +66,9 @@ export type CreateWebauthnModularAccountV2Params<
   "transport" | "chain" | "accountAddress"
 > & {
   mode: "webauthn";
-  params: ToWebAuthnAccountParameters;
+  credential: ToWebAuthnAccountParameters["credential"];
+  getFn?: ToWebAuthnAccountParameters["getFn"] | undefined;
+  rpId?: ToWebAuthnAccountParameters["rpId"] | undefined;
   entryPoint?: EntryPointDef<"0.7.0", Chain>;
   deferredAction?: Hex;
   signerEntity?: SignerEntity;
@@ -141,9 +143,13 @@ export async function createModularAccountV2<
     deferredAction,
   } = config;
 
-  const params = "params" in config ? config.params : undefined;
-
   const signer = "signer" in config ? config.signer : undefined;
+
+  const credential = "credential" in config ? config.credential : undefined;
+
+  const getFn = "getFn" in config ? config.getFn : undefined;
+
+  const rpId = "rpId" in config ? config.rpId : undefined;
 
   const client = createBundlerClient({
     transport,
@@ -153,8 +159,9 @@ export async function createModularAccountV2<
   const accountFunctions = await (async () => {
     switch (config.mode) {
       case "webauthn": {
-        if (!params) throw new Error("Missing params for MAV2 webauthn mode");
-        const publicKey = params.credential.publicKey;
+        if (!credential)
+          throw new Error("Missing params for MAV2 webauthn mode");
+        const publicKey = credential.publicKey;
         const { x, y } = parsePublicKey(publicKey);
         const {
           salt = 0n,
@@ -262,6 +269,8 @@ export async function createModularAccountV2<
   })();
 
   if (!signer) {
+    if (!credential)
+      throw new Error("Missing credential for MAV2 mode webauthn");
     return await createMAv2Base({
       source: "ModularAccountV2", // TO DO: remove need to pass in source?
       transport,
@@ -269,7 +278,9 @@ export async function createModularAccountV2<
       entryPoint,
       signerEntity,
       deferredAction,
-      params: params as ToWebAuthnAccountParameters, // this may fail if params is not provided
+      credential,
+      getFn,
+      rpId,
       ...accountFunctions,
     });
   }
