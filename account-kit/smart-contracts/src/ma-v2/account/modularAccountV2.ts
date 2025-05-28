@@ -27,7 +27,7 @@ import {
   type SignerEntity,
   type ModularAccountV2,
   createMAv2Base,
-  type ModularAccountV2NoSigner,
+  type WebauthnModularAccountV2,
 } from "./common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../utils.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
@@ -59,8 +59,7 @@ export type CreateModularAccountV2Params<
       }
   );
 
-// currently the only ModularAccountV2 mode that doesn't require a signer is "webauthn"
-export type CreateModularAccountV2ParamsNoSigner<
+export type CreateWebauthnModularAccountV2Params<
   TTransport extends Transport = Transport,
 > = Pick<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
@@ -86,8 +85,8 @@ export async function createModularAccountV2<
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
 >(
-  config: CreateModularAccountV2ParamsNoSigner<TTransport>,
-): Promise<ModularAccountV2NoSigner>;
+  config: CreateWebauthnModularAccountV2Params<TTransport>,
+): Promise<WebauthnModularAccountV2>;
 
 /**
  * Creates a ModularAccount V2 account, with the mode depending on the provided "mode" field.
@@ -118,8 +117,8 @@ export async function createModularAccountV2<
  * });
  * ```
  *
- * @param {CreateModularAccountV2Params | CreateModularAccountV2ParamsNoSigner} config Configuration parameters for creating a Modular Account V2.
- * @returns {Promise<ModularAccountV2 | ModularAccountV2NoSigner>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
+ * @param {CreateModularAccountV2Params | CreateWebauthnModularAccountV2Params} config Configuration parameters for creating a Modular Account V2.
+ * @returns {Promise<ModularAccountV2 | WebauthnModularAccountV2>} A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.
  */
 export async function createModularAccountV2<
   TTransport extends Transport = Transport,
@@ -127,8 +126,8 @@ export async function createModularAccountV2<
 >(
   config:
     | CreateModularAccountV2Params<TTransport, TSigner>
-    | CreateModularAccountV2ParamsNoSigner<TTransport>,
-): Promise<ModularAccountV2<TSigner> | ModularAccountV2NoSigner> {
+    | CreateWebauthnModularAccountV2Params<TTransport>,
+): Promise<ModularAccountV2<TSigner> | WebauthnModularAccountV2> {
   const {
     transport,
     chain,

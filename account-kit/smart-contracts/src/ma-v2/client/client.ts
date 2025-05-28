@@ -13,7 +13,7 @@ import { type Chain, type Transport } from "viem";
 import {
   createModularAccountV2,
   type CreateModularAccountV2Params,
-  type CreateModularAccountV2ParamsNoSigner,
+  type CreateWebauthnModularAccountV2Params,
 } from "../account/modularAccountV2.js";
 
 import {
@@ -27,7 +27,7 @@ import type { LightAccount } from "../../light-account/accounts/account.js";
 
 import type {
   ModularAccountV2,
-  ModularAccountV2NoSigner,
+  WebauthnModularAccountV2,
 } from "../account/common/modularAccountV2Base.js";
 import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 
@@ -40,7 +40,7 @@ export type ModularAccountV2Client<
 export type ModularAccountV2ClientNoSigner<
   TChain extends Chain = Chain,
   TTransport extends Transport | AlchemyTransport = Transport,
-> = SmartAccountClient<TTransport, TChain, ModularAccountV2NoSigner>;
+> = SmartAccountClient<TTransport, TChain, WebauthnModularAccountV2>;
 
 export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
@@ -55,7 +55,7 @@ export type CreateModularAccountV2ClientParams<
 export type CreateModularAccountV2ClientParamsNoSigner<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-> = CreateModularAccountV2ParamsNoSigner<TTransport> &
+> = CreateWebauthnModularAccountV2Params<TTransport> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
@@ -146,7 +146,7 @@ export async function createModularAccountV2Client(
 
   if (config.mode === "webauthn") {
     account = await createModularAccountV2(
-      config as CreateModularAccountV2ParamsNoSigner<Transport>,
+      config as CreateWebauthnModularAccountV2Params<Transport>,
     );
   } else {
     account = await createModularAccountV2(
