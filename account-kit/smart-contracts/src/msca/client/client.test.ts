@@ -3,7 +3,7 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { type Address, custom, parseEther } from "viem";
+import { type Address, custom, parseEther, fromHex, pad } from "viem";
 import { setBalance } from "viem/actions";
 import { local060Instance } from "~test/instances.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
@@ -272,48 +272,27 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     );
   }, 200000);
 
-  // it("should test 2/2 multisig", async () => {
-  //   console.log("chain is:");
-  //   console.log(instance.chain);
-  //   const client = await createMultisigModularAccountClient({
-  //     chain: instance.chain,
-  //     transport: custom(instance.getClient()),
-  //     signer: signer1,
-  //     owners: [await signer1.getAddress(), await signer2.getAddress()],
-  //     threshold: 2n,
-  //   });
+  it.only("should test 1/1 multisig", async () => {
+    const client1 = await createMultisigModularAccountClient({
+      chain: instance.chain,
+      transport: custom(instance.getClient()),
+      signer: signer1,
+      owners: [await signer1.getAddress(), await signer2.getAddress()],
+      threshold: 1n,
+    });
 
-  //   const client2 = await createMultisigModularAccountClient({
-  //     chain: instance.chain,
-  //     accountAddress: client.getAddress(),
-  //     transport: custom(instance.getClient()),
-  //     signer: signer2,
-  //     owners: [await signer1.getAddress(), await signer2.getAddress()],
-  //     threshold: 2n,
-  //   });
+    const result = await client1.sendUserOperation({
+      uo: {
+        target: client1.getAddress(),
+        data: "0x",
+      },
+      context: {
+        userOpSignatureType: "ACTUAL",
+      },
+    });
 
-  //   const { aggregatedSignature, signatureObj } =
-  //     await client.proposeUserOperation({
-  //       uo: {
-  //         target: client.getAddress(),
-  //         data: "0x",
-  //       },
-  //     });
-
-  //   const result = await client2.sendUserOperation({
-  //     uo: {
-  //       target: client.getAddress(),
-  //       data: "0x",
-  //     },
-  //     context: {
-  //       aggregatedSignature,
-  //       signatures: [signatureObj],
-  //       userOpSignatureType: "ACTUAL",
-  //     },
-  //   });
-
-  //   await client2.waitForUserOperationTransaction(result);
-  // });
+    await client1.waitForUserOperationTransaction(result);
+  });
 
   it("should test 2/2 multisig", async () => {
     const client = await createMultisigModularAccountClient({
@@ -361,55 +340,58 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     await client2.waitForUserOperationTransaction(result);
   });
 
-  // it.only("should test 3/3 multisig", async () => {
-  //   const signers = new Array(3).map((_, i) =>
-  //     LocalAccountSigner.mnemonicToAccountSigner(
-  //       MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
-  //       { accountIndex: i },
-  //     ),
-  //   );
+  it("should test 3/3 multisig", async () => {
+    const signers = Array.from({ length: 3 }).map((_, i) =>
+      LocalAccountSigner.mnemonicToAccountSigner(
+        MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
+        { accountIndex: i },
+      ),
+    );
 
-  //   const clients = await Promise.all(
-  //     signers.map(async (s) => {
-  //       return createMultisigModularAccountClient({
-  //         chain: instance.chain,
-  //         transport: custom(instance.getClient()),
-  //         signer: s,
-  //         owners: await Promise.all(signers.map((s) => s.getAddress())),
-  //         threshold: 3n,
-  //       });
-  //     }),
-  //   );
+    const clients = await Promise.all(
+      signers.map(async (s) => {
+        return createMultisigModularAccountClient({
+          chain: instance.chain,
+          transport: custom(instance.getClient()),
+          signer: s,
+          owners: await Promise.all(signers.map((s) => s.getAddress())),
+          threshold: 3n,
+        });
+      }),
+    );
 
-  //   console.log("console");
-  //   console.log(clients);
+    await setBalance(instance.getClient(), {
+      address: clients[0].getAddress(),
+      value: parseEther("1"),
+    });
 
-  //   const { request, signatureObj: signature1 } =
-  //     await clients[0].proposeUserOperation({
-  //       uo: {
-  //         target: clients[0].getAddress(),
-  //         data: "0x",
-  //       },
-  //     });
-
-  //   const { aggregatedSignature, signatureObj: signature2 } =
-  //     await clients[1].signMultisigUserOperation({
-  //       account: clients[0].account,
-  //       signatures: [signature1],
-  //       userOperationRequest: request,
-  //     });
-
-  //   const result = await clients[2].sendUserOperation({
-  //     uo: request.callData,
-  //     context: {
-  //       aggregatedSignature,
-  //       signatures: [signature1, signature2],
-  //       userOpSignatureType: "ACTUAL",
-  //     },
-  //   });
-
-  //   await clients[2].waitForUserOperationTransaction(result);
-  // });
+    const { request, signatureObj: signature1 } =
+      await clients[0].proposeUserOperation({
+        uo: {
+          target: clients[0].getAddress(),
+          data: "0x",
+        },
+      });
+    const { aggregatedSignature, signatureObj: signature2 } =
+      await clients[1].signMultisigUserOperation({
+        account: clients[1].account,
+        signatures: [signature1],
+        userOperationRequest: request,
+      });
+    const result = await clients[2].sendUserOperation({
+      uo: request.callData,
+      overrides: {
+        callGasLimit: request.callGasLimit,
+        verificationGasLimit: request.verificationGasLimit,
+      },
+      context: {
+        aggregatedSignature,
+        signatures: [signature1, signature2],
+        userOpSignatureType: "ACTUAL",
+      },
+    });
+    await clients[2].waitForUserOperationTransaction(result);
+  });
 
   const givenConnectedProvider = ({
     signer,
