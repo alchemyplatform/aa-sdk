@@ -95,29 +95,21 @@ export async function getUserOperationError<
           abi: entryPoint.abi,
           data: err.cause.raw,
         });
+        console.log(`Failed with '${errorName}':`);
         switch (errorName) {
           case "FailedOpWithRevert":
-            console.log("Failed with 'FailedOpWithRevert");
-            // TODO: if we pass in abi we could decode and print this too
-            console.log(
-              args && args[2]
-                ? `Smart contract account reverted with error: ${args[2]}`
-                : "No revert data from smart contract account",
-            );
-            break;
           case "FailedOp":
-            console.log("Failed with 'FailedOp");
             // TODO: if we pass in abi we could decode and print this too
+            const argsIdx = errorName === "FailedOp" ? 1 : 2;
             console.log(
-              args && args[1]
-                ? `Smart contract account reverted with error: ${args[1]}`
+              args && args[argsIdx]
+                ? `Smart contract account reverted with error: ${args[argsIdx]}`
                 : "No revert data from smart contract account",
             );
             break;
           default:
             console.log(
-              `Failed with '${errorName}': ` +
-                (args && `${args.forEach((arg) => console.log(`\n${arg}`))}`),
+              args && `${args.forEach((arg) => console.log(`\n${arg}`))}`,
             );
         }
         return;
