@@ -89,7 +89,6 @@ export async function getUserOperationError<
         });
     }
   } catch (err: any) {
-    console.log("Smart contract account reverted with error: ");
     if (err?.cause && err?.cause?.raw) {
       try {
         const { errorName, args } = decodeErrorResult({
@@ -98,17 +97,33 @@ export async function getUserOperationError<
         });
         switch (errorName) {
           case "FailedOpWithRevert":
-            console.log("FailedOpWithRevert: " + (args && args[2]));
+            console.log("Failed with 'FailedOpWithRevert");
+            // TODO: if we pass in abi we could decode and print this too
+            console.log(
+              args && args[2]
+                ? `Smart contract account reverted with error: ${args[2]}`
+                : "No revert data from smart contract account",
+            );
             break;
           case "FailedOp":
-            console.log("FailedOp: " + (args && args[1]));
+            console.log("Failed with 'FailedOp");
+            // TODO: if we pass in abi we could decode and print this too
+            console.log(
+              args && args[1]
+                ? `Smart contract account reverted with error: ${args[1]}`
+                : "No revert data from smart contract account",
+            );
             break;
+          default:
+            console.log(
+              `Failed with '${errorName}': ` +
+                (args && `${args.forEach((arg) => console.log(`\n${arg}`))}`),
+            );
         }
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      console.log(err);
+        return;
+      } catch (err) {}
     }
+    console.log("Smart contract account reverted with error: ");
+    console.log(err);
   }
 }
