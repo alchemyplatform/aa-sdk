@@ -28,6 +28,8 @@ export async function getThreshold<
     throw new MultisigAccountExpectedError();
   }
 
+  console.log("\n\n\n\n\nHERE\n\n\n\n\n");
+
   const [, threshold] = await MultisigPlugin.getContract(
     client,
     args.pluginAddress,

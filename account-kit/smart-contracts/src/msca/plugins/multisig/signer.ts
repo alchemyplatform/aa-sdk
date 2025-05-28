@@ -59,6 +59,11 @@ export const multisigSignMethods = <
     });
   };
 
+  console.log("\n\n\n\n\n");
+  console.log(MultisigPlugin.meta.addresses);
+  console.log(client.chain.id);
+  console.log(pluginAddress);
+  console.log("\n\n\n\n\n");
   return {
     getDummySignature: async (): Promise<`0x${string}`> => {
       const [, thresholdRead] = await client.readContract({
