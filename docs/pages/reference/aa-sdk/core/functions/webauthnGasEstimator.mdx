@@ -18,27 +18,34 @@ import { webauthnGasEstimator } from "@aa-sdk/core";
 
 ```ts twoslash
 import {
-webauthnGasEstimator,
-createSmartAccountClient,
-type SmartAccountClient,
+  webauthnGasEstimator,
+  createSmartAccountClient,
+  type SmartAccountClient,
 } from "@aa-sdk/core";
 import {
-createModularAccountV2,
-type CreateModularAccountV2ClientParams,
+  createModularAccountV2,
+  type CreateModularAccountV2ClientParams,
 } from "@account-kit/smart-contracts";
 
-const params: ToWebAuthnAccountParameters = {...}
+const credential = {
+  id: "credential-id",
+  publicKey: "0x...",
+};
 
 async function createWebauthnAccountClient(
-config: CreateModularAccountV2ClientParams
+  config: CreateModularAccountV2ClientParams,
 ): Promise<SmartAccountClient> {
-const webauthnAccount = await createModularAccountV2({ ...config, mode: "webauthn", params });
+  const webauthnAccount = await createModularAccountV2({
+    ...config,
+    mode: "webauthn",
+    credential,
+  });
 
-return createSmartAccountClient({
-account: webAuthnAccount,
-gasEstimator: webauthnGasEstimator(config.gasEstimator),
-...config,
-});
+  return createSmartAccountClient({
+    account: webAuthnAccount,
+    gasEstimator: webauthnGasEstimator(config.gasEstimator),
+    ...config,
+  });
 }
 ```
 
@@ -51,5 +58,5 @@ Optional custom gas estimator function
 
 ## Returns
 
-`Function`
+`ClientMiddlewareFn`
 A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.

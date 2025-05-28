@@ -22,12 +22,15 @@ export const rip7212CheckBytecode =
  *   type CreateModularAccountV2ClientParams,
  * } from "@account-kit/smart-contracts";
  *
- * const params: ToWebAuthnAccountParameters = {...}
+ * const credential = {
+ *   id: "credential-id",
+ *   publicKey: "0x...",
+ * }
  *
  * async function createWebauthnAccountClient(
  *   config: CreateModularAccountV2ClientParams
  * ): Promise<SmartAccountClient> {
- *   const webauthnAccount = await createModularAccountV2({ ...config, mode: "webauthn", params });
+ *   const webauthnAccount = await createModularAccountV2({ ...config, mode: "webauthn", credential });
  *
  *   return createSmartAccountClient({
  *     account: webAuthnAccount,
