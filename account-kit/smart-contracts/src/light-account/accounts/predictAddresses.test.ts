@@ -11,20 +11,20 @@ import {
   publicActions,
   type Address,
 } from "viem";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { localInstance } from "~test/instances.js";
+import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
+import type { LightAccountVersion } from "../types.js";
+import { createLightAccount } from "./account.js";
+import { createMultiOwnerLightAccount } from "./multiOwner.js";
 import {
   predictLightAccountAddress,
   predictMultiOwnerLightAccountAddress,
 } from "./predictAddress.js";
-import { local060Instance, local070Instance } from "~test/instances.js";
-import { createLightAccount } from "./account.js";
-import { createMultiOwnerLightAccount } from "./multiOwner.js";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
-import type { LightAccountVersion } from "../types.js";
 
 describe("Light Account Counterfactual Address Tests", () => {
-  const instanceV060 = local060Instance;
-  const instanceV070 = local070Instance;
+  const instanceV060 = localInstance;
+  const instanceV070 = localInstance;
 
   it.each([
     "v1.0.1",

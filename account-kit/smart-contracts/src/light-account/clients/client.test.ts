@@ -9,26 +9,26 @@ import {
   type UserOperationOverrides,
   type UserOperationStruct,
 } from "@aa-sdk/core";
-import { custom, parseEther, type Address, publicActions } from "viem";
+import { custom, parseEther, publicActions, type Address } from "viem";
 import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
 // TODO: update the tests that just use the 060 instance to use versions + 070 instance
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { createLightAccountClient } from "./client.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
-  const instance = local060Instance;
+  const instance = localInstance;
   let client: ReturnType<typeof instance.getClient>;
 
   beforeAll(async () => {

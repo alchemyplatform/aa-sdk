@@ -6,19 +6,19 @@ import {
   type Address,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 import { custom, parseEther, publicActions } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { mine, setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types";
 import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("MultiOwner Light Account Tests", () => {
-  const instance = local070Instance;
+  const instance = localInstance;
   let client: ReturnType<typeof instance.getClient>;
 
   beforeAll(async () => {

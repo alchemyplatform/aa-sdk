@@ -3,15 +3,15 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { custom } from "viem";
-import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { local070Instance } from "~test/instances.js";
-import { accounts } from "~test/constants.js";
 import { alchemy } from "@account-kit/infra";
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { custom } from "viem";
+import { accounts } from "~test/constants.js";
+import { localInstance } from "~test/instances.js";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests: Types", async () => {
-  const instance = local070Instance;
+  const instance = localInstance;
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,

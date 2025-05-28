@@ -5,6 +5,15 @@ import {
   type SmartAccountSigner,
 } from "@aa-sdk/core";
 import {
+  alchemy,
+  alchemyEnhancedApiActions,
+  polygonMumbai,
+  type AlchemyEnhancedApis,
+  type AlchemySmartAccountClient,
+  type AlchemyTransport,
+} from "@account-kit/infra";
+import { Alchemy, Network } from "alchemy-sdk";
+import {
   custom,
   type Address,
   type Chain,
@@ -12,21 +21,12 @@ import {
   type CustomTransport,
 } from "viem";
 import { accounts } from "~test/constants.js";
-import { local060Instance } from "~test/instances.js";
 import type { LightAccountVersion } from "../types.js";
 import { createLightAccountClient } from "./client.js";
-import {
-  alchemy,
-  polygonMumbai,
-  alchemyEnhancedApiActions,
-  type AlchemyTransport,
-  type AlchemySmartAccountClient,
-  type AlchemyEnhancedApis,
-} from "@account-kit/infra";
-import { Alchemy, Network } from "alchemy-sdk";
+import { localInstance } from "~test/instances.js";
 
 describe("Types: Light Account Tests", () => {
-  const instance = local060Instance;
+  const instance = localInstance;
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,
   );

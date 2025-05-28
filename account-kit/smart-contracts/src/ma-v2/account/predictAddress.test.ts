@@ -5,16 +5,16 @@ import {
 } from "@aa-sdk/core";
 import { custom, publicActions } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { local070Instance } from "~test/instances.js";
-import { createModularAccountV2 } from "./modularAccountV2.js";
-import { predictModularAccountV2Address } from "./predictAddress.js";
+import { localInstance } from "~test/instances.js";
 import {
   getDefaultMAV2FactoryAddress,
   getDefaultSMAV2BytecodeAddress,
 } from "../utils.js";
+import { createModularAccountV2 } from "./modularAccountV2.js";
+import { predictModularAccountV2Address } from "./predictAddress.js";
 
 describe("MAv2 Counterfactual Address Tests", () => {
-  const instanceV070 = local070Instance;
+  const instanceV070 = localInstance;
 
   it("MAv2 should match the entrypoint generated counterfactual address", async () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.

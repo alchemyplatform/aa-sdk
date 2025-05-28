@@ -4,6 +4,19 @@ import {
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
+import {
+  createModularAccountV2Client,
+  type SignerEntity,
+} from "@account-kit/smart-contracts";
+import {
+  buildDeferredActionDigest,
+  deferralActions,
+  PermissionBuilder,
+  PermissionType,
+  RootPermissionOnlyError,
+  type Permission,
+} from "@account-kit/smart-contracts/experimental";
 import {
   concat,
   custom,
@@ -16,24 +29,10 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import {
-  createModularAccountV2Client,
-  type SignerEntity,
-} from "@account-kit/smart-contracts";
-import {
-  buildDeferredActionDigest,
-  deferralActions,
-  ExpiredDeadlineError,
-  PermissionBuilder,
-  PermissionType,
-  RootPermissionOnlyError,
-  type Permission,
-} from "@account-kit/smart-contracts/experimental";
-import { local070Instance } from "~test/instances.js";
+import { entryPoint07Abi } from "viem/account-abstraction";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
-import { entryPoint07Abi } from "viem/account-abstraction";
+import { localInstance } from "~test/instances.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
@@ -41,7 +40,7 @@ import {
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
-  const instance = local070Instance;
+  const instance = localInstance;
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,
