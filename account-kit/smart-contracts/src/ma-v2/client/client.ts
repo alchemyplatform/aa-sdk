@@ -164,13 +164,11 @@ export async function createModularAccountV2Client(
           signUserOperation: default7702UserOpSigner(config.signUserOperation),
         };
       case "webauthn":
-        console.log("USING THE CORRECT GAS ESTIMATOR");
         return {
           gasEstimator: webauthnGasEstimator(config.gasEstimator),
         };
       case "default":
       default:
-        console.log("USING THE CORRECT GAS ESTIMATOR2");
         return {};
     }
   })();
