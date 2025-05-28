@@ -24,10 +24,12 @@ import { getDefaultWebauthnValidationModuleAddress } from "../utils.js";
  * import { webauthnSigningFunctions } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  *
- * const messageSigner = webauthnSigningFunctions(params, chain, account.address, account.signerEntity.entityId);
+ * const messageSigner = webauthnSigningFunctions(credential, getFn, rpId, chain, account.address, account.signerEntity.entityId);
  * ```
  *
- * @param {ToWebAuthnAccountParameters} params Parameters for creating a webauthn account}
+ * @param {ToWebAuthnAccountParameters} credential the Webauthn public key credential object
+ * @param {ToWebAuthnAccountParameters["getFn"]} getFn function to retrieve the WebAuthn credential
+ * @param {ToWebAuthnAccountParameters["rpId"]} rpId the relying party ID for the WebAuthn credential
  * @param {Chain} chain Chain object for the signer
  * @param {Address} accountAddress address of the smart account using this signer
  * @param {number} entityId the entity id of the signing validation
@@ -35,14 +37,15 @@ import { getDefaultWebauthnValidationModuleAddress } from "../utils.js";
  * @returns {object} an object with methods for signing operations and managing signatures
  */
 export const webauthnSigningFunctions = (
-  params: ToWebAuthnAccountParameters,
+  credential: ToWebAuthnAccountParameters["credential"],
+  getFn: ToWebAuthnAccountParameters["getFn"],
+  rpId: ToWebAuthnAccountParameters["rpId"],
   chain: Chain,
   accountAddress: Address,
   entityId: number,
   deferredActionData?: Hex,
 ) => {
-  const { getFn, rpId } = params;
-  const { id, publicKey } = params.credential;
+  const { id, publicKey } = credential;
 
   const sign = async ({ hash }: { hash: Hex }) => {
     const { metadata, signature } = await WebAuthnP256.sign({

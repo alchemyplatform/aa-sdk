@@ -1919,18 +1919,24 @@ describe("MA v2 Tests", async () => {
     signerEntity,
     accountAddress,
     paymasterMiddleware,
-    params,
+    credential,
+    getFn,
+    rpId,
   }: {
     signerEntity?: SignerEntity;
     accountAddress?: `0x${string}`;
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
-    params: ToWebAuthnAccountParameters;
+    credential: ToWebAuthnAccountParameters["credential"];
+    getFn?: ToWebAuthnAccountParameters["getFn"];
+    rpId?: ToWebAuthnAccountParameters["rpId"];
   }) =>
     createModularAccountV2Client({
       chain: instance.chain,
       accountAddress,
       signerEntity,
-      params,
+      credential,
+      getFn,
+      rpId,
       mode: "webauthn",
       transport: custom(instance.getClient()),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
@@ -1953,11 +1959,9 @@ describe("MA v2 Tests", async () => {
     });
 
     const provider = await givenConnectedProviderNoSigner({
-      params: {
-        credential,
-        getFn: (opts) => webauthnDevice.get(opts, "localhost"),
-        rpId: "localhost",
-      },
+      credential,
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
     });
 
     return provider;
