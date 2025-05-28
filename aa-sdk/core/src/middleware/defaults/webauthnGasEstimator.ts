@@ -64,7 +64,6 @@ export const webauthnGasEstimator: (
       uo.verificationGasLimit instanceof Promise
         ? await uo.verificationGasLimit
         : (uo?.verificationGasLimit ?? 0n);
-    console.log("verificationGasLimit gas", uo.verificationGasLimit);
 
     if (!pvg) {
       throw new Error(
