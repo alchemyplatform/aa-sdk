@@ -83,9 +83,12 @@ export const useEstimateGasErc20Sponsorship = (
     if (!client) throw new Error("Smart account client not ready");
     if (!client.account)
       throw new Error("Smart account not connected or address not available");
-    const uoStruct = await client.buildUserOperation({
-      uo: userOperations,
-    });
+    const [uoStruct, latestBlock, { maxFeePerGas, maxPriorityFeePerGas }] =
+      await Promise.all([
+        client.buildUserOperation({ uo: userOperations }),
+        client.getBlock(),
+        client.estimateFeesPerGas(),
+      ]);
 
     const toBig = (v?: Hex | number | bigint): bigint =>
       v == null
@@ -110,18 +113,16 @@ export const useEstimateGasErc20Sponsorship = (
       BigInt(0)
     );
 
-    const latestBlock = await client.getBlock();
     const baseFee = latestBlock.baseFeePerGas;
 
-    const { maxFeePerGas, maxPriorityFeePerGas } =
-      await client.estimateFeesPerGas();
-
-    const gasPrice =
-      baseFee != null
-        ? baseFee + maxPriorityFeePerGas < maxFeePerGas
-          ? baseFee + maxPriorityFeePerGas
-          : maxFeePerGas
-        : maxFeePerGas;
+    let gasPrice: bigint;
+    if (baseFee == null) {
+      gasPrice = maxFeePerGas;
+    } else {
+      const effectiveGasPrice = baseFee + maxPriorityFeePerGas;
+      gasPrice =
+        effectiveGasPrice < maxFeePerGas ? effectiveGasPrice : maxFeePerGas;
+    }
 
     const feeWei = totalGas * gasPrice;
     const feeEth = formatEther(feeWei);
