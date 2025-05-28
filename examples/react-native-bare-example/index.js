@@ -1,7 +1,4 @@
-/**
- * @format
- */
-
+/* eslint-disable import/extensions */
 import 'node-libs-react-native/globals.js';
 import 'react-native-get-random-values';
 import {AppRegistry} from 'react-native';

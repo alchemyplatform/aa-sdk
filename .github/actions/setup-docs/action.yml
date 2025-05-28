@@ -1,9 +1,9 @@
-name: 'Setup Docs'
-description: 'Sets up everything needed to generate docs with Fern CLI'
+name: "Setup Docs"
+description: "Sets up everything needed to generate docs with Fern CLI"
 
 inputs:
   docs-github-token:
-    description: 'GitHub token for accessing the docs repository'
+    description: "GitHub token for accessing the docs repository"
     required: true
 
 runs:

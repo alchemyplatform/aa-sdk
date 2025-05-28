@@ -1,10 +1,10 @@
-name: 'Setup Repo'
-description: 'Setup everything needed to build, run tests, publish, etc'
+name: "Setup Repo"
+description: "Setup everything needed to build, run tests, publish, etc"
 inputs:
   node-version:
-    description: 'Node.js version'
+    description: "Node.js version"
     required: false
-    default: '22'
+    default: "22"
   use-android-cache:
     description: "Cache JDK, Gradle, etc for android build"
     required: false
@@ -12,7 +12,7 @@ inputs:
     default: true
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -38,13 +38,13 @@ runs:
       if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn install --frozen-lockfile
       shell: bash
-    
+
     # Foundry setup
     - name: Set up foundry
       uses: foundry-rs/foundry-toolchain@v1
       with:
         cache: false
-    
+
     # Android setup
     - name: Check turborepo cache for Android
       if: inputs.use-android-cache == true

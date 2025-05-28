@@ -1,10 +1,7 @@
-/**
- * @format
- */
-
-import 'react-native';
+/* eslint-disable import/extensions */
 import React from 'react';
-import App from '../App';
+import 'react-native';
+import App from '../src/App';
 
 // Note: import explicitly to use the types shipped with jest.
 import {it} from '@jest/globals';
