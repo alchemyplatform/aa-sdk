@@ -272,7 +272,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     );
   }, 200000);
 
-  it.only("should test 1/1 multisig", async () => {
+  it("should test 1/1 multisig", async () => {
     const client1 = await createMultisigModularAccountClient({
       chain: instance.chain,
       transport: custom(instance.getClient()),
@@ -281,7 +281,12 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       threshold: 1n,
     });
 
-    const result = await client1.sendUserOperation({
+    await setBalance(instance.getClient(), {
+      address: client1.getAddress(),
+      value: parseEther("1"),
+    });
+
+    const uo = await client1.buildUserOperation({
       uo: {
         target: client1.getAddress(),
         data: "0x",
@@ -291,7 +296,17 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       },
     });
 
-    await client1.waitForUserOperationTransaction(result);
+    const signedUO = await client1.signUserOperation({
+      uoStruct: uo,
+      context: {
+        userOpSignatureType: "ACTUAL",
+      },
+    });
+
+    await client1.sendRawUserOperation(
+      signedUO,
+      client1.account.getEntryPoint().address,
+    );
   });
 
   it("should test 2/2 multisig", async () => {
