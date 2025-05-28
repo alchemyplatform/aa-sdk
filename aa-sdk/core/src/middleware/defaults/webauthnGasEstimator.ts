@@ -38,7 +38,7 @@ export const rip7212CheckBytecode =
  * ```
  *
  * @param {ClientMiddlewareFn} [gasEstimator] Optional custom gas estimator function
- * @returns {Function} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
+ * @returns {ClientMiddlewareFn} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
  */
 export const webauthnGasEstimator: (
   gasEstimator?: ClientMiddlewareFn,
