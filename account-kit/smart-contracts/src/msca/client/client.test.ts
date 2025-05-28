@@ -3,7 +3,7 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { type Address, custom, parseEther, fromHex, pad } from "viem";
+import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
 import { local060Instance } from "~test/instances.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
