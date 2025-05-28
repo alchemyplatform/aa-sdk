@@ -38,7 +38,7 @@ export const rip7212CheckBytecode =
  * ```
  *
  * @param {ClientMiddlewareFn} [gasEstimator] Optional custom gas estimator function
- * @returns {ClientMiddlewareFn} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
+ * @returns {Function} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
  */
 export const webauthnGasEstimator: (
   gasEstimator?: ClientMiddlewareFn,
@@ -76,15 +76,6 @@ export const webauthnGasEstimator: (
     const { data } = await params.client.call({ data: rip7212CheckBytecode });
 
     const chainHas7212: boolean = data ? BigInt(data) === 1n : false;
-    console.log({ chainHas7212 });
-
-    console.log("...");
-    console.log(BigInt(typeof pvg === "string" ? BigInt(pvg) : pvg));
-    console.log(chainHas7212 ? 10000n : 300000n);
-    console.log(
-      BigInt(typeof pvg === "string" ? BigInt(pvg) : pvg) +
-        (chainHas7212 ? 10000n : 300000n),
-    );
 
     // TODO: iterate numbers. Aim to have ~1000 gas buffer to account for longer authenticatorDatas and clientDataJSONs
     return {
