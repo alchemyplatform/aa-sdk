@@ -115,7 +115,7 @@ export async function getUserOperationError<
         return;
       } catch (err) {}
     }
-    console.log("Smart contract account reverted with error: ");
+    console.log("Entrypoint reverted with error: ");
     console.log(err);
   }
 }

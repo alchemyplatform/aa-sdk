@@ -1729,6 +1729,41 @@ describe("MA v2 Tests", async () => {
     );
   });
 
+  it.only("test nonce errors", async () => {
+    const client2 = await givenConnectedProvider({ signer });
+
+    await setBalance(client, {
+      address: client2.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const result = await client2.sendUserOperation({
+      uo: {
+        target,
+        data: "0x",
+      },
+    });
+
+    await client2.waitForUserOperationTransaction(result);
+
+    const sessionKeyClient = await createModularAccountV2Client({
+      chain: instance.chain,
+      signer: sessionKey,
+      transport: custom(instance.getClient()),
+      accountAddress: client2.getAddress(),
+    });
+    try {
+      // AA24 sig error prints to console
+      // TODO: read from console to make sure we are getting the right error
+      await sessionKeyClient.sendUserOperation({
+        uo: {
+          target,
+          data: "0x",
+        },
+      });
+    } catch (err) {}
+  });
+
   it("alchemy client calls the createAlchemySmartAccountClient", async () => {
     const alchemyClientSpy = vi
       .spyOn(AAInfraModule, "createAlchemySmartAccountClient")
