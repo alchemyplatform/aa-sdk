@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/core",
-  "version": "4.35.1",
+  "version": "4.36.0",
   "description": "Core library for account kit that provides state management and framework indepednent abstractions across infra, Alchemy Signer, and Smart Contracts",
   "author": "Alchemy",
   "license": "MIT",
@@ -49,11 +49,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.35.1",
-    "@account-kit/logging": "^4.35.1",
-    "@account-kit/react-native-signer": "^4.35.1",
-    "@account-kit/signer": "^4.35.1",
-    "@account-kit/smart-contracts": "^4.35.1",
+    "@account-kit/infra": "^4.36.0",
+    "@account-kit/logging": "^4.36.0",
+    "@account-kit/react-native-signer": "^4.36.0",
+    "@account-kit/signer": "^4.36.0",
+    "@account-kit/smart-contracts": "^4.36.0",
     "@solana/web3.js": "^1.98.0",
     "js-cookie": "^3.0.5",
     "zod": "^3.22.4",
