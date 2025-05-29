@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
+
+### Features
+
+- add uo err getter ([#1641](https://github.com/alchemyplatform/aa-sdk/issues/1641)) ([1e981b1](https://github.com/alchemyplatform/aa-sdk/commit/1e981b1a355f9c34a3b98761bd4a913acc3994d5))
+
 ## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
 
 ### Bug Fixes
