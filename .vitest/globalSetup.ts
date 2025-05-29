@@ -8,7 +8,7 @@ import {
   cleanupRundler,
   downloadLatestRundlerRelease,
   isRundlerInstalled,
-} from "./src/rundler";
+} from "./src/rundler/binary";
 
 export default async function () {
   if (!isCi && !(await isRundlerInstalled(rundlerBinaryPath))) {
