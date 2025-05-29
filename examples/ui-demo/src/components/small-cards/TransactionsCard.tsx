@@ -51,7 +51,7 @@ export const TransactionsCard = ({
         )}
       </>
     ),
-    [cardStatus, transactions]
+    [cardStatus, transactions],
   );
 
   return (

@@ -36,7 +36,7 @@ export type SolanaConnectionHookParams = {
  * @returns {SolanaConnection} The transaction hook.
  */
 export function useSolanaConnection(
-  opts: SolanaConnectionHookParams = {}
+  opts: SolanaConnectionHookParams = {},
 ): SolanaConnection {
   const { config } = useAlchemyAccountContext();
   const fallbackSigner: null | SolanaSigner = useSolanaSigner();
@@ -44,7 +44,7 @@ export function useSolanaConnection(
     useSyncExternalStore(
       watchSolanaConnection(config),
       () => getSolanaConnection(config),
-      () => getSolanaConnection(config)
+      () => getSolanaConnection(config),
     )?.connection || null;
   const signer: null | SolanaSigner = opts?.signer || fallbackSigner;
 

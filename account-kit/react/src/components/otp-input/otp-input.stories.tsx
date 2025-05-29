@@ -140,7 +140,7 @@ export const TestErrorState: Story = {
     // Check for error message
     await waitFor(() => {
       const errorMessage = canvas.getByText(
-        /The code you entered is incorrect/i
+        /The code you entered is incorrect/i,
       );
       expect(errorMessage).toBeInTheDocument();
     });

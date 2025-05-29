@@ -30,7 +30,7 @@ import type { AlchemyRpcSchema } from "./types.js";
 import { headersUpdate } from "../alchemyTrackerHeaders.js";
 
 export function getSignerTypeHeader<
-  TAccount extends SmartContractAccountWithSigner
+  TAccount extends SmartContractAccountWithSigner,
 >(account: TAccount) {
   return { "Alchemy-Aa-Sdk-Signer": account.getSigner().signerType };
 }
@@ -43,7 +43,7 @@ export type AlchemySmartAccountClientConfig<
     | undefined,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = {
   account?: account;
   useSimulation?: boolean;
@@ -74,7 +74,7 @@ export type BaseAlchemyActions<
     | undefined,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = SmartAccountClientActions<chain, account, context> &
   AlchemySmartAccountClientActions<account, context>;
 
@@ -86,7 +86,7 @@ export type AlchemySmartAccountClient_Base<
   actions extends Record<string, unknown> = Record<string, unknown>,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = Prettify<
   SmartAccountClient<
     AlchemyTransport,
@@ -106,7 +106,7 @@ export type AlchemySmartAccountClient<
   actions extends Record<string, unknown> = Record<string, unknown>,
   context extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = Prettify<AlchemySmartAccountClient_Base<chain, account, actions, context>>;
 
 export function createAlchemySmartAccountClient<
@@ -116,9 +116,9 @@ export function createAlchemySmartAccountClient<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
-  params: AlchemySmartAccountClientConfig<TChain, TAccount, TContext>
+  params: AlchemySmartAccountClientConfig<TChain, TAccount, TContext>,
 ): AlchemySmartAccountClient<TChain, TAccount, Record<string, never>, TContext>;
 
 /**
@@ -139,7 +139,7 @@ export function createAlchemySmartAccountClient<
  * @returns {AlchemySmartAccountClient} An instance of `AlchemySmartAccountClient` configured based on the provided options
  */
 export function createAlchemySmartAccountClient(
-  config: AlchemySmartAccountClientConfig
+  config: AlchemySmartAccountClientConfig,
 ): AlchemySmartAccountClient {
   if (!config.chain) {
     throw new ChainNotFoundError();
@@ -186,8 +186,8 @@ export function createAlchemySmartAccountClient(
       const newTransport = alchemy({ ...oldConfig });
       newTransport.updateHeaders(
         headersUpdate(breadcrumb)(
-          convertHeadersToObject(dynamicFetchOptions?.headers)
-        )
+          convertHeadersToObject(dynamicFetchOptions?.headers),
+        ),
       );
       return createAlchemySmartAccountClient({
         ...config,

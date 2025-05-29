@@ -25,7 +25,7 @@ export function watchConnection(config: AlchemyAccountsConfig) {
         if (connection) {
           onChange(connection);
         }
-      }
+      },
     );
   };
 }

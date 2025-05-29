@@ -10,10 +10,10 @@ export type MultiOwnerLightAccountClientActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends MultiOwnerLightAccount<TSigner> | undefined =
     | MultiOwnerLightAccount<TSigner>
-    | undefined
+    | undefined,
 > = {
   updateOwners: (
-    args: UpdateMultiOwnerLightAccountOwnersParams<TSigner, TAccount>
+    args: UpdateMultiOwnerLightAccountOwnersParams<TSigner, TAccount>,
   ) => Promise<Hex>;
 };
 
@@ -42,9 +42,9 @@ export const multiOwnerLightAccountClientActions: <
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends MultiOwnerLightAccount<TSigner> | undefined =
     | MultiOwnerLightAccount<TSigner>
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => MultiOwnerLightAccountClientActions<TSigner, TAccount> = (client) => ({
   updateOwners: async (args) => updateOwners(client, args),
 });

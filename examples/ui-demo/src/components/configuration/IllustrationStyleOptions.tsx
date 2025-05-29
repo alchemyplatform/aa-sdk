@@ -26,7 +26,7 @@ export function IllustrationStyleOptions() {
     ({ ui: { illustrationStyle }, setIllustrationStyle }) => ({
       illustrationStyle,
       setIllustrationStyle,
-    })
+    }),
   );
 
   return (
@@ -41,7 +41,7 @@ export function IllustrationStyleOptions() {
               "flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               illustrationStyle === value
                 ? "bg-demo-surface-secondary font-semibold"
-                : "border-gray-300"
+                : "border-gray-300",
             )}
             onClick={() => {
               setIllustrationStyle(value);
@@ -71,7 +71,7 @@ const IllustrationStyleSelectMenu = () => {
       illustrationStyle,
       setIllustrationStyle,
       primaryColor,
-    })
+    }),
   );
 
   type IllustrationStyle = typeof illustrationStyle;
@@ -107,7 +107,7 @@ const IllustrationStyleSelectMenu = () => {
           <ChevronDown
             className={cn(
               "stroke-demo-fg-primary transition",
-              menuOpen && "rotate-180"
+              menuOpen && "rotate-180",
             )}
           />
         </div>
@@ -122,7 +122,7 @@ const IllustrationStyleSelectMenu = () => {
                 "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
                 selected === option
                   ? "font-medium bg-demo-surface-secondary"
-                  : "font-normal"
+                  : "font-normal",
               )}
             >
               {getIllustrationStyleValue(option)}

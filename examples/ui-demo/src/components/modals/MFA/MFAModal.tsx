@@ -90,7 +90,7 @@ export function MFAModal({
           console.error("Error adding MFA:", error);
           setSystemError(true);
         },
-      }
+      },
     );
   }, [addMFA, isReady]);
 
@@ -116,7 +116,7 @@ export function MFAModal({
           setOtpError("The code you entered is incorrect");
           setOTP(initialOTPValue);
         },
-      }
+      },
     );
   }, [multiFactorId, onMfaEnabled, otp, verifyMFA]);
 
@@ -148,7 +148,7 @@ export function MFAModal({
               console.error("Error removing MFA:", error);
               setSystemError(true);
             },
-          }
+          },
         );
       },
       onError: (error) => {

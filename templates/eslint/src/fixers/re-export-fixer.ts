@@ -8,11 +8,11 @@ export function reExportFixerEslint(
   fixer: Rule.RuleFixer,
   node: Rule.Node,
   context: Rule.RuleContext,
-  fixBatchSize = 10
+  fixBatchSize = 10,
 ) {
   if (process.env.OPENAI_API_KEY == null) {
     console.warn(
-      "OPENAI_API_KEY is not set, skipping re-export fixer. Set OPENAI_API_KEY to enable this feature."
+      "OPENAI_API_KEY is not set, skipping re-export fixer. Set OPENAI_API_KEY to enable this feature.",
     );
     return null;
   }
@@ -45,5 +45,5 @@ export function reExportFixerEslint(
 }
 
 const getCommentSync = createSyncFn(require.resolve("./openai-worker.js")) as (
-  code: string
+  code: string,
 ) => string;

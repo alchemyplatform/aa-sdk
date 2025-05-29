@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Features
+
+- add celo and tea to aa-sdk ([#1627](https://github.com/alchemyplatform/aa-sdk/issues/1627)) ([515a302](https://github.com/alchemyplatform/aa-sdk/commit/515a30210a6106490f1132a447651889769db4b3))
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+### Bug Fixes
+
+- let outter transport dictate retries ([#1625](https://github.com/alchemyplatform/aa-sdk/issues/1625)) ([6d291bd](https://github.com/alchemyplatform/aa-sdk/commit/6d291bd83e09e0b4e98baf1608e9451d3fba792d))
+
 # [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
 
 **Note:** Version bump only for package @account-kit/infra

@@ -17,7 +17,7 @@ export type SignTypedDataParameters<
   TPrimaryType extends string = string,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = {
   typedData: TypedDataDefinition<TTypedData, TPrimaryType>;
 } & GetAccountParameter<TAccount>;
@@ -29,10 +29,10 @@ export const signTypedData: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
+  args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>,
 ) => Promise<Hex> = async (client, { account = client.account, typedData }) => {
   if (!account) {
     throw new AccountNotFoundError();

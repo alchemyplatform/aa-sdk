@@ -21,7 +21,7 @@ export const EoaConnectCard = () => {
   if (authStep.error) {
     const errorMessage = getErrorMessage(
       authStep.error,
-      authStep.connector.name
+      authStep.connector.name,
     );
     return (
       <ConnectionError

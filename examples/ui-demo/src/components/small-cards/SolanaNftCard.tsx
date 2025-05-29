@@ -65,7 +65,7 @@ export const SolanaNftCard = () => {
       const mintLen = getMintLen([ExtensionType.MetadataPointer]);
       const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
       const mintLamports = await connection.getMinimumBalanceForRentExemption(
-        mintLen + metadataLen
+        mintLen + metadataLen,
       );
 
       const mint = stakeAccount.publicKey;
@@ -81,14 +81,14 @@ export const SolanaNftCard = () => {
           mint,
           publicKey,
           mint,
-          TOKEN_2022_PROGRAM_ID
+          TOKEN_2022_PROGRAM_ID,
         ),
         createInitializeMintInstruction(
           mint,
           decimals,
           publicKey,
           null,
-          TOKEN_2022_PROGRAM_ID
+          TOKEN_2022_PROGRAM_ID,
         ),
         createInitializeInstruction({
           programId: TOKEN_2022_PROGRAM_ID,
@@ -107,7 +107,7 @@ export const SolanaNftCard = () => {
             updateAuthority: publicKey,
             field: key,
             value: value,
-          })
+          }),
         ),
       ];
       const tx = await sendTransactionAsync({
@@ -230,8 +230,8 @@ export const SolanaNftCard = () => {
       {transactionState === "idle"
         ? "Collect NFT"
         : transactionState === "complete"
-        ? "Re-collect NFT"
-        : "Collecting NFT..."}
+          ? "Re-collect NFT"
+          : "Collecting NFT..."}
     </Button>
   );
 

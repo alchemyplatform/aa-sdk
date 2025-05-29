@@ -240,7 +240,7 @@ export class PermissionBuilder {
     this.client = client;
     this.validationConfig = {
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        this.client.chain
+        this.client.chain,
       ),
       entityId,
       isUserOpValidation: true,
@@ -301,7 +301,7 @@ export class PermissionBuilder {
             p.data.address === targetAddress) ||
           (p.type === PermissionType.FUNCTIONS_ON_CONTRACT &&
             "address" in p.data &&
-            p.data.address === targetAddress)
+            p.data.address === targetAddress),
       );
 
       if (existingPermissionWithSameAddress) {
@@ -359,15 +359,15 @@ export class PermissionBuilder {
             validUntil: this.deadline,
             validAfter: 0,
           },
-          getDefaultTimeRangeModuleAddress(this.client.chain)
-        )
+          getDefaultTimeRangeModuleAddress(this.client.chain),
+        ),
       );
     }
 
     const installValidationCall = await this.compileRaw();
 
     const { typedData } = await deferralActions(
-      this.client
+      this.client,
     ).createDeferredActionTypedDataObject({
       callData: installValidationCall,
       deadline: this.deadline,
@@ -375,7 +375,7 @@ export class PermissionBuilder {
     });
 
     const preSignatureDigest = deferralActions(
-      this.client
+      this.client,
     ).buildPreSignatureDeferredActionDigest({ typedData });
 
     // Encode additional information to build the full pre-signature digest
@@ -396,7 +396,7 @@ export class PermissionBuilder {
     // Translate all permissions into raw hooks if >0
     if (this.permissions.length > 0) {
       const rawHooks = this.translatePermissions(
-        this.validationConfig.entityId
+        this.validationConfig.entityId,
       );
       // Add the translated permissions as hooks
       this.addHooks(rawHooks);
@@ -454,7 +454,7 @@ export class PermissionBuilder {
           rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER] = {
             hookConfig: {
               address: getDefaultNativeTokenLimitModuleAddress(
-                this.client.chain
+                this.client.chain,
               ),
               entityId,
               hookType: HookType.EXECUTION,
@@ -531,7 +531,7 @@ export class PermissionBuilder {
           rawHooks[HookIdentifier.GAS_LIMIT] = {
             hookConfig: {
               address: getDefaultNativeTokenLimitModuleAddress(
-                this.client.chain
+                this.client.chain,
               ),
               entityId,
               hookType: HookType.VALIDATION,
@@ -654,7 +654,7 @@ export class PermissionBuilder {
 
         // Only add the selectors if they aren't already in this.selectors
         const newSelectors = selectorsToAdd.filter(
-          (selector) => !this.selectors.includes(selector)
+          (selector) => !this.selectors.includes(selector),
         );
 
         this.selectors = [...this.selectors, ...newSelectors];
@@ -669,7 +669,7 @@ export class PermissionBuilder {
       this.hooks.push({
         hookConfig: rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER].hookConfig,
         initData: NativeTokenLimitModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER].initData
+          rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER].initData,
         ),
       });
     }
@@ -678,7 +678,7 @@ export class PermissionBuilder {
       this.hooks.push({
         hookConfig: rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER].hookConfig,
         initData: AllowlistModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER].initData
+          rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER].initData,
         ),
       });
     }
@@ -687,7 +687,7 @@ export class PermissionBuilder {
       this.hooks.push({
         hookConfig: rawHooks[HookIdentifier.GAS_LIMIT].hookConfig,
         initData: NativeTokenLimitModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.GAS_LIMIT].initData
+          rawHooks[HookIdentifier.GAS_LIMIT].initData,
         ),
       });
     }
@@ -696,7 +696,7 @@ export class PermissionBuilder {
       this.hooks.push({
         hookConfig: rawHooks[HookIdentifier.PREVAL_ALLOWLIST].hookConfig,
         initData: AllowlistModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.PREVAL_ALLOWLIST].initData
+          rawHooks[HookIdentifier.PREVAL_ALLOWLIST].initData,
         ),
       });
     }

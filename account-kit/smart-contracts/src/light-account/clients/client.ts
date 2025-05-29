@@ -28,7 +28,7 @@ import { type AlchemyLightAccountClientConfig } from "./alchemyClient.js";
 export type CreateLightAccountClientParams<
   TTransport extends Transport | AlchemyTransport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = {
   transport: CreateLightAccountParams<TTransport, TSigner>["transport"];
   chain: CreateLightAccountParams<TTransport, TSigner>["chain"];
@@ -39,11 +39,11 @@ export type CreateLightAccountClientParams<
   >;
 
 export function createLightAccountClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
   params: AlchemyLightAccountClientConfig<TSigner> & {
     transport: AlchemyTransport;
-  }
+  },
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,
@@ -54,10 +54,10 @@ export function createLightAccountClient<
 export function createLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 >(
   args: CreateLightAccountClientParams<TTransport, TChain, TSigner> &
-    NotType<TTransport, AlchemyTransport>
+    NotType<TTransport, AlchemyTransport>,
 ): Promise<
   SmartAccountClient<
     CustomTransport,
@@ -104,7 +104,7 @@ export function createLightAccountClient<
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` object containing the created account information and methods
  */
 export async function createLightAccountClient(
-  params: CreateLightAccountClientParams
+  params: CreateLightAccountClientParams,
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = params;
 

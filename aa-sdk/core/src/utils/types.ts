@@ -62,7 +62,7 @@ export type EqualsOneOfTheComponents<T, Union> = Union extends infer Component /
 export type IsMemberOrSubtypeOfAComponent<
   T,
   Union,
-  ConjunctionOfExplicitComponentChecks extends boolean
+  ConjunctionOfExplicitComponentChecks extends boolean,
 > = [T] extends [Union]
   ? true extends ConjunctionOfExplicitComponentChecks
     ? true

@@ -9,14 +9,14 @@ import { serializeStateOverride } from "../../utils/stateOverride.js";
 
 export const estimateUserOperationGas = async <
   TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 >(
   client: TClient,
   args: {
     request: UserOperationRequest<TEntryPointVersion>;
     entryPoint: Address;
     stateOverride?: StateOverride;
-  }
+  },
 ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>> => {
   return client.request({
     method: "eth_estimateUserOperationGas",

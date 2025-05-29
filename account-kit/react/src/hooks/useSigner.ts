@@ -21,7 +21,7 @@ import type { AlchemyAccountContextProps } from "../AlchemyAccountContext.js";
  * ```
  */
 export const useSigner = <T extends AlchemySigner>(
-  override?: AlchemyAccountContextProps
+  override?: AlchemyAccountContextProps,
 ): T | null => {
   const { config } = useAlchemyAccountContext(override);
 
@@ -31,6 +31,6 @@ export const useSigner = <T extends AlchemySigner>(
   return useSyncExternalStore(
     watchSigner(config),
     () => getSigner<T>(config),
-    () => null
+    () => null,
   );
 };

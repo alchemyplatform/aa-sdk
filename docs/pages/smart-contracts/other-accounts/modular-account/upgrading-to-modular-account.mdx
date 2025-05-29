@@ -16,7 +16,7 @@ import { getMSCAUpgradeToData } from "@account-kit/smart-contracts";
 
 const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
   lightAccountClient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 const hash = await lightAccountClient.upgradeAccount({
@@ -66,7 +66,7 @@ import { getMSCAUpgradeToData } from "@account-kit/smart-contracts";
 
 const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
   lightAccountClient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 const hash = await lightAccountClient.upgradeAccount({

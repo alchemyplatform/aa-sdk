@@ -14,6 +14,7 @@ import type {
 } from "../../../types";
 import { signUserOperation } from "../signUserOperation.js";
 import type { GetContextParameter, UserOperationContext } from "../types";
+import { getUserOperationError } from "../getUserOperationError.js";
 
 export async function _sendUserOperation<
   TTransport extends Transport = Transport,
@@ -24,14 +25,15 @@ export async function _sendUserOperation<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uoStruct: UserOperationStruct<TEntryPointVersion>;
     overrides?: UserOperationOverrides<TEntryPointVersion>;
   } & GetAccountParameter<TAccount> &
-    GetContextParameter<TContext>
+    GetContextParameter<TContext>,
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account, uoStruct, context, overrides } = args;
   if (!account) {
@@ -50,8 +52,13 @@ export async function _sendUserOperation<
     overrides,
   });
 
-  return {
-    hash: await client.sendRawUserOperation(request, entryPoint.address),
-    request,
-  };
+  try {
+    return {
+      hash: await client.sendRawUserOperation(request, entryPoint.address),
+      request,
+    };
+  } catch (err) {
+    getUserOperationError(client, request, entryPoint);
+    throw err;
+  }
 }

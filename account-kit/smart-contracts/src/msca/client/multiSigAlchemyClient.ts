@@ -19,7 +19,7 @@ import { type Chain, type HttpTransport } from "viem";
 // todo: this file seems somewhat duplicated with ./modularAccountClient.ts, but that file has some multi-owner specific fields. Is there a way to refactor these two to de-dupe?
 
 export type AlchemyMultisigAccountClientConfig<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Omit<
   CreateMultisigModularAccountParams<HttpTransport, TSigner>,
   "transport"
@@ -34,9 +34,9 @@ export type AlchemyMultisigAccountClientConfig<
   > & { transport: AlchemyTransport };
 
 export function createMultisigAccountAlchemyClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  params: AlchemyMultisigAccountClientConfig<TSigner>
+  params: AlchemyMultisigAccountClientConfig<TSigner>,
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,
@@ -72,7 +72,7 @@ export function createMultisigAccountAlchemyClient<
  * @returns {Promise<AlchemySmartAccountClient<Transport, Chain | undefined, MultisigModularAccount<SmartAccountSigner>, MultisigPluginActions<MultisigModularAccount<SmartAccountSigner>> & PluginManagerActions<MultisigModularAccount<SmartAccountSigner>> & AccountLoupeActions<MultisigModularAccount<SmartAccountSigner>>, MultisigUserOperationContext>>} A promise that resolves to an Alchemy Smart Account Client for multisig accounts with extended functionalities.
  */
 export async function createMultisigAccountAlchemyClient(
-  config: AlchemyMultisigAccountClientConfig
+  config: AlchemyMultisigAccountClientConfig,
 ): Promise<
   AlchemySmartAccountClient<
     Chain | undefined,

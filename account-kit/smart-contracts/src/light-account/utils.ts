@@ -77,7 +77,7 @@ export const AccountVersionRegistry: LightAccountVersionConfigs = {
  * @returns {LightAccountVersion<TLightAccountType>} the default version for the given light account type
  */
 export const defaultLightAccountVersion = <
-  TLightAccountType extends LightAccountType
+  TLightAccountType extends LightAccountType,
 >(): LightAccountVersion<TLightAccountType> => "v2.0.0";
 
 /**
@@ -90,7 +90,7 @@ export const defaultLightAccountVersion = <
  */
 export const getDefaultLightAccountFactoryAddress = (
   chain: Chain,
-  version: LightAccountVersion<"LightAccount">
+  version: LightAccountVersion<"LightAccount">,
 ): Address => {
   return (
     AccountVersionRegistry.LightAccount[version].addresses.overrides?.[chain.id]
@@ -108,7 +108,7 @@ export const getDefaultLightAccountFactoryAddress = (
  */
 export const getDefaultMultiOwnerLightAccountFactoryAddress = (
   chain: Chain,
-  version: LightAccountVersion<"MultiOwnerLightAccount">
+  version: LightAccountVersion<"MultiOwnerLightAccount">,
 ) => {
   return (
     AccountVersionRegistry.MultiOwnerLightAccount[version].addresses
@@ -139,7 +139,7 @@ export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) => [
     x.addresses.default.factory,
     ...Object.values(x.addresses.overrides ?? {}).map((z) => z.factory),
-  ]).flat()
+  ]).flat(),
 );
 
 /**
@@ -151,7 +151,7 @@ export const LightAccountUnsupported1271Factories = new Set(
  * @returns {Promise<LightAccountVersionConfig>} the light account version definition for the given light account and chain
  */
 export async function getLightAccountVersionForAccount<
-  TAccount extends LightAccountBase
+  TAccount extends LightAccountBase,
 >(account: TAccount, chain: Chain): Promise<LightAccountVersionConfig> {
   const accountType = account.source as LightAccountType;
   const factoryAddress = await account.getFactoryAddress();
@@ -160,7 +160,7 @@ export async function getLightAccountVersionForAccount<
     Object.entries(AccountVersionRegistry[accountType]).map((pair) => {
       const [version, def] = pair as [
         LightAccountVersion<LightAccountType>,
-        LightAccountVersionConfig<GetEntryPointFromAccount<TAccount>>
+        LightAccountVersionConfig<GetEntryPointFromAccount<TAccount>>,
       ];
 
       if (
@@ -171,14 +171,14 @@ export async function getLightAccountVersionForAccount<
       }
 
       return [def.addresses.default.impl, version];
-    })
+    }),
   );
 
   const factoryToVersion = new Map(
     Object.entries(AccountVersionRegistry[accountType]).map((pair) => {
       const [version, def] = pair as [
         LightAccountVersion<LightAccountType>,
-        LightAccountVersionConfig<GetEntryPointFromAccount<TAccount>>
+        LightAccountVersionConfig<GetEntryPointFromAccount<TAccount>>,
       ];
 
       if (
@@ -189,7 +189,7 @@ export async function getLightAccountVersionForAccount<
       }
 
       return [def.addresses.default.factory, version];
-    })
+    }),
   );
 
   const version =
@@ -199,7 +199,7 @@ export async function getLightAccountVersionForAccount<
 
   if (!version) {
     throw new Error(
-      `Could not determine ${account.source} version for chain ${chain.id}`
+      `Could not determine ${account.source} version for chain ${chain.id}`,
     );
   }
 

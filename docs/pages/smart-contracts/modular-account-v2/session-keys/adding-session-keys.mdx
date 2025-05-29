@@ -72,14 +72,14 @@ const executeSelector = toFunctionSelector(
   getAbiItem({
     abi: semiModularAccountBytecodeAbi,
     name: "execute",
-  })
+  }),
 );
 
 const executeBatchSelector = toFunctionSelector(
   getAbiItem({
     abi: semiModularAccountBytecodeAbi,
     name: "executeBatch",
-  })
+  }),
 );
 
 await client.installValidation({

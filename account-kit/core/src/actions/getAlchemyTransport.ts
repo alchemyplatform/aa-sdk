@@ -3,7 +3,7 @@ import { ChainNotFoundError } from "../errors.js";
 import { type AlchemyAccountsConfig } from "../types.js";
 
 export function getAlchemyTransport(
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): AlchemyTransport {
   const { chain, connections } = config.store.getState();
   if (!connections.has(chain.id)) {

@@ -28,7 +28,7 @@ import { Alchemy, Network } from "alchemy-sdk";
 describe("Types: Light Account Tests", () => {
   const instance = local060Instance;
   const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner
+    accounts.fundedAccountOwner,
   );
 
   const givenConnectedProvider = ({
@@ -83,7 +83,7 @@ describe("Types: Light Account Tests", () => {
     assertType<AlchemyEnhancedApis>(provider);
     assertType<AlchemyEnhancedApis>(
       // @ts-expect-error
-      await givenAlchemyConnectedProvider({ signer, chain })
+      await givenAlchemyConnectedProvider({ signer, chain }),
     );
     // @ts-expect-error
     assertType<Client<CustomTransport>>(provider);
@@ -92,7 +92,7 @@ describe("Types: Light Account Tests", () => {
     const chain = polygonMumbai;
 
     const signer: SmartAccountSigner = new LocalAccountSigner(
-      accounts.fundedAccountOwner
+      accounts.fundedAccountOwner,
     );
     const provider = await givenConnectedProvider({
       signer,
@@ -103,7 +103,7 @@ describe("Types: Light Account Tests", () => {
     assertType<Client<CustomTransport>>(provider);
     assertType<AlchemyEnhancedApis>(
       // @ts-expect-error
-      await givenAlchemyConnectedProvider({ signer, chain })
+      await givenAlchemyConnectedProvider({ signer, chain }),
     );
     // @ts-expect-error
     assertType<Client<AlchemyTransport>>(provider);

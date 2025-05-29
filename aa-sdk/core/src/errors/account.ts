@@ -36,7 +36,7 @@ export class DefaultFactoryNotDefinedError extends BaseError {
       [
         `No default factory for ${accountType} found on chain ${chain.name} for entrypoint version ${version}`,
         "Supply an override via the `factoryAddress` parameter when creating an account",
-      ].join("\n")
+      ].join("\n"),
     );
   }
 }

@@ -22,7 +22,7 @@ export const useDeploymentStatus = () => {
     createPublicClient({
       chain: baseSepolia,
       transport: http(),
-    })
+    }),
   );
   const signerAddress = useSignerAddress();
 
@@ -30,9 +30,9 @@ export const useDeploymentStatus = () => {
     queryKey: ["deploymentStatus7702", signerAddress ?? "0x"],
     queryFn: async () => {
       const delegationAddress = signerAddress
-        ? (await publicClient.getCode({
+        ? ((await publicClient.getCode({
             address: signerAddress,
-          })) ?? "0x"
+          })) ?? "0x")
         : "0x";
       const delegationStatus = delegationAddress !== "0x";
       return {
