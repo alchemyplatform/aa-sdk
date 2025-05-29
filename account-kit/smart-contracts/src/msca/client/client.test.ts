@@ -3,14 +3,14 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("Modular Account Multi Owner Account Tests", async () => {
-  const instance = local060Instance;
+  const instance = localInstance;
   const MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC =
     "indoor dish desk flag debris potato excuse depart ticket judge file exit";
 

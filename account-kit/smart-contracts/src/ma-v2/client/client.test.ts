@@ -1,79 +1,79 @@
-import * as AAInfraModule from "@account-kit/infra";
 import * as AACoreModule from "@aa-sdk/core";
 import {
+  createSmartAccountClient,
   erc7677Middleware,
   LocalAccountSigner,
-  createSmartAccountClient,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
+import * as AAInfraModule from "@account-kit/infra";
 import {
-  custom,
-  parseEther,
-  publicActions,
-  zeroAddress,
-  getContract,
-  hashMessage,
-  hashTypedData,
-  fromHex,
-  prepareEncodeFunctionData,
-  isAddress,
-  concat,
-  testActions,
-  concatHex,
-  toHex,
-  createWalletClient,
-  getContractAddress,
-  encodeFunctionData,
-  type TestActions,
-  type ContractFunctionName,
-} from "viem";
-import { HookType } from "../actions/common/types.js";
-import {
-  getDefaultPaymasterGuardModuleAddress,
-  getDefaultSingleSignerValidationModuleAddress,
-  getDefaultTimeRangeModuleAddress,
-  getDefaultAllowlistModuleAddress,
-  getDefaultNativeTokenLimitModuleAddress,
-  installValidationActions,
-  SingleSignerValidationModule,
-  PaymasterGuardModule,
-  TimeRangeModule,
-  AllowlistModule,
-  NativeTokenLimitModule,
-  semiModularAccountBytecodeAbi,
-  buildFullNonceKey,
-  deferralActions,
-  PermissionBuilder,
-  PermissionType,
-  buildDeferredActionDigest,
-} from "@account-kit/smart-contracts/experimental";
+  alchemy,
+  alchemyGasAndPaymasterAndDataMiddleware,
+  arbitrumSepolia,
+} from "@account-kit/infra";
 import {
   createLightAccountClient,
   createModularAccountV2Client,
+  getMAV2UpgradeToData,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
-import { local070Instance } from "~test/instances.js";
+import {
+  AllowlistModule,
+  buildDeferredActionDigest,
+  buildFullNonceKey,
+  deferralActions,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
+  getDefaultPaymasterGuardModuleAddress,
+  getDefaultSingleSignerValidationModuleAddress,
+  getDefaultTimeRangeModuleAddress,
+  installValidationActions,
+  NativeTokenLimitModule,
+  PaymasterGuardModule,
+  PermissionBuilder,
+  PermissionType,
+  semiModularAccountBytecodeAbi,
+  SingleSignerValidationModule,
+  TimeRangeModule,
+} from "@account-kit/smart-contracts/experimental";
+import {
+  concat,
+  concatHex,
+  createWalletClient,
+  custom,
+  encodeFunctionData,
+  fromHex,
+  getContract,
+  getContractAddress,
+  hashMessage,
+  hashTypedData,
+  isAddress,
+  parseEther,
+  prepareEncodeFunctionData,
+  publicActions,
+  testActions,
+  toHex,
+  zeroAddress,
+  type ContractFunctionName,
+  type TestActions,
+} from "viem";
+import { entryPoint07Abi } from "viem/account-abstraction";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
+import { localInstance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
-import { entryPoint07Abi } from "viem/account-abstraction";
-import {
-  alchemy,
-  arbitrumSepolia,
-  alchemyGasAndPaymasterAndDataMiddleware,
-} from "@account-kit/infra";
-import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { HookType } from "../actions/common/types.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
-  const instance = local070Instance;
+  const instance = localInstance;
   const isValidSigSuccess = "0x1626ba7e";
 
   let client: ReturnType<typeof instance.getClient> &
