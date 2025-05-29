@@ -28,7 +28,7 @@ export interface UseReadErc20BalanceReturn {
 }
 
 export const useReadErc20Balance = (
-  params: UseReadErc20BalanceParams
+  params: UseReadErc20BalanceParams,
 ): UseReadErc20BalanceReturn => {
   const { accountAddress, tokenAddress, chain, rpcUrl } = params;
 
@@ -51,7 +51,7 @@ export const useReadErc20Balance = (
       rpcUrl,
       params.accountMode,
     ],
-    [tokenAddress, accountAddress, chain, rpcUrl, params.accountMode]
+    [tokenAddress, accountAddress, chain, rpcUrl, params.accountMode],
   );
 
   const {

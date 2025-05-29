@@ -34,7 +34,7 @@ export interface UseEstimateGasErc20SponsorshipReturn {
   isEstimating: boolean;
   estimateGas: (userOperations: UserOperationCall[]) => void;
   estimateGasAsync: (
-    userOperations: UserOperationCall[]
+    userOperations: UserOperationCall[],
   ) => Promise<EstimateGasErc20SponsorshipResult | undefined>;
   estimateResult: EstimateGasErc20SponsorshipResult | undefined;
   error: Error | null;
@@ -42,7 +42,7 @@ export interface UseEstimateGasErc20SponsorshipReturn {
 }
 
 export const useEstimateGasErc20Sponsorship = (
-  params: UseEstimateGasErc20SponsorshipParams
+  params: UseEstimateGasErc20SponsorshipParams,
 ): UseEstimateGasErc20SponsorshipReturn => {
   const { clientOptions } = params;
 
@@ -94,10 +94,10 @@ export const useEstimateGasErc20Sponsorship = (
       v == null
         ? BigInt(0)
         : typeof v === "bigint"
-        ? v
-        : typeof v === "number"
-        ? BigInt(v)
-        : BigInt(v);
+          ? v
+          : typeof v === "number"
+            ? BigInt(v)
+            : BigInt(v);
 
     const gasBuckets = [
       "preVerificationGas",
@@ -110,7 +110,7 @@ export const useEstimateGasErc20Sponsorship = (
 
     const totalGas = gasBuckets.reduce<bigint>(
       (sum, field) => sum + toBig((uoStruct as any)[field]),
-      BigInt(0)
+      BigInt(0),
     );
 
     const baseFee = latestBlock.baseFeePerGas;

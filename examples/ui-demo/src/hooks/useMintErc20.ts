@@ -26,7 +26,7 @@ export interface UseMintErc20Return {
 }
 
 export const useMintErc20 = (
-  params: UseMintErc20Params
+  params: UseMintErc20Params,
 ): UseMintErc20Return => {
   const { amount, clientOptions } = params;
   const { setToast } = useToast();

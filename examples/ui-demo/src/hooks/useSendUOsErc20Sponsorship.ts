@@ -31,13 +31,13 @@ export interface UseSendUOsErc20SponsorshipReturn {
   error?: Error | null;
   sendUOs: (userOperations: UserOperationCall[]) => void;
   sendUOsAsync: (
-    userOperations: UserOperationCall[]
+    userOperations: UserOperationCall[],
   ) => Promise<Hex | undefined>;
   reset: () => void;
 }
 
 export const useSendUOsErc20Sponsorship = (
-  params: UseSendUOsErc20SponsorshipParams
+  params: UseSendUOsErc20SponsorshipParams,
 ): UseSendUOsErc20SponsorshipReturn => {
   const { clientOptions } = params;
   const { setToast } = useToast();

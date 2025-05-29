@@ -37,7 +37,7 @@ export const ModalCTAButton: React.FC<ModalCTAButtonProps> = ({
       "bg-white border border-[#E2E8F0] text-secondary cursor-pointer hover:bg-gray-50":
         !isEffectivelyDisabled && variant === "secondary",
     },
-    className
+    className,
   );
 
   return (

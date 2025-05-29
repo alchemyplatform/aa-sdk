@@ -99,8 +99,8 @@ export function Erc20Modal({
   const balanceDisplay = isLoadingBalance
     ? "Loading..."
     : isErrorBalance
-    ? "Error"
-    : `${numericBalance === 0 ? "0" : numericBalance.toFixed(2)} USDC`;
+      ? "Error"
+      : `${numericBalance === 0 ? "0" : numericBalance.toFixed(2)} USDC`;
 
   const handleGetUSDC = async () => {
     if (!accountAddress) return;
@@ -267,7 +267,7 @@ export function Erc20Modal({
                     <div
                       className={cn(
                         "flex justify-between items-center transition-all duration-500 whitespace-nowrap",
-                        readyToBuyNft && "transform -translate-y-16"
+                        readyToBuyNft && "transform -translate-y-16",
                       )}
                     >
                       <span className="text-fg-secondary text-sm leading-relaxed">
@@ -280,7 +280,7 @@ export function Erc20Modal({
                             !isLoadingBalance &&
                               !readyToBuyNft &&
                               "text-demo-surface-critical mr-2",
-                            readyToBuyNft && "transform translate-x-20 mr-0"
+                            readyToBuyNft && "transform translate-x-20 mr-0",
                           )}
                         >
                           {balanceDisplay}
@@ -302,7 +302,7 @@ export function Erc20Modal({
                                 isMinting &&
                                   "border border-[#E2E8F0] bg-[#EFF4F9] text-[#CBD5E1]",
                                 !isMinting &&
-                                  "bg-[#27272A] text-demo-text-invert"
+                                  "bg-[#27272A] text-demo-text-invert",
                               )}
                               onClick={handleGetUSDC}
                               disabled={isMinting}
@@ -320,7 +320,7 @@ export function Erc20Modal({
                   <div
                     className={cn(
                       "flex flex-col gap-2 pt-4 border-t border-bg-separator transition-all duration-500",
-                      readyToBuyNft && "transform -translate-y-16"
+                      readyToBuyNft && "transform -translate-y-16",
                     )}
                   >
                     <div className="flex justify-between items-center">
