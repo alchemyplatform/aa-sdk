@@ -1,3 +1,3 @@
 import { defineWorkspace } from "vitest/config";
 
-export default defineWorkspace(["account-kit/*", "aa-sdk/*"]);
+export default defineWorkspace(["account-kit/*", "aa-sdk/*", ".vitest"]);
