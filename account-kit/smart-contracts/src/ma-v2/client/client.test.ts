@@ -178,8 +178,6 @@ describe("MA v2 Tests", async () => {
       .getEntryPoint()
       .getUserOperationHash(request);
 
-    console.log("uoHash", uoHash);
-
     let signedUOHash = await provider.account.signUserOperationHash(uoHash);
 
     const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
