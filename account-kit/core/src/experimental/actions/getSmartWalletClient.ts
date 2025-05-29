@@ -2,7 +2,7 @@ import {
   createSmartWalletClient,
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
-import type { Address, IsUndefined, JsonRpcAccount } from "viem";
+import type { Address } from "viem";
 import { getAlchemyTransport } from "../../actions/getAlchemyTransport.js";
 import { getConnection } from "../../actions/getConnection.js";
 import { getSigner } from "../../actions/getSigner.js";
@@ -11,23 +11,15 @@ import { SignerNotConnectedError } from "../../errors.js";
 import type { AlchemyAccountsConfig } from "../../types.js";
 
 export type GetSmartWalletClientResult<
-  TAccount extends JsonRpcAccount<Address> | undefined =
-    | JsonRpcAccount<`0x${string}`>
-    | undefined,
+  TAccount extends Address | undefined = Address | undefined,
 > = SmartWalletClient<TAccount>;
 
 export type GetSmartWalletClientParams<
-  TAccount extends JsonRpcAccount<Address> | undefined =
-    | JsonRpcAccount<Address>
-    | undefined,
-> = { mode?: "local" | "remote" } & (IsUndefined<TAccount> extends true
-  ? { account?: never }
-  : { account: Address });
+  TAccount extends Address | undefined = Address | undefined,
+> = { account?: TAccount };
 
 export function getSmartWalletClient<
-  TAccount extends JsonRpcAccount<Address> | undefined =
-    | JsonRpcAccount<Address>
-    | undefined,
+  TAccount extends Address | undefined = Address | undefined,
 >(
   config: AlchemyAccountsConfig,
   params?: GetSmartWalletClientParams<TAccount>,
@@ -56,16 +48,12 @@ export function getSmartWalletClient(
     return smartWalletClient;
   }
 
-  // TODO: should we still cache the client like we used to?
-  // honestly that probably caused more problems than it solved
-  // TBD actually, we might store it in the store so we don't run into issues
-  // with react
   const client = createSmartWalletClient({
     transport,
     chain: connection.chain,
     signer,
     account: params?.account,
-    mode: params?.mode ?? "local",
+    mode: config.mode,
   });
 
   config.store.setState((state) => ({
