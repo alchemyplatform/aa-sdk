@@ -168,8 +168,6 @@ describe("MA v2 Tests", async () => {
       .getEntryPoint()
       .getUserOperationHash(request);
 
-    console.log("uoHash", uoHash);
-
     let signedUOHash = await provider.account.signUserOperationHash(uoHash);
 
     const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
@@ -198,51 +196,7 @@ describe("MA v2 Tests", async () => {
 
       const publicClient = instance.getClient().extend(publicActions);
 
-      const domain = {
-        name: keccak256(stringToBytes("MyDapp")),
-        version: keccak256(stringToBytes("1")),
-        chainId: provider.chain.id,
-        verifyingContract: getDefaultWebauthnValidationModuleAddress(
-          provider.chain,
-        ),
-      };
-
-      const typeHash = keccak256(
-        //ethers.utils.toUtf8Bytes
-        stringToBytes(
-          "EIP712Domain(string name,string version,number chainId,address verifyingContract)",
-        ),
-      );
-
-      // TODO: consolidate formatting message to EIP-712 format (https://github.dev/fractional-company/contracts/blob/master/src/OpenZeppelin/drafts/EIP712.sol) with 1271 validation as part of the format + prepare signature work
-      const messageEIP712 = keccak256(
-        encodePacked(
-          ["bytes32", "bytes32", "bytes32"],
-          [
-            keccak256(stringToBytes("\x19\x01")),
-            keccak256(
-              encodeAbiParameters(
-                [
-                  { name: "typeHash", type: "bytes32" },
-                  { name: "name", type: "bytes32" },
-                  { name: "version", type: "bytes32" },
-                  { name: "chainId", type: "uint256" },
-                  { name: "verifyingContract", type: "address" },
-                ],
-                [
-                  typeHash,
-                  domain.name,
-                  domain.version,
-                  BigInt(domain.chainId),
-                  domain.verifyingContract,
-                ],
-              ),
-            ),
-            keccak256(stringToBytes(message)),
-          ],
-        ),
-      );
-
+      // TODO: should be using verifyTypedData here
       const isValid = await publicClient.verifyMessage({
         // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
         message,
