@@ -1520,20 +1520,41 @@ function subscribeWithDelayedFireImmediately<T>(
   selector: (state: AlchemySignerStore) => T,
   listener: (selectedState: T, previousSelectedState: T) => void,
 ): () => void {
-  let subscribeHasReturned = false;
+  // Until this function has returned, maintain a queue of events that will be
+  // processed once it does.
+  const queue: [selectedState: T, previousSelectedState: T][] = [];
+  let queueHasEmptied = false;
+  let hasUnsubscribed = false;
+
+  function drainQueue() {
+    // Note that this handles the case where more events are added to the queue
+    // during the handling of previous events.
+    for (let i = 0; i < queue.length && !hasUnsubscribed; i++) {
+      const args = queue[i];
+      listener(...args);
+    }
+    queueHasEmptied = true;
+  }
+
+  // Schedule the queue to be drained after this function has returned.
+  setTimeout(drainQueue, 0);
+
   const unsubscribe = store.subscribe(
     selector,
     (...args) => {
-      if (subscribeHasReturned) {
+      if (queueHasEmptied) {
         listener(...args);
       } else {
-        setTimeout(() => listener(...args), 0);
+        queue.push(args);
       }
     },
     { fireImmediately: true },
   );
-  subscribeHasReturned = true;
-  return unsubscribe;
+
+  return () => {
+    hasUnsubscribed = true;
+    unsubscribe();
+  };
 }
 
 function isAuthLinkingPrompt(result: unknown): result is AuthLinkingPrompt {
