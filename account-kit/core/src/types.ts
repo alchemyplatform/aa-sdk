@@ -4,6 +4,10 @@ import type {
   AlchemyTransportConfig,
 } from "@account-kit/infra";
 import type {
+  RNAlchemySignerSingleton as RNAlchemySigner,
+  RNSignerClient,
+} from "@account-kit/react-native-signer";
+import type {
   AlchemySignerParams,
   AlchemySignerWebClient,
   AlchemyWebSigner,
@@ -11,20 +15,17 @@ import type {
 import type {
   LightAccount,
   LightAccountVersion,
+  ModularAccountV2,
   MultiOwnerLightAccount,
   MultiOwnerModularAccount,
-  ModularAccountV2,
 } from "@account-kit/smart-contracts";
+import type { SmartWalletClient } from "@account-kit/wallet-client";
+import type { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { ClientStoreConfig, Store, StoredState } from "./store/types";
-import type {
-  RNAlchemySignerSingleton as RNAlchemySigner,
-  RNSignerClient,
-} from "@account-kit/react-native-signer";
-import type { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
@@ -53,6 +54,7 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 
 export type AlchemyAccountsConfig = {
   store: Store;
+  accountCreationHint?: CreateConfigProps["accountCreationHint"];
   _internal: {
     // if not provided, the default signer will be used
     createSigner: (config: ClientStoreConfig) => AlchemySigner;
@@ -136,6 +138,10 @@ export type BaseCreateConfigProps = RpcConnectionConfig & {
   storage?: CreateStorageFn;
 
   connectors?: CreateConnectorFn[];
+
+  accountCreationHint?: NonNullable<
+    Parameters<SmartWalletClient["requestAccount"]>[0]
+  >["creationHint"];
 
   /**
    * If set, calls `preparePopupOauth` immediately upon initializing the signer.
