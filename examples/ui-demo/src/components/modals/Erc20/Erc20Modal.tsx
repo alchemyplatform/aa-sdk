@@ -24,6 +24,7 @@ type Erc20ModalProps = {
   onClose: () => void;
   accountMode: AccountMode;
   imageUri?: string;
+  onNftMinted?: () => void;
 };
 
 const AMOUNT_OF_USDC_TO_MINT = 10;
@@ -35,6 +36,7 @@ export function Erc20Modal({
   onClose,
   accountMode,
   imageUri,
+  onNftMinted,
 }: Erc20ModalProps) {
   const [networkFee, setNetworkFee] = useState(0);
   const { address: accountAddress } = useAccount({
@@ -127,6 +129,9 @@ export function Erc20Modal({
       const uos = await getNftMintBatchUOs(accountAddress);
       await mintNftAsync(uos);
       await refetchBalance();
+      if (onNftMinted) {
+        onNftMinted();
+      }
     } catch (e) {
       console.error("Failed to buy NFT:", e);
     }
@@ -195,7 +200,7 @@ export function Erc20Modal({
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
-      <div className="akui-modal md:w-[607px] rounded-lg overflow-hidden">
+      <div className="akui-modal md:w-[607px] rounded-lg md:overflow-hidden overflow-auto max-h-[100vh]">
         <DynamicHeight>
           <div className="p-5 flex flex-col gap-6">
             {/* Header */}
@@ -205,8 +210,7 @@ export function Erc20Modal({
                   Pay gas with any token
                 </h2>
                 <p className="text-sm font-normal leading-relaxed text-fg-secondary">
-                  Checkout with one click and a single token. USDC is an
-                  example.
+                  Checkout with one click and a single token, for example USDC.
                 </p>
               </div>
               <button
@@ -253,8 +257,8 @@ export function Erc20Modal({
                       >
                         <div className="bg-demo-surface-critical-subtle text-fg-critical py-1.5 px-2 rounded-lg w-full">
                           <p className="font-medium text-xs leading-[18px] w-full">
-                            Insufficient funds. You need {MINIMUM_USDC_BALANCE}{" "}
-                            USDC to complete this purchase.
+                            Insufficient funds. Minimum balance of 1 USDC plus
+                            gas fees required.
                           </p>
                         </div>
                       </Transition>
@@ -266,13 +270,13 @@ export function Erc20Modal({
                         readyToBuyNft && "transform -translate-y-16"
                       )}
                     >
-                      <span className="text-fg-secondary font-medium text-sm leading-relaxed">
+                      <span className="text-fg-secondary text-sm leading-relaxed">
                         Wallet Balance
                       </span>
                       <div className="flex items-center">
                         <span
                           className={cn(
-                            "text-fg-primary font-medium text-sm leading-5 transition-all duration-500",
+                            "text-fg-primary text-sm leading-5 font-medium transition-all duration-500",
                             !isLoadingBalance &&
                               !readyToBuyNft &&
                               "text-demo-surface-critical mr-2",
@@ -320,7 +324,7 @@ export function Erc20Modal({
                     )}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-fg-primary text-sm font-medium leading-5">
+                      <span className="text-fg-primary text-sm leading-5">
                         NFT price
                       </span>
                       <span className="text-fg-primary text-sm leading-relaxed">
@@ -328,7 +332,7 @@ export function Erc20Modal({
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-fg-primary text-sm font-medium leading-5">
+                      <span className="text-fg-primary text-sm leading-5">
                         Network fee est.
                       </span>
                       <span className="text-fg-primary text-sm leading-relaxed flex">
@@ -347,6 +351,7 @@ export function Erc20Modal({
                     <div className="flex justify-between items-center">
                       <span className="text-fg-primary font-bold">Total</span>
                       <span className="text-fg-primary font-bold">
+                        {networkFee === 0 ? "~" : ""}
                         {(nftPrice + networkFee).toFixed(2)}&nbsp;USDC
                       </span>
                     </div>

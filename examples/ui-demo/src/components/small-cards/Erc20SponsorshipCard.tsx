@@ -17,6 +17,7 @@ export const Erc20SponsorshipCard = ({
   accountMode: AccountMode;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasMintedNft, setHasMintedNft] = useState(false);
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
   const transport = alchemy({
     rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
@@ -26,6 +27,10 @@ export const Erc20SponsorshipCard = ({
     contractAddress: DEMO_NFT_USDC_MINTABLE_ADDRESS,
     clientOptions: { mode: accountMode, chain, transport },
   });
+
+  const handleNftMinted = () => {
+    setHasMintedNft(true);
+  };
 
   const imageSlot = (
     <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
@@ -77,7 +82,7 @@ export const Erc20SponsorshipCard = ({
             onClick={() => setIsModalOpen(true)}
           >
             <ShoppingBag className="w-4 h-4 mr-2" />
-            Buy NFT
+            {hasMintedNft ? "Buy NFT again" : "Buy NFT"}
           </Button>
         }
       />
@@ -86,6 +91,7 @@ export const Erc20SponsorshipCard = ({
         onClose={() => setIsModalOpen(false)}
         accountMode={accountMode}
         imageUri={uri}
+        onNftMinted={handleNftMinted}
       />
     </>
   );

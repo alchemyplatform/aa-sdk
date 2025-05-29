@@ -237,7 +237,6 @@ export const SolanaNftCard = () => {
 
   return (
     <Card
-      badgeSlot={<Badge text="New!" className="text-[#F3F3FF] bg-[#16A34A]" />}
       imageSlot={imageSlot}
       heading="Solana Gasless Transactions"
       content={content}
