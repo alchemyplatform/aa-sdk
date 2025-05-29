@@ -30,7 +30,6 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
-  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
@@ -58,12 +57,8 @@ import {
   testActions,
   toHex,
   zeroAddress,
-  keccak256,
-  encodePacked,
   type ContractFunctionName,
   type TestActions,
-  encodeAbiParameters,
-  stringToBytes,
 } from "viem";
 import {
   createWebAuthnCredential,
@@ -1913,7 +1908,7 @@ describe("MA v2 Tests", async () => {
 
   let salt = 1n;
 
-  const givenConnectedProviderNoSigner = async ({
+  const givenConnectedWebauthnProvider = async ({
     signerEntity,
     accountAddress,
     paymasterMiddleware,
@@ -1956,7 +1951,7 @@ describe("MA v2 Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
-    const provider = await givenConnectedProviderNoSigner({
+    const provider = await givenConnectedWebauthnProvider({
       credential,
       getFn: (opts) => webauthnDevice.get(opts, "localhost"),
       rpId: "localhost",
