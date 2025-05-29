@@ -53,3 +53,13 @@ export class ChainNotFoundError extends BaseError {
     });
   }
 }
+
+export class SignerNotConnectedError extends BaseError {
+  name: string = "SignerNotConnectedError";
+
+  constructor() {
+    super(
+      "Signer not connected. Authenticate the user before calling this function",
+    );
+  }
+}

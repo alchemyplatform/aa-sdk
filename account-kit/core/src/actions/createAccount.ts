@@ -2,15 +2,16 @@ import {
   createLightAccount,
   createMultiOwnerLightAccount,
   createMultiOwnerModularAccount,
-  createModularAccountV2,
   type CreateLightAccountParams,
+  type CreateModularAccountV2Params,
   type CreateMultiOwnerLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
   type LightAccountVersion,
-  type CreateModularAccountV2Params,
 } from "@account-kit/smart-contracts";
-import { custom, type Transport } from "viem";
-import { ClientOnlyPropertyError } from "../errors.js";
+import type { SmartWalletClient } from "@account-kit/wallet-client";
+import { custom, toHex, type Transport } from "viem";
+import { ClientOnlyPropertyError, SignerNotConnectedError } from "../errors.js";
+import { getSmartWalletClient } from "../experimental/actions/getSmartWalletClient.js";
 import { CoreLogger } from "../metrics.js";
 import type {
   AlchemyAccountsConfig,
@@ -18,10 +19,10 @@ import type {
   SupportedAccountTypes,
   SupportedAccounts,
 } from "../types.js";
+import type { GetAccountParams } from "./getAccount";
 import { getBundlerClient } from "./getBundlerClient.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
-import type { GetAccountParams } from "./getAccount";
 
 type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
 
@@ -93,8 +94,9 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   const signerStatus = getSignerStatus(config);
 
   if (!signerStatus.isConnected || !signer) {
-    throw new Error("Signer not connected");
+    throw new SignerNotConnectedError();
   }
+  const smartWalletClient = getSmartWalletClient(config);
 
   const cachedAccount = accounts[chain.id]?.[params.type];
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
@@ -154,22 +156,23 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         return account;
       });
     } else if (isModularV2AccountParams(params)) {
-      return createModularAccountV2({
-        ...accountConfigs[chain.id]?.[params.type],
-        ...params.accountParams,
-        signer,
-        transport: (opts) => transport({ ...opts, retryCount: 0 }),
-        chain,
-      }).then((account) => {
-        CoreLogger.trackEvent({
-          name: "account_initialized",
-          data: {
-            accountType: "ModularAccountV2",
-            accountVersion: "v2.0.0",
-          },
+      // TODO: we can probably do away with some of the if-else logic here and just convert the params to creation hints
+      // and pass them to the client
+      return smartWalletClient
+        .requestAccount({
+          accountAddress: params.accountParams?.accountAddress,
+          creationHint: convertAccountParamsToCreationHint(params),
+        })
+        .then((account) => {
+          CoreLogger.trackEvent({
+            name: "account_initialized",
+            data: {
+              accountType: "ModularAccountV2",
+              accountVersion: "v2.0.0",
+            },
+          });
+          return account as SupportedAccounts;
         });
-        return account;
-      });
     } else {
       throw new Error(`Unsupported account type: ${params.type}`);
     }
@@ -241,6 +244,27 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   }
 
   return accountPromise;
+}
+
+function convertAccountParamsToCreationHint<
+  TAccount extends SupportedAccountTypes,
+>(
+  params: CreateAccountParams<TAccount>,
+): NonNullable<
+  Parameters<SmartWalletClient["requestAccount"]>["0"]
+>["creationHint"] {
+  if (isModularV2AccountParams(params)) {
+    return params.accountParams?.mode === "7702"
+      ? { accountType: "7702" }
+      : {
+          accountType: "sma-b",
+          ...params.accountParams,
+          // @ts-expect-error salt is defined by TS can't figure that out here
+          salt: toHex(params.accountParams?.salt ?? 0n),
+        };
+  }
+
+  throw new Error("account not supported yet");
 }
 
 export const isModularV2AccountParams = (
