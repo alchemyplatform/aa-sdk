@@ -48,6 +48,12 @@ export const multiOwnerMessageSigner = <
   };
 
   return {
+    prepareSign: () => {
+      throw new Error("not implemented");
+    },
+    formatSign: () => {
+      throw new Error("not implemented");
+    },
     getDummySignature: (): Hex => {
       return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
     },

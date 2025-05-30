@@ -263,6 +263,12 @@ export async function createLightAccountBase<
       }
     },
     encodeUpgradeToAndCall,
+    prepareSign: () => {
+      throw new Error("not implemented");
+    },
+    formatSign: () => {
+      throw new Error("not implemented");
+    },
   });
 
   return {
