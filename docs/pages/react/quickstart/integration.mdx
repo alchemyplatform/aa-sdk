@@ -6,11 +6,9 @@ link: /react/quickstart/integration
 slug: wallets/react/quickstart/integration
 ---
 
-# React Integration Guide
-
 To integrate in to your existing dapp and better understand the above demo app, we will walk through the each of the steps required for using alchemy ui components in technical depth!
 
-### 1. Install the packages
+## 1. Install the packages
 
 **Prerequisites**
 
@@ -64,11 +62,11 @@ If you're still using tailwind v3, don't fret. Account Kit is still fully compat
 
 </Tip>
 
-### 2. Get your Alchemy API Key
+## 2. Get your Alchemy API Key
 
 See the steps above in the NextJS section to get your API key.
 
-### 3. Configure your UI components
+## 3. Configure your UI components
 
 In this step, you'll customize your authentication methods and UI styles.
 
@@ -85,7 +83,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
   style={{ width: "70%" }}
 />
 
-#### 3a. Customize styling with tailwind
+### 3a. Customize styling with tailwind
 
 1. In the demo app, copy your `tailwind.config.ts` code into a file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
    1. Logo: logo images are loaded client side for maximum performance, so you'll need to add the image file to your project and specify the file path in the config where noted.
@@ -111,7 +109,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
      },
      {
        // 2. (optional) overwrite AccountKit theme options
-     },
+     }
    );
    ```
 
@@ -122,7 +120,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 @config '../../tailwind.config.ts'; // [!code ++]
 ```
 
-#### 3b. Customize authentication methods
+### 3b. Customize authentication methods
 
 1. In the root of your project, create a `config.ts` file
 2. In the demo app, copy your `config.ts` code into the file of the same name in your project. This will apply your authentication methods (email, passkey, etc.)
@@ -185,19 +183,19 @@ export const config = createConfig(
       addPasskeyOnSignup: true,
       showSignInText: true,
     },
-  },
+  }
 );
 
 export const queryClient = new QueryClient();
 ```
 
-### 4. Set up the Alchemy Provider
+## 4. Set up the Alchemy Provider
 
 This example assumes you are using the NextJS app [router](https://nextjs.org/docs/getting-started/project-structure#app-routing-conventions).
 
 However, the key pieces are applicable to any React app and you can structure the location of the code as needed.
 
-#### 4a. **Create the provider - app/providers.tsx**
+### 4a. **Create the provider - app/providers.tsx**
 
 Once you have styling and authentication configs, create a `providers.tsx` file and import the `AlchemyAccountProvider`.
 
@@ -212,7 +210,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -228,7 +226,7 @@ export const Providers = (
 };
 ```
 
-#### 4b. **Use the provider - layout.tsx**
+### 4b. **Use the provider - layout.tsx**
 
 Any component or page that will use Alchemy React components, must be wrapped by this `Provider`.
 
@@ -260,7 +258,7 @@ export default function RootLayout({
   // This will allow us to persist state across page boundaries (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
   const initialState = cookieToInitialState(
     config,
-    headers().get("cookie") ?? undefined,
+    headers().get("cookie") ?? undefined
   );
 
   return (
@@ -273,7 +271,7 @@ export default function RootLayout({
 }
 ```
 
-### 5. Run it
+## 5. Run it
 
 Once you have wrapped your app with the Alchemy Provider, you can now use the pre-built Alchemy react components for auth throughout your app.
 
