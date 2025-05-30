@@ -38,8 +38,14 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/react/overview.mdx
-          - page: Quickstart
-            path: wallets/pages/react/quickstart.mdx
+          - section: Quickstart
+            contents:
+              - page: Overview
+                path: wallets/pages/react/quickstart.mdx
+              - page: NextJS Template
+                path: wallets/pages/react/quickstart/next-template.mdx
+              - page: React Integration
+                path: wallets/pages/react/quickstart/integration.mdx
           - section: Login UI
             skip-slug: true
             contents:
