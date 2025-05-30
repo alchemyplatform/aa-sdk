@@ -38,12 +38,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<
   MultisigUserOperationContext
 > = async (struct, { account, client, context }) => {
   // if the signature is not present, this has to be UPPERLIMIT because it's likely a propose operation
-  if (
-    !context ||
-    (context.userOpSignatureType === "ACTUAL" &&
-      !context.signatures &&
-      !context.aggregatedSignature)
-  ) {
+  if (!context) {
     throw new InvalidContextSignatureError();
   }
 
@@ -72,9 +67,8 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<
     signer: account.getSigner(),
   });
 
-  // then this is a propose operation
+  // then this is a propose operation or a 1/1 multisig
   if (
-    context.userOpSignatureType === "UPPERLIMIT" &&
     context?.signatures?.length == null &&
     context?.aggregatedSignature == null
   ) {
@@ -92,7 +86,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<
         upperLimitMaxFeePerGas: request.maxFeePerGas,
         upperLimitMaxPriorityFeePerGas: request.maxPriorityFeePerGas,
         upperLimitPvg: request.preVerificationGas,
-        usingMaxValues: false,
+        usingMaxValues: context.userOpSignatureType === "ACTUAL",
       }),
     };
   }

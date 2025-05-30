@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.36.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.0...v4.36.1) (2025-05-29)
+
+### Bug Fixes
+
+- multisig ([#1644](https://github.com/alchemyplatform/aa-sdk/issues/1644)) ([eeb0e14](https://github.com/alchemyplatform/aa-sdk/commit/eeb0e14ea0559d1d113da8840b20c2afa779a5e0))
+
 # [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
 
 **Note:** Version bump only for package @account-kit/smart-contracts
