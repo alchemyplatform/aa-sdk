@@ -5,6 +5,7 @@ import {
   AlchemyWebSigner,
   type ErrorInfo,
 } from "@account-kit/signer";
+import { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 import type { Chain } from "viem";
 import {
   createJSONStorage,
@@ -25,7 +26,6 @@ import {
   type Store,
   type StoreState,
 } from "./types.js";
-import { Connection as SolanaWeb3Connection } from "@solana/web3.js";
 
 export const STORAGE_VERSION = 14;
 
@@ -137,6 +137,9 @@ export const createAccountKitStore = (
                 smartAccountClients: createEmptySmartAccountClientState(
                   connections.map((c) => c.chain),
                 ),
+                smartWalletClients: createEmptySmartWalletClientState(
+                  connections.map((c) => c.chain),
+                ),
                 connections: connectionsMap,
                 solana: params.solana,
                 bundlerClient: createAlchemyPublicRpcClient({
@@ -188,6 +191,7 @@ const createInitialStoreState = (
       undefined,
     ),
     smartAccountClients: createEmptySmartAccountClientState(chains),
+    smartWalletClients: createEmptySmartWalletClientState(chains),
   };
 
   if ("solana" in params && params.solana) {
@@ -395,6 +399,16 @@ export const createEmptySmartAccountClientState = (chains: Chain[]) => {
   );
 };
 
+export const createEmptySmartWalletClientState = (chains: Chain[]) => {
+  return chains.reduce(
+    (acc, chain) => {
+      acc[chain.id] = undefined;
+
+      return acc;
+    },
+    {} as StoreState["smartWalletClients"],
+  );
+};
 const deepEquals = (obj1: any, obj2: any) => {
   if (typeof obj1 !== typeof obj2) return false;
   if (typeof obj1 !== "object") return obj1 === obj2;
