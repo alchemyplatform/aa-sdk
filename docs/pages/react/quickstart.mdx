@@ -32,89 +32,37 @@ Below you'll find guides for:
 
 ## New NextJS project
 
-### 1. Create a new NextJS app using our template
+The fastest way to get started is using our **Quickstart widget** in the Alchemy Dashboard.
 
-For a simple end-to-end example, we will spin up a new NextJS app using our template.
+### 1. Use the Dashboard Quickstart
 
-<CodeBlocks>
+1. Go to the Smart Wallets Quickstart in the [Alchemy Dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart)
+2. Accept the terms and conditions if you haven't already
+3. Follow the 3-step process:
+   - **Create new app**: Copy the provided `npx create-next-app` command
+   - **Set up environment**: Copy the pre-configured `.env` variables (includes your API key and policy ID)
+   - **Run app**: Use the provided run command
 
-```bash npm
-npx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
-```
+The quickstart widget automatically provides you with:
 
-```bash yarn
-yarn create next-app account-kit-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
-```
+- ✅ Pre-configured API key (`NEXT_PUBLIC_ALCHEMY_API_KEY`)
+- ✅ Pre-configured paymaster policy ID (`NEXT_PUBLIC_ALCHEMY_POLICY_ID`)
+- ✅ Ready-to-use commands
 
-```bash pnpm
-pnpx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
-```
+### 2. That's it!
 
-</CodeBlocks>
+Your app will be running with embedded smart wallets using social login, and gas sponsorship enabled out of the box ✨
 
-### 2. Get your Alchemy API Key
+<Tip>
+  The dashboard quickstart creates everything you need automatically. No manual
+  API key or policy setup required!
+</Tip>
 
-<Markdown src="../../shared/get-api-key.mdx" />
+### 3. Next steps
 
-…and add the API key to your `.env` file:
-
-you can copy the `.env.example` file to `.env` and replace the `ALCHEMY_API_KEY` with your own.
-
-```bash
-cp .env.example .env
-```
-
-```bash .env
-NEXT_PUBLIC_ALCHEMY_API_KEY=your_api_key_here
-```
-
-### 3. Get your Alchemy paymaster policy ID
-
-Set up a paymaster policy to sponsor gas for your smart wallets. If you want more information on how to set up a paymaster policy, see the [Sponsor gas docs](https://www.alchemy.com/docs/wallets/core/sponsor-gas).
-
-1. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
-2. Navigate to **Wallets** → **Gas Manager**
-3. In the **Policies** tab, click the **"Create new policy +"** button
-4. Fill out the steps to create a new policy. See the example inputs below:
-   - **Policy details**
-     - Name: `Smart Wallets Policy`
-     - Policy type: `Sponsor gas`
-     - Select chain type: `EVM networks`
-     - App: Select your app from the dropdown
-     - Select networks: `Arbitrum Sepolia` (required for the NFT minting example in this quickstart)
-   - **Spending rules**
-     - Select all the checkboxes to not set any limits
-     - Select `I don't want to set custom rules`
-   - **Access Controls**
-     - Select `None`
-   - **Expiry and duration**
-     - Use the default values
-5. Review and publish the policy
-6. Copy the policy ID to your `.env` file
-
-```bash .env
-NEXT_PUBLIC_ALCHEMY_POLICY_ID=your_policy_id_here
-```
-
-### 4. Run the app!
-
-That's it! Run the NextJS app to see your new auth flow in action ✨
-
-<CodeBlocks>
-
-```bash npm
-npm run dev
-```
-
-```bash yarn
-yarn dev
-```
-
-```bash pnpm
-pnpm dev
-```
-
-</CodeBlocks>
+- [Customize your UI](/react/custom-ui)
+- [Connect a wallet](/react/connect-wallet)
+- [Send user operations](/react/send-user-operations)
 
 ## Existing project
 
