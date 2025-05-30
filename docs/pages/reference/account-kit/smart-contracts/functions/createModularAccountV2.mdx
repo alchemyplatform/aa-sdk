@@ -43,10 +43,10 @@ const modularAccountV2 = await createModularAccountV2({
 
 ### config
 
-`CreateModularAccountV2Params`
+`CreateModularAccountV2Params | CreateWebauthnModularAccountV2Params`
 Configuration parameters for creating a Modular Account V2.
 
 ## Returns
 
-`Promise<ModularAccountV2>`
+`Promise<ModularAccountV2 | WebauthnModularAccountV2>`
 A promise that resolves to an `ModularAccountV2` providing methods for nonce retrieval, transaction execution, and more.

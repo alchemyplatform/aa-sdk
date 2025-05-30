@@ -1,75 +1,83 @@
-import * as AAInfraModule from "@account-kit/infra";
 import * as AACoreModule from "@aa-sdk/core";
 import {
-  erc7677Middleware,
-  LocalAccountSigner,
   createSmartAccountClient,
+  deepHexlify,
+  erc7677Middleware,
+  InvalidUserOperationError,
+  isValidRequest,
+  LocalAccountSigner,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
+import * as AAInfraModule from "@account-kit/infra";
 import {
-  custom,
-  parseEther,
-  publicActions,
-  zeroAddress,
-  getContract,
-  hashMessage,
-  hashTypedData,
-  fromHex,
-  prepareEncodeFunctionData,
-  isAddress,
-  concat,
-  testActions,
-  concatHex,
-  toHex,
-  createWalletClient,
-  getContractAddress,
-  encodeFunctionData,
-  type TestActions,
-  type ContractFunctionName,
-} from "viem";
-import { HookType } from "../actions/common/types.js";
+  alchemy,
+  alchemyGasAndPaymasterAndDataMiddleware,
+  arbitrumSepolia,
+} from "@account-kit/infra";
 import {
+  createLightAccountClient,
+  getMAV2UpgradeToData,
+  type SignerEntity,
+} from "@account-kit/smart-contracts";
+import {
+  AllowlistModule,
+  buildDeferredActionDigest,
+  buildFullNonceKey,
+  deferralActions,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
-  getDefaultAllowlistModuleAddress,
-  getDefaultNativeTokenLimitModuleAddress,
   installValidationActions,
-  SingleSignerValidationModule,
-  PaymasterGuardModule,
-  TimeRangeModule,
-  AllowlistModule,
   NativeTokenLimitModule,
-  semiModularAccountBytecodeAbi,
-  buildFullNonceKey,
-  deferralActions,
+  PaymasterGuardModule,
   PermissionBuilder,
   PermissionType,
-  buildDeferredActionDigest,
+  semiModularAccountBytecodeAbi,
+  SingleSignerValidationModule,
+  TimeRangeModule,
 } from "@account-kit/smart-contracts/experimental";
 import {
-  createLightAccountClient,
-  createModularAccountV2Client,
-  type SignerEntity,
-} from "@account-kit/smart-contracts";
-import { local070Instance } from "~test/instances.js";
+  concat,
+  concatHex,
+  createWalletClient,
+  custom,
+  encodeFunctionData,
+  fromHex,
+  getContract,
+  getContractAddress,
+  hashMessage,
+  hashTypedData,
+  isAddress,
+  parseEther,
+  prepareEncodeFunctionData,
+  publicActions,
+  testActions,
+  toHex,
+  zeroAddress,
+  type ContractFunctionName,
+  type TestActions,
+} from "viem";
+import {
+  createWebAuthnCredential,
+  entryPoint07Abi,
+  type ToWebAuthnAccountParameters,
+} from "viem/account-abstraction";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
+import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { SoftWebauthnDevice } from "~test/webauthn.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
-import { entryPoint07Abi } from "viem/account-abstraction";
-import {
-  alchemy,
-  arbitrumSepolia,
-  alchemyGasAndPaymasterAndDataMiddleware,
-} from "@account-kit/infra";
-import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { HookType } from "../actions/common/types.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
+import { createModularAccountV2Client } from "./client.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -85,6 +93,8 @@ describe("MA v2 Tests", async () => {
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
   });
+
+  const webauthnDevice = new SoftWebauthnDevice();
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,
@@ -126,6 +136,72 @@ describe("MA v2 Tests", async () => {
       startingAddressBalance + sendAmount,
     );
   });
+
+  it("sends a simple UO with webauthn account", async () => {
+    const provider = await givenWebAuthnProvider();
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // send UO with webauthn gas estimator
+    const builtUO = await provider.buildUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    const request = deepHexlify(builtUO);
+    if (!isValidRequest(request)) {
+      throw new InvalidUserOperationError(builtUO);
+    }
+
+    const uoHash = provider.account
+      .getEntryPoint()
+      .getUserOperationHash(request);
+
+    let signedUOHash = await provider.account.signUserOperationHash(uoHash);
+
+    const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
+
+    signedUO.signature = signedUOHash;
+
+    await provider.sendRawUserOperation(
+      signedUO,
+      provider.account.getEntryPoint().address,
+    );
+  });
+
+  it.fails(
+    "successfully sign + validate a message, for WebAuthn account",
+    async () => {
+      const provider = await givenWebAuthnProvider();
+
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("2"),
+      });
+
+      const message = "0xdeadbeef";
+
+      let signature = await provider.signMessage({ message });
+
+      const publicClient = instance.getClient().extend(publicActions);
+
+      // TODO: should be using verifyTypedData here
+      const isValid = await publicClient.verifyMessage({
+        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
+        message,
+        address: provider.getAddress(),
+        signature,
+      });
+
+      expect(isValid).toBe(true);
+    },
+  );
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
@@ -1769,6 +1845,58 @@ describe("MA v2 Tests", async () => {
   });
 
   let salt = 1n;
+
+  const givenConnectedWebauthnProvider = async ({
+    signerEntity,
+    accountAddress,
+    paymasterMiddleware,
+    credential,
+    getFn,
+    rpId,
+  }: {
+    signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    credential: ToWebAuthnAccountParameters["credential"];
+    getFn?: ToWebAuthnAccountParameters["getFn"];
+    rpId?: ToWebAuthnAccountParameters["rpId"];
+  }) =>
+    createModularAccountV2Client({
+      chain: instance.chain,
+      accountAddress,
+      signerEntity,
+      credential,
+      getFn,
+      rpId,
+      mode: "webauthn",
+      transport: custom(instance.getClient()),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+          ? erc7677Middleware()
+          : {}),
+      salt: salt++,
+    });
+
+  const givenWebAuthnProvider = async () => {
+    const credential = await createWebAuthnCredential({
+      rp: { id: "localhost", name: "localhost" },
+      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+      user: { name: "test", displayName: "test" },
+    });
+
+    const provider = await givenConnectedWebauthnProvider({
+      credential,
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
+    });
+
+    return provider;
+  };
 
   const givenConnectedProvider = async ({
     signer,
