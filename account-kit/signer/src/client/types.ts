@@ -265,8 +265,8 @@ export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;
 
 export type GetWebAuthnAttestationResult = {
   attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
-  challenge: ArrayBuffer;
-  authenticatorUserId: ArrayBuffer;
+  challenge: ArrayBuffer | string;
+  authenticatorUserId: BufferSource;
 };
 
 export type AuthLinkingPrompt = {
