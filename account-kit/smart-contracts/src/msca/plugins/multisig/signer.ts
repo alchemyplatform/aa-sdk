@@ -60,6 +60,12 @@ export const multisigSignMethods = <
   };
 
   return {
+    prepareSign: () => {
+      throw new Error("not implemented");
+    },
+    formatSign: () => {
+      throw new Error("not implemented");
+    },
     getDummySignature: async (): Promise<`0x${string}`> => {
       const [, thresholdRead] = await client.readContract({
         abi: MultisigPluginAbi,

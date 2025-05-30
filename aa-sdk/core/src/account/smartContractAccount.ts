@@ -119,7 +119,7 @@ export const isSmartAccountWithSigner = (
 // [!region SmartContractAccount]
 export type SmartContractAccount<
   Name extends string = string,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex | Promise<Hex>;
@@ -129,9 +129,9 @@ export type SmartContractAccount<
   signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
   signTypedDataWith6492: <
     const typedData extends TypedData | Record<string, unknown>,
-    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
   >(
-    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
   ) => Promise<Hex>;
   encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getAccountNonce(nonceKey?: bigint): Promise<bigint>;
@@ -141,7 +141,7 @@ export type SmartContractAccount<
   getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
-} & (SigningMethods | {});
+} & SigningMethods;
 // [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
@@ -173,7 +173,8 @@ export type ToSmartContractAccountParams<
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getImplementationAddress?: () => Promise<NullAddress | Address>;
-} & Omit<CustomSource, "signTransaction" | "address">;
+} & Omit<CustomSource, "signTransaction" | "address"> &
+  SigningMethods;
 // [!endregion ToSmartContractAccountParams]
 
 /**
@@ -366,6 +367,8 @@ export async function toSmartContractAccount(
     signUserOperationHash,
     encodeUpgradeToAndCall,
     getImplementationAddress,
+    prepareSign,
+    formatSign,
   } = params;
 
   const client = createBundlerClient({
@@ -540,5 +543,7 @@ export async function toSmartContractAccount(
     signMessageWith6492,
     signTypedDataWith6492,
     getImplementationAddress: getImplementationAddress_,
+    prepareSign,
+    formatSign,
   };
 }

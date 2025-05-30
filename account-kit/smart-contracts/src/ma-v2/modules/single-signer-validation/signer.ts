@@ -59,7 +59,7 @@ export const singleSignerMessageSigner = (
 ) => {
   const signingMethods: SigningMethods = {
     prepareSign: async (
-      request: SignatureRequest
+      request: SignatureRequest,
     ): Promise<SignatureRequest> => {
       let hash;
 
