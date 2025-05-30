@@ -18,7 +18,7 @@ import {
   type HDAccount,
 } from "viem";
 import { createMultisigModularAccountClient } from "../client/client.js";
-import { formatSignatures } from "../plugins/multisig/extension.ts/index.js";
+import { formatSignatures } from "../plugins/multisig/utils/index.js";
 import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
 const chain = sepolia;
