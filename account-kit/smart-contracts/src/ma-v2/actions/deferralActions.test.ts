@@ -23,7 +23,6 @@ import {
 import {
   buildDeferredActionDigest,
   deferralActions,
-  ExpiredDeadlineError,
   PermissionBuilder,
   PermissionType,
   RootPermissionOnlyError,
