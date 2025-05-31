@@ -46,6 +46,21 @@ export enum DeploymentState {
   DEPLOYED = "0x2",
 }
 
+export type SignatureRequest =
+  | {
+      type: "personal_sign";
+      data: SignableMessage;
+    }
+  | {
+      type: "eth_signTypedData_v4";
+      data: TypedDataDefinition;
+    };
+
+export type SigningMethods = {
+  prepareSign: (request: SignatureRequest) => Promise<SignatureRequest>;
+  formatSign: (signature: Hex) => Promise<Hex>;
+};
+
 export type GetEntryPointFromAccount<
   TAccount extends SmartContractAccount | undefined,
   TAccountOverride extends SmartContractAccount = SmartContractAccount,
@@ -126,7 +141,7 @@ export type SmartContractAccount<
   getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
-};
+} & SigningMethods;
 // [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
@@ -158,7 +173,8 @@ export type ToSmartContractAccountParams<
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getImplementationAddress?: () => Promise<NullAddress | Address>;
-} & Omit<CustomSource, "signTransaction" | "address">;
+} & Omit<CustomSource, "signTransaction" | "address"> &
+  SigningMethods;
 // [!endregion ToSmartContractAccountParams]
 
 /**
@@ -351,6 +367,8 @@ export async function toSmartContractAccount(
     signUserOperationHash,
     encodeUpgradeToAndCall,
     getImplementationAddress,
+    prepareSign,
+    formatSign,
   } = params;
 
   const client = createBundlerClient({
@@ -525,5 +543,7 @@ export async function toSmartContractAccount(
     signMessageWith6492,
     signTypedDataWith6492,
     getImplementationAddress: getImplementationAddress_,
+    prepareSign,
+    formatSign,
   };
 }

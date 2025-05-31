@@ -27,6 +27,12 @@ export const createDummySmartContractAccount = async <C extends BundlerClient>(
     encodeExecute: async () => "0x",
     getDummySignature: (): Hex =>
       "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+    prepareSign: () => {
+      throw new Error("Not implemented");
+    },
+    formatSign: () => {
+      throw new Error("Not implemented");
+    },
   });
 };
 
