@@ -12,10 +12,10 @@ config.watchFolders = [workspaceRoot, projectRoot];
 
 // Add aliases for file-system import based modules
 const ALIASES = {
-	"@noble/hashes/crypto": path.resolve(
-		workspaceRoot,
-		"node_modules/@noble/hashes/crypto.js"
-	),
+  '@noble/hashes/crypto': path.resolve(
+    workspaceRoot,
+    'node_modules/@noble/hashes/crypto.js',
+  ),
 };
 
 // to the real shared packages name.
@@ -34,13 +34,13 @@ config.resolver.disableHierarchicalLookup = true;
 
 // Default to file-based module resolution for file-system import based modules
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-	if (ALIASES[moduleName]) {
-		return {
-			filePath: ALIASES[moduleName],
-			type: "sourceFile",
-		};
-	}
-	return context.resolveRequest(context, moduleName, platform);
+  if (ALIASES[moduleName]) {
+    return {
+      filePath: ALIASES[moduleName],
+      type: 'sourceFile',
+    };
+  }
+  return context.resolveRequest(context, moduleName, platform);
 };
 
 config.resolver.extraNodeModules = {
@@ -54,9 +54,9 @@ config.resolver.extraNodeModules = {
 config.resolver.unstable_enablePackageExports = true;
 
 config.resolver.unstable_conditionNames = [
-	"browser",
-	"require",
-	"react-native",
+  'browser',
+  'require',
+  'react-native',
 ];
 
 module.exports = config;

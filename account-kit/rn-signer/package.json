@@ -41,7 +41,7 @@
     "test": "jest",
     "typecheck": "tsc",
     "build": "yarn typecheck",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "clean": "del-cli android/build",
     "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react-native-signer --fern",
     "prepare": "bob build"
   },

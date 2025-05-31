@@ -1,11 +1,12 @@
 **/dist/*
 site/.vitepress/cache/**/*
 .nx/*
-.github/*
 /.nx/cache
 
 /examples/*
 !/examples/ui-demo
+!/examples/react-native-bare-example
+!/examples/react-native-expo-example
 /examples/ui-demo/contracts
 /examples/ui-demo/.next/*
 

@@ -23,7 +23,7 @@ yarn expo install expo@latest --fix
 ```json
 // app.json
 {
-	"newArchEnabled": true
+  "newArchEnabled": true
 }
 ```
 
@@ -42,10 +42,10 @@ const { getDefaultConfig } = require("expo/metro-config");
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 config.resolver.extraNodeModules = {
-	...config.resolver.extraNodeModules,
-	...require("node-libs-react-native"),
-	crypto: require.resolve("crypto-browserify"),
-	stream: require.resolve("stream-browserify"),
+  ...config.resolver.extraNodeModules,
+  ...require("node-libs-react-native"),
+  crypto: require.resolve("crypto-browserify"),
+  stream: require.resolve("stream-browserify"),
 };
 
 module.exports = config;
@@ -88,6 +88,7 @@ yarn add express
 8. Run the app
 
 Prebuild the app if you need to
+
 ```bash
 npx expo prebuild --clean
 ```
@@ -95,11 +96,13 @@ npx expo prebuild --clean
 Run the app for your desired platform:
 
 IOS
+
 ```
 yarn run ios
 ```
 
 Android
+
 ```
 yarn run android
 ```

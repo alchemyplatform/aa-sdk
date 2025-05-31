@@ -79,7 +79,7 @@ runs:
         script: |
           const status = '${{ steps.generate-docs.outcome }}' === 'success' ? 'success' : 'failure';
           const envUrl = '${{ steps.generate-docs.outputs.url }}';
-          
+
           await github.rest.repos.createDeploymentStatus({
             owner: context.repo.owner,
             repo: context.repo.repo,
