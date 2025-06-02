@@ -170,7 +170,7 @@ export async function createLightAccountBase<
   const prepareSign = async (
     params: SignatureRequest,
   ): Promise<SignatureRequest> => {
-    let messageHash =
+    const messageHash =
       params.type === "personal_sign"
         ? hashMessage(params.data)
         : hashTypedData(params.data);
