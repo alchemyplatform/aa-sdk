@@ -69,7 +69,7 @@ export const multisigSignMethods = <
   ): Promise<SignatureRequest> => {
     const messageHash =
       params.type === "personal_sign"
-        ? hashMessage(message)
+        ? hashMessage(params.data)
         : hashTypedData(params.data);
 
     return {
