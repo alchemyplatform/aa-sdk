@@ -17,12 +17,6 @@ jobs:
       - name: Checkout aa-sdk
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.9.0
-          run_install: false
-
       - name: Setup Docs
         uses: ./.github/actions/setup-docs
         with:

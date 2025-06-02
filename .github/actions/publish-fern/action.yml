@@ -27,6 +27,9 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup pnpm
+      uses: ./.github/actions/setup-docs-pnpm
+
     - name: Run Generate
       shell: bash
       run: |
