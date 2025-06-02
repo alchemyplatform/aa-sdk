@@ -79,7 +79,7 @@ describe("Light Account Tests", () => {
     switch (version) {
       case "v1.0.2":
         await expect(account.signMessage({ message })).rejects.toThrowError(
-          "LightAccount v1.0.2 doesn't support 1271",
+          "Version v1.0.2 of LightAccount doesn't support 1271",
         );
         break;
       case "v1.0.1":
