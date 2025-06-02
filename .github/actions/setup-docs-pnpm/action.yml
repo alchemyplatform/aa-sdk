@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Install pnpm
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v4.0.0
       id: pnpm-install
       with:
         version: 10.9.0
