@@ -27,13 +27,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-      id: pnpm-install
-      with:
-        version: 10.9.0
-        run_install: true
-
     - name: Run Generate
       shell: bash
       run: |
