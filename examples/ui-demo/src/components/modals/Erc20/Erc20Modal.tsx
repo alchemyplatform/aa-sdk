@@ -193,7 +193,7 @@ export function Erc20Modal({
       : "#CBD5E1";
 
   return (
-    <Dialog isOpen={isOpen} onClose={handleClose}>
+    <Dialog isOpen={isOpen} onClose={handleClose} fullWidth>
       <div className="akui-modal md:w-[607px] rounded-lg md:overflow-hidden overflow-auto max-h-[100vh]">
         <DynamicHeight>
           <div className="p-5 flex flex-col gap-6">

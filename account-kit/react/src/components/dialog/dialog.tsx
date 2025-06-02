@@ -16,6 +16,7 @@ type DialogProps = {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  fullWidth?: boolean;
 };
 
 /**
@@ -24,7 +25,12 @@ type DialogProps = {
  * @param {DialogProps} props - The props for the Dialog component.
  * @returns {JSX.Element | null} The rendered Dialog component.
  */
-export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
+export const Dialog = ({
+  isOpen,
+  onClose,
+  children,
+  fullWidth = false,
+}: DialogProps) => {
   const [isScrollLocked, setScrollLocked] = useState(false);
 
   const [renderPortal, setRenderPortal] = useState(false);
@@ -85,9 +91,9 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
             <FocusTrap>
               <div
                 ref={dialogCardRef}
-                className={`max-md:w-screen md:max-w-sm block ${
-                  isOpen ? "animate-slide-up" : "animate-slide-down"
-                }`}
+                className={`max-md:w-screen ${
+                  fullWidth ? "" : "md:max-w-sm"
+                } block ${isOpen ? "animate-slide-up" : "animate-slide-down"}`}
                 onClick={(event) => event.stopPropagation()}
               >
                 {children}
