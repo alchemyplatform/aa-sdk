@@ -2,13 +2,14 @@ import { AlchemyTransport } from "@account-kit/infra";
 import { useQuery } from "@tanstack/react-query";
 import { type Address, parseAbi, type Chain } from "viem";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
+import { AccountMode } from "@/app/config";
 
 const NftContractAbi = parseAbi(["function baseURI() view returns (string)"]);
 
 interface UseReadNFTUriParams {
   contractAddress?: Address;
   clientOptions: {
-    mode: "default" | "7702";
+    mode: AccountMode;
     chain: Chain;
     transport: AlchemyTransport;
   };

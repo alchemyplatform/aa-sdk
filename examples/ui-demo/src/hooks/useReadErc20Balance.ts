@@ -1,10 +1,9 @@
-import { AccountMode } from "@/app/config";
+import { AlchemyTransport } from "@account-kit/infra";
 import { useQuery, type QueryObserverResult } from "@tanstack/react-query";
 import { useMemo } from "react";
 import {
   createPublicClient,
   erc20Abi,
-  http,
   formatUnits,
   type Hex,
   type Chain,
@@ -14,9 +13,10 @@ import {
 export interface UseReadErc20BalanceParams {
   accountAddress?: Hex;
   tokenAddress?: Hex;
-  chain?: Chain;
-  rpcUrl?: string;
-  accountMode?: AccountMode;
+  clientOptions: {
+    chain: Chain;
+    transport: AlchemyTransport;
+  };
 }
 
 export interface UseReadErc20BalanceReturn {
@@ -30,7 +30,8 @@ export interface UseReadErc20BalanceReturn {
 export const useReadErc20Balance = (
   params: UseReadErc20BalanceParams,
 ): UseReadErc20BalanceReturn => {
-  const { accountAddress, tokenAddress, chain, rpcUrl } = params;
+  const { accountAddress, tokenAddress, clientOptions } = params;
+  const { chain, transport } = clientOptions;
 
   const publicClient = useMemo<PublicClient | undefined>(() => {
     if (!chain) {
@@ -38,20 +39,13 @@ export const useReadErc20Balance = (
     }
     return createPublicClient({
       chain,
-      transport: http(rpcUrl),
+      transport,
     });
-  }, [chain, rpcUrl]);
+  }, [chain, transport]);
 
   const queryKey = useMemo(
-    () => [
-      "erc20Balance",
-      tokenAddress,
-      accountAddress,
-      chain?.id,
-      rpcUrl,
-      params.accountMode,
-    ],
-    [tokenAddress, accountAddress, chain, rpcUrl, params.accountMode],
+    () => ["erc20Balance", tokenAddress, accountAddress, chain?.id],
+    [tokenAddress, accountAddress, chain],
   );
 
   const {

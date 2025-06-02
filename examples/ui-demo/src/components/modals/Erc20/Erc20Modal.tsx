@@ -47,8 +47,6 @@ export function Erc20Modal({
   const { data: ethPriceData, isLoading: isLoadingEthPrice } = useGetEthPrice();
 
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
-  const rpcUrl =
-    chain.rpcUrls.alchemy?.http?.[0] ?? chain.rpcUrls.default.http[0];
   const transport = alchemy({
     rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
   });
@@ -61,9 +59,7 @@ export function Erc20Modal({
   } = useReadErc20Balance({
     accountAddress,
     tokenAddress: DEMO_USDC_ADDRESS_6_DECIMALS,
-    chain,
-    rpcUrl,
-    accountMode,
+    clientOptions: { chain, transport },
   });
 
   const {
@@ -190,7 +186,7 @@ export function Erc20Modal({
   const buyNftButtonEnabled =
     readyToBuyNft && !isMintingNft && !isLoadingNftClient;
 
-  let bagIconColor = mintNftTxHash
+  const bagIconColor = mintNftTxHash
     ? "#475569"
     : buyNftButtonEnabled
       ? "white"
