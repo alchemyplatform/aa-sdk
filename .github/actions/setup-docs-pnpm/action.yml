@@ -10,6 +10,7 @@ runs:
       with:
         version: 10.9.0
         run_install: false
+        package_json_file: docs-site/package.json
 
     - name: Get pnpm store directory
       id: pnpm-cache
