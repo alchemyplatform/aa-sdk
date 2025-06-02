@@ -27,9 +27,8 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup pnpm
-      # Use the pnpm action from the docs-site repo
-      uses: ./docs-site/.github/actions/setup-pnpm
+    - name: Setup pnpm for docs-site
+      uses: ./.github/actions/setup-docs-pnpm
 
     - name: Run Generate
       shell: bash

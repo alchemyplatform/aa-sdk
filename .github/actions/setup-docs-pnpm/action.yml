@@ -1,0 +1,35 @@
+name: "Setup pnpm for docs-site"
+description: "Sets up pnpm with caching"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: "docs-site/package.json"
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      id: pnpm-install
+      with:
+        version: 10.9.0
+        run_install: false
+
+    - name: Get pnpm store directory
+      id: pnpm-cache
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(cd docs-site && pnpm store path)" >> $GITHUB_OUTPUT
+
+    - name: Cache Node Modules
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('docs-site/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      shell: bash
+      run: cd docs-site && pnpm install 
