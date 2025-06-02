@@ -29,7 +29,7 @@ type Erc20ModalProps = {
 
 const AMOUNT_OF_USDC_TO_MINT = 10;
 const MINIMUM_USDC_BALANCE = 2;
-const nftPrice = 1;
+const NFT_PRICE = 1;
 
 export function Erc20Modal({
   isOpen,
@@ -47,7 +47,8 @@ export function Erc20Modal({
   const { data: ethPriceData, isLoading: isLoadingEthPrice } = useGetEthPrice();
 
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
-  const rpcUrl = chain.rpcUrls.default.http[0];
+  const rpcUrl =
+    chain.rpcUrls.alchemy?.http?.[0] ?? chain.rpcUrls.default.http[0];
   const transport = alchemy({
     rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
   });
@@ -129,9 +130,7 @@ export function Erc20Modal({
       const uos = await getNftMintBatchUOs(accountAddress);
       await mintNftAsync(uos);
       await refetchBalance();
-      if (onNftMinted) {
-        onNftMinted();
-      }
+      onNftMinted?.();
     } catch (e) {
       console.error("Failed to buy NFT:", e);
     }
@@ -191,12 +190,11 @@ export function Erc20Modal({
   const buyNftButtonEnabled =
     readyToBuyNft && !isMintingNft && !isLoadingNftClient;
 
-  let bagIconColor = "#CBD5E1";
-  if (mintNftTxHash) {
-    bagIconColor = "#475569";
-  } else if (buyNftButtonEnabled) {
-    bagIconColor = "white";
-  }
+  let bagIconColor = mintNftTxHash
+    ? "#475569"
+    : buyNftButtonEnabled
+      ? "white"
+      : "#CBD5E1";
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
@@ -352,7 +350,7 @@ export function Erc20Modal({
                       <span className="text-fg-primary font-bold">Total</span>
                       <span className="text-fg-primary font-bold">
                         {networkFee === 0 ? "~" : ""}
-                        {(nftPrice + networkFee).toFixed(2)}&nbsp;USDC
+                        {(NFT_PRICE + networkFee).toFixed(2)}&nbsp;USDC
                       </span>
                     </div>
                   </div>

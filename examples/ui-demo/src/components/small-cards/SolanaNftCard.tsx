@@ -23,7 +23,6 @@ import { LoadingIcon } from "../icons/loading";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import Image from "next/image";
-import { Badge } from "./Badge";
 import { CheckCircleFilledIcon } from "../icons/check-circle-filled";
 import { useState } from "react";
 import { ExternalLinkIcon } from "lucide-react";

@@ -63,7 +63,7 @@ export const useMintErc20 = (
 
       return client.waitForUserOperationTransaction(userOpHash);
     },
-    onError: (err: Error) => {
+    onError: (err) => {
       console.error(err);
       setToast({
         type: "error",

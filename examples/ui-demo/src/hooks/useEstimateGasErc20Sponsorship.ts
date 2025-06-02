@@ -99,19 +99,14 @@ export const useEstimateGasErc20Sponsorship = (
             ? BigInt(v)
             : BigInt(v);
 
-    const gasBuckets = [
-      "preVerificationGas",
-      "verificationGasLimit",
-      "callGasLimit",
-      ...("paymasterPostOpGasLimit" in uoStruct
-        ? ["paymasterPostOpGasLimit"]
-        : []),
-    ] as const;
+    let totalGas =
+      toBig(uoStruct.preVerificationGas) +
+      toBig(uoStruct.verificationGasLimit) +
+      toBig(uoStruct.callGasLimit);
 
-    const totalGas = gasBuckets.reduce<bigint>(
-      (sum, field) => sum + toBig((uoStruct as any)[field]),
-      BigInt(0),
-    );
+    if ("paymasterPostOpGasLimit" in uoStruct) {
+      totalGas += toBig(uoStruct.paymasterPostOpGasLimit);
+    }
 
     const baseFee = latestBlock.baseFeePerGas;
 

@@ -45,7 +45,7 @@ export const useReadNFTUri = (props: UseReadNFTUriParams) => {
         abi: NftContractAbi,
         functionName: "baseURI",
       });
-      return baseUriString as string;
+      return baseUriString;
     },
     enabled: !!client && !!contractAddress,
   });

@@ -9,7 +9,10 @@ export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:my-6 items-center w-full">
-      <Erc20SponsorshipCard accountMode={accountMode} />
+      <Erc20SponsorshipCard
+        accountMode={accountMode}
+        key={`erc20-sponsorship-card-${accountMode}`}
+      />
       <MintCard accountMode={accountMode} key={`mint-card-${accountMode}`} />
       <TransactionsCard
         accountMode={accountMode}

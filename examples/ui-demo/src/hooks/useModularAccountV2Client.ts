@@ -65,11 +65,6 @@ export const useModularAccountV2Client = ({
   const { key, entityId, accountAddress } = localKeyOverride ?? {};
 
   useEffect(() => {
-    setClient(undefined);
-    setIsLoadingClient(true);
-  }, [mode]);
-
-  useEffect(() => {
     let isMounted = true;
 
     const init = async () => {
