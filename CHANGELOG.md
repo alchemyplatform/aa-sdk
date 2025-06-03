@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.37.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.1...v4.37.0) (2025-06-03)
+
+### Bug Fixes
+
+- run api spec generate as part of aa-sdk deploy ([#1654](https://github.com/alchemyplatform/aa-sdk/issues/1654)) ([475816d](https://github.com/alchemyplatform/aa-sdk/commit/475816d8fdc3db089eee88debeeb2ebc2c11b0a3))
+
+### Features
+
+- **rn-signer:** support passkeys in React Native ([#1653](https://github.com/alchemyplatform/aa-sdk/issues/1653)) ([f9ce59c](https://github.com/alchemyplatform/aa-sdk/commit/f9ce59c9874e863e80df8219bfa8d76960bfa82a))
+
 ## [4.36.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.0...v4.36.1) (2025-05-29)
 
 ### Bug Fixes
