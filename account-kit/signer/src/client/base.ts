@@ -36,6 +36,7 @@ import type {
   ValidateMultiFactorsParams,
   AuthLinkingPrompt,
   AddOauthProviderParams,
+  CredentialCreationOptionOverrides,
 } from "./types.js";
 import { VERSION } from "../version.js";
 
@@ -142,11 +143,62 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     }
   }
 
-  // #region ABSTRACT METHODS
-
-  public abstract createAccount(
+  /**
+   * Authenticates the user by either email or passkey account creation flow. Emits events during the process.
+   *
+   * @param {CreateAccountParams} params The parameters for creating an account, including the type (email or passkey) and additional details.
+   * @returns {Promise<SignupResponse>} A promise that resolves with the response object containing the account creation result.
+   */
+  public async createAccount(
     params: CreateAccountParams,
-  ): Promise<SignupResponse>;
+  ): Promise<SignupResponse> {
+    if (params.type === "email") {
+      this.eventEmitter.emit("authenticating", { type: "otp" });
+      const { email, emailMode, expirationSeconds } = params;
+      const publicKey = await this.initSessionStamper();
+
+      const response = await this.request("/v1/signup", {
+        email,
+        emailMode,
+        targetPublicKey: publicKey,
+        expirationSeconds,
+        redirectParams: params.redirectParams?.toString(),
+      });
+
+      return response;
+    }
+
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
+    // Passkey account creation flow
+    const { attestation, challenge } = await this.getWebAuthnAttestation(
+      params.creationOpts,
+      { username: "email" in params ? params.email : params.username },
+    );
+
+    const result = await this.request("/v1/signup", {
+      passkey: {
+        challenge:
+          typeof challenge === "string"
+            ? challenge
+            : base64UrlEncode(challenge),
+        attestation,
+      },
+      email: "email" in params ? params.email : undefined,
+    });
+
+    this.user = {
+      orgId: result.orgId,
+      address: result.address!,
+      userId: result.userId!,
+      credentialId: attestation.credentialId,
+    };
+    this.initWebauthnStamper(this.user, params.creationOpts);
+    this.eventEmitter.emit("connectedPasskey", this.user);
+
+    return result;
+  }
+
+  // #region ABSTRACT METHODS
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">,
@@ -176,16 +228,24 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
 
-  public abstract lookupUserWithPasskey(user?: User): Promise<User>;
-
   public abstract targetPublicKey(): Promise<string>;
 
   protected abstract getOauthConfig(): Promise<OauthConfig>;
 
   protected abstract getWebAuthnAttestation(
-    options: CredentialCreationOptions,
+    options?: CredentialCreationOptionOverrides,
     userDetails?: { username: string },
   ): Promise<GetWebAuthnAttestationResult>;
+
+  /**
+   * Initializes the session stamper and returns its public key.
+   */
+  protected abstract initSessionStamper(): Promise<string>;
+
+  protected abstract initWebauthnStamper(
+    user: User | undefined,
+    options: CredentialCreationOptionOverrides | undefined,
+  ): Promise<void>;
 
   // #endregion
 
@@ -231,7 +291,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
           {
             attestation,
             authenticatorName: `passkey-${Date.now().toString()}`,
-            challenge: base64UrlEncode(challenge),
+            challenge:
+              typeof challenge === "string"
+                ? challenge
+                : base64UrlEncode(challenge),
           },
         ],
       },
@@ -244,6 +307,28 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     );
 
     return authenticatorIds;
+  };
+
+  /**
+   * Asynchronously handles the authentication process using WebAuthn Stamper. If a user is provided, sets the user and returns it. Otherwise, retrieves the current user and initializes the WebAuthn stamper.
+   *
+   * @param {User} [user] An optional user object to authenticate
+   * @returns {Promise<User>} A promise that resolves to the authenticated user object
+   */
+  public lookupUserWithPasskey = async (user: User | undefined = undefined) => {
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
+    await this.initWebauthnStamper(user, undefined);
+    if (user) {
+      this.user = user;
+      this.eventEmitter.emit("connectedPasskey", user);
+      return user;
+    }
+
+    const result = await this.whoami(this.rootOrg);
+    await this.initWebauthnStamper(result, undefined);
+    this.eventEmitter.emit("connectedPasskey", result);
+
+    return result;
   };
 
   /**

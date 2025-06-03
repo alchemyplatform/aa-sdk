@@ -14,11 +14,21 @@ npm install @account-kit/react-native-signer
 
 ## Usage
 
-This package requires the `react-native-mmkv` package installed in your project. Check out their [docs](https://github.com/mrousavy/react-native-mmkv) for installation instructions.
+This package requires several packages containing native modules to be installed in your project. Check out their docs at the following links for installation instructions.
 
-#### Deep Linking.
+- [react-native-mmkv](https://github.com/mrousavy/react-native-mmkv)
+- [react-native-get-random-values](https://github.com/LinusU/react-native-get-random-values)
+- [react-native-passkey](https://github.com/f-23/react-native-passkey)
 
-Your app will need to be configured to handle deep linking. Check out the React Native [docs](https://reactnative.dev/docs/linking#enabling-deep-links) for more information.
+#### Passkeys
+
+If using passkeys, there are iOS- and Android-specific steps to link your app to an associated domain to which the passkeys will be connected. This means hosting specific JSON files from a domain you control. For details on this, see the [instructions in the react-native-passkey README](https://github.com/f-23/react-native-passkey?tab=readme-ov-file#configuration).
+
+#### Deep Linking
+
+We recommend using emails containing OTP codes (the default setting) to avoid the need for this step.
+
+If using emails with magic links, your app will need to be configured to handle deep linking. Check out the React Native [docs](https://reactnative.dev/docs/linking#enabling-deep-links) for more information.
 You will also need a way to trigger the deep link via a http or https url. This can be done in a viarety of ways ranging from universal links to setting up a custom redirect server.
 
 See the [example app](./example) for usage information.

@@ -73,8 +73,10 @@
     "react": "18.3.1",
     "react-native": "0.76.5",
     "react-native-builder-bob": "^0.30.3",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-inappbrowser-reborn": "^3.7.0",
     "react-native-mmkv": "^3.1.0",
+    "react-native-passkey": "^3.1.0",
     "typescript-template": "*"
   },
   "resolutions": {
@@ -83,8 +85,10 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-native": ">=0.76.0",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-inappbrowser-reborn": "^3.7.0",
-    "react-native-mmkv": "^3.1.0"
+    "react-native-mmkv": "^3.1.0",
+    "react-native-passkey": "^3.1.0"
   },
   "jest": {
     "preset": "react-native",
@@ -140,6 +144,8 @@
   "dependencies": {
     "@aa-sdk/core": "^4.36.1",
     "@account-kit/signer": "^4.36.1",
+    "@turnkey/react-native-passkey-stamper": "^1.0.14",
+    "uuid": "^11.1.0",
     "viem": "2.29.2"
   }
 }
