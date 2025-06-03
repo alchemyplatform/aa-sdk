@@ -1,29 +1,42 @@
-import "./utils/buffer-polyfill.js";
-import "./utils/mmkv-localstorage-polyfill.js";
+/* eslint-disable import/extensions */
+import "react-native-get-random-values";
+import "./utils/buffer-polyfill";
+import "./utils/mmkv-localstorage-polyfill";
 
 /* eslint-disable import/extensions */
 import { type ConnectionConfig } from "@aa-sdk/core";
+import {
+  createPasskey,
+  PasskeyStamper,
+  type AuthenticatorTransport,
+} from "@turnkey/react-native-passkey-stamper";
+import {
+  stringify as uuidStringify,
+  parse as uuidParse,
+  v4 as uuidv4,
+  validate as uuidValidate,
+  version as uuidVersion,
+} from "uuid";
 import {
   BaseSignerClient,
   OauthFailedError,
   MfaRequiredError,
   type AlchemySignerClientEvents,
   type AuthenticatingEventMetadata,
-  type CreateAccountParams,
   type EmailAuthParams,
   type GetWebAuthnAttestationResult,
   type MfaFactor,
   type OauthConfig,
   type OauthParams,
   type OtpParams,
-  type SignupResponse,
   type User,
   type SubmitOtpCodeResponse,
+  type CredentialCreationOptionOverrides,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
 import { InAppBrowserUnavailableError } from "./errors";
-import NativeTEKStamper from "./NativeTEKStamper.js";
+import NativeTEKStamper from "./NativeTEKStamper";
 import { parseSearchParams } from "./utils/parseUrlParams";
 import { parseMfaError } from "./utils/parseMfaError";
 
@@ -34,6 +47,7 @@ export const RNSignerClientParamsSchema = z.object({
     .string()
     .optional()
     .default("https://signer.alchemy.com/callback"),
+  rpId: z.string().optional(),
 });
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
@@ -42,6 +56,7 @@ export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
+  rpId: string | undefined;
   private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
     "email",
     "otp",
@@ -49,7 +64,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   ];
 
   constructor(params: RNSignerClientParams) {
-    const { connection, rootOrgId, oauthCallbackUrl } =
+    const { connection, rootOrgId, oauthCallbackUrl, rpId } =
       RNSignerClientParamsSchema.parse(params);
 
     super({
@@ -59,6 +74,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     });
 
     this.oauthCallbackUrl = oauthCallbackUrl;
+    this.rpId = rpId;
   }
 
   override async submitOtpCode(
@@ -96,28 +112,6 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     throw new Error(
       "Failed to submit OTP code. Server did not return required fields.",
     );
-  }
-
-  override async createAccount(
-    params: CreateAccountParams,
-  ): Promise<SignupResponse> {
-    if (params.type !== "email") {
-      throw new Error("Only email account creation is supported");
-    }
-
-    this.eventEmitter.emit("authenticating", { type: "email" });
-    const { email, expirationSeconds } = params;
-    const publicKey = await this.stamper.init();
-
-    const response = await this.request("/v1/signup", {
-      email,
-      emailMode: params.emailMode,
-      targetPublicKey: publicKey,
-      expirationSeconds,
-      redirectParams: params.redirectParams?.toString(),
-    });
-
-    return response;
   }
 
   override async initEmailAuth(
@@ -246,20 +240,41 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   override exportWallet(_params: unknown): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  override lookupUserWithPasskey(_user?: User): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
 
   override targetPublicKey(): Promise<string> {
     return this.stamper.init();
   }
 
-  protected override getWebAuthnAttestation(
-    _options: CredentialCreationOptions,
-    _userDetails?: { username: string },
-  ): Promise<GetWebAuthnAttestationResult> {
-    throw new Error("Method not implemented.");
-  }
+  protected override getWebAuthnAttestation = async (
+    options?: CredentialCreationOptionOverrides,
+    userDetails: { username: string } = {
+      username: this.user?.email ?? "anonymous",
+    },
+  ): Promise<GetWebAuthnAttestationResult & { rpId: string }> => {
+    const { username } = userDetails;
+    const authenticatorUserId = getAuthenticatorUserId(options);
+    const rpId = this.requireRpId(options);
+    const authenticatorParams = await createPasskey({
+      rp: {
+        id: rpId,
+        name: rpId,
+        ...options?.publicKey?.rp,
+      },
+      user: {
+        name: username,
+        displayName: username,
+        ...options?.publicKey?.user,
+        id: uuidStringify(bufferSourceToUint8Array(authenticatorUserId)),
+      },
+      authenticatorName: "End-User Passkey",
+    });
+    return {
+      attestation: authenticatorParams.attestation,
+      challenge: authenticatorParams.challenge,
+      authenticatorUserId,
+      rpId,
+    };
+  };
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
     const publicKey = await this.stamper.init();
@@ -267,4 +282,74 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
+
+  protected override async initSessionStamper(): Promise<string> {
+    return this.stamper.init();
+  }
+
+  protected override async initWebauthnStamper(
+    user: User | undefined = this.user,
+    options?: CredentialCreationOptionOverrides,
+  ): Promise<void> {
+    const rpId = this.requireRpId(options);
+    this.setStamper(
+      new PasskeyStamper({
+        rpId,
+        allowCredentials: user?.credentialId
+          ? [
+              {
+                id: user.credentialId,
+                type: "public-key",
+                transports: ["internal", "hybrid"] as AuthenticatorTransport[],
+              },
+            ]
+          : undefined,
+      }),
+    );
+  }
+
+  private requireRpId(options?: CredentialCreationOptionOverrides): string {
+    const rpId = options?.publicKey?.rp?.id ?? this.rpId;
+    if (!rpId) {
+      throw new Error(
+        "rpId must be set in configuration to use passkeys in React Native",
+      );
+    }
+    return rpId;
+  }
+}
+
+function getAuthenticatorUserId(
+  options?: CredentialCreationOptionOverrides,
+): BufferSource {
+  // Android requires this to be a UUIDv4.
+  const id = options?.publicKey?.user?.id;
+  if (id) {
+    const stringId = uuidStringify(id as Uint8Array);
+    if (!uuidValidate(stringId) || uuidVersion(stringId) !== 4) {
+      throw new Error("Challenge must be a valid UUIDv4 to support Android");
+    }
+    return id;
+  }
+  return uuidParse(uuidv4());
+}
+
+function bufferSourceToUint8Array(bufferSource: BufferSource): Uint8Array {
+  if (bufferSource instanceof Uint8Array) {
+    return bufferSource;
+  }
+  if (bufferSource instanceof ArrayBuffer) {
+    return new Uint8Array(bufferSource);
+  }
+  if (ArrayBuffer.isView(bufferSource)) {
+    // Any other TypedArray (e.g., Int16Array, Float32Array, etc.)
+    return new Uint8Array(
+      bufferSource.buffer,
+      bufferSource.byteOffset,
+      bufferSource.byteLength,
+    );
+  }
+  throw new TypeError(
+    "Input must be a BufferSource (ArrayBuffer or TypedArray)",
+  );
 }
