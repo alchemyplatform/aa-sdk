@@ -447,6 +447,32 @@ describe("Light Account Tests", () => {
     expect(owners).toContain(ownerAddress);
   }, 200000);
 
+  it.each(versions)(
+    "should expose prepare and format functions that work",
+    async (version) => {
+      if (version !== "v1.0.2") {
+        const provider = await givenConnectedProvider({ signer, version });
+        const message = "hello world";
+
+        const { type, data } = await provider.account.prepareSign({
+          type: "personal_sign",
+          data: message,
+        });
+
+        const signature = await provider.account.formatSign(
+          await (type === "personal_sign"
+            ? provider.account.getSigner().signMessage(data)
+            : provider.account.getSigner().signTypedData(data)),
+        );
+
+        const fullSignature = await provider.signMessage({ message });
+
+        // We use `includes` to check against 6492, and slice to remove the 0x prefix
+        expect(fullSignature.includes(signature.slice(2))).toBe(true);
+      }
+    },
+  );
+
   const givenConnectedProvider = ({
     signer,
     version = "v1.1.0",
