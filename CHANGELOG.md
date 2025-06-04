@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.38.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.37.0...v4.38.0) (2025-06-04)
+
+### Bug Fixes
+
+- remove trailing slash from alchemy rpc url ([#1657](https://github.com/alchemyplatform/aa-sdk/issues/1657)) ([60b3a23](https://github.com/alchemyplatform/aa-sdk/commit/60b3a231354a6b1ca1aaf69ee4e3b82f0b4110ea))
+
+### Features
+
+- add erc20 sponsorship card ([#1631](https://github.com/alchemyplatform/aa-sdk/issues/1631)) ([a827c70](https://github.com/alchemyplatform/aa-sdk/commit/a827c70f2e8eaacb852f61ef1f0c1cb72acbc38b))
+
 # [4.37.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.1...v4.37.0) (2025-06-03)
 
 ### Bug Fixes
