@@ -6,20 +6,20 @@ link: /react/quickstart/integration
 slug: wallets/react/quickstart/integration
 ---
 
-To integrate in to your existing dapp and better understand the above demo app, we will walk through the each of the steps required for using alchemy ui components in technical depth!
+**By the end of this tutorial, you'll have embedded smart wallets with authentication integrated into your existing React application, allowing users to login without seed phrases and perform gasless transactions.**
+
+This tutorial assumes you're using a React application with Next.js app router. If you're using a different setup, the core concepts remain the same but you may need to adapt the provider setup to your framework.
 
 ## 1. Install the packages
 
+Install the React and Infra packages from Account Kit along with required dependencies.
+
 **Prerequisites**
 
-- minimum React version of 18
-- minimum Typescript version of 5
+- React 18+
+- TypeScript 5+
 - pin viem to 2.20.0 (`yarn add viem@2.20.0`)
 - pin wagmi to 2.12.7 (`yarn add wagmi@2.12.7`)
-
-**Installation**
-
-Install the React and Infra packages from Account Kit along with [tailwind](https://tailwindcss.com/) for styling and react-query to support react components.
 
 <CodeBlocks>
 
@@ -35,9 +35,9 @@ npm install -D tailwindcss @tailwindcss/postcss postcss
 
 </CodeBlocks>
 
-**Tailwind Setup**
+**Set up Tailwind CSS**
 
-If you don't have tailwind setup yet, create a `postcss.config.mjs` file (if you don't already have one) and add the `@tailwindcss/postcss` plugin.
+Create a `postcss.config.mjs` file and add the Tailwind plugin:
 
 ```js twoslash postcss.config.mjs
 export default {
@@ -47,159 +47,101 @@ export default {
 };
 ```
 
-The only thing left to do is to create a global.css file and import it in the root of your app.
+Create a `global.css` file and import it in your app root:
 
 ```css global.css
 @import "tailwindcss";
 ```
-
-For more on tailwind setup, see these [steps](https://tailwindcss.com/docs/installation/using-postcss).
 
 <Tip>
-**Still using tailwind v3?**
-
-If you're still using tailwind v3, don't fret. Account Kit is still fully compatible. Just skip the above tailwind setup steps since you've already set it up.
-
+  **Using Tailwind v3?** If you're still using Tailwind v3, you can skip the
+  setup above since you've already configured it.
 </Tip>
 
-## 2. Get your Alchemy API Key
+## 2. Get your API Key
 
-See the steps above in the NextJS section to get your API key.
+1. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/accounts)
+2. Create a new app or select an existing one
+3. Navigate to the API Keys section
+4. Copy your API key - you'll need it for the next step
 
-## 3. Configure your UI components
+## 3. Configure your authentication and styling
 
-In this step, you'll customize your authentication methods and UI styles.
+Create two configuration files that will customize your authentication methods and UI styles.
 
-The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to explore combinations. When you're all done, click the 'Code preview' toggle to export your code! You'll get two files:
+### Create your configuration files
 
-1. `tailwind.config.ts`
-2. `config.ts`
+1. In your project root, create a `config.ts` file
+2. In your project root, create a `tailwind.config.ts` file
 
-**\*Note:** tailwind.config.ts and config.ts changes are required even if using default styling\*
+You can customize these by visiting our [demo app](https://demo.alchemy.com/) - use the interactive sandbox to explore different authentication methods and styling options. When ready, click 'Code preview' to export your customized configuration files.
 
-<img
-  src="/images/wallets/ui-component-demo-app.png"
-  alt="Customize styles and auth methods in the demo app"
-  style={{ width: "70%" }}
-/>
+### Basic configuration example
 
-### 3a. Customize styling with tailwind
+Here's a basic configuration to get you started:
 
-1. In the demo app, copy your `tailwind.config.ts` code into a file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
-   1. Logo: logo images are loaded client side for maximum performance, so you'll need to add the image file to your project and specify the file path in the config where noted.
-   2. Light/Dark mode:
-      1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: add `@custom-variant dark (&:is(.dark, .dark *));` to your `global.css` file.
-         <Tip>
-           (If you are still using **tailwind v3**, follow
-           [this](https://v3.tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually)
-           guide instead. TLDR: update your tailwindcss config to use `selector`
-           mode for dark and then add the `dark` class to the root of your DOM.)
-         </Tip>
-   3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6)
-2. If your `tailwind.config.ts` already contains any existing config information, be sure to wrap it with `withAccountKitUi` :
+**tailwind.config.ts**
 
-   ```ts tailwind.config.ts
-   import { withAccountKitUi } from "@account-kit/react/tailwind";
+```ts tailwind.config.ts
+import { withAccountKitUi } from "@account-kit/react/tailwind";
 
-   export default withAccountKitUi(
-     {
-       // 1. (required) your existing tailwind config
-       // If you are using tailwind v4, this will likely be empty.
-       // If you're still using tailwind v3, this will contain things like content, theme, plugins, etc. - https://v3.tailwindcss.com/docs/installation/using-postcss
-     },
-     {
-       // 2. (optional) overwrite AccountKit theme options
-     },
-   );
-   ```
+export default withAccountKitUi(
+  {
+    // Your existing tailwind config
+  },
+  {
+    // AccountKit UI theme customizations
+  }
+);
+```
 
-3. Update your `global.css` file to include your `tailwind.config.ts`. _(Skip this step if you're still using **tailwind v3**.)_
+Update your `global.css` to include the config:
 
 ```css global.css
 @import "tailwindcss";
-@config '../../tailwind.config.ts'; // [!code ++]
+@config '../../tailwind.config.ts';
 ```
 
-### 3b. Customize authentication methods
-
-1. In the root of your project, create a `config.ts` file
-2. In the demo app, copy your `config.ts` code into the file of the same name in your project. This will apply your authentication methods (email, passkey, etc.)
-
-   - `createConfig` is used to initialize the alchemy provider in the next step. It requires 2 params:
-
-     - `props`: for creating an Alchemy config. Notice the 4 params passed to props in our example:
-
-       - **apiKey** (required): Copy-paste your Alchemy API key, from step 2. Note that for production this key should be protected by proxying to the backend and setting rpcUrl instead
-       - **chain** (required): Chain imported from @account-kit/infra . This chain must match the chain your api key / embedded accounts config is setup for.
-       - **ssr** (optional): Highly recommended for NextJs applications to keep account state consistent between the server and client
-       - **storage** (optional): Cookie storage highly recommended for NextJs applications to persist and cache account state across page loads
-       - **enablePopupOauth** (optional): If implementing social login, allow for the sign in window to appear as a pop up to your user.
-       - **sessionConfig** (optional): Used to configure the session duration
-
-     - `ui`: for creating Alchemy Accounts UI components
-
-     - See [here](https://github.com/alchemyplatform/aa-sdk/blob/dfab5c839dc782b21ba4d05f1892982133606cec/account-kit/react/src/types.ts#L5) for full details on the ui config params including authentication options
-
-3. Make sure to export your config and queryClient:
-
-**Remember to paste in your API Key from step 2**
+**config.ts**
 
 ```ts twoslash src/config.ts
 // @noErrors
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { QueryClient } from "@tanstack/react-query";
-import { arbitrumSepolia } from "@account-kit/infra";
+import { arbitrumSepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig(
   {
-    // alchemy config
-    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
-    chain: arbitrumSepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
-    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://www.alchemy.com/docs/wallets/react/ssr)
-    storage: cookieStorage, // persist the account state using cookies (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
-    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
-    // optional config to override default session manager config
-    sessionConfig: {
-      expirationTimeMs: 1000 * 60 * 60, // 60 minutes (default is 15 min)
-    },
+    transport: alchemy({ apiKey: "YOUR_API_KEY" }), // Replace with your API key
+    chain: arbitrumSepolia,
+    ssr: true,
+    storage: cookieStorage,
+    enablePopupOauth: true,
   },
   {
-    // authentication ui config - your customizations here
     auth: {
       sections: [
         [{ type: "email" }],
         [
           { type: "passkey" },
           { type: "social", authProviderId: "google", mode: "popup" },
-          { type: "social", authProviderId: "facebook", mode: "popup" },
-        ],
-        [
-          {
-            type: "external_wallets",
-            walletConnect: { projectId: "your-project-id" },
-          },
         ],
       ],
       addPasskeyOnSignup: true,
-      showSignInText: true,
     },
-  },
+  }
 );
 
 export const queryClient = new QueryClient();
 ```
 
+Remember to replace `"YOUR_API_KEY"` with the API key from step 2.
+
 ## 4. Set up the Alchemy Provider
 
-This example assumes you are using the NextJS app [router](https://nextjs.org/docs/getting-started/project-structure#app-routing-conventions).
+Wrap your application with the Alchemy Provider to enable embedded wallet functionality.
 
-However, the key pieces are applicable to any React app and you can structure the location of the code as needed.
-
-### 4a. **Create the provider - app/providers.tsx**
-
-Once you have styling and authentication configs, create a `providers.tsx` file and import the `AlchemyAccountProvider`.
-
-The `QueryClientProvider` is also required to handle React Queries within the Alchemy Account Provider.
+**Create providers.tsx**
 
 ```tsx app/providers.tsx
 "use client";
@@ -210,7 +152,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -226,13 +168,7 @@ export const Providers = (
 };
 ```
 
-### 4b. **Use the provider - layout.tsx**
-
-Any component or page that will use Alchemy React components, must be wrapped by this `Provider`.
-
-Additionally, we recommend using cookies to set the initial state when creating the provider to persist state across reloads (🧠 remember the [cookie storage configured in step 3b](https://www.notion.so/Alchemy-Account-Kit-UI-Components-Alpha-Quickstart-0805fd3fb8ba4c15bfd88846d4ad53ea?pvs=21)).
-
-For example, wrap your app with the created `Provider` by modifying your `layout.tsx` file.
+**Update your layout.tsx**
 
 ```tsx app/layout.tsx
 import { config } from "@/config";
@@ -246,8 +182,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Embedded Accounts UI Components Quickstart NextJs Template",
-  description: "Embedded Accounts UI Components Quickstart NextJs Template",
+  title: "My App with Embedded Wallets",
+  description: "My app with Alchemy Account Kit integration",
 };
 
 export default function RootLayout({
@@ -255,10 +191,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // This will allow us to persist state across page boundaries (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
   const initialState = cookieToInitialState(
     config,
-    headers().get("cookie") ?? undefined,
+    headers().get("cookie") ?? undefined
   );
 
   return (
@@ -271,11 +206,11 @@ export default function RootLayout({
 }
 ```
 
-## 5. Run it
+## 5. Add authentication to your app
 
-Once you have wrapped your app with the Alchemy Provider, you can now use the pre-built Alchemy react components for auth throughout your app.
+Now you can use the Alchemy React components to add wallet authentication anywhere in your app.
 
-All you need to do is `useAuthModal`! For example, pop open the auth modal like so:
+**Example page with login functionality**
 
 ```tsx app/page.tsx
 "use client";
@@ -316,3 +251,22 @@ export default function Home() {
   );
 }
 ```
+
+## 6. Test your integration
+
+1. Start your development server
+2. Navigate to your app in the browser
+3. Click the "Login" button
+4. Try authenticating with different methods (email, social login, etc.)
+5. Once authenticated, you should see the success message with the user's information
+
+Congratulations! You now have embedded smart wallets working in your React application.
+
+## What's next?
+
+Now that you have basic authentication working, you can explore additional features:
+
+- [Send user operations](/wallets/react/send-user-operations) to perform transactions
+- [Customize your UI components](/wallets/react/ui-components) for advanced styling
+- [Add gas sponsorship](/wallets/react/sponsor-gas) for gasless transactions
+- [Set up multi-factor authentication](/wallets/react/mfa/setup-mfa) for enhanced security
