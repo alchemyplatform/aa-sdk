@@ -25,7 +25,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
     await givenConnectedProvider({ signer, chain });
     expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(
       {
-        alchemyRpcUrl: "https://arb-sepolia.g.alchemy.com/v2/",
+        alchemyRpcUrl: "https://arb-sepolia.g.alchemy.com/v2",
         fetchOptions: {
           headers: {
             "Alchemy-AA-Sdk-Version": expect.any(String),
@@ -44,7 +44,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
       },
       `
       {
-        "alchemyRpcUrl": "https://arb-sepolia.g.alchemy.com/v2/",
+        "alchemyRpcUrl": "https://arb-sepolia.g.alchemy.com/v2",
         "fetchOptions": {
           "headers": {
             "Alchemy-AA-Sdk-Version": Any<String>,
