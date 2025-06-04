@@ -92,13 +92,13 @@ export type RequestGasAndPaymasterAndDataResponse<
         >
       : never);
 
-export type RequestPayamsterTokenQuotaRequest = [
+export type RequestPayamsterTokenQuoteRequest = [
   {
     policyId: string;
     tokenAddress: Address;
   },
 ];
 
-export type RequestPayamsterTokenQuotaResponse = {
+export type RequestPayamsterTokenQuoteResponse = {
   ethToTokenConversionRate: string;
 };
