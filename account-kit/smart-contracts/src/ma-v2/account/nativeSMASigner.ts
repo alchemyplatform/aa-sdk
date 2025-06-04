@@ -174,7 +174,7 @@ export const nativeSMASigner = (
         typedDataDefinition.domain != null &&
         // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
         "verifyingContract" in typedDataDefinition.domain &&
-        typedDataDefinition?.domain?.verifyingContract === accountAddress;
+        typedDataDefinition.domain.verifyingContract === accountAddress;
 
       return isDeferredAction
         ? concat([SignatureType.EOA, sig])
