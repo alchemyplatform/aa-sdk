@@ -175,7 +175,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
 
     const rpcUrl =
       connectionConfig.rpcUrl == null
-        ? `${chain.rpcUrls.alchemy.http[0]}`
+        ? chain.rpcUrls.alchemy.http[0]
         : connectionConfig.rpcUrl;
 
     const chainAgnosticRpcUrl =
