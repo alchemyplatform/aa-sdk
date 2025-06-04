@@ -55,7 +55,7 @@ export const Erc20SponsorshipCard = ({
         Checkout with one click and a single token.
       </p>
       <div className="flex justify-between items-center">
-        <p className="text-fg-secondary text-base">Cost</p>
+        <p className="text-fg-secondary text-base">Price</p>
         <p className="text-base text-fg-primary">1 USDC</p>
       </div>
     </>
