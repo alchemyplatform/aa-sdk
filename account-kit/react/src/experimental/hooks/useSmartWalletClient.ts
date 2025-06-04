@@ -4,10 +4,13 @@ import {
   type GetSmartWalletClientParams,
 } from "@account-kit/core/experimental";
 import { useMemo, useSyncExternalStore } from "react";
+import type { Address } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 
-export function useSmartWalletClient(params: GetSmartWalletClientParams) {
+export function useSmartWalletClient<
+  TAccount extends Address | undefined = Address | undefined,
+>(params: GetSmartWalletClientParams<TAccount>) {
   const {
     config: {
       _internal: { wagmiConfig },

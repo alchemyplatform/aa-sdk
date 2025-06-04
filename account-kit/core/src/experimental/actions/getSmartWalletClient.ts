@@ -2,7 +2,7 @@ import {
   createSmartWalletClient,
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
-import type { Address, IsUndefined, JsonRpcAccount } from "viem";
+import type { Address, JsonRpcAccount } from "viem";
 import { getAlchemyTransport } from "../../actions/getAlchemyTransport.js";
 import { getConnection } from "../../actions/getConnection.js";
 import { getSigner } from "../../actions/getSigner.js";
@@ -11,23 +11,17 @@ import { SignerNotConnectedError } from "../../errors.js";
 import type { AlchemyAccountsConfig } from "../../types.js";
 
 export type GetSmartWalletClientResult<
-  TAccount extends JsonRpcAccount<Address> | undefined =
-    | JsonRpcAccount<`0x${string}`>
-    | undefined,
-> = SmartWalletClient<TAccount>;
+  TAccount extends Address | undefined = Address | undefined,
+> = SmartWalletClient<
+  TAccount extends Address ? JsonRpcAccount<TAccount> : undefined
+>;
 
 export type GetSmartWalletClientParams<
-  TAccount extends JsonRpcAccount<Address> | undefined =
-    | JsonRpcAccount<Address>
-    | undefined,
-> = { mode?: "local" | "remote" } & (IsUndefined<TAccount> extends true
-  ? { account?: never }
-  : { account: Address });
+  TAccount extends Address | undefined = Address | undefined,
+> = { account?: TAccount };
 
 export function getSmartWalletClient<
-  TAccount extends JsonRpcAccount<Address> | undefined =
-    | JsonRpcAccount<Address>
-    | undefined,
+  TAccount extends Address | undefined = Address | undefined,
 >(
   config: AlchemyAccountsConfig,
   params?: GetSmartWalletClientParams<TAccount>,
@@ -64,8 +58,9 @@ export function getSmartWalletClient(
     transport,
     chain: connection.chain,
     signer,
+    // @ts-expect-error need to fix this in the wallet-client sdk
     account: params?.account,
-    mode: params?.mode ?? "local",
+    mode: config.mode,
   });
 
   config.store.setState((state) => ({
