@@ -174,7 +174,7 @@ export type ToSmartContractAccountParams<
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getImplementationAddress?: () => Promise<NullAddress | Address>;
 } & Omit<CustomSource, "signTransaction" | "address"> &
-  SigningMethods;
+  Partial<SigningMethods>;
 // [!endregion ToSmartContractAccountParams]
 
 /**
@@ -367,8 +367,8 @@ export async function toSmartContractAccount(
     signUserOperationHash,
     encodeUpgradeToAndCall,
     getImplementationAddress,
-    prepareSign,
-    formatSign,
+    prepareSign: prepareSign_,
+    formatSign: formatSign_,
   } = params;
 
   const client = createBundlerClient({
@@ -519,6 +519,24 @@ export async function toSmartContractAccount(
   if (entryPoint.version !== "0.6.0" && entryPoint.version !== "0.7.0") {
     throw new InvalidEntryPointError(chain, entryPoint.version);
   }
+
+  if ((prepareSign_ && !formatSign_) || (!prepareSign_ && formatSign_)) {
+    throw new Error(
+      "Must implement both prepareSign and formatSign or neither",
+    );
+  }
+
+  const prepareSign =
+    prepareSign_ ??
+    (() => {
+      throw new Error("prepareSign not implemented");
+    });
+
+  const formatSign =
+    formatSign_ ??
+    (() => {
+      throw new Error("formatSign not implemented");
+    });
 
   return {
     ...account,
