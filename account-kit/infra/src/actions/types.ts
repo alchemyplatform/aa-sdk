@@ -91,3 +91,14 @@ export type RequestGasAndPaymasterAndDataResponse<
           | "paymasterPostOpGasLimit"
         >
       : never);
+
+export type RequestPayamsterTokenQuotaRequest = [
+  {
+    policyId: string;
+    tokenAddress: Address;
+  },
+];
+
+export type RequestPayamsterTokenQuotaResponse = {
+  ethToTokenConversionRate: string;
+};
