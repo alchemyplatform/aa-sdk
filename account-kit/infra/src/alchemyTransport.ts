@@ -175,12 +175,12 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
 
     const rpcUrl =
       connectionConfig.rpcUrl == null
-        ? `${chain.rpcUrls.alchemy.http[0]}/`
+        ? chain.rpcUrls.alchemy.http[0]
         : connectionConfig.rpcUrl;
 
     const chainAgnosticRpcUrl =
       connectionConfig.rpcUrl == null
-        ? "https://api.g.alchemy.com/v2/"
+        ? "https://api.g.alchemy.com/v2"
         : (connectionConfig.chainAgnosticUrl ?? connectionConfig.rpcUrl);
 
     const innerTransport = (() => {
