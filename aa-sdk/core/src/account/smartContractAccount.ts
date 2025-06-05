@@ -174,7 +174,7 @@ export type ToSmartContractAccountParams<
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getImplementationAddress?: () => Promise<NullAddress | Address>;
 } & Omit<CustomSource, "signTransaction" | "address"> &
- (SigningMethods | Never<SigningMethods>
+ (SigningMethods | Never<SigningMethods>);
 // [!endregion ToSmartContractAccountParams]
 
 /**
