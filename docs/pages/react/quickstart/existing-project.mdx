@@ -1,7 +1,7 @@
 ---
-title: React Integration Guide
+title: Add to Existing Project
 description: Learn how to integrate Alchemy Account Kit into your existing React application with embedded wallets and authentication.
-text: Integrate into existing project
+text: Add to Existing Project
 link: /react/quickstart/integration
 slug: wallets/react/quickstart/integration
 ---
@@ -31,6 +31,11 @@ yarn add -D tailwindcss @tailwindcss/postcss postcss
 ```bash npm
 npm install @account-kit/infra @account-kit/react @tanstack/react-query
 npm install -D tailwindcss @tailwindcss/postcss postcss
+```
+
+```bash pnpm
+pnpm add @account-kit/infra @account-kit/react @tanstack/react-query
+pnpm add -D tailwindcss @tailwindcss/postcss postcss
 ```
 
 </CodeBlocks>
@@ -95,12 +100,23 @@ export default withAccountKitUi(
 );
 ```
 
+<Tip>
+  **Important:** If your `tailwind.config.ts` already contains any existing
+  config information, be sure to wrap it with `withAccountKitUi` as shown above.
+  Don't replace your existing config - just wrap it!
+</Tip>
+
 Update your `global.css` to include the config:
 
 ```css global.css
 @import "tailwindcss";
 @config '../../tailwind.config.ts';
 ```
+
+<Tip>
+  **Update your global.css file to include your tailwind.config.ts.** (Skip this
+  step if you're still using Tailwind v3.)
+</Tip>
 
 **config.ts**
 

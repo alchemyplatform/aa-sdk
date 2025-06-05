@@ -42,10 +42,10 @@ navigation:
             contents:
               - page: Overview
                 path: wallets/pages/react/quickstart.mdx
-              - page: NextJS Template
-                path: wallets/pages/react/quickstart/next-template.mdx
-              - page: React Integration
-                path: wallets/pages/react/quickstart/integration.mdx
+              - page: Quick Start (New Project)
+                path: wallets/pages/react/quickstart/new-project.mdx
+              - page: Add to Existing Project
+                path: wallets/pages/react/quickstart/existing-project.mdx
           - section: Login UI
             skip-slug: true
             contents:
