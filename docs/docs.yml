@@ -42,7 +42,7 @@ navigation:
             contents:
               - page: Overview
                 path: wallets/pages/react/quickstart.mdx
-              - page: Quick Start (New Project)
+              - page: Quickstart (New Project)
                 path: wallets/pages/react/quickstart/new-project.mdx
               - page: Add to Existing Project
                 path: wallets/pages/react/quickstart/existing-project.mdx

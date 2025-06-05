@@ -59,16 +59,34 @@ Create a `global.css` file and import it in your app root:
 ```
 
 <Tip>
-  **Using Tailwind v3?** If you're still using Tailwind v3, you can skip the
-  setup above since you've already configured it.
+  **Using Tailwind v3?** You can skip the setup above since you've already
+  configured it.
 </Tip>
 
 ## 2. Get your API Key
 
-1. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/accounts)
-2. Create a new app or select an existing one
-3. Navigate to the API Keys section
-4. Copy your API key - you'll need it for the next step
+1. **Create an app** in the [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
+   - Make sure your desired network is enabled under the Networks tab
+2. **Create an account config** in your [Account Kit Dashboard](https://dashboard.alchemy.com/accounts)
+
+   - Apply the config to your app from step 1
+
+   <img
+     src="/images/wallets/getting-started/apply-config-to-app.png"
+     alt="Apply your config to the app from the first step"
+     style={{ width: "50%" }}
+   />
+
+   - Enable the authentication methods you want (email, social login, etc.)
+   - For testing, use `http://localhost:3000` as your redirect URL
+
+3. **Copy your API key** from the dashboard - you'll need it for the next step
+
+   <img
+     src="/images/wallets/getting-started/get-api-key.png"
+     alt="How to copy the API key"
+     style={{ width: "50%" }}
+   />
 
 ## 3. Configure your authentication and styling
 
