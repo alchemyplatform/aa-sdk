@@ -36,6 +36,8 @@ import {
   type AddMfaResult,
   type RemoveMfaParams,
   type AuthLinkingPrompt,
+  type OauthProviderInfo,
+  type IdTokenOnly,
 } from "./client/types.js";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
@@ -954,14 +956,81 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       expirationSeconds: this.getExpirationSeconds(),
     };
     if (params.mode === "redirect") {
-      return this.inner.oauthWithRedirect(params);
+      const user = await this.inner.oauthWithRedirect(params);
+      if (!isUser(user)) {
+        throw new Error("Expected user from oauth with redirect");
+      }
+      return user;
     }
     const result = await this.inner.oauthWithPopup(params);
+    if (isIdTokenOnly(result)) {
+      throw new Error(
+        "Should not get only id token when authenticating with oauth",
+      );
+    }
     if (!isAuthLinkingPrompt(result)) {
       return result;
     }
     this.setAuthLinkingPrompt(result);
     return this.waitForConnected();
+  };
+
+  /**
+   * Handles OAuth authentication by augmenting the provided arguments with a type and performing authentication based on the OAuth mode (either using redirect or popup).
+   *
+   * @param {Omit<Extract<AuthParams, { type: "oauth" }>, "type">} args Authentication parameters omitting the type, which will be set to "oauth"
+   * @returns {Promise<OauthProviderInfo>} A promise that resolves to an `OauthProviderInfo` object containing provider information and the ID token.
+   */
+  public addOauthProvider = async (
+    args: Omit<Extract<AuthParams, { type: "oauth" }>, "type">,
+  ): Promise<OauthProviderInfo> => {
+    // This cast is required to suppress a spurious type error. We're just
+    // putting the omitted field back in, but TypeScript doesn't recognize that.
+    const argsWithType = { type: "oauth", ...args } as Extract<
+      AuthParams,
+      { type: "oauth" }
+    >;
+    const params: OauthParams = {
+      ...argsWithType,
+      fetchIdTokenOnly: true,
+    };
+    const result = await (params.mode === "redirect"
+      ? this.inner.oauthWithRedirect(params)
+      : this.inner.oauthWithPopup(params));
+    if (!isIdTokenOnly(result)) {
+      throw new Error("Expected id token only from oauth response");
+    }
+    return await this.inner.addOauthProvider({
+      providerName: result.providerName,
+      oidcToken: result.idToken,
+    });
+  };
+
+  /**
+   * Removes an OAuth provider by its ID if the user is authenticated.
+   *
+   * @param {string} providerId The ID of the OAuth provider to be removed, as obtained from `listOauthProviders`
+   * @returns {Promise<any>} A promise indicating the result of the removal process
+   * @throws {NotAuthenticatedError} Thrown if the user is not authenticated
+   */
+  public removeOauthProvider = async (providerId: string) => {
+    if (!this.inner.getUser()) {
+      throw new NotAuthenticatedError();
+    }
+    return this.inner.removeOauthProvider(providerId);
+  };
+
+  /**
+   * Retrieves a list of OAuth provider information associated with the authenticated user.
+   *
+   * @returns {Promise<OauthProviderInfo[]>} A promise that resolves to an array of `OauthProviderInfo` objects
+   * @throws {NotAuthenticatedError} Throws an error if the user is not authenticated
+   */
+  public listOauthProviders = async (): Promise<OauthProviderInfo[]> => {
+    if (!this.inner.getUser()) {
+      throw new NotAuthenticatedError();
+    }
+    return this.inner.listOauthProviders();
   };
 
   private authenticateWithOtp = async (
@@ -1557,9 +1626,19 @@ function subscribeWithDelayedFireImmediately<T>(
   };
 }
 
+function isUser(
+  result: User | AuthLinkingPrompt | IdTokenOnly,
+): result is User {
+  return !isAuthLinkingPrompt(result) && !isIdTokenOnly(result);
+}
+
 function isAuthLinkingPrompt(result: unknown): result is AuthLinkingPrompt {
   return (
     (result as AuthLinkingPrompt)?.status ===
     "ACCOUNT_LINKING_CONFIRMATION_REQUIRED"
   );
+}
+
+function isIdTokenOnly(result: unknown): result is IdTokenOnly {
+  return (result as IdTokenOnly)?.status === "FETCHED_ID_TOKEN_ONLY";
 }
