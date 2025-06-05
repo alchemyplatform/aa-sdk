@@ -5,18 +5,19 @@ import {
   base,
   baseSepolia,
   fraxtal,
-  fraxtalSepolia,
   mainnet,
   optimism,
   optimismSepolia,
   polygon,
   polygonAmoy,
-  polygonMumbai,
   sepolia,
   zora,
   zoraSepolia,
 } from "./chains.js";
+import type { EntryPointVersion } from "@aa-sdk/core";
 
+export const AlchemyPaymasterAddressV4 =
+  "0xEaf0Cde110a5d503f2dD69B3a49E031e29b3F9D2";
 export const AlchemyPaymasterAddressV3 =
   "0x4f84a207A80c39E9e8BaE717c1F25bA7AD1fB08F";
 export const AlchemyPaymasterAddressV2 =
@@ -26,6 +27,11 @@ export const ArbSepoliaPaymasterAddress =
 export const AlchemyPaymasterAddressV1 =
   "0xc03aac639bb21233e0139381970328db8bceeb67";
 
+export const AlchemyPaymasterAddressV07Mainnet =
+  "0x2cc0c7981D846b9F2a16276556f6e8cb52BfB633";
+export const AlchemyPaymasterAddressV07Testnet =
+  "0xEF725Aa22d43Ea69FB22bE2EBe6ECa205a6BCf5B";
+
 /**
  * Retrieves the Alchemy paymaster address for the given chain. Returns different addresses based on the chain ID.
  *
@@ -33,37 +39,47 @@ export const AlchemyPaymasterAddressV1 =
  * ```ts
  * import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
  *
- * const paymasterAddress = getAlchemyPaymasterAddress(sepolia);
+ * const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.6");
  * ```
  *
  * @param {Chain} chain The chain for which the paymaster address is required
+ * @param {EntryPointVersion} version The version of the entry point
  * @returns {Address} The Alchemy paymaster address corresponding to the specified chain
- *
- * @deprecated This chain list in this function is no longer maintained since the ERC-7677 middleware is typically used to resolve the paymaster address
  */
-export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
-  switch (chain.id) {
-    case polygonAmoy.id:
-    case optimismSepolia.id:
-    case baseSepolia.id:
-    case zora.id:
-    case zoraSepolia.id:
-    case fraxtal.id:
-    case fraxtalSepolia.id:
-      return AlchemyPaymasterAddressV3;
-    case mainnet.id:
-    case arbitrum.id:
-    case optimism.id:
-    case polygon.id:
-    case base.id:
-      return AlchemyPaymasterAddressV2;
-    case arbitrumSepolia.id:
-      return ArbSepoliaPaymasterAddress;
-    case sepolia.id:
-    case polygonMumbai.id:
-      return AlchemyPaymasterAddressV1;
+export const getAlchemyPaymasterAddress = (
+  chain: Chain,
+  version: EntryPointVersion,
+): Address => {
+  switch (version) {
+    case "0.6.0":
+      switch (chain.id) {
+        case polygonAmoy.id:
+        case optimismSepolia.id:
+        case baseSepolia.id:
+        case zora.id:
+        case zoraSepolia.id:
+        case fraxtal.id:
+          return AlchemyPaymasterAddressV3;
+        case mainnet.id:
+        case arbitrum.id:
+        case optimism.id:
+        case polygon.id:
+        case base.id:
+          return AlchemyPaymasterAddressV2;
+        case arbitrumSepolia.id:
+          return ArbSepoliaPaymasterAddress;
+        case sepolia.id:
+          return AlchemyPaymasterAddressV1;
+        default:
+          return AlchemyPaymasterAddressV4;
+      }
+    case "0.7.0":
+      if (chain.testnet) {
+        return AlchemyPaymasterAddressV07Testnet;
+      }
+      return AlchemyPaymasterAddressV07Mainnet;
     default:
-      throw new Error(`Unsupported chain: ${chain}`);
+      throw new Error(`Unsupported EntryPointVersion: ${version}`);
   }
 };
 
