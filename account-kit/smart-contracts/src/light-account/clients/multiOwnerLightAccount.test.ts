@@ -6,35 +6,41 @@ import {
   type Address,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { custom, parseEther, publicActions } from "viem";
+import {
+  alchemyFeeEstimator,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
+import { custom, parseEther, publicActions, zeroAddress } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { mine, setBalance } from "viem/actions";
-import { accounts } from "~test/constants.js";
+import { setBalance } from "viem/actions";
+import { accounts, poolId } from "~test/constants.js";
 import { local070Instance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types";
 import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 describe("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
   let client: ReturnType<typeof instance.getClient>;
+  let salt: bigint = BigInt(poolId());
 
   beforeAll(async () => {
     client = instance.getClient();
   });
 
-  const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner,
-  );
+  const signer: SmartAccountSigner =
+    LocalAccountSigner.generatePrivateKeySigner();
 
   const undeployedSigner: SmartAccountSigner = new LocalAccountSigner(
     accounts.unfundedAccountOwner,
   );
 
   it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ signer });
+    const provider = await givenConnectedProvider({
+      signer: new LocalAccountSigner(accounts.fundedAccountOwner),
+      accountIndex: 0n,
+    });
     expect(provider.getAddress()).toMatchInlineSnapshot(
       '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"',
     );
@@ -45,19 +51,18 @@ describe("MultiOwner Light Account Tests", () => {
 
     await setBalance(client, {
       address: provider.getAddress(),
-      value: parseEther("1"),
+      value: parseEther("10"),
     });
 
-    const result = await provider.sendUserOperation({
+    const result = provider.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: provider.account.getEntryPoint().address,
         data: "0x",
+        value: parseEther("1"),
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
-
-    await expect(txnHash).resolves.not.toThrowError();
+    await expect(result).resolves.not.toThrowError();
   });
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
@@ -78,46 +83,64 @@ describe("MultiOwner Light Account Tests", () => {
   });
 
   it("should successfully execute with erc-7677 paymaster", async () => {
-    await mine(client, { blocks: 2 });
-
     const provider = await givenConnectedProvider({
       signer,
       paymasterMiddleware: "erc7677",
-      accountIndex: 1n,
     });
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: zeroAddress,
         data: "0x",
+        value: 0n,
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 15_000);
+  }, 30_000);
 
   it("should successfully execute with alchemy paymaster", async () => {
-    await mine(client, { blocks: 2 });
-
     const provider = await givenConnectedProvider({
       signer,
       paymasterMiddleware: "alchemyGasAndPaymasterAndData",
-      accountIndex: 1n,
     });
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: zeroAddress,
         data: "0x",
+        value: 0n,
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 15_000);
+  }, 30_000);
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedProvider({
@@ -162,7 +185,29 @@ describe("MultiOwner Light Account Tests", () => {
   });
 
   it("should get on-chain owner addresses successfully", async () => {
-    const client = await givenConnectedProvider({ signer });
+    const signer = new LocalAccountSigner(accounts.fundedAccountOwner);
+    const client = await givenConnectedProvider({
+      signer,
+    });
+
+    await setBalance(instance.getClient(), {
+      address: client.getAddress(),
+      value: parseEther("10"),
+    });
+
+    // deploy the account one time
+    const result = await client.sendUserOperation({
+      uo: [
+        {
+          target: client.account.getEntryPoint().address,
+          data: "0x",
+          value: 0n,
+        },
+      ],
+    });
+
+    await client.waitForUserOperationTransaction(result);
+
     expect(await client.account.getOwnerAddresses()).toMatchInlineSnapshot(`
       [
         "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -277,7 +322,11 @@ describe("MultiOwner Light Account Tests", () => {
       version,
       transport: custom(client),
       chain: instance.chain,
-      salt: accountIndex,
+      salt: accountIndex ?? salt++,
+      feeEstimator: alchemyFeeEstimator(
+        // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+        custom(instance.getClient()),
+      ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",

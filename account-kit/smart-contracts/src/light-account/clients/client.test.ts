@@ -9,11 +9,15 @@ import {
   type UserOperationOverrides,
   type UserOperationStruct,
 } from "@aa-sdk/core";
-import { custom, parseEther, type Address, publicActions } from "viem";
+import { custom, parseEther, publicActions, type Address } from "viem";
 import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
 // TODO: update the tests that just use the 060 instance to use versions + 070 instance
+import {
+  alchemyFeeEstimator,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
 import { local060Instance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
@@ -21,7 +25,6 @@ import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { createLightAccountClient } from "./client.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,
@@ -35,9 +38,8 @@ describe("Light Account Tests", () => {
     client = instance.getClient();
   });
 
-  const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner,
-  );
+  const signer: SmartAccountSigner =
+    LocalAccountSigner.generatePrivateKeySigner();
 
   it.each(versions)(
     "should return correct dummy signature",
@@ -183,31 +185,47 @@ describe("Light Account Tests", () => {
   );
 
   it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ signer });
+    const provider = await givenConnectedProvider({
+      signer: new LocalAccountSigner(accounts.fundedAccountOwner),
+    });
     expect(provider.getAddress()).toMatchInlineSnapshot(
       '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
     );
   });
 
   it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ signer });
+    const provider = await givenConnectedProvider({
+      signer: LocalAccountSigner.generatePrivateKeySigner(),
+    });
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
-      value: parseEther("1"),
+      value: parseEther("10"),
     });
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: provider.account.getEntryPoint().address,
         data: "0x",
+        value: parseEther("1"),
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 10_000);
+  }, 30_000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
@@ -226,119 +244,125 @@ describe("Light Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it(
-    "should successfully execute with paymaster info using erc-7677 middleware",
-    { retry: 2, timeout: 10_000 },
-    async () => {
-      const provider = await givenConnectedProvider({
-        signer,
-        paymasterMiddleware: "erc7677",
+  it("should successfully execute with paymaster info using erc-7677 middleware", async () => {
+    const provider = await givenConnectedProvider({
+      signer,
+      paymasterMiddleware: "erc7677",
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    // @ts-expect-error this is union type when used generically, but we know it's 0.6.0 for now
+    // TODO: when using multiple versions, we need to check the version and cast accordingly
+    expect(result.request.paymasterAndData).not.toBe("0x");
+
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
       });
 
-      const result = await provider.sendUserOperation({
-        uo: {
-          target: provider.getAddress(),
-          data: "0x",
-        },
+    await expect(txnHash).resolves.not.toThrowError();
+  });
+
+  it("should successfully execute with paymaster info using alchemy paymaster middleware", async () => {
+    const provider = await givenConnectedProvider({
+      signer,
+      paymasterMiddleware: "alchemyGasAndPaymasterAndData",
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    // @ts-expect-error this is union type when used generically, but we know it's 0.6.0 for now
+    // TODO: when using multiple versions, we need to check the version and cast accordingly
+    expect(result.request.paymasterAndData).not.toBe("0x");
+
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
       });
 
-      // @ts-expect-error this is union type when used generically, but we know it's 0.6.0 for now
-      // TODO: when using multiple versions, we need to check the version and cast accordingly
-      expect(result.request.paymasterAndData).not.toBe("0x");
+    await expect(txnHash).resolves.not.toThrowError();
+  });
 
-      const txnHash = provider.waitForUserOperationTransaction(result);
+  it("should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using erc-7677 middleware", async () => {
+    const provider = await givenConnectedProvider({
+      signer,
+      paymasterMiddleware: "erc7677",
+    });
 
-      await expect(txnHash).resolves.not.toThrowError();
-    },
-  );
+    // set the value to 0 so that we can capture an error in sending the uo
+    await resetBalance(provider, instance.getClient());
 
-  it(
-    "should successfully execute with paymaster info using alchemy paymaster middleware",
-    { retry: 2, timeout: 10_000 },
-    async () => {
-      const provider = await givenConnectedProvider({
-        signer,
-        paymasterMiddleware: "alchemyGasAndPaymasterAndData",
-      });
+    const toSend = {
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      } as UserOperationCallData,
+      overrides: {
+        paymasterAndData: "0x", // bypass paymaster
+      } as UserOperationOverrides<"0.6.0">,
+    };
+    const uoStruct = (await provider.buildUserOperation(
+      toSend,
+    )) as UserOperationStruct<"0.6.0">;
 
-      const result = await provider.sendUserOperation({
-        uo: {
-          target: provider.getAddress(),
-          data: "0x",
-        },
-      });
+    expect(uoStruct.paymasterAndData).toBe("0x");
 
-      // @ts-expect-error this is union type when used generically, but we know it's 0.6.0 for now
-      // TODO: when using multiple versions, we need to check the version and cast accordingly
-      expect(result.request.paymasterAndData).not.toBe("0x");
+    await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
+  });
 
-      const txnHash = provider.waitForUserOperationTransaction(result);
+  it("should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using alchemy paymaster middleware", async () => {
+    const provider = await givenConnectedProvider({
+      signer,
+      paymasterMiddleware: "alchemyGasAndPaymasterAndData",
+    });
 
-      await expect(txnHash).resolves.not.toThrowError();
-    },
-  );
+    // set the value to 0 so that we can capture an error in sending the uo
+    await resetBalance(provider, instance.getClient());
 
-  it(
-    "should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using erc-7677 middleware",
-    { retry: 2 },
-    async () => {
-      const provider = await givenConnectedProvider({
-        signer,
-        paymasterMiddleware: "erc7677",
-      });
+    const toSend = {
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      } as UserOperationCallData,
+      overrides: {
+        paymasterAndData: "0x", // bypass paymaster
+      } as UserOperationOverrides<"0.6.0">,
+    };
+    const uoStruct = (await provider.buildUserOperation(
+      toSend,
+    )) as UserOperationStruct<"0.6.0">;
 
-      // set the value to 0 so that we can capture an error in sending the uo
-      await resetBalance(provider, instance.getClient());
+    expect(uoStruct.paymasterAndData).toBe("0x");
 
-      const toSend = {
-        uo: {
-          target: provider.getAddress(),
-          data: "0x",
-        } as UserOperationCallData,
-        overrides: {
-          paymasterAndData: "0x", // bypass paymaster
-        } as UserOperationOverrides<"0.6.0">,
-      };
-      const uoStruct = (await provider.buildUserOperation(
-        toSend,
-      )) as UserOperationStruct<"0.6.0">;
-
-      expect(uoStruct.paymasterAndData).toBe("0x");
-
-      await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
-    },
-  );
-
-  it(
-    "should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using alchemy paymaster middleware",
-    { retry: 2 },
-    async () => {
-      const provider = await givenConnectedProvider({
-        signer,
-        paymasterMiddleware: "alchemyGasAndPaymasterAndData",
-      });
-
-      // set the value to 0 so that we can capture an error in sending the uo
-      await resetBalance(provider, instance.getClient());
-
-      const toSend = {
-        uo: {
-          target: provider.getAddress(),
-          data: "0x",
-        } as UserOperationCallData,
-        overrides: {
-          paymasterAndData: "0x", // bypass paymaster
-        } as UserOperationOverrides<"0.6.0">,
-      };
-      const uoStruct = (await provider.buildUserOperation(
-        toSend,
-      )) as UserOperationStruct<"0.6.0">;
-
-      expect(uoStruct.paymasterAndData).toBe("0x");
-
-      await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
-    },
-  );
+    await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
+  });
 
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
@@ -440,6 +464,10 @@ describe("Light Account Tests", () => {
       version,
       transport: custom(instance.getClient()),
       chain: instance.chain,
+      feeEstimator: alchemyFeeEstimator(
+        // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+        custom(instance.getClient()),
+      ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",

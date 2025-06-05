@@ -1,8 +1,8 @@
 import {
+  clientHeaderTrack,
   LocalAccountSigner,
   type ClientMiddlewareFn,
   type SmartContractAccount,
-  clientHeaderTrack,
 } from "@aa-sdk/core";
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { http, zeroAddress } from "viem";
@@ -20,6 +20,9 @@ const fetchSpy = vi.spyOn(global, "fetch");
 describe("AlchemySmartAccountClient tests", () => {
   beforeEach(() => {
     fetchSpy.mockClear();
+    fetchSpy.mockImplementation(async () => {
+      return new Response();
+    });
   });
 
   it("should set the headers when using non-hoisted accounts", async () => {
