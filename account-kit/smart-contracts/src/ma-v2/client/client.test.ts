@@ -97,8 +97,6 @@ describe("MA v2 Tests", async () => {
       .extend(testActions({ mode: "anvil" }));
   });
 
-  const webauthnDevice = new SoftWebauthnDevice();
-
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,
   );
@@ -140,7 +138,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it.only("sends a simple UO with webauthn account", async () => {
+  it("sends a simple UO with webauthn account", async () => {
     const { provider } = await givenWebAuthnProvider();
 
     await setBalance(instance.getClient(), {
@@ -172,8 +170,6 @@ describe("MA v2 Tests", async () => {
 
     signedUO.signature = signedUOHash;
 
-    console.log(signedUO);
-
     const response = await provider.sendRawUserOperation(
       signedUO,
       provider.account.getEntryPoint().address,
@@ -182,42 +178,18 @@ describe("MA v2 Tests", async () => {
     await provider.waitForUserOperationTransaction({ hash: response });
   });
 
-  it.only("send uo with webauthn session key", async () => {
+  it("sends UO with webauthn session key", async () => {
     const { provider } = await givenWebAuthnProvider();
     const _provider = provider.extend(installValidationActions);
 
     await setBalance(instance.getClient(), {
-      address: _provider.getAddress(),
+      address: provider.getAddress(),
       value: parseEther("2"),
     });
 
     const { provider: sessionKeyProvider, credential } =
       await givenWebAuthnProvider();
     const { x, y } = parsePublicKey(credential.publicKey);
-
-    await setBalance(instance.getClient(), {
-      address: sessionKeyProvider.getAddress(),
-      value: parseEther("2"),
-    });
-
-    const callData = await _provider.encodeInstallValidation({
-      validationConfig: {
-        moduleAddress: getDefaultWebauthnValidationModuleAddress(
-          _provider.chain,
-        ),
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: WebAuthnValidationModule.encodeOnInstallData({
-        entityId: 1,
-        x,
-        y,
-      }),
-      hooks: [],
-    });
 
     const result = await _provider.installValidation({
       validationConfig: {
@@ -239,6 +211,21 @@ describe("MA v2 Tests", async () => {
     });
 
     await provider.waitForUserOperationTransaction(result);
+
+    await setBalance(instance.getClient(), {
+      address: sessionKeyProvider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const sessionKeyResult = await sessionKeyProvider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await sessionKeyProvider.waitForUserOperationTransaction(sessionKeyResult);
   });
 
   it.fails(
@@ -1949,13 +1936,13 @@ describe("MA v2 Tests", async () => {
     });
 
   const givenWebAuthnProvider = async () => {
+    const webauthnDevice = new SoftWebauthnDevice();
+
     const credential = await createWebAuthnCredential({
       rp: { id: "localhost", name: "localhost" },
       createFn: (opts) => webauthnDevice.create(opts, "localhost"),
       user: { name: "test", displayName: "test" },
     });
-
-    console.log(credential.id);
 
     const provider = await givenConnectedWebauthnProvider({
       credential,
