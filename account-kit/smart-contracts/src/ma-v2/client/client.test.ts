@@ -30,6 +30,7 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
@@ -78,6 +79,8 @@ import {
 import { HookType } from "../actions/common/types.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 import { createModularAccountV2Client } from "./client.js";
+import { parsePublicKey } from "webauthn-p256";
+import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -137,8 +140,8 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("sends a simple UO with webauthn account", async () => {
-    const provider = await givenWebAuthnProvider();
+  it.only("sends a simple UO with webauthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -169,16 +172,79 @@ describe("MA v2 Tests", async () => {
 
     signedUO.signature = signedUOHash;
 
-    await provider.sendRawUserOperation(
+    console.log(signedUO);
+
+    const response = await provider.sendRawUserOperation(
       signedUO,
       provider.account.getEntryPoint().address,
     );
+
+    await provider.waitForUserOperationTransaction({ hash: response });
+  });
+
+  it.only("send uo with webauthn session key", async () => {
+    const { provider } = await givenWebAuthnProvider();
+    const _provider = provider.extend(installValidationActions);
+
+    await setBalance(instance.getClient(), {
+      address: _provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const { provider: sessionKeyProvider, credential } =
+      await givenWebAuthnProvider();
+    const { x, y } = parsePublicKey(credential.publicKey);
+
+    await setBalance(instance.getClient(), {
+      address: sessionKeyProvider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const callData = await _provider.encodeInstallValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          _provider.chain,
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        x,
+        y,
+      }),
+      hooks: [],
+    });
+
+    const result = await _provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          _provider.chain,
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        x,
+        y,
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(result);
   });
 
   it.fails(
     "successfully sign + validate a message, for WebAuthn account",
     async () => {
-      const provider = await givenWebAuthnProvider();
+      const { provider } = await givenWebAuthnProvider();
 
       await setBalance(instance.getClient(), {
         address: provider.getAddress(),
@@ -1889,13 +1955,15 @@ describe("MA v2 Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
+    console.log(credential.id);
+
     const provider = await givenConnectedWebauthnProvider({
       credential,
       getFn: (opts) => webauthnDevice.get(opts, "localhost"),
       rpId: "localhost",
     });
 
-    return provider;
+    return { provider, credential };
   };
 
   const givenConnectedProvider = async ({

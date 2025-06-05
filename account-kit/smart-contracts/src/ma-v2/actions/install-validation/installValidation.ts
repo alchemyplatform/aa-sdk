@@ -7,6 +7,7 @@ import {
   type SendUserOperationResult,
   type UserOperationOverridesParameter,
   type SmartAccountSigner,
+  isSmartAccountWithSigner,
 } from "@aa-sdk/core";
 import {
   type Address,
@@ -24,8 +25,14 @@ import {
   serializeModuleEntity,
 } from "../common/utils.js";
 
-import { type ModularAccountV2Client } from "../../client/client.js";
-import { type ModularAccountV2 } from "../../account/common/modularAccountV2Base.js";
+import {
+  type ModularAccountV2Client,
+  type WebauthnModularAccountV2Client,
+} from "../../client/client.js";
+import {
+  type ModularAccountV2,
+  type WebauthnModularAccountV2,
+} from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
@@ -43,6 +50,19 @@ export type InstallValidationParams<
   GetEntryPointFromAccount<ModularAccountV2<TSigner>>
 >;
 
+export type InstallWebauthValidationParams = {
+  validationConfig: ValidationConfig;
+  selectors: Hex[];
+  installData: Hex;
+  hooks: {
+    hookConfig: HookConfig;
+    initData: Hex;
+  }[];
+  account?: WebauthnModularAccountV2 | undefined;
+} & UserOperationOverridesParameter<
+  GetEntryPointFromAccount<WebauthnModularAccountV2> // TO DO: update GetEntryPointFromAccount to support WebauthnModularAccountV2
+>;
+
 export type UninstallValidationParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = {
@@ -53,6 +73,16 @@ export type UninstallValidationParams<
   account?: ModularAccountV2<TSigner> | undefined;
 } & UserOperationOverridesParameter<
   GetEntryPointFromAccount<ModularAccountV2<TSigner>>
+>;
+
+export type UninstallWebauthnValidationParams = {
+  moduleAddress: Address;
+  entityId: number;
+  uninstallData: Hex;
+  hookUninstallDatas: Hex[];
+  account?: WebauthnModularAccountV2 | undefined;
+} & UserOperationOverridesParameter<
+  GetEntryPointFromAccount<WebauthnModularAccountV2>
 >;
 
 export type InstallValidationActions<
@@ -72,6 +102,30 @@ export type InstallValidationActions<
     args: UninstallValidationParams<TSigner>,
   ) => Promise<Hex>;
 };
+
+export type InstallWebauthnValidationActions = {
+  installValidation: (
+    args: InstallWebauthValidationParams,
+  ) => Promise<SendUserOperationResult>;
+  encodeInstallValidation: (
+    // TODO: omit the user op sending related parameters from this type
+    args: InstallWebauthValidationParams,
+  ) => Promise<Hex>;
+  uninstallValidation: (
+    args: UninstallWebauthnValidationParams,
+  ) => Promise<SendUserOperationResult>;
+  encodeUninstallValidation: (
+    args: UninstallWebauthnValidationParams,
+  ) => Promise<Hex>;
+};
+
+export function installValidationActions<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+>(client: ModularAccountV2Client<TSigner>): InstallValidationActions<TSigner>;
+
+export function installValidationActions(
+  client: WebauthnModularAccountV2Client,
+): InstallWebauthnValidationActions;
 
 /**
  * Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
@@ -117,23 +171,34 @@ export type InstallValidationActions<
  * @param {object} client - The client instance which provides account and sendUserOperation functionality.
  * @returns {object} - An object containing two methods, `installValidation` and `uninstallValidation`.
  */
-export const installValidationActions: <
+export function installValidationActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  client: ModularAccountV2Client<TSigner>,
-) => InstallValidationActions<TSigner> = (client) => {
+  client: ModularAccountV2Client<TSigner> | WebauthnModularAccountV2Client,
+): InstallValidationActions<TSigner> | InstallWebauthnValidationActions {
   const encodeInstallValidation = async ({
     validationConfig,
     selectors,
     installData,
     hooks,
     account = client.account,
-  }: InstallValidationParams) => {
+  }: InstallValidationParams | InstallWebauthValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
 
-    if (!isSmartAccountClient(client)) {
+    if (isSmartAccountWithSigner(account)) {
+      if (!isSmartAccountClient(client as ModularAccountV2Client<TSigner>)) {
+        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
+    } else if (
+      !isSmartAccountClient(client as WebauthnModularAccountV2Client)
+    ) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installValidation",
@@ -171,15 +236,26 @@ export const installValidationActions: <
     uninstallData,
     hookUninstallDatas,
     account = client.account,
-  }: UninstallValidationParams) => {
+  }: UninstallValidationParams | UninstallWebauthnValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
 
-    if (!isSmartAccountClient(client)) {
+    if (isSmartAccountWithSigner(account)) {
+      if (!isSmartAccountClient(client as ModularAccountV2Client<TSigner>)) {
+        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
+    } else if (
+      !isSmartAccountClient(client as WebauthnModularAccountV2Client)
+    ) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "uninstallValidation",
+        "installValidation",
         client,
       );
     }
@@ -210,14 +286,30 @@ export const installValidationActions: <
       hooks,
       account = client.account,
       overrides,
-    }) => {
-      const callData = await encodeInstallValidation({
-        validationConfig,
-        selectors,
-        installData,
-        hooks,
-        account,
-      });
+    }: InstallValidationParams | InstallWebauthValidationParams) => {
+      const signer = "signer" in account ? account.signer : undefined;
+      let callData: Hex;
+      if (signer) {
+        const _account = account as ModularAccountV2<TSigner>;
+        callData = await encodeInstallValidation({
+          validationConfig,
+          selectors,
+          installData,
+          hooks,
+          account: _account,
+        });
+      } else {
+        const _account = account as WebauthnModularAccountV2;
+        callData = await encodeInstallValidation({
+          validationConfig,
+          selectors,
+          installData,
+          hooks,
+          account: _account,
+        });
+      }
+
+      console.log("in here", callData);
 
       return client.sendUserOperation({
         uo: callData,
@@ -233,14 +325,28 @@ export const installValidationActions: <
       hookUninstallDatas,
       account = client.account,
       overrides,
-    }) => {
-      const callData = await encodeUninstallValidation({
-        moduleAddress,
-        entityId,
-        uninstallData,
-        hookUninstallDatas,
-        account,
-      });
+    }: UninstallValidationParams | UninstallWebauthnValidationParams) => {
+      const signer = "signer" in account ? account.signer : undefined;
+      let callData: Hex;
+      if (signer) {
+        const _account = account as ModularAccountV2<TSigner>;
+        callData = await encodeUninstallValidation({
+          moduleAddress,
+          entityId,
+          uninstallData,
+          hookUninstallDatas,
+          account: _account,
+        });
+      } else {
+        const _account = account as WebauthnModularAccountV2;
+        callData = await encodeUninstallValidation({
+          moduleAddress,
+          entityId,
+          uninstallData,
+          hookUninstallDatas,
+          account: _account,
+        });
+      }
 
       return client.sendUserOperation({
         uo: callData,
@@ -249,4 +355,4 @@ export const installValidationActions: <
       });
     },
   };
-};
+}
