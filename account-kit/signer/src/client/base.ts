@@ -37,6 +37,8 @@ import type {
   AuthLinkingPrompt,
   AddOauthProviderParams,
   CredentialCreationOptionOverrides,
+  OauthProviderInfo,
+  IdTokenOnly,
 } from "./types.js";
 import { VERSION } from "../version.js";
 
@@ -214,11 +216,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract oauthWithRedirect(
     args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<User>;
+  ): Promise<User | IdTokenOnly>;
 
   public abstract oauthWithPopup(
     args: Extract<OauthParams, { mode: "popup" }>,
-  ): Promise<User | AuthLinkingPrompt>;
+  ): Promise<User | AuthLinkingPrompt | IdTokenOnly>;
 
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">,
@@ -361,7 +363,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public addOauthProvider = async (
     params: AddOauthProviderParams,
-  ): Promise<void> => {
+  ): Promise<OauthProviderInfo> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
@@ -375,7 +377,48 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
         oauthProviders: [{ providerName, oidcToken }],
       },
     });
-    await this.request("/v1/add-oauth-provider", { stampedRequest });
+    const response = await this.request("/v1/add-oauth-provider", {
+      stampedRequest,
+    });
+    return response.oauthProviders[0];
+  };
+
+  /**
+   * Deletes a specified OAuth provider for the authenticated user.
+   *
+   * @param {string} providerId The ID of the provider to be deleted
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public removeOauthProvider = async (providerId: string) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const stampedRequest = await this.turnkeyClient.stampDeleteOauthProviders({
+      type: "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        providerIds: [providerId],
+      },
+    });
+    await this.request("/v1/remove-oauth-provider", { stampedRequest });
+  };
+
+  /**
+   * Fetches a list of OAuth providers available to the authenticated user.
+   *
+   * @throws {NotAuthenticatedError} If the user is not authenticated.
+   * @returns {Promise<OauthProviderInfo[]>} A promise that resolves to an array of OAuth provider information.
+   */
+  public listOauthProviders = async (): Promise<OauthProviderInfo[]> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const { oauthProviders } = await this.request("/v1/list-oauth-providers", {
+      suborgId: this.user.orgId,
+    });
+    return oauthProviders;
   };
 
   /**
@@ -961,6 +1004,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
             : redirectUrl
           : undefined,
       openerOrigin: mode === "popup" ? window.location.origin : undefined,
+      fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
     };
     const state = base64UrlEncode(
       new TextEncoder().encode(JSON.stringify(stateObject)),
