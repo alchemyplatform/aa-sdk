@@ -37,7 +37,11 @@ import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js"
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
-import { PermitTypes, EIP712NoncesAbi } from "../gas-manager.js";
+import {
+  PermitTypes,
+  EIP712NoncesAbi,
+  getAlchemyPaymasterAddress,
+} from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 import type { MiddlewareClient } from "../../../../aa-sdk/core/dist/types/middleware/actions.js";
 
@@ -419,22 +423,9 @@ const generateSignedPermit = async <
     }),
   });
 
-  let paymasterDataFuture = (client as Erc7677Client).request({
-    method: "pm_getPaymasterStubData",
-    params: [
-      userOp,
-      account.getEntryPoint().address,
-      toHex(client.chain.id),
-      {
-        policyId: Array.isArray(policyId) ? policyId[0] : policyId,
-      },
-    ],
-  });
-
-  const [decimalsResponse, nonceResponse, paymasterData] = await Promise.all([
+  const [decimalsResponse, nonceResponse] = await Promise.all([
     decimalsFuture,
     nonceFuture,
-    paymasterDataFuture,
   ]);
   if (!decimalsResponse.data) {
     throw new Error("No decimals returned from erc20 contract call");
@@ -448,11 +439,10 @@ const generateSignedPermit = async <
   const maxAmountToken = policyToken.maxTokenAmount * decimals;
   const nonce = BigInt(nonceResponse.data);
 
-  const paymasterAddress = paymasterData.paymaster
-    ? paymasterData.paymaster
-    : paymasterData.paymasterAndData
-      ? sliceHex(paymasterData.paymasterAndData, 0, 20)
-      : undefined;
+  const paymasterAddress = getAlchemyPaymasterAddress(
+    client.chain,
+    account.getEntryPoint().version,
+  );
 
   if (paymasterAddress === undefined || paymasterAddress === "0x") {
     throw new Error("no paymaster contract address available");
