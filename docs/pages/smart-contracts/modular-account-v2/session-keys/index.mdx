@@ -12,15 +12,11 @@ Session Keys allow you to add secondary signers to a Modular Account V2 smart wa
 
 They're ideal for reducing UX friction while maintaining onchain guarantees.
 
-## Why Use Session Keys?
-
-Session Keys enable you to add additional signers to your smart account with specific permissions. This unlocks features like automated actions a dapp can perform on a user's behalf, improved security by enabling partial owners on an account, and more!
-
 ### Skip duplicate confirmations
 
 With session keys, users don't need to approve every dapp interaction using their main wallet. Instead, a dapp can use a session key to perform follow-up actions — fast and frictionless — all within a defined scope.
 
-Example: In Alchemy's Web3 Onboarding Kit, session keys reduce friction in user flows by enabling auto-approval for repeated steps like claiming testnet tokens or submitting votes.
+Example: In Alchemy's Account Kit, session keys reduce friction in user flows by enabling auto-approval for repeated steps like claiming testnet tokens or submitting votes.
 
 Session keys unlock a simplified authentication process by allowing users to interact with apps without needing to confirm each action using their primary key. Instead, users create a session key with permissions specific to the app, then the app can use that key for future actions. This speeds up the user interaction and provides a smoother experience.
 
@@ -38,7 +34,7 @@ With the ability to delegate specific permissions to session keys, users can aut
 
 ### Securely delegate access
 
-Session keys reduce exposure of the main private key by creating temporary or restricted alternatives. Even if compromised, session keys can't take over the account.
+Session keys reduce exposure of the main private key by creating temporary or restricted alternatives. Even if compromised, session keys limit damage because they're restricted to only the permissions you defined, not your entire account.
 
 Session keys reduce risk by limiting access:
 
@@ -48,10 +44,12 @@ Session keys reduce risk by limiting access:
 
 By delegating authorization to a separate key, the exposure of the main private key is minimized.
 
-### Apply permissions for safety
+### Build with granular permissions
 
-Session keys are safe because they're permissioned. You control what a session key can do and when.
+Session keys are safe because they're built on a flexible permission system. You control exactly what a session key can do, when it can act, and how much it can spend.
 
-Session keys are only powerful when scoped properly. Modular Account V2 includes a growing library of permissions, and also supports custom modules for your own access logic.
+Modular Account V2 includes a growing library of permission types — from spending limits and time windows to contract allowlists and function restrictions. You can also build custom permission modules for specialized use cases.
+
+This granular control lets you create session keys that are perfectly scoped for each use case, whether that's a one-time NFT mint, recurring DeFi interactions, or complex multi-step workflows.
 
 > Want to build your own permission system? Let us know — Modular Account V2 is designed to plug in custom modules easily.
