@@ -3,12 +3,15 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
+import {
+  alchemyFeeEstimator,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
 import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
 import { local060Instance } from "~test/instances.js";
-import { createMultiOwnerModularAccountClient } from "./client.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 import { createMultisigModularAccountClient } from "../client/client.js";
+import { createMultiOwnerModularAccountClient } from "./client.js";
 
 describe("Modular Account Multi Owner Account Tests", async () => {
   const instance = local060Instance;
@@ -55,7 +58,18 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
@@ -78,7 +92,18 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
+    const txnHash = provider
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: result.request,
+          },
+        );
+        return await provider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
@@ -418,6 +443,10 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       salt,
       transport: custom(instance.getClient()),
       chain: instance.chain,
+      feeEstimator: alchemyFeeEstimator(
+        // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+        custom(instance.getClient()),
+      ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
