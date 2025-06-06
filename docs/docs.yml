@@ -578,6 +578,8 @@ navigation:
                   - page: Overview
                     slug: /
                     path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
+                  - page: Session key permissions
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/session-key-permissions.mdx
                   - page: Adding session keys
                     path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
                   - page: Using session keys
