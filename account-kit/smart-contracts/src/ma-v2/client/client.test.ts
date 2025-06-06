@@ -1,7 +1,10 @@
 import * as AACoreModule from "@aa-sdk/core";
 import {
   createSmartAccountClient,
+  deepHexlify,
   erc7677Middleware,
+  InvalidUserOperationError,
+  isValidRequest,
   LocalAccountSigner,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
@@ -29,6 +32,7 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
@@ -59,17 +63,24 @@ import {
   type ContractFunctionName,
   type TestActions,
 } from "viem";
-import { entryPoint07Abi } from "viem/account-abstraction";
+import {
+  createWebAuthnCredential,
+  entryPoint07Abi,
+  type ToWebAuthnAccountParameters,
+} from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { SoftWebauthnDevice } from "~test/webauthn.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { HookType } from "../actions/common/types.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
+import { parsePublicKey } from "webauthn-p256";
+import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -131,6 +142,124 @@ describe("MA v2 Tests", async () => {
       startingAddressBalance + sendAmount,
     );
   });
+
+  it("sends a simple UO with webauthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // send UO with webauthn gas estimator
+    const builtUO = await provider.buildUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    const request = deepHexlify(builtUO);
+    if (!isValidRequest(request)) {
+      throw new InvalidUserOperationError(builtUO);
+    }
+
+    const uoHash = provider.account
+      .getEntryPoint()
+      .getUserOperationHash(request);
+
+    let signedUOHash = await provider.account.signUserOperationHash(uoHash);
+
+    const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
+
+    signedUO.signature = signedUOHash;
+
+    const response = await provider.sendRawUserOperation(
+      signedUO,
+      provider.account.getEntryPoint().address,
+    );
+
+    await provider.waitForUserOperationTransaction({ hash: response });
+  });
+
+  it("sends UO with webauthn session key", async () => {
+    const { provider } = await givenWebAuthnProvider();
+    const _provider = provider.extend(installValidationActions);
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const { provider: sessionKeyProvider, credential } =
+      await givenWebAuthnProvider();
+    const { x, y } = parsePublicKey(credential.publicKey);
+
+    const result = await _provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          _provider.chain,
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        x,
+        y,
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(result);
+
+    await setBalance(instance.getClient(), {
+      address: sessionKeyProvider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const sessionKeyResult = await sessionKeyProvider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await sessionKeyProvider.waitForUserOperationTransaction(sessionKeyResult);
+  });
+
+  it.fails(
+    "successfully sign + validate a message, for WebAuthn account",
+    async () => {
+      const { provider } = await givenWebAuthnProvider();
+
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("2"),
+      });
+
+      const message = "0xdeadbeef";
+
+      let signature = await provider.signMessage({ message });
+
+      const publicClient = instance.getClient().extend(publicActions);
+
+      // TODO: should be using verifyTypedData here
+      const isValid = await publicClient.verifyMessage({
+        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
+        message,
+        address: provider.getAddress(),
+        signature,
+      });
+
+      expect(isValid).toBe(true);
+    },
+  );
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
@@ -1815,6 +1944,60 @@ describe("MA v2 Tests", async () => {
   });
 
   let salt = 1n;
+
+  const givenConnectedWebauthnProvider = async ({
+    signerEntity,
+    accountAddress,
+    paymasterMiddleware,
+    credential,
+    getFn,
+    rpId,
+  }: {
+    signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    credential: ToWebAuthnAccountParameters["credential"];
+    getFn?: ToWebAuthnAccountParameters["getFn"];
+    rpId?: ToWebAuthnAccountParameters["rpId"];
+  }) =>
+    createModularAccountV2Client({
+      chain: instance.chain,
+      accountAddress,
+      signerEntity,
+      credential,
+      getFn,
+      rpId,
+      mode: "webauthn",
+      transport: custom(instance.getClient()),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+          ? erc7677Middleware()
+          : {}),
+      salt: salt++,
+    });
+
+  const givenWebAuthnProvider = async () => {
+    const webauthnDevice = new SoftWebauthnDevice();
+
+    const credential = await createWebAuthnCredential({
+      rp: { id: "localhost", name: "localhost" },
+      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+      user: { name: "test", displayName: "test" },
+    });
+
+    const provider = await givenConnectedWebauthnProvider({
+      credential,
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
+    });
+
+    return { provider, credential };
+  };
 
   const givenConnectedProvider = async ({
     signer,
