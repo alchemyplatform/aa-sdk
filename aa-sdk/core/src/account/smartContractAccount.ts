@@ -32,7 +32,7 @@ import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { NullAddress } from "../types.js";
-import type { IsUndefined } from "../utils/types.js";
+import type { IsUndefined, Never } from "../utils/types.js";
 
 export type AccountOp = {
   target: Address;
@@ -174,7 +174,7 @@ export type ToSmartContractAccountParams<
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getImplementationAddress?: () => Promise<NullAddress | Address>;
 } & Omit<CustomSource, "signTransaction" | "address"> &
- (SigningMethods | Never<SigningMethods>);
+  (SigningMethods | Never<SigningMethods>);
 // [!endregion ToSmartContractAccountParams]
 
 /**
