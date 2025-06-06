@@ -6,39 +6,54 @@ slug: wallets/smart-contracts/modular-account-v2/session-keys
 
 ## What Are Session Keys?
 
-Session Keys allow you to add secondary signers to a Modular Account V2 smart wallet with scoped permissions. This unlocks capabilities like:
+Session Keys allow you to add secondary signers to a Modular Account V2 smart wallet with scoped permissions. This unlocks:
 
-- letting a dapp take actions on a user's behalf,
-- creating time-limited or spend-limited automations,
-- and reducing user friction without compromising security.
+- Smooth user interactions with dapps
+- Automated tasks like claiming rewards or recurring payments
+- Stronger security by limiting exposure of the main account key
+
+They're ideal for reducing UX friction while maintaining onchain guarantees.
 
 ## Why Use Session Keys?
 
-Session Keys enable you to add additional signers to your smart account with specific permissions. This unlocks features like automated actions a dapp can perform on a user’s behalf, improved security by enabling partial owners on an account, and more!
+Session Keys enable you to add additional signers to your smart account with specific permissions. This unlocks features like automated actions a dapp can perform on a user's behalf, improved security by enabling partial owners on an account, and more!
 
 ### Skip duplicate confirmations
 
-Let users interact with your app without repeatedly confirming every action. Once a session key is granted, the app can perform follow-up operations — fast and frictionless.
+With session keys, users don't need to approve every dapp interaction using their main wallet. Instead, a dapp can use a session key to perform follow-up actions — fast and frictionless — all within a defined scope.
+
+Example: In Alchemy's Web3 Onboarding Kit, session keys reduce friction in user flows by enabling auto-approval for repeated steps like claiming testnet tokens or submitting votes.
 
 Session keys unlock a simplified authentication process by allowing users to interact with apps without needing to confirm each action using their primary key. Instead, users create a session key with permissions specific to the app, then the app can use that key for future actions. This speeds up the user interaction and provides a smoother experience.
 
 ### Automate actions
 
-Allow smart wallets to handle recurring interactions like token approvals, claim flows, or contract calls — without user prompts.
+Use session keys to run workflows without needing user input each time. Automate:
+
+- Claim flows
+- Token approvals
+- Recurring transactions
+
+By granting only the necessary permissions, session keys ensure automation stays secure.
 
 With the ability to delegate specific permissions to session keys, users can automate actions within predefined limits. Session keys can be used to streamline processes like recurring payments, contract interactions, or any activity that benefits from automation.
 
 ### Securely delegate access
 
-Session keys reduce exposure of the main private key by creating temporary or restricted alternatives. Even if compromised, session keys can’t take over the account.
+Session keys reduce exposure of the main private key by creating temporary or restricted alternatives. Even if compromised, session keys can't take over the account.
 
-By delegating authorization to a separate key, the exposure of the main private key is minimized. Even if a session key is compromised, the attacker would not gain access to the user’s main account and funds. This layered approach to security helps in mitigating risks associated with key management.
+Session keys reduce risk by limiting access:
+
+- They're scoped to specific actions
+- Can expire after a set time
+- Can be revoked independently of the main account key
+
+By delegating authorization to a separate key, the exposure of the main private key is minimized.
 
 ### Apply permissions for safety
 
+Session keys are safe because they're permissioned. You control what a session key can do and when.
+
 Session keys are only powerful when scoped properly. Modular Account V2 includes a growing library of permissions, and also supports custom modules for your own access logic.
 
-To ensure that session keys are not able to take over an account, permissions have to be applied on them to scope the keys such that they can only perform certain actions. Modular Account V2 comes with several permissions you could use today, and if any other custom permission is required, you could build a hook module that provides this to plug into Modular Account V2. Please reach out to us if you’re interested in building a module!
-
 > Want to build your own permission system? Let us know — Modular Account V2 is designed to plug in custom modules easily.
->

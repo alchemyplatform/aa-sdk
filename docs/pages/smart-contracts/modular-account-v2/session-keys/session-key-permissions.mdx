@@ -1,11 +1,12 @@
 ---
 title: Supported Permissions for Session Keys
 description: Explore the supported permission types you can apply to session keys to safely delegate access in smart accounts.
-slug: wallets/smart-contracts/modular-account-v2/session-keys-permissions
+slug: wallets/smart-contracts/modular-account-v2/session-key-permissions
 ---
+
 ## What Permissions Can You Apply to Session Keys?
 
-Session keys only work if they're restricted — and Modular Account V2 gives you a flexible set of built-in permission types to scope them safely.
+Session keys work best when they are tightly scoped. Modular Account V2 gives you a flexible set of built-in permission types.
 
 Use these to limit what a key can do, for how long, where it can call, and how much it can spend.
 
@@ -30,4 +31,17 @@ Supports limiting function selectors and/or external contracts that a key may in
 Supports limiting what functions a key may call on the Modular Account (e.g. installing or uninstalling modules, or upgrading the account)
 
 > You can combine multiple permissions on a single session key. These can be layered to match the minimum required access for your use case.
->
+
+## Composing Permissions: Fine-Grained Control
+
+Permissions are composable. You can apply multiple permissions to a single session key to tightly define its behavior.
+
+Example: You could create a session key that:
+
+- Only works between June 1–June 15
+- Can call just one staking contract
+- Spend no more than 100 USDC
+
+Use Case: In Alchemy's modular wallet demos, one key is scoped to auto-stake a user's funds once a day, but only within a capped budget and only on a verified contract.
+
+By combining permissions, you can build tailored, safe delegation schemes — perfect for dapps, relayers, and complex workflows.
