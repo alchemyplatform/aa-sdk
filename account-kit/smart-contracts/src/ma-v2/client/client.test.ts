@@ -12,11 +12,13 @@ import {
 import * as AAInfraModule from "@account-kit/infra";
 import {
   alchemy,
+  alchemyFeeEstimator,
   alchemyGasAndPaymasterAndDataMiddleware,
   arbitrumSepolia,
 } from "@account-kit/infra";
 import {
   createLightAccountClient,
+  createModularAccountV2Client,
   getMAV2UpgradeToData,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
@@ -30,6 +32,7 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
@@ -67,7 +70,6 @@ import {
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
-import { accounts } from "~test/constants.js";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
@@ -77,7 +79,8 @@ import {
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { HookType } from "../actions/common/types.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
-import { createModularAccountV2Client } from "./client.js";
+import { parsePublicKey } from "webauthn-p256";
+import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
@@ -94,15 +97,8 @@ describe("MA v2 Tests", async () => {
       .extend(testActions({ mode: "anvil" }));
   });
 
-  const webauthnDevice = new SoftWebauthnDevice();
-
-  const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner
-  );
-
-  const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-    accounts.unfundedAccountOwner
-  );
+  let signer: SmartAccountSigner;
+  let sessionKey: SmartAccountSigner;
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -148,7 +144,7 @@ describe("MA v2 Tests", async () => {
   });
 
   it("sends a simple UO with webauthn account", async () => {
-    const provider = await givenWebAuthnProvider();
+    const { provider } = await givenWebAuthnProvider();
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -179,16 +175,68 @@ describe("MA v2 Tests", async () => {
 
     signedUO.signature = signedUOHash;
 
-    await provider.sendRawUserOperation(
+    const response = await provider.sendRawUserOperation(
       signedUO,
       provider.account.getEntryPoint().address
     );
+
+    await provider.waitForUserOperationTransaction({ hash: response });
+  });
+
+  it("sends UO with webauthn session key", async () => {
+    const { provider } = await givenWebAuthnProvider();
+    const _provider = provider.extend(installValidationActions);
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const { provider: sessionKeyProvider, credential } =
+      await givenWebAuthnProvider();
+    const { x, y } = parsePublicKey(credential.publicKey);
+
+    const result = await _provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          _provider.chain
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        x,
+        y,
+      }),
+      hooks: [],
+    });
+
+    await provider.waitForUserOperationTransaction(result);
+
+    await setBalance(instance.getClient(), {
+      address: sessionKeyProvider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const sessionKeyResult = await sessionKeyProvider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await sessionKeyProvider.waitForUserOperationTransaction(sessionKeyResult);
   });
 
   it.fails(
     "successfully sign + validate a message, for WebAuthn account",
     async () => {
-      const provider = await givenWebAuthnProvider();
+      const { provider } = await givenWebAuthnProvider();
 
       await setBalance(instance.getClient(), {
         address: provider.getAddress(),
@@ -201,51 +249,7 @@ describe("MA v2 Tests", async () => {
 
       const publicClient = instance.getClient().extend(publicActions);
 
-      const domain = {
-        name: keccak256(stringToBytes("MyDapp")),
-        version: keccak256(stringToBytes("1")),
-        chainId: provider.chain.id,
-        verifyingContract: getDefaultWebauthnValidationModuleAddress(
-          provider.chain
-        ),
-      };
-
-      const typeHash = keccak256(
-        //ethers.utils.toUtf8Bytes
-        stringToBytes(
-          "EIP712Domain(string name,string version,number chainId,address verifyingContract)"
-        )
-      );
-
-      // TODO: consolidate formatting message to EIP-712 format (https://github.dev/fractional-company/contracts/blob/master/src/OpenZeppelin/drafts/EIP712.sol) with 1271 validation as part of the format + prepare signature work
-      const messageEIP712 = keccak256(
-        encodePacked(
-          ["bytes32", "bytes32", "bytes32"],
-          [
-            keccak256(stringToBytes("\x19\x01")),
-            keccak256(
-              encodeAbiParameters(
-                [
-                  { name: "typeHash", type: "bytes32" },
-                  { name: "name", type: "bytes32" },
-                  { name: "version", type: "bytes32" },
-                  { name: "chainId", type: "uint256" },
-                  { name: "verifyingContract", type: "address" },
-                ],
-                [
-                  typeHash,
-                  domain.name,
-                  domain.version,
-                  BigInt(domain.chainId),
-                  domain.verifyingContract,
-                ]
-              )
-            ),
-            keccak256(stringToBytes(message)),
-          ]
-        )
-      );
-
+      // TODO: should be using verifyTypedData here
       const isValid = await publicClient.verifyMessage({
         // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
         message,
@@ -1945,6 +1949,8 @@ describe("MA v2 Tests", async () => {
     });
 
   const givenWebAuthnProvider = async () => {
+    const webauthnDevice = new SoftWebauthnDevice();
+
     const credential = await createWebAuthnCredential({
       rp: { id: "localhost", name: "localhost" },
       createFn: (opts) => webauthnDevice.create(opts, "localhost"),
@@ -1957,7 +1963,7 @@ describe("MA v2 Tests", async () => {
       rpId: "localhost",
     });
 
-    return provider;
+    return { provider, credential };
   };
 
   const givenConnectedProvider = async ({

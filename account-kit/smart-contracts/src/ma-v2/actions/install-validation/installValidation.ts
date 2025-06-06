@@ -7,6 +7,7 @@ import {
   type SendUserOperationResult,
   type UserOperationOverridesParameter,
   type SmartAccountSigner,
+  isSmartAccountWithSigner,
 } from "@aa-sdk/core";
 import {
   type Address,
@@ -24,12 +25,20 @@ import {
   serializeModuleEntity,
 } from "../common/utils.js";
 
-import { type ModularAccountV2Client } from "../../client/client.js";
-import { type ModularAccountV2 } from "../../account/common/modularAccountV2Base.js";
+import {
+  type ModularAccountV2Client,
+  type WebauthnModularAccountV2Client,
+} from "../../client/client.js";
+import {
+  type ModularAccountV2,
+  type WebauthnModularAccountV2,
+} from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
 > = {
   validationConfig: ValidationConfig;
   selectors: Hex[];
@@ -38,25 +47,41 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-  account?: ModularAccountV2<TSigner> | undefined;
+  account?: TSigner extends SmartAccountSigner
+    ? ModularAccountV2<TSigner>
+    : WebauthnModularAccountV2;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
+  GetEntryPointFromAccount<
+    TSigner extends SmartAccountSigner
+      ? ModularAccountV2<TSigner>
+      : WebauthnModularAccountV2
+  >
 >;
 
 export type UninstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
 > = {
   moduleAddress: Address;
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-  account?: ModularAccountV2<TSigner> | undefined;
+  account?: TSigner extends SmartAccountSigner
+    ? ModularAccountV2<TSigner>
+    : WebauthnModularAccountV2;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
+  GetEntryPointFromAccount<
+    TSigner extends SmartAccountSigner
+      ? ModularAccountV2<TSigner>
+      : WebauthnModularAccountV2
+  >
 >;
 
 export type InstallValidationActions<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
 > = {
   installValidation: (
     args: InstallValidationParams<TSigner>,
@@ -72,6 +97,10 @@ export type InstallValidationActions<
     args: UninstallValidationParams<TSigner>,
   ) => Promise<Hex>;
 };
+
+export function installValidationActions<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+>(client: ModularAccountV2Client<TSigner>): InstallValidationActions<TSigner>;
 
 /**
  * Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
@@ -117,11 +146,13 @@ export type InstallValidationActions<
  * @param {object} client - The client instance which provides account and sendUserOperation functionality.
  * @returns {object} - An object containing two methods, `installValidation` and `uninstallValidation`.
  */
-export const installValidationActions: <
+export function installValidationActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  client: ModularAccountV2Client<TSigner>,
-) => InstallValidationActions<TSigner> = (client) => {
+  client: TSigner extends SmartAccountSigner
+    ? ModularAccountV2Client<TSigner>
+    : WebauthnModularAccountV2Client,
+): InstallValidationActions<TSigner> {
   const encodeInstallValidation = async ({
     validationConfig,
     selectors,
@@ -133,7 +164,18 @@ export const installValidationActions: <
       throw new AccountNotFoundError();
     }
 
-    if (!isSmartAccountClient(client)) {
+    if (isSmartAccountWithSigner(account)) {
+      if (!isSmartAccountClient(client as ModularAccountV2Client<TSigner>)) {
+        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
+    } else if (
+      !isSmartAccountClient(client as WebauthnModularAccountV2Client)
+    ) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installValidation",
@@ -176,10 +218,21 @@ export const installValidationActions: <
       throw new AccountNotFoundError();
     }
 
-    if (!isSmartAccountClient(client)) {
+    if (isSmartAccountWithSigner(account)) {
+      if (!isSmartAccountClient(client as ModularAccountV2Client<TSigner>)) {
+        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
+    } else if (
+      !isSmartAccountClient(client as WebauthnModularAccountV2Client)
+    ) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "uninstallValidation",
+        "installValidation",
         client,
       );
     }
@@ -210,14 +263,28 @@ export const installValidationActions: <
       hooks,
       account = client.account,
       overrides,
-    }) => {
-      const callData = await encodeInstallValidation({
-        validationConfig,
-        selectors,
-        installData,
-        hooks,
-        account,
-      });
+    }: InstallValidationParams) => {
+      const signer = "signer" in account ? account.signer : undefined;
+      let callData: Hex;
+      if (signer) {
+        const _account = account as ModularAccountV2<TSigner>;
+        callData = await encodeInstallValidation({
+          validationConfig,
+          selectors,
+          installData,
+          hooks,
+          account: _account,
+        });
+      } else {
+        const _account = account as WebauthnModularAccountV2;
+        callData = await encodeInstallValidation({
+          validationConfig,
+          selectors,
+          installData,
+          hooks,
+          account: _account,
+        });
+      }
 
       return client.sendUserOperation({
         uo: callData,
@@ -233,14 +300,28 @@ export const installValidationActions: <
       hookUninstallDatas,
       account = client.account,
       overrides,
-    }) => {
-      const callData = await encodeUninstallValidation({
-        moduleAddress,
-        entityId,
-        uninstallData,
-        hookUninstallDatas,
-        account,
-      });
+    }: UninstallValidationParams) => {
+      const signer = "signer" in account ? account.signer : undefined;
+      let callData: Hex;
+      if (signer) {
+        const _account = account as ModularAccountV2<TSigner>;
+        callData = await encodeUninstallValidation({
+          moduleAddress,
+          entityId,
+          uninstallData,
+          hookUninstallDatas,
+          account: _account,
+        });
+      } else {
+        const _account = account as WebauthnModularAccountV2;
+        callData = await encodeUninstallValidation({
+          moduleAddress,
+          entityId,
+          uninstallData,
+          hookUninstallDatas,
+          account: _account,
+        });
+      }
 
       return client.sendUserOperation({
         uo: callData,
@@ -249,4 +330,4 @@ export const installValidationActions: <
       });
     },
   };
-};
+}
