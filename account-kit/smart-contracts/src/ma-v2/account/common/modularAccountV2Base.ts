@@ -100,6 +100,8 @@ export type CreateMAV2BaseParams<
   | "signMessage"
   | "signTypedData"
   | "getDummySignature"
+  | "prepareSign"
+  | "formatSign"
 > & {
   signer: TSigner;
   signerEntity?: SignerEntity;
