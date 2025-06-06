@@ -36,7 +36,9 @@ import {
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
 > = {
   validationConfig: ValidationConfig;
   selectors: Hex[];
@@ -45,48 +47,41 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-  account?: ModularAccountV2<TSigner> | undefined;
+  account?: TSigner extends SmartAccountSigner
+    ? ModularAccountV2<TSigner> | undefined
+    : WebauthnModularAccountV2 | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
->;
-
-export type InstallWebauthValidationParams = {
-  validationConfig: ValidationConfig;
-  selectors: Hex[];
-  installData: Hex;
-  hooks: {
-    hookConfig: HookConfig;
-    initData: Hex;
-  }[];
-  account?: WebauthnModularAccountV2 | undefined;
-} & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<WebauthnModularAccountV2> // TO DO: update GetEntryPointFromAccount to support WebauthnModularAccountV2
+  GetEntryPointFromAccount<
+    TSigner extends SmartAccountSigner
+      ? ModularAccountV2<TSigner> | undefined
+      : WebauthnModularAccountV2 | undefined
+  >
 >;
 
 export type UninstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
 > = {
   moduleAddress: Address;
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-  account?: ModularAccountV2<TSigner> | undefined;
+  account?: TSigner extends SmartAccountSigner
+    ? ModularAccountV2<TSigner> | undefined
+    : WebauthnModularAccountV2 | undefined;
 } & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
->;
-
-export type UninstallWebauthnValidationParams = {
-  moduleAddress: Address;
-  entityId: number;
-  uninstallData: Hex;
-  hookUninstallDatas: Hex[];
-  account?: WebauthnModularAccountV2 | undefined;
-} & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<WebauthnModularAccountV2>
+  GetEntryPointFromAccount<
+    TSigner extends SmartAccountSigner
+      ? ModularAccountV2<TSigner> | undefined
+      : WebauthnModularAccountV2 | undefined
+  >
 >;
 
 export type InstallValidationActions<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
 > = {
   installValidation: (
     args: InstallValidationParams<TSigner>,
@@ -100,32 +95,12 @@ export type InstallValidationActions<
   ) => Promise<SendUserOperationResult>;
   encodeUninstallValidation: (
     args: UninstallValidationParams<TSigner>,
-  ) => Promise<Hex>;
-};
-
-export type InstallWebauthnValidationActions = {
-  installValidation: (
-    args: InstallWebauthValidationParams,
-  ) => Promise<SendUserOperationResult>;
-  encodeInstallValidation: (
-    // TODO: omit the user op sending related parameters from this type
-    args: InstallWebauthValidationParams,
-  ) => Promise<Hex>;
-  uninstallValidation: (
-    args: UninstallWebauthnValidationParams,
-  ) => Promise<SendUserOperationResult>;
-  encodeUninstallValidation: (
-    args: UninstallWebauthnValidationParams,
   ) => Promise<Hex>;
 };
 
 export function installValidationActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(client: ModularAccountV2Client<TSigner>): InstallValidationActions<TSigner>;
-
-export function installValidationActions(
-  client: WebauthnModularAccountV2Client,
-): InstallWebauthnValidationActions;
 
 /**
  * Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
@@ -174,15 +149,17 @@ export function installValidationActions(
 export function installValidationActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  client: ModularAccountV2Client<TSigner> | WebauthnModularAccountV2Client,
-): InstallValidationActions<TSigner> | InstallWebauthnValidationActions {
+  client: TSigner extends SmartAccountSigner
+    ? ModularAccountV2Client<TSigner>
+    : WebauthnModularAccountV2Client,
+): InstallValidationActions<TSigner> {
   const encodeInstallValidation = async ({
     validationConfig,
     selectors,
     installData,
     hooks,
     account = client.account,
-  }: InstallValidationParams | InstallWebauthValidationParams) => {
+  }: InstallValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -236,7 +213,7 @@ export function installValidationActions<
     uninstallData,
     hookUninstallDatas,
     account = client.account,
-  }: UninstallValidationParams | UninstallWebauthnValidationParams) => {
+  }: UninstallValidationParams) => {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -286,7 +263,7 @@ export function installValidationActions<
       hooks,
       account = client.account,
       overrides,
-    }: InstallValidationParams | InstallWebauthValidationParams) => {
+    }: InstallValidationParams) => {
       const signer = "signer" in account ? account.signer : undefined;
       let callData: Hex;
       if (signer) {
@@ -325,7 +302,7 @@ export function installValidationActions<
       hookUninstallDatas,
       account = client.account,
       overrides,
-    }: UninstallValidationParams | UninstallWebauthnValidationParams) => {
+    }: UninstallValidationParams) => {
       const signer = "signer" in account ? account.signer : undefined;
       let callData: Hex;
       if (signer) {
