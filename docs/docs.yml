@@ -207,6 +207,9 @@ navigation:
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-otp.mdx
               - page: Social Login
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-social-auth.mdx
+              - page: Passkeys
+                slug: authenticating-with-passkeys
+                path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-passkeys.mdx
               - page: Email Magic Link
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
           - section: Using smart accounts
@@ -439,16 +442,12 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle.mdx
                       - page: constructor
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/constructor.mdx
-                      - page: createAccount
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/createAccount.mdx
                       - page: disconnect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/disconnect.mdx
                       - page: exportWallet
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
                       - page: initEmailAuth
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
-                      - page: lookupUserWithPasskey
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/lookupUserWithPasskey.mdx
                       - page: oauthWithPopup
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
@@ -517,6 +516,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addPasskey.mdx
                       - page: constructor
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
+                      - page: createAccount
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/createAccount.mdx
                       - page: experimental_createApiKey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
                       - page: getMfaFactors
@@ -529,6 +530,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/initOauth.mdx
                       - page: lookupUserByEmail
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
+                      - page: lookupUserWithPasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserWithPasskey.mdx
                       - page: on
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/on.mdx
                       - page: removeMfa
