@@ -48,13 +48,13 @@ export type InstallValidationParams<
     initData: Hex;
   }[];
   account?: TSigner extends SmartAccountSigner
-    ? ModularAccountV2<TSigner> | undefined
-    : WebauthnModularAccountV2 | undefined;
+    ? ModularAccountV2<TSigner>
+    : WebauthnModularAccountV2;
 } & UserOperationOverridesParameter<
   GetEntryPointFromAccount<
     TSigner extends SmartAccountSigner
-      ? ModularAccountV2<TSigner> | undefined
-      : WebauthnModularAccountV2 | undefined
+      ? ModularAccountV2<TSigner>
+      : WebauthnModularAccountV2
   >
 >;
 
@@ -68,13 +68,13 @@ export type UninstallValidationParams<
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
   account?: TSigner extends SmartAccountSigner
-    ? ModularAccountV2<TSigner> | undefined
-    : WebauthnModularAccountV2 | undefined;
+    ? ModularAccountV2<TSigner>
+    : WebauthnModularAccountV2;
 } & UserOperationOverridesParameter<
   GetEntryPointFromAccount<
     TSigner extends SmartAccountSigner
-      ? ModularAccountV2<TSigner> | undefined
-      : WebauthnModularAccountV2 | undefined
+      ? ModularAccountV2<TSigner>
+      : WebauthnModularAccountV2
   >
 >;
 
@@ -285,8 +285,6 @@ export function installValidationActions<
           account: _account,
         });
       }
-
-      console.log("in here", callData);
 
       return client.sendUserOperation({
         uo: callData,
