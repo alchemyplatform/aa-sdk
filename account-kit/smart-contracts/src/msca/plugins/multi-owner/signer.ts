@@ -1,4 +1,9 @@
-import type { Address, BundlerClient, SmartAccountSigner } from "@aa-sdk/core";
+import type {
+  Address,
+  BundlerClient,
+  SmartAccountSigner,
+  SignatureRequest,
+} from "@aa-sdk/core";
 import {
   hashMessage,
   hashTypedData,
@@ -20,7 +25,7 @@ export const multiOwnerMessageSigner = <
   signer: () => TSigner,
   pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id],
 ) => {
-  const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
+  const get712Wrapper = async (msg: Hash): Promise<TypedDataDefinition> => {
     const [, name, version, chainId, verifyingContract, salt] =
       await client.readContract({
         abi: MultiOwnerPluginAbi,
@@ -29,7 +34,7 @@ export const multiOwnerMessageSigner = <
         account: accountAddress,
       });
 
-    return signer().signTypedData({
+    return {
       domain: {
         chainId: Number(chainId),
         name,
@@ -44,10 +49,32 @@ export const multiOwnerMessageSigner = <
         message: msg,
       },
       primaryType: "AlchemyModularAccountMessage",
-    });
+    };
+  };
+
+  const prepareSign = async (
+    params: SignatureRequest,
+  ): Promise<SignatureRequest> => {
+    const data = await get712Wrapper(
+      params.type === "personal_sign"
+        ? hashMessage(params.data)
+        : hashTypedData(params.data),
+    );
+    return {
+      type: "eth_signTypedData_v4",
+      data,
+    };
+  };
+
+  const formatSign = async (
+    signature: `0x${string}`,
+  ): Promise<`0x${string}`> => {
+    return signature;
   };
 
   return {
+    prepareSign,
+    formatSign,
     getDummySignature: (): Hex => {
       return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
     },
@@ -56,21 +83,33 @@ export const multiOwnerMessageSigner = <
       return signer().signMessage({ raw: uoHash });
     },
 
-    signMessage({
+    async signMessage({
       message,
     }: {
       message: SignableMessage;
     }): Promise<`0x${string}`> {
-      return signWith712Wrapper(hashMessage(message));
+      const { type, data } = await prepareSign({
+        type: "personal_sign",
+        data: message,
+      });
+      return type === "personal_sign"
+        ? signer().signMessage(data)
+        : signer().signTypedData(data);
     },
 
-    signTypedData: <
+    signTypedData: async <
       const typedData extends TypedData | Record<string, unknown>,
       primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
     >(
       typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
-      return signWith712Wrapper(hashTypedData(typedDataDefinition));
+      const { type, data } = await prepareSign({
+        type: "eth_signTypedData_v4",
+        data: typedDataDefinition as TypedDataDefinition,
+      });
+      return type === "personal_sign"
+        ? signer().signMessage(data)
+        : signer().signTypedData(data);
     },
   };
 };

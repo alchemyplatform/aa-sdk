@@ -171,7 +171,20 @@ describe("MA v2 Tests", async () => {
 
     const message = "testmessage";
 
-    let signature = await provider.signMessage({ message });
+    const { type, data } = await provider.account.prepareSign({
+      type: "personal_sign",
+      data: message,
+    });
+
+    if (type !== "eth_signTypedData_v4") {
+      throw new Error("Invalid signature request type");
+    }
+
+    let signature = await (
+      await provider.account.getSigner()
+    ).signTypedData(data);
+
+    signature = await provider.account.formatSign(signature);
 
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature]),
@@ -263,7 +276,21 @@ describe("MA v2 Tests", async () => {
     } as const;
 
     const hashedMessageTypedData = hashTypedData(typedData);
-    let signature = await provider.signTypedData({ typedData });
+
+    const { type, data } = await provider.account.prepareSign({
+      type: "eth_signTypedData_v4",
+      data: typedData,
+    });
+
+    if (type !== "eth_signTypedData_v4") {
+      throw new Error("Invalid signature request type");
+    }
+
+    let signature = await (
+      await provider.account.getSigner()
+    ).signTypedData(data);
+
+    signature = await provider.account.formatSign(signature);
 
     await expect(
       accountContract.read.isValidSignature([
