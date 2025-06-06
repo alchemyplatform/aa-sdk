@@ -19,6 +19,12 @@ export type NoUndefined<T> = T extends undefined ? never : T;
 
 export type IsUndefined<T> = [undefined] extends [T] ? true : false;
 
+export type Never<T> = T extends object
+  ? {
+      [K in keyof T]?: never;
+    }
+  : never;
+
 export type RequiredBy<TType, TKeys extends keyof TType> = Required<
   Pick<TType, TKeys>
 > &
