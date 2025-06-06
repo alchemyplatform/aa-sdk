@@ -1065,7 +1065,14 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/getBundlerClient.mdx
                       - page: send
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
-
+      - section: Infrastructure APIs
+        contents:
+          - link: Wallet API
+            href: https://www.alchemy.com/docs/reference/smart-wallet-quickstart
+          - link: Bundler API
+            href: https://www.alchemy.com/docs/reference/bundler-api-quickstart
+          - link: Gas Manager API
+            href: https://www.alchemy.com/docs/reference/how-to-sponsor-gas-on-evm
       - section: Resources
         skip-slug: true
         contents:
