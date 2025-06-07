@@ -18,6 +18,7 @@ import type {
   SubmitOtpCodeResponse,
   AuthLinkingPrompt,
   GetWebAuthnAttestationResult,
+  IdTokenOnly,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -381,7 +382,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithRedirect = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>,
-  ): Promise<never> => {
+  ): Promise<User | IdTokenOnly> => {
     const turnkeyPublicKey = await this.initSessionStamper();
 
     const oauthParams = args;
@@ -425,7 +426,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithPopup = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>,
-  ): Promise<User | AuthLinkingPrompt> => {
+  ): Promise<User | AuthLinkingPrompt | IdTokenOnly> => {
     const turnkeyPublicKey = await this.initSessionStamper();
     const oauthParams = args;
     const providerUrl = await this.getOauthProviderUrl({
@@ -490,6 +491,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
               otpId,
               orgId,
             } satisfies AuthLinkingPrompt);
+            break;
+          case "FETCHED_ID_TOKEN_ONLY":
+            resolve({
+              status,
+              idToken,
+              providerName,
+            } satisfies IdTokenOnly);
             break;
           default:
             reject(new Error(`Unknown status: ${status}`));
