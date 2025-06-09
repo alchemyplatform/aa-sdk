@@ -10,14 +10,52 @@ slug: wallets/react/quickstart/new-project
 
 The fastest way to get started is using our **Quickstart widget** in the Alchemy Dashboard.
 
+**The quickstart will install this Next.js template:** Check out the [quickstart template source code](https://github.com/alchemyplatform/smart-wallets-quickstart) on GitHub.
+
 ## 1. Use the Dashboard Quickstart
 
 1. Go to the Smart Wallets Quickstart in the [Alchemy Dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart)
 2. Click get started to pre-generate an example API key and policy ID for testing
 3. Follow the 3-step process:
+
    - **Create new app**: Copy the provided `npx create-next-app` command
-   - **Set up environment**: Copy the pre-configured `.env` variables (includes your API key and policy ID)
+
+   <CodeBlocks>
+
+   ```bash npm
+   npx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+   ```
+
+   ```bash yarn
+   yarn create next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+   ```
+
+   ```bash pnpm
+   pnpx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+   ```
+
+   </CodeBlocks>
+
+   - **Set up environment**: Copy the pre-configured `.env` variables (includes your API key and policy ID) from the [dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart)
+     - Alternatively, create your own app and configuration at the [Smart Wallets Dashboard](https://dashboard.alchemy.com/services/smart-wallets/configuration) to get a custom API key
+     - You can also set up your own paymaster policy at the [Gas Manager Dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) for custom gas sponsorship rules
    - **Run app**: Use the provided run command
+
+    <CodeBlocks>
+
+    ```bash npm
+    npm run dev
+    ```
+
+    ```bash yarn
+    yarn dev
+    ```
+
+    ```bash pnpm
+    pnpm run dev
+    ```
+
+    </CodeBlocks>
 
 <img
   src="/images/wallets/dashboard-quickstart-widget.png"
