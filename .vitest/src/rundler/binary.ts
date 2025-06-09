@@ -22,7 +22,7 @@ export async function cleanupRundler(rundlerPath: string) {
 
 export async function downloadLatestRundlerRelease(
   filePath: string,
-  version = "v0.2.2"
+  version = "v0.8.2",
 ) {
   const repoUrl =
     "https://api.github.com/repos/alchemyplatform/rundler/releases";
@@ -33,7 +33,7 @@ export async function downloadLatestRundlerRelease(
     const releasesResponse = await fetch(repoUrl);
     if (!releasesResponse.ok) {
       throw new Error(
-        `Failed to fetch releases: ${releasesResponse.statusText}`
+        `Failed to fetch releases: ${releasesResponse.statusText}`,
       );
     }
     const releases: any = await releasesResponse.json();
@@ -68,8 +68,8 @@ export async function downloadLatestRundlerRelease(
         `Failed to find a suitable asset for the current platform, ${JSON.stringify(
           { arch, platform, assets: latestRelease.assets },
           null,
-          2
-        )}`
+          2,
+        )}`,
       );
     }
 

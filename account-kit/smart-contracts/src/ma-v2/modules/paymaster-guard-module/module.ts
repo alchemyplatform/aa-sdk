@@ -17,7 +17,7 @@ export const PaymasterGuardModule = {
           type: "address",
         },
       ],
-      [entityId, paymaster]
+      [entityId, paymaster],
     );
   },
   encodeOnUninstallData: (args: { entityId: number }): Hex => {
@@ -29,7 +29,7 @@ export const PaymasterGuardModule = {
           type: "uint32",
         },
       ],
-      [entityId]
+      [entityId],
     );
   },
 };

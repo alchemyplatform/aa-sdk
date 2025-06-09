@@ -15,6 +15,6 @@ if (writeInDev) {
     resolve(__dirname, targetFilePath),
     `
     export const WRITE_IN_DEV = ${writeInDev};
-    `
+    `,
   );
 }

@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
+
+### Features
+
+- splitting signing methods into prepare and sign ([#1629](https://github.com/alchemyplatform/aa-sdk/issues/1629)) ([8bdb82d](https://github.com/alchemyplatform/aa-sdk/commit/8bdb82d2c563e4b4657a3403ea84dca3b61011d4))
+
+# [4.39.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.38.0...v4.39.0) (2025-06-04)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.38.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.37.0...v4.38.0) (2025-06-04)
+
+### Bug Fixes
+
+- remove trailing slash from alchemy rpc url ([#1657](https://github.com/alchemyplatform/aa-sdk/issues/1657)) ([60b3a23](https://github.com/alchemyplatform/aa-sdk/commit/60b3a231354a6b1ca1aaf69ee4e3b82f0b4110ea))
+
+# [4.37.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.1...v4.37.0) (2025-06-03)
+
+### Features
+
+- **rn-signer:** support passkeys in React Native ([#1653](https://github.com/alchemyplatform/aa-sdk/issues/1653)) ([f9ce59c](https://github.com/alchemyplatform/aa-sdk/commit/f9ce59c9874e863e80df8219bfa8d76960bfa82a))
+
+## [4.36.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.0...v4.36.1) (2025-05-29)
+
+### Bug Fixes
+
+- multisig ([#1644](https://github.com/alchemyplatform/aa-sdk/issues/1644)) ([eeb0e14](https://github.com/alchemyplatform/aa-sdk/commit/eeb0e14ea0559d1d113da8840b20c2afa779a5e0))
+
+# [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- permission builder validation error ([#1630](https://github.com/alchemyplatform/aa-sdk/issues/1630)) ([64f5d92](https://github.com/alchemyplatform/aa-sdk/commit/64f5d9298f7cbeeeeeceb011c873d09df917a826))
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+### Bug Fixes
+
+- let outter transport dictate retries ([#1625](https://github.com/alchemyplatform/aa-sdk/issues/1625)) ([6d291bd](https://github.com/alchemyplatform/aa-sdk/commit/6d291bd83e09e0b4e98baf1608e9451d3fba792d))
+
 # [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
 
 ### Features

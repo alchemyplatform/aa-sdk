@@ -71,13 +71,13 @@ type Context = {
  */
 export function alchemyGasManagerMiddleware(
   policyId: string | string[],
-  policyToken?: PolicyToken
+  policyToken?: PolicyToken,
 ): Required<
   Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
 > {
   const buildContext = async (
     uo: Parameters<ClientMiddlewareFn>[0],
-    args: Parameters<ClientMiddlewareFn>[1]
+    args: Parameters<ClientMiddlewareFn>[1],
   ): Promise<Context> => {
     const context: Context = { policyId };
 
@@ -99,7 +99,7 @@ export function alchemyGasManagerMiddleware(
           client as AlchemySmartAccountClient,
           account,
           policyId,
-          policyToken
+          policyToken,
         );
       }
     }
@@ -167,7 +167,7 @@ export type PolicyToken = {
  * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData`, `feeEstimator`, `gasEstimator`, and `paymasterAndData`
  */
 export function alchemyGasAndPaymasterAndDataMiddleware(
-  params: AlchemyGasAndPaymasterAndDataMiddlewareParams
+  params: AlchemyGasAndPaymasterAndDataMiddlewareParams,
 ): Pick<
   ClientMiddlewareConfig,
   "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData"
@@ -194,26 +194,26 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       // Fall back to the default 7677 dummyPaymasterAndData middleware.
       return alchemyGasManagerMiddleware(
         policyId,
-        policyToken
+        policyToken,
       ).dummyPaymasterAndData(uo, args);
     },
     feeEstimator: (uo, args) => {
       return feeEstimatorOverride
         ? feeEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
-        ? alchemyFeeEstimator(transport)(uo, args)
-        : noopMiddleware(uo, args);
+          ? alchemyFeeEstimator(transport)(uo, args)
+          : noopMiddleware(uo, args);
     },
     gasEstimator: (uo, args) => {
       return gasEstimatorOverride
         ? gasEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
-        ? defaultGasEstimator(args.client)(uo, args)
-        : noopMiddleware(uo, args);
+          ? defaultGasEstimator(args.client)(uo, args)
+          : noopMiddleware(uo, args);
     },
     paymasterAndData: async (
       uo,
-      { account, client: client_, feeOptions, overrides: overrides_ }
+      { account, client: client_, feeOptions, overrides: overrides_ },
     ) => {
       const client = clientHeaderTrack(client_, "alchemyFeeEstimator");
       if (!client.chain) {
@@ -227,31 +227,31 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           "maxFeePerGas",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp
+          userOp,
         ),
         maxPriorityFeePerGas: overrideField(
           "maxPriorityFeePerGas",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp
+          userOp,
         ),
         callGasLimit: overrideField(
           "callGasLimit",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp
+          userOp,
         ),
         verificationGasLimit: overrideField(
           "verificationGasLimit",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp
+          userOp,
         ),
         preVerificationGas: overrideField(
           "preVerificationGas",
           overrides_ as UserOperationOverrides,
           feeOptions,
-          userOp
+          userOp,
         ),
         ...(account.getEntryPoint().version === "0.7.0"
           ? {
@@ -259,13 +259,13 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
                 "paymasterVerificationGasLimit",
                 overrides_ as UserOperationOverrides<"0.7.0">,
                 feeOptions,
-                userOp
+                userOp,
               ),
               paymasterPostOpGasLimit: overrideField<"0.7.0">(
                 "paymasterPostOpGasLimit",
                 overrides_ as UserOperationOverrides<"0.7.0">,
                 feeOptions,
-                userOp
+                userOp,
               ),
             }
           : {}),
@@ -284,7 +284,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             client,
             account,
             policyId,
-            policyToken
+            policyToken,
           );
         }
       }
@@ -326,12 +326,12 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
  * @returns {Hex | Multiplier | undefined} the overridden field value
  */
 const overrideField = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 >(
   field: keyof UserOperationFeeOptions<TEntryPointVersion>,
   overrides: UserOperationOverrides<TEntryPointVersion> | undefined,
   feeOptions: UserOperationFeeOptions<TEntryPointVersion> | undefined,
-  userOperation: UserOperationRequest<TEntryPointVersion>
+  userOperation: UserOperationRequest<TEntryPointVersion>,
 ): Hex | Multiplier | undefined => {
   let _field = field as keyof UserOperationOverrides<TEntryPointVersion>;
 
@@ -380,7 +380,7 @@ const overrideField = <
  */
 const generateSignedPermit = async <
   TAccount extends SmartContractAccount,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 >(
   userOp: UserOperationRequest<TEntryPointVersion>,
   client: MiddlewareClient,
@@ -392,7 +392,7 @@ const generateSignedPermit = async <
     approvalMode?: "NONE" | "PERMIT";
     erc20Name?: string;
     version?: string;
-  }
+  },
 ): Promise<Hex> => {
   if (!client.chain) {
     throw new ChainNotFoundError();
@@ -451,8 +451,8 @@ const generateSignedPermit = async <
   const paymasterAddress = paymasterData.paymaster
     ? paymasterData.paymaster
     : paymasterData.paymasterAndData
-    ? sliceHex(paymasterData.paymasterAndData, 0, 20)
-    : undefined;
+      ? sliceHex(paymasterData.paymasterAndData, 0, 20)
+      : undefined;
 
   if (paymasterAddress === undefined || paymasterAddress === "0x") {
     throw new Error("no paymaster contract address available");
@@ -481,6 +481,6 @@ const generateSignedPermit = async <
   const signedPermit = await account.signTypedData(typedPermitData);
   return encodeAbiParameters(
     [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
-    [maxAmountToken, deadline, signedPermit]
+    [maxAmountToken, deadline, signedPermit],
   );
 };

@@ -51,7 +51,7 @@ export class MissingUiConfigError extends BaseError {
    */
   constructor(hookName: string) {
     super(
-      `${hookName}: uiConfig must be supplied to AlchemyAccountProvider to use this hook`
+      `${hookName}: uiConfig must be supplied to AlchemyAccountProvider to use this hook`,
     );
   }
 }

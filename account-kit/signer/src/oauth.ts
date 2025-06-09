@@ -33,7 +33,7 @@ const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
  * @returns {AuthProviderCustomization | undefined} default customization parameters
  */
 export function getDefaultProviderCustomization(
-  knownAuthProviderId: KnownAuthProvider
+  knownAuthProviderId: KnownAuthProvider,
 ): AuthProviderCustomization | undefined {
   return DEFAULT_PROVIDER_CUSTOMIZATION[knownAuthProviderId];
 }

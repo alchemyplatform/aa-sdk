@@ -52,7 +52,7 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
  * ```
  */
 export function useAccount<TAccount extends SupportedAccountTypes>(
-  params: UseAccountProps<TAccount>
+  params: UseAccountProps<TAccount>,
 ): UseAccountResult<TAccount> {
   const { type, accountParams, skipCreate, ...mutationArgs } = params;
   const { config, queryClient } = useAlchemyAccountContext();
@@ -60,7 +60,7 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
   const account = useSyncExternalStore(
     watchAccount(type, config),
     () => getAccount(params, config),
-    () => getAccount(params, config)
+    () => getAccount(params, config),
   );
 
   const { mutate, isPending } = useMutation(
@@ -75,7 +75,7 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
       mutationKey: ["createAccount", type],
       ...mutationArgs,
     },
-    queryClient
+    queryClient,
   );
 
   useEffect(() => {

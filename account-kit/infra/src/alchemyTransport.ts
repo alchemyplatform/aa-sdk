@@ -92,7 +92,7 @@ export type AlchemyTransport = AlchemyTransportBase & {
  */
 export function isAlchemyTransport(
   transport: Transport,
-  chain: Chain
+  chain: Chain,
 ): transport is AlchemyTransport {
   return transport({ chain }).config.type === "alchemy";
 }
@@ -140,13 +140,13 @@ export function isAlchemyTransport(
  * @returns {AlchemyTransport} The configured Alchemy transport object.
  */
 export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
-  const { retryDelay, retryCount } = config;
+  const { retryDelay, retryCount = 0 } = config;
   // we create a copy here in case we create a split transport down below
   // we don't want to add alchemy headers to 3rd party nodes
   const fetchOptions = { ...config.fetchOptions };
 
   const connectionConfig = ConnectionConfigSchema.parse(
-    config.alchemyConnection ?? config
+    config.alchemyConnection ?? config,
   );
 
   const headersAsObject = convertHeadersToObject(fetchOptions.headers);
@@ -175,13 +175,13 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
 
     const rpcUrl =
       connectionConfig.rpcUrl == null
-        ? `${chain.rpcUrls.alchemy.http[0]}/`
+        ? chain.rpcUrls.alchemy.http[0]
         : connectionConfig.rpcUrl;
 
     const chainAgnosticRpcUrl =
       connectionConfig.rpcUrl == null
-        ? "https://api.g.alchemy.com/v2/"
-        : connectionConfig.chainAgnosticUrl ?? connectionConfig.rpcUrl;
+        ? "https://api.g.alchemy.com/v2"
+        : (connectionConfig.chainAgnosticUrl ?? connectionConfig.rpcUrl);
 
     const innerTransport = (() => {
       mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
@@ -194,11 +194,17 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
             },
             {
               methods: chainAgnosticMethods,
-              transport: http(chainAgnosticRpcUrl, { fetchOptions }),
+              transport: http(chainAgnosticRpcUrl, {
+                fetchOptions,
+                retryCount,
+                retryDelay,
+              }),
             },
           ],
           fallback: http(config.nodeRpcUrl, {
             fetchOptions: config.fetchOptions,
+            retryCount,
+            retryDelay,
           }),
         });
       }
@@ -207,10 +213,14 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         overrides: [
           {
             methods: chainAgnosticMethods,
-            transport: http(chainAgnosticRpcUrl, { fetchOptions }),
+            transport: http(chainAgnosticRpcUrl, {
+              fetchOptions,
+              retryCount,
+              retryDelay,
+            }),
           },
         ],
-        fallback: http(rpcUrl, { fetchOptions }),
+        fallback: http(rpcUrl, { fetchOptions, retryCount, retryDelay }),
       });
     })();
 
@@ -223,7 +233,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
         retryDelay,
         type: "alchemy",
       },
-      { alchemyRpcUrl: rpcUrl, fetchOptions }
+      { alchemyRpcUrl: rpcUrl, fetchOptions },
     );
   };
 
@@ -242,7 +252,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
 }
 
 export const convertHeadersToObject = (
-  headers?: HeadersInit
+  headers?: HeadersInit,
 ): Record<string, string> => {
   if (!headers) {
     return {};
@@ -257,10 +267,13 @@ export const convertHeadersToObject = (
   }
 
   if (Array.isArray(headers)) {
-    return headers.reduce((acc, header) => {
-      acc[header[0]] = header[1];
-      return acc;
-    }, {} as Record<string, string>);
+    return headers.reduce(
+      (acc, header) => {
+        acc[header[0]] = header[1];
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   }
 
   return headers;

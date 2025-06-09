@@ -28,6 +28,6 @@ export const useBundlerClient = () => {
   return useSyncExternalStore(
     watchBundlerClient(config),
     () => getBundlerClient(config),
-    () => getBundlerClient(config)
+    () => getBundlerClient(config),
   );
 };

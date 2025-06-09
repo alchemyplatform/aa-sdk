@@ -30,7 +30,8 @@ export type InstallPluginParams<
   TContext extends Record<string, unknown> | undefined =
     | Record<string, unknown>
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
@@ -69,7 +70,7 @@ export async function installPlugin<
     | undefined,
   TContext extends Record<string, unknown> | undefined =
     | Record<string, unknown>
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
@@ -77,7 +78,7 @@ export async function installPlugin<
     context,
     account = client.account,
     ...params
-  }: InstallPluginParams<TAccount, TContext>
+  }: InstallPluginParams<TAccount, TContext>,
 ) {
   if (!account) {
     throw new AccountNotFoundError();
@@ -87,7 +88,7 @@ export async function installPlugin<
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "installPlugin",
-      client
+      client,
     );
   }
 
@@ -106,10 +107,10 @@ export async function encodeInstallPluginUserOperation<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  params: Omit<InstallPluginParams, "overrides" | "account" | "context">
+  params: Omit<InstallPluginParams, "overrides" | "account" | "context">,
 ) {
   const pluginManifest = await client.readContract({
     abi: IPluginAbi,
@@ -124,7 +125,7 @@ export async function encodeInstallPluginUserOperation<
         abi: IPluginAbi,
         functionName: "pluginManifest",
         result: pluginManifest,
-      })
+      }),
     );
   return encodeFunctionData({
     abi: IPluginManagerAbi,

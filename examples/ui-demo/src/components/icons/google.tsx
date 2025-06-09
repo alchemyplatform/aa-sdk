@@ -2,7 +2,7 @@ import type { SVGProps } from "react";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const GoogleIcon = (
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
 ) => {
   return (
     <svg

@@ -40,9 +40,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
+    "typescript-template": "*"
   },
   "publishConfig": {
     "access": "public",

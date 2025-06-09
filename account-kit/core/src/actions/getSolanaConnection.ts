@@ -15,7 +15,7 @@ import { type AlchemyAccountsConfig, type SolanaConnection } from "../types.js";
  * @returns {SolanaConnection | void} a connection object for the current active chain
  */
 export function getSolanaConnection(
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): SolanaConnection | null {
   const connection = config.store.getState().solana;
   if (!connection) {

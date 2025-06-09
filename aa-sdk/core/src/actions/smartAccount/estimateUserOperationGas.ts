@@ -14,6 +14,7 @@ import type {
   UserOperationContext,
 } from "./types.js";
 import { clientHeaderTrack } from "../../index.js";
+import { getUserOperationError } from "./getUserOperationError.js";
 
 /**
  * Description SmartAccountClientAction for estimating the gas cost of a user operation
@@ -37,10 +38,11 @@ export async function estimateUserOperationGas<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client_: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>
+  args: SendUserOperationParameters<TAccount, TContext>,
 ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>> {
   const client = clientHeaderTrack(client_, "estimateUserOperationGas");
   const { account = client.account, overrides } = args;
@@ -52,16 +54,21 @@ export async function estimateUserOperationGas<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "estimateUserOperationGas",
-      client
+      client,
     );
   }
 
   return _initUserOperation(client, args).then(async (struct) => {
     const request = deepHexlify(await resolveProperties(struct));
-    return client.estimateUserOperationGas(
-      request,
-      account.getEntryPoint().address,
-      overrides?.stateOverride
-    );
+    try {
+      return await client.estimateUserOperationGas(
+        request,
+        account.getEntryPoint().address,
+        overrides?.stateOverride,
+      );
+    } catch (err) {
+      getUserOperationError(client, request, account.getEntryPoint());
+      throw err;
+    }
   });
 }

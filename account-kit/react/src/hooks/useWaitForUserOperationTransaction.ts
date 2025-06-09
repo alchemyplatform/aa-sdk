@@ -69,20 +69,20 @@ export function useWaitForUserOperationTransaction({
       mutationFn: async (params: WaitForUserOperationTxParameters) => {
         if (!client) {
           throw new ClientUndefinedHookError(
-            "useWaitForUserOperationTransaction"
+            "useWaitForUserOperationTransaction",
           );
         }
 
         return client.waitForUserOperationTransaction(params);
       },
     },
-    queryClient
+    queryClient,
   );
 
   return {
     waitForUserOperationTransaction: ReactLogger.profiled(
       "waitForUserOperationTransaction",
-      waitForUserOperationTransaction
+      waitForUserOperationTransaction,
     ),
     waitForUserOperationTransactionResult,
     isWaitingForUserOperationTransaction,

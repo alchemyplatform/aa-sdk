@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
+
+### Features
+
+- splitting signing methods into prepare and sign ([#1629](https://github.com/alchemyplatform/aa-sdk/issues/1629)) ([8bdb82d](https://github.com/alchemyplatform/aa-sdk/commit/8bdb82d2c563e4b4657a3403ea84dca3b61011d4))
+
+# [4.39.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.38.0...v4.39.0) (2025-06-04)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.38.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.37.0...v4.38.0) (2025-06-04)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.37.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.1...v4.37.0) (2025-06-03)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.36.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.0...v4.36.1) (2025-05-29)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
+
+### Features
+
+- add uo err getter ([#1641](https://github.com/alchemyplatform/aa-sdk/issues/1641)) ([1e981b1](https://github.com/alchemyplatform/aa-sdk/commit/1e981b1a355f9c34a3b98761bd4a913acc3994d5))
+
+## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
+
+### Bug Fixes
+
+- update packages for dependabot and clear out outdated example ([#1633](https://github.com/alchemyplatform/aa-sdk/issues/1633)) ([d097424](https://github.com/alchemyplatform/aa-sdk/commit/d0974244ec68afdbf4cc3a20ed53aa5a844c5d17))
+
+# [4.35.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.1...v4.35.0) (2025-05-19)
+
+### Reverts
+
+- undo the retry logic because it's causing issues ([#1628](https://github.com/alchemyplatform/aa-sdk/issues/1628)) ([2da1d37](https://github.com/alchemyplatform/aa-sdk/commit/2da1d37609fae208013a6ffde13e6c1cc14dfa7b))
+
+## [4.34.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.34.0...v4.34.1) (2025-05-16)
+
+### Bug Fixes
+
+- let outter transport dictate retries ([#1625](https://github.com/alchemyplatform/aa-sdk/issues/1625)) ([6d291bd](https://github.com/alchemyplatform/aa-sdk/commit/6d291bd83e09e0b4e98baf1608e9451d3fba792d))
+
 # [4.34.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.33.0...v4.34.0) (2025-05-15)
 
 **Note:** Version bump only for package @aa-sdk/core

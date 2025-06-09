@@ -19,7 +19,7 @@ describe("watchSmartAccountClient", () => {
     config.store.setState({
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.DISCONNECTED,
-        undefined
+        undefined,
       ),
     });
 
@@ -92,7 +92,7 @@ describe("watchSmartAccountClient", () => {
     expect(onChange).toHaveBeenCalledWith(errorState);
 
     expect(getSmartAccountClient({ type: "LightAccount" }, config)).toEqual(
-      errorState
+      errorState,
     );
   });
 

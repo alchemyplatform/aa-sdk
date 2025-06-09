@@ -38,12 +38,16 @@ For a simple end-to-end example, we will spin up a new NextJS app using our temp
 
 <CodeBlocks>
 
-```bash yarn
-yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
+```bash npm
+npx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
 ```
 
-```bash npm
-npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
+```bash yarn
+yarn create next-app account-kit-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+```
+
+```bash pnpm
+pnpx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
 ```
 
 </CodeBlocks>
@@ -52,35 +56,62 @@ npx create-next-app account-kit-app -e https://github.com/avarobinson/account-ki
 
 <Markdown src="../../shared/get-api-key.mdx" />
 
-…and paste the API key into `config.ts` where you see `ALCHEMY_API_KEY` in the alchemy `transport`
+…and add the API key to your `.env` file:
 
-```ts config.ts
-// ...other stuff in the file
-export const config = createConfig(
-  {
-    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
-    chain: sepolia,
-    ssr: true, // more about ssr: https://www.alchemy.com/docs/wallets/react/ssr
-    storage: cookieStorage, // more about persisting state with cookies: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state
-    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
-  },
-  uiConfig
-);
-// ...other stuff in the file
+you can copy the `.env.example` file to `.env` and replace the `ALCHEMY_API_KEY` with your own.
+
+```bash
+cp .env.example .env
 ```
 
-### 3. Run the app!
+```bash .env
+NEXT_PUBLIC_ALCHEMY_API_KEY=your_api_key_here
+```
+
+### 3. Get your Alchemy paymaster policy ID
+
+Set up a paymaster policy to sponsor gas for your smart wallets. If you want more information on how to set up a paymaster policy, see the [Sponsor gas docs](https://www.alchemy.com/docs/wallets/core/sponsor-gas).
+
+1. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
+2. Navigate to **Wallets** → **Gas Manager**
+3. In the **Policies** tab, click the **"Create new policy +"** button
+4. Fill out the steps to create a new policy. See the example inputs below:
+   - **Policy details**
+     - Name: `Smart Wallets Policy`
+     - Policy type: `Sponsor gas`
+     - Select chain type: `EVM networks`
+     - App: Select your app from the dropdown
+     - Select networks: `Arbitrum Sepolia` (required for the NFT minting example in this quickstart)
+   - **Spending rules**
+     - Select all the checkboxes to not set any limits
+     - Select `I don't want to set custom rules`
+   - **Access Controls**
+     - Select `None`
+   - **Expiry and duration**
+     - Use the default values
+5. Review and publish the policy
+6. Copy the policy ID to your `.env` file
+
+```bash .env
+NEXT_PUBLIC_ALCHEMY_POLICY_ID=your_policy_id_here
+```
+
+### 4. Run the app!
 
 That's it! Run the NextJS app to see your new auth flow in action ✨
 
 <CodeBlocks>
 
+```bash npm
+npm run dev
+```
+
 ```bash yarn
 yarn dev
 ```
 
-```bash npm
-npm run dev
+```bash pnpm
+pnpm dev
 ```
 
 </CodeBlocks>
@@ -151,7 +182,7 @@ See the steps above in the NextJS section to get your API key.
 
 In this step, you'll customize your authentication methods and UI styles.
 
-The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to explore combinations. When you’re all done, click the ‘Code preview’ toggle to export your code! You’ll get two files:
+The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to explore combinations. When you're all done, click the 'Code preview' toggle to export your code! You'll get two files:
 
 1. `tailwind.config.ts`
 2. `config.ts`
@@ -167,7 +198,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 #### 3a. Customize styling with tailwind
 
 1. In the demo app, copy your `tailwind.config.ts` code into a file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
-   1. Logo: logo images are loaded client side for maximum performance, so you’ll need to add the image file to your project and specify the file path in the config where noted.
+   1. Logo: logo images are loaded client side for maximum performance, so you'll need to add the image file to your project and specify the file path in the config where noted.
    2. Light/Dark mode:
       1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: add `@custom-variant dark (&:is(.dark, .dark *));` to your `global.css` file.
          <Tip>
@@ -190,7 +221,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
      },
      {
        // 2. (optional) overwrite AccountKit theme options
-     }
+     },
    );
    ```
 
@@ -229,13 +260,13 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 // @noErrors
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { QueryClient } from "@tanstack/react-query";
-import { sepolia } from "@account-kit/infra";
+import { arbitrumSepolia } from "@account-kit/infra";
 
 export const config = createConfig(
   {
     // alchemy config
     transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
-    chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
+    chain: arbitrumSepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
     ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://www.alchemy.com/docs/wallets/react/ssr)
     storage: cookieStorage, // persist the account state using cookies (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
@@ -264,7 +295,7 @@ export const config = createConfig(
       addPasskeyOnSignup: true,
       showSignInText: true,
     },
-  }
+  },
 );
 
 export const queryClient = new QueryClient();
@@ -291,7 +322,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -339,7 +370,7 @@ export default function RootLayout({
   // This will allow us to persist state across page boundaries (read more here: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state)
   const initialState = cookieToInitialState(
     config,
-    headers().get("cookie") ?? undefined
+    headers().get("cookie") ?? undefined,
   );
 
   return (
@@ -380,7 +411,8 @@ export default function Home() {
       ) : user ? (
         <div className="flex flex-col gap-2 p-2">
           <p className="text-xl font-bold">Success!</p>
-          You're logged in as {user.email ?? "anon"}.<button
+          You're logged in as {user.email ?? "anon"}.
+          <button
             className="akui-btn akui-btn-primary mt-6"
             onClick={() => logout()}
           >

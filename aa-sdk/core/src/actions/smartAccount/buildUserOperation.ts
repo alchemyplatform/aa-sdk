@@ -48,10 +48,11 @@ export async function buildUserOperation<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client_: Client<TTransport, TChain, TAccount>,
-  args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
+  args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>,
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
   const client = clientHeaderTrack(client_, USER_OPERATION_METHOD);
   const { account = client.account, overrides, context } = args;
@@ -63,7 +64,7 @@ export async function buildUserOperation<
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       USER_OPERATION_METHOD,
-      client
+      client,
     );
   }
 
@@ -73,6 +74,6 @@ export async function buildUserOperation<
       overrides,
       account,
       context,
-    })
+    }),
   );
 }

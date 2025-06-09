@@ -13,7 +13,7 @@ export { Connection };
 
 export async function balance(
   connection: Connection,
-  address: string
+  address: string,
 ): Promise<number> {
   const publicKey = new PublicKey(address);
 
@@ -30,7 +30,7 @@ export async function balance(
  */
 export async function dropTokens(
   connection: Connection,
-  solanaAddress: string
+  solanaAddress: string,
 ) {
   const publicKey = new PublicKey(solanaAddress);
 
@@ -38,11 +38,11 @@ export async function dropTokens(
 
   const airdropSignature = await connection.requestAirdrop(
     publicKey,
-    LAMPORTS_PER_SOL
+    LAMPORTS_PER_SOL,
   );
   const confirmationStrategy = await getConfirmationStrategy(
     connection,
-    airdropSignature
+    airdropSignature,
   );
 
   return await connection.confirmTransaction(confirmationStrategy);
@@ -50,7 +50,7 @@ export async function dropTokens(
 
 export async function broadcast(
   connection: Connection,
-  signedTransaction: Transaction | VersionedTransaction
+  signedTransaction: Transaction | VersionedTransaction,
 ) {
   const signature =
     "version" in signedTransaction
@@ -59,13 +59,13 @@ export async function broadcast(
 
   const confirmationStrategy = await getConfirmationStrategy(
     connection,
-    bs58.encode(signature)
+    bs58.encode(signature),
   );
   const transactionHash = await sendAndConfirmRawTransaction(
     connection,
     Buffer.from(signedTransaction.serialize()),
     confirmationStrategy,
-    { commitment: "confirmed" }
+    { commitment: "confirmed" },
   );
 
   return transactionHash;
@@ -78,7 +78,7 @@ export async function recentBlockhash(connection: Connection): Promise<string> {
 
 export async function getConfirmationStrategy(
   connection: Connection,
-  signature: string
+  signature: string,
 ): Promise<TransactionConfirmationStrategy> {
   const latestBlockHash = await connection.getLatestBlockhash();
 

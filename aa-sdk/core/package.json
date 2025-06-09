@@ -1,7 +1,7 @@
 {
   "name": "@aa-sdk/core",
   "license": "MIT",
-  "version": "4.34.0",
+  "version": "4.40.0",
   "description": "viem based SDK that enables interactions with ERC-4337 Smart Accounts. ABIs are based off the definitions generated in @account-abstraction/contracts",
   "author": "Alchemy",
   "type": "module",
@@ -44,10 +44,7 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4",
-    "typescript-template": "*",
-    "vitest": "^2.0.4"
+    "typescript-template": "*"
   },
   "dependencies": {
     "abitype": "^0.8.3",

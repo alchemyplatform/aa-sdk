@@ -13,7 +13,7 @@ import type {
  */
 export const createColorSet = (
   light: string,
-  dark: string
+  dark: string,
 ): ColorVariantRecord => ({
   light,
   dark,
@@ -29,7 +29,7 @@ export const createColorSet = (
  */
 export const apply = <S extends Record<string, any>>(
   source: S,
-  target?: DeepPartial<S>
+  target?: DeepPartial<S>,
 ): S => {
   if (!target) return source;
 
@@ -37,9 +37,6 @@ export const apply = <S extends Record<string, any>>(
     if (target[key] == null) {
       continue;
     } else if (typeof source[key] !== "object") {
-      // Also this seems to be fine when building with esm but not cjs or doing cli build
-      // vscode complains this isn't an issue but TS does. I dunno
-      // @ts-expect-error typescript doesn't like this but the tests pass
       source[key] = target[key];
     } else {
       apply(source[key], target[key]);

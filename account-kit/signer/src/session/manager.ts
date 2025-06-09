@@ -27,7 +27,7 @@ export const SessionManagerParamsSchema = z.object({
     .number()
     .default(DEFAULT_SESSION_MS)
     .describe(
-      "The time in milliseconds that a session should last before expiring [default: 15 minutes]"
+      "The time in milliseconds that a session should last before expiring [default: 15 minutes]",
     ),
   client: z.custom<BaseSignerClient>(),
 });
@@ -81,8 +81,8 @@ export class SessionManager {
         persist(this.getInitialState, {
           name: this.sessionKey,
           storage: createJSONStorage<SessionState>(() => storage),
-        })
-      )
+        }),
+      ),
     );
 
     this.registerEventListeners();
@@ -138,7 +138,7 @@ export class SessionManager {
       default:
         assertNever(
           existingSession,
-          `Unknown session type: ${(existingSession as any).type}`
+          `Unknown session type: ${(existingSession as any).type}`,
         );
     }
   };
@@ -156,7 +156,7 @@ export class SessionManager {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     localStorage.setItem(
       `${this.sessionKey}:temporary`,
-      JSON.stringify(session)
+      JSON.stringify(session),
     );
   };
 
@@ -173,7 +173,7 @@ export class SessionManager {
 
   on = <E extends keyof SessionManagerEvents>(
     event: E,
-    listener: SessionManagerEvents[E]
+    listener: SessionManagerEvents[E],
   ) => {
     this.eventEmitter.on(event, listener as any);
 
@@ -211,7 +211,7 @@ export class SessionManager {
           Extract<Session, { type: "email" | "oauth" | "otp" }>,
           "expirationDateMs"
         >
-      | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
+      | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">,
   ) => {
     const session = {
       ...session_,
@@ -250,7 +250,7 @@ export class SessionManager {
         } else if (session == null && prevSession != null) {
           this.eventEmitter.emit("disconnected");
         }
-      }
+      },
     );
 
     // Helper type to ensure that a listener is either defined or explicitly
@@ -325,10 +325,13 @@ export class SessionManager {
       clearTimeout(this.clearSessionHandle);
     }
 
-    this.clearSessionHandle = setTimeout(() => {
-      this.client.disconnect();
-      this.clearSession();
-    }, Math.min(session.expirationDateMs - Date.now(), Math.pow(2, 31) - 1));
+    this.clearSessionHandle = setTimeout(
+      () => {
+        this.client.disconnect();
+        this.clearSession();
+      },
+      Math.min(session.expirationDateMs - Date.now(), Math.pow(2, 31) - 1),
+    );
   };
 
   private setSessionWithUserAndBundle = ({

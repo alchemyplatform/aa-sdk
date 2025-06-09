@@ -12,7 +12,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   const executionAbiConst = `${pluginConfig.name}ExecutionFunctionAbi`;
   const executionAbi = extractExecutionAbi(
     executionFunctions,
-    pluginConfig.abi
+    pluginConfig.abi,
   );
 
   addImport("viem", { name: "EncodeFunctionDataParameters", isType: true });
@@ -69,10 +69,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
 
       providerFunctionDefs.push(dedent`
           ${camelCase(
-            n.name
+            n.name,
           )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
-        n.name
-      }">, "args"> & UserOperationOverridesParameter<TEntryPointVersion> &
+            n.name
+          }">, "args"> & UserOperationOverridesParameter<TEntryPointVersion> &
           GetAccountParameter<TAccount> & GetContextParameter<TContext>) =>
             Promise<SendUserOperationResult<TEntryPointVersion>>
       `);
@@ -105,12 +105,12 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     >`,
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
-      }`
+      }`,
   );
 
   const { hasReadMethods } = await asyncPipe(
     ManagementActionsGenPhase,
-    AccountReadActionsGenPhase
+    AccountReadActionsGenPhase,
   )({
     ...input,
     content: providerFunctions,
@@ -127,7 +127,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
       hasReadMethods ? "<TAccount>" : ""
     }
   `,
-    true
+    true,
   );
 
   input.content.push(dedent`
@@ -143,8 +143,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     ) => ${
       pluginConfig.name
     }Actions<TAccount, TContext> = (client) => ({ ${providerFunctions.join(
-    ",\n"
-  )} });
+      ",\n",
+    )} });
   `);
 
   return input;

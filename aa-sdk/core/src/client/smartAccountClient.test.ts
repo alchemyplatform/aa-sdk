@@ -12,7 +12,7 @@ import { createSmartAccountClient } from "./smartAccountClient.js";
 const chain = polygonMumbai;
 const getUserOperationReceiptMock = vi.spyOn(
   receiptActions,
-  "getUserOperationReceipt"
+  "getUserOperationReceipt",
 );
 
 vi.mock("viem", async (importOg) => {
@@ -55,7 +55,7 @@ describe("SmartAccountClient Tests", async () => {
           retryMsDelays.push(ms);
         }
         callback();
-      }
+      },
     );
     vi.spyOn(global.Math, "random").mockImplementation(() => 0.5);
   });
@@ -89,7 +89,7 @@ describe("SmartAccountClient Tests", async () => {
     thenExpectRetriesToBe(
       [2_050, 3_050, 4_550],
       3,
-      getUserOperationReceiptMock
+      getUserOperationReceiptMock,
     );
   });
 
@@ -110,11 +110,11 @@ describe("SmartAccountClient Tests", async () => {
   const thenExpectRetriesToBe = async (
     expectedRetryMsDelays: number[],
     expectedMockCalls: number,
-    getUserOperationReceiptMock: MockInstance
+    getUserOperationReceiptMock: MockInstance,
   ) => {
     expect(retryMsDelays).toEqual(expectedRetryMsDelays);
     expect(getUserOperationReceiptMock).toHaveBeenCalledTimes(
-      expectedMockCalls
+      expectedMockCalls,
     );
   };
 });

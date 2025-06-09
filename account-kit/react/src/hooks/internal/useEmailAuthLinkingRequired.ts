@@ -3,7 +3,7 @@ import { useSigner } from "../useSigner.js";
 
 export function useEmailAuthLinkingRequired(
   onLinkingRequired: (email: string) => void,
-  enabled = true
+  enabled = true,
 ) {
   const signer = useSigner();
 

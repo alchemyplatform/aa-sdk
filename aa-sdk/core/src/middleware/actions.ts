@@ -30,7 +30,7 @@ export type MiddlewareClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = Client<
   TTransport,
   TChain,
@@ -53,9 +53,9 @@ export const middlewareActions =
     TChain extends Chain | undefined = Chain | undefined,
     TAccount extends SmartContractAccount | undefined =
       | SmartContractAccount
-      | undefined
+      | undefined,
   >(
-    client: MiddlewareClient<TTransport, TChain, TAccount>
+    client: MiddlewareClient<TTransport, TChain, TAccount>,
   ): { middleware: ClientMiddleware } => ({
     middleware: {
       customMiddleware: overrides.customMiddleware ?? noopMiddleware,

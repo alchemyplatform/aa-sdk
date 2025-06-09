@@ -39,13 +39,13 @@ export default function Home() {
               "flex flex-col lg:flex-1 relative border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none mb-6 lg:mb-0 w-full lg:w-auto m-6 lg:m-0",
               theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
               showCode && "bg-white",
-              !user && "border-none lg:border-solid"
+              !user && "border-none lg:border-solid",
             )}
           >
             <PreviewNav showCode={showCode} setShowCode={setShowCode} />
             <PreviewWrapper showCode={showCode} />
             {/* Toast viewport */}
-            <Viewport className="absolute lg:bottom-10 lg:right-10 bottom-10 right-1/2 translate-x-1/2 lg:translate-x-0 z-50 outline-none" />
+            <Viewport className="fixed lg:bottom-10 lg:right-10 bottom-10 right-1/2 translate-x-1/2 lg:translate-x-0 z-[1000000] outline-none" />
           </div>
         </div>
       </div>

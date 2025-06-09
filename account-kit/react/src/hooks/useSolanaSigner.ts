@@ -32,7 +32,7 @@ export type SignerSet = {
 export const useSolanaSigner = (
   opts: {
     signerSet?: SignerSet; // Used to set a shared signer
-  } = {}
+  } = {},
 ): null | SolanaSigner => {
   const fallbackSigner = useSigner();
   const fallbackSignerStatus = useSignerStatus();

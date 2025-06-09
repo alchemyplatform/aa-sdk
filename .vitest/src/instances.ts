@@ -3,12 +3,13 @@ dotenv.config();
 
 import getPort from "get-port";
 import { createServer } from "prool";
-import { anvil, rundler } from "prool/instances";
+import { anvil } from "prool/instances";
 import { createClient, http, type Chain, type ClientConfig } from "viem";
 import { localhost } from "viem/chains";
 import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
 import { paymasterTransport } from "./paymaster/transport";
+import { rundler } from "./rundler/instance";
 
 export const local060Instance = defineInstance({
   chain: localhost,
@@ -114,7 +115,7 @@ function defineInstance(params: DefineInstanceParams) {
               createClient({
                 chain,
                 transport: http(rpcUrls().bundler),
-              }).extend(() => ({ mode: "bundler" }))
+              }).extend(() => ({ mode: "bundler" })),
             ),
           },
         ],
@@ -145,13 +146,15 @@ function defineInstance(params: DefineInstanceParams) {
       rundler(
         {
           binary: rundlerBinaryPath,
-          entryPointVersion,
+          // ...(entryPointVersion === "0.6.0"
+          //   ? { disableEntryPointV0_7: true }
+          //   : { disableEntryPointV0_6: true }),
           nodeHttp: `http://127.0.0.1:${anvilPort}/${key}`,
           rpc: {
             api: "eth,rundler,debug",
           },
         },
-        { messageBuffer: 1000 }
+        { messageBuffer: 10 },
       ),
     port: bundlerPort,
   });

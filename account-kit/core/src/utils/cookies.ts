@@ -23,7 +23,7 @@ export const cookieStorage = (config?: {
 }): Storage => {
   if (config?.sessionLength) {
     console.warn(
-      "The cookieStorage sessionLength option is deprecated and will be ignored."
+      "The cookieStorage sessionLength option is deprecated and will be ignored.",
     );
   }
   return {
@@ -33,7 +33,7 @@ export const cookieStorage = (config?: {
     clear: function (): void {
       throw new Error(
         "clearing cookies is not supported as this could lead to unexpected behaviour.\n" +
-          " Use removeItem instead or you can manually clear cookies with document.cookie = ''"
+          " Use removeItem instead or you can manually clear cookies with document.cookie = ''",
       );
     },
 
@@ -75,7 +75,7 @@ export const cookieStorage = (config?: {
  */
 export function cookieToInitialState(
   config: AlchemyAccountsConfig,
-  cookie?: string
+  cookie?: string,
 ): StoredState | undefined {
   if (!cookie) return;
 
@@ -99,7 +99,7 @@ export function cookieToInitialState(
 
   const wagmiClientState = wagmiCookieToInitialState(
     config._internal.wagmiConfig,
-    decodeURIComponent(cookie)
+    decodeURIComponent(cookie),
   );
 
   return {

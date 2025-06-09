@@ -28,13 +28,13 @@ import type { ModularAccountV2 } from "../account/common/modularAccountV2Base.js
 export type ModularAccountV2Client<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TChain extends Chain = Chain,
-  TTransport extends Transport | AlchemyTransport = Transport
+  TTransport extends Transport | AlchemyTransport = Transport,
 > = SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
 
 export type CreateModularAccountV2ClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = CreateModularAccountV2Params<TTransport, TSigner> &
   Omit<
     SmartAccountClientConfig<TTransport, TChain>,
@@ -44,7 +44,7 @@ export type CreateModularAccountV2ClientParams<
 export type CreateModularAccountV2AlchemyClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Omit<
   CreateModularAccountV2ClientParams<TTransport, TChain, TSigner>,
   "transport"
@@ -56,22 +56,22 @@ export type CreateModularAccountV2AlchemyClientParams<
 
 export function createModularAccountV2Client<
   TChain extends Chain = Chain,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
   args: CreateModularAccountV2AlchemyClientParams<
     AlchemyTransport,
     TChain,
     TSigner
-  >
+  >,
 ): Promise<ModularAccountV2Client<TSigner, TChain, AlchemyTransport>>;
 
 export function createModularAccountV2Client<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
   args: CreateModularAccountV2ClientParams<TTransport, TChain, TSigner> &
-    NotType<TTransport, AlchemyTransport>
+    NotType<TTransport, AlchemyTransport>,
 ): Promise<ModularAccountV2Client<TSigner, TChain>>;
 
 /**
@@ -108,7 +108,7 @@ export function createModularAccountV2Client<
 export async function createModularAccountV2Client(
   config:
     | CreateModularAccountV2ClientParams
-    | CreateModularAccountV2AlchemyClientParams
+    | CreateModularAccountV2AlchemyClientParams,
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
 

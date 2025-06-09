@@ -32,17 +32,17 @@ import { clientHeaderTrack } from "../../index.js";
  */
 export const waitForUserOperationTransaction: <
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined
+  TChain extends Chain | undefined = Chain | undefined,
 >(
   client: Client<TTransport, TChain, any>,
-  args: WaitForUserOperationTxParameters
+  args: WaitForUserOperationTxParameters,
 ) => Promise<Hex> = async (client_, args) => {
   const client = clientHeaderTrack(client_, "waitForUserOperationTransaction");
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "waitForUserOperationTransaction",
-      client
+      client,
     );
   }
 
@@ -61,14 +61,14 @@ export const waitForUserOperationTransaction: <
       Math.random() * 100;
 
     await new Promise((resolve) =>
-      setTimeout(resolve, txRetryIntervalWithJitterMs)
+      setTimeout(resolve, txRetryIntervalWithJitterMs),
     );
 
     const receipt = await client
       .getUserOperationReceipt(hash as `0x${string}`)
       .catch((e) => {
         Logger.error(
-          `[SmartAccountProvider] waitForUserOperationTransaction error fetching receipt for ${hash}: ${e}`
+          `[SmartAccountProvider] waitForUserOperationTransaction error fetching receipt for ${hash}: ${e}`,
         );
       });
 

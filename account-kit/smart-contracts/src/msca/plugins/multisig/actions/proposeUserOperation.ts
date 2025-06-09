@@ -19,14 +19,15 @@ export async function proposeUserOperation<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
     uo,
     account = client.account,
     overrides: overrides_,
-  }: SendUserOperationParameters<TAccount, undefined>
+  }: SendUserOperationParameters<TAccount, undefined>,
 ): Promise<ProposeUserOperationResult> {
   // these overrides allow us to set a high max fee and PVG upper bound
   const overrides = {
@@ -44,7 +45,7 @@ export async function proposeUserOperation<
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "proposeUserOperation",
-      client
+      client,
     );
   }
 

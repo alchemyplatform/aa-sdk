@@ -14,7 +14,7 @@ type AnonId = { id: string; expiresMs: number };
 
 function getOrCreateAnonId(): AnonId {
   let anon: AnonId | null = JSON.parse(
-    localStorage.getItem(ANON_ID_STORAGE_KEY) ?? "null"
+    localStorage.getItem(ANON_ID_STORAGE_KEY) ?? "null",
   );
 
   if (!anon || anon.expiresMs < Date.now()) {
@@ -30,7 +30,7 @@ function getOrCreateAnonId(): AnonId {
 }
 
 export function createClientLogger<Schema extends EventsSchema = []>(
-  context: LoggerContext
+  context: LoggerContext,
 ): InnerLogger<Schema> {
   const isDev = isClientDevMode();
   if (isDev && !WRITE_IN_DEV) {
@@ -82,7 +82,7 @@ export function createClientLogger<Schema extends EventsSchema = []>(
         integrations: {
           "Segment.io": !isDev,
         },
-      }
+      },
     );
 
     return analytics.ready();

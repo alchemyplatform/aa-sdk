@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import OtpAuthScreen from "./screens/otp-auth";
 import MagicLinkAuthScreen from "./screens/magic-link-auth";
 import OauthScreen from "./screens/oauth";
+import PasskeyAuthScreen from "./screens/passkey-auth";
 
 const linking = {
   enabled: "auto" as const /* Automatically generate paths for all screens */,
@@ -38,6 +39,14 @@ const RootStack = createBottomTabNavigator({
       options: {
         tabBarLabel: "Oauth",
         tabBarIcon: () => <Text>🔐</Text>,
+      },
+    },
+    Passkey: {
+      screen: PasskeyAuthScreen,
+      linking: { path: "passkey" },
+      options: {
+        tabBarLabel: "Passkey",
+        tabBarIcon: () => <Text>🫆</Text>,
       },
     },
   },

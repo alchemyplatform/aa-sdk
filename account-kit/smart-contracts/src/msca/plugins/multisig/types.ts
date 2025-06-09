@@ -28,7 +28,8 @@ export type SignMultisigUserOperationParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   userOperationRequest: UserOperationRequest<TEntryPointVersion>;
   signatures: Signature[];
@@ -39,21 +40,18 @@ export type ProposeUserOperationResult<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   request: UserOperationRequest<TEntryPointVersion>;
   aggregatedSignature: Hex;
   signatureObj: Signature;
 };
 
-export type MultisigUserOperationContext =
-  | {
-      userOpSignatureType: Extract<UserOpSignatureType, "UPPERLIMIT">;
-      aggregatedSignature?: Hex;
-      signatures?: Signature[];
-    }
-  | {
-      aggregatedSignature: Hex;
-      signatures: Signature[];
-      userOpSignatureType: Extract<UserOpSignatureType, "ACTUAL">;
-    };
+export type MultisigUserOperationContext = {
+  userOpSignatureType:
+    | Extract<UserOpSignatureType, "UPPERLIMIT">
+    | Extract<UserOpSignatureType, "ACTUAL">;
+  aggregatedSignature?: Hex;
+  signatures?: Signature[];
+};

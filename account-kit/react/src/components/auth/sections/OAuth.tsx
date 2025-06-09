@@ -92,7 +92,7 @@ export const OAuth = memo(({ ...config }: Props) => {
         config,
         `unhandled authProviderId ${
           (config as any).authProviderId
-        } passed into auth sections`
+        } passed into auth sections`,
       );
   }
 });

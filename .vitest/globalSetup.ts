@@ -8,7 +8,7 @@ import {
   cleanupRundler,
   downloadLatestRundlerRelease,
   isRundlerInstalled,
-} from "./src/rundler";
+} from "./src/rundler/binary";
 
 export default async function () {
   if (!isCi && !(await isRundlerInstalled(rundlerBinaryPath))) {
@@ -20,7 +20,7 @@ export default async function () {
       const shutdown = instance.start();
 
       return shutdown;
-    })
+    }),
   );
 
   return async () => {

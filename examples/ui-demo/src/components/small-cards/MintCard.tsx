@@ -31,8 +31,8 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
   const buttonText = !mintStarted
     ? "Collect NFT"
     : isLoading
-    ? "Collecting NFT..."
-    : "Re-collect NFT";
+      ? "Collecting NFT..."
+      : "Re-collect NFT";
 
   const renderContent = (
     <>
@@ -83,7 +83,15 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
           {!mintStarted ? (
             renderContent
           ) : (
-            <MintStages status={status} transactionUrl={transactionUrl} />
+            <MintStages
+              status={status}
+              transactionUrl={transactionUrl}
+              stageDescriptions={[
+                "Invisibly signing transactions",
+                "Sponsoring gas fees",
+                "Deploying smart account",
+              ]}
+            />
           )}
         </>
       }

@@ -246,7 +246,7 @@ const tokenMetadata: TokenMetadata = {
 const mintLen = getMintLen([ExtensionType.MetadataPointer]);
 const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
 const mintLamports = await connection.getMinimumBalanceForRentExemption(
-  mintLen + metadataLen
+  mintLen + metadataLen,
 );
 
 const mint = stakeAccount.publicKey;
@@ -262,7 +262,7 @@ const instructions = [
     mint,
     publicKey,
     mint,
-    TOKEN_2022_PROGRAM_ID
+    TOKEN_2022_PROGRAM_ID,
   ),
 ];
 /**

@@ -14,7 +14,7 @@ describe("MA v2 Tests: Types", async () => {
   const instance = local070Instance;
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner
+    accounts.fundedAccountOwner,
   );
 
   it("alchemy client instantiated can specify policy id but not for others ", async () => {

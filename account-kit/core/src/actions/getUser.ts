@@ -19,7 +19,7 @@ export type GetUserResult = (User & { type: "eoa" | "sca" }) | null;
  * @returns {GetUserResult} the user if the signer or an EOA are connected
  */
 export const getUser = (
-  config: AlchemyAccountsConfig
+  config: AlchemyAccountsConfig,
 ): (User & { type: "eoa" | "sca" }) | null => {
   const user = config.store.getState().user;
   if (user == null) return user ?? null;
