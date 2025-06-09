@@ -1,10 +1,7 @@
 import * as AACoreModule from "@aa-sdk/core";
 import {
   createSmartAccountClient,
-  deepHexlify,
   erc7677Middleware,
-  InvalidUserOperationError,
-  isValidRequest,
   LocalAccountSigner,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
@@ -151,8 +148,9 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    // send UO with webauthn gas estimator
-    const builtUO = await provider.buildUserOperation({
+    const startingAddressBalance = await getTargetBalance();
+
+    const result = await provider.sendUserOperation({
       uo: {
         target: target,
         value: sendAmount,
@@ -160,32 +158,22 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    const request = deepHexlify(builtUO);
-    if (!isValidRequest(request)) {
-      throw new InvalidUserOperationError(builtUO);
-    }
+    await provider.waitForUserOperationTransaction(result).catch(async () => {
+      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
+        uoToDrop: result.request,
+      });
+      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+    });
 
-    const uoHash = provider.account
-      .getEntryPoint()
-      .getUserOperationHash(request);
-
-    let signedUOHash = await provider.account.signUserOperationHash(uoHash);
-
-    const signedUO = await provider.signUserOperation({ uoStruct: builtUO });
-
-    signedUO.signature = signedUOHash;
-
-    const response = await provider.sendRawUserOperation(
-      signedUO,
-      provider.account.getEntryPoint().address,
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount,
     );
-
-    await provider.waitForUserOperationTransaction({ hash: response });
   });
 
   it("sends UO with webauthn session key", async () => {
-    const { provider } = await givenWebAuthnProvider();
-    const _provider = provider.extend(installValidationActions);
+    const provider = (await givenWebAuthnProvider()).provider.extend(
+      installValidationActions,
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -196,10 +184,10 @@ describe("MA v2 Tests", async () => {
       await givenWebAuthnProvider();
     const { x, y } = parsePublicKey(credential.publicKey);
 
-    const result = await _provider.installValidation({
+    const result = await provider.installValidation({
       validationConfig: {
         moduleAddress: getDefaultWebauthnValidationModuleAddress(
-          _provider.chain,
+          provider.chain,
         ),
         entityId: 1,
         isGlobal: true,
@@ -215,8 +203,14 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationTransaction(result);
+    await provider.waitForUserOperationTransaction(result).catch(async () => {
+      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
+        uoToDrop: result.request,
+      });
+      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+    });
 
+    // fund session key
     await setBalance(instance.getClient(), {
       address: sessionKeyProvider.getAddress(),
       value: parseEther("2"),
@@ -230,7 +224,16 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    await sessionKeyProvider.waitForUserOperationTransaction(sessionKeyResult);
+    await provider
+      .waitForUserOperationTransaction(sessionKeyResult)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: sessionKeyResult.request,
+          },
+        );
+        await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+      });
   });
 
   it.fails(

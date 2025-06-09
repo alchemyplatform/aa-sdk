@@ -1,4 +1,8 @@
-import type { AlchemySigner } from "@account-kit/core";
+import type {
+  AlchemySigner,
+  ModularAccountV2,
+  WebauthnModularAccountV2,
+} from "@account-kit/core";
 import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import {
@@ -26,7 +30,7 @@ type Client = ModularAccountV2Client<
   AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
 > &
   InstallValidationActions<
-    AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
+    ModularAccountV2<AlchemySigner | LocalAccountSigner<PrivateKeyAccount>>
   >;
 
 // Hook that creates an MAv2 client that can be used for things that

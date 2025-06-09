@@ -191,7 +191,6 @@ export function installValidationActions<
 
     if (isSmartAccountWithSigner(account)) {
       if (!isSmartAccountClient(client)) {
-        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
         throw new IncompatibleClientError(
           "SmartAccountClient",
           "installValidation",
