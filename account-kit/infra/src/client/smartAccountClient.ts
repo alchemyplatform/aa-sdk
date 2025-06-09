@@ -13,6 +13,7 @@ import {
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
+import { headersUpdate } from "../alchemyTrackerHeaders.js";
 import {
   alchemy,
   convertHeadersToObject,
@@ -20,6 +21,7 @@ import {
 } from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
+import type { PolicyToken } from "../middleware/gasManager.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
 import { alchemyUserOperationSimulator } from "../middleware/userOperationSimulator.js";
 import {
@@ -27,8 +29,6 @@ import {
   type AlchemySmartAccountClientActions,
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
-import { headersUpdate } from "../alchemyTrackerHeaders.js";
-import type { PolicyToken } from "../middleware/gasManager.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner,
@@ -113,7 +113,7 @@ export function createAlchemySmartAccountClient<
     | UserOperationContext
     | undefined,
 >(
-  params: AlchemySmartAccountClientConfig<TChain, TAccount, TContext>,
+  params: AlchemySmartAccountClientConfig<TChain, TAccount, TContext>
 ): AlchemySmartAccountClient<TChain, TAccount, Record<string, never>, TContext>;
 
 /**
@@ -134,7 +134,7 @@ export function createAlchemySmartAccountClient<
  * @returns {AlchemySmartAccountClient} An instance of `AlchemySmartAccountClient` configured based on the provided options
  */
 export function createAlchemySmartAccountClient(
-  config: AlchemySmartAccountClientConfig,
+  config: AlchemySmartAccountClientConfig
 ): AlchemySmartAccountClient {
   if (!config.chain) {
     throw new ChainNotFoundError();
@@ -181,8 +181,8 @@ export function createAlchemySmartAccountClient(
       const newTransport = alchemy({ ...oldConfig });
       newTransport.updateHeaders(
         headersUpdate(breadcrumb)(
-          convertHeadersToObject(dynamicFetchOptions?.headers),
-        ),
+          convertHeadersToObject(dynamicFetchOptions?.headers)
+        )
       );
       return createAlchemySmartAccountClient({
         ...config,
