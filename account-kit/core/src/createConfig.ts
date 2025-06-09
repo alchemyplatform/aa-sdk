@@ -116,6 +116,7 @@ export const createConfig = (
   const config: AlchemyAccountsConfig = {
     store: store,
     accountCreationHint: params.accountCreationHint,
+    mode: params.mode ?? "local",
     _internal: {
       ssr,
       createSigner: createSigner ?? createWebSigner, // <-- Default to web signer if not provided
