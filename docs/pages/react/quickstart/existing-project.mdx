@@ -171,6 +171,13 @@ export const queryClient = new QueryClient();
 
 Remember to replace `"YOUR_API_KEY"` with the API key from step 2.
 
+<Tip>
+  **Important:** The chain you import (like `arbitrumSepolia`) must come from
+  the `@account-kit/infra` package, not from `viem`. Additionally, make sure
+  this chain is enabled in both your Alchemy app and Account Kit config policy
+  in the dashboard.
+</Tip>
+
 ## 4. Set up the Alchemy Provider
 
 Wrap your application with the Alchemy Provider to enable embedded wallet functionality.
