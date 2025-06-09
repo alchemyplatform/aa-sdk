@@ -67,10 +67,10 @@
     jwt-decode "^4.0.0"
     zod "^3.22.4"
 
-"@account-kit/wallet-client@^0.1.0-alpha.4":
-  version "0.1.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@account-kit/wallet-client/-/wallet-client-0.1.0-alpha.4.tgz#569933cf8900c90425922438313b11b002a21671"
-  integrity sha512-Tw06XdYYjozrpX4o4nwrZvnfReY6ubMNE70EdYFaZRfP+PtxsrXQPM83cGv0ZCRKNC0jJuYBo2/TiNuHCUIEtA==
+"@account-kit/wallet-client@^0.1.0-alpha.6":
+  version "0.1.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@account-kit/wallet-client/-/wallet-client-0.1.0-alpha.6.tgz#31cf0a39078a8419760cea5f216549629fd75486"
+  integrity sha512-QaxRRI3da0qnVl1jfMWOHal1sV9QiTmLI8w98JPJp2Cm1/AXxyj/u6JRaN01znmriT1tlFi0rTj/ZYiqd/7QiA==
   dependencies:
     "@aa-sdk/core" "^4.34.0"
     "@account-kit/infra" "^4.34.0"
