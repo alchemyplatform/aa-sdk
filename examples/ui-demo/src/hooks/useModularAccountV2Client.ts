@@ -1,8 +1,4 @@
-import type {
-  AlchemySigner,
-  ModularAccountV2,
-  WebauthnModularAccountV2,
-} from "@account-kit/core";
+import type { AlchemySigner, ModularAccountV2 } from "@account-kit/core";
 import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import {
