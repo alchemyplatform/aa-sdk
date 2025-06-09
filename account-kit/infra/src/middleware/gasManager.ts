@@ -36,7 +36,7 @@ import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
 import {
   PermitTypes,
-  EIP712NoncesAbi,
+  EIP20Abis,
   getAlchemyPaymasterAddress,
 } from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
@@ -405,7 +405,7 @@ const generateSignedPermit = async <
   let decimalsFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
-      abi: parseAbi(EIP712NoncesAbi),
+      abi: parseAbi(EIP20Abis),
       functionName: "decimals",
       args: [],
     }),
@@ -414,7 +414,7 @@ const generateSignedPermit = async <
   let nonceFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
-      abi: parseAbi(EIP712NoncesAbi),
+      abi: parseAbi(EIP20Abis),
       functionName: "nonces",
       args: [account.address],
     }),

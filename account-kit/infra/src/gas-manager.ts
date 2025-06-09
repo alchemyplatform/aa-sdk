@@ -1,4 +1,4 @@
-import type { Address, Chain, Hex } from "viem";
+import { encodeFunctionData, type Address, type Chain, type Hex } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -99,12 +99,23 @@ export const PermitTypes = {
   ],
 } as const;
 
-export const EIP712NoncesAbi = [
+export const EIP20Abis = [
   "function nonces(address owner) external view returns (uint)",
   "function decimals() public view returns (uint8)",
   "function balanceOf(address owner) external view returns (uint256)",
   "function allowance(address owner, address spender) external view returns (uint256)",
 ] as const;
+
+export const approveTokenCallData = (
+  paymasterAddress: Address,
+  allowance: BigInt,
+) => {
+  return encodeFunctionData({
+    abi: EIP20Abis,
+    functionName: "approve",
+    args: [paymasterAddress, allowance],
+  });
+};
 
 export type PermitMessage = {
   owner: Hex;
