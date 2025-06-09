@@ -5,7 +5,9 @@ import * as path from "node:path";
 import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
+import { getDocsYaml } from "../fern-sidebar.js";
 import * as logger from "../logger.js";
+import packageMap from "../package-map.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
 
 export type GenerateOptions = {
@@ -29,6 +31,12 @@ export async function generate(options: GenerateOptions) {
     `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`,
   );
 
+  const docsYaml = await getDocsYaml();
+
+  if (!docsYaml) {
+    return;
+  }
+
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
     logger.error(`File not found: ${sourceFilePath}`);
@@ -38,6 +46,12 @@ export async function generate(options: GenerateOptions) {
   const packageJSON = await getPackageJson(sourceFilePath);
   if (!packageJSON) {
     logger.error(`Could not find package.json for ${sourceFilePath}`);
+    return;
+  }
+
+  const packageName = packageMap[packageJSON.name as keyof typeof packageMap];
+  if (!packageName) {
+    logger.error(`Could not find package name for ${packageJSON.name}`);
     return;
   }
 
