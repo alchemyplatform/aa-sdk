@@ -224,15 +224,16 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    await provider
+    await sessionKeyProvider
       .waitForUserOperationTransaction(sessionKeyResult)
       .catch(async () => {
-        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
-          {
+        const dropAndReplaceResult =
+          await sessionKeyProvider.dropAndReplaceUserOperation({
             uoToDrop: sessionKeyResult.request,
-          },
+          });
+        await sessionKeyProvider.waitForUserOperationTransaction(
+          dropAndReplaceResult,
         );
-        await provider.waitForUserOperationTransaction(dropAndReplaceResult);
       });
   });
 
