@@ -159,16 +159,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
-                  - page: useMFA
-                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
-                  - page: useRemoveEmail
-                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveEmail.mdx
-                  - page: useRemoveOauthProvider
-                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveOauthProvider.mdx
-                  - page: useRemovePasskey
-                    path: wallets/pages/reference/account-kit/react/hooks/useRemovePasskey.mdx
-                  - page: useSetEmail
-                    path: wallets/pages/reference/account-kit/react/hooks/useSetEmail.mdx
                   - page: useSigner
                     path: wallets/pages/reference/account-kit/react/hooks/useSigner.mdx
                   - page: useSignerStatus
@@ -213,6 +203,22 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
               - section: Other Hooks
                 contents:
+                  - page: useAddOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
+                  - page: useAuthContext
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthContext.mdx
+                  - page: useListAuthMethods
+                    path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
+                  - page: useMFA
+                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
+                  - page: useRemoveEmail
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveEmail.mdx
+                  - page: useRemoveOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveOauthProvider.mdx
+                  - page: useRemovePasskey
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemovePasskey.mdx
+                  - page: useSetEmail
+                    path: wallets/pages/reference/account-kit/react/hooks/useSetEmail.mdx
                   - page: useSolanaConnection
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaConnection.mdx
                   - page: useSolanaSignMessage
