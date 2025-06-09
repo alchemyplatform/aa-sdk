@@ -38,6 +38,7 @@ import {
   type AuthLinkingPrompt,
   type OauthProviderInfo,
   type IdTokenOnly,
+  type AuthMethods,
 } from "./client/types.js";
 import { NotAuthenticatedError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
@@ -734,6 +735,38 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       };
     });
 
+  /*
+   * Sets the email for the authenticated user, allowing them to login with that
+   * email.
+   *
+   * You must contact Alchemy to enable this feature for your team, as there are
+   * important security considerations. In particular, you must not call this
+   * without first validating that the user owns this email account.
+   *
+   * @param {string} email The email to set for the user
+   * @returns {Promise<void>} A promise that resolves when the email is set
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  setEmail: (email: string) => Promise<void> = SignerLogger.profiled(
+    "BaseAlchemySigner.setEmail",
+    async (email) => {
+      return this.inner.setEmail(email);
+    },
+  );
+
+  /**
+   * Removes the email for the authenticated user, disallowing them from login with that email.
+   *
+   * @returns {Promise<void>} A promise that resolves when the email is removed
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  removeEmail: () => Promise<void> = SignerLogger.profiled(
+    "BaseAlchemySigner.removeEmail",
+    async () => {
+      return this.inner.removeEmail();
+    },
+  );
+
   /**
    * Adds a passkey to the user's account
    *
@@ -762,6 +795,41 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     SignerLogger.profiled("BaseAlchemySigner.addPasskey", async (params) => {
       return this.inner.addPasskey(params ?? {});
     });
+
+  /**
+   * Removes a passkey from a user's account
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const authMethods = await signer.listAuthMethods();
+   * const passkey = authMethods.passkeys[0];
+   *
+   * const result = await signer.removePasskey(passkey.authenticatorId);
+   * ```
+   *
+   * @param {CredentialCreationOptions | undefined} params optional parameters for the passkey creation
+   * @returns {Promise<string[]>} an array of the authenticator ids added to the user
+   */
+  removePasskey: (authenticatorId: string) => Promise<void> =
+    SignerLogger.profiled(
+      "BaseAlchemySigner.removePasskey",
+      async (authenticatorId) => {
+        return this.inner.removePasskey(authenticatorId);
+      },
+    );
 
   getPasskeyStatus: () => Promise<{ isPasskeyAdded: boolean }> =
     SignerLogger.profiled("BaseAlchemySigner.getPasskeyStatus", async () => {
@@ -1021,16 +1089,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   /**
-   * Retrieves a list of OAuth provider information associated with the authenticated user.
+   * Retrieves a list of auth methods associated with the authenticated user.
    *
-   * @returns {Promise<OauthProviderInfo[]>} A promise that resolves to an array of `OauthProviderInfo` objects
-   * @throws {NotAuthenticatedError} Throws an error if the user is not authenticated
+   * @returns {Promise<AuthMethods>} A promise that resolves to an `AuthMethods` object containing the user's email, OAuth providers, and passkeys.
+   * @throws {NotAuthenticatedError} Thrown if the user is not authenticated
    */
-  public listOauthProviders = async (): Promise<OauthProviderInfo[]> => {
+  public listAuthMethods = async (): Promise<AuthMethods> => {
     if (!this.inner.getUser()) {
       throw new NotAuthenticatedError();
     }
-    return this.inner.listOauthProviders();
+    return this.inner.listAuthMethods();
   };
 
   private authenticateWithOtp = async (

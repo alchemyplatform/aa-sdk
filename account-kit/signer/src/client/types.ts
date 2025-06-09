@@ -173,6 +173,13 @@ export type SignerEndpoints = [
     };
   },
   {
+    Route: "/v1/update-email-auth";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
     Route: "/v1/add-oauth-provider";
     Body: {
       stampedRequest: TSignedRequest;
@@ -187,9 +194,9 @@ export type SignerEndpoints = [
     Response: void;
   },
   {
-    Route: "/v1/list-oauth-providers";
+    Route: "/v1/list-auth-methods";
     Body: {};
-    Response: { oauthProviders: OauthProviderInfo[] };
+    Response: AuthMethods;
   },
   {
     Route: "/v1/prepare-oauth";
@@ -365,11 +372,23 @@ export type AddOauthProviderParams = {
   oidcToken: string;
 };
 
+export type AuthMethods = {
+  email?: string;
+  oauthProviders: OauthProviderInfo[];
+  passkeys: PasskeyInfo[];
+};
+
 export type OauthProviderInfo = {
   providerId: string;
   issuer: string;
   providerName?: string;
   userDisplayName?: string;
+};
+
+export type PasskeyInfo = {
+  authenticatorId: string;
+  name: string;
+  createdAt: number;
 };
 
 export type experimental_CreateApiKeyParams = {
