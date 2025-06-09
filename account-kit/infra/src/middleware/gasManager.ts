@@ -3,7 +3,6 @@ import type {
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
-  Erc7677Client,
   Multiplier,
   SmartContractAccount,
   UserOperationFeeOptions,
@@ -26,12 +25,10 @@ import {
 import {
   fromHex,
   isHex,
-  toHex,
   type Hex,
   encodeAbiParameters,
   encodeFunctionData,
   parseAbi,
-  sliceHex,
 } from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 import type { AlchemyTransport } from "../alchemyTransport.js";
