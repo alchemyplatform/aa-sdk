@@ -70,6 +70,7 @@ import {
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
+import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
@@ -78,9 +79,8 @@ import {
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { HookType } from "../actions/common/types.js";
-import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
-import { parsePublicKey } from "webauthn-p256";
 import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
+import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {

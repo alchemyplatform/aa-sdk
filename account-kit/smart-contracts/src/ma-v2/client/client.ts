@@ -1,12 +1,11 @@
 import {
-  type SmartAccountClient,
-  type SmartAccountSigner,
-  type SmartAccountClientConfig,
-  type NotType,
   createSmartAccountClient,
   default7702GasEstimator,
   default7702UserOpSigner,
   webauthnGasEstimator,
+  type SmartAccountClient,
+  type SmartAccountClientConfig,
+  type SmartAccountSigner,
 } from "@aa-sdk/core";
 import { type Chain, type Transport } from "viem";
 
@@ -25,39 +24,47 @@ import {
 } from "@account-kit/infra";
 import type { LightAccount } from "../../light-account/accounts/account.js";
 
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import type {
   ModularAccountV2,
   WebauthnModularAccountV2,
 } from "../account/common/modularAccountV2Base.js";
-import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 
 export type ModularAccountV2Client<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TChain extends Chain = Chain,
   TTransport extends Transport | AlchemyTransport = Transport,
-> = SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
+> = TTransport extends AlchemyTransport
+  ? AlchemySmartAccountClient<TChain, ModularAccountV2<TSigner>>
+  : SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
 
 export type WebauthnModularAccountV2Client<
   TChain extends Chain = Chain,
   TTransport extends Transport | AlchemyTransport = Transport,
-> = SmartAccountClient<TTransport, TChain, WebauthnModularAccountV2>;
+> = TTransport extends AlchemyTransport
+  ? AlchemySmartAccountClient<TChain, WebauthnModularAccountV2>
+  : SmartAccountClient<TTransport, TChain, WebauthnModularAccountV2>;
 
 export type CreateModularAccountV2ClientParams<
-  TTransport extends Transport = Transport,
+  TTransport extends Transport | AlchemyTransport = Transport,
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = CreateModularAccountV2Params<TTransport, TSigner> &
   Omit<
-    SmartAccountClientConfig<TTransport, TChain>,
+    TTransport extends AlchemyTransport
+      ? AlchemySmartAccountClientConfig<TChain>
+      : SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
   >;
 
 export type CreateWebauthnModularAccountV2ClientParams<
-  TTransport extends Transport = Transport,
+  TTransport extends Transport | AlchemyTransport = Transport,
   TChain extends Chain = Chain,
 > = CreateWebauthnModularAccountV2Params<TTransport> &
   Omit<
-    SmartAccountClientConfig<TTransport, TChain>,
+    TTransport extends AlchemyTransport
+      ? AlchemySmartAccountClientConfig<TChain>
+      : SmartAccountClientConfig<TTransport, TChain>,
     "transport" | "account" | "chain"
   > & {
     credential: ToWebAuthnAccountParameters["credential"];
@@ -94,17 +101,15 @@ export function createModularAccountV2Client<
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  args: CreateModularAccountV2ClientParams<TTransport, TChain, TSigner> &
-    NotType<TTransport, AlchemyTransport>,
-): Promise<ModularAccountV2Client<TSigner, TChain>>;
+  args: CreateModularAccountV2ClientParams<TTransport, TChain, TSigner>,
+): Promise<ModularAccountV2Client<TSigner, TChain, TTransport>>;
 
 export function createModularAccountV2Client<
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
 >(
-  args: CreateWebauthnModularAccountV2ClientParams<TTransport, TChain> &
-    NotType<TTransport, AlchemyTransport>,
-): Promise<WebauthnModularAccountV2Client<TChain>>;
+  args: CreateWebauthnModularAccountV2ClientParams<TTransport, TChain>,
+): Promise<WebauthnModularAccountV2Client<TChain, TTransport>>;
 /**
  * Creates a Modular Account V2 client using the provided configuration parameters.
  *
