@@ -84,7 +84,7 @@ export async function generate(options: GenerateOptions) {
   // Generate and update the docs.yml file with the new SDK Reference section
   try {
     await sidebarBuilder.updateDocsYaml();
-    logger.info("Successfully updated docs.yml");
+    logger.info("Successfully updated docs.yml for package:", packageJSON.name);
   } catch (error) {
     logger.error("Failed to update docs.yml:", error);
   }

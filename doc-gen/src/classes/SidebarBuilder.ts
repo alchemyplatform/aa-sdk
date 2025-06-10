@@ -258,17 +258,15 @@ class SidebarBuilder {
     });
 
     if (!docsYamlPath) {
-      logger.error("Could not find docs.yml file");
-      return;
+      throw new Error("Could not find docs.yml file");
     }
 
     const lockAcquired = await acquireLock(docsYamlPath);
 
     if (!lockAcquired) {
-      logger.error(
+      throw new Error(
         `Failed to acquire lock for docs.yml after ${MAX_LOCK_WAIT_TIME}ms`,
       );
-      return;
     }
 
     try {
@@ -277,28 +275,24 @@ class SidebarBuilder {
 
       const sectionName = packageMap[this.packageName];
       if (!sectionName) {
-        logger.error(
+        throw new Error(
           `No section mapping found for package: ${this.packageName}`,
         );
-        return;
       }
 
       const navigation = doc.get("navigation");
       if (!(navigation instanceof YAMLSeq)) {
-        logger.error("Could not find navigation array in docs.yml");
-        return;
+        throw new Error("Could not find navigation section in docs.yml");
       }
 
       const walletsTab = navigation.items[0]; // assume wallets tab is first (it should be the only section in this repo)
       if (!(walletsTab instanceof YAMLMap)) {
-        logger.error("Could not find wallets tab in docs.yml");
-        return;
+        throw new Error("Could not find wallets tab in docs.yml");
       }
 
       const layout = walletsTab.get("layout");
       if (!(layout instanceof YAMLSeq)) {
-        logger.error("Could not find layout array in docs.yml");
-        return;
+        throw new Error("Could not find layout section in docs.yml");
       }
 
       const targetSection: YAMLMap | undefined = layout.items.find(
@@ -307,16 +301,14 @@ class SidebarBuilder {
       );
 
       if (!targetSection) {
-        logger.error(`Could not find section "${sectionName}" in docs.yml`);
-        return;
+        throw new Error(`Could not find section "${sectionName}" in docs.yml`);
       }
 
       const contents = targetSection.get("contents");
       if (!(contents instanceof YAMLSeq)) {
-        logger.error(
+        throw new Error(
           `Could not find contents array in section "${sectionName}"`,
         );
-        return;
       }
 
       const sdkRefIndex = contents.items.findIndex(
@@ -340,19 +332,12 @@ class SidebarBuilder {
       if (sdkRefIndex >= 0) {
         // Replace existing SDK Reference section
         contents.items[sdkRefIndex] = newSdkRefsItem;
-        logger.info(
-          `Replaced existing SDK Reference section in "${sectionName}"`,
-        );
       } else {
         // Add new SDK Reference section at the end if it doesn't exist
         contents.items.push(newSdkRefsItem);
-        logger.info(`Added new SDK Reference section to "${sectionName}"`);
       }
 
       fs.writeFileSync(docsYamlPath, doc.toString());
-      logger.info(
-        `Successfully updated docs.yml for package: ${this.packageName}`,
-      );
     } finally {
       // Always release the lock, even if an error occurred
       await releaseLock(docsYamlPath);
