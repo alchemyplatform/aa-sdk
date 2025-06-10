@@ -262,7 +262,7 @@ class SidebarBuilder {
     }
 
     const yamlContent = fs.readFileSync(docsYamlPath, "utf-8");
-    const doc = parseDocument(yamlContent);
+    const doc = parseDocument<YAMLMap>(yamlContent);
 
     const sectionName = packageMap[this.packageName];
     if (!sectionName) {
@@ -276,7 +276,7 @@ class SidebarBuilder {
       return;
     }
 
-    const walletsTab = navigation.items[0]; // assume wallets tab is first (it should always be, its the only tab in this repo)
+    const walletsTab = navigation.items[0]; // assume wallets tab is first (it should be the only section in this repo)
     if (!(walletsTab instanceof YAMLMap)) {
       logger.error("Could not find wallets tab in docs.yml");
       return;
@@ -309,27 +309,27 @@ class SidebarBuilder {
         item instanceof YAMLMap && item.get("section") === sdkReferenceSection,
     );
 
-    const newSdkSection = this.generateSdkReferenceSection();
+    const newSdkRefsSection = this.generateSdkReferenceSection();
 
-    if (!newSdkSection) {
+    if (!newSdkRefsSection) {
       logger.warn(
         `No SDK Reference section generated for package: ${this.packageName}`,
       );
       return;
     }
 
-    const newSdkDoc = parseDocument(newSdkSection);
-    const newSdkItem = newSdkDoc.contents;
+    const newSdkRefsDoc = parseDocument(newSdkRefsSection);
+    const newSdkRefsItem = newSdkRefsDoc.contents;
 
     if (sdkRefIndex >= 0) {
       // Replace existing SDK Reference section
-      contents.items[sdkRefIndex] = newSdkItem;
+      contents.items[sdkRefIndex] = newSdkRefsItem;
       logger.info(
         `Replaced existing SDK Reference section in "${sectionName}"`,
       );
     } else {
       // Add new SDK Reference section at the end if it doesn't exist
-      contents.items.push(newSdkItem);
+      contents.items.push(newSdkRefsItem);
       logger.info(`Added new SDK Reference section to "${sectionName}"`);
     }
 
