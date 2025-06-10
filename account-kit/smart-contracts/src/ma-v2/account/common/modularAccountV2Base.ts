@@ -33,6 +33,8 @@ import { nativeSMASigner } from "../nativeSMASigner.js";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
 
+export type ModularAccountsV2 = ModularAccountV2 | WebauthnModularAccountV2;
+
 export type SignerEntity = {
   isGlobalValidation: boolean;
   entityId: number;

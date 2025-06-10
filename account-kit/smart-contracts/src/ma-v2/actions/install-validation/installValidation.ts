@@ -5,7 +5,6 @@ import {
   type GetEntryPointFromAccount,
   IncompatibleClientError,
   type SendUserOperationResult,
-  type SmartContractAccount,
   type UserOperationOverridesParameter,
   isSmartAccountClient,
   isSmartAccountWithSigner,
@@ -29,12 +28,15 @@ import {
   serializeValidationConfig,
 } from "../common/utils.js";
 
-import { isModularAccountV2 } from "../../account/common/modularAccountV2Base.js";
+import {
+  isModularAccountV2,
+  type ModularAccountsV2,
+} from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
     | undefined,
 > = {
   validationConfig: ValidationConfig;
@@ -48,8 +50,8 @@ export type InstallValidationParams<
   GetAccountParameter<TAccount>;
 
 export type UninstallValidationParams<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
     | undefined,
 > = {
   moduleAddress: Address;
@@ -60,8 +62,8 @@ export type UninstallValidationParams<
   GetAccountParameter<TAccount>;
 
 export type InstallValidationActions<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
     | undefined,
 > = {
   installValidation: (
@@ -126,8 +128,8 @@ export type InstallValidationActions<
 export function installValidationActions<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
     | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
@@ -278,7 +280,7 @@ export function installValidationActions<
         entityId,
         uninstallData,
         hookUninstallDatas,
-        account: account,
+        account,
       });
 
       return client.sendUserOperation({
