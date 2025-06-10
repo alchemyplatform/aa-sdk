@@ -69,6 +69,7 @@
     "ora": "^8.0.1",
     "pathe": "^1.1.2",
     "picocolors": "^1.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "yaml": "^2.8.0"
   }
 }

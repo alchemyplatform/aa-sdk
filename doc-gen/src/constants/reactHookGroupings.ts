@@ -1,4 +1,4 @@
-export const hookGroupings = {
+const reactHookGroupings = {
   Authentication: [
     "useAuthModal",
     "useAddPasskey",
@@ -28,3 +28,5 @@ export const hookGroupings = {
     "useAuthError",
   ],
 };
+
+export default reactHookGroupings;

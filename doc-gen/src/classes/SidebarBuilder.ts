@@ -1,27 +1,13 @@
 import { findUp } from "find-up";
 import fs from "fs-extra";
 import ts from "typescript";
+import { parseDocument, YAMLMap, YAMLSeq } from "yaml";
+import packageMap from "../constants/packageMap.js";
+import hookGroupings from "../constants/reactHookGroupings.js";
 import * as logger from "../logger.js";
-import { hookGroupings } from "../react-hook-groupings.js";
 import { getFunctionName } from "../templates/functionTemplate.js";
 
 const sdkReferenceSection = "SDK Reference";
-
-export const getDocsYaml = async () => {
-  const docsYamlPath = await findUp("docs/docs.yml", {
-    cwd: process.cwd(),
-    type: "file",
-  });
-
-  if (!docsYamlPath) {
-    logger.error("Could not find docs.yml file");
-    return;
-  }
-
-  const yamlContent = fs.readFileSync(docsYamlPath, "utf-8");
-
-  return yamlContent;
-};
 
 interface SidebarEntry {
   name: string;
@@ -134,18 +120,18 @@ class SidebarBuilder {
     const functionEntries = this.entries.filter((e) => e.type === "function");
     const classEntries = this.groupClassEntries();
 
-    let yaml = `          - section: ${sdkReferenceSection}\n`;
-    yaml += `            path: wallets/pages/reference/${this.packageName}/index.mdx\n`;
-    yaml += `            contents:\n`;
+    let yaml = `section: ${sdkReferenceSection}\n`;
+    yaml += `path: wallets/pages/reference/${this.packageName}/index.mdx\n`;
+    yaml += `contents:\n`;
 
     if (componentEntries.length > 0) {
-      yaml += `              - section: Components\n`;
-      yaml += `                contents:\n`;
+      yaml += `  - section: Components\n`;
+      yaml += `    contents:\n`;
 
       componentEntries.sort((a, b) => a.name.localeCompare(b.name));
       for (const entry of componentEntries) {
-        yaml += `                  - page: ${entry.name}\n`;
-        yaml += `                    path: ${entry.path}\n`;
+        yaml += `      - page: ${entry.name}\n`;
+        yaml += `        path: ${entry.path}\n`;
       }
     }
 
@@ -155,31 +141,31 @@ class SidebarBuilder {
       );
 
       if (groupHooks.length > 0) {
-        yaml += `              - section: ${groupName}\n`;
-        yaml += `                contents:\n`;
+        yaml += `  - section: ${groupName}\n`;
+        yaml += `    contents:\n`;
 
         groupHooks.sort((a, b) => a.name.localeCompare(b.name));
         for (const hook of groupHooks) {
-          yaml += `                  - page: ${hook.name}\n`;
-          yaml += `                    path: ${hook.path}\n`;
+          yaml += `      - page: ${hook.name}\n`;
+          yaml += `        path: ${hook.path}\n`;
         }
       }
     }
 
     if (functionEntries.length > 0) {
-      yaml += `              - section: Functions\n`;
-      yaml += `                contents:\n`;
+      yaml += `  - section: Functions\n`;
+      yaml += `    contents:\n`;
 
       functionEntries.sort((a, b) => a.name.localeCompare(b.name));
       for (const entry of functionEntries) {
-        yaml += `                  - page: ${entry.name}\n`;
-        yaml += `                    path: ${entry.path}\n`;
+        yaml += `      - page: ${entry.name}\n`;
+        yaml += `        path: ${entry.path}\n`;
       }
     }
 
     if (Object.keys(classEntries).length > 0) {
-      yaml += `              - section: Classes\n`;
-      yaml += `                contents:\n`;
+      yaml += `  - section: Classes\n`;
+      yaml += `    contents:\n`;
 
       const sortedClassNames = Object.keys(classEntries).sort();
       for (const className of sortedClassNames) {
@@ -187,16 +173,16 @@ class SidebarBuilder {
 
         if (methods.length === 1) {
           const method = methods[0];
-          yaml += `                  - page: ${className}\n`;
-          yaml += `                    path: ${method.path}\n`;
+          yaml += `      - page: ${className}\n`;
+          yaml += `        path: ${method.path}\n`;
         } else {
-          yaml += `                  - section: ${className}\n`;
-          yaml += `                    contents:\n`;
+          yaml += `      - section: ${className}\n`;
+          yaml += `        contents:\n`;
 
           methods.sort((a, b) => a.name.localeCompare(b.name));
           for (const method of methods) {
-            yaml += `                      - page: ${method.name}\n`;
-            yaml += `                        path: ${method.path}\n`;
+            yaml += `          - page: ${method.name}\n`;
+            yaml += `            path: ${method.path}\n`;
           }
         }
       }
@@ -211,25 +197,25 @@ class SidebarBuilder {
     );
     const classEntries = this.groupClassEntries();
 
-    let yaml = `          - section: ${sdkReferenceSection}\n`;
-    yaml += `            path: wallets/pages/reference/${this.packageName}/index.mdx\n`;
-    yaml += `            contents:\n`;
+    let yaml = `section: ${sdkReferenceSection}\n`;
+    yaml += `path: wallets/pages/reference/${this.packageName}/index.mdx\n`;
+    yaml += `contents:\n`;
 
     if (functionEntries.length > 0) {
-      yaml += `              - section: Functions\n`;
-      yaml += `                contents:\n`;
+      yaml += `  - section: Functions\n`;
+      yaml += `    contents:\n`;
 
       functionEntries.sort((a, b) => a.name.localeCompare(b.name));
 
       for (const entry of functionEntries) {
-        yaml += `                  - page: ${entry.name}\n`;
-        yaml += `                    path: ${entry.path}\n`;
+        yaml += `      - page: ${entry.name}\n`;
+        yaml += `        path: ${entry.path}\n`;
       }
     }
 
     if (Object.keys(classEntries).length > 0) {
-      yaml += `              - section: Classes\n`;
-      yaml += `                contents:\n`;
+      yaml += `  - section: Classes\n`;
+      yaml += `    contents:\n`;
 
       const sortedClassNames = Object.keys(classEntries).sort();
 
@@ -239,25 +225,118 @@ class SidebarBuilder {
         // If class only has one method (usually constructor), make it a page instead of a section
         if (methods.length === 1) {
           const method = methods[0];
-          yaml += `                  - page: ${className}\n`;
-          yaml += `                    path: ${method.path}\n`;
+          yaml += `      - page: ${className}\n`;
+          yaml += `        path: ${method.path}\n`;
         } else {
           // If class has multiple methods, make it a section with nested pages
-          yaml += `                  - section: ${className}\n`;
-          yaml += `                    contents:\n`;
+          yaml += `      - section: ${className}\n`;
+          yaml += `        contents:\n`;
 
-          // Sort methods alphabetically
           methods.sort((a, b) => a.name.localeCompare(b.name));
 
           for (const method of methods) {
-            yaml += `                      - page: ${method.name}\n`;
-            yaml += `                        path: ${method.path}\n`;
+            yaml += `          - page: ${method.name}\n`;
+            yaml += `            path: ${method.path}\n`;
           }
         }
       }
     }
 
     return yaml;
+  }
+
+  async updateDocsYaml(): Promise<void> {
+    if (this.entries.length === 0) {
+      logger.warn("No entries to update in docs.yml");
+      return;
+    }
+
+    const docsYamlPath = await findUp("docs/docs.yml", {
+      cwd: process.cwd(),
+      type: "file",
+    });
+
+    if (!docsYamlPath) {
+      logger.error("Could not find docs.yml file");
+      return;
+    }
+
+    const yamlContent = fs.readFileSync(docsYamlPath, "utf-8");
+    const doc = parseDocument(yamlContent);
+
+    const sectionName = packageMap[this.packageName];
+    if (!sectionName) {
+      logger.error(`No section mapping found for package: ${this.packageName}`);
+      return;
+    }
+
+    const navigation = doc.get("navigation");
+    if (!(navigation instanceof YAMLSeq)) {
+      logger.error("Could not find navigation array in docs.yml");
+      return;
+    }
+
+    const walletsTab = navigation.items[0]; // assume wallets tab is first (it should always be, its the only tab in this repo)
+    if (!(walletsTab instanceof YAMLMap)) {
+      logger.error("Could not find wallets tab in docs.yml");
+      return;
+    }
+
+    const layout = walletsTab.get("layout");
+    if (!(layout instanceof YAMLSeq)) {
+      logger.error("Could not find layout array in docs.yml");
+      return;
+    }
+
+    const targetSection: YAMLMap | undefined = layout.items.find(
+      (section) =>
+        section instanceof YAMLMap && section.get("section") === sectionName,
+    );
+
+    if (!targetSection) {
+      logger.error(`Could not find section "${sectionName}" in docs.yml`);
+      return;
+    }
+
+    const contents = targetSection.get("contents");
+    if (!(contents instanceof YAMLSeq)) {
+      logger.error(`Could not find contents array in section "${sectionName}"`);
+      return;
+    }
+
+    const sdkRefIndex = contents.items.findIndex(
+      (item) =>
+        item instanceof YAMLMap && item.get("section") === sdkReferenceSection,
+    );
+
+    const newSdkSection = this.generateSdkReferenceSection();
+
+    if (!newSdkSection) {
+      logger.warn(
+        `No SDK Reference section generated for package: ${this.packageName}`,
+      );
+      return;
+    }
+
+    const newSdkDoc = parseDocument(newSdkSection);
+    const newSdkItem = newSdkDoc.contents;
+
+    if (sdkRefIndex >= 0) {
+      // Replace existing SDK Reference section
+      contents.items[sdkRefIndex] = newSdkItem;
+      logger.info(
+        `Replaced existing SDK Reference section in "${sectionName}"`,
+      );
+    } else {
+      // Add new SDK Reference section at the end if it doesn't exist
+      contents.items.push(newSdkItem);
+      logger.info(`Added new SDK Reference section to "${sectionName}"`);
+    }
+
+    fs.writeFileSync(docsYamlPath, doc.toString());
+    logger.info(
+      `Successfully updated docs.yml for package: ${this.packageName}`,
+    );
   }
 
   generateSdkReferenceSection(): string {

@@ -5,9 +5,8 @@ import * as path from "node:path";
 import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
-import { getDocsYaml, sidebarBuilder } from "../classes/SidebarBuilder.js";
+import { sidebarBuilder } from "../classes/SidebarBuilder.js";
 import * as logger from "../logger.js";
-import packageMap from "../package-map.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
 
 export type GenerateOptions = {
@@ -29,12 +28,6 @@ export async function generate(options: GenerateOptions) {
     `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`,
   );
 
-  const docsYaml = await getDocsYaml();
-
-  if (!docsYaml) {
-    return;
-  }
-
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
     logger.error(`File not found: ${sourceFilePath}`);
@@ -47,16 +40,7 @@ export async function generate(options: GenerateOptions) {
     return;
   }
 
-  const packageName = packageMap[packageJSON.name as keyof typeof packageMap];
-  if (!packageName) {
-    logger.error(`Could not find package name for ${packageJSON.name}`);
-    return;
-  }
-
-  // Clear previous entries for this package
   sidebarBuilder.clear();
-
-  // Set the package name for proper path generation
   sidebarBuilder.setPackageName(packageJSON.name);
 
   // clean the output directory to account for deleted docs
@@ -97,13 +81,12 @@ export async function generate(options: GenerateOptions) {
     });
   });
 
-  // Generate and output the complete SDK Reference section
-  const sdkReferenceYaml = sidebarBuilder.generateSdkReferenceSection();
-  if (sdkReferenceYaml) {
-    fs.writeFileSync(
-      path.resolve(outputFilePath, "sdk-reference-section.yaml"),
-      sdkReferenceYaml,
-    );
+  // Generate and update the docs.yml file with the new SDK Reference section
+  try {
+    await sidebarBuilder.updateDocsYaml();
+    logger.info("Successfully updated docs.yml");
+  } catch (error) {
+    logger.error("Failed to update docs.yml:", error);
   }
 }
 
