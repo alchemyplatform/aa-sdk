@@ -5,7 +5,7 @@ import * as path from "node:path";
 import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
-import { getDocsYaml } from "../fern-sidebar.js";
+import { getDocsYaml, sidebarBuilder } from "../fern-sidebar.js";
 import * as logger from "../logger.js";
 import packageMap from "../package-map.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
@@ -53,6 +53,12 @@ export async function generate(options: GenerateOptions) {
     return;
   }
 
+  // Clear previous entries for this package
+  sidebarBuilder.clear();
+
+  // Set the package name for proper path generation
+  sidebarBuilder.setPackageName(packageJSON.name);
+
   // clean the output directory to account for deleted docs
   generatedDirectories.forEach((dir) => {
     fs.emptyDirSync(path.resolve(outputFilePath, dir));
@@ -90,6 +96,15 @@ export async function generate(options: GenerateOptions) {
       );
     });
   });
+
+  // Generate and output the complete SDK Reference section
+  // const sdkReferenceYaml = sidebarBuilder.generateSdkReferenceSection();
+  // if (sdkReferenceYaml) {
+  //   fs.writeFileSync(
+  //     path.resolve(outputFilePath, "sdk-reference-section.yaml"),
+  //     sdkReferenceYaml
+  //   );
+  // }
 }
 
 async function generateDocumentation(
@@ -111,6 +126,8 @@ async function generateDocumentation(
   if (ts.isClassDeclaration(node)) {
     generateClassDocs(node, outputFilePath, importedName, packageName);
   } else {
+    // Add entry to sidebar for functions/hooks/components
+    sidebarBuilder.addEntry(node, outputFilePath, importedName, isTsx);
     generateFunctionDocs(
       node,
       importedName,
@@ -220,6 +237,9 @@ function generateClassDocs(
             ts.isFunctionExpression(member.initializer))) ||
           (member.type && ts.isFunctionLike(member.type))))
     ) {
+      // Add each class method to the sidebar
+      sidebarBuilder.addEntry(member, classOutputBasePath, importedName, false);
+
       generateFunctionDocs(
         member,
         importedName,

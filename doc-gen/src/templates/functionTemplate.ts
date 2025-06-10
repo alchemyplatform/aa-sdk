@@ -7,6 +7,16 @@ const getSlug = (outputFilePath: string) => {
   return `wallets/reference/${path}`;
 };
 
+export const getFunctionName = (
+  node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
+  importedName: string,
+) =>
+  ts.isConstructorDeclaration(node)
+    ? importedName
+    : ts.isClassElement(node)
+      ? (node.name?.getText() ?? importedName)
+      : importedName;
+
 export function functionTemplate(
   node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
   importedName: string,
@@ -16,11 +26,7 @@ export function functionTemplate(
   const jsDocCommentAndTags = ts.getJSDocCommentsAndTags(node);
   if (!jsDocCommentAndTags.length) return;
 
-  const functionName = ts.isConstructorDeclaration(node)
-    ? importedName
-    : ts.isClassElement(node)
-      ? (node.name?.getText() ?? importedName)
-      : importedName;
+  const functionName = getFunctionName(node, importedName);
 
   const importStatement = ts.isClassElement(node)
     ? ((node.parent as ts.ClassDeclaration).name?.getText() ?? functionName)
