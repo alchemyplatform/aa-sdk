@@ -38,8 +38,14 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/react/overview.mdx
-          - page: Quickstart
-            path: wallets/pages/react/quickstart.mdx
+          - section: Quickstart
+            contents:
+              - page: Overview
+                path: wallets/pages/react/quickstart.mdx
+              - page: Quickstart
+                path: wallets/pages/react/quickstart/new-project.mdx
+              - page: Add to Existing Project
+                path: wallets/pages/react/quickstart/existing-project.mdx
           - section: Login UI
             skip-slug: true
             contents:
@@ -120,10 +126,10 @@ navigation:
                 contents:
                   - page: useAddPasskey
                     path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
-                  - page: useAuthenticate
-                    path: wallets/pages/reference/account-kit/react/hooks/useAuthenticate.mdx
                   - page: useAuthModal
                     path: wallets/pages/reference/account-kit/react/hooks/useAuthModal.mdx
+                  - page: useAuthenticate
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthenticate.mdx
                   - page: useConnect
                     path: wallets/pages/reference/account-kit/react/hooks/useConnect.mdx
                   - page: useExportAccount
@@ -174,10 +180,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
               - section: Functions
                 contents:
-                  - page: createConfig
-                    path: wallets/pages/reference/account-kit/react/functions/createConfig.mdx
                   - page: Hydrate
                     path: wallets/pages/reference/account-kit/react/functions/Hydrate.mdx
+                  - page: createConfig
+                    path: wallets/pages/reference/account-kit/react/functions/createConfig.mdx
               - section: Classes
                 contents:
                   - page: NoAlchemyAccountContextError
@@ -222,13 +228,6 @@ navigation:
                 path: wallets/pages/react-native/using-smart-accounts/sponsor-gas.mdx
               - page: Retry user operations
                 path: wallets/pages/react-native/using-smart-accounts/retry-user-operations.mdx
-          - section: SDK Reference
-            path: wallets/pages/reference/account-kit/react-native/index.mdx
-            contents:
-              - section: Functions
-                contents:
-                  - page: createConfig
-                    path: wallets/pages/reference/account-kit/react-native/functions/createConfig.mdx
 
       - section: Other JS Frameworks
         slug: core
@@ -286,8 +285,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/functions/getSignerStatus.mdx
                   - page: getSmartAccountClient
                     path: wallets/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
-                  - page: getSolanaConnection
-                    path: wallets/pages/reference/account-kit/core/functions/getSolanaConnection.mdx
                   - page: getUser
                     path: wallets/pages/reference/account-kit/core/functions/getUser.mdx
                   - page: hydrate
@@ -312,8 +309,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
                   - page: watchSmartAccountClient
                     path: wallets/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
-                  - page: watchSolanaConnection
-                    path: wallets/pages/reference/account-kit/core/functions/watchSolanaConnection.mdx
                   - page: watchUser
                     path: wallets/pages/reference/account-kit/core/functions/watchUser.mdx
               - section: Classes
@@ -337,6 +332,13 @@ navigation:
               - page: Retry user operations
                 slug: drop-and-replace
                 path: wallets/pages/infra/drop-and-replace.mdx
+          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
+          # - section: Third party
+          #   contents:
+          #     - link: Bundlers
+          #       href: /wallets/resources/third-party/bundlers
+          #     - link: Paymasters
+          #       href: /wallets/resources/third-party/paymasters
           - section: SDK Reference
             path: wallets/pages/reference/account-kit/infra/index.mdx
             contents:
@@ -582,6 +584,8 @@ navigation:
                   - page: Overview
                     slug: /
                     path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
+                  - page: Session key permissions
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/session-key-permissions.mdx
                   - page: Adding session keys
                     path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
                   - page: Using session keys
@@ -649,9 +653,9 @@ navigation:
                   # TODO: Custom accounts links to docs in resources section - awkward to link to internal pages
                   # - link: Custom accounts
                   #   href: /wallets/resources/third-party/smart-contracts
-                  #   Markdown file exists but curvocs site site links to external repo
-                  # - page: Gas benchmarks
-                  #   path: wallets/pages/smart-contracts/gas-benchmarks.mdx
+          #   Markdown file exists but curvocs site site links to external repo
+          # - page: Gas benchmarks
+          #   path: wallets/pages/smart-contracts/gas-benchmarks.mdx
           - link: Gas benchmarks
             href: https://github.com/alchemyplatform/aa-benchmarks
           - page: Deployed addresses
@@ -737,14 +741,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/splitAggregatedSignature.mdx
               - section: Classes
                 contents:
-                  - page: InvalidAggregatedSignatureError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/InvalidAggregatedSignatureError/constructor.mdx
-                  - page: InvalidContextSignatureError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/InvalidContextSignatureError/constructor.mdx
-                  - page: MultisigAccountExpectedError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/MultisigAccountExpectedError/constructor.mdx
-                  - page: MultisigMissingSignatureError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/MultisigMissingSignatureError/constructor.mdx
                   - section: SessionKeyPermissionsBuilder
                     contents:
                       - page: addContractAddressAccessEntry
@@ -1051,10 +1047,10 @@ navigation:
                 contents:
                   - section: AccountSigner
                     contents:
-                      - page: connect
-                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/connect.mdx
                       - page: constructor
                         path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/constructor.mdx
+                      - page: connect
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/connect.mdx
                       - page: getAddress
                         path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/getAddress.mdx
                       - page: getBundlerClient
@@ -1067,10 +1063,10 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/signTransaction.mdx
                   - section: EthersProviderAdapter
                     contents:
-                      - page: connectToAccount
-                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/connectToAccount.mdx
                       - page: constructor
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/constructor.mdx
+                      - page: connectToAccount
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/connectToAccount.mdx
                       - page: fromEthersProvider
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/fromEthersProvider.mdx
                       - page: getBundlerClient
