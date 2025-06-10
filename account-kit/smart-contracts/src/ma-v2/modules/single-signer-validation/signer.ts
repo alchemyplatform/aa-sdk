@@ -1,4 +1,8 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
+import type {
+  SmartAccountSigner,
+  SigningMethods,
+  SignatureRequest,
+} from "@aa-sdk/core";
 import {
   type Address,
   type Chain,
@@ -15,8 +19,12 @@ import {
   getDefaultSingleSignerValidationModuleAddress,
   SignatureType,
 } from "../utils.js";
+import {
+  packUOSignature,
+  pack1271Signature,
+  assertNeverSignatureRequestType,
+} from "../../utils.js";
 
-import { pack1271Signature, packUOSignature } from "../../utils.js";
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
  *
@@ -49,7 +57,54 @@ export const singleSignerMessageSigner = (
   entityId: number,
   deferredActionData?: Hex,
 ) => {
+  const signingMethods: SigningMethods = {
+    prepareSign: async (
+      request: SignatureRequest,
+    ): Promise<SignatureRequest> => {
+      let hash;
+
+      switch (request.type) {
+        case "personal_sign":
+          hash = hashMessage(request.data);
+          break;
+
+        case "eth_signTypedData_v4":
+          hash = await hashTypedData(request.data);
+          break;
+
+        default:
+          assertNeverSignatureRequestType();
+      }
+
+      return {
+        type: "eth_signTypedData_v4",
+        data: {
+          domain: {
+            chainId: Number(chain.id),
+            verifyingContract:
+              getDefaultSingleSignerValidationModuleAddress(chain),
+            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
+          },
+          types: {
+            ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
+          },
+          message: {
+            hash,
+          },
+          primaryType: "ReplaySafeHash",
+        },
+      };
+    },
+    formatSign: async (signature: Hex) => {
+      return pack1271Signature({
+        validationSignature: signature,
+        entityId,
+      });
+    },
+  };
+
   return {
+    ...signingMethods,
     getDummySignature: (): Hex => {
       const sig = packUOSignature({
         // orderedHookData: [],
@@ -80,26 +135,18 @@ export const singleSignerMessageSigner = (
 
     // we apply the expected 1271 packing here since the account contract will expect it
     async signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
-      const hash = await hashMessage(message);
-
-      return pack1271Signature({
-        validationSignature: await signer.signTypedData({
-          domain: {
-            chainId: Number(chain.id),
-            verifyingContract:
-              getDefaultSingleSignerValidationModuleAddress(chain),
-            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-          },
-          types: {
-            ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-          },
-          message: {
-            hash,
-          },
-          primaryType: "ReplaySafeHash",
-        }),
-        entityId,
+      const { type, data } = await signingMethods.prepareSign({
+        type: "personal_sign",
+        data: message,
       });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const sig = await signer.signTypedData(data);
+
+      return signingMethods.formatSign(sig);
     },
 
     // TODO: maybe move "sign deferred actions" to a separate function?
@@ -110,7 +157,17 @@ export const singleSignerMessageSigner = (
     >(
       typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
-      // the accounts domain already gives replay protection across accounts for deferred actions, so we don't need to apply another wrapping
+      const { type, data } = await signingMethods.prepareSign({
+        type: "eth_signTypedData_v4",
+        data: typedDataDefinition as TypedDataDefinition,
+      });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const sig = await signer.signTypedData(data);
+
       const isDeferredAction =
         typedDataDefinition.primaryType === "DeferredAction" &&
         typedDataDefinition.domain != null &&
@@ -118,29 +175,9 @@ export const singleSignerMessageSigner = (
         "verifyingContract" in typedDataDefinition.domain &&
         typedDataDefinition.domain.verifyingContract === accountAddress;
 
-      const validationSignature = await signer.signTypedData({
-        domain: {
-          chainId: Number(chain.id),
-          verifyingContract:
-            getDefaultSingleSignerValidationModuleAddress(chain),
-          salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-        },
-        types: {
-          ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-        },
-        message: {
-          hash: hashTypedData(typedDataDefinition),
-        },
-        primaryType: "ReplaySafeHash",
-      });
-
-      // TODO: Handle non-EOA signer case
       return isDeferredAction
-        ? concat([SignatureType.EOA, validationSignature])
-        : pack1271Signature({
-            validationSignature,
-            entityId,
-          });
+        ? concat([SignatureType.EOA, sig])
+        : signingMethods.formatSign(sig);
     },
   };
 };

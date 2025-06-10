@@ -14,6 +14,14 @@ import { Chain, Hex, Address, PrivateKeyAccount } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
 
+interface PolicyToken {
+  address: Address;
+  maxTokenAmount: bigint;
+  approvalMode?: "PERMIT" | "NONE";
+  erc20Name?: string;
+  version?: string;
+}
+
 type Client = ModularAccountV2Client<
   AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
 > &
@@ -28,6 +36,8 @@ export const useModularAccountV2Client = ({
   chain,
   transport,
   localKeyOverride,
+  policyId: policyIdProp,
+  policyToken: policyTokenProp,
 }: {
   mode: "7702" | "default";
   chain: Chain;
@@ -37,6 +47,8 @@ export const useModularAccountV2Client = ({
     readonly entityId: number;
     readonly accountAddress?: Address;
   };
+  policyId?: string;
+  policyToken?: PolicyToken;
 }): {
   client: Client | undefined;
   isLoadingClient: boolean;
@@ -82,7 +94,9 @@ export const useModularAccountV2Client = ({
                 }
               : undefined,
             feeEstimator: alchemyFeeEstimator(transport),
-            policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
+            policyId:
+              policyIdProp ?? process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
+            policyToken: policyTokenProp,
           })
         ).extend(installValidationActions);
 
@@ -119,6 +133,8 @@ export const useModularAccountV2Client = ({
     isConnected,
     key,
     mode,
+    policyIdProp,
+    policyTokenProp,
     signer,
     transport,
   ]);

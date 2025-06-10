@@ -8,6 +8,8 @@ import type {
   SimulateUserOperationAssetChangesResponse,
   RequestGasAndPaymasterAndDataRequest,
   RequestGasAndPaymasterAndDataResponse,
+  RequestPayamsterTokenQuoteRequest,
+  RequestPayamsterTokenQuoteResponse,
 } from "../actions/types";
 import type { AlchemyTransport } from "../alchemyTransport";
 
@@ -27,6 +29,11 @@ export type AlchemyRpcSchema = [
     Method: "alchemy_requestGasAndPaymasterAndData";
     Parameters: RequestGasAndPaymasterAndDataRequest;
     ReturnType: RequestGasAndPaymasterAndDataResponse;
+  },
+  {
+    Method: "alchemy_requestPaymasterTokenQuote";
+    Parameters: RequestPayamsterTokenQuoteRequest;
+    ReturnType: RequestPayamsterTokenQuoteResponse;
   },
 ];
 

@@ -44,6 +44,7 @@ runs:
       uses: foundry-rs/foundry-toolchain@v1
       with:
         cache: false
+        version: v1.2.2
     
     # Android setup
     - name: Check turborepo cache for Android
