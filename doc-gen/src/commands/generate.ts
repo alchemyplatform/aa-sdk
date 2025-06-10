@@ -109,7 +109,6 @@ async function generateDocumentation(
   if (ts.isClassDeclaration(node)) {
     generateClassDocs(node, outputFilePath, importedName, packageName);
   } else {
-    // Add entry to sidebar for functions/hooks/components
     sidebarBuilder.addEntry(node, outputFilePath, importedName, isTsx);
     generateFunctionDocs(
       node,
@@ -220,7 +219,6 @@ function generateClassDocs(
             ts.isFunctionExpression(member.initializer))) ||
           (member.type && ts.isFunctionLike(member.type))))
     ) {
-      // Add each class method to the sidebar
       sidebarBuilder.addEntry(member, classOutputBasePath, importedName, false);
 
       generateFunctionDocs(
