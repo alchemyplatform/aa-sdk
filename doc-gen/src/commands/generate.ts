@@ -5,7 +5,7 @@ import * as path from "node:path";
 import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
-import { getDocsYaml, sidebarBuilder } from "../SidebarBuilder.js";
+import { getDocsYaml, sidebarBuilder } from "../classes/SidebarBuilder.js";
 import * as logger from "../logger.js";
 import packageMap from "../package-map.js";
 import { functionTemplate } from "../templates/functionTemplate.js";

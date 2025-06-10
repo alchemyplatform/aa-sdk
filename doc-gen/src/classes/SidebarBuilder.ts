@@ -1,8 +1,9 @@
 import { findUp } from "find-up";
 import fs from "fs-extra";
 import ts from "typescript";
-import * as logger from "./logger.js";
-import { getFunctionName } from "./templates/functionTemplate.js";
+import * as logger from "../logger.js";
+import { hookGroupings } from "../react-hook-groupings.js";
+import { getFunctionName } from "../templates/functionTemplate.js";
 
 const sdkReferenceSection = "SDK Reference";
 
@@ -25,7 +26,7 @@ export const getDocsYaml = async () => {
 interface SidebarEntry {
   name: string;
   path: string;
-  type: "function" | "class";
+  type: "function" | "class" | "hook" | "component";
   className?: string; // For class methods
 }
 
@@ -65,11 +66,20 @@ class SidebarBuilder {
     } else {
       // Handle functions/hooks/components - same logic as generateFunctionDocs
       const functionName = getFunctionName(node, importedName);
-      const typeDir = importedName.startsWith("use")
-        ? "hooks"
-        : isTsx
-          ? "components"
-          : "functions";
+
+      let entryType: "function" | "hook" | "component";
+      let typeDir: "functions" | "hooks" | "components";
+
+      if (importedName.startsWith("use")) {
+        entryType = "hook";
+        typeDir = "hooks";
+      } else if (isTsx) {
+        entryType = "component";
+        typeDir = "components";
+      } else {
+        entryType = "function";
+        typeDir = "functions";
+      }
 
       const relativePath = this.generateDocsPath(
         outputFilePath,
@@ -80,14 +90,14 @@ class SidebarBuilder {
       this.entries.push({
         name: functionName,
         path: relativePath,
-        type: "function",
+        type: entryType,
       });
     }
   }
 
   private generateDocsPath(
     outputFilePath: string,
-    typeDir: string,
+    typeDir: "functions" | "hooks" | "components" | "",
     fileName: string,
   ): string {
     const fullPath = typeDir
@@ -118,12 +128,87 @@ class SidebarBuilder {
     return classEntries;
   }
 
-  generateSdkReferenceSection(): string {
-    if (this.entries.length === 0) {
-      return "";
+  private generateReactSdkSection(): string {
+    const componentEntries = this.entries.filter((e) => e.type === "component");
+    const hookEntries = this.entries.filter((e) => e.type === "hook");
+    const functionEntries = this.entries.filter((e) => e.type === "function");
+    const classEntries = this.groupClassEntries();
+
+    let yaml = `          - section: ${sdkReferenceSection}\n`;
+    yaml += `            path: wallets/pages/reference/${this.packageName}/index.mdx\n`;
+    yaml += `            contents:\n`;
+
+    if (componentEntries.length > 0) {
+      yaml += `              - section: Components\n`;
+      yaml += `                contents:\n`;
+
+      componentEntries.sort((a, b) => a.name.localeCompare(b.name));
+      for (const entry of componentEntries) {
+        yaml += `                  - page: ${entry.name}\n`;
+        yaml += `                    path: ${entry.path}\n`;
+      }
     }
 
-    const functionEntries = this.entries.filter((e) => e.type === "function");
+    for (const [groupName, hookNames] of Object.entries(hookGroupings)) {
+      const groupHooks = hookEntries.filter((hook) =>
+        hookNames.includes(hook.name),
+      );
+
+      if (groupHooks.length > 0) {
+        yaml += `              - section: ${groupName}\n`;
+        yaml += `                contents:\n`;
+
+        groupHooks.sort((a, b) => a.name.localeCompare(b.name));
+        for (const hook of groupHooks) {
+          yaml += `                  - page: ${hook.name}\n`;
+          yaml += `                    path: ${hook.path}\n`;
+        }
+      }
+    }
+
+    if (functionEntries.length > 0) {
+      yaml += `              - section: Functions\n`;
+      yaml += `                contents:\n`;
+
+      functionEntries.sort((a, b) => a.name.localeCompare(b.name));
+      for (const entry of functionEntries) {
+        yaml += `                  - page: ${entry.name}\n`;
+        yaml += `                    path: ${entry.path}\n`;
+      }
+    }
+
+    if (Object.keys(classEntries).length > 0) {
+      yaml += `              - section: Classes\n`;
+      yaml += `                contents:\n`;
+
+      const sortedClassNames = Object.keys(classEntries).sort();
+      for (const className of sortedClassNames) {
+        const methods = classEntries[className];
+
+        if (methods.length === 1) {
+          const method = methods[0];
+          yaml += `                  - page: ${className}\n`;
+          yaml += `                    path: ${method.path}\n`;
+        } else {
+          yaml += `                  - section: ${className}\n`;
+          yaml += `                    contents:\n`;
+
+          methods.sort((a, b) => a.name.localeCompare(b.name));
+          for (const method of methods) {
+            yaml += `                      - page: ${method.name}\n`;
+            yaml += `                        path: ${method.path}\n`;
+          }
+        }
+      }
+    }
+
+    return yaml;
+  }
+
+  private generateStandardSdkSection(): string {
+    const functionEntries = this.entries.filter(({ type }) =>
+      ["function", "hook", "component"].includes(type),
+    );
     const classEntries = this.groupClassEntries();
 
     let yaml = `          - section: ${sdkReferenceSection}\n`;
@@ -173,6 +258,19 @@ class SidebarBuilder {
     }
 
     return yaml;
+  }
+
+  generateSdkReferenceSection(): string {
+    if (this.entries.length === 0) {
+      return "";
+    }
+
+    // account-kit/react is unique in that it has custom section grouping for hooks
+    if (this.packageName === "account-kit/react") {
+      return this.generateReactSdkSection();
+    }
+
+    return this.generateStandardSdkSection();
   }
 }
 
