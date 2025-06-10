@@ -32,7 +32,7 @@ import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { NullAddress } from "../types.js";
-import type { IsUndefined } from "../utils/types.js";
+import type { IsUndefined, Never } from "../utils/types.js";
 
 export type AccountOp = {
   target: Address;
@@ -45,6 +45,21 @@ export enum DeploymentState {
   NOT_DEPLOYED = "0x1",
   DEPLOYED = "0x2",
 }
+
+export type SignatureRequest =
+  | {
+      type: "personal_sign";
+      data: SignableMessage;
+    }
+  | {
+      type: "eth_signTypedData_v4";
+      data: TypedDataDefinition;
+    };
+
+export type SigningMethods = {
+  prepareSign: (request: SignatureRequest) => Promise<SignatureRequest>;
+  formatSign: (signature: Hex) => Promise<Hex>;
+};
 
 export type GetEntryPointFromAccount<
   TAccount extends SmartContractAccount | undefined,
@@ -126,7 +141,7 @@ export type SmartContractAccount<
   getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
-};
+} & SigningMethods;
 // [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
@@ -158,7 +173,8 @@ export type ToSmartContractAccountParams<
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getImplementationAddress?: () => Promise<NullAddress | Address>;
-} & Omit<CustomSource, "signTransaction" | "address">;
+} & Omit<CustomSource, "signTransaction" | "address"> &
+  (SigningMethods | Never<SigningMethods>);
 // [!endregion ToSmartContractAccountParams]
 
 /**
@@ -351,6 +367,8 @@ export async function toSmartContractAccount(
     signUserOperationHash,
     encodeUpgradeToAndCall,
     getImplementationAddress,
+    prepareSign: prepareSign_,
+    formatSign: formatSign_,
   } = params;
 
   const client = createBundlerClient({
@@ -502,6 +520,24 @@ export async function toSmartContractAccount(
     throw new InvalidEntryPointError(chain, entryPoint.version);
   }
 
+  if ((prepareSign_ && !formatSign_) || (!prepareSign_ && formatSign_)) {
+    throw new Error(
+      "Must implement both prepareSign and formatSign or neither",
+    );
+  }
+
+  const prepareSign =
+    prepareSign_ ??
+    (() => {
+      throw new Error("prepareSign not implemented");
+    });
+
+  const formatSign =
+    formatSign_ ??
+    (() => {
+      throw new Error("formatSign not implemented");
+    });
+
   return {
     ...account,
     source,
@@ -525,5 +561,7 @@ export async function toSmartContractAccount(
     signMessageWith6492,
     signTypedDataWith6492,
     getImplementationAddress: getImplementationAddress_,
+    prepareSign,
+    formatSign,
   };
 }
