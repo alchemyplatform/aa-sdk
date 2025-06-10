@@ -5,7 +5,7 @@ import * as path from "node:path";
 import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
-import { getDocsYaml, sidebarBuilder } from "../fern-sidebar.js";
+import { getDocsYaml, sidebarBuilder } from "../SidebarBuilder.js";
 import * as logger from "../logger.js";
 import packageMap from "../package-map.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
@@ -98,13 +98,13 @@ export async function generate(options: GenerateOptions) {
   });
 
   // Generate and output the complete SDK Reference section
-  // const sdkReferenceYaml = sidebarBuilder.generateSdkReferenceSection();
-  // if (sdkReferenceYaml) {
-  //   fs.writeFileSync(
-  //     path.resolve(outputFilePath, "sdk-reference-section.yaml"),
-  //     sdkReferenceYaml
-  //   );
-  // }
+  const sdkReferenceYaml = sidebarBuilder.generateSdkReferenceSection();
+  if (sdkReferenceYaml) {
+    fs.writeFileSync(
+      path.resolve(outputFilePath, "sdk-reference-section.yaml"),
+      sdkReferenceYaml,
+    );
+  }
 }
 
 async function generateDocumentation(
