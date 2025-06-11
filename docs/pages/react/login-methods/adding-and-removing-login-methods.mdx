@@ -1,0 +1,182 @@
+---
+title: Adding and Removing Auth Methods
+description: Learn how to add and remove auth methods to an account
+slug: wallets/signer/authentication/adding-and-removing-auth-methods
+---
+
+If your user has already authenticated with email, social auth, or a passkey, you can add additional login methods to their account or remove currently enabled methods from their account. This is useful in the case that you want to give your users the ability to customize their login methods after their account is created.
+
+## Viewing the currently enabled auth methods
+
+To view the enabled auth methods for the currently logged in user, use the `useListAuthMethods` hook:
+
+```tsx twoslash
+import { useListAuthMethods } from "@account-kit/react";
+
+export default function MyPage() {
+  const { data: authMethods } = useListAuthMethods();
+
+  if (!authMethods) {
+    return <div>Loading…</div>;
+  }
+
+  return (
+    <div>
+      <div>Email: {authMethods.email}</div>
+      {authMethods.oauthProviders.map((oauthProvider) => (
+        <div key={oauthProvider.providerId}>
+          {oauthProvider.providerName}: {oauthProvider.userDisplayName}
+        </div>
+      ))}
+      {authMethods.passkeys.map((passkey) => (
+        <div key={passkey.authenticatorId}>
+          Passkey created at: {new Date(passkey.createdAt).toLocaleString()}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Setting email auth
+
+To set an account's email, use the `useSetEmail` hook.
+
+<Warning>
+  **If you set a user's email, it is critical that you verify that they own the email first**, to prevent malicious users from squatting on emails that have not yet been added to accounts.
+
+Because of the security implications, the ability to set emails on existing accounts is disabled by default. If you would like it enabled for your team, please [reach
+out](mailto:support@alchemy.com).
+
+</Warning>
+
+<Warning>
+  An account may have at most one email address associated with it. If an
+  account already has an email and you call this function, then the existing
+  email will be removed.
+</Warning>
+
+```tsx twoslash
+import { useSetEmail } from "@account-kit/react";
+
+export default function MyPage() {
+  const { setEmail } = useSetEmail();
+
+  return (
+    <button onClick={() => setEmail("user@example.com")}>Change email</button>
+  );
+}
+```
+
+## Removing email auth
+
+To remove an account's email, use the `useRemoveEmail` hook.
+
+```tsx twoslash
+import { useRemoveEmail } from "@account-kit/react";
+
+export default function MyPage() {
+  const { removeEmail } = useRemoveEmail();
+
+  return (
+    <button onClick={() => removeEmail())}>Remove email</button>
+  );
+}
+```
+
+Note that you cannot remove the last auth method from an account. If removing email login would leave no auth methods, then this call will fail.
+
+## Adding OAuth providers
+
+To add an OAuth provider, use the `useAddOauthProvider` hook.
+
+```tsx twoslash
+import { useAddOauthProvider } from "@account-kit/react";
+
+export default function MyPage() {
+  const { addOauthProvider } = useAddOauthProvider();
+
+  return (
+    <button
+      onClick={() =>
+        addOauthProvider({
+          authProviderId: "google",
+          mode: "popup",
+        })
+      }
+    >
+      Add Google
+    </button>
+  );
+}
+```
+
+When this button is clicked, the user will be prompted to log in to a social account. Once they do, that account will be added as an auth method to the current user.
+
+The options that can be passed to `addOauthProvider` match those which can be passed to `authenticate` when logging in with an OAuth provider. For information on these options and the required setup for enabling OAuth providers, see the [Social Login](/wallets/react/login-methods/social-login) documentation.
+
+## Removing OAuth providers
+
+To remove an OAuth provider, use the `removeOauthProvider()` hook, then pass the OAuth provider's provider id to `removeOauth`. To find the provider id, you can examine the value returned from `useListAuthMethods()`.
+
+```tsx twoslash
+export default function MyPage() {
+  const { data: authMethods } = useListAuthMethods();
+  const { removeOauthProvider } = useRemoveOauthProvider();
+
+  if (!authMethods) {
+    return <div>Loading…</div>;
+  }
+
+  const removeFirstOauthProvider = () => {
+    removeOauthProvider(authMethods.oauthProviders[0].providerId);
+  };
+
+  return (
+    <button onClick={removeFirstOauthProvider}>Remove OAuth provider</button>
+  );
+}
+```
+
+Note that you cannot remove the last auth method from an account. If removing a social login would leave no auth methods, then this call will fail.
+
+## Adding passkeys
+
+To add a passkey, use the `useAddPasskey` hook.
+
+```tsx twoslash
+import { useAddPasskey } from "@account-kit/react";
+
+export default function MyPage() {
+  const { addPasskey } = useAddPasskey();
+
+  return (
+    <button onClick={() => addPasskey())}>Add passkey</button>
+  );
+}
+```
+
+This will prompt the user to create a passkey which will then be added as a login method to the account.
+
+## Removing passkeys
+
+To remove a passkey, use the `useRemovePasskey` hook and pass the passkey's authenticator id to the `removePasskey` function. To find the authenticator id, you can examine the value returned from `useListAuthMethods()`.
+
+```tsx twoslash
+export default function MyPage() {
+  const { data: authMethods } = useListAuthMethods();
+  const { removePasskey } = useRemovePasskey();
+
+  if (!authMethods) {
+    return <div>Loading…</div>;
+  }
+
+  const removeFirstPasskey = () => {
+    removePasskey(authMethods.passkeys[0].authenticatorId);
+  };
+
+  return <button onClick={removeFirstPasskey}>Remove passkey</button>;
+}
+```
+
+Note that you cannot remove the last auth method from an account. If removing a passkey would leave no auth methods, then this call will fail.
