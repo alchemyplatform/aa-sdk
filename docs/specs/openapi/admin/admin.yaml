@@ -1,0 +1,704 @@
+openapi: 3.1.0
+info:
+  title: 🪄 Gas Manager Admin API
+  version: "1.0"
+servers:
+  - url: https://manage.g.alchemy.com
+paths:
+  "/api/gasManager/policy":
+    post:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Create Policy
+      description: |
+        Creates a new gas manager policy with the specified rules. Returns the policy id of 
+        a successfully created policy. The newly created policy will be in the `inactive` status.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+
+        <Note title="Testnets">
+          On testnets, the userOp price is always $0, and hence the `maxSpendUsd`, `maxSpendPerSenderUsd`, and `maxSpendPerUoUsd` should not be configured.
+        </Note>
+
+        <Note title="Adding Custom Rules">
+          If you add custom rules (webhook URL) to the policy, the Gas Manager will make a POST request to the URL every time you use `alchemy_requestPaymasterAndData`, `alchemy_requestGasAndPaymasterAndData`, or `pm_getPaymasterData`.
+
+          **Request Payload**
+          - `userOperation`: The userOp object.
+          - `policyId`: The ID of your policy.
+          - `chainId`: The ID of the network where the operation is being performed.
+          - `webhookData`: Additional data you wish to include in the request, such as proof of humanity.
+
+          Here is an example request body:
+          ```json
+          {
+            "userOperation": { }, // structure depends on EntryPoint version  
+            "policyId": "",  
+            "chainId": "",  
+            "webhookData": "" 
+          }
+          ```
+
+          **Expected Result**
+
+          Your endpoint should respond with a `200` status code and a JSON body (`{ "approved": true | false }`) indicating whether to the userOp passes the custom rules.
+
+          Anything other than the above will be treated as error, and the Gas Manager will sponsor the userOp only if `approveOnFailure` is `true`.
+        </Note>
+      operationId: create-policy
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyName
+                - policyType
+                - appId
+                - networks
+              properties:
+                policyName:
+                  type: string
+                  description: Name of the policy
+                  default: "My Policy"
+                policyType:
+                  type: string
+                  description: Type of the policy (e.g. "sponsorship"). Currently we support `sponsorship` (for EVM network policies) and `solana` (for Solana network policies).
+                  default: "sponsorship"
+                appId:
+                  type: string
+                  description: |
+                    ID for the app associated with the new policy.
+                    Learn how to find your app ID [here](docs/reference/notify-api-faq).
+                  default: "6d834x9k1yh4dx6z"
+                networks:
+                  description: |
+                    Networks for the policy. Example: `ETH_MAINNET`. For Solana policies, valid values are `SOLANA_MAINNET` and `SOLANA_DEVNET`.
+                  type: array
+                  items:
+                    type: string
+                rules:
+                  description: Rules for `sponsorship` policy type. Empty if `policyType` is not `sponsorship`.
+                  $ref: "#/components/schemas/Rules"
+      responses:
+        "200":
+          description: Policy created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - error
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policy:
+                        $ref: "#/components/schemas/Policy"
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+  "/api/gasManager/policy/{id}":
+    get:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Get Policy
+      description: |
+        Returns a policy by id.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: get-policy
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          description: ID of the policy to be fetched
+          in: path
+          required: true
+          schema:
+            type: string
+            default: "a844e221-3c13-40c6-95db-d2db390e14b5"
+      responses:
+        "200":
+          description: Policy fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policy:
+                        $ref: "#/components/schemas/Policy"
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+    delete:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Delete Policy
+      description: |
+        Deletes a policy by id.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: delete-policy
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          description: ID of the policy to be deleted
+          in: path
+          required: true
+          schema:
+            type: string
+            default: "6d834x9k1yh4dx6z"
+      responses:
+        "200":
+          description: "`200` - Policy deleted successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        default: true
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+    put:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Replace Policy
+      description: |
+        Replaces all rules in an existing policy by id.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: replace-policy
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          description: ID of the policy to be replaced
+          in: path
+          required: true
+          schema:
+            type: string
+            default: "a844e221-3c13-40c6-95db-d2db390e14b5"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                policyName:
+                  type: string
+                  description: Name of the policy
+                  default: "My Policy"
+                rules:
+                  $ref: "#/components/schemas/Rules"
+                  description: Rules for "sponsorship" policy type. Empty if `policyType` is not "sponsorship".
+                networks:
+                  description: |
+                    Networks for the policy. Example: `ETH_MAINNET`. For Solana policies, valid values are `SOLANA_MAINNET` and `SOLANA_DEVNET`.
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Policy rules replaced successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policy:
+                        $ref: "#/components/schemas/Policy"
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+  "/api/gasManager/policies":
+    get:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Get All Policies
+      description: |
+        Returns all policies under an app. The results are paginated.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: get-all-policies
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: appId
+          in: query
+          description: |
+            An optional app id to filter results by policies associated with that app. Learn how to find your app ID [here](https://docs.alchemy.com/reference/notify-api-faq#where-can-i-find-the-app-id).
+          schema:
+            type: string
+            default: "6d834x9k1yh4dx6z"
+        - name: limit
+          in: query
+          description: An optional parameter to limit the number of results per page.
+          schema:
+            type: integer
+            default: 10
+        - name: before
+          in: query
+          description: String - used for pagination. If there are previous results, `before` field is returned in the response and can be passed in the request to fetch the previous page.
+          schema:
+            type: string
+        - name: after
+          in: query
+          description: String - used for pagination. If more results are available `after` field is returned in the response and can be passed in the request to fetch the next page.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policies fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policies:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Policy"
+                      before:
+                        type: string
+                        description: String - used for pagination. If there are previous results, `before` field is returned in the response and can be passed in the request to fetch the previous page. Can be null if there are no previous results.
+                      after:
+                        type: string
+                        description: String - used for pagination. If more results are available `after` field is returned in the response and can be passed in the request to fetch the next page. Can be null if there are no more results.
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+  "/api/gasManager/policy/{id}/status":
+    put:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Update Policy Status
+      description: |
+        Modifies the status of a policy to either "active" or "inactive".
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: update-policy-status
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          description: ID of the policy to be updated
+          in: path
+          required: true
+          schema:
+            type: string
+            default: "a844e221-3c13-40c6-95db-d2db390e14b5"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  description: The new status of the policy
+                  type: string
+                  enum: [active, inactive]
+                  default: active
+      responses:
+        "200":
+          description: Policy status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policy:
+                        $ref: "#/components/schemas/Policy"
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+  "/api/gasManager/policy/{id}/stats/details":
+    get:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Get Policy Stats
+      description: |
+        Returns stats about a policy specified by ID, including signatures mined, signatures expired, signatures pending, USD mined, and USD pending.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: get-policy-stats
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          description: ID of the policy to be fetched
+          in: path
+          required: true
+          schema:
+            type: string
+            default: "a844e221-3c13-40c6-95db-d2db390e14b5"
+      responses:
+        "200":
+          description: Policy stats fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policyStats:
+                        type: object
+                        properties:
+                          signaturesMined:
+                            type: integer
+                            default: 0
+                          signaturesExpired:
+                            type: integer
+                            default: 0
+                          signaturesPending:
+                            type: integer
+                            default: 0
+                          usdPending:
+                            type: string
+                            default: "0.0"
+                          usdMined:
+                            type: string
+                            default: "0.0"
+                      policyNetworkStats:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            network:
+                              type: string
+                              default: "MATIC_MAINNET"
+                            signaturesMined:
+                              type: integer
+                              default: 0
+                            signaturesExpired:
+                              type: integer
+                              default: 0
+                            signaturesPending:
+                              type: integer
+                              default: 0
+                            usdPending:
+                              type: string
+                              default: "0.0"
+                            usdMined:
+                              type: string
+                              default: "0.0"
+                            pendingNativeToken:
+                              type: number
+                              default: 0
+                            minedNativeToken:
+                              type: number
+                              default: 0
+                            currency:
+                              type: string
+                              default: "ETH"
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+  "/api/gasManager/policy/{id}/sponsorships":
+    get:
+      tags: ["Gas Manager Admin API Endpoints"]
+      summary: Get Sponsorships
+      description: |
+        Returns a list of sponsorships associated with the specified policy ID. The results are paginated.
+
+        <Note title="Header Access Token">
+          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
+          - [How to Create Access Keys](/docs/how-to-create-access-keys)
+          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+        </Note>
+      operationId: get-sponsorships
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the policy for which sponsorships are being queried.
+          schema:
+            type: string
+            default: "a844e221-3c13-40c6-95db-d2db390e14b5"
+        - name: limit
+          in: query
+          description: Limits the number of sponsorships returned.
+          schema:
+            type: integer
+            default: 5
+      responses:
+        "200":
+          description: Sponsorships fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        description: String - used for pagination. If there are previous results, `before` field is returned in the response and can be passed in the request to fetch the previous page. Can be null if there are no previous results.
+                      after:
+                        type: string
+                        description: String - used for pagination. If more results are available `after` field is returned in the response and can be passed in the request to fetch the next page. Can be null if there are no more results.
+                      sponsorships:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Sponsorship"
+                  error:
+                    type: object
+                    properties:
+                      msg:
+                        type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Rules:
+      type: object
+      properties:
+        maxSpendUsd:
+          type: string
+          description: Maximum amount of USD that can be spent by the Gas Manager
+          default: "5000.00"
+        maxSpendPerSenderUsd:
+          type: string
+          description: Maximum amount of USD that can be spent by a single sender
+          default: "100.00"
+        maxSpendPerUoUsd:
+          type: string
+          description: Maximum amount of USD that can be spent by a single user operation
+          default: "20.00"
+        maxCount:
+          type: string
+          description: Maximum number of operations that can be sponsored through the policy
+          default: "100"
+        maxCountPerSender:
+          type: string
+          description: Maximum number of operations that can be sponsored for a single sender through the policy
+          default: "2"
+        senderAllowlist:
+          type: array
+          items:
+            type: string
+          description: List of addresses that are allowed to send operations
+          default:
+            - "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+            - "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+        senderBlocklist:
+          type: array
+          items:
+            type: string
+          description: List of addresses that are not allowed to send operations
+        startTimeUnix:
+          type: string
+          description: Unix timestamp of when the policy starts
+          default: "1674228753"
+        endTimeUnix:
+          type: string
+          description: Unix timestamp of when the policy ends
+          default: "1679340742"
+        sponsorshipExpiryMs:
+          type: string
+          description: Milliseconds from signing that the sponsorship expires
+          default: "600000"
+        webhookRules:
+          type: object
+          description: Make a request to your server to verify sponsorship eligibility.
+          properties:
+            webhookUrl:
+              type: string
+              format: uri
+              description: The URL to call to verify sponsorship eligibility.
+              example: "https://dashboard.alchemy.com/gas-manager/policy/create"
+            approveOnFailure:
+              type: boolean
+              description: If true, the userOp will be sponsored in the event the request fails or times out.
+              default: false
+          required:
+            - webhookUrl
+            - approveOnFailure
+      required:
+        - startTimeUnix
+        - sponsorshipExpiryMs
+
+    SolanaRules:
+      type: object
+      properties:
+        maxSpendUsd:
+          type: string
+          description: Maximum amount of USD that can be spent by the Gas Manager
+          default: "6500.00"
+        maxSpendPerTxnUsd:
+          type: string
+          description: Maximum amount of USD that can be spent per transaction
+          default: "30.00"
+        maxCount:
+          type: string
+          description: Maximum number of transactions that can be sponsored through the policy
+          default: "200"
+        startTimeUnix:
+          type: string
+          description: Unix timestamp of when the policy starts
+          default: "1674228753"
+        endTimeUnix:
+          type: string
+          description: Unix timestamp of when the policy ends
+          default: "1679340742"
+
+    Policy:
+      type: object
+      properties:
+        policyId:
+          type: string
+          description: String ID of the policy
+          default: "0x1234567890abcdef"
+        appId:
+          type: string
+          description: String ID of the app
+          default: "0x1234567890abcdef"
+        status:
+          type: string
+          description: Status of the policy
+          default: active
+        rules:
+          $ref: "#/components/schemas/Rules"
+          description: Rules for `sponsorship` policy type. Empty if `policyType` is not `sponsorship`.
+        policyName:
+          type: string
+          description: Name of the policy
+          default: "Gas Manager Policy"
+        lastUpdatedUnix:
+          type: string
+          description: Unix timestamp of when the policy was last updated
+          default: "1674228753"
+        policyVersion:
+          type: number
+          description: Version of the policy
+          default: 0
+        policyType:
+          type: string
+          description: Type of the policy. `sponsorship`.
+          default: "sponsorship"
+        policyState:
+          type: string
+          description: State of the policy
+          default: "ongoing"
+        networks:
+          type: array
+          items:
+            type: string
+          description: List of networks the policy is active on
+      required:
+        - policyId
+        - appId
+        - status
+
+    Sponsorship:
+      type: object
+      properties:
+        sender:
+          type: string
+          description: Address of the sender
+        grantedAt:
+          type: string
+          description: Unix timestamp of when the sponsorship was granted
+        confirmedTotalUsd:
+          type: string
+          description: Total amount of USD that was spent. Can be null if the transaction has not been mined
+        status:
+          type: string
+          description: Status of the sponsorship. Can be PENDING, MINED or EXPIRED
+        uoHash:
+          type: string
+          description: Hash of the user operation
+        uoExplorerUrl:
+          type: string
+          description: URL to the user operation explorer for the associated user operation
+        txnHash:
+          type: string
+          description: Hash of the transaction associated with the sponsorship. Can be null if not mined
+        txnExplorerUrl:
+          type: string
+          description: URL to the transaction explorer for the associated transaction. Can be null if not mined
+        network:
+          type: string
+          description: Network of the user operation
+      required:
+        - sender
+        - grantedAt
+        - status
+        - uoHash
+        - uoExplorerUrl
+        - network
