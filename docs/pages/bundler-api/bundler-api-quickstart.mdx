@@ -1,0 +1,59 @@
+---
+title: Bundler API Quickstart
+description: Learn about the Bundler API and how you can use it work with user operations.
+subtitle: Learn about the Bundler API and how you can use it work with user operations.
+url: https://docs.alchemy.com/reference/bundler-api-quickstart
+slug: reference/bundler-api-quickstart
+---
+
+## What is a Bundler?
+
+The concept of a Bundler is introduced by [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), which aims to bring Account Abstraction to EVM chains. With the expectation of an increased adoption of Smart Contract Wallets (SCWs) for their user-friendly experience and flexibility, the Bundler plays a vital role. Essentially, it forwards the user operations to the Entrypoint which are then further forwarded to the smart contract accounts for execution. Our custom built Bundler called Rundler provides high performance and reliability, it's written in Rust and is [completely open source](https://github.com/alchemyplatform/rundler).
+
+To gain deeper insights into this topic, explore our [blog post on Account Abstraction](https://www.alchemy.com//blog/account-abstraction).
+
+## What is the Bundler API?
+
+The Bundler APIs are a collection of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace) compliant JSON-RPC endpoints which makes it possible for users to work with user operations.
+
+<Info>
+  Please note that using [`aa-sdk`](https://accountkit.alchemy.com/getting-started/setup.html) to send `UserOperations` is the easiest way to access our Bundler without directly dealing with the raw APIs.
+</Info>
+
+## Bundler API Endpoints
+
+All of the Bundler API endpoints are listed below along with links to their individual pages and brief descriptions.
+
+* ### [`eth_sendUserOperation`](/docs/node/bundler-api/bundler-api-endpoints/eth-send-user-operation)
+
+  Submits a user operation to a Bundler. If the request is successful, the endpoint will return a user operation hash that the caller can use to look up the status of the user operation. If it fails, or another error occurs, an error code and description will be returned.
+
+* ### [`eth_estimateUserOperationGas`](/docs/node/bundler-api/bundler-api-endpoints/eth-estimate-user-operation-gas)
+
+  Estimates the gas values for a user operation. It returns the `preVerificationGas`, `verificationGasLimit`, and `callGasLimit` values associated with the provided user operation.
+
+* ### [`eth_getUserOperationByHash`](/docs/node/bundler-api/bundler-api-endpoints/eth-get-user-operation-by-hash)
+
+  Returns a user operation based on the given user operation hash. It returns the user operation along with extra information including what block/transaction it was included in. If the operation has not yet been included, it will return `null`.
+
+* ### [`eth_getUserOperationReceipt`](/docs/node/bundler-api/bundler-api-endpoints/eth-get-user-operation-receipt)
+
+  Returns a user operation receipt ( metadata associated with the given user operation ) based on the given user operation hash. It returns `null` if the user operation has not yet been included.
+
+* ### [`rundler_maxPriorityFeePerGas`](/docs/node/bundler-api/bundler-api-endpoints/rundler-max-priority-fee-per-gas)
+
+  Returns a fee per gas that is an estimate of how much users should set as a priority fee in UOs for Rundler endpoints.
+
+* ### [`eth_supportedEntryPoints`](/docs/node/bundler-api/bundler-api-endpoints/eth-supported-entry-points)
+
+  Returns a list of Entrypoint contract addresses supported by the bunder endpoints.
+
+## Request Limits
+
+| API Endpoint                                               | Free Tier   | Growth Tier | Enterprise Tier |
+| ---------------------------------------------------------- | ----------- | ----------- | --------------- |
+| [eth\_sendUserOperation](/docs/node/bundler-api/bundler-api-endpoints/eth-send-user-operation) | 18,000 / hr | 54,000 / hr | Unlimited       |
+
+<Info>
+  These are hourly request limits.
+</Info>

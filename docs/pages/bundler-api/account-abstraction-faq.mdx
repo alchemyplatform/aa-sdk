@@ -1,0 +1,180 @@
+---
+title: FAQs
+description: Frequently asked questions about Account Abstraction
+subtitle: Frequently asked questions about Account Abstraction
+url: https://docs.alchemy.com/reference/account-abstraction-faq
+slug: reference/account-abstraction-faq
+---
+
+# Bundler
+
+## How can I track the status of a userOp?
+
+To understand the status of a userOp you can use the `eth_getUserOperationByHash` method as follows: loop over `eth_getUserOperationByHash` for as long as you are willing to wait for the userOp to land. If it still returns `null` after the timeout, there are two possibilities:
+
+1. **The userOp is still pending**: This is the most common scenario and typically means *the fees are too low*. In this case, you should drop and replace the userOp with higher fees.
+2. **The userOp has been dropped**: The most common (but rare) reason is that they paymaster signature has expired. However, this should rarely happen if you set a reasonable sponsorship expiry time, unless there is a significant delay in sending the userOp after the paymaster signs it.
+
+## Is it possible to retrieve the hash of the bundle transaction right after calling `eth_sendUserOperation` without waiting for the transaction to be confirmed on chain?
+
+The transaction hash is not included in the response of `eth_sendUserOperation` for the following reasons:
+
+* The hash of the bundle transaction that a userOp is included in can change before that userOp is mined. This can happen for multiple reasons, such as the pending bundle transaction being dropped and replaced by the bundler if it’s underpriced, or the bundle transaction being frontrun by another bundle that includes the userOp.
+* Adding the transaction hash to the response of `eth_sendUserOperation` is incompatible with the future P2P mempool, since any bundler can bundle the userOp and land it on chain.
+
+## How can I get push notifications for mined userOperations?
+
+Follow the guide on [using custom webhooks to get real time alerts and receipts for mined `userOperations`](/docs/how-to-use-custom-webhooks-to-get-push-notifications-for-mined-user-operations).
+
+## How do I get my userOp unstuck from the mempool?
+
+For EIP-1559 fee markets, the base fee is fixed per block. To prioritize the inclusion of your userOp and get it unstuck from the mempool, you need to increase the `maxPriorityFeePerGas`. This can be achieved by dropping and replacing the userOp with a new one that has a higher `maxPriorityFeePerGas`.
+
+## Can a userOp be accepted by the bundler and then dropped while it’s in the mempool?
+
+This is a possible but rare scenario and can occur due to several reasons:
+
+* The userOp is replaced by another userOp from the same sender with the same nonce.
+* The signature of the Gas Manager has expired, rendering the userOp ineligible for sponsorship.
+* The validation function of the userOp fails when it is being bundled into a transaction for on-chain submission.
+* The mempool runs out of memory, causing the bundler to drop userOps with the lowest fees.
+
+# Gas Manager
+
+## Can I implement custom logic for sponsoring userOps with the Gas Manager?
+
+Yes, you can implement custom logic for sponsoring userOps with the Alchemy Gas Manager. To do so, follow these steps:
+
+1. Get an API key.
+2. Create a Gas Manager policy.
+3. On the server side, implement your custom logic that determines whether a userOp should be sponsored.
+4. If a userOp meets the specified criteria, call Alchemy’s Gas Manager, using the API key and policy ID, to sign the userOp.
+
+## Will I get alerted if I get close to hitting my sponsorship limits?
+
+If you hit your sponsorship limit, the Gas Manager will stop sponsoring userOps. To prevent this, the following safeguards are in place:
+
+* Alerts that notify your team's billing admins via email when the Gas Manager usage reaches 50%, 75%, 90%, and 100% of the sponsorship limit.
+* Your team's billing admins to increase your sponsorship limits by buying gas credits in USD through the [Gas Manager Dashboard](https://dashboard.alchemy.com/gas-manager).
+
+## What is the encoding of `paymasterAndData`?
+
+`paymasterAndData` follows the format enforced by ERC-4337, which consists of a 20-byte address followed by an arbitrary-length data segment. For Alchemy’s paymaster contract, the data segment is formatted as a 32-byte packed time range validity followed by a 65-byte long signature.
+
+# Signatures
+
+## What is a dummy signature and why do I need it for certain endpoints?
+
+Our APIs are compatible with any type of smart account. This means regardless of the smart account you're using, our endpoints will work with it. However, different smart accounts have unique ways of signing transactions, known as signature patterns. A dummy signature is essentially a template or example signature that aligns with the signature pattern of your specific account type.
+
+For certain API endpoints, particularly those involved in gas estimation, a dummy signature is required in the request. This is because these endpoints need to simulate or estimate the transaction without actually executing it, and the dummy signature helps in this process. For more information, consult the docs for your specific account implementation. The following endpoints require a dummy signature for gas estimation:
+
+* [eth\_estimateUserOperationGas](/reference/eth-estimateuseroperationgas)
+* [alchemy\_simulateUserOperationAssetChanges](/reference/alchemy-simulateuseroperationassetchanges)
+* [alchemy\_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata)
+
+If your account type is [`LightAccount v1`](https://accountkit.alchemy.com/smart-accounts/light-account/), you can use the following dummy signature:
+
+```shell
+0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c
+```
+
+If your account type is [`LightAccount v2`](https://accountkit.alchemy.com/smart-accounts/light-account/), you can use the following dummy signature:
+
+```shell
+0x00fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c
+```
+
+# EntryPoint
+
+## Which EntryPoint version should I use, v0.6 or v0.7?
+
+The latest version of ERC-4337 is v0.7, which introduces optimizations aimed at improving the experience for both developers and end users. These include gas savings for users, optimized data structures, better gas estimation, simplified postOp logic, and structured errors during validation.
+
+The appropriate version to use is determined by the smart contract account for which you are trying to send a userOp. Typically, a smart contract account will be written to be compatible with either v0.6 or v0.7. To determine which version is compatible, you should look at the smart contract account’s source code and check the first parameter of the `validateUserOp` function. If it has type `UserOperation`, the account uses v0.6. If the parameter type is `PackedUserOperation`, the account uses v0.7.
+
+For more information about the differences between the versions, refer to the specifications for [ERC-4337 v0.6.0](https://github.com/eth-infinitism/account-abstraction/blob/v0.6.0/eip/EIPS/eip-4337.md) and [ERC-4337 v0.7.0](https://github.com/eth-infinitism/account-abstraction/blob/v0.7.0/erc/ERCS/erc-4337.md), particularly the description of the user operation fields.
+
+## At which addresses are the EntryPoint contracts for v0.6 and v0.7 deployed?
+
+The EntryPoint contracts for v0.6 and v0.7 are deployed at the following addresses across all chains supported by Alchemy:
+
+EntryPoint v0.7:
+
+```shell
+0x0000000071727De22E5E9d8BAf0edAc6f37da032
+```
+
+EntryPoint v0.6:
+
+```shell
+0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789
+```
+
+## When will EntryPoint v0.6 be deprecated?
+
+We plan to deprecate support for EntryPoint v0.6 in March 2025. Please ensure that you have migrated to EntryPoint v0.7 by that time. If you have any questions or need assistance with the migration process, please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
+
+# Common Errors
+
+## What should I do if I receive an `Invalid policy ID` error?
+
+Gas manager policies can only be tied to one app. To resolve this issue ensure:
+
+* you are using the correct policy ID and the API key associated with the app for which the Gas Manager policy is configured
+* the policy is active.
+
+## What are `precheck failed` errors and how do I handle them?
+
+`precheck failed` errors are typically related to gas and/or fees. Our bundler follows the standard [ERC 4337 implementation](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4337.md#client-behavior-upon-receiving-a-useroperation) for gas and fee checks to 1) ensure your userOp lands on chain and to 2) protect the bundler from potential attacks in order to support scalability.
+
+These errors are often related to market movement between the time gas and fees are estimated and the time when userOps are submitted to the bundler. This issue is especially prevalent on testnets. Our bundler currently rejects upon sending userOps if they are underpriced compared to the network rate to ensure inclusion in a block.
+
+To handle these errors, you should:
+
+* add buffers on top of our gas estimates to account for market fluctuations
+* implement retry mechanisms.
+
+## What is a `Replacement Underpriced` error and how can I resolve it?
+
+You might get a `"Replacement Underpriced Error"` when using `eth_sendUserOperation`. This error occurs when a user already has an existing userOp in the mempool. userOps can become "stuck" in the mempool if their gas fee limits are too low to be included in a bundle.
+
+To resolve this, you need to increase both `maxFeePerGas` and `maxPriorityFeePerGas` by at least 10%.
+
+<Info>
+  The `maxFeePerGas` is the sum of the `baseFeePerGas` and `maxPriorityFeePerGas`. Learn the [differences between maxFeePerGas vs. maxPriorityFeePerGas](/docs/maxpriorityfeepergas-vs-maxfeepergas) in our comparative article
+</Info>
+
+To do so, follow the next steps:
+
+1. **Re-estimate gas fees**: Re-estimate the gas fees required for your operation. This can be done in various ways which are mentioned below:
+
+   1. Use the [`eth_maxPriorityFeePerGas`](/reference/eth-maxpriorityfeepergas) method to obtain `maxPriorityFeePerGas`.
+   2. If using the Alchemy SDK, use the [`getFeeData`](/reference/sdk-getfeedata) method to obtain both the current `maxPriorityFeePerGas` and `maxFeePerGas`. This method is also available on web3 libraries like `ethers.js` and can be accessed through the provider as `provider.getFeeData()`.
+
+2. **Choose the suitable increase values**: Once you have the re-estimated gas fees, choose the maximum of a 10% increase or the re-estimated values. This ensures that your new gas fee is competitively priced to be included in a block.
+
+3. **Account for Rundler's service tip**: Rundler requires a small tip for its services via `maxPriorityFeePerGas`. Detailed information about this can be found on the [Bundler API Fee Logic](/reference/bundler-api-fee-logic) page, but in summary:
+
+   * On Arbitrum, the recommended tip is a minimum 5% of the estimated network base fee when the bundle is mined.
+   * On all other mainnets Alchemy supports, the recommended tip is at least 25% higher than the estimated priority fee on the network.
+   * No tip is required on testnets.
+
+After calculating the new values, send your `userOp` again with the updated fees and it should go through successfully.
+
+# Smart Accounts
+
+## How do I upgrade from Simple Account to Light Account?
+
+[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support `upgradeToAndCall` implemented by openzeppelin’s [UUPSUpgradeable](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/UUPSUpgradeable.sol) contract. This allows you to upgrade from Simple Account to [`LightAccount`](https://accountkit.alchemy.com/smart-accounts/light-account/) without changing the smart contract account address. Using `upgradeToAndCall`will update the underlying implementation contract on the account while the account address and assets will stay the same.
+
+You can call `[[upgradeToAndCall](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/ae1bafcb48fe220257d76bfd93a237db3ebaf3df/contracts/proxy/utils/UUPSUpgradeable.sol#L86)]` on the Simple Account with these params:
+
+* `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
+  * For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
+* `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner/signer on the account, usually the same owner as what the account used as Simple Account.
+  * In solidity/foundry you can use `abi.encodeCall` and in viem you can use `[encodeFunctionData]`([https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount))
+
+⚠️ It is very important that the `initialize` step is encoded correctly to ensure the account does not get in to a risky state where someone else could call initialize on it and reassign and a signer. You can call `owner()` on the account after upgrade to make sure it is assigned correctly.
+
+This can be called on the existing smart contract account by sending a user operation that calls `execute` (or `executeBatch`) and have that call `upgradeToAndCall` (the same way you would make the account send calls to other addresses).

@@ -1,0 +1,50 @@
+---
+title: How to sponsor gas on EVM
+description: The Gas Manager allows you to sponsor gas fees for your users on EVM networks, removing the biggest barrier to entry.
+subtitle: The Gas Manager allows you to sponsor gas fees for your users on EVM networks, removing the biggest barrier to entry.
+url: https://docs.alchemy.com/reference/how-to-sponsor-gas-on-evm
+slug: reference/how-to-sponsor-gas-on-evm
+---
+
+Gas fees are a significant barrier to entry for new users of your app. With the Gas Manager, you can remove this barrier by sponsoring gas fees for your users' transactions, allowing users to transact without holding the native gas token of the chain.
+
+We make it easy for you to sponsor gas for any transaction: you don’t need to hold any tokens, we front the gas for you and add it to your monthly bill.
+
+<Info>
+  **\[Recommended]** Use our [Smart Wallets SDK](https://www.alchemy.com/docs/wallets) to create and use wallets. The SDK handles all complexity for you, making development faster and easier.
+</Info>
+
+If you want to use APIs directly, follow these steps.
+
+### 1. Create a Gas Manager Policy
+
+A gas manager policy defines which transactions (userOps) are eligible for gas sponsorship. You can customize the policy with the following rules:
+
+* **Spending rules**: limit the amount of money or the number of userOps that can be sponsored by this policy
+
+* **Custom rules**: sponsor gas only for certain actions (ex: swaps) or certain users (ex: power users of your app) by making a request to your server to verify sponsorship eligibility. To enable, add the following details on your policy:
+
+  * **URL**: the URL the Gas Manager will make a POST request to
+  * **Sponsor on error or timeout**: when selected, the userOp will be sponsored in the event of an error or timeout. See [Create policy](create-policy) for details on request payload and expected response.
+
+* **Allowlist**: restrict wallet addresses that are eligible for sponsorship. The policy will only sponsor gas for userOps that were sent by addresses on this list.
+
+* **Blocklist**: ban certain addresses from receiving sponsorship under this policy.
+
+* **Sponsorship expiry period**: this is the period for which the Gas Manager signature will remain valid once it is generated.
+
+To learn more about policy configuration, refer to the guide on [setting up a gas manager policy](/docs/setup-a-gas-manager-policy).
+
+Once you have decided on policy rules for your app, create a policy in the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create/?a=api-docs).
+
+Now you should have a Gas policy created with a policy id you can use to sponsor gas for your users.
+
+### 2. Get Gas Manager's signature
+
+When sending a userOp, you can specify the `paymaster` and `paymasterData` fields in the `userOp` object. These fields are related to the signature of the Gas Manager that will sponsor the userOp.
+
+You can get these fields through [`alchemy_requestGasAndPaymasterAndData`](/reference/alchemy-requestgasandpaymasteranddata) using your gas policy id, the API key of the app associated with the policy, and a userOp. The Gas Manager signature will be generated if and only if the userOp satisfies the rules defined in your gas policy.
+
+### 3. Send the sponsored userOp
+
+Once you get the `paymaster` and `paymasterData` fields, you can use them in your userOp when you call [`eth_sendUserOperation`](/reference/eth-senduseroperation). The Gas Manager will pay for the gas of the userOp when it is mined.

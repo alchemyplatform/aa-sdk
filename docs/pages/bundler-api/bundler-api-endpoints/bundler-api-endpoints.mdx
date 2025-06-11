@@ -1,0 +1,22 @@
+---
+title: Bundler API Endpoints
+description: The Bundler APIs are a collection of ERC-4337 compliant JSON-RPC endpoints which makes it possible for users to work with user operations.
+subtitle: The Bundler APIs are a collection of ERC-4337 compliant JSON-RPC endpoints which makes it possible for users to work with user operations.
+url: https://docs.alchemy.com/reference/bundler-api-endpoints
+slug: reference/bundler-api-endpoints
+---
+
+## What exactly is the Bundler API?
+
+The Bundler APIs are a collection of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace) compliant JSON-RPC endpoints, making it possible for users to work with user operations.
+
+## Methods
+
+| Method                                                                   | Description                                                                                                              |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| [eth\_sendUserOperation](/reference/eth-senduseroperation)               | Sends a user operation to the given EVM network.                                                                         |
+| [eth\_estimateUserOperationGas](/reference/eth-estimateuseroperationgas) | Estimates the gas values for a `UserOperation`.                                                                          |
+| [eth\_supportedEntryPoints](/reference/eth-supportedentrypoints)         | Returns an array of the `entryPoint` addresses supported by the client.                                                  |
+| [eth\_getUserOperationByHash](/reference/eth-getuseroperationbyhash)     | Return a `UserOperation` based on a hash (`userOpHash`).                                                                 |
+| [eth\_getUserOperationReceipt](/reference/eth-getuseroperationreceipt)   | Get the `UserOperationReceipt` based on the `userOpHash` value.                                                          |
+| [rundler\_maxPriorityFeePerGas](/reference/rundler-maxpriorityfeepergas) | Returns a fee per gas that is an estimate of how much users should set as a priority fee in `UOs` for Rundler endpoints. |
