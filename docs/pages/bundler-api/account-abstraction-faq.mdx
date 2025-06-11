@@ -19,8 +19,8 @@ To understand the status of a userOp you can use the `eth_getUserOperationByHash
 
 The transaction hash is not included in the response of `eth_sendUserOperation` for the following reasons:
 
-* The hash of the bundle transaction that a userOp is included in can change before that userOp is mined. This can happen for multiple reasons, such as the pending bundle transaction being dropped and replaced by the bundler if it’s underpriced, or the bundle transaction being frontrun by another bundle that includes the userOp.
-* Adding the transaction hash to the response of `eth_sendUserOperation` is incompatible with the future P2P mempool, since any bundler can bundle the userOp and land it on chain.
+- The hash of the bundle transaction that a userOp is included in can change before that userOp is mined. This can happen for multiple reasons, such as the pending bundle transaction being dropped and replaced by the bundler if it’s underpriced, or the bundle transaction being frontrun by another bundle that includes the userOp.
+- Adding the transaction hash to the response of `eth_sendUserOperation` is incompatible with the future P2P mempool, since any bundler can bundle the userOp and land it on chain.
 
 ## How can I get push notifications for mined userOperations?
 
@@ -34,10 +34,10 @@ For EIP-1559 fee markets, the base fee is fixed per block. To prioritize the inc
 
 This is a possible but rare scenario and can occur due to several reasons:
 
-* The userOp is replaced by another userOp from the same sender with the same nonce.
-* The signature of the Gas Manager has expired, rendering the userOp ineligible for sponsorship.
-* The validation function of the userOp fails when it is being bundled into a transaction for on-chain submission.
-* The mempool runs out of memory, causing the bundler to drop userOps with the lowest fees.
+- The userOp is replaced by another userOp from the same sender with the same nonce.
+- The signature of the Gas Manager has expired, rendering the userOp ineligible for sponsorship.
+- The validation function of the userOp fails when it is being bundled into a transaction for on-chain submission.
+- The mempool runs out of memory, causing the bundler to drop userOps with the lowest fees.
 
 # Gas Manager
 
@@ -54,8 +54,8 @@ Yes, you can implement custom logic for sponsoring userOps with the Alchemy Gas 
 
 If you hit your sponsorship limit, the Gas Manager will stop sponsoring userOps. To prevent this, the following safeguards are in place:
 
-* Alerts that notify your team's billing admins via email when the Gas Manager usage reaches 50%, 75%, 90%, and 100% of the sponsorship limit.
-* Your team's billing admins to increase your sponsorship limits by buying gas credits in USD through the [Gas Manager Dashboard](https://dashboard.alchemy.com/gas-manager).
+- Alerts that notify your team's billing admins via email when the Gas Manager usage reaches 50%, 75%, 90%, and 100% of the sponsorship limit.
+- Your team's billing admins to increase your sponsorship limits by buying gas credits in USD through the [Gas Manager Dashboard](https://dashboard.alchemy.com/gas-manager).
 
 ## What is the encoding of `paymasterAndData`?
 
@@ -69,9 +69,9 @@ Our APIs are compatible with any type of smart account. This means regardless of
 
 For certain API endpoints, particularly those involved in gas estimation, a dummy signature is required in the request. This is because these endpoints need to simulate or estimate the transaction without actually executing it, and the dummy signature helps in this process. For more information, consult the docs for your specific account implementation. The following endpoints require a dummy signature for gas estimation:
 
-* [eth\_estimateUserOperationGas](/reference/eth-estimateuseroperationgas)
-* [alchemy\_simulateUserOperationAssetChanges](/reference/alchemy-simulateuseroperationassetchanges)
-* [alchemy\_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata)
+- [eth_estimateUserOperationGas](/reference/eth-estimateuseroperationgas)
+- [alchemy_simulateUserOperationAssetChanges](/reference/alchemy-simulateuseroperationassetchanges)
+- [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata)
 
 If your account type is [`LightAccount v1`](https://accountkit.alchemy.com/smart-accounts/light-account/), you can use the following dummy signature:
 
@@ -121,8 +121,8 @@ We plan to deprecate support for EntryPoint v0.6 in March 2025. Please ensure th
 
 Gas manager policies can only be tied to one app. To resolve this issue ensure:
 
-* you are using the correct policy ID and the API key associated with the app for which the Gas Manager policy is configured
-* the policy is active.
+- you are using the correct policy ID and the API key associated with the app for which the Gas Manager policy is configured
+- the policy is active.
 
 ## What are `precheck failed` errors and how do I handle them?
 
@@ -132,8 +132,8 @@ These errors are often related to market movement between the time gas and fees 
 
 To handle these errors, you should:
 
-* add buffers on top of our gas estimates to account for market fluctuations
-* implement retry mechanisms.
+- add buffers on top of our gas estimates to account for market fluctuations
+- implement retry mechanisms.
 
 ## What is a `Replacement Underpriced` error and how can I resolve it?
 
@@ -142,7 +142,11 @@ You might get a `"Replacement Underpriced Error"` when using `eth_sendUserOpe
 To resolve this, you need to increase both `maxFeePerGas` and `maxPriorityFeePerGas` by at least 10%.
 
 <Info>
-  The `maxFeePerGas` is the sum of the `baseFeePerGas` and `maxPriorityFeePerGas`. Learn the [differences between maxFeePerGas vs. maxPriorityFeePerGas](/docs/maxpriorityfeepergas-vs-maxfeepergas) in our comparative article
+  The `maxFeePerGas` is the sum of
+  the `baseFeePerGas` and `maxPriorityFeePerGas`. Learn the [differences between
+  maxFeePerGas vs.
+  maxPriorityFeePerGas](/docs/maxpriorityfeepergas-vs-maxfeepergas) in our
+  comparative article
 </Info>
 
 To do so, follow the next steps:
@@ -156,9 +160,9 @@ To do so, follow the next steps:
 
 3. **Account for Rundler's service tip**: Rundler requires a small tip for its services via `maxPriorityFeePerGas`. Detailed information about this can be found on the [Bundler API Fee Logic](/reference/bundler-api-fee-logic) page, but in summary:
 
-   * On Arbitrum, the recommended tip is a minimum 5% of the estimated network base fee when the bundle is mined.
-   * On all other mainnets Alchemy supports, the recommended tip is at least 25% higher than the estimated priority fee on the network.
-   * No tip is required on testnets.
+   - On Arbitrum, the recommended tip is a minimum 5% of the estimated network base fee when the bundle is mined.
+   - On all other mainnets Alchemy supports, the recommended tip is at least 25% higher than the estimated priority fee on the network.
+   - No tip is required on testnets.
 
 After calculating the new values, send your `userOp` again with the updated fees and it should go through successfully.
 
@@ -170,10 +174,10 @@ After calculating the new values, send your `userOp` again with the updated fe
 
 You can call `[[upgradeToAndCall](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/ae1bafcb48fe220257d76bfd93a237db3ebaf3df/contracts/proxy/utils/UUPSUpgradeable.sol#L86)]` on the Simple Account with these params:
 
-* `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
-  * For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
-* `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner/signer on the account, usually the same owner as what the account used as Simple Account.
-  * In solidity/foundry you can use `abi.encodeCall` and in viem you can use `[encodeFunctionData]`([https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount))
+- `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
+  - For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
+- `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner/signer on the account, usually the same owner as what the account used as Simple Account.
+  - In solidity/foundry you can use `abi.encodeCall` and in viem you can use `[encodeFunctionData]`([https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount))
 
 ⚠️ It is very important that the `initialize` step is encoded correctly to ensure the account does not get in to a risky state where someone else could call initialize on it and reassign and a signer. You can call `owner()` on the account after upgrade to make sure it is assigned correctly.
 

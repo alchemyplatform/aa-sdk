@@ -11,7 +11,9 @@ Gas fees are a significant barrier to entry for new users of your app. With the 
 We make it easy for you to sponsor gas for any transaction: you don’t need to hold any tokens, we front the gas for you and add it to your monthly bill.
 
 <Info>
-  **\[Recommended]** Use our [Smart Wallets SDK](https://www.alchemy.com/docs/wallets) to create and use wallets. The SDK handles all complexity for you, making development faster and easier.
+  **\[Recommended]** Use our [Smart Wallets
+  SDK](https://www.alchemy.com/docs/wallets) to create and use wallets. The SDK
+  handles all complexity for you, making development faster and easier.
 </Info>
 
 If you want to use APIs directly, follow these steps.
@@ -20,18 +22,18 @@ If you want to use APIs directly, follow these steps.
 
 A gas manager policy defines which transactions (userOps) are eligible for gas sponsorship. You can customize the policy with the following rules:
 
-* **Spending rules**: limit the amount of money or the number of userOps that can be sponsored by this policy
+- **Spending rules**: limit the amount of money or the number of userOps that can be sponsored by this policy
 
-* **Custom rules**: sponsor gas only for certain actions (ex: swaps) or certain users (ex: power users of your app) by making a request to your server to verify sponsorship eligibility. To enable, add the following details on your policy:
+- **Custom rules**: sponsor gas only for certain actions (ex: swaps) or certain users (ex: power users of your app) by making a request to your server to verify sponsorship eligibility. To enable, add the following details on your policy:
 
-  * **URL**: the URL the Gas Manager will make a POST request to
-  * **Sponsor on error or timeout**: when selected, the userOp will be sponsored in the event of an error or timeout. See [Create policy](create-policy) for details on request payload and expected response.
+  - **URL**: the URL the Gas Manager will make a POST request to
+  - **Sponsor on error or timeout**: when selected, the userOp will be sponsored in the event of an error or timeout. See [Create policy](create-policy) for details on request payload and expected response.
 
-* **Allowlist**: restrict wallet addresses that are eligible for sponsorship. The policy will only sponsor gas for userOps that were sent by addresses on this list.
+- **Allowlist**: restrict wallet addresses that are eligible for sponsorship. The policy will only sponsor gas for userOps that were sent by addresses on this list.
 
-* **Blocklist**: ban certain addresses from receiving sponsorship under this policy.
+- **Blocklist**: ban certain addresses from receiving sponsorship under this policy.
 
-* **Sponsorship expiry period**: this is the period for which the Gas Manager signature will remain valid once it is generated.
+- **Sponsorship expiry period**: this is the period for which the Gas Manager signature will remain valid once it is generated.
 
 To learn more about policy configuration, refer to the guide on [setting up a gas manager policy](/docs/setup-a-gas-manager-policy).
 

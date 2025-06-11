@@ -8,15 +8,17 @@ slug: reference/how-to-sponsor-gas-on-solana
 
 Fees and rent are a significant barrier to entry for new users of your app. With the Gas Manager, you can remove this barrier, allowing users to transact without holding SOL. You can use the Gas Manager to sponsor:
 
-* **Fees** cover the cost of executing transactions.
-* **Rent** is required to store data on-chain.
-  * We support rent sponsorship for SystemProgram.createAccount.
-  * If you need support for sponsoring rent in more programs, please contact us at account-abstraction@alchemy.com.
+- **Fees** cover the cost of executing transactions.
+- **Rent** is required to store data on-chain.
+  - We support rent sponsorship for SystemProgram.createAccount.
+  - If you need support for sponsoring rent in more programs, please contact us at account-abstraction@alchemy.com.
 
 We make it easy for you to sponsor fees/rent for any transaction: you don’t need to hold any tokens, we front the fees/rent for you and add it to your monthly bill.
 
 <Info>
-  **\[Recommended]** Use our [Smart Wallets SDK](https://www.alchemy.com/docs/wallets) to create and use wallets. The SDK handles all complexity for you, making development faster and easier.
+  **\[Recommended]** Use our [Smart Wallets
+  SDK](https://www.alchemy.com/docs/wallets) to create and use wallets. The SDK
+  handles all complexity for you, making development faster and easier.
 </Info>
 
 If you want to use APIs directly, follow these steps.
@@ -36,24 +38,25 @@ Here’s an example of creating a serialized transfer transaction using javascri
 <CodeGroup>
   ```javascript javasc
 
-  const instructions = [
-      solanaWeb3.SystemProgram.transfer({
-        fromPubkey: from,
-        toPubkey: to,
-        lamports: amount,
-      })
-    ];
+const instructions = [
+solanaWeb3.SystemProgram.transfer({
+fromPubkey: from,
+toPubkey: to,
+lamports: amount,
+})
+];
 
-  const recentBlockHash = await connection.getLatestBlockhash();
-    const message = new solanaWeb3.TransactionMessage({
-      payerKey: new solanaWeb3.PublicKey("Amh6quo1FcmL16Qmzdugzjq3Lv1zXzTW7ktswyLDzits"), // Set this to an address different than any other address included in the tx. This field will be updated by the alchemy_requestFeePayer API in Step 3. 
-      recentBlockhash: recentBlockhash,
-      instructions,
-    }).compileToV0Message();
+const recentBlockHash = await connection.getLatestBlockhash();
+const message = new solanaWeb3.TransactionMessage({
+payerKey: new solanaWeb3.PublicKey("Amh6quo1FcmL16Qmzdugzjq3Lv1zXzTW7ktswyLDzits"), // Set this to an address different than any other address included in the tx. This field will be updated by the alchemy_requestFeePayer API in Step 3.
+recentBlockhash: recentBlockhash,
+instructions,
+}).compileToV0Message();
 
     const transaction = new solanaWeb3.VersionedTransaction(message);
     const serializedTx = Buffer.from(transaction.serialize()).toString("base64");
-  ```
+
+````
 </CodeGroup>
 
 ### 3. Request sponsorship for the Serialized Transaction
@@ -67,9 +70,10 @@ You can get the `feePayer` address and the feePayer signature through [alchemy\
 Here is an example of signing and broadcasting a transaction using javascript:
 
 <CodeGroup>
-  ```javascript javascript
-  const tx = VersionedTransaction.deserialize(decodeBase64(serializedTx));
-  tx.sign([keypair]);
-  const signature = await connection.sendRawTransaction(tx.serialize());
-  ```
+```javascript javascript
+const tx = VersionedTransaction.deserialize(decodeBase64(serializedTx));
+tx.sign([keypair]);
+const signature = await connection.sendRawTransaction(tx.serialize());
+````
+
 </CodeGroup>

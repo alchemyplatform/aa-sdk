@@ -21,7 +21,8 @@ flowchart LR
 This guide assumes you have an account you can sign with, like an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer) or a user's EOA. You will also need an Alchemy API key, and a [gas manager policy ID](https://www.alchemy.com/docs/wallets/react/sponsor-gas) if you want to sponsor gas.
 
 <Tip title="Don't have an API key?" icon="star">
-  Start using the Alchemy Wallets API today! [Get started for free](https://dashboard.alchemy.com/signup/?a=f8afc2202c).
+  Start using the Alchemy Wallets API today! [Get started for
+  free](https://dashboard.alchemy.com/signup/?a=f8afc2202c).
 </Tip>
 
 ## Using The TypeScript SDK
@@ -35,17 +36,18 @@ You're going to need the `@account-kit/wallet-client` and `@account-kit/infra`. 
   npm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
   ```
 
-  ```shell bun
-  bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
-  ```
+```shell bun
+bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
 
-  ```shell yarn
-  yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
-  ```
+```shell yarn
+yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
 
-  ```shell pnpm
-  pnpm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
-  ```
+```shell pnpm
+pnpm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
+
 </CodeGroup>
 
 ### 2. Create A Smart Wallet Client
@@ -79,15 +81,15 @@ All you need to do is follow a few simple steps to start sending user ops with W
 // Request the account using the "7702" account type.
 const account = await client.requestAccount({
   creationHint: {
-    accountType: "7702"
-  }
+    accountType: "7702",
+  },
 });
-  
+
 // Prepare the calls.
 const preparedCalls = await client.prepareCalls({
   calls: [
     // Calls here can include `to`, `data`, and `value` params.
-    { to: "0x0000000000000000000000000000000000000000", data: "0x" }
+    { to: "0x0000000000000000000000000000000000000000", data: "0x" },
   ],
   from: account.address,
   capabilities: {
@@ -96,10 +98,10 @@ const preparedCalls = await client.prepareCalls({
     },
   },
 });
-  
+
 // Sign the calls.
 const signedCalls = await client.signPreparedCalls(preparedCalls);
-  
+
 // Send the userOp.
 const { preparedCallIds } = await client.sendPreparedCalls(signedCalls);
 
@@ -186,6 +188,7 @@ curl --request POST \
 ```
 
 If the account isn't already delegated to Modular Account V2 onchain, this will return an array of calls that must be signed:
+
 ```json
 {
   "type": "array",
@@ -217,6 +220,7 @@ If the account isn't already delegated to Modular Account V2 onchain, this will 
 ```
 
 For subsequent calls, only one call will be returned:
+
 ```json
 {
   "type": "user-operation-v070",
@@ -239,27 +243,29 @@ Sign the prepared calls. How exactly you do this will differ depending on your l
 // Assuming you have created a wallet client (see https://viem.sh/docs/clients/wallet).
 
 // Assuming `preparedCalls` is the result from `wallet_prepareCalls`.
-const userOpCall = preparedCalls.type === "array"
-  ? preparedCalls.data.find((it) => it.type === "user-operation-v070")
-  : preparedCalls
+const userOpCall =
+  preparedCalls.type === "array"
+    ? preparedCalls.data.find((it) => it.type === "user-operation-v070")
+    : preparedCalls;
 
-const authorizationCall = preparedCalls.type === "array"
-  ? preparedCalls.data.find((it) => it.type === "authorization")
-  : undefined
+const authorizationCall =
+  preparedCalls.type === "array"
+    ? preparedCalls.data.find((it) => it.type === "authorization")
+    : undefined;
 
 // Sign the user operation hash.
 const userOpSignature = await walletClient.signMessage({
   message: userOpCall.signatureRequest.data,
-})
+});
 
 // Sign the EIP-7702 authorization, if it was included in the previous step's result.
 const signedAuthorization = !authorizationCall
   ? undefined
   : await walletClient.signAuthorization({
-    contractAddress: authorizationCall.data.address,
-    nonce: hexToNumber(authorizationCall.data.nonce),
-    chainId: hexToNumber(authorizationCall.chainId),
-  })
+      contractAddress: authorizationCall.data.address,
+      nonce: hexToNumber(authorizationCall.data.nonce),
+      chainId: hexToNumber(authorizationCall.chainId),
+    });
 ```
 
 ### 4. Send The Prepared Calls

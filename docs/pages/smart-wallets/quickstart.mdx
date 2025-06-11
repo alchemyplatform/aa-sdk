@@ -31,7 +31,8 @@ If instead, you don’t want to use session keys and you want the user to sign a
 This guide assumes you have an account you can sign with, like an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer). You will also need an Alchemy API key and a [gas manager policy ID.](https://www.alchemy.com/docs/wallets/react/sponsor-gas)
 
 <Tip title="Don't have an API key?" icon="star">
-  Start using the Alchemy Wallets API today! [Get started for free](https://dashboard.alchemy.com/signup/?a=f8afc2202c)
+  Start using the Alchemy Wallets API today! [Get started for
+  free](https://dashboard.alchemy.com/signup/?a=f8afc2202c)
 </Tip>
 
 ## Using The Account Kit SDK
@@ -45,13 +46,14 @@ You're going to need `@account-kit/wallet-client`, `@account-kit/infra`, optiona
   npm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
   ```
 
-  ```shell bun
-  bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
-  ```
+```shell bun
+bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
 
-  ```shell yarn
-  yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
-  ```
+```shell yarn
+yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
+
 </CodeGroup>
 
 ### Create A Smart Account Client
@@ -83,7 +85,7 @@ A counterfactual address is the account address associated with the given signer
 
 ```ts
 const account = await client.requestAccount();
-  
+
 // get the address
 const address = account.address;
 ```
@@ -93,15 +95,15 @@ const address = account.address;
 ```ts
 import { createPublicClient } from "viem";
 
-const message = "we are so back"
-  
+const message = "we are so back";
+
 const signature = await client.signMessage({ message });
-  
+
 const publicClient = createPublicClient({
   chain: arbitrumSepolia,
   transport: transport,
 });
-  
+
 const isValid = await publicClient.verifyMessage({
   address: account.address, // fetched from await client.requestAccount()
   message,
@@ -113,12 +115,12 @@ const isValid = await publicClient.verifyMessage({
 
 ```ts
 // assuming you have a typedData variable
-const signature = await client.signTypedData({typedData});
-  
+const signature = await client.signTypedData({ typedData });
+
 const isValid = await publicClient.verifyTypedData({
   address: account.address, // fetched from await client.requestAccount()
   ...typedData,
-  signature,  
+  signature,
 });
 ```
 
@@ -128,7 +130,7 @@ const isValid = await publicClient.verifyTypedData({
 import { zeroAddress } from "viem";
 
 const account = await client.requestAccount();
-  
+
 const preparedCalls = await client.prepareCalls({
   calls: [{ to: zeroAddress, value: "0x0" }], // callData is optional in a "data" parameter
   from: account.address,
@@ -139,10 +141,10 @@ const preparedCalls = await client.prepareCalls({
     },
   },
 });
-  
+
 // Sign the calls
 const signedCalls = await client.signPreparedCalls(preparedCalls);
-  
+
 // Send the userOp
 const result = await client.sendPreparedCalls(signedCalls);
 ```
@@ -153,10 +155,10 @@ Session keys allow another account to operate on a user's smart account with giv
 
 ```ts
 const account = await client.requestAccount();
-  
+
 // This is where you would use your session key signer!
 const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
-  
+
 const permissions = await client.grantPermissions({
   account: account.address,
   expirySec: Math.floor(Date.now() / 1000) + 60 * 60,
@@ -166,7 +168,7 @@ const permissions = await client.grantPermissions({
   },
   permissions: [{ type: "root" }], // Here we grant root permissions as an example, but this is not advised in production!
 });
-  
+
 const preparedCalls = await client.prepareCalls({
   calls: [{ to: zeroAddress, value: "0x0" }],
   from: account.address,
@@ -177,12 +179,12 @@ const preparedCalls = await client.prepareCalls({
     permissions,
   },
 });
-  
+
 const signedCalls = await signPreparedCalls(
   sessionKey, // Note that we now sign with the session key!
   preparedCalls,
 );
-  
+
 const result = await client.sendPreparedCalls({
   ...signedCalls,
   capabilities: {
@@ -197,8 +199,8 @@ const result = await client.sendPreparedCalls({
 
 Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](https://accountkit.alchemy.com/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
 
-* If you want to use social sign up / log in, you can simply use the [SDK](https://accountkit.alchemy.com/react/getting-started) to authenticate user’s and retrieve their signer address
-* If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
+- If you want to use social sign up / log in, you can simply use the [SDK](https://accountkit.alchemy.com/react/getting-started) to authenticate user’s and retrieve their signer address
+- If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
 
 This will return the account address associated with the given signer, as well as a uuid you could use to differentiate between accounts for the same signer in the future.
 
@@ -242,8 +244,8 @@ After creating a session, you will be able to sign transactions for the generate
 
 To create a session key using onchain policies:
 
-* Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](https://accountkit.alchemy.com/concepts/smart-account-signer) that is either an local [signer](https://accountkit.alchemy.com/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider)
-* Create a session for that key using your session key public address - here passed in `publicKey` call `wallet_createSession`.
+- Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](https://accountkit.alchemy.com/concepts/smart-account-signer) that is either an local [signer](https://accountkit.alchemy.com/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider)
+- Create a session for that key using your session key public address - here passed in `publicKey` call `wallet_createSession`.
 
 Note that the expiry is in seconds and represents a UNIX timestamp. (E.g. 1776657600 for April 20th, 2077)
 
@@ -359,8 +361,8 @@ signatureRequest: {
 
 With the returned signature request, all you have to do is sign the userop hash returned in the `signatureRequest.data.raw` field from step 4.
 
-* If not using session keys, you’ll sign this with the owner of the account (from step 1). You can learn how to stamp the request on the frontend [here](https://docs.alchemy.com/reference/how-to-stamp-requests).
-* If using session keys, you can sign this with the session key that was added in step 2 and 3. This signature will be valid as long as it is within the permissions the session key has.
+- If not using session keys, you’ll sign this with the owner of the account (from step 1). You can learn how to stamp the request on the frontend [here](https://docs.alchemy.com/reference/how-to-stamp-requests).
+- If using session keys, you can sign this with the session key that was added in step 2 and 3. This signature will be valid as long as it is within the permissions the session key has.
 
 Note that the `type` field in the `signatureRequest` indicates the signature type needed, in this case, we need to `personal_sign` the hash.
 
@@ -415,9 +417,8 @@ const permissions = await client.grantPermissions({
     publicKey: await sessionKey.getAddress(),
     type: "secp256k1",
   },
-  permissions: [{PERMISSION_ONE}, {PERMISSION_TWO}],
+  permissions: [{ PERMISSION_ONE }, { PERMISSION_TWO }],
 });
-  
 ```
 
 ### Native Token Transfer
@@ -429,7 +430,7 @@ This permission allows transfer of native tokens (like Ether) from the account.
   type: "native-token-transfer";
   data: {
     allowance: Hex; // a hexadecimal encoded transfer limit, for example, 1 ETH would be 0xde0b6b3a7640000 (1e18 in hex)
-  };
+  }
 }
 ```
 
@@ -442,8 +443,8 @@ This permission allows transfer or approval of erc20 tokens from the account. Bo
   type: "erc20-token-transfer";
   data: {
     address: Address; // erc20 token contract address
-    allowance: Hex;   // a hexadecimal encoded transfer limit
-  };
+    allowance: Hex; // a hexadecimal encoded transfer limit
+  }
 }
 ```
 
@@ -456,7 +457,7 @@ This permission allows the session key to spend gas for user operations up to a 
   type: "gas-limit";
   data: {
     limit: Hex; // a hexadecimal encoded gas limit, for example 300000 gas would be 0x493e0
-  };
+  }
 }
 ```
 
@@ -469,7 +470,7 @@ This permission grants access to **all** functions in a specific contract.
   type: "contract-access";
   data: {
     address: Address; // the target contract’s address
-  };
+  }
 }
 ```
 

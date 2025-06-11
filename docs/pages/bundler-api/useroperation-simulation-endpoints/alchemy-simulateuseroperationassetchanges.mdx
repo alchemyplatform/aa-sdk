@@ -6,7 +6,7 @@ url: https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchange
 slug: reference/alchemy-simulateuseroperationassetchanges
 ---
 
-# alchemy\_simulateUserOperationAssetChanges
+# alchemy_simulateUserOperationAssetChanges
 
 post https://\{network}.g.alchemy.com/v2/\{apiKey}
 
@@ -15,13 +15,16 @@ Simulates user operations and returns a list of asset changes.
 <Info>
   The results provided by `alchemy_simulateUserOperationAssetChanges` are based on the blockchain's state at the moment of simulation. Changes in the blockchain state, such as updates to contract variables or balances, can occur between the time of simulation and when you actually execute your `UserOp`.
 
-  This could lead to different outcomes than predicted. For instance, if a userOp's effect is conditional on the current state of a contract, and this state is altered before the transaction is executed, the final result may not match the simulation.
+This could lead to different outcomes than predicted. For instance, if a userOp's effect is conditional on the current state of a contract, and this state is altered before the transaction is executed, the final result may not match the simulation.
 
-  Please be aware of this potential variance and consider it while using the API.
+Please be aware of this potential variance and consider it while using the API.
+
 </Info>
 
 <Warning>
-  This endpoint requires a dummy signature in the `userOp`. Check our [FAQs](/reference/account-abstraction-faq#what-is-a-dummy-signature-and-why-do-i-need-it-for-certain-endpoints) to learn what a dummy signature is and which dummy signature you should use.
+  This endpoint requires a dummy signature in the `userOp`. Check our
+  [FAQs](/reference/account-abstraction-faq#what-is-a-dummy-signature-and-why-do-i-need-it-for-certain-endpoints)
+  to learn what a dummy signature is and which dummy signature you should use.
 </Warning>
 
 This method accepts an array containing a `UserOperation` Object, an Entrypoint address, and a block override as parameters. However, these 3 items appear three times in the param array below. This has to do with Readme (our docs platform) not supporting multi-type arrays. To workaround, please fill in the `userOperation` object in the first box, the `EntryPoint` address in the second box and the `Block Override` in the third one.

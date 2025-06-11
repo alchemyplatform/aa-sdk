@@ -8,14 +8,14 @@ slug: reference/entrypoint-v06-revert-codes
 
 Bundler JSON-RPC error codes are often accompanied by an additional AAxx code provided by the EntryPoint.
 
-* **AA1x** error codes relate to **creating an account**
-* **AA2x** error codes relate to **the sender or the user operation itself** (nonce, signature, prefund, time validity, verification gas)
-* **AA3x** error codes relate to **paymasters** (deposit, expiration, verification)
-* **AA4x** error codes relate to **verification**
-* **AA5x** errors relate to **post execution actions**
-* **AA9x** error codes are **general and not related to a certain theme** (invalid addresses, failed sends, invalid aggregator, etc.)
+- **AA1x** error codes relate to **creating an account**
+- **AA2x** error codes relate to **the sender or the user operation itself** (nonce, signature, prefund, time validity, verification gas)
+- **AA3x** error codes relate to **paymasters** (deposit, expiration, verification)
+- **AA4x** error codes relate to **verification**
+- **AA5x** errors relate to **post execution actions**
+- **AA9x** error codes are **general and not related to a certain theme** (invalid addresses, failed sends, invalid aggregator, etc.)
 
-***
+---
 
 ## AA10 sender already constructed
 
@@ -25,7 +25,7 @@ The `sender` has already been created. This error may occur if you attempt to cr
 
 1. Remove the `initCode` from the userOp struct.
 
-***
+---
 
 ## AA13 initCode failed or OOG
 
@@ -41,7 +41,7 @@ The `initCode` failed to create the smart account. There are two possible reason
 3. Check that the `verificationGasLimit` is high enough for the `initCode` to complete without running out of gas.
 4. If the `initCode` reverted, investigate why using tools like [Tenderly](https://tenderly.co/).
 
-***
+---
 
 ## AA14 initCode must return sender
 
@@ -56,7 +56,7 @@ The address of the smart account deployed with the `initCode` does not match the
 
 2. Verify that the sender address was generated deterministically from `initCode`.
 
-***
+---
 
 ## AA15 initCode must create sender
 
@@ -76,7 +76,7 @@ Possible reasons:
 
 2. Verify that the `initCode` factory is implemented correctly, i.e., it deploys the smart account and returns the sender address.
 
-***
+---
 
 ## AA20 account not deployed
 
@@ -88,7 +88,7 @@ The sender of the userOp is not deployed and the `initCode` is not specified.
 2. If this is the first transaction by this account make sure the `initCode` is included in the userOp.
 3. Check that you are sending the userOp to the correct network.
 
-***
+---
 
 ## AA21 Didn’t pay prefund
 
@@ -99,7 +99,7 @@ The sender did not have enough native tokens to prefund the EntryPoint for the u
 1. If you are not using a paymaster, check that the account has enough native token to cover the required prefund.
 2. If you are using a paymaster, check that the paymaster and data fields are set.
 
-***
+---
 
 ## AA22 expired or not due
 
@@ -112,7 +112,7 @@ This error occurs when the `block.timestamp` is after the `validUntil` timestamp
 1. If you are using time-based signatures, check that the `validAfter` and `validUntil` fields are set correctly and that the userOp is sent within the specified range.
 2. If you not using time-based signatures, check that the `validAfter` and `validUntil` fields are set to `0`.
 
-***
+---
 
 ## AA23 reverted (or OOG)
 
@@ -124,7 +124,7 @@ The sender signature validation reverted or ran out of gas (OOG).
 2. If you are not using a paymaster, check that the sender has enough native tokens to cover the required prefund.
 3. If you are us a paymaster to cover the gas fees, verify that the paymaster and data fields are set.
 
-***
+---
 
 ## AA24 signature error
 
@@ -139,7 +139,7 @@ The signature of the `userOp` is invalid.
    3. The `chainId` is correct
    4. The smart account expects the same type of signature
 
-***
+---
 
 ## AA25 Invalid account nonce
 
@@ -151,7 +151,7 @@ The `nonce` of the userOp is invalid. The userOp may be reusing an old nonce or 
 2. Check that you are not using a `nonce` that is too far in the future (more than 10 higher than the current `nonce`.
 3. Check that the `nonce` is formatted correctly.
 
-***
+---
 
 ## AA30 paymaster not deployed
 
@@ -162,7 +162,7 @@ The paymaster contract is not deployed.
 1. Check that the first 20 bytes of the `paymasterAndData` field are the address of the paymaster contract you intend to use.
 2. Check that the paymaster contract is deployed on the network you are using.
 
-***
+---
 
 ## AA31 paymaster deposit too low
 
@@ -172,7 +172,7 @@ The paymaster contract does not have enough funds deposited into the EntryPoint 
 
 1. Please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-***
+---
 
 ## AA32 Paymaster expired or not due
 
@@ -182,7 +182,7 @@ The paymaster's signature is outside of the specified time range and has expired
 
 1. Make sure you are sending the userOp within the `sponsorship expiry` period specified in your Gas Manager policy.
 
-***
+---
 
 ## AA33 reverted (or OOG)
 
@@ -193,7 +193,7 @@ The paymaster signature was rejected or verifying the paymaster signature ran ou
 1. Check that the `verificationGasLimit` is high enough to cover the `validatePaymasterUserOp` function's gas costs.
 2. If the userOp is well formed with a high enough `verificationGasLimit`, please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-***
+---
 
 ## AA34 Signature Error
 
@@ -203,7 +203,7 @@ The paymaster's signature is invalid.
 
 1. Check the format of the signature in the `paymasterAndData` or the `paymaster` field depending on the EntryPoint version you are using.
 
-***
+---
 
 ## AA40 over verificationGasLimit
 
@@ -215,7 +215,7 @@ The amount of gas used to verify the smart account or paymaster signature was hi
 2. Investigate why the smart account and/or paymaster used more gas than expected using tools like [Tenderly](https://tenderly.co/).
 3. Please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-***
+---
 
 ## AA41 too little verificationGas
 
@@ -225,7 +225,7 @@ Verifying the userOp took too much gas and did not complete.
 
 1. Increase the `verificationGasLimit`.
 
-***
+---
 
 ## AA50 postOp reverted
 
@@ -235,13 +235,13 @@ The paymaster contract's postOp function reverted.
 
 1. Please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-***
+---
 
 ## AA51 prefund below actualGasCost
 
 The actual gas cost of the userOp ended was higher than the prefund covered by the smart account or the paymaster.
 
-***
+---
 
 ## AA90 invalid beneficiary
 
@@ -251,7 +251,7 @@ The bundler specified an invalid address or the zero address as the beneficiary 
 
 1. Please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-***
+---
 
 ## AA91 failed send to beneficiary
 
@@ -261,7 +261,7 @@ The beneficiary of the bundler fee was unable to receive compensation from the E
 
 1. Please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-***
+---
 
 ## AA92 internal call only
 
@@ -272,7 +272,7 @@ A function intended only for internal calls within the EntryPoint was called ext
 1. Do not call `innerHandleOp` directly from outside the EntryPoint.
 2. Ensure you are calling the EntryPoint’s main methods (`handleOps`, etc.) rather than internal helper methods.
 
-***
+---
 
 ## AA93 invalid paymasterAndData
 
@@ -282,7 +282,7 @@ The paymasterAndData field is of an incorrect length.
 
 1. Check that `paymasterAndData` is either empty or at least 20 bytes long.
 
-***
+---
 
 ## AA94 gas values overflow
 
@@ -292,7 +292,7 @@ A gas value of the userOp did not fit into a `uint160`.
 
 1. Check that all the gas limit and gas price fields of the userOp fit into `uint160`.
 
-***
+---
 
 ## AA95 out of gas
 
@@ -303,7 +303,7 @@ The entire operation (or a sub-call) ran out of gas. This is usually due to too 
 1. Increase the gas limit provided to the bundler or `handleOps` call.
 2. Optimize your code to require less gas.
 
-***
+---
 
 ## AA96 invalid aggregator
 
