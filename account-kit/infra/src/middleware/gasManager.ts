@@ -77,7 +77,6 @@ export function alchemyGasManagerMiddleware(
   Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
 > {
   const buildContext = async (
-    uo: Parameters<ClientMiddlewareFn>[0],
     args: Parameters<ClientMiddlewareFn>[1],
   ): Promise<Context> => {
     const context: Context = { policyId };
@@ -88,7 +87,6 @@ export function alchemyGasManagerMiddleware(
     }
 
     if (policyToken !== undefined) {
-      const userOp = await deepHexlify(await resolveProperties(uo));
       context.erc20Context = {
         tokenAddress: policyToken.address,
         maxTokenAmount: policyToken.maxTokenAmount,
@@ -96,10 +94,8 @@ export function alchemyGasManagerMiddleware(
 
       if (policyToken.approvalMode === "PERMIT") {
         context.erc20Context.permit = await generateSignedPermit(
-          userOp,
           client as AlchemySmartAccountClient,
           account,
-          policyId,
           policyToken,
         );
       }
@@ -109,13 +105,13 @@ export function alchemyGasManagerMiddleware(
   };
   return {
     dummyPaymasterAndData: async (uo, args) => {
-      const context = await buildContext(uo, args);
+      const context = await buildContext(args);
       const baseMiddleware = erc7677Middleware({ context });
       return baseMiddleware.dummyPaymasterAndData(uo, args);
     },
 
     paymasterAndData: async (uo, args) => {
-      const context = await buildContext(uo, args);
+      const context = await buildContext(args);
       const baseMiddleware = erc7677Middleware({ context });
       return baseMiddleware.paymasterAndData(uo, args);
     },
@@ -281,10 +277,8 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         };
         if (policyToken.approvalMode === "PERMIT") {
           erc20Context.permit = await generateSignedPermit(
-            userOp,
             client,
             account,
-            policyId,
             policyToken,
           );
         }
@@ -367,10 +361,8 @@ const overrideField = <
 /**
  * Utility function to generate a signed Permit for erc20 transaction
  *
- * @param {UserOperationRequest<TEntryPointVersion>} userOp - The user operation request
  * @param {MiddlewareClient} client - The Alchemy smart account client
  * @param {TAccount} account - The smart account instance
- * @param {string | string[]} policyId - The policy ID or array of policy IDs
  * @param {PolicyToken} policyToken - The policy token configuration
  * @param {Address} policyToken.address - ERC20 contract addressya
  * @param {bigint} [policyToken.maxTokenAmount] - Optional ERC20 token limit
@@ -379,14 +371,9 @@ const overrideField = <
  * @param {string} [policyToken.version] - EIP2612 specified ERC20 contract version
  * @returns {Promise<Hex>} Returns a Promise containing the signed EIP2612 permit
  */
-const generateSignedPermit = async <
-  TAccount extends SmartContractAccount,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
->(
-  userOp: UserOperationRequest<TEntryPointVersion>,
+const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   client: MiddlewareClient,
   account: TAccount,
-  policyId: string | string[],
   policyToken: {
     address: Address;
     maxTokenAmount: bigint;
