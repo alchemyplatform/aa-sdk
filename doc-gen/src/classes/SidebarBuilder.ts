@@ -35,6 +35,12 @@ class SidebarBuilder {
     importedName: string,
     isTsx: boolean = false,
   ) {
+    // Only add entries for nodes that have JSDoc comments (same check as functionTemplate)
+    const jsDocCommentAndTags = ts.getJSDocCommentsAndTags(node);
+    if (!jsDocCommentAndTags.length) {
+      return;
+    }
+
     // Handle class methods - use same logic as generateFunctionDocs
     if (ts.isClassElement(node)) {
       const methodName = node.name?.getText() ?? "constructor";

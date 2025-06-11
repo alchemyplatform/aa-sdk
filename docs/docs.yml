@@ -487,8 +487,6 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors.mdx
                       - page: getMfaStatus
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
-                      - page: getPasskeyStatus
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getPasskeyStatus.mdx
                       - page: getUser
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
                       - page: on
@@ -521,36 +519,24 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addOauthProvider.mdx
                       - page: addPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addPasskey.mdx
-                      - page: completeAuthWithBundle
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/completeAuthWithBundle.mdx
                       - page: constructor
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
                       - page: createAccount
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/createAccount.mdx
-                      - page: disconnect
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/disconnect.mdx
                       - page: experimental_createApiKey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
-                      - page: exportWallet
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/exportWallet.mdx
                       - page: getMfaFactors
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
                       - page: getPasskeyStatus
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getPasskeyStatus.mdx
                       - page: getUser
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getUser.mdx
-                      - page: initEmailAuth
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/initEmailAuth.mdx
                       - page: initOauth
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/initOauth.mdx
                       - page: lookupUserByEmail
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
                       - page: lookupUserWithPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserWithPasskey.mdx
-                      - page: oauthWithPopup
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/oauthWithPopup.mdx
-                      - page: oauthWithRedirect
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/oauthWithRedirect.mdx
                       - page: on
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/on.mdx
                       - page: removeMfa
@@ -563,22 +549,12 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/stampGetOrganization.mdx
                       - page: stampWhoami
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami.mdx
-                      - page: submitOtpCode
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/submitOtpCode.mdx
-                      - page: targetPublicKey
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/targetPublicKey.mdx
                       - page: validateMultiFactors
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/validateMultiFactors.mdx
                       - page: verifyMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa.mdx
                       - page: whoami
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/whoami.mdx
-                  - page: MfaRequiredError
-                    path: wallets/pages/reference/account-kit/signer/classes/MfaRequiredError/constructor.mdx
-                  - page: NotAuthenticatedError
-                    path: wallets/pages/reference/account-kit/signer/classes/NotAuthenticatedError/constructor.mdx
-                  - page: OAuthProvidersError
-                    path: wallets/pages/reference/account-kit/signer/classes/OAuthProvidersError/constructor.mdx
                   - page: OauthCancelledError
                     path: wallets/pages/reference/account-kit/signer/classes/OauthCancelledError/constructor.mdx
                   - section: SolanaSigner
@@ -589,12 +565,6 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/addSponsorship.mdx
                       - page: constructor
                         path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/constructor.mdx
-                      - page: createTransaction
-                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/createTransaction.mdx
-                      - page: createTransaction
-                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/createTransaction.mdx
-                      - page: createTransaction
-                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/createTransaction.mdx
                       - page: createTransaction
                         path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/createTransaction.mdx
                       - page: signMessage
@@ -780,14 +750,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/splitAggregatedSignature.mdx
               - section: Classes
                 contents:
-                  - page: InvalidAggregatedSignatureError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/InvalidAggregatedSignatureError/constructor.mdx
-                  - page: InvalidContextSignatureError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/InvalidContextSignatureError/constructor.mdx
-                  - page: MultisigAccountExpectedError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/MultisigAccountExpectedError/constructor.mdx
-                  - page: MultisigMissingSignatureError
-                    path: wallets/pages/reference/account-kit/smart-contracts/classes/MultisigMissingSignatureError/constructor.mdx
                   - section: SessionKeyPermissionsBuilder
                     contents:
                       - page: addContractAddressAccessEntry
@@ -924,8 +886,6 @@ navigation:
                     path: wallets/pages/reference/aa-sdk/core/classes/AccountNotFoundError/constructor.mdx
                   - page: AccountRequiresOwnerError
                     path: wallets/pages/reference/aa-sdk/core/classes/AccountRequiresOwnerError/constructor.mdx
-                  - page: BaseError
-                    path: wallets/pages/reference/aa-sdk/core/classes/BaseError/constructor.mdx
                   - page: BatchExecutionNotSupportedError
                     path: wallets/pages/reference/aa-sdk/core/classes/BatchExecutionNotSupportedError/constructor.mdx
                   - page: ChainNotFoundError
