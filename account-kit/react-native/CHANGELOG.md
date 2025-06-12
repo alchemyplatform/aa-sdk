@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
+
+### Features
+
+- create SideBarBuilder to generate Fern sidebar for SDK References ([#1671](https://github.com/alchemyplatform/aa-sdk/issues/1671)) ([c131c86](https://github.com/alchemyplatform/aa-sdk/commit/c131c86eba09b19e59261df341fd605451962083))
+
 # [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
 
 **Note:** Version bump only for package @account-kit/react-native
