@@ -7,7 +7,10 @@ import type {
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { noopMiddleware } from "../../../middleware/noopMiddleware.js";
-import type { ClientMiddleware } from "../../../middleware/types";
+import type {
+  ClientMiddleware,
+  ClientMiddlewareFn,
+} from "../../../middleware/types";
 import type {
   UserOperationOverridesParameter,
   UserOperationStruct,
@@ -46,9 +49,19 @@ export async function _runMiddlewareStack<
     uo: Deferrable<UserOperationStruct<TEntryPointVersion>>;
     context?: TContext;
   } & GetAccountParameter<TAccount> &
-    UserOperationOverridesParameter<TEntryPointVersion>,
+    UserOperationOverridesParameter<TEntryPointVersion> & {
+      middlewareOverrides?: {
+        gasEstimator?: ClientMiddlewareFn;
+      };
+    },
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
-  const { uo, overrides, account = client.account, context } = args;
+  const {
+    uo,
+    overrides,
+    account = client.account,
+    context,
+    middlewareOverrides,
+  } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -88,7 +101,7 @@ export async function _runMiddlewareStack<
   const result = await asyncPipe(
     dummyPaymasterAndData,
     client.middleware.feeEstimator,
-    client.middleware.gasEstimator,
+    middlewareOverrides?.gasEstimator ?? client.middleware.gasEstimator,
     client.middleware.customMiddleware,
     paymasterAndData,
     client.middleware.userOperationSimulator,
