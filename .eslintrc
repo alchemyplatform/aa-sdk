@@ -2,11 +2,11 @@
   "extends": ["react-app", "plugin:jsdoc/recommended-typescript-error"],
   "env": {
     "es2021": true,
-    "node": true
+    "node": true,
   },
   "plugins": ["import", "eslint-rules"],
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
   },
   "ignorePatterns": ["docs-site/**"],
   "rules": {
@@ -15,20 +15,20 @@
       "error",
       "any",
       {
-        "startLines": 1
-      }
+        "startLines": 1,
+      },
     ],
     "jsdoc/require-returns": [
       "error",
       {
-        "enableFixer": true
-      }
+        "enableFixer": true,
+      },
     ],
     "jsdoc/require-param": [
       "error",
       {
-        "enableFixer": true
-      }
+        "enableFixer": true,
+      },
     ],
     "jsdoc/require-param-type": "error",
     "jsdoc/require-returns-type": "error",
@@ -41,38 +41,26 @@
         "tags": {
           "example": {
             "message": "Example tags must provide a code block with a language identifier.",
-            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```"
-          }
-        }
-      }
+            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```",
+          },
+        },
+      },
     ],
     "eslint-rules/require-jsdoc-on-reexported-functions": [
       "error",
       {
-        "fixBatchSize": 0
-      }
-    ]
+        "fixBatchSize": 0,
+      },
+    ],
   },
   "overrides": [
-    {
-      "files": [
-        "site/snippets/**/*.ts",
-        "site/snippets/**/*.tsx",
-        "**/site/**/*.mdx"
-      ],
-      "rules": {
-        "@typescript-eslint/no-unused-vars": "off",
-        "import/extensions": ["off", "ignorePackages"],
-        "jsdoc/require-jsdoc": "off"
-      }
-    },
     {
       "files": ["**/*.mdx"],
       "extends": ["plugin:mdx/recommended"],
       "rules": {
         "import/extensions": ["off", "ignorePackages"],
-        "react/jsx-no-undef": "off"
-      }
-    }
-  ]
+        "react/jsx-no-undef": "off",
+      },
+    },
+  ],
 }
