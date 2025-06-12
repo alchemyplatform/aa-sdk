@@ -29,7 +29,7 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react-native --fern",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react-native",
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {

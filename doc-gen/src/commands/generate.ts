@@ -5,13 +5,13 @@ import * as path from "node:path";
 import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
+import { sidebarBuilder } from "../classes/SidebarBuilder.js";
 import * as logger from "../logger.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
 
 export type GenerateOptions = {
   in: string;
   out: string;
-  fern?: boolean; // TODO: remove this once Fern docs are live
 };
 
 const generatedDirectories = [
@@ -24,7 +24,6 @@ const generatedDirectories = [
 export async function generate(options: GenerateOptions) {
   const sourceFilePath = path.resolve(process.cwd(), options.in);
   const outputFilePath = path.resolve(process.cwd(), options.out);
-  const isFern = options.fern ?? false;
   logger.info(
     `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`,
   );
@@ -40,6 +39,9 @@ export async function generate(options: GenerateOptions) {
     logger.error(`Could not find package.json for ${sourceFilePath}`);
     return;
   }
+
+  sidebarBuilder.clear();
+  sidebarBuilder.setPackageName(packageJSON.name);
 
   // clean the output directory to account for deleted docs
   generatedDirectories.forEach((dir) => {
@@ -75,10 +77,17 @@ export async function generate(options: GenerateOptions) {
         outputFilePath,
         packageJSON.name,
         isTsx,
-        isFern,
       );
     });
   });
+
+  // Generate and update the docs.yml file with the new SDK Reference section
+  try {
+    await sidebarBuilder.updateDocsYaml();
+    logger.info("Successfully updated docs.yml for package:", packageJSON.name);
+  } catch (error) {
+    logger.error("Failed to update docs.yml:", error);
+  }
 }
 
 async function generateDocumentation(
@@ -87,7 +96,6 @@ async function generateDocumentation(
   outputFilePath: string,
   packageName: string,
   isTsx: boolean,
-  isFern: boolean,
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
@@ -99,15 +107,15 @@ async function generateDocumentation(
   }
 
   if (ts.isClassDeclaration(node)) {
-    generateClassDocs(node, outputFilePath, importedName, packageName, isFern);
+    generateClassDocs(node, outputFilePath, importedName, packageName);
   } else {
+    sidebarBuilder.addEntry(node, outputFilePath, importedName, isTsx);
     generateFunctionDocs(
       node,
       importedName,
       outputFilePath,
       packageName,
       isTsx,
-      isFern,
     );
   }
 }
@@ -144,7 +152,6 @@ async function generateFunctionDocs(
   outputFilePath: string,
   packageName: string,
   isTsx: boolean,
-  isFern: boolean,
 ) {
   // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
   const outputLocation = ts.isClassElement(node)
@@ -166,7 +173,6 @@ async function generateFunctionDocs(
     importedName,
     packageName,
     outputPath,
-    isFern,
   );
   if (!documentation) {
     return;
@@ -185,7 +191,6 @@ function generateClassDocs(
   outputFilePath: string,
   importedName: string,
   packageName: string,
-  isFern: boolean,
 ) {
   const classOutputBasePath = path.resolve(
     outputFilePath,
@@ -214,13 +219,14 @@ function generateClassDocs(
             ts.isFunctionExpression(member.initializer))) ||
           (member.type && ts.isFunctionLike(member.type))))
     ) {
+      sidebarBuilder.addEntry(member, classOutputBasePath, importedName, false);
+
       generateFunctionDocs(
         member,
         importedName,
         classOutputBasePath,
         packageName,
         false,
-        isFern,
       );
     }
   });
