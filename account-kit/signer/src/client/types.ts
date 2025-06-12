@@ -59,6 +59,7 @@ export type EmailAuthParams = {
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
   expirationSeconds?: number;
+  fetchIdTokenOnly?: boolean;
 };
 
 export type OtpParams = {
@@ -172,11 +173,30 @@ export type SignerEndpoints = [
     };
   },
   {
-    Route: "/v1/add-oauth-provider";
+    Route: "/v1/update-email-auth";
     Body: {
       stampedRequest: TSignedRequest;
     };
     Response: void;
+  },
+  {
+    Route: "/v1/add-oauth-provider";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: { oauthProviders: OauthProviderInfo[] };
+  },
+  {
+    Route: "/v1/remove-oauth-provider";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
+    Route: "/v1/list-auth-methods";
+    Body: {};
+    Response: AuthMethods;
   },
   {
     Route: "/v1/prepare-oauth";
@@ -278,6 +298,12 @@ export type AuthLinkingPrompt = {
   orgId: string;
 };
 
+export type IdTokenOnly = {
+  status: "FETCHED_ID_TOKEN_ONLY";
+  idToken: string;
+  providerName: string;
+};
+
 export type OauthState = {
   authProviderId: string;
   isCustomProvider?: boolean;
@@ -286,6 +312,7 @@ export type OauthState = {
   expirationSeconds?: number;
   redirectUrl?: string;
   openerOrigin?: string;
+  fetchIdTokenOnly?: boolean;
 };
 
 export type GetOauthProviderUrlArgs = {
@@ -343,6 +370,25 @@ export type SubmitOtpCodeResponse =
 export type AddOauthProviderParams = {
   providerName: string;
   oidcToken: string;
+};
+
+export type AuthMethods = {
+  email?: string;
+  oauthProviders: OauthProviderInfo[];
+  passkeys: PasskeyInfo[];
+};
+
+export type OauthProviderInfo = {
+  providerId: string;
+  issuer: string;
+  providerName?: string;
+  userDisplayName?: string;
+};
+
+export type PasskeyInfo = {
+  authenticatorId: string;
+  name: string;
+  createdAt: number;
 };
 
 export type experimental_CreateApiKeyParams = {
