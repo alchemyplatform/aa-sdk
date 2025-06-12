@@ -178,6 +178,18 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useConnection.mdx
                   - page: useUiConfig
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
+              - section: Other Hooks
+                contents:
+                  - page: useAuthContext
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthContext.mdx
+                  - page: useMFA
+                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
+                  - page: useSolanaConnection
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaConnection.mdx
+                  - page: useSolanaSignMessage
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaSignMessage.mdx
+                  - page: useSolanaTransaction
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaTransaction.mdx
               - section: Functions
                 contents:
                   - page: createConfig

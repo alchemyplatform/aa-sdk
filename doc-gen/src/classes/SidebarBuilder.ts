@@ -159,6 +159,22 @@ class SidebarBuilder {
       }
     }
 
+    const allGroupedHookNames = Object.values(hookGroupings).flat();
+    const ungroupedHooks = hookEntries.filter(
+      (hook) => !allGroupedHookNames.includes(hook.name),
+    );
+
+    if (ungroupedHooks.length > 0) {
+      yaml += `  - section: Other Hooks\n`;
+      yaml += `    contents:\n`;
+
+      ungroupedHooks.sort((a, b) => a.name.localeCompare(b.name));
+      for (const hook of ungroupedHooks) {
+        yaml += `      - page: ${hook.name}\n`;
+        yaml += `        path: ${hook.path}\n`;
+      }
+    }
+
     if (functionEntries.length > 0) {
       yaml += `  - section: Functions\n`;
       yaml += `    contents:\n`;
