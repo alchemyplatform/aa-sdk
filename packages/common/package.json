@@ -27,6 +27,11 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
     },
+    "./chains": {
+      "types": "./dist/types/chains.d.ts",
+      "import": "./dist/esm/chains.js",
+      "default": "./dist/esm/chains.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
