@@ -2,8 +2,8 @@
 title: FAQs
 description: Frequently asked questions about Gas Manager
 subtitle: Frequently asked questions about Gas Manager
-url: https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing
-slug: reference/gas-manager-coverage-api-pricing
+url: https://docs.alchemy.com/reference/gas-manager-faqs
+slug: reference/gas-manager-faqs
 ---
 
 ## Usage Limits
@@ -39,3 +39,7 @@ To provide its services, Alchemy's [Gas Coverage API](/reference/gas-manager-cov
 ## What are the deployment addresses of the Gas Manager (Paymaster)?
 
 You can find the deployment addresses [here](https://github.com/Jam516/BundleBear/blob/main/models/erc4337/labels/erc4337_labels_paymasters.sql).
+
+## What is the encoding of `paymasterAndData`?
+
+`paymasterAndData` follows the format enforced by ERC-4337, which consists of a 20-byte address followed by an arbitrary-length data segment. For Alchemy’s paymaster contract, the data segment is formatted as a 32-byte packed time range validity followed by a 65-byte long signature.

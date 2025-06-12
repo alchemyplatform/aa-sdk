@@ -1,6 +1,6 @@
 ---
 title: alchemy_simulateUserOperationAssetChanges
-description: Simulates user operations and returns a list of asset changes.
+description: Simulates userOps and returns a list of asset changes.
 subtitle: Simulates user operations and returns a list of asset changes.
 url: https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges
 slug: reference/alchemy-simulateuseroperationassetchanges
@@ -10,7 +10,7 @@ slug: reference/alchemy-simulateuseroperationassetchanges
 
 post https://\{network}.g.alchemy.com/v2/\{apiKey}
 
-Simulates user operations and returns a list of asset changes.
+Simulates userOps and returns a list of asset changes.
 
 <Info>
   The results provided by `alchemy_simulateUserOperationAssetChanges` are based on the blockchain's state at the moment of simulation. Changes in the blockchain state, such as updates to contract variables or balances, can occur between the time of simulation and when you actually execute your `UserOp`.
@@ -23,8 +23,6 @@ Please be aware of this potential variance and consider it while using the API.
 
 <Warning>
   This endpoint requires a dummy signature in the `userOp`. Check our
-  [FAQs](/reference/account-abstraction-faq#what-is-a-dummy-signature-and-why-do-i-need-it-for-certain-endpoints)
-  to learn what a dummy signature is and which dummy signature you should use.
+  [FAQs](/reference/bundler-faqs#what-is-a-dummy-signature) to learn what a
+  dummy signature is.
 </Warning>
-
-This method accepts an array containing a `UserOperation` Object, an Entrypoint address, and a block override as parameters. However, these 3 items appear three times in the param array below. This has to do with Readme (our docs platform) not supporting multi-type arrays. To workaround, please fill in the `userOperation` object in the first box, the `EntryPoint` address in the second box and the `Block Override` in the third one.
