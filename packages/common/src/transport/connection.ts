@@ -22,6 +22,7 @@ export type AlchemyConnectionConfig =
       Never<AlchemyConnectionBaseConfig> &
       Never<SplitTransportParams>)
   // This is an escape hatch for cases where we need to split traffic but still maintain an alchemy transport
-  | (SplitTransportParams &
-      Never<AlchemyConnectionBaseConfig> &
+  | (SplitTransportParams & {
+      restConnection: AlchemyConnectionConfig;
+    } & Never<AlchemyConnectionBaseConfig> &
       Never<AAOnlyChainConfig>);
