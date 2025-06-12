@@ -1,4 +1,14 @@
-# Move images wallets/images dir to docs-site/fern/images/wallets so they can be referenced by Fern
+#!/bin/bash
+
+# Ensure docs-site is clean
+# Insert script can probably be refactored for clean overwrites so this isn't necessary
+cd docs-site
+git restore . && git clean -fdq
+
+# Copy docs to docs-site
+mkdir -p fern/wallets
+cp -r ../docs/* fern/wallets/
+
 mkdir -p fern/images/wallets && \
 mv fern/wallets/images/* fern/images/wallets/
 
@@ -24,3 +34,5 @@ sed -n '/^navigation:/,$p' fern/wallets/docs.yml | sed '1d' | \
     "/$DOCS_PLACEHOLDER/d" \
     fern/docs.yml && \
   rm fern/docs.yml.bak
+
+cd ..
