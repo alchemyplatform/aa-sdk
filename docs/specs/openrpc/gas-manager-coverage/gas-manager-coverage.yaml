@@ -29,6 +29,11 @@ methods:
               items:
                 type: "string"
                 format: "uuid"
+
+      - name: "erc20Context"
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+        description: "Erc20 context"
       - name: "entryPoint"
         required: true
         description: The entrypoint address the request should be sent through. This MUST be one of the entry points returned by the `supportedEntryPoints` RPC call and match the version of the user operation in the `userOperation` field.
@@ -267,6 +272,10 @@ methods:
               items:
                 type: "string"
                 format: "uuid"
+      - name: "erc20Context"
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+        description: "Erc20 context"
       - name: "entryPoint"
         required: true
         description: "The `entrypoint` address the request should be sent through. This **MUST** be one of the entry points returned by the `supportedEntryPoints` RPC call and match the version of the user operation in the `userOperation` field."
@@ -402,6 +411,9 @@ methods:
             webhookData:
               type: "string"
               description: "Additional data you wish to include (e.g. proof of humanity)."
+            erc20Context:
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+              description: "Erc20 context"
     result:
       name: "Response"
       description: "The response object may be one of two types: - For entrypoint v0.6: an object with property paymasterAndData. - For entrypoint v0.7: an object with property paymasterData."
@@ -496,6 +508,9 @@ methods:
                     type: "string"
                     format: "uuid"
               description: "The policy ID or list of policy IDs."
+            erc20Context:
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+              description: "Erc20 context"
             webhookData:
               type: "string"
               description: "Additional data you wish to include (e.g. proof of humanity)."

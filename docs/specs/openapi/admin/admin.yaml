@@ -67,9 +67,8 @@ paths:
                   description: Name of the policy
                   default: "My Policy"
                 policyType:
-                  type: string
+                  $ref: "#/components/schemas/PolicyType"
                   description: Type of the policy (e.g. "sponsorship"). Currently we support `sponsorship` (for EVM network policies) and `solana` (for Solana network policies).
-                  default: "sponsorship"
                 appId:
                   type: string
                   description: |
@@ -85,6 +84,13 @@ paths:
                 rules:
                   description: Rules for `sponsorship` policy type. Empty if `policyType` is not `sponsorship`.
                   $ref: "#/components/schemas/Rules"
+                solana_rules:
+                  $ref: "#/components/schemas/SolanaRules"
+                  description: Rules for `solana` policy type. Empty if `policyType` is not `solana`.
+                erc20_rules:
+                  $ref: "#/components/schemas/Erc20Rules"
+                  description: Rules for `erc20` policy type. Empty if `policyType` is not `erc20`.
+
       responses:
         "200":
           description: Policy created successfully
@@ -232,6 +238,12 @@ paths:
                   type: array
                   items:
                     type: string
+                solana_rules:
+                  $ref: "#/components/schemas/SolanaRules"
+                  description: Rules for `solana` policy type. Empty if `policyType` is not `solana`.
+                erc20_rules:
+                  $ref: "#/components/schemas/Erc20Rules"
+                  description: Rules for `erc20` policy type. Empty if `policyType` is not `erc20`.
       responses:
         "200":
           description: Policy rules replaced successfully
@@ -617,6 +629,52 @@ components:
           description: Unix timestamp of when the policy ends
           default: "1679340742"
 
+    PolicyType:
+      type: string
+      enum: [sponsorship, erc20, solana]
+      description: Type of the policy (e.g. "sponsorship"). Currently we support `sponsorship` (for EVM network policies) and `solana` (for Solana network policies).
+      default: "sponsorship"
+
+    Erc20Token:
+      type: object
+      properties:
+        network:
+          type: string
+          description: Network of the Erc20 token
+        token_address:
+          type: string
+          description: Erc20 token contract address
+        price_reference_network:
+          type: string
+          description: Price reference network when the erc20 token is on a testnet
+        price_reference_token_address:
+          type: string
+          description: Erc20 token contract address from `price_reference_network`
+      required:
+        - network
+        - token_address
+
+    Erc20Rules:
+      type: object
+      properties:
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/Erc20Token"
+          description: Erc20 tokens allowed by the rule
+        recipient_address:
+          type: string
+          description: Recipient's address across all networks
+        use_post_op:
+          type: boolean
+          description: Use post_op mode or pre_op mode
+        price_multiplier:
+          type: number
+          description: multiplier of erc20 price
+        rules:
+          $ref: "#/components/schemas/Rules"
+          description: Rules for `erc20` policy type.
+
     Policy:
       type: object
       properties:
@@ -648,9 +706,8 @@ components:
           description: Version of the policy
           default: 0
         policyType:
-          type: string
+          $ref: "#/components/schemas/PolicyType"
           description: Type of the policy. `sponsorship`.
-          default: "sponsorship"
         policyState:
           type: string
           description: State of the policy
@@ -660,6 +717,16 @@ components:
           items:
             type: string
           description: List of networks the policy is active on
+        gas_pump_id:
+          type: string
+          description: Gas pump id
+        erc20_rules:
+          $ref: "#/components/schemas/Erc20Rules"
+          description: Erc20 rules for policy
+        solana_rules:
+          $ref: "#/components/schemas/SolanaRules"
+          description: Solana rules for policy
+
       required:
         - policyId
         - appId

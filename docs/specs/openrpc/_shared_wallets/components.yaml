@@ -107,6 +107,11 @@ components:
       minimum: 0
       maximum: 1
 
+    positiveDecimal:
+      title: positive decimal number
+      type: number
+      minimum: 0
+
     BlockChange:
       type: object
       required:
@@ -375,6 +380,20 @@ components:
         eip7702Auth:
           $ref: "#/components/schemas/Eip7702Auth"
           description: "The authorization tuple that an EOA account delegates to in EIP-7702"
+
+    erc20Context:
+      title: Context for Erc20 paymaster
+      type: object
+      properties:
+        tokenAddress:
+          $ref: "#/components/schemas/address"
+          description: "Erc20 contract address"
+        maxTokenAmount:
+          $ref: "#/components/schemas/positiveDecimal"
+          description: "Maximum allowed amount of value in USD"
+        permit:
+          $ref: "#/components/schemas/bytes"
+          description: "A 7597 typed permit"
 
     transactionObject:
       title: Transaction Object
