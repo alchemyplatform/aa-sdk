@@ -82,6 +82,8 @@ export class SoftWebauthnDevice {
       response: {
         clientDataJSON: Buffer.from(JSON.stringify(clientData), "utf-8"),
         attestationObject: cbor.encode(attestationObject),
+        getPublicKey: () =>
+          this.publicKey!.export({ type: "spki", format: "der" }),
       },
       type: "public-key",
       getClientExtensionResults: () => ({}),
