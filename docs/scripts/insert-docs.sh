@@ -12,6 +12,10 @@ cp -r ../docs/* fern/wallets/
 mkdir -p fern/images/wallets && \
 mv fern/wallets/images/* fern/images/wallets/
 
+cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
+cp -r fern/wallets/specs/openapi/* src/openapi/
+cp -r fern/wallets/api-generators/* fern/apis/
+
 # Takes the contents of docs/docs.yml and inserts its contents into the right places in docs-site/fern/docs.yml
 COMPONENTS_PLACEHOLDER="# Account Kit components are auto-generated here"
 DOCS_PLACEHOLDER="# Account Kit docs are auto-generated here"
