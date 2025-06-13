@@ -25,3 +25,4 @@
 [submodule "docs-site"]
 	path = docs-site
 	url = https://github.com/alchemyplatform/docs
+	branch = ds/wallet-placeholder
