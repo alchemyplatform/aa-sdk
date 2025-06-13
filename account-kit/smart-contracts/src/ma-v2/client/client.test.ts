@@ -29,7 +29,6 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
-  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
