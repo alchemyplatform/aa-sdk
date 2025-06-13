@@ -3,23 +3,40 @@
 # Set error handling
 set -e
 
-cd docs-site
+# Capture repo argument
+REPO=$1
+
+# If the repo is aa-sdk, we need to cd into the docs-site folder
+if [ "$REPO" = "aa-sdk" ]; then
+  cd docs-site
+fi
 
 # Clean up any existing files from previous runs
 rm -rf fern/wallets
 rm -rf fern/images/wallets
 
-mkdir -p fern/wallets
-mkdir -p fern/images/wallets
-
 # Copy docs to docs-site
-cp -r ../docs/* fern/wallets/
-cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
-cp -r fern/wallets/specs/openapi/* src/openapi/
-cp -r fern/wallets/api-generators/* fern/apis/
+  mkdir -p fern/wallets
+if [ "$REPO" = "aa-sdk" ]; then
+  # From aa-sdk repo, the docs folder is in the root of the repo
+  cp -r ../docs/* fern/wallets/
+else
+  # From docs repo, the docs folder is in the aa-sdk folder
+  cp -r aa-sdk/docs/* fern/wallets
+fi
 
-# Move images to the correct location
+# Copy specs and api-generators to correct place in docs-site
+if [ -d "fern/wallets/specs" ]; then
+  cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
+  cp -r fern/wallets/specs/openapi/* src/openapi/
+fi
+if [ -d "fern/wallets/api-generators" ]; then
+  cp -r fern/wallets/api-generators/* fern/apis/
+fi
+
+# Move images to the correct place in docs-site
 if [ -d "fern/wallets/images" ]; then
+    mkdir -p fern/images/wallets
     cp -r fern/wallets/images/* fern/images/wallets/
     rm -rf fern/wallets/images
 fi
@@ -57,4 +74,6 @@ awk '
 rm -f fern/wallets/temp_wallets.yml
 rm -f fern/docs.yml.bak
 
-cd ..
+if [ "$REPO" = "aa-sdk" ]; then
+  cd ..
+fi

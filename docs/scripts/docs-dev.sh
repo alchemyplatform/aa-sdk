@@ -13,12 +13,10 @@ if ! command -v pnpm &> /dev/null; then
 fi
 
 # Update docs-site submodule
-echo "Updating docs-site submodule..."
 git submodule update --init --recursive
 
-echo "Running insert-docs script..."
-# Run the insert-docs script
-./docs/scripts/insert-docs.sh
+# Insert docs content into docs-site
+./docs/scripts/insert-docs.sh aa-sdk
 
 # Install dependencies
 cd docs-site
