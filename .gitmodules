@@ -22,3 +22,7 @@
 [submodule "examples/ui-demo/contracts/lib/forge-std"]
 	path = examples/ui-demo/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "docs-site"]
+	path = docs-site
+	url = https://github.com/alchemyplatform/docs
+	branch = ds/wallet-placeholder # temporary - once this branch is merged we can remove this

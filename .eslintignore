@@ -20,3 +20,5 @@ account-kit/java/*
 **/vendor/*
 **/test-results/*
 **/playwright-report/*
+
+/docs-site/**
