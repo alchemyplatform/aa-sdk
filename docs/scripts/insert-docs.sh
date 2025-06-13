@@ -14,6 +14,9 @@ mkdir -p fern/images/wallets
 
 # Copy docs to docs-site
 cp -r ../docs/* fern/wallets/
+cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
+cp -r fern/wallets/specs/openapi/* src/openapi/
+cp -r fern/wallets/api-generators/* fern/apis/
 
 # Move images to the correct location
 if [ -d "fern/wallets/images" ]; then
