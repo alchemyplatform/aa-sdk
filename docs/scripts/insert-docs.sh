@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script is used to insert the docs into the docs-site folder across both aa-sdk and docs repos
+# It needs to be agnostic to both the repo it is running in and whether the env is local or in CI
 
 # Set error handling
 set -e
@@ -73,7 +75,3 @@ awk '
 # Clean up temporary files
 rm -f fern/wallets/temp_wallets.yml
 rm -f fern/docs.yml.bak
-
-if [ "$REPO" = "aa-sdk" ]; then
-  cd ..
-fi
