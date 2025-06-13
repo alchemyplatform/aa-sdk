@@ -49,7 +49,7 @@
     "lint:write": "eslint . --fix && yarn fern:gen && prettier --loglevel warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install && yarn turbo prepare",
-    "docs:dev": "docs/scripts/insert-docs.sh && cd docs-site && pnpm dev",
+    "docs:dev": "./docs/scripts/docs-dev.sh",
     "version": "yarn build:libs"
   },
   "devDependencies": {
