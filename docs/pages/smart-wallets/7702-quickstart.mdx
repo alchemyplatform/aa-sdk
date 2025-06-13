@@ -7,15 +7,14 @@ slug: reference/wallet-apis-7702-quickstart
 
 This short guide will introduce how to prepare and send user operations using a 7702 account in a matter of minutes. We'll demonstrate how to do it [using the SDK client](#using-the-typescript-sdk) or by using platform-agnostic [JSON-RPC APIs](#using-the-json-rpc-apis-directly).
 
-The logical flow is to request an account, prepare the calls you're looking to send, and send them!
+The logical flow is to prepare the calls you're looking to send, sign them, and send them!
 
 In API calls, it's as simple as:
 
 ```mermaid
 flowchart LR
-    A[requestAccount] --> B[prepareCalls]
-    B --> C[sendPreparedCalls]
-    C --> D[getCallsStatus]
+    A[prepareCalls] --> B[sendPreparedCalls]
+    B --> C[getCallsStatus]
 ```
 
 This guide assumes you have an account you can sign with, like an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer) or a user's EOA. You will also need an Alchemy API key, and a [gas manager policy ID](https://www.alchemy.com/docs/wallets/react/sponsor-gas) if you want to sponsor gas.
@@ -78,21 +77,15 @@ const client = createSmartWalletClient({
 All you need to do is follow a few simple steps to start sending user ops with Wallet APIs!
 
 ```ts
-// Request the account using the "7702" account type.
-const account = await client.requestAccount({
-  creationHint: {
-    accountType: "7702",
-  },
-});
-
-// Prepare the calls.
+// Prepare the calls using the 7702 capability.
 const preparedCalls = await client.prepareCalls({
   calls: [
     // Calls here can include `to`, `data`, and `value` params.
     { to: "0x0000000000000000000000000000000000000000", data: "0x" },
   ],
-  from: account.address,
+  from: "0xFROM_ADDRESS", // put the account address here
   capabilities: {
+    eip7702Auth: true,
     paymasterService: {
       policyId: "your-gas-manager-policy-id", // put your gas manager policy ID here
     },
@@ -111,48 +104,9 @@ const status = await client.getCallsStatus(preparedCallIds[0]);
 
 ## Using The JSON-RPC APIs Directly
 
-### 1. Request An Account For The Owner Signer
+### 1. Prepare Your Calls
 
-Given an EOA address, call `wallet_requestAccount` with the "7702" account type.
-
-```bash
-curl --request POST \
-     --url https://api.g.alchemy.com/v2/API_KEY \
-     --header 'accept: application/json' \
-     --header 'content-type: application/json' \
-     --data '
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "method": "wallet_requestAccount",
-  "params": [
-    {
-      "signerAddress": "0xOWNER_ADDRESS", // put the EOA address here
-      "creationHint": {
-        "accountType": "7702"
-      }
-    }
-  ]
-}
-'
-```
-
-This will return the smart account address, which should be the same as the owner address when using 7702:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "accountAddress": "0xACCOUNT_ADDRESS",
-    "id": "11111111-2222-3333-4444-555555555555"
-  }
-}
-```
-
-### 2. Prepare Your Calls
-
-Now you can simply prepare whatever calls you'd like to send.
+You can simply prepare whatever calls you'd like to send, being sure to include the 7702 capability.
 
 ```bash
 curl --request POST \
@@ -177,6 +131,7 @@ curl --request POST \
       "from": "0xACCOUNT_ADDRESS", // put the account address here
       "chainId": "0xCHAIN_ID", // put the chain ID here
       "capabilities": {
+        "eip7702Auth": true,
         "paymasterService": {
             "policyId": "your-gas-manager-policy-id" // if sponsoring gas, put your gas manager policy ID here
         }
@@ -219,7 +174,7 @@ If the account isn't already delegated to Modular Account V2 onchain, this will 
 }
 ```
 
-For subsequent calls, only one call will be returned:
+For subsequent calls, only one call will be returned (unless the owner removed or changed the delegation):
 
 ```json
 {
@@ -235,7 +190,7 @@ For subsequent calls, only one call will be returned:
 }
 ```
 
-### 3. Sign The Call(s)
+### 2. Sign The Call(s)
 
 Sign the prepared calls. How exactly you do this will differ depending on your language. Here is an example using Viem in TypeScript:
 
@@ -268,7 +223,7 @@ const signedAuthorization = !authorizationCall
     });
 ```
 
-### 4. Send The Prepared Calls
+### 3. Send The Prepared Calls
 
 Now that you have the prepared calls & signatures, you're ready to send the calls!
 
@@ -314,7 +269,7 @@ curl --request POST \
 
 This will return the array of prepared call IDs.
 
-### 5. Check The Calls Status
+### 4. Check The Calls Status
 
 Now you can simply call `wallet_getCallsStatus` to check the status of the calls.
 
