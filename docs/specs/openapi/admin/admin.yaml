@@ -7,7 +7,6 @@ servers:
 paths:
   "/api/gasManager/policy":
     post:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Create Policy
       description: |
         Creates a new gas manager policy with the specified rules. Returns the policy id of 
@@ -115,7 +114,6 @@ paths:
 
   "/api/gasManager/policy/{id}":
     get:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Get Policy
       description: |
         Returns a policy by id.
@@ -156,7 +154,6 @@ paths:
                         type: string
 
     delete:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Delete Policy
       description: |
         Deletes a policy by id.
@@ -198,7 +195,6 @@ paths:
                         type: string
 
     put:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Replace Policy
       description: |
         Replaces all rules in an existing policy by id.
@@ -265,7 +261,6 @@ paths:
 
   "/api/gasManager/policies":
     get:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Get All Policies
       description: |
         Returns all policies under an app. The results are paginated.
@@ -331,7 +326,6 @@ paths:
 
   "/api/gasManager/policy/{id}/status":
     put:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Update Policy Status
       description: |
         Modifies the status of a policy to either "active" or "inactive".
@@ -386,7 +380,6 @@ paths:
 
   "/api/gasManager/policy/{id}/stats/details":
     get:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Get Policy Stats
       description: |
         Returns stats about a policy specified by ID, including signatures mined, signatures expired, signatures pending, USD mined, and USD pending.
@@ -476,7 +469,6 @@ paths:
 
   "/api/gasManager/policy/{id}/sponsorships":
     get:
-      tags: ["Gas Manager Admin API Endpoints"]
       summary: Get Sponsorships
       description: |
         Returns a list of sponsorships associated with the specified policy ID. The results are paginated.
