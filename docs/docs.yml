@@ -34,6 +34,16 @@ navigation:
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
 
+      - section: Recipes
+        slug: recipes
+        contents:
+          - page: Overview
+            slug: /
+            path: wallets/pages/recipes/index.mdx
+          - page: Send USDC
+            slug: send-usdc
+            path: wallets/pages/recipes/send-usdc.mdx
+
       - section: React
         contents:
           - page: Overview
