@@ -3,7 +3,6 @@ import type {
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
-  Erc7677Client,
   Multiplier,
   SmartContractAccount,
   UserOperationFeeOptions,
@@ -26,18 +25,20 @@ import {
 import {
   fromHex,
   isHex,
-  toHex,
   type Hex,
   encodeAbiParameters,
   encodeFunctionData,
   parseAbi,
-  sliceHex,
 } from "viem";
 import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
-import { PermitTypes, EIP712NoncesAbi } from "../gas-manager.js";
+import {
+  PermitTypes,
+  EIP20Abis,
+  getAlchemyPaymasterAddress,
+} from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 import type { MiddlewareClient } from "../../../../aa-sdk/core/dist/types/middleware/actions.js";
 
@@ -76,7 +77,6 @@ export function alchemyGasManagerMiddleware(
   Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
 > {
   const buildContext = async (
-    uo: Parameters<ClientMiddlewareFn>[0],
     args: Parameters<ClientMiddlewareFn>[1],
   ): Promise<Context> => {
     const context: Context = { policyId };
@@ -87,7 +87,6 @@ export function alchemyGasManagerMiddleware(
     }
 
     if (policyToken !== undefined) {
-      const userOp = await deepHexlify(await resolveProperties(uo));
       context.erc20Context = {
         tokenAddress: policyToken.address,
         maxTokenAmount: policyToken.maxTokenAmount,
@@ -95,10 +94,8 @@ export function alchemyGasManagerMiddleware(
 
       if (policyToken.approvalMode === "PERMIT") {
         context.erc20Context.permit = await generateSignedPermit(
-          userOp,
           client as AlchemySmartAccountClient,
           account,
-          policyId,
           policyToken,
         );
       }
@@ -108,13 +105,13 @@ export function alchemyGasManagerMiddleware(
   };
   return {
     dummyPaymasterAndData: async (uo, args) => {
-      const context = await buildContext(uo, args);
+      const context = await buildContext(args);
       const baseMiddleware = erc7677Middleware({ context });
       return baseMiddleware.dummyPaymasterAndData(uo, args);
     },
 
     paymasterAndData: async (uo, args) => {
-      const context = await buildContext(uo, args);
+      const context = await buildContext(args);
       const baseMiddleware = erc7677Middleware({ context });
       return baseMiddleware.paymasterAndData(uo, args);
     },
@@ -280,10 +277,8 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         };
         if (policyToken.approvalMode === "PERMIT") {
           erc20Context.permit = await generateSignedPermit(
-            userOp,
             client,
             account,
-            policyId,
             policyToken,
           );
         }
@@ -366,10 +361,8 @@ const overrideField = <
 /**
  * Utility function to generate a signed Permit for erc20 transaction
  *
- * @param {UserOperationRequest<TEntryPointVersion>} userOp - The user operation request
  * @param {MiddlewareClient} client - The Alchemy smart account client
  * @param {TAccount} account - The smart account instance
- * @param {string | string[]} policyId - The policy ID or array of policy IDs
  * @param {PolicyToken} policyToken - The policy token configuration
  * @param {Address} policyToken.address - ERC20 contract addressya
  * @param {bigint} [policyToken.maxTokenAmount] - Optional ERC20 token limit
@@ -378,14 +371,9 @@ const overrideField = <
  * @param {string} [policyToken.version] - EIP2612 specified ERC20 contract version
  * @returns {Promise<Hex>} Returns a Promise containing the signed EIP2612 permit
  */
-const generateSignedPermit = async <
-  TAccount extends SmartContractAccount,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
->(
-  userOp: UserOperationRequest<TEntryPointVersion>,
+const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   client: MiddlewareClient,
   account: TAccount,
-  policyId: string | string[],
   policyToken: {
     address: Address;
     maxTokenAmount: bigint;
@@ -404,7 +392,7 @@ const generateSignedPermit = async <
   let decimalsFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
-      abi: parseAbi(EIP712NoncesAbi),
+      abi: parseAbi(EIP20Abis),
       functionName: "decimals",
       args: [],
     }),
@@ -413,28 +401,15 @@ const generateSignedPermit = async <
   let nonceFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
-      abi: parseAbi(EIP712NoncesAbi),
+      abi: parseAbi(EIP20Abis),
       functionName: "nonces",
       args: [account.address],
     }),
   });
 
-  let paymasterDataFuture = (client as Erc7677Client).request({
-    method: "pm_getPaymasterStubData",
-    params: [
-      userOp,
-      account.getEntryPoint().address,
-      toHex(client.chain.id),
-      {
-        policyId: Array.isArray(policyId) ? policyId[0] : policyId,
-      },
-    ],
-  });
-
-  const [decimalsResponse, nonceResponse, paymasterData] = await Promise.all([
+  const [decimalsResponse, nonceResponse] = await Promise.all([
     decimalsFuture,
     nonceFuture,
-    paymasterDataFuture,
   ]);
   if (!decimalsResponse.data) {
     throw new Error("No decimals returned from erc20 contract call");
@@ -448,11 +423,10 @@ const generateSignedPermit = async <
   const maxAmountToken = policyToken.maxTokenAmount * decimals;
   const nonce = BigInt(nonceResponse.data);
 
-  const paymasterAddress = paymasterData.paymaster
-    ? paymasterData.paymaster
-    : paymasterData.paymasterAndData
-      ? sliceHex(paymasterData.paymasterAndData, 0, 20)
-      : undefined;
+  const paymasterAddress = getAlchemyPaymasterAddress(
+    client.chain,
+    account.getEntryPoint().version,
+  );
 
   if (paymasterAddress === undefined || paymasterAddress === "0x") {
     throw new Error("no paymaster contract address available");

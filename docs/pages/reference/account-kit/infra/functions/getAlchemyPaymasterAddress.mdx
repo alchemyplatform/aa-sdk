@@ -18,7 +18,7 @@ import { getAlchemyPaymasterAddress } from "@account-kit/infra";
 ```ts
 import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
 
-const paymasterAddress = getAlchemyPaymasterAddress(sepolia);
+const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.6");
 ```
 
 ## Parameters
@@ -27,6 +27,11 @@ const paymasterAddress = getAlchemyPaymasterAddress(sepolia);
 
 `Chain`
 The chain for which the paymaster address is required
+
+### version
+
+`EntryPointVersion`
+The version of the entry point
 
 ## Returns
 
