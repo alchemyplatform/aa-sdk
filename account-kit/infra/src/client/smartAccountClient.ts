@@ -13,6 +13,7 @@ import {
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Address, type Chain } from "viem";
+import { headersUpdate } from "../alchemyTrackerHeaders.js";
 import {
   alchemy,
   convertHeadersToObject,
@@ -27,7 +28,6 @@ import {
   type AlchemySmartAccountClientActions,
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
-import { headersUpdate } from "../alchemyTrackerHeaders.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner,
