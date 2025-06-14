@@ -14,6 +14,7 @@ import type {
   UserOperationStruct,
 } from "../../types";
 import type { IsUndefined } from "../../utils";
+import type { ClientMiddlewareFn } from "../../middleware/types";
 
 // [!region UpgradeAccountParams]
 export type UpgradeAccountParams<
@@ -43,7 +44,11 @@ export type SendUserOperationParameters<
   uo: UserOperationCallData | BatchUserOperationCallData;
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext> &
-  UserOperationOverridesParameter<TEntryPointVersion>;
+  UserOperationOverridesParameter<TEntryPointVersion> & {
+    middlewareOverrides?: {
+      gasEstimator?: ClientMiddlewareFn;
+    };
+  };
 // [!endregion SendUserOperationParameters]
 
 // [!region BuildUserOperationParameters]
