@@ -33,7 +33,7 @@ const transferCalldata = encodeFunctionData({
 ## 2. Send the transaction
 
 <Tabs>
-  <TabItem value="react" label="React (hook)">
+  <Tab title="React (hook)">
 
 ```tsx
 import { useSmartAccountClient } from "@alchemy/aa-react";
@@ -57,8 +57,8 @@ export function SendUsdcButton() {
 }
 ```
 
-  </TabItem>
-  <TabItem value="core" label="Core (vanilla JS)">
+  </Tab>
+  <Tab title="Core (vanilla JS)">
 
 ```ts
 import { createSmartAccountClient } from "@alchemy/aa-core";
@@ -74,7 +74,7 @@ await client.sendTransaction({
 });
 ```
 
-  </TabItem>
+  </Tab>
 </Tabs>
 
 ## 3. Wait for the transaction to be mined
