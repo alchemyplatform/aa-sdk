@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/core",
-  "version": "4.40.0",
+  "version": "4.41.0",
   "description": "Core library for account kit that provides state management and framework indepednent abstractions across infra, Alchemy Signer, and Smart Contracts",
   "author": "Alchemy",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/core --fern",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/core",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
   },
@@ -49,11 +49,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.40.0",
-    "@account-kit/logging": "^4.40.0",
-    "@account-kit/react-native-signer": "^4.40.0",
-    "@account-kit/signer": "^4.40.0",
-    "@account-kit/smart-contracts": "^4.40.0",
+    "@account-kit/infra": "^4.41.0",
+    "@account-kit/logging": "^4.41.0",
+    "@account-kit/react-native-signer": "^4.41.0",
+    "@account-kit/signer": "^4.41.0",
+    "@account-kit/smart-contracts": "^4.41.0",
     "@solana/web3.js": "^1.98.0",
     "js-cookie": "^3.0.5",
     "zod": "^3.22.4",

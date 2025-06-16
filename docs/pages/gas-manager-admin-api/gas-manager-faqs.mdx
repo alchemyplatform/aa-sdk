@@ -1,0 +1,45 @@
+---
+title: FAQs
+description: Frequently asked questions about Gas Manager
+subtitle: Frequently asked questions about Gas Manager
+url: https://docs.alchemy.com/reference/gas-manager-faqs
+slug: reference/gas-manager-faqs
+---
+
+## Usage Limits
+
+### How much gas can I sponsor?
+
+You can sponsor as much gas as you want. We front the gas for you up to a base limit based on your tier, and add it to your monthly bill. If you need more gas you can easily boost your limits by buying gas manager credits in USD via our [Gas Manager Dashboard](https://dashboard.alchemy.com/gas-manager). This is a one time purchase that will be applied to your bill at the end of the month and will roll over until it is used up.
+
+| Tier       | Mainnet Base Limit | Testnet Limit              | Team Policy Creation Limit |
+| ---------- | ------------------ | -------------------------- | -------------------------- |
+| Free       | N/A                | unlimited free sponsorship | 10 Policies                |
+| PAYG       | $100 / Month       | unlimited free sponsorship | 10 Policies                |
+| Enterprise | Custom             | unlimited free sponsorship | Custom                     |
+
+### Will I get alerted if I get close to my limit?
+
+Yes! To safeguard against hitting sponsorship limits, we've implemented alerts that notify the team's billing admins via email when gas manager usage reaches 50%, 75%, 90%, and 100% of the sponsorship limit.
+
+### Can the sponsored amount exceed my limits?
+
+Our Gas Manager is designed to handle a large number of sponsorship requests quickly and efficiently. However, because of the way it processes these requests in batches, there may be brief periods where the actual spending slightly exceeds the limits you've set. This is rare but possible, especially when the system is handling a high volume of requests. Rest assured, we're actively working to minimize these occurrences and if you have concerns, please file a support ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
+
+## Fee Logic
+
+To provide its services, Alchemy's [Gas Coverage API](/reference/gas-manager-coverage-api-quickstart) charges fees on sponsorships.
+
+| Tier       | Mainnet Fee            | Testnet Fee                |
+| ---------- | ---------------------- | -------------------------- |
+| Free       | N/A                    | unlimited free sponsorship |
+| PAYG       | 8% of Gas Fees Covered | unlimited free sponsorship |
+| Enterprise | Custom                 | unlimited free sponsorship |
+
+## What are the deployment addresses of the Gas Manager (Paymaster)?
+
+You can find the deployment addresses [here](https://github.com/Jam516/BundleBear/blob/main/models/erc4337/labels/erc4337_labels_paymasters.sql).
+
+## What is the encoding of `paymasterAndData`?
+
+`paymasterAndData` follows the format enforced by ERC-4337, which consists of a 20-byte address followed by an arbitrary-length data segment. For Alchemy’s paymaster contract, the data segment is formatted as a 32-byte packed time range validity followed by a 65-byte long signature.
