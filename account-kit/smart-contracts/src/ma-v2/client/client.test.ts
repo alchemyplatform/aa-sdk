@@ -170,7 +170,7 @@ describe("MA v2 Tests", async () => {
     );
   });
 
-  it("sends UO with webauthn session key", async () => {
+  it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
     const provider = (await givenWebAuthnProvider()).provider.extend(
       installValidationActions,
     );
@@ -180,10 +180,18 @@ describe("MA v2 Tests", async () => {
       value: parseEther("2"),
     });
 
-    const { provider: sessionKeyProvider, credential } =
-      await givenWebAuthnProvider();
+    // set up session key client
+    const webauthnDevice = new SoftWebauthnDevice();
+
+    const credential = await createWebAuthnCredential({
+      rp: { id: "localhost", name: "localhost" },
+      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+      user: { name: "test", displayName: "test" },
+    });
+
     const { x, y } = parsePublicKey(credential.publicKey);
 
+    // install webauthn validation module
     const result = await provider.installValidation({
       validationConfig: {
         moduleAddress: getDefaultWebauthnValidationModuleAddress(
@@ -203,6 +211,7 @@ describe("MA v2 Tests", async () => {
       hooks: [],
     });
 
+    // wait for the UserOperation to be mined
     await provider.waitForUserOperationTransaction(result).catch(async () => {
       const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
         uoToDrop: result.request,
@@ -210,13 +219,17 @@ describe("MA v2 Tests", async () => {
       await provider.waitForUserOperationTransaction(dropAndReplaceResult);
     });
 
-    // fund session key
-    await setBalance(instance.getClient(), {
-      address: sessionKeyProvider.getAddress(),
-      value: parseEther("2"),
+    // create session key client
+    const sessionKeyClient = await givenConnectedWebauthnProvider({
+      mode: "webauthn",
+      credential,
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
     });
 
-    const sessionKeyResult = await sessionKeyProvider.sendUserOperation({
+    const sessionKeyResult = await sessionKeyClient.sendUserOperation({
       uo: {
         target: target,
         value: sendAmount,
@@ -224,14 +237,15 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    await sessionKeyProvider
+    // wait for the UserOperation to be mined
+    await sessionKeyClient
       .waitForUserOperationTransaction(sessionKeyResult)
       .catch(async () => {
         const dropAndReplaceResult =
-          await sessionKeyProvider.dropAndReplaceUserOperation({
+          await sessionKeyClient.dropAndReplaceUserOperation({
             uoToDrop: sessionKeyResult.request,
           });
-        await sessionKeyProvider.waitForUserOperationTransaction(
+        await sessionKeyClient.waitForUserOperationTransaction(
           dropAndReplaceResult,
         );
       });
