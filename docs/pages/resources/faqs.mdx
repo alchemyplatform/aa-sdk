@@ -176,22 +176,7 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
     ---
 
-    ### Option 1: `stampWhoAmI` + `whoami` (Recommended for SCAs)
-
-    Use this flow when working with Smart Contract Accounts (SCAs) via Account Kit.
-
-    1. The frontend generates a stamped identity proof using [signer.inner.stampWhoAmI](https://www.alchemy.com/docs/wallets/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami).
-    2. It sends the stamp to your backend.
-    3. The backend calls Alchemy's [/signer/v1/whoami](https://www.alchemy.com/docs/node/smart-wallets/signer-api-endpoints/signer-api-endpoints/auth-user) endpoint to verify the identity.
-    4. If you need to make subsequent requests, to avoid calling the whoami endpoint on every request. After verifying the `whoami`, the backend can issues its own session token (e.g. an HTTP-only cookie or access token). If the token is present, you can safely skip the `whoami` check.
-
-    **Why this approach?**
-    - No user signature required
-    - **Cheaper** than flows requiring a signed message
-
-    ---
-
-    ### Option 2: SIWE [Sign-In With Ethereum](https://eips.ethereum.org/EIPS/eip-4361)
+    ### Option 1: SIWE [Sign-In With Ethereum](https://eips.ethereum.org/EIPS/eip-4361)
 
     For EOAs, Account Kit doesn’t create a session on the client side and `stampWhoAmI` isn’t available, so we can use SIWE. This can be used for verifying EOA and SCA flows.
 
@@ -205,7 +190,22 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
     **Note:**
     - SIWE requires an explicit signature from the user, which [costs](https://www.alchemy.com/docs/reference/compute-unit-costs) more than calling `whoami`
-    - Required for EOAs, optional for SCAs.
+    - For verifying both EOA and SCA user sessions
+
+    ---
+
+    ### Option 2: `stampWhoAmI` + `whoami` (Only for SCAs)
+
+    Use this flow when working with Smart Contract Accounts (SCAs) via Account Kit.
+
+    1. The frontend generates a stamped identity proof using [signer.inner.stampWhoAmI](https://www.alchemy.com/docs/wallets/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami).
+    2. It sends the stamp to your backend.
+    3. The backend calls Alchemy's [/signer/v1/whoami](https://www.alchemy.com/docs/node/smart-wallets/signer-api-endpoints/signer-api-endpoints/auth-user) endpoint to verify the identity.
+    4. If you need to make subsequent requests, to avoid calling the whoami endpoint on every request. After verifying the `whoami`, the backend can issues its own session token (e.g. an HTTP-only cookie or access token). If the token is present, you can safely skip the `whoami` check.
+
+    **Why this approach?**
+    - No user signature required
+    - **Cheaper** than flows requiring a signed message
 
 </Accordion>
 
