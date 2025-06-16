@@ -304,28 +304,26 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {string} [config.iframeElementId] Optional ID for the iframe element
    * @returns {Promise<void>} A promise that resolves when the export process is complete
    */
-  public override exportWallet = async ({
-    iframeContainerId,
-    iframeElementId = "turnkey-export-iframe",
-  }: ExportWalletParams) => {
-    const exportWalletIframeStamper = new IframeStamper({
-      iframeContainer: document.getElementById(iframeContainerId),
-      iframeElementId: iframeElementId,
-      iframeUrl: "https://export.turnkey.com",
-    });
-    await exportWalletIframeStamper.init();
+  public override exportWallet = async (_options: ExportWalletParams) => {
+    throw new Error("No thanks");
+    // const exportWalletIframeStamper = new IframeStamper({
+    //   iframeContainer: document.getElementById(iframeContainerId),
+    //   iframeElementId: iframeElementId,
+    //   iframeUrl: "https://export.turnkey.com",
+    // });
+    // await exportWalletIframeStamper.init();
 
-    if (this.turnkeyClient.stamper === this.iframeStamper) {
-      return this.exportWalletInner({
-        exportStamper: exportWalletIframeStamper,
-        exportAs: "SEED_PHRASE",
-      });
-    }
+    // if (this.turnkeyClient.stamper === this.iframeStamper) {
+    //   return this.exportWalletInner({
+    //     exportStamper: exportWalletIframeStamper,
+    //     exportAs: "SEED_PHRASE",
+    //   });
+    // }
 
-    return this.exportWalletInner({
-      exportStamper: exportWalletIframeStamper,
-      exportAs: "PRIVATE_KEY",
-    });
+    // return this.exportWalletInner({
+    //   exportStamper: exportWalletIframeStamper,
+    //   exportAs: "PRIVATE_KEY",
+    // });
   };
 
   /**

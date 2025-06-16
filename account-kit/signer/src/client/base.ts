@@ -672,6 +672,8 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       },
     });
 
+    console.log({ stampedRequest });
+
     const { signature } = await this.request("/v1/sign-payload", {
       stampedRequest,
     });
