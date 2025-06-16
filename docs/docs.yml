@@ -39,7 +39,7 @@ navigation:
         contents:
           - page: Overview
             slug: /
-            path: wallets/pages/recipes/index.mdx
+            path: wallets/pages/recipes/overview.mdx
           - page: Send USDC
             slug: send-usdc
             path: wallets/pages/recipes/send-usdc.mdx
