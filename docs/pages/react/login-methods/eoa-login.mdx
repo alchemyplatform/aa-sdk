@@ -19,8 +19,8 @@ Transactions can be signed and sent in the same way, but external EOA wallets do
 These EOAs will simply function as EOAs.
 
 <img
-    src="/images/connect-to-other-wallet-providers.png"
-    alt="Connecting to external Wallets"
+  src="/images/connect-to-other-wallet-providers.png"
+  alt="Connecting to external Wallets"
 />
 
 In order to access these external wallet providers, just make sure to include configure `type: "external_wallets"` in your config:
@@ -63,7 +63,7 @@ export const config = createConfig(
       addPasskeyOnSignup: true,
       showSignInText: true,
     },
-  }
+  },
 );
 ```
 
@@ -80,6 +80,7 @@ In order to access other providers via `WalletConnect`, **also** add `walletConn
 ```
 
 ## Custom UI
+
 If you need complete control over the user experience, you can implement your own EOA connect using custom UI or our pre-built UI components and connectors:
 
 For example, using [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect)
@@ -88,29 +89,26 @@ For example, using [useConnect](https://www.alchemy.com/docs/wallets/reference/a
 // @noErrors
 import { useConnect } from "@account-kit/react";
 
-const {connectors, connect } = useConnect({
-    onSuccess: (data) => {
-      console.log("Connected!", data);
-    },
-    onError: (err) => {
-      console.error("Connection failed", err);
-    },
-  });
+const { connectors, connect } = useConnect({
+  onSuccess: (data) => {
+    console.log("Connected!", data);
+  },
+  onError: (err) => {
+    console.error("Connection failed", err);
+  },
+});
 
-
-  return (
-      <div>
-        {connectors.map((connector) => (
-            <button
-                key={connector.id}
-                onClick={() => connect({ connector })}
-            >
-              Connect with {connector.name}
-            </button>
-        ))}
-     </div>
-  );
+return (
+  <div>
+    {connectors.map((connector) => (
+      <button key={connector.id} onClick={() => connect({ connector })}>
+        Connect with {connector.name}
+      </button>
+    ))}
+  </div>
+);
 ```
 
 ## Connect to Existing Embedded EOA Wallets
+
 You can also (bring in your embedded EOAs!)[https://www.alchemy.com/docs/wallets/third-party/signers#using-walletclientsigner]
