@@ -8,9 +8,10 @@ set -e
 # Capture repo argument
 REPO=$1
 
-# If the repo is aa-sdk, we need to cd into the docs-site folder
-if [ "$REPO" = "aa-sdk" ]; then
-  cd docs-site
+if [ ! -d "fern" ]; then
+  echo "Error: fern directory not found"
+  echo "This script must be executed from the docs root directory (or docs-site root if aa-sdk)"
+  exit 1
 fi
 
 # Clean up any existing files from previous runs
@@ -20,7 +21,7 @@ rm -rf fern/images/wallets
 # Copy docs to docs-site
   mkdir -p fern/wallets
 if [ "$REPO" = "aa-sdk" ]; then
-  # From aa-sdk repo, the docs folder is in the root of the repo
+  # From aa-sdk repo, the docs folder is in the root of the monorepo
   cp -r ../docs/* fern/wallets/
 else
   # From docs repo, the docs folder is in the aa-sdk folder
@@ -28,20 +29,14 @@ else
 fi
 
 # Copy specs and api-generators to correct place in docs-site
-if [ -d "fern/wallets/specs" ]; then
-  cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
-  cp -r fern/wallets/specs/openapi/* src/openapi/
-fi
-if [ -d "fern/wallets/api-generators" ]; then
-  cp -r fern/wallets/api-generators/* fern/apis/
-fi
+cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
+cp -r fern/wallets/specs/openapi/* src/openapi/
+cp -r fern/wallets/api-generators/* fern/apis/
 
 # Move images to the correct place in docs-site
-if [ -d "fern/wallets/images" ]; then
-    mkdir -p fern/images/wallets
-    cp -r fern/wallets/images/* fern/images/wallets/
-    rm -rf fern/wallets/images
-fi
+mkdir -p fern/images/wallets
+cp -r fern/wallets/images/* fern/images/wallets/
+rm -rf fern/wallets/images
 
 # Create a backup of fern/docs.yml in case of error during insert
 cp fern/docs.yml fern/docs.yml.bak

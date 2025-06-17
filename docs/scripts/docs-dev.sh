@@ -4,12 +4,17 @@
 # Set error handling
 set -e
 
-# Get the absolute path to the project root
+# Get absolute paths
 PROJECT_ROOT="$( cd "$( dirname "$0" )/../.." && pwd )"
 DOCS_SITE_DIR="$PROJECT_ROOT/docs-site"
+DOCS_DIR="$PROJECT_ROOT/docs"
 
 cleanup() {
-    echo "Cleaning up..."
+    echo "Exiting and cleaning up..."
+    # Kill the onchange process if it exists
+    if [ ! -z "$ONCHANGE_PID" ]; then
+        kill $ONCHANGE_PID 2>/dev/null || true
+    fi
     cd "$DOCS_SITE_DIR"
     git restore .
     git clean -fdq
@@ -31,12 +36,19 @@ fi
 # Update docs-site submodule
 git submodule update --init --recursive
 
-# Insert docs content into docs-site
-./docs/scripts/insert-docs.sh aa-sdk
-
-# Install dependencies
 cd "$DOCS_SITE_DIR"
+# Install/update dependencies
 pnpm i
 
+# Insert docs content into docs-site
+pnpm exec $DOCS_DIR/scripts/insert-docs.sh aa-sdk
+
+# Start watching docs folder for changes in the background
+pnpm exec onchange "$DOCS_DIR/**/*.mdx" -- sh -c "$DOCS_DIR/scripts/insert-docs.sh aa-sdk" &
+ONCHANGE_PID=$!
+
 # Start the docs site
+cd "$DOCS_SITE_DIR"
 pnpm dev
+
+cleanup
