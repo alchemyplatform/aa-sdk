@@ -307,6 +307,134 @@ paths:
                     type: integer
                     description: Number of seconds to wait before making another verification attempt.
       operationId: verifyOtp
+  /auth-jwt:
+    post:
+      summary: Authenticate with JWT
+      description: >
+        Authenticates a user using a JSON Web Token (JWT) for secure access to their Smart Wallet functionalities. This endpoint validates the provided JWT token and can be used for authenticating an existing user or to pregenerate a wallet.
+      security:
+        - apiKey: [ ]
+      x-readme:
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jwt:
+                  type: string
+                  description: |
+                    The JSON Web Token (JWT) used for authentication. The JWT must be a valid OIDC ID Token containing the required claims for user identification and authentication.
+                    **Required OIDC Claims:**
+                    - `iss` (Issuer): The identifier of the OIDC provider. Should be the same as issuer of openid-config.
+                    - `sub` (Subject): A unique identifier that identifies the user with this auth provider.
+                    - `aud` (Audience): The client ID for which this token is intended
+                    - `exp` (Expiration): Token expiration time as Unix timestamp
+                    - `iat` (Issued At): Token issuance time as Unix timestamp
+                    - `nonce` (Nonce): toHex(sha256(targetPublicKey)) without the leading 0x
+                    **Example JWT Payload:**
+                    ```json
+                    {
+                      "iss": "https://accounts.google.com",
+                      "sub": "1234567890abcdef",
+                      "aud": "project_id",
+                      "exp": 1640995200,
+                      "iat": 1640991600,
+                    }
+                    ```
+                  example: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+                authProvider:
+                  type: string
+                  description: Name of your application as entered on google form.
+                targetPublicKey:
+                  $ref: "#/components/schemas/targetPublicKey"
+                  description: Required for authentication. Optional for pregeneration.
+                expirationSeconds:
+                  $ref: "#/components/schemas/expirationSeconds"
+
+              required:
+                - jwt
+                - authProvider
+      responses:
+        "200":
+          description: JWT authentication successful. User is now authenticated or wallet has been pregenerated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSignup:
+                    type: boolean
+                    description: If true, indicates a new wallet was created.
+                    default: false
+                  orgId:
+                    $ref: "#/components/schemas/orgId"
+                    description: The organization ID associated with the authenticated user and the application.
+                  credentialBundle:
+                    type: string
+                    description: An encrypted API key credential bundle that shall be used for subsequent authenticated requests. This bundle contains the authentication credentials encrypted with the provided targetPublicKey and can be decrypted client-side for stamping requests.
+                  userId:
+                    type: string
+                    description: A unique identifier for the authenticated user, extracted from the JWT token claims.
+                  address:
+                    type: string
+                    description: The Ethereum address of the user's signer, available after successful authentication.
+                  solanaAddress:
+                    type: string
+                    description: The Solana address of the user's signer, available after successful authentication.
+                required:
+                  - orgId
+                  - isSignUp
+        "400":
+          description: Invalid JWT token or authentication failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message describing why the JWT authentication failed.
+                  code:
+                    type: string
+                    description: Error code for programmatic handling of the error.
+                  details:
+                    type: object
+                    description: Additional details about the authentication failure, such as expired token, invalid signature, or missing claims.
+                    additionalProperties:
+                      type: string
+        "401":
+          description: Unauthorized - JWT token is invalid, expired, or malformed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message indicating the JWT token is not valid for authentication.
+                  tokenError:
+                    type: string
+                    description: Specific details about why the JWT token was rejected.
+        "429":
+          description: Too many authentication attempts. Please wait before trying again.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message indicating rate limiting is in effect.
+                  retryAfter:
+                    type: integer
+                    description: Number of seconds to wait before making another authentication attempt.
+      operationId: authJwt
   /sign-payload:
     post:
       summary: Sign Message
