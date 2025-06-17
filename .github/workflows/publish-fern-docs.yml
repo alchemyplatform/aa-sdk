@@ -17,8 +17,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Docs
         uses: ./.github/actions/setup-docs
-        with:
-          docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
 
       - name: Generate Fern Docs
         id: publish

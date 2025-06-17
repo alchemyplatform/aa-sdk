@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script is used to insert the docs into the docs-site folder across both aa-sdk and docs repos
-# It needs to be agnostic to both the repo it is running in and whether the env is local or in CI
+# It needs to be agnostic to both A) the repo it is running in and B) whether the env is local or in CI/CD
 
 # Set error handling
 set -e
