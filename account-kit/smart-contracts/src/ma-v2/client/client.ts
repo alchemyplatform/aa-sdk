@@ -85,18 +85,6 @@ export type CreateModularAccountV2AlchemyClientParams<
     "account"
   > & { paymasterAndData?: never; dummyPaymasterAndData?: never };
 
-export type CreateWebauthnModularAccountV2AlchemyClientParams<
-  TTransport extends Transport = Transport,
-  TChain extends Chain = Chain,
-> = Omit<
-  CreateWebauthnModularAccountV2ClientParams<TTransport, TChain>,
-  "transport"
-> &
-  Omit<AlchemySmartAccountClientConfig<TChain>, "account"> & {
-    paymasterAndData?: never;
-    dummyPaymasterAndData?: never;
-  };
-
 export function createModularAccountV2Client<
   TChain extends Chain = Chain,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -157,8 +145,7 @@ export async function createModularAccountV2Client(
   config:
     | CreateModularAccountV2ClientParams
     | CreateWebauthnModularAccountV2ClientParams
-    | CreateModularAccountV2AlchemyClientParams
-    | CreateWebauthnModularAccountV2AlchemyClientParams,
+    | CreateModularAccountV2AlchemyClientParams,
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
 
