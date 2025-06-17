@@ -48,7 +48,20 @@ You can reference production code directly in code snippets using `[!include]` s
 
 ### Local Development
 
-**TBD:** Currently this would require distributing a GitHub Token to access Alchemy Docs repo. Will remove this requirement once those docs go live.
+To run docs locally, you must have pnpm installed as a global dependency. Corepack can install it for you. Run:
+
+```bash
+asdf install # or `mise install`
+corepack enable
+```
+
+Then to start the dev server, run:
+
+```bash
+yarn docs:dev
+```
+
+This will install dependencies, temporarily move files, and keep the submodule update for you.
 
 ### Preview Changes
 
