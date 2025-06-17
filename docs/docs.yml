@@ -53,7 +53,7 @@ navigation:
           - section: Login methods
             contents:
               - page: EOA Login
-              - path: wallets/pages/react/login-methods/eoa-login.mdx
+                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Email OTP
                 path: wallets/pages/react/login-methods/email-otp.mdx
               - page: Email magic-link
