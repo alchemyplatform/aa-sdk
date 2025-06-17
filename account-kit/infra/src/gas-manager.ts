@@ -5,16 +5,49 @@ import {
   base,
   baseSepolia,
   fraxtal,
+  fraxtalSepolia,
   mainnet,
   optimism,
   optimismSepolia,
   polygon,
   polygonAmoy,
+  unichainSepolia,
+  worldChainSepolia,
   sepolia,
   zora,
   zoraSepolia,
+  shapeSepolia,
+  optimismGoerli,
+  arbitrumGoerli,
+  arbitrumNova,
+  baseGoerli,
+  beraChainBartio,
+  celoAlfajores,
+  celoMainnet,
+  gensynTestnet,
+  goerli,
+  inkMainnet,
+  inkSepolia,
+  monadTestnet,
+  opbnbMainnet,
+  opbnbTestnet,
+  openlootSepolia,
+  polygonMumbai,
+  riseTestnet,
+  shape,
+  soneiumMainnet,
+  soneiumMinato,
+  storyAeneid,
+  storyMainnet,
+  teaSepolia,
+  unichainMainnet,
+  worldChain,
 } from "./chains.js";
 import type { EntryPointVersion } from "@aa-sdk/core";
+export const AlchemyPaymasterAddressV06Unify =
+  "0x0000000000ce04e2359130e7d0204A5249958921";
+export const AlchemyPaymasterAddressV07Unify =
+  "0x00000000000667F27D4DB42334ec11a25db7EBb4";
 
 export const AlchemyPaymasterAddressV4 =
   "0xEaf0Cde110a5d503f2dD69B3a49E031e29b3F9D2";
@@ -27,9 +60,9 @@ export const ArbSepoliaPaymasterAddress =
 export const AlchemyPaymasterAddressV1 =
   "0xc03aac639bb21233e0139381970328db8bceeb67";
 
-export const AlchemyPaymasterAddressV07Mainnet =
+export const AlchemyPaymasterAddressV07V2 =
   "0x2cc0c7981D846b9F2a16276556f6e8cb52BfB633";
-export const AlchemyPaymasterAddressV07Testnet =
+export const AlchemyPaymasterAddressV07V1 =
   "0xEF725Aa22d43Ea69FB22bE2EBe6ECa205a6BCf5B";
 
 /**
@@ -39,7 +72,7 @@ export const AlchemyPaymasterAddressV07Testnet =
  * ```ts
  * import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
  *
- * const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.6");
+ * const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.6.0");
  * ```
  *
  * @param {Chain} chain The chain for which the paymaster address is required
@@ -53,6 +86,36 @@ export const getAlchemyPaymasterAddress = (
   switch (version) {
     case "0.6.0":
       switch (chain.id) {
+        case fraxtalSepolia.id:
+        case worldChainSepolia.id:
+        case shapeSepolia.id:
+        case unichainSepolia.id:
+        case opbnbTestnet.id:
+        case inkSepolia.id:
+        case monadTestnet.id:
+        case openlootSepolia.id:
+        case gensynTestnet.id:
+        case riseTestnet.id:
+        case storyAeneid.id:
+        case teaSepolia.id:
+        case arbitrumGoerli.id:
+        case goerli.id:
+        case optimismGoerli.id:
+        case baseGoerli.id:
+        case polygonMumbai.id:
+        case worldChain.id:
+        case shape.id:
+        case unichainMainnet.id:
+        case soneiumMinato.id:
+        case soneiumMainnet.id:
+        case opbnbMainnet.id:
+        case beraChainBartio.id:
+        case inkMainnet.id:
+        case arbitrumNova.id:
+        case storyMainnet.id:
+        case celoAlfajores.id:
+        case celoMainnet.id:
+          return AlchemyPaymasterAddressV4;
         case polygonAmoy.id:
         case optimismSepolia.id:
         case baseSepolia.id:
@@ -71,13 +134,57 @@ export const getAlchemyPaymasterAddress = (
         case sepolia.id:
           return AlchemyPaymasterAddressV1;
         default:
-          return AlchemyPaymasterAddressV4;
+          return AlchemyPaymasterAddressV06Unify;
       }
     case "0.7.0":
-      if (chain.testnet) {
-        return AlchemyPaymasterAddressV07Testnet;
+      switch (chain.id) {
+        case arbitrumNova.id:
+        case celoAlfajores.id:
+        case celoMainnet.id:
+        case gensynTestnet.id:
+        case inkMainnet.id:
+        case inkSepolia.id:
+        case monadTestnet.id:
+        case opbnbMainnet.id:
+        case opbnbTestnet.id:
+        case openlootSepolia.id:
+        case riseTestnet.id:
+        case shape.id:
+        case shapeSepolia.id:
+        case soneiumMainnet.id:
+        case soneiumMinato.id:
+        case storyAeneid.id:
+        case storyMainnet.id:
+        case teaSepolia.id:
+        case unichainMainnet.id:
+        case unichainSepolia.id:
+        case worldChain.id:
+        case worldChainSepolia.id:
+          return AlchemyPaymasterAddressV07V1;
+        case arbitrum.id:
+        case arbitrumGoerli.id:
+        case arbitrumSepolia.id:
+        case base.id:
+        case baseGoerli.id:
+        case baseSepolia.id:
+        case beraChainBartio.id:
+        case fraxtal.id:
+        case fraxtalSepolia.id:
+        case goerli.id:
+        case mainnet.id:
+        case optimism.id:
+        case optimismGoerli.id:
+        case optimismSepolia.id:
+        case polygon.id:
+        case polygonAmoy.id:
+        case polygonMumbai.id:
+        case sepolia.id:
+        case zora.id:
+        case zoraSepolia.id:
+          return AlchemyPaymasterAddressV07V2;
+        default:
+          return AlchemyPaymasterAddressV07Unify;
       }
-      return AlchemyPaymasterAddressV07Mainnet;
     default:
       throw new Error(`Unsupported EntryPointVersion: ${version}`);
   }
@@ -99,11 +206,15 @@ export const PermitTypes = {
   ],
 } as const;
 
-export const EIP20Abis = [
-  "function nonces(address owner) external view returns (uint)",
+export const ERC20Abis = [
   "function decimals() public view returns (uint8)",
   "function balanceOf(address owner) external view returns (uint256)",
   "function allowance(address owner, address spender) external view returns (uint256)",
+  "function approve(address spender, uint256 amount) external returns (bool)",
+] as const;
+
+export const EIP7597Abis = [
+  "function nonces(address owner) external view returns (uint)",
 ] as const;
 
 export const approveTokenCallData = (
@@ -111,7 +222,7 @@ export const approveTokenCallData = (
   allowance: BigInt,
 ) => {
   return encodeFunctionData({
-    abi: EIP20Abis,
+    abi: ERC20Abis,
     functionName: "approve",
     args: [paymasterAddress, allowance],
   });

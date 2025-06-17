@@ -36,7 +36,8 @@ import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
 import {
   PermitTypes,
-  EIP20Abis,
+  EIP7597Abis,
+  ERC20Abis,
   getAlchemyPaymasterAddress,
 } from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
@@ -129,6 +130,7 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 export type PolicyToken = {
   address: Address;
   maxTokenAmount: bigint;
+  paymasterAddress?: Address;
   approvalMode?: "NONE" | "PERMIT";
   erc20Name?: string;
   version?: string;
@@ -366,6 +368,7 @@ const overrideField = <
  * @param {PolicyToken} policyToken - The policy token configuration
  * @param {Address} policyToken.address - ERC20 contract addressya
  * @param {bigint} [policyToken.maxTokenAmount] - Optional ERC20 token limit
+ * @param {Address} [policyToken.paymasterAddress] - Optional Paymaster Address
  * @param {"NONE" | "PERMIT"} [policyToken.approvalMode] - ERC20 approve mode
  * @param {string} [policyToken.erc20Name] - EIP2612 specified ERC20 contract name
  * @param {string} [policyToken.version] - EIP2612 specified ERC20 contract version
@@ -377,6 +380,7 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   policyToken: {
     address: Address;
     maxTokenAmount: bigint;
+    paymasterAddress?: Address;
     approvalMode?: "NONE" | "PERMIT";
     erc20Name?: string;
     version?: string;
@@ -392,7 +396,7 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   let decimalsFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
-      abi: parseAbi(EIP20Abis),
+      abi: parseAbi(ERC20Abis),
       functionName: "decimals",
       args: [],
     }),
@@ -401,7 +405,7 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   let nonceFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
-      abi: parseAbi(EIP20Abis),
+      abi: parseAbi(EIP7597Abis),
       functionName: "nonces",
       args: [account.address],
     }),
@@ -423,10 +427,9 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   const maxAmountToken = policyToken.maxTokenAmount * decimals;
   const nonce = BigInt(nonceResponse.data);
 
-  const paymasterAddress = getAlchemyPaymasterAddress(
-    client.chain,
-    account.getEntryPoint().version,
-  );
+  const paymasterAddress =
+    policyToken.paymasterAddress ??
+    getAlchemyPaymasterAddress(client.chain, account.getEntryPoint().version);
 
   if (paymasterAddress === undefined || paymasterAddress === "0x") {
     throw new Error("no paymaster contract address available");
