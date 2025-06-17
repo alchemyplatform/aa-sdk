@@ -298,7 +298,7 @@ export type BuildDeferredActionDigestParams = {
  * Assumption: The client this extends is used to sign the typed data.
  *
  * @param {object} args The argument object containing the following:
- * @param {Hex} args.fullPreSignatureDeferredActionDigest The The data to append the signature and length to
+ * @param {Hex} args.fullPreSignatureDeferredActionDigest The data to append the signature and length to
  * @param {Hex} args.sig The signature to include in the digest
  * @returns {Hex} The encoded digest to be prepended to the userOp signature
  */
