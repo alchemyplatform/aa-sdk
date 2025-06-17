@@ -5,12 +5,8 @@ description: How to connect to bring in your own EOAs to Account Kit
 
 ## Use Your Own EOA as a Signer
 
-You can bring in your own EOAs to use as **owners and signers** of your smart account. This gives you full custody and control over how your smart account is managed, while still enabling access to powerful **Account Abstraction (AA)** features like:
+You can bring in your own EOAs to use as **owners and signers** of your smart account. This gives you full custody and control over how your smart account is managed, while still enabling access to powerful **Account Abstraction (AA)** features.
 
-- **Gas sponsorship via Paymasters**
-- **Session keys**
-- **Custom authorization flows**
-- And more
 
 ## 🔌 For EIP-1193-Compatible Providers (e.g. MetaMask, Coinbase Wallet)
 
@@ -37,9 +33,7 @@ export const signer: SmartAccountSigner = new WalletClientSigner(
 
 ## 🔐 For Public/Private Key Pairs (Embedded or Backend)
 
-To bring in your own **public/private key pair** and use it as a signer in AccountKit, you can manually implement the `SmartAccountSigner` interface. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
-
-This is fully supported and gives you the flexibility to integrate with **embedded wallets**, **server-side signers**, or **secure enclaves**.
+To bring in your own **public/private key pair** and use it as a signer in Account Kit, you can manually implement the `SmartAccountSigner` interface. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
 
 Here's an example using `viem`'s `privateKeyToAccount` utility:
 
@@ -83,11 +77,6 @@ With Account Kit, users can still connect to their existing wallets without sacr
 Our hooks will handle checking if the connected wallet is a smart wallet or an existing EOA.
 Transactions can be signed and sent in the same way, but external EOA wallets don't have access to Account Abstraction benefits such as gas abstraction, batching, etc.
 These EOAs will simply function as EOAs.
-
-<img
-  src="/docs/images/connect-to-other-wallet-providers.png"
-  alt="Connecting to external Wallets"
-/>
 
 In order to access these external wallet providers, just make sure to include configure `type: "external_wallets"` in your config:
 
