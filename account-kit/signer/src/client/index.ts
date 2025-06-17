@@ -365,7 +365,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       iframeUrl: "https://auth.turnkey.com",
     });
     this.iframeStamper = stamper;
-    this.setStamper(stamper);
+    // this.setStamper(stamper); // TODO(jh): test it's fine w/o this.
     await this.initSessionStamper();
   };
 
