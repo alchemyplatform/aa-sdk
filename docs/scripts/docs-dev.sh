@@ -21,6 +21,11 @@ cleanup() {
     cd "$PROJECT_ROOT"
     exit 0
 }
+# Check if port 3020 is in use
+if lsof -i :3020 > /dev/null; then
+    echo "Port 3020 is already in use. Please free up the port and try again."
+    exit 1
+fi
 
 # clean up changes to docs-site on script termination
 trap cleanup SIGINT SIGTERM
