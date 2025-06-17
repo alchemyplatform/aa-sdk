@@ -10,7 +10,6 @@ import {
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
-  type SmartContractAccount,
 } from "@aa-sdk/core";
 import {
   concatHex,
@@ -31,7 +30,6 @@ import { singleSignerMessageSigner } from "../../modules/single-signer-validatio
 import { webauthnSigningFunctions } from "../../modules/webauthn-validation/signingMethods.js";
 import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import { nativeSMASigner } from "../nativeSMASigner.js";
-
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
 
