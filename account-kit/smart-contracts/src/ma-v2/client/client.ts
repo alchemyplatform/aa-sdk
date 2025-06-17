@@ -81,9 +81,21 @@ export type CreateModularAccountV2AlchemyClientParams<
   "transport"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<TChain, LightAccount<TSigner>>, // TO DO: split this type so that it doesn't require a signer
+    AlchemySmartAccountClientConfig<TChain, LightAccount<TSigner>>,
     "account"
   > & { paymasterAndData?: never; dummyPaymasterAndData?: never };
+
+export type CreateWebauthnModularAccountV2AlchemyClientParams<
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain,
+> = Omit<
+  CreateWebauthnModularAccountV2ClientParams<TTransport, TChain>,
+  "transport"
+> &
+  Omit<AlchemySmartAccountClientConfig<TChain>, "account"> & {
+    paymasterAndData?: never;
+    dummyPaymasterAndData?: never;
+  };
 
 export function createModularAccountV2Client<
   TChain extends Chain = Chain,
@@ -145,7 +157,8 @@ export async function createModularAccountV2Client(
   config:
     | CreateModularAccountV2ClientParams
     | CreateWebauthnModularAccountV2ClientParams
-    | CreateModularAccountV2AlchemyClientParams,
+    | CreateModularAccountV2AlchemyClientParams
+    | CreateWebauthnModularAccountV2AlchemyClientParams,
 ): Promise<SmartAccountClient | AlchemySmartAccountClient> {
   const { transport, chain } = config;
 
