@@ -221,7 +221,6 @@ describe("MA v2 Tests", async () => {
 
     // create session key client
     const sessionKeyClient = await givenConnectedWebauthnProvider({
-      mode: "webauthn",
       credential,
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
