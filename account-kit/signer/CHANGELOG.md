@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
+
+### Features
+
+- create SideBarBuilder to generate Fern sidebar for SDK References ([#1671](https://github.com/alchemyplatform/aa-sdk/issues/1671)) ([c131c86](https://github.com/alchemyplatform/aa-sdk/commit/c131c86eba09b19e59261df341fd605451962083))
+- list, add, and remove oauth providers ([#1666](https://github.com/alchemyplatform/aa-sdk/issues/1666)) ([e9add26](https://github.com/alchemyplatform/aa-sdk/commit/e9add26907c4151a85f0a4f98efc2a18694faa62)), closes [#1669](https://github.com/alchemyplatform/aa-sdk/issues/1669)
+
+# [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.39.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.38.0...v4.39.0) (2025-06-04)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.38.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.37.0...v4.38.0) (2025-06-04)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.37.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.1...v4.37.0) (2025-06-03)
+
+### Features
+
+- **rn-signer:** support passkeys in React Native ([#1653](https://github.com/alchemyplatform/aa-sdk/issues/1653)) ([f9ce59c](https://github.com/alchemyplatform/aa-sdk/commit/f9ce59c9874e863e80df8219bfa8d76960bfa82a))
+
+## [4.36.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.0...v4.36.1) (2025-05-29)
+
+**Note:** Version bump only for package @account-kit/signer
+
 # [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
 
 ### Bug Fixes

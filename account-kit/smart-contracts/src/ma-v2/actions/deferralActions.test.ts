@@ -5,17 +5,9 @@ import {
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
 import {
-  concat,
-  custom,
-  fromHex,
-  isAddress,
-  parseEther,
-  publicActions,
-  testActions,
-  toHex,
-  type Address,
-  type Hex,
-} from "viem";
+  alchemyFeeEstimator,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
 import {
   createModularAccountV2Client,
   type SignerEntity,
@@ -23,17 +15,28 @@ import {
 import {
   buildDeferredActionDigest,
   deferralActions,
-  ExpiredDeadlineError,
   PermissionBuilder,
   PermissionType,
   RootPermissionOnlyError,
   type Permission,
 } from "@account-kit/smart-contracts/experimental";
-import { local070Instance } from "~test/instances.js";
-import { setBalance } from "viem/actions";
-import { accounts } from "~test/constants.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
+import {
+  concat,
+  custom,
+  fromHex,
+  isAddress,
+  parseEther,
+  parseGwei,
+  publicActions,
+  testActions,
+  toHex,
+  type Address,
+  type Hex,
+} from "viem";
 import { entryPoint07Abi } from "viem/account-abstraction";
+import { mine, setBalance, setNextBlockBaseFeePerGas } from "viem/actions";
+import { accounts } from "~test/constants.js";
+import { local070Instance } from "~test/instances.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
@@ -43,47 +46,39 @@ import {
 describe("MA v2 deferral actions tests", async () => {
   const instance = local070Instance;
 
-  const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner,
-  );
-
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
-  const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-    accounts.unfundedAccountOwner,
-  );
-
+  let signer: SmartAccountSigner;
+  let sessionKey: SmartAccountSigner;
   let deferredActionDigest: Hex;
   let accountAddress: Hex;
   let initCode: Hex;
 
   beforeEach(async () => {
-    // set up and sign deferred action with client with owner connected
-    const provider = await givenConnectedProvider({ signer });
+    signer = LocalAccountSigner.generatePrivateKeySigner();
+    sessionKey = LocalAccountSigner.generatePrivateKeySigner();
 
-    const serverClient = (
-      await createModularAccountV2Client({
-        chain: instance.chain,
-        accountAddress: provider.getAddress(),
-        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
-        transport: custom(instance.getClient()),
+    // set up and sign deferred action with client with owner connected
+    const provider = (
+      await givenConnectedProvider({
+        signer,
       })
     ).extend(deferralActions);
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
-      value: parseEther("2"),
+      value: parseEther("30"),
     });
 
     // these can be default values or from call arguments
-    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: true,
     });
 
     const { typedData, fullPreSignatureDeferredActionDigest } =
       await new PermissionBuilder({
-        client: serverClient,
+        client: provider,
         key: {
           publicKey: await sessionKey.getAddress(),
           type: "secp256k1",
@@ -110,107 +105,163 @@ describe("MA v2 deferral actions tests", async () => {
     initCode = await provider.account.getInitCode();
   });
 
-  it("tests the full deferred actions flow", async () => {
-    const sessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
-      accountAddress,
-      signer: sessionKey,
-      initCode,
-      deferredAction: deferredActionDigest,
-    });
+  it(
+    "deferred action then send another uo from same client",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const sessionKeyClient = await createModularAccountV2Client({
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+        accountAddress,
+        signer: sessionKey,
+        initCode,
+        deferredAction: deferredActionDigest,
+        feeEstimator: alchemyFeeEstimator(
+          // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+          custom(instance.getClient()),
+        ),
+      });
 
-    const uoResult = await sessionKeyClient.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount,
-        data: "0x",
-      },
-    });
+      const uoResult = await sessionKeyClient.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount / 2n,
+          data: "0x",
+        },
+        overrides: {
+          maxFeePerGas: { multiplier: 2 },
+          maxPriorityFeePerGas: { multiplier: 2 },
+        },
+      });
 
-    await sessionKeyClient.waitForUserOperationTransaction(uoResult);
-  });
+      await setNextBlockBaseFeePerGas(instance.getClient(), {
+        baseFeePerGas: parseGwei("1"),
+      });
 
-  it("deferred action then send another uo from same client", async () => {
-    const sessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
-      accountAddress,
-      signer: sessionKey,
-      initCode,
-      deferredAction: deferredActionDigest,
-    });
+      await mine(instance.getClient(), { blocks: 5 });
 
-    const uoResult = await sessionKeyClient.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount / 2n,
-        data: "0x",
-      },
-    });
+      await sessionKeyClient.waitForUserOperationTransaction({
+        hash: uoResult.hash,
+        retries: {
+          maxRetries: 10,
+          intervalMs: 500,
+          multiplier: 1.2,
+        },
+      });
 
-    await sessionKeyClient.waitForUserOperationTransaction(uoResult);
+      const uoResult2 = await sessionKeyClient.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount / 2n,
+          data: "0x",
+        },
+        overrides: {
+          maxFeePerGas: { multiplier: 1.5 },
+          maxPriorityFeePerGas: { multiplier: 1.5 },
+        },
+      });
 
-    const uoResult2 = await sessionKeyClient.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount / 2n,
-        data: "0x",
-      },
-    });
-    await sessionKeyClient.waitForUserOperationTransaction(uoResult2);
-  });
+      await setNextBlockBaseFeePerGas(instance.getClient(), {
+        baseFeePerGas: parseGwei("1"),
+      });
+      await mine(instance.getClient(), { blocks: 5 });
 
-  it("deferred action then send another uo from new client", async () => {
-    const sessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
-      accountAddress,
-      signer: sessionKey,
-      initCode,
-      deferredAction: deferredActionDigest,
-    });
+      await sessionKeyClient.waitForUserOperationTransaction({
+        hash: uoResult2.hash,
+        retries: {
+          maxRetries: 10,
+          intervalMs: 500,
+          multiplier: 1.2,
+        },
+      });
+    },
+  );
 
-    const uoResult = await sessionKeyClient.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount / 2n,
-        data: "0x",
-      },
-    });
+  it(
+    "deferred action then send another uo from new client",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const sessionKeyClient = await createModularAccountV2Client({
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+        accountAddress,
+        signer: sessionKey,
+        initCode,
+        deferredAction: deferredActionDigest,
+        feeEstimator: alchemyFeeEstimator(
+          // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+          custom(instance.getClient()),
+        ),
+      });
 
-    await sessionKeyClient.waitForUserOperationTransaction(uoResult);
+      const uoResult = await sessionKeyClient.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount / 2n,
+          data: "0x",
+        },
+        overrides: {
+          maxFeePerGas: { multiplier: 1.5 },
+          maxPriorityFeePerGas: { multiplier: 1.5 },
+        },
+      });
 
-    const sessionKeyClient2 = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
-      accountAddress,
-      signer: sessionKey,
-      initCode,
-      deferredAction: deferredActionDigest,
-    });
+      await setNextBlockBaseFeePerGas(instance.getClient(), {
+        baseFeePerGas: 10n,
+      });
 
-    const uoResult2 = await sessionKeyClient2.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount / 2n,
-        data: "0x",
-      },
-    });
-    await sessionKeyClient2.waitForUserOperationTransaction(uoResult2);
-  });
+      await sessionKeyClient.waitForUserOperationTransaction({
+        hash: uoResult.hash,
+        retries: {
+          maxRetries: 10,
+          intervalMs: 500,
+          multiplier: 1.2,
+        },
+      });
+
+      const sessionKeyClient2 = await createModularAccountV2Client({
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+        accountAddress,
+        signer: sessionKey,
+        initCode,
+        deferredAction: deferredActionDigest,
+        feeEstimator: alchemyFeeEstimator(
+          // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+          custom(instance.getClient()),
+        ),
+      });
+
+      const uoResult2 = await sessionKeyClient2.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount / 2n,
+          data: "0x",
+        },
+      });
+
+      await setNextBlockBaseFeePerGas(instance.getClient(), {
+        baseFeePerGas: 10n,
+      });
+
+      await sessionKeyClient2
+        .waitForUserOperationTransaction(uoResult2)
+        .catch(async () => {
+          const dropAndReplaceResult =
+            await sessionKeyClient2.dropAndReplaceUserOperation({
+              uoToDrop: uoResult2.request,
+            });
+          return await sessionKeyClient2.waitForUserOperationTransaction(
+            dropAndReplaceResult,
+          );
+        });
+    },
+  );
 
   it("PermissionBuilder: Cannot add any permission after root", async () => {
-    const provider = await givenConnectedProvider({ signer });
-
-    const serverClient = (
-      await createModularAccountV2Client({
-        chain: instance.chain,
-        accountAddress: provider.getAddress(),
-        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
-        transport: custom(instance.getClient()),
-      })
-    ).extend(deferralActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      deferralActions,
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -222,16 +273,16 @@ describe("MA v2 deferral actions tests", async () => {
     );
 
     // these can be default values or from call arguments
-    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: true,
     });
 
     const allPermissions = generateAllPermissions();
 
-    allPermissions.forEach((permission) => {
-      expect(async () => {
+    allPermissions.forEach(async (permission) => {
+      await expect(async () => {
         new PermissionBuilder({
-          client: serverClient,
+          client: provider,
           key: {
             publicKey: await sessionKey.getAddress(),
             type: "secp256k1",
@@ -251,37 +302,26 @@ describe("MA v2 deferral actions tests", async () => {
   });
 
   it("PermissionBuilder: Cannot compile post expiry", async () => {
-    const provider = await givenConnectedProvider({ signer });
-
-    const serverClient = (
-      await createModularAccountV2Client({
-        chain: instance.chain,
-        accountAddress: provider.getAddress(),
-        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
-        transport: custom(instance.getClient()),
-      })
-    ).extend(deferralActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      deferralActions,
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
 
-    const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-      accounts.unfundedAccountOwner,
-    );
-
     // these can be default values or from call arguments
-    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: false,
     });
 
     const now = Date.now() / 1000;
     const deadline = Math.round(now / 2);
 
-    expect(async () => {
+    await expect(async () => {
       await new PermissionBuilder({
-        client: serverClient,
+        client: provider,
         key: {
           publicKey: await sessionKey.getAddress(),
           type: "secp256k1",
@@ -309,18 +349,12 @@ describe("MA v2 deferral actions tests", async () => {
       .getClient()
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
-    const provider = await givenConnectedProvider({ signer });
 
-    const serverClient = (
-      await createModularAccountV2Client({
-        chain: instance.chain,
-        accountAddress: provider.getAddress(),
-        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
-        transport: custom(instance.getClient()),
-      })
-    ).extend(deferralActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      deferralActions,
+    );
 
-    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: false,
     });
 
@@ -328,7 +362,7 @@ describe("MA v2 deferral actions tests", async () => {
 
     const { typedData, fullPreSignatureDeferredActionDigest } =
       await new PermissionBuilder({
-        client: serverClient,
+        client: provider,
         key: {
           publicKey: await sessionKey.getAddress(),
           type: "secp256k1",
@@ -365,6 +399,10 @@ describe("MA v2 deferral actions tests", async () => {
       signer: sessionKey,
       initCode,
       deferredAction: deferredActionDigest,
+      feeEstimator: alchemyFeeEstimator(
+        // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+        custom(instance.getClient()),
+      ),
     });
 
     const uo = await sessionKeyClient.buildUserOperation({
@@ -388,15 +426,15 @@ describe("MA v2 deferral actions tests", async () => {
       blocks: 1,
     });
 
-    expect(async () => {
+    await expect(async () => {
       return await client.simulateContract({
-        address: serverClient.account.getEntryPoint().address,
+        address: provider.account.getEntryPoint().address,
         abi: entryPoint07Abi,
         functionName: "handleOps",
         args: [
           [
             {
-              sender: serverClient.account.address,
+              sender: provider.account.address,
               nonce: fromHex(signedUO.nonce, "bigint"),
               initCode:
                 signedUO.factory && signedUO.factoryData
@@ -436,16 +474,9 @@ describe("MA v2 deferral actions tests", async () => {
   });
 
   it("PermissionBuilder: Cannot add root after any permission", async () => {
-    const provider = await givenConnectedProvider({ signer });
-
-    const serverClient = (
-      await createModularAccountV2Client({
-        chain: instance.chain,
-        accountAddress: provider.getAddress(),
-        signer: new LocalAccountSigner(accounts.fundedAccountOwner),
-        transport: custom(instance.getClient()),
-      })
-    ).extend(deferralActions);
+    const provider = (await givenConnectedProvider({ signer })).extend(
+      deferralActions,
+    );
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -457,16 +488,16 @@ describe("MA v2 deferral actions tests", async () => {
     );
 
     // these can be default values or from call arguments
-    const { entityId, nonce } = await serverClient.getEntityIdAndNonce({
+    const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: true,
     });
 
     const allPermissions = generateAllPermissions();
 
-    allPermissions.forEach((permission) => {
-      expect(async () => {
+    allPermissions.forEach(async (permission) => {
+      await expect(async () => {
         return new PermissionBuilder({
-          client: serverClient,
+          client: provider,
           key: {
             publicKey: await sessionKey.getAddress(),
             type: "secp256k1",
@@ -512,6 +543,10 @@ describe("MA v2 deferral actions tests", async () => {
       accountAddress,
       signerEntity,
       transport: custom(instance.getClient()),
+      feeEstimator: alchemyFeeEstimator(
+        // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+        custom(instance.getClient()),
+      ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",

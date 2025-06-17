@@ -1,9 +1,10 @@
+/* eslint-disable import/extensions */
 import {
   BaseAlchemySigner,
   SessionManagerParamsSchema,
 } from "@account-kit/signer";
 import { z } from "zod";
-import { RNSignerClient, RNSignerClientParamsSchema } from "./client.js";
+import { RNSignerClient, RNSignerClientParamsSchema } from "./client";
 
 const RNAlchemySignerParamsSchema = z
   .object({
