@@ -1,11 +1,77 @@
 ---
-title: Seamlessly Connect to Existing EOA Wallets
-description: How to connect to other wallet providers using Account Kit
+title: Connect with EOAs
+description: How to connect to bring in your own EOAs to Account Kit
 ---
 
-## Seamlessly Connect to Existing EOA Wallets
+## Use Your Own EOA as a Signer
 
-Easily log in using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
+You can bring in your own EOAs to use as **owners and signers** of your smart account. This gives you full custody and control over how your smart account is managed, while still enabling access to powerful **Account Abstraction (AA)** features like:
+
+- **Gas sponsorship via Paymasters**
+- **Session keys**
+- **Custom authorization flows**
+- And more
+
+## 🔌 For EIP-1193-Compatible Providers (e.g. MetaMask, Coinbase Wallet)
+
+For wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core`. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+
+```ts
+// @noErrors
+import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+
+const externalProvider = window.ethereum; // or another EIP-1193 provider
+
+const walletClient = createWalletClient({
+  chain: sepolia,
+  transport: custom(externalProvider),
+});
+
+export const signer: SmartAccountSigner = new WalletClientSigner(
+  walletClient,
+  "json-rpc",
+);
+```
+
+## 🔐 For Public/Private Key Pairs (Embedded or Backend)
+
+To bring in your own **public/private key pair** and use it as a signer in AccountKit, you can manually implement the `SmartAccountSigner` interface. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+
+This is fully supported and gives you the flexibility to integrate with **embedded wallets**, **server-side signers**, or **secure enclaves**.
+
+Here's an example using `viem`'s `privateKeyToAccount` utility:
+
+```ts
+// @noErrors
+import { privateKeyToAccount } from "viem/accounts";
+import type { SmartAccountSigner } from "@aa-sdk/core";
+
+// ⚠️ Replace with your actual private key — keep this secure!
+const PRIVATE_KEY = "0xabc123...";
+
+const account = privateKeyToAccount(PRIVATE_KEY);
+
+export const signer: SmartAccountSigner<typeof account> = {
+  signerType: "local-private-key",
+  inner: account,
+
+  getAddress: async () => account.address,
+
+  signMessage: async (message) => {
+    return account.signMessage({ message });
+  },
+
+  signTypedData: async (typedData) => {
+    return account.signTypedData(typedData);
+  },
+};
+```
+
+## Bring in Your EOA as a Pure EOA (Using our pre-built UI Components)
+
+Easily log in into your existing EOAs using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more. Note: You will not have access to Account Abstraction features here; this external EOA will be purely used as an EOA.
 
 Our SDK supports external wallet connection out of the box, so you can seamlessly support both Web2 users with social login and Web3 users who want to bring their own EOAs.We support enabling users to bring their existing EOA in 2 ways:
 
@@ -79,9 +145,9 @@ In order to access other providers via `WalletConnect`, **also** add `walletConn
 ];
 ```
 
-## Custom UI
+## Bring in Your EOA as a Pure EOA (Using Custom UI)
 
-If you need complete control over the user experience, you can implement your own EOA connect using custom UI or our pre-built UI components and connectors:
+If you need complete control over the user experience, you can customize your EOA login:
 
 For example, using [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect)
 
@@ -108,7 +174,3 @@ return (
   </div>
 );
 ```
-
-## Connect to Existing Embedded EOA Wallets
-
-You can also (bring in your embedded EOAs!)[https://www.alchemy.com/docs/wallets/third-party/signers#using-walletclientsigner]
