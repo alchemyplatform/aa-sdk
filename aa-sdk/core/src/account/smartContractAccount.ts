@@ -438,10 +438,6 @@ export async function toSmartContractAccount(
   const getNonce_ =
     getNonce ??
     (async (nonceKey = 0n): Promise<bigint> => {
-      if (!(await isAccountDeployed())) {
-        return 0n;
-      }
-
       return entryPointContract.read.getNonce([
         accountAddress_,
         nonceKey,
