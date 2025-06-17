@@ -351,35 +351,16 @@ describe("Light Account Tests", () => {
       // set the value to 0 so that we can capture an error in sending the uo
       await resetBalance(provider, instance.getClient());
 
-      let toSend;
-      let uoStruct;
-      if (version === "v2.0.0") {
-        toSend = {
-          uo: {
-            target: provider.getAddress(),
-            data: "0x",
-          } as UserOperationCallData,
-          overrides: {
-            nonceKey: fromHex("0x12", "bigint"), // bypass paymaster
-          } as UserOperationOverrides<"0.7.0">,
-        };
-        uoStruct = (await provider.buildUserOperation(
-          toSend,
-        )) as UserOperationStruct<"0.7.0">;
-      } else {
-        toSend = {
-          uo: {
-            target: provider.getAddress(),
-            data: "0x",
-          } as UserOperationCallData,
-          overrides: {
-            nonceKey: fromHex("0x12", "bigint"), // bypass paymaster
-          } as UserOperationOverrides<"0.6.0">,
-        };
-        uoStruct = (await provider.buildUserOperation(
-          toSend,
-        )) as UserOperationStruct<"0.6.0">;
-      }
+      const toSend = {
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        } as UserOperationCallData,
+        overrides: {
+          nonceKey: fromHex("0x12", "bigint"),
+        },
+      };
+      const uoStruct = await provider.buildUserOperation(toSend);
 
       expect(toHex(uoStruct.nonce).startsWith("0x12")).toBe(true);
       const result = await provider.sendUserOperation(toSend);
