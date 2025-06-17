@@ -6602,12 +6602,10 @@
     "@tanstack/store" "0.5.5"
     use-sync-external-store "^1.2.2"
 
-"@tanstack/react-virtual@^3.13.9":
-  version "3.13.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.9.tgz#6f87bce08a65c8f4ec6d2c303646ca6b3897e9fe"
-  integrity sha512-SPWC8kwG/dWBf7Py7cfheAPOxuvIv4fFQ54PdmYbg7CpXfsKxkucak43Q0qKsxVthhUJQ1A7CIMAIplq4BjVwA==
-  dependencies:
-    "@tanstack/virtual-core" "3.13.9"
+"@tanstack/store@0.3.1", "@tanstack/store@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.3.1.tgz#317bfb7eedd8cc4ee32c4e52740abbf1bd311d36"
+  integrity sha512-A49KN8SpLMWaNmZGPa9K982RQ81W+m7W6iStcQVeKeVS70JZRqkF0fDwKByREPq6qz9/kS0aQFOPQ0W6wIeU5g==
 
 "@tanstack/store@0.3.1", "@tanstack/store@^0.3.1":
   version "0.3.1"
@@ -6619,10 +6617,12 @@
   resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.5.5.tgz#84d78568c4a71c885cb15754bf51eca42a776efe"
   integrity sha512-EOSrgdDAJExbvRZEQ/Xhh9iZchXpMN+ga1Bnk8Nmygzs8TfiE6hbzThF+Pr2G19uHL6+DTDTHhJ8VQiOd7l4tA==
 
-"@tanstack/virtual-core@3.13.9":
-  version "3.13.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.13.9.tgz#62b4d2d4351d658101664beacf088fbd061190bf"
-  integrity sha512-3jztt0jpaoJO5TARe2WIHC1UQC3VMLAFUW5mmMo0yrkwtDB2AQP0+sh10BVUpWrnvHjSLvzFizydtEGLCJKFoQ==
+"@tanstack/zod-form-adapter@^0.19.4":
+  version "0.19.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/zod-form-adapter/-/zod-form-adapter-0.19.5.tgz#2cc18d0b082906848c05c4c49e60185174b5aba6"
+  integrity sha512-yDucWQgAvDSqy5HuYnHgnW1SWN5MBTl8p+qPw0VK/da8r04LTINGhbwjiZEo3GF4LO9vo9i/ISsO+3mD+Psr5g==
+  dependencies:
+    "@tanstack/form-core" "0.19.5"
 
 "@tanstack/zod-form-adapter@^0.19.4":
   version "0.19.5"
@@ -8879,7 +8879,7 @@ acorn-walk@^8.1.1:
   dependencies:
     acorn "^8.11.0"
 
-acorn@^8.0.0, acorn@^8.11.0, acorn@^8.14.0, acorn@^8.14.1, acorn@^8.4.1, acorn@^8.9.0:
+acorn@^8.0.0, acorn@^8.11.0, acorn@^8.14.0, acorn@^8.14.1, acorn@^8.4.1, acorn@^8.6.0, acorn@^8.9.0:
   version "8.14.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.14.1.tgz#721d5dc10f7d5b5609a891773d47731796935dfb"
   integrity sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==
