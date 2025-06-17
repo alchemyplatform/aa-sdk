@@ -287,16 +287,6 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @example
    * ```ts
    * import { AlchemySignerWebClient } from "@account-kit/signer";
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
-   * @param _options
    *
    * const client = new AlchemySignerWebClient({
    *  connection: {
