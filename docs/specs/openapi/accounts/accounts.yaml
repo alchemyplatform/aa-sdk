@@ -311,7 +311,7 @@ paths:
     post:
       summary: Authenticate with JWT
       description: >
-        Authenticates a user using a JSON Web Token (JWT) for secure access to their Smart Wallet functionalities. This endpoint validates the provided JWT token and can be used for authenticating an existing user or to pregenerate a wallet.
+        Authenticates a user using a JSON Web Token (JWT) to secure smart wallets. This endpoint validates the provided JWT token and can be used for authenticating an existing user's wallet or to pregenerate a wallet.
       security:
         - apiKey: []
       x-readme:
