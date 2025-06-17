@@ -1,0 +1,127 @@
+---
+title: Pregenerate Wallets
+description: Learn how to pre-generate Smart Wallet addresses for your users with nothing more than an email address.
+slug: wallets/react/pregenerate-wallets
+---
+
+When you already know who your users are (for example you collected their email during wait-list signup) you might want to **create wallet addresses ahead of time** so you can airdrop assets or seed balances _before_ they ever open your app.
+
+With Alchemy you can do this entirely from your server using the **Signer API** – no UI, hooks, or user interaction required.
+
+<Info>
+  This guide focuses on using the [`Create Wallet`
+  endpoint](https://www.alchemy.com/docs/wallets/api/smart-wallets/signer-api-endpoints/signer-api-endpoints/create-account)
+  ( `POST /signer/v1/signup` ). All you need to supply is the user's email; the
+  response contains **both an EVM address** and **a Solana address** that you
+  can fund immediately.
+</Info>
+
+## 1. Get an API key
+
+Grab an **API Key** from the Alchemy dashboard and store it as an environment variable:
+
+```bash
+export ALCHEMY_API_KEY="<YOUR_API_KEY>"
+```
+
+## 2. Make the request
+
+Below are three common ways to call the endpoint. Pick whichever fits your stack – they all use the same request body:
+
+### Fetch (ESM / Node ≥18)
+
+```ts twoslash
+const res = await fetch("https://api.g.alchemy.com/signer/v1/signup", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    // The API key is sent in the Authorization header
+    Authorization: process.env.ALCHEMY_API_KEY!,
+  },
+  body: JSON.stringify({
+    email: "[email protected]",
+  }),
+});
+
+if (!res.ok) throw new Error(await res.text());
+
+const { address, solanaAddress, userId } = await res.json();
+console.log({ address, solanaAddress, userId });
+```
+
+### `request` (CommonJS)
+
+```ts
+import request from "request";
+
+request.post(
+  {
+    url: "https://api.g.alchemy.com/signer/v1/signup",
+    json: { email: "[email protected]" },
+    headers: {
+      Authorization: process.env.ALCHEMY_API_KEY,
+      "Content-Type": "application/json",
+    },
+  },
+  (err, _resp, body) => {
+    if (err) throw err;
+    console.log(body); // ➜  { orgId, userId, address, solanaAddress, otpId }
+  }
+);
+```
+
+### cURL
+
+```bash
+curl -X POST https://api.g.alchemy.com/signer/v1/signup \
+  -H "Authorization: $ALCHEMY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "email": "[email protected]" }'
+```
+
+## 3. Response fields
+
+| Field           | Description                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `address`       | The **signer (EOA)** address that will **own** your user's smart account (this is _not_ the smart account itself). |
+| `solanaAddress` | The **Solana** wallet address associated with the same user.                                                       |
+| `orgId`         | Your organisation ID – useful if you operate multiple orgs.                                                        |
+
+<Tip>
+  The address you receive here is the **owner key**. Your user's Smart Contract
+  Account (ModularAccountV2) will be deployed at a different address – but we
+  can deterministically calculate it ahead of time using
+  `predictModularAccountV2Address`.
+</Tip>
+
+## 4. Predict the smart account address
+
+The `@account-kit/smart-contracts` package exports a utility that mirrors the
+CREATE2 logic used by the MAv2 factory. By passing the signer address you just
+generated, you can know the **counter-factual** (future) address of the smart
+account before it is even deployed.
+
+```ts twoslash
+import { predictModularAccountV2Address } from "@account-kit/smart-contracts";
+
+// Factory & implementation addresses vary by chain – you can grab them from
+// the "Deployed addresses" page in the docs or import helpers such as
+// `getDefaultModularAccountV2FactoryAddress`.
+
+const factoryAddress = "0xMAv2Factory" as const;
+const implementationAddress = "0xMAv2Implementation" as const;
+
+const smartAccountAddress = predictModularAccountV2Address({
+  factoryAddress,
+  implementationAddress,
+  salt: 0n, // use 0 unless you have a custom salt scheme
+  type: "SMA", // Simple Modular Account (single-owner)
+  ownerAddress: address, // signer address from Step 2
+});
+
+console.log({ smartAccountAddress });
+```
+
+Now you have **both** the owner key (`address`) and the eventual smart account
+address (`smartAccountAddress`). When the user finally authenticates, their
+smart account will be deployed at exactly this counter-factual address.
