@@ -14,16 +14,16 @@ export const PayCard = ({ accountMode }: { accountMode: AccountMode }) => {
   const { setToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const signer = useSigner();
-  console.log("****PayCard signer:", signer);
+  // console.log("****PayCard signer:", signer);
   const { address } = useAccount({
     type: "ModularAccountV2",
     accountParams: {
       mode: "7702",
     },
   });
-  console.log("****PayCard address:", address);
+  // console.log("****PayCard address:", address);
   const { chain } = useChain();
-  console.log("****PayCard chain:", chain);
+  // console.log("****PayCard chain:", chain);
 
   const { transfer, isTransferring } = useTokenTransfer({
     amount: 1,

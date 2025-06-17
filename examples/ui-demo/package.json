@@ -16,7 +16,6 @@
     "@account-kit/infra": "^4.35.0",
     "@account-kit/logging": "^4.35.0",
     "@account-kit/react": "^4.35.0",
-    "@account-kit/wallet-client": "^0.1.0-alpha.7",
     "@headlessui/react": "^2.2.3",
     "@metaplex-foundation/umi": "^1.2.0",
     "@metaplex-foundation/umi-bundle-defaults": "^1.2.0",

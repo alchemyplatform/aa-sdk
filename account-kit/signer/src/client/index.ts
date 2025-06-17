@@ -55,7 +55,10 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   private iframeStamper: IframeStamper;
   private webauthnStamper: WebauthnStamper;
   oauthCallbackUrl: string;
-  iframeContainerId: string;
+  iframeConfig: {
+    iframeElementId: string;
+    iframeContainerId: string;
+  };
 
   /**
    * Initializes a new instance with the given parameters, setting up the connection, iframe configuration, and WebAuthn stamper.
@@ -97,7 +100,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
 
     this.iframeStamper = iframeStamper;
-    this.iframeContainerId = iframeConfig.iframeContainerId;
+    this.iframeConfig = iframeConfig;
 
     this.webauthnStamper = new WebauthnStamper({
       rpId: rpId ?? window.location.hostname,
@@ -284,6 +287,16 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @example
    * ```ts
    * import { AlchemySignerWebClient } from "@account-kit/signer";
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
+   * @param _options
    *
    * const client = new AlchemySignerWebClient({
    *  connection: {
@@ -304,26 +317,28 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {string} [config.iframeElementId] Optional ID for the iframe element
    * @returns {Promise<void>} A promise that resolves when the export process is complete
    */
-  public override exportWallet = async (_options: ExportWalletParams) => {
-    throw new Error("No thanks");
-    // const exportWalletIframeStamper = new IframeStamper({
-    //   iframeContainer: document.getElementById(iframeContainerId),
-    //   iframeElementId: iframeElementId,
-    //   iframeUrl: "https://export.turnkey.com",
-    // });
-    // await exportWalletIframeStamper.init();
+  public override exportWallet = async ({
+    iframeContainerId,
+    iframeElementId = "turnkey-export-iframe",
+  }: ExportWalletParams) => {
+    const exportWalletIframeStamper = new IframeStamper({
+      iframeContainer: document.getElementById(iframeContainerId),
+      iframeElementId: iframeElementId,
+      iframeUrl: "https://export.turnkey.com",
+    });
+    await exportWalletIframeStamper.init();
 
-    // if (this.turnkeyClient.stamper === this.iframeStamper) {
-    //   return this.exportWalletInner({
-    //     exportStamper: exportWalletIframeStamper,
-    //     exportAs: "SEED_PHRASE",
-    //   });
-    // }
+    if (this.turnkeyClient.stamper === this.iframeStamper) {
+      return this.exportWalletInner({
+        exportStamper: exportWalletIframeStamper,
+        exportAs: "SEED_PHRASE",
+      });
+    }
 
-    // return this.exportWalletInner({
-    //   exportStamper: exportWalletIframeStamper,
-    //   exportAs: "PRIVATE_KEY",
-    // });
+    return this.exportWalletInner({
+      exportStamper: exportWalletIframeStamper,
+      exportAs: "PRIVATE_KEY",
+    });
   };
 
   /**
@@ -348,7 +363,20 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override disconnect = async () => {
     this.user = undefined;
     this.iframeStamper.clear();
-    await this.iframeStamper.init();
+
+    // In the latest version of the TK iframe stamper, the
+    // IframeStamper instance seems to not be usable after
+    // clearing it, so we need to create a new instance.
+    const stamper = new IframeStamper({
+      iframeContainer: document.getElementById(
+        this.iframeConfig.iframeContainerId,
+      ),
+      iframeElementId: this.iframeConfig.iframeElementId,
+      iframeUrl: "https://auth.turnkey.com",
+    });
+    this.iframeStamper = stamper;
+    this.setStamper(stamper);
+    await this.initSessionStamper();
   };
 
   /**
@@ -608,14 +636,29 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     return this.request("/v1/prepare-oauth", { nonce });
   };
 
+  private initSessionStamperPromise: Promise<string> | null = null;
+
   protected override async initSessionStamper(): Promise<string> {
-    if (!this.iframeStamper.publicKey()) {
-      await this.iframeStamper.init();
+    if (this.initSessionStamperPromise) {
+      return this.initSessionStamperPromise;
     }
 
-    this.setStamper(this.iframeStamper);
+    this.initSessionStamperPromise = (async () => {
+      if (!this.iframeStamper.publicKey()) {
+        await this.iframeStamper.init();
+      }
 
-    return this.iframeStamper.publicKey()!;
+      this.setStamper(this.iframeStamper);
+
+      return this.iframeStamper.publicKey()!;
+    })();
+
+    try {
+      const result = await this.initSessionStamperPromise;
+      return result;
+    } finally {
+      this.initSessionStamperPromise = null;
+    }
   }
 
   protected override async initWebauthnStamper(

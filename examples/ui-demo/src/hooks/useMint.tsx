@@ -5,8 +5,6 @@ import {
   useSmartAccountClient,
   useSendUserOperation,
   useChain,
-  useAlchemyAccountContext,
-  useSigner,
 } from "@account-kit/react";
 import { Address, Chain, encodeFunctionData } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
