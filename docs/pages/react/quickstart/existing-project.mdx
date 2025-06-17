@@ -176,6 +176,19 @@ Remember to replace `"YOUR_API_KEY"` with the API key from step 2.
   in the dashboard.
 </Tip>
 
+Note:
+This is set up allows you to connect to other existing external EOAs such as MetaMask using our built-in connectors and WalletConnect. Learn more [here](/react/login-methods/eoa-login.mdx)
+
+```ts twoslash [src/config.ts]
+// @noErrors
+[
+  {
+    type: "external_wallets",
+    walletConnect: { projectId: "your-project-id" },
+  },
+];
+```
+
 ## 4. Set up the Alchemy Provider
 
 Wrap your application with the Alchemy Provider to enable embedded wallet functionality.
