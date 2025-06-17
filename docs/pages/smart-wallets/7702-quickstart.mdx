@@ -58,7 +58,7 @@ import { createSmartWalletClient } from "@account-kit/wallet-client";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
 
-const signer = LocalAccountSigner.fromPrivateKey(PRIVATE_KEY); // we use a private key signer as an example here
+const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // we use a private key signer as an example here
 
 const transport = alchemy({
   apiKey: ALCHEMY_API_KEY, // use your Alchemy app api key here!
