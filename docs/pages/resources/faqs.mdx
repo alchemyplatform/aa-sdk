@@ -178,7 +178,10 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
     ### Option 1: SIWE [Sign-In With Ethereum](https://eips.ethereum.org/EIPS/eip-4361)
 
+    Use this flow when you just need to verify user sessions created by EOAs and Smart Contract Accounts (SCAs) via Account Kit.
+
     For EOAs, Account Kit doesn’t create a session on the client side and `stampWhoAmI` isn’t available, so we can use SIWE. This can be used for verifying EOA and SCA flows.
+    Where you can create a [SIWE message](https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/creating-siwe-messages) with all the necessary info to get server side (address, chainId, etc).
 
     1. The backend provides a nonce to the frontend.
     2. The user signs a SIWE message with their wallet (EOA or SCA).
@@ -196,7 +199,7 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
     ### Option 2: `stampWhoAmI` + `whoami` (Only for SCAs)
 
-    Use this flow when working with Smart Contract Accounts (SCAs) via Account Kit.
+    Use this flow when you just need to verify user sessions created by SCAs via Account Kit.
 
     1. The frontend generates a stamped identity proof using [signer.inner.stampWhoAmI](https://www.alchemy.com/docs/wallets/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami).
     2. It sends the stamp to your backend.
