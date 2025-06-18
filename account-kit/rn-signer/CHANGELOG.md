@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.43.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.42.0...v4.43.0) (2025-06-18)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.42.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.41.0...v4.42.0) (2025-06-17)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
 # [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
 
 ### Features
