@@ -81,7 +81,7 @@ export type CreateModularAccountV2AlchemyClientParams<
   "transport"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<TChain, LightAccount<TSigner>>, // TO DO: split this type so that it doesn't require a signer
+    AlchemySmartAccountClientConfig<TChain, LightAccount<TSigner>>,
     "account"
   > & { paymasterAndData?: never; dummyPaymasterAndData?: never };
 
