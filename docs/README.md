@@ -51,7 +51,7 @@ To add new images:
 SDK References are automatically generated from relevant projects within the monorepo via the `docs-gen` package. Both the markdown files and the sidebar structure in `docs/docs.yml` are generated and should **not** be edited manually. In the root, to generate references from code you can run:
 
 ```shell
-yarn fern-gen
+yarn fern:gen
 ```
 
 ### Injected Code Snippets
