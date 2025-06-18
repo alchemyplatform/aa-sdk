@@ -4,7 +4,7 @@ description: Learn how to pre-generate Smart Wallet addresses for your users wit
 slug: wallets/react/pregenerate-wallets
 ---
 
-> **Objective** Generate a wallet owner (signer) and predict the smart-account address _before_ a user ever logs in, using only their email.
+> **Objective** Generate a wallet owner (signer) and the smart-account address _before_ a user ever logs in, using only their email.
 
 ## Prerequisites
 
@@ -12,10 +12,14 @@ slug: wallets/react/pregenerate-wallets
 - Node ≥ 18 (or cURL / any HTTP client)
 - The `@account-kit/smart-contracts` package (for step 4)
 
-When you already know who your users are (for example you collected their email during wait-list signup) you might want to **create wallet addresses ahead of time** so you can airdrop assets or seed balances _before_ they ever open your app.
+You can generate a wallet address on both EVM and Solana before a user ever authenticates or logs in using only their email. This could enable use cases such as: 
+- airdropping assets or seed balances to users who signed up for a waitlist with their email before they ever open your app
+- allowing users to send assets to another user with just their email even if the recipient has not logged in before. When that recipient logs in, they'll be able to claim their balance. 
+- migrating assets to smart wallets to enable gas sponsorship, batching, etc.
+- and more!
 
 With Alchemy you can do this entirely from your server using the **Signer API** – no UI, hooks, or user interaction required.
-
+**Note:** Smart contract addresses are deterministic. The deployment address is a function of the address of owner/signer address, the account implementation (e.g. latest version of Modular Account), and the salt (optionally specified). If all three of those remain the same, then the smart account will be consistent across chains and for users. We will handle generating a consistent signer address for email.
 ## 1. Get an API key
 
 Grab an **API Key** from the Alchemy dashboard and store it as an environment variable:
@@ -26,7 +30,7 @@ export ALCHEMY_API_KEY="<YOUR_API_KEY>"
 
 ## 2. Create the owner signer
 
-Use whichever call style fits your environment – they all call the same [`Create Wallet` API endpoint](https://www.alchemy.com/docs/wallets/api/smart-wallets/signer-api-endpoints/signer-api-endpoints/create-account) with an identical JSON body.
+First, you need to generate the signer address. This will be generated using the [`Create Wallet` API endpoint](https://www.alchemy.com/docs/wallets/api/smart-wallets/signer-api-endpoints/signer-api-endpoints/create-account). The signer address will be used as the owner of the new smart account and enable the user to sign transactions after authenticating with their email.
 
 <Tabs>
 <Tab title="Fetch (ESM / Node ≥18)" language="ts">
