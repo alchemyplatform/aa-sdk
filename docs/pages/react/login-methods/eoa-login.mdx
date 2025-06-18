@@ -1,13 +1,13 @@
 ---
 title: Connect with EOAs
-description: How to connect to bring in your own EOAs to Account Kit
+description: How to bring in your own EOAs to Account Kit
 ---
 
 You can allow users to login by connecting their existing EOA using Account Kit. This can be done using our pre-built UI components or custom UI - no need for a separate wallet connector!
 Depending on what method you choose, you can bring in your EOA:
 
-- As a "pure" EOA, meaning users will use their EOA and the funds in that wallet as normal. Since it is an EOA and not a smart account, it will not have access to AA features like gas sponsorship or batching.
-- As an owner and signer of a new smart account, meaning users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new wallet will get AA features like sponsorship and batching.
+- **As a "pure" EOA**: users connect and transact directly from their EOAs. These wallets don’t support smart account features like gas sponsorship or batching.
+- **As an owner and signer of a new smart account**: users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new smart wallet have AA features like sponsorship and batching.
 
 ## Pre-built Components
 
@@ -111,11 +111,10 @@ return (
 );
 ```
 
-### Bring in an EOA as an Owner
+### Bring in an EOA as a Smart Wallet Owner
 
-For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core`. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
-
-This EOA is made an owner of your smart account and has access to AA features:
+For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core` to bring in these EOAs as your smart wallet owner. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+By making your EOA an owner of a smart account, you will have access to AA feature through your new smart wallet.
 
 ```ts
 // @noErrors
@@ -134,24 +133,4 @@ export const signer: SmartAccountSigner = new WalletClientSigner(
   walletClient,
   "json-rpc",
 );
-```
-
-### Bring in a Local Account as an Owner
-
-Local Account refers to an EOA where the private key is directly accessible on the client. This EOA is made an owner of your smart account and has access to AA features:
-
-```ts
-// @noErrors
-import { LocalAccountSigner } from "@aa-sdk/core";
-import { privateKeyToAccount, generatePrivateKey } from "viem";
-
-const signer = new LocalAccountSigner(
-  privateKeyToAccount(generatePrivateKey()),
-);
-
-const account = await createModularAccountV2({
-  chain: sepolia,
-  transport: alchemyTransport,
-  signer: signer,
-});
 ```
