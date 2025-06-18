@@ -3,56 +3,16 @@ title: Connect with EOAs
 description: How to connect to bring in your own EOAs to Account Kit
 ---
 
-## Use Your Own EOA as a Signer
+You can log into Account Kit using your own EOA! This can be done using our pre-built UI components or custom UI.
+Depending on what method you choose, you can bring in your EOA:
 
-You can bring in your own EOAs to use as **owners and signers** of your smart account. This gives you full custody and control over how your smart account is managed, while still enabling access to powerful **Account Abstraction (AA)** features.
+- As a "pure" EOA, meaning it will not have access to Account Abstraction (AA) features.
+- As an owner and signer of your Alchemy smart account, which will give you access to AA features.
 
-## 🔌 For EIP-1193-Compatible Providers (e.g. MetaMask, Coinbase Wallet)
+## Pre-built Components
 
-For wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core`. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
-
-```ts
-// @noErrors
-import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
-import { createWalletClient, custom } from "viem";
-import { sepolia } from "viem/chains";
-
-const externalProvider = window.ethereum; // or another EIP-1193 provider
-
-const walletClient = createWalletClient({
-  chain: sepolia,
-  transport: custom(externalProvider),
-});
-
-export const signer: SmartAccountSigner = new WalletClientSigner(
-  walletClient,
-  "json-rpc",
-);
-```
-
-## 🔐 For Local Keys
-
-You can also bring in your own **private key** and use it as an owner of a smart account:
-
-```ts
-// @noErrors
-import { LocalAccountSigner } from "@aa-sdk/core";
-import { privateKeyToAccount, generatePrivateKey } from "viem";
-
-const signer = new LocalAccountSigner(
-privateKeyToAccount(generatePrivateKey()),
-);
-
-const account = await createModularAccountV2({
-        chain: sepolia,
-        transport: alchemyTransport,
-        signer: signer,
-    });
-```
-
-## Bring in Your EOA as a Pure EOA (Using our pre-built UI Components)
-
-Easily log in into your existing EOAs using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more. Note: You will not have access to Account Abstraction features here; this external EOA will be purely used as an EOA.
+Easily log in into your existing EOAs using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
+Note: You will not have access to Account Abstraction features here; this external, "pure" EOA will be purely used as an EOA.
 
 Our SDK supports external wallet connection out of the box, so you can seamlessly support both Web2 users with social login and Web3 users who want to bring their own EOAs.We support enabling users to bring their existing EOA in 2 ways:
 
@@ -121,9 +81,11 @@ In order to access other providers via `WalletConnect`, **also** add `walletConn
 ];
 ```
 
-## Bring in Your EOA as a Pure EOA (Using Custom UI)
+## Custom UI
 
-If you need complete control over the user experience, you can customize your EOA login:
+### React Hooks
+
+If you need complete control over the user experience, you can customize your EOA login. This is a "pure" EOA and will not have access to AA features:
 
 For example, using [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect)
 
@@ -149,4 +111,48 @@ return (
     ))}
   </div>
 );
+```
+
+### EIP-1193-Compatible Provider Integration
+
+For wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core`. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+This EOA is made an owner of your smart account and has access to AA features:
+
+```ts
+// @noErrors
+import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+
+const externalProvider = window.ethereum; // or another EIP-1193 provider
+
+const walletClient = createWalletClient({
+  chain: sepolia,
+  transport: custom(externalProvider),
+});
+
+export const signer: SmartAccountSigner = new WalletClientSigner(
+  walletClient,
+  "json-rpc",
+);
+```
+
+### 🔐 Local Account Integration
+
+Local Account refers to an EOA where the private key is directly accessible on the client. This EOA is made an owner of your smart account and has access to AA features:
+
+```ts
+// @noErrors
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { privateKeyToAccount, generatePrivateKey } from "viem";
+
+const signer = new LocalAccountSigner(
+  privateKeyToAccount(generatePrivateKey()),
+);
+
+const account = await createModularAccountV2({
+  chain: sepolia,
+  transport: alchemyTransport,
+  signer: signer,
+});
 ```
