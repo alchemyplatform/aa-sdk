@@ -55,7 +55,7 @@ export async function createViemMultiOwnerLightAccount<
   // Deduplicate and sort owners
   const deduplicatedOwners = Array.from(
     new Set([signerAddress, ...owners].map((owner) => owner.toLowerCase())),
-  ).map((owner) => owner as Address);
+  ) as Address[];
 
   const sortedOwners = deduplicatedOwners.sort((a, b) => {
     const bigintA = BigInt(a);
