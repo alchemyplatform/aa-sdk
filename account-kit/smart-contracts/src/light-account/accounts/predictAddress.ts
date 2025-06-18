@@ -20,6 +20,12 @@ export type PredictLightAccountAddressParams = {
   version: keyof LightAccountVersionConfigs["LightAccount"];
 };
 
+/**
+ * Predicts the address of a light account based on provided parameters such as factory address, salt, owner address, and version.
+ *
+ * @param {PredictLightAccountAddressParams} params The parameters required to predict the light account address, including factory address, salt, owner address, and version
+ * @returns {Address} The predicted address of the light account calculated based on the provided parameters
+ */
 export function predictLightAccountAddress({
   factoryAddress,
   salt,

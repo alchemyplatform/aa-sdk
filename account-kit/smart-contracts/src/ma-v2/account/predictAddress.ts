@@ -30,7 +30,25 @@ export type PredictModularAccountV2AddressParams = {
     }
 );
 
-export function predictModularAccountV2Address(
+/**
+ * Predicts the address of a modular account V2 based on the provided parameters, which include factory address, salt, and implementation address. This function supports different types of accounts including "SMA", "MA", and "WebAuthn".
+ *
+ * @example
+ * ```ts
+ * import { predictModularAccountV2Address } from "@account-kit/smart-contracts";
+ *
+ * const accountAddress = predictModularAccountV2Address({
+ *   factoryAddress: "0xFactoryAddress" as Address,
+ *   implementationAddress: "0xImplementation" as Address,
+ *   salt: 0n,
+ *   type: "SMA",
+ *   ownerAddress: "0xOwner" as Address,
+ * });
+ * ```
+ *
+ * @param {PredictModularAccountV2AddressParams} params The parameters for predicting the modular account address, including `factoryAddress`, `salt`, `implementationAddress`, and additional properties based on the account type.
+ * @returns {Address} The predicted address for the modular account V2.
+ */ export function predictModularAccountV2Address(
   params: PredictModularAccountV2AddressParams,
 ): Address {
   const { factoryAddress, salt, implementationAddress } = params;
