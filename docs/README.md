@@ -6,9 +6,20 @@ The contents are automatically merged with [Alchemy's Official Docs repo](https:
 
 ## Structure
 
-- `docs.yml` - The main configuration file that defines the documentation structure and sidebar navigation
-- `pages/` - Directory containing the documentation markdown files
-- `images/` - Directory containing images used in the documentation
+```text
+aa-sdk/
+├── docs/                # This project
+│   ├── docs.yml         # The main configuration file that defines the documentation structure and sidebar navigation
+│   ├── pages/           # Contains the documentation markdown files
+│   ├── images/          # Contains images used in the documentation
+│   ├── components/      # Contains the all custom React components used in markdown
+|   ├── specs/           # Contains OpenRPC and OpenAPI spec definitions which are dereferenced during build
+|   └── api-generators/  # Contains generators.yaml files used by Fern to reference API specs
+└── docs-site/           # Git Submodule containing Fern and all non-wallet docs content
+```
+
+> \[!WARNING]
+> If you want to make changes to content outside the Wallets tab, please do so in the main [Alchemy Docs repo](https://github.com/alchemyplatform/docs). See its [README](https://github.com/alchemyplatform/docs?tab=readme-ov-file#alchemy-documentation) and [contributing guidelines](https://github.com/alchemyplatform/docs/blob/main/CONTRIBUTING.md) for more information.
 
 ## Making Updates
 
@@ -18,7 +29,8 @@ To add or modify documentation content:
 
 - Add/edit markdown files in the `pages/` directory
 - Follow the existing markdown formatting conventions. Fern uses [Github-flavored Markdown](https://github.github.com/gfm/)
-- You may use any [existing Fern components](https://buildwithfern.com/learn/docs/content/components/overview) without import statements
+- You may use any [existing Fern components](https://buildwithfern.com/learn/docs/content/components/overview)
+  - Do **not** use `import`/`require` statements in MDX. Fern injects these for you.
 
 To add new pages to navigation:
 
@@ -46,23 +58,36 @@ yarn fern-gen
 
 You can reference production code directly in code snippets using `[!include]` statements. The syntax is the same as Physical File Snippets from Vocs, so you can reference [their documentation](https://vocs.dev/docs/guides/code-snippets#physical-file-snippets).
 
-### Local Development
+## Local Development
 
-**TBD:** Currently this would require distributing a GitHub Token to access Alchemy Docs repo. Will remove this requirement once those docs go live.
+To run docs locally, you must have `pnpm` installed as a global dependency. `corepack` can install it for you. Run:
 
-### Preview Changes
+```bash
+asdf install # or `mise install`
+corepack enable
+```
+
+Then to start the dev server, run:
+
+```bash
+yarn docs:dev
+```
+
+This will install dependencies, temporarily move files into `docs-site`, and keep the submodule update for you.
+
+## Preview Changes
 
 1. Create a pull request with your changes
 2. The CI will automatically generate a preview URL in the PR comments
 3. Review the preview to ensure your changes appear as expected
 
-### Publishing
+## Publishing
 
 Documentation changes are automatically published to [alchemy.com/docs](https://alchemy.com/docs) when merged to the `main` branch.
 
 ## Technical Details
 
-- The `scripts/insert-docs.sh` script handles:
-  - Moving images to the correct location in the main docs site
+- The `scripts/insert-docs.sh` script is run during local and during CI/CD from both [aa-sdk](https://github.com/alchemyplatform/aa-sdk/) and [docs](https://github.com/alchemyplatform/docs) repos. It handles:
   - Inserting Account Kit documentation configuration into the main docs site config
+  - Moving images and API specs to the correct locations in the main docs repo
 - Documentation is built and published using [Fern CLI](https://buildwithfern.com/learn/cli-reference/overview#setting-up-docs)

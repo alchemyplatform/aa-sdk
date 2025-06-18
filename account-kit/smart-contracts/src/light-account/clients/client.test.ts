@@ -9,7 +9,7 @@ import {
   type UserOperationOverrides,
   type UserOperationStruct,
 } from "@aa-sdk/core";
-import { custom, parseEther, publicActions, type Address } from "viem";
+import { custom, fromHex, parseEther, publicActions, type Address } from "viem";
 import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
@@ -18,8 +18,9 @@ import {
   alchemyFeeEstimator,
   alchemyGasAndPaymasterAndDataMiddleware,
 } from "@account-kit/infra";
+import { toHex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { local060Instance } from "~test/instances.js";
+import { local060Instance, local070Instance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
@@ -31,7 +32,7 @@ const versions = Object.keys(
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
-  const instance = local060Instance;
+  let instance = local060Instance;
   let client: ReturnType<typeof instance.getClient>;
 
   beforeAll(async () => {
@@ -336,6 +337,42 @@ describe("Light Account Tests", () => {
 
     await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
   });
+
+  it.each(versions)(
+    "should override nonce key when nonce key of user operation overrides is set for version %s",
+    async (version) => {
+      instance = version !== "v2.0.0" ? local060Instance : local070Instance; // v2 uses EP0.7
+      const provider = await givenConnectedProvider({
+        signer,
+        paymasterMiddleware: "erc7677",
+        version,
+      });
+
+      // set the value to 0 so that we can capture an error in sending the uo
+      await resetBalance(provider, instance.getClient());
+
+      const toSend = {
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        } as UserOperationCallData,
+        overrides: {
+          nonceKey: fromHex("0x12", "bigint"),
+        },
+      };
+      const uoStruct = await provider.buildUserOperation(toSend);
+
+      expect(toHex(uoStruct.nonce).startsWith("0x12")).toBe(true);
+      const result = await provider.sendUserOperation(toSend);
+
+      await expect(
+        provider.waitForUserOperationTransaction(result),
+      ).resolves.not.toThrowError();
+
+      // reset the instance
+      instance = local060Instance;
+    },
+  );
 
   it("should bypass paymaster when paymasterAndData of user operation overrides is set to 0x using alchemy paymaster middleware", async () => {
     const provider = await givenConnectedProvider({
