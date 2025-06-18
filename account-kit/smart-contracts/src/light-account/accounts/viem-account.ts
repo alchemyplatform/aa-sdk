@@ -67,8 +67,8 @@ export async function createViemLightAccount<
     version === "v2.0.0" ? LightAccountAbi_v2 : LightAccountAbi_v1;
   const factoryAbi =
     version === "v2.0.0"
-      ? LightAccountFactoryAbi_v1
-      : LightAccountFactoryAbi_v2;
+      ? LightAccountFactoryAbi_v2
+      : LightAccountFactoryAbi_v1;
 
   const signerAddress = await signer.getAddress();
   const finalFactoryAddress =
