@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
+
+### Bug Fixes
+
+- upgrade TK iframe stamper to properly handle concurrent stamping ([#1685](https://github.com/alchemyplatform/aa-sdk/issues/1685)) ([d53dc65](https://github.com/alchemyplatform/aa-sdk/commit/d53dc65831c4bb1f27d0a84c342ea7f48080ba27))
+
 # [4.43.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.42.0...v4.43.0) (2025-06-18)
 
 ### Features
