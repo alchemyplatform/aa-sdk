@@ -349,7 +349,7 @@ paths:
                       "nonce": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                     }
                     ```
-                  example: "eyJhbGciOiJSUzI1NiIsImtpZCI6Im15LWtleS1pZCIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTAyNjcyMTEsImlzcyI6Imh0dHBzOi8vMTg1Ny0yYTA5LWJhYzAtMTAwMC0zMTgtMDAtMTAtNGZkLm5ncm9rLWZyZWUuYXBwIiwiYXVkIjoiNmFiNDE1NmQtNWZmOS00YzBhLTk4YjYtYjQzZjY5NmNhNjA2Iiwic3ViIjoidXNlci1pZC0zIiwiZXhwIjoxNzUwMjc0NDExfQ.f2FLH6DP4jjkTBSXM_eyO5VoE1L3iunPQN7ZkzJ1uSdc8ScOLwG-ddrW_WzRpXKuGAQjoo0aBhoiGiZ804RcizmOx_OC4lSkKuzzwpuxqJO6IEjtZLLPMYlSGWbc_z5tDY7PQ6kAZd31qW-48tQcL6XI5tiUycVQKxPq4-CdjXh-B4uyeEoQhJeSOiICR1ULYKNg9SCc3n8hIam8GlcsLRXjwDn90z533gWNWtUVxS7WUreSkg6h9fsFIt5EegFw5Un8iovhVuTPhg3fn7uJA9R3ciyeZH3Zx1EOSDcUpY9b1SmDaKUv0_CC77fxMyFkacYjjIjqXoHXdQT4ZUi2CQ"
+                  example: "eyJhbGciOiJSUzI1NiIsImtpZCI6Im15LWtl..."
                 authProvider:
                   type: string
                   description: Name of your application as entered on [google form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736). Please reach out to us if you've lost this!
