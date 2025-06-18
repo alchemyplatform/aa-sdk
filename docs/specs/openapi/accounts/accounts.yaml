@@ -331,9 +331,9 @@ paths:
                   description: |
                     The JSON Web Token (JWT) used for authentication. The JWT must be a valid OIDC ID Token containing the required claims for user identification and authentication.
                     **Required OIDC Claims:**
-                    - `iss` (Issuer): The identifier of the OIDC provider. Should be the same as issuer of openid-config.
+                    - `iss` (Issuer): The identity of the OIDC provider. Should be the same as issuer URL specified in your /.well-known/openid-configuration, for example see the [Google OpenID configuration](https://accounts.google.com/.well-known/openid-configuration)
                     - `sub` (Subject): A unique identifier that identifies the user with this auth provider.
-                    - `aud` (Audience): The client ID for which this token is intended
+                    - `aud` (Audience): A unique identifier for the project communicated by us after registration on the [google form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736)
                     - `exp` (Expiration): Token expiration time as Unix timestamp
                     - `iat` (Issued At): Token issuance time as Unix timestamp
                     - `nonce` (Nonce): toHex(sha256(targetPublicKey)) without the leading 0x
@@ -344,13 +344,13 @@ paths:
                       "sub": "1234567890abcdef",
                       "aud": "project_id",
                       "exp": 1640995200,
-                      "iat": 1640991600,
+                      "iat": 1640991600,          # TODO: add nonce
                     }
                     ```
-                  example: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  example: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."      # TODO: add an actual JWT with the example payload.
                 authProvider:
                   type: string
-                  description: Name of your application as entered on google form.
+                  description: Name of your application as entered on [google form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736). Please reach out to us if you've lost this!
                 targetPublicKey:
                   $ref: "#/components/schemas/targetPublicKey"
                   description: Required for authentication. Optional for pregeneration.
@@ -377,10 +377,10 @@ paths:
                     description: The organization ID associated with the authenticated user and the application.
                   credentialBundle:
                     type: string
-                    description: An encrypted API key credential bundle that shall be used for subsequent authenticated requests. This bundle contains the authentication credentials encrypted with the provided targetPublicKey and can be decrypted client-side for stamping requests.
+                    description: An encrypted API key credential bundle that shall be used for subsequent authenticated requests. This bundle contains the authentication credentials encrypted with the provided targetPublicKey and can be decrypted client-side for stamping requests. A credential bundle will be returned when this endpoint is being used for authentication and would require a targetPublicKey in the request params
                   userId:
                     type: string
-                    description: A unique identifier for the authenticated user, extracted from the JWT token claims.
+                    description: A unique identifier for the authenticated user.
                   address:
                     type: string
                     description: The Ethereum address of the user's signer, available after successful authentication.
