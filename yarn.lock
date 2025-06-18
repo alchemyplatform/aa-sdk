@@ -6791,6 +6791,15 @@
     "@turnkey/encoding" "0.5.0"
     sha256-uint8array "^0.10.7"
 
+"@turnkey/api-key-stamper@0.4.6":
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.6.tgz#0356639ab9e7cb1492abc004628b82e49ef7f728"
+  integrity sha512-zUcbhOunsSD//CIKAbfyX9FWchiHcO/CjOdBKvbB+8w6gk/m4NxchVrYCdqdrtxzPFdRYAdFjcUnN0FBvDKobw==
+  dependencies:
+    "@noble/curves" "^1.3.0"
+    "@turnkey/encoding" "0.5.0"
+    sha256-uint8array "^0.10.7"
+
 "@turnkey/crypto@0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@turnkey/crypto/-/crypto-0.2.1.tgz#d03b61ddfcbdba4c3e1498d2ba83d150c64b84fd"
@@ -6841,7 +6850,7 @@
     "@turnkey/webauthn-stamper" "0.5.1"
     cross-fetch "^3.1.5"
 
-"@turnkey/http@^2.22.0", "@turnkey/http@^2.6.2":
+"@turnkey/http@^2.6.2":
   version "2.22.0"
   resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.22.0.tgz#89233e44f467dbb289351832f76700d9b550a5d3"
   integrity sha512-nkzSIiur68PDEXh0E6fPpgrev0qeMfnVjeh/nWePZpS6TwJ7NGw1i4WRqZ1VkQ+ODmCD2ztKMzUhii9b4pzURg==
@@ -6849,6 +6858,16 @@
     "@turnkey/api-key-stamper" "0.4.4"
     "@turnkey/encoding" "0.4.0"
     "@turnkey/webauthn-stamper" "0.5.0"
+    cross-fetch "^3.1.5"
+
+"@turnkey/http@^3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-3.4.2.tgz#714d010b8d5ea12c8d60ea3a7da44be64fcffbde"
+  integrity sha512-UFJxnEjOSXBmmozsUrBBRMqA9ErCqMen4VkYu+C5cyDAAKgCq01fNEtp+CakD+npd35WbtfevIW5q7JdJ6nP0w==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.6"
+    "@turnkey/encoding" "0.5.0"
+    "@turnkey/webauthn-stamper" "0.5.1"
     cross-fetch "^3.1.5"
 
 "@turnkey/iframe-stamper@2.0.0":
@@ -6860,6 +6879,11 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-1.2.0.tgz#bba478e391a266833f1a5960b9f1df9de5934fb8"
   integrity sha512-OXbCVVzypa0AXa6dcNpfu8Q0xY/sq2nGXwhesrUQmE7V5I5nYYHZE3sQv54lErToX6H6YyDR9Z1DuPzEUkYTjw==
+
+"@turnkey/iframe-stamper@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-2.5.0.tgz#4543458a3ac380c96f239c6c2a997c03bac0bd7b"
+  integrity sha512-XjntbA5CNjxGRH+loceAlVLL9PG9Q4Y7p5zjBm4DeKclhD6lpUl9h8INArMEXIFbfLwLjjS6Q+SmQG4BHvNY6A==
 
 "@turnkey/react-native-passkey-stamper@^1.0.14":
   version "1.0.16"
