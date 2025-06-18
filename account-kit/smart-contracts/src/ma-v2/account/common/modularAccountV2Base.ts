@@ -360,9 +360,3 @@ export async function createMAv2Base<
     encodeCallData,
   } as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
 }
-
-export function isModularAccountV2(
-  account: SmartContractAccount,
-): account is ModularAccountV2 | WebauthnModularAccountV2 {
-  return account.source === "ModularAccountV2";
-}

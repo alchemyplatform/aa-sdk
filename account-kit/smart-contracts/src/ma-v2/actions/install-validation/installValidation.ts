@@ -28,10 +28,7 @@ import {
   serializeValidationConfig,
 } from "../common/utils.js";
 
-import {
-  isModularAccountV2,
-  type ModularAccountsV2,
-} from "../../account/common/modularAccountV2Base.js";
+import { type ModularAccountsV2 } from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
@@ -141,7 +138,7 @@ export function installValidationActions<
     hooks,
     account = client.account,
   }: InstallValidationParams<TAccount>) => {
-    if (!account || !isModularAccountV2(account)) {
+    if (!account) {
       throw new AccountNotFoundError();
     }
 
