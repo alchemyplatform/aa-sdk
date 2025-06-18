@@ -46,3 +46,4 @@ export { SingleSignerValidationModule } from "./modules/single-signer-validation
 export { timeRangeModuleAbi } from "./modules/time-range-module/abis/timeRangeModuleAbi.js";
 export { TimeRangeModule } from "./modules/time-range-module/module.js";
 export { webauthnValidationModuleAbi } from "./modules/webauthn-validation/abis/webauthnValidationAbi.js";
+export { WebAuthnValidationModule } from "./modules/webauthn-validation/module.js";
