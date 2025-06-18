@@ -11,6 +11,7 @@ import {
   type Chain,
   type Hex,
   type PublicClient,
+  type SignableMessage,
   type Transport,
   type TypedDataDefinition,
 } from "viem";
@@ -186,14 +187,17 @@ export async function createViemLightAccountBase<
   };
 
   const prepareSignature = async (
-    message: string | TypedDataDefinition,
+    message: SignableMessage | TypedDataDefinition,
     isTypedData: boolean = false,
-  ): Promise<{ shouldWrap: boolean; data: string | TypedDataDefinition }> => {
+  ): Promise<{
+    shouldWrap: boolean;
+    data: SignableMessage | TypedDataDefinition;
+  }> => {
     const messageHash = isTypedData
       ? hashTypedData(message as TypedDataDefinition)
-      : hashMessage(message as string);
+      : hashMessage(message as SignableMessage);
 
-    switch (version as string) {
+    switch (version) {
       case "v1.0.1":
         return { shouldWrap: false, data: message };
       case "v1.0.2":
@@ -286,10 +290,7 @@ export async function createViemLightAccountBase<
     },
 
     async signMessage({ message }) {
-      const { shouldWrap, data } = await prepareSignature(
-        message as string,
-        false,
-      );
+      const { shouldWrap, data } = await prepareSignature(message, false);
 
       const sig = shouldWrap
         ? await signer.signTypedData(data as TypedDataDefinition)
