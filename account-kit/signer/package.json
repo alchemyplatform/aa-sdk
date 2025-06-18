@@ -50,6 +50,7 @@
   "dependencies": {
     "@aa-sdk/core": "^4.43.0",
     "@account-kit/logging": "^4.43.0",
+    "@noble/curves": "^1.9.2",
     "@solana/web3.js": "^1.98.0",
     "@turnkey/http": "^2.22.0",
     "@turnkey/iframe-stamper": "^1.0.0",

@@ -2,7 +2,7 @@ import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
 import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
-import { sha256, type Hex } from "viem";
+import { hexToBytes, recoverPublicKey, sha256, type Hex } from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
@@ -42,6 +42,7 @@ import type {
   AuthMethods,
 } from "./types.js";
 import { VERSION } from "../version.js";
+import { secp256k1 } from "@noble/curves/secp256k1";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -677,6 +678,110 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
 
     return signature;
+  };
+
+  /**
+   * This will sign on behalf of the multi-owner org, without doing any transformations on the message.
+   * For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass
+   * that result here.
+   *
+   * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} orgId orgId of the multi-owner org to sign on behalf of
+   * @param {string} orgAddress address of the multi-owner org to sign on behalf of
+   * @returns {Promise<Hex>} the signature over the raw hex
+   */
+  public experimental_multiOwnerSignRawMessage = async (
+    msg: Hex,
+    orgId: string,
+    orgAddress: string,
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    // this is the payload we eventually want to compute a signature over
+    // this signature should come from the multi-owner org
+    // for the authorized user to sign on behalf of the multi-owner org, they first need to
+    // receive authorization from their individual suborg
+    const payload = {
+      organizationId: orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: msg,
+        signWith: orgAddress,
+      },
+    };
+
+    // we need this later to recover the public key from the signature, so we don't let turnkey hash
+    // this for us and pass HASH_FUNCTION_NO_OP instead
+    const stringified = JSON.stringify(payload);
+    const hashed = sha256(new TextEncoder().encode(stringified));
+
+    // we request authorization to stamp from the user's suborg
+    const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+        hashFunction: "HASH_FUNCTION_NO_OP",
+        payload: hashed,
+        signWith: this.user.address,
+      },
+    });
+
+    // submit to alchemy to get the signature
+    const { signature } = await this.request("/v1/sign-payload", {
+      stampedRequest,
+    });
+
+    // recover the public key, we can't just use the address
+    const recoveredPublicKey = await recoverPublicKey({
+      hash: hashed,
+      signature,
+    });
+
+    // compute the stamp over the original payload using this signature
+    // the format here is important
+    const stamp = {
+      publicKey: secp256k1.Point.fromHex(hexToBytes(recoveredPublicKey)).toHex(
+        true,
+      ),
+      scheme: "SIGNATURE_SCHEME_TK_API_SECP256K1",
+      signature: secp256k1.Signature.fromCompact(
+        hexToBytes(signature).slice(0, 64),
+      ).toDERHex(),
+    };
+
+    // submit to turnkey to get the signature from the multi-owner org
+    const response = await fetch(
+      "https://api.turnkey.com/public/v1/submit/sign_raw_payload",
+      {
+        headers: {
+          "X-Stamp": base64UrlEncode(Buffer.from(JSON.stringify(stamp))),
+        },
+        body: stringified,
+        method: "POST",
+      },
+    );
+
+    // turnkey doesn't expose these types
+    // we just grab them
+    const parsed = (await response.json()) as Awaited<
+      ReturnType<TurnkeyClient["signRawPayload"]>
+    >;
+
+    const signRawPayloadResult = parsed.activity.result.signRawPayloadResult;
+    if (!signRawPayloadResult) {
+      throw new Error("No sign raw payload result");
+    }
+
+    // pack the response info into the expected signature format
+    // mirroring logic in signer service
+    return `0x${signRawPayloadResult.r}${signRawPayloadResult.s}${(parseInt(signRawPayloadResult.v, 16) + 27).toString(16)}`;
   };
 
   /**
