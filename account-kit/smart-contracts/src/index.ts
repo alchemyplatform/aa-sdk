@@ -18,6 +18,7 @@ export type * from "./light-account/decorators/lightAccount.js";
 export { lightAccountClientActions } from "./light-account/decorators/lightAccount.js";
 export type * from "./light-account/types.js";
 export { predictLightAccountAddress } from "./light-account/accounts/predictAddress.js";
+export { predictMultiOwnerLightAccountAddress } from "./light-account/accounts/predictAddress.js";
 
 export {
   AccountVersionRegistry,

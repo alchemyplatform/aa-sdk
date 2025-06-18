@@ -4,17 +4,17 @@ description: Learn how to pre-generate Smart Wallet addresses for your users wit
 slug: wallets/react/pregenerate-wallets
 ---
 
+> **Objective** Generate a wallet owner (signer) and predict the smart-account address _before_ a user ever logs in, using only their email.
+
+## Prerequisites
+
+- Alchemy **API Key** with Smart Wallets enabled
+- Node ≥ 18 (or cURL / any HTTP client)
+- The `@account-kit/smart-contracts` package (for step 4)
+
 When you already know who your users are (for example you collected their email during wait-list signup) you might want to **create wallet addresses ahead of time** so you can airdrop assets or seed balances _before_ they ever open your app.
 
 With Alchemy you can do this entirely from your server using the **Signer API** – no UI, hooks, or user interaction required.
-
-<Info>
-  This guide focuses on using the [`Create Wallet`
-  endpoint](https://www.alchemy.com/docs/wallets/api/smart-wallets/signer-api-endpoints/signer-api-endpoints/create-account)
-  ( `POST /signer/v1/signup` ). All you need to supply is the user's email; the
-  response contains **both an EVM address** and **a Solana address** that you
-  can fund immediately.
-</Info>
 
 ## 1. Get an API key
 
@@ -24,9 +24,9 @@ Grab an **API Key** from the Alchemy dashboard and store it as an environment va
 export ALCHEMY_API_KEY="<YOUR_API_KEY>"
 ```
 
-## 2. Get the owner of the smart account
+## 2. Create the owner signer
 
-Use whichever call style fits your environment – they all hit the same endpoint with the same JSON body.
+Use whichever call style fits your environment – they all call the same [`Create Wallet` API endpoint](https://www.alchemy.com/docs/wallets/api/smart-wallets/signer-api-endpoints/signer-api-endpoints/create-account) with an identical JSON body.
 
 <Tabs>
 <Tab title="Fetch (ESM / Node ≥18)" language="ts">
@@ -37,7 +37,7 @@ const res = await fetch("https://api.g.alchemy.com/signer/v1/signup", {
   headers: {
     "Content-Type": "application/json",
     // The API key is sent in the Authorization header
-    Authorization: process.env.ALCHEMY_API_KEY!,
+    Authorization: `Bearer ${process.env.ALCHEMY_API_KEY}`,
   },
   body: JSON.stringify({
     email: "[email protected]",
@@ -61,7 +61,7 @@ request.post(
     url: "https://api.g.alchemy.com/signer/v1/signup",
     json: { email: "[email protected]" },
     headers: {
-      Authorization: process.env.ALCHEMY_API_KEY,
+      Authorization: `Bearer ${process.env.ALCHEMY_API_KEY}`,
       "Content-Type": "application/json",
     },
   },
@@ -77,7 +77,7 @@ request.post(
 
 ```bash
 curl -X POST https://api.g.alchemy.com/signer/v1/signup \
-  -H "Authorization: $ALCHEMY_API_KEY" \
+  -H "Authorization: Bearer $ALCHEMY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "email": "[email protected]" }'
 ```
@@ -100,7 +100,7 @@ curl -X POST https://api.g.alchemy.com/signer/v1/signup \
   `predictModularAccountV2Address`.
 </Tip>
 
-## 4. Get the smart account address
+## 4. Predict the smart-account address
 
 The `@account-kit/smart-contracts` package exports a utility that mirrors the
 CREATE2 logic used by the MAv2 factory. By passing the signer address you just
@@ -111,8 +111,7 @@ account before it is even deployed.
 import { predictModularAccountV2Address } from "@account-kit/smart-contracts";
 
 // Factory & implementation addresses vary by chain – you can grab them from
-// the "Deployed addresses" page in the docs or import helpers such as
-// `getDefaultModularAccountV2FactoryAddress`.
+// the "Deployed addresses" page in the docs.
 
 const mav2FactoryAddress = "0x00000000000017c61b5bEe81050EC8eFc9c6fecd";
 const implementationAddress = "0x000000000000c5A9089039570Dd36455b5C07383";
@@ -131,3 +130,15 @@ console.log({ smartAccountAddress });
 Now you have **both** the owner key (`address`) and the eventual smart account
 address (`smartAccountAddress`). When the user finally authenticates, their
 smart account will be deployed at exactly this counter-factual address.
+
+<Info>
+    If your application is still using the older **Light Account** contracts (v1 or v2) instead of Modular Account V2, use the corresponding helpers from `@account-kit/smart-contracts`:
+    - `predictLightAccountAddress` – single-owner Light Account
+    - `predictMultiOwnerLightAccountAddress` – multi-owner Light Account
+    These functions take the same factory/owner/salt pattern shown above and work for all historical Light-Account factory versions. Everything else in this guide (steps 1-3) remains the same.
+
+</Info>
+
+---
+
+That's it! You now hold the future Smart Contract Account address. You can fund it immediately or store it for later onboarding.
