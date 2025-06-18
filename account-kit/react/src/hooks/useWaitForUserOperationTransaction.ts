@@ -1,13 +1,21 @@
 "use client";
 
-import type { WaitForUserOperationTxParameters } from "@aa-sdk/core";
+import {
+  FailedToFindTransactionError,
+  Logger,
+  type WaitForUserOperationTxParameters,
+} from "@aa-sdk/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import type { Hash } from "viem";
+import { concatHex, numberToHex, pad, type Hash } from "viem";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
-import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+import { useSmartWalletClient } from "../experimental/hooks/useSmartWalletClient.js";
+import { useGetCallsStatus } from "../experimental/hooks/useGetCallsStatus.js";
+import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+import { SmartAccountClientOptsSchema } from "../../../../aa-sdk/core/src/client/schema.js";
+import type z from "zod";
 
 export type UseWaitForUserOperationTransactionMutationArgs =
   BaseHookMutationArgs<Hash, WaitForUserOperationTxParameters>;
@@ -54,9 +62,17 @@ export type UseWaitForUserOperationTransactionResult = {
  * });
  * ```
  */
-export function useWaitForUserOperationTransaction({
-  client,
-}: UseWaitForUserOperationTransactionArgs): UseWaitForUserOperationTransactionResult {
+export function useWaitForUserOperationTransaction(
+  config: UseWaitForUserOperationTransactionArgs,
+): UseWaitForUserOperationTransactionResult {
+  const { client: _client } = config;
+  const smartWalletClient = useSmartWalletClient({
+    account: _client?.account.address,
+  });
+  const { getCallsStatusAsync } = useGetCallsStatus({
+    client: smartWalletClient,
+  });
+
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -67,13 +83,51 @@ export function useWaitForUserOperationTransaction({
   } = useMutation(
     {
       mutationFn: async (params: WaitForUserOperationTxParameters) => {
-        if (!client) {
+        if (!smartWalletClient) {
           throw new ClientUndefinedHookError(
             "useWaitForUserOperationTransaction",
           );
         }
 
-        return client.waitForUserOperationTransaction(params);
+        // TODO(jh): test that this actually works
+        const clientOptions = _client as unknown as z.infer<
+          typeof SmartAccountClientOptsSchema
+        >;
+        const {
+          hash,
+          retries = {
+            maxRetries: clientOptions.txMaxRetries,
+            intervalMs: clientOptions.txRetryIntervalMs,
+            multiplier: clientOptions.txRetryMultiplier,
+          },
+        } = params;
+
+        const chainIdPadded = pad(numberToHex(smartWalletClient.chain.id), {
+          size: 32,
+        });
+        const callId = concatHex([chainIdPadded, hash]);
+
+        for (let i = 0; i < retries.maxRetries; i++) {
+          const txRetryIntervalWithJitterMs =
+            retries.intervalMs * Math.pow(retries.multiplier, i) +
+            Math.random() * 100;
+
+          await new Promise((resolve) =>
+            setTimeout(resolve, txRetryIntervalWithJitterMs),
+          );
+
+          const result = await getCallsStatusAsync(callId).catch((err) => {
+            Logger.error(
+              `[useWaitForUserOperationTransaction] error fetching calls status for call ${callId}: ${err}`,
+            );
+          });
+
+          if (result?.receipts?.length) {
+            return result.receipts[0].transactionHash;
+          }
+        }
+
+        throw new FailedToFindTransactionError(hash);
       },
     },
     queryClient,
