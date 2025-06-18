@@ -34,6 +34,8 @@ import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js"
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
+import type { PolicyToken } from "@account-kit/core";
+
 import {
   PermitTypes,
   EIP7597Abis,
@@ -47,7 +49,7 @@ type Context = {
   policyId: string | string[];
   erc20Context?: {
     tokenAddress: Address;
-    maxTokenAmount?: BigInt;
+    maxTokenAmount?: number;
     permit?: Hex;
   };
 };
@@ -126,15 +128,6 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
   gasEstimatorOverride?: ClientMiddlewareFn;
   feeEstimatorOverride?: ClientMiddlewareFn;
 }
-
-export type PolicyToken = {
-  address: Address;
-  maxTokenAmount: bigint;
-  paymasterAddress?: Address;
-  approvalMode?: "NONE" | "PERMIT";
-  erc20Name?: string;
-  version?: string;
-};
 
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
@@ -379,7 +372,7 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   account: TAccount,
   policyToken: {
     address: Address;
-    maxTokenAmount: bigint;
+    maxTokenAmount: number;
     paymasterAddress?: Address;
     approvalMode?: "NONE" | "PERMIT";
     erc20Name?: string;
@@ -423,8 +416,8 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   }
 
   const decimals =
-    10n ** (decimalsResponse.data ? BigInt(decimalsResponse.data) : 18n);
-  const maxAmountToken = policyToken.maxTokenAmount * decimals;
+    10 ** (decimalsResponse.data ? Number(decimalsResponse.data) : 18);
+  const maxRawAmountToken = BigInt(policyToken.maxTokenAmount * decimals);
   const nonce = BigInt(nonceResponse.data);
 
   const paymasterAddress =
@@ -449,7 +442,7 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
     message: {
       owner: account.address,
       spender: paymasterAddress,
-      value: maxAmountToken,
+      value: maxRawAmountToken,
       nonce: nonce,
       deadline,
     } satisfies PermitMessage,
@@ -458,6 +451,6 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   const signedPermit = await account.signTypedData(typedPermitData);
   return encodeAbiParameters(
     [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
-    [maxAmountToken, deadline, signedPermit],
+    [maxRawAmountToken, deadline, signedPermit],
   );
 };

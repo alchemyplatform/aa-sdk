@@ -17,7 +17,7 @@ import type {
 } from "@account-kit/smart-contracts";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
-import type { Chain } from "viem";
+import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { ClientStoreConfig, Store, StoredState } from "./store/types";
 import type {
@@ -69,10 +69,20 @@ export type SolanaConnection = {
   policyId?: string;
 };
 
+export type PolicyToken = {
+  address: Address;
+  maxTokenAmount: number;
+  paymasterAddress?: Address;
+  approvalMode?: "NONE" | "PERMIT";
+  erc20Name?: string;
+  version?: string;
+};
+
 export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
   policyId?: string | string[];
+  policyToken?: PolicyToken;
 };
 
 type RpcConnectionConfig =
@@ -90,6 +100,7 @@ type RpcConnectionConfig =
       // When providing multiple chains and no default transport, the signer connection is required
       signerConnection?: ConnectionConfig;
       policyId?: never;
+      policyToken?: never;
     }
   | {
       chain: Chain;
@@ -103,12 +114,14 @@ type RpcConnectionConfig =
       // When providing multiple chains, then the signer connection is required
       signerConnection: ConnectionConfig;
       policyId?: never;
+      policyToken?: never;
     }
   | {
       transport: AlchemyTransport;
       chain: Chain;
       solana?: SolanaConnection;
       policyId?: string | string[];
+      policyToken?: PolicyToken;
       signerConnection?: ConnectionConfig;
       chains?: never;
     };

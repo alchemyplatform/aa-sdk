@@ -5,7 +5,7 @@ import {
   createModularAccountV2Client,
   ModularAccountV2Client,
 } from "@account-kit/smart-contracts";
-import { alchemyFeeEstimator, AlchemyTransport } from "@account-kit/infra";
+import { alchemyFeeEstimator, PolicyToken, AlchemyTransport } from "@account-kit/infra";
 import {
   installValidationActions,
   InstallValidationActions,
@@ -13,14 +13,6 @@ import {
 import { Chain, Hex, Address, PrivateKeyAccount } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
-
-interface PolicyToken {
-  address: Address;
-  maxTokenAmount: bigint;
-  approvalMode?: "PERMIT" | "NONE";
-  erc20Name?: string;
-  version?: string;
-}
 
 type Client = ModularAccountV2Client<
   AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
