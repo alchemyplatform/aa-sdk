@@ -15,7 +15,7 @@ import {
   fromHex,
   hashMessage,
   hashTypedData,
-  trim,
+  isAddressEqual,
   type Address,
   type Chain,
   type Hex,
@@ -128,7 +128,9 @@ export async function createLightAccountBase<
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
     if (
       fromHex(storage, "number") !== 0 &&
-      !implementationAddresses.some((x) => x === trim(storage))
+      !implementationAddresses.some((x) =>
+        isAddressEqual(x, `0x${storage.slice(26)}`),
+      )
     ) {
       throw new Error(
         `could not determine if smart account implementation is ${type} ${String(

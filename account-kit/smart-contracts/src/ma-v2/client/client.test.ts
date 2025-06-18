@@ -14,6 +14,7 @@ import {
   arbitrumSepolia,
 } from "@account-kit/infra";
 import {
+  createMultiOwnerModularAccountClient,
   createLightAccountClient,
   createModularAccountV2Client,
   getMAV2UpgradeToData,
@@ -1809,6 +1810,54 @@ describe("MA v2 Tests", async () => {
       });
 
     await lightAccountClient.upgradeAccount({
+      upgradeTo: upgradeToData,
+      waitForTx: true,
+    });
+
+    const maV2Client = createSmartAccountClient({
+      chain: instance.chain,
+      transport: custom(client),
+      account: await createModularAccountV2FromExisting(),
+    });
+
+    // test uo
+
+    const startingAddressBalance = await getTargetBalance();
+
+    const result = await maV2Client.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await maV2Client.waitForUserOperationTransaction(result);
+
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount,
+    );
+  });
+
+  it("upgrade from a ma v1", async () => {
+    const maV1Client = await createMultiOwnerModularAccountClient({
+      chain: instance.chain,
+      signer,
+      transport: custom(instance.getClient()),
+      version: "v2.0.0",
+    });
+
+    await setBalance(client, {
+      address: maV1Client.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const { createModularAccountV2FromExisting, ...upgradeToData } =
+      await getMAV2UpgradeToData(maV1Client, {
+        account: maV1Client.account,
+      });
+
+    await maV1Client.upgradeAccount({
       upgradeTo: upgradeToData,
       waitForTx: true,
     });
