@@ -231,7 +231,7 @@ export async function createViemLightAccountBase<
 
   return await toSmartAccount({
     getFactoryArgs,
-    client: client,
+    client,
     entryPoint: entryPoint as BaseLightAccountImplementation<
       TSigner,
       TLightAccountType,
