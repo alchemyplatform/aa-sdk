@@ -123,6 +123,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/components/Dialog.mdx
               - section: Authentication
                 contents:
+                  - page: useAddOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
                   - page: useAddPasskey
                     path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
                   - page: useAuthContext
@@ -135,6 +137,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useConnect.mdx
                   - page: useExportAccount
                     path: wallets/pages/reference/account-kit/react/hooks/useExportAccount.mdx
+                  - page: useListAuthMethods
+                    path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
                   - page: useMFA
