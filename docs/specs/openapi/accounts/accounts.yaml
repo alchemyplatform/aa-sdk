@@ -312,8 +312,7 @@ paths:
       summary: Authenticate with JWT
       description: >
         Authenticates a user using a JSON Web Token (JWT) for secure access to their Smart Wallet functionalities. This endpoint validates the provided JWT token and can be used for authenticating an existing user or to pregenerate a wallet.
-
-        This feature is in private access. Please fill out the [form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736) or reach out to use at smart-wallets@alchemy.com to get access
+        This feature is in private access. Please fill out the [form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736) or reach out to us at smart-wallets@alchemy.com to get access
       security:
         - apiKey: []
       x-readme:
@@ -346,10 +345,11 @@ paths:
                       "sub": "1234567890abcdef",
                       "aud": "project_id",
                       "exp": 1640995200,
-                      "iat": 1640991600,          # TODO: add nonce
+                      "iat": 1640991600,
+                      "nonce": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                     }
                     ```
-                  example: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..." # TODO: add an actual JWT with the example payload.
+                  example: "eyJhbGciOiJSUzI1NiIsImtpZCI6Im15LWtleS1pZCIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTAyNjcyMTEsImlzcyI6Imh0dHBzOi8vMTg1Ny0yYTA5LWJhYzAtMTAwMC0zMTgtMDAtMTAtNGZkLm5ncm9rLWZyZWUuYXBwIiwiYXVkIjoiNmFiNDE1NmQtNWZmOS00YzBhLTk4YjYtYjQzZjY5NmNhNjA2Iiwic3ViIjoidXNlci1pZC0zIiwiZXhwIjoxNzUwMjc0NDExfQ.f2FLH6DP4jjkTBSXM_eyO5VoE1L3iunPQN7ZkzJ1uSdc8ScOLwG-ddrW_WzRpXKuGAQjoo0aBhoiGiZ804RcizmOx_OC4lSkKuzzwpuxqJO6IEjtZLLPMYlSGWbc_z5tDY7PQ6kAZd31qW-48tQcL6XI5tiUycVQKxPq4-CdjXh-B4uyeEoQhJeSOiICR1ULYKNg9SCc3n8hIam8GlcsLRXjwDn90z533gWNWtUVxS7WUreSkg6h9fsFIt5EegFw5Un8iovhVuTPhg3fn7uJA9R3ciyeZH3Zx1EOSDcUpY9b1SmDaKUv0_CC77fxMyFkacYjjIjqXoHXdQT4ZUi2CQ"
                 authProvider:
                   type: string
                   description: Name of your application as entered on [google form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736). Please reach out to us if you've lost this!
