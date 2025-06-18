@@ -54,6 +54,11 @@ ONCHANGE_PID=$!
 
 # Start the docs site
 cd "$DOCS_SITE_DIR"
-pnpm dev
+pnpm dev || {
+    echo "Fern local dev server failed to start"
+    cleanup
+    exit 1
+}
 
+# Catch-all to ensure cleanup is always run at termination
 cleanup
