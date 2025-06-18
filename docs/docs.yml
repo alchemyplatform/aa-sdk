@@ -64,7 +64,7 @@ navigation:
                 path: wallets/pages/react/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
-              - page: EOA Login
+              - page: Connect EOAs
                 path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx

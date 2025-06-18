@@ -3,16 +3,16 @@ title: Connect with EOAs
 description: How to connect to bring in your own EOAs to Account Kit
 ---
 
-You can log into Account Kit using your own EOA! This can be done using our pre-built UI components or custom UI.
+You can allow users to login by connecting their existing EOA using Account Kit. This can be done using our pre-built UI components or custom UI - no need for a separate wallet connector!
 Depending on what method you choose, you can bring in your EOA:
 
-- As a "pure" EOA, meaning it will not have access to Account Abstraction (AA) features.
-- As an owner and signer of your Alchemy smart account, which will give you access to AA features.
+- As a "pure" EOA, meaning users will use their EOA and the funds in that wallet as normal. Since it is an EOA and not a smart account, it will not have access to AA features like gas sponsorship or batching.
+- As an owner and signer of a new smart account, meaning users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new wallet will get AA features like sponsorship and batching.
 
 ## Pre-built Components
 
 Easily log in into your existing EOAs using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
-Note: You will not have access to Account Abstraction features here; this external, "pure" EOA will be purely used as an EOA.
+**Note:** Since this is not a smart account, users will not get sponsorship, batching, or other features, and instead they will use their EOA as normal.
 
 Our SDK supports external wallet connection out of the box, so you can seamlessly support both Web2 users with social login and Web3 users who want to bring their own EOAs.We support enabling users to bring their existing EOA in 2 ways:
 
@@ -69,7 +69,7 @@ export const config = createConfig(
 );
 ```
 
-In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config:
+In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config. You create a `WalletConnect` id [here](https://cloud.reown.com/sign-in).
 
 ```ts twoslash [src/config.ts]
 // @noErrors
@@ -83,11 +83,9 @@ In order to access other providers via `WalletConnect`, **also** add `walletConn
 
 ## Custom UI
 
-### React Hooks
+### Bring in an EOA via Connectors
 
-If you need complete control over the user experience, you can customize your EOA login. This is a "pure" EOA and will not have access to AA features:
-
-For example, using [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect)
+If you need complete control over the user experience, you can customize your EOA connection. For example, use the [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect) hook to allow users to connect their EOA via available connectors:
 
 ```tsx twoslash
 // @noErrors
@@ -113,9 +111,10 @@ return (
 );
 ```
 
-### EIP-1193-Compatible Provider Integration
+### Bring in an EOA as an Owner
 
-For wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core`. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core`. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+
 This EOA is made an owner of your smart account and has access to AA features:
 
 ```ts
@@ -137,7 +136,7 @@ export const signer: SmartAccountSigner = new WalletClientSigner(
 );
 ```
 
-### Local Account Integration
+### Bring in a Local Account as an Owner
 
 Local Account refers to an EOA where the private key is directly accessible on the client. This EOA is made an owner of your smart account and has access to AA features:
 
