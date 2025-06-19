@@ -1,7 +1,8 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "@next/next/no-html-link-for-pages": "off"
   },
   "ignorePatterns": ["contracts"]
 }

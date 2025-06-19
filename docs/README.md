@@ -73,7 +73,7 @@ Then to start the dev server, run:
 yarn docs:dev
 ```
 
-This will install dependencies, temporarily move files into `docs-site`, and keep the submodule update for you.
+This will install dependencies, temporarily move files into `docs-site`, and keep the submodule updated for you.
 
 ## Preview Changes
 

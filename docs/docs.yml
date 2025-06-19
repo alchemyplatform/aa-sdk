@@ -840,7 +840,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
 
-      - section: Account Abstraction Core
+      - section: aa-sdk/core
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/core/index.mdx
@@ -1050,7 +1050,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
-      - section: Account Abstraction Ethers
+      - section: aa-sdk/ethers
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/ethers/index.mdx
