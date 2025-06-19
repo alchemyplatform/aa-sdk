@@ -6,7 +6,6 @@ instances:
 experimental:
   mdx-components:
     - wallets/components
-    - wallets/shared
 
 navigation:
   - tab: wallets
@@ -38,8 +37,14 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/react/overview.mdx
-          - page: Quickstart
-            path: wallets/pages/react/quickstart.mdx
+          - section: Quickstart
+            contents:
+              - page: Overview
+                path: wallets/pages/react/quickstart.mdx
+              - page: Quickstart
+                path: wallets/pages/react/quickstart/new-project.mdx
+              - page: Add to Existing Project
+                path: wallets/pages/react/quickstart/existing-project.mdx
           - section: Login UI
             skip-slug: true
             contents:
@@ -63,6 +68,10 @@ navigation:
                 path: wallets/pages/react/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
+              - page: Connect EOAs
+                path: wallets/pages/react/login-methods/eoa-login.mdx
+              - page: Adding and removing login methods
+                path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
               - section: Multi-factor authentication
                 contents:
                   - page: Set up MFA
@@ -87,6 +96,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: Multi-chain apps
                 path: wallets/pages/react/multi-chain-apps.mdx
+              - page: Pregenerate wallets
+                path: wallets/pages/react/pregenerate-wallets.mdx
           - page: Using EIP-7702
             path: wallets/pages/react/using-7702.mdx
           - section: Using Solana wallets
@@ -118,18 +129,34 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/components/Dialog.mdx
               - section: Authentication
                 contents:
+                  - page: useAddOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
                   - page: useAddPasskey
                     path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
-                  - page: useAuthModal
-                    path: wallets/pages/reference/account-kit/react/hooks/useAuthModal.mdx
+                  - page: useAuthContext
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthContext.mdx
                   - page: useAuthenticate
                     path: wallets/pages/reference/account-kit/react/hooks/useAuthenticate.mdx
+                  - page: useAuthModal
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthModal.mdx
                   - page: useConnect
                     path: wallets/pages/reference/account-kit/react/hooks/useConnect.mdx
                   - page: useExportAccount
                     path: wallets/pages/reference/account-kit/react/hooks/useExportAccount.mdx
+                  - page: useListAuthMethods
+                    path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
+                  - page: useMFA
+                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
+                  - page: useRemoveEmail
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveEmail.mdx
+                  - page: useRemoveOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveOauthProvider.mdx
+                  - page: useRemovePasskey
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemovePasskey.mdx
+                  - page: useSetEmail
+                    path: wallets/pages/reference/account-kit/react/hooks/useSetEmail.mdx
                   - page: useSigner
                     path: wallets/pages/reference/account-kit/react/hooks/useSigner.mdx
                   - page: useSignerStatus
@@ -172,12 +199,20 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useConnection.mdx
                   - page: useUiConfig
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
+              - section: Other Hooks
+                contents:
+                  - page: useSolanaConnection
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaConnection.mdx
+                  - page: useSolanaSignMessage
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaSignMessage.mdx
+                  - page: useSolanaTransaction
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaTransaction.mdx
               - section: Functions
                 contents:
-                  - page: Hydrate
-                    path: wallets/pages/reference/account-kit/react/functions/Hydrate.mdx
                   - page: createConfig
                     path: wallets/pages/reference/account-kit/react/functions/createConfig.mdx
+                  - page: Hydrate
+                    path: wallets/pages/reference/account-kit/react/functions/Hydrate.mdx
               - section: Classes
                 contents:
                   - page: NoAlchemyAccountContextError
@@ -212,6 +247,8 @@ navigation:
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-passkeys.mdx
               - page: Email Magic Link
                 path: wallets/pages/react-native/signer/authenticating-users/authenticating-with-magic-link.mdx
+              - page: Adding and removing login methods
+                path: wallets/pages/react-native/signer/authenticating-users/adding-and-removing-auth-methods.mdx
           - section: Using smart accounts
             contents:
               - page: Set up a smart account client
@@ -222,6 +259,13 @@ navigation:
                 path: wallets/pages/react-native/using-smart-accounts/sponsor-gas.mdx
               - page: Retry user operations
                 path: wallets/pages/react-native/using-smart-accounts/retry-user-operations.mdx
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/react-native/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: createConfig
+                    path: wallets/pages/reference/account-kit/react-native/functions/createConfig.mdx
 
       - section: Other JS Frameworks
         slug: core
@@ -279,6 +323,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/functions/getSignerStatus.mdx
                   - page: getSmartAccountClient
                     path: wallets/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
+                  - page: getSolanaConnection
+                    path: wallets/pages/reference/account-kit/core/functions/getSolanaConnection.mdx
                   - page: getUser
                     path: wallets/pages/reference/account-kit/core/functions/getUser.mdx
                   - page: hydrate
@@ -303,6 +349,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
                   - page: watchSmartAccountClient
                     path: wallets/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
+                  - page: watchSolanaConnection
+                    path: wallets/pages/reference/account-kit/core/functions/watchSolanaConnection.mdx
                   - page: watchUser
                     path: wallets/pages/reference/account-kit/core/functions/watchUser.mdx
               - section: Classes
@@ -326,13 +374,6 @@ navigation:
               - page: Retry user operations
                 slug: drop-and-replace
                 path: wallets/pages/infra/drop-and-replace.mdx
-          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
-          # - section: Third party
-          #   contents:
-          #     - link: Bundlers
-          #       href: /wallets/resources/third-party/bundlers
-          #     - link: Paymasters
-          #       href: /wallets/resources/third-party/paymasters
           - section: SDK Reference
             path: wallets/pages/reference/account-kit/infra/index.mdx
             contents:
@@ -423,11 +464,6 @@ navigation:
               - page: Multi-factor authentication
                 slug: mfa
                 path: wallets/pages/signer/authentication/mfa.mdx
-          # TODO: links to third party resources - linking to internal pages that live elsewhere in navigation is awkward
-          # - section: Third-party signers
-          #   contents:
-          #     - link: Custom signer
-          #       href: /wallets/resources/third-party/signers
           - section: SDK Reference
             path: wallets/pages/reference/account-kit/signer/index.mdx
             contents:
@@ -453,14 +489,14 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey.mdx
-                  - section: AlchemyWebSigner
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/account-kit/signer/classes/AlchemyWebSigner/constructor.mdx
+                  - page: AlchemyWebSigner
+                    path: wallets/pages/reference/account-kit/signer/classes/AlchemyWebSigner/constructor.mdx
                   - section: BaseAlchemySigner
                     contents:
                       - page: addMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addMfa.mdx
+                      - page: addOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addOauthProvider.mdx
                       - page: addPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addPasskey.mdx
                       - page: authenticate
@@ -469,8 +505,6 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/constructor.mdx
                       - page: disconnect
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/disconnect.mdx
-                      - page: toSolanaSigner
-                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toSolanaSigner.mdx
                       - page: exportWallet
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/exportWallet.mdx
                       - page: getAddress
@@ -485,12 +519,20 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
                       - page: getUser
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
+                      - page: listAuthMethods
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/listAuthMethods.mdx
                       - page: on
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/on.mdx
                       - page: preparePopupOauth
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth.mdx
+                      - page: removeEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeEmail.mdx
                       - page: removeMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeMfa.mdx
+                      - page: removeOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeOauthProvider.mdx
+                      - page: removePasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removePasskey.mdx
                       - page: signAuthorization
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signAuthorization.mdx
                       - page: signMessage
@@ -499,6 +541,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signTransaction.mdx
                       - page: signTypedData
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signTypedData.mdx
+                      - page: toSolanaSigner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toSolanaSigner.mdx
                       - page: toViemAccount
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/toViemAccount.mdx
                       - page: validateMultiFactors
@@ -509,6 +553,8 @@ navigation:
                     contents:
                       - page: addMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addMfa.mdx
+                      - page: addOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addOauthProvider.mdx
                       - page: addPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/addPasskey.mdx
                       - page: constructor
@@ -525,16 +571,26 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getUser.mdx
                       - page: initOauth
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/initOauth.mdx
+                      - page: listAuthMethods
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/listAuthMethods.mdx
                       - page: lookupUserByEmail
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
                       - page: lookupUserWithPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserWithPasskey.mdx
                       - page: on
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/on.mdx
+                      - page: removeEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeEmail.mdx
                       - page: removeMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeMfa.mdx
+                      - page: removeOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeOauthProvider.mdx
+                      - page: removePasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removePasskey.mdx
                       - page: request
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/request.mdx
+                      - page: setEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/setEmail.mdx
                       - page: signRawMessage
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage.mdx
                       - page: stampGetOrganization
@@ -547,10 +603,20 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/verifyMfa.mdx
                       - page: whoami
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/whoami.mdx
-                  - section: OauthCancelledError
+                  - page: OauthCancelledError
+                    path: wallets/pages/reference/account-kit/signer/classes/OauthCancelledError/constructor.mdx
+                  - section: SolanaSigner
                     contents:
+                      - page: addSignature
+                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/addSignature.mdx
+                      - page: addSponsorship
+                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/addSponsorship.mdx
                       - page: constructor
-                        path: wallets/pages/reference/account-kit/signer/classes/OauthCancelledError/constructor.mdx
+                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/constructor.mdx
+                      - page: createTransaction
+                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/createTransaction.mdx
+                      - page: signMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/SolanaSigner/signMessage.mdx
 
       - section: Smart Contracts
         contents:
@@ -575,6 +641,8 @@ navigation:
                   - page: Overview
                     slug: /
                     path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
+                  - page: Session key permissions
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/session-key-permissions.mdx
                   - page: Adding session keys
                     path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
                   - page: Using session keys
@@ -642,9 +710,9 @@ navigation:
                   # TODO: Custom accounts links to docs in resources section - awkward to link to internal pages
                   # - link: Custom accounts
                   #   href: /wallets/resources/third-party/smart-contracts
-          #   Markdown file exists but curvocs site site links to external repo
-          # - page: Gas benchmarks
-          #   path: wallets/pages/smart-contracts/gas-benchmarks.mdx
+                  #   Markdown file exists but curvocs site site links to external repo
+                  # - page: Gas benchmarks
+                  #   path: wallets/pages/smart-contracts/gas-benchmarks.mdx
           - link: Gas benchmarks
             href: https://github.com/alchemyplatform/aa-benchmarks
           - page: Deployed addresses
@@ -763,7 +831,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
 
-      - section: Account Abstraction Core
+      - section: aa-sdk/core
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/core/index.mdx
@@ -822,6 +890,8 @@ navigation:
                     path: wallets/pages/reference/aa-sdk/core/functions/getAccountAddress.mdx
                   - page: getEntryPoint
                     path: wallets/pages/reference/aa-sdk/core/functions/getEntryPoint.mdx
+                  - page: getUserOperationError
+                    path: wallets/pages/reference/aa-sdk/core/functions/getUserOperationError.mdx
                   - page: isEntryPointVersion
                     path: wallets/pages/reference/aa-sdk/core/functions/isEntryPointVersion.mdx
                   - page: isSigner
@@ -856,90 +926,52 @@ navigation:
                     path: wallets/pages/reference/aa-sdk/core/functions/toSmartContractAccount.mdx
                   - page: waitForUserOperationTransaction
                     path: wallets/pages/reference/aa-sdk/core/functions/waitForUserOperationTransaction.mdx
+                  - page: webauthnGasEstimator
+                    path: wallets/pages/reference/aa-sdk/core/functions/webauthnGasEstimator.mdx
                   - page: wrapSignatureWith6492
                     path: wallets/pages/reference/aa-sdk/core/functions/wrapSignatureWith6492.mdx
               - section: Classes
                 contents:
-                  - section: AccountNotFoundError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/AccountNotFoundError/constructor.mdx
-                  - section: AccountRequiresOwnerError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/AccountRequiresOwnerError/constructor.mdx
-                  - section: BatchExecutionNotSupportedError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/BatchExecutionNotSupportedError/constructor.mdx
-                  - section: ChainNotFoundError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/ChainNotFoundError/constructor.mdx
-                  - section: DefaultFactoryNotDefinedError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/DefaultFactoryNotDefinedError/constructor.mdx
-                  - section: EntityIdOverrideError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/EntityIdOverrideError/constructor.mdx
-                  - section: EntryPointNotFoundError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/EntryPointNotFoundError/constructor.mdx
-                  - section: FailedToFindTransactionError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/FailedToFindTransactionError/constructor.mdx
-                  - section: FailedToGetStorageSlotError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/FailedToGetStorageSlotError/constructor.mdx
-                  - section: GetCounterFactualAddressError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/GetCounterFactualAddressError/constructor.mdx
-                  - section: IncompatibleClientError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/IncompatibleClientError/constructor.mdx
-                  - section: IncorrectAccountType
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/IncorrectAccountType/constructor.mdx
-                  - section: InvalidDeferredActionNonce
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidDeferredActionNonce/constructor.mdx
-                  - section: InvalidEntityIdError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidEntityIdError/constructor.mdx
-                  - section: InvalidEntryPointError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidEntryPointError/constructor.mdx
-                  - section: InvalidModularAccountV2Mode
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidModularAccountV2Mode/constructor.mdx
-                  - section: InvalidNonceKeyError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidNonceKeyError/constructor.mdx
-                  - section: InvalidRpcUrlError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidRpcUrlError/constructor.mdx
-                  - section: InvalidSignerTypeError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidSignerTypeError/constructor.mdx
-                  - section: InvalidUserOperationError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/InvalidUserOperationError/constructor.mdx
+                  - page: AccountNotFoundError
+                    path: wallets/pages/reference/aa-sdk/core/classes/AccountNotFoundError/constructor.mdx
+                  - page: AccountRequiresOwnerError
+                    path: wallets/pages/reference/aa-sdk/core/classes/AccountRequiresOwnerError/constructor.mdx
+                  - page: BatchExecutionNotSupportedError
+                    path: wallets/pages/reference/aa-sdk/core/classes/BatchExecutionNotSupportedError/constructor.mdx
+                  - page: ChainNotFoundError
+                    path: wallets/pages/reference/aa-sdk/core/classes/ChainNotFoundError/constructor.mdx
+                  - page: DefaultFactoryNotDefinedError
+                    path: wallets/pages/reference/aa-sdk/core/classes/DefaultFactoryNotDefinedError/constructor.mdx
+                  - page: EntityIdOverrideError
+                    path: wallets/pages/reference/aa-sdk/core/classes/EntityIdOverrideError/constructor.mdx
+                  - page: EntryPointNotFoundError
+                    path: wallets/pages/reference/aa-sdk/core/classes/EntryPointNotFoundError/constructor.mdx
+                  - page: FailedToFindTransactionError
+                    path: wallets/pages/reference/aa-sdk/core/classes/FailedToFindTransactionError/constructor.mdx
+                  - page: FailedToGetStorageSlotError
+                    path: wallets/pages/reference/aa-sdk/core/classes/FailedToGetStorageSlotError/constructor.mdx
+                  - page: GetCounterFactualAddressError
+                    path: wallets/pages/reference/aa-sdk/core/classes/GetCounterFactualAddressError/constructor.mdx
+                  - page: IncompatibleClientError
+                    path: wallets/pages/reference/aa-sdk/core/classes/IncompatibleClientError/constructor.mdx
+                  - page: IncorrectAccountType
+                    path: wallets/pages/reference/aa-sdk/core/classes/IncorrectAccountType/constructor.mdx
+                  - page: InvalidDeferredActionNonce
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidDeferredActionNonce/constructor.mdx
+                  - page: InvalidEntityIdError
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidEntityIdError/constructor.mdx
+                  - page: InvalidEntryPointError
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidEntryPointError/constructor.mdx
+                  - page: InvalidModularAccountV2Mode
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidModularAccountV2Mode/constructor.mdx
+                  - page: InvalidNonceKeyError
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidNonceKeyError/constructor.mdx
+                  - page: InvalidRpcUrlError
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidRpcUrlError/constructor.mdx
+                  - page: InvalidSignerTypeError
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidSignerTypeError/constructor.mdx
+                  - page: InvalidUserOperationError
+                    path: wallets/pages/reference/aa-sdk/core/classes/InvalidUserOperationError/constructor.mdx
                   - section: LocalAccountSigner
                     contents:
                       - page: constructor
@@ -974,14 +1006,10 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/core/classes/Logger/verbose.mdx
                       - page: warn
                         path: wallets/pages/reference/aa-sdk/core/classes/Logger/warn.mdx
-                  - section: SignTransactionNotSupportedError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/SignTransactionNotSupportedError/constructor.mdx
-                  - section: SmartAccountWithSignerRequiredError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/SmartAccountWithSignerRequiredError/constructor.mdx
+                  - page: SignTransactionNotSupportedError
+                    path: wallets/pages/reference/aa-sdk/core/classes/SignTransactionNotSupportedError/constructor.mdx
+                  - page: SmartAccountWithSignerRequiredError
+                    path: wallets/pages/reference/aa-sdk/core/classes/SmartAccountWithSignerRequiredError/constructor.mdx
                   - section: TraceHeader
                     contents:
                       - page: constructor
@@ -994,22 +1022,14 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/toTraceHeader.mdx
                       - page: withEvent
                         path: wallets/pages/reference/aa-sdk/core/classes/TraceHeader/withEvent.mdx
-                  - section: TransactionMissingToParamError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/TransactionMissingToParamError/constructor.mdx
-                  - section: UpgradeToAndCallNotSupportedError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/UpgradeToAndCallNotSupportedError/constructor.mdx
-                  - section: UpgradesNotSupportedError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/UpgradesNotSupportedError/constructor.mdx
-                  - section: WaitForUserOperationError
-                    contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/core/classes/WaitForUserOperationError/constructor.mdx
+                  - page: TransactionMissingToParamError
+                    path: wallets/pages/reference/aa-sdk/core/classes/TransactionMissingToParamError/constructor.mdx
+                  - page: UpgradeToAndCallNotSupportedError
+                    path: wallets/pages/reference/aa-sdk/core/classes/UpgradeToAndCallNotSupportedError/constructor.mdx
+                  - page: UpgradesNotSupportedError
+                    path: wallets/pages/reference/aa-sdk/core/classes/UpgradesNotSupportedError/constructor.mdx
+                  - page: WaitForUserOperationError
+                    path: wallets/pages/reference/aa-sdk/core/classes/WaitForUserOperationError/constructor.mdx
                   - section: WalletClientSigner
                     contents:
                       - page: constructor
@@ -1021,7 +1041,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
-      - section: Account Abstraction Ethers
+      - section: aa-sdk/ethers
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/ethers/index.mdx
@@ -1036,10 +1056,10 @@ navigation:
                 contents:
                   - section: AccountSigner
                     contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/constructor.mdx
                       - page: connect
                         path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/connect.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/constructor.mdx
                       - page: getAddress
                         path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/getAddress.mdx
                       - page: getBundlerClient
@@ -1052,16 +1072,84 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/ethers/classes/AccountSigner/signTransaction.mdx
                   - section: EthersProviderAdapter
                     contents:
-                      - page: constructor
-                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/constructor.mdx
                       - page: connectToAccount
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/connectToAccount.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/constructor.mdx
                       - page: fromEthersProvider
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/fromEthersProvider.mdx
                       - page: getBundlerClient
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/getBundlerClient.mdx
                       - page: send
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
+
+      - section: API
+        contents:
+          - section: Smart Wallets
+            contents:
+              - page: Wallets API Quickstart
+                path: wallets/pages/smart-wallets/quickstart.mdx
+              - section: Wallet API Endpoints
+                contents:
+                  - api: Wallet API Endpoints
+                    api-name: wallet-api
+                    flattened: true
+              - section: Signer API Endpoints
+                contents:
+                  - api: Signer API Endpoints
+                    api-name: accounts
+                    flattened: true
+              - page: 7702 Quickstart
+                path: wallets/pages/smart-wallets/7702-quickstart.mdx
+              - page: How to stamp requests
+                path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
+            slug: smart-wallets
+          - section: Gas Manager
+            contents:
+              - page: How to sponsor gas on EVM
+                path: >-
+                  wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
+              - page: How to sponsor gas on Solana
+                path: >-
+                  wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-solana.mdx
+              - api: Gas Abstraction API Endpoints
+                api-name: gas-manager-coverage
+              - api: Admin API Endpoints
+                api-name: admin
+              - page: Gas Manager Errors
+                path: wallets/pages/gas-manager-admin-api/gas-manager-errors.mdx
+              - page: Supported Chains
+                path: wallets/pages/gas-manager-admin-api/gas-manager-supported-chains.mdx
+              - page: FAQs
+                path: >-
+                  wallets/pages/gas-manager-admin-api/gas-manager-faqs.mdx
+            slug: gas-manager-admin-api
+          - section: Bundler
+            contents:
+              - page: How to send a userOp
+                path: wallets/pages/bundler-api/bundler-api-quickstart.mdx
+              - api: Bundler API Endpoints
+                api-name: bundler
+                slug: bundler-api-endpoints
+              - api: UserOp Simulation Endpoints
+                api-name: user-op-sim
+                slug: useroperation-simulation-endpoints
+              - page: Bundler RPC Errors
+                path: wallets/pages/bundler-api/bundler-rpc-errors.mdx
+              - section: EntryPoint Revert Codes
+                contents:
+                  - page: EntryPoint v0.7 Revert Codes
+                    path: >-
+                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v07-revert-codes.mdx
+                  - page: EntryPoint v0.6 Revert Codes
+                    path: >-
+                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v06-revert-codes.mdx
+                slug: entrypoint-revert-codes
+              - page: Supported Chains
+                path: wallets/pages/bundler-api/bundler-supported-chains.mdx
+              - page: FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
+            slug: bundler-api
 
       - section: Resources
         skip-slug: true

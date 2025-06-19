@@ -1,0 +1,653 @@
+# yaml-language-server: $schema=https://meta.open-rpc.org/
+
+$schema: https://meta.open-rpc.org/
+openrpc: 1.2.4
+info:
+  title: Alchemy Gas Manager Coverage API JSON-RPC Specification
+  description: A specification of the standard JSON-RPC methods for Gas Manager Coverage API.
+  version: 0.0.0
+servers:
+  - url: https://eth-mainnet.g.alchemy.com/v2
+    name: Mainnet
+  - url: https://eth-sepolia.g.alchemy.com/v2
+    name: Sepolia
+methods:
+  - name: "alchemy_requestGasAndPaymasterAndData"
+    description: |
+      Requests gas and coverage for a `UserOperation`. Returns `paymasterAndData` and gas parameters if approved, errors if not. Optionally accepts fee parameter overrides to be used in the `UserOperation`.
+    params:
+      - name: "policyId"
+        required: true
+        description: "The Gas Policy ID or list of Gas Policy IDs."
+        schema:
+          oneOf:
+            - type: "string"
+              title: "policyId"
+              format: "uuid"
+            - type: "array"
+              title: "policyId Array"
+              items:
+                type: "string"
+                format: "uuid"
+
+      - name: "erc20Context"
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+        description: "Erc20 context"
+      - name: "entryPoint"
+        required: true
+        description: The entrypoint address the request should be sent through. This MUST be one of the entry points returned by the `supportedEntryPoints` RPC call and match the version of the user operation in the `userOperation` field.
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]*$"
+      - name: "dummySignature"
+        required: true
+        description: |
+          Dummy signature for the operation. This is useful for estimating gas costs.
+            <Warning>
+              This endpoint requires a dummy signature in the `userOp`. Check our [FAQs](/docs/reference/account-abstraction-faq#signatures) to learn what a dummy signature is and which dummy signature you should use.
+            </Warning>
+        schema:
+          type: "string"
+      - name: "userOperation"
+        required: true
+        description: An object containing optional gas parameters, `paymasterAndData`, and signature fields. It can be either a v0.6 or v0.7 user operation but must match the version of the entry point at the specified `entryPoint`.
+        schema:
+          title: "User Operation, either v0.6 or v0.7 (missing signature, paymasterData, and gas fields)"
+          oneOf:
+            - title: "User Operation v0.6"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06Partial"
+
+            - title: "User Operation v0.7"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07Partial"
+      - name: "overrides"
+        description: |
+          Optional fields that override our gas and fee estimates. Use this parameter to optionally override available fields: `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `verificationGasLimit`, or `preVerificationGas`. 
+
+          This will apply either:
+          - absolutes overrides (using a hex string) simply overriding estimated values entirely OR
+          - multiplier overrides relative to our estimates (in the format of { "multiplier": number } with max precision of 4 decimal places). For example, if the override value is { multiplier: 1.1 } for the `maxPriorityFeePerGas` field, then a 1.1 multiplier, or a 10% increase, is applied to the estimated `maxPriorityFeePerGas` of the userOp.
+
+          These overrides will be applied for every userOp sent with this provider. A higher buffer may give userOps a better chance to mine if the L1/L2 gas and fees change.
+
+          ```json
+          "overrides": {
+            "maxFeePerGas": "hex string" | { "multiplier": number },
+            "maxPriorityFeePerGas": "hex string" | { "multiplier": number },
+            "callGasLimit": "hex string" | { "multiplier": number },
+            "verificationGasLimit": "hex string" | { "multiplier": number },
+            "preVerificationGas": "hex string" | { "multiplier": number },
+          }
+          ```
+
+          <Warning>
+            Previous override using "percentage" has been deprecated in favor of "multiplier" values
+          </Warning>
+        schema:
+          type: "object"
+          properties:
+            maxFeePerGas:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            maxPriorityFeePerGas:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            callGasLimit:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            verificationGasLimit:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            preVerificationGas:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+      - name: "stateOverrideSet"
+        description: |
+          Optional.Allows changes to the state of a contract before executing the call. For example, you can modify variable values (like balances or approvals) for that call without changing the contract itself on the blockchain. 
+
+          In more technical terms, the state override set is an optional parameter that allows executing the call against a modified chain state. It is an address-to-state mapping, where each entry specifies some state to be overridden prior to executing the call.
+        schema:
+          type: "object"
+          properties:
+            balance:
+              type: "string"
+              description: "Fake balance to set for the account before executing the call (<= 32 bytes)"
+            nonce:
+              type: "string"
+              description: Fake nonce to set for the account before executing the call (<= 8 bytes).
+            code:
+              type: "string"
+              description: "Fake EVM bytecode to inject into the account before executing the call."
+            state:
+              type: "object"
+              description: "Fake key-value mapping to override all slots in the account storage before executing the call."
+            stateDiff:
+              type: "object"
+              description: "Fake key-value mapping to override individual slots in the account storage before executing the call."
+      - name: "webhookData"
+        description: "Additional data you wish to include in the request, such as proof of humanity."
+        schema:
+          type: "string"
+    result:
+      name: "Asset changes"
+      description: "The transformed response object that wraps the original gas and paymaster response. It includes an array of asset change objects, a gasUsed field, and an error field."
+      schema:
+        type: "object"
+        required: ["entrypointV06Response", "entrypointV07Response"]
+        properties:
+          entrypointV06Response:
+            title: "Entrypoint v0.6 Response"
+            type: "object"
+            properties:
+              paymasterAndData:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/bytes"
+                description: "The 0x‑prefixed hex string for the user to put into the UO's paymasterAndData field. Contains gas manager address, sigTimeRange, and secp256k1 signature."
+              callGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The amount of gas to allocate for the main execution call."
+              verificationGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The amount of gas to allocate for the verification step."
+              preVerificationGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The amount of gas to compensate the bundler for pre-verification execution and calldata."
+              maxFeePerGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The maximum fee per gas to pay for the execution of this operation (similar to EIP-1559 max_fee_per_gas)."
+              maxPriorityFeePerGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "Maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas)."
+          entrypointV07Response:
+            title: "Entrypoint v0.7 Response"
+            type: "object"
+            properties:
+              paymaster:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/address"
+                description: "The paymaster address used in the operation."
+              paymasterData:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/bytes"
+                description: "The data for the paymaster in the operation."
+              callGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The amount of gas to allocate for the main execution call."
+              verificationGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The amount of gas to allocate for the verification step."
+              preVerificationGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The amount of gas to compensate the bundler for pre-verification execution and calldata."
+              maxFeePerGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The maximum fee per gas to pay for the execution of this operation (similar to EIP-1559 max_fee_per_gas)."
+              maxPriorityFeePerGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "Maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas)."
+              paymasterVerificationGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The gas limit for paymaster verification."
+              paymasterPostOpGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint64"
+                description: "The gas limit for paymaster post-operation."
+    examples:
+      - name: "alchemy_requestGasAndPaymasterAndData example"
+        params:
+          - name: "params"
+            value:
+              webhookData: "example webhook data"
+              policyId: "69d524a7-e932-4214-8673-dcdcba31bb42"
+              entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+              dummySignature: "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
+              userOperation:
+                sender: "0x1234567890123456789012345678901234567890"
+                nonce: "0x1"
+                callData: "0xabcdef"
+                callGasLimit: "0x5208"
+                verificationGasLimit: "0x5208"
+                preVerificationGas: "0x5208"
+                maxFeePerGas: "0x1"
+                maxPriorityFeePerGas: "0x1"
+        result:
+          name: "alchemy_requestGasAndPaymasterAndData response"
+          value:
+            entrypointV06Response:
+              paymasterAndData: "0xabcde"
+            entrypointV07Response:
+              paymasterData: "0x67890"
+              paymasterVerificationGasLimit: "0x5208"
+              paymasterPostOpGasLimit: "0x5208"
+
+  - name: "alchemy_requestPaymasterAndData"
+    description: |
+      Requests coverage for a `UserOperation`. Returns paymasterAndData if approved, errors if not.
+
+      <Warning title="This endpoint will be deprecated">
+        Please use `alchemy_requestGasAndPaymasterAndData` instead.
+
+        While you can use `alchemy_requestPaymasterAndData` to request a paymaster signature, it's important to note that this function requires gas fields to be part of the `UserOperation` passed as a parameter. These gas fields are influenced by the response of this endpoint, creating a circular dependency.
+
+        To simplify this process, we introduced alchemy_requestGasAndPaymasterAndData. This function both estimates gas and provides signed `paymaster` and `paymasterData` fields, therefore resolving the circular dependency.
+      </Warning>
+
+    params:
+      - name: "policyId"
+        required: true
+        description: "The policy ID or list of policy IDs."
+        schema:
+          oneOf:
+            - type: "string"
+              title: "policyId"
+              format: "uuid"
+            - type: "array"
+              title: "policyId Array"
+              items:
+                type: "string"
+                format: "uuid"
+      - name: "erc20Context"
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+        description: "Erc20 context"
+      - name: "entryPoint"
+        required: true
+        description: "The `entrypoint` address the request should be sent through. This **MUST** be one of the entry points returned by the `supportedEntryPoints` RPC call and match the version of the user operation in the `userOperation` field."
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]*$"
+      - name: "userOperation"
+        required: true
+        description: "Test Partial UserOperation object, missing `paymasterAndData` and `signature` fields. This can be either a v0.6 or v0.7 user operation, but **MUST** match the version of the entry point at the address in the `entryPoint` field."
+        schema:
+          title: "User Operation, either v0.6 or v0.7 (missing signature and paymasterData)"
+          oneOf:
+            - title: "User Operation v0.6"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06Partial"
+
+            - title: "User Operation v0.7"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07Partial"
+
+      - name: "webhookData"
+        description: "Additional data you wish to include in the request, such as proof of humanity."
+        schema:
+          type: "string"
+    result:
+      name: "Response"
+      description: "The response object may be one of two types: - For entrypoint v0.6: an object with property paymasterAndData. - For entrypoint v0.7: an object with properties paymasterData, paymasterVerificationGasLimit, and paymasterPostOpGasLimit."
+      schema:
+        type: "object"
+        required: ["entrypointV06Response", "entrypointV07Response"]
+        properties:
+          entrypointV06Response:
+            title: "Entrypoint v0.6 Response"
+            type: "object"
+            properties:
+              paymasterAndData:
+                type: "string"
+                description: "The 0x-prefixed hex string for the user to put into the UO's paymasterAndData field. Contains gas manager `address`, `sigTimeRange`, and secp256k1 `signature`."
+          entrypointV07Response:
+            title: "Entrypoint v0.7 Response"
+            type: "object"
+            properties:
+              paymaster:
+                type: "string"
+                description: "The paymaster address used in the operation."
+              paymasterData:
+                type: "string"
+                description: "The data for the paymaster in the operation."
+              paymasterVerificationGasLimit:
+                type: "string"
+                description: "The gas limit for paymaster verification."
+              paymasterPostOpGasLimit:
+                type: "string"
+                description: "The gas limit for paymaster post-operation."
+    examples:
+      - name: "alchemy_requestPaymasterAndData example"
+        params:
+          - name: "params"
+            value:
+              webhookData: "example webhook data"
+              policyId: "69d524a7-e932-4214-8673-dcdcba31bb42"
+              entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+              userOperation:
+                sender: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+                nonce: "0x2"
+                initCode: "0x"
+                callData: "0xdeadbeef"
+                callGasLimit: "0x5208"
+                verificationGasLimit: "0x5208"
+                preVerificationGas: "0x5208"
+                maxFeePerGas: "0x1"
+                maxPriorityFeePerGas: "0x1"
+        result:
+          name: "alchemy_requestPaymasterAndData response"
+          value:
+            entrypointV06Response:
+              paymasterAndData: "0xdead"
+              callGasLimit: "0x5208"
+              verificationGasLimit: "0x5208"
+              preVerificationGas: "0x5208"
+              maxFeePerGas: "0x1"
+              maxPriorityFeePerGas: "0x1"
+            entrypointV07Response:
+              paymaster: "0xfeed"
+              paymasterData: "0xfeed"
+              paymasterVerificationGasLimit: "0x5208"
+              paymasterPostOpGasLimit: "0x5208"
+              callGasLimit: "0x5208"
+              verificationGasLimit: "0x5208"
+              preVerificationGas: "0x5208"
+              maxFeePerGas: "0x1"
+              maxPriorityFeePerGas: "0x1"
+
+  - name: "pm_getPaymasterData"
+    description: Returns values to be used in paymaster-related fields of a signed user operation. These values are not stubs and will be included in a signed user operation as part of an `eth_sendUserOperation` call. Accepts an unsigned `userOperation`, an `entrypoint` `address`, a `chainId`, and a `context` object.
+    params:
+      - name: "userOperation"
+        description: "Partial UserOperation object (either v0.6 or v0.7, missing signature and paymasterData)."
+        required: true
+        schema:
+          title: "User Operation, either v0.6 or v0.7 (missing signature and paymasterData)"
+          oneOf:
+            - title: "User Operation v0.6"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06Partial"
+
+            - title: "User Operation v0.7"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07Partial"
+      - name: "entryPoint"
+        required: true
+        description: "The entrypoint address the request should be sent through. Must be one of the entry points returned by the `supportedEntryPoints` RPC call."
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]*$"
+      - name: "chainId"
+        required: true
+        description: "The chain ID of the network the operation will be submitted on."
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]+$"
+      - name: "context"
+        description: "An object containing context. Must include a policyId and may include webhookData."
+        schema:
+          type: "object"
+          required: ["policyId"]
+          properties:
+            policyId:
+              oneOf:
+                - type: "string"
+                  format: "uuid"
+                - type: "array"
+                  items:
+                    type: "string"
+                    format: "uuid"
+              description: "The policy ID or list of policy IDs."
+            webhookData:
+              type: "string"
+              description: "Additional data you wish to include (e.g. proof of humanity)."
+            erc20Context:
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+              description: "Erc20 context"
+    result:
+      name: "Response"
+      description: "The response object may be one of two types: - For entrypoint v0.6: an object with property paymasterAndData. - For entrypoint v0.7: an object with property paymasterData."
+      schema:
+        type: "object"
+        required: ["entrypointV06Response", "entrypointV07Response"]
+        properties:
+          entrypointV06Response:
+            title: "EntryPoint v0.6 Response"
+            type: "object"
+            properties:
+              paymasterAndData:
+                type: "string"
+                description: "The 0x‑prefixed hex string for the user to put into the UO's paymasterAndData field."
+          entrypointV07Response:
+            title: "EntryPoint v0.7 Response"
+            type: "object"
+            properties:
+              paymaster:
+                type: "string"
+                description: "The address of the paymaster."
+              paymasterData:
+                type: "string"
+                description: "The data for the paymaster in the operation."
+    examples:
+      - name: "pm_getPaymasterData example"
+        params:
+          - name: "userOperation"
+            value:
+              sender: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+              nonce: "0x2"
+              callData: "0xdeadbeef"
+              callGasLimit: "0x5208"
+              verificationGasLimit: "0x5208"
+              preVerificationGas: "0x5208"
+              maxFeePerGas: "0x1"
+              maxPriorityFeePerGas: "0x1"
+          - name: "entryPoint"
+            value: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+          - name: "chainId"
+            value: "0x1"
+          - name: "context"
+            value:
+              policyId: "69d524a7-e932-4214-8673-dcdcba31bb42"
+        result:
+          name: "pm_getPaymasterData response"
+          value:
+            entrypointV06Response:
+              paymasterAndData: "0xabc123"
+            entrypointV07Response:
+              paymaster: "0xfeed"
+              paymasterData: "0x789abc"
+
+  - name: "pm_getPaymasterStubData"
+    description: "Returns stub values to be used in paymaster-related fields of an unsigned user operation for gas estimation. Accepts an unsigned user operation, an `entrypoint` address, a `chainId`, and a `context` object. Paymaster service providers can define fields that app developers should use in the `context` object."
+    params:
+      - name: "userOperation"
+        description: "Partial UserOperation object (either v0.6 or v0.7, missing signature and paymasterData)."
+        required: true
+        schema:
+          title: "User Operation, either v0.6 or v0.7 (missing signature and paymasterData)"
+          oneOf:
+            - title: "User Operation v0.6"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06Partial"
+
+            - title: "User Operation v0.7"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07Partial"
+      - name: "entryPoint"
+        required: true
+        description: "The entrypoint address the request should be sent through. Must be one of the entry points returned by the supportedEntryPoints RPC call."
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]*$"
+      - name: "chainId"
+        required: true
+        description: "The chain ID of the network the operation will be submitted on."
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]+$"
+      - name: "context"
+        description: "An object containing context. Must include a policyId and may include webhookData."
+        schema:
+          type: "object"
+          required: ["policyId"]
+          properties:
+            policyId:
+              oneOf:
+                - type: "string"
+                  format: "uuid"
+                - type: "array"
+                  items:
+                    type: "string"
+                    format: "uuid"
+              description: "The policy ID or list of policy IDs."
+            erc20Context:
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+              description: "Erc20 context"
+            webhookData:
+              type: "string"
+              description: "Additional data you wish to include (e.g. proof of humanity)."
+    result:
+      name: "Response"
+      description: "The response object may be one of two types: - For entrypoint v0.6: an object with properties paymasterAndData and sponsor. - For entrypoint v0.7: an object with properties paymasterData and sponsor."
+      schema:
+        type: "object"
+        required: ["entrypointV06Response", "entrypointV07Response"]
+        properties:
+          entrypointV06Response:
+            title: "EntryPoint v0.6 Stub Response"
+            type: "object"
+            properties:
+              paymasterAndData:
+                type: "string"
+                description: "The 0x‑prefixed hex string for the user to put into the UO's paymasterAndData field."
+              sponsor:
+                type: "object"
+                description: "Information about who is sponsoring the user's transaction."
+                properties:
+                  name:
+                    type: "string"
+                    description: "The name of the entity sponsoring the operation."
+          entrypointV07Response:
+            title: "EntryPoint v0.7 Stub Response"
+            type: "object"
+            properties:
+              paymaster:
+                type: "string"
+                description: "The address of the paymaster."
+              paymasterData:
+                type: "string"
+                description: "The data for the paymaster in the operation."
+              sponsor:
+                type: "object"
+                description: "Information about who is sponsoring the user's transaction."
+                properties:
+                  name:
+                    type: "string"
+                    description: "The name of the entity sponsoring the operation."
+    examples:
+      - name: "pm_getPaymasterDataStub example"
+        params:
+          - name: "userOperation"
+            value:
+              sender: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+              nonce: "0x3"
+              callData: "0x1234"
+              callGasLimit: "0x5208"
+              verificationGasLimit: "0x5208"
+              preVerificationGas: "0x5208"
+              maxFeePerGas: "0x1"
+              maxPriorityFeePerGas: "0x1"
+          - name: "entryPoint"
+            value: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+          - name: "chainId"
+            value: "0x1"
+          - name: "context"
+            value:
+              policyId: "69d524a7-e932-4214-8673-dcdcba31bb42"
+        result:
+          name: "pm_getPaymasterDataStub response"
+          value:
+            entrypointV06Response:
+              paymasterAndData: "0xabc123"
+              sponsor:
+                name: "SponsorName"
+            entrypointV07Response:
+              paymasterData: "0x789abc"
+              sponsor:
+                name: "SponsorName"
+
+  - name: "alchemy_requestFeePayer"
+    description: |
+      Requests gas sponsorship for a Solana transaction and returns the **fully-signed** `serializedTransaction` (now containing the fee-payer signature).
+
+      <Note>
+        Request access by reaching out to account-abstraction@alchemy.com
+      </Note>
+    params:
+      - name: policyId
+        required: true
+        description: "The policy ID (_or list of IDs_) that governs sponsorship."
+        schema:
+          oneOf:
+            - title: policyId
+              type: "string"
+              format: "uuid"
+            - title: policyIdArray
+              type: "array"
+              items:
+                type: "string"
+                format: "uuid"
+      - name: serializedTransaction
+        required: true
+        description: |
+          The unsigned transaction produced by `tx.serialize()`.
+          It may already contain a `feePayer`; the service will overwrite it
+          with the sponsoring account and add the fee-payer signature.
+        schema:
+          type: "string"
+          pattern: "^[A-Za-z0-9+/]+={0,2}$"
+    result:
+      name: "Sponsored transaction wrapper"
+      description: >
+        Object containing the **fully-signed** transaction ready for
+        `sendRawTransaction`.
+      schema:
+        type: "object"
+        required: ["serializedTransaction"]
+        properties:
+          serializedTransaction:
+            title: "base-64-encoded Solana transaction"
+            type: "string"
+            description: >
+              The transaction after the service sets the `feePayer` field and
+              adds the fee-payer signature.
+    servers:
+      [
+        {
+          "url": "https://solana-mainnet.g.alchemy.com/v2",
+          "name": "Solana Mainnet",
+        },
+        {
+          "url": "https://solana-devnet.g.alchemy.com/v2",
+          "name": "Solana Devnet",
+        },
+      ]
+    examples:
+      - name: "alchemy_requestFeePayer example"
+        params:
+          - name: "sponsorshipRequest"
+            value:
+              policyId: "69d524a7-e932-4214-8673-dcdcba31bb42"
+              serializedTransaction: "AgICAQMEBQYHCAkKCwwNDg8BCg==" # unsigned tx
+        result:
+          name: "Sponsored transaction wrapper"
+          value:
+            serializedTransaction: "AQIDBAUGBwgJCgsMDQ4PEA==" # signed tx

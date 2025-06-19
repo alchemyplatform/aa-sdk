@@ -1,0 +1,144 @@
+---
+title: Pregenerate Wallets
+description: Learn how to pre-generate Smart Wallet addresses for your users with nothing more than an email address.
+slug: wallets/react/pregenerate-wallets
+---
+
+> **Objective** Generate a wallet owner (signer) and the smart-account address _before_ a user ever logs in, using only their email.
+
+## Prerequisites
+
+- Alchemy **API Key** with Smart Wallets enabled
+  - If starting from scratch, follow the [quickstart](/docs/wallets/react/quickstart/existing-project#2-get-your-api-key) to get your API key
+  - Existing api keys can be found in the Alchemy Dashboard by viewing your config in the [Smart wallets configuration page](https://dashboard.alchemy.com/services/smart-wallets/configuration)
+- Node ≥ 18 (or cURL / any HTTP client)
+- The `@account-kit/smart-contracts` package (for step 4)
+
+You can generate a wallet address on both EVM and Solana before a user ever authenticates or logs in using only their email. This could enable use cases such as:
+
+- airdropping assets or seed balances to users who signed up for a waitlist with their email before they ever open your app
+- allowing users to send assets to another user with just their email even if the recipient has not logged in before. When that recipient logs in, they'll be able to claim their balance.
+- migrating assets to smart wallets to enable gas sponsorship, batching, etc.
+- and more!
+
+With Alchemy you can do this entirely from your server using the **Signer API** – no UI, hooks, or user interaction required.
+
+**Note:** Smart contract addresses are deterministic. The deployment address is a function of the address of owner/signer address, the account implementation (e.g. latest version of Modular Account), and the salt (optionally specified). If all three of those remain the same, then the smart account will be consistent across chains and for users. We will handle generating a consistent signer address for email.
+
+## 1. Create the owner signer
+
+First, you need to generate the signer address. This will be generated using the [`Create Wallet` API endpoint](https://www.alchemy.com/docs/wallets/api/smart-wallets/signer-api-endpoints/signer-api-endpoints/create-account). The signer address will be used as the owner of the new smart account and enable the user to sign transactions after authenticating with their email.
+
+<Tabs>
+<Tab title="Fetch (ESM / Node ≥18)" language="ts">
+
+```ts twoslash
+const res = await fetch("https://api.g.alchemy.com/signer/v1/signup", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    // The API key is sent in the Authorization header
+    Authorization: `Bearer ${process.env.ALCHEMY_API_KEY}`,
+  },
+  body: JSON.stringify({
+    email: "[email protected]",
+  }),
+});
+
+if (!res.ok) throw new Error(await res.text());
+
+const { address, solanaAddress, userId } = await res.json();
+console.log({ address, solanaAddress, userId });
+```
+
+</Tab>
+<Tab title="request (CommonJS)" language="ts">
+
+```ts
+import request from "request";
+
+request.post(
+  {
+    url: "https://api.g.alchemy.com/signer/v1/signup",
+    json: { email: "[email protected]" },
+    headers: {
+      Authorization: `Bearer ${process.env.ALCHEMY_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+  },
+  (err, _resp, body) => {
+    if (err) throw err;
+    console.log(body); // ➜  { orgId, userId, address, solanaAddress, otpId }
+  },
+);
+```
+
+</Tab>
+<Tab title="cURL" language="bash">
+
+```bash
+curl -X POST https://api.g.alchemy.com/signer/v1/signup \
+  -H "Authorization: Bearer $ALCHEMY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "email": "[email protected]" }'
+```
+
+</Tab>
+</Tabs>
+
+| Field           | Description                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `address`       | The **signer (EOA)** address that will **own** your user's smart account (this is _not_ the smart account itself). |
+| `solanaAddress` | The **Solana** wallet address associated with the same user.                                                       |
+| `orgId`         | Your organisation ID – useful if you operate multiple orgs.                                                        |
+
+<Tip>
+  The address you receive here is the **owner key**. Your user's Smart Contract
+  Account (ModularAccountV2) will be deployed at a different address – but we
+  can deterministically calculate it ahead of time using
+  `predictModularAccountV2Address`.
+</Tip>
+
+## 2. Predict the smart-account address
+
+Using the signer address you generated in step 2, you can now generate the counter-factual (future) address of the smart account before it is even deployed.
+
+The `predictModularAccountV2Address` method will generate the address for a new Modular Account v2 and mirrors the CREATE2 logic used by the MAv2 factory.
+
+```ts twoslash
+import { predictModularAccountV2Address } from "@account-kit/smart-contracts";
+
+// Factory & implementation addresses vary by chain – you can grab them from
+// the Deployed addresses page.
+// https://www.alchemy.com/docs/wallets/smart-contracts/deployed-addresses
+
+const mav2FactoryAddress = "0x00000000000017c61b5bEe81050EC8eFc9c6fecd";
+const implementationAddress = "0x000000000000c5A9089039570Dd36455b5C07383";
+
+const smartAccountAddress = predictModularAccountV2Address({
+  factoryAddress: mav2FactoryAddress,
+  implementationAddress,
+  salt: 0n, // use 0 unless you have a custom salt scheme
+  type: "SMA",
+  ownerAddress: address, // signer address from Step 2
+});
+
+console.log({ smartAccountAddress });
+```
+
+Now you have **both** the owner key (`address`) and the eventual smart account
+address (`smartAccountAddress`). When the user finally authenticates, their
+smart account will be deployed at exactly this counter-factual address.
+
+<Info>
+    If your application is still using the older **Light Account** contracts (v1 or v2) instead of Modular Account V2, use the corresponding helpers from `@account-kit/smart-contracts`:
+    - `predictLightAccountAddress` – single-owner Light Account
+    - `predictMultiOwnerLightAccountAddress` – multi-owner Light Account
+
+    These functions take the same factory/owner/salt pattern shown above and work for all historical Light-Account factory versions. Everything else in this guide (steps 1-3) remains the same.
+
+</Info>
+
+---
+
+That's it! You now hold the future Smart Contract Account address. You can fund it immediately or store it for later onboarding.

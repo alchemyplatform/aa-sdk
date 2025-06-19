@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
+
+### Bug Fixes
+
+- upgrade TK iframe stamper to properly handle concurrent stamping ([#1685](https://github.com/alchemyplatform/aa-sdk/issues/1685)) ([d53dc65](https://github.com/alchemyplatform/aa-sdk/commit/d53dc65831c4bb1f27d0a84c342ea7f48080ba27))
+
+# [4.43.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.42.0...v4.43.0) (2025-06-18)
+
+### Features
+
+- add webauthn-p256 to account-kit/smart-contracts + auto-generated ([#1702](https://github.com/alchemyplatform/aa-sdk/issues/1702)) ([06b3c07](https://github.com/alchemyplatform/aa-sdk/commit/06b3c07074baaa05baa5fe765f0190b735920499))
+
+# [4.42.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.41.0...v4.42.0) (2025-06-17)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
+
+### Features
+
+- create SideBarBuilder to generate Fern sidebar for SDK References ([#1671](https://github.com/alchemyplatform/aa-sdk/issues/1671)) ([c131c86](https://github.com/alchemyplatform/aa-sdk/commit/c131c86eba09b19e59261df341fd605451962083))
+- list, add, and remove oauth providers ([#1666](https://github.com/alchemyplatform/aa-sdk/issues/1666)) ([e9add26](https://github.com/alchemyplatform/aa-sdk/commit/e9add26907c4151a85f0a4f98efc2a18694faa62)), closes [#1669](https://github.com/alchemyplatform/aa-sdk/issues/1669)
+
 # [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
 
 **Note:** Version bump only for package @account-kit/signer

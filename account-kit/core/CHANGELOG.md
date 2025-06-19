@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.43.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.42.0...v4.43.0) (2025-06-18)
+
+### Features
+
+- add webauthn-p256 to account-kit/smart-contracts + auto-generated ([#1702](https://github.com/alchemyplatform/aa-sdk/issues/1702)) ([06b3c07](https://github.com/alchemyplatform/aa-sdk/commit/06b3c07074baaa05baa5fe765f0190b735920499))
+
+# [4.42.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.41.0...v4.42.0) (2025-06-17)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
+
+### Features
+
+- create SideBarBuilder to generate Fern sidebar for SDK References ([#1671](https://github.com/alchemyplatform/aa-sdk/issues/1671)) ([c131c86](https://github.com/alchemyplatform/aa-sdk/commit/c131c86eba09b19e59261df341fd605451962083))
+
 # [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
 
 **Note:** Version bump only for package @account-kit/core

@@ -17,6 +17,8 @@ export {
 export type * from "./light-account/decorators/lightAccount.js";
 export { lightAccountClientActions } from "./light-account/decorators/lightAccount.js";
 export type * from "./light-account/types.js";
+export { predictLightAccountAddress } from "./light-account/accounts/predictAddress.js";
+export { predictMultiOwnerLightAccountAddress } from "./light-account/accounts/predictAddress.js";
 
 export {
   AccountVersionRegistry,
@@ -124,3 +126,4 @@ export type * from "./ma-v2/client/client.js";
 export { createModularAccountV2Client } from "./ma-v2/client/client.js";
 export type * from "./ma-v2/utils.js";
 export { getMAV2UpgradeToData } from "./ma-v2/utils.js";
+export { predictModularAccountV2Address } from "./ma-v2/account/predictAddress.js";

@@ -37,6 +37,9 @@ import type {
   AuthLinkingPrompt,
   AddOauthProviderParams,
   CredentialCreationOptionOverrides,
+  OauthProviderInfo,
+  IdTokenOnly,
+  AuthMethods,
 } from "./types.js";
 import { VERSION } from "../version.js";
 
@@ -48,8 +51,8 @@ export interface BaseSignerClientParams {
 }
 
 export type ExportWalletStamper = TurnkeyClient["stamper"] & {
-  injectWalletExportBundle(bundle: string): Promise<boolean>;
-  injectKeyExportBundle(bundle: string): Promise<boolean>;
+  injectWalletExportBundle(bundle: string, orgId: string): Promise<boolean>;
+  injectKeyExportBundle(bundle: string, orgId: string): Promise<boolean>;
   publicKey(): string | null;
 };
 
@@ -214,11 +217,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract oauthWithRedirect(
     args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<User>;
+  ): Promise<User | IdTokenOnly>;
 
   public abstract oauthWithPopup(
     args: Extract<OauthParams, { mode: "popup" }>,
-  ): Promise<User | AuthLinkingPrompt>;
+  ): Promise<User | AuthLinkingPrompt | IdTokenOnly>;
 
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">,
@@ -268,6 +271,59 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * Sets the email for the authenticated user, allowing them to login with that
+   * email.
+   *
+   * You must contact Alchemy to enable this feature for your team, as there are
+   * important security considerations. In particular, you must not call this
+   * without first validating that the user owns this email account.
+   *
+   * @param {string} email The email to set for the user
+   * @returns {Promise<void>} A promise that resolves when the email is set
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public setEmail = async (email: string): Promise<void> => {
+    if (!email) {
+      throw new Error(
+        "Email must not be empty. Use removeEmail() to remove email auth.",
+      );
+    }
+    await this.updateEmail(email);
+  };
+
+  /**
+   * Removes the email for the authenticated user, disallowing them from login with that email.
+   *
+   * @returns {Promise<void>} A promise that resolves when the email is removed
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public removeEmail = async (): Promise<void> => {
+    // This is a hack to remove the email for the user. Turnkey does not
+    // support clearing the email once set, so we set it to a known
+    // inaccessible address instead.
+    await this.updateEmail("not.enabled@example.invalid");
+  };
+
+  private updateEmail = async (email: string): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const stampedRequest = await this.turnkeyClient.stampUpdateUser({
+      type: "ACTIVITY_TYPE_UPDATE_USER",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        userEmail: email,
+        userTagIds: [],
+      },
+    });
+    await this.request("/v1/update-email-auth", {
+      stampedRequest,
+    });
+  };
+
+  /**
    * Handles the creation of authenticators using WebAuthn attestation and the provided options. Requires the user to be authenticated.
    *
    * @param {CredentialCreationOptions} options The options used to create the WebAuthn attestation
@@ -307,6 +363,28 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     );
 
     return authenticatorIds;
+  };
+
+  /**
+   * Removes a passkey authenticator from the user's account.
+   *
+   * @param {string} authenticatorId The ID of the authenticator to remove.
+   * @returns {Promise<void>} A promise that resolves when the authenticator is removed.
+   * @throws {NotAuthenticatedError} If the user is not authenticated.
+   */
+  public removePasskey = async (authenticatorId: string): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    await this.turnkeyClient.deleteAuthenticators({
+      type: "ACTIVITY_TYPE_DELETE_AUTHENTICATORS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        authenticatorIds: [authenticatorId],
+      },
+    });
   };
 
   /**
@@ -361,7 +439,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public addOauthProvider = async (
     params: AddOauthProviderParams,
-  ): Promise<void> => {
+  ): Promise<OauthProviderInfo> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
@@ -375,7 +453,47 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
         oauthProviders: [{ providerName, oidcToken }],
       },
     });
-    await this.request("/v1/add-oauth-provider", { stampedRequest });
+    const response = await this.request("/v1/add-oauth-provider", {
+      stampedRequest,
+    });
+    return response.oauthProviders[0];
+  };
+
+  /**
+   * Deletes a specified OAuth provider for the authenticated user.
+   *
+   * @param {string} providerId The ID of the provider to be deleted
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public removeOauthProvider = async (providerId: string) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const stampedRequest = await this.turnkeyClient.stampDeleteOauthProviders({
+      type: "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        providerIds: [providerId],
+      },
+    });
+    await this.request("/v1/remove-oauth-provider", { stampedRequest });
+  };
+
+  /**
+   * Retrieves the list of authentication methods for the current user.
+   *
+   * @returns {Promise<AuthMethods>} A promise that resolves to the list of authentication methods
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public listAuthMethods = async (): Promise<AuthMethods> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    return await this.request("/v1/list-auth-methods", {
+      suborgId: this.user.orgId,
+    });
   };
 
   /**
@@ -818,7 +936,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       "exportWalletResult",
     );
 
-    const result = await stamper.injectWalletExportBundle(exportBundle);
+    const result = await stamper.injectWalletExportBundle(
+      exportBundle,
+      this.user.orgId,
+    );
 
     if (!result) {
       throw new Error("Failed to inject wallet export bundle");
@@ -848,7 +969,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       "exportWalletAccountResult",
     );
 
-    const result = await stamper.injectKeyExportBundle(exportBundle);
+    const result = await stamper.injectKeyExportBundle(
+      exportBundle,
+      this.user.orgId,
+    );
 
     if (!result) {
       throw new Error("Failed to inject wallet export bundle");
@@ -961,6 +1085,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
             : redirectUrl
           : undefined,
       openerOrigin: mode === "popup" ? window.location.origin : undefined,
+      fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
     };
     const state = base64UrlEncode(
       new TextEncoder().encode(JSON.stringify(stateObject)),

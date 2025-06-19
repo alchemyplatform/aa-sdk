@@ -18,6 +18,7 @@ import type {
   SubmitOtpCodeResponse,
   AuthLinkingPrompt,
   GetWebAuthnAttestationResult,
+  IdTokenOnly,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -54,7 +55,10 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   private iframeStamper: IframeStamper;
   private webauthnStamper: WebauthnStamper;
   oauthCallbackUrl: string;
-  iframeContainerId: string;
+  iframeConfig: {
+    iframeElementId: string;
+    iframeContainerId: string;
+  };
 
   /**
    * Initializes a new instance with the given parameters, setting up the connection, iframe configuration, and WebAuthn stamper.
@@ -96,7 +100,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
 
     this.iframeStamper = iframeStamper;
-    this.iframeContainerId = iframeConfig.iframeContainerId;
+    this.iframeConfig = iframeConfig;
 
     this.webauthnStamper = new WebauthnStamper({
       rpId: rpId ?? window.location.hostname,
@@ -349,7 +353,19 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override disconnect = async () => {
     this.user = undefined;
     this.iframeStamper.clear();
-    await this.iframeStamper.init();
+
+    // In the latest version of the TK iframe stamper, the
+    // IframeStamper instance seems to not be usable after
+    // clearing it, so we need to create a new instance.
+    const stamper = new IframeStamper({
+      iframeContainer: document.getElementById(
+        this.iframeConfig.iframeContainerId,
+      ),
+      iframeElementId: this.iframeConfig.iframeElementId,
+      iframeUrl: "https://auth.turnkey.com",
+    });
+    this.iframeStamper = stamper;
+    await this.initSessionStamper();
   };
 
   /**
@@ -381,7 +397,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithRedirect = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>,
-  ): Promise<never> => {
+  ): Promise<User | IdTokenOnly> => {
     const turnkeyPublicKey = await this.initSessionStamper();
 
     const oauthParams = args;
@@ -425,7 +441,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithPopup = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>,
-  ): Promise<User | AuthLinkingPrompt> => {
+  ): Promise<User | AuthLinkingPrompt | IdTokenOnly> => {
     const turnkeyPublicKey = await this.initSessionStamper();
     const oauthParams = args;
     const providerUrl = await this.getOauthProviderUrl({
@@ -490,6 +506,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
               otpId,
               orgId,
             } satisfies AuthLinkingPrompt);
+            break;
+          case "FETCHED_ID_TOKEN_ONLY":
+            resolve({
+              status,
+              idToken,
+              providerName,
+            } satisfies IdTokenOnly);
             break;
           default:
             reject(new Error(`Unknown status: ${status}`));
@@ -602,14 +625,29 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     return this.request("/v1/prepare-oauth", { nonce });
   };
 
+  private initSessionStamperPromise: Promise<string> | null = null;
+
   protected override async initSessionStamper(): Promise<string> {
-    if (!this.iframeStamper.publicKey()) {
-      await this.iframeStamper.init();
+    if (this.initSessionStamperPromise) {
+      return this.initSessionStamperPromise;
     }
 
-    this.setStamper(this.iframeStamper);
+    this.initSessionStamperPromise = (async () => {
+      if (!this.iframeStamper.publicKey()) {
+        await this.iframeStamper.init();
+      }
 
-    return this.iframeStamper.publicKey()!;
+      this.setStamper(this.iframeStamper);
+
+      return this.iframeStamper.publicKey()!;
+    })();
+
+    try {
+      const result = await this.initSessionStamperPromise;
+      return result;
+    } finally {
+      this.initSessionStamperPromise = null;
+    }
   }
 
   protected override async initWebauthnStamper(

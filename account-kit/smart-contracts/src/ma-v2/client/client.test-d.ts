@@ -3,11 +3,11 @@ import {
   LocalAccountSigner,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { custom } from "viem";
-import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { local070Instance } from "~test/instances.js";
-import { accounts } from "~test/constants.js";
 import { alchemy } from "@account-kit/infra";
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { custom } from "viem";
+import { accounts } from "~test/constants.js";
+import { local070Instance } from "~test/instances.js";
 
 // TODO: Include a snapshot to reset to in afterEach.
 describe("MA v2 Tests: Types", async () => {
@@ -16,6 +16,58 @@ describe("MA v2 Tests: Types", async () => {
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,
   );
+
+  it("webauthn client can be instantiated with alchemy transport", async () => {
+    await createModularAccountV2Client({
+      mode: "webauthn",
+      chain: instance.chain,
+      transport: alchemy({ apiKey: "AN_API_KEY" }),
+      credential: {
+        id: "test-id",
+        publicKey: "0x000",
+      },
+    });
+  });
+
+  it("webauthn client can be instantiated with other transport", async () => {
+    await createModularAccountV2Client({
+      mode: "webauthn",
+      chain: instance.chain,
+      transport: custom(instance.getClient()),
+      credential: {
+        id: "test-id",
+        publicKey: "0x000",
+      },
+    });
+  });
+
+  it("webauthn client cannot be instantied with a signer when using alchemy transport", async () => {
+    // @ts-expect-error // Should not be able to pass a signer
+    await createModularAccountV2Client({
+      mode: "webauthn",
+      chain: instance.chain,
+      signer,
+      transport: alchemy({ apiKey: "AN_API_KEY" }),
+      credential: {
+        id: "test-id",
+        publicKey: "0x000",
+      },
+    });
+  });
+
+  it("webauthn client cannot be instantied with a signer when using other transport", async () => {
+    await createModularAccountV2Client({
+      mode: "webauthn",
+      chain: instance.chain,
+      // @ts-expect-error // Should not be able to pass a signer
+      signer,
+      transport: custom(instance.getClient()),
+      credential: {
+        id: "test-id",
+        publicKey: "0x000",
+      },
+    });
+  });
 
   it("alchemy client instantiated can specify policy id but not for others ", async () => {
     createModularAccountV2Client({
