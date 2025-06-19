@@ -68,6 +68,8 @@ navigation:
                 path: wallets/pages/react/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
+              - page: Connect EOAs
+                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
               - section: Multi-factor authentication
@@ -127,6 +129,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/components/Dialog.mdx
               - section: Authentication
                 contents:
+                  - page: useAddOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
                   - page: useAddPasskey
                     path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
                   - page: useAuthContext
@@ -139,6 +143,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useConnect.mdx
                   - page: useExportAccount
                     path: wallets/pages/reference/account-kit/react/hooks/useExportAccount.mdx
+                  - page: useListAuthMethods
+                    path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
                   - page: useSigner
