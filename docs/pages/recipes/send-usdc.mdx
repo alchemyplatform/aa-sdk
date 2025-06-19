@@ -13,6 +13,7 @@ In this recipe you'll construct an ERC-20 `transfer` call and submit it through 
 1. Account Kit integrated in your app (see the [React quickstart](/wallets/react/quickstart) or [Core quickstart](/wallets/core/quickstart)).
 2. A connected user with an on-chain smart account.
 3. The USDC contract address for your target chain. For Ethereum mainnet this is `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`.
+  - Visit [Circle's documentation](https://developers.circle.com/stablecoins/usdc-contract-addresses) for USDC addresses on other chains.
 
 ## 1. Encode the `transfer` calldata
 
@@ -36,21 +37,37 @@ const transferCalldata = encodeFunctionData({
   <Tab title="React (hook)">
 
 ```tsx
-import { useSmartAccountClient } from "@alchemy/aa-react";
+import {
+  useSmartAccountClient,
+  useSendUserOperation,
+} from "@account-kit/react";
 
 export function SendUsdcButton() {
-  const { data: client } = useSmartAccountClient();
+  const { client } = useSmartAccountClient({
+    type: "ModularAccountV2",
+  });
+
+  const { sendUserOperation, sendUserOperationResult } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+    onSuccess: () => {
+      console.log("USDC transfer successful!");
+    },
+    onError: (error) => {
+      console.error("USDC transfer failed:", error);
+    },
+  });
 
   const handleClick = async () => {
     if (!client) return;
 
-    const txHash = await client.sendTransaction({
-      to: usdcAddress,
-      data: transferCalldata,
-      value: 0n, // no native value for ERC-20 transfers
+    sendUserOperation({
+      uo: {
+        target: usdcAddress,
+        data: transferCalldata,
+        value: 0n, // no native value for ERC-20 transfers
+      },
     });
-
-    console.log("USDC transfer userOp hash:", txHash);
   };
 
   return <button onClick={handleClick}>Send USDC</button>;
@@ -67,11 +84,15 @@ const client = await createSmartAccountClient({
   /* config */
 });
 
-await client.sendTransaction({
-  to: usdcAddress,
-  data: transferCalldata,
-  value: 0n,
+const userOpHash = await client.sendUserOperation({
+  uo: {
+    target: usdcAddress,
+    data: transferCalldata,
+    value: 0n,
+  },
 });
+
+console.log("USDC transfer userOp hash:", userOpHash);
 ```
 
   </Tab>
@@ -79,13 +100,25 @@ await client.sendTransaction({
 
 ## 3. Wait for the transaction to be mined
 
-If you're using the React hooks, you can track confirmation with `useWaitForUserOperationTransaction`:
+If you're using the React hooks with `waitForTxn: true`, the transaction will automatically be waited for. You can access the transaction hash from `sendUserOperationResult`:
+
+```tsx
+const { sendUserOperation, sendUserOperationResult } = useSendUserOperation({
+  client,
+  waitForTxn: true,
+  onSuccess: () => {
+    console.log("Transaction hash:", sendUserOperationResult?.hash);
+  },
+});
+```
+
+Alternatively, you can manually wait for the transaction:
 
 ```ts
-import { useWaitForUserOperationTransaction } from "@alchemy/aa-react";
+import { useWaitForUserOperationTransaction } from "@account-kit/react";
 
 const { waitForUserOp } = useWaitForUserOperationTransaction();
-await waitForUserOp(txHash);
+const receipt = await waitForUserOp(userOpHash);
 ```
 
 ## Next steps
