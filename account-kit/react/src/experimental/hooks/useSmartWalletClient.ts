@@ -3,7 +3,7 @@ import {
   watchSmartWalletClient,
   type GetSmartWalletClientParams,
 } from "@account-kit/core/experimental";
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import type { Address } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
@@ -28,15 +28,14 @@ export function useSmartWalletClient<
     config: wagmiConfig,
   });
 
-  const eoaClient = useMemo(() => {
-    if (!isConnected) return null;
-    console.warn("EOA is connected, will not return an SCA client");
+  useEffect(() => {
+    if (!isConnected) return;
 
-    return undefined;
+    console.warn("EOA is connected, will not return an SCA client");
   }, [isConnected]);
 
-  if (eoaClient) {
-    return eoaClient;
+  if (isConnected) {
+    return undefined;
   }
 
   return result;
