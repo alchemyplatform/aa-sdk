@@ -22,6 +22,7 @@ You can generate a wallet address on both EVM and Solana before a user ever auth
 - and more!
 
 With Alchemy you can do this entirely from your server using the **Signer API** – no UI, hooks, or user interaction required.
+
 **Note:** Smart contract addresses are deterministic. The deployment address is a function of the address of owner/signer address, the account implementation (e.g. latest version of Modular Account), and the salt (optionally specified). If all three of those remain the same, then the smart account will be consistent across chains and for users. We will handle generating a consistent signer address for email.
 
 ## 1. Create the owner signer
