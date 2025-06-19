@@ -15,7 +15,7 @@ runs:
 
     - name: Ensure docs-site submodule is up-to-date
       shell: bash
-      run: git submodule update --init --recursive
+      run: git submodule update --init --remote docs-site/
 
     - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
       shell: bash

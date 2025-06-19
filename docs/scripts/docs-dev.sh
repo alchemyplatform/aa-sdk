@@ -39,7 +39,7 @@ if ! command -v pnpm &> /dev/null; then
 fi
 
 # Update docs-site submodule
-git submodule update --init --recursive
+git submodule update --init --recursive --remote docs-site/
 
 cd "$DOCS_SITE_DIR"
 # Install/update dependencies
