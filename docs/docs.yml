@@ -14,6 +14,17 @@ navigation:
             path: wallets/pages/index.mdx
           - link: Demo
             href: https://demo.alchemy.com/
+        - section: Recipes
+          contents:
+            - page: Overview
+              slug: recipes
+              path: wallets/pages/recipes/overview.mdx
+            - page: Send USDC
+              slug: recipes/send-usdc
+              path: wallets/pages/recipes/send-usdc.mdx
+            - page: Onramp Funds
+              slug: recipes/onramp-funds
+              path: wallets/pages/recipes/onramp-funds.mdx
           - section: Concepts
             contents:
               - page: Intro to Account Kit
@@ -28,21 +39,6 @@ navigation:
                 path: wallets/pages/concepts/smart-account-signer.mdx
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
-
-      - section: Recipes
-        contents:
-          - page: Overview
-            slug: recipes
-            path: wallets/pages/recipes/overview.mdx
-          - section: Guides
-            contents:
-              - page: Send USDC
-                slug: recipes/send-usdc
-                path: wallets/pages/recipes/send-usdc.mdx
-              - page: Onramp Funds
-                slug: recipes/onramp-funds
-                path: wallets/pages/recipes/onramp-funds.mdx
-
       - section: React
         contents:
           - page: Overview
