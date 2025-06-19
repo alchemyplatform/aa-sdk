@@ -1,0 +1,183 @@
+---
+title: Onramp Funds to Embedded Smart Wallets with Coinbase
+description: Step-by-step guide to let users buy crypto with Coinbase Onramp and fund an Alchemy Embedded Smart Wallet.
+slug: wallets/recipes/onramp-funds
+---
+
+# Onramping Funds to Embedded Smart Wallets with Coinbase
+
+This Recipe demonstrates how to integrate the Coinbase Onramp into an app that uses **Alchemy Embedded Smart Wallets**. It uses the [Coinbase Developer Platform](https://docs.cdp.coinbase.com/onramp/docs/api-onramp-initializing) and assumes you've configured your smart wallet integration using `@account-kit/react`.
+
+> **Goal**: Let users seamlessly buy crypto (e.g. ETH) via card and fund their smart wallet directly.
+
+---
+
+## Prerequisites
+
+- Smart wallet integration using [Alchemy Account Kit](https://accountkit.alchemy.com/)
+- Coinbase Developer Platform credentials:
+  - `CDP_API_KEY_ID`
+  - `CDP_API_KEY_SECRET` (EC or Ed25519 private key)
+- A backend capable of securely generating JWTs
+
+---
+
+## Step-by-Step Integration
+
+### 1. Create Coinbase Session JWT
+
+On your backend, generate a [CDP-compliant JWT](https://docs.cdp.coinbase.com/onramp/docs/authentication) using the provided secret key.
+
+```ts
+// lib/coinbase.ts
+import { generateJwt } from "./jwt";
+
+export const coinbaseFetch = async (...args: Parameters<typeof fetch>) => {
+  const [url, options] = args;
+  const parsedUrl = url instanceof Request ? new URL(url.url) : new URL(url);
+
+  const bearer = await generateJwt({
+    requestMethod: options?.method ?? "GET",
+    requestPath: parsedUrl.pathname,
+    requestHost: parsedUrl.host,
+    apiKeyId: process.env.CDP_API_KEY_ID!,
+    apiKeySecret: process.env.CDP_API_KEY_SECRET!,
+  });
+
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      Authorization: `Bearer ${bearer}`,
+    },
+  });
+};
+```
+
+Then expose an endpoint to create a tokenized session:
+
+```ts
+// app/api/on-ramp/session/route.ts
+export async function POST(request: Request) {
+  const { address } = await request.json();
+
+  const session = await coinbaseFetch(
+    "https://api.developer.coinbase.com/onramp/v1/token",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        addresses: [{ address, blockchains: ["ethereum"] }],
+      }),
+    },
+  );
+
+  const { token } = await session.json();
+  return NextResponse.json({ token });
+}
+```
+
+### 2. Trigger Coinbase Onramp in Frontend
+
+Install @coinbase/onchainkit for constructing the onramp URL:
+
+```bash
+npm install @coinbase/onchainkit
+```
+
+Then implement the onramp modal:
+
+```tsx
+// components/on-ramp.tsx
+import React, { useEffect } from "react";
+import { getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
+import { useSmartAccountClient, useUser } from "@account-kit/react";
+
+function OnRampPartnerCard() {
+  const user = useUser();
+  const { client, address } = useSmartAccountClient({});
+  const userId = user?.userId ?? "";
+
+  useEffect(() => {
+    async function redirect() {
+      const response = await fetch("/api/on-ramp/session", {
+        method: "POST",
+        body: JSON.stringify({ address }),
+      });
+
+      const { token } = await response.json();
+
+      window.open(
+        getOnrampBuyUrl({
+          defaultPaymentMethod: "CARD",
+          defaultAsset: "ETH",
+          presetFiatAmount: 0.01,
+          partnerUserId: userId,
+          sessionToken: token,
+        }),
+        "_blank",
+      );
+    }
+
+    redirect();
+  }, [address, userId]);
+}
+```
+
+This opens a Coinbase-hosted onramp UI where the user can complete the transaction.
+
+---
+
+### 3. Track Transaction Status (Optional)
+
+Coinbase provides a transaction status API. You can use this to show a "pending/success/failure" UI post-purchase:
+
+```ts
+// app/api/on-ramp/status/route.ts
+export async function GET(request: NextRequest) {
+  const partnerUserId = request.nextUrl.searchParams.get("partnerUserId");
+
+  const response = await coinbaseFetch(
+    `https://api.developer.coinbase.com/onramp/v1/buy/user/${partnerUserId}/transactions`,
+  );
+
+  const { transactions } = await response.json();
+  return NextResponse.json({ transactions });
+}
+```
+
+Then in your frontend, fetch and display the status:
+
+```tsx
+function PartnerTransactionStatus({
+  partnerUserId,
+}: {
+  partnerUserId: string;
+}) {
+  const txQuery = useQuery({
+    queryKey: ["partner-transaction-status", partnerUserId],
+    queryFn: async () => {
+      const url = new URL("/api/on-ramp/status", window.location.origin);
+      url.searchParams.set("partnerUserId", partnerUserId);
+
+      const res = await fetch(url);
+      return res.json();
+    },
+  });
+
+  const tx = txQuery.data?.transactions[0];
+  return <div>{tx ? tx.status : "Waiting for payment..."}</div>;
+}
+```
+
+## Best Practices
+
+- Always generate Coinbase JWTs server-side using secure keys.
+- Use partnerUserId for tracking user-specific transactions.
+- Default to card + ETH but let users switch networks and assets via the Coinbase modal.
+- If using QR codes, follow EIP-681 format: `ethereum:<address>`
+
+## Resources
+
+- [Coinbase Onramp API](https://docs.cdp.coinbase.com/onramp/docs/api-onramp-initializing)
+- [Alchemy Smart Wallets Quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)
+- [Coinbase Onchainkit](https://www.npmjs.com/package/@coinbase/onchainkit)
