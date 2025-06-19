@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import {
   hexToBytes,
   recoverPublicKey,
+  serializeSignature,
   sha256,
   type Address,
   type Hex,
@@ -71,6 +72,8 @@ const MFA_PAYLOAD = {
   VERIFY: "verify_mfa",
   LIST: "list_mfas",
 } as const;
+
+const withHexPrefix = (hex: string) => `0x${hex}` as const;
 
 /**
  * Base class for all Alchemy Signer clients
@@ -702,23 +705,8 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       // this for us and pass HASH_FUNCTION_NO_OP instead
       const hashed = sha256(new TextEncoder().encode(request));
 
-      // we request authorization to stamp from the user's suborg
-      const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
-        organizationId: this.user.orgId,
-        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-        timestampMs: Date.now().toString(),
-        parameters: {
-          encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-          hashFunction: "HASH_FUNCTION_NO_OP",
-          payload: hashed,
-          signWith: this.user.address,
-        },
-      });
-
-      // submit to alchemy to get the signature
-      const { signature } = await this.request("/v1/sign-payload", {
-        stampedRequest,
-      });
+      // sign through the user's suborg
+      const signature = await this.signRawMessage(hashed, "ETHEREUM");
 
       // recover the public key, we can't just use the address
       const recoveredPublicKey = await recoverPublicKey({
@@ -787,9 +775,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       throw new Error("No sign raw payload result");
     }
 
-    // pack the response info into the expected signature format
-    // mirroring logic in signer service
-    return `0x${signRawPayloadResult.r}${signRawPayloadResult.s}${(parseInt(signRawPayloadResult.v, 16) + 27).toString(16)}`;
+    return serializeSignature({
+      r: withHexPrefix(signRawPayloadResult.r),
+      s: withHexPrefix(signRawPayloadResult.s),
+      yParity: Number(signRawPayloadResult.v), // this is not actually a legacy v value, it's the y parity bit
+    });
   };
 
   /**
@@ -799,7 +789,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * @param {Address[]} additionalMembers members to add, aside from the currently authenticated user
    * @returns {Promise<SignerResponse<"/v1/multi-sig-create">>} created multi-sig
    */
-  public experimental_createMultiSig = async (
+  public experimental_createMultiSig = (
     quorum: number,
     additionalMembers: Address[],
   ) => {

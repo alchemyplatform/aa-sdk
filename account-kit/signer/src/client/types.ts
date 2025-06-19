@@ -273,15 +273,15 @@ export type SignerEndpoints = [
     Body: {
       quorum: number;
       members: {
-        evmSignerAddress: string;
+        evmSignerAddress: Address;
       }[];
     };
     Response: {
       orgId: string;
       quorum: number;
-      evmSignerAddress: string;
+      evmSignerAddress: Address;
       members: {
-        evmSignerAddress: string;
+        evmSignerAddress: Address;
       }[];
     };
   },
@@ -289,7 +289,7 @@ export type SignerEndpoints = [
     Route: "/v1/multi-sig-prepare-add";
     Body: {
       members: {
-        evmSignerAddress: string;
+        evmSignerAddress: Address;
       }[];
     };
     Response: TurnkeyApiTypes["v1CreateUsersIntentV3"];
@@ -301,7 +301,7 @@ export type SignerEndpoints = [
     };
     Response: {
       members: {
-        evmSignerAddress: string;
+        evmSignerAddress: Address;
       }[];
       updateRootQuorumIntent: TurnkeyApiTypes["v1UpdateRootQuorumIntent"];
     };
