@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
 import { Viewport } from "@radix-ui/react-toast";
+
 const publicSans = Public_Sans({
   subsets: ["latin"],
   display: "swap",

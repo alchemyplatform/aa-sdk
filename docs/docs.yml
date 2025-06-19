@@ -92,6 +92,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: Multi-chain apps
                 path: wallets/pages/react/multi-chain-apps.mdx
+              - page: Pregenerate wallets
+                path: wallets/pages/react/pregenerate-wallets.mdx
           - page: Using EIP-7702
             path: wallets/pages/react/using-7702.mdx
           - section: Using Solana wallets
