@@ -20,6 +20,12 @@ export type PredictLightAccountAddressParams = {
   version: keyof LightAccountVersionConfigs["LightAccount"];
 };
 
+/**
+ * Predicts the address of a light account based on provided parameters such as factory address, salt, owner address, and version.
+ *
+ * @param {PredictLightAccountAddressParams} params The parameters required to predict the light account address, including factory address, salt, owner address, and version
+ * @returns {Address} The predicted address of the light account calculated based on the provided parameters
+ */
 export function predictLightAccountAddress({
   factoryAddress,
   salt,
@@ -94,6 +100,20 @@ export type PredictMultiOwnerLightAccountAddressParams = {
 };
 
 // Note: assumes the owner addresses are already deduped, sorted in ascending order, and have the signer address included.
+/**
+ * Predicts the address of a **Multi-Owner Light Account** given the factory, salt
+ * and the set of owner addresses.
+ *
+ * Internally replicates the CREATE2 calculation performed by the factory so
+ * you can obtain the counter-factual account address before deployment (useful
+ * for funding or displaying to users).
+ *
+ * @param {PredictMultiOwnerLightAccountAddressParams} params  Object containing:
+ *  – `factoryAddress` Factory contract that will deploy the account.
+ *  – `salt` Arbitrary salt used when calling the factory.
+ *  – `ownerAddresses` Array of owner EOAs (must be deduped & sorted).
+ * @returns {Address} Predicted account address for the multi-owner light account.
+ */
 export function predictMultiOwnerLightAccountAddress({
   factoryAddress,
   salt,
