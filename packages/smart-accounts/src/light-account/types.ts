@@ -1,5 +1,5 @@
 import { type Address, type Chain } from "viem";
-import type { LightAccountBase } from "./base-account";
+import type { LightAccountBase } from "./accounts/base-account";
 
 export type LightAccountVersionConfigs = {
   LightAccount: {

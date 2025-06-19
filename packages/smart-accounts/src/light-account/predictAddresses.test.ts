@@ -1,26 +1,23 @@
-import {
-  getAccountAddress,
-  getEntryPoint,
-  LocalAccountSigner,
-} from "@aa-sdk/core";
+import { getAccountAddress, getEntryPoint } from "@aa-sdk/core";
 import {
   concatHex,
+  createWalletClient,
   custom,
   encodeFunctionData,
   hexToBigInt,
   publicActions,
   type Address,
 } from "viem";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { local060Instance, local070Instance } from "~test/instances.js";
+import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
+import { createLightAccount } from "./accounts/account.js";
+import { createMultiOwnerLightAccount } from "./accounts/multi-owner-account.js";
 import {
   predictLightAccountAddress,
   predictMultiOwnerLightAccountAddress,
 } from "./predictAddress.js";
-import { local060Instance, local070Instance } from "~test/instances.js";
-import { createLightAccount } from "./account.js";
-import { createMultiOwnerLightAccount } from "./multiOwner.js";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
-import type { LightAccountVersion } from "../types.js";
+import type { LightAccountVersion } from "./types.js";
 
 describe("Light Account Counterfactual Address Tests", () => {
   const instanceV060 = local060Instance;
@@ -36,8 +33,11 @@ describe("Light Account Counterfactual Address Tests", () => {
       // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
       for (let i = 0; i < 20; i++) {
-        const localSigner =
-          LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+        const localSigner = createWalletClient({
+          account: privateKeyToAccount(generatePrivateKey()),
+          transport: custom(instanceV060.getClient()),
+          chain: instanceV060.chain,
+        });
 
         // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
         const salt = BigInt(generatePrivateKey());
@@ -48,9 +48,7 @@ describe("Light Account Counterfactual Address Tests", () => {
         });
 
         const lightAccountV1 = await createLightAccount({
-          transport: custom(instanceV060.getClient()),
-          signer: localSigner,
-          chain,
+          client: localSigner,
           salt,
           version,
         });
@@ -62,11 +60,11 @@ describe("Light Account Counterfactual Address Tests", () => {
           // cannot use lightAccountV1.getInitCode, because it silently replaces salt with 0n for non-replay-safe-1271 account versions.
           getAccountInitCode: async () => {
             return concatHex([
-              await lightAccountV1.getFactoryAddress(),
+              (await lightAccountV1.getFactoryArgs()).factory!,
               encodeFunctionData({
                 abi: LightAccountFactoryAbi_v1,
                 functionName: "createAccount",
-                args: [await localSigner.getAddress(), salt],
+                args: [localSigner.account.address, salt],
               }),
             ]);
           },
@@ -75,9 +73,9 @@ describe("Light Account Counterfactual Address Tests", () => {
         // Then, compute the address using the predictLightAccountAddress function:
 
         const locallyComputedAddress = predictLightAccountAddress({
-          factoryAddress: await lightAccountV1.getFactoryAddress(),
+          factoryAddress: (await lightAccountV1.getFactoryArgs()).factory!,
           salt,
-          ownerAddress: await localSigner.getAddress(),
+          ownerAddress: localSigner.account.address,
           version,
         });
 
@@ -90,8 +88,11 @@ describe("Light Account Counterfactual Address Tests", () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const localSigner =
-        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+      const localSigner = createWalletClient({
+        account: privateKeyToAccount(generatePrivateKey()),
+        transport: custom(instanceV070.getClient()),
+        chain: instanceV070.chain,
+      });
 
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
       const salt = BigInt(generatePrivateKey());
@@ -102,9 +103,7 @@ describe("Light Account Counterfactual Address Tests", () => {
       });
 
       const lightAccountV2 = await createLightAccount({
-        transport: custom(instanceV070.getClient()),
-        signer: localSigner,
-        chain,
+        client: localSigner,
         salt,
         version: "v2.0.0",
       });
@@ -114,14 +113,19 @@ describe("Light Account Counterfactual Address Tests", () => {
         client: instanceV070.getClient().extend(publicActions),
         entryPoint,
         // Can use the lightAccountV2.getInitCode, because it is replay-safe.
-        getAccountInitCode: lightAccountV2.getInitCode,
+        getAccountInitCode: async () => {
+          return concatHex([
+            (await lightAccountV2.getFactoryArgs()).factory!,
+            (await lightAccountV2.getFactoryArgs()).factoryData!,
+          ]);
+        },
       });
 
       // Then, compute the address using the predictLightAccountAddress function:
       const locallyComputedAddress = predictLightAccountAddress({
-        factoryAddress: await lightAccountV2.getFactoryAddress(),
+        factoryAddress: (await lightAccountV2.getFactoryArgs()).factory!,
         salt,
-        ownerAddress: await localSigner.getAddress(),
+        ownerAddress: localSigner.account.address,
         version: "v2.0.0",
       });
 
@@ -133,10 +137,13 @@ describe("Light Account Counterfactual Address Tests", () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const localSigner =
-        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+      const localSigner = createWalletClient({
+        account: privateKeyToAccount(generatePrivateKey()),
+        transport: custom(instanceV070.getClient()),
+        chain: instanceV070.chain,
+      });
 
-      const signerAddress = await localSigner.getAddress();
+      const signerAddress = localSigner.account.address;
 
       // Generate `i` random other owners.
       const otherOwners: Address[] = Array.from(
@@ -153,10 +160,8 @@ describe("Light Account Counterfactual Address Tests", () => {
       });
 
       const multiOwnerLightAccount = await createMultiOwnerLightAccount({
-        transport: custom(instanceV070.getClient()),
-        signer: localSigner,
+        client: localSigner,
         owners: otherOwners,
-        chain,
         salt,
         accountAddress: undefined,
       });
@@ -166,7 +171,12 @@ describe("Light Account Counterfactual Address Tests", () => {
         client: instanceV070.getClient().extend(publicActions),
         entryPoint,
         // Can use the lightAccountV2.getInitCode, because it is replay-safe.
-        getAccountInitCode: multiOwnerLightAccount.getInitCode,
+        getAccountInitCode: async () => {
+          return concatHex([
+            (await multiOwnerLightAccount.getFactoryArgs()).factory!,
+            (await multiOwnerLightAccount.getFactoryArgs()).factoryData!,
+          ]);
+        },
       });
 
       // Then, compute the address using the predictLightAccountAddress function.
@@ -182,7 +192,8 @@ describe("Light Account Counterfactual Address Tests", () => {
         });
 
       const locallyComputedAddress = predictMultiOwnerLightAccountAddress({
-        factoryAddress: await multiOwnerLightAccount.getFactoryAddress(),
+        factoryAddress: (await multiOwnerLightAccount.getFactoryArgs())
+          .factory!,
         salt,
         ownerAddresses: owners_,
       });
