@@ -13,8 +13,11 @@ This Recipe demonstrates how to integrate the Coinbase Onramp into an app that u
 ## Prerequisites
 
 - Smart wallet integration using [Alchemy Account Kit](https://accountkit.alchemy.com/)
-- Coinbase Developer Platform credentials
-  - `CDP_PROJECT_ID` (get it at the [Coinbase Developer Portal](https://portal.cdp.coinbase.com/projects/api-keys))
+- Coinbase Developer Platform project ID
+
+  - `CDP_PROJECT_ID` - create one in the [Coinbase Developer Portal](https://portal.cdp.coinbase.com/projects/api-keys)
+
+- A backend (or serverless function) to keep that project ID secret
 
 ---
 
@@ -263,8 +266,6 @@ export default OnRampPartnerCard;
 
 ### 4. Add to Your App
 
-Install @coinbase/onchainkit for constructing the onramp URL:
-
 ```tsx
 // app/page.tsx
 import OnRampPartnerCard from "./components/on-ramp";
@@ -287,14 +288,24 @@ export default function Home() {
 
 ## Best Practices
 
-- Always generate Coinbase JWTs server-side using secure keys.
-- Use partnerUserId for tracking user-specific transactions.
-- Default to card + ETH but let users switch networks and assets via the Coinbase modal.
-- If using QR codes, follow EIP-681 format: `ethereum:<address>`
+- Keep `CDP_PROJECT_ID` in environment variables and **never** expose it client-side.  
+  _Example_:
+
+  ```bash
+  # .env.local
+  CDP_PROJECT_ID=your_project_id
+  ```
+
+- Let users change networks/assets in the Coinbase modal (default here is card ➜ ETH).
+- For user-level analytics you can pass `partnerUserId` when generating the onramp URL.
 
 ## Success!
 
-Users can now click a "Buy Crypto" button in your app, complete their purchase in a popup window, and automatically return to your app with success confirmation. The crypto is sent directly to their smart wallet address.
+Users can now click “Buy Crypto”, complete their purchase in a popup, and immediately spend the ETH that lands in their smart wallet.
+
+## Next Steps
+
+- **Sponsor their first transaction** – set up [Gas Manager](/wallets/react/sponsor-gas) so new users don’t pay gas.
 
 ## Resources
 
