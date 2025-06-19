@@ -9,6 +9,7 @@ import {
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
+  type SmartContractAccount,
 } from "@aa-sdk/core";
 import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
@@ -27,6 +28,8 @@ import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
 import { nativeSMASigner } from "../nativeSMASigner.js";
 import { singleSignerMessageSigner } from "../../modules/single-signer-validation/signer.js";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
+import { webauthnSigningFunctions } from "../../modules/webauthn-validation/signingMethods.js";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
 
@@ -70,8 +73,23 @@ export type ModularAccountV2<
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
 
+export type WebauthnModularAccountV2 = SmartContractAccount<
+  "ModularAccountV2",
+  "0.7.0"
+> & {
+  params: ToWebAuthnAccountParameters;
+  signerEntity: SignerEntity;
+  getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
+  getValidationData: (
+    args: ValidationDataParams,
+  ) => Promise<ValidationDataView>;
+  encodeCallData: (callData: Hex) => Promise<Hex>;
+};
+
 export type CreateMAV2BaseParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
   TTransport extends Transport = Transport,
 > = Omit<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
@@ -91,17 +109,36 @@ export type CreateMAV2BaseParams<
   deferredAction?: Hex;
 };
 
+export type CreateWebauthnMAV2BaseParams = Omit<
+  CreateMAV2BaseParams,
+  "signer"
+> & {
+  credential: ToWebAuthnAccountParameters["credential"];
+  getFn?: ToWebAuthnAccountParameters["getFn"] | undefined;
+  rpId?: ToWebAuthnAccountParameters["rpId"] | undefined;
+};
+
 export type CreateMAV2BaseReturnType<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Promise<ModularAccountV2<TSigner>>;
 
+// function overload
+export async function createMAv2Base(
+  config: CreateWebauthnMAV2BaseParams,
+): Promise<WebauthnModularAccountV2>;
+
 export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
->(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
+>(config: CreateMAV2BaseParams): CreateMAV2BaseReturnType<TSigner>;
+
+export async function createMAv2Base<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+>(
+  config: CreateMAV2BaseParams<TSigner> | CreateWebauthnMAV2BaseParams,
+): Promise<WebauthnModularAccountV2 | ModularAccountV2<TSigner>> {
   let {
     transport,
     chain,
-    signer,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     signerEntity = {
       isGlobalValidation: true,
@@ -115,6 +152,11 @@ export async function createMAv2Base<
     deferredAction,
     ...remainingToSmartContractAccountParams
   } = config;
+
+  const signer = "signer" in config ? config.signer : undefined;
+  const credential = "credential" in config ? config.credential : undefined;
+  const getFn = "getFn" in config ? config.getFn : undefined;
+  const rpId = "rpId" in config ? config.rpId : undefined;
 
   if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
@@ -275,16 +317,37 @@ export async function createMAv2Base<
     encodeExecute,
     encodeBatchExecute,
     getNonce,
-    ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
-      : singleSignerMessageSigner(
-          signer,
+    ...(signer
+      ? entityId === DEFAULT_OWNER_ENTITY_ID
+        ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
+        : singleSignerMessageSigner(
+            signer,
+            chain,
+            accountAddress,
+            entityId,
+            deferredActionData,
+          )
+      : webauthnSigningFunctions(
+          // credential required for webauthn mode is checked at modularAccountV2 creation level
+          credential!,
+          getFn,
+          rpId,
           chain,
           accountAddress,
           entityId,
           deferredActionData,
         )),
   });
+
+  if (!signer) {
+    return {
+      ...baseAccount,
+      signerEntity,
+      getExecutionData,
+      getValidationData,
+      encodeCallData,
+    } as WebauthnModularAccountV2; // TO DO: figure out when this breaks! we shouldn't have to cast
+  }
 
   return {
     ...baseAccount,
@@ -293,5 +356,5 @@ export async function createMAv2Base<
     getExecutionData,
     getValidationData,
     encodeCallData,
-  };
+  } as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
 }
