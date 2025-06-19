@@ -3,6 +3,10 @@
 instances:
   - url: https://alchemy.com/docs
 
+experimental:
+  mdx-components:
+    - wallets/components
+
 navigation:
   - tab: wallets
     layout:
@@ -64,6 +68,8 @@ navigation:
                 path: wallets/pages/react/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
+              - page: Connect EOAs
+                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
               - section: Multi-factor authentication
@@ -90,6 +96,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: Multi-chain apps
                 path: wallets/pages/react/multi-chain-apps.mdx
+              - page: Pregenerate wallets
+                path: wallets/pages/react/pregenerate-wallets.mdx
           - page: Using EIP-7702
             path: wallets/pages/react/using-7702.mdx
           - section: Using Solana wallets
@@ -832,7 +840,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
 
-      - section: Account Abstraction Core
+      - section: aa-sdk/core
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/core/index.mdx
@@ -1042,7 +1050,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
-      - section: Account Abstraction Ethers
+      - section: aa-sdk/ethers
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/ethers/index.mdx
