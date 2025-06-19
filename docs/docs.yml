@@ -513,6 +513,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
+                      - page: submitJwt
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitJwt.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
