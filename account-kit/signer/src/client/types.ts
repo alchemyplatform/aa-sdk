@@ -1,5 +1,9 @@
 import type { Address } from "@aa-sdk/core";
-import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
+import type {
+  TSignedRequest,
+  TurnkeyApiTypes,
+  getWebAuthnAttestation,
+} from "@turnkey/http";
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
@@ -262,6 +266,44 @@ export type SignerEndpoints = [
         credentialBundle?: string;
       };
       multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/multi-sig-create";
+    Body: {
+      quorum: number;
+      members: {
+        evmSignerAddress: string;
+      }[];
+    };
+    Response: {
+      orgId: string;
+      quorum: number;
+      evmSignerAddress: string;
+      members: {
+        evmSignerAddress: string;
+      }[];
+    };
+  },
+  {
+    Route: "/v1/multi-sig-prepare-add";
+    Body: {
+      members: {
+        evmSignerAddress: string;
+      }[];
+    };
+    Response: TurnkeyApiTypes["v1CreateUsersIntentV3"];
+  },
+  {
+    Route: "/v1/multi-sig-add";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      members: {
+        evmSignerAddress: string;
+      }[];
+      updateRootQuorumIntent: TurnkeyApiTypes["v1UpdateRootQuorumIntent"];
     };
   },
 ];
