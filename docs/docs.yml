@@ -3,6 +3,10 @@
 instances:
   - url: https://alchemy.com/docs
 
+experimental:
+  mdx-components:
+    - wallets/components
+
 navigation:
   - tab: wallets
     layout:

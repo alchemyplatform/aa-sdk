@@ -67,6 +67,28 @@ awk '
     }
 ' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
 
+# Extract the experimental section from aa-sdk version of docs.yml
+sed -n '/^experimental:/,/^[a-z]/p' fern/wallets/docs.yml | sed '$d' > fern/wallets/temp_experimental.yml
+
+# Find the experimental section and append additional settings
+awk '
+    BEGIN { found = 0; }
+    /^experimental:/ {
+        found = 1;
+        print;
+        next;
+    }
+    found && (/^[a-z]/ || /^$/) {
+        # We found either the next section or an empty line, insert new settings before it
+        system("cat fern/wallets/temp_experimental.yml | grep -v ^experimental:");
+        found = 0;
+        print;
+        next;
+    }
+    { print; }
+' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
+
 # Clean up temporary files
 rm -f fern/wallets/temp_wallets.yml
+rm -f fern/wallets/temp_experimental.yml
 rm -f fern/docs.yml.bak
