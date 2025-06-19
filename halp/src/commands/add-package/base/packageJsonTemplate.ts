@@ -36,7 +36,7 @@ export function packageJsonTemplate(packageName: string, description: string) {
       "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
       "build:types":
         "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-      "fern:gen": `node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/${packageName} --fern`,
+      "fern:gen": `node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/${packageName}`,
       clean: "rm -rf ./dist",
       test: "vitest",
       "test:run": "vitest run",
