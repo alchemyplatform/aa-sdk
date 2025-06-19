@@ -1,60 +1,62 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
   encodeFunctionData,
   type Address,
   type Chain,
+  type Client,
   type Hex,
-  type PublicClient,
+  type JsonRpcAccount,
+  type LocalAccount,
   type Transport,
 } from "viem";
 import { readContract } from "viem/actions";
 import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js";
 import { MultiOwnerLightAccountFactoryAbi } from "../abis/MultiOwnerLightAccountFactoryAbi.js";
+import { predictMultiOwnerLightAccountAddress } from "../predictAddress.js";
 import { getDefaultMultiOwnerLightAccountFactoryAddress } from "../utils.js";
-import { predictMultiOwnerLightAccountAddress } from "./predictAddress.js";
 import {
-  createViemLightAccountBase,
-  type ViemLightAccountBase,
-} from "./viem-base.js";
+  createLightAccountBase,
+  type LightAccountBase,
+} from "./base-account.js";
 
-export type ViemMultiOwnerLightAccount<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-> = ViemLightAccountBase<TSigner, "MultiOwnerLightAccount", "v2.0.0"> & {
-  encodeAddOwner: (ownerToAdd: Address) => Hex;
-  encodeRemoveOwner: (ownerToRemove: Address) => Hex;
+export type MultiOwnerLightAccount = LightAccountBase<
+  "MultiOwnerLightAccount",
+  "v2.0.0"
+> & {
+  encodeUpdateOwners: (
+    ownersToAdd: Address[],
+    ownersToRemove: Address[],
+  ) => Hex;
   getOwnerAddresses: () => Promise<readonly Address[]>;
 };
 
-export type CreateViemMultiOwnerLightAccountParams<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-> = {
-  client: PublicClient<TTransport, Chain>;
-  signer: TSigner;
-  owners: Address[];
+export type CreateMultiOwnerLightAccountParams = {
+  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount>;
+  owners?: Address[];
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
 };
 
-export async function createViemMultiOwnerLightAccount<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
->({
+/**
+ * Creates a multi-owner light account.
+ *
+ * @param {CreateMultiOwnerLightAccountParams} param0 - The parameters for creating a multi-owner light account.
+ * @returns {Promise<MultiOwnerLightAccount<TSigner>>} A multi-owner light account.
+ */
+export async function createMultiOwnerLightAccount({
   client,
-  signer,
   owners,
   salt = 0n,
   accountAddress,
   factoryAddress,
-}: CreateViemMultiOwnerLightAccountParams<TTransport, TSigner>): Promise<
-  ViemMultiOwnerLightAccount<TSigner>
-> {
-  const signerAddress = await signer.getAddress();
+}: CreateMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
+  const signerAddress = client.account.address;
 
   // Deduplicate and sort owners
   const deduplicatedOwners = Array.from(
-    new Set([signerAddress, ...owners].map((owner) => owner.toLowerCase())),
+    new Set(
+      [signerAddress, ...(owners ?? [])].map((owner) => owner.toLowerCase()),
+    ),
   ) as Address[];
 
   const sortedOwners = deduplicatedOwners.sort((a, b) => {
@@ -88,10 +90,9 @@ export async function createViemMultiOwnerLightAccount<
     };
   };
 
-  const baseAccount = await createViemLightAccountBase({
+  const baseAccount = await createLightAccountBase({
     client,
     abi: MultiOwnerLightAccountAbi,
-    signer,
     accountAddress: address,
     type: "MultiOwnerLightAccount",
     version: "v2.0.0",
@@ -101,19 +102,11 @@ export async function createViemMultiOwnerLightAccount<
   return {
     ...baseAccount,
 
-    encodeAddOwner: (ownerToAdd: Address) => {
+    encodeUpdateOwners: (ownersToAdd: Address[], ownersToRemove: Address[]) => {
       return encodeFunctionData({
         abi: MultiOwnerLightAccountAbi,
         functionName: "updateOwners",
-        args: [[ownerToAdd], []],
-      });
-    },
-
-    encodeRemoveOwner: (ownerToRemove: Address) => {
-      return encodeFunctionData({
-        abi: MultiOwnerLightAccountAbi,
-        functionName: "updateOwners",
-        args: [[], [ownerToRemove]],
+        args: [ownersToAdd, ownersToRemove],
       });
     },
 
@@ -126,6 +119,10 @@ export async function createViemMultiOwnerLightAccount<
 
       if (callResult == null) {
         throw new Error("could not get on-chain owners");
+      }
+
+      if (!callResult.includes(client.account.address)) {
+        throw new Error("on-chain owners does not include the current signer");
       }
 
       return callResult as readonly Address[];

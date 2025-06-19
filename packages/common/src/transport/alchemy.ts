@@ -81,7 +81,7 @@ export type AlchemyTransport<
  */
 export function isAlchemyTransport(
   transport: Transport,
-  chain: Chain,
+  chain: Chain
 ): transport is AlchemyTransport {
   return transport({ chain }).config.type === "alchemy";
 }
@@ -201,7 +201,7 @@ export function alchemy<
       if (!connectionConfig.proxyUrl && chain.rpcUrls.alchemy === null) {
         // TODO(v5): update this error message to be the correct package name
         throw new Error(
-          "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`.",
+          "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`."
         );
       }
 
@@ -297,14 +297,14 @@ export function alchemy<
               error: new ServerError(
                 await response.text(),
                 response.status,
-                new Error(response.statusText),
+                new Error(response.statusText)
               ) satisfies BaseError,
             };
           }
 
           return { result: await response.json() };
         },
-      },
+      }
     );
   };
 
@@ -321,7 +321,7 @@ export function alchemy<
 }
 
 export const convertHeadersToObject = (
-  headers?: HeadersInit,
+  headers?: HeadersInit
 ): Record<string, string> => {
   if (!headers) {
     return {};
@@ -341,7 +341,7 @@ export const convertHeadersToObject = (
         acc[header[0]] = header[1];
         return acc;
       },
-      {} as Record<string, string>,
+      {} as Record<string, string>
     );
   }
 

@@ -1,4 +1,4 @@
-import { type EntryPointVersion, type SmartAccountSigner } from "@aa-sdk/core";
+import type { SignatureRequest } from "@aa-sdk/core";
 import {
   concat,
   encodeFunctionData,
@@ -9,9 +9,10 @@ import {
   type Abi,
   type Address,
   type Chain,
+  type Client,
   type Hex,
-  type PublicClient,
-  type SignableMessage,
+  type JsonRpcAccount,
+  type LocalAccount,
   type Transport,
   type TypedDataDefinition,
 } from "viem";
@@ -23,7 +24,7 @@ import {
   type SmartAccount,
   type SmartAccountImplementation,
 } from "viem/account-abstraction";
-import { getStorageAt } from "viem/actions";
+import { getStorageAt, signMessage, signTypedData } from "viem/actions";
 import type {
   LightAccountEntryPointVersion,
   LightAccountType,
@@ -38,57 +39,45 @@ enum SignatureType {
 }
 
 export type BaseLightAccountImplementation<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountType extends LightAccountType = LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
 > = SmartAccountImplementation<
-  ["0.6.0"] extends LightAccountEntryPointVersion<
+  ["0.6"] extends LightAccountEntryPointVersion<
     TLightAccountType,
     TLightAccountVersion
   >
     ? typeof entryPoint06Abi
     : typeof entryPoint07Abi,
-  LightAccountEntryPointVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  > extends "0.6.0"
-    ? "0.6"
-    : "0.7",
+  LightAccountEntryPointVersion<TLightAccountType, TLightAccountVersion>,
   {
     getLightAccountVersion: () => TLightAccountVersion;
-    getSigner: () => TSigner;
     source: TLightAccountType;
     encodeUpgradeToAndCall: (params: {
       upgradeToAddress: Address;
       upgradeToInitData: Hex;
     }) => Promise<Hex>;
+    prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
+    formatSignature: (signature: Hex) => Promise<Hex>;
   },
   false
 >;
 
-export type ViemLightAccountBase<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+export type LightAccountBase<
   TLightAccountType extends LightAccountType = LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
 > = SmartAccount<
-  BaseLightAccountImplementation<
-    TSigner,
-    TLightAccountType,
-    TLightAccountVersion
-  >
+  BaseLightAccountImplementation<TLightAccountType, TLightAccountVersion>
 >;
 
-export type CreateViemLightAccountBaseParams<
+export type CreateLightAccountBaseParams<
   TLightAccountType extends LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = {
-  client: PublicClient<TTransport, Chain>;
-  signer: TSigner;
+  client: Client<TTransport, Chain, JsonRpcAccount | LocalAccount>;
   abi: Abi;
   accountAddress: Address;
   type: TLightAccountType;
@@ -99,28 +88,23 @@ export type CreateViemLightAccountBaseParams<
   }>;
 };
 
-export async function createViemLightAccountBase<
+export async function createLightAccountBase<
   TLightAccountType extends LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >({
   client,
-  signer,
   abi,
   version,
   type,
   accountAddress,
   getFactoryArgs,
-}: CreateViemLightAccountBaseParams<
+}: CreateLightAccountBaseParams<
   TLightAccountType,
   TLightAccountVersion,
-  TTransport,
-  TSigner
->): Promise<
-  ViemLightAccountBase<TSigner, TLightAccountType, TLightAccountVersion>
-> {
+  TTransport
+>): Promise<LightAccountBase<TLightAccountType, TLightAccountVersion>> {
   const encodeUpgradeToAndCall = async ({
     upgradeToAddress,
     upgradeToInitData,
@@ -187,57 +171,58 @@ export async function createViemLightAccountBase<
   };
 
   const prepareSignature = async (
-    message: SignableMessage | TypedDataDefinition,
-    isTypedData: boolean = false,
-  ): Promise<{
-    shouldWrap: boolean;
-    data: SignableMessage | TypedDataDefinition;
-  }> => {
-    const messageHash = isTypedData
-      ? hashTypedData(message as TypedDataDefinition)
-      : hashMessage(message as SignableMessage);
+    params: SignatureRequest,
+  ): Promise<SignatureRequest> => {
+    const messageHash =
+      params.type === "eth_signTypedData_v4"
+        ? hashTypedData(params.data)
+        : hashMessage(params.data);
 
     switch (version) {
       case "v1.0.1":
-        return { shouldWrap: false, data: message };
+        return params;
       case "v1.0.2":
         throw new Error(
           `Version ${String(version)} of LightAccount doesn't support 1271`,
         );
       case "v1.1.0":
-        return { shouldWrap: true, data: get1271Wrapper(messageHash, "1") };
+        return {
+          type: "eth_signTypedData_v4",
+          data: get1271Wrapper(messageHash, "1"),
+        };
       case "v2.0.0":
-        return { shouldWrap: true, data: get1271Wrapper(messageHash, "2") };
+        return {
+          type: "eth_signTypedData_v4",
+          data: get1271Wrapper(messageHash, "2"),
+        };
       default:
         throw new Error(`Unknown version ${String(version)} of LightAccount`);
     }
   };
 
-  const formatSignature = (signature: Hex): Hex => {
+  const formatSignature = async (signature: Hex): Promise<Hex> => {
     return version === "v2.0.0"
       ? concat([SignatureType.EOA, signature])
       : signature;
   };
 
-  const entryPointVersion: EntryPointVersion = (
-    AccountVersionRegistry[type][version] as any
-  ).entryPointVersion;
+  const entryPointVersion = (AccountVersionRegistry[type][version] as any)
+    .entryPointVersion;
 
   const entryPoint = {
-    abi: entryPointVersion === "0.6.0" ? entryPoint06Abi : entryPoint07Abi,
+    abi: entryPointVersion === "0.6" ? entryPoint06Abi : entryPoint07Abi,
     address:
-      entryPointVersion === "0.6.0"
+      // TODO(v5): make these constants elsewhere
+      entryPointVersion === "0.6"
         ? ("0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address)
         : ("0x0000000071727De22E5E9d8BAf0edAc6f37da032" as Address),
-    version:
-      entryPointVersion === "0.6.0" ? ("0.6" as const) : ("0.7" as const),
+    version: entryPointVersion === "0.6" ? ("0.6" as const) : ("0.7" as const),
   };
 
   return await toSmartAccount({
     getFactoryArgs,
     client,
     entryPoint: entryPoint as BaseLightAccountImplementation<
-      TSigner,
       TLightAccountType,
       TLightAccountVersion
     >["entryPoint"],
@@ -290,24 +275,29 @@ export async function createViemLightAccountBase<
     },
 
     async signMessage({ message }) {
-      const { shouldWrap, data } = await prepareSignature(message, false);
+      const { type, data } = await prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
 
-      const sig = shouldWrap
-        ? await signer.signTypedData(data as TypedDataDefinition)
-        : await signer.signMessage(message);
+      const sig =
+        type === "eth_signTypedData_v4"
+          ? await signTypedData(client, data)
+          : await signMessage(client, { message });
 
       return formatSignature(sig);
     },
 
     async signTypedData(params) {
-      const { shouldWrap, data } = await prepareSignature(
-        params as TypedDataDefinition,
-        true,
-      );
+      const { type, data } = await prepareSignature({
+        type: "eth_signTypedData_v4",
+        data: params as TypedDataDefinition,
+      });
 
-      const sig = shouldWrap
-        ? await signer.signTypedData(data as TypedDataDefinition)
-        : await signer.signTypedData(params);
+      const sig =
+        type === "eth_signTypedData_v4"
+          ? await signTypedData(client, data)
+          : await signMessage(client, { message: data });
 
       return formatSignature(sig);
     },
@@ -324,22 +314,22 @@ export async function createViemLightAccountBase<
         },
       });
 
-      const signature = await signer.signMessage({ raw: userOpHash });
+      const signature = await signMessage(client, {
+        message: { raw: userOpHash },
+      });
 
-      switch (version) {
-        case "v2.0.0":
-          return concat([SignatureType.EOA, signature]);
-        default:
-          return signature;
-      }
+      return version === "v2.0.0"
+        ? concat([SignatureType.EOA, signature])
+        : signature;
     },
 
     // Extension properties
     extend: {
       source: type,
       getLightAccountVersion: () => version,
-      getSigner: () => signer,
       encodeUpgradeToAndCall,
+      prepareSignature,
+      formatSignature,
     },
   });
 }

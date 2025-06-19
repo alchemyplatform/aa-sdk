@@ -1,68 +1,67 @@
-import { type SmartAccountSigner } from "@aa-sdk/core";
 import {
   encodeFunctionData,
   type Address,
   type Chain,
+  type Client,
   type Hex,
-  type PublicClient,
+  type JsonRpcAccount,
+  type LocalAccount,
   type Transport,
 } from "viem";
 import { readContract } from "viem/actions";
-import { LightAccountAbi_v1 } from "./abis/LightAccountAbi_v1.js";
-import { LightAccountAbi_v2 } from "./abis/LightAccountAbi_v2.js";
-import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
-import { LightAccountFactoryAbi_v2 } from "./abis/LightAccountFactoryAbi_v2.js";
-import {
-  createLightAccountBase,
-  type LightAccountBase,
-} from "./base-account.js";
-import { predictLightAccountAddress } from "./predictAddress.js";
-import type { LightAccountVersion } from "./types.js";
+import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
+import { LightAccountAbi_v2 } from "../abis/LightAccountAbi_v2.js";
+import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
+import { LightAccountFactoryAbi_v2 } from "../abis/LightAccountFactoryAbi_v2.js";
+import { predictLightAccountAddress } from "../predictAddress.js";
+import type { LightAccountVersion } from "../types.js";
 import {
   LightAccountUnsupported1271Factories,
   defaultLightAccountVersion,
   getDefaultLightAccountFactoryAddress,
-} from "./utils.js";
+} from "../utils.js";
+import {
+  createLightAccountBase,
+  type LightAccountBase,
+} from "./base-account.js";
 
 export type LightAccount<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
-> = LightAccountBase<TSigner, "LightAccount", TLightAccountVersion> & {
+> = LightAccountBase<"LightAccount", TLightAccountVersion> & {
   encodeTransferOwnership: (newOwner: Address) => Hex;
   getOwnerAddress: () => Promise<Address>;
 };
 
 export type CreateLightAccountParams<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
 > = {
-  client: PublicClient<TTransport, Chain>;
-  signer: TSigner;
+  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount>;
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
   version?: TLightAccountVersion;
 };
 
+/**
+ * Creates a light account.
+ *
+ * @param {CreateLightAccountParams} param0 - The parameters for creating a light account.
+ * @returns {Promise<LightAccount<TSigner, TLightAccountVersion>>} A light account.
+ */
 export async function createLightAccount<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = "v2.0.0",
+  TLightAccountVersion extends
+    LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
 >({
   client,
-  signer,
   salt: salt_ = 0n,
   accountAddress,
   factoryAddress,
   version = defaultLightAccountVersion() as TLightAccountVersion,
-}: CreateLightAccountParams<
-  TTransport,
-  TSigner,
-  TLightAccountVersion
->): Promise<LightAccount<TSigner, TLightAccountVersion>> {
+}: CreateLightAccountParams<TLightAccountVersion>): Promise<
+  LightAccount<TLightAccountVersion>
+> {
   const accountAbi =
     version === "v2.0.0" ? LightAccountAbi_v2 : LightAccountAbi_v1;
   const factoryAbi =
@@ -70,13 +69,13 @@ export async function createLightAccount<
       ? LightAccountFactoryAbi_v2
       : LightAccountFactoryAbi_v1;
 
-  const signerAddress = await signer.getAddress();
+  const signerAddress = client.account.address;
   const finalFactoryAddress =
     factoryAddress ??
     getDefaultLightAccountFactoryAddress(client.chain, version);
 
   const salt = LightAccountUnsupported1271Factories.has(
-    finalFactoryAddress.toLowerCase() as Address
+    finalFactoryAddress.toLowerCase() as Address,
   )
     ? 0n
     : salt_;
@@ -106,7 +105,6 @@ export async function createLightAccount<
   const baseAccount = await createLightAccountBase({
     client,
     abi: accountAbi,
-    signer,
     accountAddress: address,
     type: "LightAccount",
     version,
