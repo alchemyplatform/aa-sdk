@@ -38,6 +38,9 @@ navigation:
           - page: Send USDC
             slug: send-usdc
             path: wallets/pages/recipes/send-usdc.mdx
+          - page: Onramp Funds
+            slug: onramp-funds
+            path: wallets/pages/recipes/onramp-funds.mdx
 
       - section: React
         contents:
