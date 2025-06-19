@@ -97,6 +97,9 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new SignerNotConnectedError();
   }
   const smartWalletClient = getSmartWalletClient(config);
+  if (!smartWalletClient) {
+    throw new Error("Smart wallet client not found");
+  }
 
   const cachedAccount = accounts[chain.id]?.[params.type];
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
