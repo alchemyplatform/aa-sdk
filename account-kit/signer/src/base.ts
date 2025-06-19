@@ -318,6 +318,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return this.handleOauthReturn(params);
           case "otp":
             return this.authenticateWithOtp(params);
+          case "custom-jwt":
+            return this.authenticateWithJwt(params);
           default:
             assertNever(type, `Unknown auth type: ${type}`);
         }
@@ -361,6 +363,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           name: "signer_authnticate",
           data: {
             authType: isAnon ? "passkey_anon" : "passkey_email",
+          },
+        });
+        return;
+      }
+      case "custom-jwt": {
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: {
+            authType: "custom-jwt",
+            provider: params.authProviderId,
           },
         });
         return;
@@ -1101,6 +1113,26 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.inner.listAuthMethods();
   };
 
+  private authenticateWithJwt = async (
+    args: Extract<AuthParams, { type: "custom-jwt" }>,
+  ): Promise<User> => {
+    const { credentialBundle, orgId, isSignUp } = await this.inner.submitJwt({
+      jwt: args.jwt,
+      authProvider: args.authProviderId,
+      expirationSeconds: this.getExpirationSeconds(),
+    });
+
+    const user = await this.inner.completeAuthWithBundle({
+      bundle: credentialBundle,
+      orgId: orgId,
+      connectedEventName: "connectedJwt",
+      authenticatingType: "custom-jwt",
+    });
+
+    this.emitNewUserEvent(isSignUp);
+    return user;
+  };
+
   private authenticateWithOtp = async (
     args: Extract<AuthParams, { type: "otp" }>,
   ): Promise<User> => {
@@ -1265,6 +1297,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           case "otp":
           case "otpVerify":
             return AlchemySignerStatus.AWAITING_OTP_AUTH;
+          case "custom-jwt":
+            return AlchemySignerStatus.AUTHENTICATING_JWT;
           default:
             assertNever(type, "unhandled authenticating type");
         }

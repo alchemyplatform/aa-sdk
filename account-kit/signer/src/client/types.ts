@@ -82,6 +82,19 @@ export type OtpResponse =
       multiFactors: MfaFactor[];
     };
 
+export type JwtParams = {
+  jwt: string;
+  targetPublicKey: string;
+  authProvider: string;
+  expirationSeconds?: number;
+};
+
+export type JwtResponse = {
+  isSignUp: boolean;
+  orgId: string;
+  credentialBundle: string;
+};
+
 export type SignupResponse = {
   orgId: string;
   userId?: string;
@@ -247,6 +260,11 @@ export type SignerEndpoints = [
     };
   },
   {
+    Route: "/v1/auth-jwt";
+    Body: JwtParams;
+    Response: JwtResponse;
+  },
+  {
     Route: "/v1/signer-config";
     Body: {};
     Response: SignerConfig;
@@ -267,7 +285,7 @@ export type SignerEndpoints = [
 ];
 
 export type AuthenticatingEventMetadata = {
-  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify";
+  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify" | "custom-jwt";
 };
 
 export type AlchemySignerClientEvents = {
@@ -278,6 +296,7 @@ export type AlchemySignerClientEvents = {
   connectedPasskey(user: User): void;
   connectedOauth(user: User, bundle: string): void;
   connectedOtp(user: User, bundle: string): void;
+  connectedJwt(user: User, bundle: string): void;
   disconnected(): void;
 };
 
