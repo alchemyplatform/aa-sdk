@@ -12,7 +12,7 @@ import type { AlchemyAccountsConfig } from "../../types.js";
 
 export type GetSmartWalletClientResult<
   TAccount extends Address | undefined = Address | undefined,
-> = SmartWalletClient<TAccount>;
+> = SmartWalletClient<TAccount> | undefined;
 
 export type GetSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -29,6 +29,10 @@ export function getSmartWalletClient(
   config: AlchemyAccountsConfig,
   params?: GetSmartWalletClientParams,
 ): GetSmartWalletClientResult {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
   const connection = getConnection(config);
   const signerStatus = getSignerStatus(config);
   const transport = getAlchemyTransport(config);
