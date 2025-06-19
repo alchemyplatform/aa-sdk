@@ -71,7 +71,7 @@ export const config = createConfig(
 
 In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config. You create a `WalletConnect` id [here](https://cloud.reown.com/sign-in).
 
-```ts twoslash [src/config.ts]
+```ts twoslash
 // @noErrors
 [
   {
@@ -116,11 +116,12 @@ return (
 For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core` to bring in these EOAs as your smart wallet owner. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
 By making your EOA an owner of a smart account, you will have access to AA feature through your new smart wallet.
 
-```ts
+```ts twoslash
 // @noErrors
 import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
+import { createModularAccountV2 } from "@account-kit/smart-contracts";
 
 const externalProvider = window.ethereum; // or another EIP-1193 provider
 
@@ -133,4 +134,12 @@ export const signer: SmartAccountSigner = new WalletClientSigner(
   walletClient,
   "json-rpc",
 );
+
+// Connect your signer to your smart account
+
+const account = await createModularAccountV2({
+  chain: sepolia,
+  transport: alchemyTransport,
+  signer: signer, // your EOA that you've brought in as an owner
+});
 ```
