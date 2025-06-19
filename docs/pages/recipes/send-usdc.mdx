@@ -44,9 +44,7 @@ import {
 } from "@account-kit/react";
 
 export function SendUsdcButton() {
-  const { client } = useSmartAccountClient({
-    type: "ModularAccountV2",
-  });
+  const { client } = useSmartAccountClient({});
 
   const { sendUserOperation, sendUserOperationResult } = useSendUserOperation({
     client,
@@ -125,5 +123,5 @@ const receipt = await waitForUserOp(userOpHash);
 ## Next steps
 
 - Parameterize the token address/decimals to support any ERC-20.
-- Batch multiple transfers in **one** user operation (e.g. payroll or airdrop).
+- Batch multiple user operations in **one** request (e.g. aprrove, transfer, etc).
 - Combine with [sponsored gas](/wallets/react/sponsor-gas) for a completely gas-less UX.
