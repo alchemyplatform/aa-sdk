@@ -1,17 +1,17 @@
 import {
   encodeAbiParameters,
   encodeDeployData,
-  keccak256,
+  encodeFunctionData,
   getContractAddress,
+  keccak256,
+  toHex,
   type Address,
   type Hex,
-  toHex,
-  encodeFunctionData,
 } from "viem";
-import type { LightAccountVersionConfigs } from "../types";
-import { OZ_ERC1967Proxy_ConstructorAbi } from "../abis/OZ_ERC1967Proxy.js";
-import { AccountVersionRegistry } from "../utils.js";
-import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
+import { LightAccountAbi_v1 } from "./abis/LightAccountAbi_v1.js";
+import { OZ_ERC1967Proxy_ConstructorAbi } from "./abis/OZ_ERC1967Proxy.js";
+import type { LightAccountVersionConfigs } from "./types.js";
+import { AccountVersionRegistry } from "./utils.js";
 
 export type PredictLightAccountAddressParams = {
   factoryAddress: Address;
@@ -157,6 +157,8 @@ function getLAv2ProxyBytecode(implementationAddress: Address): Hex {
   )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3`;
 }
 
-function assertNeverLightAccountVersion(version: never): never {
+function assertNeverLightAccountVersion(
+  version: never | string | number,
+): never {
   throw new Error(`Unknown light account version: ${version}`);
 }

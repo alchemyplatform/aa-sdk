@@ -1,7 +1,7 @@
 import { ChainNotFoundError } from "@alchemy/common";
 import { fromHex, trim, type Address, type Chain } from "viem";
 import { getStorageAt } from "viem/actions";
-import type { LightAccountBase } from "./base-account";
+import type { LightAccountBase } from "./accounts/base-account";
 import type {
   LightAccountType,
   LightAccountVersion,
@@ -91,7 +91,7 @@ export const defaultLightAccountVersion = <
  */
 export const getDefaultLightAccountFactoryAddress = (
   chain: Chain,
-  version: LightAccountVersion<"LightAccount">
+  version: LightAccountVersion<"LightAccount">,
 ): Address => {
   return (
     AccountVersionRegistry.LightAccount[version].addresses.overrides?.[chain.id]
@@ -109,7 +109,7 @@ export const getDefaultLightAccountFactoryAddress = (
  */
 export const getDefaultMultiOwnerLightAccountFactoryAddress = (
   chain: Chain,
-  version: LightAccountVersion<"MultiOwnerLightAccount">
+  version: LightAccountVersion<"MultiOwnerLightAccount">,
 ) => {
   return (
     AccountVersionRegistry.MultiOwnerLightAccount[version].addresses
@@ -140,12 +140,18 @@ export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) => [
     x.addresses.default.factory,
     ...Object.values(x.addresses.overrides ?? {}).map((z) => z.factory),
-  ]).flat()
+  ]).flat(),
 );
 
+/**
+ * Get the light account implementation address for the given light account
+ *
+ * @param {LightAccountBase} account - the light account to get the implementation address for
+ * @returns {Promise<Address>} the light account implementation address for the given light account
+ */
 export async function getLightAccountImplAddress<
   TAccount extends LightAccountBase,
->(account: TAccount) {
+>(account: TAccount): Promise<Address> {
   const client = account.client;
   const version = account.getLightAccountVersion();
   const type = account.source as LightAccountType;
@@ -161,16 +167,16 @@ export async function getLightAccountImplAddress<
 
   if (storage == null) {
     throw new Error(
-      "Failed to get storage slot: 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc"
+      "Failed to get storage slot: 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
     );
   }
 
   const implementationAddresses = Object.values(
-    AccountVersionRegistry[type]
+    AccountVersionRegistry[type],
   ).map(
     (x) =>
       x.addresses.overrides?.[client.chain!.id]?.impl ??
-      x.addresses.default.impl
+      x.addresses.default.impl,
   );
 
   if (
@@ -179,8 +185,8 @@ export async function getLightAccountImplAddress<
   ) {
     throw new Error(
       `could not determine if smart account implementation is ${type} ${String(
-        version
-      )}`
+        version,
+      )}`,
     );
   }
 
@@ -216,7 +222,7 @@ export async function getLightAccountVersionForAccount<
       }
 
       return [def.addresses.default.impl, version];
-    })
+    }),
   );
 
   const factoryToVersion = new Map(
@@ -234,7 +240,7 @@ export async function getLightAccountVersionForAccount<
       }
 
       return [def.addresses.default.factory, version];
-    })
+    }),
   );
 
   const version =
@@ -244,7 +250,7 @@ export async function getLightAccountVersionForAccount<
 
   if (!version) {
     throw new Error(
-      `Could not determine ${account.source} version for chain ${chain.id}`
+      `Could not determine ${account.source} version for chain ${chain.id}`,
     );
   }
 
