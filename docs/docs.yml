@@ -34,12 +34,14 @@ navigation:
           - page: Overview
             slug: recipes
             path: wallets/pages/recipes/overview.mdx
-          - page: Send USDC
-            slug: recipes/send-usdc
-            path: wallets/pages/recipes/send-usdc.mdx
-          - page: Onramp Funds
-            slug: recipes/onramp-funds
-            path: wallets/pages/recipes/onramp-funds.mdx
+          - section: Guides
+            contents:
+              - page: Send USDC
+                slug: recipes/send-usdc
+                path: wallets/pages/recipes/send-usdc.mdx
+              - page: Onramp Funds
+                slug: recipes/onramp-funds
+                path: wallets/pages/recipes/onramp-funds.mdx
 
       - section: React
         contents:

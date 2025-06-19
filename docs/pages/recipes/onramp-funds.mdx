@@ -298,14 +298,17 @@ export default function Home() {
 
 - Let users change networks/assets in the Coinbase modal (default here is card ➜ ETH).
 - For user-level analytics you can pass `partnerUserId` when generating the onramp URL.
+- Protect the `/onramp` API route with your app's auth/session middleware so only
+  the signed-in user can request an Onramp URL for **their** smart-wallet address.
+  (Rate-limit or require a CSRF token if you don't have full auth in place.)
 
 ## Success!
 
-Users can now click “Buy Crypto”, complete their purchase in a popup, and immediately spend the ETH that lands in their smart wallet.
+Users can now click "Buy Crypto", complete their purchase in a popup, and immediately spend the ETH that lands in their smart wallet.
 
 ## Next Steps
 
-- **Sponsor their first transaction** – set up [Gas Manager](/wallets/react/sponsor-gas) so new users don’t pay gas.
+- **Sponsor their first transaction** – set up [Gas Manager](/wallets/react/sponsor-gas) so new users don't pay gas.
 
 ## Resources
 
