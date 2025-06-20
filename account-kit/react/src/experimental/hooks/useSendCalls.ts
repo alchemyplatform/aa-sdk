@@ -24,6 +24,8 @@ export type UseSendCallsParams = {
   client?: GetSmartWalletClientResult<Address>;
 };
 
+type MutationParams = Parameters<SmartWalletClient<Address>["prepareCalls"]>[0];
+
 type MutationResult<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = {
@@ -38,13 +40,13 @@ export type UseSendCallsResult<
   sendCalls: UseMutateFunction<
     MutationResult<TEntryPointVersion>,
     Error,
-    Parameters<SmartWalletClient<Address>["prepareCalls"]>[0],
+    MutationParams,
     unknown
   >;
   sendCallsAsync: UseMutateAsyncFunction<
     MutationResult<TEntryPointVersion>,
     Error,
-    Parameters<SmartWalletClient<Address>["prepareCalls"]>[0],
+    MutationParams,
     unknown
   >;
   sendCallsResult: MutationResult | undefined;
@@ -112,17 +114,20 @@ export function useSendCalls<
 
         const { preparedCallIds } = await client.sendPreparedCalls(signedCalls);
 
-        const signature = (
+        const uoCall =
           signedCalls.type === "array"
-            ? signedCalls.data[0].signature
-            : signedCalls.signature
-        ).data;
+            ? signedCalls.data.find(
+                (it) =>
+                  it.type === "user-operation-v060" ||
+                  it.type === "user-operation-v070",
+              )!
+            : signedCalls;
 
         return {
           ids: preparedCallIds,
           request: {
-            ...preparedCalls.data,
-            signature,
+            ...uoCall.data,
+            signature: uoCall.signature.data,
           } as UserOperationRequest<TEntryPointVersion>,
         };
       },
