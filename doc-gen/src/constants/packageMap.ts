@@ -7,8 +7,8 @@ const packageMap: Record<string, string> = {
   "account-kit/infra": "Infra",
   "account-kit/signer": "Signer",
   "account-kit/smart-contracts": "Smart Contracts",
-  "aa-sdk/core": "Account Abstraction Core",
-  "aa-sdk/ethers": "Account Abstraction Ethers",
+  "aa-sdk/core": "aa-sdk/core",
+  "aa-sdk/ethers": "aa-sdk/ethers",
 };
 
 export default packageMap;

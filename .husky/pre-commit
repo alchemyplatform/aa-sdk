@@ -2,3 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 yarn lint-staged
+# Ensure the docs-site submodule is up-to-date
+git submodule update --init --remote docs-site/
+git add -A docs-site/
