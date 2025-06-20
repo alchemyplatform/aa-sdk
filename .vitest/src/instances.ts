@@ -54,6 +54,7 @@ const bundlerMethods = [
   "debug_bundler_clearState",
   "debug_bundler_setBundlingMode",
   "rundler_maxPriorityFeePerGas",
+  "rundler_getPendingUserOperationBySenderNonce",
 ];
 
 function defineInstance(params: DefineInstanceParams) {

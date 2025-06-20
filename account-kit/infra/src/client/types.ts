@@ -3,13 +3,14 @@ import {
   type Erc7677RpcSchema,
   type UserOperationRequest,
 } from "@aa-sdk/core";
+import type { Address, Hex } from "viem";
 import type {
-  SimulateUserOperationAssetChangesRequest,
-  SimulateUserOperationAssetChangesResponse,
   RequestGasAndPaymasterAndDataRequest,
   RequestGasAndPaymasterAndDataResponse,
   RequestPayamsterTokenQuoteRequest,
   RequestPayamsterTokenQuoteResponse,
+  SimulateUserOperationAssetChangesRequest,
+  SimulateUserOperationAssetChangesResponse,
 } from "../actions/types";
 import type { AlchemyTransport } from "../alchemyTransport";
 
@@ -23,6 +24,11 @@ export type AlchemyRpcSchema = [
     Method: "rundler_maxPriorityFeePerGas";
     Parameters: [];
     ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
+  },
+  {
+    Method: "rundler_getPendingUserOperationBySenderNonce";
+    Parameters: [Address, Hex];
+    ReturnType: UserOperationRequest | null;
   },
   ...Erc7677RpcSchema<{ policyId: string }>,
   {

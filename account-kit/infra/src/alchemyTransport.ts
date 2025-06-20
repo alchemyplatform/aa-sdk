@@ -40,6 +40,7 @@ const alchemyMethods = [
   "eth_getUserOperationByHash",
   "eth_supportedEntryPoints",
   "rundler_maxPriorityFeePerGas",
+  "rundler_getPendingUserOperationBySenderNonce",
   "pm_getPaymasterData",
   "pm_getPaymasterStubData",
   "alchemy_requestGasAndPaymasterAndData",

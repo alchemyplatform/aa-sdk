@@ -40,73 +40,59 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     );
   });
 
-  it("should execute successfully using the first signer", async () => {
-    const provider = await givenConnectedProvider({
-      signer: signer1,
-      owners,
-    });
-
-    await setBalance(instance.getClient(), {
-      address: provider.getAddress(),
-      value: parseEther("1"),
-    });
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: provider.getAddress(),
-        data: "0x",
-      },
-    });
-
-    const txnHash = provider
-      .waitForUserOperationTransaction(result)
-      .catch(async () => {
-        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
-          {
-            uoToDrop: result.request,
-          },
-        );
-        return await provider.waitForUserOperationTransaction(
-          dropAndReplaceResult,
-        );
+  it(
+    "should execute successfully using the first signer",
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer: signer1,
+        owners,
       });
 
-    await expect(txnHash).resolves.not.toThrowError();
-  }, 100000);
-
-  it("should execute successfully using the second signer", async () => {
-    const provider = await givenConnectedProvider({
-      signer: signer2,
-      owners,
-    });
-
-    await setBalance(instance.getClient(), {
-      address: provider.getAddress(),
-      value: parseEther("1"),
-    });
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: provider.getAddress(),
-        data: "0x",
-      },
-    });
-
-    const txnHash = provider
-      .waitForUserOperationTransaction(result)
-      .catch(async () => {
-        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
-          {
-            uoToDrop: result.request,
-          },
-        );
-        return await provider.waitForUserOperationTransaction(
-          dropAndReplaceResult,
-        );
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("1"),
       });
 
-    await expect(txnHash).resolves.not.toThrowError();
-  }, 100000);
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        },
+      });
+
+      const txnHash = provider.waitForUserOperationTransaction(result);
+
+      await expect(txnHash).resolves.not.toThrowError();
+    },
+    { timeout: 100000, retry: 3 },
+  );
+
+  it(
+    "should execute successfully using the second signer",
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer: signer2,
+        owners,
+      });
+
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("1"),
+      });
+
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        },
+      });
+
+      const txnHash = provider.waitForUserOperationTransaction(result);
+
+      await expect(txnHash).resolves.not.toThrowError();
+    },
+    { timeout: 100000, retry: 3 },
+  );
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
