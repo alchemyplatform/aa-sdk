@@ -588,9 +588,6 @@ methods:
     description: |
       Requests gas sponsorship for a Solana transaction and returns the **fully-signed** `serializedTransaction` (now containing the fee-payer signature).
 
-      <Note>
-        Request access by reaching out to account-abstraction@alchemy.com
-      </Note>
     params:
       - name: policyId
         required: true
