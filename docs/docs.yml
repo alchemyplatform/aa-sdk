@@ -147,6 +147,16 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
+                  - page: useMFA
+                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
+                  - page: useRemoveEmail
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveEmail.mdx
+                  - page: useRemoveOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveOauthProvider.mdx
+                  - page: useRemovePasskey
+                    path: wallets/pages/reference/account-kit/react/hooks/useRemovePasskey.mdx
+                  - page: useSetEmail
+                    path: wallets/pages/reference/account-kit/react/hooks/useSetEmail.mdx
                   - page: useSigner
                     path: wallets/pages/reference/account-kit/react/hooks/useSigner.mdx
                   - page: useSignerStatus
@@ -191,22 +201,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
               - section: Other Hooks
                 contents:
-                  - page: useAddOauthProvider
-                    path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
-                  - page: useAuthContext
-                    path: wallets/pages/reference/account-kit/react/hooks/useAuthContext.mdx
-                  - page: useListAuthMethods
-                    path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
-                  - page: useMFA
-                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
-                  - page: useRemoveEmail
-                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveEmail.mdx
-                  - page: useRemoveOauthProvider
-                    path: wallets/pages/reference/account-kit/react/hooks/useRemoveOauthProvider.mdx
-                  - page: useRemovePasskey
-                    path: wallets/pages/reference/account-kit/react/hooks/useRemovePasskey.mdx
-                  - page: useSetEmail
-                    path: wallets/pages/reference/account-kit/react/hooks/useSetEmail.mdx
                   - page: useSolanaConnection
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaConnection.mdx
                   - page: useSolanaSignMessage
@@ -570,8 +564,14 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
                       - page: createAccount
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/createAccount.mdx
+                      - page: experimental_addToMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_addToMultiOwner.mdx
                       - page: experimental_createApiKey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
+                      - page: experimental_createMultiSig
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiSig.mdx
+                      - page: experimental_multiOwnerSignRawMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
                       - page: getPasskeyStatus
@@ -801,6 +801,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/multisigSignatureMiddleware.mdx
                   - page: pluginManagerActions
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/pluginManagerActions.mdx
+                  - page: predictLightAccountAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictLightAccountAddress.mdx
+                  - page: predictModularAccountV2Address
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictModularAccountV2Address.mdx
+                  - page: predictMultiOwnerLightAccountAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictMultiOwnerLightAccountAddress.mdx
                   - page: sessionKeyPluginActions
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/sessionKeyPluginActions.mdx
                   - page: splitAggregatedSignature
