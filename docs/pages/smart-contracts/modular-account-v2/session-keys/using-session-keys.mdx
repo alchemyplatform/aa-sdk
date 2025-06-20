@@ -35,6 +35,7 @@ const sessionKeyClient = await createModularAccountV2Client({
   transport: alchemy({ apiKey: "your-api-key" }),
   signer: sessionKeySigner,
   accountAddress: client.getAddress(client.account),
+  initCode: await client.account.getInitCode(),
   signerEntity: {
     entityId: sessionKeyEntityId,
     isGlobalValidation: true,
@@ -50,4 +51,4 @@ await sessionKeyClient.sendUserOperation({
 });
 ```
 
-Note that you have to pass in `accountAddress` to session key clients. By default, the client uses an account address counterfactual that assumes that the connected signer is the owner.
+Note that you have to pass in `accountAddress` and `initCode` to session key clients. By default, the client uses an account address counterfactual that assumes that the connected signer is the owner.
