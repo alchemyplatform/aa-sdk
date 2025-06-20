@@ -51,8 +51,7 @@ export const alchemyFeeEstimator: (
         }),
         transport_.request({
           method: "rundler_getPendingUserOperationBySenderNonce",
-          // @ts-expect-error ... I could not tell you why the fuck this isn't resolving correctly
-          params: [sender, nonceHex],
+          params: [sender as Address, nonceHex],
         }),
       ]);
 
