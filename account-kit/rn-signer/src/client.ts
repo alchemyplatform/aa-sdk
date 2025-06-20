@@ -29,6 +29,8 @@ import {
   type OauthConfig,
   type OauthParams,
   type OtpParams,
+  type JwtParams,
+  type JwtResponse,
   type User,
   type SubmitOtpCodeResponse,
   type CredentialCreationOptionOverrides,
@@ -137,6 +139,20 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       }
       throw error;
     }
+  }
+
+  override async submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">,
+  ): Promise<JwtResponse> {
+    this.eventEmitter.emit("authenticating", { type: "custom-jwt" });
+
+    const publicKey = await this.stamper.init();
+    return this.request("/v1/auth-jwt", {
+      jwt: args.jwt,
+      targetPublicKey: publicKey,
+      authProvider: args.authProvider,
+      expirationSeconds: args?.expirationSeconds,
+    });
   }
 
   override async completeAuthWithBundle(params: {

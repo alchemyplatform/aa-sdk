@@ -488,6 +488,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
+                      - page: submitJwt
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitJwt.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
@@ -795,6 +797,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/multisigSignatureMiddleware.mdx
                   - page: pluginManagerActions
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/pluginManagerActions.mdx
+                  - page: predictLightAccountAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictLightAccountAddress.mdx
+                  - page: predictModularAccountV2Address
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictModularAccountV2Address.mdx
+                  - page: predictMultiOwnerLightAccountAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictMultiOwnerLightAccountAddress.mdx
                   - page: sessionKeyPluginActions
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/sessionKeyPluginActions.mdx
                   - page: splitAggregatedSignature
