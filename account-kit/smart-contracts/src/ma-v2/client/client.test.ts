@@ -107,65 +107,63 @@ describe("MA v2 Tests", async () => {
     signer = LocalAccountSigner.generatePrivateKeySigner();
   });
 
-  it("sends a simple UO", async () => {
-    const provider = await givenConnectedProvider({ signer });
+  it(
+    "sends a simple UO",
+    async () => {
+      const provider = await givenConnectedProvider({ signer });
 
-    await setBalance(instance.getClient(), {
-      address: provider.getAddress(),
-      value: parseEther("20"),
-    });
-
-    const startingAddressBalance = await getTargetBalance();
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount,
-        data: "0x",
-      },
-    });
-
-    await provider.waitForUserOperationTransaction(result).catch(async () => {
-      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
-        uoToDrop: result.request,
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("20"),
       });
-      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
-    });
 
-    await expect(getTargetBalance()).resolves.toEqual(
-      startingAddressBalance + sendAmount,
-    );
-  });
+      const startingAddressBalance = await getTargetBalance();
 
-  it("sends a simple UO with webauthn account", async () => {
-    const { provider } = await givenWebAuthnProvider();
-
-    await setBalance(instance.getClient(), {
-      address: provider.getAddress(),
-      value: parseEther("2"),
-    });
-
-    const startingAddressBalance = await getTargetBalance();
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount,
-        data: "0x",
-      },
-    });
-
-    await provider.waitForUserOperationTransaction(result).catch(async () => {
-      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
-        uoToDrop: result.request,
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
       });
-      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
-    });
 
-    await expect(getTargetBalance()).resolves.toEqual(
-      startingAddressBalance + sendAmount,
-    );
-  });
+      await provider.waitForUserOperationTransaction(result);
+
+      await expect(getTargetBalance()).resolves.toEqual(
+        startingAddressBalance + sendAmount,
+      );
+    },
+    { retry: 3 },
+  );
+
+  it(
+    "sends a simple UO with webauthn account",
+    async () => {
+      const { provider } = await givenWebAuthnProvider();
+
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("2"),
+      });
+
+      const startingAddressBalance = await getTargetBalance();
+
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      });
+
+      await provider.waitForUserOperationTransaction(result);
+
+      await expect(getTargetBalance()).resolves.toEqual(
+        startingAddressBalance + sendAmount,
+      );
+    },
+    { retry: 3 },
+  );
 
   it.fails(
     "successfully sign + validate a message, for WebAuthn account",
@@ -921,111 +919,107 @@ describe("MA v2 Tests", async () => {
     ).rejects.toThrowError();
   });
 
-  it.fails(
-    "installs paymaster guard module, verifies use of valid paymaster, then uninstalls module",
-    async () => {
-      let provider = (
-        await givenConnectedProvider({
-          signer,
-          paymasterMiddleware: "erc7677",
-        })
-      ).extend(installValidationActions);
+  it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
+    let provider = (
+      await givenConnectedProvider({
+        signer,
+        paymasterMiddleware: "erc7677",
+      })
+    ).extend(installValidationActions);
 
-      await setBalance(client, {
-        address: provider.getAddress(),
-        value: parseEther("20"),
-      });
+    await setBalance(client, {
+      address: provider.getAddress(),
+      value: parseEther("20"),
+    });
 
-      const paymaster = paymaster070.getPaymasterDetails().address;
+    const paymaster = paymaster070.getPaymasterDetails().address;
 
-      const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
-        entityId: 1,
-        paymaster: paymaster,
-      });
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 1,
+      paymaster: paymaster,
+    });
 
-      const installResult = await provider.installValidation({
-        validationConfig: {
-          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-            provider.chain,
-          ),
-          entityId: 1,
-          isGlobal: true,
-          isSignatureValidation: true,
-          isUserOpValidation: true,
-        },
-        selectors: [],
-        installData: SingleSignerValidationModule.encodeOnInstallData({
-          entityId: 1,
-          signer: await sessionKey.getAddress(),
-        }),
-        hooks: [
-          {
-            hookConfig: {
-              address: getDefaultPaymasterGuardModuleAddress(provider.chain),
-              entityId: 1,
-              hookType: HookType.VALIDATION,
-              hasPreHooks: true,
-              hasPostHooks: false,
-            },
-            initData: hookInstallData,
-          },
-        ],
-      });
-
-      // verify hook installation succeeded
-      await provider.waitForUserOperationTransaction(installResult);
-
-      // create session key client
-      const sessionKeyProvider = (
-        await givenConnectedProvider({
-          signer: sessionKey,
-          accountAddress: provider.account.address,
-          paymasterMiddleware: "erc7677",
-          signerEntity: { entityId: 1, isGlobalValidation: true },
-        })
-      ).extend(installValidationActions);
-
-      // happy path: send a UO with correct paymaster
-      const result = await sessionKeyProvider
-        .sendUserOperation({
-          uo: {
-            target: zeroAddress,
-            value: 0n,
-            data: "0x",
-          },
-        })
-        .catch((e) => {
-          console.log("FAILED HERE 1");
-          console.log(e);
-          throw e;
-        });
-
-      // verify if correct paymaster is used
-      const txnHash =
-        sessionKeyProvider.waitForUserOperationTransaction(result);
-      await expect(txnHash).resolves.not.toThrowError();
-
-      const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
-        entityId: 1,
-      });
-
-      const uninstallResult = await provider.uninstallValidation({
+    const installResult = await provider.installValidation({
+      validationConfig: {
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
           provider.chain,
         ),
         entityId: 1,
-        uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
-          entityId: 1,
-        }),
-        hookUninstallDatas: [hookUninstallData],
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: await sessionKey.getAddress(),
+      }),
+      hooks: [
+        {
+          hookConfig: {
+            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            entityId: 1,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
+
+    // verify hook installation succeeded
+    await provider.waitForUserOperationTransaction(installResult);
+
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        paymasterMiddleware: "erc7677",
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
+    // happy path: send a UO with correct paymaster
+    const result = await sessionKeyProvider
+      .sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      })
+      .catch((e) => {
+        console.log("FAILED HERE 1");
+        console.log(e);
+        throw e;
       });
 
-      // verify uninstall
-      await expect(
-        provider.waitForUserOperationTransaction(uninstallResult),
-      ).resolves.not.toThrowError();
-    },
-  );
+    // verify if correct paymaster is used
+    const txnHash = sessionKeyProvider.waitForUserOperationTransaction(result);
+    await expect(txnHash).resolves.not.toThrowError();
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 1,
+    });
+
+    const uninstallResult = await provider.uninstallValidation({
+      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+        provider.chain,
+      ),
+      entityId: 1,
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+        entityId: 1,
+      }),
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationTransaction(uninstallResult),
+    ).resolves.not.toThrowError();
+  });
 
   it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
     let provider = (

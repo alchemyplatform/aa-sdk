@@ -22,7 +22,7 @@ export async function cleanupRundler(rundlerPath: string) {
 
 export async function downloadLatestRundlerRelease(
   filePath: string,
-  version = "v0.8.2",
+  version = "v0.9.0",
 ) {
   const repoUrl =
     "https://api.github.com/repos/alchemyplatform/rundler/releases";

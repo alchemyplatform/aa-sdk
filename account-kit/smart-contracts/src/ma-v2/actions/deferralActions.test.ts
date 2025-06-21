@@ -244,17 +244,7 @@ describe("MA v2 deferral actions tests", async () => {
         baseFeePerGas: 10n,
       });
 
-      await sessionKeyClient2
-        .waitForUserOperationTransaction(uoResult2)
-        .catch(async () => {
-          const dropAndReplaceResult =
-            await sessionKeyClient2.dropAndReplaceUserOperation({
-              uoToDrop: uoResult2.request,
-            });
-          return await sessionKeyClient2.waitForUserOperationTransaction(
-            dropAndReplaceResult,
-          );
-        });
+      await sessionKeyClient2.waitForUserOperationTransaction(uoResult2);
     },
   );
 

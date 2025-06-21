@@ -82,65 +82,51 @@ describe("MultiOwner Light Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it("should successfully execute with erc-7677 paymaster", async () => {
-    const provider = await givenConnectedProvider({
-      signer,
-      paymasterMiddleware: "erc7677",
-    });
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: zeroAddress,
-        data: "0x",
-        value: 0n,
-      },
-    });
-
-    const txnHash = provider
-      .waitForUserOperationTransaction(result)
-      .catch(async () => {
-        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
-          {
-            uoToDrop: result.request,
-          },
-        );
-        return await provider.waitForUserOperationTransaction(
-          dropAndReplaceResult,
-        );
+  it(
+    "should successfully execute with erc-7677 paymaster",
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer,
+        paymasterMiddleware: "erc7677",
       });
 
-    await expect(txnHash).resolves.not.toThrowError();
-  }, 30_000);
-
-  it("should successfully execute with alchemy paymaster", async () => {
-    const provider = await givenConnectedProvider({
-      signer,
-      paymasterMiddleware: "alchemyGasAndPaymasterAndData",
-    });
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: zeroAddress,
-        data: "0x",
-        value: 0n,
-      },
-    });
-
-    const txnHash = provider
-      .waitForUserOperationTransaction(result)
-      .catch(async () => {
-        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
-          {
-            uoToDrop: result.request,
-          },
-        );
-        return await provider.waitForUserOperationTransaction(
-          dropAndReplaceResult,
-        );
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          data: "0x",
+          value: 0n,
+        },
       });
 
-    await expect(txnHash).resolves.not.toThrowError();
-  }, 30_000);
+      const txnHash = provider.waitForUserOperationTransaction(result);
+
+      await expect(txnHash).resolves.not.toThrowError();
+    },
+    { timeout: 30_000, retry: 3 },
+  );
+
+  it(
+    "should successfully execute with alchemy paymaster",
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer,
+        paymasterMiddleware: "alchemyGasAndPaymasterAndData",
+      });
+
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: zeroAddress,
+          data: "0x",
+          value: 0n,
+        },
+      });
+
+      const txnHash = provider.waitForUserOperationTransaction(result);
+
+      await expect(txnHash).resolves.not.toThrowError();
+    },
+    { timeout: 30_000, retry: 3 },
+  );
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedProvider({
