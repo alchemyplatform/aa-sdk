@@ -1,35 +1,43 @@
 import {
   AccountNotFoundError,
-  IncompatibleClientError,
-  isSmartAccountClient,
   EntityIdOverrideError,
+  type GetAccountParameter,
   type GetEntryPointFromAccount,
+  IncompatibleClientError,
   type SendUserOperationResult,
   type UserOperationOverridesParameter,
-  type SmartAccountSigner,
+  isSmartAccountClient,
+  isSmartAccountWithSigner,
 } from "@aa-sdk/core";
 import {
   type Address,
+  type Chain,
+  type Client,
   type Hex,
-  encodeFunctionData,
+  type Transport,
   concatHex,
+  encodeFunctionData,
   zeroAddress,
 } from "viem";
 
 import { semiModularAccountBytecodeAbi } from "../../abis/semiModularAccountBytecodeAbi.js";
 import type { HookConfig, ValidationConfig } from "../common/types.js";
 import {
-  serializeValidationConfig,
   serializeHookConfig,
   serializeModuleEntity,
+  serializeValidationConfig,
 } from "../common/utils.js";
 
-import { type ModularAccountV2Client } from "../../client/client.js";
-import { type ModularAccountV2 } from "../../account/common/modularAccountV2Base.js";
+import {
+  type ModularAccountsV2,
+  isModularAccountV2,
+} from "../../account/common/modularAccountV2Base.js";
 import { DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 
 export type InstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
+    | undefined,
 > = {
   validationConfig: ValidationConfig;
   selectors: Hex[];
@@ -38,38 +46,38 @@ export type InstallValidationParams<
     hookConfig: HookConfig;
     initData: Hex;
   }[];
-  account?: ModularAccountV2<TSigner> | undefined;
-} & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
->;
+} & UserOperationOverridesParameter<GetEntryPointFromAccount<TAccount>> &
+  GetAccountParameter<TAccount>;
 
 export type UninstallValidationParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
+    | undefined,
 > = {
   moduleAddress: Address;
   entityId: number;
   uninstallData: Hex;
   hookUninstallDatas: Hex[];
-  account?: ModularAccountV2<TSigner> | undefined;
-} & UserOperationOverridesParameter<
-  GetEntryPointFromAccount<ModularAccountV2<TSigner>>
->;
+} & UserOperationOverridesParameter<GetEntryPointFromAccount<TAccount>> &
+  GetAccountParameter<TAccount>;
 
 export type InstallValidationActions<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
+    | undefined,
 > = {
   installValidation: (
-    args: InstallValidationParams<TSigner>,
+    args: InstallValidationParams<TAccount>,
   ) => Promise<SendUserOperationResult>;
   encodeInstallValidation: (
     // TODO: omit the user op sending related parameters from this type
-    args: InstallValidationParams<TSigner>,
+    args: InstallValidationParams<TAccount>,
   ) => Promise<Hex>;
   uninstallValidation: (
-    args: UninstallValidationParams<TSigner>,
+    args: UninstallValidationParams<TAccount>,
   ) => Promise<SendUserOperationResult>;
   encodeUninstallValidation: (
-    args: UninstallValidationParams<TSigner>,
+    args: UninstallValidationParams<TAccount>,
   ) => Promise<Hex>;
 };
 
@@ -117,28 +125,35 @@ export type InstallValidationActions<
  * @param {object} client - The client instance which provides account and sendUserOperation functionality.
  * @returns {object} - An object containing two methods, `installValidation` and `uninstallValidation`.
  */
-export const installValidationActions: <
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+export function installValidationActions<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends ModularAccountsV2 | undefined =
+    | ModularAccountsV2
+    | undefined,
 >(
-  client: ModularAccountV2Client<TSigner>,
-) => InstallValidationActions<TSigner> = (client) => {
+  client: Client<TTransport, TChain, TAccount>,
+): InstallValidationActions<TAccount> {
   const encodeInstallValidation = async ({
     validationConfig,
     selectors,
     installData,
     hooks,
     account = client.account,
-  }: InstallValidationParams) => {
-    if (!account) {
+  }: InstallValidationParams<TAccount>) => {
+    if (!account || !isModularAccountV2(account)) {
       throw new AccountNotFoundError();
     }
 
-    if (!isSmartAccountClient(client)) {
-      throw new IncompatibleClientError(
-        "SmartAccountClient",
-        "installValidation",
-        client,
-      );
+    if (isSmartAccountWithSigner(account)) {
+      if (!isSmartAccountClient(client)) {
+        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
     }
 
     // an entityId of zero is only allowed if we're installing or uninstalling hooks on the fallback validation
@@ -171,17 +186,19 @@ export const installValidationActions: <
     uninstallData,
     hookUninstallDatas,
     account = client.account,
-  }: UninstallValidationParams) => {
-    if (!account) {
+  }: UninstallValidationParams<TAccount>) => {
+    if (!account || !isModularAccountV2(account)) {
       throw new AccountNotFoundError();
     }
 
-    if (!isSmartAccountClient(client)) {
-      throw new IncompatibleClientError(
-        "SmartAccountClient",
-        "uninstallValidation",
-        client,
-      );
+    if (isSmartAccountWithSigner(account)) {
+      if (!isSmartAccountClient(client)) {
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
     }
 
     return account.encodeCallData(
@@ -210,7 +227,19 @@ export const installValidationActions: <
       hooks,
       account = client.account,
       overrides,
-    }) => {
+    }: InstallValidationParams<TAccount>) => {
+      if (!isSmartAccountClient(client)) {
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "installValidation",
+          client,
+        );
+      }
+
+      if (!account) {
+        throw new AccountNotFoundError();
+      }
+
       const callData = await encodeInstallValidation({
         validationConfig,
         selectors,
@@ -233,8 +262,20 @@ export const installValidationActions: <
       hookUninstallDatas,
       account = client.account,
       overrides,
-    }) => {
-      const callData = await encodeUninstallValidation({
+    }: UninstallValidationParams<TAccount>) => {
+      if (!account) {
+        throw new AccountNotFoundError();
+      }
+
+      if (!isSmartAccountClient(client)) {
+        throw new IncompatibleClientError(
+          "SmartAccountClient",
+          "uninstallValidation",
+          client,
+        );
+      }
+
+      const callData: Hex = await encodeUninstallValidation({
         moduleAddress,
         entityId,
         uninstallData,
@@ -249,4 +290,4 @@ export const installValidationActions: <
       });
     },
   };
-};
+}

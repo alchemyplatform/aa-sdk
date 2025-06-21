@@ -1,37 +1,39 @@
 import {
   createBundlerClient,
   getEntryPoint,
+  InvalidDeferredActionNonce,
   InvalidEntityIdError,
   InvalidNonceKeyError,
-  InvalidDeferredActionNonce,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
+  type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
-  type SmartContractAccount,
 } from "@aa-sdk/core";
-import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
-  type Hex,
-  type Address,
-  type Chain,
-  type Transport,
+  concatHex,
   encodeFunctionData,
+  getContract,
+  maxUint152,
   maxUint32,
   zeroAddress,
-  getContract,
-  concatHex,
-  maxUint152,
+  type Address,
+  type Chain,
+  type Hex,
+  type Transport,
 } from "viem";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
-import { nativeSMASigner } from "../nativeSMASigner.js";
 import { singleSignerMessageSigner } from "../../modules/single-signer-validation/signer.js";
-import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import { webauthnSigningFunctions } from "../../modules/webauthn-validation/signingMethods.js";
+import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
+import { nativeSMASigner } from "../nativeSMASigner.js";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
+
+export type ModularAccountsV2 = ModularAccountV2 | WebauthnModularAccountV2;
 
 export type SignerEntity = {
   isGlobalValidation: boolean;
@@ -357,4 +359,10 @@ export async function createMAv2Base<
     getValidationData,
     encodeCallData,
   } as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
+}
+
+export function isModularAccountV2(
+  account: SmartContractAccount,
+): account is ModularAccountV2 | WebauthnModularAccountV2 {
+  return account.source === "ModularAccountV2";
 }
