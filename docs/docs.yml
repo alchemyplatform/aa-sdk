@@ -6,7 +6,6 @@ instances:
 experimental:
   mdx-components:
     - wallets/components
-    - wallets/shared
 
 navigation:
   - tab: wallets
@@ -19,6 +18,17 @@ navigation:
             path: wallets/pages/index.mdx
           - link: Demo
             href: https://demo.alchemy.com/
+          - section: Recipes
+            contents:
+              - page: Overview
+                slug: recipes
+                path: wallets/pages/recipes/overview.mdx
+              - page: Send USDC
+                slug: recipes/send-usdc
+                path: wallets/pages/recipes/send-usdc.mdx
+              - page: Onramp Funds
+                slug: recipes/onramp-funds
+                path: wallets/pages/recipes/onramp-funds.mdx
           - section: Concepts
             contents:
               - page: Intro to Account Kit
@@ -33,7 +43,6 @@ navigation:
                 path: wallets/pages/concepts/smart-account-signer.mdx
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
-
       - section: React
         contents:
           - page: Overview
@@ -69,6 +78,8 @@ navigation:
                 path: wallets/pages/react/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
+              - page: Connect EOAs
+                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
               - section: Multi-factor authentication
@@ -95,6 +106,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: Multi-chain apps
                 path: wallets/pages/react/multi-chain-apps.mdx
+              - page: Pregenerate wallets
+                path: wallets/pages/react/pregenerate-wallets.mdx
           - page: Using EIP-7702
             path: wallets/pages/react/using-7702.mdx
           - section: Using Solana wallets
@@ -130,6 +143,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
                   - page: useAddPasskey
                     path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
+                  - page: useAuthContext
+                    path: wallets/pages/reference/account-kit/react/hooks/useAuthContext.mdx
                   - page: useAuthenticate
                     path: wallets/pages/reference/account-kit/react/hooks/useAuthenticate.mdx
                   - page: useAuthModal
@@ -142,6 +157,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
+                  - page: useMFA
+                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
                   - page: useRemoveEmail
                     path: wallets/pages/reference/account-kit/react/hooks/useRemoveEmail.mdx
                   - page: useRemoveOauthProvider
@@ -194,10 +211,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
               - section: Other Hooks
                 contents:
-                  - page: useAuthContext
-                    path: wallets/pages/reference/account-kit/react/hooks/useAuthContext.mdx
-                  - page: useMFA
-                    path: wallets/pages/reference/account-kit/react/hooks/useMFA.mdx
                   - page: useSolanaConnection
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaConnection.mdx
                   - page: useSolanaSignMessage
@@ -495,6 +508,8 @@ navigation:
                     contents:
                       - page: addMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addMfa.mdx
+                      - page: addOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addOauthProvider.mdx
                       - page: addPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/addPasskey.mdx
                       - page: authenticate
@@ -517,12 +532,20 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
                       - page: getUser
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
+                      - page: listAuthMethods
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/listAuthMethods.mdx
                       - page: on
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/on.mdx
                       - page: preparePopupOauth
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth.mdx
+                      - page: removeEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeEmail.mdx
                       - page: removeMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeMfa.mdx
+                      - page: removeOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removeOauthProvider.mdx
+                      - page: removePasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/removePasskey.mdx
                       - page: signAuthorization
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/signAuthorization.mdx
                       - page: signMessage
@@ -561,16 +584,26 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getUser.mdx
                       - page: initOauth
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/initOauth.mdx
+                      - page: listAuthMethods
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/listAuthMethods.mdx
                       - page: lookupUserByEmail
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
                       - page: lookupUserWithPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserWithPasskey.mdx
                       - page: on
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/on.mdx
+                      - page: removeEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeEmail.mdx
                       - page: removeMfa
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeMfa.mdx
+                      - page: removeOauthProvider
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removeOauthProvider.mdx
+                      - page: removePasskey
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/removePasskey.mdx
                       - page: request
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/request.mdx
+                      - page: setEmail
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/setEmail.mdx
                       - page: signRawMessage
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage.mdx
                       - page: stampGetOrganization
@@ -811,7 +844,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData.mdx
 
-      - section: Account Abstraction Core
+      - section: aa-sdk/core
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/core/index.mdx
@@ -906,6 +939,8 @@ navigation:
                     path: wallets/pages/reference/aa-sdk/core/functions/toSmartContractAccount.mdx
                   - page: waitForUserOperationTransaction
                     path: wallets/pages/reference/aa-sdk/core/functions/waitForUserOperationTransaction.mdx
+                  - page: webauthnGasEstimator
+                    path: wallets/pages/reference/aa-sdk/core/functions/webauthnGasEstimator.mdx
                   - page: wrapSignatureWith6492
                     path: wallets/pages/reference/aa-sdk/core/functions/wrapSignatureWith6492.mdx
               - section: Classes
@@ -1019,7 +1054,7 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
-      - section: Account Abstraction Ethers
+      - section: aa-sdk/ethers
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/aa-sdk/ethers/index.mdx

@@ -67,7 +67,7 @@ export const ExportPrivateKeyView = () => {
   // we are using react-query to handle loading states more easily, but feel free to use w/e state management library you prefer
   const {
     mutate: exportWallet,
-    isLoading,
+    isPending,
     data,
   } = useMutation({
     mutationFn: () =>
@@ -84,7 +84,7 @@ export const ExportPrivateKeyView = () => {
   return (
     <div className="flex flex-col gap-2">
       {!data ? (
-        <button onClick={() => exportWallet()} disabled={isLoading}>
+        <button onClick={() => exportWallet()} disabled={isPending}>
           Export Wallet
         </button>
       ) : (

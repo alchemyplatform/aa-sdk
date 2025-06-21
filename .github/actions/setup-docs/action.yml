@@ -13,21 +13,12 @@ runs:
       shell: bash
       run: node docs/scripts/extract-include-statements.js
 
-    - name: Checkout Alchemy Docs Repo
-      uses: actions/checkout@v4
-      with:
-        repository: alchemyplatform/docs
-        token: ${{ inputs.docs-github-token }}
-        path: docs-site
-
-    - name: Copy docs to docs-site/fern/wallets
+    - name: Ensure docs-site submodule is up-to-date
       shell: bash
-      run: |
-        mkdir -p docs-site/fern/wallets
-        cp -r docs/* docs-site/fern/wallets/
+      run: git submodule update --init --remote docs-site/
 
     - name: Insert Account Kit docs.yml into docs-site/fern/docs.yml
       shell: bash
       run: |
         cd docs-site
-        fern/wallets/scripts/insert-docs.sh
+        ../docs/scripts/insert-docs.sh aa-sdk

@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.43.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.42.0...v4.43.0) (2025-06-18)
+
+### Features
+
+- add webauthn-p256 to account-kit/smart-contracts + auto-generated ([#1702](https://github.com/alchemyplatform/aa-sdk/issues/1702)) ([06b3c07](https://github.com/alchemyplatform/aa-sdk/commit/06b3c07074baaa05baa5fe765f0190b735920499))
+
+# [4.42.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.41.0...v4.42.0) (2025-06-17)
+
+### Features
+
+- adds webauthn account support ([#1678](https://github.com/alchemyplatform/aa-sdk/issues/1678)) ([d2f0101](https://github.com/alchemyplatform/aa-sdk/commit/d2f0101900bb1a984b7e9e3d5825363bd4a22f89)), closes [#1639](https://github.com/alchemyplatform/aa-sdk/issues/1639) [#1694](https://github.com/alchemyplatform/aa-sdk/issues/1694)
+- allow nonce key overrides by default for non-deployed accounts ([#1683](https://github.com/alchemyplatform/aa-sdk/issues/1683)) ([0eb97cd](https://github.com/alchemyplatform/aa-sdk/commit/0eb97cd2bd264b81b31d29008f831b92b0d58f91))
+
 # [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
 
 ### Features
