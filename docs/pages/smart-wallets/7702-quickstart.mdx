@@ -31,9 +31,9 @@ This guide assumes you have an account you can sign with, like an [Alchemy Signe
 You're going to need the `@account-kit/wallet-client` and `@account-kit/infra`. We'll also be using `LocalAccountSigner` from `@aa-sdk/core` as the signer for demonstration purposes.
 
 <CodeGroup>
-  ```shell npm
-  npm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
-  ```
+```shell npm
+npm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
 
 ```shell bun
 bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
@@ -67,7 +67,6 @@ const transport = alchemy({
 const client = createSmartWalletClient({
   transport,
   chain: arbitrumSepolia, // use any chain imported from @account-kit/infra here!
-  mode: "remote",
   signer,
 });
 ```
