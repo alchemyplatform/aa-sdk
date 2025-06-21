@@ -42,11 +42,7 @@ methods:
           pattern: "^0[xX][0-9a-fA-F]*$"
       - name: "dummySignature"
         required: true
-        description: |
-          Dummy signature for the operation. This is useful for estimating gas costs.
-            <Warning>
-              This endpoint requires a dummy signature in the `userOp`. Check our [FAQs](/docs/reference/bundler-faqs#what-is-a-dummy-signature) to learn what a dummy signature is.
-            </Warning>
+        description: Dummy signature for the userOperation. This is useful for estimating gas costs. Check our [FAQs](/docs/reference/bundler-faqs#what-is-a-dummy-signature) to learn what a dummy signature is.
         schema:
           type: "string"
       - name: "userOperation"
