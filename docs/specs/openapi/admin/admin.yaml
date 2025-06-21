@@ -10,44 +10,12 @@ paths:
       tags: ["Gas Manager Admin API Endpoints"]
       summary: Create Policy
       description: |
-        Creates a new gas manager policy with the specified rules. Returns the policy id of 
-        a successfully created policy. The newly created policy will be in the `inactive` status.
+        Creates a new gas manager policy with the specified rules. The newly created policy will be in the `inactive` status.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
 
-        <Note title="Testnets">
-          On testnets, the userOp price is always $0, and hence the `maxSpendUsd`, `maxSpendPerSenderUsd`, and `maxSpendPerUoUsd` should not be configured.
-        </Note>
-
-        <Note title="Adding Custom Rules">
-          If you add custom rules (webhook URL) to the policy, the Gas Manager will make a POST request to the URL every time you use `alchemy_requestPaymasterAndData`, `alchemy_requestGasAndPaymasterAndData`, or `pm_getPaymasterData`.
-
-          **Request Payload**
-          - `userOperation`: The userOp object.
-          - `policyId`: The ID of your policy.
-          - `chainId`: The ID of the network where the operation is being performed.
-          - `webhookData`: Additional data you wish to include in the request, such as proof of humanity.
-
-          Here is an example request body:
-          ```json
-          {
-            "userOperation": { }, // structure depends on EntryPoint version  
-            "policyId": "",  
-            "chainId": "",  
-            "webhookData": "" 
-          }
-          ```
-
-          **Expected Result**
-
-          Your endpoint should respond with a `200` status code and a JSON body (`{ "approved": true | false }`) indicating whether to the userOp passes the custom rules.
-
-          Anything other than the above will be treated as error, and the Gas Manager will sponsor the userOp only if `approveOnFailure` is `true`.
-        </Note>
       operationId: create-policy
       security:
         - BearerAuth: []
@@ -68,16 +36,15 @@ paths:
                   default: "My Policy"
                 policyType:
                   $ref: "#/components/schemas/PolicyType"
-                  description: Type of the policy (e.g. "sponsorship"). Currently we support `sponsorship` (for EVM network policies) and `solana` (for Solana network policies).
+                  description: Type of the policy. Currently we support `sponsorship` (for sponsoring gas on EVM networks), `erc20` (for enabling users to pay gas with any ERC-20 token on EVM networks), and `solana` (for sponsoring fees and rent on Solana).
                 appId:
                   type: string
                   description: |
                     ID for the app associated with the new policy.
-                    Learn how to find your app ID [here](docs/reference/notify-api-faq).
                   default: "6d834x9k1yh4dx6z"
                 networks:
                   description: |
-                    Networks for the policy. Example: `ETH_MAINNET`. For Solana policies, valid values are `SOLANA_MAINNET` and `SOLANA_DEVNET`.
+                    Networks to be enabled for the policy. Example: `ETH_MAINNET`. For Solana policies, valid values are `SOLANA_MAINNET` and `SOLANA_DEVNET`.
                   type: array
                   items:
                     type: string
@@ -542,29 +509,29 @@ components:
       properties:
         maxSpendUsd:
           type: string
-          description: Maximum amount of USD that can be spent by the Gas Manager
+          description: Maximum amount of USD that can be sponsored
           default: "5000.00"
         maxSpendPerSenderUsd:
           type: string
-          description: Maximum amount of USD that can be spent by a single sender
+          description: Maximum amount of USD that can be sponsored for a single sender (not enforced on testnets)
           default: "100.00"
         maxSpendPerUoUsd:
           type: string
-          description: Maximum amount of USD that can be spent by a single user operation
+          description: Maximum amount of USD that can be sponsored for a single userOperation (not enforced on testnets)
           default: "20.00"
         maxCount:
           type: string
-          description: Maximum number of operations that can be sponsored through the policy
+          description: Maximum number of userOperations that can be sponsored
           default: "100"
         maxCountPerSender:
           type: string
-          description: Maximum number of operations that can be sponsored for a single sender through the policy
+          description: Maximum number of userOperations that can be sponsored for a single sender
           default: "2"
         senderAllowlist:
           type: array
           items:
             type: string
-          description: List of addresses that are allowed to send operations
+          description: List of addresses that are eligible for sponsorship
           default:
             - "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
             - "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
@@ -572,7 +539,7 @@ components:
           type: array
           items:
             type: string
-          description: List of addresses that are not allowed to send operations
+          description: List of addresses that are banned from receiving sponsorship
         startTimeUnix:
           type: string
           description: Unix timestamp of when the policy starts
@@ -587,7 +554,7 @@ components:
           default: "600000"
         webhookRules:
           type: object
-          description: Make a request to your server to verify sponsorship eligibility.
+          description: Enable conditional gas sponsorship by making a request to your server to verify sponsorship eligibility
           properties:
             webhookUrl:
               type: string
@@ -596,7 +563,7 @@ components:
               example: "https://dashboard.alchemy.com/gas-manager/policy/create"
             approveOnFailure:
               type: boolean
-              description: If true, the userOp will be sponsored in the event the request fails or times out.
+              description: If true, the userOp will be sponsored in the event on an error or timeout.
               default: false
           required:
             - webhookUrl
@@ -610,15 +577,15 @@ components:
       properties:
         maxSpendUsd:
           type: string
-          description: Maximum amount of USD that can be spent by the Gas Manager
+          description: Maximum amount of USD that can be sponsored
           default: "6500.00"
         maxSpendPerTxnUsd:
           type: string
-          description: Maximum amount of USD that can be spent per transaction
+          description: Maximum amount of USD that can be sponsored per transaction (not enforced on testnet)
           default: "30.00"
         maxCount:
           type: string
-          description: Maximum number of transactions that can be sponsored through the policy
+          description: Maximum number of transactions that can be sponsored
           default: "200"
         startTimeUnix:
           type: string
@@ -632,7 +599,7 @@ components:
     PolicyType:
       type: string
       enum: [sponsorship, erc20, solana]
-      description: Type of the policy (e.g. "sponsorship"). Currently we support `sponsorship` (for EVM network policies) and `solana` (for Solana network policies).
+      description: Type of the policy. Currently we support `sponsorship` (for sponsoring gas on EVM networks), `erc20` (for enabling users to pay gas with any ERC-20 token on EVM networks), and `solana` (for sponsoring fees and rent on Solana).
       default: "sponsorship"
 
     Erc20Token:
@@ -646,10 +613,10 @@ components:
           description: Erc20 token contract address
         price_reference_network:
           type: string
-          description: Price reference network when the erc20 token is on a testnet
+          description: Network to be used to calculate conversion rate (required for testnet ERC-20 tokens)
         price_reference_token_address:
           type: string
-          description: Erc20 token contract address from `price_reference_network`
+          description: Erc20 token contract address (on `price_reference_network`) to be used to calculate conversion rate (required for testnet ERC-20 tokens)
       required:
         - network
         - token_address
@@ -661,16 +628,22 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Erc20Token"
-          description: Erc20 tokens allowed by the rule
+          description: Erc20 tokens allowed under this policy
         recipient_address:
           type: string
-          description: Recipient's address across all networks
+          description: Wallet address that will receive the tokens paid by users. Please ensure that you own this address across all networks enabled under this policy
         use_post_op:
           type: boolean
-          description: Use post_op mode or pre_op mode
+          description: |
+            Erc20 transfer mode
+            - [Recommended] True: The user pays for the gas after the userOp execution. Enables the user to allow the paymaster contract to spend the ERC-20 token on their behalf (`approve()`) without a separate tx, improving ux. If the transfer fails, the userOp will revert but you’ll remain liable for the gas costs.
+            - False: The user pays for the gas before the userOp execution. Requires the paymaster contract to have allowance onchain before the userOp gets submitted. If the allowance doesn’t exist, the userOp will fail immediately.
         price_multiplier:
           type: number
-          description: multiplier of erc20 price
+          description: |
+            Adjust the Erc20 amount the user pays. For example: 
+            - `1.1` means that they user pays 10% more (you monetize gas payments)
+            - `0.95` means that the user pays 5% less (you partially sponsor gas)
         rules:
           $ref: "#/components/schemas/Rules"
           description: Rules for `erc20` policy type.
@@ -707,7 +680,7 @@ components:
           default: 0
         policyType:
           $ref: "#/components/schemas/PolicyType"
-          description: Type of the policy. `sponsorship`.
+          description: Type of the policy.
         policyState:
           type: string
           description: State of the policy
@@ -722,10 +695,10 @@ components:
           description: Gas pump id
         erc20_rules:
           $ref: "#/components/schemas/Erc20Rules"
-          description: Erc20 rules for policy
+          description: Erc20 rules for policy. Empty if `policyType` is not `erc20`.
         solana_rules:
           $ref: "#/components/schemas/SolanaRules"
-          description: Solana rules for policy
+          description: Solana rules for policy. Empty if `policyType` is not `solana`.
 
       required:
         - policyId

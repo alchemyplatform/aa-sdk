@@ -407,7 +407,7 @@ methods:
               description: "The policy ID or list of policy IDs."
             webhookData:
               type: "string"
-              description:  "Additional data you can include in the request, such as proof of humanity, if you have enabled custom rules in your Gas Manager policy."
+              description: "Additional data you can include in the request, such as proof of humanity, if you have enabled custom rules in your Gas Manager policy."
             erc20Context:
               $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
               description: "Erc20 context, required to enable users to pay gas with ERC-20 tokens."
@@ -510,7 +510,7 @@ methods:
               description: "Erc20 context, required to enable users to pay gas with ERC-20 tokens."
             webhookData:
               type: "string"
-              description:  "Additional data you can include in the request, such as proof of humanity, if you have enabled custom rules in your Gas Manager policy."
+              description: "Additional data you can include in the request, such as proof of humanity, if you have enabled custom rules in your Gas Manager policy."
     result:
       name: "Response"
       description: "The response object may be one of two types:"
