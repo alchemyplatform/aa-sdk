@@ -45,7 +45,7 @@ type Context = {
   policyId: string | string[];
   erc20Context?: {
     tokenAddress: Address;
-    maxTokenAmount?: BigInt;
+    maxTokenAmount?: number;
     permit?: Hex;
   };
 };
@@ -131,7 +131,7 @@ interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
 
 export type PolicyToken = {
   address: Address;
-  maxTokenAmount: bigint;
+  maxTokenAmount: number;
   approvalMode?: "NONE" | "PERMIT";
   erc20Name?: string;
   version?: string;
@@ -372,7 +372,7 @@ const overrideField = <
  * @param {string | string[]} policyId - The policy ID or array of policy IDs
  * @param {PolicyToken} policyToken - The policy token configuration
  * @param {Address} policyToken.address - ERC20 contract addressya
- * @param {bigint} [policyToken.maxTokenAmount] - Optional ERC20 token limit
+ * @param {bigint} [policyToken.maxTokenAmount] - ERC20 token value limit
  * @param {"NONE" | "PERMIT"} [policyToken.approvalMode] - ERC20 approve mode
  * @param {string} [policyToken.erc20Name] - EIP2612 specified ERC20 contract name
  * @param {string} [policyToken.version] - EIP2612 specified ERC20 contract version
@@ -388,7 +388,7 @@ const generateSignedPermit = async <
   policyId: string | string[],
   policyToken: {
     address: Address;
-    maxTokenAmount: bigint;
+    maxTokenAmount: number;
     approvalMode?: "NONE" | "PERMIT";
     erc20Name?: string;
     version?: string;
@@ -444,8 +444,8 @@ const generateSignedPermit = async <
   }
 
   const decimals =
-    10n ** (decimalsResponse.data ? BigInt(decimalsResponse.data) : 18n);
-  const maxAmountToken = policyToken.maxTokenAmount * decimals;
+    10 ** (decimalsResponse.data ? Number(decimalsResponse.data) : 18);
+  const maxRawAmountToken = BigInt(policyToken.maxTokenAmount * decimals);
   const nonce = BigInt(nonceResponse.data);
 
   const paymasterAddress = paymasterData.paymaster
@@ -472,7 +472,7 @@ const generateSignedPermit = async <
     message: {
       owner: account.address,
       spender: paymasterAddress,
-      value: maxAmountToken,
+      value: maxRawAmountToken,
       nonce: nonce,
       deadline,
     } satisfies PermitMessage,
@@ -481,6 +481,6 @@ const generateSignedPermit = async <
   const signedPermit = await account.signTypedData(typedPermitData);
   return encodeAbiParameters(
     [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
-    [maxAmountToken, deadline, signedPermit],
+    [maxRawAmountToken, deadline, signedPermit],
   );
 };

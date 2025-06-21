@@ -50,7 +50,7 @@ export type AlchemySmartAccountClientConfig<
   policyId?: string | string[];
   policyToken?: {
     address: Address;
-    maxTokenAmount: bigint;
+    maxTokenAmount: number;
     approvalMode?: "NONE" | "PERMIT";
     erc20Name?: string;
     version?: string;
