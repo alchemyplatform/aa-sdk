@@ -88,9 +88,7 @@ paths:
         Returns a policy by id.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: get-policy
       security:
@@ -129,9 +127,7 @@ paths:
         Deletes a policy by id.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: delete-policy
       security:
@@ -171,9 +167,7 @@ paths:
         Replaces all rules in an existing policy by id.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: replace-policy
       security:
@@ -235,12 +229,10 @@ paths:
       tags: ["Gas Manager Admin API Endpoints"]
       summary: Get All Policies
       description: |
-        Returns all policies under an app. The results are paginated.
+        Returns all policies. The results are paginated.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: get-all-policies
       security:
@@ -249,7 +241,7 @@ paths:
         - name: appId
           in: query
           description: |
-            An optional app id to filter results by policies associated with that app. Learn how to find your app ID [here](https://docs.alchemy.com/reference/notify-api-faq#where-can-i-find-the-app-id).
+            An optional app id to filter results by policies associated with that app.
           schema:
             type: string
             default: "6d834x9k1yh4dx6z"
@@ -286,7 +278,7 @@ paths:
                           $ref: "#/components/schemas/Policy"
                       before:
                         type: string
-                        description: String - used for pagination. If there are previous results, `before` field is returned in the response and can be passed in the request to fetch the previous page. Can be null if there are no previous results.
+                        description: String - used for pagination. If there are previous results, `before` field is returned in the response and can be passed in the request to fetch the previous page. Can be null if there are no previous results. Can be null if there are no previous results.
                       after:
                         type: string
                         description: String - used for pagination. If more results are available `after` field is returned in the response and can be passed in the request to fetch the next page. Can be null if there are no more results.
@@ -304,9 +296,7 @@ paths:
         Modifies the status of a policy to either "active" or "inactive".
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: update-policy-status
       security:
@@ -356,12 +346,10 @@ paths:
       tags: ["Gas Manager Admin API Endpoints"]
       summary: Get Policy Stats
       description: |
-        Returns stats about a policy specified by ID, including signatures mined, signatures expired, signatures pending, USD mined, and USD pending.
+        Returns stats about a policy specified by ID.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: get-policy-stats
       security:
@@ -449,9 +437,7 @@ paths:
         Returns a list of sponsorships associated with the specified policy ID. The results are paginated.
 
         <Note title="Header Access Token">
-          To call this endpoint, you must use your access token in the authorization header of the API request. Useful resources:
-          - [How to Create Access Keys](/docs/how-to-create-access-keys)
-          - [How To Make HTTP Header-Based API Requests](/docs/how-to-use-api-keys-in-http-headers)
+          To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
         </Note>
       operationId: get-sponsorships
       security:
@@ -460,7 +446,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: ID of the policy for which sponsorships are being queried.
+          description: ID of the policy.
           schema:
             type: string
             default: "a844e221-3c13-40c6-95db-d2db390e14b5"
@@ -710,31 +696,31 @@ components:
       properties:
         sender:
           type: string
-          description: Address of the sender
+          description: Address of the sender.
         grantedAt:
           type: string
-          description: Unix timestamp of when the sponsorship was granted
+          description: Unix timestamp of when the sponsorship was granted.
         confirmedTotalUsd:
           type: string
-          description: Total amount of USD that was spent. Can be null if the transaction has not been mined
+          description: Total amount of USD that was sponsored. Can be null if the userOp has not been mined.
         status:
           type: string
-          description: Status of the sponsorship. Can be PENDING, MINED or EXPIRED
+          description: Status of the sponsorship. Can be PENDING, MINED or EXPIRED.
         uoHash:
           type: string
-          description: Hash of the user operation
+          description: Hash of the userOperation.
         uoExplorerUrl:
           type: string
-          description: URL to the user operation explorer for the associated user operation
+          description: URL to view the userOperation in a block explorer.
         txnHash:
           type: string
-          description: Hash of the transaction associated with the sponsorship. Can be null if not mined
+          description: Hash of the bundle transaction containing the userOperation. Can be null if not yet mined.
         txnExplorerUrl:
           type: string
-          description: URL to the transaction explorer for the associated transaction. Can be null if not mined
+          description: URL to view the bundle transaction in an explorer. Can be null if not yet mined.
         network:
           type: string
-          description: Network of the user operation
+          description: Network where the userOperation was submitted.
       required:
         - sender
         - grantedAt
