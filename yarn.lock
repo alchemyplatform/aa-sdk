@@ -67,14 +67,14 @@
     jwt-decode "^4.0.0"
     zod "^3.22.4"
 
-"@account-kit/wallet-client@^0.1.0-alpha.6":
-  version "0.1.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@account-kit/wallet-client/-/wallet-client-0.1.0-alpha.6.tgz#31cf0a39078a8419760cea5f216549629fd75486"
-  integrity sha512-QaxRRI3da0qnVl1jfMWOHal1sV9QiTmLI8w98JPJp2Cm1/AXxyj/u6JRaN01znmriT1tlFi0rTj/ZYiqd/7QiA==
+"@account-kit/wallet-client@^0.1.0-alpha.9":
+  version "0.1.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@account-kit/wallet-client/-/wallet-client-0.1.0-alpha.9.tgz#56af3836a516e5361d818cdce4658e2c4de5c37f"
+  integrity sha512-P5oPZIKxM+X0AQJc5kRuXZ2LkZCz+NUmzt/OgvVezvmp/sFeor1pZ3Q2j6EtzCYCWE1apPgg90AHNB5ezB2f4A==
   dependencies:
-    "@aa-sdk/core" "^4.34.0"
-    "@account-kit/infra" "^4.34.0"
-    "@account-kit/smart-contracts" "^4.34.0"
+    "@aa-sdk/core" "^4.43.1"
+    "@account-kit/infra" "^4.43.1"
+    "@account-kit/smart-contracts" "^4.43.1"
     "@sinclair/typebox" "^0.34.33"
     deep-equal "^2.2.3"
     ox "^0.6.12"
