@@ -574,8 +574,14 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
                       - page: createAccount
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/createAccount.mdx
+                      - page: experimental_addToMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_addToMultiOwner.mdx
                       - page: experimental_createApiKey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
+                      - page: experimental_createMultiSig
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiSig.mdx
+                      - page: experimental_multiOwnerSignRawMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
                       - page: getPasskeyStatus

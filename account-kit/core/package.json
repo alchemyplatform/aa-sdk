@@ -59,7 +59,7 @@
     "@account-kit/react-native-signer": "^4.43.1",
     "@account-kit/signer": "^4.43.1",
     "@account-kit/smart-contracts": "^4.43.1",
-    "@account-kit/wallet-client": "^0.1.0-alpha.6",
+    "@account-kit/wallet-client": "^0.1.0-alpha.9",
     "@solana/web3.js": "^1.98.0",
     "js-cookie": "^3.0.5",
     "zod": "^3.22.4",
