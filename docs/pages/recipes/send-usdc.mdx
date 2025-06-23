@@ -1,0 +1,127 @@
+---
+title: Send USDC (or other ERC-20s)
+description: Learn how to build and send a transaction that transfers USDC from a smart account using Account Kit.
+slug: wallets/recipes/send-usdc
+---
+
+In this recipe you'll construct an ERC-20 `transfer` call and submit it through a Smart Account Client. The same pattern works for **any** ERC-20 token; just swap the token address and number of decimals.
+
+> Prefer code? Jump straight to the **React** or **Core** tabs below.
+
+## Prerequisites
+
+1. Account Kit integrated in your app (see the [React quickstart](/wallets/react/quickstart) or [Core quickstart](/wallets/core/quickstart)).
+2. A connected user with an on-chain smart account.
+3. The USDC contract address for your target chain. For Ethereum mainnet this is `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`.
+
+- Visit [Circle's documentation](https://developers.circle.com/stablecoins/usdc-contract-addresses) for USDC addresses on other chains.
+
+## 1. Encode the `transfer` calldata
+
+```ts
+import { encodeFunctionData, parseAbi } from "viem";
+
+const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+const recipient = "0xRecipientAddress";
+const amount = 10n * 1_000_000n; // 10 USDC (6 decimals)
+
+const transferCalldata = encodeFunctionData({
+  abi: parseAbi(["function transfer(address,uint256) returns (bool)"]),
+  functionName: "transfer",
+  args: [recipient, amount],
+});
+```
+
+## 2. Send the transaction
+
+<Tabs>
+  <Tab title="React (hook)">
+
+```tsx
+import {
+  useSmartAccountClient,
+  useSendUserOperation,
+} from "@account-kit/react";
+
+export function SendUsdcButton() {
+  const { client } = useSmartAccountClient({});
+
+  const { sendUserOperation, sendUserOperationResult } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+    onSuccess: () => {
+      console.log("USDC transfer successful!");
+    },
+    onError: (error) => {
+      console.error("USDC transfer failed:", error);
+    },
+  });
+
+  const handleClick = async () => {
+    if (!client) return;
+
+    sendUserOperation({
+      uo: {
+        target: usdcAddress,
+        data: transferCalldata,
+        value: 0n, // no native value for ERC-20 transfers
+      },
+    });
+  };
+
+  return <button onClick={handleClick}>Send USDC</button>;
+}
+```
+
+  </Tab>
+  <Tab title="Core (vanilla JS)">
+
+```ts
+import { createSmartAccountClient } from "@alchemy/aa-core";
+// Set up your transport, signer and entryPoint as usual
+const client = await createSmartAccountClient({
+  /* config */
+});
+
+const userOpHash = await client.sendUserOperation({
+  uo: {
+    target: usdcAddress,
+    data: transferCalldata,
+    value: 0n,
+  },
+});
+
+console.log("USDC transfer userOp hash:", userOpHash);
+```
+
+  </Tab>
+</Tabs>
+
+## 3. Wait for the transaction to be mined
+
+If you're using the React hooks with `waitForTxn: true`, the transaction will automatically be waited for. You can access the transaction hash from `sendUserOperationResult`:
+
+```tsx
+const { sendUserOperation, sendUserOperationResult } = useSendUserOperation({
+  client,
+  waitForTxn: true,
+  onSuccess: () => {
+    console.log("Transaction hash:", sendUserOperationResult?.hash);
+  },
+});
+```
+
+Alternatively, you can manually wait for the transaction:
+
+```ts
+import { useWaitForUserOperationTransaction } from "@account-kit/react";
+
+const { waitForUserOp } = useWaitForUserOperationTransaction();
+const receipt = await waitForUserOp(userOpHash);
+```
+
+## Next steps
+
+- Parameterize the token address/decimals to support any ERC-20.
+- Batch multiple user operations in **one** request (e.g. aprrove, transfer, etc).
+- Combine with [sponsored gas](/wallets/react/sponsor-gas) for a completely gas-less UX.

@@ -1,0 +1,145 @@
+---
+title: Connect with EOAs
+description: How to bring in your own EOAs to Account Kit
+---
+
+You can allow users to login by connecting their existing EOA using Account Kit. This can be done using our pre-built UI components or custom UI - no need for a separate wallet connector!
+Depending on what method you choose, you can bring in your EOA:
+
+- **As a "pure" EOA**: users connect and transact directly from their EOAs. These wallets don’t support smart account features like gas sponsorship or batching.
+- **As an owner and signer of a new smart account**: users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new smart wallet have AA features like sponsorship and batching.
+
+## Pre-built Components
+
+Easily log in into your existing EOAs using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
+**Note:** Since this is not a smart account, users will not get sponsorship, batching, or other features, and instead they will use their EOA as normal.
+
+Our SDK supports external wallet connection out of the box, so you can seamlessly support both Web2 users with social login and Web3 users who want to bring their own EOAs.We support enabling users to bring their existing EOA in 2 ways:
+
+1. **Automatically detect and display all wallet extensions available in the user's browser.** (_Note: if the user has no wallet extensions installed, nothing will be displayed_)
+2. **WalletConnect for all other EOAs**
+
+With Account Kit, users can still connect to their existing wallets without sacrificing compatibility or convenience.
+
+Our hooks will handle checking if the connected wallet is a smart wallet or an existing EOA.
+Transactions can be signed and sent in the same way, but external EOA wallets don't have access to Account Abstraction benefits such as gas abstraction, batching, etc.
+These EOAs will simply function as EOAs.
+
+In order to access these external wallet providers, just make sure to include configure `type: "external_wallets"` in your config:
+
+```ts twoslash [src/config.ts]
+// @noErrors
+import { createConfig, cookieStorage } from "@account-kit/react";
+import { alchemy, sepolia } from "@account-kit/infra";
+
+export const config = createConfig(
+  {
+    // alchemy config
+    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
+    chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
+    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
+    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
+    // optional config to override default session manager config
+    sessionConfig: {
+      expirationTimeMs: 1000 * 60 * 60, // 60 minutes (default is 15 min)
+    },
+  },
+  {
+    // authentication ui config - your customizations here
+    auth: {
+      sections: [
+        [{ type: "email" }],
+        [
+          { type: "passkey" },
+          { type: "social", authProviderId: "google", mode: "popup" },
+          { type: "social", authProviderId: "facebook", mode: "popup" },
+        ],
+        [
+          {
+            type: "external_wallets",
+            walletConnect: { projectId: "your-project-id" },
+          },
+        ],
+      ],
+      addPasskeyOnSignup: true,
+      showSignInText: true,
+    },
+  },
+);
+```
+
+In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config. You create a `WalletConnect` id [here](https://cloud.reown.com/sign-in).
+
+```ts twoslash
+// @noErrors
+[
+  {
+    type: "external_wallets",
+    walletConnect: { projectId: "your-project-id" },
+  },
+];
+```
+
+## Custom UI
+
+### Bring in an EOA via Connectors
+
+If you need complete control over the user experience, you can customize your EOA connection. For example, use the [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect) hook to allow users to connect their EOA via available connectors:
+
+```tsx twoslash
+// @noErrors
+import { useConnect } from "@account-kit/react";
+
+const { connectors, connect } = useConnect({
+  onSuccess: (data) => {
+    console.log("Connected!", data);
+  },
+  onError: (err) => {
+    console.error("Connection failed", err);
+  },
+});
+
+return (
+  <div>
+    {connectors.map((connector) => (
+      <button key={connector.id} onClick={() => connect({ connector })}>
+        Connect with {connector.name}
+      </button>
+    ))}
+  </div>
+);
+```
+
+### Bring in an EOA as a Smart Wallet Owner
+
+For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core` to bring in these EOAs as your smart wallet owner. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
+By making your EOA an owner of a smart account, you will have access to AA feature through your new smart wallet.
+
+```ts twoslash
+// @noErrors
+import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+import { createModularAccountV2 } from "@account-kit/smart-contracts";
+
+const externalProvider = window.ethereum; // or another EIP-1193 provider
+
+const walletClient = createWalletClient({
+  chain: sepolia,
+  transport: custom(externalProvider),
+});
+
+export const signer: SmartAccountSigner = new WalletClientSigner(
+  walletClient,
+  "json-rpc",
+);
+
+// Connect your signer to your smart account
+
+const account = await createModularAccountV2({
+  chain: sepolia,
+  transport: alchemyTransport,
+  signer: signer, // your EOA that you've brought in as an owner
+});
+```
