@@ -6,58 +6,46 @@ slug: wallets/react/sponsor-gas-with-erc20
 
 Gas fees paid in the native network token can still feel foreign to users that primarily hold stablecoins or your app's own token. With **Account Kit** you can let users pay those fees in any ERC-20 token that you approve via the **Gas Manager**.
 
-## Create a Gas Manager policy
+## Goal
 
-_TODO_
+Enable your React app to sponsor gas fees with an ERC-20 token (for example **USDC**) so end-users can pay fees without native ETH.
 
-## Set the policy globally
+## Prerequisites
 
-Just like standard sponsorship, you can attach an ERC-20 policy to every `UserOperation` sent by the hooks by passing both `policyId` **and** `policyToken` when you create your Account Kit config.
+- Account Kit already installed and configured in your project.
+- An Alchemy API key.
+- A Gas Manager policy of type "Pay gas with any token". (_TODO – link to policy creation guide_)
+- The ERC-20 token contract address you want to accept (shown here as `USDC_ADDRESS`).
 
-<Tip>
-  Replace `ALCHEMY_API_KEY`, `GAS_MANAGER_POLICY_ID`, and `USDC_ADDRESS` with
-  your own values.
-</Tip>
+## Steps
+
+### 1 Add the policy to your global config
 
 ```ts twoslash config.ts
-// @noErrors
 import { createConfig } from "@account-kit/react";
 import { sepolia } from "@account-kit/infra";
 
 export const config = createConfig({
   apiKey: "ALCHEMY_API_KEY",
   chain: sepolia,
-  policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+  policyId: "GAS_MANAGER_POLICY_ID", // your policy
   policyToken: {
-    // [!code ++]
-    address: "USDC_ADDRESS", // ERC-20 used to pay gas
-    // Optional: limit max token amount the paymaster can pull
-    maxTokenAmount: 10_000n,
+    address: "0x", // USDC_ADDRESS or an ERC-20 token address
+    maxTokenAmount: 10_000n, // optional safety limit
   },
 });
 ```
 
-All `UserOperations` dispatched with the [Send User Operations](/wallets/react/send-user-operations) guide will now be paid with the token you provided.
+All `UserOperations` sent with the hooks will now be paid with the token configured above.
 
-## Set the policy per smart-account client
-
-If you prefer to sponsor only some operations, pass the same two fields to `useSmartAccountClient`.
+### 2 Send a sponsored UserOperation
 
 ```tsx twoslash
 import React from "react";
-import {
-  useSmartAccountClient,
-  useSendUserOperation,
-} from "@account-kit/react";
+import { useSendUserOperation } from "@account-kit/react";
 
-export default function MyComponent() {
-  const { client } = useSmartAccountClient({
-    policyId: "GAS_MANAGER_POLICY_ID",
-    policyToken: {
-      address: "USDC_ADDRESS", // [!code ++]
-    },
-  });
-  const { sendUserOperation } = useSendUserOperation({ client });
+export default function PayWithUsdcButton() {
+  const { sendUserOperation } = useSendUserOperation();
 
   return (
     <button
@@ -71,15 +59,28 @@ export default function MyComponent() {
         })
       }
     >
-      Send USDC-Sponsored UO
+      Send USDC-sponsored operation
     </button>
   );
 }
 ```
 
-## Things to keep in mind
+### 3 (Optional) Override on a single client
 
-• The account must hold enough of the chosen token to cover the gas cost.
-• If your policy uses the **After** transfer mode (default), the first sponsored operation must include or be preceded by an `approve` so the paymaster can pull tokens. The `@account-kit/core` helpers can automate this for you – see the `useSendUOsErc20Sponsorship` example in the repo.
-• The USD value of the tokens transferred is added to your monthly Alchemy invoice, just like native-token sponsorship.
+If you only want specific operations to use the policy, create a dedicated client instead of setting it globally.
 
+```tsx twoslash
+const { client } = useSmartAccountClient({
+  policyId: "GAS_MANAGER_POLICY_ID",
+  policyToken: {
+    address: "0x", // USDC_ADDRESS or an ERC-20 token address
+    maxTokenAmount: 10_000n,
+  },
+});
+```
+
+Use this `client` with any hook that sends UserOperations.
+
+## Done
+
+Your dApp now sponsors gas with the chosen ERC-20 token!

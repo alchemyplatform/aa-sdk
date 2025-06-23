@@ -6,59 +6,47 @@ slug: wallets/react-native/using-smart-accounts/sponsor-gas-with-erc20
 
 Gas fees paid in the native network token can feel foreign to users that mainly hold stablecoins or your app's own token. With **Account Kit** you can let them pay those fees in any ERC-20 token approved in your **Gas Manager** policy.
 
-## Create a Gas Manager policy
+## Goal
 
-_TODO_
+Allow your React Native app to sponsor gas fees with a chosen ERC-20 token (for example **USDC**) so users don't need native ETH.
 
-## Set the Policy ID and token globally
+## Prerequisites
 
-Attach an ERC-20 policy to every `UserOperation` sent by the hooks by passing both `policyId` **and** `policyToken` when you create your Account Kit config.
+- Account Kit set up in your project.
+- An Alchemy API key.
+- A Gas Manager policy of type "Pay gas with any token". (_TODO – link to policy creation guide_)
+- The ERC-20 token contract address you want to accept.
 
-<Tip>
-  Replace `ALCHEMY_API_KEY`, `GAS_MANAGER_POLICY_ID`, and `USDC_ADDRESS` with
-  your own values.
-</Tip>
+## Steps
+
+### 1 Add the policy to your global config
 
 ```ts twoslash config.ts
-// @noErrors
 import { createConfig } from "@account-kit/react-native";
 import { sepolia } from "@account-kit/infra";
 
 export const config = createConfig({
   apiKey: "ALCHEMY_API_KEY",
   chain: sepolia,
-  policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+  policyId: "GAS_MANAGER_POLICY_ID", // your policy
   policyToken: {
-    // [!code ++]
-    address: "USDC_ADDRESS", // ERC-20 used to pay gas
-    // Optional: limit max token amount the paymaster can pull
-    maxTokenAmount: 10_000n,
+    address: "0x", // USDC_ADDRESS or an ERC-20 token address
+    maxTokenAmount: 10_000n, // optional safety limit
   },
 });
 ```
 
-All `UserOperations` dispatched with the [Send User Operations](/wallets/react-native/using-smart-accounts/send-user-operations) guide will now be paid with the token you provided.
+All hooks will now pay gas with the token configured above.
 
-## Set the policy per UserOperation
-
-If you want finer control, pass the same two fields to `useSmartAccountClient()`.
+### 2 Send a sponsored UserOperation
 
 ```tsx twoslash
 import React from "react";
 import { View, Pressable, Text } from "react-native";
-import {
-  useSmartAccountClient,
-  useSendUserOperation,
-} from "@account-kit/react-native";
+import { useSendUserOperation } from "@account-kit/react-native";
 
-export default function MyComponent() {
-  const { client } = useSmartAccountClient({
-    policyId: "GAS_MANAGER_POLICY_ID",
-    policyToken: {
-      address: "USDC_ADDRESS", // [!code ++]
-    },
-  });
-  const { sendUserOperation } = useSendUserOperation({ client });
+export default function PayWithTokenButton() {
+  const { sendUserOperation } = useSendUserOperation();
 
   return (
     <View>
@@ -74,7 +62,7 @@ export default function MyComponent() {
         }
       >
         <View>
-          <Text>Send USDC-Sponsored User Operation</Text>
+          <Text>Send token-sponsored UO</Text>
         </View>
       </Pressable>
     </View>
@@ -82,8 +70,22 @@ export default function MyComponent() {
 }
 ```
 
-## Things to keep in mind
+### 3 (Optional) Override on a single client
 
-• The account must hold enough of the chosen token to cover the gas cost.
-• If your policy uses the **After** transfer mode (default), the first sponsored operation must include or be preceded by an `approve` so the paymaster can pull tokens. The helper shown in `useSendUOsErc20Sponsorship` in the repo can automate this for you.
-• The USD value of the tokens transferred is added to your monthly Alchemy invoice, just like native-token sponsorship.
+Create a dedicated client if you only want certain operations to use the policy.
+
+```tsx twoslash
+const { client } = useSmartAccountClient({
+  policyId: "GAS_MANAGER_POLICY_ID",
+  policyToken: {
+    address: "0x", // USDC_ADDRESS or an ERC-20 token address
+    maxTokenAmount: 10_000n,
+  },
+});
+```
+
+Use this `client` with any hook that sends UserOperations.
+
+## Done
+
+Your app now sponsors gas with the specified ERC-20 token!
