@@ -1,0 +1,157 @@
+---
+title: Session Keys
+subtitle: Learn how to use session keys with Wallet APIs
+url: https://docs.alchemy.com/reference/wallet-apis-session-keys
+slug: reference/wallet-apis-session-keys
+---
+
+Session keys are a powerful feature of the Alchemy Wallets API that allow you to create a session for a user's smart account with specific permissions. This enables secure, permissioned access to the user's wallet, allowing your app's server to perform actions on behalf of the user without needing their private key.
+
+### Create A Session With Permissions
+
+Session keys allow another account to operate on a user's smart account with given permissions. After creating a session, you will be able to sign transactions for the generated wallet within the defined permissions using that session key. See [here for a list of permissions!](#permission-types)
+
+This guide assumes you have an account you can sign with, like an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer) or a user's EOA. You will also need an Alchemy API key, and a [gas manager policy ID](https://www.alchemy.com/docs/wallets/react/sponsor-gas) if you want to sponsor gas.
+
+<Tip title="Don't have an API key?" icon="star">
+  Start using the Alchemy Wallets API today! [Get started for
+  free](https://dashboard.alchemy.com/signup/?a=f8afc2202c).
+</Tip>
+
+We'll demonstrate how to create and use session keys [using the SDK client](/reference/wallet-apis-session-keys/sdk) or by using platform-agnostic [JSON-RPC APIs](/reference/wallet-apis-session-keys/api).
+
+<CardGroup cols={2}>
+  <Card
+    title="Using SDK"
+    href="/reference/wallet-apis-session-keys/sdk"
+    icon="code"
+  >
+    Start building in minutes using the TypeScript SDK.
+  </Card>
+  <Card
+    title="Using JSON-RPC API"
+    href="/reference/wallet-apis-session-keys/api"
+    icon="network-wired"
+  >
+    Integrate with any RPC client using the JSON-RPC APIs.
+  </Card>
+</CardGroup>
+
+## Permission Types
+
+To specify permissions during a session key installation, include them in the `permissions` array when calling `client.grantPermission()` via the SDK or `wallet_createSession` via the API.
+
+```ts
+const permissions = await client.grantPermissions({
+  account: account.address,
+  expirySec: Math.floor(Date.now() / 1000) + 60 * 60,
+  key: {
+    publicKey: await sessionKey.getAddress(),
+    type: "secp256k1",
+  },
+  permissions: [{ PERMISSION_ONE }, { PERMISSION_TWO }],
+});
+```
+
+### Native Token Transfer
+
+This permission allows transfer of native tokens (like Ether) from the account.
+
+```ts
+{
+  type: "native-token-transfer";
+  data: {
+    allowance: Hex; // a hexadecimal encoded transfer limit, for example, 1 ETH would be 0xde0b6b3a7640000 (1e18 in hex)
+  }
+}
+```
+
+### ERC20 Token Transfer
+
+This permission allows transfer or approval of erc20 tokens from the account. Both transfers and approvals count towards the limit.
+
+```ts
+{
+  type: "erc20-token-transfer";
+  data: {
+    address: Address; // erc20 token contract address
+    allowance: Hex; // a hexadecimal encoded transfer limit
+  }
+}
+```
+
+### Gas Limit
+
+This permission allows the session key to spend gas for user operations up to a specified limit.
+
+```ts
+{
+  type: "gas-limit";
+  data: {
+    limit: Hex; // a hexadecimal encoded gas limit, for example 300000 gas would be 0x493e0
+  }
+}
+```
+
+### Contract Access
+
+This permission grants access to **all** functions in a specific contract.
+
+```ts
+{
+  type: "contract-access";
+  data: {
+    address: Address; // the target contract’s address
+  }
+}
+```
+
+### Account Functions
+
+This permission grants access to specific functions on the smart account itself.
+
+```ts
+{
+  type: "account-functions";
+  data: {
+    functions: Hex[]; // array of allowed function selectors, e.g. ["0xabcdef01", "0x12345678"]
+  };
+}
+```
+
+### Functions On All Contracts
+
+This permission grants access to a set of function selectors **across any** address.
+
+```ts
+{
+  type: "functions-on-all-contracts";
+  data: {
+    functions: Hex[]; // array of function selectors allowed globally, e.g. ["0xddf252ad"]
+  };
+}
+```
+
+### Functions On Contract
+
+This permission grants access to specific function selectors on **one** contract.
+
+```ts
+{
+  type: "functions-on-contract";
+  data: {
+    address: Address;  // the contract address you’re targeting
+    functions: Hex[];  // array of allowed function selectors for that contract, e.g. ["0xddf252ad"]
+  };
+}
+```
+
+### Root
+
+This permission grants full access to everything. Needless to say, this is a very dangerous permission to grant.
+
+```ts
+{
+  type: "root"; // no additional data required
+}
+```
