@@ -1,5 +1,6 @@
 import {
   AccountNotFoundError,
+  NotAModularAccountV2Error,
   EntityIdOverrideError,
   type GetAccountParameter,
   type GetEntryPointFromAccount,
@@ -141,19 +142,21 @@ export function installValidationActions<
     hooks,
     account = client.account,
   }: InstallValidationParams<TAccount>) => {
-    if (!account || !isModularAccountV2(account)) {
+    if (!account) {
       throw new AccountNotFoundError();
     }
 
-    if (isSmartAccountWithSigner(account)) {
-      if (!isSmartAccountClient(client)) {
-        // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
-        throw new IncompatibleClientError(
-          "SmartAccountClient",
-          "installValidation",
-          client,
-        );
-      }
+    if (!isModularAccountV2(account)) {
+      throw new NotAModularAccountV2Error();
+    }
+
+    if (isSmartAccountWithSigner(account) && !isSmartAccountClient(client)) {
+      // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "installValidation",
+        client,
+      );
     }
 
     // an entityId of zero is only allowed if we're installing or uninstalling hooks on the fallback validation
@@ -187,8 +190,12 @@ export function installValidationActions<
     hookUninstallDatas,
     account = client.account,
   }: UninstallValidationParams<TAccount>) => {
-    if (!account || !isModularAccountV2(account)) {
+    if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isModularAccountV2(account)) {
+      throw new NotAModularAccountV2Error();
     }
 
     if (isSmartAccountWithSigner(account)) {
