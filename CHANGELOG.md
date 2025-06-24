@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+### Features
+
+- add paymaster address to aa-sdk ([#1662](https://github.com/alchemyplatform/aa-sdk/issues/1662)) ([eff651c](https://github.com/alchemyplatform/aa-sdk/commit/eff651c89758bd3a1b7ecc04778b25d2a9dc64e9))
+- adds webauthn session key support ([#1563](https://github.com/alchemyplatform/aa-sdk/issues/1563)) ([326d660](https://github.com/alchemyplatform/aa-sdk/commit/326d6605a2db8b9a23d81ac95df0374bd8a36572)), closes [#1639](https://github.com/alchemyplatform/aa-sdk/issues/1639) [#1663](https://github.com/alchemyplatform/aa-sdk/issues/1663) [#1654](https://github.com/alchemyplatform/aa-sdk/issues/1654)
+
 # [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
 
 ### Bug Fixes
