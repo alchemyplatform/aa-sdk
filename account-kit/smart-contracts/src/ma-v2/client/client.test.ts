@@ -29,6 +29,7 @@ import {
   getDefaultPaymasterGuardModuleAddress,
   getDefaultSingleSignerValidationModuleAddress,
   getDefaultTimeRangeModuleAddress,
+  getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
   NativeTokenLimitModule,
   PaymasterGuardModule,
@@ -66,6 +67,7 @@ import {
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
+import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
@@ -74,6 +76,7 @@ import {
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
 import { HookType } from "../actions/common/types.js";
+import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -165,6 +168,86 @@ describe("MA v2 Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount,
     );
+  });
+
+  it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
+    const provider = (await givenWebAuthnProvider()).provider.extend(
+      installValidationActions,
+    );
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // set up session key client
+    const webauthnDevice = new SoftWebauthnDevice();
+
+    const credential = await createWebAuthnCredential({
+      rp: { id: "localhost", name: "localhost" },
+      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+      user: { name: "test", displayName: "test" },
+    });
+
+    const { x, y } = parsePublicKey(credential.publicKey);
+
+    // install webauthn validation module
+    const result = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          provider.chain,
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        x,
+        y,
+      }),
+      hooks: [],
+    });
+
+    // wait for the UserOperation to be mined
+    await provider.waitForUserOperationTransaction(result).catch(async () => {
+      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
+        uoToDrop: result.request,
+      });
+      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+    });
+
+    // create session key client
+    const sessionKeyClient = await givenConnectedWebauthnProvider({
+      credential,
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
+    });
+
+    const sessionKeyResult = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    // wait for the UserOperation to be mined
+    await sessionKeyClient
+      .waitForUserOperationTransaction(sessionKeyResult)
+      .catch(async () => {
+        const dropAndReplaceResult =
+          await sessionKeyClient.dropAndReplaceUserOperation({
+            uoToDrop: sessionKeyResult.request,
+          });
+        await sessionKeyClient.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
   });
 
   it.fails(
