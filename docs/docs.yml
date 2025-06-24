@@ -102,6 +102,8 @@ navigation:
                 path: wallets/pages/react/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/react/sponsor-gas.mdx
+              - page: Pay gas with ERC-20 tokens
+                path: wallets/pages/react/sponsor-gas-with-erc20.mdx
               - page: Add passkey
                 path: wallets/pages/react/add-passkey.mdx
               - page: Multi-chain apps
@@ -267,6 +269,8 @@ navigation:
                 path: wallets/pages/react-native/using-smart-accounts/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/react-native/using-smart-accounts/sponsor-gas.mdx
+              - page: Pay gas with ERC-20 tokens
+                path: wallets/pages/react-native/using-smart-accounts/sponsor-gas-with-erc20.mdx
               - page: Retry user operations
                 path: wallets/pages/react-native/using-smart-accounts/retry-user-operations.mdx
           - section: SDK Reference
