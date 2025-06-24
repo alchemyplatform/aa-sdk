@@ -167,6 +167,52 @@ We recommend adding error handling when sending a UO to handle potential gas and
   [here](#TODO).
 </Accordion>
 
+### How to Authenticate Users and Verify User Sessions on the Backend?
+
+<Accordion title="Answer">
+    After a user logs in with Account Kit on the frontend, you might want to verify their identity on your backend to authorize actions or access.
+
+    You can do this using one of two approaches:
+
+    ---
+
+    ### Option 1: SIWE [Sign-In With Ethereum](https://eips.ethereum.org/EIPS/eip-4361)
+
+    Use this flow when you just need to verify user sessions created by EOAs and Smart Contract Accounts (SCAs) via Account Kit.
+
+    For EOAs, Account Kit doesn’t create a session on the client side and `stampWhoAmI` isn’t available, so we can use SIWE. This can be used for verifying EOA and SCA flows.
+    You can create a [SIWE message](https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/creating-siwe-messages) with all the necessary info to get server side (address, chainId, etc).
+
+    1. The backend provides a nonce to the frontend.
+    2. The user signs a SIWE message with their wallet (EOA or SCA).
+    3. The frontend sends the signed message back to the backend.
+    4. The backend verifies the signature:
+    - EOAs: Standard signature recovery
+    - SCAs: Use EIP-1271 or EIP-6492 to verify the contract signature
+    5. The backend issues a session token.
+
+    **Note:**
+    - SIWE requires an explicit signature from the user, which [costs](https://www.alchemy.com/docs/reference/compute-unit-costs) more than calling `whoami`
+    - For verifying both EOA and SCA user sessions
+
+    ---
+
+    ### Option 2: `stampWhoAmI` + `whoami` (Only when using Alchemy signer)
+
+    Use this flow when you just need to verify user sessions created by SCAs via Account Kit.
+
+    1. The frontend generates a stamped request using [signer.inner.stampWhoAmI](https://www.alchemy.com/docs/wallets/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami).
+    2. It sends the stamp to your backend.
+    3. The backend calls Alchemy's [/signer/v1/whoami](https://www.alchemy.com/docs/node/smart-wallets/signer-api-endpoints/signer-api-endpoints/auth-user) endpoint to verify the identity.
+    4. If you need to make subsequent requests, you can also avoid calling the whoami endpoint on every request. To do so, after verifying the `whoami`, the backend can issue its own session token (e.g. an HTTP-only cookie or access token). If the token is present, you can safely skip the `whoami` check.
+
+    **Why this approach?**
+    - No user signature required
+    - **Cheaper** than flows requiring a signed message
+    - Easily retrieve user's login info, such email and address if available
+
+</Accordion>
+
 ## Common Errors
 
 ### Replacement underpriced: `"code":-32602,"message":"replacement underpriced","data"...`
