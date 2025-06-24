@@ -198,14 +198,13 @@ export function installValidationActions<
       throw new NotAModularAccountV2Error();
     }
 
-    if (isSmartAccountWithSigner(account)) {
-      if (!isSmartAccountClient(client)) {
-        throw new IncompatibleClientError(
-          "SmartAccountClient",
-          "installValidation",
-          client,
-        );
-      }
+    if (isSmartAccountWithSigner(account) && !isSmartAccountClient(client)) {
+      // if we don't differentiate between WebauthnModularAccountV2Client and ModularAccountV2Client, passing client to isSmartAccountClient complains
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "uninstallValidation",
+        client,
+      );
     }
 
     return account.encodeCallData(
