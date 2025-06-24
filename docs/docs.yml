@@ -1029,6 +1029,8 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/core/classes/Logger/verbose.mdx
                       - page: warn
                         path: wallets/pages/reference/aa-sdk/core/classes/Logger/warn.mdx
+                  - page: NotAModularAccountV2Error
+                    path: wallets/pages/reference/aa-sdk/core/classes/NotAModularAccountV2Error/constructor.mdx
                   - page: SignTransactionNotSupportedError
                     path: wallets/pages/reference/aa-sdk/core/classes/SignTransactionNotSupportedError/constructor.mdx
                   - page: SmartAccountWithSignerRequiredError

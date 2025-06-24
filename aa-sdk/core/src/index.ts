@@ -57,6 +57,7 @@ export {
 export type * from "./entrypoint/types.js";
 export {
   AccountNotFoundError,
+  NotAModularAccountV2Error,
   AccountRequiresOwnerError,
   BatchExecutionNotSupportedError,
   DefaultFactoryNotDefinedError,
