@@ -1,6 +1,6 @@
 To enable your users to pay gas using an ERC-20 token, you need to create a "Pay gas with any token" Policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create). You can customize the policy with the following:
 
-- Receiving address: **you must specify** an address of your choosing where the users' ERC20 tokens will be sent to as they pay for gas. The token transfer to this address is orchestrated by the paymaster contract and happens automatically at transaction time.
+- Receiving address: **you must specify** an address you own where the users' ERC20 tokens will be sent to as they pay for gas. The token transfer to this address is orchestrated by the paymaster contract and happens automatically at transaction time.
 - Tokens: **you must select** which tokens users should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
 - ERC-20 transfer mode: choose when the user's token payment occurs.
   - [Recommended] After: No upfront allowance is required. The user signs an approval inside the same user operation batch, and the paymaster pulls the token _after_ the operation has executed. If that post-execution transfer fails, the entire user operation is reverted and you still pay the gas fee.
