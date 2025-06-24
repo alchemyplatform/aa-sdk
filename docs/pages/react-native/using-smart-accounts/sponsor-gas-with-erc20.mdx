@@ -6,13 +6,7 @@ slug: wallets/react-native/using-smart-accounts/sponsor-gas-with-erc20
 
 Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app's own token. With our smart wallet, you can enable your users to pay for gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
 
-<Tip>
-  *How it works:* To enable this capability you will need to create a Gas
-  Manager policy. When a user pays for gas with an ERC-20 token, we front the
-  gas using the network's native gas token and transfer the ERC-20 tokens from
-  the user's wallet to a wallet you control. The equivalent USD amount and the
-  admin fee is then added to your monthly invoice.
-</Tip>
+<Markdown src="../../../shared/sponsor-gas-erc20-how-it-works.mdx" />
 
 ## Goal
 
@@ -20,33 +14,13 @@ Configure your React Native app to enable users to pay gas fees with an ERC-20 t
 
 ## Prerequisites
 
-- Account Kit already installed and configured in your project.
-- An Alchemy API key.
+<Markdown src="../../../shared/sponsor-gas-erc20-prerequisites.mdx" />
 
 ## Steps
 
 ### 1 Create a Gas Manager policy
 
-To enable your users to pay gas using an ERC-20 token, you need to create a "Pay gas with any token" Policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create). You can customize the policy with the following:
-
-- Receiving address: an address of your choosing where the users' ERC20 tokens will be sent to as they pay for gas (this is orchestrated by the paymaster contract and happens automatically at the time of the transaction).
-- Tokens: the tokens the user should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
-- ERC-20 transfer mode: select whether the user should pay for the gas before or after the userOp execution.
-  - [Recommended] After: Enables the user to allow the paymaster contract to spend the ERC-20 token on their behalf (`approve()`) without a separate tx, improving UX. If the transfer fails, the userOp will revert but you'll remain liable for the gas costs.
-  - Before: Requires the paymaster contract to have allowance onchain before the userOp gets submitted. If the allowance doesn't exist, the userOp will fail immediately.
-- Sponsorship expiry period: this is the period for which the Gas Manager signature and ERC-20 exchange rate will remain valid once generated.
-
-<img
-  src="/images/wallets/erc-20-policy-create.png"
-  alt="Creating an ERC-20 sponsorship policy"
-/>
-
-Now you should have a Gas policy created with a policy id you can use to enable gas payments with ERC-20 tokens.
-
-<img
-  src="/images/wallets/erc-20-sponsorship-policy.png"
-  alt="viewing your ERC-20 sponsorship policy"
-/>
+<Markdown src="../../../shared/sponsor-gas-erc20-create-policy.mdx" />
 
 ### 2 Add the policy to your global config
 
