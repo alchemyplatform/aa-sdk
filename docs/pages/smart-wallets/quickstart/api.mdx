@@ -5,11 +5,13 @@ url: https://docs.alchemy.com/reference/smart-wallet-quickstart/api
 slug: reference/smart-wallet-quickstart/api
 ---
 
+We'll demonstrate how to use the [`wallet_requestAccount`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account), [`wallet_prepareCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls), and [`wallet_sendPreparedCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls) endpoints.
+
 ### 1. Request an Account for the Owner Signer
 
-Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](https://accountkit.alchemy.com/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
+Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
 
-- If you want to use social sign up / log in, you can simply use the [SDK](https://accountkit.alchemy.com/react/getting-started) to authenticate user's and retrieve their signer address
+- If you want to use social sign up / log in, you can simply use the [SDK](/docs/wallets/react/getting-started) to authenticate user's and retrieve their signer address
 - If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
 
 This will return the account address associated with the given signer, as well as a uuid you could use to differentiate between accounts for the same signer in the future.
@@ -103,7 +105,7 @@ If using a library like Viem, you can instead use `personal_sign` to sign the ha
 
 With the returned signature request, all you have to do is sign the signature request (returned in step 4). You'll sign this using the account owner (from step 1).
 
-If using an Alchemy Signer, you can learn how to stamp the request on the frontend [here](https://docs.alchemy.com/reference/how-to-stamp-requests). When using the Alchemy Signer, it's easiest to sign the `signatureRequest.rawPayload` directly.
+If using an Alchemy Signer, you can learn how to stamp the request on the frontend [here](/docs/reference/how-to-stamp-requests). When using the Alchemy Signer, it's easiest to sign the `signatureRequest.rawPayload` directly.
 
 If you are using a library such as Viem that supports the `personal_sign` method, you should use that to sign the hash (since the `signatureRequest.type` is `"personal_sign"`).
 
@@ -159,4 +161,4 @@ curl --request POST \
 '
 ```
 
-See [here](/docs/node/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) for all of the possible results.
+See [here](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) for all of the possible results.

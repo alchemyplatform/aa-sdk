@@ -7,9 +7,9 @@ slug: reference/wallet-apis-session-keys/api
 
 ### 1. Request an Account for the Owner Signer
 
-Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](https://accountkit.alchemy.com/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
+Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
 
-- If you want to use social sign up / log in, you can simply use the [SDK](https://accountkit.alchemy.com/react/getting-started) to authenticate users and retrieve their signer address
+- If you want to use social sign up / log in, you can simply use the [SDK](/docs/wallets/react/getting-started) to authenticate users and retrieve their signer address
 - If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
 
 This will return the account address associated with the given signer, as well as a uuid you could use to differentiate between accounts for the same signer in the future.
@@ -35,7 +35,7 @@ curl --request POST \
 
 This will return the smart account address associated with the given signer:
 
-```bash
+```json
 {
     "jsonrpc": "2.0",
     "id": 1,
@@ -62,7 +62,7 @@ if you do not want to send any calls.
 
 To create a session key using onchain policies:
 
-- Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](https://accountkit.alchemy.com/concepts/smart-account-signer) that is either an local [signer](https://accountkit.alchemy.com/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider).
+- Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](/docs/wallets/concepts/smart-account-signer) that is either an local [signer](/docs/wallets/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider).
 - Create a session for that key, by passing it as the `publicKey` in a call to `wallet_createSession`. (Note that this must be the public key **address**, but the full public key.)
 
 Note that the expiry is in seconds and represents a UNIX timestamp (e.g. 1776657600 for April 20th, 2077).
@@ -103,7 +103,7 @@ This will return two key elements:
 
 Keep note of the session ID, you'll need it later!
 
-```bash
+```json
 {
     "jsonrpc": "2.0",
     "id": 1,
@@ -140,11 +140,11 @@ curl --request POST \
         {
             "capabilities": {
                 "paymasterService": {
-                    "policyId": GAS_MANAGER_POLICY_ID, // put your gas manager policy ID here
+                    "policyId": "GAS-MANAGER-POLICY-ID", // put your gas manager policy ID here
                 },
                 "permissions": {
-                    "sessionId": 0xSESSION_ID,
-                    "signature": 0xPERMISSION_SIG,
+                    "sessionId": "0xSESSION_ID",
+                    "signature": "0xPERMISSION_SIG",
                 }
             },
             "calls": [
@@ -166,7 +166,7 @@ This will return the userop request (the `data` field) and a signature request, 
 {
     "type": "user-operation-v070",
     "data": {...useropRequest},
-    "chainId": "0xCHAIN_ID"
+    "chainId": "0xCHAIN_ID",
     "signatureRequest": {
         "type": "personal_sign",
         "data": {

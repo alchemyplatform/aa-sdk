@@ -30,7 +30,7 @@ pnpm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
 
 ### 2. Create A Smart Wallet Client
 
-Create a client for a given signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer)).
+Create a client for a given signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](/docs/wallets/signer/what-is-a-signer#alchemy-signer)).
 
 ```ts
 import { createSmartWalletClient } from "@account-kit/wallet-client";
@@ -76,6 +76,6 @@ const signedCalls = await client.signPreparedCalls(preparedCalls);
 // Send the userOp.
 const { preparedCallIds } = await client.sendPreparedCalls(signedCalls);
 
-// Check calls status.
+// Check the status of the call.
 const status = await client.getCallsStatus(preparedCallIds[0]);
 ```

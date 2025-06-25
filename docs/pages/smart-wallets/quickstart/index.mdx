@@ -6,11 +6,16 @@ url: https://docs.alchemy.com/reference/smart-wallet-quickstart
 slug: reference/smart-wallet-quickstart
 ---
 
-This guide outlines exactly what you need to use Wallet Server with your app! We'll go over the [`wallet_requestAccount`](https://www.alchemy.com/docs/node/smart-wallets/wallets-api-endpoints/wallets-api-endpoints/wallet-request-account), [`wallet_prepareCalls`](https://www.alchemy.com/docs/node/smart-wallets/wallets-api-endpoints/wallets-api-endpoints/wallet-prepare-calls), and [`wallet_sendPreparedCalls`](https://www.alchemy.com/docs/node/smart-wallets/wallets-api-endpoints/wallets-api-endpoints/wallet-send-prepared-calls) endpoints in this tutorial. _(Note: If you are wanting to use EIP-7702, see [this guide](/docs/reference/wallet-apis-7702-quickstart) instead.)_
+This quickstart shows you how to prepare and send a User Operation (UO) in minutes.
 
-The logical flow is to get an account for a given signer, prepare the calls you're looking to send, and send them! We'll demonstrate how to do it [using the SDK client](/reference/smart-wallet-quickstart/sdk) or by using platform-agnostic [JSON-RPC APIs](/reference/smart-wallet-quickstart/api).
+To use this guide, you'll need:
+• An account you can sign with (e.g. an [Alchemy Signer](docs/wallets/signer/what-is-a-signer#alchemy-signer) or an EOA)
+• An Alchemy API key
+• A [gas manager policy ID](/docs/wallets/react/sponsor-gas) if sponsoring gas
 
-In API calls, it's as simple as:
+Want to use EIP-7702? Check out the [7702 Quickstart](/docs/reference/wallet-apis-7702-quickstart) instead.
+
+You can complete this tutorial using either the [TypeScript SDK](/reference/smart-wallet-quickstart/sdk) or raw [JSON-RPC APIs](/reference/smart-wallet-quickstart/api).
 
 ```mermaid
 flowchart LR
@@ -18,8 +23,6 @@ flowchart LR
     B --> C[sendPreparedCalls]
     C --> D[getCallsStatus]
 ```
-
-This guide assumes you have an account you can sign with, like an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer). You will also need an Alchemy API key and a [gas manager policy ID.](https://www.alchemy.com/docs/wallets/react/sponsor-gas)
 
 <Tip title="Don't have an API key?" icon="star">
   Start using the Alchemy Wallets API today! [Get started for
