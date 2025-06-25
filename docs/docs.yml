@@ -1131,7 +1131,7 @@ navigation:
                   - page: Intro
                     path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
                   - page: Using SDK
-                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
+                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
               - section: Wallet API Endpoints
