@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+### Features
+
+- update RequestPayamsterTokenQuote API ([#1730](https://github.com/alchemyplatform/aa-sdk/issues/1730)) ([9b285a1](https://github.com/alchemyplatform/aa-sdk/commit/9b285a15e3f16c5ef5701e4746981ec22fb2ec2f))
+
 # [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
 
 ### Features
