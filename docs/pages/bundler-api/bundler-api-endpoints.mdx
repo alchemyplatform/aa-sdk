@@ -1,0 +1,22 @@
+---
+title: Bundler API Endpoints Overview
+description: Use the Bundler APIs to send userOps in EVM networks.
+subtitle: Use the Bundler APIs to send userOps in EVM networks.
+url: https://docs.alchemy.com/docs/reference/bundler-api-endpoints
+slug: reference/bundler-api-endpoints-overview
+---
+
+## What exactly is the Bundler API?
+
+The Bundler APIs are a collection of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace) compliant JSON-RPC endpoints.
+
+## Methods
+
+| Method                                                                  | Description                                                                                                                  |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [eth_sendUserOperation](/wallets/api/bundler-api/bundler-api-endpoints/eth-send-user-operation)               | Sends a userOp to the given EVM network.                                                                                     |
+| [eth_estimateUserOperationGas](/wallets/api/bundler-api/bundler-api-endpoints/eth-estimate-user-operation-gas) | Estimates the gas values for a `userOp`.                                                                                     |
+| [eth_supportedEntryPoints](/wallets/api/bundler-api/bundler-api-endpoints/eth-supported-entry-points)         | Returns an array of the `entryPoint` addresses supported by the client.                                                      |
+| [eth_getUserOperationByHash](/wallets/api/bundler-api/bundler-api-endpoints/eth-get-user-operation-by-hash)     | Returns a `userOp` based on a hash (`userOpHash`).                                                                           |
+| [eth_getUserOperationReceipt](/wallets/api/bundler-api/bundler-api-endpoints/eth-get-user-operation-receipt)   | Get the `UserOperationReceipt` based on the `userOpHash` value.                                                              |
+| [rundler_maxPriorityFeePerGas](/wallets/api/bundler-api/bundler-api-endpoints/rundler-max-priority-fee-per-gas) | Returns a fee per gas that is an estimate of how much users should set as a priority fee in `userOps` for Rundler endpoints. |
