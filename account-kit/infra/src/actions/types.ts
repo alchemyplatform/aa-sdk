@@ -94,7 +94,7 @@ export type RequestGasAndPaymasterAndDataResponse<
 
 export type RequestPayamsterTokenQuoteRequest = [
   {
-    policyId: string | string[];
+    policyId: string;
     entryPoint: Address;
     erc20Context?: {
       tokenAddress: Address;
