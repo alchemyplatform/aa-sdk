@@ -1147,6 +1147,8 @@ navigation:
             contents:
               - page: How to send a userOp
                 path: wallets/pages/bundler-api/bundler-api-quickstart.mdx
+              - page: Bundler API Endpoints Overview
+                path: wallets/pages/bundler-api/bundler-api-endpoints/bundler-api-endpoints.mdx
               - api: Bundler API Endpoints
                 api-name: bundler
                 slug: bundler-api-endpoints
