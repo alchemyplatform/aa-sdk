@@ -11,7 +11,7 @@ import {
   type UseMutateFunction,
 } from "@tanstack/react-query";
 import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
-import { fromHex, type Address, type Hex } from "viem";
+import { fromHex, type Address, type Hex, type Prettify } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import {
   ClientUndefinedHookError,
@@ -23,6 +23,10 @@ import { ReactLogger } from "../../metrics.js";
 export type UseSendCallsParams = {
   client?: GetSmartWalletClientResult<Address>;
 };
+
+type MutationParams = Prettify<
+  Parameters<SmartWalletClient<Address>["prepareCalls"]>[0]
+>;
 
 type MutationResult<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
@@ -38,13 +42,13 @@ export type UseSendCallsResult<
   sendCalls: UseMutateFunction<
     MutationResult<TEntryPointVersion>,
     Error,
-    Parameters<SmartWalletClient<Address>["prepareCalls"]>[0],
+    MutationParams,
     unknown
   >;
   sendCallsAsync: UseMutateAsyncFunction<
     MutationResult<TEntryPointVersion>,
     Error,
-    Parameters<SmartWalletClient<Address>["prepareCalls"]>[0],
+    MutationParams,
     unknown
   >;
   sendCallsResult: MutationResult | undefined;
@@ -52,6 +56,52 @@ export type UseSendCallsResult<
   sendCallsError: Error | null;
 };
 
+/**
+ * Hook for sending calls to a smart account or EOA wallet.
+ *
+ * This hook provides functionality to execute calls on a smart account using Account Abstraction,
+ * or fall back to regular EOA transactions when connected to an EOA wallet. It handles the complete
+ * flow of preparing, signing, and sending calls.
+ *
+ * @template TEntryPointVersion - The entry point version to use for user operations (defaults to EntryPointVersion)
+ *
+ * @param {UseSendCallsParams} params - Configuration parameters for the hook
+ * @param {GetSmartWalletClientResult<Address>} [params.client] - Optional smart wallet client instance (Required if an EOA is not connected)
+ *
+ * @returns {UseSendCallsResult<TEntryPointVersion>} An object containing:
+ * - `sendCalls`: Function to send calls synchronously (returns void)
+ * - `sendCallsAsync`: Async function to send calls (returns Promise)
+ * - `sendCallsResult`: The result of the last successful call execution
+ * - `isSendingCalls`: Boolean indicating if calls are currently being sent
+ * - `sendCallsError`: Error from the last failed call execution, if any
+ *
+ * @example
+ * ```tsx
+ * const { sendCalls, sendCallsAsync, isSendingCalls, sendCallsError } = useSendCalls();
+ *
+ * // Send a single call
+ * await sendCallsAsync({
+ *   calls: [{
+ *     to: "0x...",
+ *     data: "0x...",
+ *     value: "0x0"
+ *   }]
+ * });
+ *
+ * // Send multiple calls (smart account only)
+ * await sendCallsAsync({
+ *   calls: [
+ *     { to: "0x...", data: "0x..." },
+ *     { to: "0x...", data: "0x..." }
+ *   ]
+ * });
+ * ```
+ *
+ * @description
+ * - When connected to an EOA wallet, only single calls are supported (batch execution is not allowed)
+ * - For smart accounts, the returned `ids` are the prepared call IDs
+ * - For EOA wallets, the returned `ids` are transaction hashes
+ */
 // TODO: remove the entrypoint version generic when we don't need it anymore
 export function useSendCalls<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
@@ -112,17 +162,20 @@ export function useSendCalls<
 
         const { preparedCallIds } = await client.sendPreparedCalls(signedCalls);
 
-        const signature = (
+        const uoCall =
           signedCalls.type === "array"
-            ? signedCalls.data[0].signature
-            : signedCalls.signature
-        ).data;
+            ? signedCalls.data.find(
+                (it) =>
+                  it.type === "user-operation-v060" ||
+                  it.type === "user-operation-v070",
+              )!
+            : signedCalls;
 
         return {
           ids: preparedCallIds,
           request: {
-            ...preparedCalls.data,
-            signature,
+            ...uoCall.data,
+            signature: uoCall.signature.data,
           } as UserOperationRequest<TEntryPointVersion>,
         };
       },
