@@ -1,10 +1,10 @@
 To enable your users to pay gas using an ERC-20 token, you need to create a "Pay gas with any token" Policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create). You can customize the policy with the following:
 
-- Receiving address: an address of your choosing where the users' ERC20 tokens will be sent to as they pay for gas (this is orchestrated by the paymaster contract and happens automatically at the time of the transaction).
-- Tokens: the tokens the user should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
-- ERC-20 transfer mode: select whether the user should pay for the gas before or after the userOp execution.
-  - [Recommended] After: Enables the user to allow the paymaster contract to spend the ERC-20 token on their behalf (`approve()`) without a separate tx, improving UX. If the transfer fails, the userOp will revert but you'll remain liable for the gas costs.
-  - Before: Requires the paymaster contract to have allowance onchain before the userOp gets submitted. If the allowance doesn't exist, the userOp will fail immediately.
+- Receiving address: **you must specify** an address you own where the users' ERC20 tokens will be sent to as they pay for gas. The token transfer to this address is orchestrated by the paymaster contract and happens automatically at transaction time.
+- Tokens: **you must select** which tokens users should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
+- ERC-20 transfer mode: choose when the user's token payment occurs.
+  - [Recommended] After: No upfront allowance is required. The user signs an approval inside the same user operation batch, and the paymaster pulls the token _after_ the operation has executed. If that post-execution transfer fails, the entire user operation is reverted and you still pay the gas fee.
+  - Before: You (the developer) must ensure the paymaster already has sufficient allowance—either through a prior `approve()` transaction or a permit signature—_before_ the UserOperation is submitted. If the required allowance isn't in place when the user operation is submitted, it will be rejected upfront.
 - Sponsorship expiry period: this is the period for which the Gas Manager signature and ERC-20 exchange rate will remain valid once generated.
 
 <img
