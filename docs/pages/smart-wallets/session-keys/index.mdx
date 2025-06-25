@@ -8,9 +8,10 @@ slug: reference/wallet-apis-session-keys
 Session keys are a powerful feature of the Alchemy Wallets API that allow you to create a session for a user's smart account with specific permissions. This enables secure, permissioned access to the user's wallet, allowing your app's server to perform actions on behalf of the user without needing their private key. Session keys allow another account to operate on a user's smart account with given permissions. After creating a session, you will be able to sign transactions for the generated wallet within the defined permissions using that session key. See [here for a list of permissions!](#permission-types)
 
 To use this guide, you'll need:
-• An account you can sign with (e.g. an [Alchemy Signer](docs/wallets/signer/what-is-a-signer#alchemy-signer) or an EOA)
-• An Alchemy API key
-• A [gas manager policy ID](/docs/wallets/react/sponsor-gas) if sponsoring gas
+
+- An account you can sign with (e.g. an [Alchemy Signer](docs/wallets/signer/what-is-a-signer#alchemy-signer) or an EOA)
+- An Alchemy API key
+- A [gas manager policy ID](/docs/wallets/react/sponsor-gas) if sponsoring gas
 
 <Tip title="Don't have an API key?" icon="star">
   Start using the Alchemy Wallets API today! [Get started for

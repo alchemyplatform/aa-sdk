@@ -7,6 +7,13 @@ slug: reference/smart-wallet-quickstart/api
 
 We'll demonstrate how to use the [`wallet_requestAccount`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account), [`wallet_prepareCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls), and [`wallet_sendPreparedCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls) endpoints.
 
+```mermaid
+flowchart LR
+    A[requestAccount] --> B[prepareCalls]
+    B --> C[sendPreparedCalls]
+    C --> D[getCallsStatus]
+```
+
 ### 1. Request an Account for the Owner Signer
 
 Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
