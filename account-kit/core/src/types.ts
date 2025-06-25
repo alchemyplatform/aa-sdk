@@ -57,7 +57,6 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 export type AlchemyAccountsConfig = {
   store: Store;
   accountCreationHint?: CreateConfigProps["accountCreationHint"];
-  mode: "local" | "remote";
   _internal: {
     // if not provided, the default signer will be used
     createSigner: (config: ClientStoreConfig) => AlchemySigner;
@@ -149,7 +148,6 @@ export type BaseCreateConfigProps = RpcConnectionConfig & {
   accountCreationHint?: NonNullable<
     Parameters<SmartWalletClient["requestAccount"]>[0]
   >["creationHint"];
-  mode?: "local" | "remote";
 
   /**
    * If set, calls `preparePopupOauth` immediately upon initializing the signer.
