@@ -5,14 +5,14 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { signTypedData as wagmi_signTypedData } from "@wagmi/core";
-import type { Hex, TypedDataDefinition } from "viem";
-import { useAccount as wagmi_useAccount } from "wagmi";
+import type { Address, Hex, TypedDataDefinition } from "viem";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
-import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+import { useSmartWalletClient } from "../experimental/hooks/useSmartWalletClient.js";
+import { signTypedData as wagmi_signTypedData } from "@wagmi/core";
+import { useAccount as wagmi_useAccount } from "wagmi";
 
 export type SignTypedDataArgs = { typedData: TypedDataDefinition };
 
@@ -22,7 +22,7 @@ export type UseSignTypedDataMutationArgs = BaseHookMutationArgs<
 >;
 
 export type UseSignTypedDataArgs = {
-  client: UseSmartAccountClientResult["client"] | undefined;
+  client: { account: { address: Address } } | undefined;
 } & UseSignTypedDataMutationArgs;
 
 export type UseSignTypedDataResult = {
@@ -69,10 +69,14 @@ export type UseSignTypedDataResult = {
  * const result = await signTypedData({ typedData });
  * ```
  */
-export function useSignTypedData({
-  client,
-  ...mutationArgs
-}: UseSignTypedDataArgs): UseSignTypedDataResult {
+export function useSignTypedData(
+  args: UseSignTypedDataArgs,
+): UseSignTypedDataResult {
+  const { client: _client, ...mutationArgs } = args;
+  const smartWalletClient = useSmartWalletClient({
+    account: _client?.account.address,
+  });
+
   const {
     queryClient,
     config: {
@@ -94,10 +98,11 @@ export function useSignTypedData({
           return wagmi_signTypedData(wagmiConfig, params.typedData);
         }
 
-        if (!client) {
+        if (!smartWalletClient) {
           throw new ClientUndefinedHookError("useSignTypedData");
         }
-        return client.signTypedData({ ...params });
+
+        return smartWalletClient.signTypedData(params.typedData);
       },
       ...mutationArgs,
     },
