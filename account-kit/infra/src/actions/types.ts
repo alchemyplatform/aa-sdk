@@ -26,7 +26,7 @@ export enum SimulateChangeType {
 export type SimulateUserOperationAssetChangesRequest = [
   UserOperationStruct,
   entryPoint: Address,
-  blockNumber?: Hash,
+  blockNumber?: Hash
 ];
 
 export type SimulateUserOperationAssetChangesResponse = {
@@ -65,11 +65,11 @@ export type RequestGasAndPaymasterAndDataRequest = [
     dummySignature: Hex;
     userOperation: UserOperationRequest;
     overrides?: UserOperationOverrides;
-  },
+  }
 ];
 
 export type RequestGasAndPaymasterAndDataResponse<
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = Pick<
   UserOperationRequest,
   | "callGasLimit"
@@ -83,22 +83,32 @@ export type RequestGasAndPaymasterAndDataResponse<
         paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
       }
     : TEntryPointVersion extends "0.7.0"
-      ? Pick<
-          UserOperationRequest<"0.7.0">,
-          | "paymaster"
-          | "paymasterData"
-          | "paymasterVerificationGasLimit"
-          | "paymasterPostOpGasLimit"
-        >
-      : never);
+    ? Pick<
+        UserOperationRequest<"0.7.0">,
+        | "paymaster"
+        | "paymasterData"
+        | "paymasterVerificationGasLimit"
+        | "paymasterPostOpGasLimit"
+      >
+    : never);
 
 export type RequestPayamsterTokenQuoteRequest = [
   {
     policyId: string;
-    tokenAddress: Address;
-  },
+    entryPoint: Address;
+    erc20Context?: {
+      tokenAddress: Address;
+      permit?: Hex;
+      maxTokenAmount?: BigInt;
+    };
+    dummySignature: Hex;
+    userOperation: UserOperationRequest;
+    overrides?: UserOperationOverrides;
+  }
 ];
 
 export type RequestPayamsterTokenQuoteResponse = {
-  ethToTokenConversionRate: string;
+  tokensPerEth: string;
+  estimatedTokenAmount: string;
+  estimatedUsd: number;
 };
