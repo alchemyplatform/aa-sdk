@@ -515,6 +515,7 @@ describe("createConfig tests", () => {
               "isInitializing": true,
               "status": "INITIALIZING",
             },
+            "smartWalletClients": {},
           },
           "version": ${STORAGE_VERSION},
         }
@@ -584,6 +585,7 @@ describe("createConfig tests", () => {
               "isInitializing": true,
               "status": "INITIALIZING",
             },
+            "smartWalletClients": {},
           },
           "version": ${STORAGE_VERSION},
         }
