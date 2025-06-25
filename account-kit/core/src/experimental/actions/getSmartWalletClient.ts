@@ -1,3 +1,4 @@
+import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
   createSmartWalletClient,
   type SmartWalletClient,
@@ -15,7 +16,7 @@ export type GetSmartWalletClientResult<
 
 export type GetSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
-> = { account?: TAccount };
+> = { account?: TAccount; signer?: SmartAccountSigner };
 
 export function getSmartWalletClient<
   TAccount extends Address | undefined = Address | undefined,
@@ -37,7 +38,8 @@ export function getSmartWalletClient(
   const transport = getAlchemyTransport(config);
   const signer = getSigner(config);
 
-  if (!signer || !signerStatus.isConnected) {
+  // am I dumb? if we don't have the signer connected AND there's no override, we can't do anything soooo (!signer || !connected) == !connectedSigner, !params.signer == !overrideSigner -> !connectedSigner && !overrideSigner -> undefined
+  if ((!signer || !signerStatus.isConnected) && !params?.signer) {
     return undefined;
   }
 
@@ -54,7 +56,7 @@ export function getSmartWalletClient(
   const client = createSmartWalletClient({
     transport,
     chain: connection.chain,
-    signer,
+    signer: (params?.signer ?? signer)!,
     account: params?.account,
     mode: "remote",
     // @ts-expect-error - TODO: fix this capability
