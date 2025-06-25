@@ -5,11 +5,7 @@ url: https://docs.alchemy.com/reference/wallet-apis-session-keys
 slug: reference/wallet-apis-session-keys
 ---
 
-Session keys are a powerful feature of the Alchemy Wallets API that allow you to create a session for a user's smart account with specific permissions. This enables secure, permissioned access to the user's wallet, allowing your app's server to perform actions on behalf of the user without needing their private key.
-
-### Create A Session With Permissions
-
-Session keys allow another account to operate on a user's smart account with given permissions. After creating a session, you will be able to sign transactions for the generated wallet within the defined permissions using that session key. See [here for a list of permissions!](#permission-types)
+Session keys are a powerful feature of the Alchemy Wallets API that allow you to create a session for a user's smart account with specific permissions. This enables secure, permissioned access to the user's wallet, allowing your app's server to perform actions on behalf of the user without needing their private key. Session keys allow another account to operate on a user's smart account with given permissions. After creating a session, you will be able to sign transactions for the generated wallet within the defined permissions using that session key. See [here for a list of permissions!](#permission-types)
 
 This guide assumes you have an account you can sign with, like an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer) or a user's EOA. You will also need an Alchemy API key, and a [gas manager policy ID](https://www.alchemy.com/docs/wallets/react/sponsor-gas) if you want to sponsor gas.
 
@@ -18,18 +14,20 @@ This guide assumes you have an account you can sign with, like an [Alchemy Signe
   free](https://dashboard.alchemy.com/signup/?a=f8afc2202c).
 </Tip>
 
+### Create A Session With Permissions
+
 We'll demonstrate how to create and use session keys [using the SDK client](/reference/wallet-apis-session-keys/sdk) or by using platform-agnostic [JSON-RPC APIs](/reference/wallet-apis-session-keys/api).
 
 <CardGroup cols={2}>
   <Card
-    title="Using SDK"
+    title="Use the SDK"
     href="/reference/wallet-apis-session-keys/sdk"
     icon="code"
   >
     Start building in minutes using the TypeScript SDK.
   </Card>
   <Card
-    title="Using JSON-RPC API"
+    title="Use the JSON-RPC API"
     href="/reference/wallet-apis-session-keys/api"
     icon="network-wired"
   >

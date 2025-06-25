@@ -1,14 +1,11 @@
 ---
 title: Wallets API Quickstart (SDK)
-description: How to go from zero to hero with Wallet APIs.
-subtitle: Learn to interact with Wallet APIs using any RPC client!
+subtitle: Learn to interact with Wallet APIs using the SDK
 url: https://docs.alchemy.com/reference/smart-wallet-quickstart/sdk
 slug: reference/smart-wallet-quickstart/sdk
 ---
 
-## Using The TypeScript SDK
-
-### Install Prerequisities
+### 1. Install Prerequisities
 
 You're going to need `@account-kit/wallet-client`, `@account-kit/infra`, optionally `@aa-sdk/core` if you use a `LocalAccountSigner`, and optionally `viem` if you want to verify a signed message.
 
@@ -27,7 +24,7 @@ yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
 
 </CodeGroup>
 
-### Create A Smart Account Client
+### 2. Create A Smart Account Client
 
 Given a signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer#alchemy-signer)), all you need to do is follow a few simple steps to start sending user ops with Wallet APIs!
 
@@ -49,7 +46,7 @@ const client = createSmartWalletClient({
 });
 ```
 
-### Request The Account
+### 3. Request The Account
 
 A counterfactual address is the account address associated with the given signer-- but the account contract hasn't been deployed yet.
 
@@ -60,7 +57,7 @@ const account = await client.requestAccount();
 const address = account.address;
 ```
 
-### Sign A Message
+### 4. Sign A Message
 
 ```ts
 import { createPublicClient } from "viem";
@@ -81,7 +78,7 @@ const isValid = await publicClient.verifyMessage({
 });
 ```
 
-### Sign Typed Data
+### 5. Sign Typed Data
 
 ```ts
 // assuming you have a typedData variable
@@ -94,7 +91,7 @@ const isValid = await publicClient.verifyTypedData({
 });
 ```
 
-### Send A UserOp
+### 6. Send A UserOp
 
 ```ts
 import { zeroAddress } from "viem";
