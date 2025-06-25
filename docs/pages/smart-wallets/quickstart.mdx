@@ -182,7 +182,7 @@ const preparedCalls = await client.prepareCalls({
 
 const signedCalls = await signPreparedCalls(
   sessionKey, // Note that we now sign with the session key!
-  preparedCalls
+  preparedCalls,
 );
 
 const result = await client.sendPreparedCalls({
