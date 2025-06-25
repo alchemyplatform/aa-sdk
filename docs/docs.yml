@@ -1149,6 +1149,7 @@ navigation:
                 path: wallets/pages/bundler-api/bundler-api-quickstart.mdx
               - page: Bundler API Endpoints Overview
                 path: wallets/pages/bundler-api/bundler-api-endpoints.mdx
+                slug: bundler-api-endpoints-overview
               - api: Bundler API Endpoints
                 api-name: bundler
                 slug: bundler-api-endpoints
