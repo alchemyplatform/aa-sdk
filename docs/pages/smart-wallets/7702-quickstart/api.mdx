@@ -1,6 +1,6 @@
 ---
 title: EIP-7702 Wallet API Quickstart (API)
-subtitle: Learn how to send user ops using EIP-7702
+subtitle: Learn how to send user ops using EIP-7702 with any RPC client
 url: https://docs.alchemy.com/reference/wallet-apis-7702-quickstart/api
 slug: reference/wallet-apis-7702-quickstart/api
 ---
@@ -20,24 +20,24 @@ curl --request POST \
     "jsonrpc": "2.0",
     "method": "wallet_prepareCalls",
     "params": [
-    {
-        "calls": [
-        // Put the call data here, including `to`, `data`, and optional `value`.
         {
-            "to": "0x0000000000000000000000000000000000000000",
-            "data": "0x",
-            "value": "0x0"
+            "calls": [
+                // Put the call data here, including `to`, `data`, and optional `value`.
+                {
+                    "to": "0x0000000000000000000000000000000000000000",
+                    "data": "0x",
+                    "value": "0x0"
+                }
+            ],
+            "from": "0xACCOUNT_ADDRESS", // put the account address here
+            "chainId": "0xCHAIN_ID", // put the chain ID here
+            "capabilities": {
+                "eip7702Auth": true,
+                "paymasterService": {
+                    "policyId": "your-gas-manager-policy-id" // if sponsoring gas, put your gas manager policy ID here
+                }
+            }
         }
-        ],
-        "from": "0xACCOUNT_ADDRESS", // put the account address here
-        "chainId": "0xCHAIN_ID", // put the chain ID here
-        "capabilities": {
-        "eip7702Auth": true,
-        "paymasterService": {
-            "policyId": "your-gas-manager-policy-id" // if sponsoring gas, put your gas manager policy ID here
-        }
-        }
-    }
     ]
 }
 '
@@ -49,28 +49,35 @@ If the account isn't already delegated to Modular Account V2 onchain, this will 
 {
     "type": "array",
     "data": [
-    {
-        "type": "authorization",
-        "data": {
-        "address": "0xDELEGATION_ADDRESS",
-        "nonce": "0xNONCE"
+        {
+            "type": "authorization",
+            "data": {
+                "address": "0xDELEGATION_ADDRESS",
+                "nonce": "0xNONCE"
+            },
+            "chainId": "0xCHAIN_ID",
+            "signatureRequest": {
+                "type": "eip7702Auth",
+                // If using Alchemy's signer service, this is the full raw payload to sign.
+                // If using a library like Viem, you can instead construct the authorization
+                // using the address, nonce, and chainId.
+                "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+            }
         },
-        "chainId": "0xCHAIN_ID",
-        "signatureRequest": {
-        "type": "eip7702Auth"
+        {
+            "type": "user-operation-v070",
+            "data": {...},
+            "chainId": "0xCHAIN_ID",
+            "signatureRequest": {
+                "type": "personal_sign",
+                "data": {
+                    "raw": "0xHASH_TO_SIGN"
+                },
+                // If using Alchemy's signer service, this is the full raw payload to sign.
+                // If using a library like Viem, you can instead use `personal_sign` to sign the hash.
+                "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+            }
         }
-    },
-    {
-        "type": "user-operation-v070",
-        "data": {...},
-        "chainId": "0xCHAIN_ID",
-        "signatureRequest": {
-        "type": "personal_sign",
-        "data": {
-            "raw": "0xHASH_TO_SIGN"
-        }
-        }
-    }
     ]
 }
 ```
@@ -83,10 +90,13 @@ For subsequent calls, only one call will be returned (unless the owner removed o
     "data": {...},
     "chainId": "0xCHAIN_ID",
     "signatureRequest": {
-    "type": "personal_sign",
-    "data": {
-        "raw": "0xHASH_TO_SIGN"
-    }
+        "type": "personal_sign",
+        "data": {
+            "raw": "0xHASH_TO_SIGN"
+        },
+        // If using Alchemy's signer service, this is the full raw payload to sign.
+        // If using a library like Viem, you can instead use `personal_sign` to sign the hash.
+        "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
     }
 }
 ```
@@ -140,30 +150,30 @@ curl --request POST \
     "jsonrpc": "2.0",
     "method": "wallet_sendPreparedCalls",
     "params": [
-    {
-        "type": "array",
-        "data": [
         {
-            "type": "user-operation-v070",
-            "data": {...}, // include the user op call data returned from `wallet_prepareCalls`
-            "chainId": "0xCHAIN_ID", // put the chain id here
-            "signature": {
-            "type": "secp256k1",
-            "data": "0xUSEROP_SIGNATURE"
+            "type": "array",
+            "data": [
+            {
+                "type": "user-operation-v070",
+                "data": {...}, // include the user op call data returned from `wallet_prepareCalls`
+                "chainId": "0xCHAIN_ID", // put the chain id here
+                "signature": {
+                    "type": "secp256k1",
+                    "data": "0xUSEROP_SIGNATURE"
+                }
+            },
+            // The signed authorization only needs to be included if an authorization was returned from `wallet_prepareCalls`.
+            {
+                "type": "authorization",
+                "data": {...}, // include the authorization call data returned from `wallet_prepareCalls`
+                "chainId": "0xCHAIN_ID", // put the chain id here
+                "signature": {
+                    "type": "secp256k1",
+                    "data": "0xAUTHORIZATION_SIGNATURE" // this can be serialized in hex format, or a raw signature (r,s,v or r,s,yParity)
+                }
             }
-        },
-        // The signed authorization only needs to be included if an authorization was returned from `wallet_prepareCalls`.
-        {
-            "type": "authorization",
-            "data": {...}, // include the authorization call data returned from `wallet_prepareCalls`
-            "chainId": "0xCHAIN_ID", // put the chain id here
-            "signature": {
-            "type": "secp256k1",
-            "data": "0xAUTHORIZATION_SIGNATURE" // this can be serialized in hex format, or a raw signature (r,s,v or r,s,yParity)
-            }
+            ]
         }
-        ]
-    }
     ]
 }
 '
@@ -186,7 +196,7 @@ curl --request POST \
     "jsonrpc": "2.0",
     "method": "wallet_getCallsStatus",
     "params": [
-    "0xPREPARED_CALL_ID"
+        "0xPREPARED_CALL_ID"
     ]
 }
 '

@@ -35,7 +35,7 @@ curl --request POST \
 
 This will return the smart account address associated with the given signer:
 
-```bash
+```json
 {
     "jsonrpc": "2.0",
     "id": 1,
@@ -81,25 +81,31 @@ curl --request POST \
 
 This will return the userop request (the `data` field) and a signature request, for example:
 
-```bash
-type: "user-operation-v070",
-data: {...useropRequest},
-chainId: "0xCHAIN_ID"
-signatureRequest: {
-    type: "personal_sign",
-    data: {
-    raw: HASH_TO_SIGN,
+```json
+{
+    "type": "user-operation-v070",
+    "data": {...useropRequest},
+    "chainId": "0xCHAIN_ID",
+    "signatureRequest": {
+        "type": "personal_sign",
+        "data": {
+            "raw": "0xHASH_TO_SIGN",
+        },
+        "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
     }
 }
 ```
 
+If using Alchemy's signer service, this is the full raw payload to sign.
+If using a library like Viem, you can instead use `personal_sign` to sign the hash.
+
 ### 3. Sign the userop
 
-With the returned signature request, all you have to do is sign the userop hash returned in the `signatureRequest.data.raw` field from step 4.
+With the returned signature request, all you have to do is sign the signature request (returned in step 4). You'll sign this using the account owner (from step 1).
 
-You'll sign this using the account owner (from step 1). If using Alchemy Signer, you can learn how to stamp the request on the frontend [here](https://docs.alchemy.com/reference/how-to-stamp-requests).
+If using an Alchemy Signer, you can learn how to stamp the request on the frontend [here](https://docs.alchemy.com/reference/how-to-stamp-requests). When using the Alchemy Signer, it's easiest to sign the `signatureRequest.rawPayload` directly.
 
-Note that the `type` field in the `signatureRequest` indicates the signature type needed, in this case, we need to `personal_sign` the hash.
+If you are using a library such as Viem that supports the `personal_sign` method, you should use that to sign the hash (since the `signatureRequest.type` is `"personal_sign"`).
 
 ### 4. Send the Prepared Calls!
 
