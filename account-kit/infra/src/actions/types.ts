@@ -92,7 +92,7 @@ export type RequestGasAndPaymasterAndDataResponse<
         >
       : never);
 
-export type RequestPayamsterTokenQuoteRequest = [
+export type RequestPaymasterTokenQuoteRequest = [
   {
     policyId: string;
     entryPoint: Address;
@@ -107,7 +107,7 @@ export type RequestPayamsterTokenQuoteRequest = [
   },
 ];
 
-export type RequestPayamsterTokenQuoteResponse = {
+export type RequestPaymasterTokenQuoteResponse = {
   tokensPerEth: string;
   estimatedTokenAmount: string;
   estimatedUsd: number;
