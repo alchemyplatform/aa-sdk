@@ -94,11 +94,21 @@ export type RequestGasAndPaymasterAndDataResponse<
 
 export type RequestPayamsterTokenQuoteRequest = [
   {
-    policyId: string;
-    tokenAddress: Address;
+    policyId: string | string[];
+    entryPoint: Address;
+    erc20Context?: {
+      tokenAddress: Address;
+      permit?: Hex;
+      maxTokenAmount?: BigInt;
+    };
+    dummySignature: Hex;
+    userOperation: UserOperationRequest;
+    overrides?: UserOperationOverrides;
   },
 ];
 
 export type RequestPayamsterTokenQuoteResponse = {
-  ethToTokenConversionRate: string;
+  tokensPerEth: string;
+  estimatedTokenAmount: string;
+  estimatedUsd: number;
 };
