@@ -5,7 +5,7 @@ import {
   createModularAccountV2Client,
   ModularAccountV2Client,
 } from "@account-kit/smart-contracts";
-import { alchemyFeeEstimator, PolicyToken, AlchemyTransport } from "@account-kit/infra";
+import { alchemyFeeEstimator, AlchemyTransport } from "@account-kit/infra";
 import {
   installValidationActions,
   InstallValidationActions,
@@ -20,6 +20,14 @@ type Client = ModularAccountV2Client<
   InstallValidationActions<
     ModularAccountV2<AlchemySigner | LocalAccountSigner<PrivateKeyAccount>>
   >;
+
+interface PolicyToken {
+  address: Address;
+  maxTokenAmount: number;
+  approvalMode?: "PERMIT" | "NONE";
+  erc20Name?: string;
+  version?: string;
+}
 
 // Hook that creates an MAv2 client that can be used for things that
 // @account-kit/react doesn't yet support, such as session keys.

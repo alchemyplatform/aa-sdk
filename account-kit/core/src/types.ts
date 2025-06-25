@@ -17,7 +17,7 @@ import type {
 } from "@account-kit/smart-contracts";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
-import type { Address, Chain } from "viem";
+import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { ClientStoreConfig, Store, StoredState } from "./store/types";
 import type {
@@ -25,6 +25,8 @@ import type {
   RNSignerClient,
 } from "@account-kit/react-native-signer";
 import type { Connection as SolanaWeb3Connection } from "@solana/web3.js";
+import type { PolicyToken } from "@account-kit/infra";
+
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
@@ -67,15 +69,6 @@ export type AlchemyAccountsConfig = {
 export type SolanaConnection = {
   connection: SolanaWeb3Connection;
   policyId?: string;
-};
-
-export type PolicyToken = {
-  address: Address;
-  maxTokenAmount: number;
-  paymasterAddress?: Address;
-  approvalMode?: "NONE" | "PERMIT";
-  erc20Name?: string;
-  version?: string;
 };
 
 export type Connection = {

@@ -28,7 +28,7 @@ import {
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
 import { headersUpdate } from "../alchemyTrackerHeaders.js";
-import type { PolicyToken } from "@account-kit/core";
+import type { PolicyToken } from "../middleware/gasManager.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner,

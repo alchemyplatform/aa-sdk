@@ -34,7 +34,6 @@ import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js"
 import type { AlchemyTransport } from "../alchemyTransport.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 import type { RequestGasAndPaymasterAndDataRequest } from "../actions/types.js";
-import type { PolicyToken } from "@account-kit/core";
 
 import {
   PermitTypes,
@@ -53,6 +52,16 @@ type Context = {
     permit?: Hex;
   };
 };
+
+export type PolicyToken = {
+  address: Address;
+  maxTokenAmount: number;
+  paymasterAddress?: Address;
+  approvalMode?: "NONE" | "PERMIT";
+  erc20Name?: string;
+  version?: string;
+};
+
 /**
  * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
  * transactions. Adheres to the ERC-7677 standardized communication protocol.
