@@ -1,7 +1,7 @@
 ---
-title: Pay gas with ERC-20 tokens
+title: Pay gas with any token
 description: Enable your users to pay gas with ERC-20 tokens like USDC via Gas Manager
-slug: wallets/react-native/using-smart-accounts/sponsor-gas-with-erc20
+slug: wallets/react-native/using-smart-accounts/pay-gas-with-any-token
 ---
 
 Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app's own token. With our smart wallet, you can enable your users to pay for gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
@@ -33,8 +33,8 @@ export const config = createConfig({
   chain: sepolia,
   policyId: "GAS_MANAGER_POLICY_ID", // your policy
   policyToken: {
-    address: "0x", // USDC_ADDRESS or an ERC-20 token address
-    maxTokenAmount: 10_000n, // optional safety limit
+    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
+    maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
   },
 });
 ```
@@ -57,7 +57,7 @@ export default function PayWithTokenButton() {
         onPress={() =>
           sendUserOperation({
             uo: {
-              target: "0xTARGET_ADDRESS",
+              target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
               data: "0x",
               value: 0n,
             },
@@ -81,8 +81,8 @@ Create a dedicated client if you only want certain operations to use the policy.
 const { client } = useSmartAccountClient({
   policyId: "GAS_MANAGER_POLICY_ID",
   policyToken: {
-    address: "0x", // USDC_ADDRESS or an ERC-20 token address
-    maxTokenAmount: 10_000n,
+    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
+    maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
   },
 });
 ```
