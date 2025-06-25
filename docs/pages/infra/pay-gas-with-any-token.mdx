@@ -1,0 +1,64 @@
+---
+title: Sponsor Gas With Any Erc20 Token
+description: Learn how to sponsor gas with Erc20 token for UserOperations from any ERC-4337 smart account using Account Kit core.
+slug: wallets/pages/infra/pay-gas-with-any-token
+---
+
+Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app’s own token. With our smart wallet, you can enable your users to pay gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
+
+**How it works:** We front the gas using the network’s native gas token and transfer the ERC-20 tokens from the user’s wallet to a wallet you control. The equivalent USD amount and the admin fee is then added to your monthly invoice.
+
+### 1. Create a Gas Manager policy
+
+<Markdown src="../../shared/sponsor-gas-erc20-create-policy.mdx" />
+
+### 2. Create a smart Account Client
+
+Now you can create a Smart Account Client which is configured to sponsor gas.
+
+```tsx
+import {
+  alchemy,
+  createAlchemySmartAccountClient,
+  sepolia,
+} from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+// You can replace this with any signer you'd like
+// We're using a LocalAccountSigner to generate a local key to sign with
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey } from "viem/accounts";
+
+const alchemyTransport = alchemy({
+  apiKey: "YOUR_API_KEY",
+});
+
+export const client = createAlchemySmartAccountClient({
+  transport: alchemyTransport,
+  policyId: "YOUR_POLICY_ID",
+  policyToken: {
+    address: tokenAddress,
+    approvalMode: "NONE",
+    maxTokenAmount: 10_000_000n,
+  },
+  chain: sepolia,
+  account: await createLightAccount({
+    chain: sepolia,
+    transport: alchemyTransport,
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  }),
+});
+```
+
+### **3. Send a sponsored UserOperation**
+
+```tsx
+import { client } from "./client";
+
+const { hash } = await client.sendUserOperation({
+  uo: {
+    target: "0xTARGET_ADDRESS",
+    data: "0x",
+    value: 0n,
+  },
+});
+```
