@@ -7,7 +7,7 @@ import { ClientUndefinedHookError } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
 
-export type UseGetCallsStatusParams = {
+export type UseCallsStatusParams = {
   client?: GetSmartWalletClientResult<Address>;
   callId?: Hex;
 };
@@ -34,14 +34,14 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  * }
  * ```
  *
- * @param {UseGetCallsStatusParams} params - Parameters for the hook
+ * @param {UseCallsStatusParams} params - Parameters for the hook
  * @param {GetSmartWalletClientResult<Address> | undefined} params.client - Smart wallet client instance. The hook will not fetch until this is defined.
  * @param {Hex | undefined} params.callId - A call ID (hex string) returned from `sendPreparedCalls`. The hook will not fetch until this is defined.
  *
  * @returns {UseCallsStatusResult} Query result
  */
 export function useCallsStatus(
-  params: UseGetCallsStatusParams,
+  params: UseCallsStatusParams,
 ): UseCallsStatusResult {
   const { client, callId } = params;
   const { queryClient } = useAlchemyAccountContext();
