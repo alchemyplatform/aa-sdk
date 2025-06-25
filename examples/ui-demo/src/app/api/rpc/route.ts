@@ -3,8 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { env } from "../../../../env.mjs";
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
+  const body = await req.json();
   const headers: Record<string, string> = {};
+
+  if (body.method.startsWith("wallet_")) {
+    headers.Authorization = `Bearer ${env.API_KEY}`;
+  }
+
   req.headers.forEach((value: string, key: string) => {
     // don't pass the cookie because it doesn't get used downstream
     if (key === "cookie") return;
@@ -12,12 +17,16 @@ export async function POST(req: NextRequest) {
     headers[key] = value;
   });
 
-  const res = await fetch(env.ALCHEMY_RPC_URL, {
+  const url = body.method.startsWith("wallet_")
+    ? `${env.ALCHEMY_API_URL}/v2`
+    : env.ALCHEMY_RPC_URL;
+
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       ...headers,
     },
-    body,
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

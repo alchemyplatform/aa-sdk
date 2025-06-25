@@ -7,7 +7,6 @@ import { getAlchemyTransport } from "../../actions/getAlchemyTransport.js";
 import { getConnection } from "../../actions/getConnection.js";
 import { getSigner } from "../../actions/getSigner.js";
 import { getSignerStatus } from "../../actions/getSignerStatus.js";
-import { SignerNotConnectedError } from "../../errors.js";
 import type { AlchemyAccountsConfig } from "../../types.js";
 
 export type GetSmartWalletClientResult<
@@ -39,7 +38,7 @@ export function getSmartWalletClient(
   const signer = getSigner(config);
 
   if (!signer || !signerStatus.isConnected) {
-    throw new SignerNotConnectedError();
+    return undefined;
   }
 
   const smartWalletClient =
@@ -57,7 +56,9 @@ export function getSmartWalletClient(
     chain: connection.chain,
     signer,
     account: params?.account,
-    mode: config.mode,
+    mode: "remote",
+    // @ts-expect-error - TODO: fix this capability
+    policyId: connection.policyId,
   });
 
   config.store.setState((state) => ({
