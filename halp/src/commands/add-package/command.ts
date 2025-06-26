@@ -11,6 +11,7 @@ import { tsconfigBuildTemplate } from "./base/tsconfigBuildTemplate.js";
 import { tsconfigTemplate } from "./base/tsconfigTemplate.js";
 import { vitestConfigTemplate } from "./base/vitestConfigTemplate.js";
 import { jsonRpcTask } from "./json-rpc/task.js";
+import { restApiTask } from "./rest-api/task.js";
 
 export type AddPackageOptions = {
   package: string;
@@ -112,17 +113,7 @@ export async function addPackage(options: Record<string, any>) {
       },
     },
     jsonRpcTask(config, packageFolder),
-    {
-      title: "Adding REST API Scaffolding",
-      enabled: () => config.type === "rest-api",
-      task: async (_, task) => {
-        task.skip(
-          "not implemented yet, need to implement alchemy transport REST support first",
-        );
-        // TODO: this should probably use subtasks
-        // task.newListr([]);
-      },
-    },
+    restApiTask(config, packageFolder),
   ]);
 
   await tasks.run();
