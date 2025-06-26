@@ -83,7 +83,7 @@
     "@types/react": "^18.2.44"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
+    "react": ">=18.2.0",
     "react-native": ">=0.76.0",
     "react-native-get-random-values": "^1.11.0",
     "react-native-inappbrowser-reborn": "^3.7.0",
