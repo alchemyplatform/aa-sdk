@@ -14,6 +14,11 @@ export type TODO_MyActions<
   dummyAction: (params: DummyActionParams<TChain, TAccount>) => Promise<DummyActionResult>;
 };
 
+/**
+ * This is a decorator that is used to add actions to a client.
+ * @param client - The client to add the actions to.
+ * @returns The client with the actions added.
+ */
 export const TODO_myActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends Account | undefined =

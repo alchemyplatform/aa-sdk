@@ -5,8 +5,6 @@ import { type Erc7677RpcSchema, type UserOperationRequest } from "@aa-sdk/core";
 import type {
   RequestGasAndPaymasterAndDataRequest,
   RequestGasAndPaymasterAndDataResponse,
-  RequestPayamsterTokenQuoteRequest,
-  RequestPayamsterTokenQuoteResponse,
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
 } from "@account-kit/infra";
@@ -29,9 +27,6 @@ export type AlchemyJsonRpcSchema = [
     Parameters: RequestGasAndPaymasterAndDataRequest;
     ReturnType: RequestGasAndPaymasterAndDataResponse;
   },
-  {
-    Method: "alchemy_requestPaymasterTokenQuote";
-    Parameters: RequestPayamsterTokenQuoteRequest;
-    ReturnType: RequestPayamsterTokenQuoteResponse;
-  },
 ];
+
+export type AlchemyHttpSchema = [];
