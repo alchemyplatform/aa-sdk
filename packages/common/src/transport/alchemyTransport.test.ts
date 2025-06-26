@@ -33,7 +33,7 @@ describe("Alchemy Transport Tests", () => {
     expect(() =>
       alchemy({ apiKey: "some_key" })({ chain: avalanche }),
     ).toThrowErrorMatchingInlineSnapshot(
-      `[Error: chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@account-kit/infra\`.]`,
+      `[Error: chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@alchemy/common/chains\`.]`,
     );
   });
 });
