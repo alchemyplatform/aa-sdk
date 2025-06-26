@@ -390,7 +390,7 @@ components:
           description: "Erc20 contract address"
         maxTokenAmount:
           $ref: "#/components/schemas/positiveDecimal"
-          description: "Maximum allowed amount of value in token"
+          description: "Maximum allowed amount of value in raw token amount"
         permit:
           $ref: "#/components/schemas/bytes"
           description: "A 7597 typed permit"
