@@ -27,7 +27,7 @@ methods:
                   type: "string"
                 creationHint:
                   anyOf:
-                    - description: "SMA-B account type"
+                    - description: "Modular Account V2 SMA-B account type"
                       type: "object"
                       properties:
                         accountType:
@@ -37,6 +37,90 @@ methods:
                         salt:
                           type: "string"
                           pattern: "^0x(.*)$"
+                    - description: "Light Account V2 account type"
+                      type: "object"
+                      properties:
+                        accountType:
+                          type: "string"
+                          enum:
+                            - "la-v2"
+                        salt:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "accountType"
+                    - description: "Light Account V2 Multi-Owner account type"
+                      type: "object"
+                      properties:
+                        accountType:
+                          type: "string"
+                          enum:
+                            - "la-v2-multi-owner"
+                        salt:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        initialOwners:
+                          description: "The initial owners of the account. The signer address will be implicitly added if not specified in this list."
+                          type: "array"
+                          items:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                      required:
+                        - "accountType"
+                    - description: "Light Account V1.0.1 account type"
+                      type: "object"
+                      properties:
+                        accountType:
+                          type: "string"
+                          enum:
+                            - "la-v1.0.1"
+                        salt:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "accountType"
+                    - description: "Light Account V1.0.2 account type"
+                      type: "object"
+                      properties:
+                        accountType:
+                          type: "string"
+                          enum:
+                            - "la-v1.0.2"
+                        salt:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "accountType"
+                    - description: "Light Account V1.1.0 account type"
+                      type: "object"
+                      properties:
+                        accountType:
+                          type: "string"
+                          enum:
+                            - "la-v1.1.0"
+                        salt:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "accountType"
+                    - description: "Modular Account V1 Multi-Owner account type"
+                      type: "object"
+                      properties:
+                        accountType:
+                          type: "string"
+                          enum:
+                            - "ma-v1-multi-owner"
+                        salt:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        initialOwners:
+                          description: "The initial owners of the account. The signer address will be implicitly added if not specified in this list."
+                          type: "array"
+                          items:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                      required:
+                        - "accountType"
                     - description: "7702 account type"
                       type: "object"
                       properties:
@@ -324,6 +408,15 @@ methods:
                       type: "boolean"
                       enum:
                         - true
+                nonceOverride:
+                  type: "object"
+                  properties:
+                    nonceKey:
+                      description: "Override nonce key as hex string"
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                  required:
+                    - "nonceKey"
           required:
             - "calls"
             - "from"
@@ -434,9 +527,13 @@ methods:
                                           pattern: "^0x(.*)$"
                                       required:
                                         - "raw"
+                                rawPayload:
+                                  type: "string"
+                                  pattern: "^0x(.*)$"
                               required:
                                 - "type"
                                 - "data"
+                                - "rawPayload"
                             - description: "Typed data"
                               type: "object"
                               properties:
@@ -487,9 +584,13 @@ methods:
                                     - "types"
                                     - "primaryType"
                                     - "message"
+                                rawPayload:
+                                  type: "string"
+                                  pattern: "^0x(.*)$"
                               required:
                                 - "type"
                                 - "data"
+                                - "rawPayload"
                       required:
                         - "type"
                         - "data"
@@ -583,9 +684,13 @@ methods:
                                           pattern: "^0x(.*)$"
                                       required:
                                         - "raw"
+                                rawPayload:
+                                  type: "string"
+                                  pattern: "^0x(.*)$"
                               required:
                                 - "type"
                                 - "data"
+                                - "rawPayload"
                             - description: "Typed data"
                               type: "object"
                               properties:
@@ -636,9 +741,13 @@ methods:
                                     - "types"
                                     - "primaryType"
                                     - "message"
+                                rawPayload:
+                                  type: "string"
+                                  pattern: "^0x(.*)$"
                               required:
                                 - "type"
                                 - "data"
+                                - "rawPayload"
                       required:
                         - "type"
                         - "data"
@@ -674,8 +783,12 @@ methods:
                               type: "string"
                               enum:
                                 - "eip7702Auth"
+                            rawPayload:
+                              type: "string"
+                              pattern: "^0x(.*)$"
                           required:
                             - "type"
+                            - "rawPayload"
                       required:
                         - "type"
                         - "data"
@@ -774,9 +887,13 @@ methods:
                                 pattern: "^0x(.*)$"
                             required:
                               - "raw"
+                      rawPayload:
+                        type: "string"
+                        pattern: "^0x(.*)$"
                     required:
                       - "type"
                       - "data"
+                      - "rawPayload"
                   - description: "Typed data"
                     type: "object"
                     properties:
@@ -827,9 +944,13 @@ methods:
                           - "types"
                           - "primaryType"
                           - "message"
+                      rawPayload:
+                        type: "string"
+                        pattern: "^0x(.*)$"
                     required:
                       - "type"
                       - "data"
+                      - "rawPayload"
             required:
               - "type"
               - "data"
@@ -923,9 +1044,13 @@ methods:
                                 pattern: "^0x(.*)$"
                             required:
                               - "raw"
+                      rawPayload:
+                        type: "string"
+                        pattern: "^0x(.*)$"
                     required:
                       - "type"
                       - "data"
+                      - "rawPayload"
                   - description: "Typed data"
                     type: "object"
                     properties:
@@ -976,9 +1101,13 @@ methods:
                           - "types"
                           - "primaryType"
                           - "message"
+                      rawPayload:
+                        type: "string"
+                        pattern: "^0x(.*)$"
                     required:
                       - "type"
                       - "data"
+                      - "rawPayload"
             required:
               - "type"
               - "data"
@@ -1955,7 +2084,7 @@ methods:
               type: "string"
             creationOptions:
               anyOf:
-                - description: "SMA-B account type"
+                - description: "Modular Account V2 SMA-B account type"
                   type: "object"
                   properties:
                     accountType:
@@ -1965,6 +2094,90 @@ methods:
                     salt:
                       type: "string"
                       pattern: "^0x(.*)$"
+                - description: "Light Account V2 account type"
+                  type: "object"
+                  properties:
+                    accountType:
+                      type: "string"
+                      enum:
+                        - "la-v2"
+                    salt:
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                  required:
+                    - "accountType"
+                - description: "Light Account V2 Multi-Owner account type"
+                  type: "object"
+                  properties:
+                    accountType:
+                      type: "string"
+                      enum:
+                        - "la-v2-multi-owner"
+                    salt:
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                    initialOwners:
+                      description: "The initial owners of the account. The signer address will be implicitly added if not specified in this list."
+                      type: "array"
+                      items:
+                        type: "string"
+                        pattern: "^0x(.*)$"
+                  required:
+                    - "accountType"
+                - description: "Light Account V1.0.1 account type"
+                  type: "object"
+                  properties:
+                    accountType:
+                      type: "string"
+                      enum:
+                        - "la-v1.0.1"
+                    salt:
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                  required:
+                    - "accountType"
+                - description: "Light Account V1.0.2 account type"
+                  type: "object"
+                  properties:
+                    accountType:
+                      type: "string"
+                      enum:
+                        - "la-v1.0.2"
+                    salt:
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                  required:
+                    - "accountType"
+                - description: "Light Account V1.1.0 account type"
+                  type: "object"
+                  properties:
+                    accountType:
+                      type: "string"
+                      enum:
+                        - "la-v1.1.0"
+                    salt:
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                  required:
+                    - "accountType"
+                - description: "Modular Account V1 Multi-Owner account type"
+                  type: "object"
+                  properties:
+                    accountType:
+                      type: "string"
+                      enum:
+                        - "ma-v1-multi-owner"
+                    salt:
+                      type: "string"
+                      pattern: "^0x(.*)$"
+                    initialOwners:
+                      description: "The initial owners of the account. The signer address will be implicitly added if not specified in this list."
+                      type: "array"
+                      items:
+                        type: "string"
+                        pattern: "^0x(.*)$"
+                  required:
+                    - "accountType"
                 - description: "7702 account type"
                   type: "object"
                   properties:
@@ -2231,6 +2444,9 @@ methods:
           sessionId:
             type: "string"
             pattern: "^0x(.*)$"
+          chainId:
+            type: "string"
+            pattern: "^0x(.*)$"
           signatureRequest:
             description: "Typed data"
             type: "object"
@@ -2282,11 +2498,16 @@ methods:
                   - "types"
                   - "primaryType"
                   - "message"
+              rawPayload:
+                type: "string"
+                pattern: "^0x(.*)$"
             required:
               - "type"
               - "data"
+              - "rawPayload"
         required:
           - "sessionId"
+          - "chainId"
           - "signatureRequest"
 
     examples:

@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+### Bug Fixes
+
+- **middleware:** fix the 7677 middleware to use returned gas limits in pm_getPaymasterData ([146f548](https://github.com/alchemyplatform/aa-sdk/commit/146f548eb760caf91b987c1abe81a21cc7d1290f))
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+### Features
+
+- update RequestPayamsterTokenQuote API ([#1730](https://github.com/alchemyplatform/aa-sdk/issues/1730)) ([9b285a1](https://github.com/alchemyplatform/aa-sdk/commit/9b285a15e3f16c5ef5701e4746981ec22fb2ec2f))
+
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+### Features
+
+- add paymaster address to aa-sdk ([#1662](https://github.com/alchemyplatform/aa-sdk/issues/1662)) ([eff651c](https://github.com/alchemyplatform/aa-sdk/commit/eff651c89758bd3a1b7ecc04778b25d2a9dc64e9))
+- adds webauthn session key support ([#1563](https://github.com/alchemyplatform/aa-sdk/issues/1563)) ([326d660](https://github.com/alchemyplatform/aa-sdk/commit/326d6605a2db8b9a23d81ac95df0374bd8a36572)), closes [#1639](https://github.com/alchemyplatform/aa-sdk/issues/1639) [#1663](https://github.com/alchemyplatform/aa-sdk/issues/1663) [#1654](https://github.com/alchemyplatform/aa-sdk/issues/1654)
+
+# [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
+
+### Bug Fixes
+
+- force docs-site submodule to be up-to-date ([#1709](https://github.com/alchemyplatform/aa-sdk/issues/1709)) ([506de2e](https://github.com/alchemyplatform/aa-sdk/commit/506de2e446377f87ffa0c3fdef2c37e0a1b63172))
+
+### Features
+
+- multi owner signing ([#1708](https://github.com/alchemyplatform/aa-sdk/issues/1708)) ([113dfe7](https://github.com/alchemyplatform/aa-sdk/commit/113dfe76b70361070a120ccedb0f03b11707d392))
+
 ## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
 
 ### Bug Fixes

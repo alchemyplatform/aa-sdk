@@ -1,4 +1,4 @@
-import type { AlchemySigner } from "@account-kit/core";
+import type { AlchemySigner, ModularAccountV2 } from "@account-kit/core";
 import { useSigner, useSignerStatus } from "@account-kit/react";
 import { useState, useEffect } from "react";
 import {
@@ -14,20 +14,20 @@ import { Chain, Hex, Address, PrivateKeyAccount } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { privateKeyToAccount } from "viem/accounts";
 
-interface PolicyToken {
-  address: Address;
-  maxTokenAmount: bigint;
-  approvalMode?: "PERMIT" | "NONE";
-  erc20Name?: string;
-  version?: string;
-}
-
 type Client = ModularAccountV2Client<
   AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
 > &
   InstallValidationActions<
-    AlchemySigner | LocalAccountSigner<PrivateKeyAccount>
+    ModularAccountV2<AlchemySigner | LocalAccountSigner<PrivateKeyAccount>>
   >;
+
+interface PolicyToken {
+  address: Address;
+  maxTokenAmount: number;
+  approvalMode?: "PERMIT" | "NONE";
+  erc20Name?: string;
+  version?: string;
+}
 
 // Hook that creates an MAv2 client that can be used for things that
 // @account-kit/react doesn't yet support, such as session keys.

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+### Features
+
+- update RequestPayamsterTokenQuote API ([#1730](https://github.com/alchemyplatform/aa-sdk/issues/1730)) ([9b285a1](https://github.com/alchemyplatform/aa-sdk/commit/9b285a15e3f16c5ef5701e4746981ec22fb2ec2f))
+
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+### Features
+
+- add paymaster address to aa-sdk ([#1662](https://github.com/alchemyplatform/aa-sdk/issues/1662)) ([eff651c](https://github.com/alchemyplatform/aa-sdk/commit/eff651c89758bd3a1b7ecc04778b25d2a9dc64e9))
+
+# [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
+
+**Note:** Version bump only for package @account-kit/infra
+
 ## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
 
 **Note:** Version bump only for package @account-kit/infra

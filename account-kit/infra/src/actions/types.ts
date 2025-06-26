@@ -60,7 +60,7 @@ export type RequestGasAndPaymasterAndDataRequest = [
     erc20Context?: {
       tokenAddress: Address;
       permit?: Hex;
-      maxTokenAmount?: BigInt;
+      maxTokenAmount?: number;
     };
     dummySignature: Hex;
     userOperation: UserOperationRequest;
@@ -92,13 +92,23 @@ export type RequestGasAndPaymasterAndDataResponse<
         >
       : never);
 
-export type RequestPayamsterTokenQuoteRequest = [
+export type RequestPaymasterTokenQuoteRequest = [
   {
     policyId: string;
-    tokenAddress: Address;
+    entryPoint: Address;
+    erc20Context?: {
+      tokenAddress: Address;
+      permit?: Hex;
+      maxTokenAmount?: BigInt;
+    };
+    dummySignature: Hex;
+    userOperation: UserOperationRequest;
+    overrides?: UserOperationOverrides;
   },
 ];
 
-export type RequestPayamsterTokenQuoteResponse = {
-  ethToTokenConversionRate: string;
+export type RequestPaymasterTokenQuoteResponse = {
+  tokensPerEth: string;
+  estimatedTokenAmount: string;
+  estimatedUsd: number;
 };
