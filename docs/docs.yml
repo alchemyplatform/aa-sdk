@@ -1140,6 +1140,9 @@ navigation:
               - page: How to sponsor gas on EVM
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
+              - page: How to pay gas with any token
+                path: >-
+                  wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
               - page: How to sponsor gas on Solana
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-solana.mdx
