@@ -795,7 +795,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * This will create a multi-owner account with the current user and additional specified signers
    *
    * @param {Address[]} additionalMembers members to add, aside from the currently authenticated user
-   * @returns {Promise<SignerResponse<"/v1/multi-owner-create">>} created multi-owner account
+   * @returns {Promise<SignerResponse<"/v1/multi-owner-create">['result']>} created multi-owner account
    */
   public experimental_createMultiOwner = async (
     additionalMembers: Address[],
