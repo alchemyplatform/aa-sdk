@@ -844,16 +844,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       stampedRequest,
     });
 
-    const { result } = await this.request(
-      "/v1/multi-owner-update-root-quorum",
-      {
-        stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
-          updateRootQuorumRequest,
-        ),
-      },
-    );
-
-    console.log(result);
+    await this.request("/v1/multi-owner-update-root-quorum", {
+      stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+        updateRootQuorumRequest,
+      ),
+    });
   };
 
   /**
