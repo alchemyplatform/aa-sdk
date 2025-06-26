@@ -1,6 +1,6 @@
 import dedent from "dedent";
 
-export const jsonRpcDummyActionTestTemplate = () => dedent`
+export const restApiDummyActionTestTemplate = () => dedent`
 import { local070Instance } from "~test/instances.js";
 import { dummyAction } from "./dummyAction.js";
 
@@ -11,11 +11,8 @@ describe("dummyAction tests", async () => {
   const client = instance.getClient();
 
   const result = await dummyAction(client, {
-    firstParam: {
-      param1: "foo",
-      param2: 1,
-    },
-    secondParam: "bar",
+    param1: "foo",
+    param2: 1,
   });
 
   expect(result).toEqual({
