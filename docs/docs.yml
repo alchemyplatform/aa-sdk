@@ -121,6 +121,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/components/Dialog.mdx
               - section: Authentication
                 contents:
+                  - page: useAddOauthProvider
+                    path: wallets/pages/reference/account-kit/react/hooks/useAddOauthProvider.mdx
                   - page: useAddPasskey
                     path: wallets/pages/reference/account-kit/react/hooks/useAddPasskey.mdx
                   - page: useAuthContext
@@ -133,6 +135,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useConnect.mdx
                   - page: useExportAccount
                     path: wallets/pages/reference/account-kit/react/hooks/useExportAccount.mdx
+                  - page: useListAuthMethods
+                    path: wallets/pages/reference/account-kit/react/hooks/useListAuthMethods.mdx
                   - page: useLogout
                     path: wallets/pages/reference/account-kit/react/hooks/useLogout.mdx
                   - page: useMFA
@@ -552,8 +556,14 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
                       - page: createAccount
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/createAccount.mdx
+                      - page: experimental_addToMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_addToMultiOwner.mdx
                       - page: experimental_createApiKey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
+                      - page: experimental_createMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiOwner.mdx
+                      - page: experimental_multiOwnerSignRawMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
                       - page: getPasskeyStatus

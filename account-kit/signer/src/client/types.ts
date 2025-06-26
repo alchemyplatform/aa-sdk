@@ -269,41 +269,66 @@ export type SignerEndpoints = [
     };
   },
   {
-    Route: "/v1/multi-sig-create";
+    Route: "/v1/multi-owner-create";
     Body: {
-      quorum: number;
       members: {
         evmSignerAddress: Address;
       }[];
     };
     Response: {
-      orgId: string;
-      quorum: number;
-      evmSignerAddress: Address;
-      members: {
+      result: {
+        orgId: string;
         evmSignerAddress: Address;
-      }[];
+        members: {
+          evmSignerAddress: Address;
+        }[];
+      };
     };
   },
   {
-    Route: "/v1/multi-sig-prepare-add";
+    Route: "/v1/multi-owner-prepare-add";
     Body: {
+      organizationId: string;
       members: {
         evmSignerAddress: Address;
       }[];
     };
-    Response: TurnkeyApiTypes["v1CreateUsersIntentV3"];
+    Response: {
+      result: TurnkeyApiTypes["v1CreateUsersRequest"];
+    };
   },
   {
-    Route: "/v1/multi-sig-add";
+    Route: "/v1/multi-owner-add";
     Body: {
       stampedRequest: TSignedRequest;
     };
     Response: {
-      members: {
-        evmSignerAddress: Address;
-      }[];
-      updateRootQuorumIntent: TurnkeyApiTypes["v1UpdateRootQuorumIntent"];
+      result: {
+        members: {
+          evmSignerAddress: Address;
+        }[];
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-update-root-quorum";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1UpdateRootQuorumResult"];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-sign-raw-payload";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        signRawPayloadResult: TurnkeyApiTypes["v1SignRawPayloadResult"];
+      };
     };
   },
 ];

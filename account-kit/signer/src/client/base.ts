@@ -757,52 +757,47 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     }
     const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
 
-    const signatureResult = await multiOwnerClient.signRawPayload({
-      organizationId: orgId,
-      type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
-        hashFunction: "HASH_FUNCTION_NO_OP",
-        payload: msg,
-        signWith: orgAddress,
-      },
+    const { result } = await this.request("/v1/multi-owner-sign-raw-payload", {
+      stampedRequest: await multiOwnerClient.stampSignRawPayload({
+        organizationId: orgId,
+        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+        timestampMs: Date.now().toString(),
+        parameters: {
+          encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+          hashFunction: "HASH_FUNCTION_NO_OP",
+          payload: msg,
+          signWith: orgAddress,
+        },
+      }),
     });
 
-    const signRawPayloadResult =
-      signatureResult.activity.result.signRawPayloadResult;
-    if (!signRawPayloadResult) {
-      throw new Error("No sign raw payload result");
-    }
-
     return serializeSignature({
-      r: withHexPrefix(signRawPayloadResult.r),
-      s: withHexPrefix(signRawPayloadResult.s),
-      yParity: Number(signRawPayloadResult.v), // this is not actually a legacy v value, it's the y parity bit
+      r: withHexPrefix(result.signRawPayloadResult.r),
+      s: withHexPrefix(result.signRawPayloadResult.s),
+      yParity: Number(result.signRawPayloadResult.v), // this is not actually a legacy v value, it's the y parity bit
     });
   };
 
   /**
-   * This will create a multi-sig with the current user and additional specified signers
+   * This will create a multi-owner account with the current user and additional specified signers
    *
-   * @param {number} quorum multi sig quorum, currently only 1 is supported
    * @param {Address[]} additionalMembers members to add, aside from the currently authenticated user
-   * @returns {Promise<SignerResponse<"/v1/multi-sig-create">>} created multi-sig
+   * @returns {Promise<SignerResponse<"/v1/multi-owner-create">>} created multi-owner account
    */
-  public experimental_createMultiSig = (
-    quorum: number,
+  public experimental_createMultiOwner = async (
     additionalMembers: Address[],
   ) => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
 
-    return this.request("/v1/multi-sig-create", {
+    const response = await this.request("/v1/multi-owner-create", {
       members: [this.user.address, ...additionalMembers].map(
         (evmSignerAddress) => ({ evmSignerAddress }),
       ),
-      quorum,
     });
+
+    return response.result;
   };
 
   /**
@@ -821,27 +816,31 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
     const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
 
-    const prepared = await this.request("/v1/multi-sig-prepare-add", {
+    const prepared = await this.request("/v1/multi-owner-prepare-add", {
+      organizationId: orgId,
       members: members.map((evmSignerAddress) => ({ evmSignerAddress })),
     });
 
-    const stampedRequest = await multiOwnerClient.stampCreateUsers({
-      organizationId: orgId,
-      type: "ACTIVITY_TYPE_CREATE_USERS_V3",
-      timestampMs: Date.now().toString(),
-      parameters: prepared,
-    });
+    const stampedRequest = await multiOwnerClient.stampCreateUsers(
+      prepared.result,
+    );
 
-    const { updateRootQuorumIntent } = await this.request("/v1/multi-sig-add", {
+    const {
+      result: { updateRootQuorumRequest },
+    } = await this.request("/v1/multi-owner-add", {
       stampedRequest,
     });
 
-    await multiOwnerClient.updateRootQuorum({
-      organizationId: orgId,
-      type: "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM",
-      timestampMs: Date.now().toString(),
-      parameters: updateRootQuorumIntent,
-    });
+    const { result } = await this.request(
+      "/v1/multi-owner-update-root-quorum",
+      {
+        stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+          updateRootQuorumRequest,
+        ),
+      },
+    );
+
+    console.log(result);
   };
 
   /**
