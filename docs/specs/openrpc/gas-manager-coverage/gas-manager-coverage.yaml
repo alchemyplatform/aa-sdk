@@ -586,28 +586,30 @@ methods:
       </Note>
 
     params:
-      - name: policyId
+      - name: sponsorshipRequest
         required: true
-        description: "The Gas Manager Policy ID or list of Gas Manager Policy IDs."
+        description: "The sponsorship request object containing policy ID(s) and a serialized transaction."
         schema:
-          oneOf:
-            - title: policyId
+          type: object
+          required: ["policyId", "serializedTransaction"]
+          properties:
+            policyId:
+              description: "The Gas Manager Policy ID or list of Gas Manager Policy IDs."
+              oneOf:
+                - title: policyId
+                  type: "string"
+                - title: policyIdArray
+                  type: "array"
+                  items:
+                    type: "string"
+            serializedTransaction:
+              description: |
+                The unsigned transaction produced by `tx.serialize()`.
+                It may already contain a `feePayer`; the service will overwrite it
+                with the sponsoring account and add the fee-payer signature.
               type: "string"
-              format: "uuid"
-            - title: policyIdArray
-              type: "array"
-              items:
-                type: "string"
-                format: "uuid"
-      - name: serializedTransaction
-        required: true
-        description: |
-          The unsigned transaction produced by `tx.serialize()`.
-          It may already contain a `feePayer`; the service will overwrite it
-          with the sponsoring account and add the fee-payer signature.
-        schema:
-          type: "string"
-          pattern: "^[A-Za-z0-9+/]+={0,2}$"
+              pattern: "^[A-Za-z0-9+/]+={0,2}$"
+
     result:
       name: "Sponsored transaction wrapper"
       description: >
