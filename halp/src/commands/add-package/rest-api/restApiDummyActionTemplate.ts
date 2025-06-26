@@ -1,21 +1,18 @@
 import dedent from "dedent";
 
-export const jsonRpcDummyActionTemplate = () => dedent`
+export const restApiDummyActionTemplate = () => dedent`
 import type { Client, Chain, Account } from "viem";
 import type { AlchemyTransport } from "@alchemy/common";
-import type { TODO_MyRpcSchema } from "../schema.js";
+import type { TODO_MyHttpSchema } from "../schema.js";
 
 export type DummyActionParams = {
-  firstParam: {
     param1: string;
     param2: number;
-  };
-  secondParam: string;
-};
+}
 
 export type DummyActionResult = {
-  success: boolean;
-};
+    success: boolean;
+}
 
 /**
  * This is a dummy action that is used to test the decorator.
@@ -28,10 +25,11 @@ export const dummyAction = async <
   TAccount extends Account | undefined =
     | Account
     | undefined,
->(client: Client<AlchemyTransport<TODO_MyRpcSchema>, TChain, TAccount>, params: DummyActionParams): Promise<DummyActionResult> => {
-    return client.transport.request({
-      method: "TODO_MyMethod",
-      params: [params.firstParam, params.secondParam]
+>(client: Client<AlchemyTransport<undefined, TODO_MyHttpSchema>, TChain, TAccount>, params: DummyActionParams): Promise<DummyActionResult> => {
+    return client.transport.makeHttpRequest({
+      method: "POST",
+      route: "TODO_MyRoute",
+      body: params
     });
 };
 `;

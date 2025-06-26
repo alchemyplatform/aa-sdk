@@ -113,7 +113,7 @@ export function createAlchemySmartAccountClient<
     | UserOperationContext
     | undefined,
 >(
-  params: AlchemySmartAccountClientConfig<TChain, TAccount, TContext>
+  params: AlchemySmartAccountClientConfig<TChain, TAccount, TContext>,
 ): AlchemySmartAccountClient<TChain, TAccount, Record<string, never>, TContext>;
 
 /**
@@ -134,7 +134,7 @@ export function createAlchemySmartAccountClient<
  * @returns {AlchemySmartAccountClient} An instance of `AlchemySmartAccountClient` configured based on the provided options
  */
 export function createAlchemySmartAccountClient(
-  config: AlchemySmartAccountClientConfig
+  config: AlchemySmartAccountClientConfig,
 ): AlchemySmartAccountClient {
   if (!config.chain) {
     throw new ChainNotFoundError();
@@ -181,8 +181,8 @@ export function createAlchemySmartAccountClient(
       const newTransport = alchemy({ ...oldConfig });
       newTransport.updateHeaders(
         headersUpdate(breadcrumb)(
-          convertHeadersToObject(dynamicFetchOptions?.headers)
-        )
+          convertHeadersToObject(dynamicFetchOptions?.headers),
+        ),
       );
       return createAlchemySmartAccountClient({
         ...config,

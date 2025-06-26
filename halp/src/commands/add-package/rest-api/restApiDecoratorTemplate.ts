@@ -1,9 +1,9 @@
 import dedent from "dedent";
 
-export const jsonRpcDecoratorTemplate = () => dedent`
-import { dummyAction, type DummyActionParams, type DummyActionResult } from "./actions/dummyAction.js";
-import type { AlchemyTransport } from "@alchemy/common";
+export const restApiDecoratorTemplate = () => dedent`
 import type { Client, Chain, Account } from "viem";
+import type { AlchemyTransport } from "@alchemy/common";
+import { dummyAction, type DummyActionParams, type DummyActionResult } from "./actions/dummyAction.js";
 
 export type TODO_MyActions = {
   dummyAction: (params: DummyActionParams) => Promise<DummyActionResult>;
