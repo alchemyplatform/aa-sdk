@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+### Bug Fixes
+
+- **middleware:** fix the 7677 middleware to use returned gas limits in pm_getPaymasterData ([146f548](https://github.com/alchemyplatform/aa-sdk/commit/146f548eb760caf91b987c1abe81a21cc7d1290f))
+
 # [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
 
 **Note:** Version bump only for package @aa-sdk/core
