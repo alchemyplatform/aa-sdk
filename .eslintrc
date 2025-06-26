@@ -52,6 +52,10 @@
         "fixBatchSize": 0,
       },
     ],
+    "no-warning-comments": [
+      "warn",
+      { "terms": ["TODO(v5)"], "location": "anywhere" },
+    ],
   },
   "overrides": [
     {
