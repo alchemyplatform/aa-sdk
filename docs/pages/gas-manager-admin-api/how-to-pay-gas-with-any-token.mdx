@@ -1,0 +1,217 @@
+---
+title: How to pay gas with any token
+description: Learn how to enable gas payments with ERC-20 tokens.
+subtitle: Learn how to enable gas payments with ERC-20 tokens.
+url: https://docs.alchemy.com/reference/how-to-pay-gas-with-any-token
+slug: reference/how-to-pay-gas-with-any-token
+---
+
+Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app’s own token.
+With our smart wallet, you can enable your users to pay gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
+
+<Info>
+  **How it works:** We front the gas using the network’s native gas token and
+  transfer the ERC-20 tokens from the user’s wallet to a wallet you control. The
+  equivalent USD amount and the admin fee is then added to your monthly invoice.
+</Info>
+
+<Info>
+  **\[Recommended]** Use our [SDK](https://www.alchemy.com/docs/wallets) to
+  create and use wallets. The SDK handles all complexity for you, making
+  development faster and easier.
+</Info>
+
+If you want to use APIs directly, follow these steps.
+
+## Steps
+
+### 1. Get an API key
+
+- Get you API Key by creating an app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
+- Make sure you enable the networks you are building on under the Networks tab
+
+### 2. Create a Gas Manager policy
+
+To enable your users to pay gas using an ERC-20 token, you need to create a “Pay gas with any token” Policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create). You can customize the policy with the following:
+
+- Receiving address: an address of your choosing where the users' ERC20 tokens will be sent to as they pay for gas (this is orchestrated by the paymaster contract and happens automatically at the time of the transaction).
+- Tokens: the tokens the user should be able to pay gas with. Learn more [here](/reference/gas-manager-faqs).
+- ERC-20 transfer mode: choose when the user's token payment occurs.
+  - [Recommended] After: No upfront allowance is required. The user signs an approval inside the same user operation batch, and the paymaster pulls the token _after_ the operation has executed. If that post-execution transfer fails, the entire user operation is reverted and you still pay the gas fee.
+  - Before: You (the developer) must ensure the paymaster already has sufficient allowance—either through a prior `approve()` transaction or a permit signature—_before_ the UserOperation is submitted. If the required allowance isn't in place when the user operation is submitted, it will be rejected upfront.
+- Sponsorship expiry period: this is the period for which the Gas Manager signature and ERC-20 exchange rate will remain valid once generated.
+
+Now you should have a Gas policy created with a policy id you can use to enable gas payments with ERC-20 tokens.
+
+### 3. Get Gas Manager’s signature
+
+When sending a userOperation, you can specify the `paymaster` and `paymasterData` fields in the **`userOp`** object. These fields are related to the signature of the Gas Manager that enables the user to pay for gas with ERC-20 tokens.
+
+You can get these fields through [`alchemy_requestGasAndPaymasterAndData`](/docs/wallets/api/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-gas-and-paymaster-and-data) using your Gas Manager Policy id, the API key of the app associated with the policy, a userOperation, the address of the EntryPoint contract, and the address of the ERC-20 token. You can find an example script below.
+
+### 4. Send the userOp
+
+Once you get the `paymaster` and `paymasterData` fields, you can use them in your userOperation when you call [`eth_sendUserOperation`](https://www.alchemy.com/reference/eth-senduseroperation). You can find an example script below.
+
+## Example script
+
+```ts
+const { ethers } = require("ethers");
+
+// --- Constants ---
+
+// Address of the ERC-4337 EntryPoint contract
+const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
+
+// ABI for the EntryPoint contract, specifically for the getNonce function
+const ENTRYPOINT_ABI = [
+  {
+    type: "function",
+    name: "getNonce",
+    inputs: [
+      { name: "sender", type: "address", internalType: "address" },
+      { name: "key", type: "uint192", internalType: "uint192" },
+    ],
+    outputs: [
+      {
+        name: "nonce",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+];
+
+// Alchemy RPC URL for Sepolia testnet
+const ALCHEMY_RPC_URL = "";
+// Alchemy Gas Manager RPC URL for Sepolia testnet
+const ALCHEMY_GAS_MANAGER_URL = "";
+
+// Policy ID for the Alchemy Gas Manager
+const ALCHEMY_POLICY_ID = "";
+
+// Address of the ERC20 token to be used for gas payment
+const ERC20_TOKEN_ADDRESS = "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238"; // USDC
+
+// --- Ethers.js Setup ---
+
+// Initialize a JSON RPC provider
+const provider = new ethers.JsonRpcProvider(ALCHEMY_RPC_URL);
+
+// Create an ethers.js contract instance for the EntryPoint contract
+const entryPoint = new ethers.Contract(
+  ENTRYPOINT_ADDRESS,
+  ENTRYPOINT_ABI,
+  provider,
+);
+
+// --- Alchemy API Functions ---
+
+/**
+ * Requests gas fee estimations and paymaster data from Alchemy.
+ * This function constructs and sends a request to the 'alchemy_requestGasAndPaymasterAndData' RPC method.
+ * @param {object} uo - The user operation object.
+ * @returns {Promise<object>} A promise that resolves to the result object from Alchemy,
+ *                            containing paymasterAndData and gas estimations.
+ */
+async function requestGasAndPaymaster(uo) {
+  const body = JSON.stringify({
+    id: 1,
+    jsonrpc: "2.0",
+    method: "alchemy_requestGasAndPaymasterAndData",
+    params: [
+      {
+        policyId: ALCHEMY_POLICY_ID,
+        userOperation: {
+          sender: uo.sender,
+          nonce: uo.nonce,
+          initCode: uo.initCode,
+          callData: uo.callData,
+        },
+        erc20Context: {
+          tokenAddress: ERC20_TOKEN_ADDRESS,
+        },
+        entryPoint: ENTRYPOINT_ADDRESS,
+        dummySignature: uo.signature,
+      },
+    ],
+  });
+
+  const options = {
+    method: "POST",
+    headers: { accept: "application/json", "content-type": "application/json" },
+    body,
+  };
+
+  const res = await fetch(ALCHEMY_GAS_MANAGER_URL, options);
+  const jsonRes = await res.json();
+  console.log("Alchemy Gas and Paymaster Response:", jsonRes);
+  return jsonRes.result;
+}
+
+/**
+ * Sends a user operation to the bundler via Alchemy.
+ * This function constructs and sends a request to the 'eth_sendUserOperation' RPC method.
+ * @param {object} uo - The complete user operation object, including paymaster data and gas estimations.
+ * @returns {Promise<void>} A promise that resolves when the request is sent.
+ *                          The bundler's response (including userOpHash) is logged to the console.
+ */
+async function sendUserOperation(uo) {
+  const body = JSON.stringify({
+    id: 1,
+    jsonrpc: "2.0",
+    method: "eth_sendUserOperation",
+    params: [uo, ENTRYPOINT_ADDRESS],
+  });
+
+  const options = {
+    method: "POST",
+    headers: { accept: "application/json", "content-type": "application/json" },
+    body,
+  };
+
+  const res = await fetch(ALCHEMY_GAS_MANAGER_URL, options);
+  const jsonRes = await res.json();
+  console.log("Alchemy Send UserOperation Response:", jsonRes);
+}
+
+// --- Main Script Execution ---
+
+// Define the initial user operation object
+// This object contains the core details of the transaction to be executed.
+const userOp = {
+  sender: "0x", // Smart account address
+  nonce: "0x", // Initial nonce (will be updated)
+  initCode: "0x", // Set to "0x" if the smart account is already deployed
+  callData: "0x", // Encoded function call data
+  signature: "0x", // Dummy signature, should be replaced after requesting paymaster data
+};
+
+// IIFE (Immediately Invoked Function Expression) to run the async operations
+(async () => {
+  // Fetch the current nonce for the sender address from the EntryPoint contract
+  const nonce = BigInt(await entryPoint.getNonce(userOp.sender, 0));
+  userOp.nonce = "0x" + nonce.toString(16); // Update userOp with the correct nonce
+
+  console.log("Fetching paymaster data and gas estimates...");
+  // Request paymaster data and gas estimations from Alchemy
+  const paymasterAndGasData = await requestGasAndPaymaster(userOp);
+
+  // Combine the original userOp with the data returned by Alchemy (paymasterAndData, gas limits, etc.)
+  const userOpWithGas = { ...userOp, ...paymasterAndGasData }; // Spread order matters: userOp properties can be overwritten by paymasterAndGasData if names clash (e.g. if userOp had gas fields)
+
+  console.log(
+    "Final UserOperation with Gas and Paymaster Data:",
+    JSON.stringify(userOpWithGas, null, 2),
+  );
+  console.log("EntryPoint Address used for submission: ", ENTRYPOINT_ADDRESS);
+
+  // The script currently stops here. Uncomment the line below to actually send the UserOperation.
+  // Make sure your account is funded with the ERC20 token and has approved the paymaster.
+  return; // Intentionally stopping before sending for review. Remove this line to proceed.
+
+  // userOpWithGas.signature = await sign(userOpWithGas);
+  // await sendUserOperation(userOpWithGas);
+})();
+```
