@@ -705,8 +705,21 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       // this for us and pass HASH_FUNCTION_NO_OP instead
       const hashed = sha256(new TextEncoder().encode(request));
 
-      // sign through the user's suborg
-      const signature = await this.signRawMessage(hashed, "ETHEREUM");
+      const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+        organizationId: this.user.orgId,
+        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+        timestampMs: Date.now().toString(),
+        parameters: {
+          encoding: "PAYLOAD_ENCODING_TEXT_UTF8",
+          hashFunction: "HASH_FUNCTION_SHA256",
+          payload: request,
+          signWith: this.user.address,
+        },
+      });
+
+      const { signature } = await this.request("/v1/sign-payload", {
+        stampedRequest,
+      });
 
       // recover the public key, we can't just use the address
       const recoveredPublicKey = await recoverPublicKey({
