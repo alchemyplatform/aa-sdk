@@ -12,7 +12,7 @@ Example:
 const userOp = await client?.buildUserOperation({
     uo: ...
 })
-const quote = await noPermitClient.request({
+const quote = await client?.request({
     method: 'alchemy_requestPaymasterTokenQuote',
     params: [
         {
