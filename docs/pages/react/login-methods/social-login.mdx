@@ -11,7 +11,7 @@ Social login authentication allows users to authenticate using OAuth providers l
 
 ## Prerequisites
 
-Before implementing social login in your application, you need to configure your Account Kit dashboard and application:
+Before implementing social login in your application, you need to configure your Smart Wallets dashboard and application:
 
 1. **Follow the Setup Instructions in the Getting Started Guide**:
 
@@ -19,7 +19,7 @@ Before implementing social login in your application, you need to configure your
    - Pay special attention to the social authentication provider configuration and whitelisted origins setup
 
 2. **Key Configuration Requirements**:
-   - Enable desired social providers in your Account Kit dashboard
+   - Enable desired social providers in your Smart Wallets dashboard
    - Add your application's domain to the whitelisted origins
    - Set `enablePopupOauth: true` in your config if using popup flow
 
@@ -32,7 +32,7 @@ You can implement Social Login authentication in two ways:
 
 ## Pre-built UI Components
 
-Account Kit provides pre-built UI components that handle the entire Social Login authentication flow with minimal code.
+Smart Wallets provides pre-built UI components that handle the entire Social Login authentication flow with minimal code.
 
 ### Step 1: Add Authentication Components to Your Page
 
@@ -97,20 +97,20 @@ type SocialAuthType = {
 };
 ```
 
-You can find the full type definition in the [Account Kit source code](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts).
+You can find the full type definition in the [Smart Wallets source code](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts).
 
 For more details on UI component customization, see the [UI Components](/wallets/react/ui-components) documentation.
 
 ## Custom UI
 
-If you need complete control over the user experience, you can implement your own custom UI for Social Login authentication using Account Kit hooks.
+If you need complete control over the user experience, you can implement your own custom UI for Social Login authentication using Smart Wallets hooks.
 
 ### Step 1: Configure Your Application
 
 Before implementing social login, make sure you've:
 
-1. Set up your authentication providers in the Account Kit dashboard
-2. If using popup flow, set `enablePopupOauth: true` in your Account Kit configuration
+1. Set up your authentication providers in the Smart Wallets dashboard
+2. If using popup flow, set `enablePopupOauth: true` in your Smart Wallets configuration
 
 ### Step 2: Implement the Authentication
 
