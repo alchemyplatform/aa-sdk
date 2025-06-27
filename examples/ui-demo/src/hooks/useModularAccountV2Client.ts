@@ -23,10 +23,14 @@ type Client = ModularAccountV2Client<
 
 interface PolicyToken {
   address: Address;
-  maxTokenAmount: number;
-  approvalMode?: "PERMIT" | "NONE";
-  erc20Name?: string;
-  version?: string;
+  maxTokenAmount: bigint;
+  permit?: {
+    paymasterAddress?: Address;
+    autoPermitApproveTo: bigint;
+    autoPermitBelow: bigint;
+    erc20Name: string;
+    version: string;
+  };
 }
 
 // Hook that creates an MAv2 client that can be used for things that

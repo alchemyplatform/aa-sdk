@@ -13,7 +13,7 @@ const erc20Abi = parseAbi([
 const nftAbi = parseAbi(["function mintTo(address to)"]);
 
 // Amount of USDC to approve for gas payment (e.g., 100 USDC, 100 * 10^6)
-export const USDC_GAS_APPROVAL_AMOUNT = 100_000_000;
+export const USDC_GAS_APPROVAL_AMOUNT = BigInt(100_000_000);
 const NFT_MINT_PRICE = BigInt(1_000_000); // 1 USDC for mint price (1 * 10^6)
 
 export async function getNftMintBatchUOs(accountAddress: Address) {
