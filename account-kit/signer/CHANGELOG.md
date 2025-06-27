@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
+
+### Features
+
+- multi owner api rework ([#1737](https://github.com/alchemyplatform/aa-sdk/issues/1737)) ([3ef63c7](https://github.com/alchemyplatform/aa-sdk/commit/3ef63c73e737076b25cae8b86b16cf5affa53bba))
+
 ## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
 
 **Note:** Version bump only for package @account-kit/signer
