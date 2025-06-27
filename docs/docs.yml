@@ -1122,8 +1122,22 @@ navigation:
         contents:
           - section: Smart Wallets
             contents:
-              - page: Wallets API Quickstart
-                path: wallets/pages/smart-wallets/quickstart.mdx
+              - section: Quickstart
+                contents:
+                  - page: Intro
+                    path: wallets/pages/smart-wallets/quickstart/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/quickstart/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/quickstart/api.mdx
+              - section: 7702 Quickstart
+                contents:
+                  - page: Intro
+                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
               - section: Wallet API Endpoints
                 contents:
                   - api: Wallet API Endpoints
@@ -1134,8 +1148,14 @@ navigation:
                   - api: Signer API Endpoints
                     api-name: accounts
                     flattened: true
-              - page: 7702 Quickstart
-                path: wallets/pages/smart-wallets/7702-quickstart.mdx
+              - section: Session Keys
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-wallets/session-keys/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/session-keys/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/session-keys/api.mdx
               - page: How to stamp requests
                 path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
             slug: smart-wallets

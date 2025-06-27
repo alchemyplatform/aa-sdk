@@ -48,18 +48,21 @@ type Context = {
   policyId: string | string[];
   erc20Context?: {
     tokenAddress: Address;
-    maxTokenAmount?: number;
+    maxTokenAmount?: bigint;
     permit?: Hex;
   };
 };
 
 export type PolicyToken = {
   address: Address;
-  maxTokenAmount: number;
-  paymasterAddress?: Address;
-  approvalMode?: "NONE" | "PERMIT";
-  erc20Name?: string;
-  version?: string;
+  maxTokenAmount: bigint;
+  permit?: {
+    paymasterAddress?: Address;
+    autoPermitApproveTo: bigint;
+    autoPermitBelow: bigint;
+    erc20Name: string;
+    version: string;
+  };
 };
 
 /**
@@ -104,12 +107,11 @@ export function alchemyGasManagerMiddleware(
         maxTokenAmount: policyToken.maxTokenAmount,
       };
 
-      if (policyToken.approvalMode === "PERMIT") {
-        context.erc20Context.permit = await generateSignedPermit(
-          client as AlchemySmartAccountClient,
-          account,
-          policyToken,
-        );
+      if (policyToken.permit !== undefined) {
+        const permit = await generateSignedPermit(client, account, policyToken);
+        if (permit !== undefined) {
+          context.erc20Context.permit = permit;
+        }
       }
     }
 
@@ -279,12 +281,15 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           tokenAddress: policyToken.address,
           maxTokenAmount: policyToken.maxTokenAmount,
         };
-        if (policyToken.approvalMode === "PERMIT") {
-          erc20Context.permit = await generateSignedPermit(
+        if (policyToken.permit !== undefined) {
+          const permit = await generateSignedPermit(
             client,
             account,
             policyToken,
           );
+          if (permit !== undefined) {
+            erc20Context.permit = permit;
+          }
         }
       }
 
@@ -368,39 +373,38 @@ const overrideField = <
  * @param {MiddlewareClient} client - The Alchemy smart account client
  * @param {TAccount} account - The smart account instance
  * @param {PolicyToken} policyToken - The policy token configuration
- * @param {Address} policyToken.address - ERC20 contract addressya
- * @param {bigint} [policyToken.maxTokenAmount] - Optional ERC20 token limit
- * @param {Address} [policyToken.paymasterAddress] - Optional Paymaster Address
- * @param {"NONE" | "PERMIT"} [policyToken.approvalMode] - ERC20 approve mode
- * @param {string} [policyToken.erc20Name] - EIP2612 specified ERC20 contract name
- * @param {string} [policyToken.version] - EIP2612 specified ERC20 contract version
  * @returns {Promise<Hex>} Returns a Promise containing the signed EIP2612 permit
  */
 const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   client: MiddlewareClient,
   account: TAccount,
-  policyToken: {
-    address: Address;
-    maxTokenAmount: number;
-    paymasterAddress?: Address;
-    approvalMode?: "NONE" | "PERMIT";
-    erc20Name?: string;
-    version?: string;
-  },
-): Promise<Hex> => {
+  policyToken: PolicyToken,
+): Promise<Hex | undefined> => {
   if (!client.chain) {
     throw new ChainNotFoundError();
   }
-  if (!policyToken.erc20Name || !policyToken.version) {
+  if (!policyToken.permit) {
+    throw new Error("permit is missing");
+  }
+
+  if (!policyToken.permit?.erc20Name || !policyToken.permit?.version) {
     throw new Error("erc20Name or version is missing");
   }
 
-  let decimalsFuture = client.call({
+  const paymasterAddress =
+    policyToken.permit.paymasterAddress ??
+    getAlchemyPaymasterAddress(client.chain, account.getEntryPoint().version);
+
+  if (paymasterAddress === undefined || paymasterAddress === "0x") {
+    throw new Error("no paymaster contract address available");
+  }
+
+  let allowanceFuture = client.call({
     to: policyToken.address,
     data: encodeFunctionData({
       abi: parseAbi(ERC20Abis),
-      functionName: "decimals",
-      args: [],
+      functionName: "allowance",
+      args: [account.address, paymasterAddress],
     }),
   });
 
@@ -413,29 +417,27 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
     }),
   });
 
-  const [decimalsResponse, nonceResponse] = await Promise.all([
-    decimalsFuture,
+  const [allowanceResponse, nonceResponse] = await Promise.all([
+    allowanceFuture,
     nonceFuture,
   ]);
-  if (!decimalsResponse.data) {
-    throw new Error("No decimals returned from erc20 contract call");
+
+  if (!allowanceResponse.data) {
+    throw new Error("No allowance returned from erc20 contract call");
   }
+
   if (!nonceResponse.data) {
     throw new Error("No nonces returned from erc20 contract call");
   }
 
-  const decimals =
-    10 ** (decimalsResponse.data ? Number(decimalsResponse.data) : 18);
-  const maxRawAmountToken = BigInt(policyToken.maxTokenAmount * decimals);
-  const nonce = BigInt(nonceResponse.data);
-
-  const paymasterAddress =
-    policyToken.paymasterAddress ??
-    getAlchemyPaymasterAddress(client.chain, account.getEntryPoint().version);
-
-  if (paymasterAddress === undefined || paymasterAddress === "0x") {
-    throw new Error("no paymaster contract address available");
+  const permitLimit = policyToken.permit.autoPermitApproveTo;
+  const currentAllowance: bigint = BigInt(allowanceResponse.data);
+  if (currentAllowance > policyToken.permit.autoPermitBelow) {
+    // no need to generate permit
+    return undefined;
   }
+
+  const nonce = BigInt(nonceResponse.data);
 
   const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 10);
 
@@ -443,15 +445,15 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
     types: PermitTypes,
     primaryType: "Permit" as const,
     domain: {
-      name: policyToken.erc20Name ?? "",
-      version: policyToken.version ?? "",
+      name: policyToken.permit.erc20Name ?? "",
+      version: policyToken.permit.version ?? "",
       chainId: BigInt(client.chain.id),
       verifyingContract: policyToken.address,
     } satisfies PermitDomain,
     message: {
       owner: account.address,
       spender: paymasterAddress,
-      value: maxRawAmountToken,
+      value: permitLimit as bigint,
       nonce: nonce,
       deadline,
     } satisfies PermitMessage,
@@ -460,6 +462,6 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   const signedPermit = await account.signTypedData(typedPermitData);
   return encodeAbiParameters(
     [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
-    [maxRawAmountToken, deadline, signedPermit],
+    [permitLimit as bigint, deadline, signedPermit],
   );
 };
