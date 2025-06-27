@@ -645,3 +645,183 @@ methods:
           name: "Sponsored transaction wrapper"
           value:
             serializedTransaction: "AQIDBAUGBwgJCgsMDQ4PEA==" # signed tx
+  - name: "alchemy_requestPaymasterTokenQuote"
+    description: |
+      Requests ERC20 fee quote for a `UserOperation`. Optionally accepts fee parameter overrides to be used in the `UserOperation`.
+    params:
+      - name: "policyId"
+        required: true
+        description: "The Gas Manager Policy ID or list of Gas Manager Policy IDs."
+        schema:
+          oneOf:
+            - type: "string"
+              title: "policyId"
+              format: "uuid"
+            - type: "array"
+              title: "policyId Array"
+              items:
+                type: "string"
+                format: "uuid"
+
+      - name: "erc20Context"
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
+        description: "Erc20 context, required to enable users to pay gas with ERC-20 tokens."
+      - name: "entryPoint"
+        required: true
+        description: The EntryPoint address the request should be sent through. This MUST be one of the EntryPoints returned by the `supportedEntryPoints` RPC call and match the version of the userOperation in the `userOperation` field.
+        schema:
+          type: "string"
+          pattern: "^0[xX][0-9a-fA-F]*$"
+      - name: "dummySignature"
+        required: true
+        description: Dummy signature for the userOperation. This is useful for estimating gas costs. Check our [FAQs](/docs/reference/bundler-faqs#what-is-a-dummy-signature) to learn what a dummy signature is.
+        schema:
+          type: "string"
+      - name: "userOperation"
+        required: true
+        description: An object containing optional gas parameters, `paymasterAndData`, and signature fields. It can be either a v0.6 or v0.7 userOperation but must match the version of the EntryPoint at the specified `entryPoint`.
+        schema:
+          title: "User Operation, either v0.6 or v0.7 (missing signature, paymasterData, and gas fields)"
+          oneOf:
+            - title: "User Operation v0.6"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06Partial"
+
+            - title: "User Operation v0.7"
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07Partial"
+      - name: "overrides"
+        description: |
+          Optional fields that override our gas and fee estimates. Use this parameter to override: `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `verificationGasLimit`, or `preVerificationGas`. 
+
+          This will apply either:
+          - absolutes overrides (using a hex string) simply overriding estimated values entirely OR
+          - multiplier overrides relative to our estimates (in the format of { "multiplier": number } with max precision of 4 decimal places). For example, if the override value is { multiplier: 1.1 } for the `maxPriorityFeePerGas` field, then a 1.1 multiplier, or a 10% increase, is applied to the estimated `maxPriorityFeePerGas` of the userOp.
+
+          A higher buffer may give userOps a better chance to mine if the L1/L2 gas and fees change.
+
+          ```json
+          "overrides": {
+            "maxFeePerGas": "hex string" | { "multiplier": number },
+            "maxPriorityFeePerGas": "hex string" | { "multiplier": number },
+            "callGasLimit": "hex string" | { "multiplier": number },
+            "verificationGasLimit": "hex string" | { "multiplier": number },
+            "preVerificationGas": "hex string" | { "multiplier": number },
+          }
+          ```
+
+        schema:
+          type: "object"
+          properties:
+            maxFeePerGas:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            maxPriorityFeePerGas:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            callGasLimit:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            verificationGasLimit:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+            preVerificationGas:
+              oneOf:
+                - type: "string"
+                  description: "Hex string."
+                - type: "object"
+                  properties:
+                    multiplier:
+                      type: "number"
+                  description: "Multiplier value."
+      - name: "stateOverrideSet"
+        description: |
+          Allows changes to the state of a contract before executing the call. For example, you can modify variable values (like balances or approvals) for that call without changing the contract itself on the blockchain. 
+
+          In more technical terms, the state override set is an optional parameter that allows executing the call against a modified chain state. It is an address-to-state mapping, where each entry specifies some state to be overridden prior to executing the call.
+        schema:
+          type: "object"
+          properties:
+            balance:
+              type: "string"
+              description: "Fake balance to set for the account before executing the call (<= 32 bytes)"
+            nonce:
+              type: "string"
+              description: Fake nonce to set for the account before executing the call (<= 8 bytes).
+            code:
+              type: "string"
+              description: "Fake EVM bytecode to inject into the account before executing the call."
+            state:
+              type: "object"
+              description: "Fake key-value mapping to override all slots in the account storage before executing the call."
+            stateDiff:
+              type: "object"
+              description: "Fake key-value mapping to override individual slots in the account storage before executing the call."
+    result:
+      name: "Response"
+      description: "The response object may be one of two types:"
+      schema:
+        type: "object"
+        properties:
+          tokensPerEth:
+            title: "erc20 token amount per ethereum"
+            type: "string"
+            description: >
+              The erc20 amout per 1 eth.
+          estimatedTokenAmount:
+            title: "estimated erc20 token amount to pay for the user operation"
+            type: "string"
+            description: >
+              The estimated erc20 token amount to pay for the user operation.
+          estimatedUsd:
+            title: "estimated USD amount to pay for the user operation"
+            type: "string"
+            description: >
+              The estimated USD amount to pay for the user operation.
+
+    examples:
+      - name: "alchemy_requestPaymasterTokenQuote example"
+        params:
+          - name: "params"
+            value:
+              policyId: "69d524a7-e932-4214-8673-dcdcba31bb42"
+              entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+              dummySignature: "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
+              userOperation:
+                sender: "0x1234567890123456789012345678901234567890"
+                nonce: "0x1"
+                callData: "0xabcdef"
+                callGasLimit: "0x5208"
+                verificationGasLimit: "0x5208"
+                preVerificationGas: "0x5208"
+                maxFeePerGas: "0x1"
+                maxPriorityFeePerGas: "0x1"
+        result:
+          name: "alchemy_requestPaymasterTokenQuote response"
+          value:
+            tokensPerEth: "2413210000"
+            estimatedTokenAmount: "100000"
+            estimatedUsd: "0.1"

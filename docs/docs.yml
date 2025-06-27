@@ -298,6 +298,8 @@ navigation:
                 path: wallets/pages/core/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/core/sponsor-gas.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/core/sponsor-gas-with-any-token.mdx
               - page: Add passkey
                 path: wallets/pages/core/add-passkey.mdx
               - page: Multi-chain apps
@@ -385,6 +387,8 @@ navigation:
                 path: wallets/pages/infra/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/infra/sponsor-gas.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/infra/pay-gas-with-any-token.mdx
               - page: Retry user operations
                 slug: drop-and-replace
                 path: wallets/pages/infra/drop-and-replace.mdx
