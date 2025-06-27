@@ -25,6 +25,8 @@ import type {
   RNSignerClient,
 } from "@account-kit/react-native-signer";
 import type { Connection as SolanaWeb3Connection } from "@solana/web3.js";
+import type { PolicyToken } from "@account-kit/infra";
+
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
   | "LightAccount"
@@ -73,6 +75,7 @@ export type Connection = {
   transport: AlchemyTransportConfig;
   chain: Chain;
   policyId?: string | string[];
+  policyToken?: PolicyToken;
 };
 
 type RpcConnectionConfig =
@@ -90,6 +93,7 @@ type RpcConnectionConfig =
       // When providing multiple chains and no default transport, the signer connection is required
       signerConnection?: ConnectionConfig;
       policyId?: never;
+      policyToken?: never;
     }
   | {
       chain: Chain;
@@ -103,12 +107,14 @@ type RpcConnectionConfig =
       // When providing multiple chains, then the signer connection is required
       signerConnection: ConnectionConfig;
       policyId?: never;
+      policyToken?: never;
     }
   | {
       transport: AlchemyTransport;
       chain: Chain;
       solana?: SolanaConnection;
       policyId?: string | string[];
+      policyToken?: PolicyToken;
       signerConnection?: ConnectionConfig;
       chains?: never;
     };

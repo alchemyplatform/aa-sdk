@@ -10,7 +10,8 @@ slug: reference/gas-manager-faqs
 
 ### How much gas can I sponsor?
 
-You can sponsor as much gas as you want. We front the gas for you up to a base limit based on your tier, and add it to your monthly bill. If you need more gas you can easily boost your limits by buying gas manager credits in USD via our [Gas Manager Dashboard](https://dashboard.alchemy.com/gas-manager). This is a one time purchase that will be applied to your bill at the end of the month and will roll over until it is used up.
+You can sponsor as much gas as you want. We front the gas for you up to a base limit based on your tier, and add it to your monthly bill. Note that both gas sponsorship and ERC-20 gas payments contribute towards your limit.
+If you need more gas you can easily boost your limits by buying gas manager credits in USD via our [Gas Manager Dashboard](https://dashboard.alchemy.com/gas-manager). This is a one time purchase that will be applied to your bill at the end of the month and will roll over until it is used up.
 
 | Tier       | Mainnet Base Limit | Testnet Limit              | Team Policy Creation Limit |
 | ---------- | ------------------ | -------------------------- | -------------------------- |
@@ -28,13 +29,152 @@ Our Gas Manager is designed to handle a large number of sponsorship requests qui
 
 ## Fee Logic
 
-To provide its services, Alchemy's [Gas Coverage API](/reference/gas-manager-coverage-api-quickstart) charges fees on sponsorships.
+To provide its services, Alchemy's Gas Abstraction API charges fees on gas sponsorships and ERC-20 gas payments.
 
 | Tier       | Mainnet Fee            | Testnet Fee                |
 | ---------- | ---------------------- | -------------------------- |
 | Free       | N/A                    | unlimited free sponsorship |
 | PAYG       | 8% of Gas Fees Covered | unlimited free sponsorship |
 | Enterprise | Custom                 | unlimited free sponsorship |
+
+## Gas payments with any token
+
+### Which ERC-20 tokens are supported by the Gas Manager?
+
+The ERC-20 Gas Manager supports any token supported by our [Token Prices By Address API](https://docs.alchemy.com/reference/get-token-prices-by-address).
+
+### Which ERC20 tokens can I enable via the Gas Manager dashboard?
+
+Below is a list of the tokens you can currently enable in your policy via our Gas Manager dashboard:
+
+<Info>
+  **Want to support custom tokens?** You can either contact us at
+  wallets@alchemy.com or use our [Admin
+  APIs](https://www.alchemy.com/docs/wallets/api/gas-manager-admin-api/admin-api-endpoints/create-policy)
+  to enable more ERC-20 tokens.
+</Info>
+
+- ETH_MAINNET
+
+  - USDC: [**`0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`**](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
+  - USDT: `0xdac17f958d2ee523a2206206994597c13d831ec7`
+  - WLD: `0x163f8c2467924be0ae7b5347228cabf260318753`
+  - wBTC: `0x2260fac5e5542a773aa44fbcfedf7c193bc2c599`
+  - wETH: `0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc`
+  - DAI: `0x6b175474e89094c44da98b954eedeac495271d0f`
+  - USDe: `0x4c9edd5852cd905f086c759e8383e09bff1e68b3`
+  - SUKU: `0x0763fdCCF1aE541A5961815C0872A8c5Bc6DE4d7`
+
+- ETH_SEPOLIA
+
+  - USDC: [**`0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238`**](https://sepolia.etherscan.io/address/0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238)
+
+- BASE_MAINNET
+
+  - USDC: [**`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`**](https://basescan.org/token/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)
+  - USDT: `0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2`
+  - wETH: `0x4200000000000000000000000000000000000006`
+
+- BASE_SEPOLIA
+
+  - USDC: [**`0x036CbD53842c5426634e7929541eC2318f3dCF7e`**](https://base-sepolia.blockscout.com/address/0x036CbD53842c5426634e7929541eC2318f3dCF7e)
+
+- ARB_MAINNET
+
+  - USDC: [**`0xaf88d065e77c8cC2239327C5EDb3A432268e5831`**](https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831)
+  - USDT: `0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9`
+  - wETH: `0x82af49447d8a07e3bd95bd0d56f35241523fbab1`
+  - DAI: `0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1`
+  - USDe: `0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34`
+
+- ARBNOVA_MAINNET
+
+  - USDC: [`0x750ba8b76187092b0d1e87e28daaf484d1b5273b`](https://nova.arbiscan.io/token/0x750ba8b76187092b0d1e87e28daaf484d1b5273b)
+  - wETH: `0x722e8bdd2ce80a4422e880164f2079488e115365`
+
+- ARB_SEPOLIA
+
+  - USDC: [**`0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d`**](https://sepolia.arbiscan.io/address/0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d)
+
+- OPT_MAINNET
+
+  - USDC: [**`0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85`**](https://optimistic.etherscan.io/token/0x0b2c639c533813f4aa9d7837caf62653d097ff85)
+  - USDT: `0x94b008aa00579c1307b0ef2c499ad98a8ce58e58`
+  - WLD: `0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1`
+  - wBTC: `0x68f180fcce6836688e9084f035309e29bf0a2095`
+  - wETH: `0x4200000000000000000000000000000000000006`
+  - DAI: `0xda10009cbd5d07dd0cecc66161fc93d7c9000da1`
+  - USDe: `0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34`
+
+- OPT_SEPOLIA
+
+  - USDC: [**`0x5fd84259d66Cd46123540766Be93DFE6D43130D7`**](https://sepolia-optimism.etherscan.io/address/0x5fd84259d66Cd46123540766Be93DFE6D43130D7)
+
+- MATIC_MAINNET (Polygon mainnet)
+
+  - USDC: `0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359`
+  - USDT: `0xc2132d05d31c914a87c6611c10748aeb04b58e8f`
+  - wBTC: `0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6`
+  - wETH: `0x7ceb23fd6bc0add59e62ac25578270cff1b9f619`
+  - DAI: `0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063`
+  - SUKU: `0x60Ea918FC64360269Da4efBDA11d8fC6514617C6`
+
+- MATIC_AMOY (Polygon amoy)
+
+  - USDC: [**`0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582`**](https://www.oklink.com/amoy/address/0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582)
+
+- WORLDCHAIN_MAINNET
+
+  - USDC: [`0x79A02482A880bCE3F13e09Da970dC34db4CD24d1`](https://worldscan.org/address/0x79A02482A880bCE3F13e09Da970dC34db4CD24d1)
+  - WLD: [`0x2cfc85d8e48f8eab294be644d9e25c3030863003`](https://worldscan.org/address/0x2cFc85d8E48F8EAB294be644d9E25C3030863003)
+  - wBTC: [`0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3`](https://worldscan.org/address/0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3)
+  - wETH: [`0x4200000000000000000000000000000000000006`](https://worldscan.org/address/0x4200000000000000000000000000000000000006)
+
+- MONAD_TESTNET
+  - USDC: `0xf817257fed379853cDe0fa4F97AB987181B1E5Ea`
+  - USDT: `0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D`
+  - wBTC: [`0xcf5a6076cfa32686c0Df13aBaDa2b40dec133F1d`](https://testnet.monadexplorer.com/address/0xcf5a6076cfa32686c0Df13aBaDa2b40dec133F1d)
+  - wETH: [`0xB5a30b0FDc5EA94A52fDc42e3E9760Cb8449Fb37`](https://testnet.monadexplorer.com/address/0xB5a30b0FDc5EA94A52fDc42e3E9760Cb8449Fb37)
+
+### How is the exchange rate for an ERC-20 token calculated?
+
+We use our [Token Prices By Address API](https://docs.alchemy.com/reference/get-token-prices-by-address) to determine the exchange rate for ERC-20 tokens. The exchange rate is locked in **at the moment the paymaster signs the userOp**, not when the userOp is mined on-chain.
+
+On testnets, since token prices are effectively $0, we use a reference token for pricing:
+
+- **Native gas token**: We use the corresponding price of the token on mainnet.
+- **ERC-20 token supported on the dashboard**: We use the token’s mainnet price.
+- **Custom ERC-20 token:** If you're enabling a custom token, you can choose which token to use as the pricing reference. Make sure to pick a price reference token that has the same decimals as the custom token.
+
+### What are the different ERC-20 transfer modes supported by the Paymaster?
+
+To allow the paymaster contract to transfer ERC-20 tokens from the user’s wallet, the user must first approve (`approve()`) the paymaster to spend tokens on their behalf. This typically requires a separate transaction, either paid for by the user with the native gas token or sponsored by the app builder.
+
+To eliminate the need for a separate approval transaction and improve UX, the Paymaster supports two ERC-20 transfer modes, configurable at the policy level:
+
+1. [Recommended] Transfer ERC-20 tokens _after_ userOp execution:
+   1. We front the gas using the native gas token and transfer ERC-20 tokens from the user’s wallet to your receiving address after the userOp execution.
+   2. No upfront allowance is required. You can batch the approval with the userOp, enabling the user to allow the paymaster to spend the ERC-20 token on their behalf (`approve()`) without a separate tx — greatly improving UX.
+   3. If the post-execution ERC-20 transfer fails, the userOp will revert, but you’ll remain liable for the gas costs.
+   4. You can run off-chain simulation to verify the approval is likely to succeed, but this does not guarantee on-chain success.
+2. Transfer ERC-20 tokens before userOp execution:
+   1. We front the gas using the native gas token and execute the ERC-20 token transfer during `validatePaymasterUserOp`, before the userOp execution.
+   2. This requires you (the developer) to ensure the paymaster already has sufficient allowance—either through a prior `approve()` transaction or a permit signature—_before_ the UserOp is submitted. This approval must either be paid for by the user with the native gas token or sponsored by you.
+   3. If the required allowance isn't in place when the userOp is submitted, the userOp will be rejected.
+   4. This flow adds friction to the UX and is generally more gas intensive than the post-execution mode.
+
+### Where can I see userOps that used ERC-20 tokens for gas?
+
+You can view past userOps by selecting your policy in the **Gas Manager dashboard.** For every userOp, you will see:
+
+- userOpHash
+- Timestamp
+- ERC-20 token used
+- Amount of ERC-20 tokens spent and its USD equivalent
+- User address
+- Network
+
+You can also use our [Get Sponsorships API](https://www.alchemy.com/docs/node/gas-manager-admin-api/gas-manager-admin-api-endpoints/gas-manager-admin-api-endpoints/get-sponsorships) to fetch the full history programmatically.
 
 ## What are the deployment addresses of the Gas Manager (Paymaster)?
 

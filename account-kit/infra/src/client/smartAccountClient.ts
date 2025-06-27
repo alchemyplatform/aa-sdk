@@ -12,7 +12,7 @@ import {
   type SmartContractAccountWithSigner,
   type UserOperationContext,
 } from "@aa-sdk/core";
-import { type Address, type Chain } from "viem";
+import { type Chain } from "viem";
 import {
   alchemy,
   convertHeadersToObject,
@@ -28,6 +28,7 @@ import {
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
 import { headersUpdate } from "../alchemyTrackerHeaders.js";
+import type { PolicyToken } from "../middleware/gasManager.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner,
@@ -48,13 +49,7 @@ export type AlchemySmartAccountClientConfig<
   account?: account;
   useSimulation?: boolean;
   policyId?: string | string[];
-  policyToken?: {
-    address: Address;
-    maxTokenAmount: bigint;
-    approvalMode?: "NONE" | "PERMIT";
-    erc20Name?: string;
-    version?: string;
-  };
+  policyToken?: PolicyToken;
 } & Pick<
   SmartAccountClientConfig<AlchemyTransport, chain, account, context>,
   | "customMiddleware"

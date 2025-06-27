@@ -584,6 +584,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
                       - page: experimental_createMultiSig
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiSig.mdx
+                      - page: experimental_createMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiOwner.mdx
                       - page: experimental_multiOwnerSignRawMessage
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
@@ -1160,6 +1162,9 @@ navigation:
               - page: How to sponsor gas on EVM
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
+              - page: How to pay gas with any token
+                path: >-
+                  wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
               - page: How to sponsor gas on Solana
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-solana.mdx

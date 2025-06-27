@@ -13,7 +13,7 @@ const erc20Abi = parseAbi([
 const nftAbi = parseAbi(["function mintTo(address to)"]);
 
 // Amount of USDC to approve for gas payment (e.g., 100 USDC, 100 * 10^6)
-export const USDC_GAS_APPROVAL_AMOUNT = BigInt(100_000_000);
+export const USDC_GAS_APPROVAL_AMOUNT = 100_000_000;
 const NFT_MINT_PRICE = BigInt(1_000_000); // 1 USDC for mint price (1 * 10^6)
 
 export async function getNftMintBatchUOs(accountAddress: Address) {
@@ -21,7 +21,7 @@ export async function getNftMintBatchUOs(accountAddress: Address) {
   const approveGasSponsorshipCallData = encodeFunctionData({
     abi: erc20Abi,
     functionName: "approve",
-    args: [ALCHEMY_PAYMASTER_ADDRESS, USDC_GAS_APPROVAL_AMOUNT],
+    args: [ALCHEMY_PAYMASTER_ADDRESS, BigInt(USDC_GAS_APPROVAL_AMOUNT)],
   });
 
   // 2. Approve the NFT contract to spend USDC for the mint price

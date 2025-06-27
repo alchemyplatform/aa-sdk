@@ -44,6 +44,8 @@ export type Erc7677RpcSchema<
     ReturnType: {
       paymaster?: Address; // Paymaster address (entrypoint v0.7)
       paymasterData?: Hex; // Paymaster data (entrypoint v0.7)
+      paymasterVerificationGasLimit?: Hex; // Paymaster validation gas (entrypoint v0.7)
+      paymasterPostOpGasLimit?: Hex; // Paymaster post-op gas (entrypoint v0.7)
       paymasterAndData?: Hex; // Paymaster and data (entrypoint v0.6)
     };
   },
@@ -154,8 +156,9 @@ export function erc7677Middleware<
       ...uo,
       paymaster,
       paymasterData,
-      paymasterPostOpGasLimit,
+      // these values are currently not override-able, so can be set here directly
       paymasterVerificationGasLimit,
+      paymasterPostOpGasLimit,
     };
   };
 
@@ -176,11 +179,16 @@ export function erc7677Middleware<
     const erc7677client = client as Erc7677Client;
 
     const entrypoint = account.getEntryPoint();
-    const { paymaster, paymasterAndData, paymasterData } =
-      await erc7677client.request({
-        method: "pm_getPaymasterData",
-        params: [userOp, entrypoint.address, toHex(client.chain.id), context],
-      });
+    const {
+      paymaster,
+      paymasterAndData,
+      paymasterData,
+      paymasterPostOpGasLimit,
+      paymasterVerificationGasLimit,
+    } = await erc7677client.request({
+      method: "pm_getPaymasterData",
+      params: [userOp, entrypoint.address, toHex(client.chain.id), context],
+    });
 
     if (entrypoint.version === "0.6.0") {
       return {
@@ -193,6 +201,12 @@ export function erc7677Middleware<
       ...uo,
       paymaster,
       paymasterData,
+      // if these fields are returned they should override the ones set by user operation gas estimation,
+      // otherwise they shouldn't modify
+      ...(paymasterVerificationGasLimit
+        ? { paymasterVerificationGasLimit }
+        : {}),
+      ...(paymasterPostOpGasLimit ? { paymasterPostOpGasLimit } : {}),
     };
   };
 

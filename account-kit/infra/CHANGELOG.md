@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
+
+### Bug Fixes
+
+- unify maxTokenAmount as token value ([#1704](https://github.com/alchemyplatform/aa-sdk/issues/1704)) ([2c356a8](https://github.com/alchemyplatform/aa-sdk/commit/2c356a842d5a0d6286e13a52a087fc675dd62a6b))
+
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+### Features
+
+- update RequestPayamsterTokenQuote API ([#1730](https://github.com/alchemyplatform/aa-sdk/issues/1730)) ([9b285a1](https://github.com/alchemyplatform/aa-sdk/commit/9b285a15e3f16c5ef5701e4746981ec22fb2ec2f))
+
 # [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
 
 ### Features
