@@ -64,7 +64,7 @@ if you do not want to send any calls.
 To create a session key using onchain policies:
 
 - Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](/docs/wallets/concepts/smart-account-signer) that is either an local [signer](/docs/wallets/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider).
-- Create a session for that key, by passing it as the `publicKey` in a call to `wallet_createSession`. (Note that this must be the public key **address**, but the full public key.)
+- Create a session for that key, by passing it as the `publicKey` in a call to `wallet_createSession`. (Note that this must be the public key **address**, not the full public key.)
 
 Note that the expiry is in seconds and represents a UNIX timestamp (e.g. 1776657600 for April 20th, 2077).
 
@@ -205,8 +205,8 @@ curl --request POST \
             "chainId": "0xCHAIN_ID", // e.g. "0x66eee" for Arbitrum Sepolia
             "capabilities": {
                 "permissions": {
-                    "sessionId": 0xSESSION_ID,
-                    "signature": 0xPERMISSION_SIG,
+                    "sessionId": "0xSESSION_ID",
+                    "signature": "0xPERMISSION_SIG",
                 }
             },
             "signature": {

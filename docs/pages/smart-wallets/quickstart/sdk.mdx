@@ -116,5 +116,5 @@ const signedCalls = await client.signPreparedCalls(preparedCalls);
 const result = await client.sendPreparedCalls(signedCalls);
 
 // Check calls status.
-const status = await client.getCallsStatus(preparedCallIds[0]);
+const status = await client.getCallsStatus(result.preparedCallIds[0]);
 ```
