@@ -1,0 +1,213 @@
+---
+title: EIP-7702 Wallet API Quickstart (API)
+subtitle: Learn how to send user ops using EIP-7702 with any RPC client
+url: https://docs.alchemy.com/reference/wallet-apis-7702-quickstart/api
+slug: reference/wallet-apis-7702-quickstart/api
+---
+
+We'll demonstrate how to use the [`wallet_prepareCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls), [`wallet_sendPreparedCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls), and [`wallet_getCallsStatus`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) endpoints.
+
+```mermaid
+flowchart LR
+    A[prepareCalls] --> B[sendPreparedCalls]
+    B --> C[getCallsStatus]
+```
+
+### 1. Prepare Your Calls
+
+You can simply prepare whatever calls you'd like to send, being sure to include the 7702 capability.
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_prepareCalls",
+    "params": [
+        {
+            "calls": [
+                // Put the call data here, including `to`, `data`, and optional `value`.
+                {
+                    "to": "0x0000000000000000000000000000000000000000",
+                    "data": "0x",
+                    "value": "0x0"
+                }
+            ],
+            "from": "0xACCOUNT_ADDRESS", // put the account address here
+            "chainId": "0xCHAIN_ID", // put the chain ID here
+            "capabilities": {
+                "eip7702Auth": true,
+                "paymasterService": {
+                    "policyId": "your-gas-manager-policy-id" // if sponsoring gas, put your gas manager policy ID here
+                }
+            }
+        }
+    ]
+}
+'
+```
+
+If the account isn't already delegated to Modular Account V2 onchain, this will return an array of calls that must be signed:
+
+```json
+{
+    "type": "array",
+    "data": [
+        {
+            "type": "authorization",
+            "data": {
+                "address": "0xDELEGATION_ADDRESS",
+                "nonce": "0xNONCE"
+            },
+            "chainId": "0xCHAIN_ID",
+            "signatureRequest": {
+                "type": "eip7702Auth",
+                // If using Alchemy's signer service, this is the full raw payload to sign.
+                // If using a library like Viem, you can instead construct the authorization
+                // using the address, nonce, and chainId.
+                "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+            }
+        },
+        {
+            "type": "user-operation-v070",
+            "data": {...},
+            "chainId": "0xCHAIN_ID",
+            "signatureRequest": {
+                "type": "personal_sign",
+                "data": {
+                    "raw": "0xHASH_TO_SIGN"
+                },
+                // If using Alchemy's signer service, this is the full raw payload to sign.
+                // If using a library like Viem, you can instead use `personal_sign` to sign the hash.
+                "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+            }
+        }
+    ]
+}
+```
+
+For subsequent calls, only one call will be returned (unless the owner removed or changed the delegation):
+
+```json
+{
+    "type": "user-operation-v070",
+    "data": {...},
+    "chainId": "0xCHAIN_ID",
+    "signatureRequest": {
+        "type": "personal_sign",
+        "data": {
+            "raw": "0xHASH_TO_SIGN"
+        },
+        // If using Alchemy's signer service, this is the full raw payload to sign.
+        // If using a library like Viem, you can instead use `personal_sign` to sign the hash.
+        "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+    }
+}
+```
+
+### 2. Sign The Call(s)
+
+Sign the prepared calls. How exactly you do this will differ depending on your language. Here is an example using Viem in TypeScript:
+
+```ts
+import { hexToNumber } from "viem";
+// Assuming you have created a wallet client (see https://viem.sh/docs/clients/wallet).
+
+// Assuming `preparedCalls` is the result from `wallet_prepareCalls`.
+const userOpCall =
+  preparedCalls.type === "array"
+    ? preparedCalls.data.find((it) => it.type === "user-operation-v070")
+    : preparedCalls;
+
+const authorizationCall =
+  preparedCalls.type === "array"
+    ? preparedCalls.data.find((it) => it.type === "authorization")
+    : undefined;
+
+// Sign the user operation hash.
+const userOpSignature = await walletClient.signMessage({
+  message: userOpCall.signatureRequest.data,
+});
+
+// Sign the EIP-7702 authorization, if it was included in the previous step's result.
+const signedAuthorization = !authorizationCall
+  ? undefined
+  : await walletClient.signAuthorization({
+      contractAddress: authorizationCall.data.address,
+      nonce: hexToNumber(authorizationCall.data.nonce),
+      chainId: hexToNumber(authorizationCall.chainId),
+    });
+```
+
+### 3. Send The Prepared Calls
+
+Now that you have the prepared calls & signatures, you're ready to send the calls!
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_sendPreparedCalls",
+    "params": [
+        {
+            "type": "array",
+            "data": [
+            {
+                "type": "user-operation-v070",
+                "data": {...}, // include the user op call data returned from `wallet_prepareCalls`
+                "chainId": "0xCHAIN_ID", // put the chain id here
+                "signature": {
+                    "type": "secp256k1",
+                    "data": "0xUSEROP_SIGNATURE"
+                }
+            },
+            // The signed authorization only needs to be included if an authorization was returned from `wallet_prepareCalls`.
+            {
+                "type": "authorization",
+                "data": {...}, // include the authorization call data returned from `wallet_prepareCalls`
+                "chainId": "0xCHAIN_ID", // put the chain id here
+                "signature": {
+                    "type": "secp256k1",
+                    "data": "0xAUTHORIZATION_SIGNATURE" // this can be serialized in hex format, or a raw signature (r,s,v or r,s,yParity)
+                }
+            }
+            ]
+        }
+    ]
+}
+'
+```
+
+This will return the array of prepared call IDs.
+
+### 4. Check The Calls Status
+
+Now you can simply call `wallet_getCallsStatus` to check the status of the calls.
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_getCallsStatus",
+    "params": [
+        "0xPREPARED_CALL_ID"
+    ]
+}
+'
+```
+
+See [here](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) for all of the possible results.
