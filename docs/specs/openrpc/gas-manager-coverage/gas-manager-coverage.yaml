@@ -792,15 +792,15 @@ methods:
             description: >
               The erc20 amout per 1 eth.
           estimatedTokenAmount:
-            title: "estiamted erc20 token amount to pay for the user operation"
+            title: "estimated erc20 token amount to pay for the user operation"
             type: "string"
             description: >
-              The estiamted erc20 token amount to pay for the user operation.
+              The estimated erc20 token amount to pay for the user operation.
           estimatedUsd:
-            title: "estiamted USD amount to pay for the user operation"
+            title: "estimated USD amount to pay for the user operation"
             type: "string"
             description: >
-              The estiamted USD amount to pay for the user operation.
+              The estimated USD amount to pay for the user operation.
 
     examples:
       - name: "alchemy_requestPaymasterTokenQuote example"
