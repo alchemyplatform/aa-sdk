@@ -4,9 +4,9 @@ description: Follow this guide to sponsor gas for UserOperations from any
 slug: wallets/react-native/using-smart-accounts/sponsor-gas
 ---
 
-Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
+Gas fees are a significant barrier to entry for new user of your app. With Smart Wallets you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
 
-After [setting up Account Kit](/wallets/react-native/signer/setup-guide) in your project, follow these steps to sponsor gas.
+After [setting up Smart Wallets](/wallets/react-native/signer/setup-guide) in your project, follow these steps to sponsor gas.
 
 ## Create a Gas Manager policy
 
@@ -14,7 +14,7 @@ After [setting up Account Kit](/wallets/react-native/signer/setup-guide) in your
 
 ## Set the Policy ID globally
 
-When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
+When creating your Smart Wallets config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
 Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 

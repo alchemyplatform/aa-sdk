@@ -31,7 +31,7 @@ navigation:
                 path: wallets/pages/recipes/onramp-funds.mdx
           - section: Concepts
             contents:
-              - page: Intro to Account Kit
+              - page: Intro to Smart Wallets
                 path: wallets/pages/concepts/intro-to-account-kit.mdx
               - page: Smart Contract Account
                 path: wallets/pages/concepts/smart-contract-account.mdx

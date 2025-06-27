@@ -1,12 +1,12 @@
 ---
 title: Custom theme
-description: Learn how to customize the theme of the Account Kit React components
+description: Learn how to customize the theme of the Smart Wallets React components
 slug: wallets/react/customization/theme
 ---
 
 When using React components in your app, you can customize both 1) overall [theme](#colors) and 2) [authentication components](#custom-authentication-component).
 
-Most theme customizations are passed through using `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
+Most theme customizations are passed through using `withAccountKitUi`, the Smart Wallets Tailwind plugin, in your `tailwind.config.js` file.
 
 <Tip>
   The easiest way to configure your UI components, is using the [Demo
@@ -15,7 +15,7 @@ Most theme customizations are passed through using `withAccountKitUi`, the Accou
 
 ## Colors
 
-The [Account Kit Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overiddable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
+The [Smart Wallets Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overiddable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
 
 ### Border colors
 
