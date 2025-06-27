@@ -1,0 +1,222 @@
+---
+title: Session Keys (API)
+subtitle: Learn how to use session keys using any RPC client
+url: https://docs.alchemy.com/reference/wallet-apis-session-keys/api
+slug: reference/wallet-apis-session-keys/api
+---
+
+### 1. Request an Account for the Owner Signer
+
+Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
+
+- If you want to use social sign up / log in, you can simply use the [SDK](/docs/wallets/react/getting-started) to authenticate users and retrieve their signer address
+- If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
+
+This will return the account address associated with the given signer, as well as a uuid you could use to differentiate between accounts for the same signer in the future.
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_requestAccount",
+    "params": [
+        {
+            "signerAddress": "0xOWNER_ADDRESS"
+        }
+    ]
+}
+'
+```
+
+This will return the smart account address associated with the given signer:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "accountAddress": "0xACCOUNT_ADDRESS",
+    "id": "af638-a8..."
+  }
+}
+```
+
+### 2. Create a Session With the Session Key Signer
+
+<Accordion title="Using EIP-7702?">
+
+If you are using an EIP-7702 account, the account must be delegated onchain
+before creating the session. If the account has already sent calls, it will
+already be delegated. If it hasn't sent any calls before creating the session
+key, you can delegate it by sending an empty call as the owner.
+
+[Follow the instructions here](/docs/reference/wallet-apis-7702-quickstart#using-the-json-rpc-apis-directly)
+to send your first call. Note that the `calls` in the request to `wallet_prepareCalls` can be an empty array
+if you do not want to send any calls.
+
+</Accordion>
+
+To create a session key using onchain policies:
+
+- Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](/docs/wallets/concepts/smart-account-signer) that is either an local [signer](/docs/wallets/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider).
+- Create a session for that key, by passing it as the `publicKey` in a call to `wallet_createSession`. (Note that this must be the public key **address**, not the full public key.)
+
+Note that the expiry is in seconds and represents a UNIX timestamp (e.g. 1776657600 for April 20th, 2077).
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "wallet_createSession",
+    "params": [
+        {
+            "account": "0xACCOUNT_ADDRESS",
+            "chainId": "0xCHAIN_ID",
+            "expirySec": UNIX_TIMESTAMP_EXPIRY_IN_SECONDS,
+            "key": {
+                "publicKey": "0xSESSION_KEY_ADDRESS",
+                "type": "secp256k1",
+            },
+            "permissions": [
+                {
+                    "type": "root"
+                }
+            ]
+        }
+    ]
+}'
+```
+
+This will return two key elements:
+
+1. The session ID
+2. The signature request that must be signed by the account owner to authorize the session key
+
+Keep note of the session ID, you'll need it later!
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+        "sessionId": "0xSESSION_ID",
+        "signatureRequest": {
+            "type": "eth_signTypedData_v4",
+            "data": {...},
+            "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+        }
+    }
+}
+```
+
+### 3. Sign the Session Key Authorization
+
+Sign the signature request using the account owner's key (used in step 1), then store the resulting signature. If you are using an Alchemy Signer, you can directly sign the `rawPayload`. If you are using a library that supports signing typed data, you can use it to sign the typed data.
+
+### 4. Prepare Calls With the Session Key
+
+With the session ID received in step 2 and the signature from step 3, we're now ready to prepare some calls!
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_prepareCalls",
+    "params": [
+        {
+            "capabilities": {
+                "paymasterService": {
+                    "policyId": "GAS-MANAGER-POLICY-ID", // put your gas manager policy ID here
+                },
+                "permissions": {
+                    "sessionId": "0xSESSION_ID",
+                    "signature": "0xPERMISSION_SIG",
+                }
+            },
+            "calls": [
+                {
+                    "to": "0x0000000000000000000000000000000000000000"
+                }
+            ],
+            "from": "0xACCOUNT_ADDRESS",
+            "chainId": "0xCHAIN_ID"
+        }
+    ]
+}
+'
+```
+
+This will return the userop request (the `data` field) and a signature request, for example:
+
+```json
+{
+    "type": "user-operation-v070",
+    "data": {...useropRequest},
+    "chainId": "0xCHAIN_ID",
+    "signatureRequest": {
+        "type": "personal_sign",
+        "data": {
+            "raw": "0x_HASH_TO_SIGN",
+        },
+        "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+    }
+}
+```
+
+### 5. Sign the userop
+
+With the returned signature request, all you have to do is sign the userop hash returned in the `signatureRequest` field. This should be signed with the session key. This signature will be valid as long as it is within the permissions the session key has.
+
+Note that the `type` field in the `signatureRequest` indicates the signature type needed. In this case, we need to `personal_sign` the hash, or, if using an Alchemy Signer, you can directly sign the `rawPayload` instead.
+
+### 6. Send the Prepared Calls!
+
+With the signature from step 5 and the `useropRequest` from step 4, you're good to go to send the call!
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_sendPreparedCalls",
+    "params": [
+        {
+            "type": "user-operation-v070",
+            "data": {...useropRequest},
+            "chainId": "0xCHAIN_ID", // e.g. "0x66eee" for Arbitrum Sepolia
+            "capabilities": {
+                "permissions": {
+                    "sessionId": "0xSESSION_ID",
+                    "signature": "0xPERMISSION_SIG",
+                }
+            },
+            "signature": {
+                "type": "secp256k1",
+                "data": "0xUSEROP_SIGNATURE",
+            }
+        }
+    ]
+}
+'
+```
+
+This will return the array of prepared call IDs!
