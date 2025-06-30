@@ -55,16 +55,31 @@ export const createConfig = (
 
   const connections: Connection[] = [];
   if (connectionConfig.chains == null) {
+    const transportConfig = { ...connectionConfig.transport.config };
+    if (signerConnection?.rpcUrl && transportConfig.chainAgnosticUrl == null) {
+      transportConfig.chainAgnosticUrl = `${signerConnection.rpcUrl}/v2`;
+    }
+
     connections.push({
-      transport: connectionConfig.transport.config,
+      transport: transportConfig,
       policyId: connectionConfig.policyId,
       chain,
     });
   } else {
     connectionConfig.chains.forEach((params) => {
       const { chain, policyId, transport } = params;
+      const transportConfig =
+        transport?.config ?? connectionConfig.transport!.config;
+
+      if (
+        signerConnection?.rpcUrl &&
+        transportConfig.chainAgnosticUrl == null
+      ) {
+        transportConfig.chainAgnosticUrl = `${signerConnection.rpcUrl}/v2`;
+      }
+
       connections.push({
-        transport: transport?.config ?? connectionConfig.transport!.config,
+        transport: transportConfig,
         chain,
         policyId: policyId ?? connectionConfig.policyId,
       });
