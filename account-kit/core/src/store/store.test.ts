@@ -536,7 +536,7 @@ describe("createConfig tests", () => {
             },
             "smartWalletClients": {},
           },
-          "version": 14,
+          "version": ${STORAGE_VERSION},
         }
       `);
   });
@@ -607,7 +607,7 @@ describe("createConfig tests", () => {
             },
             "smartWalletClients": {},
           },
-          "version": 14,
+          "version": ${STORAGE_VERSION},
         }
       `);
   });
