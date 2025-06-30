@@ -1,7 +1,7 @@
 {
   "name": "@account-kit/react-native",
   "version": "4.47.0",
-  "description": "React Native Components and Hooks for using Account Kit",
+  "description": "React Native Components and Hooks for using Smart Wallets",
   "license": "MIT",
   "author": "Alchemy",
   "private": false,
