@@ -25,6 +25,7 @@ describe("createConfig tests", () => {
       `
       {
         "config": {
+          "chainAgnosticUrl": "/api/signer/v2",
           "rpcUrl": "/api/sepolia",
         },
         "dynamicFetchOptions": {
@@ -58,10 +59,11 @@ describe("createConfig tests", () => {
     );
 
     expect(getAlchemyTransport(hydratedConfig).config).toMatchInlineSnapshot(`
-        {
-          "rpcUrl": "/api/arbitrumSepolia",
-        }
-      `);
+      {
+        "chainAgnosticUrl": "/api/signer/v2",
+        "rpcUrl": "/api/arbitrumSepolia",
+      }
+    `);
   });
 
   it("should overwrite the state if the config changed (chain removed)", async () => {
@@ -79,6 +81,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -91,6 +94,7 @@ describe("createConfig tests", () => {
               },
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/arbitrumSepolia",
               },
             },
@@ -129,6 +133,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -153,6 +158,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -165,6 +171,7 @@ describe("createConfig tests", () => {
               },
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/arbitrumSepolia",
               },
             },
@@ -207,6 +214,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id2",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -219,6 +227,7 @@ describe("createConfig tests", () => {
               },
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/arbitrumSepolia",
               },
             },
@@ -243,6 +252,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -255,6 +265,7 @@ describe("createConfig tests", () => {
               },
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/arbitrumSepolia",
               },
             },
@@ -298,6 +309,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -310,6 +322,7 @@ describe("createConfig tests", () => {
               },
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/arbitrumSepolia",
               },
             },
@@ -381,6 +394,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -393,6 +407,7 @@ describe("createConfig tests", () => {
               },
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/arbitrumSepolia",
               },
             },
@@ -436,6 +451,7 @@ describe("createConfig tests", () => {
               "policyId": "test-policy-id",
               "transport": {
                 "__type": "Transport",
+                "chainAgnosticUrl": "/api/signer/v2",
                 "rpcUrl": "/api/sepolia",
               },
             },
@@ -449,6 +465,7 @@ describe("createConfig tests", () => {
               "transport": {
                 "__type": "Transport",
                 "apiKey": "test-api-key",
+                "chainAgnosticUrl": "/api/signer/v2",
               },
             },
           ],
@@ -490,6 +507,7 @@ describe("createConfig tests", () => {
                     "policyId": "test-policy-id",
                     "transport": {
                       "__type": "Transport",
+                      "chainAgnosticUrl": "/api/signer/v2",
                       "rpcUrl": "/api/sepolia",
                     },
                   },
@@ -502,6 +520,7 @@ describe("createConfig tests", () => {
                     },
                     "transport": {
                       "__type": "Transport",
+                      "chainAgnosticUrl": "/api/signer/v2",
                       "rpcUrl": "/api/arbitrumSepolia",
                     },
                   },
@@ -572,6 +591,7 @@ describe("createConfig tests", () => {
                     "policyId": "test-policy-id",
                     "transport": {
                       "__type": "Transport",
+                      "chainAgnosticUrl": "/api/signer/v2",
                       "rpcUrl": "/api/sepolia",
                     },
                   },
