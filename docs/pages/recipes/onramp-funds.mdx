@@ -8,16 +8,18 @@ This Recipe demonstrates how to integrate the Coinbase Onramp into an app that u
 
 > **Goal**: Let users seamlessly buy crypto (e.g. ETH) via card and fund their smart wallet directly.
 
+**Framework**: This recipe shows a **front-end** integration in **Next.js**. The same component can be dropped into any React app.
+
+**Heads-up**: Coinbase Onramp only works on mainnet. Running this demo will purchase **real USDC on Base**. Use a payment method you're comfortable with.
+
 ---
 
 ## Prerequisites
 
-- Smart wallet integration using [Alchemy Account Kit](https://accountkit.alchemy.com/)
+- Smart wallets integrated in your app (see the [React quickstart](/wallets/react/quickstart) or [Core quickstart](/wallets/core/quickstart)).
 - Coinbase Developer Platform project ID
 
-  - `CDP_PROJECT_ID` - create one in the [Coinbase Developer Portal](https://portal.cdp.coinbase.com/projects/api-keys)
-
-- A backend (or serverless function) to keep that project ID secret
+  - `NEXT_PUBLIC_CDP_PROJECT_ID` – create one in the [Coinbase Developer Portal](https://portal.cdp.coinbase.com/projects/overview)
 
 ---
 
@@ -29,56 +31,21 @@ This Recipe demonstrates how to integrate the Coinbase Onramp into an app that u
 npm install @coinbase/onchainkit
 ```
 
-### 2. Create Backend Route for Onramp URL Generation
-
-Create a simple API route that generates the onramp URL using your CDP Project ID:
-
-```ts
-// app/onramp/route.ts
-import { getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const address = searchParams.get("address");
-
-  if (!address) {
-    return Response.json(
-      { error: "Address parameter is required" },
-      { status: 400 },
-    );
-  }
-
-  const projectId = process.env.CDP_PROJECT_ID;
-
-  if (!projectId) {
-    return Response.json(
-      { error: "CDP_PROJECT_ID environment variable is required" },
-      { status: 500 },
-    );
-  }
-
-  const onrampBuyUrl = getOnrampBuyUrl({
-    projectId,
-    addresses: { [address]: ["base"] }, // or ["ethereum"] for mainnet
-    assets: ["USDC"], // or ["ETH"]
-    presetFiatAmount: 20,
-    fiatCurrency: "USD",
-  });
-
-  return Response.json({ onrampBuyUrl });
-}
-```
-
-### 3. Create the Onramp Component
+### 2. Create the Onramp Component
 
 This opens a Coinbase-hosted onramp UI in a popup where the user can complete the transaction.
 
 ```tsx
 // components/on-ramp.tsx
 import { useEffect, useState } from "react";
-import { setupOnrampEventListeners } from "@coinbase/onchainkit/fund";
+import {
+  setupOnrampEventListeners,
+  getOnrampBuyUrl,
+} from "@coinbase/onchainkit/fund";
 import { useSmartAccountClient } from "@account-kit/react";
 import type { SuccessEventData, OnrampError } from "@coinbase/onchainkit/fund";
+
+const CDP_PROJECT_ID = process.env.NEXT_PUBLIC_CDP_PROJECT_ID;
 
 function OnRampPartnerCard() {
   const { address } = useSmartAccountClient({});
@@ -89,89 +56,55 @@ function OnRampPartnerCard() {
   const [popupWindow, setPopupWindow] = useState<Window | null>(null);
 
   useEffect(() => {
-    if (!address) return;
+    if (!address || !CDP_PROJECT_ID) return;
 
-    async function fetchOnrampUrl() {
-      if (!address) return;
+    setIsLoading(true);
+    setError(null);
 
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(
-          `/onramp?address=${encodeURIComponent(address)}`,
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch onramp URL");
-        }
-
-        const { onrampBuyUrl } = await response.json();
-        setOnrampUrl(onrampBuyUrl);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load onramp");
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      const url = getOnrampBuyUrl({
+        projectId: CDP_PROJECT_ID,
+        addresses: { [address]: ["base"] }, // or ["ethereum"] for mainnet
+        assets: ["USDC"], // or ["ETH"]
+        presetFiatAmount: 1,
+        fiatCurrency: "USD",
+      });
+      setOnrampUrl(url);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to generate onramp URL"
+      );
+    } finally {
+      setIsLoading(false);
     }
-
-    fetchOnrampUrl();
   }, [address]);
 
   useEffect(() => {
     if (!onrampUrl) return;
 
-    // Set up event listeners for onramp completion
     const unsubscribe = setupOnrampEventListeners({
       onSuccess: (data?: SuccessEventData) => {
         console.log("Onramp purchase successful:", data);
         setIsComplete(true);
-        // Close the popup window if it's open
-        if (popupWindow && !popupWindow.closed) {
-          popupWindow.close();
-        }
+        if (popupWindow && !popupWindow.closed) popupWindow.close();
       },
-      onExit: (error?: OnrampError) => {
-        if (error) {
-          console.error("Onramp exited with error:", error);
-          setError("Transaction was cancelled or failed");
-        } else {
-          console.log("User closed onramp");
-        }
-        // Close the popup window if it's open
-        if (popupWindow && !popupWindow.closed) {
-          popupWindow.close();
-        }
-      },
-      onEvent: (event) => {
-        console.log("Onramp event:", event);
+      onExit: (err?: OnrampError) => {
+        if (err) setError("Transaction was cancelled or failed");
+        if (popupWindow && !popupWindow.closed) popupWindow.close();
       },
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [onrampUrl, popupWindow]);
 
   const openOnrampPopup = () => {
     if (!onrampUrl) return;
-
     const popup = window.open(
       onrampUrl,
       "coinbase-onramp",
-      "width=500,height=700,scrollbars=yes,resizable=yes,status=yes,location=yes,toolbar=no,menubar=no",
+      "width=500,height=700,scrollbars=yes,resizable=yes,status=yes,location=yes,toolbar=no,menubar=no"
     );
-
-    if (popup) {
-      setPopupWindow(popup);
-      // Monitor if popup is closed manually
-      const checkClosed = setInterval(() => {
-        if (popup.closed) {
-          clearInterval(checkClosed);
-          setPopupWindow(null);
-        }
-      }, 1000);
-    }
+    if (popup) setPopupWindow(popup);
   };
 
   if (!address) {
@@ -288,19 +221,8 @@ export default function Home() {
 
 ## Best Practices
 
-- Keep `CDP_PROJECT_ID` in environment variables and **never** expose it client-side.  
-  _Example_:
-
-  ```bash
-  # .env.local
-  CDP_PROJECT_ID=your_project_id
-  ```
-
 - Let users change networks/assets in the Coinbase modal (default here is card ➜ ETH).
 - For user-level analytics you can pass `partnerUserId` when generating the onramp URL.
-- Protect the `/onramp` API route with your app's auth/session middleware so only
-  the signed-in user can request an Onramp URL for **their** smart-wallet address.
-  (Rate-limit or require a CSRF token if you don't have full auth in place.)
 
 ## Success!
 

@@ -10,9 +10,11 @@ In this recipe you'll construct an ERC-20 `transfer` call and submit it through 
 
 ## Prerequisites
 
-1. Account Kit integrated in your app (see the [React quickstart](/wallets/react/quickstart) or [Core quickstart](/wallets/core/quickstart)).
-2. A connected user with an on-chain smart account.
-3. The USDC contract address for your target chain. For Ethereum mainnet this is `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`.
+1. Smart wallets integrated in your app (see the [React quickstart](/wallets/react/quickstart) or [Core quickstart](/wallets/core/quickstart)).
+
+- The quickstart uses Arbitrum Sepolia, so make sure your gas policy is configured for Arbitrum Sepolia if you're using the default settings.
+
+2. The USDC contract address for your target chain. For Arbitrum Sepolia this is `0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d`.
 
 - Visit [Circle's documentation](https://developers.circle.com/stablecoins/usdc-contract-addresses) for USDC addresses on other chains.
 
@@ -21,9 +23,9 @@ In this recipe you'll construct an ERC-20 `transfer` call and submit it through 
 ```ts
 import { encodeFunctionData, parseAbi } from "viem";
 
-const usdcAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+const usdcAddress = "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d";
 const recipient = "0xRecipientAddress";
-const amount = 10n * 1_000_000n; // 10 USDC (6 decimals)
+const amount = BigInt(10) * BigInt(1_000_000); // 10 USDC (6 decimals)
 
 const transferCalldata = encodeFunctionData({
   abi: parseAbi(["function transfer(address,uint256) returns (bool)"]),
@@ -64,7 +66,7 @@ export function SendUsdcButton() {
       uo: {
         target: usdcAddress,
         data: transferCalldata,
-        value: 0n, // no native value for ERC-20 transfers
+        value: BigInt(0), // no native value for ERC-20 transfers
       },
     });
   };
@@ -87,7 +89,7 @@ const userOpHash = await client.sendUserOperation({
   uo: {
     target: usdcAddress,
     data: transferCalldata,
-    value: 0n,
+    value: BigInt(0),
   },
 });
 
