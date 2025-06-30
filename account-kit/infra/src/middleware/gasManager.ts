@@ -63,6 +63,11 @@ export type PolicyToken = {
     erc20Name: string;
     version: string;
   };
+  signedPermit?: {
+    value: bigint;
+    deadline: bigint;
+    signature: Hex;
+  };
 };
 
 /**
@@ -112,6 +117,12 @@ export function alchemyGasManagerMiddleware(
         if (permit !== undefined) {
           context.erc20Context.permit = permit;
         }
+      } else if (policyToken.signedPermit !== undefined) {
+        context.erc20Context.permit = encodeSignedPermit(
+          policyToken.signedPermit.value,
+          policyToken.signedPermit.deadline,
+          policyToken.signedPermit.signature,
+        );
       }
     }
 
@@ -460,8 +471,16 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   } as const;
 
   const signedPermit = await account.signTypedData(typedPermitData);
+  return encodeSignedPermit(permitLimit, deadline, signedPermit);
+};
+
+function encodeSignedPermit(
+  value: bigint,
+  deadline: bigint,
+  signedPermit: Hex,
+) {
   return encodeAbiParameters(
     [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
-    [permitLimit as bigint, deadline, signedPermit],
+    [value, deadline, signedPermit],
   );
-};
+}
