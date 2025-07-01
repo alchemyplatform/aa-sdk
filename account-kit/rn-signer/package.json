@@ -2,7 +2,7 @@
   "name": "@account-kit/react-native-signer",
   "version": "4.47.0",
   "author": "Alchemy",
-  "description": "React Native compatible Account Kit signer",
+  "description": "React Native compatible Smart Wallets signer",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",

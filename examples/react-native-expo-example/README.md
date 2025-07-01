@@ -1,6 +1,6 @@
-# Account Kit RN Example using Expo
+# Smart Wallets RN Example using Expo
 
-This is a sample repo that used expo to get started and integrates with Account Kit
+This is a sample repo that used expo to get started and integrates with Smart Wallets
 
 <img width="434" alt="image" src="https://github.com/alchemyplatform/aa-sdk-rn-expo/assets/4642570/e0dab7bc-f980-46eb-966c-13be7e79bc15">
 
@@ -68,7 +68,7 @@ import "react-native-get-random-values";
 // rest of _layout.tsx
 ```
 
-6. Install [Account Kit](https://www.alchemy.com/docs/wallets) Packages. At this point you're ready to use the aa-sdk in your project.
+6. Install [Smart Wallets](https://www.alchemy.com/docs/wallets) Packages. At this point you're ready to use the aa-sdk in your project.
 
 ```bash
 yarn add @account-kit/react-native-signer @account-kit/signer @account-kit/smart-contracts @account-kit/infra

@@ -1,6 +1,6 @@
-# Account Kit Documentation
+# Smart Wallets Documentation
 
-This repository contains the documentation for Account Kit that gets published to [alchemy.com/docs](https://alchemy.com/docs) which is built using [Fern](https://buildwithfern.com/learn/docs/getting-started/overview).
+This repository contains the documentation for Smart Wallets that gets published to [alchemy.com/docs](https://alchemy.com/docs) which is built using [Fern](https://buildwithfern.com/learn/docs/getting-started/overview).
 
 The contents are automatically merged with [Alchemy's Official Docs repo](https://github.com/alchemyplatform/docs) to create seamless updates without needing to make changes separately in that repo.
 
@@ -88,6 +88,6 @@ Documentation changes are automatically published to [alchemy.com/docs](https://
 ## Technical Details
 
 - The `scripts/insert-docs.sh` script is run during local and during CI/CD from both [aa-sdk](https://github.com/alchemyplatform/aa-sdk/) and [docs](https://github.com/alchemyplatform/docs) repos. It handles:
-  - Inserting Account Kit documentation configuration into the main docs site config
+  - Inserting Smart Wallets documentation configuration into the main docs site config
   - Moving images and API specs to the correct locations in the main docs repo
 - Documentation is built and published using [Fern CLI](https://buildwithfern.com/learn/cli-reference/overview#setting-up-docs)

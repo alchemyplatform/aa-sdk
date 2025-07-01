@@ -1,7 +1,7 @@
 {
   "name": "@account-kit/react",
   "version": "4.47.0",
-  "description": "React components and hooks for using Account Kit",
+  "description": "React components and hooks for using Smart Wallets",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
