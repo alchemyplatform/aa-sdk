@@ -41,7 +41,15 @@ export function Erc20Modal({
   const [networkFee, setNetworkFee] = useState(0);
   const { address: accountAddress } = useAccount({
     type: "ModularAccountV2",
-    accountParams: { mode: accountMode },
+    accountParams:
+      accountMode === "7702"
+        ? {
+            mode: "7702",
+          }
+        : {
+            mode: "default",
+            salt: BigInt(1),
+          },
   });
 
   const { data: ethPriceData, isLoading: isLoadingEthPrice } = useGetEthPrice();

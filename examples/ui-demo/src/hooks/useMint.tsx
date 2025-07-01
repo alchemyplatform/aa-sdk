@@ -10,6 +10,7 @@ import { Address, Chain, encodeFunctionData } from "viem";
 import { AccountKitNftMinterABI } from "@/utils/config";
 import { MintStatus } from "@/components/small-cards/MintCard";
 import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
+import { AccountMode } from "@/app/config";
 
 const initialValuePropState = {
   signing: "initial",
@@ -28,16 +29,22 @@ export interface UseMintReturn {
 
 export const useMint = (props: {
   contractAddress: Address;
-  mode: "default" | "7702";
+  mode: AccountMode;
   chain: Chain;
 }): UseMintReturn => {
   const { chain: activeChain, isSettingChain } = useChain();
 
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
-    accountParams: {
-      mode: props.mode,
-    },
+    accountParams:
+      props.mode === "7702"
+        ? {
+            mode: "7702",
+          }
+        : {
+            mode: "default",
+            salt: BigInt(1),
+          },
   });
   const { isDeployed, refetch: refetchDeploymentStatus } =
     useDeploymentStatus();

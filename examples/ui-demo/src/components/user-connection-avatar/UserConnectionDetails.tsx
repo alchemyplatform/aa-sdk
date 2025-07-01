@@ -37,9 +37,15 @@ export function UserConnectionDetails({
   );
   const scaAccount = useAccount({
     type: "ModularAccountV2",
-    accountParams: {
-      mode: accountMode,
-    },
+    accountParams:
+      accountMode === "7702"
+        ? {
+            mode: "7702",
+          }
+        : {
+            mode: "default",
+            salt: BigInt(1),
+          },
   });
   const solanaSigner = useMemo(() => {
     if (!signer) return;

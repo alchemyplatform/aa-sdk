@@ -27,6 +27,7 @@ import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
+import { AccountMode } from "@/app/config";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -63,7 +64,7 @@ export interface UseRecurringTransactionReturn {
 }
 
 export const useRecurringTransactions = (clientOptions: {
-  mode: "default" | "7702";
+  mode: AccountMode;
   chain: Chain;
   transport: AlchemyTransport;
 }): UseRecurringTransactionReturn => {
