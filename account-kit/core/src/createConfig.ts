@@ -1,6 +1,7 @@
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
 import { getBundlerClient } from "./actions/getBundlerClient.js";
+import { createSigner as createWebSigner } from "./environments/web/createSigner.js";
 import { CoreLogger } from "./metrics.js";
 import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
@@ -9,7 +10,6 @@ import {
   type Connection,
   type CreateConfigProps,
 } from "./types.js";
-import { createSigner as createWebSigner } from "./environments/web/createSigner.js";
 
 export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
@@ -55,16 +55,31 @@ export const createConfig = (
 
   const connections: Connection[] = [];
   if (connectionConfig.chains == null) {
+    const transportConfig = { ...connectionConfig.transport.config };
+    if (signerConnection?.rpcUrl && transportConfig.chainAgnosticUrl == null) {
+      transportConfig.chainAgnosticUrl = `${signerConnection.rpcUrl}/v2`;
+    }
+
     connections.push({
-      transport: connectionConfig.transport.config,
+      transport: transportConfig,
       policyId: connectionConfig.policyId,
       chain,
     });
   } else {
     connectionConfig.chains.forEach((params) => {
       const { chain, policyId, transport } = params;
+      const transportConfig =
+        transport?.config ?? connectionConfig.transport!.config;
+
+      if (
+        signerConnection?.rpcUrl &&
+        transportConfig.chainAgnosticUrl == null
+      ) {
+        transportConfig.chainAgnosticUrl = `${signerConnection.rpcUrl}/v2`;
+      }
+
       connections.push({
-        transport: transport?.config ?? connectionConfig.transport!.config,
+        transport: transportConfig,
         chain,
         policyId: policyId ?? connectionConfig.policyId,
       });
@@ -115,6 +130,7 @@ export const createConfig = (
 
   const config: AlchemyAccountsConfig = {
     store: store,
+    accountCreationHint: params.accountCreationHint,
     _internal: {
       ssr,
       createSigner: createSigner ?? createWebSigner, // <-- Default to web signer if not provided
