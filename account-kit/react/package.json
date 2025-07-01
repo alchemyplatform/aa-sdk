@@ -48,6 +48,11 @@
       "import": "./dist/esm/hooks/index.js",
       "default": "./dist/esm/hooks/index.js"
     },
+    "./experimental": {
+      "types": "./dist/types/experimental/index.d.ts",
+      "import": "./dist/esm/experimental/index.js",
+      "default": "./dist/esm/experimental/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

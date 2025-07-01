@@ -21,7 +21,9 @@ import { getConnection } from "./getConnection.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 
-type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
+type OmitSignerTransportChain<T> = T extends infer U
+  ? Omit<U, "signer" | "transport" | "chain">
+  : never;
 
 export type AccountConfig<TAccount extends SupportedAccountTypes> =
   TAccount extends "LightAccount"
@@ -100,6 +102,10 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
+
+  // TODO(jh): remove this logging after debugging.
+  console.log("requesting account");
+  console.log({ creationHint: convertAccountParamsToCreationHint(params) });
 
   const accountPromise = smartWalletClient
     .requestAccount({
@@ -203,7 +209,6 @@ function convertAccountParamsToCreationHint<
       ? { accountType: "7702" }
       : {
           accountType: "sma-b",
-          // @ts-expect-error salt is defined by TS can't figure that out here
           salt: toHex(params.accountParams?.salt ?? 0n),
         };
   }

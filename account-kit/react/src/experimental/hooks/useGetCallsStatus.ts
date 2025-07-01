@@ -8,8 +8,8 @@ import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.j
 import { ReactLogger } from "../../metrics.js";
 
 export type UseGetCallsStatusParams = {
-  client?: GetSmartWalletClientResult<Address>;
-  callId?: Hex;
+  client: GetSmartWalletClientResult<Address> | undefined;
+  callId: Hex | undefined;
 };
 
 type QueryResult = Awaited<ReturnType<typeof getCallsStatus>>;
