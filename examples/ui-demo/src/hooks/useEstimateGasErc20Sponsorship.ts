@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { type Chain, type Hex, type Address, formatEther } from "viem";
 import { type AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
-import { USDC_GAS_APPROVAL_AMOUNT } from "@/components/modals/Erc20/utils";
 import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../utils/constants";
 
 const ERC20_SPONSORSHIP_POLICY_ID =
@@ -51,7 +50,7 @@ export const useEstimateGasErc20Sponsorship = (
     policyId: ERC20_SPONSORSHIP_POLICY_ID,
     policyToken: {
       address: DEMO_USDC_ADDRESS_6_DECIMALS,
-      maxTokenAmount: USDC_GAS_APPROVAL_AMOUNT,
+      maxTokenAmount: BigInt(100_000_000_000_000),
     },
   });
 
