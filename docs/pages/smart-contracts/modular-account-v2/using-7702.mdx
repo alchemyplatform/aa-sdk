@@ -1,14 +1,14 @@
 ---
 title: Upgrade Your EOA with EIP-7702
-description: Learn how to upgrade your existing EOA to a smart account using EIP-7702 with Account Kit.
+description: Learn how to upgrade your existing EOA to a smart account using EIP-7702 with Smart Wallets.
 slug: wallets/smart-contracts/modular-account-v2/using-7702
 ---
 
 [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) introduces a straightforward way for Externally Owned Accounts (EOAs) to use smart contract account features. This is a major milestone in Ethereum’s account abstraction journey, enabling existing EOAs to benefit from functionality previously exclusive to smart accounts – such as batching actions, sponsoring transactions, and more.
 
-With Account Kit, you can support this upgrade path directly into your app or wallet. Users will seamlessly access advanced features like transaction batching, session keys, and gas sponsorship, while maintaining their existing EOA address and without having to migrate assets.
+With Smart Wallets, you can support this upgrade path directly into your app or wallet. Users will seamlessly access advanced features like transaction batching, session keys, and gas sponsorship, while maintaining their existing EOA address and without having to migrate assets.
 
-Below we will guide you through **when to use EIP-7702** and how to leverage Account Kit to **upgrade your existing embedded EOAs to a smart contract account**, specifically to Modular Account v2.
+Below we will guide you through **when to use EIP-7702** and how to leverage Smart Wallets to **upgrade your existing embedded EOAs to a smart contract account**, specifically to Modular Account v2.
 
 ## When to Use EIP-7702?
 
@@ -31,13 +31,13 @@ By upgrading to a smart account, you immediately unlock features such as:
 
 ## EIP-7702 Compatible Accounts
 
-Account Kit provides an EIP-7702 compatible smart account, [Modular Account v2](#TODO/linktomav2), that you can upgrade existing EOAs to. This ERC-4337 compatible account is the most gas efficient on the market, fully audited, and supports ecosystem modules for advanced functionality.
+Smart Wallets provides an EIP-7702 compatible smart account, [Modular Account v2](#TODO/linktomav2), that you can upgrade existing EOAs to. This ERC-4337 compatible account is the most gas efficient on the market, fully audited, and supports ecosystem modules for advanced functionality.
 
 ## Signer Requirements
 
 To use EIP-7702, you need a signer that can generate an authorization signature. Typically, this is implemented as a method called `signAuthorization`. Regardless of which signer you choose, you'll need to create an instance of a [`SmartAccountSigner`](/wallets/resources/types#smartaccountsigner) that you can pass to the client.
 
-### Out-of-the-Box Support in Account Kit
+### Out-of-the-Box Support in Smart Wallets
 
 **Alchemy Signer**
 
@@ -183,6 +183,6 @@ Now that you have an EOA successfully upgraded and a smart account clinet, you c
 
 ## When can I use it?
 
-Today! EIP-7702 is live on Ethereum Mainnet, Sepolia, and more. Account Kit will support EIP-7702 integration on more chains as they roll out EIP-7702 support.
+Today! EIP-7702 is live on Ethereum Mainnet, Sepolia, and more. Smart Wallets will support EIP-7702 integration on more chains as they roll out EIP-7702 support.
 
 Check out the [UI Demo](https://demo.alchemy.com) to see a live preview of these features in action!
