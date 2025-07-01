@@ -72,7 +72,7 @@ function OnRampPartnerCard() {
       setOnrampUrl(url);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to generate onramp URL"
+        err instanceof Error ? err.message : "Failed to generate onramp URL",
       );
     } finally {
       setIsLoading(false);
@@ -102,7 +102,7 @@ function OnRampPartnerCard() {
     const popup = window.open(
       onrampUrl,
       "coinbase-onramp",
-      "width=500,height=700,scrollbars=yes,resizable=yes,status=yes,location=yes,toolbar=no,menubar=no"
+      "width=500,height=700,scrollbars=yes,resizable=yes,status=yes,location=yes,toolbar=no,menubar=no",
     );
     if (popup) setPopupWindow(popup);
   };
