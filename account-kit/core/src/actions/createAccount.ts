@@ -103,10 +103,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     return cachedAccount.account;
   }
 
-  // TODO(jh): remove this logging after debugging.
-  console.log("requesting account");
-  console.log({ creationHint: convertAccountParamsToCreationHint(params) });
-
   const accountPromise = smartWalletClient
     .requestAccount({
       accountAddress: params.accountParams?.accountAddress,

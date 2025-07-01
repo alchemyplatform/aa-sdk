@@ -36,15 +36,7 @@ export const useMint = (props: {
 
   const { client, isLoadingClient } = useSmartAccountClient({
     type: "ModularAccountV2",
-    accountParams:
-      props.mode === "7702"
-        ? {
-            mode: "7702",
-          }
-        : {
-            mode: "default",
-            salt: BigInt(1),
-          },
+    accountParams: { mode: props.mode },
   });
   const { isDeployed, refetch: refetchDeploymentStatus } =
     useDeploymentStatus();
