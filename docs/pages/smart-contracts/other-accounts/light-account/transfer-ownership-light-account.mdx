@@ -4,7 +4,7 @@ description: Follow this guide to transfer ownership of a Light Account with
 slug: wallets/smart-contracts/other-accounts/light-account/transfer-ownership-light-account
 ---
 
-Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our `LightAccount`! Let's see a few different ways we can transfer ownership of an Account (using `LightAccount` as an example).
+Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Smart Wallets do, including our `LightAccount`! Let's see a few different ways we can transfer ownership of an Account (using `LightAccount` as an example).
 
 ## Usage
 
@@ -14,7 +14,7 @@ Not all smart account implementations support transferring the ownership (e.g. `
 function transferOwnership(address newOwner) public virtual onlyOwner
 ```
 
-There a number of ways you can call this method using Account Kit.
+There a number of ways you can call this method using Smart Wallets.
 
 ### 1. Using `transferOwnership` client action
 

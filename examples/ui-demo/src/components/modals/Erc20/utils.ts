@@ -21,7 +21,7 @@ export async function getNftMintBatchUOs(accountAddress: Address) {
   const approveGasSponsorshipCallData = encodeFunctionData({
     abi: erc20Abi,
     functionName: "approve",
-    args: [ALCHEMY_PAYMASTER_ADDRESS, BigInt(USDC_GAS_APPROVAL_AMOUNT)],
+    args: [ALCHEMY_PAYMASTER_ADDRESS, USDC_GAS_APPROVAL_AMOUNT],
   });
 
   // 2. Approve the NFT contract to spend USDC for the mint price

@@ -1,10 +1,10 @@
 ---
 title: Server-side Rendering
-description: Learn how to use Account Kit core with server-side rendering.
+description: Learn how to use Smart Wallets core with server-side rendering.
 slug: wallets/core/ssr
 ---
 
-When using Account Kit core in a server-side rendered setting, you will see inconsistencies of the user state between the server and the client. This will lead to flashes of content when a user is logged in. To avoid this, the account state can be optimistically loaded on the server and passed to the client.
+When using Smart Wallets core in a server-side rendered setting, you will see inconsistencies of the user state between the server and the client. This will lead to flashes of content when a user is logged in. To avoid this, the account state can be optimistically loaded on the server and passed to the client.
 
 ## Update your config
 
@@ -25,7 +25,7 @@ This setting will defer hydration of the account kit state until you can call th
 
 ## Hydrate the Account State
 
-Now that you've set up your config for SSR, you will have to manually hydrate the state on the client. This can be done by calling the `hydrate` method exported by Account Kit core.
+Now that you've set up your config for SSR, you will have to manually hydrate the state on the client. This can be done by calling the `hydrate` method exported by Smart Wallets core.
 
 <CodeBlocks>
 
