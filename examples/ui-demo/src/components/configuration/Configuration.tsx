@@ -28,7 +28,6 @@ export const Configuration = ({ className }: { className?: string }) => {
       type: "ModularAccountV2" as const,
       accountParams: {
         mode: accountMode,
-        salt: accountMode !== "7702" ? BigInt(1) : undefined,
       },
     }),
     [accountMode],

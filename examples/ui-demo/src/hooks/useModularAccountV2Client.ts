@@ -79,7 +79,6 @@ export const useModularAccountV2Client = ({
       try {
         const _client: Client = await createModularAccountV2Client({
           mode,
-          salt: mode === "7702" ? undefined : BigInt(1),
           chain,
           transport,
           signer: privateKey
