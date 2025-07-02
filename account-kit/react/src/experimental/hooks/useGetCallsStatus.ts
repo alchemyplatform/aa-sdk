@@ -26,6 +26,7 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  *
  * This hook queries the status of a specific call ID that was returned from `wallet_sendPreparedCalls`.
  * The status indicates whether the batch of calls has been processed, confirmed, or failed on-chain.
+ * While the call status is pending, the status is automatically fetched every second.
  *
  * @example
  * ```tsx
