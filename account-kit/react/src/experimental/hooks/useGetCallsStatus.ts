@@ -1,15 +1,20 @@
 import { BaseError, clientHeaderTrack } from "@aa-sdk/core";
 import type { GetSmartWalletClientResult } from "@account-kit/core/experimental";
 import type { getCallsStatus } from "@account-kit/wallet-client";
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+import {
+  useQuery,
+  type UseQueryOptions,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 import { type Address, type Hex } from "viem";
 import { ClientUndefinedHookError } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
 
 export type UseGetCallsStatusParams = {
-  client?: GetSmartWalletClientResult<Address>;
-  callId?: Hex;
+  client: GetSmartWalletClientResult<Address> | undefined;
+  callId: Hex | undefined;
+  queryOptions?: Omit<UseQueryOptions<QueryResult>, "queryKey" | "queryFn">;
 };
 
 type QueryResult = Awaited<ReturnType<typeof getCallsStatus>>;
@@ -30,6 +35,10 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  *   const { data: callsStatus, isLoading, error } = useCallsStatus({
  *     client: smartWalletClient,
  *     callId: "0x1234...", // The call ID from sendPreparedCalls
+ *     queryOptions: {
+ *       // Refetch every 2 sec while pending.
+ *       refetchInterval: (q) => q.state.data?.status === 100 ? 2000 : false,
+ *     }
  *   });
  * }
  * ```
@@ -46,7 +55,7 @@ export function useCallsStatus(
   const { client, callId } = params;
   const { queryClient } = useAlchemyAccountContext();
 
-  return useQuery(
+  return useQuery<QueryResult>(
     {
       queryKey: ["useCallsStatus", params.callId],
       queryFn: ReactLogger.profiled(
@@ -65,6 +74,7 @@ export function useCallsStatus(
         },
       ),
       enabled: !!client && !!params.callId,
+      ...params.queryOptions,
     },
     queryClient,
   );

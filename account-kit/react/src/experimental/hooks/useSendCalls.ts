@@ -21,7 +21,7 @@ import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.j
 import { ReactLogger } from "../../metrics.js";
 
 export type UseSendCallsParams = {
-  client?: GetSmartWalletClientResult<Address>;
+  client: GetSmartWalletClientResult<Address> | undefined;
 };
 
 type MutationParams = Prettify<
