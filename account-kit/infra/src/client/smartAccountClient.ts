@@ -13,6 +13,7 @@ import {
   type UserOperationContext,
 } from "@aa-sdk/core";
 import { type Chain } from "viem";
+import { headersUpdate } from "../alchemyTrackerHeaders.js";
 import {
   alchemy,
   convertHeadersToObject,
@@ -20,6 +21,7 @@ import {
 } from "../alchemyTransport.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
+import type { PolicyToken } from "../middleware/gasManager.js";
 import { alchemyGasAndPaymasterAndDataMiddleware } from "../middleware/gasManager.js";
 import { alchemyUserOperationSimulator } from "../middleware/userOperationSimulator.js";
 import {
@@ -27,8 +29,6 @@ import {
   type AlchemySmartAccountClientActions,
 } from "./decorators/smartAccount.js";
 import type { AlchemyRpcSchema } from "./types.js";
-import { headersUpdate } from "../alchemyTrackerHeaders.js";
-import type { PolicyToken } from "../middleware/gasManager.js";
 
 export function getSignerTypeHeader<
   TAccount extends SmartContractAccountWithSigner,
