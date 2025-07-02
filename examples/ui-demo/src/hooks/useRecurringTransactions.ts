@@ -2,31 +2,28 @@ import { useState } from "react";
 import type { BatchUserOperationCallData } from "@aa-sdk/core";
 import {
   encodeFunctionData,
-  toFunctionSelector,
+  getAbiItem,
   Hex,
   parseEther,
-  getAbiItem,
+  toFunctionSelector,
   type Chain,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import {
-  AllowlistModule,
-  getDefaultAllowlistModuleAddress,
-  getDefaultSingleSignerValidationModuleAddress,
-  getDefaultTimeRangeModuleAddress,
-  semiModularAccountBytecodeAbi,
-  TimeRangeModule,
-} from "@account-kit/smart-contracts/experimental";
-import { SingleSignerValidationModule } from "@account-kit/smart-contracts/experimental";
 import { DEMO_USDC_ADDRESS, SWAP_VENUE_ADDRESS } from "./7702/dca/constants";
 import { swapAbi } from "./7702/dca/abi/swap";
 import { erc20MintableAbi } from "./7702/dca/abi/erc20Mintable";
-import { genEntityId } from "./7702/genEntityId";
-import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
+import { AccountMode } from "@/app/config";
+import {
+  deferralActions,
+  PermissionBuilder,
+  PermissionType,
+} from "@account-kit/smart-contracts/experimental";
+import { genEntityId } from "./7702/genEntityId";
+import { SESSION_KEY_VALIDITY_TIME_SECONDS } from "./7702/constants";
 
 export type CardStatus = "initial" | "setup" | "active" | "done";
 
@@ -63,7 +60,7 @@ export interface UseRecurringTransactionReturn {
 }
 
 export const useRecurringTransactions = (clientOptions: {
-  mode: "default" | "7702";
+  mode: AccountMode;
   chain: Chain;
   transport: AlchemyTransport;
 }): UseRecurringTransactionReturn => {
@@ -72,9 +69,17 @@ export const useRecurringTransactions = (clientOptions: {
 
   const [cardStatus, setCardStatus] = useState<CardStatus>("initial");
 
-  const [localSessionKey] = useState<Hex>(() => generatePrivateKey());
-  const [sessionKeyEntityId] = useState<number>(() => genEntityId());
-  const [sessionKeyAdded, setSessionKeyAdded] = useState<boolean>(false);
+  const [sessionKey, setSessionKey] = useState<{
+    privateKey: Hex;
+    entityId: number;
+    isGlobalValidation: boolean;
+    isInstalled: boolean;
+  }>({
+    privateKey: generatePrivateKey(),
+    entityId: genEntityId(),
+    isGlobalValidation: false,
+    isInstalled: false,
+  });
 
   const { client, isLoadingClient } = useModularAccountV2Client({
     ...clientOptions,
@@ -83,9 +88,10 @@ export const useRecurringTransactions = (clientOptions: {
   const { client: sessionKeyClient } = useModularAccountV2Client({
     ...clientOptions,
     localKeyOverride: {
-      key: localSessionKey,
-      entityId: sessionKeyEntityId,
+      privateKey: sessionKey.privateKey,
+      entityId: sessionKey.entityId,
       accountAddress: client?.getAddress(),
+      isGlobalValidation: sessionKey.isGlobalValidation,
     },
   });
 
@@ -174,7 +180,49 @@ export const useRecurringTransactions = (clientOptions: {
 
     // Start by minting the required USDC amount, and installing the session key, if not already installed.
 
-    const currentEpochTimeSeconds = Math.floor(Date.now() / 1000);
+    let installData: Hex | undefined;
+    if (!sessionKey.isInstalled) {
+      const currentEpochTimeSeconds = Math.floor(Date.now() / 1000);
+
+      const _client = client.extend(deferralActions);
+
+      const { entityId, nonce } = await _client.getEntityIdAndNonce({
+        entityId: sessionKey.entityId,
+        isGlobalValidation: sessionKey.isGlobalValidation,
+      });
+
+      const _installData = await new PermissionBuilder({
+        client,
+        key: {
+          type: "secp256k1",
+          publicKey: privateKeyToAccount(sessionKey.privateKey).address,
+        },
+        entityId,
+        nonce,
+        deadline: currentEpochTimeSeconds + SESSION_KEY_VALIDITY_TIME_SECONDS,
+      })
+        .addPermissions({
+          permissions: [
+            {
+              type: PermissionType.FUNCTIONS_ON_CONTRACT,
+              data: {
+                address: SWAP_VENUE_ADDRESS,
+                functions: [
+                  toFunctionSelector(
+                    getAbiItem({
+                      abi: swapAbi,
+                      name: "swapUSDCtoWETH",
+                    }),
+                  ),
+                ],
+              },
+            },
+          ],
+        })
+        .compileRaw();
+      installData = _installData;
+      setSessionKey((prev) => ({ ...prev, entityId }));
+    }
 
     const batchActions: BatchUserOperationCallData = [
       {
@@ -194,71 +242,14 @@ export const useRecurringTransactions = (clientOptions: {
         }),
       },
       // Only install the session key if it hasn't been installed yet
-      ...(sessionKeyAdded
-        ? []
-        : [
+      ...(installData
+        ? [
             {
-              target: await client.getAddress(),
-              data: await client.encodeInstallValidation({
-                validationConfig: {
-                  moduleAddress:
-                    await getDefaultSingleSignerValidationModuleAddress(
-                      clientOptions.chain,
-                    ),
-                  entityId: sessionKeyEntityId,
-                  isGlobal: false,
-                  isSignatureValidation: false,
-                  isUserOpValidation: true,
-                },
-                selectors: [
-                  toFunctionSelector(
-                    getAbiItem({
-                      abi: semiModularAccountBytecodeAbi,
-                      name: "execute",
-                    }),
-                  ),
-                ],
-                installData: SingleSignerValidationModule.encodeOnInstallData({
-                  entityId: sessionKeyEntityId,
-                  signer: privateKeyToAccount(localSessionKey).address,
-                }),
-                hooks: [
-                  AllowlistModule.buildHook(
-                    {
-                      entityId: sessionKeyEntityId,
-                      inputs: [
-                        {
-                          target: SWAP_VENUE_ADDRESS,
-                          hasSelectorAllowlist: true,
-                          hasERC20SpendLimit: false,
-                          erc20SpendLimit: BigInt(0),
-                          selectors: [
-                            toFunctionSelector(
-                              getAbiItem({
-                                abi: swapAbi,
-                                name: "swapUSDCtoWETH",
-                              }),
-                            ),
-                          ],
-                        },
-                      ],
-                    },
-                    getDefaultAllowlistModuleAddress(clientOptions.chain),
-                  ),
-                  TimeRangeModule.buildHook(
-                    {
-                      entityId: sessionKeyEntityId,
-                      validUntil:
-                        currentEpochTimeSeconds +
-                        SESSION_KEY_VALIDITY_TIME_SECONDS,
-                      validAfter: 0,
-                    },
-                    getDefaultTimeRangeModuleAddress(clientOptions.chain),
-                  ),
-                ],
-              }),
+              target: client.account.address,
+              data: installData,
             },
-          ]),
+          ]
+        : []),
     ];
 
     const uoHash = await client.sendUserOperation({
@@ -278,7 +269,7 @@ export const useRecurringTransactions = (clientOptions: {
     if (!isDeployed) {
       refetchDeploymentStatus();
     }
-    setSessionKeyAdded(true);
+    setSessionKey((prev) => ({ ...prev, isInstalled: true }));
     setCardStatus("active");
 
     for (let i = 0; i < transactions.length; i++) {
