@@ -90,6 +90,7 @@
     "@account-kit/infra": "^4.47.0",
     "@account-kit/logging": "^4.47.0",
     "@account-kit/signer": "^4.47.0",
+    "@account-kit/wallet-client": "^0.1.0-alpha.10",
     "@solana/web3.js": "^1.98.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",

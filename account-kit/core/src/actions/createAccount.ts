@@ -206,12 +206,14 @@ function convertAccountParamsToCreationHint<
       : {
           accountType: "sma-b",
           salt: toHex(params.accountParams?.salt ?? 0n),
+          createAdditional: true,
         };
   }
   if (isLightAccountParams(params)) {
     return {
       accountType: `la-${params.accountParams?.version === "v2.0.0" ? "v2" : (params.accountParams?.version ?? "v2")}`,
       salt: toHex(params.accountParams?.salt ?? 0n),
+      createAdditional: true,
     };
   }
 
@@ -220,6 +222,7 @@ function convertAccountParamsToCreationHint<
       accountType: `la-v2-multi-owner`,
       salt: toHex(params.accountParams?.salt ?? 0n),
       initialOwners: params.accountParams?.owners,
+      createAdditional: true,
     };
   }
 
@@ -228,6 +231,7 @@ function convertAccountParamsToCreationHint<
       accountType: "ma-v1-multi-owner",
       salt: toHex(params.accountParams?.salt ?? 0n),
       initialOwners: params.accountParams?.owners,
+      createAdditional: true,
     };
   }
 
