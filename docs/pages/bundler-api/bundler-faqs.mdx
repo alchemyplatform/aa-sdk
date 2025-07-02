@@ -71,6 +71,18 @@ To do so, follow the next steps:
 
 After calculating the new values, send your `userOp` again with the updated fees and it should go through successfully.
 
+## Parallel nonces
+
+### What is the maximum number of supported parallel nonces?
+
+Our bundler supports up to 4 parallel nonces (default value from ERC-7562) for unstaked senders and unlimited parallel nonces for staked senders. See [below](/reference/bundler-faqs#what-is-the-minimum-amount-that-must-be-staked-with-the-entrypoint) for stake requirements.
+
+Staked senders are subject to ERC-7562 reputation rules. If a sender submits a large number of userOps and subsequently invalidates them all, they may be throttled or banned.
+
+### Can I include multiple parallel nonces in a single bundle?
+
+To include multiple parallel nonces in the same bundle, the account must stake the [minimum stake amount](/reference/bundler-faqs#what-is-the-minimum-amount-that-must-be-staked-with-the-entrypoint) with the EntryPoint.
+
 ## Signatures
 
 ### What is a dummy signature?
@@ -161,3 +173,23 @@ EntryPoint v0.6: `0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789`
 ### When will EntryPoint v0.6 be deprecated?
 
 We plan to deprecate support for EntryPoint v0.6 in September 2025. Please ensure that you have migrated to EntryPoint v0.7 by that time. If you have any questions or need assistance with the migration process, please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
+
+## Compatibility with 3P Paymasters and Factories
+
+### What is the minimum amount that must be staked with the EntryPoint?
+
+Mainnets:
+
+- Native token: ETH --> 0.1 ETH
+- Native token: MATIC --> 100 MATIC
+
+Testnets:
+
+- Native token: ETH --> 0.1 ETH
+- Native token: MATIC --> 10 MATIC
+
+If a Paymaster or Factory used in the userOp does not have the above amounts staked with the Entrypoint, the userOp will be rejected.
+
+### What is the minimum delay value?
+
+The minimum unstake delay required by Rundler is 1 Day. If a Paymaster or Factory used in the userOp does not have the "minimum delay" value configured with the Entrypoint, the userOp will be rejected.
