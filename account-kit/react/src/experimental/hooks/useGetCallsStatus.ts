@@ -21,6 +21,7 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  *
  * This hook queries the status of a specific call ID that was returned from `wallet_sendPreparedCalls`.
  * The status indicates whether the batch of calls has been processed, confirmed, or failed on-chain.
+ * While the call status is pending, the status is automatically fetched every second.
  *
  * @example
  * ```tsx
@@ -46,7 +47,7 @@ export function useCallsStatus(
   const { client, callId } = params;
   const { queryClient } = useAlchemyAccountContext();
 
-  return useQuery(
+  return useQuery<QueryResult>(
     {
       queryKey: ["useCallsStatus", params.callId],
       queryFn: ReactLogger.profiled(
@@ -65,6 +66,9 @@ export function useCallsStatus(
         },
       ),
       enabled: !!client && !!params.callId,
+      // TODO(jh): we should prob do this in the other branch?
+      refetchInterval: (opts) =>
+        opts.state.data?.status === 100 ? 1000 : false,
     },
     queryClient,
   );
