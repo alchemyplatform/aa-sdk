@@ -1,0 +1,9 @@
+{
+  "extends": "typescript-template/base.json",
+  "compilerOptions": {
+    "paths": {
+      "@account-kit/wallet-client": ["./src/index.ts"],
+      "~test/*": ["../../.vitest/src/*"]
+    }
+  }
+}
