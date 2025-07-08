@@ -64,7 +64,7 @@ function OnRampPartnerCard() {
     try {
       const url = getOnrampBuyUrl({
         projectId: CDP_PROJECT_ID,
-        addresses: { [address]: ["base"] }, // or ["ethereum"] for mainnet
+        addresses: { [address]: ["base"] },
         assets: ["USDC"], // or ["ETH"]
         presetFiatAmount: 1,
         fiatCurrency: "USD",
@@ -94,7 +94,7 @@ function OnRampPartnerCard() {
       },
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, [onrampUrl, popupWindow]);
 
   const openOnrampPopup = () => {
