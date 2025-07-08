@@ -101,10 +101,10 @@
     ox "^0.6.12"
     viem "2.29.2"
 
-"@alchemy/wallet-api-types@0.1.0-alpha.11":
-  version "0.1.0-alpha.11"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.11.tgz#7072a97990c3cb01ad34d09f2115050075a9e409"
-  integrity sha512-aQE8+bHC0yQ4flx2MW5phqGDfyz3Xv0c6f1j4q+D7ZpD8tNKLXqUcey9hT7Ew2M3TV9mfVlqPx4Oy0i7/R2ZmA==
+"@alchemy/wallet-api-types@0.1.0-alpha.12":
+  version "0.1.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.12.tgz#81dffd2288d22c25a4a55f7a9251e48b14cd8dd7"
+  integrity sha512-veqMfG/n0z6Aa4sKFcP2Rya9knfBlbMnRbM34NuERNucNEDhLTUD2n2VUymKf1Lj8tiSnj0RaPPHQ9DVckl/7g==
   dependencies:
     "@sinclair/typebox" "^0.34.33"
     deep-equal "^2.2.3"
