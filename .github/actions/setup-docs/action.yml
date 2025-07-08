@@ -13,6 +13,10 @@ runs:
       shell: bash
       run: node docs/scripts/extract-include-statements.js
 
+    - name: Extract JSDoc MDX
+      shell: bash
+      run: node docs/scripts/extract-jsdoc-tags.js
+
     - name: Ensure docs-site submodule is up-to-date
       shell: bash
       run: git submodule update --init --remote docs-site/

@@ -10,6 +10,8 @@ slug: wallets/react/quickstart/existing-project
 
 This tutorial assumes you're using a React application with Next.js app router. If you're using a different setup, the core concepts remain the same but you may need to adapt the provider setup to your framework.
 
+// [!jsdoc-mdx @account-kit/core:createSmartAccountClient]
+
 ## 1. Install the packages
 
 Install the React and Infra packages from Smart Wallets along with required dependencies.
@@ -112,7 +114,7 @@ export default withAccountKitUi(
   },
   {
     // AccountKit UI theme customizations
-  },
+  }
 );
 ```
 
@@ -161,7 +163,7 @@ export const config = createConfig(
       ],
       addPasskeyOnSignup: true,
     },
-  },
+  }
 );
 
 export const queryClient = new QueryClient();
@@ -204,7 +206,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -245,7 +247,7 @@ export default function RootLayout({
 }>) {
   const initialState = cookieToInitialState(
     config,
-    headers().get("cookie") ?? undefined,
+    headers().get("cookie") ?? undefined
   );
 
   return (
