@@ -6,6 +6,7 @@ import { resolve } from "pathe";
 import { format } from "prettier";
 import ts from "typescript";
 import { sidebarBuilder } from "../classes/SidebarBuilder.js";
+import { jsDocTagRegistry } from "../classes/JSDocTagRegistry.js";
 import * as logger from "../logger.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
 
@@ -42,6 +43,10 @@ export async function generate(options: GenerateOptions) {
 
   sidebarBuilder.clear();
   sidebarBuilder.setPackageName(packageJSON.name);
+
+  // Set up JSDoc tag registry
+  jsDocTagRegistry.clear();
+  jsDocTagRegistry.setOutputDir(path.resolve(outputFilePath, ".."));
 
   // clean the output directory to account for deleted docs
   generatedDirectories.forEach((dir) => {
@@ -87,6 +92,14 @@ export async function generate(options: GenerateOptions) {
     logger.info("Successfully updated docs.yml for package:", packageJSON.name);
   } catch (error) {
     logger.error("Failed to update docs.yml:", error);
+  }
+
+  // Export JSDoc tag registry
+  try {
+    await jsDocTagRegistry.exportRegistry();
+    logger.info("Successfully exported JSDoc tag registry");
+  } catch (error) {
+    logger.error("Failed to export JSDoc tag registry:", error);
   }
 }
 
@@ -178,12 +191,22 @@ async function generateFunctionDocs(
     return;
   }
 
-  fs.outputFileSync(
-    path.resolve(`${outputPath}.mdx`),
-    await format(await format(documentation, { parser: "mdx" }), {
+  const formattedDocumentation = await format(
+    await format(documentation, { parser: "mdx" }),
+    {
       parser: "mdx",
-    }),
+    },
   );
+
+  // Store the full MDX content in the registry
+  jsDocTagRegistry.storeMDXContent(
+    importedName,
+    packageName,
+    outputPath,
+    formattedDocumentation,
+  );
+
+  fs.outputFileSync(path.resolve(`${outputPath}.mdx`), formattedDocumentation);
 }
 
 function generateClassDocs(

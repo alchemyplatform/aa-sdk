@@ -17,6 +17,29 @@ export const getFunctionName = (
       ? (node.name?.getText() ?? importedName)
       : importedName;
 
+export function extractCustomJSDocTag(
+  node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
+  tagName: string,
+): string | null {
+  const jsDocCommentAndTags = ts.getJSDocCommentsAndTags(node);
+  if (!jsDocCommentAndTags.length) return null;
+
+  const comment = jsDocCommentAndTags.find(
+    (x) => x.kind === ts.SyntaxKind.JSDoc,
+  ) as ts.JSDoc;
+
+  if (!comment.tags) return null;
+
+  const customTag = comment.tags.find(
+    (x) =>
+      x.kind === ts.SyntaxKind.JSDocTag && x.tagName.escapedText === tagName,
+  );
+
+  if (!customTag) return null;
+
+  return ts.getTextOfJSDocComment(customTag.comment) || null;
+}
+
 export function functionTemplate(
   node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
   importedName: string,
