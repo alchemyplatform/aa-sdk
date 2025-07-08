@@ -1,6 +1,7 @@
 {
   "extends": "typescript-template/base.json",
   "compilerOptions": {
+    "types": ["vitest/globals", "bun-types"],
     "paths": {
       "@account-kit/wallet-client": ["./src/index.ts"],
       "~test/*": ["../../.vitest/src/*"]

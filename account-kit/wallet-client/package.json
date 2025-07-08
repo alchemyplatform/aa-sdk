@@ -6,14 +6,15 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "main": "./dist/esm/src/index.js",
-  "module": "./dist/esm/src/index.js",
-  "types": "./dist/types/src/index.d.ts",
-  "typings": "./dist/types/src/index.d.ts",
+  "main": "./dist/esm/exports/index.js",
+  "module": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist",
     "src/**/*.ts",
+    "package.json",
     "!dist/**/*.tsbuildinfo",
     "!vitest.config.ts",
     "!.env",
@@ -23,9 +24,19 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types/src/index.d.ts",
-      "import": "./dist/esm/src/index.js",
-      "default": "./dist/esm/src/index.js"
+      "types": "./dist/types/exports/index.d.ts",
+      "require": "./dist/esm/exports/index.js",
+      "import": "./dist/esm/exports/index.js"
+    },
+    "./internal": {
+      "types": "./dist/types/exports/internal.d.ts",
+      "require": "./dist/esm/exports/internal.js",
+      "import": "./dist/esm/exports/internal.js"
+    },
+    "./abi": {
+      "types": "./dist/types/abi/index.d.ts",
+      "require": "./dist/esm/abi/index.js",
+      "import": "./dist/esm/abi/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -34,11 +45,23 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
-    "test": "vitest",
-    "test:run": "vitest run"
+    "test:e2e": "bun test ./src/**/*.e2e.test.*"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.47.0"
+    "@aa-sdk/core": "^4.47.0",
+    "@account-kit/infra": "^4.47.0",
+    "@account-kit/smart-contracts": "^4.47.0",
+    "@alchemy/wallet-api-types": "0.1.0-alpha.11",
+    "@sinclair/typebox": "^0.34.33",
+    "deep-equal": "^2.2.3",
+    "ox": "^0.6.12",
+    "viem": "2.29.2"
+  },
+  "devDependencies": {
+    "@types/deep-equal": "^1.0.4",
+    "@types/node": "^24.0.11",
+    "bun": "^1.2.18",
+    "bun-types": "^1.2.18"
   },
   "peerDependencies": {
     "viem": "2.29.2"
