@@ -5,6 +5,7 @@ import type {
   EntryPointVersion,
   Multiplier,
   SmartContractAccount,
+  UserOperationContext,
   UserOperationFeeOptions,
   UserOperationOverrides,
   UserOperationRequest,
@@ -43,6 +44,7 @@ import {
 } from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 import type { MiddlewareClient } from "../../../../aa-sdk/core/dist/types/middleware/actions.js";
+import { InvalidSignedPermit } from "../errors/invalidSignedPermit.js";
 
 type Context = {
   policyId: string | string[];
@@ -112,6 +114,10 @@ export function alchemyGasManagerMiddleware(
         if (permit !== undefined) {
           context.erc20Context.permit = permit;
         }
+      } else if (args.context !== undefined) {
+        context.erc20Context.permit = extractSignedPermitFromContext(
+          args.context,
+        );
       }
     }
 
@@ -216,7 +222,13 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
     },
     paymasterAndData: async (
       uo,
-      { account, client: client_, feeOptions, overrides: overrides_ },
+      {
+        account,
+        client: client_,
+        feeOptions,
+        overrides: overrides_,
+        context: uoContext,
+      },
     ) => {
       const client = clientHeaderTrack(client_, "alchemyFeeEstimator");
       if (!client.chain) {
@@ -290,6 +302,8 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           if (permit !== undefined) {
             erc20Context.permit = permit;
           }
+        } else if (uoContext !== undefined) {
+          erc20Context.permit = extractSignedPermitFromContext(uoContext);
         }
       }
 
@@ -460,8 +474,42 @@ const generateSignedPermit = async <TAccount extends SmartContractAccount>(
   } as const;
 
   const signedPermit = await account.signTypedData(typedPermitData);
+  return encodeSignedPermit(permitLimit, deadline, signedPermit);
+};
+
+function extractSignedPermitFromContext(
+  context: UserOperationContext,
+): Hex | undefined {
+  if (context.signedPermit === undefined) {
+    return undefined;
+  }
+
+  if (typeof context.signedPermit !== "object") {
+    throw new InvalidSignedPermit("signedPermit is not an object");
+  }
+  if (typeof context.signedPermit.value !== "bigint") {
+    throw new InvalidSignedPermit("signedPermit.value is not a bigint");
+  }
+  if (typeof context.signedPermit.deadline !== "bigint") {
+    throw new InvalidSignedPermit("signedPermit.deadline is not a bigint");
+  }
+  if (!isHex(context.signedPermit.signature)) {
+    throw new InvalidSignedPermit("signedPermit.signature is not a hex string");
+  }
+  return encodeSignedPermit(
+    context.signedPermit.value,
+    context.signedPermit.deadline,
+    context.signedPermit.signature,
+  );
+}
+
+function encodeSignedPermit(
+  value: bigint,
+  deadline: bigint,
+  signedPermit: Hex,
+) {
   return encodeAbiParameters(
     [{ type: "uint256" }, { type: "uint256" }, { type: "bytes" }],
-    [permitLimit as bigint, deadline, signedPermit],
+    [value, deadline, signedPermit],
   );
-};
+}

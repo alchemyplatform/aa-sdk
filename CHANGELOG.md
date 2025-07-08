@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
+
+### Features
+
+- add erc20 docs ([#1736](https://github.com/alchemyplatform/aa-sdk/issues/1736)) ([f8f4863](https://github.com/alchemyplatform/aa-sdk/commit/f8f486314a5e3242f10d19948c2b46c900bf600c))
+- **middleware:** add signed permit to uo context for use in middleware ([f91e7ee](https://github.com/alchemyplatform/aa-sdk/commit/f91e7ee72ce33d225af935cce2c79ad08f44ca05))
+- refactor erc20 paymaster arguments ([#1738](https://github.com/alchemyplatform/aa-sdk/issues/1738)) ([20957e3](https://github.com/alchemyplatform/aa-sdk/commit/20957e39a68aae94e66eee23b6de6a1eaf53b3ef))
+- update the max token amount ([#1745](https://github.com/alchemyplatform/aa-sdk/issues/1745)) ([c37f2b5](https://github.com/alchemyplatform/aa-sdk/commit/c37f2b5cf15cccebc3faa7898615dbc247a0551f))
+
 # [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
 
 ### Bug Fixes
