@@ -52,13 +52,30 @@ export const client = createAlchemySmartAccountClient({
 
 ```tsx
 import { client } from "./client";
+import { encodeFunctionData, parseAbi } from "viem";
+
+const erc20Abi = parseAbi([
+  "function approve(address spender, uint256 amount) public returns (bool)",
+]);
 
 const { hash } = await client.sendUserOperation({
-  uo: {
-    target: "0xTARGET_ADDRESS",
-    data: "0x",
-    value: 0n,
-  },
+  uo: [
+    {
+      // approve call
+      target: tokenAddress,
+      data: encodeFunctionData({
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [paymasterAddress, maxTokenAmount],
+      }) as `0x${string}`,
+    },
+    {
+      // actual call
+      target: "0xTARGET_ADDRESS",
+      data: "0x",
+      value: 0n,
+    },
+  ],
 });
 ```
 
