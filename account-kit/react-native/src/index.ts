@@ -19,6 +19,8 @@ export {
   useSignMessage,
   useSignTypedData,
   useSmartAccountClient,
+  useSolanaConnection,
+  useSolanaSigner,
   useUser,
   useWaitForUserOperationTransaction,
 } from "@account-kit/react/hooks";
