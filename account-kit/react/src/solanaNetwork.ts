@@ -11,6 +11,19 @@ import bs58 from "bs58";
 
 export { Connection };
 
+export interface ConfirmationOptions {
+  /**
+   * Whether to use polling instead of WebSocket subscriptions for transaction confirmation.
+   * Useful for environments where WebSocket connections are unreliable (e.g., React Native).
+   *
+   * @default false
+   */
+  usePolling?: boolean;
+  pollingInterval?: number;
+  maxPollingAttempts?: number;
+  commitment?: "processed" | "confirmed" | "finalized";
+}
+
 export async function balance(
   connection: Connection,
   address: string,
@@ -51,24 +64,101 @@ export async function dropTokens(
 export async function broadcast(
   connection: Connection,
   signedTransaction: Transaction | VersionedTransaction,
+  options: ConfirmationOptions = {},
 ) {
+  const {
+    usePolling = false,
+    pollingInterval = 1000,
+    maxPollingAttempts = 30,
+    commitment = "confirmed",
+  } = options;
+
   const signature =
     "version" in signedTransaction
       ? signedTransaction.signatures[0]!
       : signedTransaction.signature!;
 
-  const confirmationStrategy = await getConfirmationStrategy(
-    connection,
-    bs58.encode(signature),
-  );
-  const transactionHash = await sendAndConfirmRawTransaction(
-    connection,
-    Buffer.from(signedTransaction.serialize()),
-    confirmationStrategy,
-    { commitment: "confirmed" },
-  );
+  if (usePolling) {
+    return await broadcastWithPolling(
+      connection,
+      signedTransaction,
+      pollingInterval,
+      maxPollingAttempts,
+      commitment,
+    );
+  } else {
+    const confirmationStrategy = await getConfirmationStrategy(
+      connection,
+      bs58.encode(signature),
+    );
+    const transactionHash = await sendAndConfirmRawTransaction(
+      connection,
+      Buffer.from(signedTransaction.serialize()),
+      confirmationStrategy,
+      { commitment },
+    );
 
-  return transactionHash;
+    return transactionHash;
+  }
+}
+
+async function broadcastWithPolling(
+  connection: Connection,
+  signedTransaction: Transaction | VersionedTransaction,
+  pollingInterval: number,
+  maxPollingAttempts: number,
+  commitment: "processed" | "confirmed" | "finalized",
+): Promise<string> {
+  const txSignature =
+    "version" in signedTransaction
+      ? await connection.sendTransaction(signedTransaction)
+      : await connection.sendRawTransaction(signedTransaction.serialize());
+
+  let confirmed = false;
+  let attempts = 0;
+
+  while (!confirmed && attempts < maxPollingAttempts) {
+    attempts++;
+
+    try {
+      const status = await connection.getSignatureStatus(txSignature);
+
+      if (status.value?.confirmationStatus) {
+        const confirmationStatus = status.value.confirmationStatus;
+
+        const isConfirmed =
+          commitment === "processed" ||
+          (commitment === "confirmed" &&
+            (confirmationStatus === "confirmed" ||
+              confirmationStatus === "finalized")) ||
+          (commitment === "finalized" && confirmationStatus === "finalized");
+
+        if (isConfirmed) {
+          if (status.value.err) {
+            throw new Error(
+              `Transaction failed: ${JSON.stringify(status.value.err)}`,
+            );
+          }
+          confirmed = true;
+          break;
+        }
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, pollingInterval));
+    } catch (pollError) {
+      console.log(`Polling attempt ${attempts} failed:`, pollError);
+      await new Promise((resolve) => setTimeout(resolve, pollingInterval));
+    }
+  }
+
+  if (!confirmed) {
+    throw new Error(
+      `Transaction confirmation timed out after ${maxPollingAttempts} attempts. ` +
+        `Transaction may still be processed. Signature: ${txSignature}`,
+    );
+  }
+
+  return txSignature;
 }
 
 export async function recentBlockhash(connection: Connection): Promise<string> {
