@@ -21,6 +21,7 @@ export {
   useSmartAccountClient,
   useSolanaConnection,
   useSolanaSigner,
+  useSolanaTransaction,
   useUser,
   useWaitForUserOperationTransaction,
 } from "@account-kit/react/hooks";

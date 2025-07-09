@@ -41,7 +41,12 @@ export const useSolanaSigner = (
     const signerStatus = opts.signerSet?.signerStatus || fallbackSignerStatus;
     if (!signer) return null;
     if (!signerStatus.isConnected) return null;
-    return signer.toSolanaSigner();
+    try {
+      return signer.toSolanaSigner();
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }, [
     opts.signerSet?.signer,
     opts.signerSet?.signerStatus,
