@@ -42,6 +42,7 @@ export type SmartWalletClient<
  * @returns {SmartWalletClient} - A viem-compatible client
  *
  * @example
+ * ```ts
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { alchemy, arbitrumSepolia } from "@account-kit/infra";
  * import { generatePrivateKey } from "viem/accounts";
@@ -56,6 +57,7 @@ export type SmartWalletClient<
  *   chain: arbitrumSepolia,
  *   signer,
  * });
+ * ```
  */
 export function createSmartWalletClient<
   TAccount extends Address | undefined = undefined,

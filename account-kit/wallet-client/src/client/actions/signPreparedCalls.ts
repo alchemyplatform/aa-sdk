@@ -21,7 +21,7 @@ export type SignPreparedCallsResult = Static<
  * @param {SmartAccountSigner} signer - The signer to use
  * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
- **/
+ */
 export async function signPreparedCalls(
   signer: SmartAccountSigner,
   params: SignPreparedCallsParams,

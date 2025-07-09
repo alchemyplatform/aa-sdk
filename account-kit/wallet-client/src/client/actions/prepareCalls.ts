@@ -37,6 +37,7 @@ export type PrepareCallsResult = Static<
  * the user operation data and signature request
  *
  * @example
+ * ```ts
  * // Prepare a sponsored user operation call
  * const result = await client.prepareCalls({
  *   calls: [{
@@ -48,6 +49,7 @@ export type PrepareCallsResult = Static<
  *     paymasterService: { policyId: "your-policy-id" }
  *   }
  * });
+ * ```
  */
 export async function prepareCalls<
   TAccount extends Address | undefined = Address | undefined,

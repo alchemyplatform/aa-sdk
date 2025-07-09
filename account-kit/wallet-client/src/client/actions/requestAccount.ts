@@ -35,9 +35,11 @@ export type RequestAccountResult = SmartContractAccount;
  * @returns {Promise<RequestAccountResult>} A Promise that resolves to a SmartContractAccount instance
  *
  * @example
+ * ```ts
  * // Request an account with default parameters using a local signer
  * const signer = LocalAccountSigner.privateKeyToAccountSigner("0x...");
  * const account = await client.requestAccount(signer);
+ * ```
  */
 export async function requestAccount(
   client: InnerWalletApiClient,

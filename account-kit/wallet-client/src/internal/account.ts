@@ -23,8 +23,22 @@ type CreateAccountParams = {
 
 /**
  * Creates a smart account instance from the given parameters.
- * @param params - The parameters for creating a smart account.
- * @returns A promise that resolves to the created smart account.
+ *
+ * @param {CreateAccountParams} params - The parameters for creating a smart account.
+ * @returns {Promise<SmartContractAccount>} A promise that resolves to the created smart account.
+ *
+ * @example
+ * ```ts
+ * // Create a smart account
+ * const account = await createAccount({
+ *   chain: arbitrumSepolia,
+ *   transport: alchemy({
+ *     apiKey: "your-alchemy-api-key",
+ *   }),
+ *   signer: signer,
+ *   accountAddress: "0x1234...",
+ * });
+ * ```
  */
 export async function createAccount(
   params: CreateAccountParams,

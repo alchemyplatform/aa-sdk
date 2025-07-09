@@ -13,16 +13,19 @@ export type SignMessageResult = Hex;
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SmartAccountSigner} signer - The signer of the smart account
- * @param {SignableMessage} message - The message to sign
+ * @param {SignMessageParams} params - Parameters for signing the message
+ * @param {SignableMessage} params.message - The message to sign using EIP-191. Can be a string, or object with raw bytes.
+ * @param {Address} [params.account] - Optional account address to use for signing. If not provided, uses the client's current account.
  * @returns {Promise<SignMessageResult>} A Promise that resolves to the signed message as a hex string
  *
  * @example
+ * ```ts
  * // Sign a simple text message
  * const signature = await client.signMessage("Hello, world!");
  *
- * @example
  * // Sign a raw hex message
  * const signature = await client.signMessage({ raw: "0x48656c6c6f2c20776f726c6421" });
+ * ```
  */
 export async function signMessage(
   client: InnerWalletApiClient,

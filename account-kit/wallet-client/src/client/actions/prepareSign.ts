@@ -24,12 +24,14 @@ export type PrepareSignResult = Static<typeof wallet_prepareSign>["ReturnType"];
  * @returns {Promise<PrepareSignResult>} A Promise that resolves to the prepare sign result containing a signature request
  *
  * @example
+ * ```ts
  * // Prepare a message to be signed
  * const result = await client.prepareSign({
  *    from: "0x1234...",
  *    type: "personal_sign",
  *    data: "Hello, world!",
  * });
+ * ```
  */
 export async function prepareSign<
   TAccount extends Address | undefined = Address | undefined,

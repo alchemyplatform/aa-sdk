@@ -44,9 +44,9 @@ export type GrantPermissionsResult = {
  * @param {string} params.key.type - The type of the key (e.g., "secp256k1")
  * @param {Array} params.permissions - Array of permission objects defining what the session key can do
  * @returns {Promise<GrantPermissionsResult>} A Promise that resolves to the result containing a context identifier
- * @returns {Hex} result.context - A hex identifier for the granted permissions context
  *
  * @example
+ * ```ts
  * // Create a session key and grant root permissions
  * const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
  * const account = await client.requestAccount();
@@ -86,6 +86,7 @@ export type GrantPermissionsResult = {
  *     permissions,
  *   },
  * });
+ * ```
  */
 export async function grantPermissions<
   TAccount extends Address | undefined = Address | undefined,

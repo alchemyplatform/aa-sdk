@@ -19,6 +19,7 @@ export type SignTypedDataResult = Hex;
  * @returns {Promise<SignTypedDataResult>} A Promise that resolves to the signature as a hex string
  *
  * @example
+ * ```ts
  * // Sign typed data
  * const signature = await client.signTypedData({
  *   domain: {
@@ -39,6 +40,7 @@ export type SignTypedDataResult = Hex;
  *     wallet: '0xAaAaAaAaAaAaAaAaAaAAAAAAAAaaaAaAaAaaAaAa'
  *   }
  * });
+ * ```
  */
 export async function signTypedData(
   client: InnerWalletApiClient,

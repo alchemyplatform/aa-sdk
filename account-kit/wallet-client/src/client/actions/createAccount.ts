@@ -32,6 +32,7 @@ export type CreateAccountResult = Static<
  * @returns {Promise<CreateAccountResult>} A Promise that resolves to the created account information
  *
  * @example
+ * ```ts
  * // Create a new account with a custom salt
  * const account = await client.createAccount({
  *   creationOptions: {
@@ -40,6 +41,7 @@ export type CreateAccountResult = Static<
  *   }
  * });
  * console.log(`Created account at address: ${account.accountAddress}`);
+ * ```
  */
 export async function createAccount(
   client: InnerWalletApiClient,

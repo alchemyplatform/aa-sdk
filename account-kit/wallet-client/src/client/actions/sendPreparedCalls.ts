@@ -22,6 +22,7 @@ export type SendPreparedCallsResult = Static<
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs
  *
  * @example
+ * ```ts
  * // First prepare the calls
  * const preparedCalls = await client.prepareCalls({
  *   calls: [{
@@ -41,6 +42,7 @@ export type SendPreparedCallsResult = Static<
  * const result = await client.sendPreparedCalls({
  *   signedCalls,
  * });
+ * ```
  */
 export async function sendPreparedCalls(
   client: InnerWalletApiClient,

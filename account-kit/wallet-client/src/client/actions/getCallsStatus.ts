@@ -23,11 +23,13 @@ export type GetCallsStatusResult = Static<
  *   - receipts: Optional array of transaction receipts if the batch has been executed
  *
  * @example
+ * ```ts
  * // After sending prepared calls
  * const sendResult = await client.sendPreparedCalls({...});
  *
  * // Check the status of the first call ID
  * const status = await client.getCallsStatus(sendResult.preparedCallIds[0]);
+ * ```
  */
 export async function getCallsStatus(
   client: InnerWalletApiClient,

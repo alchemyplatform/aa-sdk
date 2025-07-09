@@ -26,6 +26,7 @@ export type FormatSignResult = Static<typeof wallet_formatSign>["ReturnType"];
  * @returns {Promise<FormatSignResult>} A Promise that resolves to the formatSign result containing the formatted signature.
  *
  * @example
+ * ```ts
  * // Formats a signature
  * const result = await client.formatSign({
  *    from: "0x1234...",
@@ -34,6 +35,7 @@ export type FormatSignResult = Static<typeof wallet_formatSign>["ReturnType"];
  *      data: "0xabcd..."
  *    },
  * });
+ * ```
  */
 export async function formatSign<
   TAccount extends Address | undefined = Address | undefined,
