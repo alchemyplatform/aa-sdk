@@ -37,15 +37,15 @@ const findFiles = (dir, pattern) => {
  * @returns {string|null} - Path to the generated MDX file or null if not found
  */
 const findJSDocMdxFile = (packageName, functionName) => {
-  // Convert package name to path segment (remove @ and convert / to -)
-  const packagePath = packageName.replace("@", "").replace("/", "/");
+  // Convert package name to path segment (remove @ and keep / as is)
+  const packagePath = packageName.replace("@", "");
 
   // Try different possible locations for the generated file
   const possiblePaths = [
-    `docs/wallets/pages/reference/${packagePath}/functions/${functionName}.mdx`,
-    `docs/wallets/pages/reference/${packagePath}/hooks/${functionName}.mdx`,
-    `docs/wallets/pages/reference/${packagePath}/classes/${functionName}.mdx`,
-    `docs/wallets/pages/reference/${packagePath}/components/${functionName}.mdx`,
+    `docs/pages/reference/${packagePath}/functions/${functionName}.mdx`,
+    `docs/pages/reference/${packagePath}/hooks/${functionName}.mdx`,
+    `docs/pages/reference/${packagePath}/classes/${functionName}.mdx`,
+    `docs/pages/reference/${packagePath}/components/${functionName}.mdx`,
   ];
 
   for (const possiblePath of possiblePaths) {
