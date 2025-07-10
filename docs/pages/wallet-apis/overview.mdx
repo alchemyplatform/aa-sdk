@@ -1,0 +1,79 @@
+---
+title: Wallet APIs Overview
+description: Learn about Alchemy's Wallet APIs and the wallet-client SDK for programmatic smart wallet management
+slug: wallets/wallet-apis
+---
+
+# Wallet APIs Overview
+
+The Wallet APIs provide a powerful interface for programmatically managing smart wallets and executing transactions. Through the `@account-kit/wallet-client` package, developers can integrate smart account functionality directly into their applications with full control over wallet operations.
+
+## What are Wallet APIs?
+
+Wallet APIs are a set of programmatic interfaces that enable developers to:
+
+- **Create and manage smart wallets** - Programmatically create new smart accounts and manage existing ones
+- **Execute transactions** - Prepare, sign, and send transactions through smart accounts
+- **Handle signatures** - Sign messages and typed data using smart account capabilities
+- **Manage permissions** - Grant and revoke permissions for wallet operations
+- **Discover accounts** - List and request access to existing smart accounts
+
+## Why use Wallet APIs?
+
+The Wallet APIs are ideal when you need:
+
+### Direct Control
+
+Full programmatic control over wallet operations without UI components or framework-specific abstractions.
+
+### Backend Integration
+
+Perfect for server-side applications, automated systems, or custom wallet implementations.
+
+### Custom Experiences
+
+Build entirely custom wallet experiences tailored to your specific use case.
+
+### Advanced Features
+
+Access to advanced smart account features like batched transactions, permission management, and custom validation logic.
+
+## Key Components
+
+### SmartWalletClient
+
+The main client interface that provides all wallet functionality:
+
+```typescript
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const client = createSmartWalletClient({
+  // Configuration options
+});
+```
+
+### Actions
+
+Individual functions for specific wallet operations:
+
+- `createAccount` - Create new smart accounts
+- `prepareCalls` - Prepare transactions for execution
+- `signMessage` - Sign messages with smart accounts
+- `grantPermissions` - Manage wallet permissions
+
+## When to use Wallet APIs vs other solutions
+
+| Use Case                 | Recommended Solution                                        |
+| ------------------------ | ----------------------------------------------------------- |
+| React web applications   | [@account-kit/react](/wallets/react/overview)               |
+| React Native mobile apps | [@account-kit/react-native](/wallets/react-native/overview) |
+| Non-React frameworks     | [@account-kit/core](/wallets/core/overview)                 |
+| Backend/API integration  | **@account-kit/wallet-client**                              |
+| Custom wallet UI         | **@account-kit/wallet-client**                              |
+| Automated systems        | **@account-kit/wallet-client**                              |
+
+## Next Steps
+
+- [Get started with the Wallet APIs quickstart guide](/wallets/wallet-apis/quickstart)
+- [Explore the SDK reference](/wallets/reference/account-kit/wallet-client)
+- [Learn about smart accounts](/wallets/smart-accounts/overview)

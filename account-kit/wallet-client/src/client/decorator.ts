@@ -2,11 +2,6 @@ import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address, Hex } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import {
-  createAccount,
-  type CreateAccountParams,
-  type CreateAccountResult,
-} from "./actions/createAccount.js";
-import {
   getCallsStatus,
   type GetCallsStatusParams,
   type GetCallsStatusResult,
@@ -64,7 +59,6 @@ export type SmartWalletActions<
   sendPreparedCalls: (
     params: SendPreparedCallsParams,
   ) => Promise<SendPreparedCallsResult>;
-  createAccount: (params: CreateAccountParams) => Promise<CreateAccountResult>;
   listAccounts: (params: ListAccountsParams) => Promise<ListAccountsResult>;
   getCallsStatus: (
     params: GetCallsStatusParams,
@@ -90,7 +84,6 @@ export function smartWalletClientActions<
 ): SmartWalletActions<TAccount> {
   return {
     requestAccount: (params) => requestAccount(client, signer, params),
-    createAccount: (params) => createAccount(client, signer, params),
     prepareCalls: (params) => prepareCalls(client, params),
     listAccounts: (params) => listAccounts(client, signer, params),
     sendPreparedCalls: (params) => sendPreparedCalls(client, params),

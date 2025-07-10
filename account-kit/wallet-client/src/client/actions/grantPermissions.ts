@@ -39,7 +39,7 @@ export type GrantPermissionsResult = {
  * @param {GrantPermissionsParams} params - The parameters for granting permissions
  * @param {Address} [params.account] - The account address (required if client was not initialized with an account)
  * @param {number} params.expirySec - Unix timestamp when the permissions expire
- * @param {object} params.key - The session key information
+ * @param {sessionKeyData} params.key - The session key information
  * @param {string} params.key.publicKey - The public key of the session key
  * @param {string} params.key.type - The type of the key (e.g., "secp256k1")
  * @param {Array} params.permissions - Array of permission objects defining what the session key can do

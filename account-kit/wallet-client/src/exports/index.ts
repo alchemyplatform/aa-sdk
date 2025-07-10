@@ -12,7 +12,6 @@ export {
 } from "@alchemy/wallet-api-types/rpc";
 
 // client actions
-export { createAccount } from "../client/actions/createAccount.js";
 export { getCallsStatus } from "../client/actions/getCallsStatus.js";
 export { grantPermissions } from "../client/actions/grantPermissions.js";
 export { listAccounts } from "../client/actions/listAccounts.js";

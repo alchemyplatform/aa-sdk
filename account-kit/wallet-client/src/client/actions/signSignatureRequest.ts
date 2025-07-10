@@ -37,13 +37,16 @@ export type SignSignatureRequestResult = {
  * @returns {Eip7702ExtendedFields["eip7702Auth"]} result.signedAuthorization - The signed EIP-7702 authorization, if applicable
  *
  * @example
+ * ```ts
  * // Sign a personal message
  * const result = await client.signSignatureRequest({
  *   type: 'personal_sign',
  *   data: 'Hello, world!'
  * });
+ * ```
  *
  * @example
+ * ```ts
  * // Sign typed data (EIP-712)
  * const result = await client.signSignatureRequest({
  *   type: 'eth_signTypedData_v4',
@@ -54,6 +57,7 @@ export type SignSignatureRequestResult = {
  *     message: { ... }
  *   }
  * });
+ * ```
  */
 
 export async function signSignatureRequest(

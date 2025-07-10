@@ -1,0 +1,227 @@
+---
+title: Wallet APIs Quickstart
+description: Get started with Alchemy's Wallet APIs and create your first smart wallet in minutes
+slug: wallets/wallet-apis/quickstart
+---
+
+This guide will help you get started with the Wallet APIs using the `@account-kit/wallet-client` package. You'll learn how to create a smart wallet client and perform basic operations.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- Node.js version 18 or higher
+- An Alchemy API key ([Get one here](https://www.alchemy.com))
+- Basic knowledge of TypeScript/JavaScript
+
+## Installation
+
+Install the wallet client package and its peer dependencies:
+
+```bash
+npm install @account-kit/wallet-client viem@2.29.2
+```
+
+or with yarn:
+
+```bash
+yarn add @account-kit/wallet-client viem@2.29.2
+```
+
+## Basic Setup
+
+### 1. Create a Smart Wallet Client
+
+First, import and create a smart wallet client:
+
+```typescript
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { sepolia } from "viem/chains";
+
+const client = createSmartWalletClient({
+  chain: sepolia,
+  apiKey: "YOUR_ALCHEMY_API_KEY", // Replace with your API key
+});
+```
+
+### 2. Create a Smart Account
+
+Create a new smart account:
+
+```typescript
+import { createAccount } from "@account-kit/wallet-client";
+
+const account = await createAccount(client, {
+  type: "LightAccount", // or "MultiOwnerLightAccount"
+});
+
+console.log("Smart account address:", account.address);
+```
+
+### 3. Request Account Access
+
+If you need to request access to an existing account:
+
+```typescript
+import { requestAccount } from "@account-kit/wallet-client";
+
+const account = await requestAccount(client);
+console.log("Connected to account:", account.address);
+```
+
+## Common Operations
+
+### Send a Transaction
+
+Prepare and send a transaction:
+
+```typescript
+import { prepareCalls, signPreparedCalls } from "@account-kit/wallet-client";
+
+// Prepare the transaction
+const preparedCalls = await prepareCalls(client, {
+  calls: [
+    {
+      to: "0x...", // Recipient address
+      value: parseEther("0.001"), // Send 0.001 ETH
+      data: "0x", // Optional: contract call data
+    },
+  ],
+});
+
+// Sign and send the transaction
+const result = await signPreparedCalls(client, preparedCalls);
+console.log("Transaction hash:", result.hash);
+```
+
+### Sign a Message
+
+Sign a message with the smart account:
+
+```typescript
+import { signMessage } from "@account-kit/wallet-client";
+
+const signature = await signMessage(client, {
+  account: account.address,
+  message: "Hello from my smart wallet!",
+});
+
+console.log("Signature:", signature);
+```
+
+### Sign Typed Data
+
+Sign typed data (EIP-712):
+
+```typescript
+import { signTypedData } from "@account-kit/wallet-client";
+
+const signature = await signTypedData(client, {
+  account: account.address,
+  domain: {
+    name: "My App",
+    version: "1",
+    chainId: sepolia.id,
+  },
+  types: {
+    Message: [
+      { name: "content", type: "string" },
+      { name: "timestamp", type: "uint256" },
+    ],
+  },
+  primaryType: "Message",
+  message: {
+    content: "Hello from typed data!",
+    timestamp: Date.now(),
+  },
+});
+```
+
+### List Available Accounts
+
+Get all available accounts:
+
+```typescript
+import { listAccounts } from "@account-kit/wallet-client";
+
+const accounts = await listAccounts(client);
+accounts.forEach((account) => {
+  console.log("Account:", account.address);
+});
+```
+
+### Check Transaction Status
+
+Monitor the status of a transaction:
+
+```typescript
+import { getCallsStatus } from "@account-kit/wallet-client";
+
+const status = await getCallsStatus(client, {
+  hash: result.hash,
+});
+
+console.log("Transaction status:", status.status);
+```
+
+## Advanced Configuration
+
+### Custom Chain Configuration
+
+Use a custom chain or multiple chains:
+
+```typescript
+import { mainnet, polygon, arbitrum } from "viem/chains";
+
+const client = createSmartWalletClient({
+  chain: mainnet, // Primary chain
+  chains: [mainnet, polygon, arbitrum], // Supported chains
+  apiKey: "YOUR_ALCHEMY_API_KEY",
+});
+```
+
+### With Custom Transport
+
+Use a custom transport for more control:
+
+```typescript
+import { http } from "viem";
+
+const client = createSmartWalletClient({
+  chain: sepolia,
+  transport: http("https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY"),
+});
+```
+
+## Error Handling
+
+Always wrap your operations in try-catch blocks:
+
+```typescript
+try {
+  const account = await createAccount(client, {
+    type: "LightAccount",
+  });
+} catch (error) {
+  console.error("Failed to create account:", error);
+  // Handle specific error types
+  if (error.code === "INSUFFICIENT_FUNDS") {
+    console.log("Please fund your account");
+  }
+}
+```
+
+## Next Steps
+
+Now that you've learned the basics, explore more advanced features:
+
+- [SDK Reference Documentation](/wallets/reference/account-kit/wallet-client) - Complete API reference
+- [Smart Account Types](/wallets/smart-accounts/overview) - Learn about different account types
+- [Gas Sponsorship](/wallets/core/sponsor-gas) - Sponsor gas fees for your users
+- [Permission Management](/wallets/reference/account-kit/wallet-client/functions/grantPermissions) - Manage account permissions
+
+## Need Help?
+
+- Check out our [GitHub repository](https://github.com/alchemyplatform/aa-sdk)
+- Join our [Discord community](https://discord.gg/alchemy)
+- Read the [API documentation](https://docs.alchemy.com)
