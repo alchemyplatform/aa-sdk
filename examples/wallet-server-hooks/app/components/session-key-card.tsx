@@ -16,7 +16,6 @@ export default function SessionKeyCard() {
     account: client?.account.address
   });
   const [sessionKeySigner] = useState(
-    // () => privateKeyToAccount(generatePrivateKey())
     () => LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
 )
   
@@ -59,7 +58,6 @@ export default function SessionKeyCard() {
             }            
         })
         const signedCalls = await signPreparedCalls(
-            // @ts-expect-error TODO(jh): this should work.. isn't this exactly what we do in tests in wallet server?
             sessionKeySigner,
             prepared
         )
