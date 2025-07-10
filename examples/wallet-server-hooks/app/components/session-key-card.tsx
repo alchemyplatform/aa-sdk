@@ -9,7 +9,6 @@ import {useSmartAccountClient} from '@account-kit/react';
 import { zeroAddress } from 'viem';
 import { signPreparedCalls } from '@account-kit/wallet-client';
 import { LocalAccountSigner } from '@aa-sdk/core';
-import { SmartAccountSigner } from '@aa-sdk/core';
 
 export default function SessionKeyCard() {
   const { client } = useSmartAccountClient({});
@@ -60,7 +59,7 @@ export default function SessionKeyCard() {
             }            
         })
         const signedCalls = await signPreparedCalls(
-            // @ts-expect-error TODO(jh): this should work...
+            // @ts-expect-error TODO(jh): this should work.. isn't this exactly what we do in tests in wallet server?
             sessionKeySigner,
             prepared
         )
