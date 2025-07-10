@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useSmartAccountClient,
-  useWaitForUserOperationTransaction,
 } from "@account-kit/react";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, zeroAddress } from "viem";
 import { NFT_MINTABLE_ABI_PARSED, NFT_CONTRACT_ADDRESS } from "@/lib/constants";
 import {
   useCallsStatus,
@@ -46,8 +45,12 @@ export const useMint = ({ onSuccess }: UseMintNFTParams): UseMintReturn => {
   const { data: callStatus, refetch } = useCallsStatus({
     client: walletClient,
     callId: sendCallsResult?.ids[0],
+    queryOptions: {
+      // Refetch every 2 sec while pending.
+      refetchInterval: (q) => q.state.data?.status === 100 ? 2000 : false
+    }
   });
-
+  
   const handleSuccess = useCallback(() => {
     setIsMinting(false);
     setError(undefined);
