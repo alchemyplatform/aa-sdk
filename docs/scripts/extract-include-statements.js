@@ -48,6 +48,21 @@ const findJSDocMdxFile = (packageName, functionName) => {
     `docs/pages/reference/${packagePath}/components/${functionName}.mdx`,
   ];
 
+  // Also search within class subdirectories
+  const classesDir = `docs/pages/reference/${packagePath}/classes`;
+  if (fs.existsSync(classesDir)) {
+    const classDirs = fs
+      .readdirSync(classesDir, { withFileTypes: true })
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
+
+    for (const className of classDirs) {
+      possiblePaths.push(
+        `docs/pages/reference/${packagePath}/classes/${className}/${functionName}.mdx`
+      );
+    }
+  }
+
   for (const possiblePath of possiblePaths) {
     if (fs.existsSync(possiblePath)) {
       return possiblePath;
@@ -92,17 +107,17 @@ for (const mdxFile of mdxFiles) {
 
       if (region) {
         const regionStart = fileContent.indexOf(
-          `// [!region ${region.trim()}]`,
+          `// [!region ${region.trim()}]`
         );
         const regionEnd = fileContent.indexOf(
-          `// [!endregion ${region.trim()}]`,
+          `// [!endregion ${region.trim()}]`
         );
 
         if (regionStart !== -1 && regionEnd !== -1) {
           fileContent = fileContent
             .substring(
               regionStart + `// [!region ${region.trim()}]`.length,
-              regionEnd,
+              regionEnd
             )
             .trim();
         } else {
@@ -124,18 +139,18 @@ for (const mdxFile of mdxFiles) {
 
       if (!packageName || !functionName) {
         throw new Error(
-          `Invalid jsdoc-mdx include format: "${includeSpec}". Expected format: "package:function"`,
+          `Invalid jsdoc-mdx include format: "${includeSpec}". Expected format: "package:function"`
         );
       }
 
       const jsdocPath = findJSDocMdxFile(
         packageName.trim(),
-        functionName.trim(),
+        functionName.trim()
       );
 
       if (!jsdocPath) {
         throw new Error(
-          `JSDoc MDX file not found for ${packageName.trim()}:${functionName.trim()}`,
+          `JSDoc MDX file not found for ${packageName.trim()}:${functionName.trim()}`
         );
       }
 
