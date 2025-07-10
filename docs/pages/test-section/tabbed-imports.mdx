@@ -1,0 +1,90 @@
+---
+title: Tabbed JSDoc Import Test
+description: Testing JSDoc imports with tabbed content for different frameworks
+slug: test-section/tabbed-imports
+---
+
+# Authentication Methods
+
+This page demonstrates how to authenticate users across different frameworks using JSDoc imports.
+
+Authentication is a core part of any application. Whether you're building with React or vanilla JavaScript, our SDK provides powerful authentication capabilities.
+
+<Tabs>
+<Tab title="React">
+
+## React Authentication
+
+For React applications, use the `useAuthenticate` hook which provides a simple interface for handling authentication flows:
+
+// [!jsdoc-mdx @account-kit/react:useAuthenticate]
+
+### React Example
+
+```tsx
+import { useAuthenticate } from "@account-kit/react";
+
+function AuthComponent() {
+  const { authenticate, isPending, error } = useAuthenticate();
+
+  const handleAuth = () => {
+    authenticate({
+      type: "email",
+      emailMode: "otp",
+      email: "user@example.com",
+    });
+  };
+
+  return (
+    <button onClick={handleAuth} disabled={isPending}>
+      {isPending ? "Authenticating..." : "Sign In"}
+    </button>
+  );
+}
+```
+
+</Tab>
+<Tab title="Pure JS">
+
+## Pure JavaScript Authentication
+
+For vanilla JavaScript or other frameworks, use the base signer client's authenticate method:
+
+// [!jsdoc-mdx @account-kit/signer:authenticate]
+
+### Pure JS Example
+
+```javascript
+import { BaseAlchemySigner } from "@account-kit/signer";
+
+const signer = new BaseAlchemySigner({
+  // configuration
+});
+
+async function authenticateUser() {
+  try {
+    const user = await signer.authenticate({
+      type: "email",
+      emailMode: "otp",
+      email: "user@example.com",
+    });
+    console.log("User authenticated:", user);
+  } catch (error) {
+    console.error("Authentication failed:", error);
+  }
+}
+```
+
+</Tab>
+</Tabs>
+
+## Next Steps
+
+After authentication, you can:
+
+- Set up smart account clients
+- Send transactions
+- Manage user sessions
+- Implement multi-factor authentication
+
+Choose the approach that best fits your application architecture!
