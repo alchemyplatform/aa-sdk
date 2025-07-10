@@ -45,7 +45,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
-    "test:e2e": "bun test ./src/**/*.e2e.test.*"
+    "test:e2e": "bun test ./src/**/*.test.e2e.*"
   },
   "dependencies": {
     "@aa-sdk/core": "^4.47.0",
