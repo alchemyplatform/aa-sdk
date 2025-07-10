@@ -30,11 +30,8 @@ export type SignSignatureRequestResult = {
  * @param {SmartAccountSigner} signer - The signer to use for signing the request
  * @param {SignSignatureRequestParams} params - The signature request parameters
  * @param {string} params.type - The type of signature request ('personal_sign', 'eth_signTypedData_v4', or 'signature_with_authorization')
- * @param {any} params.data - The data to sign, format depends on the signature type
+ * @param {SignSignatureRequestParams["data"]} params.data - The data to sign, format depends on the signature type
  * @returns {Promise<SignSignatureRequestResult>} A Promise that resolves to the signature result
- * @returns {string} result.type - The signature type (currently only 'secp256k1' is supported)
- * @returns {Hex} result.signature - The hex-encoded signature
- * @returns {Eip7702ExtendedFields["eip7702Auth"]} result.signedAuthorization - The signed EIP-7702 authorization, if applicable
  *
  * @example
  * ```ts
@@ -43,10 +40,7 @@ export type SignSignatureRequestResult = {
  *   type: 'personal_sign',
  *   data: 'Hello, world!'
  * });
- * ```
  *
- * @example
- * ```ts
  * // Sign typed data (EIP-712)
  * const result = await client.signSignatureRequest({
  *   type: 'eth_signTypedData_v4',

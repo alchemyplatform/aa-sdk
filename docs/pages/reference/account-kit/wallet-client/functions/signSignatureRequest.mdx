@@ -19,8 +19,19 @@ import { signSignatureRequest } from "@account-kit/wallet-client";
 ```ts
 // Sign a personal message
 const result = await client.signSignatureRequest({
-  type: "personal_sign",
-  data: "Hello, world!",
+type: 'personal_sign',
+data: 'Hello, world!'
+});
+
+// Sign typed data (EIP-712)
+const result = await client.signSignatureRequest({
+type: 'eth_signTypedData_v4',
+data: {
+domain: { ... },
+types: { ... },
+primaryType: '...',
+message: { ... }
+}
 });
 ```
 
@@ -46,7 +57,7 @@ const result = await client.signSignatureRequest({
 
 ### params.data
 
-`any`
+`SignSignatureRequestParams["data"]`
 
 - The data to sign, format depends on the signature type
 
