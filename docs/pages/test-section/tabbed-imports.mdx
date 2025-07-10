@@ -1,0 +1,43 @@
+---
+title: Tabbed JSDoc Import Test
+description: Testing JSDoc imports with tabbed content for different frameworks
+slug: test-section/tabbed-imports
+---
+
+# Authentication Methods
+
+This page demonstrates how to authenticate users across different frameworks using JSDoc imports.
+
+Authentication is a core part of any application. Whether you're building with React or vanilla JavaScript, our SDK provides powerful authentication capabilities.
+
+<Tabs>
+<Tab title="React">
+
+## React Authentication
+
+For React applications, use the `useAuthenticate` hook which provides a simple interface for handling authentication flows:
+
+// [!jsdoc-mdx @account-kit/react:useAuthenticate]
+
+</Tab>
+<Tab title="Pure JS">
+
+## Pure JavaScript Authentication
+
+For vanilla JavaScript or other frameworks, use the base signer client's authenticate method:
+
+// [!jsdoc-mdx @account-kit/signer:authenticate]
+
+</Tab>
+</Tabs>
+
+## Next Steps
+
+After authentication, you can:
+
+- Set up smart account clients
+- Send transactions
+- Manage user sessions
+- Implement multi-factor authentication
+
+Choose the approach that best fits your application architecture!

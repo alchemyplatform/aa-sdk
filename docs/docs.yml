@@ -43,6 +43,12 @@ navigation:
                 path: wallets/pages/concepts/smart-account-signer.mdx
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
+      - section: Test Section
+        contents:
+          - page: Tabbed imports
+            path: wallets/pages/test-section/tabbed-imports.mdx
+          - page: Standalone page
+            path: wallets/pages/test-section/standalone.mdx
       - section: React
         contents:
           - page: Overview
