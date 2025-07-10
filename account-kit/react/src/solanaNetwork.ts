@@ -18,7 +18,7 @@ export interface ConfirmationOptions {
    *
    * @default false
    */
-  usePolling?: boolean;
+  enablePolling?: boolean;
   pollingInterval?: number;
   maxPollingAttempts?: number;
   commitment?: "processed" | "confirmed" | "finalized";
@@ -67,7 +67,7 @@ export async function broadcast(
   options: ConfirmationOptions = {},
 ) {
   const {
-    usePolling = false,
+    enablePolling = false,
     pollingInterval = 1000,
     maxPollingAttempts = 30,
     commitment = "confirmed",
@@ -78,7 +78,7 @@ export async function broadcast(
       ? signedTransaction.signatures[0]!
       : signedTransaction.signature!;
 
-  if (usePolling) {
+  if (enablePolling) {
     return await broadcastWithPolling(
       connection,
       signedTransaction,
@@ -114,12 +114,7 @@ async function broadcastWithPolling(
       ? await connection.sendTransaction(signedTransaction)
       : await connection.sendRawTransaction(signedTransaction.serialize());
 
-  let confirmed = false;
-  let attempts = 0;
-
-  while (!confirmed && attempts < maxPollingAttempts) {
-    attempts++;
-
+  for (let attempt = 0; attempt < maxPollingAttempts; attempt++) {
     try {
       const status = await connection.getSignatureStatus(txSignature);
 
@@ -139,26 +134,21 @@ async function broadcastWithPolling(
               `Transaction failed: ${JSON.stringify(status.value.err)}`,
             );
           }
-          confirmed = true;
-          break;
+          return txSignature;
         }
       }
 
       await new Promise((resolve) => setTimeout(resolve, pollingInterval));
     } catch (pollError) {
-      console.log(`Polling attempt ${attempts} failed:`, pollError);
+      console.log(`Polling attempt ${attempt + 1} failed:`, pollError);
       await new Promise((resolve) => setTimeout(resolve, pollingInterval));
     }
   }
 
-  if (!confirmed) {
-    throw new Error(
-      `Transaction confirmation timed out after ${maxPollingAttempts} attempts. ` +
-        `Transaction may still be processed. Signature: ${txSignature}`,
-    );
-  }
-
-  return txSignature;
+  throw new Error(
+    `Transaction confirmation timed out after ${maxPollingAttempts} attempts. ` +
+      `Transaction may still be processed. Signature: ${txSignature}`,
+  );
 }
 
 export async function recentBlockhash(connection: Connection): Promise<string> {
