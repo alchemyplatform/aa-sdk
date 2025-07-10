@@ -46,19 +46,34 @@ All `UserOperations` sent with the hooks will now be paid with the token configu
 ```tsx twoslash
 import React from "react";
 import { useSendUserOperation } from "@account-kit/react";
+import { encodeFunctionData, parseAbi } from "viem";
 
 export default function PayWithUsdcButton() {
   const { sendUserOperation } = useSendUserOperation();
+  const erc20Abi = parseAbi([
+    "function approve(address spender, uint256 amount) public returns (bool)",
+  ]);
 
   return (
     <button
       onClick={() =>
         sendUserOperation({
-          uo: {
-            target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
-            data: "0x",
-            value: 0n,
-          },
+          uo: [
+            {
+              // approve call
+              target: tokenAddress,
+              data: encodeFunctionData({
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [paymasterAddress, maxTokenAmount],
+              }) as `0x${string}`,
+            },
+            {
+              target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
+              data: "0x",
+              value: 0n,
+            },
+          ],
         })
       }
     >
