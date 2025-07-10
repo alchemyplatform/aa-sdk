@@ -6,14 +6,15 @@ import NftMintCard from "./components/nft-mint-card";
 import LoginCard from "./components/login-card";
 import Header from "./components/header";
 import LearnMore from "./components/learn-more";
+import SessionKeyCard from "./components/session-key-card";
 
 export default function Home() {
   const signerStatus = useSignerStatus();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 flex flex-col">
       <Header />
-      <div className="bg-bg-main bg-cover bg-center bg-no-repeat h-[calc(100vh-4rem)]">
+      <div className="bg-bg-main bg-cover bg-center bg-no-repeat flex-grow">
         <main className="container mx-auto px-4 py-8 h-full">
           {signerStatus.isConnected ? (
             <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
@@ -21,7 +22,10 @@ export default function Home() {
                 <UserInfoCard />
                 <LearnMore />
               </div>
-              <NftMintCard />
+              <div className="grid gap-4">
+                <NftMintCard />
+                <SessionKeyCard />
+              </div>
             </div>
           ) : (
             <div className="flex justify-center items-center h-full pb-[4rem]">
