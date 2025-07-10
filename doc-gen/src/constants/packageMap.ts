@@ -6,6 +6,7 @@ const packageMap: Record<string, string> = {
   "account-kit/core": "Other JS Frameworks",
   "account-kit/infra": "Infra",
   "account-kit/signer": "Signer",
+  "account-kit/wallet-client": "Wallet APIs",
   "account-kit/smart-contracts": "Smart Contracts",
   "aa-sdk/core": "aa-sdk/core",
   "aa-sdk/ethers": "aa-sdk/ethers",

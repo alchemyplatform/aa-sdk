@@ -26,7 +26,7 @@ export type CreateAccountResult = Static<
  * @param {SmartAccountSigner} signer - The signer that will be associated with the account
  * @param {CreateAccountParams} params - Parameters for creating the account
  * @param {string} [params.id] - Optional UUID v4 identifier for the account
- * @param {object} params.creationOptions - Options for account creation
+ * @param {CreationOptions} [params.creationOptions] - Options for account creation
  * @param {string} [params.creationOptions.accountType] - Currently only "sma-b" (Modular Account v2) is supported
  * @param {string} [params.creationOptions.salt] - Optional hex string to use as salt for account creation
  * @returns {Promise<CreateAccountResult>} A Promise that resolves to the created account information

@@ -281,6 +281,39 @@ navigation:
                   - page: createConfig
                     path: wallets/pages/reference/account-kit/react-native/functions/createConfig.mdx
 
+      - section: Wallet APIs
+        slug: wallet-apis
+        contents:
+          - page: Overview
+            path: wallets/pages/wallet-apis/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/wallet-apis/quickstart.mdx
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/wallet-client/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: createAccount
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/createAccount.mdx
+                  - page: getCallsStatus
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/getCallsStatus.mdx
+                  - page: grantPermissions
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/grantPermissions.mdx
+                  - page: listAccounts
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/listAccounts.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/prepareCalls.mdx
+                  - page: requestAccount
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/requestAccount.mdx
+                  - page: signMessage
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signMessage.mdx
+                  - page: signPreparedCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signPreparedCalls.mdx
+                  - page: signSignatureRequest
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signSignatureRequest.mdx
+                  - page: signTypedData
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signTypedData.mdx
+
       - section: Other JS Frameworks
         slug: core
         contents:
