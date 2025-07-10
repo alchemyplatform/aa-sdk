@@ -29,43 +29,124 @@ const findFiles = (dir, pattern) => {
   return results;
 };
 
+/**
+ * Find generated JSDoc MDX file for a given package and function name
+ *
+ * @param {string} packageName - Package name (e.g., "@account-kit/core")
+ * @param {string} functionName - Function name (e.g., "createSmartAccountClient")
+ * @returns {string|null} - Path to the generated MDX file or null if not found
+ */
+const findJSDocMdxFile = (packageName, functionName) => {
+  // Convert package name to path segment (remove @ and convert / to -)
+  const packagePath = packageName.replace("@", "").replace("/", "/");
+
+  // Try different possible locations for the generated file
+  const possiblePaths = [
+    `docs/wallets/pages/reference/${packagePath}/functions/${functionName}.mdx`,
+    `docs/wallets/pages/reference/${packagePath}/hooks/${functionName}.mdx`,
+    `docs/wallets/pages/reference/${packagePath}/classes/${functionName}.mdx`,
+    `docs/wallets/pages/reference/${packagePath}/components/${functionName}.mdx`,
+  ];
+
+  for (const possiblePath of possiblePaths) {
+    if (fs.existsSync(possiblePath)) {
+      return possiblePath;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Extract content from generated JSDoc MDX file (removes frontmatter)
+ *
+ * @param {string} filePath - Path to the generated MDX file
+ * @returns {string} - Content without frontmatter
+ */
+const extractJSDocContent = (filePath) => {
+  let content = fs.readFileSync(filePath, "utf8");
+
+  // Remove frontmatter (everything between first --- and second ---)
+  const frontmatterRegex = /^---\n[\s\S]*?\n---\n/;
+  content = content.replace(frontmatterRegex, "");
+
+  return content.trim();
+};
+
 const mdxFiles = findFiles("docs", "*.mdx");
 
 for (const mdxFile of mdxFiles) {
   let content = fs.readFileSync(mdxFile, "utf8");
 
+  // Handle code includes (existing functionality)
   const snippetRegex = /\s*\/\/\s*\[!include\s+([^\]]+)\]\s*/g;
+  const codeMatches = [...content.matchAll(snippetRegex)];
 
-  const matches = [...content.matchAll(snippetRegex)];
-  if (matches.length === 0) {
-    continue;
+  if (codeMatches.length > 0) {
+    content = content.replace(snippetRegex, (match, includePath) => {
+      const [filePath, region] = includePath.split(":");
+
+      const fullPath = path.resolve(process.cwd(), filePath.trim());
+
+      let fileContent = fs.readFileSync(fullPath, "utf8");
+
+      if (region) {
+        const regionStart = fileContent.indexOf(
+          `// [!region ${region.trim()}]`
+        );
+        const regionEnd = fileContent.indexOf(
+          `// [!endregion ${region.trim()}]`
+        );
+
+        if (regionStart !== -1 && regionEnd !== -1) {
+          fileContent = fileContent
+            .substring(
+              regionStart + `// [!region ${region.trim()}]`.length,
+              regionEnd
+            )
+            .trim();
+        } else {
+          throw new Error(`Region "${region.trim()}" not found in ${fullPath}`);
+        }
+      }
+
+      return `\n${fileContent}\n`;
+    });
   }
 
-  content = content.replace(snippetRegex, (match, includePath) => {
-    const [filePath, region] = includePath.split(":");
+  // Handle JSDoc MDX includes (new functionality)
+  const jsdocMdxRegex = /\s*\/\/\s*\[!jsdoc-mdx\s+([^\]]+)\]\s*/g;
+  const jsdocMatches = [...content.matchAll(jsdocMdxRegex)];
 
-    const fullPath = path.resolve(process.cwd(), filePath.trim());
+  if (jsdocMatches.length > 0) {
+    content = content.replace(jsdocMdxRegex, (match, includeSpec) => {
+      const [packageName, functionName] = includeSpec.split(":");
 
-    let fileContent = fs.readFileSync(fullPath, "utf8");
-
-    if (region) {
-      const regionStart = fileContent.indexOf(`// [!region ${region.trim()}]`);
-      const regionEnd = fileContent.indexOf(`// [!endregion ${region.trim()}]`);
-
-      if (regionStart !== -1 && regionEnd !== -1) {
-        fileContent = fileContent
-          .substring(
-            regionStart + `// [!region ${region.trim()}]`.length,
-            regionEnd,
-          )
-          .trim();
-      } else {
-        throw new Error(`Region "${region.trim()}" not found in ${fullPath}`);
+      if (!packageName || !functionName) {
+        throw new Error(
+          `Invalid jsdoc-mdx include format: "${includeSpec}". Expected format: "package:function"`
+        );
       }
-    }
 
-    return `\n${fileContent}\n`;
-  });
+      const jsdocPath = findJSDocMdxFile(
+        packageName.trim(),
+        functionName.trim()
+      );
 
-  fs.writeFileSync(mdxFile, content);
+      if (!jsdocPath) {
+        throw new Error(
+          `JSDoc MDX file not found for ${packageName.trim()}:${functionName.trim()}`
+        );
+      }
+
+      const jsdocContent = extractJSDocContent(jsdocPath);
+
+      return `\n${jsdocContent}\n`;
+    });
+  }
+
+  // Only write the file if we made changes
+  if (codeMatches.length > 0 || jsdocMatches.length > 0) {
+    fs.writeFileSync(mdxFile, content);
+  }
 }
