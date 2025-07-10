@@ -140,7 +140,7 @@ async function broadcastWithPolling(
 
       await new Promise((resolve) => setTimeout(resolve, pollingInterval));
     } catch (pollError) {
-      console.log(`Polling attempt ${attempt + 1} failed:`, pollError);
+      console.log(`Polling attempt ${attempt + 1} failed: `, pollError);
       await new Promise((resolve) => setTimeout(resolve, pollingInterval));
     }
   }
