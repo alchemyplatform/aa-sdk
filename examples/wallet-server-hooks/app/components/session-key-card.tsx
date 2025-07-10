@@ -7,13 +7,19 @@ import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { useGrantPermissions, usePrepareCalls, useSendCalls, useSendPreparedCalls, useSmartWalletClient } from '@account-kit/react/experimental';
 import {useSmartAccountClient} from '@account-kit/react';
 import { zeroAddress } from 'viem';
+import { signPreparedCalls } from '@account-kit/wallet-client';
+import { LocalAccountSigner } from '@aa-sdk/core';
+import { SmartAccountSigner } from '@aa-sdk/core';
 
 export default function SessionKeyCard() {
   const { client } = useSmartAccountClient({});
   const walletClient = useSmartWalletClient({
     account: client?.account.address
   });
-  const [sessionKeySigner] = useState(() => privateKeyToAccount(generatePrivateKey()))
+  const [sessionKeySigner] = useState(
+    // () => privateKeyToAccount(generatePrivateKey())
+    () => LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+)
   
   const {grantPermissions, isGrantingPermissions, grantPermissionsResult} = useGrantPermissions({
     client: walletClient
@@ -22,11 +28,11 @@ export default function SessionKeyCard() {
   const {prepareCallsAsync} = usePrepareCalls({client: walletClient})
   const {sendPreparedCallsAsync} = useSendPreparedCalls({client: walletClient})
 
-  const handleCreateSessionKey = useCallback(() => {
+  const handleCreateSessionKey = useCallback(async () => {
     grantPermissions({
         key: {
             type: "secp256k1",
-            publicKey: sessionKeySigner.address
+            publicKey: await sessionKeySigner.getAddress()
         },
         permissions: [
             {type: "root"}
@@ -53,25 +59,13 @@ export default function SessionKeyCard() {
                 permissions: grantPermissionsResult,
             }            
         })
-        // Signing these calls is pretty annoying... Would be nice if we had a way to sign
-        // w/ our session key more easily. Using session keys w/ our existing React hooks
-        // is not possible either though, so it can probably come post-GA.
-        if (prepared.type !== "user-operation-v070") {
-            throw new Error("Unexpected prepared call type")
-        }
-        if (prepared.signatureRequest.type !== "personal_sign") {
-            throw new Error("Unexpected prepared call signature type")
-        }
-        const sig = await sessionKeySigner.signMessage({
-            message: prepared.signatureRequest.data
-        })
+        const signedCalls = await signPreparedCalls(
+            // @ts-expect-error TODO(jh): this should work...
+            sessionKeySigner,
+            prepared
+        )
         const result = await sendPreparedCallsAsync({
-            type: "user-operation-v070",
-            data: prepared.data,
-            signature: {
-                type: "secp256k1",
-                data: sig
-            },
+            ...signedCalls,
             capabilities: {
                 permissions: grantPermissionsResult,
             }

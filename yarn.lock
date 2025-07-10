@@ -7,6 +7,15 @@
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.1.2.tgz#9af8deaf3f236c1c6ee99cc5349051475e5dcc83"
   integrity sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==
 
+"@aa-sdk/core@^4.49.0":
+  version "4.49.0"
+  resolved "https://registry.yarnpkg.com/@aa-sdk/core/-/core-4.49.0.tgz#8fea9c7ace9bdd3b6197fedc9ab529b524e1785a"
+  integrity sha512-bxNJlXlEof6hI/Qdj6fnrra1+LYO8WNwCFV/dJzIUtDoE7aiwBjD/l5PePH/OlfTTbVesBqja7d2mJkCKLkKig==
+  dependencies:
+    abitype "^0.8.3"
+    eventemitter3 "^5.0.1"
+    zod "^3.22.4"
+
 "@account-kit/react-native-signer@4.17.0":
   version "4.17.0"
   resolved "https://registry.yarnpkg.com/@account-kit/react-native-signer/-/react-native-signer-4.17.0.tgz#1a9d0c085b5cabe7e19b1f4b996ac4de440ebadd"
@@ -76,6 +85,20 @@
     "@account-kit/infra" "^4.43.1"
     "@account-kit/smart-contracts" "^4.43.1"
     "@alchemy/wallet-api-types" "0.1.0-alpha.10"
+    "@sinclair/typebox" "^0.34.33"
+    deep-equal "^2.2.3"
+    ox "^0.6.12"
+    viem "2.29.2"
+
+"@account-kit/wallet-client@^0.1.0-alpha.12":
+  version "0.1.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@account-kit/wallet-client/-/wallet-client-0.1.0-alpha.12.tgz#3ae8deac45cc0cb6faee76ba3601a5f92a4ee753"
+  integrity sha512-6f/LVfB5t3YUbBZidujQC+2nSDZnHOGQ6+bE+KBtkwchkxfgdSy3D83tr4RQ0UQLI2gIYRIu9UNhnSLy0Hvrdw==
+  dependencies:
+    "@aa-sdk/core" "^4.43.1"
+    "@account-kit/infra" "^4.43.1"
+    "@account-kit/smart-contracts" "^4.43.1"
+    "@alchemy/wallet-api-types" "0.1.0-alpha.12"
     "@sinclair/typebox" "^0.34.33"
     deep-equal "^2.2.3"
     ox "^0.6.12"
@@ -15593,6 +15616,11 @@ isows@1.0.6:
   resolved "https://registry.yarnpkg.com/isows/-/isows-1.0.6.tgz#0da29d706fa51551c663c627ace42769850f86e7"
   integrity sha512-lPHCayd40oW98/I0uvgaHKWCSvkzY27LjWLbtzOm64yQ+G3Q5npjjbdppU65iZXkK1Zt+kH9pfegli0AYfwYYw==
 
+isows@1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/isows/-/isows-1.0.7.tgz#1c06400b7eed216fbba3bcbd68f12490fc342915"
+  integrity sha512-I1fSfDCZL5P0v33sVqeTDSpcstAg/N+wF5HS033mogOVIp4B+oHC7oOCsA3axAbBSGTJ8QubbNmnIRN/h8U7hg==
+
 istanbul-lib-coverage@^3.0.0, istanbul-lib-coverage@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/istanbul-lib-coverage/-/istanbul-lib-coverage-3.2.2.tgz#2d166c4b0644d43a39f04bf6c2edd1e585f31756"
@@ -19183,6 +19211,19 @@ own-keys@^1.0.1:
     get-intrinsic "^1.2.6"
     object-keys "^1.1.1"
     safe-push-apply "^1.0.0"
+
+ox@0.6.7:
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/ox/-/ox-0.6.7.tgz#afd53f2ecef68b8526660e9d29dee6e6b599a832"
+  integrity sha512-17Gk/eFsFRAZ80p5eKqv89a57uXjd3NgIf1CaXojATPBuujVc/fQSVhBeAU9JCRB+k7J50WQAyWTxK19T9GgbA==
+  dependencies:
+    "@adraffy/ens-normalize" "^1.10.1"
+    "@noble/curves" "^1.6.0"
+    "@noble/hashes" "^1.5.0"
+    "@scure/bip32" "^1.5.0"
+    "@scure/bip39" "^1.4.0"
+    abitype "^1.0.6"
+    eventemitter3 "5.0.1"
 
 ox@0.6.9:
   version "0.6.9"
@@ -23593,7 +23634,21 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.29.2, viem@2.30.0, viem@>=2.23.11, viem@^2.1.1, viem@^2.21.40:
+viem@2.23.2:
+  version "2.23.2"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.23.2.tgz#db395c8cf5f4fb5572914b962fb8ce5db09f681c"
+  integrity sha512-NVmW/E0c5crMOtbEAqMF0e3NmvQykFXhLOc/CkLIXOlzHSA6KXVz3CYVmaKqBF8/xtjsjHAGjdJN3Ru1kFJLaA==
+  dependencies:
+    "@noble/curves" "1.8.1"
+    "@noble/hashes" "1.7.1"
+    "@scure/bip32" "1.6.2"
+    "@scure/bip39" "1.5.4"
+    abitype "1.0.8"
+    isows "1.0.6"
+    ox "0.6.7"
+    ws "8.18.0"
+
+viem@2.29.2, viem@>=2.23.11, viem@^2.1.1, viem@^2.21.40:
   version "2.29.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.29.2.tgz#e3033f68d6baf95c412593b213865e91634ac35e"
   integrity sha512-cukRxab90jvQ+TDD84sU3qB3UmejYqgCw4cX8SfWzvh7JPfZXI3kAMUaT5OSR2As1Mgvx1EJawccwPjGqkSSwA==
@@ -23604,6 +23659,20 @@ viem@2.23.2, viem@2.29.2, viem@2.30.0, viem@>=2.23.11, viem@^2.1.1, viem@^2.21.4
     "@scure/bip39" "1.5.4"
     abitype "1.0.8"
     isows "1.0.6"
+    ox "0.6.9"
+    ws "8.18.1"
+
+viem@2.30.0:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.30.0.tgz#e8f881bdba290db87fbf94302b0427aaa8abe320"
+  integrity sha512-hvO4l5JIOnYPL8imULoFQiVTSkebIqzGHmIfsdMfIHpAgBaCx8rJJH9cXAxQeWCqsFuTmjEj1cX912N7HSCgpQ==
+  dependencies:
+    "@noble/curves" "1.8.2"
+    "@noble/hashes" "1.7.2"
+    "@scure/bip32" "1.6.2"
+    "@scure/bip39" "1.5.4"
+    abitype "1.0.8"
+    isows "1.0.7"
     ox "0.6.9"
     ws "8.18.1"
 
