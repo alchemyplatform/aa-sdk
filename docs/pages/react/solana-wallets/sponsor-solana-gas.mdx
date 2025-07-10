@@ -18,13 +18,13 @@ See our [recommendations](https://www.alchemy.com/support/best-practices-to-limi
 
 ## Setup
 
-On your gas manager [dashboard](https://dashboard.alchemy.com/signup), create a new Solana sponsorship policy. You can customize this policy to set rules on sponsorship like max spend per transaction, max spend per policy, or max transactions per policy.
+On your gas manager [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration), create a new Solana sponsorship policy. You can customize this policy to set rules on sponsorship like max spend per transaction, max spend per policy, or max transactions per policy.
 
 Select Solana as the chain type and apply this policy to the app corresponding to the API key you’re using.
 
 ## Global sponsorship
 
-To apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config. Replace the API key and Policy Id with your keys from the [dashboard](https://dashboard.alchemy.com/signup).
+To apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config. Replace the API key and Policy Id with your keys from the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration).
 
 ```tsx config.ts
 import { cookieStorage, createConfig } from "@account-kit/react";
