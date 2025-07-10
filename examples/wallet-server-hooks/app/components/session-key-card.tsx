@@ -57,7 +57,7 @@ export default function SessionKeyCard() {
                 permissions: grantPermissionsResult,
             }            
         })
-        const signedCalls = await signPreparedCalls(
+        const signedCalls = await signPreparedCalls( // TODO(jh): should we create a hook for this?
             sessionKeySigner,
             prepared
         )
