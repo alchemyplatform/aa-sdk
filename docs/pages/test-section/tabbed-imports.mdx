@@ -19,30 +19,6 @@ For React applications, use the `useAuthenticate` hook which provides a simple i
 
 // [!jsdoc-mdx @account-kit/react:useAuthenticate]
 
-### React Example
-
-```tsx
-import { useAuthenticate } from "@account-kit/react";
-
-function AuthComponent() {
-  const { authenticate, isPending, error } = useAuthenticate();
-
-  const handleAuth = () => {
-    authenticate({
-      type: "email",
-      emailMode: "otp",
-      email: "user@example.com",
-    });
-  };
-
-  return (
-    <button onClick={handleAuth} disabled={isPending}>
-      {isPending ? "Authenticating..." : "Sign In"}
-    </button>
-  );
-}
-```
-
 </Tab>
 <Tab title="Pure JS">
 
@@ -51,29 +27,6 @@ function AuthComponent() {
 For vanilla JavaScript or other frameworks, use the base signer client's authenticate method:
 
 // [!jsdoc-mdx @account-kit/signer:authenticate]
-
-### Pure JS Example
-
-```javascript
-import { BaseAlchemySigner } from "@account-kit/signer";
-
-const signer = new BaseAlchemySigner({
-  // configuration
-});
-
-async function authenticateUser() {
-  try {
-    const user = await signer.authenticate({
-      type: "email",
-      emailMode: "otp",
-      email: "user@example.com",
-    });
-    console.log("User authenticated:", user);
-  } catch (error) {
-    console.error("Authentication failed:", error);
-  }
-}
-```
 
 </Tab>
 </Tabs>
