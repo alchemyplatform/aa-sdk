@@ -141,7 +141,8 @@ for (const mdxFile of mdxFiles) {
 
       const jsdocContent = extractJSDocContent(jsdocPath);
 
-      return `\n${jsdocContent}\n`;
+      // Ensure proper spacing: blank line before and after the injected content
+      return `\n\n${jsdocContent}\n\n`;
     });
   }
 
