@@ -90,7 +90,7 @@ await connection.sendTransaction(signedTransaction);
 
 To sponsor transaction fees on Solana:
 
-1. Set up your [sponsorship policy](https://dashboard.alchemy.com/services/gas-manager/configuration) in the dashboard to retrieve a **policy ID**
+1. Set up your [sponsorship policy](https://dashboard.alchemy.com/signup) in the dashboard to retrieve a **policy ID**
 2. Add sponsorship to the preparred transaction before signing and sending
 
 ```ts sponsored-solana-transaction-signer.tsx
@@ -113,7 +113,7 @@ async function signTransaction(
   const transaction = await signer.addSponsorship(
     instructions,
     connection,
-    "<policyId>", // Replace with your solana sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+    "<policyId>", // Replace with your solana sponsorship policy ID: https://dashboard.alchemy.com/signup
   );
 
   // Sign the transaction using the Solana wallet

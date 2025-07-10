@@ -148,10 +148,10 @@ import { signer } from "./signer.js";
 // Constructing the smart account client
 const smartAccountClient = await createModularAccountV2Client({
   mode: "7702",
-  transport: alchemy({ apiKey: "your-api-key" }), // Get your API key: https://dashboard.alchemy.com/apps
+  transport: alchemy({ apiKey: "your-api-key" }), // Get your API key: https://dashboard.alchemy.com/signup
   chain: sepolia,
   signer,
-  policyId: "policy-id", // Sponsor gas with your sponsorship policy id: https://dashboard.alchemy.com/gas-manager
+  policyId: "policy-id", // Sponsor gas with your sponsorship policy id: https://dashboard.alchemy.com/signup
 });
 
 // Sending a user operation

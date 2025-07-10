@@ -52,7 +52,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
 
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
+    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/signup
     chain: sepolia,
     ssr: true, // more about ssr: https://www.alchemy.com/docs/wallets/react/ssr
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow

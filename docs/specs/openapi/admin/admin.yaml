@@ -538,7 +538,7 @@ components:
               type: string
               format: uri
               description: The URL to call to verify sponsorship eligibility.
-              example: "https://dashboard.alchemy.com/gas-manager/policy/create"
+              example: "https://dashboard.alchemy.com/signup"
             approveOnFailure:
               type: boolean
               description: If true, the userOp will be sponsored in the event on an error or timeout.
