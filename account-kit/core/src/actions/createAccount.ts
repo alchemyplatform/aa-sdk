@@ -1,16 +1,14 @@
 import {
-  createLightAccount,
-  createMultiOwnerLightAccount,
-  createMultiOwnerModularAccount,
-  createModularAccountV2,
   type CreateLightAccountParams,
+  type CreateModularAccountV2Params,
   type CreateMultiOwnerLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
   type LightAccountVersion,
-  type CreateModularAccountV2Params,
 } from "@account-kit/smart-contracts";
-import { custom, type Transport } from "viem";
-import { ClientOnlyPropertyError } from "../errors.js";
+import type { SmartWalletClient } from "@account-kit/wallet-client";
+import { toHex, type Transport } from "viem";
+import { ClientOnlyPropertyError, SignerNotConnectedError } from "../errors.js";
+import { getSmartWalletClient } from "../experimental/actions/getSmartWalletClient.js";
 import { CoreLogger } from "../metrics.js";
 import type {
   AlchemyAccountsConfig,
@@ -18,12 +16,14 @@ import type {
   SupportedAccountTypes,
   SupportedAccounts,
 } from "../types.js";
-import { getBundlerClient } from "./getBundlerClient.js";
+import type { GetAccountParams } from "./getAccount";
+import { getConnection } from "./getConnection.js";
 import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
-import type { GetAccountParams } from "./getAccount";
 
-type OmitSignerTransportChain<T> = Omit<T, "signer" | "transport" | "chain">;
+type OmitSignerTransportChain<T> = T extends infer U
+  ? Omit<U, "signer" | "transport" | "chain">
+  : never;
 
 export type AccountConfig<TAccount extends SupportedAccountTypes> =
   TAccount extends "LightAccount"
@@ -84,16 +84,18 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
-  const accountConfigs = store.getState().accountConfigs;
 
-  const bundlerClient = getBundlerClient(config);
-  const transport = custom(bundlerClient);
-  const chain = bundlerClient.chain;
+  const connection = getConnection(config);
+  const chain = connection.chain;
   const signer = getSigner(config);
   const signerStatus = getSignerStatus(config);
 
   if (!signerStatus.isConnected || !signer) {
-    throw new Error("Signer not connected");
+    throw new SignerNotConnectedError();
+  }
+  const smartWalletClient = getSmartWalletClient(config);
+  if (!smartWalletClient) {
+    throw new Error("Smart wallet client not found");
   }
 
   const cachedAccount = accounts[chain.id]?.[params.type];
@@ -101,79 +103,27 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     return cachedAccount.account;
   }
 
-  const accountPromise = (() => {
-    if (isLightAccountParams(params)) {
-      return createLightAccount({
-        ...accountConfigs[chain.id]?.[params.type],
-        ...params.accountParams,
-        signer,
-        transport: (opts) => transport({ ...opts, retryCount: 0 }),
-        chain,
-      }).then((account) => {
-        CoreLogger.trackEvent({
-          name: "account_initialized",
-          data: {
-            accountType: "LightAccount",
-            accountVersion: account.getLightAccountVersion(),
-          },
-        });
-        return account;
+  const accountPromise = smartWalletClient
+    .requestAccount({
+      accountAddress: params.accountParams?.accountAddress,
+      creationHint: convertAccountParamsToCreationHint(params),
+    })
+    .then((account) => {
+      CoreLogger.trackEvent({
+        name: "account_initialized",
+        data: {
+          accountType: params.type,
+          accountVersion: isLightAccountParams(params)
+            ? (params.accountParams?.version ?? "v2.0.0")
+            : isMultiOwnerLightAccountParams(params)
+              ? "v2.0.0"
+              : isMultiOwnerModularAccountParams(params)
+                ? "v1.0.0"
+                : "v2.0.0",
+        },
       });
-    } else if (isMultiOwnerLightAccountParams(params)) {
-      return createMultiOwnerLightAccount({
-        ...accountConfigs[chain.id]?.[params.type],
-        ...params.accountParams,
-        signer,
-        transport: (opts) => transport({ ...opts, retryCount: 0 }),
-        chain,
-      }).then((account) => {
-        CoreLogger.trackEvent({
-          name: "account_initialized",
-          data: {
-            accountType: "MultiOwnerLightAccount",
-            accountVersion: account.getLightAccountVersion(),
-          },
-        });
-        return account;
-      });
-    } else if (isMultiOwnerModularAccountParams(params)) {
-      return createMultiOwnerModularAccount({
-        ...accountConfigs[chain.id]?.[params.type],
-        ...params.accountParams,
-        signer,
-        transport: (opts) => transport({ ...opts, retryCount: 0 }),
-        chain,
-      }).then((account) => {
-        CoreLogger.trackEvent({
-          name: "account_initialized",
-          data: {
-            accountType: "MultiOwnerModularAccount",
-            accountVersion: "v1.0.0",
-          },
-        });
-        return account;
-      });
-    } else if (isModularV2AccountParams(params)) {
-      return createModularAccountV2({
-        ...accountConfigs[chain.id]?.[params.type],
-        ...params.accountParams,
-        signer,
-        transport: (opts) => transport({ ...opts, retryCount: 0 }),
-        chain,
-      }).then((account) => {
-        CoreLogger.trackEvent({
-          name: "account_initialized",
-          data: {
-            accountType: "ModularAccountV2",
-            accountVersion: "v2.0.0",
-          },
-        });
-        return account;
-      });
-    } else {
-      throw new Error(`Unsupported account type: ${params.type}`);
-    }
-  })();
+      return account as SupportedAccounts;
+    });
 
   if (cachedAccount.status !== "RECONNECTING") {
     store.setState((state) => ({
@@ -241,6 +191,51 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   }
 
   return accountPromise;
+}
+
+function convertAccountParamsToCreationHint<
+  TAccount extends SupportedAccountTypes,
+>(
+  params: CreateAccountParams<TAccount>,
+): NonNullable<
+  Parameters<SmartWalletClient["requestAccount"]>["0"]
+>["creationHint"] {
+  if (isModularV2AccountParams(params)) {
+    return params.accountParams?.mode === "7702"
+      ? { accountType: "7702" }
+      : {
+          accountType: "sma-b",
+          salt: toHex(params.accountParams?.salt ?? 0n),
+          createAdditional: true,
+        };
+  }
+  if (isLightAccountParams(params)) {
+    return {
+      accountType: `la-${params.accountParams?.version === "v2.0.0" ? "v2" : (params.accountParams?.version ?? "v2")}`,
+      salt: toHex(params.accountParams?.salt ?? 0n),
+      createAdditional: true,
+    };
+  }
+
+  if (isMultiOwnerLightAccountParams(params)) {
+    return {
+      accountType: `la-v2-multi-owner`,
+      salt: toHex(params.accountParams?.salt ?? 0n),
+      initialOwners: params.accountParams?.owners,
+      createAdditional: true,
+    };
+  }
+
+  if (isMultiOwnerModularAccountParams(params)) {
+    return {
+      accountType: "ma-v1-multi-owner",
+      salt: toHex(params.accountParams?.salt ?? 0n),
+      initialOwners: params.accountParams?.owners,
+      createAdditional: true,
+    };
+  }
+
+  throw new Error(`account of type ${params.type} not supported yet`);
 }
 
 export const isModularV2AccountParams = (

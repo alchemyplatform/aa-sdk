@@ -5,11 +5,12 @@ import { useToast } from "@/hooks/useToast";
 import { AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../utils/constants";
+import { AccountMode } from "@/app/config";
 
 export interface UseMintErc20Params {
   amount: number | string;
   clientOptions: {
-    mode: "default" | "7702";
+    mode: AccountMode;
     chain: Chain;
     transport: AlchemyTransport;
   };

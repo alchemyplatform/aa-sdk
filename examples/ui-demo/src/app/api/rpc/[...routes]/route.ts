@@ -21,7 +21,6 @@ export async function POST(
   const res = await fetch(env.ALCHEMY_API_URL + `/${params.routes.join("/")}`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${env.API_KEY}`,
       ...headers,
     },
     body,

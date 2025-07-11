@@ -261,7 +261,7 @@ export const buildFullNonceKey = ({
 }: BuildNonceParams): bigint => {
   return (
     (nonceKey << 40n) +
-    BigInt(entityId << 8) +
+    (BigInt(entityId) << 8n) +
     (isDeferredAction ? 2n : 0n) +
     (isGlobalValidation ? 1n : 0n)
   );
