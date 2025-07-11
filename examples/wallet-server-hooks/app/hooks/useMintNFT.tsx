@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  useSmartAccountClient,
-} from "@account-kit/react";
+import { useSmartAccountClient } from "@account-kit/react";
 import { encodeFunctionData, zeroAddress } from "viem";
 import { NFT_MINTABLE_ABI_PARSED, NFT_CONTRACT_ADDRESS } from "@/lib/constants";
 import {
@@ -47,10 +45,10 @@ export const useMint = ({ onSuccess }: UseMintNFTParams): UseMintReturn => {
     callId: sendCallsResult?.ids[0],
     queryOptions: {
       // Refetch every 2 sec while pending.
-      refetchInterval: (q) => q.state.data?.status === 100 ? 2000 : false
-    }
+      refetchInterval: (q) => (q.state.data?.status === 100 ? 2000 : false),
+    },
   });
-  
+
   const handleSuccess = useCallback(() => {
     setIsMinting(false);
     setError(undefined);
