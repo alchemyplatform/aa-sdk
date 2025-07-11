@@ -62,10 +62,11 @@ export async function prepareCalls<
     throw new AccountNotFoundError();
   }
 
-  if (client.policyId && !params.capabilities?.paymasterService) {
+  if (client.policyIds && !params.capabilities?.paymasterService) {
     params.capabilities = {
       ...params.capabilities,
-      paymasterService: { policyId: client.policyId },
+      // TODO(jh): need to do a prod wallet server release & publish new rpc types pkg for this to work
+      paymasterService: { policyIds: client.policyIds },
     };
   }
 
