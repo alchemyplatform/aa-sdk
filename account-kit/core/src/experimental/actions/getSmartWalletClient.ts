@@ -56,9 +56,7 @@ export function getSmartWalletClient(
     chain: connection.chain,
     signer,
     account: params?.account,
-    mode: "remote",
-    // @ts-expect-error - TODO: fix this capability
-    policyId: connection.policyId,
+    policyId: connection.policyId as string | undefined,
   });
 
   config.store.setState((state) => ({

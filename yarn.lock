@@ -67,20 +67,6 @@
     jwt-decode "^4.0.0"
     zod "^3.22.4"
 
-"@account-kit/wallet-client@^0.1.0-alpha.10":
-  version "0.1.0-alpha.10"
-  resolved "https://registry.yarnpkg.com/@account-kit/wallet-client/-/wallet-client-0.1.0-alpha.10.tgz#09b8b0b87ba9144281ea775806f2dbfe1ed2f683"
-  integrity sha512-EqpM3ebo7tFbKtbSiSmCY6RetvTulDJOJgU069W6nfaaU6N+5TTh8Gz2IiYzo3KU7NrHMVQbH4A2CaROpRDauQ==
-  dependencies:
-    "@aa-sdk/core" "^4.43.1"
-    "@account-kit/infra" "^4.43.1"
-    "@account-kit/smart-contracts" "^4.43.1"
-    "@alchemy/wallet-api-types" "0.1.0-alpha.10"
-    "@sinclair/typebox" "^0.34.33"
-    deep-equal "^2.2.3"
-    ox "^0.6.12"
-    viem "2.29.2"
-
 "@adobe/css-tools@^4.4.0":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.3.tgz#beebbefb0264fdeb32d3052acae0e0d94315a9a2"
@@ -90,16 +76,6 @@
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.11.0.tgz#42cc67c5baa407ac25059fcd7d405cc5ecdb0c33"
   integrity sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==
-
-"@alchemy/wallet-api-types@0.1.0-alpha.10":
-  version "0.1.0-alpha.10"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.10.tgz#f890fce7ca18e4fd27243d17deb00a620e11f97f"
-  integrity sha512-AKNbC9cVcqMG1yrwYfLKnd5ERF+YRdUI6RK7mNvA4cEV9mnRGU80ZWlosyhIli2EgBrwnzRcexkMhRk9QUIRKw==
-  dependencies:
-    "@sinclair/typebox" "^0.34.33"
-    deep-equal "^2.2.3"
-    ox "^0.6.12"
-    viem "2.29.2"
 
 "@alchemy/wallet-api-types@0.1.0-alpha.12":
   version "0.1.0-alpha.12"
