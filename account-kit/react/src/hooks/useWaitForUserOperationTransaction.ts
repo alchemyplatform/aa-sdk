@@ -14,7 +14,6 @@ import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSmartWalletClient } from "../experimental/hooks/useSmartWalletClient.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
-import type z from "zod";
 
 export type UseWaitForUserOperationTransactionMutationArgs =
   BaseHookMutationArgs<Hash, WaitForUserOperationTxParameters>;
@@ -78,16 +77,14 @@ export function useWaitForUserOperationTransaction(
   } = useMutation(
     {
       mutationFn: async (params: WaitForUserOperationTxParameters) => {
-        if (!smartWalletClient) {
+        if (!smartWalletClient || !client) {
           throw new ClientUndefinedHookError(
             "useWaitForUserOperationTransaction",
           );
         }
 
-        // TODO(jh): test that this actually works
-        const clientOptions = client as unknown as z.infer<
-          typeof SmartAccountClientOptsSchema
-        >;
+        const clientOptions =
+          SmartAccountClientOptsSchema.passthrough().parse(client);
         const {
           hash,
           retries = {
