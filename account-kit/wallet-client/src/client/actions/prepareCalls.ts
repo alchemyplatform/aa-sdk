@@ -62,10 +62,10 @@ export async function prepareCalls<
     throw new AccountNotFoundError();
   }
 
-  if (client.policyId && !params.capabilities?.paymasterService) {
+  if (client.policyIds && !params.capabilities?.paymasterService) {
     params.capabilities = {
       ...params.capabilities,
-      paymasterService: { policyId: client.policyId },
+      paymasterService: { policyIds: client.policyIds },
     };
   }
 

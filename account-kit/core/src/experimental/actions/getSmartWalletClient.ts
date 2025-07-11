@@ -56,7 +56,11 @@ export function getSmartWalletClient(
     chain: connection.chain,
     signer,
     account: params?.account,
-    policyId: connection.policyId as string | undefined,
+    ...(Array.isArray(connection.policyId)
+      ? { policyIds: connection.policyId }
+      : connection.policyId
+        ? { policyId: connection.policyId }
+        : {}),
   });
 
   config.store.setState((state) => ({

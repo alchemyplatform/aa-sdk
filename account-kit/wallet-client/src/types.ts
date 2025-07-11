@@ -16,7 +16,7 @@ export type CreateInnerClientParams<
 > = {
   chain: Chain;
   transport: AlchemyTransport;
-  policyId?: string;
+  policyIds?: string[];
   account?: TAccount | Address | undefined;
 };
 
@@ -29,7 +29,7 @@ export type InnerWalletApiClientBase<
   Chain,
   JsonRpcAccount<Address> | undefined,
   WalletServerViemRpcSchema,
-  { policyId?: string } & TExtend
+  { policyIds?: string[] } & TExtend
 >;
 
 export type CachedAccount = {
