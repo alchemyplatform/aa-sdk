@@ -75,7 +75,6 @@ export type GrantPermissionsResult = {
  *
  * // Sign with the session key
  * const signedCalls = await client.signPreparedCalls(
- *   sessionKey,
  *   preparedCalls,
  * );
  *

@@ -44,7 +44,7 @@ const preparedCalls = await client.prepareCalls({
 });
 
 // Sign with the session key
-const signedCalls = await client.signPreparedCalls(sessionKey, preparedCalls);
+const signedCalls = await client.signPreparedCalls(preparedCalls);
 
 // Send the prepared call using the session key
 const result = await client.sendPreparedCalls({
