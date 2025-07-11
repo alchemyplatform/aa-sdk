@@ -28,11 +28,6 @@
       "require": "./dist/esm/exports/index.js",
       "import": "./dist/esm/exports/index.js"
     },
-    "./internal": {
-      "types": "./dist/types/exports/internal.d.ts",
-      "require": "./dist/esm/exports/internal.js",
-      "import": "./dist/esm/exports/internal.js"
-    },
     "./abi": {
       "types": "./dist/types/abi/index.d.ts",
       "require": "./dist/esm/abi/index.js",
