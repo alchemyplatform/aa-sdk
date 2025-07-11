@@ -65,7 +65,6 @@ export async function prepareCalls<
   if (client.policyIds && !params.capabilities?.paymasterService) {
     params.capabilities = {
       ...params.capabilities,
-      // TODO(jh): need to do a prod wallet server release & publish new rpc types pkg for this to work
       paymasterService: { policyIds: client.policyIds },
     };
   }
