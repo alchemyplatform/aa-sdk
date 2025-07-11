@@ -53,7 +53,7 @@ export type GrantPermissionsResult = {
  *
  * const permissions = await client.grantPermissions({
  *   account: account.address,
- *   expiry: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
+ *   expirySec: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
  *   key: {
  *     publicKey: await sessionKey.getAddress(),
  *     type: "secp256k1",
@@ -74,9 +74,7 @@ export type GrantPermissionsResult = {
  * });
  *
  * // Sign with the session key
- * const signedCalls = await client.signPreparedCalls(
- *   preparedCalls,
- * );
+ * const signedCalls = await signPreparedCalls(sessionKey, preparedCalls);
  *
  * // Send the prepared call using the session key
  * const result = await client.sendPreparedCalls({
