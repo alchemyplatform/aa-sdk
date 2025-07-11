@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/wallet-client",
-  "version": "4.47.0",
+  "version": "4.49.0",
   "description": "Wallet Client for Alchemy Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "prebuild": "tsx ./inject-version.ts",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
