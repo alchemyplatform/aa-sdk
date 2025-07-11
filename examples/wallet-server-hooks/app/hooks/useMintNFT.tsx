@@ -18,17 +18,6 @@ export interface UseMintReturn {
   error?: string;
 }
 
-// TODO(jh): test these hooks
-// - [x] useSmartWalletClient - tested here
-// - [x] useSendCalls - tested here
-// - [x] useSendUserOperation - tested in main ui demo app
-// - [] useWaitForUserOperationTransaction - need to test (w/ UO hash, not call id)
-// - [] useGrantPermissions - need to test
-// - [] usePrepareCalls
-// - [] useSendPreparedCalls
-// - [] useSignMessage - prob ok
-// - [] useSignTypedData - prob ok
-
 export const useMint = ({ onSuccess }: UseMintNFTParams): UseMintReturn => {
   const [isMinting, setIsMinting] = useState(false);
   const [error, setError] = useState<string>();
