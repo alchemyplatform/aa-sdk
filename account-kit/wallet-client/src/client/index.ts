@@ -18,13 +18,17 @@ import { internalStateDecorator } from "../internal/decorator.js";
 
 export type SmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
-> = Prettify<{
-  transport: AlchemyTransport;
-  chain: Chain;
-  signer: SmartAccountSigner;
-  policyId?: string;
-  account?: TAccount | Address | undefined;
-}>;
+> = Prettify<
+  {
+    transport: AlchemyTransport;
+    chain: Chain;
+    signer: SmartAccountSigner;
+    account?: TAccount | Address | undefined;
+  } & (
+    | { policyId?: string; policyIds?: never }
+    | { policyIds?: string[]; policyId?: never }
+  )
+>;
 
 export type SmartWalletClient<
   TAccount extends Address | undefined = Address | undefined,
@@ -66,7 +70,13 @@ export function createSmartWalletClient<
 export function createSmartWalletClient(
   params: SmartWalletClientParams,
 ): SmartWalletClient {
-  const { transport, chain, policyId, account, signer } = params;
+  const { transport, chain, account, signer } = params;
+
+  const policyIds = params.policyId
+    ? [params.policyId]
+    : params.policyIds
+      ? params.policyIds
+      : undefined;
 
   const innerClient = createClient({
     transport: (opts) =>
@@ -76,7 +86,7 @@ export function createSmartWalletClient(
     chain,
     account,
   }).extend(() => ({
-    policyId,
+    policyIds,
     internal: internalStateDecorator(),
   }));
 
