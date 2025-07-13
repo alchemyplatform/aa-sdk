@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
+
+### Features
+
+- add react native hooks for solana ([#1755](https://github.com/alchemyplatform/aa-sdk/issues/1755)) ([bcc6fa8](https://github.com/alchemyplatform/aa-sdk/commit/bcc6fa859125f91bee4e25c7a6d9d0d50768edfa))
+
 # [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
 
 **Note:** Version bump only for package @account-kit/react

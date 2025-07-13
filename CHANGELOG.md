@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
+
+### Bug Fixes
+
+- add approve call in sponsor-gas-with-any-token.mdx ([#1756](https://github.com/alchemyplatform/aa-sdk/issues/1756)) ([2631c22](https://github.com/alchemyplatform/aa-sdk/commit/2631c2228124fd1fc92e610b32a09a59c2985cd9))
+- update CODEOWNER ([#1757](https://github.com/alchemyplatform/aa-sdk/issues/1757)) ([909e955](https://github.com/alchemyplatform/aa-sdk/commit/909e955d52d28bb3299835306f09d74ea504d988))
+
+### Features
+
+- add react native hooks for solana ([#1755](https://github.com/alchemyplatform/aa-sdk/issues/1755)) ([bcc6fa8](https://github.com/alchemyplatform/aa-sdk/commit/bcc6fa859125f91bee4e25c7a6d9d0d50768edfa))
+
 # [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
 
 ### Features
