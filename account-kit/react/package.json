@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.49.0",
+  "version": "4.50.0",
   "description": "React components and hooks for using Smart Wallets",
   "author": "Alchemy",
   "license": "MIT",
@@ -86,11 +86,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/core": "^4.49.0",
-    "@account-kit/infra": "^4.49.0",
-    "@account-kit/logging": "^4.49.0",
-    "@account-kit/signer": "^4.49.0",
-    "@account-kit/wallet-client": "^4.49.0",
+    "@account-kit/core": "^4.50.0",
+    "@account-kit/infra": "^4.50.0",
+    "@account-kit/logging": "^4.50.0",
+    "@account-kit/signer": "^4.50.0",
+    "@account-kit/wallet-client": "^4.50.0",
     "@solana/web3.js": "^1.98.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
