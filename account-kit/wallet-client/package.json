@@ -51,8 +51,7 @@
     "@alchemy/wallet-api-types": "0.1.0-alpha.13",
     "@sinclair/typebox": "^0.34.33",
     "deep-equal": "^2.2.3",
-    "ox": "^0.6.12",
-    "viem": "2.29.2"
+    "ox": "^0.6.12"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
