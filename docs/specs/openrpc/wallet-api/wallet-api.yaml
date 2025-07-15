@@ -254,12 +254,23 @@ methods:
                         - "sessionId"
                         - "signature"
                 paymasterService:
-                  type: "object"
-                  properties:
-                    policyId:
-                      type: "string"
-                  required:
-                    - "policyId"
+                  anyOf:
+                    - description: "Single Policy ID"
+                      type: "object"
+                      properties:
+                        policyId:
+                          type: "string"
+                      required:
+                        - "policyId"
+                    - description: "Array of Policy IDs"
+                      type: "object"
+                      properties:
+                        policyIds:
+                          type: "array"
+                          items:
+                            type: "string"
+                      required:
+                        - "policyIds"
                 gasParamsOverride:
                   minProperties: 1
                   type: "object"
@@ -2040,119 +2051,6 @@ methods:
             preparedCallIds:
               - "0x0000000000000000000000000000000000000000000000000000000000066eeec69e468aa6fafb5c7298c02841e76f976b433018266af39a5807bc29ea9ad392"
 
-  - name: wallet_createAccount
-    description: This method is used to create a smart account for a given signer. This method is primarly used to import existing accounts. For most cases, you should use wallet_requestAccount instead.
-    params:
-      - name: createAccountRequest
-        required: true
-        schema:
-          type: "object"
-          properties:
-            signerAddress:
-              type: "string"
-              pattern: "^0x(.*)$"
-            id:
-              format: "uuid"
-              type: "string"
-            creationOptions:
-              anyOf:
-                - allOf:
-                    - type: "object"
-                      properties:
-                        createAdditional:
-                          description: "If true, will allow creating more than one smart wallet per signer."
-                          type: "boolean"
-                          enum:
-                            - true
-                        salt:
-                          type: "string"
-                          pattern: "^0x(.*)$"
-                    - anyOf:
-                        - type: "object"
-                          properties:
-                            accountType:
-                              anyOf:
-                                - description: "Modular Account V2 SMA-B account type"
-                                  type: "string"
-                                  enum:
-                                    - "sma-b"
-                                - description: "Light Account V2 account type"
-                                  type: "string"
-                                  enum:
-                                    - "la-v2"
-                                - description: "Light Account V1.0.1 account type"
-                                  type: "string"
-                                  enum:
-                                    - "la-v1.0.1"
-                                - description: "Light Account V1.0.2 account type"
-                                  type: "string"
-                                  enum:
-                                    - "la-v1.0.2"
-                                - description: "Light Account V1.1.0 account type"
-                                  type: "string"
-                                  enum:
-                                    - "la-v1.1.0"
-                        - type: "object"
-                          properties:
-                            accountType:
-                              anyOf:
-                                - description: "Light Account V2 Multi-Owner account type"
-                                  type: "string"
-                                  enum:
-                                    - "la-v2-multi-owner"
-                                - description: "Modular Account V1 Multi-Owner account type"
-                                  type: "string"
-                                  enum:
-                                    - "ma-v1-multi-owner"
-                            initialOwners:
-                              description: "The initial owners of the account. The signer address will be implicitly added if not specified in this list."
-                              type: "array"
-                              items:
-                                type: "string"
-                                pattern: "^0x(.*)$"
-                          required:
-                            - "accountType"
-                - description: "7702 account type"
-                  type: "object"
-                  properties:
-                    accountType:
-                      type: "string"
-                      enum:
-                        - "7702"
-                  required:
-                    - "accountType"
-          required:
-            - "signerAddress"
-
-    result:
-      name: createAccountResponse
-      schema:
-        type: "object"
-        properties:
-          accountAddress:
-            type: "string"
-            pattern: "^0x(.*)$"
-          id:
-            format: "uuid"
-            type: "string"
-        required:
-          - "accountAddress"
-          - "id"
-
-    examples:
-      - name: "wallet_createAccount example"
-        params:
-          - name: "Request"
-            value:
-              - signerAddress: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
-                creationOption:
-                  salt: "0x10"
-        result:
-          name: "Response"
-          value:
-            accountAddress: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
-            id: "3061cc5f-1f96-48a9-ab45-41faad2dd23b"
-
   - name: wallet_createSession
     description: This method is used to create a session for a given address with specified permissions.
     params:
@@ -2484,6 +2382,94 @@ methods:
                   call: "0x1bbf564c00000000000099DE0BF6fA90dEB851E2A2df7d83000000010500000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000001000000000000000000000000647bbf38cd0e116d1672405ae17a775572a84e0300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007900000000000082B8e2012be914dFA4f62A0573eA0000000101000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000682fe675000000000000000000000000000000000000000000000000000000000000000000000000000000"
               rawPayload: "0x2a8073568c8fad3edf15f70c3471a7fff18e1d57c650a501ab47f57a5c1f0e39"
 
+  - name: wallet_formatSign
+    description: This method is used to format ECDSA signatures
+    params:
+      - name: formatSignRequest
+        required: true
+        schema:
+          type: "object"
+          properties:
+            from:
+              type: "string"
+              pattern: "^0x(.*)$"
+            chainId:
+              type: "string"
+              pattern: "^0x(.*)$"
+            signature:
+              type: "object"
+              properties:
+                type:
+                  type: "string"
+                  enum:
+                    - "ecdsa"
+                data:
+                  type: "string"
+                  pattern: "^0x(.*)$"
+              required:
+                - "type"
+                - "data"
+            capabilities:
+              type: "object"
+              properties:
+                permissions:
+                  anyOf:
+                    - description: "Permissions context"
+                      type: "object"
+                      properties:
+                        context:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "context"
+                    - description: "Remote permission"
+                      type: "object"
+                      properties:
+                        sessionId:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        signature:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "sessionId"
+                        - "signature"
+              required:
+                - "permissions"
+          required:
+            - "from"
+            - "chainId"
+            - "signature"
+
+    result:
+      name: formatSignResponse
+      schema:
+        type: "object"
+        properties:
+          signature:
+            type: "string"
+            pattern: "^0x(.*)$"
+        required:
+          - "signature"
+
+    examples:
+      - name: "wallet_formatSign example"
+        params:
+          - name: "Request"
+            value:
+              - from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+                chainId: "0x01"
+                signature:
+                  type: "ecdsa"
+                  data: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
+                capabilities:
+                  permissions:
+                    context: "0xabcdef0123456789"
+        result:
+          name: "Response"
+          value:
+            signature: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
+
   - name: wallet_getCallsStatus
     description: This method is used to get the status of calls IDs returned from wallet_sendPreparedCalls.
     params:
@@ -2705,3 +2691,248 @@ methods:
             meta:
               totalCount: 1
               after: null
+
+  - name: wallet_prepareSign
+    description: This method is used to translate raw data into a signature request
+    params:
+      - name: prepareSignRequest
+        required: true
+        schema:
+          type: "object"
+          properties:
+            from:
+              type: "string"
+              pattern: "^0x(.*)$"
+            chainId:
+              type: "string"
+              pattern: "^0x(.*)$"
+            signatureRequest:
+              anyOf:
+                - type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum:
+                        - "personal_sign"
+                    data:
+                      anyOf:
+                        - minLength: 1
+                          description: "Message"
+                          type: "string"
+                        - description: "Raw message"
+                          type: "object"
+                          properties:
+                            raw:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "raw"
+                  required:
+                    - "type"
+                    - "data"
+                - type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum:
+                        - "eth_signTypedData_v4"
+                    data:
+                      type: "object"
+                      properties:
+                        domain:
+                          type: "object"
+                          properties:
+                            chainId:
+                              type: "integer"
+                            name:
+                              type: "string"
+                            salt:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            verifyingContract:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            version:
+                              type: "string"
+                        types:
+                          type: "object"
+                          patternProperties:
+                            ^(.*)$:
+                              type: "array"
+                              items:
+                                type: "object"
+                                properties:
+                                  name:
+                                    type: "string"
+                                  type:
+                                    type: "string"
+                                required:
+                                  - "name"
+                                  - "type"
+                        primaryType:
+                          type: "string"
+                        message:
+                          type: "object"
+                          patternProperties:
+                            ^(.*)$: {}
+                      required:
+                        - "types"
+                        - "primaryType"
+                        - "message"
+                  required:
+                    - "type"
+                    - "data"
+            capabilities:
+              type: "object"
+              properties:
+                permissions:
+                  anyOf:
+                    - description: "Permissions context"
+                      type: "object"
+                      properties:
+                        context:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "context"
+                    - description: "Remote permission"
+                      type: "object"
+                      properties:
+                        sessionId:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        signature:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "sessionId"
+                        - "signature"
+              required:
+                - "permissions"
+          required:
+            - "from"
+            - "chainId"
+            - "signatureRequest"
+
+    result:
+      name: prepareSignResponse
+      schema:
+        type: "object"
+        properties:
+          chainId:
+            type: "string"
+            pattern: "^0x(.*)$"
+          signatureRequest:
+            anyOf:
+              - type: "object"
+                properties:
+                  type:
+                    type: "string"
+                    enum:
+                      - "personal_sign"
+                  data:
+                    anyOf:
+                      - minLength: 1
+                        description: "Message"
+                        type: "string"
+                      - description: "Raw message"
+                        type: "object"
+                        properties:
+                          raw:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                        required:
+                          - "raw"
+                required:
+                  - "type"
+                  - "data"
+              - type: "object"
+                properties:
+                  type:
+                    type: "string"
+                    enum:
+                      - "eth_signTypedData_v4"
+                  data:
+                    type: "object"
+                    properties:
+                      domain:
+                        type: "object"
+                        properties:
+                          chainId:
+                            type: "integer"
+                          name:
+                            type: "string"
+                          salt:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                          verifyingContract:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                          version:
+                            type: "string"
+                      types:
+                        type: "object"
+                        patternProperties:
+                          ^(.*)$:
+                            type: "array"
+                            items:
+                              type: "object"
+                              properties:
+                                name:
+                                  type: "string"
+                                type:
+                                  type: "string"
+                              required:
+                                - "name"
+                                - "type"
+                      primaryType:
+                        type: "string"
+                      message:
+                        type: "object"
+                        patternProperties:
+                          ^(.*)$: {}
+                    required:
+                      - "types"
+                      - "primaryType"
+                      - "message"
+                required:
+                  - "type"
+                  - "data"
+        required:
+          - "chainId"
+          - "signatureRequest"
+
+    examples:
+      - name: "wallet_prepareSign example"
+        params:
+          - name: "Request"
+            value:
+              - from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+                chainId: "0x01"
+                signatureRequest:
+                  type: "personal_sign"
+                  data:
+                    raw: "0x48656c6c6f20576f726c6421"
+                capabilities:
+                  permissions:
+                    context:
+                      read:
+                        - "account"
+                        - "session"
+        result:
+          name: "Response"
+          value:
+            chainId: "0x66eee"
+            signatureRequest:
+              type: "eth_signTypedData_v4"
+              data:
+                domain:
+                  chainId: 421614
+                  verifyingContract: "0xafdABa1E09e82F780721963eba39bA9e6d9FE4d2"
+                types:
+                  ReplaySafeHash:
+                    - name: "hash"
+                      type: "bytes32"
+                primaryType: "ReplaySafeHash"
+                message:
+                  hash: "0xec3608877ecbf8084c29896b7eab2a368b2b3c8d003288584d145613dfa4706c"
