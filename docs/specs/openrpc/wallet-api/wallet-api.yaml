@@ -27,7 +27,8 @@ methods:
                   type: "string"
                 creationHint:
                   anyOf:
-                    - allOf:
+                    - description: "Smart contract account types"
+                      allOf:
                         - type: "object"
                           properties:
                             createAdditional:
@@ -39,7 +40,8 @@ methods:
                               type: "string"
                               pattern: "^0x(.*)$"
                         - anyOf:
-                            - type: "object"
+                            - description: "Single owner account types"
+                              type: "object"
                               properties:
                                 accountType:
                                   anyOf:
@@ -63,7 +65,8 @@ methods:
                                       type: "string"
                                       enum:
                                         - "la-v1.1.0"
-                            - type: "object"
+                            - description: "Multi-owner account types"
+                              type: "object"
                               properties:
                                 accountType:
                                   anyOf:
@@ -83,7 +86,7 @@ methods:
                                     pattern: "^0x(.*)$"
                               required:
                                 - "accountType"
-                    - description: "7702 account type"
+                    - description: "Smart EOA account type (EIP-7702)"
                       type: "object"
                       properties:
                         accountType:
