@@ -2462,9 +2462,6 @@ methods:
                 signature:
                   type: "ecdsa"
                   data: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
-                capabilities:
-                  permissions:
-                    context: "0xabcdef0123456789"
         result:
           name: "Response"
           value:
@@ -2913,12 +2910,6 @@ methods:
                   type: "personal_sign"
                   data:
                     raw: "0x48656c6c6f20576f726c6421"
-                capabilities:
-                  permissions:
-                    context:
-                      read:
-                        - "account"
-                        - "session"
         result:
           name: "Response"
           value:
