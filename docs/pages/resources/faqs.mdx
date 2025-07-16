@@ -307,6 +307,12 @@ We recommend moving your API key to the backend by routing to a proxy. You can s
 
 For more information on how to secure your API key, refer to [this guide](https://docs.alchemy.com/docs/best-practices-for-key-security-and-management).
 
+<Warning>
+  If you have logic in your proxy that restricts certain paths, ensure that the
+  relative path `/v2` is allowed so you are still able to call our chain
+  agnostic endpoint `api.g.alchemy.com/v2`{" "}
+</Warning>
+
 **How can I protect my Policy ID?**
 
 Protecting your Policy ID requires some custom work, but it’s similar to safeguarding any key on the backend. One solution is to use a proxy server that holds both the API key and Policy ID. In the frontend, when creating an Alchemy client, pass the proxy server URL as the RPC URL instead of a public Alchemy URL.
