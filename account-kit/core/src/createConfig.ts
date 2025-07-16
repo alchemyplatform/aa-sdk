@@ -56,9 +56,12 @@ export const createConfig = (
   const connections: Connection[] = [];
   if (connectionConfig.chains == null) {
     const transportConfig = { ...connectionConfig.transport.config };
-    if (signerConnection?.rpcUrl && transportConfig.chainAgnosticUrl == null) {
-      transportConfig.chainAgnosticUrl = `${signerConnection.rpcUrl}/v2`;
-    }
+
+    transportConfig.chainAgnosticUrl ??= signerConnection?.rpcUrl
+      ? `${signerConnection.rpcUrl}/v2`
+      : transportConfig.rpcUrl
+        ? `${transportConfig.rpcUrl}/v2`
+        : undefined;
 
     connections.push({
       transport: transportConfig,
@@ -71,12 +74,13 @@ export const createConfig = (
       const transportConfig =
         transport?.config ?? connectionConfig.transport!.config;
 
-      if (
-        signerConnection?.rpcUrl &&
-        transportConfig.chainAgnosticUrl == null
-      ) {
-        transportConfig.chainAgnosticUrl = `${signerConnection.rpcUrl}/v2`;
-      }
+      transportConfig.chainAgnosticUrl ??= signerConnection?.rpcUrl
+        ? `${signerConnection.rpcUrl}/v2`
+        : connectionConfig.transport?.config.rpcUrl
+          ? `${connectionConfig.transport.config.rpcUrl}/v2`
+          : transportConfig.rpcUrl
+            ? `${transportConfig.rpcUrl}/v2`
+            : undefined;
 
       connections.push({
         transport: transportConfig,
