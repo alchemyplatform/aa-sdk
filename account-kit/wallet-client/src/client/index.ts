@@ -15,6 +15,7 @@ import {
 import { Provider } from "ox";
 import { WalletServerRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
+import { metrics } from "../metrics.js";
 
 export type SmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -90,6 +91,14 @@ export function createSmartWalletClient(
     internal: internalStateDecorator(),
   }));
 
+  metrics.trackEvent({
+    name: "client_created",
+    data: {
+      chainId: params.chain.id,
+    },
+  });
+
+  // TODO: potentially we might want to make this client async and have it use `requestAccount` so that it can create a SCA client with an account attached to it
   return innerClient.extend((client) =>
     smartWalletClientActions(client, signer),
   );

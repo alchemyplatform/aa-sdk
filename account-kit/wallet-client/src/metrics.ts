@@ -1,19 +1,26 @@
 import { createLogger } from "@account-kit/logging";
 import { VERSION } from "./version.js";
+import type { StaticDecode } from "@sinclair/typebox";
+import { SerializedInitcode } from "@alchemy/wallet-api-types";
 
-// TODO(jh): add wallet client events
 export type CoreEventsSchema = [
   {
     EventName: "client_created";
-    EventData: {};
+    EventData: {
+      chainId: number;
+    };
   },
   {
     EventName: "account_initialized";
-    EventData: {};
+    EventData: {
+      chainId: number;
+      factory: StaticDecode<typeof SerializedInitcode>["factoryType"] | "7702";
+    };
   },
+  // TODO(jh): add more events
 ];
 
-export const Metrics = createLogger<CoreEventsSchema>({
+export const metrics = createLogger<CoreEventsSchema>({
   package: "@account-kit/walet-client",
   version: VERSION,
 });
