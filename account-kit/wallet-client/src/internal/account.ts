@@ -11,6 +11,7 @@ import { SerializedInitcode } from "@alchemy/wallet-api-types";
 import { InternalError, InvalidRequestError } from "ox/RpcResponse";
 import { assertNever } from "../utils.js";
 import { getAccountTypeForDelegationAddress7702 } from "@alchemy/wallet-api-types/capabilities";
+import { metrics } from "../metrics.js";
 
 type CreateAccountParams = {
   chain: Chain;
@@ -69,6 +70,16 @@ export async function createAccount(
     ...accountParams,
     initCode: concatHex([ci.factoryAddress, ci.factoryData]),
   };
+
+  metrics.trackEvent({
+    name: "account_initialized",
+    data: {
+      chainId: params.chain.id,
+      factory: params.delegation
+        ? "7702"
+        : (params.counterfactualInfo?.factoryType ?? "unknown"),
+    },
+  });
 
   // Return the account created based on the factory type
   switch (factoryType) {
