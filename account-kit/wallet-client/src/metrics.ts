@@ -62,6 +62,6 @@ export type CoreEventsSchema = [
 ];
 
 export const metrics = createLogger<CoreEventsSchema>({
-  package: "@account-kit/walet-client",
+  package: "@account-kit/wallet-client",
   version: VERSION,
 });
