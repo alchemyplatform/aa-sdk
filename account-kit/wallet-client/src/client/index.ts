@@ -98,7 +98,6 @@ export function createSmartWalletClient(
     },
   });
 
-  // TODO: potentially we might want to make this client async and have it use `requestAccount` so that it can create a SCA client with an account attached to it
   return innerClient.extend((client) =>
     smartWalletClientActions(client, signer),
   );
