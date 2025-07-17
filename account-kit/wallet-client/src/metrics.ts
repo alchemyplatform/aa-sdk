@@ -17,7 +17,48 @@ export type CoreEventsSchema = [
       factory: StaticDecode<typeof SerializedInitcode>["factoryType"] | "7702";
     };
   },
-  // TODO(jh): add more events
+  {
+    EventName: "list_accounts";
+  },
+  {
+    EventName: "prepare_sign";
+  },
+  {
+    EventName: "format_sign";
+  },
+  {
+    EventName: "get_calls_status";
+  },
+  {
+    EventName: "grant_permissions";
+  },
+  {
+    EventName: "prepare_calls";
+  },
+  {
+    EventName: "send_prepared_calls";
+    EventData: {
+      type: string;
+    };
+  },
+  {
+    EventName: "sign_message";
+  },
+  {
+    EventName: "sign_typed_data";
+  },
+  {
+    EventName: "sign_prepared_calls";
+    EventData: {
+      type: string;
+    };
+  },
+  {
+    EventName: "sign_signature_request";
+    EventData: {
+      type: string;
+    };
+  },
 ];
 
 export const metrics = createLogger<CoreEventsSchema>({

@@ -3,6 +3,7 @@ import { toHex, type Address, type IsUndefined } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { Static } from "@sinclair/typebox";
 import { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
+import { metrics } from "../../metrics.js";
 
 export type GetAccountParam<TAccount> =
   IsUndefined<TAccount> extends true
@@ -57,6 +58,10 @@ export async function prepareCalls<
   client: InnerWalletApiClient,
   params: PrepareCallsParams<TAccount>,
 ): Promise<PrepareCallsResult> {
+  metrics.trackEvent({
+    name: "prepare_calls",
+  });
+
   const from = params.from ?? client.account?.address;
   if (!from) {
     throw new AccountNotFoundError();

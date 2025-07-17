@@ -2,6 +2,7 @@ import { type SmartAccountSigner } from "@aa-sdk/core";
 import { type Address, type Hex, type SignableMessage } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import { requestAccount } from "./requestAccount.js";
+import { metrics } from "../../metrics.js";
 
 export type SignMessageParams = { message: SignableMessage; account?: Address };
 
@@ -32,6 +33,10 @@ export async function signMessage(
   signer: SmartAccountSigner,
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
+  metrics.trackEvent({
+    name: "sign_message",
+  });
+
   const account = await requestAccount(client, signer, {
     accountAddress: params.account ?? client.account?.address,
   });
