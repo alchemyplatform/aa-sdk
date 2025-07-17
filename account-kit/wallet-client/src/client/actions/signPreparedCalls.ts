@@ -8,6 +8,7 @@ import {
   type PreparedCall_UserOpV060,
   type PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
+import { metrics } from "../../metrics.js";
 
 export type SignPreparedCallsParams = PrepareCallsResult;
 
@@ -26,6 +27,13 @@ export async function signPreparedCalls(
   signer: SmartAccountSigner,
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult> {
+  metrics.trackEvent({
+    name: "sign_prepared_calls",
+    data: {
+      type: params.type,
+    },
+  });
+
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
     const signature = await signSignatureRequest(signer, {

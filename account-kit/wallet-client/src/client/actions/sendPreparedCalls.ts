@@ -2,6 +2,7 @@ import type { Static } from "@sinclair/typebox";
 import { toHex } from "viem";
 import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, WithoutChainId } from "../../types.ts";
+import { metrics } from "../../metrics.js";
 
 export type SendPreparedCallsParams = WithoutChainId<
   Static<
@@ -48,6 +49,13 @@ export async function sendPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
+  metrics.trackEvent({
+    name: "send_prepared_calls",
+    data: {
+      type: params.type,
+    },
+  });
+
   return client.request({
     method: "wallet_sendPreparedCalls",
     params: [

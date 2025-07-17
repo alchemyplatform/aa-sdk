@@ -9,6 +9,7 @@ import {
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
 import type { WithoutRawPayload } from "../../types.ts";
+import { metrics } from "../../metrics.js";
 
 export type SignSignatureRequestParams = WithoutRawPayload<
   | PersonalSignSignatureRequest
@@ -58,6 +59,13 @@ export async function signSignatureRequest(
   signer: SmartAccountSigner,
   params: SignSignatureRequestParams,
 ): Promise<SignSignatureRequestResult> {
+  metrics.trackEvent({
+    name: "sign_signature_request",
+    data: {
+      type: params.type,
+    },
+  });
+
   switch (params.type) {
     case "personal_sign": {
       return {

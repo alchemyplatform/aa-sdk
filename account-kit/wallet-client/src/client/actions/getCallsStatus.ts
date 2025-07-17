@@ -1,6 +1,7 @@
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { Static } from "@sinclair/typebox";
 import { wallet_getCallsStatus } from "@alchemy/wallet-api-types/rpc";
+import { metrics } from "../../metrics.js";
 
 export type GetCallsStatusParams = Static<
   typeof wallet_getCallsStatus
@@ -35,6 +36,10 @@ export async function getCallsStatus(
   client: InnerWalletApiClient,
   params: GetCallsStatusParams,
 ): Promise<GetCallsStatusResult> {
+  metrics.trackEvent({
+    name: "get_calls_status",
+  });
+
   return await client.request({
     method: "wallet_getCallsStatus",
     params: [params],
