@@ -118,7 +118,7 @@ export {
   getMSCAUpgradeToData,
 } from "./msca/utils.js";
 
-// ma v2 types
+// ma v2 exports
 export type * from "./ma-v2/account/modularAccountV2.js";
 export type * from "./ma-v2/account/common/modularAccountV2Base.js";
 export { createModularAccountV2 } from "./ma-v2/account/modularAccountV2.js";
@@ -127,3 +127,4 @@ export { createModularAccountV2Client } from "./ma-v2/client/client.js";
 export type * from "./ma-v2/utils.js";
 export { getMAV2UpgradeToData } from "./ma-v2/utils.js";
 export { predictModularAccountV2Address } from "./ma-v2/account/predictAddress.js";
+export { semiModularAccountBytecodeAbi } from "./ma-v2/abis/semiModularAccountBytecodeAbi.js";
