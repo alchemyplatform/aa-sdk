@@ -72,13 +72,11 @@ export const pack1271Signature = ({
   ]);
 };
 
-export const getDefaultMAV2FactoryAddress = (
-  chain: Chain,
-  isWebauthnAccount?: false,
-): Address => {
-  if (isWebauthnAccount) {
-    return "0x9c607854b60fb6AFDB33daC5a1676AC06048bE5f";
-  }
+export const getDefaultWebAuthnMAV2FactoryAddress = (): Address => {
+  return "0x9c607854b60fb6AFDB33daC5a1676AC06048bE5f";
+};
+
+export const getDefaultMAV2FactoryAddress = (chain: Chain): Address => {
   switch (chain.id) {
     // TODO: case mekong.id:
     case sepolia.id:
