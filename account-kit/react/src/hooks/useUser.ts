@@ -5,6 +5,7 @@ import type { User } from "@account-kit/signer";
 import { useMemo, useSyncExternalStore } from "react";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
 
@@ -34,6 +35,9 @@ export const useUser = (): UseUserResult => {
   } = config;
 
   const account = wagmi_useAccount({ config: wagmiConfig });
+  const { publicKey: solanaPublicKey, connected: isSolanaConnected } =
+    useWallet();
+
   const user = useSyncExternalStore(
     watchUser(config),
     () => getUser(config) ?? null,
@@ -59,7 +63,22 @@ export const useUser = (): UseUserResult => {
     };
   }, [account.address, account.status]);
 
+  const solanaEoaUser = useMemo(() => {
+    if (!isSolanaConnected || !solanaPublicKey) return null;
+
+    // todo: this is bad lol
+    const address = solanaPublicKey.toBase58() as `0x${string}`;
+
+    return {
+      address,
+      orgId: address,
+      userId: address,
+      type: "eoa" as const,
+    };
+  }, [solanaPublicKey, isSolanaConnected]);
+
   if (eoaUser) return eoaUser;
+  if (solanaEoaUser) return solanaEoaUser;
 
   return user;
 };

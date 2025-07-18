@@ -13,6 +13,7 @@ import { AlchemyAccountContext } from "./AlchemyAccountContext.js";
 import type { AlchemyClientState } from "@account-kit/core";
 import { type QueryClient } from "@tanstack/react-query";
 import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
+import { AlchemySolanaAccountContext } from "./AlchemySolanaAccountContext.js";
 
 export type AlchemyAccountsProviderProps = {
   config: AlchemyAccountsConfigWithUI;
@@ -105,22 +106,24 @@ export const AlchemyAccountProvider = (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          {config.ui ? (
-            <UiConfigProvider initialConfig={config.ui}>
-              <AuthModalContext.Provider
-                value={{
-                  authStep,
-                  setAuthStep,
-                  resetAuthStep,
-                }}
-              >
-                {children}
-                <AuthModal />
-              </AuthModalContext.Provider>
-            </UiConfigProvider>
-          ) : (
-            children
-          )}
+          <AlchemySolanaAccountContext>
+            {config.ui ? (
+              <UiConfigProvider initialConfig={config.ui}>
+                <AuthModalContext.Provider
+                  value={{
+                    authStep,
+                    setAuthStep,
+                    resetAuthStep,
+                  }}
+                >
+                  {children}
+                  <AuthModal />
+                </AuthModalContext.Provider>
+              </UiConfigProvider>
+            ) : (
+              children
+            )}
+          </AlchemySolanaAccountContext>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>

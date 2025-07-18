@@ -1,3 +1,5 @@
+"use client";
+
 import { walletConnect } from "wagmi/connectors";
 import { useChain } from "../../../hooks/useChain.js";
 import { Spinner } from "../../../icons/spinner.js";
@@ -10,6 +12,8 @@ import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
+import { useWallet, type Wallet } from "@solana/wallet-adapter-react";
+import { useEffect } from "react";
 
 export const WALLET_CONNECT = "walletConnect";
 
@@ -18,26 +22,25 @@ export const EoaConnectCard = () => {
   const { connect } = useConnectEOA();
   const { chain } = useChain();
 
-  if (authStep.error) {
-    const errorMessage = getErrorMessage(
-      authStep.error,
-      authStep.connector.name,
-    );
+  const connector = authStep.connector;
+
+  if (authStep.error && connector) {
+    const errorMessage = getErrorMessage(authStep.error, connector.name);
     return (
       <ConnectionError
-        icon={<WalletIcon connector={authStep.connector} />}
+        icon={<WalletIcon connector={connector} />}
         headerText={errorMessage.heading}
         bodyText={errorMessage.body}
         tryAgainCTA={errorMessage.tryAgainCTA}
         handleTryAgain={() => {
           setAuthStep({
             type: "eoa_connect",
-            connector: authStep.connector,
+            connector: connector,
           });
 
           // Re-try connector's connection...
           connect({
-            connector: authStep.connector,
+            connector: connector,
             chainId: chain.id,
           });
         }}
@@ -48,14 +51,14 @@ export const EoaConnectCard = () => {
 
   return (
     <CardContent
-      header={`Connecting to ${authStep.connector.name}`}
+      header={`Connecting to ${authStep.connector?.name}`}
       className={"gap-0"}
       icon={
         <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
           <img
             className={authStep.error ? undefined : "animate-pulse"}
-            src={authStep.connector.icon}
-            alt={authStep.connector.name}
+            src={authStep.connector?.icon}
+            alt={authStep.connector?.name}
             height={28}
             width={28}
           />
@@ -148,10 +151,45 @@ export const WalletConnectCard = () => {
   );
 };
 
+function SolanaLoginButton({ wallet }: { wallet: Wallet }) {
+  const { setAuthStep } = useAuthContext();
+  const {
+    connect,
+    connecting,
+    connected,
+    select,
+    wallet: selectedWallet,
+  } = useWallet();
+
+  const handleClick = () => {
+    select(wallet.adapter.name);
+  };
+
+  useEffect(() => {
+    if (selectedWallet?.adapter.name !== wallet.adapter.name) return;
+    if (connected || connecting) return;
+    setAuthStep({ type: "eoa_connect" });
+    connect()
+      .then((e) => {
+        console.log(e, "complete");
+        console.log("complete");
+        setAuthStep({ type: "complete" });
+      })
+      .catch((error) => {
+        setAuthStep({ type: "eoa_connect", error });
+      });
+  }, [selectedWallet, wallet, connect, connected, connecting]);
+
+  console.log(selectedWallet, wallet, connected, "selectedWallet");
+
+  return <Button onClick={handleClick}>{wallet.adapter.name}</Button>;
+}
+
 export const EoaPickCard = () => {
   const { chain } = useChain();
   const { connectors, connect } = useConnectEOA();
   const { setAuthStep } = useAuthContext("pick_eoa");
+  const { wallets } = useWallet();
 
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
@@ -217,6 +255,9 @@ export const EoaPickCard = () => {
                 WalletConnect
               </Button>
             )}
+            {wallets.map((wallet) => (
+              <SolanaLoginButton key={wallet.adapter.name} wallet={wallet} />
+            ))}
           </div>
         ) : (
           "No wallets available"

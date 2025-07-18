@@ -42,7 +42,8 @@ export type AuthStep =
     }
   | { type: "initial"; error?: Error }
   | { type: "complete" }
-  | { type: "eoa_connect"; connector: Connector; error?: Error }
+  | { type: "eoa_connect"; connector?: Connector; error?: Error }
+  // todo: possibly add another step here for sol?
   | { type: "wallet_connect"; error?: Error }
   | { type: "pick_eoa" };
 

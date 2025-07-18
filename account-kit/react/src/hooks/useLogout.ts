@@ -5,6 +5,7 @@ import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useOptionalAuthContext } from "../components/auth/context.js";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { BaseHookMutationArgs } from "../types.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export type UseLogoutMutationArgs = BaseHookMutationArgs<void, void>;
 
@@ -38,6 +39,7 @@ export function useLogout(
 ): UseLogoutResult {
   const { queryClient, config } = useAlchemyAccountContext();
   const authContext = useOptionalAuthContext();
+  const { disconnect: disconnectSolana } = useWallet();
 
   const {
     mutate: logout,
@@ -47,6 +49,7 @@ export function useLogout(
     {
       mutationFn: async () => {
         await disconnect(config);
+        await disconnectSolana();
         authContext?.resetAuthStep();
       },
       ...mutationArgs,
