@@ -15,6 +15,7 @@ import {
 import { Provider } from "ox";
 import { WalletServerRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
+import { metrics } from "../metrics.js";
 
 export type SmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -89,6 +90,13 @@ export function createSmartWalletClient(
     policyIds,
     internal: internalStateDecorator(),
   }));
+
+  metrics.trackEvent({
+    name: "client_created",
+    data: {
+      chainId: params.chain.id,
+    },
+  });
 
   return innerClient.extend((client) =>
     smartWalletClientActions(client, signer),

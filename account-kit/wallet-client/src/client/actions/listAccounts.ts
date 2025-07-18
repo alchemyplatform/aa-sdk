@@ -3,6 +3,7 @@ import type { wallet_listAccounts } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address } from "viem";
+import { metrics } from "../../metrics.js";
 
 export type ListAccountsParams = Omit<
   Static<typeof wallet_listAccounts>["Request"]["params"][0],
@@ -45,6 +46,10 @@ export async function listAccounts(
   signer: SmartAccountSigner,
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
+  metrics.trackEvent({
+    name: "list_accounts",
+  });
+
   const signerAddress = params.signerAddress ?? (await signer.getAddress());
 
   return client.request({
