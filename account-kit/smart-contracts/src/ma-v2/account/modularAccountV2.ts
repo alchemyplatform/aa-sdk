@@ -21,6 +21,7 @@ import {
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import {
   getDefaultMAV2FactoryAddress,
+  getDefaultWebAuthnMAV2FactoryAddress,
   getDefaultSMAV2BytecodeAddress,
 } from "../utils.js";
 import {
@@ -169,7 +170,7 @@ export async function createModularAccountV2<
         const { x, y } = parsePublicKey(publicKey);
         const {
           salt = 0n,
-          factoryAddress = getDefaultMAV2FactoryAddress(chain),
+          factoryAddress = getDefaultWebAuthnMAV2FactoryAddress(),
           initCode,
         } = config;
 
