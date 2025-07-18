@@ -11,6 +11,7 @@ import type { Static } from "@sinclair/typebox";
 import { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
 import { encodePermissionsContext } from "@alchemy/wallet-api-types/capabilities";
 import { signSignatureRequest } from "./signSignatureRequest.js";
+import { metrics } from "../../metrics.js";
 
 export type GrantPermissionsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -92,6 +93,10 @@ export async function grantPermissions<
   signer: SmartAccountSigner,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
+  metrics.trackEvent({
+    name: "grant_permissions",
+  });
+
   const account = params.account ?? client.account?.address;
   if (!account) {
     throw new AccountNotFoundError();

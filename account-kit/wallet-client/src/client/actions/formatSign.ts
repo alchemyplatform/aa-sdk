@@ -3,6 +3,7 @@ import type { wallet_formatSign } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, WithoutChainId } from "../../types.ts";
 import { toHex, type Address, type IsUndefined } from "viem";
 import { AccountNotFoundError } from "@aa-sdk/core";
+import { metrics } from "../../metrics.js";
 
 export type FormatSignParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -43,6 +44,10 @@ export async function formatSign<
   client: InnerWalletApiClient,
   params: FormatSignParams<TAccount>,
 ): Promise<FormatSignResult> {
+  metrics.trackEvent({
+    name: "format_sign",
+  });
+
   const from = params.from ?? client.account?.address;
   if (!from) {
     throw new AccountNotFoundError();

@@ -3,6 +3,7 @@ import { toHex, type Address, type IsUndefined } from "viem";
 import { AccountNotFoundError } from "@aa-sdk/core";
 import type { Static } from "@sinclair/typebox";
 import { wallet_prepareSign } from "@alchemy/wallet-api-types/rpc";
+import { metrics } from "../../metrics.js";
 
 export type PrepareSignParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -39,6 +40,10 @@ export async function prepareSign<
   client: InnerWalletApiClient,
   params: PrepareSignParams<TAccount>,
 ): Promise<PrepareSignResult> {
+  metrics.trackEvent({
+    name: "prepare_sign",
+  });
+
   const from = params.from ?? client.account?.address;
   if (!from) {
     throw new AccountNotFoundError();
