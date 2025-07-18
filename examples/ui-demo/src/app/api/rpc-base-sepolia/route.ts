@@ -6,10 +6,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const headers: Record<string, string> = {};
 
-  if (body.method.startsWith("wallet_")) {
-    headers.Authorization = `Bearer ${env.API_KEY}`;
-  }
-
   req.headers.forEach((value: string, key: string) => {
     // don't pass the cookie because it doesn't get used downstream
     if (key === "cookie") return;
@@ -17,11 +13,7 @@ export async function POST(req: NextRequest) {
     headers[key] = value;
   });
 
-  const url = body.method.startsWith("wallet_")
-    ? `${env.ALCHEMY_API_URL}/v2`
-    : env.ALCHEMY_RPC_URL_BASE_SEPOLIA;
-
-  const res = await fetch(url, {
+  const res = await fetch(env.ALCHEMY_RPC_URL_BASE_SEPOLIA, {
     method: "POST",
     headers: {
       ...headers,
