@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+### Features
+
+- export sma abi ([#1778](https://github.com/alchemyplatform/aa-sdk/issues/1778)) ([385d92c](https://github.com/alchemyplatform/aa-sdk/commit/385d92cd77e329b2d32071d1d34c788eef2b5d61))
+
 ## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
 
 **Note:** Version bump only for package @account-kit/smart-contracts

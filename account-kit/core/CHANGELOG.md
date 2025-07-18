@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+### Bug Fixes
+
+- add more fallbacks for chainAgnosticRpcUrl ([#1768](https://github.com/alchemyplatform/aa-sdk/issues/1768)) ([61e2dc1](https://github.com/alchemyplatform/aa-sdk/commit/61e2dc1d11f425eae2149a954451891b02f30c63))
+
 ## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
 
 **Note:** Version bump only for package @account-kit/core

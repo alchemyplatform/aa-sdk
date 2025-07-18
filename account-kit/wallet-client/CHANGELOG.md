@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+### Features
+
+- add metrics tracking to wallet client ([#1772](https://github.com/alchemyplatform/aa-sdk/issues/1772)) ([65e3fcb](https://github.com/alchemyplatform/aa-sdk/commit/65e3fcb981115812138fe78a6ddab194cbf055c6))
+
 ## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
 
 **Note:** Version bump only for package @account-kit/wallet-client
