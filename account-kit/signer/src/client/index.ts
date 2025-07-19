@@ -152,7 +152,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       const multiFactors = parseMfaError(error);
 
       // If MFA is required, and emailMode is Magic Link, the user must submit mfa with the request or
-      // the the server will return an error with the required mfa factors.
+      // the server will return an error with the required mfa factors.
       if (multiFactors) {
         throw new MfaRequiredError(multiFactors);
       }
