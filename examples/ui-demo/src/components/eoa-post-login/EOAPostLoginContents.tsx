@@ -1,5 +1,4 @@
 import {
-  useAlchemyAccountContext,
   useLogout,
   useSolanaSignMessage,
   useSolanaTransaction,
@@ -12,7 +11,6 @@ import { WalletIcon } from "../icons/wallet";
 import {
   PublicKey,
   SystemProgram,
-  TransactionInstruction,
 } from "@solana/web3.js";
 import { useToast } from "@/hooks/useToast";
 import { Button } from "../shared/Button";
