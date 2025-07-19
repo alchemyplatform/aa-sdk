@@ -2,7 +2,10 @@
 
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletProvider } from "@solana/wallet-adapter-react";
-import { UnsafeBurnerWalletAdapter } from "@solana/wallet-adapter-wallets";
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
 import { useMemo, type ReactNode } from "react";
 
 export function AlchemySolanaAccountContext(props: { children: ReactNode }) {
@@ -22,7 +25,8 @@ export function AlchemySolanaAccountContext(props: { children: ReactNode }) {
        * instantiate its legacy wallet adapter here. Common legacy adapters can be found
        * in the npm package `@solana/wallet-adapter-wallets`.
        */
-      new UnsafeBurnerWalletAdapter(),
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [network],

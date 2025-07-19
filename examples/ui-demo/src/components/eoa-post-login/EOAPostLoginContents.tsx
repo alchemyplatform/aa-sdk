@@ -1,8 +1,21 @@
-import { useLogout } from "@account-kit/react";
+import {
+  useAlchemyAccountContext,
+  useLogout,
+  useSolanaSignMessage,
+  useSolanaTransaction,
+  useUser,
+} from "@account-kit/react";
 import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { UserIcon } from "../icons/user";
 import { WalletIcon } from "../icons/wallet";
+import {
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
+import { useToast } from "@/hooks/useToast";
+import { Button } from "../shared/Button";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
@@ -47,6 +60,15 @@ export const EOAPostLoginActions = () => {
 };
 
 export const EOAPostLoginContents = () => {
+  const solTx = useSolanaTransaction({
+    policyId: "8aa20005-e472-407b-8634-95639e16a3f4",
+  });
+  const solMsg = useSolanaSignMessage({});
+  const user = useUser();
+  const { setToast } = useToast();
+
+  if (!user) return;
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center justify-center">
@@ -102,6 +124,48 @@ export const EOAPostLoginContents = () => {
             </>
           }
         />
+        <div className="flex flex-col gap-2">
+          <Button
+            onClick={() => {
+              solTx
+                .sendTransactionAsync({
+                  instructions: [
+                    SystemProgram.transfer({
+                      fromPubkey: new PublicKey(user.address),
+                      toPubkey: new PublicKey(user.address),
+                      lamports: 0, // transferring 0 lamports to self
+                    }),
+                  ],
+                })
+                .then((tx) =>
+                  setToast({
+                    text: "Transaction sent with hash " + tx.hash,
+                    type: "success",
+                    open: true,
+                  }),
+                )
+                .catch(console.error);
+            }}
+          >
+            Send a transaction
+          </Button>
+          <Button
+            onClick={() => {
+              solMsg
+                .signMessageAsync({ message: "Hello" })
+                .then((msg) =>
+                  setToast({
+                    text: "Message signed with hash " + msg,
+                    type: "success",
+                    open: true,
+                  }),
+                )
+                .catch(console.error);
+            }}
+          >
+            Sign a message
+          </Button>
+        </div>
       </div>
     </div>
   );

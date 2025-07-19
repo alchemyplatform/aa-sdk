@@ -5,6 +5,7 @@ import { toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types";
 import { useSolanaSigner } from "./useSolanaSigner.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export type MutationParams = {
   message: string | ByteArray;
@@ -62,21 +63,25 @@ export type UseSolanaSignMessageParams = {
 export function useSolanaSignMessage(
   opts: UseSolanaSignMessageParams,
 ): SolanaSignedMessage {
-  const fallbackSigner = useSolanaSigner({});
+  const fallbackSigner = useSolanaSigner();
+  const { connected: eoaConnected, signMessage: eoaSignMessage } = useWallet();
   const signer = opts.signer || fallbackSigner;
   const mutation = useMutation({
     mutationFn: async (args: MutationParams) => {
-      if (!signer)
+      let signMessage;
+      if (eoaConnected && eoaSignMessage) {
+        signMessage = eoaSignMessage;
+      } else if (signer) {
+        signMessage = signer.signMessage;
+      } else {
         throw new Error(
           "The signer is null, and should be passed in or put into context",
         );
-      return await signer
-        .signMessage(
-          typeof args.message === "string"
-            ? toBytes(args.message)
-            : args.message,
-        )
-        .then(toHex);
+      }
+
+      return signMessage(
+        typeof args.message === "string" ? toBytes(args.message) : args.message,
+      ).then(toHex);
     },
     ...opts.mutation,
   });

@@ -13,19 +13,27 @@ import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
 import { useWallet, type Wallet } from "@solana/wallet-adapter-react";
-import { useEffect } from "react";
+import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
 
 export const WALLET_CONNECT = "walletConnect";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
-  const { connect } = useConnectEOA();
+  const { connect: connectEvm } = useConnectEOA();
+  const { connect: connectSolana } = useConnectSolanaEOA();
   const { chain } = useChain();
 
-  const connector = authStep.connector;
+  const connector =
+    authStep.chain === "evm"
+      ? { icon: authStep.connector.icon, name: authStep.connector.name }
+      : {
+          icon: authStep.wallet.adapter.icon,
+          name: authStep.wallet.adapter.name,
+        };
 
-  if (authStep.error && connector) {
+  if (authStep.error) {
     const errorMessage = getErrorMessage(authStep.error, connector.name);
+
     return (
       <ConnectionError
         icon={<WalletIcon connector={connector} />}
@@ -35,14 +43,19 @@ export const EoaConnectCard = () => {
         handleTryAgain={() => {
           setAuthStep({
             type: "eoa_connect",
-            connector: connector,
+            ...(authStep.chain === "evm"
+              ? { connector: authStep.connector, chain: "evm" }
+              : { wallet: authStep.wallet, chain: "svm" }),
           });
 
-          // Re-try connector's connection...
-          connect({
-            connector: connector,
-            chainId: chain.id,
-          });
+          if (authStep.chain === "evm") {
+            connectEvm({
+              connector: authStep.connector,
+              chainId: chain.id,
+            });
+          } else {
+            connectSolana(authStep.wallet);
+          }
         }}
         handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
@@ -51,14 +64,14 @@ export const EoaConnectCard = () => {
 
   return (
     <CardContent
-      header={`Connecting to ${authStep.connector?.name}`}
+      header={`Connecting to ${connector?.name}`}
       className={"gap-0"}
       icon={
         <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
           <img
             className={authStep.error ? undefined : "animate-pulse"}
-            src={authStep.connector?.icon}
-            alt={authStep.connector?.name}
+            src={connector?.icon}
+            alt={connector?.name}
             height={28}
             width={28}
           />
@@ -152,37 +165,28 @@ export const WalletConnectCard = () => {
 };
 
 function SolanaLoginButton({ wallet }: { wallet: Wallet }) {
-  const { setAuthStep } = useAuthContext();
-  const {
-    connect,
-    connecting,
-    connected,
-    select,
-    wallet: selectedWallet,
-  } = useWallet();
+  const { connect } = useConnectSolanaEOA();
 
-  const handleClick = () => {
-    select(wallet.adapter.name);
-  };
-
-  useEffect(() => {
-    if (selectedWallet?.adapter.name !== wallet.adapter.name) return;
-    if (connected || connecting) return;
-    setAuthStep({ type: "eoa_connect" });
-    connect()
-      .then((e) => {
-        console.log(e, "complete");
-        console.log("complete");
-        setAuthStep({ type: "complete" });
-      })
-      .catch((error) => {
-        setAuthStep({ type: "eoa_connect", error });
-      });
-  }, [selectedWallet, wallet, connect, connected, connecting]);
-
-  console.log(selectedWallet, wallet, connected, "selectedWallet");
-
-  return <Button onClick={handleClick}>{wallet.adapter.name}</Button>;
+  return (
+    <Button
+      className="justify-start"
+      variant="social"
+      icon={
+        wallet.adapter.icon && (
+          <img
+            src={wallet.adapter.icon}
+            alt={wallet.adapter.name}
+            height={20}
+            width={20}
+          />
+        )
+      }
+      onClick={() => connect(wallet)}
+    >
+      {wallet.adapter.name}{" "}
+      <span className="bg-gray-100 px-1 py-0.5 rounded-md text-xs">solana</span>
+    </Button>
+  );
 }
 
 export const EoaPickCard = () => {

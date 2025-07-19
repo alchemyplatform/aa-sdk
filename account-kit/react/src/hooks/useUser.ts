@@ -35,8 +35,18 @@ export const useUser = (): UseUserResult => {
   } = config;
 
   const account = wagmi_useAccount({ config: wagmiConfig });
-  const { publicKey: solanaPublicKey, connected: isSolanaConnected } =
-    useWallet();
+  const {
+    publicKey: solanaPublicKey,
+    connected: isSolanaConnected,
+    wallet,
+  } = useWallet();
+
+  console.log(
+    solanaPublicKey,
+    wallet,
+    isSolanaConnected,
+    "solanaPublicKey, wallet",
+  );
 
   const user = useSyncExternalStore(
     watchUser(config),
@@ -64,6 +74,11 @@ export const useUser = (): UseUserResult => {
   }, [account.address, account.status]);
 
   const solanaEoaUser = useMemo(() => {
+    console.log(
+      isSolanaConnected,
+      solanaPublicKey,
+      "isSolanaConnected, solanaPublicKey",
+    );
     if (!isSolanaConnected || !solanaPublicKey) return null;
 
     // todo: this is bad lol

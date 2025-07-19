@@ -1,8 +1,9 @@
 "use client";
 
-import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 import type { AuthType } from "./types";
+import type { Wallet } from "@solana/wallet-adapter-react";
+import type { Connector } from "wagmi";
 
 export enum AuthStepStatus {
   base = "base",
@@ -10,6 +11,11 @@ export enum AuthStepStatus {
   error = "error",
   verifying = "verifying",
 }
+
+type EoaConnectAuthStep = {
+  type: "eoa_connect";
+  error?: Error;
+} & ({ chain: "svm"; wallet: Wallet } | { chain: "evm"; connector: Connector });
 
 export type AuthStep =
   | { type: "email_verify"; email: string }
@@ -42,8 +48,7 @@ export type AuthStep =
     }
   | { type: "initial"; error?: Error }
   | { type: "complete" }
-  | { type: "eoa_connect"; connector?: Connector; error?: Error }
-  // todo: possibly add another step here for sol?
+  | EoaConnectAuthStep
   | { type: "wallet_connect"; error?: Error }
   | { type: "pick_eoa" };
 

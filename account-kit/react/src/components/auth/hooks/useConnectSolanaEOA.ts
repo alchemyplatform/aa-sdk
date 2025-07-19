@@ -1,43 +1,27 @@
 "use client";
 
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet, type Wallet } from "@solana/wallet-adapter-react";
 import { useAuthContext } from "../context.js";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export const useConnectSolanaEOA = () => {
   const { setAuthStep } = useAuthContext();
+  const { disconnect, select, publicKey } = useWallet();
 
-  const {
-    select,
-    connect: connectInternal,
-    connected,
-    connecting,
-    wallet,
-  } = useWallet();
-
-  const { mutate: connect } = useMutation({
-    mutationFn: (...args: Parameters<typeof select>): Promise<void> => {
-      console.log("selecting", args);
-      select(...args);
-      console.log("connecting");
-      console.log(connectInternal);
-      return connectInternal();
+  const connect = useCallback(
+    (wallet: Wallet) => {
+      disconnect().then(async () => {
+        select(wallet.adapter.name);
+        setAuthStep({ type: "eoa_connect", chain: "svm", wallet });
+      });
     },
-    onMutate: () => {
-      setAuthStep({ type: "eoa_connect" });
-    },
-    onError: (error) => {
-      setAuthStep({ type: "eoa_connect", error });
-    },
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
-    },
-  });
+    [select, setAuthStep, disconnect],
+  );
 
   useEffect(() => {
-    console.log(connected, connecting, wallet, "status");
-  }, [connected, connecting, wallet]);
+    if (!publicKey) return;
+    setAuthStep({ type: "complete" });
+  }, [publicKey, setAuthStep]);
 
   return {
     connect,
