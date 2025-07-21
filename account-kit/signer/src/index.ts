@@ -21,4 +21,4 @@ export type * from "./solanaSigner.js";
 export type * from "./types.js";
 export { AlchemySignerStatus } from "./types.js";
 export { SolanaSigner } from "./solanaSigner.js";
-export { addSolanaSponsorship } from "./utils/solana.js";
+export { createSolanaSponsoredTransaction } from "./utils/solana.js";

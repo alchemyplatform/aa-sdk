@@ -2,7 +2,7 @@
 
 import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
-import { addSolanaSponsorship, SolanaSigner } from "@account-kit/signer";
+import { createSolanaSponsoredTransaction, SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types.js";
 import {
   PublicKey,
@@ -202,7 +202,7 @@ export function useSolanaTransaction(
     "policyId" in opts ? opts.policyId : backupConnection?.policyId;
   const mapTransformInstructions: Record<string, TransformInstruction> = {
     async addSponsorship(instructions: TransactionInstruction[]) {
-      return await addSolanaSponsorship(
+      return await createSolanaSponsoredTransaction(
         instructions,
         connection || missing("connection"),
         policyId || missing("policyId"),

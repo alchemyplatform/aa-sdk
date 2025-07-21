@@ -9,7 +9,7 @@ import {
 import { size, slice, toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { BaseSignerClient } from "./client/base";
 import { NotAuthenticatedError } from "./errors.js";
-import { addSolanaSponsorship } from "./utils/solana.js";
+import { createSolanaSponsoredTransaction } from "./utils/solana.js";
 
 /**
  * The SolanaSigner class is used to sign transactions and messages for the Solana blockchain.
@@ -160,7 +160,7 @@ export class SolanaSigner {
     connection: Connection,
     policyId: string,
   ): Promise<VersionedTransaction> {
-    return addSolanaSponsorship(instructions, connection, policyId, this.address)
+    return createSolanaSponsoredTransaction(instructions, connection, policyId, this.address)
   }
 
   private formatSignatureForSolana(signature: Hex): Hex {

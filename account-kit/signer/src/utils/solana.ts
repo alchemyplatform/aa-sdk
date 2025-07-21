@@ -1,7 +1,16 @@
 import type { TransactionInstruction } from "@solana/web3.js";
 import { Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 
-export async function addSolanaSponsorship(
+/**
+ * This function wraps instructions in a sponsored transaction
+ * 
+ * @param {TransactionInstruction[]} instructions - The instructions to add sponsorship to
+ * @param {Connection} connection - The connection to use
+ * @param {string} policyId - The policy id to use
+ * @param {string} address - The address to use
+ * @returns {Promise<VersionedTransaction>} - The sponsored transaction
+ */
+export async function createSolanaSponsoredTransaction(
   instructions: TransactionInstruction[],
   connection: Connection,
   policyId: string,
