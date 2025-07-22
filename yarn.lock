@@ -77,10 +77,10 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.11.0.tgz#42cc67c5baa407ac25059fcd7d405cc5ecdb0c33"
   integrity sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==
 
-"@alchemy/wallet-api-types@0.1.0-alpha.13":
-  version "0.1.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.13.tgz#7e9c8d76f8bbf57c9baa26ffda522792d9661835"
-  integrity sha512-huQYiNbmvOKXR3qZ6MWoWrXwvOQUlpfPJDTLHoXT5GXPQnd3VoW4n8SM/s5uwMOosVblnXxR/VU/YYuwCIRP1Q==
+"@alchemy/wallet-api-types@0.1.0-alpha.14":
+  version "0.1.0-alpha.14"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.14.tgz#0e46ce3a7138a178ba9fa9bb8869654e2e3d199a"
+  integrity sha512-pYMOt/QPHXEHi4L7103TQiv3f5N0f3AA7jW05s2fgs+UknxfokjE8oVQPW43zkNP7etbLl3Bra6/2GwY6EPfkQ==
   dependencies:
     "@sinclair/typebox" "^0.34.33"
     deep-equal "^2.2.3"
