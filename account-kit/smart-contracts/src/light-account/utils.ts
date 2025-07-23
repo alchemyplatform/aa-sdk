@@ -85,7 +85,7 @@ export const defaultLightAccountVersion = <
  *
  * @param {Chain} chain - a Chain object
  * @param {LightAccountVersion} version - the version of the light account to get the factory address for
- * @returns {Address} an for the given chain
+ * @returns {Address} address for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultLightAccountFactoryAddress = (

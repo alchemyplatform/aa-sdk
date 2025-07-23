@@ -84,7 +84,7 @@ export const defaultLightAccountVersion = <
  *
  * @param {Chain} chain - a Chain object
  * @param {LightAccountVersion} version - the version of the light account to get the factory address for
- * @returns {Address} an for the given chain
+ * @returns {Address} address for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultLightAccountFactoryAddress = (
@@ -102,7 +102,7 @@ export const getDefaultLightAccountFactoryAddress = (
  * Utility method returning the default multi owner light account factory address given a Chain object
  *
  * @param {Chain} chain - a Chain object
- * @param {string} version - the version of the light account to get the factory address for
+ * @param {LightAccountVersion<"LightAccount">} version - the version of the light account to get the factory address for
  * @returns {Address} an Address for the given chain
  */
 export const getDefaultMultiOwnerLightAccountFactoryAddress = (
@@ -178,7 +178,6 @@ export async function getLightAccountImplAddress<
 
   if (
     hexToNumber(storage) !== 0 &&
-    // TODO(jh): fix here too?
     !expectedImplAddresses.some((x) => x === lowerAddress(trim(storage)))
   ) {
     throw new BaseError(

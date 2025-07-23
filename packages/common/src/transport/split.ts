@@ -1,5 +1,5 @@
 import { custom, type CustomTransport, type Transport } from "viem";
-import { BaseError } from "../errors/BaseError";
+import { BaseError } from "../errors/BaseError.js";
 
 export interface SplitTransportParams {
   overrides: {
