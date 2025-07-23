@@ -352,14 +352,14 @@ createConfig({
 
 #### 🧪 Other common causes of session ending:
 
-* **Server-Side Rendering (SSR) misconfigured**
+- **Server-Side Rendering (SSR) misconfigured**
   If you're using SSR and haven't configured the provider correctly, session state can reset on the client.
   👉 [Enable SSR and pass initial params →](https://www.alchemy.com/docs/wallets/react/ssr)
 
-* **Ad blockers**
+- **Ad blockers**
   Some ad blockers (especially those with aggressive cookie or storage policies) can interfere with localStorage or SDK requests, causing unexpected logouts.
 
-* **Private/incognito mode**
+- **Private/incognito mode**
   Browsers often restrict or wipe localStorage between tabs or after a short time in incognito mode. Consider warning users or designing for short session lengths in those environments.
 
 ---
@@ -368,7 +368,7 @@ createConfig({
 
 If you're seeing repeated or sporadic logouts in production, test the behavior across:
 
-* Browsers (Chrome, Firefox, Safari)
-* Devices (desktop vs mobile)
-* Browsing modes (incognito vs standard)
-* With and without ad blockers
+- Browsers (Chrome, Firefox, Safari)
+- Devices (desktop vs mobile)
+- Browsing modes (incognito vs standard)
+- With and without ad blockers
