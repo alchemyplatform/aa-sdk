@@ -32,8 +32,8 @@ describe("Alchemy Transport Tests", () => {
   it("should correctly do runtime validation when chain is not supported by Alchemy", () => {
     expect(() =>
       alchemy({ apiKey: "some_key" })({ chain: avalanche }),
-    ).toThrowErrorMatchingInlineSnapshot(
-      `[Error: chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@alchemy/common/chains\`.]`,
+    ).toThrowError(
+      `chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@alchemy/common/chains\`.`,
     );
   });
 });
