@@ -31,12 +31,9 @@ addPasskeyOnSignup: true,
 }
 
 const config = createConfig({
-  transport: alchemy({ apiKey: "your_api_key" })
-  chain: sepolia,
-  ssr: true,
-  sessionConfig: {
-    duration: 60 * 60, // 1 hour in seconds
-  },
+transport: alchemy({ apiKey: "your_api_key" })
+chain: sepolia,
+ssr: true,
 }, uiConfig)
 
 export const queryClient = new QueryClient();
@@ -53,11 +50,6 @@ for creating an alchemy account config
 
 `AlchemyAccountsUIConfig`
 (optional) configuration to use for the Auth Components UI
-
-### sessionConfig
-
-`SessionConfig`
-**Note**: If no duration is provided, the default session timeout is 15 minutes (900 seconds). Sessions are stored in `localStorage` unless cleared due to browser behavior or extensions.
 
 ## Returns
 

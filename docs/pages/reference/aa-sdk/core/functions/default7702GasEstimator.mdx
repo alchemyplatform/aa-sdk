@@ -29,7 +29,7 @@ import {
 } from "@account-kit/smart-contracts";
 
 async function createSMA7702AccountClient(
-  config: CreateModularAccountV2ClientParams,
+  config: CreateModularAccountV2ClientParams
 ): Promise<SmartAccountClient> {
   const sma7702Account = await createModularAccountV2({
     ...config,
