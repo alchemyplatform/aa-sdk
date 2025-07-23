@@ -330,3 +330,53 @@ For more information on how to secure your API key, refer to [this guide](https:
 Protecting your Policy ID requires some custom work, but it’s similar to safeguarding any key on the backend. One solution is to use a proxy server that holds both the API key and Policy ID. In the frontend, when creating an Alchemy client, pass the proxy server URL as the RPC URL instead of a public Alchemy URL.
 
 Additionally, you'll need to implement custom code on your proxy server to limit gas sponsorship requests. This could include rules that make sense for your app, such as limiting gas fees, restricting certain contract or method calls, or implementing limits based on IP addresses or CAPTCHA verification.
+
+### Why are my users getting logged out unexpectedly?
+
+**Issue:**  
+You or your users might notice that the session ends sooner than expected, requiring re-authentication.
+
+**Default behavior:**  
+By default, authenticated sessions using `AlchemyWebSigner` are stored in `localStorage` and expire after **15 minutes** of inactivity.
+
+---
+
+#### ✅ Solution: Extend or configure session duration
+
+You can customize the session timeout by passing a `sessionConfig` object to the `createConfig` method:
+
+```ts
+createConfig({
+  ...,
+  sessionConfig: {
+    duration: 60 * 60, // Session duration in seconds (e.g., 1 hour)
+  },
+})
+```
+
+👉 [Reference: createConfig](https://www.alchemy.com/docs/wallets/reference/account-kit/react/functions/createConfig)
+
+---
+
+#### 🧪 Other common causes of session ending:
+
+- **Server-Side Rendering (SSR) misconfigured**
+  If you're using SSR and haven't configured the provider correctly, session state can reset on the client.
+  👉 [Enable SSR and pass initial params →](https://www.alchemy.com/docs/wallets/react/ssr)
+
+- **Ad blockers**
+  Some ad blockers (especially those with aggressive cookie or storage policies) can interfere with localStorage or SDK requests, causing unexpected logouts.
+
+- **Private/incognito mode**
+  Browsers often restrict or wipe localStorage between tabs or after a short time in incognito mode. Consider warning users or designing for short session lengths in those environments.
+
+---
+
+#### 🔁 Debugging Checklist
+
+If you're seeing repeated or sporadic logouts in production, test the behavior across:
+
+- Browsers (Chrome, Firefox, Safari)
+- Devices (desktop vs mobile)
+- Browsing modes (incognito vs standard)
+- With and without ad blockers
