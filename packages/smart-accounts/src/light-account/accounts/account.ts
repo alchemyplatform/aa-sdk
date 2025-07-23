@@ -22,6 +22,7 @@ import {
   lowerAddress,
 } from "../utils.js";
 import { createLightAccountBase, type LightAccountBase } from "./base.js";
+import { BaseError } from "@alchemy/common";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -125,7 +126,7 @@ export async function createLightAccount<
       });
 
       if (owner == null) {
-        throw new Error("could not get on-chain owner");
+        throw new BaseError("could not get on-chain owner");
       }
 
       return owner;

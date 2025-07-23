@@ -18,6 +18,7 @@ import {
   lowerAddress,
 } from "../utils.js";
 import { createLightAccountBase, type LightAccountBase } from "./base.js";
+import { BaseError } from "@alchemy/common";
 
 export type MultiOwnerLightAccount = LightAccountBase<
   "MultiOwnerLightAccount",
@@ -116,11 +117,13 @@ export async function createMultiOwnerLightAccount({
       });
 
       if (owners == null) {
-        throw new Error("could not get on-chain owners");
+        throw new BaseError("could not get on-chain owners");
       }
 
       if (!owners.includes(signerAddress)) {
-        throw new Error("on-chain owners does not include the current signer");
+        throw new BaseError(
+          "on-chain owners does not include the current signer",
+        );
       }
 
       return owners;

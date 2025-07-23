@@ -1,4 +1,4 @@
-import { ChainNotFoundError } from "@alchemy/common";
+import { BaseError, ChainNotFoundError } from "@alchemy/common";
 import { hexToBigInt, hexToNumber, trim, type Address, type Chain } from "viem";
 import { getStorageAt } from "viem/actions";
 import type { LightAccountBase } from "./accounts/base";
@@ -171,7 +171,7 @@ export async function getLightAccountImplAddress<
   });
 
   if (storage == null) {
-    throw new Error(
+    throw new BaseError(
       `Failed to get storage slot: ${EIP1967_PROXY_IMPL_STORAGE_SLOT}`,
     );
   }
@@ -181,7 +181,7 @@ export async function getLightAccountImplAddress<
     // TODO(jh): fix here too?
     !expectedImplAddresses.some((x) => x === lowerAddress(trim(storage)))
   ) {
-    throw new Error(
+    throw new BaseError(
       `could not determine if smart account implementation is ${type} ${String(
         version,
       )}`,
@@ -251,7 +251,7 @@ export async function getLightAccountVersionForAccount<
         : undefined;
 
   if (!version) {
-    throw new Error(
+    throw new BaseError(
       `Could not determine ${account.source} version for chain ${chain.id}`,
     );
   }

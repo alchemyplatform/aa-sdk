@@ -39,6 +39,7 @@ import {
   lowerAddress,
 } from "../utils.js";
 import { type LightAccountVersionConfig } from "../types.js";
+import { BaseError } from "@alchemy/common";
 
 const SignaturePrefix = {
   EOA: "0x00",
@@ -134,7 +135,7 @@ export async function createLightAccountBase<
     });
 
     if (storage == null) {
-      throw new Error(
+      throw new BaseError(
         `Failed to get storage slot: ${EIP1967_PROXY_IMPL_STORAGE_SLOT}`,
       );
     }
@@ -144,7 +145,7 @@ export async function createLightAccountBase<
       fromHex(storage, "number") !== 0 &&
       !expectedImplAddresses.some((x) => x === lowerAddress(trim(storage)))
     ) {
-      throw new Error(
+      throw new BaseError(
         `could not determine if smart account implementation is ${type} ${String(
           version,
         )}`,
@@ -193,7 +194,7 @@ export async function createLightAccountBase<
       case "v1.0.1":
         return params;
       case "v1.0.2":
-        throw new Error(
+        throw new BaseError(
           `Version ${String(version)} of LightAccount doesn't support 1271`,
         );
       case "v1.1.0":
@@ -207,7 +208,9 @@ export async function createLightAccountBase<
           data: get1271Wrapper(messageHash, "2"),
         };
       default:
-        throw new Error(`Unknown version ${String(version)} of LightAccount`);
+        throw new BaseError(
+          `Unknown version ${String(version)} of LightAccount`,
+        );
     }
   };
 
@@ -285,7 +288,7 @@ export async function createLightAccountBase<
         case "v2.0.0":
           return concat([SignaturePrefix.EOA, signature]);
         default:
-          throw new Error(`Unknown version ${type} of ${String(version)}`);
+          throw new BaseError(`Unknown version ${type} of ${String(version)}`);
       }
     },
 

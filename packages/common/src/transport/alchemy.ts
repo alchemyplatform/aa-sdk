@@ -200,7 +200,7 @@ export function alchemy<
 
       if (!connectionConfig.proxyUrl && chain.rpcUrls.alchemy == null) {
         // TODO(v5): update this error message to be the correct package name
-        throw new Error(
+        throw new BaseError(
           "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`.",
         );
       }
