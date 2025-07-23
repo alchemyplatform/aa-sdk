@@ -19,6 +19,8 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  * an additional argument, the configuration object for the Auth Components UI
  * (the modal and AuthCard).
  *
+ * **Note:** In `props.sessionConfig`, if `expirationTimeMs` is not provided, the default session timeout is 15 minutes. Sessions are stored in `localStorage` unless cleared due to browser behavior or extensions.
+ *
  * @example
  * ```ts twoslash
  * import { sepolia, alchemy } from "@account-kit/infra"
