@@ -349,7 +349,7 @@ You can customize the session timeout by passing a `sessionConfig` object to the
 createConfig({
   ...,
   sessionConfig: {
-    duration: 60 * 60, // Session duration in seconds (e.g., 1 hour)
+    expirationTimeMs: 1000 * 60 * 60 * 24, // Session duration in milliseconds (e.g., 24 hours)
   },
 })
 ```

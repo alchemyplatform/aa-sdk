@@ -20,7 +20,7 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  * (the modal and AuthCard).
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { sepolia, alchemy } from "@account-kit/infra"
  * import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
  * import { QueryClient } from "@tanstack/react-query";
@@ -37,6 +37,9 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *   transport: alchemy({ apiKey: "your_api_key" })
  *   chain: sepolia,
  *   ssr: true,
+ *   sessionConfig: {
+ *     expirationTimeMs: 1000 * 60 * 60 * 24, // <-- Adjust the session expiration time as needed (defauly 15 mins)
+ *   },
  * }, uiConfig)
  *
  * export const queryClient = new QueryClient();
@@ -48,11 +51,11 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  */
 export const createConfig = (
   props: CreateConfigProps,
-  ui?: AlchemyAccountsUIConfig,
+  ui?: AlchemyAccountsUIConfig
 ): AlchemyAccountsConfigWithUI => {
   if (
     ui?.auth?.sections.some((x) =>
-      x.some((y) => y.type === "social" && y.mode === "popup"),
+      x.some((y) => y.type === "social" && y.mode === "popup")
     )
   ) {
     props.enablePopupOauth = true;
@@ -70,7 +73,7 @@ export const createConfig = (
   ) {
     const walletConnectAuthConfig = externalWalletSection?.walletConnect;
     const walletConnectParams = getWalletConnectParams(
-      walletConnectAuthConfig,
+      walletConnectAuthConfig
     )!;
 
     props.connectors ??= [];
