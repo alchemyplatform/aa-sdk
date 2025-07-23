@@ -1,5 +1,10 @@
-import { type Address, type Chain } from "viem";
-import type { LightAccountBase } from "./accounts/base-account";
+import type {
+  Address,
+  Chain,
+  SignableMessage,
+  TypedDataDefinition,
+} from "viem";
+import type { LightAccountBase } from "./accounts/base";
 
 export type LightAccountVersionConfigs = {
   LightAccount: {
@@ -15,7 +20,6 @@ export type LightAccountVersionConfigs = {
 
 /**
  * Light account types supported: LightAccount, MultiOwnerLightAccount
- *
  */
 export type LightAccountType = keyof LightAccountVersionConfigs;
 
@@ -51,3 +55,13 @@ export type LightAccountEntryPointVersion<
 > = LightAccountVersionConfigs[TLightAccountType][TLightAccountVersion] extends LightAccountVersionConfig
   ? LightAccountVersionConfigs[TLightAccountType][TLightAccountVersion]["entryPointVersion"]
   : never;
+
+export type SignatureRequest =
+  | {
+      type: "personal_sign";
+      data: SignableMessage;
+    }
+  | {
+      type: "eth_signTypedData_v4";
+      data: TypedDataDefinition;
+    };

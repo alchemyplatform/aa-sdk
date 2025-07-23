@@ -1,6 +1,6 @@
-import type { SignatureRequest } from "@aa-sdk/core";
 import {
   concat,
+  concatHex,
   encodeFunctionData,
   fromHex,
   hashMessage,
@@ -18,7 +18,9 @@ import {
 } from "viem";
 import {
   entryPoint06Abi,
+  entryPoint06Address,
   entryPoint07Abi,
+  entryPoint07Address,
   getUserOperationHash,
   toSmartAccount,
   type SmartAccount,
@@ -29,14 +31,20 @@ import type {
   LightAccountEntryPointVersion,
   LightAccountType,
   LightAccountVersion,
+  SignatureRequest,
 } from "../types.js";
-import { AccountVersionRegistry } from "../utils.js";
+import {
+  AccountVersionRegistry,
+  EIP1967_PROXY_IMPL_STORAGE_SLOT,
+  lowerAddress,
+} from "../utils.js";
+import { type LightAccountVersionConfig } from "../types.js";
 
-enum SignatureType {
-  EOA = "0x00",
-  CONTRACT = "0x01",
-  CONTRACT_WITH_ADDR = "0x02",
-}
+const SignaturePrefix = {
+  EOA: "0x00",
+  CONTRACT: "0x01",
+  CONTRACT_WITH_ADDR: "0x02",
+} as const;
 
 export type BaseLightAccountImplementation<
   TLightAccountType extends LightAccountType = LightAccountType,
@@ -112,18 +120,7 @@ export async function createLightAccountBase<
     upgradeToAddress: Address;
     upgradeToInitData: Hex;
   }): Promise<Hex> => {
-    const storage = await getStorageAt(client, {
-      address: accountAddress,
-      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-    });
-
-    if (storage == null) {
-      throw new Error(
-        "Failed to get storage slot: 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-      );
-    }
-
-    const implementationAddresses = Object.values(
+    const expectedImplAddresses = Object.values(
       AccountVersionRegistry[type],
     ).map(
       (x) =>
@@ -131,9 +128,21 @@ export async function createLightAccountBase<
         x.addresses.default.impl,
     );
 
+    const storage = await getStorageAt(client, {
+      address: accountAddress,
+      slot: EIP1967_PROXY_IMPL_STORAGE_SLOT,
+    });
+
+    if (storage == null) {
+      throw new Error(
+        `Failed to get storage slot: ${EIP1967_PROXY_IMPL_STORAGE_SLOT}`,
+      );
+    }
+
+    // Only upgrade undeployed accounts (storage 0) or deployed light accounts, else error.
     if (
       fromHex(storage, "number") !== 0 &&
-      !implementationAddresses.some((x) => x === trim(storage))
+      !expectedImplAddresses.some((x) => x === lowerAddress(trim(storage)))
     ) {
       throw new Error(
         `could not determine if smart account implementation is ${type} ${String(
@@ -154,6 +163,8 @@ export async function createLightAccountBase<
     version: string,
   ): TypedDataDefinition => {
     return {
+      // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
+      // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
       domain: {
         chainId: client.chain.id,
         name: type,
@@ -202,22 +213,26 @@ export async function createLightAccountBase<
 
   const formatSignature = async (signature: Hex): Promise<Hex> => {
     return version === "v2.0.0"
-      ? concat([SignatureType.EOA, signature])
+      ? concat([SignaturePrefix.EOA, signature])
       : signature;
   };
 
-  const entryPointVersion = (AccountVersionRegistry[type][version] as any)
-    .entryPointVersion;
+  const entryPointVersion = (
+    AccountVersionRegistry[type][version] as LightAccountVersionConfig
+  ).entryPointVersion;
 
-  const entryPoint = {
-    abi: entryPointVersion === "0.6" ? entryPoint06Abi : entryPoint07Abi,
-    address:
-      // TODO(v5): make these constants elsewhere
-      entryPointVersion === "0.6"
-        ? ("0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address)
-        : ("0x0000000071727De22E5E9d8BAf0edAc6f37da032" as Address),
-    version: entryPointVersion === "0.6" ? ("0.6" as const) : ("0.7" as const),
-  };
+  const entryPoint =
+    entryPointVersion === "0.6"
+      ? {
+          abi: entryPoint06Abi,
+          address: entryPoint06Address as Address,
+          version: "0.6" as const,
+        }
+      : {
+          abi: entryPoint07Abi,
+          address: entryPoint07Address as Address,
+          version: "0.7" as const,
+        };
 
   return await toSmartAccount({
     getFactoryArgs,
@@ -262,13 +277,13 @@ export async function createLightAccountBase<
       const signature =
         "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
-      switch (version as string) {
+      switch (version) {
         case "v1.0.1":
         case "v1.0.2":
         case "v1.1.0":
           return signature;
         case "v2.0.0":
-          return concat([SignatureType.EOA, signature]);
+          return concat([SignaturePrefix.EOA, signature]);
         default:
           throw new Error(`Unknown version ${type} of ${String(version)}`);
       }
@@ -319,7 +334,7 @@ export async function createLightAccountBase<
       });
 
       return version === "v2.0.0"
-        ? concat([SignatureType.EOA, signature])
+        ? concatHex([SignaturePrefix.EOA, signature])
         : signature;
     },
 

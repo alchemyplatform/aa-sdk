@@ -19,11 +19,9 @@ import {
   LightAccountUnsupported1271Factories,
   defaultLightAccountVersion,
   getDefaultLightAccountFactoryAddress,
+  lowerAddress,
 } from "../utils.js";
-import {
-  createLightAccountBase,
-  type LightAccountBase,
-} from "./base-account.js";
+import { createLightAccountBase, type LightAccountBase } from "./base.js";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -56,9 +54,9 @@ export async function createLightAccount<
 >({
   client,
   salt: salt_ = 0n,
-  accountAddress,
-  factoryAddress,
+  accountAddress: accountAddress_,
   version = defaultLightAccountVersion() as TLightAccountVersion,
+  factoryAddress = getDefaultLightAccountFactoryAddress(client.chain, version),
 }: CreateLightAccountParams<TLightAccountVersion>): Promise<
   LightAccount<TLightAccountVersion>
 > {
@@ -70,20 +68,17 @@ export async function createLightAccount<
       : LightAccountFactoryAbi_v1;
 
   const signerAddress = client.account.address;
-  const finalFactoryAddress =
-    factoryAddress ??
-    getDefaultLightAccountFactoryAddress(client.chain, version);
 
   const salt = LightAccountUnsupported1271Factories.has(
-    finalFactoryAddress.toLowerCase() as Address,
+    lowerAddress(factoryAddress),
   )
     ? 0n
     : salt_;
 
-  const address =
-    accountAddress ??
+  const accountAddress =
+    accountAddress_ ??
     predictLightAccountAddress({
-      factoryAddress: finalFactoryAddress,
+      factoryAddress,
       salt,
       ownerAddress: signerAddress,
       version,
@@ -97,7 +92,7 @@ export async function createLightAccount<
     });
 
     return {
-      factory: finalFactoryAddress,
+      factory: factoryAddress,
       factoryData,
     };
   };
@@ -105,7 +100,7 @@ export async function createLightAccount<
   const baseAccount = await createLightAccountBase({
     client,
     abi: accountAbi,
-    accountAddress: address,
+    accountAddress,
     type: "LightAccount",
     version,
     getFactoryArgs,
@@ -123,17 +118,17 @@ export async function createLightAccount<
     },
 
     async getOwnerAddress(): Promise<Address> {
-      const callResult = await readContract(client, {
-        address,
+      const owner = await readContract(client, {
+        address: accountAddress,
         abi: accountAbi,
         functionName: "owner",
       });
 
-      if (callResult == null) {
+      if (owner == null) {
         throw new Error("could not get on-chain owner");
       }
 
-      return callResult as Address;
+      return owner;
     },
   };
 }

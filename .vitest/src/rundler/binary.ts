@@ -95,6 +95,7 @@ export async function downloadLatestRundlerRelease(
     const tarStream = tar.extract({
       cwd: extractPath,
     });
+    // @ts-ignore
     await streamPipeline(assetResponse.body, gunzipStream, tarStream);
   } catch (error) {
     throw new Error(`Failed to download the latest release. ${error}`);

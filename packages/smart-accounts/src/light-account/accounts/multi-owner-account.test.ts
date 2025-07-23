@@ -248,55 +248,7 @@ describe("MultiOwner Light Account Tests", () => {
     expect(newOwnerAddresses).toContain(newOwner.account.address);
   }, 100000);
 
-  // TODO(v5): implement support for these methods
-  //   it("should upgrade a deployed multi owner light account to msca successfully", async () => {
-  //     // create a owner signer to create the account
-  //     const throwawaySigner =
-  //       LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
-  //     const throwawayClient = await givenConnectedProvider({
-  //       signer: throwawaySigner,
-  //     });
-
-  //     const accountAddress = throwawayClient.getAddress();
-  //     const ownerAddress = await throwawaySigner.getAddress();
-
-  //     // fund + deploy the throwaway address
-  //     await setBalance(client, {
-  //       address: accountAddress,
-  //       value: 200000000000000000n,
-  //     });
-
-  //     const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
-  //       throwawayClient,
-  //       {
-  //         account: throwawayClient.account,
-  //         multiOwnerPluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-  //       }
-  //     );
-
-  //     await throwawayClient.upgradeAccount({
-  //       upgradeTo: upgradeToData,
-  //       waitForTx: true,
-  //     });
-
-  //     const upgradedClient = createSmartAccountClientFromExisting({
-  //       client: createBundlerClient({
-  //         chain: instance.chain,
-  //         transport: custom(client),
-  //       }),
-  //       account: await createMAAccount(),
-  //     }).extend(multiOwnerPluginActions);
-
-  //     const upgradedAccountAddress = upgradedClient.getAddress();
-
-  //     const owners = await upgradedClient.readOwners({
-  //       account: upgradedClient.account,
-  //       pluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-  //     });
-
-  //     expect(upgradedAccountAddress).toBe(accountAddress);
-  //     expect(owners).toContain(ownerAddress);
-  //   }, 200000);
+  // TODO(v5): implement test for upgrading account to MSCA?
 
   const givenConnectedProvider = async ({
     signer,

@@ -1,5 +1,6 @@
 import {
   encodeFunctionData,
+  hexToBigInt,
   type Address,
   type Chain,
   type Client,
@@ -12,11 +13,11 @@ import { readContract } from "viem/actions";
 import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js";
 import { MultiOwnerLightAccountFactoryAbi } from "../abis/MultiOwnerLightAccountFactoryAbi.js";
 import { predictMultiOwnerLightAccountAddress } from "../predictAddress.js";
-import { getDefaultMultiOwnerLightAccountFactoryAddress } from "../utils.js";
 import {
-  createLightAccountBase,
-  type LightAccountBase,
-} from "./base-account.js";
+  getDefaultMultiOwnerLightAccountFactoryAddress,
+  lowerAddress,
+} from "../utils.js";
+import { createLightAccountBase, type LightAccountBase } from "./base.js";
 
 export type MultiOwnerLightAccount = LightAccountBase<
   "MultiOwnerLightAccount",
@@ -31,10 +32,10 @@ export type MultiOwnerLightAccount = LightAccountBase<
 
 export type CreateMultiOwnerLightAccountParams = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount>;
-  owners?: Address[];
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
+  owners?: Address[];
 };
 
 /**
@@ -45,34 +46,31 @@ export type CreateMultiOwnerLightAccountParams = {
  */
 export async function createMultiOwnerLightAccount({
   client,
-  owners,
   salt = 0n,
-  accountAddress,
-  factoryAddress,
+  owners = [],
+  accountAddress: accountAddress_,
+  factoryAddress = getDefaultMultiOwnerLightAccountFactoryAddress(
+    client.chain,
+    "v2.0.0",
+  ),
 }: CreateMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
   const signerAddress = client.account.address;
 
   // Deduplicate and sort owners
-  const deduplicatedOwners = Array.from(
-    new Set(
-      [signerAddress, ...(owners ?? [])].map((owner) => owner.toLowerCase()),
-    ),
-  ) as Address[];
+  const dedupedOwners = Array.from(
+    new Set([signerAddress, ...owners].map((addr) => lowerAddress(addr))),
+  );
 
-  const sortedOwners = deduplicatedOwners.sort((a, b) => {
-    const bigintA = BigInt(a);
-    const bigintB = BigInt(b);
+  const sortedOwners = dedupedOwners.sort((a, b) => {
+    const bigintA = hexToBigInt(a);
+    const bigintB = hexToBigInt(b);
     return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
   });
 
-  const finalFactoryAddress =
-    factoryAddress ??
-    getDefaultMultiOwnerLightAccountFactoryAddress(client.chain, "v2.0.0");
-
-  const address =
-    accountAddress ??
+  const accountAddress =
+    accountAddress_ ??
     predictMultiOwnerLightAccountAddress({
-      factoryAddress: finalFactoryAddress,
+      factoryAddress,
       salt,
       ownerAddresses: sortedOwners,
     });
@@ -85,7 +83,7 @@ export async function createMultiOwnerLightAccount({
     });
 
     return {
-      factory: finalFactoryAddress,
+      factory: factoryAddress,
       factoryData,
     };
   };
@@ -93,7 +91,7 @@ export async function createMultiOwnerLightAccount({
   const baseAccount = await createLightAccountBase({
     client,
     abi: MultiOwnerLightAccountAbi,
-    accountAddress: address,
+    accountAddress,
     type: "MultiOwnerLightAccount",
     version: "v2.0.0",
     getFactoryArgs,
@@ -111,21 +109,21 @@ export async function createMultiOwnerLightAccount({
     },
 
     async getOwnerAddresses(): Promise<readonly Address[]> {
-      const callResult = await readContract(client, {
-        address,
+      const owners = await readContract(client, {
+        address: accountAddress,
         abi: MultiOwnerLightAccountAbi,
         functionName: "owners",
       });
 
-      if (callResult == null) {
+      if (owners == null) {
         throw new Error("could not get on-chain owners");
       }
 
-      if (!callResult.includes(client.account.address)) {
+      if (!owners.includes(signerAddress)) {
         throw new Error("on-chain owners does not include the current signer");
       }
 
-      return callResult as readonly Address[];
+      return owners;
     },
   };
 }

@@ -1,4 +1,4 @@
-import { AccountNotFoundError } from "@aa-sdk/core";
+import { AccountNotFoundError } from "@alchemy/common";
 import type { Address, Chain, Client, Hex, IsUndefined, Transport } from "viem";
 import { sendUserOperation, type SmartAccount } from "viem/account-abstraction";
 import { getAction } from "viem/utils";
@@ -34,7 +34,6 @@ export function singleOwnerLightAccountActions<
 ): LightAccountActions<
   IsUndefined<TAccount> extends true ? undefined : LightAccount
 > {
-  // TODO(v5): refactor this out to its own function if needed
   return {
     transferOwnership: async (args) => {
       const { newOwner, account = client.account } = args;

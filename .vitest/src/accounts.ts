@@ -52,6 +52,7 @@ export async function resetBalance<
     await client.waitForUserOperationTransaction({ hash });
   }
 
+  // @ts-ignore
   await setBalance(testClient, {
     address: client.account.address,
     value: 0n,

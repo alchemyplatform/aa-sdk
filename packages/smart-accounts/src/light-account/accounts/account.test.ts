@@ -293,7 +293,6 @@ describe("Light Account Tests", () => {
     await expect(receipt).resolves.not.toThrowError();
   });
 
-  // TODO(v5): add transfer ownership support for this account
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
     const throwawaySigner =
@@ -329,56 +328,6 @@ describe("Light Account Tests", () => {
     expect(newOwnerAddress).toBe(await newOwner.getAddress());
   }, 100000);
 
-  // TODO(v5): implement support for these methods
-  // it("should upgrade a deployed light account to msca successfully", async () => {
-  //   // create a owner signer to create the account
-  //   const throwawaySigner =
-  //     LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
-  //   const throwawayClient = await givenConnectedProvider({
-  //     signer: throwawaySigner,
-  //   });
-
-  //   const accountAddress = throwawayClient.getAddress();
-  //   const ownerAddress = await throwawaySigner.getAddress();
-
-  //   // fund + deploy the throwaway address
-  //   await setBalance(client, {
-  //     address: accountAddress,
-  //     value: 200000000000000000n,
-  //   });
-
-  //   const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
-  //     throwawayClient,
-  //     {
-  //       account: throwawayClient.account,
-  //       multiOwnerPluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-  //     }
-  //   );
-
-  //   await throwawayClient.upgradeAccount({
-  //     upgradeTo: upgradeToData,
-  //     waitForTx: true,
-  //   });
-
-  //   const upgradedClient = createSmartAccountClientFromExisting({
-  //     client: createBundlerClient({
-  //       chain: instance.chain,
-  //       transport: custom(client),
-  //     }),
-  //     account: await createMAAccount(),
-  //   }).extend(multiOwnerPluginActions);
-
-  //   const upgradedAccountAddress = upgradedClient.getAddress();
-
-  //   const owners = await upgradedClient.readOwners({
-  //     account: upgradedClient.account,
-  //     pluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
-  //   });
-
-  //   expect(upgradedAccountAddress).toBe(accountAddress);
-  //   expect(owners).toContain(ownerAddress);
-  // }, 200000);
-
   it.each(versions)(
     "should expose prepare and format functions that work",
     async (version) => {
@@ -407,6 +356,10 @@ describe("Light Account Tests", () => {
       }
     },
   );
+
+  // TODO(v5): implement test for upgrading account to MSCA?
+
+  // TODO(v5): implement test for upgrading account to MAv2
 
   const givenConnectedProvider = async ({
     version = "v1.1.0",
@@ -437,7 +390,7 @@ describe("Light Account Tests", () => {
       userOperation: {
         // TODO(v5): move this to the common package so it can be reused
         estimateFeesPerGas: async ({ bundlerClient }) => {
-          let [block, maxPriorityFeePerGasEstimate] = await Promise.all([
+          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
             getBlock(bundlerClient, { blockTag: "latest" }),
             // it is a fair assumption that if someone is using this Alchemy Middleware, then they are using Alchemy RPC
             bundlerClient.request({
