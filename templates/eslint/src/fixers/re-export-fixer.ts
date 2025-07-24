@@ -5,7 +5,6 @@ let numFixes = 0;
 export function reExportFixerEslint(
   fixer: Rule.RuleFixer,
   node: Rule.Node,
-  context: Rule.RuleContext,
   fixBatchSize = 10,
 ) {
   if (fixBatchSize > 0 && numFixes > fixBatchSize) {
