@@ -6,7 +6,7 @@ import { ArrowUpRightFromSquare } from "lucide-react";
 import { LoadingIcon } from "../icons/loading";
 
 export const DepositAndSwapsCard = () => {
-    const uri = "https://alchemyapi.typeform.com/to/pkjSr57v"
+  const uri = "https://alchemyapi.typeform.com/to/pkjSr57v";
 
   const imageSlot = (
     <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
@@ -40,19 +40,15 @@ export const DepositAndSwapsCard = () => {
         imageSlot={imageSlot}
         heading="Swaps, Deposits, Payments"
         content={
-            <p className="text-fg-primary text-sm mb-3">
-                Maximize liquidity onchain with easy to use swaps, payments, and deposits.
-            </p>
+          <p className="text-fg-primary text-sm mb-3">
+            Maximize liquidity onchain with easy to use swaps, payments, and
+            deposits.
+          </p>
         }
         buttons={
-            <Button
-                as="a"
-                className="mt-auto w-full"
-                href={uri}
-                target="_blank"
-            >
-                Request Early Access
-                <ArrowUpRightFromSquare className="w-4 h-4 mr-2" />
+          <Button as="a" className="mt-auto w-full" href={uri} target="_blank">
+            Request Early Access
+            <ArrowUpRightFromSquare className="w-4 h-4 mr-2" />
           </Button>
         }
       />
