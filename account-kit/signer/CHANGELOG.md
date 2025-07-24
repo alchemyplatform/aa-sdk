@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.52.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.51.0...v4.52.0) (2025-07-18)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.50.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.49.0...v4.50.0) (2025-07-14)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
+
+### Features
+
+- multi owner api rework ([#1737](https://github.com/alchemyplatform/aa-sdk/issues/1737)) ([3ef63c7](https://github.com/alchemyplatform/aa-sdk/commit/3ef63c73e737076b25cae8b86b16cf5affa53bba))
+
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
+
+### Features
+
+- multi owner signing ([#1708](https://github.com/alchemyplatform/aa-sdk/issues/1708)) ([113dfe7](https://github.com/alchemyplatform/aa-sdk/commit/113dfe76b70361070a120ccedb0f03b11707d392))
+
 ## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
 
 ### Bug Fixes

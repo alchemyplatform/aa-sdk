@@ -1,0 +1,73 @@
+You can use the [alchemy_simulateUserOperationAssetChanges](https://www.alchemy.com/docs/wallets/api/bundler-api/useroperation-simulation-endpoints/alchemy-simulate-user-operation-asset-changes) endpoint to do off-chain simulation to verify both the approval and the underlying userOp will succeed.
+
+<Note>
+
+Note that changes in blockchain's state could lead to different outcomes.
+
+</Note>
+
+Example:
+
+```tsx
+...
+const erc20Abi = parseAbi([
+  "function approve(address spender, uint256 amount) public returns (bool)",]);
+const client = createAlchemyPublicRpcClient(...);
+const response = await simulateUserOperationChanges(client, {
+uo: [{
+      // approve
+        target: tokenAddress,
+        data: encodeFunctionData({abi: erc20Abi,
+              functionName: "approve",
+              args: [paymasterAddress, 1_000_000_000n]}
+            ) as `0x${string}`,
+    },
+     // underlying transaction.
+    {
+      target: tokenAddress,
+      data: transfer(paymasterAddress_07, 1_000n) as `0x${string}`,
+    }],
+});
+```
+
+Sample response:
+
+```tsx
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+        "changes": [
+            {
+                "assetType": "ERC20",
+                "changeType": "APPROVE",
+                "from": "0x717ec68b238dc95c7fe1a5c9bcfaa2998915edba",
+                "to": "0x4fd9098af9ddcb41da48a1d78f91f1398965addc",
+                "rawAmount": "1000000000",
+                "contractAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "tokenId": null,
+                "decimals": 6,
+                "symbol": "USDC",
+                "name": "USDC",
+                "logo": "https://static.alchemyapi.io/images/assets/3408.png",
+                "amount": "1000"
+            },
+            {
+                "assetType": "ERC20",
+                "changeType": "TRANSFER",
+                "from": "0x717ec68b238dc95c7fe1a5c9bcfaa2998915edba",
+                "to": "0xffffffffffffffffffffffffffffffffffffffff",
+                "rawAmount": "4633",
+                "contractAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "tokenId": null,
+                "decimals": 6,
+                "symbol": "USDC",
+                "name": "USDC",
+                "logo": "https://static.alchemyapi.io/images/assets/3408.png",
+                "amount": "0.004633"
+            }
+        ],
+        "error": null
+    }
+}
+```

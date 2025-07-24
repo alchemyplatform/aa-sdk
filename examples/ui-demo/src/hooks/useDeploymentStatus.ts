@@ -13,9 +13,7 @@ export const useDeploymentStatus = () => {
 
   const { account } = useAccount({
     type: "ModularAccountV2",
-    accountParams: {
-      mode: accountMode,
-    },
+    accountParams: { mode: accountMode },
   });
 
   const [publicClient] = useState(() =>

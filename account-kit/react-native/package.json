@@ -1,7 +1,7 @@
 {
   "name": "@account-kit/react-native",
-  "version": "4.43.1",
-  "description": "React Native Components and Hooks for using Account Kit",
+  "version": "4.52.2",
+  "description": "React Native Components and Hooks for using Smart Wallets",
   "license": "MIT",
   "author": "Alchemy",
   "private": false,
@@ -39,11 +39,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/core": "^4.43.1",
-    "@account-kit/infra": "^4.43.1",
-    "@account-kit/react": "^4.43.1",
-    "@account-kit/react-native-signer": "^4.43.1",
-    "@account-kit/signer": "^4.43.1",
+    "@account-kit/core": "^4.52.2",
+    "@account-kit/infra": "^4.52.2",
+    "@account-kit/react": "^4.52.2",
+    "@account-kit/react-native-signer": "^4.52.2",
+    "@account-kit/signer": "^4.52.2",
     "@noble/hashes": "1.7.1",
     "crypto-browserify": "^3.12.1",
     "node-libs-react-native": "^1.2.1",

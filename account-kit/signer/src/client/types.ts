@@ -1,5 +1,9 @@
 import type { Address } from "@aa-sdk/core";
-import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
+import type {
+  TSignedRequest,
+  TurnkeyApiTypes,
+  getWebAuthnAttestation,
+} from "@turnkey/http";
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
@@ -262,6 +266,69 @@ export type SignerEndpoints = [
         credentialBundle?: string;
       };
       multiFactors: MfaFactor[];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-create";
+    Body: {
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: {
+        orgId: string;
+        evmSignerAddress: Address;
+        members: {
+          evmSignerAddress: Address;
+        }[];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-prepare-add";
+    Body: {
+      organizationId: string;
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1CreateUsersRequest"];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-add";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        members: {
+          evmSignerAddress: Address;
+        }[];
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-update-root-quorum";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1UpdateRootQuorumResult"];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-sign-raw-payload";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        signRawPayloadResult: TurnkeyApiTypes["v1SignRawPayloadResult"];
+      };
     };
   },
 ];

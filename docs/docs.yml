@@ -18,9 +18,20 @@ navigation:
             path: wallets/pages/index.mdx
           - link: Demo
             href: https://demo.alchemy.com/
+          - section: Recipes
+            contents:
+              - page: Overview
+                slug: recipes
+                path: wallets/pages/recipes/overview.mdx
+              - page: Send USDC
+                slug: recipes/send-usdc
+                path: wallets/pages/recipes/send-usdc.mdx
+              - page: Onramp Funds
+                slug: recipes/onramp-funds
+                path: wallets/pages/recipes/onramp-funds.mdx
           - section: Concepts
             contents:
-              - page: Intro to Account Kit
+              - page: Intro to Smart Wallets
                 path: wallets/pages/concepts/intro-to-account-kit.mdx
               - page: Smart Contract Account
                 path: wallets/pages/concepts/smart-contract-account.mdx
@@ -32,7 +43,6 @@ navigation:
                 path: wallets/pages/concepts/smart-account-signer.mdx
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
-
       - section: React
         contents:
           - page: Overview
@@ -92,6 +102,8 @@ navigation:
                 path: wallets/pages/react/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/react/sponsor-gas.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/react/pay-gas-with-any-token.mdx
               - page: Add passkey
                 path: wallets/pages/react/add-passkey.mdx
               - page: Multi-chain apps
@@ -257,6 +269,8 @@ navigation:
                 path: wallets/pages/react-native/using-smart-accounts/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/react-native/using-smart-accounts/sponsor-gas.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/react-native/using-smart-accounts/pay-gas-with-any-token.mdx
               - page: Retry user operations
                 path: wallets/pages/react-native/using-smart-accounts/retry-user-operations.mdx
           - section: SDK Reference
@@ -284,6 +298,8 @@ navigation:
                 path: wallets/pages/core/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/core/sponsor-gas.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/core/sponsor-gas-with-any-token.mdx
               - page: Add passkey
                 path: wallets/pages/core/add-passkey.mdx
               - page: Multi-chain apps
@@ -371,6 +387,8 @@ navigation:
                 path: wallets/pages/infra/send-user-operations.mdx
               - page: Sponsor gas
                 path: wallets/pages/infra/sponsor-gas.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/infra/pay-gas-with-any-token.mdx
               - page: Retry user operations
                 slug: drop-and-replace
                 path: wallets/pages/infra/drop-and-replace.mdx
@@ -561,8 +579,14 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/constructor.mdx
                       - page: createAccount
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/createAccount.mdx
+                      - page: experimental_addToMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_addToMultiOwner.mdx
                       - page: experimental_createApiKey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
+                      - page: experimental_createMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiOwner.mdx
+                      - page: experimental_multiOwnerSignRawMessage
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/getMfaFactors.mdx
                       - page: getPasskeyStatus
@@ -792,6 +816,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/multisigSignatureMiddleware.mdx
                   - page: pluginManagerActions
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/pluginManagerActions.mdx
+                  - page: predictLightAccountAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictLightAccountAddress.mdx
+                  - page: predictModularAccountV2Address
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictModularAccountV2Address.mdx
+                  - page: predictMultiOwnerLightAccountAddress
+                    path: wallets/pages/reference/account-kit/smart-contracts/functions/predictMultiOwnerLightAccountAddress.mdx
                   - page: sessionKeyPluginActions
                     path: wallets/pages/reference/account-kit/smart-contracts/functions/sessionKeyPluginActions.mdx
                   - page: splitAggregatedSignature
@@ -1006,6 +1036,8 @@ navigation:
                         path: wallets/pages/reference/aa-sdk/core/classes/Logger/verbose.mdx
                       - page: warn
                         path: wallets/pages/reference/aa-sdk/core/classes/Logger/warn.mdx
+                  - page: NotAModularAccountV2Error
+                    path: wallets/pages/reference/aa-sdk/core/classes/NotAModularAccountV2Error/constructor.mdx
                   - page: SignTransactionNotSupportedError
                     path: wallets/pages/reference/aa-sdk/core/classes/SignTransactionNotSupportedError/constructor.mdx
                   - page: SmartAccountWithSignerRequiredError
@@ -1087,8 +1119,22 @@ navigation:
         contents:
           - section: Smart Wallets
             contents:
-              - page: Wallets API Quickstart
-                path: wallets/pages/smart-wallets/quickstart.mdx
+              - section: Quickstart
+                contents:
+                  - page: Intro
+                    path: wallets/pages/smart-wallets/quickstart/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/quickstart/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/quickstart/api.mdx
+              - section: 7702 Quickstart
+                contents:
+                  - page: Intro
+                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
               - section: Wallet API Endpoints
                 contents:
                   - api: Wallet API Endpoints
@@ -1099,8 +1145,14 @@ navigation:
                   - api: Signer API Endpoints
                     api-name: accounts
                     flattened: true
-              - page: 7702 Quickstart
-                path: wallets/pages/smart-wallets/7702-quickstart.mdx
+              - section: Session Keys
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-wallets/session-keys/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/session-keys/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/session-keys/api.mdx
               - page: How to stamp requests
                 path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
             slug: smart-wallets
@@ -1109,6 +1161,9 @@ navigation:
               - page: How to sponsor gas on EVM
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
+              - page: How to pay gas with any token
+                path: >-
+                  wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
               - page: How to sponsor gas on Solana
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-solana.mdx
@@ -1150,6 +1205,29 @@ navigation:
               - page: FAQs
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
             slug: bundler-api
+          - section: SDK Reference
+            path: wallets/pages/reference/account-kit/wallet-client/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: getCallsStatus
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/getCallsStatus.mdx
+                  - page: grantPermissions
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/grantPermissions.mdx
+                  - page: listAccounts
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/listAccounts.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/prepareCalls.mdx
+                  - page: requestAccount
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/requestAccount.mdx
+                  - page: signMessage
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signMessage.mdx
+                  - page: signPreparedCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signPreparedCalls.mdx
+                  - page: signSignatureRequest
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signSignatureRequest.mdx
+                  - page: signTypedData
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/signTypedData.mdx
 
       - section: Resources
         skip-slug: true

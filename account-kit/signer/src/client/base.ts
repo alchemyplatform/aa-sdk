@@ -2,7 +2,14 @@ import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
 import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
-import { sha256, type Hex } from "viem";
+import {
+  hexToBytes,
+  recoverPublicKey,
+  serializeSignature,
+  sha256,
+  type Address,
+  type Hex,
+} from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
@@ -42,6 +49,8 @@ import type {
   AuthMethods,
 } from "./types.js";
 import { VERSION } from "../version.js";
+import { secp256k1 } from "@noble/curves/secp256k1";
+import { Point } from "@noble/secp256k1";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -63,6 +72,8 @@ const MFA_PAYLOAD = {
   VERIFY: "verify_mfa",
   LIST: "list_mfas",
 } as const;
+
+const withHexPrefix = (hex: string) => `0x${hex}` as const;
 
 /**
  * Base class for all Alchemy Signer clients
@@ -677,6 +688,167 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
 
     return signature;
+  };
+
+  private experimental_createMultiOwnerStamper = () => ({
+    stamp: async (
+      request: string,
+    ): Promise<{
+      stampHeaderName: string;
+      stampHeaderValue: string;
+    }> => {
+      if (!this.user) {
+        throw new NotAuthenticatedError();
+      }
+
+      // we need this later to recover the public key from the signature, so we don't let turnkey hash
+      // this for us and pass HASH_FUNCTION_NO_OP instead
+      const hashed = sha256(new TextEncoder().encode(request));
+
+      const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+        organizationId: this.user.orgId,
+        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+        timestampMs: Date.now().toString(),
+        parameters: {
+          encoding: "PAYLOAD_ENCODING_TEXT_UTF8",
+          hashFunction: "HASH_FUNCTION_SHA256",
+          payload: request,
+          signWith: this.user.address,
+        },
+      });
+
+      const { signature } = await this.request("/v1/sign-payload", {
+        stampedRequest,
+      });
+
+      // recover the public key, we can't just use the address
+      const recoveredPublicKey = await recoverPublicKey({
+        hash: hashed,
+        signature,
+      });
+
+      // compute the stamp over the original payload using this signature
+      // the format here is important
+      const stamp = {
+        publicKey: Point.fromHex(hexToBytes(recoveredPublicKey)).toHex(true),
+        scheme: "SIGNATURE_SCHEME_TK_API_SECP256K1",
+        signature: secp256k1.Signature.fromCompact(
+          hexToBytes(signature).slice(0, 64),
+        ).toDERHex(),
+      };
+
+      return {
+        stampHeaderName: "X-Stamp",
+        stampHeaderValue: base64UrlEncode(Buffer.from(JSON.stringify(stamp))),
+      };
+    },
+  });
+
+  private experimental_createMultiOwnerTurnkeyClient = () =>
+    new TurnkeyClient(
+      { baseUrl: "https://api.turnkey.com" },
+      this.experimental_createMultiOwnerStamper(),
+    );
+
+  /**
+   * This will sign on behalf of the multi-owner org, without doing any transformations on the message.
+   * For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass
+   * that result here.
+   *
+   * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} orgId orgId of the multi-owner org to sign on behalf of
+   * @param {string} orgAddress address of the multi-owner org to sign on behalf of
+   * @returns {Promise<Hex>} the signature over the raw hex
+   */
+  public experimental_multiOwnerSignRawMessage = async (
+    msg: Hex,
+    orgId: string,
+    orgAddress: string,
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const { result } = await this.request("/v1/multi-owner-sign-raw-payload", {
+      stampedRequest: await multiOwnerClient.stampSignRawPayload({
+        organizationId: orgId,
+        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+        timestampMs: Date.now().toString(),
+        parameters: {
+          encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+          hashFunction: "HASH_FUNCTION_NO_OP",
+          payload: msg,
+          signWith: orgAddress,
+        },
+      }),
+    });
+
+    return serializeSignature({
+      r: withHexPrefix(result.signRawPayloadResult.r),
+      s: withHexPrefix(result.signRawPayloadResult.s),
+      yParity: Number(result.signRawPayloadResult.v), // this is not actually a legacy v value, it's the y parity bit
+    });
+  };
+
+  /**
+   * This will create a multi-owner account with the current user and additional specified signers
+   *
+   * @param {Address[]} additionalMembers members to add, aside from the currently authenticated user
+   * @returns {Promise<SignerResponse<"/v1/multi-owner-create">['result']>} created multi-owner account
+   */
+  public experimental_createMultiOwner = async (
+    additionalMembers: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const response = await this.request("/v1/multi-owner-create", {
+      members: [this.user.address, ...additionalMembers].map(
+        (evmSignerAddress) => ({ evmSignerAddress }),
+      ),
+    });
+
+    return response.result;
+  };
+
+  /**
+   * This will add additional members to an existing multi-sig account
+   *
+   * @param {string} orgId orgId of the multi-sig to add members to
+   * @param {Address[]} members the addresses of the members to add
+   */
+  public experimental_addToMultiOwner = async (
+    orgId: string,
+    members: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const prepared = await this.request("/v1/multi-owner-prepare-add", {
+      organizationId: orgId,
+      members: members.map((evmSignerAddress) => ({ evmSignerAddress })),
+    });
+
+    const stampedRequest = await multiOwnerClient.stampCreateUsers(
+      prepared.result,
+    );
+
+    const {
+      result: { updateRootQuorumRequest },
+    } = await this.request("/v1/multi-owner-add", {
+      stampedRequest,
+    });
+
+    await this.request("/v1/multi-owner-update-root-quorum", {
+      stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+        updateRootQuorumRequest,
+      ),
+    });
   };
 
   /**

@@ -68,6 +68,7 @@ export * from "./alchemyTrackerHeaders.js";
 export {
   alchemyGasManagerMiddleware,
   alchemyGasAndPaymasterAndDataMiddleware,
+  type PolicyToken,
 } from "./middleware/gasManager.js";
 export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulator.js";
 export type * from "./schema.js";

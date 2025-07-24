@@ -6,23 +6,21 @@ import type {
   SendUserOperationParameters,
   SendUserOperationResult,
 } from "@aa-sdk/core";
-import { WaitForUserOperationError, clientHeaderTrack } from "@aa-sdk/core";
+import { WaitForUserOperationError } from "@aa-sdk/core";
 import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
-import type { Hex } from "viem";
+import { slice, toHex, type Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
-import {
-  ClientUndefinedHookError,
-  UnsupportedEOAActionError,
-} from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
+import { useSendCalls } from "../experimental/hooks/useSendCalls.js";
+import { useSmartWalletClient } from "../experimental/hooks/useSmartWalletClient.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
 export type SendUserOperationWithEOA<
@@ -133,6 +131,13 @@ export function useSendUserOperation<
   params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>,
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
   const { client: _client, waitForTxn = false, ...mutationArgs } = params;
+  const smartWalletClient = useSmartWalletClient({
+    account: params.client?.account.address,
+  });
+
+  const { sendCallsAsync } = useSendCalls<TEntryPointVersion>({
+    client: smartWalletClient,
+  });
 
   const {
     queryClient,
@@ -151,56 +156,48 @@ export function useSendUserOperation<
   } = useMutation(
     {
       mutationFn: async (params: SendUserOperationParameters<TAccount>) => {
+        if (typeof params.uo === "string") {
+          throw new Error("need to support hex calls probably");
+        }
+
+        const { ids, request } = await sendCallsAsync({
+          calls: (Array.isArray(params.uo) ? params.uo : [params.uo]).map(
+            (x) => ({
+              to: x.target,
+              data: x.data,
+              value: x.value ? toHex(x.value) : undefined,
+            }),
+          ),
+        });
+
         if (isConnected) {
-          console.warn(
-            "useSendUserOperation: connected to an EOA, sending as a transaction instead",
-          );
-          const { uo } = params;
-
-          if (Array.isArray(uo)) {
-            throw new UnsupportedEOAActionError(
-              "useSendUserOperation",
-              "batch execute",
-            );
-          }
-
-          if (typeof uo === "string") {
-            throw new UnsupportedEOAActionError(
-              "useSendUserOperation",
-              "hex user operation",
-            );
-          }
-
-          const tx = await wagmi_sendTransaction(wagmiConfig, {
-            to: uo.target,
-            data: uo.data,
-            value: uo.value,
-          });
-
           return {
-            hash: tx,
+            hash: ids[0],
+          };
+        }
+
+        const uoHash = slice(ids[0], 32);
+        if (!waitForTxn) {
+          return {
+            hash: uoHash,
+            request: request!,
           };
         }
 
         if (!_client) {
           throw new ClientUndefinedHookError("useSendUserOperation");
         }
-        const client = clientHeaderTrack(_client, "reactUseSendUserOperation");
 
-        if (!waitForTxn) {
-          return client.sendUserOperation(params);
-        }
-
-        const { hash, request } = await client.sendUserOperation(params);
-        const txnHash = await client
-          .waitForUserOperationTransaction({ hash })
+        // TODO: this should really use useCallsStatusHook instead (once it exists)
+        const txnHash = await _client
+          .waitForUserOperationTransaction({ hash: uoHash })
           .catch((e) => {
-            throw new WaitForUserOperationError(request, e);
+            throw new WaitForUserOperationError(request!, e);
           });
 
         return {
           hash: txnHash,
-          request,
+          request: request!,
         };
       },
       ...mutationArgs,

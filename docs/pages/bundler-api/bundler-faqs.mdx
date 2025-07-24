@@ -71,6 +71,20 @@ To do so, follow the next steps:
 
 After calculating the new values, send your `userOp` again with the updated fees and it should go through successfully.
 
+## Parallel nonces
+
+### What is the maximum number of supported parallel nonces?
+
+Our bundler supports up to 4 parallel nonces (default value from ERC-7562) for unstaked senders and unlimited parallel nonces for staked senders. See [below](/reference/bundler-faqs#what-is-the-minimum-amount-that-must-be-staked-with-the-entrypoint) for stake requirements.
+
+Unstaked accounts that attempt to exceed this limit will receive the error `Max operations (4) reached for account`. Staking the account removes the restriction. Accounts can be staked by calling `addStake(uint32 unstakeDelaySec)` on the EntryPoint contract, and later `unlockStake()` followed by `withdrawStake(address payable)` to recover the stake.
+
+Staked senders are subject to ERC-7562 reputation rules. If a sender submits a large number of userOps and subsequently invalidates them all, they may be throttled or banned.
+
+### Can I include multiple parallel nonces in a single bundle?
+
+To include multiple parallel nonces in the same bundle, the account must stake the [minimum stake amount](/reference/bundler-faqs#what-is-the-minimum-amount-that-must-be-staked-with-the-entrypoint) with the EntryPoint.
+
 ## Signatures
 
 ### What is a dummy signature?
@@ -121,7 +135,7 @@ This check is intended to prevent user operations from taking up gas limit space
 </Warning>
 
 <Info>
-  It's recommended to use our [Account Kit
+  It's recommended to use our [Smart Wallets
   SDK](https://www.alchemy.com/docs/wallets) to minimize the complexities of
   estimating userOp gas fees.
 </Info>
@@ -138,6 +152,10 @@ This check is intended to prevent user operations from taking up gas limit space
   - **Note**: The feeOverride parameters don't include preVerificationGas (PVG). The method will always increase the estimated PVG by 5% to give the UO a better chance to mine if the L1 /L2 fee ratio changes. If you would like to modify this value, its recommended you use [alchemy_requestPaymasterAndData](/reference/alchemy-requestpaymasteranddata) instead.
 
 ## EntryPoint
+
+### Which EntryPoint versions are supported?
+
+We currently support versions v0.6 and v0.7 of ERC-4337. If you need support for v0.8, please contact us at [wallets@alchemy.com](mailto:wallets@alchemy.com).
 
 ### Which EntryPoint version should I use, v0.6 or v0.7?
 
@@ -157,3 +175,23 @@ EntryPoint v0.6: `0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789`
 ### When will EntryPoint v0.6 be deprecated?
 
 We plan to deprecate support for EntryPoint v0.6 in September 2025. Please ensure that you have migrated to EntryPoint v0.7 by that time. If you have any questions or need assistance with the migration process, please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
+
+## Entity Staking Requirements
+
+### What is the minimum amount that must be staked with the EntryPoint?
+
+Mainnets:
+
+- Native token: ETH --> 0.1 ETH
+- Native token: MATIC --> 100 MATIC
+
+Testnets:
+
+- Native token: ETH --> 0.1 ETH
+- Native token: MATIC --> 10 MATIC
+
+Paymasters and factories must have at least the above stake or their userOps will be rejected. Accounts only need to stake if they wish to exceed 4 parallel nonces in the Bundler's mempool; otherwise, userOps beyond this limit will be rejected. The same stake amounts apply to accounts.
+
+### What is the minimum delay value?
+
+The minimum unstake delay required by Rundler is 1 Day. Paymasters and factories must configure at least this delay or their userOps will be rejected. Staked accounts are subject to the same delay requirement.

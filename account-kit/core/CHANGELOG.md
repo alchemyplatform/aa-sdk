@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+**Note:** Version bump only for package @account-kit/core
+
+## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.52.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.51.0...v4.52.0) (2025-07-18)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+### Bug Fixes
+
+- add more fallbacks for chainAgnosticRpcUrl ([#1768](https://github.com/alchemyplatform/aa-sdk/issues/1768)) ([61e2dc1](https://github.com/alchemyplatform/aa-sdk/commit/61e2dc1d11f425eae2149a954451891b02f30c63))
+
+## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.50.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.49.0...v4.50.0) (2025-07-14)
+
+### Features
+
+- add initial smart wallet client actions ([#1648](https://github.com/alchemyplatform/aa-sdk/issues/1648)) ([a3d8ab2](https://github.com/alchemyplatform/aa-sdk/commit/a3d8ab2f698ca08f62d04423262b3497b46551af)), closes [#1649](https://github.com/alchemyplatform/aa-sdk/issues/1649) [#1733](https://github.com/alchemyplatform/aa-sdk/issues/1733) [#1742](https://github.com/alchemyplatform/aa-sdk/issues/1742)
+
+# [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
+
+### Bug Fixes
+
+- unify maxTokenAmount as token value ([#1704](https://github.com/alchemyplatform/aa-sdk/issues/1704)) ([2c356a8](https://github.com/alchemyplatform/aa-sdk/commit/2c356a842d5a0d6286e13a52a087fc675dd62a6b))
+
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
+
+**Note:** Version bump only for package @account-kit/core
+
 ## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
 
 **Note:** Version bump only for package @account-kit/core

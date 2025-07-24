@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.52.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.51.0...v4.52.0) (2025-07-18)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+### Bug Fixes
+
+- skip dummy 7702 auth if already delegated ([#1766](https://github.com/alchemyplatform/aa-sdk/issues/1766)) ([14187f8](https://github.com/alchemyplatform/aa-sdk/commit/14187f8b87224d8730da2919575ac753626461eb))
+
+## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.50.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.49.0...v4.50.0) (2025-07-14)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+### Bug Fixes
+
+- **middleware:** fix the 7677 middleware to use returned gas limits in pm_getPaymasterData ([146f548](https://github.com/alchemyplatform/aa-sdk/commit/146f548eb760caf91b987c1abe81a21cc7d1290f))
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+### Features
+
+- adds webauthn session key support ([#1563](https://github.com/alchemyplatform/aa-sdk/issues/1563)) ([326d660](https://github.com/alchemyplatform/aa-sdk/commit/326d6605a2db8b9a23d81ac95df0374bd8a36572)), closes [#1639](https://github.com/alchemyplatform/aa-sdk/issues/1639) [#1663](https://github.com/alchemyplatform/aa-sdk/issues/1663) [#1654](https://github.com/alchemyplatform/aa-sdk/issues/1654)
+
+# [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 ## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
 
 **Note:** Version bump only for package @aa-sdk/core

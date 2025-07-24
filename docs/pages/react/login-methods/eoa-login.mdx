@@ -1,9 +1,10 @@
 ---
 title: Connect with EOAs
-description: How to bring in your own EOAs to Account Kit
+description: How to bring in your own EOAs to Smart Wallets
+slug: wallets/react/login-methods/eoa-login
 ---
 
-You can allow users to login by connecting their existing EOA using Account Kit. This can be done using our pre-built UI components or custom UI - no need for a separate wallet connector!
+You can allow users to login by connecting their existing EOA using Smart Wallets. This can be done using our pre-built UI components or custom UI - no need for a separate wallet connector!
 Depending on what method you choose, you can bring in your EOA:
 
 - **As a "pure" EOA**: users connect and transact directly from their EOAs. These wallets don’t support smart account features like gas sponsorship or batching.
@@ -19,7 +20,7 @@ Our SDK supports external wallet connection out of the box, so you can seamlessl
 1. **Automatically detect and display all wallet extensions available in the user's browser.** (_Note: if the user has no wallet extensions installed, nothing will be displayed_)
 2. **WalletConnect for all other EOAs**
 
-With Account Kit, users can still connect to their existing wallets without sacrificing compatibility or convenience.
+With Smart Wallets, users can still connect to their existing wallets without sacrificing compatibility or convenience.
 
 Our hooks will handle checking if the connected wallet is a smart wallet or an existing EOA.
 Transactions can be signed and sent in the same way, but external EOA wallets don't have access to Account Abstraction benefits such as gas abstraction, batching, etc.

@@ -25,7 +25,11 @@ export const Erc20SponsorshipCard = ({
 
   const { uri } = useReadNFTUri({
     contractAddress: DEMO_NFT_USDC_MINTABLE_ADDRESS,
-    clientOptions: { mode: accountMode, chain, transport },
+    clientOptions: {
+      mode: accountMode,
+      chain,
+      transport,
+    },
   });
 
   const handleNftMinted = () => {
