@@ -46,14 +46,6 @@ To add new images:
 - Reference images from the `images/` directory in markdown using `images/wallets/filename.png`
 - You may use [markdown syntax or `img` tags](https://buildwithfern.com/learn/docs/content/write-markdown#images)
 
-### SDK References
-
-SDK References are automatically generated from relevant projects within the monorepo via the `docs-gen` package. Both the markdown files and the sidebar structure in `docs/docs.yml` are generated and should **not** be edited manually. In the root, to generate references from code you can run:
-
-```shell
-yarn fern:gen
-```
-
 ### Injected Code Snippets
 
 You can reference production code directly in code snippets using `[!include]` statements. The syntax is the same as Physical File Snippets from Vocs, so you can reference [their documentation](https://vocs.dev/docs/guides/code-snippets#physical-file-snippets).

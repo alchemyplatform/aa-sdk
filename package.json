@@ -13,7 +13,6 @@
       "templates/*",
       "examples/*",
       "account-kit/rn-signer/example",
-      "doc-gen",
       "docs",
       ".vitest"
     ]
@@ -42,11 +41,10 @@
     "clean:node_modules": "lerna clean -y && rm -rf node_modules",
     "dev:ui": "turbo watch dev --filter='@account-kit/react' --filter=ui-demo",
     "dev:docs": "turbo watch dev --filter=docs",
-    "fern:gen": "turbo run fern:gen",
     "test": "vitest dev",
     "test:ci": "vitest run",
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
-    "lint:write": "eslint . --fix && yarn fern:gen && prettier --loglevel warn --write --ignore-unknown .",
+    "lint:write": "eslint . --fix && prettier --loglevel warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install && yarn turbo prepare",
     "docs:dev": "./docs/scripts/docs-dev.sh",
@@ -56,7 +54,6 @@
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
     "add": "^2.0.6",
-    "ak-docgen": "*",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8.51.0",
     "eslint-config-react-app": "^7.0.1",
