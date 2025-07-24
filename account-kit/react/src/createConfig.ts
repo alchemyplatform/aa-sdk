@@ -37,6 +37,9 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *   transport: alchemy({ apiKey: "your_api_key" })
  *   chain: sepolia,
  *   ssr: true,
+ *   sessionConfig: {
+ *     expirationTimeMs: 1000 * 60 * 60, // 1 hour (defaults to 15 min)
+ *   },
  * }, uiConfig)
  *
  * export const queryClient = new QueryClient();
@@ -48,11 +51,11 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  */
 export const createConfig = (
   props: CreateConfigProps,
-  ui?: AlchemyAccountsUIConfig,
+  ui?: AlchemyAccountsUIConfig
 ): AlchemyAccountsConfigWithUI => {
   if (
     ui?.auth?.sections.some((x) =>
-      x.some((y) => y.type === "social" && y.mode === "popup"),
+      x.some((y) => y.type === "social" && y.mode === "popup")
     )
   ) {
     props.enablePopupOauth = true;
@@ -70,7 +73,7 @@ export const createConfig = (
   ) {
     const walletConnectAuthConfig = externalWalletSection?.walletConnect;
     const walletConnectParams = getWalletConnectParams(
-      walletConnectAuthConfig,
+      walletConnectAuthConfig
     )!;
 
     props.connectors ??= [];
