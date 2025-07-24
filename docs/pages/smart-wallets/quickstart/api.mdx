@@ -1,0 +1,172 @@
+---
+title: Wallets API Quickstart (API)
+subtitle: Learn to interact with Wallet APIs using any RPC client
+url: https://docs.alchemy.com/reference/smart-wallet-quickstart/api
+slug: reference/smart-wallet-quickstart/api
+---
+
+We'll demonstrate how to use the [`wallet_requestAccount`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account), [`wallet_prepareCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls), [`wallet_sendPreparedCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls), and [`wallet_getCallsStatus`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) endpoints.
+
+```mermaid
+flowchart LR
+    A[requestAccount] --> B[prepareCalls]
+    B --> C[sendPreparedCalls]
+    C --> D[getCallsStatus]
+```
+
+### 1. Request an Account for the Owner Signer
+
+Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
+
+- If you want to use social sign up / log in, you can simply use the [SDK](/docs/wallets/react/getting-started) to authenticate user's and retrieve their signer address
+- If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
+
+This will return the account address associated with the given signer, as well as a uuid you could use to differentiate between accounts for the same signer in the future.
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_requestAccount",
+    "params": [
+        {
+            "signerAddress": "0xOWNER_ADDRESS"
+        }
+    ]
+}
+'
+```
+
+This will return the smart account address associated with the given signer:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "accountAddress": "0xACCOUNT_ADDRESS",
+    "id": "af638-a8..."
+  }
+}
+```
+
+### 2. Prepare Calls
+
+Now that we have an account, it's time to prepare some calls!
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_prepareCalls",
+    "params": [
+        {
+            "capabilities": {
+                "paymasterService": {
+                    "policyId": GAS_MANAGER_POLICY_ID // put your gas manager policy ID here
+                }
+            },
+            "calls": [
+                {
+                    "to": "0x0000000000000000000000000000000000000000"
+                }
+            ],
+            "from": "0xACCOUNT_ADDRESS",
+            "chainId": "0xCHAIN_ID"
+        }
+    ]
+}
+'
+```
+
+This will return the userop request (the `data` field) and a signature request, for example:
+
+```json
+{
+    "type": "user-operation-v070",
+    "data": {...useropRequest},
+    "chainId": "0xCHAIN_ID",
+    "signatureRequest": {
+        "type": "personal_sign",
+        "data": {
+            "raw": "0xHASH_TO_SIGN",
+        },
+        "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+    }
+}
+```
+
+If using Alchemy's signer service, this is the full raw payload to sign.
+If using a library like Viem, you can instead use `personal_sign` to sign the hash.
+
+### 3. Sign the userop
+
+With the returned signature request, all you have to do is sign the signature request (returned in step 2). You'll sign this using the account owner (from step 1).
+
+If using an Alchemy Signer, you can learn how to stamp the request on the frontend [here](/docs/reference/how-to-stamp-requests). When using the Alchemy Signer, it's easiest to sign the `signatureRequest.rawPayload` directly.
+
+If you are using a library such as Viem that supports the `personal_sign` method, you should use that to sign the hash (since the `signatureRequest.type` is `"personal_sign"`).
+
+### 4. Send the Prepared Calls!
+
+With the signature from step 3 and the `useropRequest` from step 2, you're good to send the call!
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_sendPreparedCalls",
+    "params": [
+        {
+            "type": "user-operation-v070",
+            "data": {...useropRequest},
+            "chainId": "0xCHAIN_ID", // E.g. "0x66eee" for Arbitrum Sepolia
+            "signature": {
+                "type": "secp256k1"
+                "data": "0xUSEROP_SIGNATURE"
+            }
+        }
+    ]
+}
+'
+```
+
+This will return the array of prepared call IDs!
+
+### 5. Check The Calls Status
+
+Now you can simply call `wallet_getCallsStatus` to check the status of the calls.
+
+```bash
+curl --request POST \
+    --url https://api.g.alchemy.com/v2/API_KEY \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --data '
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "wallet_getCallsStatus",
+    "params": [
+        "0xPREPARED_CALL_ID"
+    ]
+}
+'
+```
+
+See [here](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) for all of the possible results.

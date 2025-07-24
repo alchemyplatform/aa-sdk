@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/signer",
-  "version": "4.35.1",
+  "version": "4.52.2",
   "description": "Core interfaces and clients for interfacing with the Alchemy Signer API",
   "author": "Alchemy",
   "license": "MIT",
@@ -34,7 +34,7 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/signer --fern",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/signer",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
@@ -48,11 +48,14 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.35.1",
-    "@account-kit/logging": "^4.35.1",
+    "@aa-sdk/core": "^4.52.2",
+    "@account-kit/logging": "^4.52.2",
+    "@noble/curves": "^1.9.2",
+    "@noble/hashes": "1.7.1",
+    "@noble/secp256k1": "^2.3.0",
     "@solana/web3.js": "^1.98.0",
-    "@turnkey/http": "^2.22.0",
-    "@turnkey/iframe-stamper": "^1.0.0",
+    "@turnkey/http": "^3.4.2",
+    "@turnkey/iframe-stamper": "^2.5.0",
     "@turnkey/viem": "^0.4.8",
     "@turnkey/webauthn-stamper": "^0.4.3",
     "bs58": "^6.0.0",

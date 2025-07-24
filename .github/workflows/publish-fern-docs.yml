@@ -17,8 +17,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Docs
         uses: ./.github/actions/setup-docs
-        with:
-          docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
 
       - name: Generate Fern Docs
         id: publish
@@ -28,3 +26,11 @@ jobs:
           fern-token: ${{ secrets.FERN_TOKEN }}
           environment: docs-production
           ref: ${{ github.ref }}
+
+      - name: Trigger GitHub Pages Deploy Workflow
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.DOCS_GH_PAGES_DEPLOY_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/alchemyplatform/docs/dispatches \
+            -d '{"event_type":"trigger-gh-pages-deploy","client_payload":{"source":"alchemyplatform/aa-sdk"}}'

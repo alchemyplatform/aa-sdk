@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { env } from "../../../../env.mjs";
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
+  const body = await req.json();
   const headers: Record<string, string> = {};
+
   req.headers.forEach((value: string, key: string) => {
     // don't pass the cookie because it doesn't get used downstream
     if (key === "cookie") return;
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
     headers: {
       ...headers,
     },
-    body,
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

@@ -1,0 +1,39 @@
+You can use the [alchemy_requestPaymasterTokenQuote](https://www.alchemy.com/docs/wallets/api/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-paymaster-token-quote) endpoint to do off-chain simulation to verify both the approval and the underlying userOp will succeed.
+
+<Note>
+
+Note that changes in blockchain's state could lead to different outcomes.
+
+</Note>
+
+Example:
+
+```tsx
+const userOp = await client?.buildUserOperation({
+    uo: ...
+})
+const quote = await client?.request({
+    method: 'alchemy_requestPaymasterTokenQuote',
+    params: [
+        {
+        policyId: policyId,
+        entryPoint: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
+        dummySignature: userOp.signature,
+        userOperation: {
+            sender: userOp.sender,
+            nonce: userOp.nonce,
+            initCode: userOp.initCode,
+            callData: userOp.callData,
+            signature: userOp.signature,
+            paymasterAndData: userOp.paymasterAndData,
+            maxFeePerGas: userOp.maxFeePerGas,
+            maxPriorityFeePerGas: userOp.maxPriorityFeePerGas,
+            callGasLimit: userOp.callGasLimit,
+            verificationGasLimit: userOp.verificationGasLimit,
+            preVerificationGas: userOp.preVerificationGas,
+        },
+        erc20Context: {tokenAddress: tokenAddress},
+        },
+    ],
+});
+```

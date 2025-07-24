@@ -3,6 +3,123 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
+
+### Bug Fixes
+
+- updates webauthn factory address ([#1784](https://github.com/alchemyplatform/aa-sdk/issues/1784)) ([d7d367f](https://github.com/alchemyplatform/aa-sdk/commit/d7d367fe555195b595d66e84eae594826bcb6f9c))
+
+# [4.52.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.51.0...v4.52.0) (2025-07-18)
+
+### Features
+
+- adds new webauthn factory address ([#1780](https://github.com/alchemyplatform/aa-sdk/issues/1780)) ([b343437](https://github.com/alchemyplatform/aa-sdk/commit/b343437a9e4a833c25fed7bc8785a815cbbae0ee))
+
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+### Features
+
+- export sma abi ([#1778](https://github.com/alchemyplatform/aa-sdk/issues/1778)) ([385d92c](https://github.com/alchemyplatform/aa-sdk/commit/385d92cd77e329b2d32071d1d34c788eef2b5d61))
+
+## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.50.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.49.0...v4.50.0) (2025-07-14)
+
+### Features
+
+- add initial smart wallet client actions ([#1648](https://github.com/alchemyplatform/aa-sdk/issues/1648)) ([a3d8ab2](https://github.com/alchemyplatform/aa-sdk/commit/a3d8ab2f698ca08f62d04423262b3497b46551af)), closes [#1649](https://github.com/alchemyplatform/aa-sdk/issues/1649) [#1733](https://github.com/alchemyplatform/aa-sdk/issues/1733) [#1742](https://github.com/alchemyplatform/aa-sdk/issues/1742)
+
+# [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.48.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.47.0...v4.48.0) (2025-07-01)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.47.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.1...v4.47.0) (2025-06-27)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.46.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.46.0...v4.46.1) (2025-06-26)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.46.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.45.0...v4.46.0) (2025-06-25)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.45.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.44.0...v4.45.0) (2025-06-24)
+
+### Features
+
+- adds webauthn session key support ([#1563](https://github.com/alchemyplatform/aa-sdk/issues/1563)) ([326d660](https://github.com/alchemyplatform/aa-sdk/commit/326d6605a2db8b9a23d81ac95df0374bd8a36572)), closes [#1639](https://github.com/alchemyplatform/aa-sdk/issues/1639) [#1663](https://github.com/alchemyplatform/aa-sdk/issues/1663) [#1654](https://github.com/alchemyplatform/aa-sdk/issues/1654)
+
+# [4.44.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.1...v4.44.0) (2025-06-23)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.43.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.43.0...v4.43.1) (2025-06-18)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.43.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.42.0...v4.43.0) (2025-06-18)
+
+### Features
+
+- add webauthn-p256 to account-kit/smart-contracts + auto-generated ([#1702](https://github.com/alchemyplatform/aa-sdk/issues/1702)) ([06b3c07](https://github.com/alchemyplatform/aa-sdk/commit/06b3c07074baaa05baa5fe765f0190b735920499))
+
+# [4.42.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.41.0...v4.42.0) (2025-06-17)
+
+### Features
+
+- adds webauthn account support ([#1678](https://github.com/alchemyplatform/aa-sdk/issues/1678)) ([d2f0101](https://github.com/alchemyplatform/aa-sdk/commit/d2f0101900bb1a984b7e9e3d5825363bd4a22f89)), closes [#1639](https://github.com/alchemyplatform/aa-sdk/issues/1639) [#1694](https://github.com/alchemyplatform/aa-sdk/issues/1694)
+- allow nonce key overrides by default for non-deployed accounts ([#1683](https://github.com/alchemyplatform/aa-sdk/issues/1683)) ([0eb97cd](https://github.com/alchemyplatform/aa-sdk/commit/0eb97cd2bd264b81b31d29008f831b92b0d58f91))
+
+# [4.41.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.40.0...v4.41.0) (2025-06-12)
+
+### Features
+
+- create SideBarBuilder to generate Fern sidebar for SDK References ([#1671](https://github.com/alchemyplatform/aa-sdk/issues/1671)) ([c131c86](https://github.com/alchemyplatform/aa-sdk/commit/c131c86eba09b19e59261df341fd605451962083))
+
+# [4.40.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.39.0...v4.40.0) (2025-06-06)
+
+### Features
+
+- splitting signing methods into prepare and sign ([#1629](https://github.com/alchemyplatform/aa-sdk/issues/1629)) ([8bdb82d](https://github.com/alchemyplatform/aa-sdk/commit/8bdb82d2c563e4b4657a3403ea84dca3b61011d4))
+
+# [4.39.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.38.0...v4.39.0) (2025-06-04)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.38.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.37.0...v4.38.0) (2025-06-04)
+
+### Bug Fixes
+
+- remove trailing slash from alchemy rpc url ([#1657](https://github.com/alchemyplatform/aa-sdk/issues/1657)) ([60b3a23](https://github.com/alchemyplatform/aa-sdk/commit/60b3a231354a6b1ca1aaf69ee4e3b82f0b4110ea))
+
+# [4.37.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.1...v4.37.0) (2025-06-03)
+
+### Features
+
+- **rn-signer:** support passkeys in React Native ([#1653](https://github.com/alchemyplatform/aa-sdk/issues/1653)) ([f9ce59c](https://github.com/alchemyplatform/aa-sdk/commit/f9ce59c9874e863e80df8219bfa8d76960bfa82a))
+
+## [4.36.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.36.0...v4.36.1) (2025-05-29)
+
+### Bug Fixes
+
+- multisig ([#1644](https://github.com/alchemyplatform/aa-sdk/issues/1644)) ([eeb0e14](https://github.com/alchemyplatform/aa-sdk/commit/eeb0e14ea0559d1d113da8840b20c2afa779a5e0))
+
+# [4.36.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.1...v4.36.0) (2025-05-29)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
 ## [4.35.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.35.0...v4.35.1) (2025-05-21)
 
 ### Bug Fixes

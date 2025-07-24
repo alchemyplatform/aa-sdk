@@ -1,0 +1,120 @@
+---
+title: Wallets API Quickstart (SDK)
+subtitle: Learn to interact with Wallet APIs using the Wallet Client SDK
+url: https://docs.alchemy.com/reference/smart-wallet-quickstart/sdk
+slug: reference/smart-wallet-quickstart/sdk
+---
+
+### 1. Install Prerequisities
+
+You're going to need `@account-kit/wallet-client`, `@account-kit/infra`, optionally `@aa-sdk/core` if you use a `LocalAccountSigner`, and optionally `viem` if you want to verify a signed message.
+
+<CodeGroup>
+```shell npm
+npm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
+
+```shell bun
+bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
+
+```shell yarn
+yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
+```
+
+</CodeGroup>
+
+### 2. Create A Smart Account Client
+
+Given a signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](/docs/wallets/signer/what-is-a-signer#alchemy-signer)), all you need to do is follow a few simple steps to start sending user ops with Wallet APIs!
+
+```ts
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // we use a private key signer as an example here
+
+const transport = alchemy({
+  apiKey: ALCHEMY_API_KEY, // use your Alchemy app api key here!
+});
+
+const client = createSmartWalletClient({
+  transport,
+  chain: arbitrumSepolia, // use any chain imported from @account-kit/infra here!
+  signer,
+});
+```
+
+### 3. Request The Account
+
+A counterfactual address is the account address associated with the given signer-- but the account contract hasn't been deployed yet.
+
+```ts
+const account = await client.requestAccount();
+
+// get the address
+const address = account.address;
+```
+
+### 4. Sign A Message
+
+```ts
+import { createPublicClient } from "viem";
+
+const message = "we are so back";
+
+const signature = await client.signMessage({ message });
+
+const publicClient = createPublicClient({
+  chain: arbitrumSepolia,
+  transport: transport,
+});
+
+const isValid = await publicClient.verifyMessage({
+  address: account.address, // fetched from await client.requestAccount()
+  message,
+  signature,
+});
+```
+
+### 5. Sign Typed Data
+
+```ts
+// assuming you have a typedData variable
+const signature = await client.signTypedData({ typedData });
+
+const isValid = await publicClient.verifyTypedData({
+  address: account.address, // fetched from await client.requestAccount()
+  ...typedData,
+  signature,
+});
+```
+
+### 6. Send A UserOp
+
+```ts
+import { zeroAddress } from "viem";
+
+const account = await client.requestAccount();
+
+const preparedCalls = await client.prepareCalls({
+  calls: [{ to: zeroAddress, value: "0x0" }], // callData is optional in a "data" parameter
+  from: account.address,
+  // "capabilities" is a data structure that hold gas manager data (as seen below) or permission data
+  capabilities: {
+    paymasterService: {
+      policyId: GAS_MANAGER_POLICY_ID, // put your gas manager policy ID here
+    },
+  },
+});
+
+// Sign the calls
+const signedCalls = await client.signPreparedCalls(preparedCalls);
+
+// Send the userOp
+const result = await client.sendPreparedCalls(signedCalls);
+
+// Check calls status.
+const status = await client.getCallsStatus(result.preparedCallIds[0]!);
+```

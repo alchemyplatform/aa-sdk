@@ -1,10 +1,10 @@
 ---
-title: Getting started with Account Kit on Expo
-description: A guide on integrating Account Kit within a React Native Expo application
+title: Getting started with Smart Wallets on Expo
+description: A guide on integrating Smart Wallets within a React Native Expo application
 slug: wallets/react-native/getting-started/getting-started-expo
 ---
 
-We would go through the steps to get your environment setup for using Account Kit within a React Native application on Expo.
+We would go through the steps to get your environment setup for using Smart Wallets within a React Native application on Expo.
 
 <Markdown src="../../../shared/react-native/prerequisites.mdx" />
 
@@ -134,31 +134,33 @@ import "react-native-get-random-values";
 // rest of App.tsx
 ```
 
-## Install Account Kit
+## Install Smart Wallets
 
-That's it! Now you can install the packages you want from Account Kit and start building your React Native Account Abstraction app.
+That's it! Now you can install the packages you want from Smart Wallets and start building your React Native Account Abstraction app.
 
-<CodeBlocks>
+<Warning>
+If you get an error about mismatched peer dependencies for React, you can use `--legacy-peer-deps` in your install commands to avoid this error.
 
-```bash npm
-npm install -s @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
-```
-
-```bash yarn
-yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra
-```
-
-</CodeBlocks>
-
-<Tip>
-The `@account-kit/react-native` package is an ESM module. As such, you might have to add the following to your `tsconfig.json`'s `compilerOptions`:
+The `@account-kit/react-native` package is an ESM module. As such, have to add the following to your `tsconfig.json`'s `compilerOptions`:
 
 ```json
 "module": "NodeNext",
 "moduleResolution": "nodenext",
 ```
 
-</Tip>
+</Warning>
+
+<CodeBlocks>
+
+```bash npm
+npm install --save @account-kit/react-native @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
+```
+
+```bash yarn
+yarn add @account-kit/react-native @account-kit/smart-contracts @account-kit/infra @account-kit/react-native-signer
+```
+
+</CodeBlocks>
 
 ### Add supporting dependencies
 
@@ -167,14 +169,28 @@ To ensure the Signer package works correctly, you'll need to add the following d
 <CodeBlocks>
 
 ```bash npm
-npm install react-native-mmkv zustand abitype react-native-inappbrowser-reborn
+npm install --save react-native-mmkv zustand abitype react-native-inappbrowser-reborn viem wagmi @tanstack/react-query
 ```
 
 ```bash yarn
-yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn
+yarn add react-native-mmkv zustand abitype react-native-inappbrowser-reborn viem wagmi @tanstack/react-query
 ```
 
 </CodeBlocks>
+
+<Warning>
+The zustand library uses `import.meta` which is not supported in the latest version of Expo. To fix this, create a `babel.config.js` file with the following content:
+
+```js
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: [["babel-preset-expo", { unstable_transformImportMeta: true }]],
+  };
+};
+```
+
+</Warning>
 
 ## Set iOS minimum deployment target
 
@@ -219,6 +235,72 @@ npx expo prebuild --platform ios
 ```
 
 </CodeBlocks>
+
+## Run the app
+
+Because the app is using native modules, you cannot run it with expo go and instead need to use development builds. You can do this with the `android` and `ios` commands:
+
+<CodeBlocks>
+
+```bash npm(android)
+npm run android
+```
+
+```bash yarn(android)
+yarn android
+```
+
+```bash npm(ios)
+npm run ios
+```
+
+```bash yarn(ios)
+yarn ios
+```
+
+</CodeBlocks>
+
+## Common Issues
+
+### NotSupportedError: Cannot set "location"., js engine: hermes
+
+If you get this error, you can add the following to you `app.json` within the `expo` config:
+
+```json
+"extra": {
+  "router": {
+    "origin": false
+  }
+}
+```
+
+### Build error: androidx.browser:browser requires a higher Android Gradle Plugin (AGP) version or compileSdk version
+
+If you get this error when running the Android app, you can fix this by updating the `android/build.gradle` to include the following override:
+
+```gradle
+allprojects {
+  configurations.all {
+      resolutionStrategy {
+          // Force a specific version of androidx.browser
+          force 'androidx.browser:browser:1.8.0'
+      }
+  }
+}
+```
+
+Related issue: https://github.com/alchemyplatform/aa-sdk/issues/1534
+
+### `npm install` fails due to mismatching peer dependencies
+
+Our packages list a minimum version of React as 18.2.0, but the latest version of expo is on >=19. If you are using `npm install` it's likely you'll get errors about peer dependencies. To force a consistent version of react, you can add the following to your `package.json`:
+
+```json
+"overrides": {
+  "react": "19.0.0",
+  "react-dom": "19.0.0"
+}
+```
 
 ## Next steps
 

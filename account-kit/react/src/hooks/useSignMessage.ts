@@ -5,15 +5,15 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { signMessage as wagmi_signMessage } from "@wagmi/core";
 import { useCallback } from "react";
-import type { Hex, SignableMessage } from "viem";
-import { useAccount as wagmi_useAccount } from "wagmi";
+import type { Address, Hex, SignableMessage } from "viem";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
-import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+import { useSmartWalletClient } from "../experimental/hooks/useSmartWalletClient.js";
+import { useAccount as wagmi_useAccount } from "wagmi";
+import { signMessage as wagmi_signMessage } from "@wagmi/core";
 
 export type SignMessageArgs = { message: SignableMessage };
 
@@ -23,7 +23,7 @@ export type UseSignMessagedMutationArgs = BaseHookMutationArgs<
 >;
 
 export type UseSignMessageArgs = {
-  client: UseSmartAccountClientResult["client"] | undefined;
+  client: { account: { address: Address } } | undefined;
 } & UseSignMessagedMutationArgs;
 
 export type UseSignMessageResult = {
@@ -70,10 +70,14 @@ export type UseSignMessageResult = {
  * const result = await signMessage({ message: data });
  * ```
  */
-export function useSignMessage({
-  client,
-  ...mutationArgs
-}: UseSignMessageArgs): UseSignMessageResult {
+export function useSignMessage(
+  config: UseSignMessageArgs,
+): UseSignMessageResult {
+  const { client: _client, ...mutationArgs } = config;
+  const smartWalletClient = useSmartWalletClient({
+    account: _client?.account.address,
+  });
+
   const {
     queryClient,
     config: {
@@ -89,13 +93,13 @@ export function useSignMessage({
         return wagmi_signMessage(wagmiConfig, params);
       }
 
-      if (!client) {
+      if (!smartWalletClient) {
         throw new ClientUndefinedHookError("useSignMessage");
       }
 
-      return client.signMessage(params);
+      return smartWalletClient.signMessage(params);
     },
-    [client, isConnected, wagmiConfig],
+    [isConnected, smartWalletClient, wagmiConfig],
   );
 
   const {

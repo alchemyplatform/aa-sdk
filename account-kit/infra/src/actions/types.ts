@@ -91,3 +91,24 @@ export type RequestGasAndPaymasterAndDataResponse<
           | "paymasterPostOpGasLimit"
         >
       : never);
+
+export type RequestPaymasterTokenQuoteRequest = [
+  {
+    policyId: string;
+    entryPoint: Address;
+    erc20Context?: {
+      tokenAddress: Address;
+      permit?: Hex;
+      maxTokenAmount?: BigInt;
+    };
+    dummySignature: Hex;
+    userOperation: UserOperationRequest;
+    overrides?: UserOperationOverrides;
+  },
+];
+
+export type RequestPaymasterTokenQuoteResponse = {
+  tokensPerEth: string;
+  estimatedTokenAmount: string;
+  estimatedUsd: number;
+};

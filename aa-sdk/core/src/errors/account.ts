@@ -18,6 +18,20 @@ export class AccountNotFoundError extends BaseError {
 }
 
 /**
+ * This error is thrown when an account is not a Modular Account V2
+ */
+
+export class NotAModularAccountV2Error extends BaseError {
+  override name = "NotAModularAccountV2Error";
+  /**
+   * Constructor for initializing an error message indicating that the account is not a Modular Account V2.
+   */
+  constructor() {
+    super("This is not a Modular Account V2 account.");
+  }
+}
+
+/**
  * Represents an error that is thrown when no default factory is defined for a specific account type on a given chain and entry point version.
  * This error suggests providing an override via the `factoryAddress` parameter when creating an account.
  */

@@ -1,0 +1,81 @@
+# yaml-language-server: $schema=https://meta.open-rpc.org/
+
+$schema: https://meta.open-rpc.org/
+openrpc: 1.2.4
+info:
+  title: Alchemy User Operation Simulation API JSON-RPC Specification
+  description: A specification of the standard JSON-RPC methods for Alchemy User Operation Simulation API.
+  version: 0.0.0
+servers:
+  - url: https://eth-mainnet.g.alchemy.com/v2
+    name: Mainnet
+  - url: https://eth-sepolia.g.alchemy.com/v2
+    name: Sepolia
+methods:
+  - name: alchemy_simulateUserOperationAssetChanges
+    description: |
+      Simulates userOperations and returns a list of asset changes.
+
+      <Note title="Changes in blockchain's state could lead to different outcomes">
+        The results provided by this method are based on the blockchain's state at the moment of simulation. Changes in the blockchain state, such as updates to contract variables or balances, can occur between the time of simulation and userOperation execution.
+
+        This could lead to different outcomes than predicted. For instance, if a userOperation's effect is conditional on the current state of a contract, and this state is altered before the transaction is executed, the final result may not match the simulation.
+
+        Please conside this potential variance when using the API.
+      </Note>
+
+    params:
+      - name: UserOperation
+        required: true
+        description: userOperation to simulate. The signature can be a [dummy value](/docs/reference/bundler-faqs#what-is-a-dummy-signature); it doesn't need to be valid.
+        schema:
+          oneOf:
+            - $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06"
+            - $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07"
+      - name: entryPoint
+        required: true
+        description: "`EntryPoint` to use for the simulation. This MUST be one of the EntryPoints returned by the `supportedEntryPoints` RPC call."
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/address"
+      - name: blockNumber
+        required: false
+        description: Optional block number in context of which the simulation should be executed. If not specified, the current block number is used.
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/uint"
+    result:
+      name: Simulation Result
+      description: Object containing simulated asset changes and any potential errors.
+      schema:
+        type: object
+        properties:
+          changes:
+            type: array
+            items:
+              $ref: "../_shared_wallets/components.yaml#/components/schemas/AssetChange"
+          error:
+            type: [object, "null"]
+            properties:
+              message:
+                type: string
+              revertReason:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/RevertMessage"
+    examples:
+      - name: alchemy_simulateUserOperationAssetChanges example
+        params:
+          - name: UserOperation
+            value:
+              sender: "0xceb161d3e0B6d01bc0e87ECC27fF9f2E2eCDCD81"
+              nonce: "0x3"
+              initCode: "0x"
+              callData: "0xb61d27f600000000000000000000000043f6bfbe9dad44cf0a60570c30c307d949be4cd40000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000645c833bfd000000000000000000000000613c64104b98b048b93289ed20aefd80912b3cde0000000000000000000000000000000000000000000000000de123e8a84f9901000000000000000000000000c9371ea30dea5ac745b71e191ba8cde2c4e66df500000000000000000000000000000000000000000000000000000000"
+              callGasLimit: "0x7A1200"
+              verificationGasLimit: "0x927C0"
+              preVerificationGas: "0x15F90"
+              maxFeePerGas: "0x656703D00"
+              maxPriorityFeePerGas: "0x13AB6680"
+              signature: "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
+              paymasterAndData: "0x9db7f05b0eb93eb242b5913596dcfaada756af5c"
+          - name: entryPoint
+            value: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+          - name: blockNumber
+            value: "0x113CF6E"

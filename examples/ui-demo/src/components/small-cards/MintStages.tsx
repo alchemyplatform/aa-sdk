@@ -8,22 +8,27 @@ import { Stage } from "./Stage";
 export const MintStages = ({
   status,
   transactionUrl,
+  stageDescriptions,
 }: {
   status: MintStatus;
   transactionUrl?: string;
+  stageDescriptions: [string, string, string];
 }) => {
   return (
     <div>
       <Stage
         icon={getMintIcon(status.signing)}
-        description="Invisibly signing transactions"
+        description={stageDescriptions[0]}
       />
-      <Stage icon={getMintIcon(status.gas)} description="Sponsoring gas fees" />
+      <Stage
+        icon={getMintIcon(status.gas)}
+        description={stageDescriptions[1]}
+      />
       <Stage
         icon={getMintIcon(status.batch)}
         description={
           <span className="flex gap-3 justify-between">
-            Deploying smart account
+            {stageDescriptions[2]}
             {status.batch === "success" && transactionUrl && (
               <a
                 href={transactionUrl}

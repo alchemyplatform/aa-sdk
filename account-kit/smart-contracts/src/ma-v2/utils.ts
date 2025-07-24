@@ -72,6 +72,10 @@ export const pack1271Signature = ({
   ]);
 };
 
+export const getDefaultWebAuthnMAV2FactoryAddress = (): Address => {
+  return "0x55010E571dCf07e254994bfc88b9C1C8FAe31960";
+};
+
 export const getDefaultMAV2FactoryAddress = (chain: Chain): Address => {
   switch (chain.id) {
     // TODO: case mekong.id:
@@ -261,7 +265,7 @@ export const buildFullNonceKey = ({
 }: BuildNonceParams): bigint => {
   return (
     (nonceKey << 40n) +
-    BigInt(entityId << 8) +
+    (BigInt(entityId) << 8n) +
     (isDeferredAction ? 2n : 0n) +
     (isGlobalValidation ? 1n : 0n)
   );
@@ -314,4 +318,8 @@ export const buildDeferredActionDigest = ({
     sig,
   ]);
   return encodedData;
+};
+
+export const assertNeverSignatureRequestType = (): never => {
+  throw new Error("Invalid signature request type ");
 };

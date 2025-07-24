@@ -4,13 +4,11 @@ import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { z } from "zod";
 import type { AuthParams } from "../signer.js";
-import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import { BaseSignerClient } from "./base.js";
 import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
-  CreateAccountParams,
   CredentialCreationOptionOverrides,
   EmailAuthParams,
   ExportWalletParams,
@@ -19,6 +17,8 @@ import type {
   User,
   SubmitOtpCodeResponse,
   AuthLinkingPrompt,
+  GetWebAuthnAttestationResult,
+  IdTokenOnly,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -55,7 +55,10 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   private iframeStamper: IframeStamper;
   private webauthnStamper: WebauthnStamper;
   oauthCallbackUrl: string;
-  iframeContainerId: string;
+  iframeConfig: {
+    iframeElementId: string;
+    iframeContainerId: string;
+  };
 
   /**
    * Initializes a new instance with the given parameters, setting up the connection, iframe configuration, and WebAuthn stamper.
@@ -97,7 +100,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
 
     this.iframeStamper = iframeStamper;
-    this.iframeContainerId = iframeConfig.iframeContainerId;
+    this.iframeConfig = iframeConfig;
 
     this.webauthnStamper = new WebauthnStamper({
       rpId: rpId ?? window.location.hostname,
@@ -105,72 +108,6 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     this.oauthCallbackUrl = oauthCallbackUrl;
   }
-
-  /**
-   * Authenticates the user by either email or passkey account creation flow. Emits events during the process.
-   *
-   * @example
-   * ```ts
-   * import { AlchemySignerWebClient } from "@account-kit/signer";
-   *
-   * const client = new AlchemySignerWebClient({
-   *  connection: {
-   *    apiKey: "your-api-key",
-   *  },
-   *  iframeConfig: {
-   *   iframeContainerId: "signer-iframe-container",
-   *  },
-   * });
-   *
-   * const account = await client.createAccount({ type: "email", email: "you@mail.com" });
-   * ```
-   *
-   * @param {CreateAccountParams} params The parameters for creating an account, including the type (email or passkey) and additional details.
-   * @returns {Promise<SignupResponse>} A promise that resolves with the response object containing the account creation result.
-   */
-  public override createAccount = async (params: CreateAccountParams) => {
-    if (params.type === "email") {
-      this.eventEmitter.emit("authenticating", { type: "otp" });
-      const { email, emailMode, expirationSeconds } = params;
-      const publicKey = await this.initIframeStamper();
-
-      const response = await this.request("/v1/signup", {
-        email,
-        emailMode,
-        targetPublicKey: publicKey,
-        expirationSeconds,
-        redirectParams: params.redirectParams?.toString(),
-      });
-
-      return response;
-    }
-
-    this.eventEmitter.emit("authenticating", { type: "passkey" });
-    // Passkey account creation flow
-    const { attestation, challenge } = await this.getWebAuthnAttestation(
-      params.creationOpts,
-      { username: "email" in params ? params.email : params.username },
-    );
-
-    const result = await this.request("/v1/signup", {
-      passkey: {
-        challenge: base64UrlEncode(challenge),
-        attestation,
-      },
-      email: "email" in params ? params.email : undefined,
-    });
-
-    this.user = {
-      orgId: result.orgId,
-      address: result.address!,
-      userId: result.userId!,
-      credentialId: attestation.credentialId,
-    };
-    this.initWebauthnStamper(this.user);
-    this.eventEmitter.emit("connectedPasskey", this.user);
-
-    return result;
-  };
 
   /**
    * Begin authenticating a user with their email and an expiration time for the authentication request. Initializes the iframe stamper to get the target public key.
@@ -200,7 +137,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   ) => {
     this.eventEmitter.emit("authenticating", { type: "otp" });
     const { email, emailMode, expirationSeconds } = params;
-    const publicKey = await this.initIframeStamper();
+    const publicKey = await this.initSessionStamper();
 
     try {
       return await this.request("/v1/auth", {
@@ -253,7 +190,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
-    const targetPublicKey = await this.initIframeStamper();
+    const targetPublicKey = await this.initSessionStamper();
     const response = await this.request("/v1/otp", {
       ...args,
       targetPublicKey,
@@ -328,7 +265,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     idToken?: string;
   }): Promise<User> => {
     this.eventEmitter.emit("authenticating", { type: authenticatingType });
-    await this.initIframeStamper();
+    await this.initSessionStamper();
 
     const result = await this.iframeStamper.injectCredentialBundle(bundle);
 
@@ -341,46 +278,6 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     this.eventEmitter.emit(connectedEventName, user, bundle);
 
     return user;
-  };
-
-  /**
-   * Asynchronously handles the authentication process using WebAuthn Stamper. If a user is provided, sets the user and returns it. Otherwise, retrieves the current user and initializes the WebAuthn stamper.
-   *
-   * @example
-   * ```ts
-   * import { AlchemySignerWebClient } from "@account-kit/signer";
-   *
-   * const client = new AlchemySignerWebClient({
-   *  connection: {
-   *    apiKey: "your-api-key",
-   *  },
-   *  iframeConfig: {
-   *   iframeContainerId: "signer-iframe-container",
-   *  },
-   * });
-   *
-   * const account = await client.lookupUserWithPasskey();
-   * ```
-   *
-   * @param {User} [user] An optional user object to authenticate
-   * @returns {Promise<User>} A promise that resolves to the authenticated user object
-   */
-  public override lookupUserWithPasskey = async (
-    user: User | undefined = undefined,
-  ) => {
-    this.eventEmitter.emit("authenticating", { type: "passkey" });
-    await this.initWebauthnStamper(user);
-    if (user) {
-      this.user = user;
-      this.eventEmitter.emit("connectedPasskey", user);
-      return user;
-    }
-
-    const result = await this.whoami(this.rootOrg);
-    await this.initWebauthnStamper(result);
-    this.eventEmitter.emit("connectedPasskey", result);
-
-    return result;
   };
 
   /**
@@ -456,7 +353,19 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override disconnect = async () => {
     this.user = undefined;
     this.iframeStamper.clear();
-    await this.iframeStamper.init();
+
+    // In the latest version of the TK iframe stamper, the
+    // IframeStamper instance seems to not be usable after
+    // clearing it, so we need to create a new instance.
+    const stamper = new IframeStamper({
+      iframeContainer: document.getElementById(
+        this.iframeConfig.iframeContainerId,
+      ),
+      iframeElementId: this.iframeConfig.iframeElementId,
+      iframeUrl: "https://auth.turnkey.com",
+    });
+    this.iframeStamper = stamper;
+    await this.initSessionStamper();
   };
 
   /**
@@ -488,8 +397,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithRedirect = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>,
-  ): Promise<never> => {
-    const turnkeyPublicKey = await this.initIframeStamper();
+  ): Promise<User | IdTokenOnly> => {
+    const turnkeyPublicKey = await this.initSessionStamper();
 
     const oauthParams = args;
     const providerUrl = await this.getOauthProviderUrl({
@@ -532,8 +441,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    */
   public override oauthWithPopup = async (
     args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>,
-  ): Promise<User | AuthLinkingPrompt> => {
-    const turnkeyPublicKey = await this.initIframeStamper();
+  ): Promise<User | AuthLinkingPrompt | IdTokenOnly> => {
+    const turnkeyPublicKey = await this.initSessionStamper();
     const oauthParams = args;
     const providerUrl = await this.getOauthProviderUrl({
       oauthParams,
@@ -598,6 +507,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
               orgId,
             } satisfies AuthLinkingPrompt);
             break;
+          case "FETCHED_ID_TOKEN_ONLY":
+            resolve({
+              status,
+              idToken,
+              providerName,
+            } satisfies IdTokenOnly);
+            break;
           default:
             reject(new Error(`Unknown status: ${status}`));
         }
@@ -641,31 +557,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<string>} A promise that resolves with the target public key when the iframe stamper is successfully initialized, or throws an error if the target public key is not supported.
    */
   public override targetPublicKey = async (): Promise<string> => {
-    return this.initIframeStamper();
-  };
-
-  private initIframeStamper = async () => {
-    if (!this.iframeStamper.publicKey()) {
-      await this.iframeStamper.init();
-    }
-
-    this.setStamper(this.iframeStamper);
-
-    return this.iframeStamper.publicKey()!;
-  };
-
-  private initWebauthnStamper = async (user: User | undefined = this.user) => {
-    this.setStamper(this.webauthnStamper);
-    if (user && user.credentialId) {
-      // The goal here is to allow us to cache the allowed credential, but this doesn't work with hybrid transport :(
-      this.webauthnStamper.allowCredentials = [
-        {
-          id: Buffer.from(user.credentialId, "base64"),
-          type: "public-key",
-          transports: ["internal", "hybrid"],
-        },
-      ];
-    }
+    return this.initSessionStamper();
   };
 
   protected override getWebAuthnAttestation = async (
@@ -673,7 +565,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
     },
-  ) => {
+  ): Promise<GetWebAuthnAttestationResult> => {
     const challenge = generateRandomBuffer();
     const authenticatorUserId = generateRandomBuffer();
 
@@ -725,13 +617,54 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
     const currentStamper = this.turnkeyClient.stamper;
-    const publicKey = await this.initIframeStamper();
+    const publicKey = await this.initSessionStamper();
 
     // swap the stamper back in case the user logged in with a different stamper (passkeys)
     this.setStamper(currentStamper);
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
+
+  private initSessionStamperPromise: Promise<string> | null = null;
+
+  protected override async initSessionStamper(): Promise<string> {
+    if (this.initSessionStamperPromise) {
+      return this.initSessionStamperPromise;
+    }
+
+    this.initSessionStamperPromise = (async () => {
+      if (!this.iframeStamper.publicKey()) {
+        await this.iframeStamper.init();
+      }
+
+      this.setStamper(this.iframeStamper);
+
+      return this.iframeStamper.publicKey()!;
+    })();
+
+    try {
+      const result = await this.initSessionStamperPromise;
+      return result;
+    } finally {
+      this.initSessionStamperPromise = null;
+    }
+  }
+
+  protected override async initWebauthnStamper(
+    user: User | undefined = this.user,
+  ): Promise<void> {
+    this.setStamper(this.webauthnStamper);
+    if (user && user.credentialId) {
+      // The goal here is to allow us to cache the allowed credential, but this doesn't work with hybrid transport :(
+      this.webauthnStamper.allowCredentials = [
+        {
+          id: Buffer.from(user.credentialId, "base64"),
+          type: "public-key",
+          transports: ["internal", "hybrid"],
+        },
+      ];
+    }
+  }
 }
 
 /**

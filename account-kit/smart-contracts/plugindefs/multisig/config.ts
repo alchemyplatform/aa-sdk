@@ -35,6 +35,7 @@ export const MultisigPluginGenConfig: PluginConfig = {
     2523: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [zora.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [zoraSepolia.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
+    1337: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
   },
   installConfig: {
     initAbiParams: parseAbiParameters("address[], uint"),

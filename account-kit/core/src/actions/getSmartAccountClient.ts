@@ -1,3 +1,4 @@
+import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
 import {
   createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
@@ -12,28 +13,27 @@ import {
   type AccountLoupeActions,
   type LightAccount,
   type LightAccountClientActions,
+  type ModularAccountV2,
   type MultiOwnerLightAccount,
   type MultiOwnerLightAccountClientActions,
   type MultiOwnerModularAccount,
   type MultiOwnerPluginActions,
   type PluginManagerActions,
-  type ModularAccountV2,
 } from "@account-kit/smart-contracts";
 import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
   AlchemySigner,
+  Connection,
   SupportedAccount,
   SupportedAccounts,
   SupportedAccountTypes,
-  Connection,
 } from "../types";
 import { createAccount, isModularV2AccountParams } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
-import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
 
 export type GetSmartAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
@@ -79,6 +79,8 @@ export function getSmartAccountClient<
 /**
  * Obtains a smart account client based on the provided parameters and configuration. Supports creating any of the SupportAccountTypes in Account Kit.
  * If the signer is not connected, or an account is already being intializes, this results in a loading state.
+ *
+ * @deprecated Use `getSmartWalletClient` instead.
  *
  * @example
  * ```ts
@@ -178,6 +180,7 @@ export function getSmartAccountClient(
     return clientState;
   }
 
+  // TODO: this needs to be updated to use the smart wallet client instead
   const newState = (() => {
     switch (account.source) {
       case "LightAccount":

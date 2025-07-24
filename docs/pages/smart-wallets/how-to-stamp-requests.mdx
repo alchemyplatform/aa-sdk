@@ -1,0 +1,99 @@
+---
+title: How to stamp requests
+description: Overview for how to send stamped (or verified) requests required for using Wallet APIs directly.
+subtitle: Overview for how to send stamped (or verified) requests required for using Wallet APIs directly.
+url: https://docs.alchemy.com/reference/how-to-stamp-requests
+slug: reference/how-to-stamp-requests
+---
+
+### What is stamping?
+
+Stamping, or verifying requests, is used to verify the integrity and authenticity of the requests in order to manage and use wallets in a secure and non-custodial manner.
+
+Every request made to create, authenticate, and sign Wallet APIs must include a signature over the POST body attached as a HTTP header. You’ll need to stamp with either a `targetPublicKey` in the body and/or an `X-Stamp` attached to the HTTP POST request headers. A secure enclave will use these parameters to verify and encrypt the authenticity of your requests, ensuring that there are no man in the middle attacks.
+
+### SDKs
+
+We provide [SDKs](https://accountkit.alchemy.com/) to abstract this stamping logic and simplify your integration:
+
+- [React](https://accountkit.alchemy.com/react/quickstart)
+- [React Native](https://accountkit.alchemy.com/react-native/overview)
+- [Vanilla JS](https://accountkit.alchemy.com/core/quickstart)
+- Java (Coming soon)
+
+### How to stamp in another language
+
+If we do not have an out of the box SDK in the language you need, you can build your own custom stamping logic to use our Wallet APIs.
+
+For any endpoint the requires a `stampedRequest` body for the verification logic you’ll need to:
+
+1. Generate and store a P256 Public Private Key Pair (TEK) on device for future API requests
+
+   1. The public key will be used as the `targetPublicKey` in Wallet API requests like Create Wallet.
+
+2. Generate a private key bundle
+
+   1. Exchange the `targetPublicKey` for an encrypted `bundle` by calling [create wallet](/docs/reference/createaccount) (e.g., OAuth, email login)
+
+3. Decrypt the bundle using Hybrid Public Key Encryption (HPKE).
+
+   1. Take the received bundle and decode it using Base58Check. The decoded bundle consists of:
+
+      1. The first 33 bytes: an ephemeral public key.
+         1. Convert into NIST P256 uncompressed format to be used in HPKE as `ephemeralUncompressedPublicKeyBytes`.
+      2. The remaining bytes: the ciphertext to decrypt.
+
+   2. Pass the above in to HPKE decrypt using the TEK private key
+
+      1. KemId: `DHKEM_P256_HKDF_SHA256`
+      2. KdfId: `HKDF_SHA256`
+      3. AeadId: `AES_256_GCM`
+      4. info: `turnkey_hpke`
+      5. aad: `ephemeralUncompressedPublicKeyBytes + tekPublicKeyBytes`
+
+4. Sign the JSON-encoded POST body with your private key (generated in step 3) to produce a `signature` *(DER-encoded)*
+
+   1. And hex encode the `signature`
+
+5. Create a JSON-encoded stamp:
+
+   - `publicKey`: the public key of TEK Key Pair
+   - `signature`: the signature produced in step 2
+   - `scheme`: `SIGNATURE_SCHEME_TK_API_P256`
+
+6. `Base64URL` encode the stamp
+
+7. Attach the encoded string to your request as a `stampedRequest` body as such:
+
+   ```shell
+   {
+     "stampedRequest": {
+       "body": "{\"organizationId\": ...},  // the JSON stringified body of the request
+       "stamp": {
+         "stampHeaderName": "X-Stamp", // this is hardcoded
+         "stampHeaderValue": "eyJ..." // generated from step 5
+       },
+       "url": "https://example.com" // this doesn't matter you can hard code this.
+     }
+   }
+   ```
+
+8. Submit the stamped request to our APIs
+
+If you're building in React, Vanilla JS, or (soon) Java, use our [SDK](https://accountkit.alchemy.com/) to which will handle this stamping logic for you. If you're building in another language not supported by our SDKs see the following implementations:
+
+- (Coming soon) Java SDK
+
+- [JS SDK stamper](https://github.com/tkhq/sdk/tree/24c399bd8e6c04ceb3e75ba9438b859cef796fda/packages/http)
+
+  - Specify the [body parameters for a request](https://github.com/tkhq/sdk/blob/main/packages/api-key-stamper/src/index.ts#L75-L78)
+  - Given a TEK [generate the payloads and generate the signatures for the request](https://github.com/tkhq/sdk/blob/24c399bd8e6c04ceb3e75ba9438b859cef796fda/packages/http/src/base.ts#L216-L255).
+
+- [JS SDK React Native stamper](https://github.com/alchemyplatform/aa-sdk/blob/9ad59f2d6673bc6f587e6a57343b1486c92f382f/account-kit/rn-signer/src/NativeTEKStamper.ts#L9)
+
+  - [Generating keys, stamping requests on iOS](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/rn-signer/ios/implementation/NativeTEKStamperImpl.swift)
+  - [Generating keys, stamping requests on Android](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/rn-signer/android/src/main/java/com/accountkit/reactnativesigner/NativeTEKStamperModule.kt)
+
+- [More examples of stamping via our partner Turnkey](https://docs.turnkey.com/developer-reference/api-overview/stamps#stampers)
+
+If you have more questions, please reach out.

@@ -12,7 +12,7 @@ test("Google sign in", async ({ page }) => {
       "PLAYWRIGHT_GOOGLE_EMAIL and PLAYWRIGHT_GOOGLE_PASSWORD must be set",
     );
   }
-  await expect(page).toHaveTitle(/Account Kit/);
+  await expect(page).toHaveTitle(/Smart Wallets/);
   // Fast way to initialize the page and ensure config is loaded
   await page.getByRole("switch", { name: "Email" }).click();
   await page.getByRole("switch", { name: "Email" }).click();

@@ -2,8 +2,6 @@ name: Generate Fern Docs Preview
 
 on:
   pull_request:
-    branches:
-      - main
 
 jobs:
   preview:
@@ -19,8 +17,6 @@ jobs:
 
       - name: Setup Docs
         uses: ./.github/actions/setup-docs
-        with:
-          docs-github-token: ${{ secrets.DOCS_GITHUB_TOKEN }}
 
       - name: Set Build Comment to In Progress
         uses: actions/github-script@v7

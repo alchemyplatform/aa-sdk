@@ -1,0 +1,108 @@
+---
+title: Pay gas with any token
+description: Enable your users to pay gas with ERC-20 tokens like USDC via Gas Manager
+slug: wallets/react-native/using-smart-accounts/pay-gas-with-any-token
+---
+
+Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app's own token. With our smart wallet, you can enable your users to pay for gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
+
+<Markdown src="../../../shared/sponsor-gas-erc20-how-it-works.mdx" />
+
+## Goal
+
+Configure your React Native app to enable users to pay gas fees with an ERC-20 token (for example USDC).
+
+## Prerequisites
+
+<Markdown src="../../../shared/sponsor-gas-erc20-prerequisites.mdx" />
+
+## Steps
+
+### 1 Create a Gas Manager policy
+
+<Markdown src="../../../shared/sponsor-gas-erc20-create-policy.mdx" />
+
+### 2 Add the policy to your global config
+
+```ts twoslash config.ts
+import { createConfig } from "@account-kit/react-native";
+import { sepolia } from "@account-kit/infra";
+
+export const config = createConfig({
+  apiKey: "ALCHEMY_API_KEY",
+  chain: sepolia,
+  policyId: "GAS_MANAGER_POLICY_ID", // your policy
+  policyToken: {
+    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
+    maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
+  },
+});
+```
+
+All `UserOperations` sent with the hooks will now be paid with the token configured above.
+
+### 3 Send a sponsored UserOperation
+
+```tsx twoslash
+import React from "react";
+import { View, Pressable, Text } from "react-native";
+import { useSendUserOperation } from "@account-kit/react-native";
+
+export default function PayWithTokenButton() {
+  const { sendUserOperation } = useSendUserOperation();
+  const erc20Abi = parseAbi([
+    "function approve(address spender, uint256 amount) public returns (bool)",
+  ]);
+
+  return (
+    <View>
+      <Pressable
+        onPress={() =>
+          sendUserOperation({
+            uo: [
+              {
+                // approve call
+                target: tokenAddress,
+                data: encodeFunctionData({
+                  abi: erc20Abi,
+                  functionName: "approve",
+                  args: [paymasterAddress, maxTokenAmount],
+                }) as `0x${string}`,
+              },
+              {
+                target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
+                data: "0x",
+                value: 0n,
+              },
+            ],
+          })
+        }
+      >
+        <View>
+          <Text>Send token-sponsored UO</Text>
+        </View>
+      </Pressable>
+    </View>
+  );
+}
+```
+
+### 4 (Optional) Override on a single client
+
+Create a dedicated client if you only want certain operations to use the policy.
+
+```tsx twoslash
+const { client } = useSmartAccountClient({
+  policyId: "GAS_MANAGER_POLICY_ID",
+  policyToken: {
+    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
+    maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
+  },
+});
+```
+
+Use this `client` with any hook that sends UserOperations.
+
+## Done
+
+Your app now sponsors gas with the specified ERC-20 token!

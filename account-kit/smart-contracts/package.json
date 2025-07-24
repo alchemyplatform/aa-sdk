@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/smart-contracts",
-  "version": "4.35.1",
+  "version": "4.52.2",
   "description": "aa-sdk compatible interfaces for Alchemy Smart Accounts",
   "author": "Alchemy",
   "license": "MIT",
@@ -46,13 +46,13 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/smart-contracts --fern",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/smart-contracts",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@account-kit/plugingen": "^4.35.1",
+    "@account-kit/plugingen": "^4.52.2",
     "change-case": "^5.1.2",
     "dedent": "^1.5.1",
     "dotenv": "^16.3.1",
@@ -72,8 +72,9 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
   "dependencies": {
-    "@aa-sdk/core": "^4.35.1",
-    "@account-kit/infra": "^4.35.1"
+    "@aa-sdk/core": "^4.52.2",
+    "@account-kit/infra": "^4.52.2",
+    "webauthn-p256": "^0.0.10"
   },
   "peerDependencies": {
     "viem": "2.29.2"

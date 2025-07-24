@@ -1,0 +1,82 @@
+---
+title: Quickstart
+description: Get started in 5 minutes with Alchemy Smart Wallets using our NextJS template with embedded smart wallets and social login.
+text: Quickstart
+link: /react/quickstart/new-project
+slug: wallets/react/quickstart/new-project
+---
+
+**By the end of this tutorial, you'll have a working NextJS application with embedded smart wallets, social login, and gasless transactions.**
+
+The fastest way to get started is using our **Quickstart widget** in the Alchemy Dashboard.
+
+**The quickstart will install this Next.js template:** Check out the [quickstart template source code](https://github.com/alchemyplatform/smart-wallets-quickstart) on GitHub.
+
+## 1. Use the Dashboard Quickstart
+
+1. Go to the Smart Wallets Quickstart in the [Alchemy Dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart)
+2. Click get started to pre-generate an example API key and policy ID for testing
+3. Follow the 3-step process:
+
+   - **Create new app**: Copy the provided `npx create-next-app` command
+
+   <CodeBlocks>
+
+   ```bash npm
+   npx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+   ```
+
+   ```bash yarn
+   yarn create next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+   ```
+
+   ```bash pnpm
+   pnpx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
+   ```
+
+   </CodeBlocks>
+
+   - **Set up environment**: Copy the pre-configured `.env` variables (includes your API key and policy ID) from the [dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart)
+     - Alternatively, create your own app and configuration at the [Smart Wallets Dashboard](https://dashboard.alchemy.com/services/smart-wallets/configuration) to get an API key
+     - You can also set up your own paymaster policy at the [Gas Manager Dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration)
+   - **Run app**: Use the provided run command
+
+    <CodeBlocks>
+
+   ```bash npm
+   npm run dev
+   ```
+
+   ```bash yarn
+   yarn dev
+   ```
+
+   ```bash pnpm
+   pnpm run dev
+   ```
+
+    </CodeBlocks>
+
+<img
+  src="/images/wallets/dashboard-quickstart-widget.png"
+  alt="Alchemy Dashboard quickstart widget showing the 3-step process"
+  style={{ width: "100%", maxWidth: "800px" }}
+/>
+
+The quickstart widget automatically provides you with:
+
+- ✅ Pre-configured API key (`NEXT_PUBLIC_ALCHEMY_API_KEY`)
+- ✅ Pre-configured paymaster policy ID (`NEXT_PUBLIC_ALCHEMY_POLICY_ID`)
+- ✅ Ready-to-use commands
+- ✅ Default network set to Arbitrum Sepolia testnet
+  - Uses an example NFT contract deployed on this network for the demo
+
+## 2. That's it!
+
+Your app will be running with embedded smart wallets using social login, and gas sponsorship enabled out of the box ✨
+
+<Tip>
+  The dashboard quickstart creates everything you need automatically. No manual
+  API key or policy setup required! Visit the [Login UI
+  setup](/wallets/react/getting-started) to start customizing your experience.
+</Tip>

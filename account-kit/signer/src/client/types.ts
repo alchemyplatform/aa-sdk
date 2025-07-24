@@ -1,5 +1,9 @@
 import type { Address } from "@aa-sdk/core";
-import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
+import type {
+  TSignedRequest,
+  TurnkeyApiTypes,
+  getWebAuthnAttestation,
+} from "@turnkey/http";
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
@@ -59,6 +63,7 @@ export type EmailAuthParams = {
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
   expirationSeconds?: number;
+  fetchIdTokenOnly?: boolean;
 };
 
 export type OtpParams = {
@@ -172,11 +177,30 @@ export type SignerEndpoints = [
     };
   },
   {
-    Route: "/v1/add-oauth-provider";
+    Route: "/v1/update-email-auth";
     Body: {
       stampedRequest: TSignedRequest;
     };
     Response: void;
+  },
+  {
+    Route: "/v1/add-oauth-provider";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: { oauthProviders: OauthProviderInfo[] };
+  },
+  {
+    Route: "/v1/remove-oauth-provider";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
+    Route: "/v1/list-auth-methods";
+    Body: {};
+    Response: AuthMethods;
   },
   {
     Route: "/v1/prepare-oauth";
@@ -244,6 +268,69 @@ export type SignerEndpoints = [
       multiFactors: MfaFactor[];
     };
   },
+  {
+    Route: "/v1/multi-owner-create";
+    Body: {
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: {
+        orgId: string;
+        evmSignerAddress: Address;
+        members: {
+          evmSignerAddress: Address;
+        }[];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-prepare-add";
+    Body: {
+      organizationId: string;
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1CreateUsersRequest"];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-add";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        members: {
+          evmSignerAddress: Address;
+        }[];
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-update-root-quorum";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1UpdateRootQuorumResult"];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-sign-raw-payload";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        signRawPayloadResult: TurnkeyApiTypes["v1SignRawPayloadResult"];
+      };
+    };
+  },
 ];
 
 export type AuthenticatingEventMetadata = {
@@ -265,8 +352,8 @@ export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;
 
 export type GetWebAuthnAttestationResult = {
   attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
-  challenge: ArrayBuffer;
-  authenticatorUserId: ArrayBuffer;
+  challenge: ArrayBuffer | string;
+  authenticatorUserId: BufferSource;
 };
 
 export type AuthLinkingPrompt = {
@@ -278,6 +365,12 @@ export type AuthLinkingPrompt = {
   orgId: string;
 };
 
+export type IdTokenOnly = {
+  status: "FETCHED_ID_TOKEN_ONLY";
+  idToken: string;
+  providerName: string;
+};
+
 export type OauthState = {
   authProviderId: string;
   isCustomProvider?: boolean;
@@ -286,6 +379,7 @@ export type OauthState = {
   expirationSeconds?: number;
   redirectUrl?: string;
   openerOrigin?: string;
+  fetchIdTokenOnly?: boolean;
 };
 
 export type GetOauthProviderUrlArgs = {
@@ -343,6 +437,25 @@ export type SubmitOtpCodeResponse =
 export type AddOauthProviderParams = {
   providerName: string;
   oidcToken: string;
+};
+
+export type AuthMethods = {
+  email?: string;
+  oauthProviders: OauthProviderInfo[];
+  passkeys: PasskeyInfo[];
+};
+
+export type OauthProviderInfo = {
+  providerId: string;
+  issuer: string;
+  providerName?: string;
+  userDisplayName?: string;
+};
+
+export type PasskeyInfo = {
+  authenticatorId: string;
+  name: string;
+  createdAt: number;
 };
 
 export type experimental_CreateApiKeyParams = {

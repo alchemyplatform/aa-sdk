@@ -1,6 +1,6 @@
 ---
 title: Frequently Asked Questions
-description: Learn how to get started with Alchemy's Account Kit, a vertically
+description: Learn how to get started with Alchemy's Smart Wallets, a vertically
 slug: wallets/resources/faqs
 ---
 
@@ -167,6 +167,52 @@ We recommend adding error handling when sending a UO to handle potential gas and
   [here](#TODO).
 </Accordion>
 
+### How to Authenticate Users and Verify User Sessions on the Backend?
+
+<Accordion title="Answer">
+    After a user logs in with Smart Wallets on the frontend, you might want to verify their identity on your backend to authorize actions or access.
+
+    You can do this using one of two approaches:
+
+    ---
+
+    ### Option 1: SIWE [Sign-In With Ethereum](https://eips.ethereum.org/EIPS/eip-4361)
+
+    Use this flow when you just need to verify user sessions created by EOAs and Smart Contract Accounts (SCAs) via Smart Wallets.
+
+    For EOAs, Smart Wallets doesn’t create a session on the client side and `stampWhoAmI` isn’t available, so we can use SIWE. This can be used for verifying EOA and SCA flows.
+    You can create a [SIWE message](https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/creating-siwe-messages) with all the necessary info to get server side (address, chainId, etc).
+
+    1. The backend provides a nonce to the frontend.
+    2. The user signs a SIWE message with their wallet (EOA or SCA).
+    3. The frontend sends the signed message back to the backend.
+    4. The backend verifies the signature:
+    - EOAs: Standard signature recovery
+    - SCAs: Use EIP-1271 or EIP-6492 to verify the contract signature
+    5. The backend issues a session token.
+
+    **Note:**
+    - SIWE requires an explicit signature from the user, which [costs](https://www.alchemy.com/docs/reference/compute-unit-costs) more than calling `whoami`
+    - For verifying both EOA and SCA user sessions
+
+    ---
+
+    ### Option 2: `stampWhoAmI` + `whoami` (Only when using Alchemy signer)
+
+    Use this flow when you just need to verify user sessions created by SCAs via Smart Wallets.
+
+    1. The frontend generates a stamped request using [signer.inner.stampWhoAmI](https://www.alchemy.com/docs/wallets/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami).
+    2. It sends the stamp to your backend.
+    3. The backend calls Alchemy's [/signer/v1/whoami](https://www.alchemy.com/docs/node/smart-wallets/signer-api-endpoints/signer-api-endpoints/auth-user) endpoint to verify the identity.
+    4. If you need to make subsequent requests, you can also avoid calling the whoami endpoint on every request. To do so, after verifying the `whoami`, the backend can issue its own session token (e.g. an HTTP-only cookie or access token). If the token is present, you can safely skip the `whoami` check.
+
+    **Why this approach?**
+    - No user signature required
+    - **Cheaper** than flows requiring a signed message
+    - Easily retrieve user's login info, such email and address if available
+
+</Accordion>
+
 ## Common Errors
 
 ### Replacement underpriced: `"code":-32602,"message":"replacement underpriced","data"...`
@@ -238,6 +284,14 @@ If your `UserOperation` continues to be delayed beyond a limit you are willing t
   reverts, and it shows this message in explorers.
 </Accordion>
 
+### `ERR_BLOCKED_BY_CLIENT` when loading the page
+
+<Accordion title="Answer">
+  This message is usually triggered by browser ad‑blocking tools that stop our
+  analytics scripts from running. Analytics collection will be blocked, but the
+  Smart Wallet functionality will continue to work normally.
+</Accordion>
+
 ## Other Support
 
 ### Does the aa-sdk repo support React Native?
@@ -246,7 +300,7 @@ No, the `aa-sdk` repo does not offically support React Native. **It is on our ra
 
 Currently we have a strong dependency on Viem, which requires several global features, such as `TextEncoder` and `crypto`, that are absent in React Native's environment. See more about [Viem's capability here](https://viem.sh/docs/compatibility).
 
-However, we have created a small PoC using Expo that you can find [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). For more information on how to use Account Kit within a React Native application see [the guide](/wallets/react-native/overview).
+However, we have created a small PoC using Expo that you can find [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). For more information on how to use Smart Wallets within a React Native application see [the guide](/wallets/react-native/overview).
 
 ### How should I protect my api key and policy id in the frontend?
 
@@ -261,8 +315,68 @@ We recommend moving your API key to the backend by routing to a proxy. You can s
 
 For more information on how to secure your API key, refer to [this guide](https://docs.alchemy.com/docs/best-practices-for-key-security-and-management).
 
+<Warning>
+  If you have logic in your proxy that restricts certain paths, ensure that the
+  relative paths for network-agnostic RPC requests and signer API requests ([see
+  example
+  here](https://github.com/alchemyplatform/aa-sdk/blob/14187f8b87224d8730da2919575ac753626461eb/examples/ui-demo/src/app/api/rpc/%5B...routes%5D/route.ts#L21)),
+  and network-specific RPC requests ([see example
+  here](https://github.com/alchemyplatform/aa-sdk/blob/14187f8b87224d8730da2919575ac753626461eb/examples/ui-demo/src/app/api/rpc/route.ts))
+  are preserved when forwarding.
+</Warning>
+
 **How can I protect my Policy ID?**
 
 Protecting your Policy ID requires some custom work, but it’s similar to safeguarding any key on the backend. One solution is to use a proxy server that holds both the API key and Policy ID. In the frontend, when creating an Alchemy client, pass the proxy server URL as the RPC URL instead of a public Alchemy URL.
 
 Additionally, you'll need to implement custom code on your proxy server to limit gas sponsorship requests. This could include rules that make sense for your app, such as limiting gas fees, restricting certain contract or method calls, or implementing limits based on IP addresses or CAPTCHA verification.
+
+### Why are my users getting logged out unexpectedly?
+
+**Issue:**  
+You or your users might notice that the session ends sooner than expected, requiring re-authentication.
+
+**Default behavior:**  
+By default, authenticated sessions using `AlchemyWebSigner` are stored in `localStorage` and expire after **15 minutes** of inactivity.
+
+---
+
+#### ✅ Solution: Extend or configure session duration
+
+You can customize the session timeout by passing a `sessionConfig` object to the `createConfig` method:
+
+```ts
+createConfig({
+  ...,
+  sessionConfig: {
+    expirationTimeMs: 1000 * 60 * 60, // 1 hour session duration (defaults to 15 min)
+  },
+})
+```
+
+👉 [Reference: createConfig](https://www.alchemy.com/docs/wallets/reference/account-kit/react/functions/createConfig)
+
+---
+
+#### 🧪 Other common causes of session ending:
+
+- **Server-Side Rendering (SSR) misconfigured**
+  If you're using SSR and haven't configured the provider correctly, session state can reset on the client.
+  👉 [Enable SSR and pass initial params →](https://www.alchemy.com/docs/wallets/react/ssr)
+
+- **Ad blockers**
+  Some ad blockers (especially those with aggressive cookie or storage policies) can interfere with localStorage or SDK requests, causing unexpected logouts.
+
+- **Private/incognito mode**
+  Browsers often restrict or wipe localStorage between tabs or after a short time in incognito mode. Consider warning users or designing for short session lengths in those environments.
+
+---
+
+#### 🔁 Debugging Checklist
+
+If you're seeing repeated or sporadic logouts in production, test the behavior across:
+
+- Browsers (Chrome, Firefox, Safari)
+- Devices (desktop vs mobile)
+- Browsing modes (incognito vs standard)
+- With and without ad blockers

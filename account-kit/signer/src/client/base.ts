@@ -2,7 +2,14 @@ import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
 import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import { jwtDecode } from "jwt-decode";
-import { sha256, type Hex } from "viem";
+import {
+  hexToBytes,
+  recoverPublicKey,
+  serializeSignature,
+  sha256,
+  type Address,
+  type Hex,
+} from "viem";
 import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
@@ -36,8 +43,14 @@ import type {
   ValidateMultiFactorsParams,
   AuthLinkingPrompt,
   AddOauthProviderParams,
+  CredentialCreationOptionOverrides,
+  OauthProviderInfo,
+  IdTokenOnly,
+  AuthMethods,
 } from "./types.js";
 import { VERSION } from "../version.js";
+import { secp256k1 } from "@noble/curves/secp256k1";
+import { Point } from "@noble/secp256k1";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -47,8 +60,8 @@ export interface BaseSignerClientParams {
 }
 
 export type ExportWalletStamper = TurnkeyClient["stamper"] & {
-  injectWalletExportBundle(bundle: string): Promise<boolean>;
-  injectKeyExportBundle(bundle: string): Promise<boolean>;
+  injectWalletExportBundle(bundle: string, orgId: string): Promise<boolean>;
+  injectKeyExportBundle(bundle: string, orgId: string): Promise<boolean>;
   publicKey(): string | null;
 };
 
@@ -59,6 +72,8 @@ const MFA_PAYLOAD = {
   VERIFY: "verify_mfa",
   LIST: "list_mfas",
 } as const;
+
+const withHexPrefix = (hex: string) => `0x${hex}` as const;
 
 /**
  * Base class for all Alchemy Signer clients
@@ -142,11 +157,62 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     }
   }
 
-  // #region ABSTRACT METHODS
-
-  public abstract createAccount(
+  /**
+   * Authenticates the user by either email or passkey account creation flow. Emits events during the process.
+   *
+   * @param {CreateAccountParams} params The parameters for creating an account, including the type (email or passkey) and additional details.
+   * @returns {Promise<SignupResponse>} A promise that resolves with the response object containing the account creation result.
+   */
+  public async createAccount(
     params: CreateAccountParams,
-  ): Promise<SignupResponse>;
+  ): Promise<SignupResponse> {
+    if (params.type === "email") {
+      this.eventEmitter.emit("authenticating", { type: "otp" });
+      const { email, emailMode, expirationSeconds } = params;
+      const publicKey = await this.initSessionStamper();
+
+      const response = await this.request("/v1/signup", {
+        email,
+        emailMode,
+        targetPublicKey: publicKey,
+        expirationSeconds,
+        redirectParams: params.redirectParams?.toString(),
+      });
+
+      return response;
+    }
+
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
+    // Passkey account creation flow
+    const { attestation, challenge } = await this.getWebAuthnAttestation(
+      params.creationOpts,
+      { username: "email" in params ? params.email : params.username },
+    );
+
+    const result = await this.request("/v1/signup", {
+      passkey: {
+        challenge:
+          typeof challenge === "string"
+            ? challenge
+            : base64UrlEncode(challenge),
+        attestation,
+      },
+      email: "email" in params ? params.email : undefined,
+    });
+
+    this.user = {
+      orgId: result.orgId,
+      address: result.address!,
+      userId: result.userId!,
+      credentialId: attestation.credentialId,
+    };
+    this.initWebauthnStamper(this.user, params.creationOpts);
+    this.eventEmitter.emit("connectedPasskey", this.user);
+
+    return result;
+  }
+
+  // #region ABSTRACT METHODS
 
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">,
@@ -162,11 +228,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract oauthWithRedirect(
     args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<User>;
+  ): Promise<User | IdTokenOnly>;
 
   public abstract oauthWithPopup(
     args: Extract<OauthParams, { mode: "popup" }>,
-  ): Promise<User | AuthLinkingPrompt>;
+  ): Promise<User | AuthLinkingPrompt | IdTokenOnly>;
 
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">,
@@ -176,16 +242,24 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
 
-  public abstract lookupUserWithPasskey(user?: User): Promise<User>;
-
   public abstract targetPublicKey(): Promise<string>;
 
   protected abstract getOauthConfig(): Promise<OauthConfig>;
 
   protected abstract getWebAuthnAttestation(
-    options: CredentialCreationOptions,
+    options?: CredentialCreationOptionOverrides,
     userDetails?: { username: string },
   ): Promise<GetWebAuthnAttestationResult>;
+
+  /**
+   * Initializes the session stamper and returns its public key.
+   */
+  protected abstract initSessionStamper(): Promise<string>;
+
+  protected abstract initWebauthnStamper(
+    user: User | undefined,
+    options: CredentialCreationOptionOverrides | undefined,
+  ): Promise<void>;
 
   // #endregion
 
@@ -205,6 +279,59 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     this.eventEmitter.on(event, listener as any);
 
     return () => this.eventEmitter.removeListener(event, listener as any);
+  };
+
+  /**
+   * Sets the email for the authenticated user, allowing them to login with that
+   * email.
+   *
+   * You must contact Alchemy to enable this feature for your team, as there are
+   * important security considerations. In particular, you must not call this
+   * without first validating that the user owns this email account.
+   *
+   * @param {string} email The email to set for the user
+   * @returns {Promise<void>} A promise that resolves when the email is set
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public setEmail = async (email: string): Promise<void> => {
+    if (!email) {
+      throw new Error(
+        "Email must not be empty. Use removeEmail() to remove email auth.",
+      );
+    }
+    await this.updateEmail(email);
+  };
+
+  /**
+   * Removes the email for the authenticated user, disallowing them from login with that email.
+   *
+   * @returns {Promise<void>} A promise that resolves when the email is removed
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public removeEmail = async (): Promise<void> => {
+    // This is a hack to remove the email for the user. Turnkey does not
+    // support clearing the email once set, so we set it to a known
+    // inaccessible address instead.
+    await this.updateEmail("not.enabled@example.invalid");
+  };
+
+  private updateEmail = async (email: string): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const stampedRequest = await this.turnkeyClient.stampUpdateUser({
+      type: "ACTIVITY_TYPE_UPDATE_USER",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        userEmail: email,
+        userTagIds: [],
+      },
+    });
+    await this.request("/v1/update-email-auth", {
+      stampedRequest,
+    });
   };
 
   /**
@@ -231,7 +358,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
           {
             attestation,
             authenticatorName: `passkey-${Date.now().toString()}`,
-            challenge: base64UrlEncode(challenge),
+            challenge:
+              typeof challenge === "string"
+                ? challenge
+                : base64UrlEncode(challenge),
           },
         ],
       },
@@ -244,6 +374,50 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     );
 
     return authenticatorIds;
+  };
+
+  /**
+   * Removes a passkey authenticator from the user's account.
+   *
+   * @param {string} authenticatorId The ID of the authenticator to remove.
+   * @returns {Promise<void>} A promise that resolves when the authenticator is removed.
+   * @throws {NotAuthenticatedError} If the user is not authenticated.
+   */
+  public removePasskey = async (authenticatorId: string): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    await this.turnkeyClient.deleteAuthenticators({
+      type: "ACTIVITY_TYPE_DELETE_AUTHENTICATORS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        authenticatorIds: [authenticatorId],
+      },
+    });
+  };
+
+  /**
+   * Asynchronously handles the authentication process using WebAuthn Stamper. If a user is provided, sets the user and returns it. Otherwise, retrieves the current user and initializes the WebAuthn stamper.
+   *
+   * @param {User} [user] An optional user object to authenticate
+   * @returns {Promise<User>} A promise that resolves to the authenticated user object
+   */
+  public lookupUserWithPasskey = async (user: User | undefined = undefined) => {
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
+    await this.initWebauthnStamper(user, undefined);
+    if (user) {
+      this.user = user;
+      this.eventEmitter.emit("connectedPasskey", user);
+      return user;
+    }
+
+    const result = await this.whoami(this.rootOrg);
+    await this.initWebauthnStamper(result, undefined);
+    this.eventEmitter.emit("connectedPasskey", result);
+
+    return result;
   };
 
   /**
@@ -276,7 +450,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public addOauthProvider = async (
     params: AddOauthProviderParams,
-  ): Promise<void> => {
+  ): Promise<OauthProviderInfo> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
@@ -290,7 +464,47 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
         oauthProviders: [{ providerName, oidcToken }],
       },
     });
-    await this.request("/v1/add-oauth-provider", { stampedRequest });
+    const response = await this.request("/v1/add-oauth-provider", {
+      stampedRequest,
+    });
+    return response.oauthProviders[0];
+  };
+
+  /**
+   * Deletes a specified OAuth provider for the authenticated user.
+   *
+   * @param {string} providerId The ID of the provider to be deleted
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public removeOauthProvider = async (providerId: string) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const stampedRequest = await this.turnkeyClient.stampDeleteOauthProviders({
+      type: "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        providerIds: [providerId],
+      },
+    });
+    await this.request("/v1/remove-oauth-provider", { stampedRequest });
+  };
+
+  /**
+   * Retrieves the list of authentication methods for the current user.
+   *
+   * @returns {Promise<AuthMethods>} A promise that resolves to the list of authentication methods
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public listAuthMethods = async (): Promise<AuthMethods> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    return await this.request("/v1/list-auth-methods", {
+      suborgId: this.user.orgId,
+    });
   };
 
   /**
@@ -474,6 +688,167 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
 
     return signature;
+  };
+
+  private experimental_createMultiOwnerStamper = () => ({
+    stamp: async (
+      request: string,
+    ): Promise<{
+      stampHeaderName: string;
+      stampHeaderValue: string;
+    }> => {
+      if (!this.user) {
+        throw new NotAuthenticatedError();
+      }
+
+      // we need this later to recover the public key from the signature, so we don't let turnkey hash
+      // this for us and pass HASH_FUNCTION_NO_OP instead
+      const hashed = sha256(new TextEncoder().encode(request));
+
+      const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
+        organizationId: this.user.orgId,
+        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+        timestampMs: Date.now().toString(),
+        parameters: {
+          encoding: "PAYLOAD_ENCODING_TEXT_UTF8",
+          hashFunction: "HASH_FUNCTION_SHA256",
+          payload: request,
+          signWith: this.user.address,
+        },
+      });
+
+      const { signature } = await this.request("/v1/sign-payload", {
+        stampedRequest,
+      });
+
+      // recover the public key, we can't just use the address
+      const recoveredPublicKey = await recoverPublicKey({
+        hash: hashed,
+        signature,
+      });
+
+      // compute the stamp over the original payload using this signature
+      // the format here is important
+      const stamp = {
+        publicKey: Point.fromHex(hexToBytes(recoveredPublicKey)).toHex(true),
+        scheme: "SIGNATURE_SCHEME_TK_API_SECP256K1",
+        signature: secp256k1.Signature.fromCompact(
+          hexToBytes(signature).slice(0, 64),
+        ).toDERHex(),
+      };
+
+      return {
+        stampHeaderName: "X-Stamp",
+        stampHeaderValue: base64UrlEncode(Buffer.from(JSON.stringify(stamp))),
+      };
+    },
+  });
+
+  private experimental_createMultiOwnerTurnkeyClient = () =>
+    new TurnkeyClient(
+      { baseUrl: "https://api.turnkey.com" },
+      this.experimental_createMultiOwnerStamper(),
+    );
+
+  /**
+   * This will sign on behalf of the multi-owner org, without doing any transformations on the message.
+   * For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass
+   * that result here.
+   *
+   * @param {Hex} msg the hex representation of the bytes to sign
+   * @param {string} orgId orgId of the multi-owner org to sign on behalf of
+   * @param {string} orgAddress address of the multi-owner org to sign on behalf of
+   * @returns {Promise<Hex>} the signature over the raw hex
+   */
+  public experimental_multiOwnerSignRawMessage = async (
+    msg: Hex,
+    orgId: string,
+    orgAddress: string,
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const { result } = await this.request("/v1/multi-owner-sign-raw-payload", {
+      stampedRequest: await multiOwnerClient.stampSignRawPayload({
+        organizationId: orgId,
+        type: "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
+        timestampMs: Date.now().toString(),
+        parameters: {
+          encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
+          hashFunction: "HASH_FUNCTION_NO_OP",
+          payload: msg,
+          signWith: orgAddress,
+        },
+      }),
+    });
+
+    return serializeSignature({
+      r: withHexPrefix(result.signRawPayloadResult.r),
+      s: withHexPrefix(result.signRawPayloadResult.s),
+      yParity: Number(result.signRawPayloadResult.v), // this is not actually a legacy v value, it's the y parity bit
+    });
+  };
+
+  /**
+   * This will create a multi-owner account with the current user and additional specified signers
+   *
+   * @param {Address[]} additionalMembers members to add, aside from the currently authenticated user
+   * @returns {Promise<SignerResponse<"/v1/multi-owner-create">['result']>} created multi-owner account
+   */
+  public experimental_createMultiOwner = async (
+    additionalMembers: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const response = await this.request("/v1/multi-owner-create", {
+      members: [this.user.address, ...additionalMembers].map(
+        (evmSignerAddress) => ({ evmSignerAddress }),
+      ),
+    });
+
+    return response.result;
+  };
+
+  /**
+   * This will add additional members to an existing multi-sig account
+   *
+   * @param {string} orgId orgId of the multi-sig to add members to
+   * @param {Address[]} members the addresses of the members to add
+   */
+  public experimental_addToMultiOwner = async (
+    orgId: string,
+    members: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const prepared = await this.request("/v1/multi-owner-prepare-add", {
+      organizationId: orgId,
+      members: members.map((evmSignerAddress) => ({ evmSignerAddress })),
+    });
+
+    const stampedRequest = await multiOwnerClient.stampCreateUsers(
+      prepared.result,
+    );
+
+    const {
+      result: { updateRootQuorumRequest },
+    } = await this.request("/v1/multi-owner-add", {
+      stampedRequest,
+    });
+
+    await this.request("/v1/multi-owner-update-root-quorum", {
+      stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+        updateRootQuorumRequest,
+      ),
+    });
   };
 
   /**
@@ -733,7 +1108,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       "exportWalletResult",
     );
 
-    const result = await stamper.injectWalletExportBundle(exportBundle);
+    const result = await stamper.injectWalletExportBundle(
+      exportBundle,
+      this.user.orgId,
+    );
 
     if (!result) {
       throw new Error("Failed to inject wallet export bundle");
@@ -763,7 +1141,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       "exportWalletAccountResult",
     );
 
-    const result = await stamper.injectKeyExportBundle(exportBundle);
+    const result = await stamper.injectKeyExportBundle(
+      exportBundle,
+      this.user.orgId,
+    );
 
     if (!result) {
       throw new Error("Failed to inject wallet export bundle");
@@ -876,6 +1257,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
             : redirectUrl
           : undefined,
       openerOrigin: mode === "popup" ? window.location.origin : undefined,
+      fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
     };
     const state = base64UrlEncode(
       new TextEncoder().encode(JSON.stringify(stateObject)),

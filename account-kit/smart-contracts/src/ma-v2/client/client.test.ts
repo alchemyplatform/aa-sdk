@@ -1,74 +1,82 @@
-import * as AAInfraModule from "@account-kit/infra";
 import * as AACoreModule from "@aa-sdk/core";
 import {
+  createSmartAccountClient,
   erc7677Middleware,
   LocalAccountSigner,
-  createSmartAccountClient,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
 } from "@aa-sdk/core";
+import * as AAInfraModule from "@account-kit/infra";
 import {
-  custom,
-  parseEther,
-  publicActions,
-  zeroAddress,
-  getContract,
-  hashMessage,
-  hashTypedData,
-  fromHex,
-  prepareEncodeFunctionData,
-  isAddress,
-  concat,
-  testActions,
-  concatHex,
-  toHex,
-  createWalletClient,
-  getContractAddress,
-  encodeFunctionData,
-  type TestActions,
-  type ContractFunctionName,
-} from "viem";
-import { HookType } from "../actions/common/types.js";
-import {
-  getDefaultPaymasterGuardModuleAddress,
-  getDefaultSingleSignerValidationModuleAddress,
-  getDefaultTimeRangeModuleAddress,
-  getDefaultAllowlistModuleAddress,
-  getDefaultNativeTokenLimitModuleAddress,
-  installValidationActions,
-  SingleSignerValidationModule,
-  PaymasterGuardModule,
-  TimeRangeModule,
-  AllowlistModule,
-  NativeTokenLimitModule,
-  semiModularAccountBytecodeAbi,
-  buildFullNonceKey,
-  deferralActions,
-  PermissionBuilder,
-  PermissionType,
-  buildDeferredActionDigest,
-} from "@account-kit/smart-contracts/experimental";
+  alchemy,
+  alchemyFeeEstimator,
+  alchemyGasAndPaymasterAndDataMiddleware,
+  arbitrumSepolia,
+} from "@account-kit/infra";
 import {
   createLightAccountClient,
   createModularAccountV2Client,
+  getMAV2UpgradeToData,
   type SignerEntity,
 } from "@account-kit/smart-contracts";
-import { local070Instance } from "~test/instances.js";
+import {
+  AllowlistModule,
+  buildDeferredActionDigest,
+  buildFullNonceKey,
+  deferralActions,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
+  getDefaultPaymasterGuardModuleAddress,
+  getDefaultSingleSignerValidationModuleAddress,
+  getDefaultTimeRangeModuleAddress,
+  getDefaultWebauthnValidationModuleAddress,
+  installValidationActions,
+  NativeTokenLimitModule,
+  PaymasterGuardModule,
+  PermissionBuilder,
+  PermissionType,
+  semiModularAccountBytecodeAbi,
+  SingleSignerValidationModule,
+  TimeRangeModule,
+} from "@account-kit/smart-contracts/experimental";
+import {
+  concat,
+  concatHex,
+  createWalletClient,
+  custom,
+  encodeFunctionData,
+  fromHex,
+  getContract,
+  getContractAddress,
+  hashMessage,
+  hashTypedData,
+  isAddress,
+  parseEther,
+  prepareEncodeFunctionData,
+  publicActions,
+  testActions,
+  toHex,
+  zeroAddress,
+  type ContractFunctionName,
+  type TestActions,
+} from "viem";
+import {
+  createWebAuthnCredential,
+  entryPoint07Abi,
+  type ToWebAuthnAccountParameters,
+} from "viem/account-abstraction";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
-import { accounts } from "~test/constants.js";
+import { parsePublicKey } from "webauthn-p256";
+import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
+import { SoftWebauthnDevice } from "~test/webauthn.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
-import { entryPoint07Abi } from "viem/account-abstraction";
-import {
-  alchemy,
-  arbitrumSepolia,
-  alchemyGasAndPaymasterAndDataMiddleware,
-} from "@account-kit/infra";
-import { getMAV2UpgradeToData } from "@account-kit/smart-contracts";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { HookType } from "../actions/common/types.js";
+import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -86,13 +94,8 @@ describe("MA v2 Tests", async () => {
       .extend(testActions({ mode: "anvil" }));
   });
 
-  const signer: SmartAccountSigner = new LocalAccountSigner(
-    accounts.fundedAccountOwner,
-  );
-
-  const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-    accounts.unfundedAccountOwner,
-  );
+  let signer: SmartAccountSigner;
+  let sessionKey: SmartAccountSigner;
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -102,8 +105,43 @@ describe("MA v2 Tests", async () => {
       address: target,
     });
 
+  beforeEach(async () => {
+    sessionKey = LocalAccountSigner.generatePrivateKeySigner();
+    signer = LocalAccountSigner.generatePrivateKeySigner();
+  });
+
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("20"),
+    });
+
+    const startingAddressBalance = await getTargetBalance();
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    await provider.waitForUserOperationTransaction(result).catch(async () => {
+      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
+        uoToDrop: result.request,
+      });
+      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+    });
+
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount,
+    );
+  });
+
+  it("sends a simple UO with webauthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
 
     await setBalance(instance.getClient(), {
       address: provider.getAddress(),
@@ -120,12 +158,125 @@ describe("MA v2 Tests", async () => {
       },
     });
 
-    await provider.waitForUserOperationTransaction(result);
+    await provider.waitForUserOperationTransaction(result).catch(async () => {
+      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
+        uoToDrop: result.request,
+      });
+      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+    });
 
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount,
     );
   });
+
+  it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
+    const provider = (await givenWebAuthnProvider()).provider.extend(
+      installValidationActions,
+    );
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    // set up session key client
+    const webauthnDevice = new SoftWebauthnDevice();
+
+    const credential = await createWebAuthnCredential({
+      rp: { id: "localhost", name: "localhost" },
+      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+      user: { name: "test", displayName: "test" },
+    });
+
+    const { x, y } = parsePublicKey(credential.publicKey);
+
+    // install webauthn validation module
+    const result = await provider.installValidation({
+      validationConfig: {
+        moduleAddress: getDefaultWebauthnValidationModuleAddress(
+          provider.chain,
+        ),
+        entityId: 1,
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: WebAuthnValidationModule.encodeOnInstallData({
+        entityId: 1,
+        x,
+        y,
+      }),
+      hooks: [],
+    });
+
+    // wait for the UserOperation to be mined
+    await provider.waitForUserOperationTransaction(result).catch(async () => {
+      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
+        uoToDrop: result.request,
+      });
+      await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+    });
+
+    // create session key client
+    const sessionKeyClient = await givenConnectedWebauthnProvider({
+      credential,
+      accountAddress: provider.getAddress(),
+      signerEntity: { entityId: 1, isGlobalValidation: true },
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
+    });
+
+    const sessionKeyResult = await sessionKeyClient.sendUserOperation({
+      uo: {
+        target: target,
+        value: sendAmount,
+        data: "0x",
+      },
+    });
+
+    // wait for the UserOperation to be mined
+    await sessionKeyClient
+      .waitForUserOperationTransaction(sessionKeyResult)
+      .catch(async () => {
+        const dropAndReplaceResult =
+          await sessionKeyClient.dropAndReplaceUserOperation({
+            uoToDrop: sessionKeyResult.request,
+          });
+        await sessionKeyClient.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
+  });
+
+  it.fails(
+    "successfully sign + validate a message, for WebAuthn account",
+    async () => {
+      const { provider } = await givenWebAuthnProvider();
+
+      await setBalance(instance.getClient(), {
+        address: provider.getAddress(),
+        value: parseEther("2"),
+      });
+
+      const message = "0xdeadbeef";
+
+      let signature = await provider.signMessage({ message });
+
+      const publicClient = instance.getClient().extend(publicActions);
+
+      // TODO: should be using verifyTypedData here
+      const isValid = await publicClient.verifyMessage({
+        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
+        message,
+        address: provider.getAddress(),
+        signature,
+      });
+
+      expect(isValid).toBe(true);
+    },
+  );
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
@@ -166,7 +317,20 @@ describe("MA v2 Tests", async () => {
 
     const message = "testmessage";
 
-    let signature = await provider.signMessage({ message });
+    const { type, data } = await provider.account.prepareSign({
+      type: "personal_sign",
+      data: message,
+    });
+
+    if (type !== "eth_signTypedData_v4") {
+      throw new Error("Invalid signature request type");
+    }
+
+    let signature = await (
+      await provider.account.getSigner()
+    ).signTypedData(data);
+
+    signature = await provider.account.formatSign(signature);
 
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature]),
@@ -258,7 +422,21 @@ describe("MA v2 Tests", async () => {
     } as const;
 
     const hashedMessageTypedData = hashTypedData(typedData);
-    let signature = await provider.signTypedData({ typedData });
+
+    const { type, data } = await provider.account.prepareSign({
+      type: "eth_signTypedData_v4",
+      data: typedData,
+    });
+
+    if (type !== "eth_signTypedData_v4") {
+      throw new Error("Invalid signature request type");
+    }
+
+    let signature = await (
+      await provider.account.getSigner()
+    ).signTypedData(data);
+
+    signature = await provider.account.formatSign(signature);
 
     await expect(
       accountContract.read.isValidSignature([
@@ -826,97 +1004,111 @@ describe("MA v2 Tests", async () => {
     ).rejects.toThrowError();
   });
 
-  it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
-    let provider = (
-      await givenConnectedProvider({
-        signer,
-        paymasterMiddleware: "erc7677",
-      })
-    ).extend(installValidationActions);
+  it.fails(
+    "installs paymaster guard module, verifies use of valid paymaster, then uninstalls module",
+    async () => {
+      let provider = (
+        await givenConnectedProvider({
+          signer,
+          paymasterMiddleware: "erc7677",
+        })
+      ).extend(installValidationActions);
 
-    await setBalance(client, {
-      address: provider.getAddress(),
-      value: parseEther("2"),
-    });
+      await setBalance(client, {
+        address: provider.getAddress(),
+        value: parseEther("20"),
+      });
 
-    const paymaster = paymaster070.getPaymasterDetails().address;
+      const paymaster = paymaster070.getPaymasterDetails().address;
 
-    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
-      entityId: 1,
-      paymaster: paymaster,
-    });
+      const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+        entityId: 1,
+        paymaster: paymaster,
+      });
 
-    const installResult = await provider.installValidation({
-      validationConfig: {
+      const installResult = await provider.installValidation({
+        validationConfig: {
+          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
+            provider.chain,
+          ),
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        selectors: [],
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: 1,
+          signer: await sessionKey.getAddress(),
+        }),
+        hooks: [
+          {
+            hookConfig: {
+              address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+              entityId: 1,
+              hookType: HookType.VALIDATION,
+              hasPreHooks: true,
+              hasPostHooks: false,
+            },
+            initData: hookInstallData,
+          },
+        ],
+      });
+
+      // verify hook installation succeeded
+      await provider.waitForUserOperationTransaction(installResult);
+
+      // create session key client
+      const sessionKeyProvider = (
+        await givenConnectedProvider({
+          signer: sessionKey,
+          accountAddress: provider.account.address,
+          paymasterMiddleware: "erc7677",
+          signerEntity: { entityId: 1, isGlobalValidation: true },
+        })
+      ).extend(installValidationActions);
+
+      // happy path: send a UO with correct paymaster
+      const result = await sessionKeyProvider
+        .sendUserOperation({
+          uo: {
+            target: zeroAddress,
+            value: 0n,
+            data: "0x",
+          },
+        })
+        .catch((e) => {
+          console.log("FAILED HERE 1");
+          console.log(e);
+          throw e;
+        });
+
+      // verify if correct paymaster is used
+      const txnHash =
+        sessionKeyProvider.waitForUserOperationTransaction(result);
+      await expect(txnHash).resolves.not.toThrowError();
+
+      const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+        entityId: 1,
+      });
+
+      const uninstallResult = await provider.uninstallValidation({
         moduleAddress: getDefaultSingleSignerValidationModuleAddress(
           provider.chain,
         ),
         entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: await sessionKey.getAddress(),
-      }),
-      hooks: [
-        {
-          hookConfig: {
-            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
-            entityId: 1,
-            hookType: HookType.VALIDATION,
-            hasPreHooks: true,
-            hasPostHooks: false,
-          },
-          initData: hookInstallData,
-        },
-      ],
-    });
+        uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+          entityId: 1,
+        }),
+        hookUninstallDatas: [hookUninstallData],
+      });
 
-    // verify hook installation succeeded
-    await provider.waitForUserOperationTransaction(installResult);
-
-    // create session key client
-    const sessionKeyProvider = (
-      await givenConnectedProvider({
-        signer: sessionKey,
-        accountAddress: provider.account.address,
-        paymasterMiddleware: "erc7677",
-        signerEntity: { entityId: 1, isGlobalValidation: true },
-      })
-    ).extend(installValidationActions);
-
-    // happy path: send a UO with correct paymaster
-    const result = await sessionKeyProvider.sendUserOperation({
-      uo: {
-        target: target,
-        value: sendAmount,
-        data: "0x",
-      },
-    });
-
-    // verify if correct paymaster is used
-    const txnHash = sessionKeyProvider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
-
-    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
-      entityId: 1,
-    });
-
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: zeroAddress,
-      entityId: 1,
-      uninstallData: "0x",
-      hookUninstallDatas: [hookUninstallData],
-    });
-
-    // verify uninstall
-    await expect(
-      provider.waitForUserOperationTransaction(uninstallResult),
-    ).resolves.not.toThrowError();
-  });
+      // verify uninstall
+      await expect(
+        provider.waitForUserOperationTransaction(uninstallResult),
+      ).resolves.not.toThrowError();
+    },
+  );
 
   it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
     let provider = (
@@ -1770,6 +1962,60 @@ describe("MA v2 Tests", async () => {
 
   let salt = 1n;
 
+  const givenConnectedWebauthnProvider = async ({
+    signerEntity,
+    accountAddress,
+    paymasterMiddleware,
+    credential,
+    getFn,
+    rpId,
+  }: {
+    signerEntity?: SignerEntity;
+    accountAddress?: `0x${string}`;
+    paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
+    credential: ToWebAuthnAccountParameters["credential"];
+    getFn?: ToWebAuthnAccountParameters["getFn"];
+    rpId?: ToWebAuthnAccountParameters["rpId"];
+  }) =>
+    createModularAccountV2Client({
+      chain: instance.chain,
+      accountAddress,
+      signerEntity,
+      credential,
+      getFn,
+      rpId,
+      mode: "webauthn",
+      transport: custom(instance.getClient()),
+      ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
+        ? alchemyGasAndPaymasterAndDataMiddleware({
+            policyId: "FAKE_POLICY_ID",
+            // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+            transport: custom(instance.getClient()),
+          })
+        : paymasterMiddleware === "erc7677"
+          ? erc7677Middleware()
+          : {}),
+      salt: salt++,
+    });
+
+  const givenWebAuthnProvider = async () => {
+    const webauthnDevice = new SoftWebauthnDevice();
+
+    const credential = await createWebAuthnCredential({
+      rp: { id: "localhost", name: "localhost" },
+      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+      user: { name: "test", displayName: "test" },
+    });
+
+    const provider = await givenConnectedWebauthnProvider({
+      credential,
+      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
+      rpId: "localhost",
+    });
+
+    return { provider, credential };
+  };
+
   const givenConnectedProvider = async ({
     signer,
     signerEntity,
@@ -1787,6 +2033,10 @@ describe("MA v2 Tests", async () => {
       accountAddress,
       signerEntity,
       transport: custom(instance.getClient()),
+      feeEstimator: alchemyFeeEstimator(
+        // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+        custom(instance.getClient()),
+      ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",

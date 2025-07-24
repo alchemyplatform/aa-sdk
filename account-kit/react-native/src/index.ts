@@ -19,8 +19,12 @@ export {
   useSignMessage,
   useSignTypedData,
   useSmartAccountClient,
+  useSolanaConnection,
+  useSolanaSigner,
+  useSolanaTransaction,
   useUser,
   useWaitForUserOperationTransaction,
 } from "@account-kit/react/hooks";
+export type * from "@account-kit/react/hooks";
 export * from "./context.js";
 export { createConfig } from "./createConfig.js";

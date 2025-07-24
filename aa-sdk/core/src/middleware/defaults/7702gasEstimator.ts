@@ -1,4 +1,4 @@
-import { zeroHash } from "viem";
+import { concatHex, numberToHex, zeroHash } from "viem";
 import { AccountNotFoundError } from "../../errors/account.js";
 import type { UserOperationStruct } from "../../types.js";
 import type { ClientMiddlewareFn } from "../types";
@@ -56,18 +56,28 @@ export const default7702GasEstimator: (
       );
     }
 
-    const implementationAddress = await account.getImplementationAddress();
+    const [implementationAddress, code = "0x"] = await Promise.all([
+      account.getImplementationAddress(),
+      params.client.getCode({ address: params.account.address }),
+    ]);
 
-    // Note: does not omit the delegation from estimation if the account is already 7702 delegated.
+    const isAlreadyDelegated =
+      code.toLowerCase() === concatHex(["0xef0100", implementationAddress]);
 
-    (struct as UserOperationStruct<"0.7.0">).eip7702Auth = {
-      chainId: "0x0",
-      nonce: "0x0",
-      address: implementationAddress,
-      r: zeroHash, // aka `bytes32(0)`
-      s: zeroHash,
-      yParity: "0x0",
-    };
+    if (!isAlreadyDelegated) {
+      (struct as UserOperationStruct<"0.7.0">).eip7702Auth = {
+        chainId: numberToHex(params.client.chain?.id ?? 0),
+        nonce: numberToHex(
+          await params.client.getTransactionCount({
+            address: params.account.address,
+          }),
+        ),
+        address: implementationAddress,
+        r: zeroHash, // aka `bytes32(0)`
+        s: zeroHash,
+        yParity: "0x0",
+      };
+    }
 
     return gasEstimator_(struct, params);
   };

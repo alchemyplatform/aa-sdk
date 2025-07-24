@@ -1,34 +1,39 @@
 import {
   createBundlerClient,
   getEntryPoint,
+  InvalidDeferredActionNonce,
   InvalidEntityIdError,
   InvalidNonceKeyError,
-  InvalidDeferredActionNonce,
   toSmartContractAccount,
   type AccountOp,
   type SmartAccountSigner,
+  type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
 } from "@aa-sdk/core";
-import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
 import {
-  type Hex,
-  type Address,
-  type Chain,
-  type Transport,
+  concatHex,
   encodeFunctionData,
+  getContract,
+  maxUint152,
   maxUint32,
   zeroAddress,
-  getContract,
-  concatHex,
-  maxUint152,
+  type Address,
+  type Chain,
+  type Hex,
+  type Transport,
 } from "viem";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import { modularAccountAbi } from "../../abis/modularAccountAbi.js";
 import { serializeModuleEntity } from "../../actions/common/utils.js";
-import { nativeSMASigner } from "../nativeSMASigner.js";
 import { singleSignerMessageSigner } from "../../modules/single-signer-validation/signer.js";
+import { webauthnSigningFunctions } from "../../modules/webauthn-validation/signingMethods.js";
+import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../../utils.js";
+import { nativeSMASigner } from "../nativeSMASigner.js";
 
 export const executeUserOpSelector: Hex = "0x8DD7712F";
+
+export type ModularAccountsV2 = ModularAccountV2 | WebauthnModularAccountV2;
 
 export type SignerEntity = {
   isGlobalValidation: boolean;
@@ -70,8 +75,23 @@ export type ModularAccountV2<
   encodeCallData: (callData: Hex) => Promise<Hex>;
 };
 
+export type WebauthnModularAccountV2 = SmartContractAccount<
+  "ModularAccountV2",
+  "0.7.0"
+> & {
+  params: ToWebAuthnAccountParameters;
+  signerEntity: SignerEntity;
+  getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
+  getValidationData: (
+    args: ValidationDataParams,
+  ) => Promise<ValidationDataView>;
+  encodeCallData: (callData: Hex) => Promise<Hex>;
+};
+
 export type CreateMAV2BaseParams<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner | undefined =
+    | SmartAccountSigner
+    | undefined,
   TTransport extends Transport = Transport,
 > = Omit<
   ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">,
@@ -82,6 +102,8 @@ export type CreateMAV2BaseParams<
   | "signMessage"
   | "signTypedData"
   | "getDummySignature"
+  | "prepareSign"
+  | "formatSign"
 > & {
   signer: TSigner;
   signerEntity?: SignerEntity;
@@ -89,17 +111,36 @@ export type CreateMAV2BaseParams<
   deferredAction?: Hex;
 };
 
+export type CreateWebauthnMAV2BaseParams = Omit<
+  CreateMAV2BaseParams,
+  "signer"
+> & {
+  credential: ToWebAuthnAccountParameters["credential"];
+  getFn?: ToWebAuthnAccountParameters["getFn"] | undefined;
+  rpId?: ToWebAuthnAccountParameters["rpId"] | undefined;
+};
+
 export type CreateMAV2BaseReturnType<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Promise<ModularAccountV2<TSigner>>;
 
+// function overload
+export async function createMAv2Base(
+  config: CreateWebauthnMAV2BaseParams,
+): Promise<WebauthnModularAccountV2>;
+
 export async function createMAv2Base<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
->(config: CreateMAV2BaseParams<TSigner>): CreateMAV2BaseReturnType<TSigner> {
+>(config: CreateMAV2BaseParams): CreateMAV2BaseReturnType<TSigner>;
+
+export async function createMAv2Base<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+>(
+  config: CreateMAV2BaseParams<TSigner> | CreateWebauthnMAV2BaseParams,
+): Promise<WebauthnModularAccountV2 | ModularAccountV2<TSigner>> {
   let {
     transport,
     chain,
-    signer,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
     signerEntity = {
       isGlobalValidation: true,
@@ -113,6 +154,11 @@ export async function createMAv2Base<
     deferredAction,
     ...remainingToSmartContractAccountParams
   } = config;
+
+  const signer = "signer" in config ? config.signer : undefined;
+  const credential = "credential" in config ? config.credential : undefined;
+  const getFn = "getFn" in config ? config.getFn : undefined;
+  const rpId = "rpId" in config ? config.rpId : undefined;
 
   if (entityId > Number(maxUint32)) {
     throw new InvalidEntityIdError(entityId);
@@ -273,16 +319,37 @@ export async function createMAv2Base<
     encodeExecute,
     encodeBatchExecute,
     getNonce,
-    ...(entityId === DEFAULT_OWNER_ENTITY_ID
-      ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
-      : singleSignerMessageSigner(
-          signer,
+    ...(signer
+      ? entityId === DEFAULT_OWNER_ENTITY_ID
+        ? nativeSMASigner(signer, chain, accountAddress, deferredActionData)
+        : singleSignerMessageSigner(
+            signer,
+            chain,
+            accountAddress,
+            entityId,
+            deferredActionData,
+          )
+      : webauthnSigningFunctions(
+          // credential required for webauthn mode is checked at modularAccountV2 creation level
+          credential!,
+          getFn,
+          rpId,
           chain,
           accountAddress,
           entityId,
           deferredActionData,
         )),
   });
+
+  if (!signer) {
+    return {
+      ...baseAccount,
+      signerEntity,
+      getExecutionData,
+      getValidationData,
+      encodeCallData,
+    } as WebauthnModularAccountV2; // TO DO: figure out when this breaks! we shouldn't have to cast
+  }
 
   return {
     ...baseAccount,
@@ -291,5 +358,11 @@ export async function createMAv2Base<
     getExecutionData,
     getValidationData,
     encodeCallData,
-  };
+  } as ModularAccountV2<TSigner>; // TO DO: figure out when this breaks! we shouldn't have to cast
+}
+
+export function isModularAccountV2(
+  account: SmartContractAccount,
+): account is ModularAccountV2 | WebauthnModularAccountV2 {
+  return account.source === "ModularAccountV2";
 }

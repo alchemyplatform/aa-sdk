@@ -1,0 +1,599 @@
+# yaml-language-server: $schema=https://meta.open-rpc.org/
+
+$schema: https://meta.open-rpc.org/
+openrpc: 1.2.4
+info:
+  title: Alchemy Bundler API JSON-RPC Specification
+  description: A specification of the standard JSON-RPC methods for the Alchemy Bundler API.
+  version: 0.0.0
+servers:
+  - url: https://eth-mainnet.g.alchemy.com/v2
+    name: Ethereum Mainnet
+  - url: https://eth-sepolia.g.alchemy.com/v2
+    name: Ethereum Sepolia
+  - url: https://eth-holesky.g.alchemy.com/v2
+    name: Ethereum Holesky
+  - url: https://opt-mainnet.g.alchemy.com/v2
+    name: Optimism Mainnet
+  - url: https://polygon-mainnet.g.alchemy.com/v2
+    name: Polygon Mainnet
+  - url: https://polygon-amoy.g.alchemy.com/v2
+    name: Polygon Amoy
+  - url: https://arb-mainnet.g.alchemy.com/v2
+    name: Arbitrum Mainnet
+  - url: https://arb-sepolia.g.alchemy.com/v2
+    name: Arbitrum Sepolia
+  - url: https://arbnova-mainnet.g.alchemy.com/v2
+    name: Arbitrum Nova
+  - url: https://berachain-bartio.g.alchemy.com/v2
+    name: Berachain Bartio
+  - url: https://zora-mainnet.g.alchemy.com/v2
+    name: Zora Mainnet
+  - url: https://zora-sepolia.g.alchemy.com/v2
+    name: Zora Sepolia
+  - url: https://polynomial-mainnet.g.alchemy.com/v2
+    name: Polynomial Mainnet
+  - url: https://polynomial-sepolia.g.alchemy.com/v2
+    name: Polynomial Sepolia
+  - url: https://base-mainnet.g.alchemy.com/v2
+    name: Base Mainnet
+  - url: https://base-sepolia.g.alchemy.com/v2
+    name: Base Sepolia
+  - url: https://frax-mainnet.g.alchemy.com/v2
+    name: Frax Mainnet
+  - url: https://frax-sepolia.g.alchemy.com/v2
+    name: Frax Sepolia
+  - url: https://anime-sepolia.g.alchemy.com/v2
+    name: Anime Sepolia
+  - url: https://race-mainnet.g.alchemy.com/v2
+    name: Race Mainnet
+  - url: https://shape-mainnet.g.alchemy.com/v2
+    name: Shape Mainnet
+  - url: https://worldchain-mainnet.g.alchemy.com/v2
+    name: Worldchain Mainnet
+  - url: https://ink-mainnet.g.alchemy.com/v2
+    name: Ink Mainnet
+  - url: https://ink-sepolia.g.alchemy.com/v2
+    name: Ink Sepolia
+methods:
+  - name: rundler_maxPriorityFeePerGas
+    description: Returns a fee per gas that is an estimate of how much users should set as a priority fee in userOperations for Rundler endpoints.
+    params: []
+    result:
+      name: Estimated priority fee
+      description: Returns the estimated priority fee per gas to be used in the userOperation for Rundler endpoints.
+      schema:
+        type: string
+    examples:
+      - name: rundler_maxPriorityFeePerGas example
+        params: []
+        result:
+          name: Estimated priority fee
+          value: "0xb1770efb14906e509893b6190359658208ae64d0c56e22f748a1b0869885559e"
+
+  - name: eth_getUserOperationReceipt
+    description: |
+      Get the `UserOperationReceipt` based on the `userOpHash`.
+
+      <Note title="Limitations">
+        This method retrieves and decodes userOperations from the logs of mined transactions by querying the node. If you attempt to fetch a receipt for a transaction from a distant past block, the request may be rejected by the node due to limitations on the block range size it can process.
+
+        The default range we support is 150 blocks, however the following networks have an unlimited range.
+
+        - Ethereum
+        - Polygon
+        - Base
+        - Optimism
+        - Worldchain
+        - Arbitrum
+      </Note>
+
+      <Note title="Want to get push notifications for mined userOperations?">
+        Follow [this guide](/docs/how-to-use-custom-webhooks-to-get-push-notifications-for-mined-user-operations) to learn how to use Custom Webhooks and get real time alerts and receipts for mined userOperations.
+      </Note>
+    params:
+      - name: userOpHash
+        required: true
+        description: The `userOpHash` of the `UserOperation` to get the receipt for (as returned by `eth_sendUserOperation`).
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/hash32"
+    result:
+      name: UserOperationReceipt
+      description: "`UserOperationReceipt` object representing the outcome of a `UserOperation`."
+      schema:
+        type: object
+        required:
+          [
+            "userOpHash",
+            "entryPoint",
+            "sender",
+            "nonce",
+            "paymaster",
+            "actualGasCost",
+            "actualGasUsed",
+            "success",
+            "reason",
+            "logs",
+            "receipt",
+          ]
+        properties:
+          userOpHash:
+            type: string
+            description: The hash of the `UserOperation`.
+          entryPoint:
+            type: string
+            description: The EntryPoint address the request should be sent through. This MUST be one of the EntryPoints returned by the `supportedEntryPoints` RPC call.
+          sender:
+            type: string
+            description: The account initiating the `UserOperation`.
+          nonce:
+            type: string
+            description: The nonce used in the `UserOperation`.
+          paymaster:
+            type: string
+            description: The paymaster used for this `UserOperation` (or empty if self-sponsored).
+          actualGasCost:
+            type: string
+            description: The actual amount paid (by account or paymaster) for this `UserOperation`.
+          actualGasUsed:
+            type: string
+            description: The total gas used by this `UserOperation` (including `preVerification`, `creation`, `validation`, and `execution`).
+          success:
+            type: boolean
+            description: Indicates whether the execution completed without reverting.
+          reason:
+            type: string
+            description: In case of revert, this is the revert reason.
+          logs:
+            type: array
+            description: The logs generated by this `UserOperation` (not including logs of other `UserOperations` in the same bundle).
+            items:
+              type: string
+          receipt:
+            type: object
+            description: The `TransactionReceipt` object for the entire bundle, not only for this `UserOperation`.
+            required:
+              [
+                "blockHash",
+                "blockNumber",
+                "transactionIndex",
+                "transactionHash",
+                "from",
+                "to",
+                "cumulativeGasUsed",
+                "gasUsed",
+                "contractAddress",
+                "logs",
+                "logsBloom",
+                "root",
+                "status",
+                "effectiveGasPrice",
+                "type",
+              ]
+            properties:
+              blockHash:
+                type: string
+                description: 32 Bytes - The hash of the block where the given transaction was included.
+              blockNumber:
+                type: string
+                description: The number of the block where the given transaction was included.
+              transactionIndex:
+                type: string
+                description: The index of the transaction in the block.
+              transactionHash:
+                type: string
+                description: 32 Bytes - The hash of the transaction.
+              from:
+                type: string
+                description: 20 Bytes - address of the sender.
+              to:
+                type: string
+                description: 20 Bytes - address of the receiver. Null when its a contract creation transaction.
+              cumulativeGasUsed:
+                type: string
+                description: The total amount of gas used when this transaction was executed in the block.
+              gasUsed:
+                type: string
+                description: The amount of gas used by this specific transaction alone.
+              contractAddress:
+                type: string
+                description: 20 Bytes - The contract address created, if the transaction was a contract creation, otherwise null.
+              logs:
+                type: array
+                description: Array of `Log` objects.
+                required:
+                  [
+                    "blockHash",
+                    "blockNumber",
+                    "transactionIndex",
+                    "address",
+                    "logIndex",
+                    "data",
+                    "removed",
+                    "topics",
+                    "transactionHash",
+                  ]
+                items:
+                  type: object
+                  properties:
+                    blockHash:
+                      type: string
+                      description: hash of the block where this log was in. `null` when its pending log.
+                    blockNumber:
+                      type: string
+                      description: The block num.
+                    transactionIndex:
+                      type: integer
+                      description: Integer of the transactions index position log was created from. null when its pending log.
+                    address:
+                      type: string
+                      description: 20 Bytes - address from which this log originated.
+                    logIndex:
+                      type: integer
+                      description: Integer of the log index position in the block. null when its pending log.
+                    data:
+                      type: string
+                      description: Contains one or more 32 Bytes non-indexed arguments of the log.
+                    removed:
+                      type: boolean
+                      description: "`true` when the log was removed, due to a chain reorganization. `false` if its a valid log."
+                    topics:
+                      type: array
+                      description: "Array of zero to four 32 Bytes `DATA` of indexed log arguments. In solidity: The first topic is the hash of the signature of the event (e.g. `Deposit(address,bytes32,uint256)`), except you declare the event with the anonymous specifier."
+                      items:
+                        type: string
+                    transactionHash:
+                      type: string
+                      description: Hash of the transactions this log was created from. null when its pending log.
+              logsBloom:
+                type: string
+                description: 256 Bytes - Bloom filter for light clients to quickly retrieve related logs.
+              root:
+                type: string
+                description: 32 bytes of post-transaction stateroot. (pre Byzantium hard fork at block 4,370,000).
+              status:
+                type: integer
+                description: Either `1` (success) or `0` (failure). (post Byzantium hard fork at block 4,370,000).
+              effectiveGasPrice:
+                type: string
+                description: The actual price per unit of gas paid by the sender.
+              type:
+                type: string
+                description: The type of the transaction.
+    examples:
+      - name: eth_getUserOperationReceipt example
+        params:
+          - name: userOpHash
+            value: "0x93c06f3f5909cc2b192713ed9bf93e3e1fde4b22fcd2466304fa404f9b80ff90"
+        result:
+          name: UserOperationReceipt
+          value:
+            userOpHash: "0x77c0b560eb0b042902abc5613f768d2a6b2d67481247e9663bf4d68dec0ca122"
+            entryPoint: "0xc944E90C64B2c07662A292be6244BDf05Cda44a7"
+            sender: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+            nonce: 42
+            paymaster: "0x7A0A0d159218E6a2f407B99173A2b12A6DDfC2a6"
+            actualGasCost: 21000
+            actualGasUsed: 314159
+            success: true
+            reason: ""
+            logs: []
+            receipt:
+              transactionHash: "0x8fc90a6c3ee3001cdcbbb685b4fbe67b1fa2bec575b15b0395fea5540d0901ae"
+              blockHash: "0x58a945e1558810523df00490ff28cbe111b37851c44679ce5be1eeaebb4b4907"
+              blockNumber: "0xeb8822"
+              transactionIndex: "0x4e"
+
+  - name: eth_supportedEntryPoints
+    description: |
+      Returns an array of the `entryPoint` addresses supported by the client.
+
+    params: []
+    result:
+      name: Supported entryPoints
+      description: Array of supported `entryPoint` addresses.
+      schema:
+        type: array
+        items:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/address"
+    examples:
+      - name: eth_supportedEntryPoints example
+        params: []
+        result:
+          name: Supported entryPoints
+          value:
+            - "0xcd01C8aa8995A59eB7B2627E69b40e0524B5ecf8"
+            - "0x7A0A0d159218E6a2f407B99173A2b12A6DDfC2a6"
+
+  - name: eth_getUserOperationByHash
+    description: |
+      Return a `UserOperation` based on a `userOpHash`.
+
+      <Note title="Limitations">
+        This method method retrieves and decodes userOperations from the logs of mined transactions by querying the node. If you attempt to fetch a userOperation from a distant past block, the request may be rejected by the node due to limitations on the block range size it can process.
+
+        The default range we support is 150 blocks, however the following networks have an unlimited range.
+
+        - Ethereum
+        - Polygon
+        - Base
+        - Optimism
+        - Worldchain
+        - Arbitrum
+      </Note>
+    params:
+      - name: userOpHash
+        required: true
+        description: The `userOpHash` of the `UserOperation` to retrieve.
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/hash32"
+    result:
+      name: UserOperation
+      description: The `UserOperation` object.
+      schema:
+        type: object
+        required: ["entrypointV06Response", "entrypointV07Response"]
+        properties:
+          entrypointV06Response:
+            title: "Entrypoint v0.6 Response"
+            type: "object"
+            properties:
+              sender:
+                type: "string"
+                description: The account sending the userOperation.
+              nonce:
+                type: "string"
+                description: Anti-replay parameter; also used as the salt for first-time account creation.
+              initCode:
+                type: "string"
+                description: The initCode of the account (needed if and only if the account is not yet on-chain and needs to be created).
+              callData:
+                type: "string"
+                description: Encoded data for executing the primary function call or operation within the user's transaction, such as calling a smart contract function or transferring tokens. This data is passed to the sender's address during the execution of the userOperation.
+              callGasLimit:
+                type: "string"
+                description: The amount of gas to allocate for the main execution call.
+              verificationGasLimit:
+                type: "string"
+                description: The amount of gas to allocate for the verification step.
+              preVerificationGas:
+                type: "string"
+                description: The amount of gas to compensate the bundler for pre-verification execution and calldata.
+              maxFeePerGas:
+                type: "string"
+                description: The maximum fee per gas to pay for the execution of this operation (similar to EIP-1559 max_fee_per_gas).
+              maxPriorityFeePerGas:
+                type: "string"
+                description: Maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas).
+              signature:
+                type: "string"
+                description: Data passed into the account along with the nonce during the verification step.
+              paymasterAndData:
+                type: "string"
+                description: Address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transaction).
+              entryPoint:
+                type: "string"
+                description: Address of the EntryPoint contract.
+              blockNumber:
+                type: "string"
+                description: Block number in which `UserOperation` is included.
+              blockHash:
+                type: "string"
+                description: Block hash of the block containing `UserOperation`.
+              transactionHash:
+                type: "string"
+                description: Transaction hash of the `UserOperation`.
+          entrypointV07Response:
+            title: "Entrypoint v0.7 Response"
+            type: "object"
+            properties:
+              sender:
+                type: "string"
+                description: The account sending the userOperation.
+              nonce:
+                type: "string"
+                description: Anti-replay parameter; also used as the salt for first-time account creation.
+              factory:
+                type: "string"
+                description: The account factory address (needed if and only if the account is not yet on-chain and needs to be created).
+              factoryData:
+                type: "string"
+                description: Data for the account factory (only if the account factory exists).
+              callData:
+                type: "string"
+                description: Encoded data for executing the primary function call or operation within the user's transaction, such as calling a smart contract function or transferring tokens. This data is passed to the sender's address during the execution of the userOperation.
+              callGasLimit:
+                type: "string"
+                description: The amount of gas to allocate for the main execution call.
+              verificationGasLimit:
+                type: "string"
+                description: The amount of gas to allocate for the verification step.
+              preVerificationGas:
+                type: "string"
+                description: The amount of gas to compensate the bundler for pre-verification execution and calldata.
+              maxFeePerGas:
+                type: "string"
+                description: The maximum fee per gas to pay for the execution of this operation (similar to EIP-1559 max_fee_per_gas).
+              maxPriorityFeePerGas:
+                type: "string"
+                description: Maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas).
+              paymasterVerificationGasLimit:
+                type: "string"
+                description: The amount of gas to allocate for the paymaster validation code (only if a paymaster exists).
+              paymasterPostOpGasLimit:
+                type: "string"
+                description: The amount of gas to allocate for the paymaster post-op code (only if a paymaster exists).
+              signature:
+                type: "string"
+                description: Data passed into the account along with the nonce during the verification step.
+              paymaster:
+                type: "string"
+                description: Address of the paymaster contract (or empty, if the account pays for itself).
+              paymasterData:
+                type: "string"
+                description: Data for the paymaster (only if the paymaster exists).
+              entryPoint:
+                type: "string"
+                description: Address of the EntryPoint contract.
+              blockNumber:
+                type: "string"
+                description: Block number in which `UserOperation` is included.
+              blockHash:
+                type: "string"
+                description: Block hash of the block containing `UserOperation`.
+              transactionHash:
+                type: "string"
+                description: Transaction hash of the `UserOperation`.
+    examples:
+      - name: eth_getUserOperationByHash example
+        params:
+          - name: userOpHash
+            value: "0x77c0b560eb0b042902abc5613f768d2a6b2d67481247e9663bf4d68dec0ca122"
+        result:
+          name: UserOperation
+          value:
+            sender: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            nonce: 1
+            initCode: "0x"
+            callData: "0x"
+            callGasLimit: "0x0"
+            verificationGasLimit: "0x0"
+            preVerificationGas: "0x0"
+            maxFeePerGas: "0x0"
+            maxPriorityFeePerGas: "0x0"
+            paymasterAndData: "0x"
+            signature: "0x"
+            entryPoint: "0x"
+            blockNumber: "0x"
+            blockHash: "0x"
+            transactionHash: "0x"
+
+  - name: eth_sendUserOperation
+    description: |
+      Sends a `UserOperation` to the given EVM network.
+
+    params:
+      - name: UserOperation
+        required: true
+        description: The UserOperation object. This can be either a v0.6 or v0.7 user operation, but MUST match the version of the entry point at the address of the second parameter.
+        schema:
+          oneOf:
+            - $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06"
+            - $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07"
+      - name: Entrypoint address
+        required: true
+        description: The EntryPoint address the request should be sent through. This MUST be one of the EntryPoints returned by the `supportedEntryPoints` RPC call.
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/address"
+    result:
+      name: userOpHash
+      description: The calculated `userOpHash` for the `UserOperation`.
+      schema:
+        type: string
+        format: "hex"
+    examples:
+      - name: eth_sendUserOperation example
+        params:
+          - name: UserOperation
+            value: { sender: "0x...", nonce: "0x...", callData: "0x..." }
+          - name: Entrypoint address
+            value: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+        result:
+          name: userOpHash
+          value:
+            result: "0x1234...5678"
+
+  - name: eth_estimateUserOperationGas
+    description: |
+      Estimates the gas values for a `UserOperation`.
+
+      <Note>
+        This endpoint requires a dummy signature in the `userOp`. Check our [FAQs](/docs/reference/bundler-faqs#what-is-a-dummy-signature) to learn what a dummy signature is.
+      </Note>
+    params:
+      - name: UserOperation
+        required: true
+        description: Contains gas limits and prices (optional). This can be either a v0.6 or v0.7 userOperation but must match the version of the `EntryPoint` at the address of the second parameter.
+        schema:
+          oneOf:
+            - $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV06"
+            - $ref: "../_shared_wallets/components.yaml#/components/schemas/UserOperationV07"
+      - name: entryPoint
+        required: true
+        description: The address to which the request should be sent. This must be one of the `EntryPoint` returned by the `supportedEntryPoints` method and should match the version of the `userOp` in the first parameter.
+        schema:
+          $ref: "../_shared_wallets/components.yaml#/components/schemas/address"
+      - name: "stateOverrideSet"
+        required: false
+        description: |
+          Allows changes to the state of a contract before executing the call. For example, you can modify variable values (like balances or approvals) for that call without changing the contract itself on the blockchain. 
+
+          In more technical terms, the state override set is an optional parameter that allows executing the call against a modified chain state. It is an address-to-state mapping, where each entry specifies some state to be overridden prior to executing the call.
+        schema:
+          type: "object"
+          properties:
+            balance:
+              type: "string"
+              description: "Fake balance to set for the account before executing the call (<= 32 bytes)"
+            nonce:
+              type: "string"
+              description: Fake nonce to set for the account before executing the call (<= 8 bytes).
+            code:
+              type: "string"
+              description: "Fake EVM bytecode to inject into the account before executing the call."
+            state:
+              type: "object"
+              description: "Fake key-value mapping to override all slots in the account storage before executing the call."
+            stateDiff:
+              type: "object"
+              description: "Fake key-value mapping to override individual slots in the account storage before executing the call."
+    result:
+      name: Gas estimation
+      description: Gas values estimated for the userOperation.
+      schema:
+        type: object
+        required: ["entrypointV06Response", "entrypointV07Response"]
+        properties:
+          entrypointV06Response:
+            type: object
+            title: Entrypoint v0.6 Response
+            properties:
+              preVerificationGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Gas overhead of this userOperation.
+              verificationGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Actual gas used by the validation of this userOperation.
+              callGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Value used by inner account execution.
+          entrypointV07Response:
+            type: object
+            title: Entrypoint v0.7 Response
+            properties:
+              preVerificationGas:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Gas overhead of this userOperation.
+              verificationGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Actual gas used by the validation of this userOperation.
+              callGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Value used by inner account execution.
+              paymasterVerificationGasLimit:
+                $ref: "../_shared_wallets/components.yaml#/components/schemas/uint256"
+                description: Value used by the paymaster during verification.
+    examples:
+      - name: eth_estimateUserOperationGas example
+        params:
+          - name: UserOperation
+            value: { sender: "0x...", nonce: "0x...", callData: "0x..." }
+          - name: Entrypoint address
+            value: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
+        result:
+          name: Gas estimation
+          value:
+            preVerificationGas: "0x1"
+            verificationGasLimit: "0x1"
+            callGasLimit: "0x1"
+            paymasterVerificationGasLimit: "0x1"

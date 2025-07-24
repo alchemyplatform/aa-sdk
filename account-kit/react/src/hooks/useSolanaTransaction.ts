@@ -40,10 +40,12 @@ export type SolanaTransactionParams =
         toAddress: string;
       };
       transactionComponents?: SolanaTransactionParamOptions;
+      confirmationOptions?: solanaNetwork.ConfirmationOptions;
     }
   | {
       instructions: TransactionInstruction[];
       transactionComponents?: SolanaTransactionParamOptions;
+      confirmationOptions?: solanaNetwork.ConfirmationOptions;
     };
 /**
  * We wanted to make sure that this will be using the same useMutation that the
@@ -81,6 +83,7 @@ export type SolanaTransactionHookParams = {
   signer?: SolanaSigner;
   connection?: solanaNetwork.Connection;
   policyId?: string | void;
+  confirmationOptions?: solanaNetwork.ConfirmationOptions;
   /**
    * Override the default mutation options
    *
@@ -123,6 +126,7 @@ export function useSolanaTransaction(
         preSend,
         transformInstruction = mapTransformInstructions.default,
       } = {},
+      confirmationOptions,
       ...params
     }: SolanaTransactionParams) => {
       const instructions = getInstructions();
@@ -136,7 +140,17 @@ export function useSolanaTransaction(
       }
 
       const localConnection = connection || missing("connection");
-      const hash = await solanaNetwork.broadcast(localConnection, transaction);
+
+      const finalConfirmationOptions = {
+        ...opts.confirmationOptions,
+        ...confirmationOptions,
+      };
+
+      const hash = await solanaNetwork.broadcast(
+        localConnection,
+        transaction,
+        finalConfirmationOptions,
+      );
       return { hash };
 
       function getInstructions() {

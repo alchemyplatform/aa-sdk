@@ -1,8 +1,8 @@
-# Account Kit
+# Smart Wallets
 
 Build zero friction sign up and transaction flows with smart accounts. Sign up with email, login with passkeys, transact with sponsored gas, and checkout in one click with transaction batching.
 
-This repo contains all of the packages that make up Account Kit as well as the core AA SDK that Account Kit is built on top of. These packages allow you to build your app on top of Account Abstraction, offering you everything from a fully integrated solution through React Components down to the low level clients and interfaces you need to have full control over development!
+This repo contains all of the packages that make up Smart Wallets as well as the core AA SDK that Smart Wallets is built on top of. These packages allow you to build your app on top of Account Abstraction, offering you everything from a fully integrated solution through React Components down to the low level clients and interfaces you need to have full control over development!
 
 ## @account-kit/\*
 
