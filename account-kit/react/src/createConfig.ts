@@ -19,8 +19,11 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  * an additional argument, the configuration object for the Auth Components UI
  * (the modal and AuthCard).
  *
+ * `SessionConfig`
+ * Note: If no expirationTimeMs is provided, the default session timeout is 15 minutes (900 seconds). Sessions are stored in `localStorage` unless cleared due to browser behavior or extensions.
+ *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { sepolia, alchemy } from "@account-kit/infra"
  * import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
  * import { QueryClient } from "@tanstack/react-query";
@@ -51,11 +54,11 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  */
 export const createConfig = (
   props: CreateConfigProps,
-  ui?: AlchemyAccountsUIConfig,
+  ui?: AlchemyAccountsUIConfig
 ): AlchemyAccountsConfigWithUI => {
   if (
     ui?.auth?.sections.some((x) =>
-      x.some((y) => y.type === "social" && y.mode === "popup"),
+      x.some((y) => y.type === "social" && y.mode === "popup")
     )
   ) {
     props.enablePopupOauth = true;
@@ -73,7 +76,7 @@ export const createConfig = (
   ) {
     const walletConnectAuthConfig = externalWalletSection?.walletConnect;
     const walletConnectParams = getWalletConnectParams(
-      walletConnectAuthConfig,
+      walletConnectAuthConfig
     )!;
 
     props.connectors ??= [];
