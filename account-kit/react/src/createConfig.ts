@@ -40,7 +40,7 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *   chain: sepolia,
  *   ssr: true,
  *   sessionConfig: {
- *     expirationTimeMs: 1000 * 60 * 60 * 24, // <-- Adjust the session expiration time as needed (defauly 15 mins)
+ *     expirationTimeMs: 1000 * 60 * 60 * 24, // <-- Adjust the session expiration time as needed (default 15 mins)
  *   },
  * }, uiConfig)
  *
