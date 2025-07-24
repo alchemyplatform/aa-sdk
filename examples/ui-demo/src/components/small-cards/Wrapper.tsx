@@ -4,6 +4,7 @@ import { MintCard } from "./MintCard";
 import { SolanaNftCard } from "./SolanaNftCard";
 import { TransactionsCard } from "./TransactionsCard";
 import { Erc20SponsorshipCard } from "./Erc20SponsorshipCard";
+import { DepositAndSwapsCard } from "./DepositAndSwapsCard";
 
 export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
@@ -20,6 +21,7 @@ export const SmallCardsWrapper = () => {
       />
       <SolanaNftCard />
       <MFACard />
+      <DepositAndSwapsCard/>
     </div>
   );
 };
