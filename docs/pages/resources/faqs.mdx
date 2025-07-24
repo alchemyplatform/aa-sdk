@@ -284,6 +284,14 @@ If your `UserOperation` continues to be delayed beyond a limit you are willing t
   reverts, and it shows this message in explorers.
 </Accordion>
 
+### `ERR_BLOCKED_BY_CLIENT` when loading the page
+
+<Accordion title="Answer">
+  This message is usually triggered by browser ad‑blocking tools that stop our
+  analytics scripts from running. Analytics collection will be blocked, but the
+  Smart Wallet functionality will continue to work normally.
+</Accordion>
+
 ## Other Support
 
 ### Does the aa-sdk repo support React Native?
@@ -325,10 +333,10 @@ Additionally, you'll need to implement custom code on your proxy server to limit
 
 ### Why are my users getting logged out unexpectedly?
 
-**Issue:**
+**Issue:**  
 You or your users might notice that the session ends sooner than expected, requiring re-authentication.
 
-**Default behavior:**
+**Default behavior:**  
 By default, authenticated sessions using `AlchemyWebSigner` are stored in `localStorage` and expire after **15 minutes** of inactivity.
 
 ---
@@ -341,7 +349,7 @@ You can customize the session timeout by passing a `sessionConfig` object to the
 createConfig({
   ...,
   sessionConfig: {
-    duration: 60 * 60, // Session duration in seconds (e.g., 1 hour)
+    expirationTimeMs: 1000 * 60 * 60, // 1 hour session duration (defaults to 15 min)
   },
 })
 ```
@@ -352,14 +360,14 @@ createConfig({
 
 #### 🧪 Other common causes of session ending:
 
-* **Server-Side Rendering (SSR) misconfigured**
+- **Server-Side Rendering (SSR) misconfigured**
   If you're using SSR and haven't configured the provider correctly, session state can reset on the client.
   👉 [Enable SSR and pass initial params →](https://www.alchemy.com/docs/wallets/react/ssr)
 
-* **Ad blockers**
+- **Ad blockers**
   Some ad blockers (especially those with aggressive cookie or storage policies) can interfere with localStorage or SDK requests, causing unexpected logouts.
 
-* **Private/incognito mode**
+- **Private/incognito mode**
   Browsers often restrict or wipe localStorage between tabs or after a short time in incognito mode. Consider warning users or designing for short session lengths in those environments.
 
 ---
@@ -368,7 +376,7 @@ createConfig({
 
 If you're seeing repeated or sporadic logouts in production, test the behavior across:
 
-* Browsers (Chrome, Firefox, Safari)
-* Devices (desktop vs mobile)
-* Browsing modes (incognito vs standard)
-* With and without ad blockers
+- Browsers (Chrome, Firefox, Safari)
+- Devices (desktop vs mobile)
+- Browsing modes (incognito vs standard)
+- With and without ad blockers
