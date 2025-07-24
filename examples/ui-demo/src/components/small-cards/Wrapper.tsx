@@ -21,7 +21,7 @@ export const SmallCardsWrapper = () => {
       />
       <SolanaNftCard />
       <MFACard />
-      <DepositAndSwapsCard/>
+      <DepositAndSwapsCard />
     </div>
   );
 };

@@ -1,34 +1,34 @@
-import React, {PropsWithChildren} from "react";
+import React, { PropsWithChildren } from "react";
 
 type ButtonBaseProps = {
-    className?: string;
+  className?: string;
 };
 
 type ButtonAsButton = PropsWithChildren<
-    ButtonBaseProps & {
+  ButtonBaseProps & {
     as?: "button";
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+  } & React.ButtonHTMLAttributes<HTMLButtonElement>
 >;
 
 type ButtonAsAnchor = PropsWithChildren<
-    ButtonBaseProps & {
+  ButtonBaseProps & {
     as: "a";
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>
+  } & React.AnchorHTMLAttributes<HTMLAnchorElement>
 >;
 
 type ButtonProps = ButtonAsButton | ButtonAsAnchor;
 
 export const Button = ({
-                           children,
-                           className = "",
-                           as = "button",
-                           ...rest
-                       }: ButtonProps) => {
-    const Component = as;
+  children,
+  className = "",
+  as = "button",
+  ...rest
+}: ButtonProps) => {
+  const Component = as;
 
-    return (
-        <Component className={`akui-btn-auth akui-btn ${className}`} {...rest}>
-            {children}
-        </Component>
-    );
+  return (
+    <Component className={`akui-btn-auth akui-btn ${className}`} {...rest}>
+      {children}
+    </Component>
+  );
 };
