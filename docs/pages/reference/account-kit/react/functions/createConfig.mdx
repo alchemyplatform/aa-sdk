@@ -9,6 +9,9 @@ Wraps the `createConfig` that is exported from `@aa-sdk/core` to allow passing
 an additional argument, the configuration object for the Auth Components UI
 (the modal and AuthCard).
 
+`SessionConfig`
+Note: If no expirationTimeMs is provided, the default session timeout is 15 minutes (900 seconds). Sessions are stored in `localStorage` unless cleared due to browser behavior or extensions.
+
 ## Import
 
 ```ts
@@ -17,26 +20,26 @@ import { createConfig } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
 import { sepolia, alchemy } from "@account-kit/infra"
 import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
 import { QueryClient } from "@tanstack/react-query";
 
 const uiConfig: AlchemyAccountsUIConfig = {
-  illustrationStyle: "linear",
-  auth: {
-    sections: [[{ type: "email" }], [{ type: "passkey" }]],
-    addPasskeyOnSignup: true,
-  },
+illustrationStyle: "linear",
+auth: {
+sections: [[{ type: "email" }], [{ type: "passkey" }]],
+addPasskeyOnSignup: true,
+},
 }
 
 const config = createConfig({
-  transport: alchemy({ apiKey: "your_api_key" })
-  chain: sepolia,
-  ssr: true,
-  sessionConfig: {
-    expirationTimeMs: 1000 * 60 * 60, // 1 hour (defaults to 15 min)
-  },
+transport: alchemy({ apiKey: "your_api_key" })
+chain: sepolia,
+ssr: true,
+sessionConfig: {
+expirationTimeMs: 1000 * 60 * 60, // 1 hour (defaults to 15 min)
+},
 }, uiConfig)
 
 export const queryClient = new QueryClient();

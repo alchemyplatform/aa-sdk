@@ -33,7 +33,7 @@ const credential = {
 };
 
 async function createWebauthnAccountClient(
-  config: CreateModularAccountV2ClientParams,
+  config: CreateModularAccountV2ClientParams
 ): Promise<SmartAccountClient> {
   const webauthnAccount = await createModularAccountV2({
     ...config,
