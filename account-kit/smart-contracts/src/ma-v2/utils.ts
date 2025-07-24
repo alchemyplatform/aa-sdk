@@ -73,7 +73,7 @@ export const pack1271Signature = ({
 };
 
 export const getDefaultWebAuthnMAV2FactoryAddress = (): Address => {
-  return "0x9c607854b60fb6AFDB33daC5a1676AC06048bE5f";
+  return "0x55010E571dCf07e254994bfc88b9C1C8FAe31960";
 };
 
 export const getDefaultMAV2FactoryAddress = (chain: Chain): Address => {

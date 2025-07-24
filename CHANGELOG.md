@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+### Bug Fixes
+
+- re-export react hook types from react-native package ([#1789](https://github.com/alchemyplatform/aa-sdk/issues/1789)) ([f7744f9](https://github.com/alchemyplatform/aa-sdk/commit/f7744f9f792f9373f238ecd5131c8951e7696f44))
+
+## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
+
+### Bug Fixes
+
+- updates webauthn factory address ([#1784](https://github.com/alchemyplatform/aa-sdk/issues/1784)) ([d7d367f](https://github.com/alchemyplatform/aa-sdk/commit/d7d367fe555195b595d66e84eae594826bcb6f9c))
+
 # [4.52.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.51.0...v4.52.0) (2025-07-18)
 
 ### Features
