@@ -2,23 +2,11 @@ import { type EntryPointVersion } from "@aa-sdk/core";
 import { type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 
-export type LightAccountVersionConfigs = {
-  LightAccount: {
-    "v1.0.1": LightAccountVersionConfig<"0.6.0">;
-    "v1.0.2": LightAccountVersionConfig<"0.6.0">;
-    "v1.1.0": LightAccountVersionConfig<"0.6.0">;
-    "v2.0.0": LightAccountVersionConfig<"0.7.0">;
-  };
-  MultiOwnerLightAccount: {
-    "v2.0.0": LightAccountVersionConfig<"0.7.0">;
-  };
-};
-
 /**
  * Light account types supported: LightAccount, MultiOwnerLightAccount
  *
  */
-export type LightAccountType = keyof LightAccountVersionConfigs;
+export type LightAccountType = "LightAccount" | "MultiOwnerLightAccount";
 
 export type LightAccountVersionConfig<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
@@ -36,6 +24,18 @@ export type LightAccountVersionConfig<
         impl: Address;
       }
     >;
+  };
+};
+
+export type LightAccountVersionConfigs = {
+  LightAccount: {
+    "v1.0.1": LightAccountVersionConfig<"0.6.0">;
+    "v1.0.2": LightAccountVersionConfig<"0.6.0">;
+    "v1.1.0": LightAccountVersionConfig<"0.6.0">;
+    "v2.0.0": LightAccountVersionConfig<"0.7.0">;
+  };
+  MultiOwnerLightAccount: {
+    "v2.0.0": LightAccountVersionConfig<"0.7.0">;
   };
 };
 
