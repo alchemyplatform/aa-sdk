@@ -1,9 +1,13 @@
+// transport
 export type * from "./transport/alchemy.js";
 export { alchemy, isAlchemyTransport } from "./transport/alchemy.js";
 export type * from "./transport/connection.js";
 export type * from "./transport/split.js";
 export { split } from "./transport/split.js";
+
+// utils
 export type * from "./utils/types.js";
+export { assertNever } from "./utils/assertNever.js";
 
 // errors
 export { BaseError } from "./errors/BaseError.js";
