@@ -190,6 +190,10 @@ export async function createModularAccountV2Base<
 
   // TODO(jh): continue here from `encodeExecute` in the old `modularAccountV2Base`...
 
+  // TODO(jh): look back at this:
+  // https://github.com/wevm/viem/blob/f82cdd929062c0d079142de1555a472f78ac59e1/src/account-abstraction/accounts/types.ts#L29
+  // see things like getNonce exist on it. anything else we need that's optional?
+
   return await toSmartAccount({
     getFactoryArgs, // TODO(jh): i think we actually need this to make viem happy.
     client,
