@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+### Bug Fixes
+
+- re-export react hook types from react-native package ([#1789](https://github.com/alchemyplatform/aa-sdk/issues/1789)) ([f7744f9](https://github.com/alchemyplatform/aa-sdk/commit/f7744f9f792f9373f238ecd5131c8951e7696f44))
+
 ## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
 
 **Note:** Version bump only for package @account-kit/react-native
