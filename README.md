@@ -46,5 +46,5 @@ We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](C
 ## Development notes
 
 This repository previously generated documentation by invoking OpenAI during linting.
-That integration has been removed in favor of a simple placeholder comment. No
-additional environment variables are required for building or testing.
+All such code generation has been removed in favor of a simple placeholder comment.
+No additional environment variables are required for building or testing.
