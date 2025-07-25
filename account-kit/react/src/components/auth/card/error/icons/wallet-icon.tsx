@@ -1,12 +1,11 @@
 import { EOAConnectionFailed } from "../../../../../icons/EOAConnectionFailed.js";
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
 
-import type { Connector } from "@wagmi/core";
 import { WALLET_CONNECT } from "../../eoa.js";
 export const WalletIcon = ({
   connector,
 }: {
-  connector: Connector | typeof WALLET_CONNECT;
+  connector: { icon: string | undefined; name: string } | typeof WALLET_CONNECT;
 }) => {
   const isWalletConnect = connector === WALLET_CONNECT;
   return (

@@ -1,6 +1,6 @@
 import { AuthType } from "@account-kit/react";
 import { KnownAuthProvider } from "@account-kit/signer";
-import { Config } from "./config";
+import { Config, externalWalletsConfig } from "./config";
 
 const isTesting = process.env.NEXT_PUBLIC_APP_ENV === "test";
 const auth0TestingConnection = process.env.NEXT_PUBLIC_AUTH0_TESTING_CONNECTION;

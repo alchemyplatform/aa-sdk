@@ -27,6 +27,7 @@ import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { ClientStoreConfig, Store, StoredState } from "./store/types";
+import type { WalletAdapter } from "@solana/wallet-adapter-base";
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
@@ -71,6 +72,27 @@ export type AlchemyAccountsConfig = {
 export type SolanaConnection = {
   connection: SolanaWeb3Connection;
   policyId?: string;
+  /**
+   * Optional array of Solana wallet adapters to be used for connecting to wallets
+   * These adapters will be made available in the React context for wallet selection
+   *
+   * @example
+   * ```ts
+   * import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
+   *
+   * const config = createConfig({
+   *   // ... other config
+   *   solana: {
+   *     connection: solanaConnection,
+   *     adapters: [
+   *       new PhantomWalletAdapter(),
+   *       new SolflareWalletAdapter(),
+   *     ]
+   *   }
+   * });
+   * ```
+   */
+  adapters?: WalletAdapter[];
 };
 
 export type Connection = {

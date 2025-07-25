@@ -10,14 +10,14 @@ export const useConnectEOA = () => {
       if (typeof connector === "function") {
         setAuthStep({ type: "wallet_connect" });
       } else {
-        setAuthStep({ type: "eoa_connect", connector });
+        setAuthStep({ type: "eoa_connect", connector, chain: "evm" });
       }
     },
     onError: (error, { connector }) => {
       if (typeof connector === "function") {
         setAuthStep({ type: "wallet_connect", error });
       } else {
-        setAuthStep({ type: "eoa_connect", connector, error });
+        setAuthStep({ type: "eoa_connect", connector, error, chain: "evm" });
       }
     },
     onSuccess: () => {

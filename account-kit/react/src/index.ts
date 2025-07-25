@@ -86,3 +86,8 @@ export {
 } from "./hooks/useSolanaConnection.js";
 
 export { useSolanaSignMessage } from "./hooks/useSolanaSignMessage.js";
+
+export {
+  configForExternalWallets,
+  type ExternalWalletConfig,
+} from "./configForExternalWallets.js";
