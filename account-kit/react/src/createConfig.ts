@@ -37,6 +37,9 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *   transport: alchemy({ apiKey: "your_api_key" })
  *   chain: sepolia,
  *   ssr: true,
+ *   sessionConfig: {
+ *     expirationTimeMs: 1000 * 60 * 60, // 1 hour (defaults to 15 min)
+ *   },
  * }, uiConfig)
  *
  * export const queryClient = new QueryClient();
