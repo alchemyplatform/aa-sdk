@@ -359,7 +359,7 @@ describe("Light Account Tests", () => {
 
   // TODO(v5): implement test for upgrading account to MSCA?
 
-  // TODO(v5): implement test for upgrading account to MAv2
+  // TODO(v5): implement test for upgrading account to MAv2 (prob will do this in the MAv2 tests)
 
   const givenConnectedProvider = async ({
     version = "v1.1.0",
@@ -380,6 +380,7 @@ describe("Light Account Tests", () => {
       }),
       version,
       accountAddress,
+      owner: signerAccount,
     });
 
     return createBundlerClient({

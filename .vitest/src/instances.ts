@@ -60,6 +60,7 @@ function defineInstance(params: DefineInstanceParams) {
   const {
     anvilPort,
     bundlerPort,
+    entryPointVersion,
     forkUrl,
     forkBlockNumber,
     chain: chain_,

@@ -6,7 +6,7 @@ import {
   encodeFunctionData,
   hexToBigInt,
   publicActions,
-  type Address,
+  type LocalAccount,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { local060Instance, local070Instance } from "~test/instances.js";
@@ -49,6 +49,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
         const lightAccountV1 = await createLightAccount({
           client: localSigner,
+          owner: localSigner.account,
           salt,
           version,
         });
@@ -104,6 +105,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
       const lightAccountV2 = await createLightAccount({
         client: localSigner,
+        owner: localSigner.account,
         salt,
         version: "v2.0.0",
       });
@@ -146,9 +148,8 @@ describe("Light Account Counterfactual Address Tests", () => {
       const signerAddress = localSigner.account.address;
 
       // Generate `i` random other owners.
-      const otherOwners: Address[] = Array.from(
-        { length: i },
-        () => privateKeyToAccount(generatePrivateKey()).address,
+      const otherOwners: LocalAccount[] = Array.from({ length: i }, () =>
+        privateKeyToAccount(generatePrivateKey()),
       );
 
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
@@ -161,7 +162,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
       const multiOwnerLightAccount = await createMultiOwnerLightAccount({
         client: localSigner,
-        owners: otherOwners,
+        owners: [localSigner.account, ...otherOwners],
         salt,
         accountAddress: undefined,
       });
@@ -182,7 +183,9 @@ describe("Light Account Counterfactual Address Tests", () => {
       // Then, compute the address using the predictLightAccountAddress function.
       // We must first run the logic to include the signer address, dedepe, and sort.
 
-      const owners_ = Array.from(new Set([...otherOwners, signerAddress]))
+      const owners_ = Array.from(
+        new Set([...otherOwners.map((it) => it.address), signerAddress]),
+      )
         .filter((x) => hexToBigInt(x) !== 0n)
         .sort((a, b) => {
           const bigintA = hexToBigInt(a);

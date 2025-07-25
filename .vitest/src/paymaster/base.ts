@@ -59,7 +59,6 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
     },
     async deployPaymasterContract(client) {
       // give the owner some ether
-      // @ts-ignore
       await setBalance(client, {
         address: accounts.paymasterOwner.address,
         value: parseEther("10"),
@@ -112,7 +111,6 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
         address: proxyAddress,
       });
 
-      // @ts-ignore
       await setBalance(client, {
         address: proxyAddress,
         value: parseEther("5"),

@@ -7,6 +7,7 @@ import {
   type Hex,
   type JsonRpcAccount,
   type LocalAccount,
+  type OneOf,
   type Transport,
 } from "viem";
 import { readContract } from "viem/actions";
@@ -32,11 +33,11 @@ export type MultiOwnerLightAccount = LightAccountBase<
 };
 
 export type CreateMultiOwnerLightAccountParams = {
-  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount>;
+  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
+  owners: OneOf<JsonRpcAccount | LocalAccount>[];
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
-  owners?: Address[];
 };
 
 /**
@@ -55,11 +56,10 @@ export async function createMultiOwnerLightAccount({
     "v2.0.0",
   ),
 }: CreateMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
-  const signerAddress = client.account.address;
+  const signer = owners[0];
 
-  // Deduplicate and sort owners
   const dedupedOwners = Array.from(
-    new Set([signerAddress, ...owners].map((addr) => lowerAddress(addr))),
+    new Set(owners.map((it) => lowerAddress(it.address))),
   );
 
   const sortedOwners = dedupedOwners.sort((a, b) => {
@@ -91,6 +91,7 @@ export async function createMultiOwnerLightAccount({
 
   const baseAccount = await createLightAccountBase({
     client,
+    owner: signer,
     abi: MultiOwnerLightAccountAbi,
     accountAddress,
     type: "MultiOwnerLightAccount",
@@ -110,23 +111,27 @@ export async function createMultiOwnerLightAccount({
     },
 
     async getOwnerAddresses(): Promise<readonly Address[]> {
-      const owners = await readContract(client, {
+      const ownersOnChain = await readContract(client, {
         address: accountAddress,
         abi: MultiOwnerLightAccountAbi,
         functionName: "owners",
       });
 
-      if (owners == null) {
+      if (ownersOnChain == null) {
         throw new BaseError("could not get on-chain owners");
       }
 
-      if (!owners.includes(signerAddress)) {
+      if (
+        !ownersOnChain
+          .map((it) => lowerAddress(it))
+          .includes(lowerAddress(signer.address))
+      ) {
         throw new BaseError(
           "on-chain owners does not include the current signer",
         );
       }
 
-      return owners;
+      return ownersOnChain;
     },
   };
 }

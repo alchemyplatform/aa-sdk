@@ -10,6 +10,7 @@ import {
   type Hex,
   type JsonRpcAccount,
   type LocalAccount,
+  type OneOf,
   type Transport,
   type WalletClient,
 } from "viem";
@@ -60,7 +61,7 @@ describe("MultiOwner Light Account Tests", () => {
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({
       signer: fundedAccountSigner,
-      accountIndex: 0n,
+      salt: 0n,
     });
     expect(provider.account.address).toMatchInlineSnapshot(
       '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"',
@@ -172,7 +173,7 @@ describe("MultiOwner Light Account Tests", () => {
   it("should get on-chain owner addresses successfully", async () => {
     const provider = await givenConnectedProvider({
       signer: fundedAccountSigner,
-      owners: [undeployedSigner.account.address],
+      owners: [undeployedSigner.account],
     });
 
     await setBalance(instance.getClient(), {
@@ -254,21 +255,21 @@ describe("MultiOwner Light Account Tests", () => {
     signer,
     accountAddress,
     usePaymaster = false,
-    accountIndex,
     owners,
+    salt: _salt,
   }: {
     signer: WalletClient<Transport, Chain, JsonRpcAccount | LocalAccount>;
     version?: LightAccountVersion<"MultiOwnerLightAccount">;
     accountAddress?: Address;
-    accountIndex?: bigint;
     usePaymaster?: boolean;
-    owners?: Address[];
+    owners?: OneOf<JsonRpcAccount | LocalAccount>[];
+    salt?: bigint;
   }) => {
     const account = await createMultiOwnerLightAccount({
       client: signer,
       accountAddress,
-      salt: accountIndex ?? salt++,
-      owners,
+      salt: _salt ?? salt++,
+      owners: [signer.account, ...(owners ?? [])],
     });
 
     return createBundlerClient({

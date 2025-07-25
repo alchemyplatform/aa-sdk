@@ -86,9 +86,10 @@ export type CreateLightAccountBaseParams<
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
 > = {
-  client: Client<TTransport, Chain, JsonRpcAccount | LocalAccount>;
+  client: Client<TTransport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   abi: Abi;
   accountAddress: Address;
+  owner: JsonRpcAccount | LocalAccount;
   type: TLightAccountType;
   version: TLightAccountVersion;
   getFactoryArgs: () => Promise<{
@@ -105,9 +106,10 @@ export async function createLightAccountBase<
 >({
   client,
   abi,
-  version,
-  type,
   accountAddress,
+  owner,
+  type,
+  version,
   getFactoryArgs,
 }: CreateLightAccountBaseParams<
   TLightAccountType,
@@ -300,8 +302,11 @@ export async function createLightAccountBase<
 
       const sig =
         type === "eth_signTypedData_v4"
-          ? await signTypedData(client, data)
-          : await signMessage(client, { message });
+          ? await signTypedData(client, {
+              ...data,
+              account: owner,
+            })
+          : await signMessage(client, { account: owner, message });
 
       return formatSignature(sig);
     },
@@ -314,8 +319,11 @@ export async function createLightAccountBase<
 
       const sig =
         type === "eth_signTypedData_v4"
-          ? await signTypedData(client, data)
-          : await signMessage(client, { message: data });
+          ? await signTypedData(client, {
+              ...data,
+              account: owner,
+            })
+          : await signMessage(client, { account: owner, message: data });
 
       return formatSignature(sig);
     },
@@ -333,6 +341,7 @@ export async function createLightAccountBase<
       });
 
       const signature = await signMessage(client, {
+        account: owner,
         message: { raw: userOpHash },
       });
 
@@ -341,7 +350,6 @@ export async function createLightAccountBase<
         : signature;
     },
 
-    // Extension properties
     extend: {
       source: type,
       getLightAccountVersion: () => version,

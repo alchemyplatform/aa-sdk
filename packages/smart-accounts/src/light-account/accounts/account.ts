@@ -36,7 +36,8 @@ export type CreateLightAccountParams<
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
 > = {
-  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount>;
+  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
+  owner: JsonRpcAccount | LocalAccount;
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
@@ -54,6 +55,7 @@ export async function createLightAccount<
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
 >({
   client,
+  owner,
   salt: salt_ = 0n,
   accountAddress: accountAddress_,
   version = defaultLightAccountVersion() as TLightAccountVersion,
@@ -68,8 +70,6 @@ export async function createLightAccount<
       ? LightAccountFactoryAbi_v2
       : LightAccountFactoryAbi_v1;
 
-  const signerAddress = client.account.address;
-
   const salt = LightAccountUnsupported1271Factories.has(
     lowerAddress(factoryAddress),
   )
@@ -81,7 +81,7 @@ export async function createLightAccount<
     predictLightAccountAddress({
       factoryAddress,
       salt,
-      ownerAddress: signerAddress,
+      ownerAddress: owner.address,
       version,
     });
 
@@ -89,7 +89,7 @@ export async function createLightAccount<
     const factoryData = encodeFunctionData({
       abi: factoryAbi,
       functionName: "createAccount",
-      args: [signerAddress, salt],
+      args: [owner.address, salt],
     });
 
     return {
@@ -100,6 +100,7 @@ export async function createLightAccount<
 
   const baseAccount = await createLightAccountBase({
     client,
+    owner,
     abi: accountAbi,
     accountAddress,
     type: "LightAccount",
