@@ -2,9 +2,9 @@ import type { Never } from "../utils/types";
 import type { SplitTransportParams } from "./split";
 
 type AlchemyConnectionBaseConfig =
-  // TODO(v5): is this really the best devex? can we do better
-  // basic configuration for connecting to alchemy
-  // proxyUrl is used when making calls to the developer backend
+  // TODO(v5): is this really the best devex? can we do better?
+  // basic configuration for connecting to alchemy.
+  // proxyUrl is used when making calls to the developer backend.
   | { proxyUrl: string; apiKey?: never; jwt?: never }
   | { proxyUrl?: never; apiKey: string; jwt?: never }
   | { proxyUrl?: never; apiKey?: never; jwt: string };
