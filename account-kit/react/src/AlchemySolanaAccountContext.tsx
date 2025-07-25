@@ -1,36 +1,15 @@
 "use client";
 
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+// import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletProvider } from "@solana/wallet-adapter-react";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
 import { useMemo, type ReactNode } from "react";
+import { useSolanaAdapters } from "./hooks/useSolanaAdapters.js";
 
 export function AlchemySolanaAccountContext(props: { children: ReactNode }) {
-  const network = WalletAdapterNetwork.Devnet;
+  // const network = WalletAdapterNetwork.Devnet;
+  const configuredAdapters = useSolanaAdapters();
 
-  const wallets = useMemo(
-    () => [
-      /**
-       * Wallets that implement either of these standards will be available automatically.
-       *
-       *   - Solana Mobile Stack Mobile Wallet Adapter Protocol
-       *     (https://github.com/solana-mobile/mobile-wallet-adapter)
-       *   - Solana Wallet Standard
-       *     (https://github.com/anza-xyz/wallet-standard)
-       *
-       * If you wish to support a wallet that supports neither of those standards,
-       * instantiate its legacy wallet adapter here. Common legacy adapters can be found
-       * in the npm package `@solana/wallet-adapter-wallets`.
-       */
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
-    ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [network],
-  );
+  const wallets = useMemo(() => configuredAdapters, [configuredAdapters]);
 
   return (
     <WalletProvider wallets={wallets} autoConnect>

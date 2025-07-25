@@ -1,9 +1,14 @@
 import type { TransactionInstruction } from "@solana/web3.js";
-import { Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import {
+  Connection,
+  PublicKey,
+  TransactionMessage,
+  VersionedTransaction,
+} from "@solana/web3.js";
 
 /**
  * This function wraps instructions in a sponsored transaction
- * 
+ *
  * @param {TransactionInstruction[]} instructions - The instructions to add sponsorship to
  * @param {Connection} connection - The connection to use
  * @param {string} policyId - The policy id to use

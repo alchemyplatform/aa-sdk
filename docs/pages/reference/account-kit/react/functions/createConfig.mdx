@@ -18,23 +18,49 @@ import { createConfig } from "@account-kit/react";
 ## Usage
 
 ```ts
-import { sepolia, alchemy } from "@account-kit/infra"
-import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
+import { sepolia, alchemy } from "@account-kit/infra";
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
 import { QueryClient } from "@tanstack/react-query";
 
 const uiConfig: AlchemyAccountsUIConfig = {
-illustrationStyle: "linear",
-auth: {
-sections: [[{ type: "email" }], [{ type: "passkey" }]],
-addPasskeyOnSignup: true,
-},
-}
+  illustrationStyle: "linear",
+  auth: {
+    sections: [
+      [{ type: "email" }],
+      [{ type: "passkey" }],
+      [
+        {
+          type: "external_wallets",
+          walletConnect: { projectId: "your_project_id" },
+          inline: {
+            wallets: ["MetaMask", "Phantom", "WalletConnect"],
+            maxCount: 3,
+            showMoreButton: true,
+            moreButtonText: "More wallets",
+          },
+        },
+      ],
+    ],
+    addPasskeyOnSignup: true,
+  },
+};
 
-const config = createConfig({
-transport: alchemy({ apiKey: "your_api_key" })
-chain: sepolia,
-ssr: true,
-}, uiConfig)
+const config = createConfig(
+  {
+    transport: alchemy({ apiKey: "your_api_key" }),
+    chain: sepolia,
+    ssr: true,
+    solana: {
+      connection: solanaConnection,
+      adapters: [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
+    },
+  },
+  uiConfig,
+);
 
 export const queryClient = new QueryClient();
 ```

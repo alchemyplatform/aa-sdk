@@ -22,6 +22,7 @@ const Test = (props: any) => {
   if (props.authType === "email-passkey") {
     sections = [[{ type: "email" as const }], [{ type: "passkey" as const }]];
   }
+
   if (props.authType === "external_wallets") {
     sections = [
       [

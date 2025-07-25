@@ -160,7 +160,12 @@ export class SolanaSigner {
     connection: Connection,
     policyId: string,
   ): Promise<VersionedTransaction> {
-    return createSolanaSponsoredTransaction(instructions, connection, policyId, this.address)
+    return createSolanaSponsoredTransaction(
+      instructions,
+      connection,
+      policyId,
+      this.address,
+    );
   }
 
   private formatSignatureForSolana(signature: Hex): Hex {
@@ -179,4 +184,3 @@ export class SolanaSigner {
     return toHex(messageToSign);
   }
 }
-

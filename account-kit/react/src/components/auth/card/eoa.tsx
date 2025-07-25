@@ -5,15 +5,22 @@ import { useChain } from "../../../hooks/useChain.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { ls } from "../../../strings.js";
-import { Button } from "../../button.js";
+// import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
+import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
-import { useWallet, type Wallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
+import {
+  WalletButton,
+  WalletConnectButton,
+  SolanaWalletButton,
+} from "../wallet-buttons/index.js";
+import type { AuthType, ExternalWalletUIConfig } from "../types.js";
 
 export const WALLET_CONNECT = "walletConnect";
 
@@ -164,103 +171,106 @@ export const WalletConnectCard = () => {
   );
 };
 
-function SolanaLoginButton({ wallet }: { wallet: Wallet }) {
-  const { connect } = useConnectSolanaEOA();
-
-  return (
-    <Button
-      className="justify-start"
-      variant="social"
-      icon={
-        wallet.adapter.icon && (
-          <img
-            src={wallet.adapter.icon}
-            alt={wallet.adapter.name}
-            height={20}
-            width={20}
-          />
-        )
-      }
-      onClick={() => connect(wallet)}
-    >
-      {wallet.adapter.name}{" "}
-      <span className="bg-gray-100 px-1 py-0.5 rounded-md text-xs">solana</span>
-    </Button>
-  );
-}
-
 export const EoaPickCard = () => {
-  const { chain } = useChain();
-  const { connectors, connect } = useConnectEOA();
-  const { setAuthStep } = useAuthContext("pick_eoa");
+  const { connectors } = useConnectEOA();
+  // const { setAuthStep } = useAuthContext("pick_eoa");
   const { wallets } = useWallet();
-
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
-  const connectorButtons = connectors
-    .filter((x) => x.type !== WALLET_CONNECT)
-    .map((connector) => {
-      return (
-        <Button
-          className="justify-start"
-          variant="social"
-          key={connector.id}
-          icon={
-            connector.icon && (
-              <img
-                src={connector.icon}
-                alt={connector.name}
-                height={20}
-                width={20}
-              />
-            )
-          }
-          onClick={() => {
-            connect({ connector, chainId: chain.id });
-          }}
-        >
-          {connector.name}
-        </Button>
-      );
-    });
+  // Get external wallets config to access logoUrl for each wallet
+  const externalWalletsConfig = useAuthConfig((auth) => {
+    const externalWalletSection = auth.sections
+      .find((x) => x.some((y) => y.type === "external_wallets"))
+      ?.find((x) => x.type === "external_wallets") as
+      | Extract<AuthType, { type: "external_wallets" }>
+      | undefined;
 
-  const walletConnectConnector = walletConnectParams
-    ? walletConnect(walletConnectParams)
-    : null;
+    return externalWalletSection;
+  });
+
+  // Helper function to find logoUrl for a connector
+  const getLogoUrlForConnector = (
+    connectorType: string,
+  ): string | undefined => {
+    if (!externalWalletsConfig?.wallets) return undefined;
+
+    // Look for a wallet config with matching connector type
+    const walletConfig = externalWalletsConfig.wallets.find(
+      (wallet: ExternalWalletUIConfig) =>
+        wallet.type === "evm" && wallet.id === connectorType,
+    );
+    return walletConfig?.logoUrl;
+  };
+
+  // Helper function to find logoUrl for a Solana adapter
+  const getLogoUrlForAdapter = (adapterName: string): string | undefined => {
+    if (!externalWalletsConfig?.wallets) return undefined;
+
+    // Look for a wallet config with matching adapter name
+    const walletConfig = externalWalletsConfig.wallets.find(
+      (wallet: ExternalWalletUIConfig) =>
+        wallet.type === "solana" && wallet.id === adapterName,
+    );
+    return walletConfig?.logoUrl;
+  };
+
+  // Helper function to find logoUrl for WalletConnect
+  const getLogoUrlForWalletConnect = (): string | undefined => {
+    if (!externalWalletsConfig?.wallets) return undefined;
+
+    // Look for a wallet config with WalletConnect type
+    const walletConfig = externalWalletsConfig.wallets.find(
+      (wallet: ExternalWalletUIConfig) =>
+        wallet.type === "walletconnect" && wallet.id === "WalletConnect",
+    );
+    return walletConfig?.logoUrl;
+  };
+
+  // Deduplicate connectors to prevent duplicates from auto-detection
+  const uniqueConnectors = (() => {
+    const uniqueMap = new Map<string, (typeof connectors)[0]>();
+
+    connectors
+      .filter((x) => x.type !== WALLET_CONNECT)
+      .forEach((connector) => {
+        const key = connector.name.toLowerCase();
+
+        // If we already have this connector, prefer the explicit one over auto-detected
+        // Auto-detected connectors typically have generic IDs, explicit ones have specific types
+        if (!uniqueMap.has(key) || connector.type !== "injected") {
+          uniqueMap.set(key, connector);
+        }
+      });
+
+    return Array.from(uniqueMap.values());
+  })();
+
+  // Use reusable wallet button components with deduplicated connectors
+  const connectorButtons = uniqueConnectors.map((connector) => (
+    <WalletButton
+      key={connector.id}
+      connector={connector}
+      logoUrl={getLogoUrlForConnector(connector.type)}
+    />
+  ));
 
   return (
     <CardContent
       className="w-full"
       header="Select your wallet"
       description={
-        walletConnectConnector != null || connectors.length ? (
+        walletConnectParams != null || connectors.length || wallets.length ? (
           <div className="flex flex-col gap-3 w-full">
             {connectorButtons}
-            {walletConnectConnector && (
-              <Button
-                className="justify-start"
-                variant="social"
-                icon={<WalletConnectIcon className="w-[25px] h-[25px]" />}
-                onClick={() => {
-                  // If walletConnectConnector is not found, set the error and return
-                  if (!walletConnectConnector) {
-                    return setAuthStep({
-                      type: "wallet_connect",
-                      error: new Error("WalletConnect params not found"),
-                    });
-                  }
-
-                  connect({
-                    connector: walletConnectConnector,
-                    chainId: chain.id,
-                  });
-                }}
-              >
-                WalletConnect
-              </Button>
+            {walletConnectParams && (
+              <WalletConnectButton logoUrl={getLogoUrlForWalletConnect()} />
             )}
             {wallets.map((wallet) => (
-              <SolanaLoginButton key={wallet.adapter.name} wallet={wallet} />
+              <SolanaWalletButton
+                key={wallet.adapter.name}
+                wallet={wallet}
+                logoUrl={getLogoUrlForAdapter(wallet.adapter.name)}
+              />
             ))}
           </div>
         ) : (

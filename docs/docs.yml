@@ -488,6 +488,10 @@ navigation:
           - section: SDK Reference
             path: wallets/pages/reference/account-kit/signer/index.mdx
             contents:
+              - section: Functions
+                contents:
+                  - page: createSolanaSponsoredTransaction
+                    path: wallets/pages/reference/account-kit/signer/functions/createSolanaSponsoredTransaction.mdx
               - section: Classes
                 contents:
                   - section: AlchemySignerWebClient

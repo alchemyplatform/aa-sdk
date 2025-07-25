@@ -8,10 +8,7 @@ import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { UserIcon } from "../icons/user";
 import { WalletIcon } from "../icons/wallet";
-import {
-  PublicKey,
-  SystemProgram,
-} from "@solana/web3.js";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { useToast } from "@/hooks/useToast";
 import { Button } from "../shared/Button";
 

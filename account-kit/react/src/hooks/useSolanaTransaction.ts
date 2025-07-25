@@ -2,7 +2,10 @@
 
 import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
-import { createSolanaSponsoredTransaction, SolanaSigner } from "@account-kit/signer";
+import {
+  createSolanaSponsoredTransaction,
+  SolanaSigner,
+} from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types.js";
 import {
   PublicKey,
