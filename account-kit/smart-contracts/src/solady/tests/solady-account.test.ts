@@ -8,7 +8,7 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, verifyMessage, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
-import { local070Instance } from "../instances";
+import { local070Instance } from "../../../../../.vitest/src/instances";
 
 describe("Viem AA - Solady Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -19,13 +19,6 @@ describe("Viem AA - Solady Smart Account", () => {
     const blockNumber = await getBlockNumber(client);
     expect(blockNumber).toBeGreaterThan(0n);
   }, 30_000);
-
-  it("should demonstrate viem AA framework with toSoladySmartAccount", async () => {
-    const owner = privateKeyToAccount(generatePrivateKey());
-
-    expect(toSoladySmartAccount).toBeDefined();
-    expect(typeof toSoladySmartAccount).toBe("function");
-  });
 
   it("should create a Solady smart account successfully", async () => {
     const owner = privateKeyToAccount(generatePrivateKey());
@@ -43,17 +36,12 @@ describe("Viem AA - Solady Smart Account", () => {
     );
   });
 
-  it("should sign a message with Solady smart account", async () => {
+  it("should sign a message with Solady smart account and verify signature", async () => {
     const owner = privateKeyToAccount(generatePrivateKey());
 
     const account = await toSoladySmartAccount({
       client,
       owner,
-    });
-
-    await setBalance(client, {
-      address: account.address,
-      value: parseEther("0.1"),
     });
 
     const message = "Hello from Viem AA with Solady!";
@@ -63,8 +51,16 @@ describe("Viem AA - Solady Smart Account", () => {
 
     expect(signature).toBeDefined();
     expect(signature).toMatch(/^0x[a-fA-F0-9]+$/);
-    // EIP-6492 signatures are typically 132 bytes for undeployed accounts
-    expect(signature.length).toBe(132);
+
+    // Verify the signature using publicClient
+    const publicClient = client.extend(publicActions);
+    const isValid = await publicClient.verifyMessage({
+      address: account.address,
+      message,
+      signature,
+    });
+
+    expect(isValid).toBe(true);
   }, 30_000);
 
   it("should create a bundler client with Solady account", async () => {
@@ -88,7 +84,8 @@ describe("Viem AA - Solady Smart Account", () => {
 
     expect(bundlerClient).toBeDefined();
     expect(bundlerClient.account).toBe(account);
-    expect(await account.isDeployed()).toBe(true);
+    // Account should NOT be deployed yet
+    expect(await account.isDeployed()).toBe(false);
   }, 30_000);
 
   it.skip("should send a simple ETH transfer user operation", async () => {
@@ -117,22 +114,7 @@ describe("Viem AA - Solady Smart Account", () => {
       address: recipient,
     });
 
-    // Deploy the account
-    const deployHash = await bundlerClient.sendUserOperation({
-      calls: [
-        {
-          to: account.address,
-          value: 0n,
-          data: "0x",
-        },
-      ],
-    });
-
-    await bundlerClient.waitForUserOperationReceipt({
-      hash: deployHash,
-    });
-
-    // Send the actual transfer
+    // Send the transfer - account will be deployed automatically
     const userOpHash = await bundlerClient.sendUserOperation({
       calls: [
         {
@@ -155,6 +137,9 @@ describe("Viem AA - Solady Smart Account", () => {
     });
 
     expect(finalBalance).toBe(initialBalance + amount);
+    
+    // Account should be deployed after the first UO
+    expect(await account.isDeployed()).toBe(true);
   }, 60_000);
 
   it("should demonstrate the complete viem AA framework setup", async () => {
@@ -171,4 +156,4 @@ describe("Viem AA - Solady Smart Account", () => {
       "0x5d82735936c6Cd5DE57cC3c1A799f6B2E6F933Df",
     );
   });
-});
+}); 
