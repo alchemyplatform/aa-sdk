@@ -134,12 +134,11 @@ const rule: Rule.RuleModule = {
             {
               desc: "Add JSDoc comment",
               data: { name: nameOverride ?? name },
-              fix: (fixer) =>
-                reExportFixerEslint(fixer, node, context, fixBatchSize),
+              fix: (fixer) => reExportFixerEslint(fixer, node, fixBatchSize),
             },
           ],
           fix: enableFixer
-            ? (fixer) => reExportFixerEslint(fixer, node, context, fixBatchSize)
+            ? (fixer) => reExportFixerEslint(fixer, node, fixBatchSize)
             : undefined,
         });
       }

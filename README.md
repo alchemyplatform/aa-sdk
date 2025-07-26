@@ -42,3 +42,9 @@ npx turbo login --sso-team=alchemy-dot-com
 so that you can benefit from remote caching in your builds!
 
 We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](CONTRIBUTING.md) for more information.
+
+## Development notes
+
+This repository previously generated documentation by invoking OpenAI during linting.
+All such code generation has been removed in favor of a simple placeholder comment.
+No additional environment variables are required for building or testing.

@@ -45,7 +45,6 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/core",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
   },
