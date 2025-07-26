@@ -1,7 +1,6 @@
 import {
   type Address,
   type Hex,
-  type Abi,
   type Chain,
   type Client,
   type JsonRpcAccount,
@@ -14,6 +13,8 @@ import {
   hashTypedData,
   type TypedDataDefinition,
   maxUint32,
+  maxUint152,
+  zeroAddress,
 } from "viem";
 import {
   entryPoint07Abi,
@@ -24,41 +25,38 @@ import {
   toSmartAccount,
   type WebAuthnAccount,
 } from "viem/account-abstraction";
-import type { SignatureRequest } from "../../light-account/types.js"; // TODO(jh): this should be shared
 import {
   getCode,
   readContract,
   signMessage,
   signTypedData,
 } from "viem/actions";
-import { BaseError } from "@alchemy/common";
-import { DEFAULT_OWNER_ENTITY_ID, parseDeferredAction } from "../utils.js";
-
-export const executeUserOpSelector: Hex = "0x8DD7712F";
-
-// TODO(jh): ideally viem abstracts away the normal vs webauthn signer & this isn't needed at all.
-// export type ModularAccountsV2 =
-//   | BaseModularAccountV2Implementation
-//   | WebauthnModularAccountV2;
-
-export type SignerEntity = {
-  isGlobalValidation: boolean;
-  entityId: number;
-};
-
-export type ExecutionDataView = {
-  module: Address;
-  skipRuntimeValidation: boolean;
-  allowGlobalValidation: boolean;
-  executionHooks: readonly Hex[];
-};
-
-export type ValidationDataView = {
-  validationHooks: readonly Hex[];
-  executionHooks: readonly Hex[];
-  selectors: readonly Hex[];
-  validationFlags: number;
-};
+import {
+  assertNever,
+  BaseError,
+  InvalidDeferredActionNonceError,
+  InvalidEntityIdError,
+  InvalidNonceKeyError,
+} from "@alchemy/common";
+import {
+  DEFAULT_OWNER_ENTITY_ID,
+  EXECUTE_USER_OP_SELECTOR,
+  getDefaultWebauthnValidationModuleAddress,
+  pack1271Signature,
+  packUOSignature,
+  parseDeferredAction,
+  serializeModuleEntity,
+  toReplaySafeTypedData,
+  toWebAuthnSignature,
+} from "../utils.js";
+import {
+  SignaturePrefix,
+  type ExecutionDataView,
+  type SignerEntity,
+  type ValidationDataView,
+} from "../types.js";
+import { modularAccountAbi } from "../abis/modularAccountAbi.js";
+import type { SignatureRequest } from "../../types.js";
 
 export type ValidationDataParams =
   | {
@@ -75,18 +73,14 @@ export type BaseModularAccountV2Implementation = SmartAccountImplementation<
   "0.7",
   {
     source: "ModularAccountV2";
-    // TODO(jh): should these live here or not on the base?
-    prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
-    formatSignature: (signature: Hex) => Promise<Hex>;
-    // TODO(jh): what do we need the rest of this?
     signerEntity: SignerEntity;
+    encodeCallData: (callData: Hex) => Promise<Hex>;
     getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
     getValidationData: (
       args: ValidationDataParams,
     ) => Promise<ValidationDataView>;
-    // encodeCallData: (callData: Hex) => Promise<Hex>;
   },
-  false // TODO(jh): this generic param is a `eip7702` bool... may need to use it elsewhere.
+  boolean // TODO(jh): this generic param is a `eip7702` bool... may need to use it elsewhere.
 >;
 
 export type ModularAccountV2Base =
@@ -96,50 +90,29 @@ export type CreateModularAccountV2BaseParams<
   TTransport extends Transport = Transport,
 > = {
   client: Client<TTransport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  // Required for Webauthn b/c it can't be hoisted on a Client. Optional if
-  // there's already an account hoisted on the client.
-  owner?: LocalAccount | WebAuthnAccount;
-  abi: Abi;
+  owner: JsonRpcAccount | LocalAccount | WebAuthnAccount; // TODO(jh): call this `owner` or `signer`?
   accountAddress: Address;
-  // TODO(jh): need this here like we added to Light Account or nah?
-  //   getFactoryArgs: () => Promise<{
-  //     factory?: Address | undefined;
-  //     factoryData?: Hex | undefined;
-  //   }>;
+  getFactoryArgs: () => Promise<{
+    factory?: Address | undefined;
+    factoryData?: Hex | undefined;
+  }>;
   signerEntity?: SignerEntity;
   deferredAction?: Hex;
 };
 
-// TODO(jh): maybe wherever this is used, we should have 2 diff functions
-// for creating Webauthn or standard? or maybe even consider having 2 overloads
-// here like we did in v4, but idk how i feel about that when this is the "base"...
 export async function createModularAccountV2Base<
   TTransport extends Transport = Transport,
 >({
   client,
-  owner: owner_,
-  abi,
+  owner,
   accountAddress,
-  // getFactoryArgs // TODO(jh): remove if not used
+  getFactoryArgs,
   signerEntity = {
     isGlobalValidation: true,
     entityId: DEFAULT_OWNER_ENTITY_ID,
   },
   deferredAction,
 }: CreateModularAccountV2BaseParams<TTransport>): Promise<ModularAccountV2Base> {
-  // TODO(jh): do we need to impl `encodeUpgradeToAndCall` like Light Account has?
-
-  // TODO(jh): impl prepare & format sign (depends on entityId & webauthn or not)
-  // TODO(jh): should we have different factory functions for each type or just use params to set it?
-
-  const owner = owner_ ?? client.account;
-  if (!owner) {
-    throw new BaseError(
-      "Account must exist on client or be passed as the `owner`.",
-    );
-  }
-  // TODO(jh): owner.type here tells us if it's webauthn.
-
   let { isGlobalValidation, entityId } = signerEntity;
 
   const entryPoint = {
@@ -149,11 +122,8 @@ export async function createModularAccountV2Base<
   };
 
   if (entityId > Number(maxUint32)) {
-    throw new InvalidEntityIdError(entityId); // TODO(jh): add this error to common
+    throw new InvalidEntityIdError(entityId);
   }
-
-  const transport = client.transport;
-  const chain = client.chain;
 
   const isAccountDeployed: () => Promise<boolean> = async () =>
     !!(await getCode(client, { address: accountAddress }));
@@ -184,20 +154,146 @@ export async function createModularAccountV2Base<
         parseDeferredAction(deferredAction));
     } else if (deferredActionNonce > nextNonceForDeferredAction) {
       // if nonce is greater than the next nonce, its invalid, so we throw
-      throw new InvalidDeferredActionNonce(); // TODO(jh): add this error to common
+      throw new InvalidDeferredActionNonceError();
     }
   }
 
-  // TODO(jh): continue here from `encodeExecute` in the old `modularAccountV2Base`...
+  const getNonce = async (
+    params?: { key?: bigint | undefined } | undefined,
+  ): Promise<bigint> => {
+    if (nonce) {
+      const tempNonce = nonce;
+      nonce = undefined; // set to falsy value once used
+      return tempNonce;
+    }
 
-  // TODO(jh): look back at this:
-  // https://github.com/wevm/viem/blob/f82cdd929062c0d079142de1555a472f78ac59e1/src/account-abstraction/accounts/types.ts#L29
-  // see things like getNonce exist on it. anything else we need that's optional?
+    const nonceKey = params?.key ?? 0n;
+
+    if (nonceKey > maxUint152) {
+      throw new InvalidNonceKeyError(nonceKey);
+    }
+
+    const fullNonceKey: bigint =
+      (nonceKey << 40n) +
+      (BigInt(entityId) << 8n) +
+      (isGlobalValidation ? 1n : 0n);
+
+    return readContract(client, {
+      ...entryPoint,
+      functionName: "getNonce",
+      args: [accountAddress, fullNonceKey],
+    });
+  };
+
+  const accountContract = {
+    address: accountAddress,
+    abi: modularAccountAbi,
+  };
+
+  const getExecutionData = async (selector: Hex) => {
+    if (!(await isAccountDeployed())) {
+      return {
+        module: zeroAddress,
+        skipRuntimeValidation: false,
+        allowGlobalValidation: false,
+        executionHooks: [],
+      };
+    }
+
+    return readContract(client, {
+      ...accountContract,
+      functionName: "getExecutionData",
+      args: [selector],
+    });
+  };
+
+  const getValidationData = async (args: ValidationDataParams) => {
+    if (!(await isAccountDeployed())) {
+      return {
+        validationHooks: [],
+        executionHooks: [],
+        selectors: [],
+        validationFlags: 0,
+      };
+    }
+
+    const { validationModuleAddress, entityId } = args;
+    return readContract(client, {
+      ...accountContract,
+      functionName: "getValidationData",
+      args: [
+        serializeModuleEntity({
+          moduleAddress: validationModuleAddress ?? zeroAddress,
+          entityId: entityId ?? Number(maxUint32),
+        }),
+      ],
+    });
+  };
+
+  const encodeCallData = async (callData: Hex): Promise<Hex> => {
+    const validationData = await getValidationData({
+      entityId: Number(entityId),
+    });
+    if (hasAssociatedExecHooks) {
+      hasAssociatedExecHooks = false; // set to falsy value once used
+      return concatHex([EXECUTE_USER_OP_SELECTOR, callData]);
+    }
+    if (validationData.executionHooks.length) {
+      return concatHex([EXECUTE_USER_OP_SELECTOR, callData]);
+    }
+    return callData;
+  };
+
+  const prepareSignature = async (
+    request: SignatureRequest,
+  ): Promise<Extract<SignatureRequest, { type: "eth_signTypedData_v4" }>> => {
+    if (owner.type === "webAuthn") {
+      throw new BaseError(
+        "`prepareSignature` not supported by WebAuthn signer",
+      );
+    }
+
+    const isDeferredAction =
+      request.type === "eth_signTypedData_v4" &&
+      request.data?.primaryType === "DeferredAction" &&
+      request.data?.domain?.verifyingContract === accountAddress;
+
+    if (isDeferredAction && entityId === DEFAULT_OWNER_ENTITY_ID) {
+      return request;
+    }
+
+    const hash =
+      request.type === "personal_sign"
+        ? hashMessage(request.data)
+        : request.type === "eth_signTypedData_v4"
+          ? hashTypedData(request.data)
+          : assertNever(request, "Unexpected signature request type");
+
+    return {
+      type: "eth_signTypedData_v4",
+      data: toReplaySafeTypedData({
+        chainId: client.chain.id,
+        address: accountAddress,
+        hash,
+      }),
+    };
+  };
+
+  const formatSignature = async (signature: Hex): Promise<Hex> => {
+    if (owner.type === "webAuthn") {
+      throw new BaseError("`formatSignature` not supported by WebAuthn signer");
+    }
+    return pack1271Signature({
+      validationSignature: signature,
+      entityId,
+    });
+  };
 
   return await toSmartAccount({
-    getFactoryArgs, // TODO(jh): i think we actually need this to make viem happy.
+    getFactoryArgs,
     client,
     entryPoint,
+    getNonce,
 
     async getAddress() {
       return accountAddress;
@@ -207,14 +303,14 @@ export async function createModularAccountV2Base<
       if (calls.length === 1) {
         const call = calls[0];
         return encodeFunctionData({
-          abi, // TODO(jh): should we just hardcode this?
+          abi: modularAccountAbi,
           functionName: "execute",
           args: [call.to, call.value ?? 0n, call.data ?? "0x"],
         });
       }
 
       return encodeFunctionData({
-        abi, // TODO(jh): should we just hardcode this?
+        abi: modularAccountAbi,
         functionName: "executeBatch",
         args: [
           calls.map((call) => ({
@@ -226,112 +322,159 @@ export async function createModularAccountV2Base<
       });
     },
 
-    // TODO(jh): impl
-    // async getStubSignature() {
-    //   const signature =
-    //     "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+    async getStubSignature() {
+      if (owner.type === "webAuthn") {
+        return "0xff000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001949fc7c88032b9fcb5f6efc7a7b8c63668eae9871b765e23123bb473ff57aa831a7c0d9276168ebcc29f2875a0239cffdf2a9cd1c2007c5c77c071db9264df1d000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a7b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2273496a396e6164474850596759334b7156384f7a4a666c726275504b474f716d59576f4d57516869467773222c226f726967696e223a2268747470733a2f2f7369676e2e636f696e626173652e636f6d222c2263726f73734f726967696e223a66616c73657d00000000000000000000000000000000000000000000";
+      }
 
-    //   switch (version) {
-    //     case "v1.0.1":
-    //     case "v1.0.2":
-    //     case "v1.1.0":
-    //       return signature;
-    //     case "v2.0.0":
-    //       return concat([SignaturePrefix.EOA, signature]);
-    //     default:
-    //       throw new BaseError(`Unknown version ${type} of ${String(version)}`);
+      const sig = packUOSignature({
+        validationSignature:
+          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+      });
+      return deferredActionData ? concatHex([deferredActionData, sig]) : sig;
+    },
+
+    async signMessage({ message }) {
+      if (owner.type === "webAuthn") {
+        const hash = hashTypedData(
+          toReplaySafeTypedData({
+            chainId: client.chain.id,
+            address: getDefaultWebauthnValidationModuleAddress(client.chain),
+            hash: hashMessage(message),
+          }),
+        );
+        const validationSignature = toWebAuthnSignature(
+          await owner.sign({ hash }),
+        );
+        return pack1271Signature({
+          validationSignature,
+          entityId,
+        });
+      }
+
+      const { data } = await prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      const signature = await signTypedData(client, {
+        ...data,
+        account: owner,
+      });
+
+      return formatSignature(signature);
+    },
+
+    async signTypedData(td) {
+      const isDeferredAction =
+        td.primaryType === "DeferredAction" &&
+        td.domain &&
+        typeof td.domain === "object" &&
+        "verifyingContract" in td.domain &&
+        td.domain.verifyingContract === accountAddress;
+
+      if (owner.type === "webAuthn") {
+        const hash = hashTypedData(
+          toReplaySafeTypedData({
+            chainId: client.chain.id,
+            address: getDefaultWebauthnValidationModuleAddress(client.chain),
+            hash: hashTypedData(td),
+            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
+          }),
+        );
+        const validationSignature = toWebAuthnSignature(
+          await owner.sign({ hash }),
+        );
+        return isDeferredAction
+          ? pack1271Signature({
+              validationSignature,
+              entityId,
+            })
+          : validationSignature;
+      }
+
+      const { data } = await prepareSignature({
+        type: "eth_signTypedData_v4",
+        data: td as TypedDataDefinition, // TODO(jh): why do we need to cast?
+      });
+
+      const signature = await signTypedData(client, {
+        ...data,
+        account: owner,
+      });
+
+      return isDeferredAction
+        ? concat([SignaturePrefix.EOA, signature])
+        : formatSignature(signature);
+    },
+
+    async signUserOperation(uo) {
+      const hash = getUserOperationHash({
+        chainId: uo.chainId ?? client.chain.id,
+        entryPointAddress: entryPoint.address,
+        entryPointVersion: entryPoint.version,
+        userOperation: {
+          ...uo,
+          sender: accountAddress,
+        },
+      });
+
+      if (owner.type === "webAuthn") {
+        const validationSignature = toWebAuthnSignature(
+          await owner.sign({ hash }),
+        );
+        const signature = deferredActionData
+          ? concatHex([deferredActionData, validationSignature])
+          : validationSignature;
+        deferredActionData = undefined;
+        return concatHex(["0xff", signature]);
+      }
+
+      const validationSignature = await signMessage(client, {
+        account: owner,
+        message: { raw: hash },
+      });
+
+      const packedSignature = packUOSignature({
+        validationSignature,
+      });
+
+      const signature = deferredActionData
+        ? concatHex([deferredActionData, packedSignature])
+        : packedSignature;
+
+      deferredActionData = undefined;
+
+      return signature;
+    },
+
+    // TODO(jh): should we handle different gas estimation stuff for 7702 or webauthn here?
+    // or will the bundler client handle that later?
+    // https://github.com/wevm/viem/blob/main/src/account-abstraction/accounts/implementations/toCoinbaseSmartAccount.ts
+    // userOperation: {
+    //   estimateGas: () => {
+    //     TODO
     //   }
-    // },
+    // }
 
-    // TODO(jh): impl
-    // async signMessage({ message }) {
-    //   const { type, data } = await prepareSignature({
-    //     type: "personal_sign",
-    //     data: message,
-    //   });
+    // TODO(jh): figure out how to properly use the generic param for 7702
+    // https://github.com/wevm/viem/blob/f82cdd929062c0d079142de1555a472f78ac59e1/src/account-abstraction/accounts/types.ts#L204
 
-    //   const sig =
-    //     type === "eth_signTypedData_v4"
-    //       ? await signTypedData(client, data)
-    //       : await signMessage(client, { message });
-
-    //   return formatSignature(sig);
-    // },
-
-    // TODO(jh): impl
-    // async signTypedData(params) {
-    //   const { type, data } = await prepareSignature({
-    //     type: "eth_signTypedData_v4",
-    //     data: params as TypedDataDefinition,
-    //   });
-
-    //   const sig =
-    //     type === "eth_signTypedData_v4"
-    //       ? await signTypedData(client, data)
-    //       : await signMessage(client, { message: data });
-
-    //   return formatSignature(sig);
-    // },
-
-    // TODO(jh): impl
-    // async signUserOperation(parameters) {
-    //   const { chainId = client.chain.id, ...userOperation } = parameters;
-    //   const userOpHash = getUserOperationHash({
-    //     chainId,
-    //     entryPointAddress: entryPoint.address,
-    //     entryPointVersion: entryPoint.version,
-    //     userOperation: {
-    //       ...userOperation,
-    //       sender: accountAddress,
-    //     },
-    //   });
-
-    //   const signature = await signMessage(client, {
-    //     message: { raw: userOpHash },
-    //   });
-
-    //   return version === "v2.0.0"
-    //     ? concatHex([SignaturePrefix.EOA, signature])
-    //     : signature;
-    // },
-
-    // Extension properties
     extend: {
       source: "ModularAccountV2" as const,
-      prepareSignature,
-      formatSignature,
-      signerEntity,
-      getExecutionData, // TODO(jh): impl
-      getValidationData, // TODO(jh): impl
+      signerEntity: {
+        entityId,
+        isGlobalValidation,
+      },
+      encodeCallData,
+      getExecutionData,
+      getValidationData,
     },
   });
 }
 
-// TODO(jh): do we really want a different BASE type for this?
-// probably not since viem is handling our signer account now.
-// and viem also supports webauthn accounts internally:
-// https://viem.sh/account-abstraction/accounts/webauthn
-// so we need to figure out how to make that work... might
-// want to use some generic on the base mav2 acct possibly?
+// TODO(jh): implement the different account modes (default or 7702) on top of this base?
+// the different implementation on top of the base pass in the "getFactoryArgs" function!
+// will bundler client still need to know default, 7702, or webauthn for gas estimation?
 
-// export type WebauthnModularAccountV2 = SmartContractAccount<
-//   "ModularAccountV2",
-//   "0.7.0"
-// > & {
-//   params: ToWebAuthnAccountParameters;
-//   signerEntity: SignerEntity;
-//   getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
-//   getValidationData: (
-//     args: ValidationDataParams,
-//   ) => Promise<ValidationDataView>;
-//   encodeCallData: (callData: Hex) => Promise<Hex>;
-// };
-
-// export type CreateWebauthnMAV2BaseParams = Omit<
-//   CreateMAV2BaseParams,
-//   "signer"
-// > & {
-//   credential: ToWebAuthnAccountParameters["credential"];
-//   getFn?: ToWebAuthnAccountParameters["getFn"] | undefined;
-//   rpId?: ToWebAuthnAccountParameters["rpId"] | undefined;
-// };
+// TODO(jh): copy over the `modules` from `account-kit/smart-contracts` (already have webauthn sig stuff though)

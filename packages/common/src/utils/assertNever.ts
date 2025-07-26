@@ -1,3 +1,5 @@
+import { BaseError } from "../errors/BaseError.js";
+
 export const assertNever = (_x: never, msg: string): never => {
-  throw new Error(msg);
+  throw new BaseError(msg);
 };
