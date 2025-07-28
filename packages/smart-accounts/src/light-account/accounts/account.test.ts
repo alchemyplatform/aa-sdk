@@ -19,7 +19,7 @@ import { local060Instance } from "~test/instances.js";
 import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
-import { createLightAccount } from "./account.js";
+import { toLightAccount } from "./account.js";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,
@@ -372,7 +372,7 @@ describe("Light Account Tests", () => {
     accountAddress?: Address;
     usePaymaster?: boolean;
   }) => {
-    const account = await createLightAccount({
+    const account = await toLightAccount({
       client: createWalletClient({
         account: signerAccount,
         transport: custom(client.transport),

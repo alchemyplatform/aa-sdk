@@ -21,7 +21,7 @@ import {
   getDefaultLightAccountFactoryAddress,
   lowerAddress,
 } from "../utils.js";
-import { createLightAccountBase, type LightAccountBase } from "./base.js";
+import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError } from "@alchemy/common";
 
 export type LightAccount<
@@ -32,7 +32,7 @@ export type LightAccount<
   getOwnerAddress: () => Promise<Address>;
 };
 
-export type CreateLightAccountParams<
+export type ToLightAccountParams<
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
 > = {
@@ -47,10 +47,10 @@ export type CreateLightAccountParams<
 /**
  * Creates a light account.
  *
- * @param {CreateLightAccountParams} param0 - The parameters for creating a light account.
+ * @param {ToLightAccountParams} param0 - The parameters for creating a light account.
  * @returns {Promise<LightAccount<TSigner, TLightAccountVersion>>} A light account.
  */
-export async function createLightAccount<
+export async function toLightAccount<
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
 >({
@@ -60,7 +60,7 @@ export async function createLightAccount<
   accountAddress: accountAddress_,
   version = defaultLightAccountVersion() as TLightAccountVersion,
   factoryAddress = getDefaultLightAccountFactoryAddress(client.chain, version),
-}: CreateLightAccountParams<TLightAccountVersion>): Promise<
+}: ToLightAccountParams<TLightAccountVersion>): Promise<
   LightAccount<TLightAccountVersion>
 > {
   const accountAbi =
@@ -98,7 +98,7 @@ export async function createLightAccount<
     };
   };
 
-  const baseAccount = await createLightAccountBase({
+  const baseAccount = await toLightAccountBase({
     client,
     owner,
     abi: accountAbi,

@@ -18,7 +18,7 @@ import {
   getDefaultMultiOwnerLightAccountFactoryAddress,
   lowerAddress,
 } from "../utils.js";
-import { createLightAccountBase, type LightAccountBase } from "./base.js";
+import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError } from "@alchemy/common";
 
 export type MultiOwnerLightAccount = LightAccountBase<
@@ -32,7 +32,7 @@ export type MultiOwnerLightAccount = LightAccountBase<
   getOwnerAddresses: () => Promise<readonly Address[]>;
 };
 
-export type CreateMultiOwnerLightAccountParams = {
+export type ToMultiOwnerLightAccountParams = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owners: OneOf<JsonRpcAccount | LocalAccount>[];
   salt?: bigint;
@@ -43,10 +43,10 @@ export type CreateMultiOwnerLightAccountParams = {
 /**
  * Creates a multi-owner light account.
  *
- * @param {CreateMultiOwnerLightAccountParams} param0 - The parameters for creating a multi-owner light account.
+ * @param {ToMultiOwnerLightAccountParams} param0 - The parameters for creating a multi-owner light account.
  * @returns {Promise<MultiOwnerLightAccount<TSigner>>} A multi-owner light account.
  */
-export async function createMultiOwnerLightAccount({
+export async function toMultiOwnerLightAccount({
   client,
   salt = 0n,
   owners = [],
@@ -55,7 +55,7 @@ export async function createMultiOwnerLightAccount({
     client.chain,
     "v2.0.0",
   ),
-}: CreateMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
+}: ToMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
   const signer = owners[0];
 
   const dedupedOwners = Array.from(
@@ -89,7 +89,7 @@ export async function createMultiOwnerLightAccount({
     };
   };
 
-  const baseAccount = await createLightAccountBase({
+  const baseAccount = await toLightAccountBase({
     client,
     owner: signer,
     abi: MultiOwnerLightAccountAbi,

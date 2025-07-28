@@ -21,7 +21,7 @@ import { accounts, poolId } from "~test/constants.js";
 import { local070Instance } from "~test/instances.js";
 import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
 import type { LightAccountVersion } from "../types";
-import { createMultiOwnerLightAccount } from "./multi-owner-account.js";
+import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
 
 describe("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
@@ -265,7 +265,7 @@ describe("MultiOwner Light Account Tests", () => {
     owners?: OneOf<JsonRpcAccount | LocalAccount>[];
     salt?: bigint;
   }) => {
-    const account = await createMultiOwnerLightAccount({
+    const account = await toMultiOwnerLightAccount({
       client: signer,
       accountAddress,
       salt: _salt ?? salt++,

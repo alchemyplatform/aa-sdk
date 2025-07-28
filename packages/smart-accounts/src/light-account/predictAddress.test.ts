@@ -11,8 +11,8 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { local060Instance, local070Instance } from "~test/instances.js";
 import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
-import { createLightAccount } from "./accounts/account.js";
-import { createMultiOwnerLightAccount } from "./accounts/multi-owner-account.js";
+import { toLightAccount } from "./accounts/account.js";
+import { toMultiOwnerLightAccount } from "./accounts/multi-owner-account.js";
 import {
   predictLightAccountAddress,
   predictMultiOwnerLightAccountAddress,
@@ -47,7 +47,7 @@ describe("Light Account Counterfactual Address Tests", () => {
           version: "0.6.0", // EP version, not LA version
         });
 
-        const lightAccountV1 = await createLightAccount({
+        const lightAccountV1 = await toLightAccount({
           client: localSigner,
           owner: localSigner.account,
           salt,
@@ -103,7 +103,7 @@ describe("Light Account Counterfactual Address Tests", () => {
         version: "0.7.0", // EP version, not LA version
       });
 
-      const lightAccountV2 = await createLightAccount({
+      const lightAccountV2 = await toLightAccount({
         client: localSigner,
         owner: localSigner.account,
         salt,
@@ -160,7 +160,7 @@ describe("Light Account Counterfactual Address Tests", () => {
         version: "0.7.0", // EP version, not LA version
       });
 
-      const multiOwnerLightAccount = await createMultiOwnerLightAccount({
+      const multiOwnerLightAccount = await toMultiOwnerLightAccount({
         client: localSigner,
         owners: [localSigner.account, ...otherOwners],
         salt,

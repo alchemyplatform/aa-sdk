@@ -40,6 +40,9 @@ export function multiOwnerLightAccountActions<
   IsUndefined<TAccount> extends true ? undefined : MultiOwnerLightAccount
 > {
   return {
+    // TODO(v5): Another pattern I think we should consider deprecating for v5 - actions that
+    // implicitly do a sendUserOperation internally. These are non-composable with batching
+    // and have a number of other issues that are solved with viem writeContract.
     updateOwners: async (args) => {
       const { ownersToAdd, ownersToRemove, account = client.account } = args;
 

@@ -69,6 +69,12 @@ export const AccountVersionRegistry: LightAccountVersionConfigs = {
   },
 };
 
+// TODO(v5): The pattern of getDefaultXYZAddress(…) doesn’t really make sense as a standalone.
+// We built this expecting lots of diverging addresses per chain, but in practice we have none
+// (and we’ve turned down things that require this). Instead: we could build the
+// default-but-overridable behavior into the consuming functions themselves (i.e.
+// createLightAccount defaulting to a factory address, but make it overridable)
+
 /**
  * Get the default light account version for the given light account type
  *

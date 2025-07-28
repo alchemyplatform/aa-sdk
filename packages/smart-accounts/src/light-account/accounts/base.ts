@@ -80,7 +80,7 @@ export type LightAccountBase<
   BaseLightAccountImplementation<TLightAccountType, TLightAccountVersion>
 >;
 
-export type CreateLightAccountBaseParams<
+export type ToLightAccountBaseParams<
   TLightAccountType extends LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
@@ -98,7 +98,7 @@ export type CreateLightAccountBaseParams<
   }>;
 };
 
-export async function createLightAccountBase<
+export async function toLightAccountBase<
   TLightAccountType extends LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
@@ -111,7 +111,7 @@ export async function createLightAccountBase<
   type,
   version,
   getFactoryArgs,
-}: CreateLightAccountBaseParams<
+}: ToLightAccountBaseParams<
   TLightAccountType,
   TLightAccountVersion,
   TTransport
@@ -131,6 +131,7 @@ export async function createLightAccountBase<
         x.addresses.default.impl,
     );
 
+    // TODO(v5): This is a super fragile workflow, and we should consider not supporting this on the SmartAccount level in v5.
     const storage = await getStorageAt(client, {
       address: accountAddress,
       slot: EIP1967_PROXY_IMPL_STORAGE_SLOT,
