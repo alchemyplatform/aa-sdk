@@ -13,6 +13,7 @@ To run the tests in this project, you need to have **Anvil** installed. Anvil is
 The easiest way to install Anvil is through Foundryup, the official installer for the Foundry toolchain.
 
 1. **Install Foundryup:**
+
    ```bash
    curl -L https://foundry.paradigm.xyz | bash
    ```
@@ -27,6 +28,7 @@ This will install `forge`, `cast`, `anvil`, and `chisel` binaries.
 #### Verify Installation
 
 Check that Anvil is installed correctly:
+
 ```bash
 anvil --version
 ```
@@ -42,4 +44,4 @@ Once Anvil is installed, you can run the tests using:
 yarn test
 ```
 
-The test infrastructure will automatically start and manage Anvil instances as needed. 
+The test infrastructure will automatically start and manage Anvil instances as needed.
