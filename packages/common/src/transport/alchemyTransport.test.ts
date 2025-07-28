@@ -1,4 +1,3 @@
-// TODO(v5): we shouldn't be depending on any of these core packages here
 import { avalanche } from "viem/chains";
 import { sepolia } from "../chains.js";
 import { alchemy } from "./alchemy.js";
@@ -32,7 +31,9 @@ describe("Alchemy Transport Tests", () => {
 
   it("should correctly do runtime validation when chain is not supported by Alchemy", () => {
     expect(() =>
-      alchemy({ proxyUrl: "/test" })({ chain: avalanche }),
-    ).toThrowErrorMatchingInlineSnapshot();
+      alchemy({ apiKey: "some_key" })({ chain: avalanche }),
+    ).toThrowError(
+      `chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@alchemy/common/chains\`.`,
+    );
   });
 });
