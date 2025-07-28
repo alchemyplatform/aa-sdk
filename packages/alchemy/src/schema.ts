@@ -9,7 +9,7 @@ import type {
   SimulateUserOperationAssetChangesResponse,
 } from "@account-kit/infra";
 
-// TODO(v5): yea this definitely shouldn't live in common, but in aggregate in the alchemy-sdk package and combined with the schemas from other packages
+// TODO(v5): this definitely shouldn't live in common, but in aggregate in the alchemy-sdk package and combined with the schemas from other packages
 export type AlchemyJsonRpcSchema = [
   {
     Method: "alchemy_simulateUserOperationAssetChanges";

@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/smart-accounts",
   "version": "0.0.0",
-  "description": "Alchemy Smart Accounts",
+  "description": "This package contains all of the viem interfaces for Alchemy's Smart Contract Accounts",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
@@ -34,7 +34,7 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/smart-accounts --fern",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/smart-accounts",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"

@@ -1,4 +1,5 @@
 import { custom, type CustomTransport, type Transport } from "viem";
+import { BaseError } from "../errors/BaseError.js";
 
 export interface SplitTransportParams {
   overrides: {
@@ -44,7 +45,7 @@ export const split = (params: SplitTransportParams): CustomTransport => {
   const overrideMap = params.overrides.reduce((accum, curr) => {
     curr.methods.forEach((method) => {
       if (accum.has(method) && accum.get(method) !== curr.transport) {
-        throw new Error(
+        throw new BaseError(
           "A method cannot be handled by more than one transport",
         );
       }
