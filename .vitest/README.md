@@ -38,7 +38,7 @@ For complete installation instructions and troubleshooting, visit the official F
 
 ## Running Tests
 
-Once Anvil is installed, you can run the tests using:
+Once Anvil is installed, you can run the test using:
 
 ```bash
 yarn test
