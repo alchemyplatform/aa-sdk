@@ -1,34 +1,22 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
+import { Slot } from "@radix-ui/react-slot";
 
-type ButtonBaseProps = {
-  className?: string;
-};
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean;
+}
 
-type ButtonAsButton = PropsWithChildren<
-  ButtonBaseProps & {
-    as?: "button";
-  } & React.ButtonHTMLAttributes<HTMLButtonElement>
->;
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className = "", asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
 
-type ButtonAsAnchor = PropsWithChildren<
-  ButtonBaseProps & {
-    as: "a";
-  } & React.AnchorHTMLAttributes<HTMLAnchorElement>
->;
+    return (
+      <Comp
+        className={`akui-btn-auth akui-btn ${className}`}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
-type ButtonProps = ButtonAsButton | ButtonAsAnchor;
-
-export const Button = ({
-  children,
-  className = "",
-  as = "button",
-  ...rest
-}: ButtonProps) => {
-  const Component = as;
-
-  return (
-    <Component className={`akui-btn-auth akui-btn ${className}`} {...rest}>
-      {children}
-    </Component>
-  );
-};
+Button.displayName = "Button";

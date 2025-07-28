@@ -46,9 +46,11 @@ export const DepositAndSwapsCard = () => {
           </p>
         }
         buttons={
-          <Button as="a" className="mt-auto w-full" href={uri} target="_blank">
-            Request Early Access
-            <ArrowUpRightFromSquare className="w-4 h-4 mr-2" />
+          <Button asChild className="mt-auto w-full">
+            <a href={uri} target="_blank">
+              Request Early Access
+              <ArrowUpRightFromSquare className="w-4 h-4 mr-2" />
+            </a>
           </Button>
         }
       />
