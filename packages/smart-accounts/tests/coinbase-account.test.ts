@@ -1,6 +1,5 @@
 import {
   toCoinbaseSmartAccount,
-  createBundlerClient,
   bundlerActions,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -8,6 +7,7 @@ import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
 import { local070Instance } from "~test/instances.js";
+import { AlchemyViemBundlerFactory } from "../src/viemBundlerFactory.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -39,7 +39,8 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = createBundlerClient({
+    // Use the factory for all bundler clients
+    const bundlerClient = AlchemyViemBundlerFactory({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
@@ -98,7 +99,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = createBundlerClient({
+    const bundlerClient = AlchemyViemBundlerFactory({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
