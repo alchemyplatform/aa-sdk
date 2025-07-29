@@ -141,4 +141,29 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     expect(isValid).toBe(true);
   }, 60_000);
+
+  it("should verify EIP-6492 signatures for pre-deployed accounts", async () => {
+    const owner = privateKeyToAccount(generatePrivateKey());
+
+    const account = await toCoinbaseSmartAccount({
+      client,
+      owners: [owner],
+    });
+
+    // Create a public client for verification
+    const publicClient = client.extend(publicActions);
+
+    // Sign a message before deployment
+    const message = "Sign before deployment with EIP-6492!";
+    const signature = await account.signMessage({ message });
+
+    // Verify the signature using viem's verifyMessage (which should support EIP-6492)
+    const isValid = await publicClient.verifyMessage({
+      address: account.address,
+      message,
+      signature,
+    });
+
+    expect(isValid).toBe(true);
+  }, 60_000);
 });
