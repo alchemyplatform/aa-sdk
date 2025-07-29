@@ -5,8 +5,10 @@ slug: wallets/recipes/hyperliquid-wallets
 ---
 
 By the end of this tutorial, you’ll have an application integrated with Alchemy Wallets, enabling email and social login for user authentication, and the ability to sign and send transactions seamlessly.
+
 <Tip>
-Support on Hyperliquid for programmatic features like gasless and batched transactions powered by Account Abstraction is coming soon!
+  Support on Hyperliquid for programmatic features like gasless and batched
+  transactions powered by Account Abstraction is coming soon!
 </Tip>
 
 ---
@@ -17,26 +19,26 @@ Support on Hyperliquid for programmatic features like gasless and batched transa
 
 #### Working with React?
 
-Follow this [Quickstart](https://www.alchemy.com/docs/wallets/react/quickstart/new-project) guide to set up a new project. 
+Follow this [Quickstart](https://www.alchemy.com/docs/wallets/react/quickstart/new-project) guide to set up a new project.
 
 The most important step is getting your API Key (`NEXT_PUBLIC_ALCHEMY_API_KEY`) and ensuring your project is configured correctly on your dashboard. Make sure you have Hyperliquid enabled as a network on your app.
 
-  <img
-    src="/images/wallets/hyperliquid-account-config.png"
-    alt="Hyperliquid account config"
-  />
-  <img
-    src="/images/wallets/hyperliquid-dashboard-support.png"
-    alt="Hyperliquid dashboard support"
-  />
+<img
+  src="/images/wallets/hyperliquid-account-config.png"
+  alt="Hyperliquid account config"
+/>
+<img
+  src="/images/wallets/hyperliquid-dashboard-support.png"
+  alt="Hyperliquid dashboard support"
+/>
 
-Next, navigate to your `page.tsx`, and get the embedded EOA address using [useSigner()](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useSigner). This new embedded EOA, also known as a signer, will be where users assets live and will sign transactions. 
+Next, navigate to your `page.tsx`, and get the embedded EOA address using [useSigner()](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useSigner). This new embedded EOA, also known as a signer, will be where users assets live and will sign transactions.
 
 ```tsx
 const signer = useSigner();
 ```
 
-Note: in order access your embedded EOA created by Alchemy Signer, you need to have finished authentication. To check your authentication status, you can check [useSignerStatus()](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useSignerStatus). For example: 
+Note: in order access your embedded EOA created by Alchemy Signer, you need to have finished authentication. To check your authentication status, you can check [useSignerStatus()](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useSignerStatus). For example:
 
 ```tsx
 ...
@@ -45,13 +47,13 @@ Note: in order access your embedded EOA created by Alchemy Signer, you need to h
         console.log("Connected signer address:", address);
       }
  ...
- ```
+```
 
 #### Not Working With React?
 
 That’s okay! We have lower level methods we can leverage here to access your signer!
 
-You can follow this [Quickstart](https://www.alchemy.com/docs/wallets/signer/quickstart) specifically for setting up authentication and generating a new embedded EOA with Alchemy signer. 
+You can follow this [Quickstart](https://www.alchemy.com/docs/wallets/signer/quickstart) specifically for setting up authentication and generating a new embedded EOA with Alchemy signer.
 
 #### Create a Signer Instance
 
@@ -83,6 +85,7 @@ const result = await signer.authenticate({
 });
 ...
 ```
+
 Once you finish authenticating, you can access your signer!
 
 ## 2. Create a Custom Chain Config
@@ -90,26 +93,26 @@ Once you finish authenticating, you can access your signer!
 Extend [viem’s custom chains](https://viem.sh/docs/chains/introduction#custom-chains) to create a chain definition for Hyperliquid, as it's not a defined chain on viem yet. This is the chain config you’ll be passing into your viem client in step #3.
 
 ```tsx
-import { defineChain } from 'viem'
+import { defineChain } from "viem";
 
 export const hype = defineChain({
-    id: 999,
-    name: 'Hype',
-    nativeCurrency: {
-        decimals: 18,
-        name: 'Hype',
-        symbol: 'HYPE',
+  id: 999,
+  name: "Hype",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Hype",
+    symbol: "HYPE",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://hyperliquid-mainnet.g.alchemy.com/v2/{API_KEY}"],
+      webSocket: ["wss://hyperliquid-mainnet.g.alchemy.com/v2/{API_KEY}"],
     },
-    rpcUrls: {
-        default: {
-            http: ['https://hyperliquid-mainnet.g.alchemy.com/v2/{API_KEY}'],
-            webSocket: ['wss://hyperliquid-mainnet.g.alchemy.com/v2/{API_KEY}'],
-        },
-    },
-    blockExplorers: {
-        default: { name: 'Explorer', url: 'https://hyperevmscan.io/' },
-    }
-})
+  },
+  blockExplorers: {
+    default: { name: "Explorer", url: "https://hyperevmscan.io/" },
+  },
+});
 ```
 
 Wrap it in `defineAlchemyChain` to create an alchemy chain to pass into your `config.tsx`
@@ -148,7 +151,7 @@ const signedTx = await signer.signTransaction(txRequest);
 Then use `viem` to send transactions.
 
 ```tsx
-import { createWalletClient, http, custom, parseEther } from 'viem'
+import { createWalletClient, http, custom, parseEther } from "viem";
 
 export const walletClient = createWalletClient({
   transport: http("https://hyperliquid-mainnet.g.alchemy.com/v2/{API_KEY}"),
@@ -159,17 +162,18 @@ export const walletClient = createWalletClient({
 const txRequest = await walletClient.prepareTransactionRequest({
   account: acct,
   to: "0x0000000000000000000000000000000000000000",
-  value: parseEther("0.0001")
+  value: parseEther("0.0001"),
 });
 
 // Sign transaction
 
 const txHash = await walletClient.sendRawTransaction({
-    serializedTransaction: signedTx,
+  serializedTransaction: signedTx,
 });
 ```
 
 ### Resources
+
 - [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/overview)
 - [Using Signer as EOA](https://www.alchemy.com/docs/wallets/signer/as-an-eoa)
 - [Connect your EOAs](https://www.alchemy.com/docs/wallets/react/login-methods/eoa-login)
