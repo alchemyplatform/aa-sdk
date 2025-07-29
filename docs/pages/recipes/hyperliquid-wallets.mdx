@@ -151,7 +151,7 @@ Then use `viem` to send transactions.
 import { createWalletClient, http, custom, parseEther } from 'viem'
 
 export const walletClient = createWalletClient({
-  transport: http("https://hyperliquid-mainnet.g.alchemy.com/v2/{API-KEY}"),
+  transport: http("https://hyperliquid-mainnet.g.alchemy.com/v2/{API_KEY}"),
   chain: Hype,
   account: signer.toViemAccount(),
 });
