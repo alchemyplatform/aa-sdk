@@ -1,13 +1,14 @@
 import {
   toCoinbaseSmartAccount,
   bundlerActions,
+  createBundlerClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
 import { local070Instance } from "~test/instances.js";
-import { AlchemyViemBundlerFactory } from "../src/viemBundlerFactory.js";
+import { alchemyEstimateFeesPerGas } from "../src/alchemyEstimateFeesPerGas.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -39,11 +40,15 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    // Use the factory for all bundler clients
-    const bundlerClient = AlchemyViemBundlerFactory({
+    // Create a bundler client that uses the Alchemy fee estimator
+    const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
+      userOperation: {
+        // Cast to `any` to satisfy viem's internal generic expectations in this test context.
+        estimateFeesPerGas: alchemyEstimateFeesPerGas as any,
+      },
     });
 
     // Fund the account
@@ -99,10 +104,13 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = AlchemyViemBundlerFactory({
+    const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
+      userOperation: {
+        estimateFeesPerGas: alchemyEstimateFeesPerGas as any,
+      },
     }).extend(bundlerActions);
 
     // Fund and deploy the account
