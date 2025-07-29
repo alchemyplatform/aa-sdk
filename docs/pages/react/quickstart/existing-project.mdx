@@ -50,9 +50,9 @@ export default {
 };
 ```
 
-Create a `global.css` file and import it in your app root:
+Create a `global.css` in your `app` directory and import Tailwind:
 
-```css global.css
+```css app/global.css
 @import "tailwindcss";
 ```
 
@@ -113,7 +113,7 @@ export default withAccountKitUi(
   },
   {
     // AccountKit UI theme customizations
-  },
+  }
 );
 ```
 
@@ -168,7 +168,7 @@ export const config = createConfig(
       ],
       addPasskeyOnSignup: true,
     },
-  },
+  }
 );
 
 export const queryClient = new QueryClient();
@@ -212,7 +212,7 @@ import { PropsWithChildren } from "react";
 export const Providers = (
   props: PropsWithChildren<{
     initialState?: AlchemyAccountsProviderProps["initialState"];
-  }>,
+  }>
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -253,7 +253,7 @@ export default function RootLayout({
 }>) {
   const initialState = cookieToInitialState(
     config,
-    headers().get("cookie") ?? undefined,
+    headers().get("cookie") ?? undefined
   );
 
   return (
