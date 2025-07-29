@@ -29,6 +29,9 @@ navigation:
               - page: Onramp Funds
                 slug: recipes/onramp-funds
                 path: wallets/pages/recipes/onramp-funds.mdx
+              - page: Hyperliquid Transactions
+                slug: recipes/hyperliquid-wallets
+                path: wallets/pages/recipes/hyperliquid-wallets.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
