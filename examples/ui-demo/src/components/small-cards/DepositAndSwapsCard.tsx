@@ -3,7 +3,6 @@ import { Card } from "./Card";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { ArrowUpRightFromSquare } from "lucide-react";
-import { LoadingIcon } from "../icons/loading";
 
 export const DepositAndSwapsCard = () => {
   const uri = "https://alchemyapi.typeform.com/to/pkjSr57v";
