@@ -53,7 +53,7 @@ Note: in order access your embedded EOA created by Alchemy Signer, you need to h
 
 That’s okay! We have lower level methods we can leverage here to access your signer!
 
-You can follow this [Quickstart](https://www.alchemy.com/docs/wallets/signer/quickstart) specifically for setting up authentication and generating a new embedded EOA with Alchemy signer.
+You can follow this [Quickstart](https://www.alchemy.com/docs/wallets/signer/quickstart), to use our '@account-kit/signer' package directly to create and use our wallets.
 
 #### Create a Signer Instance
 
@@ -148,7 +148,7 @@ Got your signer/embedded EOA address? Now you are ready to send transactions! Al
 const signedTx = await signer.signTransaction(txRequest);
 ```
 
-Then use `viem` to send transactions.
+Then you can use a generic wallet client to send transactions! For example, if you are using viem, then you can use the 'toViemAccount' method which will allow you to use the signer with a [WalletClient](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
 
 ```tsx
 import { createWalletClient, http, custom, parseEther } from "viem";
