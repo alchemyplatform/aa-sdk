@@ -148,8 +148,7 @@ const signedTx = await signer.signTransaction(txRequest);
 Then use `viem` to send transactions.
 
 ```tsx
-import { createWalletClient, http } from "viem";
-import { createWalletClient, custom, parseEther } from 'viem'
+import { createWalletClient, http, custom, parseEther } from 'viem'
 
 export const walletClient = createWalletClient({
   transport: http("https://hyperliquid-mainnet.g.alchemy.com/v2/{API-KEY}"),
