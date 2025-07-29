@@ -148,7 +148,7 @@ Got your signer/embedded EOA address? Now you are ready to send transactions! Al
 const signedTx = await signer.signTransaction(txRequest);
 ```
 
-Then you can use a generic wallet client to send transactions! For example, if you are using viem, then you can use the 'toViemAccount' method which will allow you to use the signer with a [WalletClient](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
+Then you can use a generic wallet client to send transactions! For example, if you are using viem, then you can use the `toViemAccount` method which will allow you to use the signer with a [WalletClient](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
 
 ```tsx
 import { createWalletClient, http, custom, parseEther } from "viem";
