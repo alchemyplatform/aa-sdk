@@ -103,6 +103,16 @@ export type SignerConfig = {
   email: EmailConfig;
 };
 
+type GetUserParams =
+  | {
+      type: "email";
+      value: string;
+    }
+  | {
+      type: "phone";
+      value: string;
+    };
+
 /**
  * Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
@@ -310,6 +320,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         switch (type) {
           case "email":
             return this.authenticateWithEmail(params);
+          case "sms":
+            return this.authenticateWithSms(params);
           case "passkey":
             return this.authenticateWithPasskey(params);
           case "oauth":
@@ -352,6 +364,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         SignerLogger.trackEvent({
           name: "signer_authnticate",
           data: { authType: "email" },
+        });
+        return;
+      }
+      case "sms": {
+        // we just want to track the start of phone auth
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: { authType: "sms" },
         });
         return;
       }
@@ -701,6 +721,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   /**
    * Unauthenticated call to look up a user's organizationId by email
    *
+   * @deprecated Use getUser({ type: "email", value: email }) instead
+   *
    * @example
    * ```ts
    * import { AlchemyWebSigner } from "@account-kit/signer";
@@ -722,18 +744,79 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {string} email the email to lookup
    * @returns {Promise<{orgId: string}>} the organization id for the user if they exist
    */
-  getUser: (email: string) => Promise<{ orgId: string } | null> =
-    SignerLogger.profiled("BaseAlchemySigner.getUser", async (email) => {
-      const result = await this.inner.lookupUserByEmail(email);
+  getUser(email: string): Promise<{ orgId: string } | null>;
+  /**
+   * Unauthenticated call to look up a user's organizationId by email
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
+   * ```
+   *
+   * @param {string} email the email to lookup
+   * @returns {Promise<{orgId: string}>} the organization id for the user if they exist
+   */
+  getUser(params: GetUserParams): Promise<{ orgId: string } | null>;
+  /**
+   * Unauthenticated call to look up a user's organizationId by email
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
+   * ```
+   *
+   * @param {string | GetUserParams} params the params to look up
+   * @returns {Promise<{orgId: string}>} the organization id for the user if they exist
+   */
+  getUser(params: string | GetUserParams): Promise<{ orgId: string } | null> {
+    return SignerLogger.profiled(
+      "BaseAlchemySigner.getUser",
+      async (params: string | GetUserParams) => {
+        let result;
+        if (typeof params === "string") {
+          result = await this.inner.lookupUserByEmail(params);
+        } else if (params.type === "email") {
+          result = await this.inner.lookupUserByEmail(params.value);
+        } else if (params.type === "phone") {
+          result = await this.inner.lookupUserByPhone(params.value);
+        }
 
-      if (result.orgId == null) {
-        return null;
-      }
+        if (result?.orgId == null) {
+          return null;
+        }
 
-      return {
-        orgId: result.orgId,
-      };
-    });
+        return {
+          orgId: result.orgId,
+        };
+      },
+    )(params);
+  }
 
   /*
    * Sets the email for the authenticated user, allowing them to login with that
@@ -975,13 +1058,39 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.waitForConnected();
   };
 
+  private authenticateWithSms = async (
+    params: Extract<AuthParams, { type: "sms" }>,
+  ): Promise<User> => {
+    const { orgId, otpId, isNewUser } = await this.initOrCreateSmsUser(
+      params.phone,
+    );
+
+    this.setAwaitingSmsAuth({ orgId, otpId, isNewUser });
+
+    // TODO: add phone auth linking
+    // // Clear the auth linking status if the email has changed. This would mean
+    // // that the previously initiated social login is not associated with the
+    // // email which is now being used to login.
+    // const { authLinkingStatus } = this.store.getState();
+    // if (authLinkingStatus && authLinkingStatus.email !== params.email) {
+    //   this.store.setState({ authLinkingStatus: undefined });
+    // }
+
+    // We wait for the session manager to emit a connected event if
+    // cross tab sessions are permitted
+    return this.waitForConnected();
+  };
+
   private authenticateWithPasskey = async (
     args: Extract<AuthParams, { type: "passkey" }>,
   ): Promise<User> => {
     let user: User;
     const shouldCreateNew = async () => {
       if ("email" in args) {
-        const existingUser = await this.getUser(args.email);
+        const existingUser = await this.getUser({
+          type: "email",
+          value: args.email,
+        });
         return existingUser == null;
       }
 
@@ -1175,6 +1284,26 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     });
   };
 
+  private setAwaitingSmsAuth = ({
+    orgId,
+    otpId,
+    isNewUser,
+  }: {
+    orgId: string;
+    otpId?: string;
+    isNewUser?: boolean;
+  }): void => {
+    this.sessionManager.setTemporarySession({
+      orgId,
+      isNewUser,
+    });
+    this.store.setState({
+      status: AlchemySignerStatus.AWAITING_SMS_AUTH,
+      otpId,
+      error: null,
+    });
+  };
+
   private handleOauthReturn = ({
     bundle,
     orgId,
@@ -1321,6 +1450,35 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       emailMode,
       expirationSeconds,
       redirectParams,
+    });
+    return {
+      orgId,
+      otpId,
+      isNewUser: true,
+    };
+  }
+
+  private async initOrCreateSmsUser(phone: string): Promise<{
+    orgId: string;
+    otpId?: string;
+    isNewUser: boolean;
+  }> {
+    const existingUser = await this.getUser({ type: "phone", value: phone });
+
+    if (existingUser) {
+      const { orgId, otpId } = await this.inner.initSmsAuth({
+        phone,
+      });
+      return {
+        orgId,
+        otpId,
+        isNewUser: false,
+      };
+    }
+
+    const { orgId, otpId } = await this.inner.createAccount({
+      type: "phone",
+      phone,
     });
     return {
       orgId,

@@ -22,6 +22,10 @@ export type AuthParams =
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
+      type: "sms";
+      phone: string;
+    }
+  | {
       type: "passkey";
       email: string;
       creationOpts?: CredentialCreationOptionOverrides;

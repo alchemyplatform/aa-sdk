@@ -29,15 +29,15 @@ const signer = new AlchemyWebSigner({
   },
 });
 
-const result = await signer.getUser("foo@mail.com");
+const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
 ```
 
 ## Parameters
 
-### email
+### params
 
-`string`
-the email to lookup
+`string | GetUserParams`
+the params to look up
 
 ## Returns
 

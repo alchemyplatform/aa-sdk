@@ -8,6 +8,7 @@ export type SignerEventsSchema = [
       | {
           authType:
             | "email"
+            | "sms"
             | "passkey_anon"
             | "passkey_email"
             | "otp"
