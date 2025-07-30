@@ -7,8 +7,14 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
+// eslint-disable-next-line import/no-unresolved
 import { local070Instance } from "~test/instances.js";
-import { alchemyEstimateFeesPerGas } from "../src/alchemyEstimateFeesPerGas.js";
+// eslint-disable-next-line import/no-unresolved
+import { entrypoint070 } from "~test/constants.js";
+import {
+  alchemyEstimateFeesPerGas,
+  alchemyRpcSchema,
+} from "../src/alchemyEstimateFeesPerGas.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -45,9 +51,9 @@ describe("Viem AA - Coinbase Smart Account", () => {
       account,
       chain: local070Instance.chain,
       transport: custom(client),
+      rpcSchema: alchemyRpcSchema,
       userOperation: {
-        // Cast to `any` to satisfy viem's internal generic expectations in this test context.
-        estimateFeesPerGas: alchemyEstimateFeesPerGas as any,
+        estimateFeesPerGas: alchemyEstimateFeesPerGas,
       },
     });
 
@@ -66,6 +72,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Send the user operation
     const userOpHash = await bundlerClient.sendUserOperation({
+      entryPointAddress: entrypoint070,
       calls: [
         {
           to: recipient,
@@ -108,8 +115,9 @@ describe("Viem AA - Coinbase Smart Account", () => {
       account,
       chain: local070Instance.chain,
       transport: custom(client),
+      rpcSchema: alchemyRpcSchema,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas as any,
+        estimateFeesPerGas: alchemyEstimateFeesPerGas,
       },
     }).extend(bundlerActions);
 
@@ -121,6 +129,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Deploy by sending a simple transaction to self
     const deployHash = await bundlerClient.sendUserOperation({
+      entryPointAddress: entrypoint070,
       calls: [
         {
           to: account.address,
