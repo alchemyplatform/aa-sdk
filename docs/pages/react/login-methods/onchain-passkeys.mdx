@@ -1,10 +1,12 @@
 ---
-title: [Early Access] Onchain Passkey Login Authentication
-description: How use onchain passkeys to authenticate users and send user operations
+title: [NEW] Onchain Passkey Login Authentication
+description: How to use onchain passkeys to authenticate users and send user operations
 slug: wallets/react/login-methods/onchain-passkeys
 ---
 
-The WebAuthn Modular Account enables password-less authentication on-chain using **passkeys** (via WebAuthn), and is compatible with [Alchemy’s Account Kit](https://accountkit.alchemy.com/). This guide demonstrates how to register credentials, authenticate users, and send user operations using the `@account-kit/smart-contracts` package.
+<Warning>**This feature is in early access.**</Warning>
+
+The WebAuthn Modular Account enables password-less authentication on-chain using **passkeys** (via WebAuthn), and is compatible with [Alchemy’s Account Kit](/wallets). This guide demonstrates how to register credentials, authenticate users, and send user operations using the `@account-kit/smart-contracts` package.
 
 Instead of on-device verification it's on-chain verification. Devs are responsible for generating the credentials attached to those biometric webauthn compatible passkeys and then using our signer.
 
