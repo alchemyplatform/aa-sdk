@@ -75,7 +75,9 @@ export async function alchemyEstimateFeesPerGas({
   const maxPriorityFeePerGas =
     typeof maxPriorityFeePerGasEstimate === "bigint"
       ? maxPriorityFeePerGasEstimate
-      : fromHex(maxPriorityFeePerGasEstimate as Hex, "bigint");
+      : isHex(maxPriorityFeePerGasEstimate)
+        ? fromHex(maxPriorityFeePerGasEstimate as Hex, "bigint")
+        : throwError(`Invalid hex value: ${maxPriorityFeePerGasEstimate}`);
 
   return {
     maxPriorityFeePerGas,
