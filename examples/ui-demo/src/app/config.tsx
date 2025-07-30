@@ -9,7 +9,7 @@ import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
-import { walletConnect, metaMask, coinbaseWallet } from "wagmi/connectors";
+import { metaMask, coinbaseWallet } from "wagmi/connectors";
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
@@ -74,12 +74,14 @@ export const externalWalletsConfig = configForExternalWallets({
       adapter: SolflareWalletAdapter,
     },
     {
+      featured: 3,
       connector: coinbaseWallet,
     },
   ],
   // moreButtonText: "More wallet options",
+  hideMoreButton: true,
 });
-console.log(externalWalletsConfig);
+
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,

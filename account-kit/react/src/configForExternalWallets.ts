@@ -27,6 +27,7 @@ interface ConfigForExternalWalletsParams {
   wallets: ExternalWalletConfig[];
   projectId?: string; // Fallback project ID for WalletConnect wallets that don't specify their own
   moreButtonText?: string;
+  hideMoreButton?: boolean;
 }
 
 interface ConfigForExternalWalletsResult {
@@ -36,6 +37,7 @@ interface ConfigForExternalWalletsResult {
     walletConnect?: { projectId: string };
     wallets?: ExternalWalletUIConfig[];
     moreButtonText?: string;
+    hideMoreButton?: boolean;
   };
 }
 
@@ -62,6 +64,7 @@ export const configForExternalWallets = ({
   wallets,
   projectId,
   moreButtonText = "More wallets",
+  hideMoreButton = false,
 }: ConfigForExternalWalletsParams): ConfigForExternalWalletsResult => {
   if (!wallets.length) {
     throw new Error("No wallets provided");
@@ -129,6 +132,7 @@ export const configForExternalWallets = ({
       ...(uiWallets.length > 0 && {
         wallets: uiWallets,
         moreButtonText,
+        hideMoreButton,
       }),
     },
   };

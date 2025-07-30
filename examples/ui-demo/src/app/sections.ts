@@ -71,7 +71,7 @@ export function getSectionsForConfig(
     sections.push([
       {
         type: "external_wallets",
-        walletConnect: { projectId: walletConnectProjectId },
+        ...externalWalletsConfig.uiConfig,
       },
     ]);
   }

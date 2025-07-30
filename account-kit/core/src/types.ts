@@ -58,6 +58,9 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 export type AlchemyAccountsConfig = {
   store: Store;
   accountCreationHint?: CreateConfigProps["accountCreationHint"];
+  solana?: {
+    adapters: WalletAdapter[];
+  };
   _internal: {
     // if not provided, the default signer will be used
     createSigner: (config: ClientStoreConfig) => AlchemySigner;

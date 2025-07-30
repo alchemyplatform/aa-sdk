@@ -4,6 +4,7 @@ import type {
 } from "@account-kit/signer";
 import type { WalletConnectParameters } from "wagmi/connectors";
 import { capitalize } from "../../utils.js";
+import type { ExternalWalletUIConfig } from "../../configForExternalWallets.js";
 
 export type AuthType =
   | {
@@ -16,7 +17,13 @@ export type AuthType =
       placeholder?: string;
     }
   | { type: "passkey" }
-  | { type: "external_wallets"; walletConnect?: WalletConnectParameters }
+  | {
+      type: "external_wallets";
+      walletConnect?: WalletConnectParameters;
+      wallets?: ExternalWalletUIConfig[];
+      moreButtonText?: string;
+      hideMoreButton?: boolean;
+    }
   | ({ type: "social"; scope?: string; claims?: string } & (
       | {
           authProviderId: "auth0";
