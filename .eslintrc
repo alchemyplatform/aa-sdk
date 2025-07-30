@@ -66,5 +66,11 @@
         "react/jsx-no-undef": "off",
       },
     },
+    {
+      "files": ["packages/**/*"],
+      "rules": {
+        "no-warning-comments": "off",
+      },
+    },
   ],
 }

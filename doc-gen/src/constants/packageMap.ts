@@ -10,6 +10,8 @@ const packageMap: Record<string, string> = {
   "account-kit/smart-contracts": "Smart Contracts",
   "aa-sdk/core": "aa-sdk/core",
   "aa-sdk/ethers": "aa-sdk/ethers",
+  "alchemy/common": "Alchemy Common",
+  "alchemy/smart-accounts": "Alchemy Smart Accounts",
 };
 
 export default packageMap;
