@@ -11,8 +11,6 @@ type FooterProps = {
 
 const RenderFooterText = ({ authStep }: FooterProps) => {
   switch (authStep.type) {
-    case "initial":
-      return <RegistrationDisclaimer />;
     case "email_verify":
     case "otp_verify":
       return <EmailNotReceivedDisclaimer authStep={authStep} />;
@@ -22,6 +20,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
       return <HelpText />;
     case "oauth_completing":
       return <OAuthContactSupport />;
+    case "initial":
     case "email_completing":
     case "totp_verify":
     case "passkey_create_success":
@@ -32,9 +31,14 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
   }
 };
 export const Footer = ({ authStep }: FooterProps) => {
+  const isDisclaimerVisible = authStep.type !== "initial";
+
   return (
     <div className="p-5 pt-2">
-      <RenderFooterText authStep={authStep} />
+      <div className="flex flex-col gap-2">
+        <RenderFooterText authStep={authStep} />
+        {isDisclaimerVisible && <RegistrationDisclaimer />}
+      </div>
       <div className="flex justify-center">
         <ProtectedBy />
       </div>
