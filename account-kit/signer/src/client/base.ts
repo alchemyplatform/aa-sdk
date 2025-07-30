@@ -47,6 +47,7 @@ import type {
   OauthProviderInfo,
   IdTokenOnly,
   AuthMethods,
+  SmsAuthParams,
 } from "./types.js";
 import { VERSION } from "../version.js";
 import { secp256k1 } from "@noble/curves/secp256k1";
@@ -182,6 +183,18 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       return response;
     }
 
+    if (params.type === "phone") {
+      this.eventEmitter.emit("authenticating", { type: "otp" });
+      const { phone } = params;
+      const publicKey = await this.initSessionStamper();
+
+      const response = await this.request("/v1/signup", {
+        phone,
+        targetPublicKey: publicKey,
+      });
+      return response;
+    }
+
     this.eventEmitter.emit("authenticating", { type: "passkey" });
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
@@ -217,6 +230,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">,
   ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }>;
+
+  public abstract initSmsAuth(
+    params: Omit<SmsAuthParams, "targetPublicKey">,
+  ): Promise<{ orgId: string; otpId?: string }>;
 
   public abstract completeAuthWithBundle(params: {
     bundle: string;
@@ -643,6 +660,16 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public lookupUserByEmail = async (email: string) => {
     return this.request("/v1/lookup", { email });
+  };
+
+  /**
+   * Looks up information based on a phone number.
+   *
+   * @param {string} phone the phone number to look up
+   * @returns {Promise<any>} the result of the lookup request
+   */
+  public lookupUserByPhone = async (phone: string) => {
+    return this.request("/v1/lookup", { phone });
   };
 
   /**
