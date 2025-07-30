@@ -183,7 +183,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       return response;
     }
 
-    if (params.type === "phone") {
+    if (params.type === "sms") {
       this.eventEmitter.emit("authenticating", { type: "otp" });
       const { phone } = params;
       const publicKey = await this.initSessionStamper();

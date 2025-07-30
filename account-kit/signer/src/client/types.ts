@@ -39,7 +39,7 @@ export type CreateAccountParams =
       redirectParams?: URLSearchParams;
     }
   | {
-      type: "phone";
+      type: "sms";
       phone: string;
     }
   | {
