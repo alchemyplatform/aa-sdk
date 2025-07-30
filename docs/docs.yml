@@ -1118,6 +1118,56 @@ navigation:
                       - page: send
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
 
+      - section: Alchemy Common
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/common/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: addBreadCrumb
+                    path: wallets/pages/reference/alchemy/common/functions/addBreadCrumb.mdx
+                  - page: alchemy
+                    path: wallets/pages/reference/alchemy/common/functions/alchemy.mdx
+                  - page: isAlchemyTransport
+                    path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
+                  - page: split
+                    path: wallets/pages/reference/alchemy/common/functions/split.mdx
+              - section: Classes
+                contents:
+                  - page: AccountNotFoundError
+                    path: wallets/pages/reference/alchemy/common/classes/AccountNotFoundError/constructor.mdx
+                  - page: ChainNotFoundError
+                    path: wallets/pages/reference/alchemy/common/classes/ChainNotFoundError/constructor.mdx
+      - section: Alchemy Smart Accounts
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/smart-accounts/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: defaultLightAccountVersion
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/defaultLightAccountVersion.mdx
+                  - page: getDefaultLightAccountFactoryAddress
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getDefaultLightAccountFactoryAddress.mdx
+                  - page: getDefaultMultiOwnerLightAccountFactoryAddress
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getDefaultMultiOwnerLightAccountFactoryAddress.mdx
+                  - page: getLightAccountImplAddress
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountImplAddress.mdx
+                  - page: getLightAccountVersionForAccount
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountVersionForAccount.mdx
+                  - page: multiOwnerLightAccountActions
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/multiOwnerLightAccountActions.mdx
+                  - page: predictLightAccountAddress
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/predictLightAccountAddress.mdx
+                  - page: predictMultiOwnerLightAccountAddress
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/predictMultiOwnerLightAccountAddress.mdx
+                  - page: singleOwnerLightAccountActions
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/singleOwnerLightAccountActions.mdx
+                  - page: toLightAccount
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/toLightAccount.mdx
+                  - page: toMultiOwnerLightAccount
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/toMultiOwnerLightAccount.mdx
       - section: API
         contents:
           - section: Smart Wallets
