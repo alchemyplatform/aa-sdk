@@ -66,20 +66,24 @@ export const paymasterTransport = (
         }
       } else if (args.method === "alchemy_requestGasAndPaymasterAndData") {
         try {
-          const [{ userOperation, entryPoint, overrides }] = args.params as [
-            {
-              policyId: string;
-              entryPoint: Address;
-              dummySignature: Hex;
-              userOperation: UserOperationRequest;
-              overrides?: UserOperationOverrides;
-            },
-          ];
+          const [{ userOperation, entryPoint, dummySignature, overrides }] =
+            args.params as [
+              {
+                policyId: string;
+                entryPoint: Address;
+                dummySignature: Hex;
+                userOperation: UserOperationRequest;
+                overrides?: UserOperationOverrides;
+              },
+            ];
           const isPMv7 =
             entryPoint.toLowerCase() ===
             paymaster070.entryPointAddress.toLowerCase();
 
-          let uo = { ...userOperation };
+          let uo = {
+            ...userOperation,
+            signature: userOperation.signature ?? dummySignature,
+          };
 
           const maxFeePerGas: Hex = toHex(
             bigIntMultiply(
