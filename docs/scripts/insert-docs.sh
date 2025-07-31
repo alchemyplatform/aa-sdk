@@ -67,28 +67,40 @@ awk '
     }
 ' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
 
-# Extract the experimental section from aa-sdk version of docs.yml
-sed -n '/^experimental:/,/^[a-z]/p' fern/wallets/docs.yml | sed '$d' > fern/wallets/temp_experimental.yml
+# Extract the mdx-components items from aa-sdk version of docs.yml
+sed -n '/^  mdx-components:/,/^  [a-z]/p' fern/wallets/docs.yml | sed '$d' | grep '^    -' > fern/wallets/temp_mdx_components.yml
 
-# Find the experimental section and append additional settings
+# Find the mdx-components section and append additional components
 awk '
-    BEGIN { found = 0; }
-    /^experimental:/ {
-        found = 1;
+    BEGIN { in_mdx = 0; }
+    /^  mdx-components:/ {
+        in_mdx = 1;
         print;
         next;
     }
-    found && (/^[a-z]/ || /^$/) {
-        # We found either the next section or an empty line, insert new settings before it
-        system("cat fern/wallets/temp_experimental.yml | grep -v ^experimental:");
-        found = 0;
+    in_mdx && /^    - / {
+        # This is a component item, print it
+        print;
+        next;
+    }
+    in_mdx && !/^    / {
+        # We are no longer in component items (not indented with 4 spaces)
+        # Insert new components before this line
+        system("cat fern/wallets/temp_mdx_components.yml");
+        in_mdx = 0;
         print;
         next;
     }
     { print; }
+    END {
+        # If we reached the end of file and are still in mdx-components section
+        if (in_mdx) {
+            system("cat fern/wallets/temp_mdx_components.yml");
+        }
+    }
 ' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
 
 # Clean up temporary files
 rm -f fern/wallets/temp_wallets.yml
-rm -f fern/wallets/temp_experimental.yml
+rm -f fern/wallets/temp_mdx_components.yml
 rm -f fern/docs.yml.bak

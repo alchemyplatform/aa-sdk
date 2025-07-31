@@ -9,7 +9,7 @@ export class NotAuthenticatedError extends BaseError {
         "Please authenticate to use this signer",
       ].join("\n"),
       {
-        docsPath: "/signers/alchemy-signer/introduction.html",
+        docsPath: "/signer/overview",
       },
     );
   }
