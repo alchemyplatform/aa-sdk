@@ -9,8 +9,6 @@ import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
 // eslint-disable-next-line import/no-unresolved
 import { local070Instance } from "~test/instances.js";
-// eslint-disable-next-line import/no-unresolved
-import { entrypoint070 } from "~test/constants.js";
 import {
   alchemyEstimateFeesPerGas,
   alchemyRpcSchema,
@@ -72,7 +70,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Send the user operation
     const userOpHash = await bundlerClient.sendUserOperation({
-      entryPointAddress: entrypoint070,
+      account,
       calls: [
         {
           to: recipient,
@@ -129,7 +127,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Deploy by sending a simple transaction to self
     const deployHash = await bundlerClient.sendUserOperation({
-      entryPointAddress: entrypoint070,
+      account,
       calls: [
         {
           to: account.address,
