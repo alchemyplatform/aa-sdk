@@ -92,6 +92,12 @@ awk '
         next;
     }
     { print; }
+    END {
+        # If we reached the end of file and are still in mdx-components section
+        if (in_mdx) {
+            system("cat fern/wallets/temp_mdx_components.yml");
+        }
+    }
 ' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
 
 # Clean up temporary files
