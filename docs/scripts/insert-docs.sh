@@ -72,15 +72,14 @@ sed -n '/^  mdx-components:/,/^  [a-z]/p' fern/wallets/docs.yml | sed '$d' | gre
 
 # Find the mdx-components section and append additional components
 awk '
-    BEGIN { in_mdx = 0; last_component_line = 0; }
+    BEGIN { in_mdx = 0; }
     /^  mdx-components:/ {
         in_mdx = 1;
         print;
         next;
     }
     in_mdx && /^    - / {
-        # This is a component item, remember this line and print it
-        last_component_line = NR;
+        # This is a component item, print it
         print;
         next;
     }
