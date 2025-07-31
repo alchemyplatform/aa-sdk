@@ -1,12 +1,6 @@
 import { maxUint48, toHex, zeroAddress, type Address, type Hex } from "viem";
 
 import { NativeTokenLimitModule } from "./modules/native-token-limit-module/module.js";
-import {
-  getDefaultAllowlistModuleAddress,
-  getDefaultNativeTokenLimitModuleAddress,
-  getDefaultSingleSignerValidationModuleAddress,
-  getDefaultTimeRangeModuleAddress,
-} from "./modules/utils.js";
 import { SingleSignerValidationModule } from "./modules/single-signer-validation/module.js";
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
 import { TimeRangeModule } from "./modules/time-range-module/module.js";
@@ -20,6 +14,7 @@ import {
   type InstallValidationParams,
 } from "./decorators/installValidation.js";
 import { assertNever } from "@alchemy/common";
+import { DefaultAddress, DefaultModuleAddress } from "./utils.js";
 
 // We use this to offset the ERC20 spend limit entityId
 const HALF_UINT32 = 2147483647;
@@ -222,9 +217,7 @@ export class PermissionBuilder {
   }) {
     this.client = client;
     this.validationConfig = {
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        this.client.chain,
-      ),
+      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId,
       isUserOpValidation: true,
       isGlobal: false,
@@ -342,7 +335,7 @@ export class PermissionBuilder {
             validUntil: this.deadline,
             validAfter: 0,
           },
-          getDefaultTimeRangeModuleAddress(this.client.chain),
+          DefaultModuleAddress.TIME_RANGE,
         ),
       );
     }
@@ -436,9 +429,7 @@ export class PermissionBuilder {
           }
           rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER] = {
             hookConfig: {
-              address: getDefaultNativeTokenLimitModuleAddress(
-                this.client.chain,
-              ),
+              address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
               entityId,
               hookType: HookType.EXECUTION,
               hasPreHooks: true,
@@ -457,7 +448,7 @@ export class PermissionBuilder {
           }
           rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER] = {
             hookConfig: {
-              address: getDefaultAllowlistModuleAddress(this.client.chain),
+              address: DefaultModuleAddress.ALLOWLIST,
               entityId: entityId + HALF_UINT32,
               hookType: HookType.EXECUTION,
               hasPreHooks: true,
@@ -483,7 +474,7 @@ export class PermissionBuilder {
           // Also allow `approve` and `transfer` for the erc20
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
-              address: getDefaultAllowlistModuleAddress(this.client.chain),
+              address: DefaultModuleAddress.ALLOWLIST,
               entityId,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
@@ -513,9 +504,7 @@ export class PermissionBuilder {
           }
           rawHooks[HookIdentifier.GAS_LIMIT] = {
             hookConfig: {
-              address: getDefaultNativeTokenLimitModuleAddress(
-                this.client.chain,
-              ),
+              address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
               entityId,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
@@ -533,7 +522,7 @@ export class PermissionBuilder {
           }
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
-              address: getDefaultAllowlistModuleAddress(this.client.chain),
+              address: DefaultModuleAddress.ALLOWLIST,
               entityId,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
@@ -565,7 +554,7 @@ export class PermissionBuilder {
           }
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
-              address: getDefaultAllowlistModuleAddress(this.client.chain),
+              address: DefaultModuleAddress.ALLOWLIST,
               entityId,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
@@ -597,7 +586,7 @@ export class PermissionBuilder {
           }
           rawHooks[HookIdentifier.PREVAL_ALLOWLIST] = {
             hookConfig: {
-              address: getDefaultAllowlistModuleAddress(this.client.chain),
+              address: DefaultModuleAddress.ALLOWLIST,
               entityId,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
