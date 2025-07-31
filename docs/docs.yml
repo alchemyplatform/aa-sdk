@@ -1216,6 +1216,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: formatSign
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/formatSign.mdx
                   - page: getCallsStatus
                     path: wallets/pages/reference/account-kit/wallet-client/functions/getCallsStatus.mdx
                   - page: grantPermissions
@@ -1224,8 +1226,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/functions/listAccounts.mdx
                   - page: prepareCalls
                     path: wallets/pages/reference/account-kit/wallet-client/functions/prepareCalls.mdx
+                  - page: prepareSign
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/prepareSign.mdx
                   - page: requestAccount
                     path: wallets/pages/reference/account-kit/wallet-client/functions/requestAccount.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/sendPreparedCalls.mdx
                   - page: signMessage
                     path: wallets/pages/reference/account-kit/wallet-client/functions/signMessage.mdx
                   - page: signPreparedCalls
