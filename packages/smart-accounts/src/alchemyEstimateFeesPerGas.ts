@@ -53,7 +53,7 @@ export async function alchemyEstimateFeesPerGas({
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: Client;
+  bundlerClient: PriorityFeeClient;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{
