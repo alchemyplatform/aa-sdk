@@ -1,0 +1,226 @@
+---
+title: Send User Operations
+description: Learn how to send user operations using Smart Wallets across different frameworks.
+slug: wallets/transactions/send/send-user-operations
+---
+
+Once your users have been authenticated, you can start sending user operations! Smart Wallets makes it easy to send single or batched user operations across different frameworks.
+
+<Tabs>
+  <Tab title="React">
+    ## Overview
+
+    Sending user operations is really easy with React hooks. Use the [`useSendUserOperation`](/wallets/reference/account-kit/react/hooks/useSendUserOperation) hook to send transactions.
+
+    If you want to sponsor the gas for a user, see our [guide](/wallets/react/sponsor-gas).
+
+    ## Single user operation
+
+    <Tip>
+      In the below example, we use `ModularAccountV2` as the underlying Smart Contract type, which is our default and recommended account. To learn more about all the account options, check out our guide [on choosing a smart account](/wallets/smart-contracts/choosing-a-smart-account).
+    </Tip>
+
+    ```tsx twoslash
+    import React from "react";
+    import {
+      type UseSendUserOperationResult,
+      useSendUserOperation,
+      useSmartAccountClient,
+    } from "@account-kit/react";
+
+    export default function MyOpSenderComponent() {
+      const { client } = useSmartAccountClient({});
+
+      const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+        client,
+        // optional parameter that will wait for the transaction to be mined before returning
+        waitForTxn: true,
+        onSuccess: ({ hash, request }) => {
+          // [optional] Do something with the hash and request
+        },
+        onError: (error) => {
+          // [optional] Do something with the error
+        },
+      });
+
+      return (
+        <div>
+          <button
+            onClick={() =>
+              sendUserOperation({
+                uo: {
+                  target: "0xTARGET_ADDRESS",
+                  data: "0x",
+                  value: 0n,
+                },
+              })
+            }
+            disabled={isSendingUserOperation}
+          >
+            {isSendingUserOperation ? "Sending..." : "Send UO"}
+          </button>
+        </div>
+      );
+    }
+    ```
+
+    ## Batch user operation
+
+    It's also possible to send user operations in batch using the same hook.
+
+    ```tsx twoslash
+    import React from "react";
+    import {
+      type UseSendUserOperationResult,
+      useSendUserOperation,
+      useSmartAccountClient,
+    } from "@account-kit/react";
+
+    export default function MyOpSenderComponent() {
+      const { client } = useSmartAccountClient({});
+
+      const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+        client,
+        // optional parameter that will wait for the transaction to be mined before returning
+        waitForTxn: true,
+        onSuccess: ({ hash, request }) => {
+          // [optional] Do something with the hash and request
+        },
+        onError: (error) => {
+          // [optional] Do something with the error
+        },
+      });
+
+      return (
+        <div>
+          <button
+            onClick={() =>
+              sendUserOperation({
+                uo: [
+                  {
+                    target: "0xTARGET_ADDRESS",
+                    data: "0x",
+                    value: 0n,
+                  },
+                  {
+                    target: "0xTARGET_ADDRESS",
+                    data: "0x",
+                    value: 0n,
+                  },
+                ],
+              })
+            }
+            disabled={isSendingUserOperation}
+          >
+            {isSendingUserOperation ? "Sending..." : "Send UO"}
+          </button>
+        </div>
+      );
+    }
+    ```
+  </Tab>
+  <Tab title="React Native">
+    ## React Native Send User Operations
+
+    React Native content will be migrated here - combining content from:
+    - /react-native/using-smart-accounts/send-user-operations.mdx
+
+    This section will include React Native specific implementation details.
+  </Tab>
+  <Tab title="Other JS">
+    ## Other JS Frameworks
+
+    Once your users have been [authenticated](/wallets/core/authenticate-users), you can start sending user operations!
+
+    ## Single user operation
+
+    <Tip>
+      In the below example, we use `LightAccount` as the underlying Smart Contract type. You can also use `MultiOwnerModularAccount` if you want to provide your users with an ERC-6900 compliant modular account, or you can use `MultiOwnerLightAccount` if you want to support an account with multiple owners.
+    </Tip>
+
+    ```ts twoslash
+    import { watchSmartAccountClient } from "@account-kit/core";
+    import { config } from "./config.js";
+
+    // How you actually store this state variable
+    // depends on the framework you're using
+    let clientState;
+
+    // The watch smart account client will handle all of the possible state changes
+    // that can impact this client:
+    //  - Signer status
+    //  - Account instantiation
+    //  - Chain changes
+    const clientSubscription = watchSmartAccountClient(
+      {
+        type: "LightAccount",
+      },
+      config,
+    )((clientState_) => {
+      clientState = clientState_;
+    });
+
+    if (clientState == null || clientState.isLoadingClient) {
+      console.log("Loading...");
+    }
+
+    const client = clientState.client;
+
+    await client.sendUserOperation({
+      uo: {
+        target: "0xtarget",
+        data: "0x",
+        value: 0n,
+      },
+    });
+    ```
+
+    ## Batch user operation
+
+    It's also possible to send user operations in batch using the same approach!
+
+    ```ts twoslash
+    import { watchSmartAccountClient } from "@account-kit/core";
+    import { config } from "./config.js";
+
+    // How you actually store this state variable
+    // depends on the framework you're using
+    let clientState;
+
+    // The watch smart account client will handle all of the possible state changes
+    // that can impact this client:
+    //  - Signer status
+    //  - Account instantiation
+    //  - Chain changes
+    const clientSubscription = watchSmartAccountClient(
+      {
+        type: "LightAccount",
+      },
+      config,
+    )((clientState_) => {
+      clientState = clientState_;
+    });
+
+    if (clientState == null || clientState.isLoadingClient) {
+      console.log("Loading...");
+    }
+
+    const client = clientState.client;
+
+    await client.sendUserOperation({
+      uo: [
+        {
+          target: "0xtarget",
+          data: "0x",
+          value: 0n,
+        },
+        {
+          target: "0xtarget",
+          data: "0x",
+          value: 0n,
+        },
+      ],
+    });
+    ```
+  </Tab>
+</Tabs>
