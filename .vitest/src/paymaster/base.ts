@@ -12,7 +12,7 @@ import {
   type Hex,
 } from "viem";
 import {
-  getBytecode,
+  getCode,
   sendTransaction,
   setBalance,
   waitForTransactionReceipt,
@@ -68,7 +68,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
       const { address: implAddress, calldata: implCalldata } =
         this.getPaymasterImplDetails();
 
-      const paymasterImplBytecode = await getBytecode(client, {
+      const paymasterImplBytecode = await getCode(client, {
         address: implAddress,
       });
 
@@ -87,7 +87,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
       const { address: proxyAddress, calldata: proxyCalldata } =
         this.getPaymasterDetails();
 
-      const proxyBytecode = await getBytecode(client, {
+      const proxyBytecode = await getCode(client, {
         address: proxyAddress,
       });
 

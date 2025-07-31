@@ -1125,10 +1125,10 @@ navigation:
             contents:
               - section: Functions
                 contents:
-                  - page: dummyAction
-                    path: wallets/pages/reference/alchemy/wallet-apis/functions/dummyAction.mdx
-                  - page: TODO_myActions
-                    path: wallets/pages/reference/alchemy/wallet-apis/functions/TODO_myActions.mdx
+                  - page: gasManagerActions
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/gasManagerActions.mdx
+                  - page: requestGasAndPaymasterAndData
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/requestGasAndPaymasterAndData.mdx
       - section: Alchemy Common
         contents:
           - section: SDK Reference
