@@ -17,12 +17,11 @@ export type AlchemyRpcSchema = [
 export const alchemyRpcSchema = rpcSchema<AlchemyRpcSchema>();
 
 // Extend viem's Client with a typed rundler RPC method.
-export type PriorityFeeClient = Client & {
-  request(args: {
-    method: "rundler_maxPriorityFeePerGas";
-    params: [];
-  }): Promise<UserOperationRequest["maxPriorityFeePerGas"]>;
-};
+export type PriorityFeeClient<
+  transport extends Transport = Transport,
+  chain extends Chain | undefined = Chain | undefined,
+  account extends Account | undefined = Account | undefined,
+> = Client<transport, chain, account, AlchemyRpcSchema>;
 
 /**
  * Alchemy-flavoured `estimateFeesPerGas` callback for viem Bundler Clients.
