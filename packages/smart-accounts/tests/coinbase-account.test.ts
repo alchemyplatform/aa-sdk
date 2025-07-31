@@ -1,18 +1,13 @@
 import {
   toCoinbaseSmartAccount,
   bundlerActions,
-  createBundlerClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
-// eslint-disable-next-line import/no-unresolved
 import { local070Instance } from "~test/instances.js";
-import {
-  alchemyEstimateFeesPerGas,
-  alchemyRpcSchema,
-} from "../src/alchemyEstimateFeesPerGas.js";
+import { createAlchemyBundlerClient } from "../src/clients.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -45,14 +40,10 @@ describe("Viem AA - Coinbase Smart Account", () => {
     });
 
     // Create a bundler client that uses the Alchemy fee estimator
-    const bundlerClient = createBundlerClient({
+    const bundlerClient = createAlchemyBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      rpcSchema: alchemyRpcSchema,
-      userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
-      },
     });
 
     // Fund the account
@@ -109,14 +100,10 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = createBundlerClient({
+    const bundlerClient = createAlchemyBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      rpcSchema: alchemyRpcSchema,
-      userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
-      },
     }).extend(bundlerActions);
 
     // Fund and deploy the account
