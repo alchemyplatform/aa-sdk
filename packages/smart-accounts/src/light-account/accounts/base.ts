@@ -31,7 +31,6 @@ import type {
   LightAccountEntryPointVersion,
   LightAccountType,
   LightAccountVersion,
-  SignatureRequest,
 } from "../types.js";
 import {
   AccountVersionRegistry,
@@ -40,6 +39,7 @@ import {
 } from "../utils.js";
 import { type LightAccountVersionConfig } from "../types.js";
 import { BaseError } from "@alchemy/common";
+import type { SignatureRequest } from "../../types.js";
 
 const SignaturePrefix = {
   EOA: "0x00",

@@ -1,4 +1,4 @@
-import { getAccountAddress, getEntryPoint } from "@aa-sdk/core";
+import { getAccountAddress, getEntryPoint } from "@aa-sdk/core"; // TODO(v5): remove core dep
 import {
   concatHex,
   createWalletClient,

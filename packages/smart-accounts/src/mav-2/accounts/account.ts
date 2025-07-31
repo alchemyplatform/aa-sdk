@@ -1,0 +1,171 @@
+import {
+  encodeFunctionData,
+  type Address,
+  type Chain,
+  type Client,
+  type Hex,
+  type JsonRpcAccount,
+  type LocalAccount,
+  type PrivateKeyAccount,
+  type Transport,
+} from "viem";
+import type {
+  WebAuthnAccount,
+  ToSmartAccountParameters,
+} from "viem/account-abstraction";
+import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils.js";
+import { toModularAccountV2Base, type ModularAccountV2Base } from "./base.js";
+import type { SignerEntity } from "../types.js";
+import { predictModularAccountV2Address } from "../predictAddress.js";
+import { parsePublicKey } from "webauthn-p256";
+import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
+
+type Mode = "default" | "7702";
+
+// TODO(jh): does this need to be extended w/ any more methods like LightAccount does?
+export type ModularAccountV2 = ModularAccountV2Base & {};
+
+export type ToModularAccountV2Params<
+  TMode extends "default" | "7702" = "default",
+> = {
+  client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
+  owner: JsonRpcAccount | LocalAccount | WebAuthnAccount;
+  deferredAction?: Hex;
+  signerEntity?: SignerEntity;
+  accountAddress?: Address;
+  mode?: TMode;
+} & (TMode extends "7702"
+  ? {
+      salt?: never;
+      factoryAddress?: never;
+      implementationAddress?: never;
+    }
+  : {
+      salt?: bigint;
+      factoryAddress?: Address;
+      implementationAddress?: Address;
+    });
+
+/**
+ * Creates a MAv2 account.
+ *
+ * @param {ToModularAccountV2Params} param0 - The parameters for creating a MAv2 account.
+ * @returns {Promise<ModularAccountV2>} A MAv2 account.
+ */
+export async function toModularAccountV2<TMode extends Mode = Mode>({
+  client,
+  owner,
+  deferredAction,
+  signerEntity,
+  accountAddress: accountAddress_,
+  salt = 0n,
+  factoryAddress: factoryAddress_,
+  implementationAddress: implementationAddress_,
+  mode,
+}: ToModularAccountV2Params<TMode>): Promise<ModularAccountV2> {
+  const is7702 = mode === "7702";
+
+  const entityId = signerEntity?.entityId ?? DEFAULT_OWNER_ENTITY_ID;
+
+  const factoryAddress =
+    factoryAddress_ ??
+    (owner.type === "webAuthn"
+      ? DefaultAddress.MAV2_FACTORY_WEBAUTHN
+      : DefaultAddress.MAV2_FACTORY);
+
+  const implementationAddress =
+    implementationAddress_ ??
+    (is7702 ? DefaultAddress.SMAV2_7702 : DefaultAddress.SMAV2_BYTECODE);
+
+  const accountAddress =
+    accountAddress_ ??
+    predictModularAccountV2Address({
+      factoryAddress,
+      implementationAddress,
+      salt,
+      ...(owner.type === "webAuthn"
+        ? {
+            type: "WebAuthn",
+            entityId,
+            ownerPublicKey: owner.publicKey,
+          }
+        : {
+            ownerAddress: owner.address,
+            entityId,
+            type: "SMA", // TODO(jh): should this never be "MA"? double check w/ adam.
+          }),
+    });
+
+  let authorization: ToSmartAccountParameters["authorization"];
+  if (is7702) {
+    // TODO(jh): Ensure this works w/ our signer types.
+    if (owner.type !== "local") {
+      throw new Error(
+        `Owner of type ${owner.type} is unsupported for 7702 mode.`, // TODO(jh): add this error.
+      ); // TODO(jh): add class for this error.
+    }
+    if (owner.signAuthorization == null) {
+      throw new Error(
+        "Owner must implement `signAuthorization` to be used with 7702 mode.", // TODO(jh): add this error.
+      );
+    }
+    if (
+      entityId === DEFAULT_OWNER_ENTITY_ID &&
+      owner.address !== accountAddress
+    ) {
+      throw new EntityIdOverrideError(); // TODO(jh): add this error.
+    }
+    authorization = {
+      // The current version of Viem has some pretty strict constraints
+      // on a `PrivateKeyAccount`, but this seems safe as long as the
+      // owner is able to `signAuthorization`.
+      account: owner as PrivateKeyAccount,
+      address: DefaultAddress.SMAV2_7702,
+    };
+  }
+
+  const getFactoryArgs = async () => {
+    if (is7702) {
+      return {
+        factory: "0x7702",
+        factoryData: "0x",
+      } as const;
+    }
+
+    if (owner.type === "webAuthn") {
+      const { x, y } = parsePublicKey(owner.publicKey);
+      return {
+        factory: factoryAddress,
+        factoryData: encodeFunctionData({
+          abi: accountFactoryAbi,
+          functionName: "createWebAuthnAccount",
+          args: [x, y, salt, entityId],
+        }),
+      };
+    }
+
+    return {
+      factory: factoryAddress,
+      factoryData: encodeFunctionData({
+        abi: accountFactoryAbi,
+        functionName: "createSemiModularAccount",
+        args: [owner.address, salt],
+      }),
+    };
+  };
+
+  const base = await toModularAccountV2Base({
+    client,
+    owner,
+    accountAddress,
+    getFactoryArgs,
+    signerEntity,
+    deferredAction,
+    authorization,
+  });
+
+  return {
+    ...base,
+    // TODO(jh): does this need to be extended w/ any more methods like LightAccount does, or nah?
+  };
+}
