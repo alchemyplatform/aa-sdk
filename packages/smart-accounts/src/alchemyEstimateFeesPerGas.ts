@@ -1,18 +1,19 @@
 import { getBlock } from "viem/actions";
-import { fromHex, type Hex, type Client, rpcSchema } from "viem";
+import {
+  fromHex,
+  type Hex,
+  type Client,
+  rpcSchema,
+  isHex,
+  type Transport,
+  type Chain,
+  type Account,
+} from "viem";
 import type {
   UserOperationRequest,
   SmartAccount,
 } from "viem/account-abstraction";
-
-// Minimal RPC schema that only declares the Alchemy priority fee method.
-export type AlchemyRpcSchema = [
-  {
-    Method: "rundler_maxPriorityFeePerGas";
-    Parameters: [];
-    ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
-  },
-];
+import type { AlchemyRpcSchema } from "./types";
 
 export const alchemyRpcSchema = rpcSchema<AlchemyRpcSchema>();
 
@@ -76,7 +77,11 @@ export async function alchemyEstimateFeesPerGas({
       ? maxPriorityFeePerGasEstimate
       : isHex(maxPriorityFeePerGasEstimate)
         ? fromHex(maxPriorityFeePerGasEstimate as Hex, "bigint")
-        : throwError(`Invalid hex value: ${maxPriorityFeePerGasEstimate}`);
+        : (() => {
+            throw new Error(
+              `Invalid hex value: ${maxPriorityFeePerGasEstimate}`,
+            );
+          })();
 
   return {
     maxPriorityFeePerGas,
