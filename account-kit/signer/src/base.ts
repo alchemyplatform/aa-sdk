@@ -1392,9 +1392,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           case "oauth":
             return AlchemySignerStatus.AUTHENTICATING_OAUTH;
           case "otp":
-          case "sms":
           case "otpVerify":
             return AlchemySignerStatus.AWAITING_OTP_AUTH;
+          case "sms":
+            return AlchemySignerStatus.AWAITING_SMS_AUTH;
           default:
             assertNever(type, "unhandled authenticating type");
         }
