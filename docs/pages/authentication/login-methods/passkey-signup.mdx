@@ -1,0 +1,188 @@
+---
+title: Passkey Signup Authentication
+description: How to implement Passkey Signup authentication across different frameworks
+slug: wallets/authentication/login-methods/passkey-signup
+---
+
+Passkeys provide a secure, passwordless authentication method that can be used to create wallets for your users without going through email verification flows. You can implement passkey signup with or without an associated email address.
+
+<Markdown src="../../../shared/passkey-email-warning.mdx" />
+
+<Tabs>
+  <Tab title="React">
+    ## Implementation Options
+
+    You can implement Passkey Signup authentication in two ways:
+
+    - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
+    - [Custom UI](#custom-ui) - Complete control over the user experience
+
+    ## Pre-built UI Components
+
+    Smart Wallets provides pre-built UI components that handle the entire Passkey Signup authentication flow with minimal code.
+
+    ### Step 1: Add Authentication Components to Your Page
+
+    Before configuring your authentication, first add one of the pre-built components to your application:
+
+    <Markdown src="../shared/modal-auth-example.mdx" />
+
+    Or:
+
+    <Markdown src="../shared/embedded-auth-example.mdx" />
+
+    ### Step 2: Configure Passkey Signup in UI Components
+
+    After adding the components, configure the Passkey Signup authentication in your application config:
+
+    ```tsx twoslash
+    import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+    import { sepolia, alchemy } from "@account-kit/infra";
+
+    const uiConfig: AlchemyAccountsUIConfig = {
+      auth: {
+        sections: [
+          [
+            // Include passkey in a section
+            { type: "passkey" },
+
+            // You can combine with other authentication methods
+            { type: "email" },
+          ],
+        ],
+        // Enable automatic passkey creation after signup
+        addPasskeyOnSignup: true,
+      },
+    };
+
+    export const config = createConfig(
+      {
+        transport: alchemy({ apiKey: "your-api-key" }),
+        chain: sepolia,
+      },
+      uiConfig,
+    );
+    ```
+
+    ## Custom UI
+
+    If you need complete control over the user experience, you can implement your own custom UI for Passkey Signup authentication using Smart Wallets hooks.
+
+    ### Option 1: Passkey Signup with Email (Recommended)
+
+    This approach associates an email with the passkey, allowing users to recover their account if they lose access to their device.
+
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate } = useAuthenticate();
+
+    // When the user submits their email and wants to create a passkey
+    const handlePasskeySignup = (email: string) => {
+      // Important: Validate the email before proceeding
+      if (!isValidEmail(email)) {
+        // Handle validation error
+        return;
+      }
+
+      authenticate(
+        {
+          type: "passkey",
+          email,
+        },
+        {
+          onSuccess: () => {
+            // Success - passkey created and user authenticated
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        },
+      );
+    };
+
+    // Simple email validation function
+    const isValidEmail = (email: string) => {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+    ```
+
+    <Error>
+      It's important that you validate the email before creating an account for the user. This is to prevent users from losing access to their wallets if they lose their device.
+    </Error>
+
+    ### Option 2: Passkey Signup without Email
+
+    This approach creates a passkey without an associated email. Use this only if you have another recovery mechanism in place.
+
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate } = useAuthenticate();
+
+    // When the user wants to create a passkey without email
+    const handlePasskeyOnlySignup = (username: string) => {
+      authenticate(
+        {
+          type: "passkey",
+          createNew: true,
+          username, // A unique identifier for the passkey
+        },
+        {
+          onSuccess: () => {
+            // Success - passkey created and user authenticated
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        },
+      );
+    };
+    ```
+
+    ### Step 3: Track Authentication Status
+
+    Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+    ```tsx twoslash
+    import { useSignerStatus } from "@account-kit/react";
+
+    // Inside your component
+    const { isConnected } = useSignerStatus();
+
+    // You can use isConnected to conditionally render UI
+    ```
+  </Tab>
+  <Tab title="React Native">
+    ## React Native Passkey Signup
+
+    React Native content will be migrated here - combining content from:
+    - /react-native/signer/authenticating-users/authenticating-with-passkeys.mdx
+
+    This section will include React Native specific implementation details for passkey signup authentication.
+  </Tab>
+  <Tab title="JavaScript">
+    ## Other JS Frameworks
+
+    It is possible to create wallets for users using just a passkey. This is useful for creating wallets for users if you don't want to go through the email OTP or magic link flow.
+
+    ## Authenticate a user with email and passkey
+
+    If you want to allow sign-up and login with a passkey, you can ask the user for an email to associate with their passkey. This way, they can log in with their email or passkey in the future. Under the hood, the email is also used to check if an account exists already so you can have a unified sign-up and login flow.
+
+    <Error>
+      It's important that you validate this email before creating an account for the user. This is to prevent users from losing access to their wallets if they lose their device.
+    </Error>
+
+    ```ts twoslash
+    import { signer } from "./signer";
+
+    const result = await signer.authenticate({
+      type: "passkey",
+      email: "user@mail.com",
+    });
+    ```
+  </Tab>
+</Tabs>

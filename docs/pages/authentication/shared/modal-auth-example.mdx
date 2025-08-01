@@ -1,0 +1,16 @@
+## Using Modal Authentication
+
+To add authentication in a modal popup:
+
+```tsx twoslash
+import React from "react";
+import { useAuthModal } from "@account-kit/react";
+
+export default function MyPage() {
+  const { openAuthModal } = useAuthModal();
+
+  return <button onClick={openAuthModal}>Sign in</button>;
+}
+```
+
+For more details on modal configuration, see the [Modal Authentication](/wallets/react/ui-components#modal-auth) documentation.
