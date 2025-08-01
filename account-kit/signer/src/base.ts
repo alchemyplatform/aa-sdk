@@ -1477,7 +1477,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     }
 
     const { orgId, otpId } = await this.inner.createAccount({
-      type: "phone",
+      type: "sms",
       phone,
     });
     return {
