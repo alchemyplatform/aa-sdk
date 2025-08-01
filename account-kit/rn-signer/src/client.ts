@@ -141,7 +141,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   }
 
   override async initSmsAuth(params: Omit<SmsAuthParams, "targetPublicKey">) {
-    this.eventEmitter.emit("authenticating", { type: "otp" });
+    this.eventEmitter.emit("authenticating", { type: "sms" });
     const { phone } = params;
     const targetPublicKey = await this.stamper.init();
 

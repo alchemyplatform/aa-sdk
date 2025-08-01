@@ -5,7 +5,7 @@ description: Overview of the initSmsAuth method
 slug: wallets/reference/account-kit/signer/classes/AlchemySignerWebClient/initSmsAuth
 ---
 
-Begin authenticating a user with their phone. Initializes the iframe stamper to get the target public key.
+Begin authenticating a user through sms. Initializes the iframe stamper to get the target public key.
 This method sends a text message to the user to complete their login
 
 ## Import
@@ -35,8 +35,8 @@ const account = await client.initSmsAuth({ phone: "+1234567890" });
 
 ### params
 
-`Omit<PhoneAuthParams, "targetPublicKey">`
-The parameters for phone authentication, excluding the target public key
+`Omit<SmsAuthParams, "targetPublicKey">`
+The parameters for sms authentication, excluding the target public key
 
 ## Returns
 
