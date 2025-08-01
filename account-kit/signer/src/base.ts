@@ -746,7 +746,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   getUser(email: string): Promise<{ orgId: string } | null>;
   /**
-   * Unauthenticated call to look up a user's organizationId by email
+   * Unauthenticated call to look up a user's organizationId by email or phone
    *
    * @example
    * ```ts
@@ -771,7 +771,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   getUser(params: GetUserParams): Promise<{ orgId: string } | null>;
   /**
-   * Unauthenticated call to look up a user's organizationId by email
+   * Unauthenticated call to look up a user's organizationId by email or phone
    *
    * @example
    * ```ts
@@ -1392,6 +1392,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           case "oauth":
             return AlchemySignerStatus.AUTHENTICATING_OAUTH;
           case "otp":
+          case "sms":
           case "otpVerify":
             return AlchemySignerStatus.AWAITING_OTP_AUTH;
           default:

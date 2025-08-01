@@ -162,7 +162,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   /**
-   * Begin authenticating a user with their phone. Initializes the iframe stamper to get the target public key.
+   * Begin authenticating a user through sms. Initializes the iframe stamper to get the target public key.
    * This method sends a text message to the user to complete their login
    *
    * @example
@@ -181,7 +181,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * const account = await client.initSmsAuth({ phone: "+1234567890" });
    * ```
    *
-   * @param {Omit<PhoneAuthParams, "targetPublicKey">} params The parameters for phone authentication, excluding the target public key
+   * @param {Omit<SmsAuthParams, "targetPublicKey">} params The parameters for sms authentication, excluding the target public key
    * @returns {Promise<any>} The response from the authentication request
    */
   public override initSmsAuth = async (
