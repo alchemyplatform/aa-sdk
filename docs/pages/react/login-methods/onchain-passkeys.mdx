@@ -126,6 +126,11 @@ const operation = await accountClient.sendUserOperation({
 
 Get your React Native environment set up by following these [docs](/wallets/react-native/overview). Once you’ve completed this setup, you can use the webauthn signer as detailed above!
 
+<Warning>
+  `localStorage` is not available in React Native. Please use an alternative
+  storage method.{" "}
+</Warning>
+
 ## What's Next
 
 This is only the initial SDK release for on-chain passkeys. We are actively working on the DevX so your feedback will be greatly appreciated. If you have any questions or are interested in learning more, please reach out!
