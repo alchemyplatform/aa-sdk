@@ -309,7 +309,7 @@ export async function toSmartContractAccount<
  *  source: "MyAccount",
  *  transport: http("RPC_URL"),
  *  chain: sepolia,
- *  // The EntryPointDef that your account is com"patible with
+ *  // The EntryPointDef that your account is compatible with
  *  entryPoint: getEntryPoint(sepolia, { version: "0.6.0" }),
  *  // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
  *  getAccountInitCode: async () => "0x{factoryAddress}{callData}",
