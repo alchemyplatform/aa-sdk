@@ -20,6 +20,7 @@ import {
  * @param {Transport} params.transport       – viem transport (eg. `custom(client)`).
  * @returns {ReturnType<typeof createBundlerClient>} a Bundler Client ready to use with Alchemy’s Rundler.
  */
+// TODO(v5): Revisit the `createAlchemyBundlerClient` export – we might rename or move it in the next major.
 export function createAlchemyBundlerClient<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
