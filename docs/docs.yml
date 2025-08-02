@@ -405,8 +405,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/functions/alchemyEnhancedApiActions.mdx
                   - page: alchemyFeeEstimator
                     path: wallets/pages/reference/account-kit/infra/functions/alchemyFeeEstimator.mdx
+                  - page: alchemyGasAndPaymasterAndDataHooks
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyGasAndPaymasterAndDataHooks.mdx
                   - page: alchemyGasAndPaymasterAndDataMiddleware
                     path: wallets/pages/reference/account-kit/infra/functions/alchemyGasAndPaymasterAndDataMiddleware.mdx
+                  - page: alchemyGasManagerHooks
+                    path: wallets/pages/reference/account-kit/infra/functions/alchemyGasManagerHooks.mdx
                   - page: alchemyGasManagerMiddleware
                     path: wallets/pages/reference/account-kit/infra/functions/alchemyGasManagerMiddleware.mdx
                   - page: alchemyUserOperationSimulator
