@@ -12,7 +12,11 @@ const config = getDefaultConfig(projectRoot);
 const ALIASES = {
 	"@noble/hashes/crypto": path.resolve(
 		monorepoRoot,
-		"node_modules/@noble/hashes/crypto.js"
+		"node_modules/@noble/hashes/crypto.js",
+	),
+	"@sinclair/typebox": path.resolve(
+		monorepoRoot,
+		"node_modules/@sinclair/typebox/build/cjs/index.js",
 	),
 };
 
@@ -42,7 +46,7 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
 
 config.resolver.extraNodeModules = {
 	...config.resolver.extraNodeModules,
-	crypto: require.resolve('crypto-browserify'),
+	crypto: require.resolve("crypto-browserify"),
 	stream: require.resolve("stream-browserify"),
 };
 
