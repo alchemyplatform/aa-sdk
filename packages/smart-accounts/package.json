@@ -43,6 +43,7 @@
     "typescript-template": "*"
   },
   "dependencies": {
+    "@account-kit/infra": "*",
     "@alchemy/common": "*",
     "viem": "2.29.2"
   },
