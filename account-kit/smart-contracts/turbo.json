@@ -2,7 +2,6 @@
   "extends": ["//"],
   "tasks": {
     "generate": {
-      "env": ["OPENAI_API_KEY"],
       "inputs": ["plugindefs/**"],
       "dependsOn": ["@account-kit/plugingen#build"],
       "outputs": ["src/**/plugins/**/plugin.ts"]

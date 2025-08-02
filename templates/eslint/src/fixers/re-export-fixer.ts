@@ -1,22 +1,12 @@
-import "dotenv/config";
 import type { Rule } from "eslint";
-import { createSyncFn } from "synckit";
 
 let numFixes = 0;
 
 export function reExportFixerEslint(
   fixer: Rule.RuleFixer,
   node: Rule.Node,
-  context: Rule.RuleContext,
   fixBatchSize = 10,
 ) {
-  if (process.env.OPENAI_API_KEY == null) {
-    console.warn(
-      "OPENAI_API_KEY is not set, skipping re-export fixer. Set OPENAI_API_KEY to enable this feature.",
-    );
-    return null;
-  }
-
   if (fixBatchSize > 0 && numFixes > fixBatchSize) {
     // TODO: add this back to the configuration
     return null;
@@ -39,11 +29,7 @@ export function reExportFixerEslint(
   }
 
   numFixes++;
-  const commentBody = getCommentSync(context.sourceCode.getText(node));
+  const commentBody = "/** TODO: Add documentation */\n";
 
   return fixer.insertTextBefore(parent, commentBody);
 }
-
-const getCommentSync = createSyncFn(require.resolve("./openai-worker.js")) as (
-  code: string,
-) => string;
