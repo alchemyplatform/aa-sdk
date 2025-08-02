@@ -56,7 +56,7 @@ import { clientHeaderTrack } from "../../index.js";
  * @param {Client<Transport, TChain, TAccount>} client_ the smart account client to use for RPC requests
  * @param {SendTransactionParameters} args the send tx parameters
  * @param {UserOperationOverrides} overrides optional overrides to use for any of the fields
- * @param {TContext} context if the smart account client requires additinoal context for building UOs
+ * @param {TContext} context if the smart account client requires additional context for building UOs
  * @returns {Promise<UserOperationStruct<TEntryPointVersion>>} a Promise containing the built user operation
  */
 export async function buildUserOperationFromTx<
