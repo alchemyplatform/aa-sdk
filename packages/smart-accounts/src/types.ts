@@ -1,8 +1,5 @@
-import type { IsUndefined } from "viem";
-import type {
-  SmartAccount,
-  UserOperationRequest,
-} from "viem/account-abstraction";
+import type { IsUndefined, RpcUserOperation } from "viem";
+import type { SmartAccount } from "viem/account-abstraction";
 
 export type GetAccountParameter<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
@@ -17,6 +14,6 @@ export type AlchemyRpcSchema = [
   {
     Method: "rundler_maxPriorityFeePerGas";
     Parameters: [];
-    ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
+    ReturnType: RpcUserOperation["maxPriorityFeePerGas"];
   },
 ];
