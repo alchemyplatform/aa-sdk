@@ -1,4 +1,4 @@
-import type { IsUndefined } from "viem";
+import type { IsUndefined, RpcUserOperation } from "viem";
 import type { SmartAccount } from "viem/account-abstraction";
 
 export type GetAccountParameter<
@@ -8,3 +8,12 @@ export type GetAccountParameter<
   IsUndefined<TAccount> extends true
     ? { account: TAccountOverride }
     : { account?: TAccountOverride };
+
+// Minimal RPC schema that only declares the Alchemy priority fee method.
+export type AlchemyRpcSchema = [
+  {
+    Method: "rundler_maxPriorityFeePerGas";
+    Parameters: [];
+    ReturnType: RpcUserOperation["maxPriorityFeePerGas"];
+  },
+];
