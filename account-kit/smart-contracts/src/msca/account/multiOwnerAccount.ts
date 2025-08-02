@@ -3,17 +3,21 @@ import type {
   SmartAccountSigner,
   SmartContractAccountWithSigner,
   ToSmartContractAccountParams,
+  UpgradeToAndCallParams,
 } from "@aa-sdk/core";
 import {
   createBundlerClient,
   getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
+  FailedToGetStorageSlotError,
 } from "@aa-sdk/core";
 import {
   concatHex,
   encodeFunctionData,
   hexToBigInt,
+  fromHex,
+  isAddressEqual,
   type Address,
   type Chain,
   type Hex,
@@ -23,6 +27,7 @@ import { MultiOwnerModularAccountFactoryAbi } from "../abis/MultiOwnerModularAcc
 import { multiOwnerMessageSigner } from "../plugins/multi-owner/signer.js";
 import { getDefaultMultiOwnerModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
+import { UpgradeableModularAccountAbi } from "../abis/UpgradeableModularAccount.js";
 
 export type MultiOwnerModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -137,6 +142,41 @@ export async function createMultiOwnerModularAccount(
     getAccountInitCode,
   });
 
+  const encodeUpgradeToAndCall = async ({
+    upgradeToAddress,
+    upgradeToInitData,
+  }: UpgradeToAndCallParams): Promise<Hex> => {
+    const storage = await client.getStorageAt({
+      address: _accountAddress,
+      // the slot at which impl addresses are stored by UUPS
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    });
+
+    if (storage == null) {
+      throw new FailedToGetStorageSlotError(
+        "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+        "Proxy Implementation Address",
+      );
+    }
+
+    // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
+    if (
+      fromHex(storage, "number") !== 0 &&
+      !isAddressEqual(
+        `0x${storage.slice(26)}`,
+        "0x0046000000000151008789797b54fdb500E2a61e",
+      )
+    ) {
+      throw new Error(`Current account implementation is not MA v1`);
+    }
+
+    return encodeFunctionData({
+      abi: UpgradeableModularAccountAbi,
+      functionName: "upgradeToAndCall",
+      args: [upgradeToAddress, upgradeToInitData],
+    });
+  };
+
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
@@ -144,6 +184,7 @@ export async function createMultiOwnerModularAccount(
     accountAddress: _accountAddress,
     source: `MultiOwnerModularAccount`,
     getAccountInitCode,
+    encodeUpgradeToAndCall,
     ...standardExecutor,
     ...multiOwnerMessageSigner(client, _accountAddress, () => signer),
   });
