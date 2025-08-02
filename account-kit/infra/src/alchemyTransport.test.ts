@@ -2,8 +2,7 @@ import * as AACoreModule from "@aa-sdk/core";
 import { createSmartAccountClient } from "@aa-sdk/core";
 import { avalanche } from "viem/chains";
 import { alchemy } from "./alchemyTransport.js";
-import { arbitrumSepolia, sepolia } from "./chains.js";
-import { http } from "viem";
+import { sepolia } from "./chains.js";
 import { createBundlerClient } from "viem/account-abstraction";
 
 describe("Alchemy Transport Tests", () => {
@@ -60,7 +59,7 @@ describe("Alchemy Transport Tests", () => {
           rpcUrl: "http://invalid",
           retryCount,
         }),
-        chain: arbitrumSepolia,
+        chain: sepolia,
       });
 
       await expect(
@@ -85,7 +84,7 @@ describe("Alchemy Transport Tests", () => {
           apiKey: "invalid",
           retryCount,
         }),
-        chain: arbitrumSepolia,
+        chain: sepolia,
       });
 
       await expect(
