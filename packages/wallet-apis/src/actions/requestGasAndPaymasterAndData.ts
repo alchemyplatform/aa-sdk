@@ -12,8 +12,9 @@ import {
 } from "./utils.js";
 
 /**
- * TODO(v5): real docs
- * This is a dummy action that is used to test the decorator.
+ * Requests gas estimation and paymaster data from the Alchemy Gas Manager API for a user operation.
+ * This function retrieves the necessary gas parameters and paymaster data needed to properly construct and submit
+ * user operations to the network with gas sponsorship.
  *
  * @param {object} client - The client to add the actions to.
  * @param {object} params - The parameters for the action.

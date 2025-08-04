@@ -3,7 +3,7 @@ import type {
   GasAndFeeOverridesRequest,
   RequestGasAndPaymasterAndDataResponse,
 } from "./types.js";
-import type { AlchemyWalletApisRpcSchema } from "../schema.js";
+import type { AlchemyRequestGasAndPaymasterAndDataSchema } from "../schema.js";
 import { hexToBigInt, numberToHex } from "viem";
 
 export function formatOverridesRequest(
@@ -31,7 +31,7 @@ export function formatOverridesRequest(
 }
 
 export function formatGasAndPaymasterResponse(
-  response: AlchemyWalletApisRpcSchema[0]["ReturnType"],
+  response: AlchemyRequestGasAndPaymasterAndDataSchema["ReturnType"],
 ): RequestGasAndPaymasterAndDataResponse {
   const commonFields = {
     callGasLimit: hexToBigInt(response.callGasLimit),

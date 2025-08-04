@@ -66,6 +66,10 @@ export const paymasterTransport = (
         }
       } else if (args.method === "alchemy_requestGasAndPaymasterAndData") {
         try {
+          // There's some bad type-casting happening here as of SDKv5, because viem and aa-sdk/core's concept of a
+          // UserOperationRequest is slightly different, but so far the only issue we've needed to patch is loading
+          // the dummy signature into the UO's signature. More may come up as we increase test coverage.
+          // TODO(v5): cast as viem RpcUserOperation instead of aa-sdk/core's UserOperationRequest.
           const [{ userOperation, entryPoint, dummySignature, overrides }] =
             args.params as [
               {
