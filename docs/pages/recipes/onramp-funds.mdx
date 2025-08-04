@@ -15,8 +15,8 @@ This Recipe demonstrates how to integrate the Coinbase Onramp into an app that u
 ---
 
 <Warning>
-Effective **7/31/2025**, all Coinbase Onramp & Offramp URLs must be securely initialized using the `sessionToken` parameter.
-
+  Starting **July 31, 2025**, all Coinbase Onramp and Offramp URLs must be
+  securely initialized with the `sessionToken` parameter.
 </Warning>
 
 ## Prerequisites
@@ -66,7 +66,7 @@ function OnRampPartnerCard() {
   useEffect(() => {
     if (!address) return;
 
-    // Generate session token using backend API
+    // Generate session token via API
     const generateSessionToken = async () => {
       try {
         const response = await fetch("/api/session", {
@@ -76,10 +76,10 @@ function OnRampPartnerCard() {
             addresses: [
               {
                 address: address,
-                blockchains: ["ethereum", "base"],
+                blockchains: ["base"],
               },
             ],
-            assets: ["ETH", "USDC"],
+            assets: ["USDC"], // or ["ETH"]
           }),
         });
 
