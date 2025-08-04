@@ -2,7 +2,7 @@ import { AccountNotFoundError } from "@aa-sdk/core";
 import { toHex, type Address, type IsUndefined } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { Static } from "@sinclair/typebox";
-import { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
+import type { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
 
 export type GetAccountParam<TAccount> =

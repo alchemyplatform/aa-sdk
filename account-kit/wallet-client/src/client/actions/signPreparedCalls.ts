@@ -2,11 +2,11 @@ import type { PrepareCallsResult } from "./prepareCalls.ts";
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { Static } from "@sinclair/typebox";
-import { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
-import {
-  type PreparedCall_Authorization,
-  type PreparedCall_UserOpV060,
-  type PreparedCall_UserOpV070,
+import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
+import type {
+  PreparedCall_Authorization,
+  PreparedCall_UserOpV060,
+  PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
 
@@ -25,7 +25,7 @@ export type SignPreparedCallsResult = Static<
  */
 export async function signPreparedCalls(
   signer: SmartAccountSigner,
-  params: SignPreparedCallsParams,
+  params: SignPreparedCallsParams
 ): Promise<SignPreparedCallsResult> {
   metrics.trackEvent({
     name: "sign_prepared_calls",
@@ -50,7 +50,7 @@ export async function signPreparedCalls(
   };
 
   const signUserOperationCall = async (
-    call: PreparedCall_UserOpV060 | PreparedCall_UserOpV070,
+    call: PreparedCall_UserOpV060 | PreparedCall_UserOpV070
   ) => {
     const { signatureRequest, ...rest } = call;
     const signature = await signSignatureRequest(signer, signatureRequest);
@@ -67,8 +67,8 @@ export async function signPreparedCalls(
           params.data.map((call) =>
             call.type === "authorization"
               ? signAuthorizationCall(call)
-              : signUserOperationCall(call),
-          ),
+              : signUserOperationCall(call)
+          )
         ),
       }
     : signUserOperationCall(params);

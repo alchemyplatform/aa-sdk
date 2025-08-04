@@ -6,12 +6,35 @@ import {
   createMultiOwnerModularAccount,
 } from "@account-kit/smart-contracts";
 import { concatHex, type Chain, type Transport, type Address } from "viem";
+import type { SerializedInitcode } from "@alchemy/wallet-api-types";
+import type { Supported7702AccountType } from "@alchemy/wallet-api-types/capabilities";
 import type { StaticDecode } from "@sinclair/typebox";
-import { SerializedInitcode } from "@alchemy/wallet-api-types";
 import { InternalError, InvalidRequestError } from "ox/RpcResponse";
 import { assertNever } from "../utils.js";
-import { getAccountTypeForDelegationAddress7702 } from "@alchemy/wallet-api-types/capabilities";
 import { metrics } from "../metrics.js";
+
+// TODO(jh): export this from somewhere else that can be imported safely?
+export const Eip7702AccountTypeToDelegationAddress = {
+  ModularAccountV2: "0x69007702764179f14F51cdce752f4f775d74E139",
+} as const satisfies Record<Supported7702AccountType, Address>;
+
+// TODO(jh): export this from somewhere else that can be imported safely?
+export const DelegationAddressToAccountType: Record<
+  Address,
+  Supported7702AccountType
+> = Object.fromEntries(
+  Object.entries(Eip7702AccountTypeToDelegationAddress).map(([key, value]) => [
+    value,
+    key,
+  ])
+) as Record<Address, Supported7702AccountType>;
+
+// TODO(jh): export this from somewhere else that can be imported safely?
+export const getAccountTypeForDelegationAddress7702 = (
+  address: Address
+): Supported7702AccountType | undefined => {
+  return DelegationAddressToAccountType[address];
+};
 
 type CreateAccountParams = {
   chain: Chain;
@@ -42,13 +65,13 @@ type CreateAccountParams = {
  * ```
  */
 export async function createAccount(
-  params: CreateAccountParams,
+  params: CreateAccountParams
 ): Promise<SmartContractAccount> {
   const { counterfactualInfo: ci, ...accountParams } = params;
 
   if (params.delegation) {
     const accountType = getAccountTypeForDelegationAddress7702(
-      params.delegation,
+      params.delegation
     );
     if (accountType !== "ModularAccountV2") {
       throw new Error("7702 mode currently only supports ModularAccountV2");

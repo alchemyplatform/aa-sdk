@@ -1,9 +1,9 @@
 import { createLogger } from "@account-kit/logging";
 import { VERSION } from "./version.js";
 import type { StaticDecode } from "@sinclair/typebox";
-import { SerializedInitcode } from "@alchemy/wallet-api-types";
+import type { SerializedInitcode } from "@alchemy/wallet-api-types";
 
-export type CoreEventsSchema = [
+export type WalletClientMetricsSchema = [
   {
     EventName: "client_created";
     EventData: {
@@ -61,7 +61,7 @@ export type CoreEventsSchema = [
   },
 ];
 
-export const metrics = createLogger<CoreEventsSchema>({
+export const metrics = createLogger<WalletClientMetricsSchema>({
   package: "@account-kit/wallet-client",
   version: VERSION,
 });

@@ -1,17 +1,46 @@
 import { AccountNotFoundError, type SmartAccountSigner } from "@aa-sdk/core";
-import {
-  toHex,
-  type Address,
-  type Hex,
-  type IsUndefined,
-  type Prettify,
-} from "viem";
+import type { Address, Hex, IsUndefined, Prettify } from "viem";
+import { toHex, concatHex } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { Static } from "@sinclair/typebox";
-import { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
-import { encodePermissionsContext } from "@alchemy/wallet-api-types/capabilities";
+import type { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
+// import { encodePermissionsContext } from "@alchemy/wallet-api-types/capabilities";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
+import { assertNever } from "../../utils.js";
+import type { DecodedPermissionsContext } from "@alchemy/wallet-api-types/capabilities";
+
+// TODO(jh): can this live somewhere that doesn't import a non-type from types pkg?
+const PermissionsContextVersion = {
+  REMOTE_MODE_DEFERRED_ACTION: "0x00",
+  LOCAL_MODE_DEFERRED_ACTION: "0x01",
+  NON_DEFERRED_ACTION: "0x02",
+} as const;
+
+// TODO(jh): can this live somewhere that doesn't import a non-type from types pkg?
+const encodePermissionsContext = (context: DecodedPermissionsContext): Hex => {
+  switch (context.contextVersion) {
+    case "REMOTE_MODE_DEFERRED_ACTION":
+      return concatHex([
+        PermissionsContextVersion.REMOTE_MODE_DEFERRED_ACTION,
+        context.sessionId,
+        context.signature,
+      ]);
+    case "LOCAL_MODE_DEFERRED_ACTION":
+      return concatHex([
+        PermissionsContextVersion.LOCAL_MODE_DEFERRED_ACTION,
+        context.deferredAction,
+      ]);
+    case "NON_DEFERRED_ACTION":
+      return concatHex([
+        PermissionsContextVersion.NON_DEFERRED_ACTION,
+        context.isGlobalValidation ? "0x01" : "0x00",
+        context.entityId,
+      ]);
+    default:
+      return assertNever(context, "Unexpected context version");
+  }
+};
 
 export type GrantPermissionsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -91,7 +120,7 @@ export async function grantPermissions<
 >(
   client: InnerWalletApiClient,
   signer: SmartAccountSigner,
-  params: GrantPermissionsParams<TAccount>,
+  params: GrantPermissionsParams<TAccount>
 ): Promise<GrantPermissionsResult> {
   metrics.trackEvent({
     name: "grant_permissions",
