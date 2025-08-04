@@ -3,12 +3,10 @@ import {
   type SmartContractAccount,
 } from "@aa-sdk/core";
 import type { Static } from "@sinclair/typebox";
-import { Value } from "@sinclair/typebox/value";
 import type { Address } from "abitype";
 import deepEqual from "deep-equal";
 import { custom } from "viem";
 import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
-import { SerializedInitcode } from "@alchemy/wallet-api-types";
 import type { InnerWalletApiClient } from "../../types.js";
 import { createAccount } from "../../internal/account.js";
 
@@ -77,9 +75,7 @@ export async function requestAccount(
 
   const account = await createAccount({
     accountAddress,
-    counterfactualInfo: counterfactualInfo
-      ? Value.Parse(SerializedInitcode, counterfactualInfo)
-      : undefined,
+    counterfactualInfo,
     delegation,
     chain: client.chain,
     transport: custom(client.transport),

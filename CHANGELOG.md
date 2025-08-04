@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
+
+### Bug Fixes
+
+- only use typebox for types in `wallet-client` ([#1843](https://github.com/alchemyplatform/aa-sdk/issues/1843)) ([41b8ef8](https://github.com/alchemyplatform/aa-sdk/commit/41b8ef844180e51294e820f4c41c0dc4e63193f7))
+
+## [4.52.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.2...v4.52.3) (2025-08-04)
+
+### Bug Fixes
+
+- docspath param in errors ([#1830](https://github.com/alchemyplatform/aa-sdk/issues/1830)) ([2b4ec0a](https://github.com/alchemyplatform/aa-sdk/commit/2b4ec0a38e10b057098ad72c3982ec353f0e9b09))
+- respect retryCount on alchemy transport & in alchemy smart account client ([#1841](https://github.com/alchemyplatform/aa-sdk/issues/1841)) ([cba003f](https://github.com/alchemyplatform/aa-sdk/commit/cba003f897b26890cb9f6cf7e107444603751e53))
+
+### Features
+
+- append wallets mdx-components to existing mdx-components in docs.yml ([#1828](https://github.com/alchemyplatform/aa-sdk/issues/1828)) ([7a266ec](https://github.com/alchemyplatform/aa-sdk/commit/7a266ec2a4e244fb82c9894e85aaf6daa06ef392))
+- **demo app:** add swaps & deposits card to the demo app ([#1798](https://github.com/alchemyplatform/aa-sdk/issues/1798)) ([7364a5c](https://github.com/alchemyplatform/aa-sdk/commit/7364a5c98126eddf502ea023d93b124a10d195ff))
+
 ## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
 
 ### Bug Fixes
