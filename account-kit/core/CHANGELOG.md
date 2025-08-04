@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.2...v4.52.3) (2025-08-04)
+
+### Bug Fixes
+
+- docspath param in errors ([#1830](https://github.com/alchemyplatform/aa-sdk/issues/1830)) ([2b4ec0a](https://github.com/alchemyplatform/aa-sdk/commit/2b4ec0a38e10b057098ad72c3982ec353f0e9b09))
+
 ## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
 
 **Note:** Version bump only for package @account-kit/core
