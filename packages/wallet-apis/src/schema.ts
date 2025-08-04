@@ -1,9 +1,9 @@
 import type { Address, Hex, PartialBy } from "viem";
-import type { Multiplier } from "./actions/types";
 import type {
   EntryPointVersion,
   RpcUserOperation,
 } from "viem/account-abstraction";
+import type { Multiplier } from "./actions/types.js";
 
 export type RpcGasAndFeeOverrides<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
