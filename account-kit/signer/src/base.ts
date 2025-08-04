@@ -798,14 +798,17 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return SignerLogger.profiled(
       "BaseAlchemySigner.getUser",
       async (params: string | GetUserParams) => {
-        let result;
-        if (typeof params === "string") {
-          result = await this.inner.lookupUserByEmail(params);
-        } else if (params.type === "email") {
-          result = await this.inner.lookupUserByEmail(params.value);
-        } else if (params.type === "phone") {
-          result = await this.inner.lookupUserByPhone(params.value);
-        }
+        const _params =
+          typeof params === "string"
+            ? { type: "email" as const, value: params }
+            : params;
+
+        const result =
+          _params.type === "email"
+            ? await this.inner.lookupUserByEmail(_params.value)
+            : _params.type === "phone"
+              ? await this.inner.lookupUserByPhone(_params.value)
+              : assertNever(_params, "unhandled get user params");
 
         if (result?.orgId == null) {
           return null;
