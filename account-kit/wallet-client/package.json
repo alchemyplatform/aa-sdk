@@ -44,7 +44,6 @@
     "@account-kit/infra": "^4.52.3",
     "@account-kit/smart-contracts": "^4.52.3",
     "@alchemy/wallet-api-types": "0.1.0-alpha.14",
-    "@sinclair/typebox": "^0.34.33",
     "deep-equal": "^2.2.3",
     "ox": "^0.6.12"
   },
@@ -52,7 +51,8 @@
     "@types/deep-equal": "^1.0.4",
     "@types/node": "^24.0.11",
     "bun": "^1.2.18",
-    "bun-types": "^1.2.18"
+    "bun-types": "^1.2.18",
+    "@sinclair/typebox": "^0.34.33"
   },
   "peerDependencies": {
     "viem": "2.29.2"
