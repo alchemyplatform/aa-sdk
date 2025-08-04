@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
+
+**Note:** Version bump only for package @account-kit/react
+
 ## [4.52.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.2...v4.52.3) (2025-08-04)
 
 **Note:** Version bump only for package @account-kit/react
