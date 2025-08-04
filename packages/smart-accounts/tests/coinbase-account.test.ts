@@ -3,7 +3,10 @@ import {
   bundlerActions,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { alchemyGasManagerHooks } from "../../../account-kit/infra/src/hooks/alchemyGasManagerHooks.js";
+import { 
+  alchemyGasManagerHooks,
+  alchemyGasAndPaymasterAndDataHooks 
+} from "../../../account-kit/infra/src/hooks/alchemyGasManagerHooks.js";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
