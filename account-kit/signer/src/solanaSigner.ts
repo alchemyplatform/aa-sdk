@@ -9,6 +9,7 @@ import {
 import { size, slice, toBytes, toHex, type ByteArray, type Hex } from "viem";
 import type { BaseSignerClient } from "./client/base";
 import { NotAuthenticatedError } from "./errors.js";
+import { createSolanaSponsoredTransaction } from "./utils/solana.js";
 
 /**
  * The SolanaSigner class is used to sign transactions and messages for the Solana blockchain.
@@ -159,53 +160,11 @@ export class SolanaSigner {
     connection: Connection,
     policyId: string,
   ): Promise<VersionedTransaction> {
-    const { blockhash } = await connection.getLatestBlockhash({
-      commitment: "finalized",
-    });
-    const message = new TransactionMessage({
-      // Right now the backend will rewrite this payer Key to the server's address
-      payerKey: new PublicKey(this.address),
-      recentBlockhash: blockhash,
+    return createSolanaSponsoredTransaction(
       instructions,
-    }).compileToV0Message();
-    const versionedTransaction = new VersionedTransaction(message);
-    const serializedTransaction = Buffer.from(
-      versionedTransaction.serialize(),
-    ).toString("base64");
-    const body = JSON.stringify({
-      id: crypto?.randomUUID() ?? Math.floor(Math.random() * 1000000),
-      jsonrpc: "2.0",
-      method: "alchemy_requestFeePayer",
-      params: [
-        {
-          policyId,
-          serializedTransaction,
-        },
-      ],
-    });
-    const options = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body,
-    };
-
-    const response = await fetch(
-      // TODO: Use the connection??
-      connection.rpcEndpoint,
-      options,
-    );
-    const jsonResponse = await response.json();
-    if (!jsonResponse?.result?.serializedTransaction)
-      throw new Error(
-        `Response doesn't include the serializedTransaction ${JSON.stringify(
-          jsonResponse,
-        )}`,
-      );
-    return VersionedTransaction.deserialize(
-      decodeBase64(jsonResponse.result.serializedTransaction),
+      connection,
+      policyId,
+      this.address,
     );
   }
 
@@ -224,7 +183,4 @@ export class SolanaSigner {
     }
     return toHex(messageToSign);
   }
-}
-function decodeBase64(serializedTransaction: string): Uint8Array {
-  return Buffer.from(serializedTransaction, "base64");
 }

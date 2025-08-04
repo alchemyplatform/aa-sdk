@@ -3,6 +3,11 @@
 import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
 import { SolanaSigner } from "@account-kit/signer";
+import { useWallet } from "@solana/wallet-adapter-react";
+import {
+  createSolanaSponsoredTransaction,
+  createSolanaTransaction,
+} from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types.js";
 import {
   PublicKey,
@@ -93,7 +98,9 @@ export type SolanaTransactionHookParams = {
 };
 
 /**
- * This is the hook that will be used to send a transaction.
+ * This is the hook that will be used to send a transaction. It will prioritize external
+ * connected Solana wallets, falling back to the internal signer when not connected.
+ * Supports sponsorship for both external wallets and internal signers.
  *
  * @example
  * ```ts
@@ -115,31 +122,82 @@ export function useSolanaTransaction(
 ): SolanaTransaction {
   const { config } = useAlchemyAccountContext();
   const fallbackSigner: null | SolanaSigner = useSolanaSigner();
+  const {
+    connected: isWalletConnected,
+    publicKey: walletPublicKey,
+    sendTransaction: walletSendTransaction,
+  } = useWallet();
   const backupConnection = useSyncExternalStore(
     watchSolanaConnection(config),
     () => getSolanaConnection(config),
     () => getSolanaConnection(config),
   );
+
   const mutation = useMutation({
     mutationFn: async ({
-      transactionComponents: {
-        preSend,
-        transformInstruction = mapTransformInstructions.default,
-      } = {},
+      transactionComponents: { preSend, transformInstruction } = {},
       confirmationOptions,
       ...params
     }: SolanaTransactionParams) => {
+      const localConnection = connection || missing("connection");
       const instructions = getInstructions();
-      let transaction: VersionedTransaction | Transaction =
-        await transformInstruction(instructions);
 
+      // Use external wallet if connected
+      if (isWalletConnected && walletSendTransaction && walletPublicKey) {
+        try {
+          const fromAddress = walletPublicKey.toBase58();
+
+          // Use custom transform if provided, otherwise use sponsorship-aware defaults
+          let transaction: VersionedTransaction | Transaction;
+          if (transformInstruction) {
+            transaction = await transformInstruction(instructions);
+          } else if (policyId) {
+            // Use sponsorship utility for external wallets
+            transaction = await createSolanaSponsoredTransaction(
+              instructions,
+              localConnection,
+              policyId,
+              fromAddress,
+            );
+          } else {
+            // Use regular transaction utility for external wallets
+            transaction = await createSolanaTransaction(
+              instructions,
+              localConnection,
+              fromAddress,
+            );
+          }
+
+          transaction = (await preSend?.(transaction)) || transaction;
+
+          const signature = await walletSendTransaction(
+            transaction,
+            localConnection,
+          );
+          return { hash: signature };
+        } catch (error) {
+          throw new Error(`External wallet transaction failed: ${error}`);
+        }
+      }
+
+      // Fall back to internal signer flow
+      if (!signer) {
+        throw new Error(
+          "No Solana wallet connected and no internal signer available",
+        );
+      }
+
+      const defaultTransformInstruction = mapTransformInstructions.default;
+      const finalTransformInstruction =
+        transformInstruction || defaultTransformInstruction;
+
+      let transaction: VersionedTransaction | Transaction =
+        await finalTransformInstruction(instructions);
       transaction = (await preSend?.(transaction)) || transaction;
 
       if (needsSignerToSign()) {
-        await signer?.addSignature(transaction);
+        await signer.addSignature(transaction);
       }
-
-      const localConnection = connection || missing("connection");
 
       const finalConfirmationOptions = {
         ...opts.confirmationOptions,
@@ -157,11 +215,15 @@ export function useSolanaTransaction(
         if ("instructions" in params) {
           return params.instructions;
         }
+
+        const fromAddress =
+          isWalletConnected && walletPublicKey
+            ? walletPublicKey.toBase58()
+            : signer?.address || missing("signer.address");
+
         return [
           SystemProgram.transfer({
-            fromPubkey: new PublicKey(
-              signer?.address || missing("signer.address"),
-            ),
+            fromPubkey: new PublicKey(fromAddress),
             toPubkey: new PublicKey(params.transfer.toAddress),
             lamports: params.transfer.amount,
           }),
@@ -186,6 +248,7 @@ export function useSolanaTransaction(
     },
     ...opts.mutation,
   });
+
   const signer: null | SolanaSigner = opts?.signer || fallbackSigner;
   const connection = opts?.connection || backupConnection?.connection || null;
   const policyId =
