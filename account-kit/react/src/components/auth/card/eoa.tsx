@@ -245,6 +245,39 @@ export const EoaPickCard = () => {
     return Array.from(uniqueMap.values());
   })();
 
+  // Deduplicate Solana wallets, prioritizing installed ones
+  const uniqueSolanaWallets = (() => {
+    const uniqueMap = new Map<string, (typeof wallets)[0]>();
+
+    wallets.forEach((wallet) => {
+      const key = wallet.adapter.name.toLowerCase();
+      const existing = uniqueMap.get(key);
+
+      if (!existing) {
+        uniqueMap.set(key, wallet);
+      } else if (
+        wallet.readyState === "Installed" &&
+        existing.readyState !== "Installed"
+      ) {
+        // Replace with installed version if current one is installed and existing isn't
+        uniqueMap.set(key, wallet);
+      }
+      // If both are installed or both are not installed, keep the first one
+    });
+
+    return Array.from(uniqueMap.values());
+  })();
+
+  // Filter to only show installed Solana wallets if any are available
+  const filteredSolanaWallets = (() => {
+    const installedWallets = uniqueSolanaWallets.filter(
+      (wallet) => wallet.readyState === "Installed",
+    );
+
+    // If we have installed wallets, only show those. Otherwise show all unique wallets.
+    return installedWallets.length > 0 ? installedWallets : uniqueSolanaWallets;
+  })();
+
   // Use reusable wallet button components with deduplicated connectors
   const connectorButtons = uniqueConnectors.map((connector) => (
     <WalletButton
@@ -259,13 +292,15 @@ export const EoaPickCard = () => {
       className="w-full"
       header="Select your wallet"
       description={
-        walletConnectParams != null || connectors.length || wallets.length ? (
+        walletConnectParams != null ||
+        connectors.length ||
+        filteredSolanaWallets.length ? (
           <div className="flex flex-col gap-3 w-full">
             {connectorButtons}
             {walletConnectParams && (
               <WalletConnectButton logoUrl={getLogoUrlForWalletConnect()} />
             )}
-            {wallets.map((wallet) => (
+            {filteredSolanaWallets.map((wallet) => (
               <SolanaWalletButton
                 key={wallet.adapter.name}
                 wallet={wallet}
