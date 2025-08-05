@@ -4,6 +4,7 @@ import type {
   AlchemyTransportConfig,
   PolicyToken,
 } from "@account-kit/infra";
+
 import type {
   RNAlchemySignerSingleton as RNAlchemySigner,
   RNSignerClient,
@@ -60,6 +61,7 @@ export type AlchemyAccountsConfig = {
   accountCreationHint?: CreateConfigProps["accountCreationHint"];
   solana?: {
     adapters: WalletAdapter[];
+    connection: SolanaWeb3Connection;
   };
   _internal: {
     // if not provided, the default signer will be used

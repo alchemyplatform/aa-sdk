@@ -1,7 +1,11 @@
 "use client";
 
-import { WalletProvider } from "@solana/wallet-adapter-react";
+import {
+  WalletProvider,
+  ConnectionProvider,
+} from "@solana/wallet-adapter-react";
 import { useSolanaAdapters } from "../hooks/useSolanaAdapters.js";
+import { useAlchemyAccountContext } from "../hooks/useAlchemyAccountContext.js";
 import type { ReactNode } from "react";
 
 interface SolanaWalletProviderProps {
@@ -9,11 +13,14 @@ interface SolanaWalletProviderProps {
 }
 
 export function SolanaWalletProvider({ children }: SolanaWalletProviderProps) {
-  const solanaAdapters = useSolanaAdapters();
+  const { connection } = useAlchemyAccountContext().config.solana!;
+  const wallets = useSolanaAdapters();
 
   return (
-    <WalletProvider wallets={solanaAdapters} autoConnect>
-      {children}
-    </WalletProvider>
+    <ConnectionProvider endpoint={connection.rpcEndpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        {children}
+      </WalletProvider>
+    </ConnectionProvider>
   );
 }

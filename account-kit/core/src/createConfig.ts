@@ -138,6 +138,7 @@ export const createConfig = (
     solana: params.solana
       ? {
           adapters: params.solana.adapters || [],
+          connection: params.solana.connection,
         }
       : undefined,
     _internal: {
