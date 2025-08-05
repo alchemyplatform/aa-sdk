@@ -16,23 +16,7 @@ navigation:
           - page: Overview
             slug: /
             path: wallets/pages/index.mdx
-          - link: Gas benchmarks
-            href: https://github.com/alchemyplatform/aa-benchmarks
-          - page: Contact us
-            path: wallets/pages/resources/contact-us.mdx
-          - section: Concepts
-            contents:
-              - page: Intro to Smart Wallets
-                path: wallets/pages/concepts/intro-to-account-kit.mdx
-              - page: Smart Contract Account
-                path: wallets/pages/concepts/smart-contract-account.mdx
-              - page: Smart Account Client
-                path: wallets/pages/concepts/smart-account-client.mdx
-              - page: Bundler Client
-                path: wallets/pages/concepts/bundler-client.mdx
-              - page: Middleware
-                path: wallets/pages/concepts/middleware.mdx
-          - section: Setup
+          - section: Set up
             contents:
               - section: React
                 contents:
@@ -68,22 +52,37 @@ navigation:
                     path: wallets/pages/core/multi-chain-apps.mdx
                   - page: Server-side rendering
                     path: wallets/pages/core/ssr.mdx
-          - section: Using 7702
+              - page: Wallets API Quickstart
+                path: wallets/pages/smart-wallets/quickstart/index.mdx
+          - section: Recipes
             contents:
               - page: Overview
-                path: wallets/pages/react/using-7702.mdx
-              - page: Upgrade existing embedded EOAs
-                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
-          - section: SDK concepts
+                slug: recipes
+                path: wallets/pages/recipes/overview.mdx
+              - page: Send USDC
+                slug: recipes/send-usdc
+                path: wallets/pages/recipes/send-usdc.mdx
+              - page: Onramp Funds
+                slug: recipes/onramp-funds
+                path: wallets/pages/recipes/onramp-funds.mdx
+              - page: Hyperliquid Transactions
+                slug: recipes/hyperliquid-wallets
+                path: wallets/pages/recipes/hyperliquid-wallets.mdx
+          - section: Concepts
             contents:
+              - page: Intro to Smart Wallets
+                path: wallets/pages/concepts/intro-to-account-kit.mdx
+              - page: Smart Contract Account
+                path: wallets/pages/concepts/smart-contract-account.mdx
+              - page: Smart Account Client
+                path: wallets/pages/concepts/smart-account-client.mdx
+              - page: Bundler Client
+                path: wallets/pages/concepts/bundler-client.mdx
+              - page: Middleware
+                path: wallets/pages/concepts/middleware.mdx
               - page: Intro to Account Kit
                 path: wallets/pages/overview/sdk-concepts/intro-to-account-kit.mdx
-          - section: API
-            contents:
-              - section: Smart Wallets
-                contents:
-                  - page: Quickstart
-                    path: wallets/pages/smart-wallets/quickstart/index.mdx
+
       - section: Authentication
         contents:
           - page: What is a signer?
@@ -244,6 +243,14 @@ navigation:
                 path: wallets/pages/third-party/chains.mdx
               - page: Paymasters
                 path: wallets/pages/third-party/paymasters.mdx
+          - section: Using 7702
+            contents:
+              - page: Overview
+                path: wallets/pages/react/using-7702.mdx
+              - page: Upgrade existing embedded EOAs
+                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
+          - link: Gas benchmarks
+            href: https://github.com/alchemyplatform/aa-benchmarks
 
       - section: API
         contents:
@@ -456,21 +463,6 @@ navigation:
                 contents:
                   - page: convertSignerStatusToState
                     path: wallets/pages/reference/account-kit/core/functions/convertSignerStatusToState.mdx
-
-      - section: Recipes
-        contents:
-          - page: Overview
-            slug: recipes
-            path: wallets/pages/recipes/overview.mdx
-          - page: Send USDC
-            slug: recipes/send-usdc
-            path: wallets/pages/recipes/send-usdc.mdx
-          - page: Onramp Funds
-            slug: recipes/onramp-funds
-            path: wallets/pages/recipes/onramp-funds.mdx
-          - page: Hyperliquid Transactions
-            slug: recipes/hyperliquid-wallets
-            path: wallets/pages/recipes/hyperliquid-wallets.mdx
 
       - section: Resources
         skip-slug: true
