@@ -85,22 +85,6 @@ navigation:
 
       - section: Authentication
         contents:
-          - page: What is a signer?
-            path: wallets/pages/authentication/what-is-a-signer.mdx
-          - page: Other JS setup
-            path: wallets/pages/signer/quickstart.mdx
-          - section: React setup
-            contents:
-              - page: Set up
-                path: wallets/pages/authentication/react-setup/setup.mdx
-              - page: UI components
-                path: wallets/pages/react/ui-components.mdx
-              - page: Whitelabel
-                path: wallets/pages/react/react-hooks.mdx
-          - section: React Native setup
-            contents:
-              - page: React Native setup
-                path: wallets/pages/react-native/signer/setup-guide.mdx
           - section: Login methods
             contents:
               - page: Email OTP
@@ -133,12 +117,26 @@ navigation:
                 path: wallets/pages/react/mfa/social-login.mdx
               - page: Other JS MFA
                 path: wallets/pages/signer/authentication/mfa.mdx
-          - page: Pregenerate wallets
-            path: wallets/pages/react/pregenerate-wallets.mdx
           - section: Customization
             contents:
               - page: Theme
                 path: wallets/pages/react/customization/theme.mdx
+          - page: Pregenerate wallets
+            path: wallets/pages/react/pregenerate-wallets.mdx
+          - section: React setup
+            contents:
+              - page: Set up
+                path: wallets/pages/authentication/react-setup/setup.mdx
+              - page: UI components
+                path: wallets/pages/react/ui-components.mdx
+              - page: Whitelabel
+                path: wallets/pages/react/react-hooks.mdx
+          - page: React Native setup
+            path: wallets/pages/react-native/signer/setup-guide.mdx
+          - page: Other JS setup
+            path: wallets/pages/signer/quickstart.mdx
+          - page: What is a signer?
+            path: wallets/pages/authentication/what-is-a-signer.mdx
           - page: Third party
             path: wallets/pages/third-party/signers.mdx
 
