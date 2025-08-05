@@ -1,14 +1,25 @@
 export type * from "./transport/alchemy.js";
 export { alchemy, isAlchemyTransport } from "./transport/alchemy.js";
-export type * from "./transport/connection.js";
 export type * from "./transport/split.js";
 export { split } from "./transport/split.js";
 export type * from "./utils/types.js";
+
+// config
+export type { AlchemyConnectionConfig } from "./transport/connection-schema.js";
+export {
+  AlchemyConnectionConfigSchema,
+  validateAlchemyConnectionConfig,
+  isAlchemyConnectionConfig,
+  createApiKeyConfig,
+  createJwtConfig,
+  createRpcUrlConfig,
+} from "./transport/connection-schema.js";
 
 // errors
 export { BaseError } from "./errors/BaseError.js";
 export { ChainNotFoundError } from "./errors/ChainNotFoundError.js";
 export { AccountNotFoundError } from "./errors/AccountNotFoundError.js";
+export { ConnectionConfigError } from "./errors/ConnectionConfigError.js";
 
 // actions
 export type * from "./actions/addBreadCrumb.js";

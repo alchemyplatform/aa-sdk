@@ -15,7 +15,7 @@ import { FetchError } from "../errors/FetchError.js";
 import { ServerError } from "../errors/ServerError.js";
 import { mutateRemoveTrackingHeaders } from "../tracing/updateHeaders.js";
 import { VERSION } from "../version.js";
-import type { AlchemyConnectionConfig } from "./connection.js";
+import { type AlchemyConnectionConfig, validateAlchemyConnectionConfig } from "./connection-schema.js";
 import { split } from "./split.js";
 import type { HttpRequestFn, HttpRequestSchema } from "./types.js";
 
@@ -40,6 +40,8 @@ const chainAgnosticMethods = [
   "wallet_createSession",
   "wallet_getCallsStatus",
 ];
+
+const DEFAULT_CHAIN_AGNOSTIC_URL = "https://api.g.alchemy.com/v2";
 
 export type AlchemyTransportConfig = AlchemyConnectionConfig & {
   /** The max number of times to retry. */
@@ -87,66 +89,68 @@ export function isAlchemyTransport(
 }
 
 /**
- * Creates an Alchemy transport with the specified configuration options.
- * When sending all traffic to Alchemy, you must pass in one of rpcUrl, apiKey, or jwt.
- * If you want to send Bundler and Paymaster traffic to Alchemy and Node traffic to a different RPC, you must pass in alchemyConnection and nodeRpcUrl.
+ * Creates an Alchemy transport with the specified configuration options using discriminated unions.
+ * Each configuration type is explicitly defined with a 'type' discriminator for clear validation and type safety.
  *
  * @example
- * ### Basic Example
- * If the chain you're using is supported for both Bundler and Node RPCs, then you can do the following:
+ * ### API Key Configuration
+ * Most common setup for Alchemy-supported chains:
  * ```ts twoslash
- * import { alchemy } from "@alchemy/common";
+ * import { alchemy, createApiKeyConfig } from "@alchemy/common";
  *
+ * // Using factory function (recommended)
+ * const transport = alchemy(createApiKeyConfig("your-api-key"));
+ *
+ * // Or explicit configuration
  * const transport = alchemy({
- *  // NOTE: you can also pass in an rpcUrl or jwt here or rpcUrl and jwt
- *  apiKey: "your-api-key",
+ *   type: "apiKey",
+ *   apiKey: "your-api-key"
  * });
  * ```
  *
- * ### AA Only Chains
- * For AA-only chains, you need to specify the alchemyConnection and nodeRpcUrl since Alchemy only
- * handles the Bundler and Paymaster RPCs for these chains.
+ * ### JWT Configuration
+ * For JWT-based authentication:
  * ```ts twoslash
- * import { alchemy } from "@alchemy/common";
+ * import { alchemy, createJwtConfig } from "@alchemy/common";
  *
- * const transport = alchemy({
- *  alchemyConnection: {
- *    apiKey: "your-api-key",
- *  },
- *  nodeRpcUrl: "https://zora.rpc.url",
- * });
+ * const transport = alchemy(createJwtConfig("your-jwt-token"));
  * ```
  *
- * ### Split Transport support
- * Sometimes, the above configuration is still too restrictive and you want to split specific JSON-RPC methods between different transports. We support
- * this by allowing you to pass in a split transport configuration to make this much simpler.
+ * ### Custom RPC URL
+ * For using custom RPC endpoints:
+ * ```ts twoslash
+ * import { alchemy, createRpcUrlConfig } from "@alchemy/common";
+ *
+ * const transport = alchemy(createRpcUrlConfig("https://custom-rpc.example.com"));
+ * ```
+ *
+ * ### AA-Only Chain Configuration
+ * For chains where Alchemy only supports Account Abstraction (Bundler/Paymaster) but not node RPC:
  * ```ts twoslash
  * import { alchemy } from "@alchemy/common";
  *
  * const transport = alchemy({
- *  // in this example we want to send all eth_chainId requests to a different RPC
- *  overrides: [{
- *    methods: ["eth_chainId"],
- *    transport: http("https://rpc2.url")
- *  }],
- *  // the fallback is where all other methods will be sent to
- *  fallback: http("https://rpc1.url")
+ *   type: "aaOnly",
+ *   alchemyConnection: {
+ *     type: "apiKey",
+ *     apiKey: "your-api-key"
+ *   },
+ *   nodeRpcUrl: "https://node-rpc.example.com"
  * });
  * ```
  *
  * @param {AlchemyTransportConfig} config The configuration object for the Alchemy transport.
- * @param {number} config.retryDelay Optional The delay between retries, in milliseconds.
- * @param {number} config.retryCount Optional The number of retry attempts.
- * @param {string} [config.alchemyConnection] Optional Alchemy connection configuration (if this is passed in, nodeRpcUrl is required).
- * @param {string} [config.nodeRpcUrl] Optional RPC URL for node (if this is passed in, alchemyConnection is required).
- * @param {Array<{methods: string[], transport: Transport}>} [config.overrides] When provided, fallback is also required as this sets up a split transport
- * @param {Transport} [config.fallback] Optionally required if overrides are provided, this is the fallback transport for the split transport config.
- * @param {string} [config.restConnection] Optionally required if overrides are provided rest connection config for the split transport
- * @param {string} [config.fetchOptions] Optional fetch options for HTTP requests.
- * @param {string} [config.rpcUrl] Optional RPC URL.
- * @param {string} [config.apiKey] Optional API key for Alchemy.
- * @param {string} [config.jwt] Optional JSON Web Token for authorization.
- * @returns {AlchemyTransport} The configured Alchemy transport object.
+ * @param {number} [config.retryDelay] The delay between retries, in milliseconds.
+ * @param {number} [config.retryCount] The number of retry attempts.
+ * @param {object} [config.fetchOptions] Optional fetch options for HTTP requests.
+ * @param {"apiKey" | "jwt" | "rpcUrl" | "aaOnly"} config.type The discriminator specifying the configuration type.
+ * @param {string} [config.apiKey] API key for Alchemy (required when type is "apiKey").
+ * @param {string} [config.jwt] JWT token for authentication (required when type is "jwt").
+ * @param {string} [config.rpcUrl] Custom RPC URL (required when type is "rpcUrl").
+ * @param {object} [config.alchemyConnection] Nested authentication config (required when type is "aaOnly").
+ * @param {string} [config.nodeRpcUrl] External node RPC URL (required when type is "aaOnly").
+ * @param {string} [config.chainAgnosticUrl] Optional chain-agnostic URL override for all config types.
+ * @returns {AlchemyTransport} The configured Alchemy transport function.
  */
 export function alchemy<
   rpcSchema extends RpcSchema | undefined = undefined,
@@ -158,6 +162,10 @@ export function alchemy<
     fetchOptions: fetchOptions_,
     ...connectionConfig
   } = config;
+  
+  // Validate the connection configuration at runtime
+  const validatedConfig = validateAlchemyConnectionConfig(connectionConfig);
+  
   // we create a copy here in case we create a split transport down below
   // we don't want to add alchemy headers to 3rd party nodes
   const fetchOptions = { ...fetchOptions_ };
@@ -169,13 +177,31 @@ export function alchemy<
     "Alchemy-AA-Sdk-Version": VERSION,
   };
 
-  if (connectionConfig.jwt != null || connectionConfig.apiKey != null) {
+  // Handle authentication based on validated config type
+  if (validatedConfig.type === 'jwt') {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${
-        connectionConfig.jwt ?? connectionConfig.apiKey
-      }`,
+      Authorization: `Bearer ${validatedConfig.jwt}`,
     };
+  } else if (validatedConfig.type === 'apiKey') {
+    fetchOptions.headers = {
+      ...fetchOptions.headers,
+      Authorization: `Bearer ${validatedConfig.apiKey}`,
+    };
+  } else if (validatedConfig.type === 'aaOnly') {
+    // Handle nested authentication for AA-only config
+    const authConfig = validatedConfig.alchemyConnection;
+    if (authConfig.type === 'jwt') {
+      fetchOptions.headers = {
+        ...fetchOptions.headers,
+        Authorization: `Bearer ${authConfig.jwt}`,
+      };
+    } else if (authConfig.type === 'apiKey') {
+      fetchOptions.headers = {
+        ...fetchOptions.headers,
+        Authorization: `Bearer ${authConfig.apiKey}`,
+      };
+    }
   }
 
   const transport: AlchemyTransportBase = (opts) => {
@@ -186,85 +212,104 @@ export function alchemy<
 
     const { innerTransport, rpcUrl } = (() => {
       mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
-      if (
-        connectionConfig.overrides != null &&
-        connectionConfig.fallback != null
-      ) {
-        return {
-          innerTransport: split(connectionConfig),
-          rpcUrl:
-            connectionConfig.restConnection.proxyUrl ??
-            "https://api.g.alchemy.com/v2",
-        };
-      }
-
-      if (!connectionConfig.proxyUrl && chain.rpcUrls.alchemy == null) {
-        // TODO(v5): update this error message to be the correct package name
-        throw new BaseError(
-          "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`.",
-        );
-      }
-
-      const rpcUrl =
-        connectionConfig.proxyUrl == null
-          ? chain.rpcUrls.alchemy.http[0]
-          : connectionConfig.proxyUrl;
-
-      const chainAgnosticRpcUrl =
-        connectionConfig.proxyUrl == null
-          ? "https://api.g.alchemy.com/v2"
-          : connectionConfig.proxyUrl;
-
-      if (
-        connectionConfig.alchemyConnection != null &&
-        connectionConfig.nodeRpcUrl != null
-      ) {
-        return {
-          rpcUrl,
-          innerTransport: split({
-            overrides: [
-              {
-                methods: alchemyMethods,
-                transport: http(rpcUrl, {
-                  fetchOptions,
-                  retryCount,
-                  retryDelay,
-                }),
-              },
-              {
-                methods: chainAgnosticMethods,
-                transport: http(chainAgnosticRpcUrl, {
-                  fetchOptions,
-                  retryCount,
-                  retryDelay,
-                }),
-              },
-            ],
-            fallback: http(connectionConfig.nodeRpcUrl, {
-              fetchOptions: fetchOptions_,
-              retryCount,
-              retryDelay,
-            }),
-          }),
-        };
-      }
-
-      return {
-        rpcUrl,
-        innerTransport: split({
-          overrides: [
-            {
-              methods: chainAgnosticMethods,
-              transport: http(chainAgnosticRpcUrl, {
-                fetchOptions,
+      
+      // Handle each discriminated union case
+      switch (validatedConfig.type) {
+        case 'aaOnly': {
+          // AA-only configuration with split transport
+          const chainAgnosticRpcUrl = validatedConfig.chainAgnosticUrl ?? DEFAULT_CHAIN_AGNOSTIC_URL;
+          const alchemyRpcUrl = chain.rpcUrls.alchemy?.http[0] ?? chainAgnosticRpcUrl;
+          
+          return {
+            rpcUrl: chainAgnosticRpcUrl,
+            innerTransport: split({
+              overrides: [
+                {
+                  methods: alchemyMethods,
+                  transport: http(alchemyRpcUrl, {
+                    fetchOptions,
+                    retryCount,
+                    retryDelay,
+                  }),
+                },
+                {
+                  methods: chainAgnosticMethods,
+                  transport: http(chainAgnosticRpcUrl, {
+                    fetchOptions,
+                    retryCount,
+                    retryDelay,
+                  }),
+                },
+              ],
+              fallback: http(validatedConfig.nodeRpcUrl, {
+                fetchOptions: fetchOptions_,
                 retryCount,
                 retryDelay,
               }),
-            },
-          ],
-          fallback: http(rpcUrl, { fetchOptions, retryCount, retryDelay }),
-        }),
-      };
+            }),
+          };
+        }
+        
+
+        case 'rpcUrl': {
+          // Custom RPC URL configuration
+          const rpcUrl = validatedConfig.rpcUrl;
+          const chainAgnosticRpcUrl = validatedConfig.chainAgnosticUrl ?? DEFAULT_CHAIN_AGNOSTIC_URL;
+          
+          return {
+            rpcUrl,
+            innerTransport: split({
+              overrides: [
+                {
+                  methods: chainAgnosticMethods,
+                  transport: http(chainAgnosticRpcUrl, {
+                    fetchOptions,
+                    retryCount,
+                    retryDelay,
+                  }),
+                },
+              ],
+              fallback: http(rpcUrl, { fetchOptions, retryCount, retryDelay }),
+            }),
+          };
+        }
+        
+        case 'apiKey':
+        case 'jwt': {
+          // Standard Alchemy API configurations
+          if (chain.rpcUrls.alchemy == null) {
+            throw new BaseError(
+              "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`.",
+            );
+          }
+          
+          const rpcUrl = chain.rpcUrls.alchemy.http[0];
+          const chainAgnosticRpcUrl = validatedConfig.chainAgnosticUrl ?? DEFAULT_CHAIN_AGNOSTIC_URL;
+          
+          return {
+            rpcUrl,
+            innerTransport: split({
+              overrides: [
+                {
+                  methods: chainAgnosticMethods,
+                  transport: http(chainAgnosticRpcUrl, {
+                    fetchOptions,
+                    retryCount,
+                    retryDelay,
+                  }),
+                },
+              ],
+              fallback: http(rpcUrl, { fetchOptions, retryCount, retryDelay }),
+            }),
+          };
+        }
+        
+        default: {
+          // TypeScript exhaustiveness check
+          const _exhaustive: never = validatedConfig;
+          throw new BaseError(`Unsupported connection type: ${JSON.stringify(_exhaustive)}`);
+        }
+      }
     })();
 
     return createTransport(

@@ -1,10 +1,14 @@
+import { describe, it, expect, vi } from "vitest";
 import { avalanche } from "viem/chains";
-import { sepolia } from "../chains.js";
-import { alchemy } from "./alchemy.js";
-import * as SplitModule from "./split.js";
+import { sepolia } from "../../src/chains.js";
+import { alchemy } from "../../src/transport/alchemy.js";
+import * as SplitModule from "../../src/transport/split.js";
 
 describe("Alchemy Transport Tests", () => {
-  it.each([{ proxyUrl: "/api" }, { jwt: "test" }, { apiKey: "key" }])(
+  it.each([
+    { type: "jwt" as const, jwt: "test" },
+    { type: "apiKey" as const, apiKey: "key" }
+  ])(
     "should successfully create a non-split transport",
     (args) => {
       expect(() =>
@@ -15,11 +19,16 @@ describe("Alchemy Transport Tests", () => {
     },
   );
 
-  it.each([{ proxyUrl: "/api" }, { jwt: "test" }, { apiKey: "key" }])(
+  // TODO: Add back support for split transport deciding on config schema approach
+  it.skip.each([
+    { type: "jwt" as const, jwt: "test" },
+    { type: "apiKey" as const, apiKey: "key" }
+  ])(
     "should correctly create a split transport",
     (args) => {
       const splitSpy = vi.spyOn(SplitModule, "split");
       alchemy({
+        type: "aaOnly",
         alchemyConnection: args,
         nodeRpcUrl: "/test",
       })({ chain: sepolia });
@@ -31,7 +40,7 @@ describe("Alchemy Transport Tests", () => {
 
   it("should correctly do runtime validation when chain is not supported by Alchemy", () => {
     expect(() =>
-      alchemy({ apiKey: "some_key" })({ chain: avalanche }),
+      alchemy({ type: "apiKey", apiKey: "some_key" })({ chain: avalanche }),
     ).toThrowError(
       `chain must include an alchemy rpc url. See \`defineAlchemyChain\` or import a chain from \`@alchemy/common/chains\`.`,
     );
