@@ -142,16 +142,46 @@ navigation:
 
       - section: Authorization
         contents:
+          - link: Sending transactions
+            href: /docs/wallets/transactions/send/
+          - section: Signing
+            contents:
+              - page: Signing transactions
+                path: wallets/pages/signer/as-an-eoa.mdx
+              - page: Signing messages
+                path: wallets/pages/signer/as-an-eoa.mdx
+              - page: Sign EIP-7702 authorization
+                path: wallets/pages/signer/as-an-eoa.mdx
+              - page: Sign Solana transactions
+                path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
+              - section: Other signing
+                contents:
+                  - page: Sign typed data
+                    path: wallets/pages/signer/as-an-eoa.mdx
+                  - page: Sign raw hash
+                    path: wallets/pages/signer/as-an-eoa.mdx
+          - section: Policies
+            contents:
+              - page: Overview
+                path: wallets/pages/authorization/policies/overview.mdx
+              - page: Key Concepts
+                path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
+              - page: Session key overview
+                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
+              - page: Session key permissions
+                path: wallets/pages/authorization/policies/session-key-permissions.mdx
+              - page: Adding session keys
+                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
+              - page: Using session keys
+                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
+              - page: Removing session keys
+                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
           - page: User sessions
             path: wallets/pages/signer/user-sessions.mdx
-          - page: Export private key
-            path: wallets/pages/signer/export-private-key.mdx
-          - page: Embedded EOAs
-            path: wallets/pages/signer/as-an-eoa.mdx
-          - page: Signing Solana
-            path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
           - page: Manage account ownership
             path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
+          - page: Export private key
+            path: wallets/pages/signer/export-private-key.mdx
           - section: Smart Account Types
             contents:
               - page: Choosing a Smart Account
@@ -204,22 +234,6 @@ navigation:
                 path: wallets/pages/third-party/smart-contracts.mdx
               - page: Deployed addresses
                 path: wallets/pages/smart-contracts/deployed-addresses.mdx
-          - section: Policies
-            contents:
-              - page: Overview
-                path: wallets/pages/authorization/policies/overview.mdx
-              - page: Key Concepts
-                path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
-              - page: Session key overview
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
-              - page: Session key permissions
-                path: wallets/pages/authorization/policies/session-key-permissions.mdx
-              - page: Adding session keys
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
-              - page: Using session keys
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
-              - page: Removing session keys
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
 
       - section: Transactions
         contents:
