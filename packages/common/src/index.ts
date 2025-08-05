@@ -8,6 +8,7 @@ export { split } from "./transport/split.js";
 // utils
 export type * from "./utils/types.js";
 export { assertNever } from "./utils/assertNever.js";
+export { raise } from "./utils/raise.js";
 
 // errors
 export { BaseError } from "./errors/BaseError.js";

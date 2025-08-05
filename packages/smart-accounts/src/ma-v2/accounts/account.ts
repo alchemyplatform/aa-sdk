@@ -40,11 +40,13 @@ export type ToModularAccountV2Params<
   ? {
       salt?: never;
       factoryAddress?: never;
+      factoryData?: never;
       implementationAddress?: never;
     }
   : {
       salt?: bigint;
       factoryAddress?: Address;
+      factoryData?: Hex;
       implementationAddress?: Address;
     });
 
@@ -62,6 +64,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   accountAddress: accountAddress_,
   salt = 0n,
   factoryAddress: factoryAddress_,
+  factoryData: factoryData_,
   implementationAddress: implementationAddress_,
   mode,
 }: ToModularAccountV2Params<TMode>): Promise<ModularAccountV2> {
@@ -138,21 +141,25 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
       const { x, y } = parsePublicKey(owner.publicKey);
       return {
         factory: factoryAddress,
-        factoryData: encodeFunctionData({
-          abi: accountFactoryAbi,
-          functionName: "createWebAuthnAccount",
-          args: [x, y, salt, entityId],
-        }),
+        factoryData:
+          factoryData_ ??
+          encodeFunctionData({
+            abi: accountFactoryAbi,
+            functionName: "createWebAuthnAccount",
+            args: [x, y, salt, entityId],
+          }),
       };
     }
 
     return {
       factory: factoryAddress,
-      factoryData: encodeFunctionData({
-        abi: accountFactoryAbi,
-        functionName: "createSemiModularAccount",
-        args: [owner.address, salt],
-      }),
+      factoryData:
+        factoryData_ ??
+        encodeFunctionData({
+          abi: accountFactoryAbi,
+          functionName: "createSemiModularAccount",
+          args: [owner.address, salt],
+        }),
     };
   };
 

@@ -34,13 +34,7 @@ import {
   signMessage,
   signTypedData,
 } from "viem/actions";
-import {
-  assertNever,
-  BaseError,
-  InvalidDeferredActionNonceError,
-  InvalidEntityIdError,
-  InvalidNonceKeyError,
-} from "@alchemy/common";
+import { assertNever, BaseError } from "@alchemy/common";
 import {
   SignaturePrefix,
   type ExecutionDataView,
@@ -64,6 +58,9 @@ import {
   packUOSignature,
 } from "../utils/signature.js";
 import { chainHas7212 } from "../../utils.js";
+import { InvalidDeferredActionNonceError } from "../../errors/InvalidDeferredActionNonceError.js";
+import { InvalidNonceKeyError } from "../../errors/InvalidNonceKeyError.js";
+import { InvalidEntityIdError } from "../../errors/InvalidEntityIdError.js";
 
 export type ValidationDataParams =
   | {
@@ -452,7 +449,9 @@ export async function toModularAccountV2Base<
         return concatHex(["0xff", signature]);
       }
 
-      const validationSignature = await signMessage(client, {
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+
+      const validationSignature = await signMessageAction({
         account: owner,
         message: { raw: hash },
       });
