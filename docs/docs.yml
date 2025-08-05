@@ -247,10 +247,12 @@ navigation:
             path: wallets/pages/transactions/send/batch-user-ops.mdx
           - section: Sponsor gas
             contents:
-              - page: Sponsor gas
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas.mdx
-              - page: Pay gas with any token
-                path: wallets/pages/react/pay-gas-with-any-token.mdx
+              - page: EVM
+                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
+              - page: Solana
+                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+          - page: Pay gas with any token
+            path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Third Party
             contents:
               - page: Bundlers
