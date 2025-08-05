@@ -4,6 +4,7 @@ export type * from "./transport/connection.js";
 export type * from "./transport/split.js";
 export { split } from "./transport/split.js";
 export type * from "./utils/types.js";
+export { bigIntMultiply } from "./utils/bigint.js";
 
 // errors
 export { BaseError } from "./errors/BaseError.js";

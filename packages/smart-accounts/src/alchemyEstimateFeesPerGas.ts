@@ -12,8 +12,7 @@ import type {
   UserOperationRequest,
   SmartAccount,
 } from "viem/account-abstraction";
-import { BaseError } from "@alchemy/common";
-import { bigIntMultiply } from "@aa-sdk/core";
+import { BaseError, bigIntMultiply } from "@alchemy/common";
 import type { AlchemyRpcSchema } from "./types";
 
 export const alchemyRpcSchema = rpcSchema<AlchemyRpcSchema>();
