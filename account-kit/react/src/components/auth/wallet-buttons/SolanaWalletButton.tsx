@@ -34,9 +34,14 @@ export const SolanaWalletButton = ({
         )
       }
       onClick={handleClick}
+      fullWidthContent={true}
     >
-      {wallet.adapter.name}{" "}
-      <span className="bg-gray-100 px-1 py-0.5 rounded-md text-xs">solana</span>
+      <div className="flex items-center justify-between w-full">
+        <span>{wallet.adapter.name}</span>
+        <span className="bg-bg-surface-inset px-1 rounded-sm text-xs font-medium h-4 flex items-center gap-1 leading-4 text-fg-tertiary">
+          solana
+        </span>
+      </div>
     </Button>
   );
 };
