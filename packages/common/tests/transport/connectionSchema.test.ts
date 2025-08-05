@@ -5,7 +5,7 @@ import {
   createApiKeyConfig,
   createJwtConfig,
   createRpcUrlConfig
-} from "../../src/transport/connection-schema.js";
+} from "../../src/transport/connectionSchema.js";
 import { ConnectionConfigError } from "../../src/errors/ConnectionConfigError.js";
 
 describe("AlchemyConnectionConfig Schema", () => {

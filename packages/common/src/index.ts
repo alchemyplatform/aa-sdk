@@ -5,7 +5,7 @@ export { split } from "./transport/split.js";
 export type * from "./utils/types.js";
 
 // config
-export type { AlchemyConnectionConfig } from "./transport/connection-schema.js";
+export type { AlchemyConnectionConfig } from "./transport/connectionSchema.js";
 export {
   AlchemyConnectionConfigSchema,
   validateAlchemyConnectionConfig,
@@ -13,7 +13,7 @@ export {
   createApiKeyConfig,
   createJwtConfig,
   createRpcUrlConfig,
-} from "./transport/connection-schema.js";
+} from "./transport/connectionSchema.js";
 
 // errors
 export { BaseError } from "./errors/BaseError.js";

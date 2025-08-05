@@ -15,7 +15,7 @@ import { FetchError } from "../errors/FetchError.js";
 import { ServerError } from "../errors/ServerError.js";
 import { mutateRemoveTrackingHeaders } from "../tracing/updateHeaders.js";
 import { VERSION } from "../version.js";
-import { type AlchemyConnectionConfig, validateAlchemyConnectionConfig } from "./connection-schema.js";
+import { type AlchemyConnectionConfig, validateAlchemyConnectionConfig } from "./connectionSchema.js";
 import { split } from "./split.js";
 import type { HttpRequestFn, HttpRequestSchema } from "./types.js";
 
