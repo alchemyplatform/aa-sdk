@@ -479,36 +479,29 @@ navigation:
       - section: Resources
         skip-slug: true
         contents:
-          - section: Third Party
-            contents:
-              - page: Bundlers
-                path: wallets/pages/third-party/bundlers.mdx
-              - page: Chains
-                path: wallets/pages/third-party/chains.mdx
-              - page: Paymasters
-                path: wallets/pages/third-party/paymasters.mdx
-              - page: Signers
-                path: wallets/pages/third-party/signers.mdx
-              - page: Smart Contracts
-                path: wallets/pages/third-party/smart-contracts.mdx
-          - page: Migrating to 4.x.x
-            slug: migration-guide
-            path: wallets/pages/migration-guide.mdx
           - link: GitHub
             href: https://github.com/alchemyplatform/aa-sdk
           - link: Changelog
             href: https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md
           - link: Contributing
             href: https://github.com/alchemyplatform/aa-sdk/blob/main/CONTRIBUTING.md
+          - page: Migrating to 4.x.x
+            slug: migration-guide
+            path: wallets/pages/migration-guide.mdx
           - page: Terms
             slug: resources/terms
             path: wallets/pages/resources/terms.mdx
           - page: Types
             slug: resources/types
             path: wallets/pages/resources/types.mdx
-          - page: FAQs
-            slug: resources/faqs
-            path: wallets/pages/resources/faqs.mdx
+          - section: Troubleshooting
+            contents:
+              - page: General FAQs
+                path: wallets/pages/resources/faqs.mdx
+              - page: Gas Manager FAQs
+                path: wallets/pages/gas-manager-admin-api/gas-manager-faqs.mdx
+              - page: Bundler FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx
