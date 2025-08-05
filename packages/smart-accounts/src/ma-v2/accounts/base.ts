@@ -42,18 +42,6 @@ import {
   InvalidNonceKeyError,
 } from "@alchemy/common";
 import {
-  chainHas7212,
-  DEFAULT_OWNER_ENTITY_ID,
-  DefaultModuleAddress,
-  EXECUTE_USER_OP_SELECTOR,
-  pack1271Signature,
-  packUOSignature,
-  parseDeferredAction,
-  serializeModuleEntity,
-  toReplaySafeTypedData,
-  toWebAuthnSignature,
-} from "../utils.js";
-import {
   SignaturePrefix,
   type ExecutionDataView,
   type SignerEntity,
@@ -62,6 +50,20 @@ import {
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import type { SignatureRequest } from "../../types.js";
 import { getAction } from "viem/utils";
+import {
+  DEFAULT_OWNER_ENTITY_ID,
+  DefaultModuleAddress,
+  EXECUTE_USER_OP_SELECTOR,
+  serializeModuleEntity,
+} from "../utils/account.js";
+import { parseDeferredAction } from "../utils/deferredActions.js";
+import {
+  pack1271Signature,
+  toWebAuthnSignature,
+  toReplaySafeTypedData,
+  packUOSignature,
+} from "../utils/signature.js";
+import { chainHas7212 } from "../../utils.js";
 
 export type ValidationDataParams =
   | {
@@ -82,7 +84,7 @@ export type BaseModularAccountV2Implementation = SmartAccountImplementation<
     encodeCallData: (callData: Hex) => Promise<Hex>;
     getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
     getValidationData: (
-      args: ValidationDataParams,
+      args: ValidationDataParams
     ) => Promise<ValidationDataView>;
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
@@ -111,12 +113,12 @@ export type ToModularAccountV2BaseParams<
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
 >(
-  params: ToModularAccountV2BaseParams<TTransport>,
+  params: ToModularAccountV2BaseParams<TTransport>
 ): Promise<ModularAccountV2Base>;
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
 >(
-  params: ToModularAccountV2BaseParams<TTransport>,
+  params: ToModularAccountV2BaseParams<TTransport>
 ): Promise<ModularAccountV2Base>;
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
@@ -178,7 +180,7 @@ export async function toModularAccountV2Base<
   }
 
   const getNonce = async (
-    params?: { key?: bigint | undefined } | undefined,
+    params?: { key?: bigint | undefined } | undefined
   ): Promise<bigint> => {
     if (nonce) {
       const tempNonce = nonce;
@@ -264,11 +266,11 @@ export async function toModularAccountV2Base<
   };
 
   const prepareSignature = async (
-    request: SignatureRequest,
+    request: SignatureRequest
   ): Promise<Extract<SignatureRequest, { type: "eth_signTypedData_v4" }>> => {
     if (owner.type === "webAuthn") {
       throw new BaseError(
-        "`prepareSignature` not supported by WebAuthn signer",
+        "`prepareSignature` not supported by WebAuthn signer"
       );
     }
 
@@ -361,10 +363,10 @@ export async function toModularAccountV2Base<
             chainId: client.chain.id,
             address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
             hash: hashMessage(message),
-          }),
+          })
         );
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash }),
+          await owner.sign({ hash })
         );
         return pack1271Signature({
           validationSignature,
@@ -400,10 +402,10 @@ export async function toModularAccountV2Base<
             address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
             hash: hashTypedData(td),
             salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-          }),
+          })
         );
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash }),
+          await owner.sign({ hash })
         );
         return isDeferredAction
           ? pack1271Signature({
@@ -441,7 +443,7 @@ export async function toModularAccountV2Base<
 
       if (owner.type === "webAuthn") {
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash }),
+          await owner.sign({ hash })
         );
         const signature = deferredActionData
           ? concatHex([deferredActionData, validationSignature])
@@ -478,11 +480,11 @@ export async function toModularAccountV2Base<
         const estimateGasAction = getAction(
           client,
           estimateUserOperationGas,
-          "estimateUserOperationGas",
+          "estimateUserOperationGas"
         );
 
         const estimate = await estimateGasAction(
-          uo as UserOperation<typeof entryPoint.version>,
+          uo as UserOperation<typeof entryPoint.version>
         );
 
         const buffer = (await chainHas7212(client)) ? 10000n : 300000n;

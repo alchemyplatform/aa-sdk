@@ -13,7 +13,6 @@ import type {
   WebAuthnAccount,
   ToSmartAccountParameters,
 } from "viem/account-abstraction";
-import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils.js";
 import { toModularAccountV2Base, type ModularAccountV2Base } from "./base.js";
 import type { SignerEntity } from "../types.js";
 import { predictModularAccountV2Address } from "../predictAddress.js";
@@ -21,10 +20,11 @@ import { parsePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
+import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
 
 type Mode = "default" | "7702";
 
-// TODO(jh): does this need to be extended w/ any more methods like LightAccount does?
+// TODO(v5): does this need to be extended w/ any more methods like LightAccount does?
 export type ModularAccountV2 = ModularAccountV2Base & {};
 
 export type ToModularAccountV2Params<
@@ -100,7 +100,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   let authorization: ToSmartAccountParameters["authorization"];
   if (is7702) {
-    // TODO(jh): Ensure this works w/ our signer types.
+    // TODO(v5): Ensure this works w/ our signer types.
     if (owner.type !== "local") {
       throw new InvalidOwnerError(
         `Owner of type ${owner.type} is unsupported for 7702 mode.`
@@ -168,6 +168,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   return {
     ...base,
-    // TODO(jh): does this need to be extended w/ any more methods like LightAccount does
+    // TODO(v5): does this need to be extended w/ any more methods like LightAccount does?
   };
 }

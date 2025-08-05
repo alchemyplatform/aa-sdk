@@ -66,3 +66,8 @@ export type ValidationData = {
   executionHooks: Hex[];
   selectors: Hex[];
 };
+
+export type UpgradeToData = {
+  implAddress: Address;
+  initializationData: Hex;
+};

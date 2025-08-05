@@ -12,18 +12,20 @@ import {
 import type { HookConfig, ValidationConfig } from "../types";
 import type { ModularAccountV2 } from "../accounts/account";
 import type { GetAccountParameter } from "../../types";
-import {
-  DEFAULT_OWNER_ENTITY_ID,
-  isModularAccountV2,
-  serializeHookConfig,
-  serializeModuleEntity,
-  serializeValidationConfig,
-} from "../utils.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { type SmartAccount, sendUserOperation } from "viem/account-abstraction";
 import { getAction } from "viem/utils";
 import { AccountNotFoundError } from "@alchemy/common";
-import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError";
+import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
+import {
+  serializeHookConfig,
+  serializeValidationConfig,
+} from "../utils/hooks.js";
+import {
+  DEFAULT_OWNER_ENTITY_ID,
+  isModularAccountV2,
+  serializeModuleEntity,
+} from "../utils/account.js";
 
 export type InstallValidationParams<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,

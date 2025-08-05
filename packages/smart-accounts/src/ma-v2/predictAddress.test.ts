@@ -10,8 +10,8 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { local070Instance } from "~test/instances.js";
 import { toModularAccountV2 } from "./accounts/account.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
-import { DefaultAddress } from "./utils.js";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
+import { DefaultAddress } from "./utils/account.js";
 
 describe("MAv2 Counterfactual Address Tests", () => {
   const instanceV070 = local070Instance;
@@ -63,7 +63,7 @@ describe("MAv2 Counterfactual Address Tests", () => {
         implementationAddress: DefaultAddress.SMAV2_BYTECODE,
         salt,
         type: "SMA",
-        ownerAddress: await localSigner.account.address,
+        ownerAddress: localSigner.account.address,
       });
 
       expect(entryPointComputedAddress).toEqual(locallyComputedAddress);

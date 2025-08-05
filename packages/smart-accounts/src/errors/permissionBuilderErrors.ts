@@ -1,5 +1,6 @@
-import { BaseError, type Address } from "@aa-sdk/core";
-import type { Permission } from "../mav-2/permissionBuilder";
+import { BaseError } from "@alchemy/common";
+import type { Permission } from "../ma-v2/permissionBuilder";
+import type { Address } from "viem";
 
 export abstract class PermissionBuilderError extends BaseError {}
 

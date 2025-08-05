@@ -1,5 +1,13 @@
-import { maxUint48, toHex, zeroAddress, type Address, type Hex } from "viem";
-
+import {
+  maxUint48,
+  toHex,
+  zeroAddress,
+  type Address,
+  type Chain,
+  type Client,
+  type Hex,
+  type Transport,
+} from "viem";
 import { NativeTokenLimitModule } from "./modules/native-token-limit-module/module.js";
 import { SingleSignerValidationModule } from "./modules/single-signer-validation/module.js";
 import { AllowlistModule } from "./modules/allowlist-module/module.js";
@@ -13,8 +21,7 @@ import {
   installValidationActions,
   type InstallValidationParams,
 } from "./decorators/installValidation.js";
-import { assertNever } from "@alchemy/common";
-import { DefaultModuleAddress } from "./utils.js";
+import { assertNever, AccountNotFoundError } from "@alchemy/common";
 import {
   AccountAddressAsTargetError,
   DeadlineOverLimitError,
@@ -28,6 +35,8 @@ import {
   ValidationConfigUnsetError,
   ZeroAddressError,
 } from "../errors/permissionBuilderErrors.js";
+import type { SmartAccount } from "viem/account-abstraction";
+import { DefaultModuleAddress, isModularAccountV2 } from "./utils/account.js";
 
 // We use this to offset the ERC20 spend limit entityId
 const HALF_UINT32 = 2147483647;
@@ -195,7 +204,7 @@ type Hook = {
 };
 
 export class PermissionBuilder {
-  private client: ModularAccountV2Client; // TODO(jh): update this to use what the new decorators use.
+  private client: Client<Transport, Chain, SmartAccount>;
   private validationConfig: ValidationConfig = {
     moduleAddress: zeroAddress,
     entityId: 0, // uint32
@@ -220,7 +229,7 @@ export class PermissionBuilder {
     hooks,
     deadline,
   }: {
-    client: ModularAccountV2Client; // TODO(jh): update this to use what the new decorators use.
+    client: Client<Transport, Chain, SmartAccount>;
     key: Key;
     entityId: number;
     nonce: bigint;
@@ -228,6 +237,11 @@ export class PermissionBuilder {
     hooks?: Hook[];
     deadline?: number;
   }) {
+    const account = client.account;
+    if (!account || !isModularAccountV2(account)) {
+      throw new AccountNotFoundError();
+    }
+
     this.client = client;
     this.validationConfig = {
       moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
@@ -382,6 +396,11 @@ export class PermissionBuilder {
 
   // Use for direct `installValidation()` low-level calls (maybe useless)
   async compileRaw(): Promise<Hex> {
+    const account = this.client.account;
+    if (!account || !isModularAccountV2(account)) {
+      throw new AccountNotFoundError();
+    }
+
     // Translate all permissions into raw hooks if >0
     if (this.permissions.length > 0) {
       const rawHooks = this.translatePermissions(
@@ -397,12 +416,17 @@ export class PermissionBuilder {
       selectors: this.selectors,
       installData: this.installData,
       hooks: this.hooks,
-      account: this.client.account,
+      account,
     });
   }
 
   // Use for compiling args to installValidation
   async compileInstallArgs(): Promise<InstallValidationParams> {
+    const account = this.client.account;
+    if (!account || !isModularAccountV2(account)) {
+      throw new AccountNotFoundError();
+    }
+
     this.validateConfiguration();
 
     return {
@@ -410,7 +434,7 @@ export class PermissionBuilder {
       selectors: this.selectors,
       installData: this.installData,
       hooks: this.hooks,
-      account: this.client.account,
+      account,
     };
   }
 
