@@ -49,8 +49,10 @@ export const bigIntMultiply = (
 
   // Get decimal places of b. Max decimal places is defined by the validation above.
   const decimalPlaces = multiplier.toString().split(".")[1]?.length ?? 0;
-  const result = BigInt(base) * BigInt(Math.round(multiplier * 10 ** decimalPlaces));
-  return roundingMode === RoundingMode.ROUND_UP && result % BigInt(10 ** decimalPlaces) > 0
+  const result =
+    BigInt(base) * BigInt(Math.round(multiplier * 10 ** decimalPlaces));
+  return roundingMode === RoundingMode.ROUND_UP &&
+    result % BigInt(10 ** decimalPlaces) > 0
     ? result / BigInt(10 ** decimalPlaces) + 1n
     : result / BigInt(10 ** decimalPlaces);
 };
