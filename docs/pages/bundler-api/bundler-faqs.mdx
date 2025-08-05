@@ -182,13 +182,61 @@ We plan to deprecate support for EntryPoint v0.6 in September 2025. Please ensur
 
 Mainnets:
 
-- Native token: ETH --> 0.1 ETH
-- Native token: MATIC --> 100 MATIC
+| Network Key   | Chain Name          | Min Stake (Native Token) |
+| ------------- | ------------------- | ------------------------ |
+| `ethmainnet`  | Ethereum Mainnet    | 0.1 ETH                  |
+| `bnbmain`     | BNB Mainnet         | 0.1 BNB                  |
+| `pgmainnet`   | Polygon Mainnet     | 100 MATIC                |
+| `arbmainnet`  | Arbitrum One        | 0.1 ETH (L2)             |
+| `optmainnet`  | Optimism Mainnet    | 0.1 ETH (L2)             |
+| `zoramainnet` | Zora Mainnet        | 0.1 ETH (L2)             |
+| `fraxmainnet` | Frax Mainnet        | 0.1 ETH (L2)             |
+| `basemainnet` | Base Mainnet        | 0.1 ETH (L2)             |
+| `pnmainnet`   | Polynomial Mainnet  | 0.1 ETH (L2)             |
+| `wcmainnet`   | World Chain Mainnet | 0.1 ETH (L2)             |
+| `shpmainnet`  | Shape Mainnet       | 0.1 ETH (L2)             |
+| `anmainnet`   | Arbitrum Nova       | 0.1 ETH (L2)             |
+| `beramainnet` | Berachain Mainnet   | 0.1 BERA                 |
+| `ammainnet`   | Anime Mainnet       | 0.1 ETH (L2)             |
+| `rcmainnet`   | Race Mainnet        | 0.1 ETH (L2)             |
+| `ucmainnet`   | Unichain Mainnet    | 0.1 ETH (L2)             |
+| `sonmainnet`  | Soneium Mainnet     | 0.1 ETH (L2)             |
+| `inkmainnet`  | Ink Mainnet         | 0.1 ETH (L2)             |
+| `stomainnet`  | Story Mainnet       | 0.1 ETH                  |
+| `celomainnet` | Celo Mainnet        | 0.1 CELO                 |
+| `opbnbmain`   | OpBNB Mainnet       | 0.4 BNB                  |
 
 Testnets:
 
-- Native token: ETH --> 0.1 ETH
-- Native token: MATIC --> 10 MATIC
+| Network Key   | Chain Name          | Min Stake (Native Units) |
+| ------------- | ------------------- | ------------------------ |
+| `ethsepolia`  | Ethereum Sepolia    | 0.1 ETH                  |
+| `bnbtest`     | BNB Testnet         | 0.1 BNB                  |
+| `pgamoy`      | Polygon Amoy        | 10 MATIC                 |
+| `arbsepolia`  | Arbitrum Sepolia    | 0.1 ETH (L2)             |
+| `optsepolia`  | Optimism Sepolia    | 0.1 ETH (L2)             |
+| `zorasepolia` | Zora Sepolia        | 0.1 ETH (L2)             |
+| `alchsepolia` | Alchemy Sepolia     | 0.1 ETH (L2)             |
+| `basesepolia` | Base Sepolia        | 0.1 ETH (L2)             |
+| `pnsepolia`   | Polynomial Sepolia  | 0.1 ETH (L2)             |
+| `wcsepolia`   | World Chain Sepolia | 0.1 ETH (L2)             |
+| `shpsepolia`  | Shape Sepolia       | 0.1 ETH (L2)             |
+| `amsepolia`   | Anime Sepolia       | 0.1 ETH (L2)             |
+| `rcsepolia`   | Race Sepolia        | 0.1 ETH (L2)             |
+| `ucsepolia`   | Unichain Sepolia    | 0.1 ETH (L2)             |
+| `sonminato`   | Soneium Minato      | 0.1 ETH (L2)             |
+| `inksepolia`  | Ink Sepolia         | 0.1 ETH (L2)             |
+| `monadtest`   | Monad Testnet       | 0.1 ETH                  |
+| `olsepolia`   | Openloot Sepolia    | 0.1 ETH                  |
+| `wysepolia`   | Wylerchain Sepolia  | 0.1 ETH                  |
+| `gensyntest`  | Gensyn Testnet      | 0.1 ETH                  |
+| `risetest`    | Rise Testnet        | 0.1 ETH                  |
+| `stoaeneid`   | Story Aeneid        | 0.1 ETH                  |
+| `convtest`    | Converge Testnet    | 0.1 ETH                  |
+| `celotestnet` | Celo Alfajores      | 0.1 CELO                 |
+| `teasepolia`  | Tea Sepolia         | 0.1 ETH                  |
+| `edutest`     | Educhain Testnet    | 0.1 ETH                  |
+| `opbnbtest`   | OpBNB Testnet       | 0.4 BNB                  |
 
 Paymasters and factories must have at least the above stake or their userOps will be rejected. Accounts only need to stake if they wish to exceed 4 parallel nonces in the Bundler's mempool; otherwise, userOps beyond this limit will be rejected. The same stake amounts apply to accounts.
 
