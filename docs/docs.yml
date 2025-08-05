@@ -239,8 +239,10 @@ navigation:
         contents:
           - section: Send
             contents:
-              - page: Send user operations
-                path: wallets/pages/transactions/send/send-user-operations.mdx
+              - page: EVM
+                path: wallets/pages/transactions/send/evm-user-ops.mdx
+              - page: Solana
+                path: wallets/pages/transactions/send/solana-user-ops.mdx
           - section: Sponsor gas
             contents:
               - page: Sponsor gas
@@ -264,7 +266,7 @@ navigation:
           - link: Gas benchmarks
             href: https://github.com/alchemyplatform/aa-benchmarks
 
-      - section: API
+      - section: API Reference
         contents:
           - section: Smart Wallets
             contents:

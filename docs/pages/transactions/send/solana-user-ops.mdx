@@ -1,0 +1,291 @@
+---
+title: Sign and send on Solana
+description: How to sign messages and send transactions on Solana
+text: How to sign messages and send transactions on Solana
+slug: wallets/transactions/send/send-solana-user-operations
+---
+
+Once you've [created](/docs/wallets/react/solana-wallets/get-started) a smart wallet on Solana, [send transactions](/docs/wallets/react/solana-wallets/sign-and-send-solana#sending-solana-transactions) and [sign messages](/docs/wallets/react/solana-wallets/sign-and-send-solana#sign-messages) using the `useSolanaTransaction` and `useSolanaSignMessage` hooks. You can also add [mutliplie signers](/docs/wallets/react/solana-wallets/sign-and-send-solana#multi-signature-support-using-custom-signers) to your Solana wallet.
+
+# Sending Solana transactions
+
+To send a transaction from an embedded Solana wallet, use the `sendTransaction` method from the `useSolanaTransaction` hook.
+
+- This method supports signing both single and **batched** transactions and integrates seamlessly with popular web3 libraries like `@solana/web3js`.
+- You'll need to use a web3 library to construct and submit transactions.
+
+<Tip>
+  Want to sponsor gas for Solana transactions? Skip to [this
+  guide](/wallets/react/solana-wallets/sponsoring-gas) for sending sponsored
+  transactions.
+</Tip>
+
+## Send a single transaction
+
+```tsx single-solana-transaction.tsx
+import React from "react";
+import { useSolanaTransaction } from "@account-kit/react";
+
+function MyComponent() {
+  const {
+    sendTransaction,
+    isPending,
+    signer,
+    reset,
+    data: { hash: txHash = null } = {},
+  } = useSolanaTransaction({});
+
+  if (!signer) {
+    return <div>Loading alchemy signer...</div>;
+  }
+
+  return (
+    <div>
+      Solana Address {signer.address}
+      <button
+        onClick={() =>
+          sendTransaction({
+            transfer: {
+              amount: 1000000,
+              toAddress: "<ToSolanaAddress>",
+            },
+          })
+        }
+      >
+        Go make Transfer
+      </button>
+      {!!txHash && <button onClick={() => reset()}> Reset </button>}
+      {!!txHash && (
+        <a
+          href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`}
+          target="_blank"
+        >
+          View transaction
+        </a>
+      )}
+    </div>
+  );
+}
+```
+
+## Send a batched transaction
+
+Batch multiple Solana instructions into a single transaction.
+
+```tsx batched-solana-transaction.tsx
+import React from "react";
+import { useSolanaTransaction } from "@account-kit/react";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
+
+function MyComponent() {
+  const {
+    sendTransaction,
+    isPending,
+    signer,
+    reset,
+    data: { hash: txHash = null } = {},
+  } = useSolanaTransaction({});
+
+  if (!signer) {
+    return <div>Loading alchemy signer...</div>;
+  }
+
+  return (
+    <div>
+      Solana Address {signer.address}
+      <button
+        onClick={() =>
+          sendTransaction({
+            instructions: [
+              SystemProgram.transfer({
+                fromPubkey: new PublicKey(signer.address),
+                toPubkey: new PublicKey("<ToAddress>"),
+                lamports: someValue, // ex: lamports: 50000000 - 0.05 SOL
+              }),
+              SystemProgram.transfer({
+                fromPubkey: new PublicKey(signer.address),
+                toPubkey: new PublicKey("<ToAddress>"),
+                lamports: someValue2,
+              }),
+            ],
+          })
+        }
+      >
+        Go make Transfer
+      </button>
+      {!!txHash && <button onClick={() => reset()}> Reset </button>}
+      {!!txHash && (
+        <a
+          href={`https://explorer.solana.com/tx/${txHash}?cluster=devnet`}
+          target="_blank"
+        >
+          Go To Tracker
+        </a>
+      )}
+    </div>
+  );
+}
+```
+
+## How does `sendTransaction` work?
+
+The `sendTransaction` method will construct and send a Solana transaction using the connection you provide. You can either construct a transaction using simple parameters or instructions for finer grained control.
+
+### Using simple transfer parameters:
+
+```tsx
+sendTransaction({
+  transfer: {
+    // Amount in the atomic values of solana (Sol)
+    amount: 123,
+    toAddress: "<AddressToSendTo>",
+  },
+});
+```
+
+### Using instructions:
+
+If you want finer grained control like transfer and `nonceAdvance` you can pass instructions by using the exposed [web3 SystemProgram](https://solana-foundation.github.io/solana-web3.js/classes/SystemProgram.html).
+
+```tsx
+sendTransaction({
+  instructions: [
+    SystemProgram.transfer({
+      fromPubkey: new PublicKey("<FromAddress>"),
+      toPubkey: new PublicKey("<ToAddress>"),
+      lamports: params.transfer.amount,
+    }),
+  ],
+});
+```
+
+# Sign messages
+
+Sign messages (either a string or a byte array) with your Solana wallet by using the `useSolanaSignMessage` hook.
+
+```tsx sign-solana-message.tsx
+import { useSolanaSignMessage } from "@account-kit/react";
+import { SolanaSigner } from "@account-kit/signer";
+
+function MyComponent() {
+  const {
+    signer,
+    data,
+    signMessage,
+    data: signedMessage,
+    reset,
+  } = useSolanaSignMessage({});
+
+  if (!signer) {
+    return <div>Loading signer...</div>;
+  }
+
+  return (
+    <div>
+      <button onClick={() => signMessage({ message: "Here is my message" })}>
+        {" Sign "}
+      </button>
+      Message Signed: {signedMessage}
+    </div>
+  );
+}
+```
+
+# Multi-signature support using custom signers
+
+You can implement multi-signature behavior using the `preSign` feature to authorize multiple signers on a transaction before execution.
+
+### Example use case: adding additional signers
+
+A common pattern involves supporting multiple signers for a single transaction. For example, in our demo environment, we generate a temporary (or "throwaway") account that can hold various tokens. However, this account alone isn't sufficient for transaction security or coordination.
+
+To enable multi-signature functionality, we attach additional signers to the transaction using `preSign`. This allows the transaction to be authorized by multiple parties before being broadcast, ensuring that:
+
+- Multiple stakeholders can approve a transaction.
+- Tokens can exist at a shared account address with controlled access.
+- Coordination between signers happens off-chain via pre-signed approvals.
+
+**Example flow:**
+
+1. Create a transaction from a temporary account.
+2. Add one or more `preSign` signatures from required co-signers.
+3. Submit the fully signed transaction.
+
+[Learn more about Solana multisig.](https://blog.keyst.one/a-deep-dive-into-understanding-solana-multisig)
+
+```tsx add-solana-signer.ts
+import {
+  Transaction,
+  VersionedTransaction,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+} from "@solana/web3.js";
+
+import {
+  ExtensionType,
+  LENGTH_SIZE,
+  TOKEN_2022_PROGRAM_ID,
+  TYPE_SIZE,
+  createInitializeMetadataPointerInstruction,
+  getMintLen,
+} from "@solana/spl-token";
+import { pack, TokenMetadata } from "@solana/spl-token-metadata";
+const stakeAccount = Keypair.generate();
+const publicKey = new PublicKey(signer.address);
+const metaData: (readonly [string, string])[] = [];
+const tokenMetadata: TokenMetadata = {
+  updateAuthority: publicKey,
+  mint: stakeAccount.publicKey,
+  name: "Alchemy Duck",
+  symbol: "ALCHDUCK",
+  uri: "https://bafybeigtvzjqalevyw67xdhr7am5r3jxe5kjbg4pi2jv3nxvhelptwksoe.ipfs.dweb.link?filename=duckImage.png",
+  additionalMetadata: metaData,
+};
+const mintLen = getMintLen([ExtensionType.MetadataPointer]);
+const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(tokenMetadata).length;
+const mintLamports = await connection.getMinimumBalanceForRentExemption(
+  mintLen + metadataLen
+);
+
+const mint = stakeAccount.publicKey;
+const instructions = [
+  SystemProgram.createAccount({
+    fromPubkey: publicKey,
+    newAccountPubkey: mint,
+    space: mintLen,
+    lamports: mintLamports,
+    programId: TOKEN_2022_PROGRAM_ID,
+  }),
+  createInitializeMetadataPointerInstruction(
+    mint,
+    publicKey,
+    mint,
+    TOKEN_2022_PROGRAM_ID
+  ),
+];
+/**
+ * Send a transaction with a custom `preSend` hook to add an extra signer.
+ */
+const tx = await sendTransactionAsync({
+  instructions, // Standard transaction instructions
+  transactionComponents: {
+    preSend: getAddStakeSignatureFn(stakeAccount), // Add secondary signer before sending
+  },
+});
+
+/**
+ * Returns a preSend hook that appends a signature from the provided `stakeAccount`.
+ *
+ * @param stakeAccount - The Keypair used to sign the transaction
+ * @returns A function that accepts a transaction and returns a signed transaction
+ */
+function getAddStakeSignatureFn(stakeAccount: Keypair) {
+  return async (transaction: Transaction | VersionedTransaction) => {
+    if ("version" in transaction) {
+      transaction.sign([stakeAccount]); // Add stake account's signature for v0 transactions
+    }
+    return transaction;
+  };
+}
+```
