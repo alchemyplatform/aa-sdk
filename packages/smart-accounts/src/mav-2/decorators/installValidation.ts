@@ -22,6 +22,8 @@ import {
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { type SmartAccount, sendUserOperation } from "viem/account-abstraction";
 import { getAction } from "viem/utils";
+import { AccountNotFoundError } from "@alchemy/common";
+import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError";
 
 export type InstallValidationParams<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
@@ -48,14 +50,14 @@ export type InstallValidationActions<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
 > = {
   encodeInstallValidation: (
-    args: InstallValidationParams<TAccount>,
+    args: InstallValidationParams<TAccount>
   ) => Promise<Hex>;
   installValidation: (args: InstallValidationParams<TAccount>) => Promise<Hex>;
   encodeUninstallValidation: (
-    args: UninstallValidationParams<TAccount>,
+    args: UninstallValidationParams<TAccount>
   ) => Promise<Hex>;
   uninstallValidation: (
-    args: UninstallValidationParams<TAccount>,
+    args: UninstallValidationParams<TAccount>
   ) => Promise<Hex>;
 };
 
@@ -109,14 +111,14 @@ export function installValidationActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ): InstallValidationActions<
   IsUndefined<TAccount> extends true ? undefined : ModularAccountV2
 > {
   const encodeInstallValidation = async (
     args: InstallValidationParams<
       IsUndefined<TAccount> extends true ? undefined : ModularAccountV2
-    >,
+    >
   ) => {
     const {
       validationConfig,
@@ -127,7 +129,7 @@ export function installValidationActions<
     } = args;
 
     if (!account || !isModularAccountV2(account)) {
-      throw new AccountNotFoundError(); // TODO(jh): add error
+      throw new AccountNotFoundError();
     }
 
     // An entityId of zero is only allowed if we're installing or uninstalling hooks on the fallback validation.
@@ -135,7 +137,7 @@ export function installValidationActions<
       validationConfig.entityId === DEFAULT_OWNER_ENTITY_ID &&
       validationConfig.moduleAddress !== zeroAddress
     ) {
-      throw new EntityIdOverrideError(); // TODO(jh): add error
+      throw new EntityIdOverrideError();
     }
 
     return account.encodeCallData(
@@ -147,17 +149,17 @@ export function installValidationActions<
           selectors,
           installData,
           hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
-            concatHex([serializeHookConfig(hook.hookConfig), hook.initData]),
+            concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
           ),
         ],
-      }),
+      })
     );
   };
 
   const encodeUninstallValidation = async (
     args: UninstallValidationParams<
       IsUndefined<TAccount> extends true ? undefined : ModularAccountV2
-    >,
+    >
   ) => {
     const {
       moduleAddress,
@@ -168,7 +170,7 @@ export function installValidationActions<
     } = args;
 
     if (!account || !isModularAccountV2(account)) {
-      throw new AccountNotFoundError(); // TODO(jh): add error
+      throw new AccountNotFoundError();
     }
 
     return account.encodeCallData(
@@ -183,7 +185,7 @@ export function installValidationActions<
           uninstallData,
           hookUninstallDatas,
         ],
-      }),
+      })
     );
   };
 
@@ -200,7 +202,7 @@ export function installValidationActions<
       } = args;
 
       if (!account || !isModularAccountV2(account)) {
-        throw new AccountNotFoundError(); // TODO(jh): add error
+        throw new AccountNotFoundError();
       }
 
       const data = await encodeInstallValidation({
@@ -235,7 +237,7 @@ export function installValidationActions<
       } = args;
 
       if (!account || !isModularAccountV2(account)) {
-        throw new AccountNotFoundError(); // TODO(jh): add error
+        throw new AccountNotFoundError();
       }
 
       const data = await encodeUninstallValidation({

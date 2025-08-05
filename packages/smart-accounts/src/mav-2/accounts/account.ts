@@ -19,6 +19,8 @@ import type { SignerEntity } from "../types.js";
 import { predictModularAccountV2Address } from "../predictAddress.js";
 import { parsePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
+import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
+import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 
 type Mode = "default" | "7702";
 
@@ -100,20 +102,20 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   if (is7702) {
     // TODO(jh): Ensure this works w/ our signer types.
     if (owner.type !== "local") {
-      throw new Error(
-        `Owner of type ${owner.type} is unsupported for 7702 mode.`, // TODO(jh): add this error.
-      ); // TODO(jh): add class for this error.
+      throw new InvalidOwnerError(
+        `Owner of type ${owner.type} is unsupported for 7702 mode.`
+      );
     }
     if (owner.signAuthorization == null) {
-      throw new Error(
-        "Owner must implement `signAuthorization` to be used with 7702 mode.", // TODO(jh): add this error.
+      throw new InvalidOwnerError(
+        "Owner must implement `signAuthorization` to be used with 7702 mode."
       );
     }
     if (
       entityId === DEFAULT_OWNER_ENTITY_ID &&
       owner.address !== accountAddress
     ) {
-      throw new EntityIdOverrideError(); // TODO(jh): add this error.
+      throw new EntityIdOverrideError();
     }
     authorization = {
       // The current version of Viem has some pretty strict constraints
@@ -166,6 +168,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   return {
     ...base,
-    // TODO(jh): does this need to be extended w/ any more methods like LightAccount does, or nah?
+    // TODO(jh): does this need to be extended w/ any more methods like LightAccount does
   };
 }

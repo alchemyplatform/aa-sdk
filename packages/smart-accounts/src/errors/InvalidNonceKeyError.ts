@@ -1,6 +1,5 @@
-import { BaseError } from "./BaseError.js";
+import { BaseError } from "@alchemy/common";
 
-// TODO(jh): very specific errors should live in the sub-pkgs instead of in common.
 /**
  * Error class denoting that the nonce key is invalid because its too large.
  */
@@ -14,7 +13,7 @@ export class InvalidNonceKeyError extends BaseError {
    */
   constructor(nonceKey: bigint) {
     super(
-      `Nonce key is ${nonceKey} but has to be less than or equal to 2**152`,
+      `Nonce key is ${nonceKey} but has to be less than or equal to 2**152`
     );
   }
 }

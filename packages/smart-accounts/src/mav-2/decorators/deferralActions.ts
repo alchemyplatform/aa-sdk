@@ -23,29 +23,12 @@ import {
 import { entityIdAndNonceReaderAbi } from "../abis/entityIdAndNonceReader.js";
 import { getAction } from "viem/utils";
 import { call } from "viem/actions";
+import {
+  AccountNotFoundError,
+  BaseError,
+  InvalidNonceKeyError,
+} from "@alchemy/common";
 
-// TODO(jh): old version from v4. doesn't always play nicely w/ viem.
-// export type DeferredActionTypedData = {
-//   domain: {
-//     chainId: number;
-//     verifyingContract: Address;
-//   };
-//   types: {
-//     DeferredAction: [
-//       { name: "nonce"; type: "uint256" },
-//       { name: "deadline"; type: "uint48" },
-//       { name: "call"; type: "bytes" },
-//     ];
-//   };
-//   primaryType: "DeferredAction";
-//   message: {
-//     nonce: bigint;
-//     deadline: number;
-//     call: Hex;
-//   };
-// };
-
-// TODO(jh): i think this should play nicer w/ viem. remove the above once confirmed.
 export type DeferredActionTypedData = TypedDataDefinition<
   {
     DeferredAction: [
@@ -80,13 +63,13 @@ export type EntityIdAndNonceParams = {
 
 export type DeferralActions = {
   createDeferredActionTypedDataObject: (
-    args: CreateDeferredActionTypedDataParams,
+    args: CreateDeferredActionTypedDataParams
   ) => Promise<DeferredActionReturnData>;
   buildPreSignatureDeferredActionDigest: (
-    args: BuildPreSignatureDeferredActionDigestParams,
+    args: BuildPreSignatureDeferredActionDigestParams
   ) => Hex;
   getEntityIdAndNonce: (
-    args: EntityIdAndNonceParams,
+    args: EntityIdAndNonceParams
   ) => Promise<{ nonce: bigint; entityId: number }>;
 };
 
@@ -101,7 +84,7 @@ export const deferralActions = <
   TChain extends Chain = Chain,
   TAccount extends SmartAccount = SmartAccount,
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ): DeferralActions => {
   const createDeferredActionTypedDataObject = async ({
     callData,
@@ -110,7 +93,7 @@ export const deferralActions = <
   }: CreateDeferredActionTypedDataParams): Promise<DeferredActionReturnData> => {
     const account = client.account;
     if (!account || !isModularAccountV2(account)) {
-      throw new AccountNotFoundError(); // TODO(jh): add error
+      throw new AccountNotFoundError();
     }
 
     return {
@@ -141,7 +124,7 @@ export const deferralActions = <
   }: BuildPreSignatureDeferredActionDigestParams): Hex => {
     const account = client.account;
     if (!account || !isModularAccountV2(account)) {
-      throw new AccountNotFoundError(); // TODO(jh): add error
+      throw new AccountNotFoundError();
     }
 
     const signerEntity = account.signerEntity;
@@ -151,7 +134,7 @@ export const deferralActions = <
 
     const encodedCallData = encodePacked(
       ["uint168", "uint48", "bytes"],
-      [validationLocator, typedData.message.deadline, typedData.message.call],
+      [validationLocator, typedData.message.deadline, typedData.message.call]
     );
 
     const encodedDataLength = size(encodedCallData);
@@ -170,11 +153,11 @@ export const deferralActions = <
   }: EntityIdAndNonceParams) => {
     const account = client.account;
     if (!account || !isModularAccountV2(account)) {
-      throw new AccountNotFoundError(); // TODO(jh): add error
+      throw new AccountNotFoundError();
     }
 
     if (nonceKey > maxUint152) {
-      throw new InvalidNonceKeyError(nonceKey); // TODO(jh): add error
+      throw new InvalidNonceKeyError(nonceKey);
     }
 
     const bytecode = encodeDeployData({
@@ -195,10 +178,10 @@ export const deferralActions = <
     const action = getAction(client, call, "call");
     const { data } = await action({ data: bytecode });
     if (!data) {
-      throw new Error("No data returned from contract call"); // TODO(jh): use proper error class
+      throw new BaseError("No data returned from contract call");
     }
     if (!isHex(data)) {
-      throw new Error("Expected hex data from contract call"); // TODO(jh): use proper error class
+      throw new BaseError("Expected hex data from contract call");
     }
 
     return {

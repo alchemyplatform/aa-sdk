@@ -1,6 +1,5 @@
-import { BaseError } from "./BaseError.js";
+import { BaseError } from "@alchemy/common";
 
-// TODO(jh): very specific errors should live in the sub-pkgs instead of in common.
 /**
  * Error class denoting that the deferred action nonce used is invalid.
  */
