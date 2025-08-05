@@ -1,20 +1,16 @@
 ---
-title: Send EVM User Operations
-description: Learn how to send user operations using Smart Wallets across different frameworks.
-slug: wallets/transactions/send/send-user-operations
+title: Batch User Operations
+description: Learn how to send batched user operations using Smart Wallets across different frameworks.
+slug: wallets/transactions/send/batch-user-operations
 ---
 
-Once your users have been authenticated, you can start sending user operations! Smart Wallets makes it easy to send single or batched user operations across different frameworks.
+Batching user operations allows you to execute multiple transactions atomically in a single operation, which can save gas and improve user experience.
 
 <Tabs>
   <Tab title="React">
-    ## Overview
+    ## Batch user operation
 
-    Sending user operations is really easy with React hooks. Use the [`useSendUserOperation`](/wallets/reference/account-kit/react/hooks/useSendUserOperation) hook to send transactions.
-
-    If you want to sponsor the gas for a user, see our [guide](/wallets/react/sponsor-gas).
-
-    ## Single user operation
+    It's possible to send user operations in batch using the [`useSendUserOperation`](/wallets/reference/account-kit/react/hooks/useSendUserOperation) hook by passing an array of operations.
 
     <Tip>
       In the below example, we use `ModularAccountV2` as the underlying Smart Contract type, which is our default and recommended account. To learn more about all the account options, check out our guide [on choosing a smart account](/wallets/smart-contracts/choosing-a-smart-account).
@@ -48,30 +44,34 @@ Once your users have been authenticated, you can start sending user operations! 
           <button
             onClick={() =>
               sendUserOperation({
-                uo: {
-                  target: "0xTARGET_ADDRESS",
-                  data: "0x",
-                  value: 0n,
-                },
+                uo: [
+                  {
+                    target: "0xTARGET_ADDRESS",
+                    data: "0x",
+                    value: 0n,
+                  },
+                  {
+                    target: "0xTARGET_ADDRESS",
+                    data: "0x",
+                    value: 0n,
+                  },
+                ],
               })
             }
             disabled={isSendingUserOperation}
           >
-            {isSendingUserOperation ? "Sending..." : "Send UO"}
+            {isSendingUserOperation ? "Sending..." : "Send Batch UO"}
           </button>
         </div>
       );
     }
     ```
 
-
   </Tab>
   <Tab title="React Native">
-    Sending user operations is pretty straightforward. All you have to do is use the `useSendUserOperation()` hook from the `@account-kit/react-native` package.
+    ## Batch user operation
 
-    If you want to sponsor the gas for a user, see our [guide](/wallets/react-native/using-smart-accounts/sponsor-gas).
-
-    ## Single user operation
+    To send multiple user operations in a single call, simply pass an array of user operations to the `sendUserOperation` method.
 
     <Tip>
       In the below example, we use `ModularAccountV2` as the underlying Smart
@@ -79,7 +79,7 @@ Once your users have been authenticated, you can start sending user operations! 
       [here](/wallets/smart-contracts/other-accounts/modular-account)).
     </Tip>
 
-    ```tsx twoslash send-user-operation.tsx
+    ```tsx twoslash batch-user-operation-component.tsx
     import React, { useState, useEffect } from "react";
     import { Alert, View, Button } from "react-native";
     import { User } from "@account-kit/signer";
@@ -108,36 +108,40 @@ Once your users have been authenticated, you can start sending user operations! 
         },
       });
 
-      const handleSendUserOperation = () => {
+      const handleSendBatchUserOperations = () => {
         sendUserOperation({
-          uo: {
-            target: "0xTARGET_ADDRESS",
-            data: "0x",
-            value: 0n,
-          },
+          uo: [
+            {
+              target: "0xTARGET_ADDRESS",
+              data: "0x",
+              value: 0n,
+            },
+            {
+              target: "0xTARGET_ADDRESS",
+              data: "0x",
+              value: 0n,
+            },
+          ],
         });
       };
 
       return (
         <View>
           <Button
-            onPress={handleSendUserOperation}
+            onPress={handleSendBatchUserOperations}
             disabled={isSendingUserOperation}
-            title={isSendingUserOperation ? "Sending..." : "Send UO"}
+            title={isSendingUserOperation ? "Sending..." : "Send Batch UO"}
           />
         </View>
       );
     }
     ```
 
-
   </Tab>
   <Tab title="Other JS">
-    ## Other JS Frameworks
+    ## Batch user operation
 
-    Once your users have been [authenticated](/wallets/core/authenticate-users), you can start sending user operations!
-
-    ## Single user operation
+    It's possible to send user operations in batch using the same approach as single operations, just pass an array instead!
 
     <Tip>
       In the below example, we use `LightAccount` as the underlying Smart Contract type. You can also use `MultiOwnerModularAccount` if you want to provide your users with an ERC-6900 compliant modular account, or you can use `MultiOwnerLightAccount` if you want to support an account with multiple owners.
@@ -172,14 +176,20 @@ Once your users have been authenticated, you can start sending user operations! 
     const client = clientState.client;
 
     await client.sendUserOperation({
-      uo: {
-        target: "0xtarget",
-        data: "0x",
-        value: 0n,
-      },
+      uo: [
+        {
+          target: "0xtarget",
+          data: "0x",
+          value: 0n,
+        },
+        {
+          target: "0xtarget",
+          data: "0x",
+          value: 0n,
+        },
+      ],
     });
     ```
-
 
   </Tab>
 </Tabs>

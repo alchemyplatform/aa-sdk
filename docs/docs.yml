@@ -243,6 +243,8 @@ navigation:
                 path: wallets/pages/transactions/send/evm-user-ops.mdx
               - page: Solana
                 path: wallets/pages/transactions/send/solana-user-ops.mdx
+          - page: Batch
+            path: wallets/pages/transactions/send/batch-user-ops.mdx
           - section: Sponsor gas
             contents:
               - page: Sponsor gas
