@@ -275,8 +275,3 @@ export function alchemyGasManagerHooks(
     },
   } as const;
 }
-
-/**
- * @deprecated Use alchemyGasManagerHooks instead
- */
-export const alchemyGasAndPaymasterAndDataHooks = alchemyGasManagerHooks;
