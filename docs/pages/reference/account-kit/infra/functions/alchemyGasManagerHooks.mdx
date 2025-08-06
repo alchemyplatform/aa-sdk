@@ -5,10 +5,12 @@ description: Overview of the alchemyGasManagerHooks method
 slug: wallets/reference/account-kit/infra/functions/alchemyGasManagerHooks
 ---
 
-Adapts Alchemy's Gas Manager to viem's new paymaster interface.
+Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
+`alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and
+paymaster sponsorship in a single RPC call.
 
-Creates viem-compatible paymaster hooks that work directly with Alchemy's
-ERC-7677 implementation for gas sponsorship.
+This implementation caches the result from the first call to avoid duplicate RPC calls
+when viem calls both getPaymasterStubData and getPaymasterData.
 
 ## Import
 
@@ -46,5 +48,5 @@ const bundler = createBundlerClient({
 
 ## Returns
 
-`{ paymaster: { getPaymasterData: Function, getPaymasterStubData: Function } }`
-Paymaster hooks for createBundlerClient
+`{ paymaster: Function, userOperation: { estimateFeesPerGas: Function } }`
+Hooks for createBundlerClient
