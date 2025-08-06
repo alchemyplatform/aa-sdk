@@ -291,10 +291,10 @@ describe("alchemyGasAndPaymasterAndDataHooks - Optimized Flow", () => {
       params: ["latest", false],
     });
 
-    // Should calculate: baseFee * 2 + priority
+    // Should calculate: baseFee * 1.5 + priority
     expect(fees).toEqual({
-      maxFeePerGas: 20100000000n, // (10 gwei * 2) + 0.1 gwei
-      maxPriorityFeePerGas: 100000000n, // 0.1 gwei default
+      maxFeePerGas: 16000000000n, // (10 gwei * 1.5) + 1 gwei
+      maxPriorityFeePerGas: 1000000000n, // 1 gwei default
     });
   });
 

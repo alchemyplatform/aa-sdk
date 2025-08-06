@@ -1,5 +1,6 @@
 import {
   toCoinbaseSmartAccount,
+  createBundlerClient,
   bundlerActions,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -11,7 +12,6 @@ import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
 import { local070Instance } from "~test/instances.js";
-import { createAlchemyBundlerClient } from "../src/clients.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -43,12 +43,12 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    // Create a bundler client that uses the Alchemy fee estimator
-    const bundlerClient = createAlchemyBundlerClient({
+    // Create a bundler client that uses the optimized Alchemy gas manager
+    const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...alchemyGasManagerHooks("test-policy"),
+      ...alchemyGasAndPaymasterAndDataHooks("test-policy"),
     });
 
     // Fund the account
@@ -105,11 +105,11 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = createAlchemyBundlerClient({
+    const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...alchemyGasManagerHooks("test-policy"),
+      ...alchemyGasAndPaymasterAndDataHooks("test-policy"),
     }).extend(bundlerActions);
 
     // Fund and deploy the account
