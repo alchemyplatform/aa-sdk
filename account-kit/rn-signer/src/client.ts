@@ -32,6 +32,7 @@ import {
   type User,
   type SubmitOtpCodeResponse,
   type CredentialCreationOptionOverrides,
+  type SmsAuthParams,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -137,6 +138,19 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       }
       throw error;
     }
+  }
+
+  override async initSmsAuth(
+    params: Omit<SmsAuthParams, "targetPublicKey">,
+  ): Promise<{ orgId: string; otpId?: string }> {
+    this.eventEmitter.emit("authenticating", { type: "sms" });
+    const { phone } = params;
+    const targetPublicKey = await this.stamper.init();
+
+    return this.request("/v1/auth", {
+      phone,
+      targetPublicKey,
+    });
   }
 
   override async completeAuthWithBundle(params: {
