@@ -7,7 +7,7 @@ import type {
   GetPaymasterStubDataReturnType,
 } from "viem/account-abstraction";
 import { deepHexlify, resolveProperties } from "@aa-sdk/core";
-import { alchemyEstimateFeesPerGas } from "../../../../packages/smart-accounts/src/alchemyEstimateFeesPerGas.js";
+import { alchemyEstimateFeesPerGas } from "../utils/alchemyFeeEstimator.js";
 import type { PolicyToken } from "../middleware/gasManager.js";
 
 // Type for the optimized RPC response
