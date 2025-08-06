@@ -106,24 +106,26 @@ export const AlchemyAccountProvider = (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          {config.ui ? (
-            <UiConfigProvider initialConfig={config.ui}>
-              <SolanaWalletProvider>
-                <AuthModalContext.Provider
-                  value={{
-                    authStep,
-                    setAuthStep,
-                    resetAuthStep,
-                  }}
-                >
-                  {children}
-                  <AuthModal />
-                </AuthModalContext.Provider>
-              </SolanaWalletProvider>
-            </UiConfigProvider>
-          ) : (
-            <SolanaWalletProvider>{children}</SolanaWalletProvider>
-          )}
+          <SolanaWalletProvider>
+            <>
+              {config.ui ? (
+                <UiConfigProvider initialConfig={config.ui}>
+                  <AuthModalContext.Provider
+                    value={{
+                      authStep,
+                      setAuthStep,
+                      resetAuthStep,
+                    }}
+                  >
+                    {children}
+                    <AuthModal />
+                  </AuthModalContext.Provider>
+                </UiConfigProvider>
+              ) : (
+                { children }
+              )}
+            </>
+          </SolanaWalletProvider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>
