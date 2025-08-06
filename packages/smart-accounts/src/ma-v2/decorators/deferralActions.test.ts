@@ -1,8 +1,4 @@
-import {
-  bigIntMultiply,
-  LocalAccountSigner,
-  type SmartAccountSigner,
-} from "@aa-sdk/core"; // TODO(jh): remove v4 dep
+import { bigIntMultiply } from "@aa-sdk/core";
 import {
   concat,
   concatHex,
@@ -15,7 +11,6 @@ import {
   publicActions,
   testActions,
   toHex,
-  zeroAddress,
   type Address,
   type Hex,
   type LocalAccount,
@@ -23,7 +18,7 @@ import {
 import { createBundlerClient } from "viem/account-abstraction";
 import { entryPoint07Abi } from "viem/account-abstraction";
 import { mine, setBalance, setNextBlockBaseFeePerGas } from "viem/actions";
-import { generatePrivateKey } from "viem/accounts";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlock } from "viem/actions";
 import { local070Instance } from "~test/instances.js";
 import {
@@ -38,10 +33,7 @@ import {
   type Permission,
 } from "../permissionBuilder.js";
 import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js";
-// import { buildDeferredActionDigest } from "../utils/deferredActions.js";
 import { raise } from "@alchemy/common";
-import { alchemyFeeEstimator } from "@account-kit/infra";
-import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { buildDeferredActionDigest } from "../utils/deferredActions.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -58,8 +50,8 @@ describe("MA v2 deferral actions tests", async () => {
   let factoryArgs: { factory?: Address; factoryData?: Hex } | undefined;
 
   beforeEach(async () => {
-    owner = LocalAccountSigner.generatePrivateKeySigner().inner;
-    sessionKey = LocalAccountSigner.generatePrivateKeySigner().inner;
+    owner = privateKeyToAccount(generatePrivateKey());
+    sessionKey = privateKeyToAccount(generatePrivateKey());
 
     // set up and sign deferred action with client with owner connected
     const provider = (
@@ -111,26 +103,6 @@ describe("MA v2 deferral actions tests", async () => {
     "deferred action then send another uo from same client",
     { retry: 3, timeout: 30_000 },
     async () => {
-      // TODO(jh): using root owner of SCA seems fine, it fails when we try to use a deferred action.
-      //   const ownerClient = await givenConnectedProvider({
-      //     signer: owner,
-      //     accountAddress,
-      //     //   TODO(jh): test w/ these on.
-      //     // deferredAction: deferredActionDigest,
-      //     factoryArgs,
-      //   });
-      //
-      //   const testHash = await ownerClient.sendUserOperation({
-      //     calls: [
-      //       {
-      //         to: zeroAddress,
-      //         data: "0x",
-      //       },
-      //     ],
-      //   });
-      //
-      //   console.log({ testHash });
-
       const sessionKeyClient = await givenConnectedProvider({
         signer: sessionKey,
         accountAddress,
@@ -138,7 +110,6 @@ describe("MA v2 deferral actions tests", async () => {
         factoryArgs,
       });
 
-      // TODO(jh): this is failing.
       const hash = await sessionKeyClient.sendUserOperation({
         calls: [
           {
@@ -247,9 +218,6 @@ describe("MA v2 deferral actions tests", async () => {
       address: provider.account.address,
       value: parseEther("2"),
     });
-
-    sessionKey =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()).inner;
 
     // these can be default values or from call arguments
     const { entityId, nonce } = await provider
@@ -459,9 +427,6 @@ describe("MA v2 deferral actions tests", async () => {
       address: provider.account.address,
       value: parseEther("2"),
     });
-
-    sessionKey =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()).inner;
 
     // these can be default values or from call arguments
     const { entityId, nonce } = await provider

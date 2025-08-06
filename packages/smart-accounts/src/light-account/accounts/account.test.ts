@@ -12,7 +12,7 @@ import {
   type LocalAccount,
 } from "viem";
 import { createBundlerClient } from "viem/account-abstraction";
-import { generatePrivateKey } from "viem/accounts";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlock, setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { local060Instance } from "~test/instances.js";
@@ -22,13 +22,13 @@ import { AccountVersionRegistry } from "../utils.js";
 import { toLightAccount } from "./account.js";
 
 const versions = Object.keys(
-  AccountVersionRegistry.LightAccount,
+  AccountVersionRegistry.LightAccount
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
   let instance = local060Instance;
   let client: ReturnType<typeof instance.getClient>;
-  const signerAccount = LocalAccountSigner.generatePrivateKeySigner().inner;
+  const signerAccount = privateKeyToAccount(generatePrivateKey());
 
   beforeAll(async () => {
     client = instance.getClient();
@@ -46,18 +46,18 @@ describe("Light Account Tests", () => {
         case "v1.0.2":
         case "v1.1.0":
           expect(await account.getStubSignature()).toBe(
-            "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+            "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
           );
           break;
         case "v2.0.0":
           expect(await account.getStubSignature()).toBe(
-            "0x00fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+            "0x00fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
           );
           break;
         default:
           throw new Error(`Unknown version ${version}`);
       }
-    },
+    }
   );
 
   it.each(versions)("should correctly sign the message", async (version) => {
@@ -72,7 +72,7 @@ describe("Light Account Tests", () => {
     switch (version) {
       case "v1.0.2":
         await expect(account.signMessage({ message })).rejects.toThrowError(
-          "Version v1.0.2 of LightAccount doesn't support 1271",
+          "Version v1.0.2 of LightAccount doesn't support 1271"
         );
         break;
       case "v1.0.1":
@@ -89,7 +89,7 @@ describe("Light Account Tests", () => {
               address: account.address,
               message,
               signature,
-            }),
+            })
           ).toBe(true);
         }
         break;
@@ -115,7 +115,7 @@ describe("Light Account Tests", () => {
     switch (version) {
       case "v1.0.2":
         await expect(account.signTypedData(typedData)).rejects.toThrowError(
-          "Version v1.0.2 of LightAccount doesn't support 1271",
+          "Version v1.0.2 of LightAccount doesn't support 1271"
         );
         break;
       case "v1.1.0":
@@ -130,7 +130,7 @@ describe("Light Account Tests", () => {
               address: account.address,
               signature,
               ...typedData,
-            }),
+            })
           ).toBe(true);
         }
         break;
@@ -148,12 +148,12 @@ describe("Light Account Tests", () => {
       });
       expect(
         account.encodeTransferOwnership(
-          "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        ),
+          "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+        )
       ).toBe(
-        "0xf2fde38b000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        "0xf2fde38b000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       );
-    },
+    }
   );
 
   it.each(versions)(
@@ -172,17 +172,17 @@ describe("Light Account Tests", () => {
       ] satisfies Call[];
 
       expect(await provider.account.encodeCalls(data)).toBe(
-        "0x47e1da2a000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000",
+        "0x47e1da2a000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"
       );
-    },
+    }
   );
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({
-      signerAccount: new LocalAccountSigner(accounts.fundedAccountOwner).inner,
+      signerAccount: accounts.fundedAccountOwner,
     });
     expect(provider.account.address).toMatchInlineSnapshot(
-      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
+      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"'
     );
   });
 
@@ -196,6 +196,7 @@ describe("Light Account Tests", () => {
       value: parseEther("10"),
     });
 
+    // TODO(v5): is this failing all of a sudden?
     const result = await provider.sendUserOperation({
       calls: [
         {
@@ -211,6 +212,7 @@ describe("Light Account Tests", () => {
     await expect(receipt).resolves.not.toThrowError();
   }, 30_000);
 
+  // TODO(v5): is this failing all of a sudden?
   it("should execute successfully after account has already been deployed", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
@@ -268,6 +270,7 @@ describe("Light Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
+  // TODO(v5): is this failing all of a sudden?
   it("should successfully execute with paymaster info using erc-7677 middleware", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
@@ -293,12 +296,12 @@ describe("Light Account Tests", () => {
     await expect(receipt).resolves.not.toThrowError();
   });
 
+  // TODO(v5): is this failing all of a sudden?
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
-    const throwawaySigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const throwawaySigner = privateKeyToAccount(generatePrivateKey());
     const throwawayClient = await givenConnectedProvider({
-      signerAccount: throwawaySigner.inner,
+      signerAccount: throwawaySigner,
     });
 
     // fund the throwaway address
@@ -308,24 +311,23 @@ describe("Light Account Tests", () => {
     });
 
     // create new signer and transfer ownership
-    const newOwner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const newOwner = privateKeyToAccount(generatePrivateKey());
 
     const hash = await throwawayClient.transferOwnership({
-      newOwner: newOwner.inner.address,
+      newOwner: newOwner.address,
     });
 
     await throwawayClient.waitForUserOperationReceipt({ hash });
 
     const newOwnerClient = await givenConnectedProvider({
-      signerAccount: newOwner.inner,
+      signerAccount: newOwner,
       accountAddress: throwawayClient.account.address,
     });
 
     const newOwnerAddress = await newOwnerClient.account.getOwnerAddress();
 
-    expect(newOwnerAddress).not.toBe(await throwawaySigner.getAddress());
-    expect(newOwnerAddress).toBe(await newOwner.getAddress());
+    expect(newOwnerAddress).not.toBe(throwawaySigner.address);
+    expect(newOwnerAddress).toBe(newOwner.address);
   }, 100000);
 
   it.each(versions)(
@@ -346,7 +348,7 @@ describe("Light Account Tests", () => {
         const signature = await provider.account.formatSignature(
           await (type === "personal_sign"
             ? signerAccount.signMessage({ message: data })
-            : signerAccount.signTypedData(data)),
+            : signerAccount.signTypedData(data))
         );
 
         const fullSignature = await provider.account.signMessage({ message });
@@ -354,7 +356,7 @@ describe("Light Account Tests", () => {
         // We use `includes` to check against 6492, and slice to remove the 0x prefix
         expect(fullSignature.includes(signature.slice(2))).toBe(true);
       }
-    },
+    }
   );
 
   // TODO(v5): implement test for upgrading account to MSCA?
@@ -409,7 +411,7 @@ describe("Light Account Tests", () => {
           return {
             maxPriorityFeePerGas: fromHex(
               maxPriorityFeePerGasEstimate as Hex,
-              "bigint",
+              "bigint"
             ),
             maxFeePerGas:
               bigIntMultiply(baseFeePerGas, 1.5) +
