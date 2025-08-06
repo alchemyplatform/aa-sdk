@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
+
+**Note:** Version bump only for package @account-kit/logging
+
 # [4.53.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.4...v4.53.0) (2025-08-06)
 
 **Note:** Version bump only for package @account-kit/logging
