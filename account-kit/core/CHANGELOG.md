@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.5-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.4...v4.52.5-alpha.0) (2025-08-06)
+
+### Features
+
+- conditionally add the solana provider ([44e48ac](https://github.com/alchemyplatform/aa-sdk/commit/44e48acc07b7e0f9eb21ddfece25287fa48e6686))
+- login ui configuration ([c006368](https://github.com/alchemyplatform/aa-sdk/commit/c00636896f97d0a2353bdff74f7208912cf0f8e9))
+- pass the solana connection url ([70afce9](https://github.com/alchemyplatform/aa-sdk/commit/70afce92503d3158c28a6d5885b0987aeb863de1))
+- pass ui options and connectors to the config ([1a62e7a](https://github.com/alchemyplatform/aa-sdk/commit/1a62e7af191cfcd9c53f33f5103750ac3ddd9615))
+
 ## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
 
 **Note:** Version bump only for package @account-kit/core

@@ -70,16 +70,18 @@ export const externalWalletsConfig = configForExternalWallets({
       type: "WalletConnect",
       projectId: "30e7ffaff99063e68cc9870c105d905b",
     },
+    // {
+    //   featured: 2,
+    //   adapter: SolflareWalletAdapter,
+    // },
     {
-      adapter: SolflareWalletAdapter,
-    },
-    {
-      featured: 3,
+      // featured: 3,
       connector: coinbaseWallet,
+      logoUrl: "/images/discord.svg",
     },
   ],
   // moreButtonText: "More wallet options",
-  hideMoreButton: true,
+  // hideMoreButton: true,
 });
 
 export const DEFAULT_CONFIG: Config = {

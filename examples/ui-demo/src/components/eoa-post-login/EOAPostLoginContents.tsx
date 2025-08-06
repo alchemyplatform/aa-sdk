@@ -1,8 +1,16 @@
-import { useLogout } from "@account-kit/react";
+import {
+  useLogout,
+  useSolanaSignMessage,
+  useSolanaTransaction,
+  useUser,
+} from "@account-kit/react";
 import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { UserIcon } from "../icons/user";
 import { WalletIcon } from "../icons/wallet";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { useToast } from "@/hooks/useToast";
+import { Button } from "../shared/Button";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
@@ -47,6 +55,18 @@ export const EOAPostLoginActions = () => {
 };
 
 export const EOAPostLoginContents = () => {
+  const solTx = useSolanaTransaction({
+    policyId: "e2f15d98-2111-42a3-bde8-db46e07eede0",
+  });
+  const solMsg = useSolanaSignMessage({});
+  const user = useUser();
+  const { setToast } = useToast();
+
+  if (!user) return null;
+
+  // Check if user is connected with a Solana wallet
+  const isSolanaWallet = !!user.solanaAddress;
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center justify-center">
@@ -102,6 +122,77 @@ export const EOAPostLoginContents = () => {
             </>
           }
         />
+
+        {/* Solana Wallet Actions - Only show if connected with Solana wallet */}
+        {isSolanaWallet && (
+          <div className="mt-6">
+            <h4 className="text-lg font-semibold text-fg-primary mb-4">
+              Try Solana Features
+            </h4>
+            <div className="flex flex-col gap-3">
+              <Button
+                onClick={() => {
+                  solTx
+                    .sendTransactionAsync({
+                      instructions: [
+                        SystemProgram.transfer({
+                          fromPubkey: new PublicKey(user.solanaAddress!),
+                          toPubkey: new PublicKey(user.solanaAddress!),
+                          lamports: 0, // transferring 0 lamports to self
+                        }),
+                      ],
+                    })
+                    .then((tx) => {
+                      console.log(tx);
+                      setToast({
+                        text: "Sponsored transaction sent! Hash: " + tx.hash,
+                        type: "success",
+                        open: true,
+                      });
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      setToast({
+                        text: "Transaction failed: " + error.message,
+                        type: "error",
+                        open: true,
+                      });
+                    });
+                }}
+                className="!bg-gradient-to-r !from-orange-400 !to-pink-500 !text-white !border-orange-400 hover:!from-orange-500 hover:!to-pink-600 transition-all duration-200"
+              >
+                Send Sponsored Transaction
+              </Button>
+              <Button
+                onClick={() => {
+                  solMsg
+                    .signMessageAsync({ message: "Hello from Solana wallet!" })
+                    .then((signature) =>
+                      setToast({
+                        text:
+                          "Message signed! Signature: " +
+                          signature.slice(0, 10) +
+                          "...",
+                        type: "success",
+                        open: true,
+                      }),
+                    )
+                    .catch((error) => {
+                      console.error(error);
+                      setToast({
+                        text: "Signing failed: " + error.message,
+                        type: "error",
+                        open: true,
+                      });
+                    });
+                }}
+                className="!bg-purple-600 !text-white !border-purple-600 hover:!bg-purple-700 transition-all duration-200"
+              >
+                Sign Message
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

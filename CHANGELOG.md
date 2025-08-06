@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.52.5-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.4...v4.52.5-alpha.0) (2025-08-06)
+
+### Bug Fixes
+
+- typebox metro config ([#1838](https://github.com/alchemyplatform/aa-sdk/issues/1838)) ([920d9ee](https://github.com/alchemyplatform/aa-sdk/commit/920d9ee69be75c63fc48b5340bb20be557380a7c))
+
+### Features
+
+- add in solana hook functionality ([a0586fe](https://github.com/alchemyplatform/aa-sdk/commit/a0586fecd784b9435f4ff8c46540ffae5db54535))
+- code clean up ([1457742](https://github.com/alchemyplatform/aa-sdk/commit/1457742f26c7a59f2198c5536d1b5fd0b3d2be45))
+- conditionally add the solana provider ([44e48ac](https://github.com/alchemyplatform/aa-sdk/commit/44e48acc07b7e0f9eb21ddfece25287fa48e6686))
+- login ui configuration ([c006368](https://github.com/alchemyplatform/aa-sdk/commit/c00636896f97d0a2353bdff74f7208912cf0f8e9))
+- pass the solana connection url ([70afce9](https://github.com/alchemyplatform/aa-sdk/commit/70afce92503d3158c28a6d5885b0987aeb863de1))
+- pass ui options and connectors to the config ([1a62e7a](https://github.com/alchemyplatform/aa-sdk/commit/1a62e7af191cfcd9c53f33f5103750ac3ddd9615))
+- show installed solana wallets ([207ce15](https://github.com/alchemyplatform/aa-sdk/commit/207ce15b3198bdde93efd0f02319a382275ff5ca))
+- solana button styles ([90b6a4d](https://github.com/alchemyplatform/aa-sdk/commit/90b6a4d960315d1cf46eb48dd9c725eb37c8d025))
+- wallet cleanup ([2224580](https://github.com/alchemyplatform/aa-sdk/commit/2224580140dc9933d2f3c7ddf80f779ef3571b65))
+
 ## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
 
 ### Bug Fixes
