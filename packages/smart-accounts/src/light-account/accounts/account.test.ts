@@ -1,5 +1,4 @@
-// TODO(v5): remove aa-sdk/core dependency
-import { bigIntMultiply, LocalAccountSigner } from "@aa-sdk/core";
+import { bigIntMultiply } from "@aa-sdk/core"; // TODO(v5): remove aa-sdk/core dependency
 import {
   createWalletClient,
   custom,

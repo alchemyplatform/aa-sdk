@@ -56,12 +56,8 @@ describe("MA v2 deferral actions tests", async () => {
   let initCode: Hex;
 
   beforeEach(async () => {
-    signer = LocalAccountSigner.privateKeyToAccountSigner(
-      "0xeea678dff1d3d63a23ac97381234e11c9578d7dc8df7a5c819a6971f062a6620"
-    );
-    sessionKey = LocalAccountSigner.privateKeyToAccountSigner(
-      "0x553ec047514421be8e38f0de9c104fb4b1a409a2db7d21aa63c4122b6ed93799"
-    );
+    signer = LocalAccountSigner.generatePrivateKeySigner();
+    sessionKey = LocalAccountSigner.generatePrivateKeySigner();
 
     // set up and sign deferred action with client with owner connected
     const provider = (
@@ -99,7 +95,6 @@ describe("MA v2 deferral actions tests", async () => {
         .compileDeferred();
 
     const sig = await provider.account.signTypedData(typedData);
-    console.log({ sig });
 
     deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
@@ -123,7 +118,7 @@ describe("MA v2 deferral actions tests", async () => {
         deferredAction: deferredActionDigest,
         feeEstimator: alchemyFeeEstimator(
           // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-          custom(instance.getClient())
+          custom(instance.getClient()),
         ),
       });
 
@@ -179,7 +174,7 @@ describe("MA v2 deferral actions tests", async () => {
           multiplier: 1.2,
         },
       });
-    }
+    },
   );
 
   it(
@@ -195,11 +190,11 @@ describe("MA v2 deferral actions tests", async () => {
         deferredAction: deferredActionDigest,
         feeEstimator: alchemyFeeEstimator(
           // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-          custom(instance.getClient())
+          custom(instance.getClient()),
         ),
       });
 
-      const uoResult = await sessionKeyClient.buildUserOperation({
+      const uoResult = await sessionKeyClient.sendUserOperation({
         uo: {
           target: target,
           value: sendAmount / 2n,
@@ -210,63 +205,62 @@ describe("MA v2 deferral actions tests", async () => {
           maxPriorityFeePerGas: { multiplier: 1.5 },
         },
       });
-      console.log({ uoResult });
 
-      // await setNextBlockBaseFeePerGas(instance.getClient(), {
-      //   baseFeePerGas: 10n,
-      // });
+      await setNextBlockBaseFeePerGas(instance.getClient(), {
+        baseFeePerGas: 10n,
+      });
 
-      // await sessionKeyClient.waitForUserOperationTransaction({
-      //   hash: uoResult.hash,
-      //   retries: {
-      //     maxRetries: 10,
-      //     intervalMs: 500,
-      //     multiplier: 1.2,
-      //   },
-      // });
+      await sessionKeyClient.waitForUserOperationTransaction({
+        hash: uoResult.hash,
+        retries: {
+          maxRetries: 10,
+          intervalMs: 500,
+          multiplier: 1.2,
+        },
+      });
 
-      // const sessionKeyClient2 = await createModularAccountV2Client({
-      //   transport: custom(instance.getClient()),
-      //   chain: instance.chain,
-      //   accountAddress,
-      //   signer: sessionKey,
-      //   initCode,
-      //   deferredAction: deferredActionDigest,
-      //   feeEstimator: alchemyFeeEstimator(
-      //     // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-      //     custom(instance.getClient())
-      //   ),
-      // });
+      const sessionKeyClient2 = await createModularAccountV2Client({
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+        accountAddress,
+        signer: sessionKey,
+        initCode,
+        deferredAction: deferredActionDigest,
+        feeEstimator: alchemyFeeEstimator(
+          // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
+          custom(instance.getClient()),
+        ),
+      });
 
-      // const uoResult2 = await sessionKeyClient2.sendUserOperation({
-      //   uo: {
-      //     target: target,
-      //     value: sendAmount / 2n,
-      //     data: "0x",
-      //   },
-      // });
+      const uoResult2 = await sessionKeyClient2.sendUserOperation({
+        uo: {
+          target: target,
+          value: sendAmount / 2n,
+          data: "0x",
+        },
+      });
 
-      // await setNextBlockBaseFeePerGas(instance.getClient(), {
-      //   baseFeePerGas: 10n,
-      // });
+      await setNextBlockBaseFeePerGas(instance.getClient(), {
+        baseFeePerGas: 10n,
+      });
 
-      // await sessionKeyClient2
-      //   .waitForUserOperationTransaction(uoResult2)
-      //   .catch(async () => {
-      //     const dropAndReplaceResult =
-      //       await sessionKeyClient2.dropAndReplaceUserOperation({
-      //         uoToDrop: uoResult2.request,
-      //       });
-      //     return await sessionKeyClient2.waitForUserOperationTransaction(
-      //       dropAndReplaceResult
-      //     );
-      //   });
-    }
+      await sessionKeyClient2
+        .waitForUserOperationTransaction(uoResult2)
+        .catch(async () => {
+          const dropAndReplaceResult =
+            await sessionKeyClient2.dropAndReplaceUserOperation({
+              uoToDrop: uoResult2.request,
+            });
+          return await sessionKeyClient2.waitForUserOperationTransaction(
+            dropAndReplaceResult,
+          );
+        });
+    },
   );
 
   it("PermissionBuilder: Cannot add any permission after root", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
-      deferralActions
+      deferralActions,
     );
 
     await setBalance(instance.getClient(), {
@@ -275,7 +269,7 @@ describe("MA v2 deferral actions tests", async () => {
     });
 
     const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-      accounts.unfundedAccountOwner
+      accounts.unfundedAccountOwner,
     );
 
     // these can be default values or from call arguments
@@ -309,7 +303,7 @@ describe("MA v2 deferral actions tests", async () => {
 
   it("PermissionBuilder: Cannot compile post expiry", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
-      deferralActions
+      deferralActions,
     );
 
     await setBalance(instance.getClient(), {
@@ -346,7 +340,7 @@ describe("MA v2 deferral actions tests", async () => {
         })
         .compileDeferred();
     }).rejects.toThrowError(
-      /compileDeferred\(\): deadline \d+ cannot be before now \(\d+(\.\d+)?\)/
+      /compileDeferred\(\): deadline \d+ cannot be before now \(\d+(\.\d+)?\)/,
     );
   });
 
@@ -357,7 +351,7 @@ describe("MA v2 deferral actions tests", async () => {
       .extend(testActions({ mode: "anvil" }));
 
     const provider = (await givenConnectedProvider({ signer })).extend(
-      deferralActions
+      deferralActions,
     );
 
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
@@ -407,7 +401,7 @@ describe("MA v2 deferral actions tests", async () => {
       deferredAction: deferredActionDigest,
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient())
+        custom(instance.getClient()),
       ),
     });
 
@@ -453,7 +447,7 @@ describe("MA v2 deferral actions tests", async () => {
               }),
               preVerificationGas: fromHex(
                 signedUO.preVerificationGas,
-                "bigint"
+                "bigint",
               ),
               gasFees: packAccountGasLimits({
                 maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
@@ -481,7 +475,7 @@ describe("MA v2 deferral actions tests", async () => {
 
   it("PermissionBuilder: Cannot add root after any permission", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
-      deferralActions
+      deferralActions,
     );
 
     await setBalance(instance.getClient(), {
@@ -490,7 +484,7 @@ describe("MA v2 deferral actions tests", async () => {
     });
 
     const sessionKey: SmartAccountSigner = new LocalAccountSigner(
-      accounts.unfundedAccountOwner
+      accounts.unfundedAccountOwner,
     );
 
     // these can be default values or from call arguments
@@ -521,7 +515,7 @@ describe("MA v2 deferral actions tests", async () => {
       }).rejects.toThrow(
         new RootPermissionOnlyError({
           type: PermissionType.ROOT,
-        })
+        }),
       );
     });
   });
@@ -551,7 +545,7 @@ describe("MA v2 deferral actions tests", async () => {
       transport: custom(instance.getClient()),
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient())
+        custom(instance.getClient()),
       ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
@@ -574,7 +568,7 @@ describe("MA v2 deferral actions tests", async () => {
    */
   function createERC20TokenTransferPermission(
     tokenAddress: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC on Ethereum mainnet
-    allowance: string | number = "1000000000" // 1,000 USDC with 6 decimals
+    allowance: string | number = "1000000000", // 1,000 USDC with 6 decimals
   ): Permission {
     return {
       type: PermissionType.ERC20_TOKEN_TRANSFER,
@@ -592,7 +586,7 @@ describe("MA v2 deferral actions tests", async () => {
    * @returns {Permission} A NATIVE_TOKEN_TRANSFER permission
    */
   function createNativeTokenTransferPermission(
-    allowance: string | number = "1000000000000000000" // 1 ETH
+    allowance: string | number = "1000000000000000000", // 1 ETH
   ): Permission {
     return {
       type: PermissionType.NATIVE_TOKEN_TRANSFER,
@@ -609,7 +603,7 @@ describe("MA v2 deferral actions tests", async () => {
    * @returns {Permission} A GAS_LIMIT permission
    */
   function createGasLimitPermission(
-    limit: string | number = "100000" // 100k gas
+    limit: string | number = "100000", // 100k gas
   ): Permission {
     return {
       type: PermissionType.GAS_LIMIT,
@@ -626,7 +620,7 @@ describe("MA v2 deferral actions tests", async () => {
    * @returns {Permission} A CONTRACT_ACCESS permission
    */
   function createContractAccessPermission(
-    contractAddress: Address = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984" // Uniswap on Ethereum mainnet
+    contractAddress: Address = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", // Uniswap on Ethereum mainnet
   ): Permission {
     return {
       type: PermissionType.CONTRACT_ACCESS,
@@ -647,7 +641,7 @@ describe("MA v2 deferral actions tests", async () => {
       "0x095ea7b3", // approve(address,uint256)
       "0xa9059cbb", // transfer(address,uint256)
       "0x23b872dd", // transferFrom(address,address,uint256)
-    ]
+    ],
   ): Permission {
     return {
       type: PermissionType.ACCOUNT_FUNCTIONS,
@@ -667,7 +661,7 @@ describe("MA v2 deferral actions tests", async () => {
     functionSignatures: Hex[] = [
       "0x095ea7b3", // approve(address,uint256)
       "0xa9059cbb", // transfer(address,uint256)
-    ]
+    ],
   ): Permission {
     return {
       type: PermissionType.FUNCTIONS_ON_ALL_CONTRACTS,
@@ -689,7 +683,7 @@ describe("MA v2 deferral actions tests", async () => {
     functionSignatures: Hex[] = [
       "0x7ff36ab5", // swapExactETHForTokens
       "0x18cbafe5", // swapExactTokensForETH
-    ]
+    ],
   ): Permission {
     return {
       type: PermissionType.FUNCTIONS_ON_CONTRACT,
