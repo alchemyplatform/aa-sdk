@@ -1025,6 +1025,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/addBreadCrumb.mdx
                   - page: alchemy
                     path: wallets/pages/reference/alchemy/common/functions/alchemy.mdx
+                  - page: bigIntMultiply
+                    path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
                   - page: split

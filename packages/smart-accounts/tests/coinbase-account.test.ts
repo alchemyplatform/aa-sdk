@@ -1,6 +1,5 @@
 import {
   toCoinbaseSmartAccount,
-  createBundlerClient,
   bundlerActions,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -8,6 +7,7 @@ import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
 import { local070Instance } from "~test/instances.js";
+import { createAlchemyBundlerClient } from "../src/clients.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   let client: ReturnType<typeof local070Instance.getClient>;
@@ -39,7 +39,8 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = createBundlerClient({
+    // Create a bundler client that uses the Alchemy fee estimator
+    const bundlerClient = createAlchemyBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
@@ -60,6 +61,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Send the user operation
     const userOpHash = await bundlerClient.sendUserOperation({
+      account,
       calls: [
         {
           to: recipient,
@@ -98,7 +100,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    const bundlerClient = createBundlerClient({
+    const bundlerClient = createAlchemyBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
@@ -112,6 +114,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Deploy by sending a simple transaction to self
     const deployHash = await bundlerClient.sendUserOperation({
+      account,
       calls: [
         {
           to: account.address,
