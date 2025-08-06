@@ -274,14 +274,6 @@ navigation:
         contents:
           - section: Smart Wallets
             contents:
-              - section: Quickstart
-                contents:
-                  - page: Intro
-                    path: wallets/pages/smart-wallets/quickstart/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/quickstart/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/quickstart/api.mdx
               - section: 7702 Quickstart
                 contents:
                   - page: Intro
@@ -330,9 +322,6 @@ navigation:
                 path: wallets/pages/gas-manager-admin-api/gas-manager-errors.mdx
               - page: Supported Chains
                 path: wallets/pages/gas-manager-admin-api/gas-manager-supported-chains.mdx
-              - page: FAQs
-                path: >-
-                  wallets/pages/gas-manager-admin-api/gas-manager-faqs.mdx
             slug: gas-manager-admin-api
           - section: Bundler
             contents:
@@ -357,8 +346,6 @@ navigation:
                 slug: entrypoint-revert-codes
               - page: Supported Chains
                 path: wallets/pages/bundler-api/bundler-supported-chains.mdx
-              - page: FAQs
-                path: wallets/pages/bundler-api/bundler-faqs.mdx
             slug: bundler-api
 
       - section: SDK Reference
