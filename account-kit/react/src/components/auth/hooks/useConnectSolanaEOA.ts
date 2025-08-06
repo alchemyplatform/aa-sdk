@@ -5,7 +5,7 @@ import { useAuthContext } from "../context.js";
 import { useCallback, useEffect } from "react";
 
 export const useConnectSolanaEOA = () => {
-  const { setAuthStep } = useAuthContext();
+  const { setAuthStep, authStep } = useAuthContext();
   const { disconnect, select, publicKey } = useWallet();
 
   const connect = useCallback(
@@ -20,8 +20,9 @@ export const useConnectSolanaEOA = () => {
 
   useEffect(() => {
     if (!publicKey) return;
-    setAuthStep({ type: "complete" });
-  }, [publicKey, setAuthStep]);
+
+    if (authStep.type !== "complete") setAuthStep({ type: "complete" });
+  }, [publicKey, setAuthStep, authStep.type]);
 
   return {
     connect,

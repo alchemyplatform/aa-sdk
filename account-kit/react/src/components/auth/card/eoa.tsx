@@ -8,19 +8,19 @@ import { ls } from "../../../strings.js";
 import { useAuthContext } from "../context.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
-import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
-import { useSolanaWallet } from "../../../hooks/useSolanaWallet.js";
 import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
 import {
   WalletButton,
   WalletConnectButton,
   SolanaWalletButton,
 } from "../wallet-buttons/index.js";
-import type { AuthType } from "../types.js";
-import type { ExternalWalletUIConfig } from "../../../configForExternalWallets.js";
+import {
+  useWalletLogoResolver,
+  useWalletAvailability,
+} from "../../../hooks/internal/useWalletDeduplication.js";
 
 export const WALLET_CONNECT = "walletConnect";
 
@@ -172,111 +172,14 @@ export const WalletConnectCard = () => {
 };
 
 export const EoaPickCard = () => {
-  const { connectors } = useConnectEOA();
-  // const { setAuthStep } = useAuthContext("pick_eoa");
-  const { wallets } = useSolanaWallet();
   const { walletConnectParams } = useWalletConnectAuthConfig();
-
-  // Get external wallets config to access logoUrl for each wallet
-  const externalWalletsConfig = useAuthConfig((auth) => {
-    const externalWalletSection = auth.sections
-      .find((x) => x.some((y) => y.type === "external_wallets"))
-      ?.find((x) => x.type === "external_wallets") as
-      | Extract<AuthType, { type: "external_wallets" }>
-      | undefined;
-
-    return externalWalletSection;
-  });
-
-  // Helper function to find logoUrl for a connector
-  const getLogoUrlForConnector = (
-    connectorType: string,
-  ): string | undefined => {
-    if (!externalWalletsConfig?.wallets) return undefined;
-
-    // Look for a wallet config with matching connector type
-    const walletConfig = externalWalletsConfig.wallets.find(
-      (wallet: ExternalWalletUIConfig) =>
-        wallet.type === "evm" && wallet.id === connectorType,
-    );
-    return walletConfig?.logoUrl;
-  };
-
-  // Helper function to find logoUrl for a Solana adapter
-  const getLogoUrlForAdapter = (adapterName: string): string | undefined => {
-    if (!externalWalletsConfig?.wallets) return undefined;
-
-    // Look for a wallet config with matching adapter name
-    const walletConfig = externalWalletsConfig.wallets.find(
-      (wallet: ExternalWalletUIConfig) =>
-        wallet.type === "solana" && wallet.id === adapterName,
-    );
-    return walletConfig?.logoUrl;
-  };
-
-  // Helper function to find logoUrl for WalletConnect
-  const getLogoUrlForWalletConnect = (): string | undefined => {
-    if (!externalWalletsConfig?.wallets) return undefined;
-
-    // Look for a wallet config with WalletConnect type
-    const walletConfig = externalWalletsConfig.wallets.find(
-      (wallet: ExternalWalletUIConfig) =>
-        wallet.type === "walletconnect" && wallet.id === "WalletConnect",
-    );
-    return walletConfig?.logoUrl;
-  };
-
-  // Deduplicate connectors to prevent duplicates from auto-detection
-  const uniqueConnectors = (() => {
-    const uniqueMap = new Map<string, (typeof connectors)[0]>();
-
-    connectors
-      .filter((x) => x.type !== WALLET_CONNECT)
-      .forEach((connector) => {
-        const key = connector.name.toLowerCase();
-
-        // If we already have this connector, prefer the explicit one over auto-detected
-        // Auto-detected connectors typically have generic IDs, explicit ones have specific types
-        if (!uniqueMap.has(key) || connector.type !== "injected") {
-          uniqueMap.set(key, connector);
-        }
-      });
-
-    return Array.from(uniqueMap.values());
-  })();
-
-  // Deduplicate Solana wallets, prioritizing installed ones
-  const uniqueSolanaWallets = (() => {
-    const uniqueMap = new Map<string, (typeof wallets)[0]>();
-
-    wallets.forEach((wallet) => {
-      const key = wallet.adapter.name.toLowerCase();
-      const existing = uniqueMap.get(key);
-
-      if (!existing) {
-        uniqueMap.set(key, wallet);
-      } else if (
-        wallet.readyState === "Installed" &&
-        existing.readyState !== "Installed"
-      ) {
-        // Replace with installed version if current one is installed and existing isn't
-        uniqueMap.set(key, wallet);
-      }
-      // If both are installed or both are not installed, keep the first one
-    });
-
-    return Array.from(uniqueMap.values());
-  })();
-
-  // Filter to only show installed Solana wallets if any are available
-  const filteredSolanaWallets = (() => {
-    const installedWallets = uniqueSolanaWallets.filter(
-      (wallet) => wallet.readyState === "Installed",
-    );
-
-    // If we have installed wallets, only show those. Otherwise show all unique wallets.
-    return installedWallets.length > 0 ? installedWallets : uniqueSolanaWallets;
-  })();
+  const {
+    getLogoUrlForConnector,
+    getLogoUrlForAdapter,
+    getLogoUrlForWalletConnect,
+  } = useWalletLogoResolver();
+  const { hasAnyWallets, uniqueConnectors, filteredSolanaWallets } =
+    useWalletAvailability();
 
   // Use reusable wallet button components with deduplicated connectors
   const connectorButtons = uniqueConnectors.map((connector) => (
@@ -292,9 +195,7 @@ export const EoaPickCard = () => {
       className="w-full"
       header="Select your wallet"
       description={
-        walletConnectParams != null ||
-        connectors.length ||
-        filteredSolanaWallets.length ? (
+        hasAnyWallets ? (
           <div className="flex flex-col gap-3 w-full">
             {connectorButtons}
             {walletConnectParams && (
