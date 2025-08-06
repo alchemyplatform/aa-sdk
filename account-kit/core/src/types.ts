@@ -60,7 +60,7 @@ export type AlchemyAccountsConfig = {
   store: Store;
   accountCreationHint?: CreateConfigProps["accountCreationHint"];
   solana?: {
-    adapters: WalletAdapter[];
+    adapters?: WalletAdapter[] | "detect";
     connection: SolanaWeb3Connection;
   };
   _internal: {
@@ -78,13 +78,24 @@ export type SolanaConnection = {
   connection: SolanaWeb3Connection;
   policyId?: string;
   /**
-   * Optional array of Solana wallet adapters to be used for connecting to wallets
-   * These adapters will be made available in the React context for wallet selection
+   * Array of Solana wallet adapters to be used for connecting to wallets.
+   * Set to "detect" to auto-detect installed wallets, or provide explicit adapters.
+   * These adapters will be made available in the React context for wallet selection.
    *
    * @example
    * ```ts
    * import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
    *
+   * // Auto-detect installed wallets
+   * const config = createConfig({
+   *   // ... other config
+   *   solana: {
+   *     connection: solanaConnection,
+   *     adapters: "detect"
+   *   }
+   * });
+   *
+   * // Explicit wallet configuration
    * const config = createConfig({
    *   // ... other config
    *   solana: {
@@ -97,7 +108,7 @@ export type SolanaConnection = {
    * });
    * ```
    */
-  adapters?: WalletAdapter[];
+  adapters?: WalletAdapter[] | "detect";
 };
 
 export type Connection = {

@@ -12,7 +12,7 @@ import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useSolanaWallet } from "../../../hooks/useSolanaWallet.js";
 import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
 import {
   WalletButton,
@@ -174,7 +174,7 @@ export const WalletConnectCard = () => {
 export const EoaPickCard = () => {
   const { connectors } = useConnectEOA();
   // const { setAuthStep } = useAuthContext("pick_eoa");
-  const { wallets } = useWallet();
+  const { wallets } = useSolanaWallet();
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
   // Get external wallets config to access logoUrl for each wallet

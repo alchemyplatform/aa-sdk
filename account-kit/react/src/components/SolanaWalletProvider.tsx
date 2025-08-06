@@ -13,12 +13,21 @@ interface SolanaWalletProviderProps {
 }
 
 export function SolanaWalletProvider({ children }: SolanaWalletProviderProps) {
-  const { connection } = useAlchemyAccountContext().config.solana!;
-  const wallets = useSolanaAdapters();
+  const solana = useAlchemyAccountContext().config.solana;
+  const walletsAdapters = useSolanaAdapters();
+
+  // Short-circuit if no Solana adapters - connection may still be needed for embedded wallets
+  if (
+    !solana ||
+    !solana.adapters ||
+    (Array.isArray(solana.adapters) && solana.adapters.length === 0)
+  ) {
+    return <>{children}</>;
+  }
 
   return (
-    <ConnectionProvider endpoint={connection.rpcEndpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
+    <ConnectionProvider endpoint={solana.connection.rpcEndpoint}>
+      <WalletProvider wallets={walletsAdapters} autoConnect>
         {children}
       </WalletProvider>
     </ConnectionProvider>

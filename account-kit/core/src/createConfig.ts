@@ -137,7 +137,7 @@ export const createConfig = (
     accountCreationHint: params.accountCreationHint,
     solana: params.solana
       ? {
-          adapters: params.solana.adapters || [],
+          adapters: params.solana.adapters,
           connection: params.solana.connection,
         }
       : undefined,

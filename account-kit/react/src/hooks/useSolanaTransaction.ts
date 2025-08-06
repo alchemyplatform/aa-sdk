@@ -3,7 +3,7 @@
 import * as solanaNetwork from "../solanaNetwork.js";
 import { useMutation } from "@tanstack/react-query";
 import { SolanaSigner } from "@account-kit/signer";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useSolanaWallet } from "./useSolanaWallet.js";
 import {
   createSolanaSponsoredTransaction,
   createSolanaTransaction,
@@ -126,7 +126,7 @@ export function useSolanaTransaction(
     connected: isWalletConnected,
     publicKey: walletPublicKey,
     sendTransaction: walletSendTransaction,
-  } = useWallet();
+  } = useSolanaWallet();
   const backupConnection = useSyncExternalStore(
     watchSolanaConnection(config),
     () => getSolanaConnection(config),

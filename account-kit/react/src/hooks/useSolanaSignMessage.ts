@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { toBytes, toHex, type ByteArray, type Hex } from "viem";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useSolanaWallet } from "./useSolanaWallet.js";
 import type { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types";
 import { useSolanaSigner } from "./useSolanaSigner.js";
@@ -65,7 +65,7 @@ export function useSolanaSignMessage(
 ): SolanaSignedMessage {
   const fallbackSigner = useSolanaSigner({});
   const { connected: isWalletConnected, signMessage: walletSignMessage } =
-    useWallet();
+    useSolanaWallet();
   const signer = opts.signer || fallbackSigner;
 
   const mutation = useMutation({

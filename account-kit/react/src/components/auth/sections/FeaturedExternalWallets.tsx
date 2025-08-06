@@ -1,4 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useSolanaWallet } from "../../../hooks/useSolanaWallet.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
 import {
@@ -17,7 +17,7 @@ export const FeaturedExternalWallets = ({
   config,
 }: InlineWalletButtonsProps) => {
   const { connectors } = useConnectEOA();
-  const { wallets } = useWallet();
+  const { wallets } = useSolanaWallet();
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
   // Get featured wallets from the new config structure

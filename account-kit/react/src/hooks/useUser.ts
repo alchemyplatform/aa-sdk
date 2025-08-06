@@ -4,7 +4,7 @@ import { getUser, watchUser } from "@account-kit/core";
 import type { User } from "@account-kit/signer";
 import { useMemo, useSyncExternalStore } from "react";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useSolanaWallet } from "./useSolanaWallet.js";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
@@ -36,7 +36,7 @@ export const useUser = (): UseUserResult => {
 
   const account = wagmi_useAccount({ config: wagmiConfig });
   const { connected: solanaConnected, publicKey: solanaPublicKey } =
-    useWallet();
+    useSolanaWallet();
   const user = useSyncExternalStore(
     watchUser(config),
     () => getUser(config) ?? null,
