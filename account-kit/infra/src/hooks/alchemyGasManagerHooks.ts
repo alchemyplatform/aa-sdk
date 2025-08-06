@@ -1,5 +1,6 @@
 import type { Address, Client, Transport, Chain, Hex } from "viem";
-import { hexToBigInt } from "viem";
+import { hexToBigInt, fromHex, isHex } from "viem";
+import { getBlock } from "viem/actions";
 import type {
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
@@ -7,7 +8,7 @@ import type {
   GetPaymasterStubDataReturnType,
 } from "viem/account-abstraction";
 import { deepHexlify, resolveProperties } from "@aa-sdk/core";
-import { alchemyEstimateFeesPerGas } from "../utils/alchemyFeeEstimator.js";
+import { bigIntMultiply } from "@alchemy/common";
 import type { PolicyToken } from "../middleware/gasManager.js";
 
 // Type for the optimized RPC response
@@ -270,7 +271,35 @@ export function alchemyGasManagerHooks(
         }
 
         // Otherwise use Alchemy's fee estimation which includes rundler_maxPriorityFeePerGas
-        return alchemyEstimateFeesPerGas(params);
+        const { bundlerClient } = params;
+        const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
+          getBlock(bundlerClient, { blockTag: "latest" }),
+          (bundlerClient as any).request({
+            method: "rundler_maxPriorityFeePerGas",
+            params: [],
+          }),
+        ]);
+
+        const baseFeePerGas = block.baseFeePerGas;
+        if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
+        if (maxPriorityFeePerGasEstimate == null)
+          throw new Error(
+            "rundler_maxPriorityFeePerGas returned null or undefined",
+          );
+
+        const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
+          ? fromHex(maxPriorityFeePerGasEstimate, "bigint")
+          : (() => {
+              throw new Error(
+                `Invalid hex value: ${maxPriorityFeePerGasEstimate}`,
+              );
+            })();
+
+        return {
+          maxPriorityFeePerGas,
+          maxFeePerGas:
+            bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
+        };
       },
     },
   } as const;
