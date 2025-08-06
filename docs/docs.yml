@@ -515,6 +515,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
                       - page: initEmailAuth
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
+                      - page: initSmsAuth
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initSmsAuth.mdx
                       - page: oauthWithPopup
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
@@ -551,6 +553,10 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors.mdx
                       - page: getMfaStatus
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
+                      - page: getUser
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
+                      - page: getUser
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
                       - page: getUser
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
                       - page: listAuthMethods
@@ -615,6 +621,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/listAuthMethods.mdx
                       - page: lookupUserByEmail
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
+                      - page: lookupUserByPhone
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByPhone.mdx
                       - page: lookupUserWithPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserWithPasskey.mdx
                       - page: on
