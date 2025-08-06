@@ -427,13 +427,26 @@ export function alchemyGasAndPaymasterAndDataHooks(
           method: "eth_getBlockByNumber",
           params: ["latest", false],
         });
+
         const baseFeePerGas = block
           ? hexToBigInt(block.baseFeePerGas || "0x0")
           : 0n;
-        const maxPriorityFeePerGas = hexToBigInt("0x5f5e100"); // 0.1 gwei default
+
+        // Try to get priority fee from rundler, fallback to default
+        let maxPriorityFeePerGas: bigint;
+        try {
+          const priorityFeeHex = await (bundlerClient as any).request({
+            method: "rundler_maxPriorityFeePerGas",
+            params: [],
+          });
+          maxPriorityFeePerGas = hexToBigInt(priorityFeeHex);
+        } catch {
+          // Default to 1 gwei if method not available
+          maxPriorityFeePerGas = 1000000000n;
+        }
 
         return {
-          maxFeePerGas: baseFeePerGas * 2n + maxPriorityFeePerGas,
+          maxFeePerGas: (baseFeePerGas * 3n) / 2n + maxPriorityFeePerGas, // 1.5x multiplier
           maxPriorityFeePerGas,
         };
       },
