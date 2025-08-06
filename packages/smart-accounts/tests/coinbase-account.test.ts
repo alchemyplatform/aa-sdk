@@ -4,10 +4,7 @@ import {
   bundlerActions,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import {
-  alchemyGasManagerHooks,
-  alchemyGasAndPaymasterAndDataHooks,
-} from "../../../account-kit/infra/src/hooks/alchemyGasManagerHooks.js";
+import { alchemyGasManagerHooks } from "../../../account-kit/infra/src/hooks/alchemyGasManagerHooks.js";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
@@ -48,7 +45,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...alchemyGasAndPaymasterAndDataHooks("test-policy"),
+      ...alchemyGasManagerHooks("test-policy"),
     });
 
     // Fund the account
@@ -109,7 +106,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...alchemyGasAndPaymasterAndDataHooks("test-policy"),
+      ...alchemyGasManagerHooks("test-policy"),
     }).extend(bundlerActions);
 
     // Fund and deploy the account

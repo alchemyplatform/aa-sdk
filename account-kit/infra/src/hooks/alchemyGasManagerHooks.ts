@@ -1,5 +1,5 @@
 import type { Address, Client, Transport, Chain, Hex } from "viem";
-import { toHex, hexToBigInt } from "viem";
+import { hexToBigInt } from "viem";
 import type {
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
@@ -7,19 +7,25 @@ import type {
   GetPaymasterStubDataReturnType,
 } from "viem/account-abstraction";
 import { deepHexlify, resolveProperties } from "@aa-sdk/core";
+import { alchemyEstimateFeesPerGas } from "../../../../packages/smart-accounts/src/alchemyEstimateFeesPerGas.js";
 import type { PolicyToken } from "../middleware/gasManager.js";
 
-// Type for ERC-7677 paymaster response
-type Erc7677PaymasterResponse = {
+// Type for the optimized RPC response
+type GasAndPaymasterAndDataResponse = {
+  callGasLimit: Hex;
+  preVerificationGas: Hex;
+  verificationGasLimit: Hex;
+  maxFeePerGas: Hex;
+  maxPriorityFeePerGas: Hex;
   paymasterAndData?: Hex;
   paymaster?: Address;
   paymasterData?: Hex;
-  paymasterVerificationGasLimit?: bigint;
-  paymasterPostOpGasLimit?: bigint;
+  paymasterVerificationGasLimit?: Hex;
+  paymasterPostOpGasLimit?: Hex;
 };
 
 /**
- * Context for Alchemy Gas Manager ERC-7677 calls
+ * Context for Alchemy Gas Manager calls
  */
 interface AlchemyGasManagerContext {
   policyId: string | string[];
@@ -34,7 +40,7 @@ interface AlchemyGasManagerContext {
  *
  * @param {string | string[]} policyId - The policy ID(s) for gas sponsorship
  * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration
- * @returns {AlchemyGasManagerContext} The context object for ERC-7677 calls
+ * @returns {AlchemyGasManagerContext} The context object for Gas Manager calls
  */
 function createGasManagerContext(
   policyId: string | string[],
@@ -60,14 +66,16 @@ function createGasManagerContext(
 }
 
 /**
- * Adapts Alchemy's Gas Manager to viem's new paymaster interface.
+ * Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
+ * `alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and
+ * paymaster sponsorship in a single RPC call.
  *
- * Creates viem-compatible paymaster hooks that work directly with Alchemy's
- * ERC-7677 implementation for gas sponsorship.
+ * This implementation caches the result from the first call to avoid duplicate RPC calls
+ * when viem calls both getPaymasterStubData and getPaymasterData.
  *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
  * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration (permits not supported)
- * @returns {{ paymaster: { getPaymasterData: Function, getPaymasterStubData: Function } }} Paymaster hooks for createBundlerClient
+ * @returns {{ paymaster: Function, userOperation: { estimateFeesPerGas: Function } }} Hooks for createBundlerClient
  *
  * @example
  * ```ts
@@ -83,177 +91,6 @@ function createGasManagerContext(
  * ```
  */
 export function alchemyGasManagerHooks(
-  policyId: string | string[],
-  policyToken?: PolicyToken,
-) {
-  const context = createGasManagerContext(policyId, policyToken);
-
-  // We need to return a function that will be called by createBundlerClient
-  // The function receives the bundlerClient and returns the paymaster hooks
-  return {
-    paymaster: (bundlerClient: Client<Transport, Chain>) => ({
-      async getPaymasterData(
-        parameters: GetPaymasterDataParameters,
-      ): Promise<GetPaymasterDataReturnType> {
-        const {
-          chainId,
-          entryPointAddress,
-          context: userContext,
-          ...userOpFields
-        } = parameters;
-
-        // Prepare user operation for ERC-7677 call
-        const userOp = deepHexlify(
-          await resolveProperties(userOpFields as any),
-        );
-
-        // Merge contexts
-        const finalContext = {
-          ...context,
-          ...(userContext || {}),
-        };
-
-        // Make ERC-7677 pm_getPaymasterData call
-        const response = await bundlerClient.request<{
-          Method: "pm_getPaymasterData";
-          Parameters: [any, Address, Hex, any];
-          ReturnType: Erc7677PaymasterResponse;
-        }>({
-          method: "pm_getPaymasterData",
-          params: [userOp, entryPointAddress, toHex(chainId), finalContext],
-        });
-
-        // Format response for viem
-        if (response.paymasterAndData) {
-          return { paymasterAndData: response.paymasterAndData };
-        }
-
-        if (response.paymaster) {
-          return {
-            paymaster: response.paymaster,
-            paymasterData: response.paymasterData || "0x",
-            paymasterVerificationGasLimit:
-              response.paymasterVerificationGasLimit!,
-            paymasterPostOpGasLimit: response.paymasterPostOpGasLimit!,
-          };
-        }
-
-        throw new Error("No paymaster data returned from ERC-7677 call");
-      },
-
-      async getPaymasterStubData(
-        parameters: GetPaymasterStubDataParameters,
-      ): Promise<GetPaymasterStubDataReturnType> {
-        const {
-          chainId,
-          entryPointAddress,
-          context: userContext,
-          ...userOpFields
-        } = parameters;
-
-        // Prepare user operation with zero gas values for stub call
-        const userOp = deepHexlify(
-          await resolveProperties(userOpFields as any),
-        );
-
-        // For stub calls, set gas values to zero as per ERC-7677
-        userOp.maxFeePerGas = "0x0";
-        userOp.maxPriorityFeePerGas = "0x0";
-        userOp.callGasLimit = "0x0";
-        userOp.verificationGasLimit = "0x0";
-        userOp.preVerificationGas = "0x0";
-
-        // For EP v0.7, also zero out paymaster gas fields
-        if (
-          entryPointAddress
-            .toLowerCase()
-            .includes("0x0000000071727de22e5e9d8baf0edac6f37da032")
-        ) {
-          userOp.paymasterVerificationGasLimit = "0x0";
-          userOp.paymasterPostOpGasLimit = "0x0";
-        }
-
-        // Merge contexts
-        const finalContext = {
-          ...context,
-          ...(userContext || {}),
-        };
-
-        // Make ERC-7677 pm_getPaymasterStubData call
-        const response = await bundlerClient.request<{
-          Method: "pm_getPaymasterStubData";
-          Parameters: [any, Address, Hex, any];
-          ReturnType: Erc7677PaymasterResponse;
-        }>({
-          method: "pm_getPaymasterStubData",
-          params: [userOp, entryPointAddress, toHex(chainId), finalContext],
-        });
-
-        // Format response for viem
-        if (response.paymasterAndData) {
-          return {
-            paymasterAndData: response.paymasterAndData,
-            isFinal: false,
-          };
-        }
-
-        if (response.paymaster) {
-          return {
-            paymaster: response.paymaster,
-            paymasterData: response.paymasterData || "0x",
-            paymasterVerificationGasLimit:
-              response.paymasterVerificationGasLimit!,
-            paymasterPostOpGasLimit: response.paymasterPostOpGasLimit || 50000n,
-            isFinal: false,
-          };
-        }
-
-        throw new Error("No paymaster stub data returned from ERC-7677 call");
-      },
-    }),
-  } as const;
-}
-
-// Type for the optimized RPC response
-type GasAndPaymasterAndDataResponse = {
-  callGasLimit: Hex;
-  preVerificationGas: Hex;
-  verificationGasLimit: Hex;
-  maxFeePerGas: Hex;
-  maxPriorityFeePerGas: Hex;
-  paymasterAndData?: Hex;
-  paymaster?: Address;
-  paymasterData?: Hex;
-  paymasterVerificationGasLimit?: Hex;
-  paymasterPostOpGasLimit?: Hex;
-};
-
-/**
- * Adapts Alchemy's optimized gas+paymaster middleware to viem's new interface.
- * Uses the non-standard `alchemy_requestGasAndPaymasterAndData` flow that combines
- * gas estimation and paymaster sponsorship in a single RPC call.
- *
- * This implementation caches the result from the first call to avoid duplicate RPC calls
- * when viem calls both getPaymasterStubData and getPaymasterData.
- *
- * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
- * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration
- * @returns {{ paymaster: Function, userOperation: { estimateFeesPerGas: Function } }} Hooks for createBundlerClient
- *
- * @example
- * ```ts
- * import { createBundlerClient } from "viem/account-abstraction";
- * import { alchemyGasAndPaymasterAndDataHooks } from "@account-kit/infra";
- *
- * const bundler = createBundlerClient({
- *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
- *   chain: sepolia,
- *   account,
- *   ...alchemyGasAndPaymasterAndDataHooks("your-policy-id"),
- * });
- * ```
- */
-export function alchemyGasAndPaymasterAndDataHooks(
   policyId: string | string[],
   policyToken?: PolicyToken,
 ) {
@@ -401,17 +238,27 @@ export function alchemyGasAndPaymasterAndDataHooks(
           }
         }
 
-        // If no cached result, fall back to regular flow
-        // This shouldn't happen in normal operation
-        return alchemyGasManagerHooks(policyId, policyToken)
-          .paymaster(bundlerClient)
-          .getPaymasterData(parameters);
+        // If no cached result, we need to make the call
+        // This shouldn't happen in normal operation as getPaymasterStubData is called first
+        const stubResult = await this.getPaymasterStubData(parameters);
+
+        if ("paymasterAndData" in stubResult && stubResult.paymasterAndData) {
+          return { paymasterAndData: stubResult.paymasterAndData };
+        }
+
+        return {
+          paymaster: stubResult.paymaster!,
+          paymasterData: stubResult.paymasterData!,
+          paymasterVerificationGasLimit:
+            stubResult.paymasterVerificationGasLimit!,
+          paymasterPostOpGasLimit: stubResult.paymasterPostOpGasLimit!,
+        };
       },
     }),
 
     userOperation: {
-      // Custom fee estimator that uses the cached gas values
-      async estimateFeesPerGas({ bundlerClient }: { bundlerClient: Client }) {
+      // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
+      async estimateFeesPerGas(params: { bundlerClient: Client }) {
         // If we have cached gas values, return them
         if (cachedResult) {
           return {
@@ -422,34 +269,14 @@ export function alchemyGasAndPaymasterAndDataHooks(
           };
         }
 
-        // Otherwise use default estimation
-        const block = await bundlerClient.request({
-          method: "eth_getBlockByNumber",
-          params: ["latest", false],
-        });
-
-        const baseFeePerGas = block
-          ? hexToBigInt(block.baseFeePerGas || "0x0")
-          : 0n;
-
-        // Try to get priority fee from rundler, fallback to default
-        let maxPriorityFeePerGas: bigint;
-        try {
-          const priorityFeeHex = await (bundlerClient as any).request({
-            method: "rundler_maxPriorityFeePerGas",
-            params: [],
-          });
-          maxPriorityFeePerGas = hexToBigInt(priorityFeeHex);
-        } catch {
-          // Default to 1 gwei if method not available
-          maxPriorityFeePerGas = 1000000000n;
-        }
-
-        return {
-          maxFeePerGas: (baseFeePerGas * 3n) / 2n + maxPriorityFeePerGas, // 1.5x multiplier
-          maxPriorityFeePerGas,
-        };
+        // Otherwise use Alchemy's fee estimation which includes rundler_maxPriorityFeePerGas
+        return alchemyEstimateFeesPerGas(params);
       },
     },
   } as const;
 }
+
+/**
+ * @deprecated Use alchemyGasManagerHooks instead
+ */
+export const alchemyGasAndPaymasterAndDataHooks = alchemyGasManagerHooks;
