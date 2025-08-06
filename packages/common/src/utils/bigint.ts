@@ -41,7 +41,7 @@ export const bigIntMultiply = (
   multiplier: Multiplier["multiplier"],
   roundingMode: RoundingMode = RoundingMode.ROUND_UP,
 ) => {
-  if (!isValidMultiplier(multiplier)) {
+  if (!isValidMultiplier({ multiplier })) {
     throw new Error(
       "bigIntMultiply requires a multiplier validated number as the second argument (max 4 decimal places)",
     );
