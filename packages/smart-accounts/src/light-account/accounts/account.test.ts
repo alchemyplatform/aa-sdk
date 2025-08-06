@@ -195,7 +195,6 @@ describe("Light Account Tests", () => {
       value: parseEther("10"),
     });
 
-    // TODO(v5): is this failing all of a sudden?
     const result = await provider.sendUserOperation({
       calls: [
         {
@@ -211,7 +210,6 @@ describe("Light Account Tests", () => {
     await expect(receipt).resolves.not.toThrowError();
   }, 30_000);
 
-  // TODO(v5): is this failing all of a sudden?
   it("should execute successfully after account has already been deployed", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
@@ -269,7 +267,6 @@ describe("Light Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  // TODO(v5): is this failing all of a sudden?
   it("should successfully execute with paymaster info using erc-7677 middleware", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
@@ -295,7 +292,6 @@ describe("Light Account Tests", () => {
     await expect(receipt).resolves.not.toThrowError();
   });
 
-  // TODO(v5): is this failing all of a sudden?
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
     const throwawaySigner = privateKeyToAccount(generatePrivateKey());
