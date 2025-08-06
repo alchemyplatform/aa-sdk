@@ -45,27 +45,33 @@ const ERC20_TRANSFER_SELECTOR = "0xa9059cbb";
 const ACCOUNT_EXECUTE_SELECTOR = "0xb61d27f6";
 const ACCOUNT_EXECUTEBATCH_SELECTOR = "0x34fcd5be";
 
-export enum PermissionType {
-  NATIVE_TOKEN_TRANSFER = "native-token-transfer",
-  ERC20_TOKEN_TRANSFER = "erc20-token-transfer",
-  // ERC721_TOKEN_TRANSFER = "erc721-token-transfer", // Unimplemented
-  // ERC1155_TOKEN_TRANSFER = "erc1155-token-transfer", // Unimplemented
-  GAS_LIMIT = "gas-limit",
-  // CALL_LIMIT = "call-limit", //Unimplemented
-  // RATE_LIMIT = "rate-limit", //Unimplemented
-  CONTRACT_ACCESS = "contract-access",
-  ACCOUNT_FUNCTIONS = "account-functions",
-  FUNCTIONS_ON_ALL_CONTRACTS = "functions-on-all-contracts",
-  FUNCTIONS_ON_CONTRACT = "functions-on-contract",
-  ROOT = "root",
-}
+export const PermissionType = {
+  NATIVE_TOKEN_TRANSFER: "native-token-transfer",
+  ERC20_TOKEN_TRANSFER: "erc20-token-transfer",
+  // ERC721_TOKEN_TRANSFER : "erc721-token-transfer", // Unimplemented
+  // ERC1155_TOKEN_TRANSFER : "erc1155-token-transfer", // Unimplemented
+  GAS_LIMIT: "gas-limit",
+  // CALL_LIMIT : "call-limit", //Unimplemented
+  // RATE_LIMIT : "rate-limit", //Unimplemented
+  CONTRACT_ACCESS: "contract-access",
+  ACCOUNT_FUNCTIONS: "account-functions",
+  FUNCTIONS_ON_ALL_CONTRACTS: "functions-on-all-contracts",
+  FUNCTIONS_ON_CONTRACT: "functions-on-contract",
+  ROOT: "root",
+} as const;
 
-enum HookIdentifier {
-  NATIVE_TOKEN_TRANSFER,
-  ERC20_TOKEN_TRANSFER,
-  GAS_LIMIT,
-  PREVAL_ALLOWLIST, // aggregate of CONTRACT_ACCESS, ACCOUNT_FUNCTIONS, FUNCTIONS_ON_ALL_CONTRACTS, FUNCTIONS_ON_CONTRACT
-}
+// @ts-ignore - This is fine.
+export type PermissionType = PermissionType[keyof typeof PermissionType];
+
+export const HookIdentifier = {
+  NATIVE_TOKEN_TRANSFER: "native-token-transfer",
+  ERC20_TOKEN_TRANSFER: "erc20-token-transfer",
+  GAS_LIMIT: "gas-limit",
+  PREVAL_ALLOWLIST: "preval-allowlist", // aggregate of CONTRACT_ACCESS, ACCOUNT_FUNCTIONS, FUNCTIONS_ON_ALL_CONTRACTS, FUNCTIONS_ON_CONTRACT
+} as const;
+
+// @ts-ignore - This is fine.
+export type HookIdentifier = HookIdentifier[keyof typeof HookIdentifier];
 
 type PreExecutionHookConfig = {
   address: Address;

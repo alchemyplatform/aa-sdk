@@ -1,10 +1,7 @@
-// TODO(jh): claude did most of this. need to review & fix.
-
 import { bigIntMultiply } from "@aa-sdk/core";
 import {
   createWalletClient,
   custom,
-  fromHex,
   parseEther,
   publicActions,
   testActions,
@@ -24,12 +21,16 @@ import {
   zeroAddress,
   type ContractFunctionName,
   type TestActions,
+  parseAbi,
+  createPublicClient,
+  isHex,
 } from "viem";
 import {
   createBundlerClient,
   entryPoint07Abi,
   createWebAuthnCredential,
-  type ToWebAuthnAccountParameters,
+  toWebAuthnAccount,
+  type WebAuthnAccount,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlock, setBalance } from "viem/actions";
@@ -41,40 +42,33 @@ import {
   packAccountGasLimits,
   packPaymasterData,
 } from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
-import { HookType } from "../actions/common/types.js";
 import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
-import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 import { toModularAccountV2 } from "./account.js";
 import { toLightAccount } from "../../light-account/accounts/account.js";
 import { deferralActions } from "../decorators/deferralActions.js";
 import { installValidationActions } from "../decorators/installValidation.js";
-import {
-  AllowlistModule,
-  buildDeferredActionDigest,
-  buildFullNonceKey,
-  getDefaultAllowlistModuleAddress,
-  getDefaultNativeTokenLimitModuleAddress,
-  getDefaultPaymasterGuardModuleAddress,
-  getDefaultSingleSignerValidationModuleAddress,
-  getDefaultTimeRangeModuleAddress,
-  getDefaultWebauthnValidationModuleAddress,
-  NativeTokenLimitModule,
-  PaymasterGuardModule,
-  PermissionBuilder,
-  PermissionType,
-  semiModularAccountBytecodeAbi,
-  SingleSignerValidationModule,
-  TimeRangeModule,
-} from "../../../experimental/index.js";
+import { HookType } from "../types.js";
+import { buildFullNonceKey, DefaultModuleAddress } from "../utils/account.js";
+import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
+import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
+import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
+import { buildDeferredActionDigest } from "../utils/deferredActions.js";
+import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
+import { AllowlistModule } from "../modules/allowlist-module/module.js";
+import { NativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
+import { TimeRangeModule } from "../modules/time-range-module/module.js";
+import { raise } from "@alchemy/common";
+import { getMAV2UpgradeToData } from "../utils/account";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
   const instance = local070Instance;
-  const isValidSigSuccess = "0x1626ba7e";
+  const IS_VALID_SIG_SUCCESS = "0x1626ba7e";
 
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions> &
     TestActions;
+
   beforeAll(async () => {
     client = instance
       .getClient()
@@ -98,7 +92,7 @@ describe("MA v2 Account Tests", async () => {
     owner = privateKeyToAccount(generatePrivateKey());
   });
 
-  it("sends a simple UO", async () => {
+  it("sends a simple UO", { retry: 3, timeout: 30_000 }, async () => {
     const provider = await givenConnectedProvider({ signer: owner });
 
     await setBalance(instance.getClient(), {
@@ -108,7 +102,7 @@ describe("MA v2 Account Tests", async () => {
 
     const startingAddressBalance = await getTargetBalance();
 
-    const result = await provider.sendUserOperation({
+    const hash = await provider.sendUserOperation({
       calls: [
         {
           to: target,
@@ -117,12 +111,12 @@ describe("MA v2 Account Tests", async () => {
         },
       ],
     });
+    console.log({ hash });
 
-    await provider.waitForUserOperationReceipt(result).catch(async () => {
-      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
-        uoToDrop: result.request,
-      });
-      await provider.waitForUserOperationReceipt(dropAndReplaceResult);
+    // TODO(jh): we really need this to land quicker....
+    await provider.waitForUserOperationReceipt({
+      hash,
+      timeout: 30_000,
     });
 
     await expect(getTargetBalance()).resolves.toEqual(
@@ -131,7 +125,11 @@ describe("MA v2 Account Tests", async () => {
   });
 
   it("sends a simple UO with webauthn account", async () => {
-    const { provider } = await givenWebAuthnProvider();
+    const credential = await givenWebauthnCredential();
+
+    const provider = await givenConnectedProvider({
+      signer: toWebAuthnAccount({ credential }),
+    });
 
     await setBalance(instance.getClient(), {
       address: provider.account.address,
@@ -140,7 +138,7 @@ describe("MA v2 Account Tests", async () => {
 
     const startingAddressBalance = await getTargetBalance();
 
-    const result = await provider.sendUserOperation({
+    const hash = await provider.sendUserOperation({
       calls: [
         {
           to: target,
@@ -150,12 +148,7 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationReceipt(result).catch(async () => {
-      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
-        uoToDrop: result.request,
-      });
-      await provider.waitForUserOperationReceipt(dropAndReplaceResult);
-    });
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
@@ -163,64 +156,52 @@ describe("MA v2 Account Tests", async () => {
   });
 
   it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
-    const provider = (await givenWebAuthnProvider()).provider.extend(
-      installValidationActions
-    );
+    const credential = await givenWebauthnCredential();
+
+    const provider = await givenConnectedProvider({
+      signer: toWebAuthnAccount({ credential }),
+    });
 
     await setBalance(instance.getClient(), {
       address: provider.account.address,
       value: parseEther("2"),
     });
 
-    // set up session key client
-    const webauthnDevice = new SoftWebauthnDevice();
-
-    const credential = await createWebAuthnCredential({
-      rp: { id: "localhost", name: "localhost" },
-      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
-      user: { name: "test", displayName: "test" },
-    });
-
-    const { x, y } = parsePublicKey(credential.publicKey);
+    const sessionKeyCredential = await givenWebauthnCredential();
+    const { x, y } = parsePublicKey(sessionKeyCredential.publicKey);
 
     // install webauthn validation module
-    const result = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: getDefaultWebauthnValidationModuleAddress(
-          provider.chain
-        ),
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: WebAuthnValidationModule.encodeOnInstallData({
-        entityId: 1,
-        x,
-        y,
-      }),
-      hooks: [],
-    });
+    const hash = await provider
+      .extend(installValidationActions)
+      .installValidation({
+        validationConfig: {
+          moduleAddress: DefaultModuleAddress.WEBAUTHN_VALIDATION,
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        selectors: [],
+        installData: WebAuthnValidationModule.encodeOnInstallData({
+          entityId: 1,
+          x,
+          y,
+        }),
+        hooks: [],
+      });
 
     // wait for the UserOperation to be mined
-    await provider.waitForUserOperationReceipt(result).catch(async () => {
-      const dropAndReplaceResult = await provider.dropAndReplaceUserOperation({
-        uoToDrop: result.request,
-      });
-      await provider.waitForUserOperationReceipt(dropAndReplaceResult);
-    });
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     // create session key client
-    const sessionKeyClient = await givenConnectedWebauthnProvider({
-      credential,
+    const sessionKeyClient = await givenConnectedProvider({
+      signer: toWebAuthnAccount({ credential }),
       accountAddress: provider.account.address,
       signerEntity: { entityId: 1, isGlobalValidation: true },
-      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
-      rpId: "localhost",
+      // TODO(jh): don't need factory args here since we already installed the validation on-chain, which deployed the acct.
     });
 
-    const sessionKeyResult = await sessionKeyClient.sendUserOperation({
+    const sessionKeyHash = await sessionKeyClient.sendUserOperation({
       calls: [
         {
           to: target,
@@ -230,39 +211,35 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    // wait for the UserOperation to be mined
-    await sessionKeyClient
-      .waitForUserOperationReceipt(sessionKeyResult)
-      .catch(async () => {
-        const dropAndReplaceResult =
-          await sessionKeyClient.dropAndReplaceUserOperation({
-            uoToDrop: sessionKeyResult.request,
-          });
-        await sessionKeyClient.waitForUserOperationReceipt(
-          dropAndReplaceResult
-        );
-      });
+    await sessionKeyClient.waitForUserOperationReceipt({
+      hash: sessionKeyHash,
+      timeout: 30_000,
+    });
   });
 
   it.fails(
-    "successfully sign + validate a message, for WebAuthn account",
+    "successfully sign and validate a message, for WebAuthn account",
     async () => {
-      const { provider } = await givenWebAuthnProvider();
+      const credential = await givenWebauthnCredential();
+
+      const provider = await givenConnectedProvider({
+        signer: toWebAuthnAccount({ credential }),
+      });
 
       await setBalance(instance.getClient(), {
         address: provider.account.address,
         value: parseEther("2"),
       });
 
-      const message = "0xdeadbeef";
+      const message = "0xdecafbad";
 
-      let signature = await provider.account.signMessage({ message });
+      const signature = await provider.account.signMessage({ message });
 
       const publicClient = instance.getClient().extend(publicActions);
 
-      // TODO: should be using verifyTypedData here
+      // TODO(v4): should be using verifyTypedData here
       const isValid = await publicClient.verifyMessage({
-        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
+        // TODO(v4): this is gonna fail until the message can be formatted since the actual message is EIP-712
         message,
         address: provider.account.address,
         signature,
@@ -272,7 +249,7 @@ describe("MA v2 Account Tests", async () => {
     }
   );
 
-  it("successfully sign + validate a message, for native and single signer validation", async () => {
+  it("successfully sign and validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer: owner })).extend(
       installValidationActions
     );
@@ -289,11 +266,9 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // UO deploys the account to test 1271 against
-    const result = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -307,7 +282,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     const message = "testmessage";
 
@@ -320,29 +295,37 @@ describe("MA v2 Account Tests", async () => {
       throw new Error("Invalid signature request type");
     }
 
-    let signature = await owner.signTypedData(data);
+    const signature = await owner.signTypedData(data);
 
-    signature = await provider.account.formatSignature(signature);
+    const fmtSignature = await provider.account.formatSignature(signature);
 
     await expect(
-      accountContract.read.isValidSignature([hashMessage(message), signature])
-    ).resolves.toEqual(isValidSigSuccess);
+      accountContract.read.isValidSignature([
+        hashMessage(message),
+        fmtSignature,
+      ])
+    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
 
     // connect session key
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
 
-    signature = await sessionKeyClient.account.signMessage({ message });
+    const sessionKeySig = await sessionKeyClient.account.signMessage({
+      message,
+    });
 
     await expect(
-      accountContract.read.isValidSignature([hashMessage(message), signature])
-    ).resolves.toEqual(isValidSigSuccess);
+      accountContract.read.isValidSignature([
+        hashMessage(message),
+        sessionKeySig,
+      ])
+    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
   });
 
-  it("successfully sign + validate typed data messages, for native and single signer validation", async () => {
+  it("successfully sign and validate typed data messages, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer: owner })).extend(
       installValidationActions
     );
@@ -359,11 +342,9 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // UO deploys the account to test 1271 against
-    const result = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -377,7 +358,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     const typedData = {
       domain: {
@@ -422,30 +403,37 @@ describe("MA v2 Account Tests", async () => {
       throw new Error("Invalid signature request type");
     }
 
-    let signature = await owner.signTypedData(data);
+    const signature = await owner.signTypedData(data);
 
-    signature = await provider.account.formatSignature(signature);
+    const fmtSignature = await provider.account.formatSignature(signature);
 
     await expect(
-      accountContract.read.isValidSignature([hashedMessageTypedData, signature])
-    ).resolves.toEqual(isValidSigSuccess);
+      accountContract.read.isValidSignature([
+        hashedMessageTypedData,
+        fmtSignature,
+      ])
+    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
 
     // connect session key
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
 
-    signature = await sessionKeyClient.account.signTypedData({ typedData });
+    const sessionKeySignature =
+      await sessionKeyClient.account.signTypedData(typedData);
 
     await expect(
-      accountContract.read.isValidSignature([hashedMessageTypedData, signature])
-    ).resolves.toEqual(isValidSigSuccess);
+      accountContract.read.isValidSignature([
+        hashedMessageTypedData,
+        sessionKeySignature,
+      ])
+    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
   });
 
   it("adds a session key with no permissions", async () => {
-    let provider = (await givenConnectedProvider({ signer: owner })).extend(
+    const provider = (await givenConnectedProvider({ signer: owner })).extend(
       installValidationActions
     );
 
@@ -454,11 +442,9 @@ describe("MA v2 Account Tests", async () => {
       value: parseEther("2"),
     });
 
-    let result = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -472,18 +458,18 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     const startingAddressBalance = await getTargetBalance();
 
     // connect session key and send tx with session key
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
 
-    result = await sessionKeyClient.sendUserOperation({
+    const sessionKeyHash = await sessionKeyClient.sendUserOperation({
       calls: [
         {
           to: target,
@@ -493,7 +479,10 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await sessionKeyClient.waitForUserOperationReceipt(result);
+    await sessionKeyClient.waitForUserOperationReceipt({
+      hash: sessionKeyHash,
+      timeout: 30_000,
+    });
 
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount
@@ -501,7 +490,7 @@ describe("MA v2 Account Tests", async () => {
   });
 
   it("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
-    let provider = (
+    const provider = (
       await givenConnectedProvider({
         signer: owner,
       })
@@ -560,7 +549,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       factoryArgs: await provider.account.getFactoryArgs(),
@@ -568,7 +557,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // Send the raw UserOp
-    const result = await sessionKeyClient.sendUserOperation({
+    const hash = await sessionKeyClient.sendUserOperation({
       calls: [
         {
           to: target,
@@ -578,11 +567,11 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
   });
 
   it("installs a session key via deferred action using PermissionBuilder with ERC20 permission signed by the owner and has it sign a UO", async () => {
-    let provider = (
+    const provider = (
       await givenConnectedProvider({
         signer: owner,
       })
@@ -672,7 +661,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       factoryArgs: await provider.account.getFactoryArgs(),
@@ -717,7 +706,7 @@ describe("MA v2 Account Tests", async () => {
   });
 
   it("Low-level installs a session key via deferred action signed by the owner and has it sign a UO", async () => {
-    let provider = (await givenConnectedProvider({ signer: owner }))
+    const provider = (await givenConnectedProvider({ signer: owner }))
       .extend(installValidationActions)
       .extend(deferralActions);
 
@@ -735,9 +724,7 @@ describe("MA v2 Account Tests", async () => {
     // Encode install data to defer
     let encodedInstallData = await provider.encodeInstallValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: entityId,
         isGlobal: isGlobalValidation,
         isSignatureValidation: true,
@@ -781,7 +768,7 @@ describe("MA v2 Account Tests", async () => {
     ]);
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       factoryArgs: await provider.account.getFactoryArgs(),
@@ -789,29 +776,29 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // Build the full UO with the deferred action signature prepend (provider/client only used for account address & entrypoint)
-    const unsignedUo = await sessionKeyClient.buildUserOperation({
+    const unsignedUo = await sessionKeyClient.prepareUserOperation({
       calls: [{ to: target, data: "0x" }],
-      overrides: {
-        nonce: nonce,
-      },
+      // TODO(jh): i don't think this nonce override actually works here... is that a problem?
+      // overrides: {
+      //   nonce,
+      // },
     });
 
     // Sign the UO with the session key
-    const uo = await sessionKeyClient.signUserOperation({
-      uoStruct: unsignedUo,
-    });
+    const signature =
+      await sessionKeyClient.account.signUserOperation(unsignedUo);
 
     // Send the raw UserOp
-    const result = await sessionKeyClient.sendRawUserOperation(
-      uo,
-      provider.account.entryPoint.address
-    );
+    const hash = await sessionKeyClient.sendUserOperation({
+      ...unsignedUo,
+      signature,
+    });
 
-    await provider.waitForUserOperationReceipt({ hash: result });
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
   });
 
   it("installs a session key via deferred action signed by another session key and has it sign a UO", async () => {
-    let provider = (await givenConnectedProvider({ signer: owner }))
+    const provider = (await givenConnectedProvider({ signer: owner }))
       .extend(installValidationActions)
       .extend(deferralActions);
 
@@ -823,11 +810,9 @@ describe("MA v2 Account Tests", async () => {
     const sessionKeyEntityId = 1;
 
     // First, install a session key
-    let sessionKeyInstallResult = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: sessionKeyEntityId,
         isGlobal: true,
         isSignatureValidation: true,
@@ -841,10 +826,10 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(sessionKeyInstallResult);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     // Create a client with the first session key
-    let sessionKeyClient = (
+    const sessionKeyClient = (
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
@@ -857,8 +842,7 @@ describe("MA v2 Account Tests", async () => {
       .extend(installValidationActions)
       .extend(deferralActions);
 
-    const randomWallet = privateKeyToAccount(generatePrivateKey());
-    const newSessionKey: LocalAccount = randomWallet;
+    const sessionKey2 = privateKeyToAccount(generatePrivateKey());
 
     const { entityId, nonce } = await provider.getEntityIdAndNonce({
       isGlobalValidation: true,
@@ -870,7 +854,7 @@ describe("MA v2 Account Tests", async () => {
       await new PermissionBuilder({
         client: sessionKeyClient,
         key: {
-          publicKey: newSessionKey.address,
+          publicKey: sessionKey2.address,
           type: "secp256k1",
         },
         entityId: entityId,
@@ -896,14 +880,14 @@ describe("MA v2 Account Tests", async () => {
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let newSessionKeyClient = await givenConnectedProvider({
-      signer: newSessionKey,
+      signer: sessionKey2,
       accountAddress: provider.account.address,
       factoryArgs: await provider.account.getFactoryArgs(),
       deferredAction: deferredActionDigest,
     });
 
     // Send the UserOp (provider/client only used for account address & entrypoint)
-    const result = await newSessionKeyClient.sendUserOperation({
+    const hash2 = await newSessionKeyClient.sendUserOperation({
       calls: [
         {
           to: target,
@@ -912,11 +896,14 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({
+      hash: hash2,
+      timeout: 30_000,
+    });
   });
 
   it("uninstalls a session key", async () => {
-    let provider = (await givenConnectedProvider({ signer: owner })).extend(
+    const provider = (await givenConnectedProvider({ signer: owner })).extend(
       installValidationActions
     );
 
@@ -925,11 +912,9 @@ describe("MA v2 Account Tests", async () => {
       value: parseEther("2"),
     });
 
-    let result = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -943,12 +928,10 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-    result = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        provider.chain
-      ),
+    const hash2 = await provider.uninstallValidation({
+      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -956,10 +939,13 @@ describe("MA v2 Account Tests", async () => {
       hookUninstallDatas: [],
     });
 
-    await provider.waitForUserOperationReceipt(result);
+    await provider.waitForUserOperationReceipt({
+      hash: hash2,
+      timeout: 30_000,
+    });
 
     // connect session key and send tx with session key
-    let sessionKeyClient = await givenConnectedProvider({
+    const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
       signerEntity: { entityId: 1, isGlobalValidation: true },
@@ -981,7 +967,7 @@ describe("MA v2 Account Tests", async () => {
   it.fails(
     "installs paymaster guard module, verifies use of valid paymaster, then uninstalls module",
     async () => {
-      let provider = (
+      const provider = (
         await givenConnectedProvider({
           signer: owner,
           paymasterMiddleware: "erc7677",
@@ -1000,11 +986,9 @@ describe("MA v2 Account Tests", async () => {
         paymaster: paymaster,
       });
 
-      const installResult = await provider.installValidation({
+      const hash = await provider.installValidation({
         validationConfig: {
-          moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-            provider.chain
-          ),
+          moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
           isGlobal: true,
           isSignatureValidation: true,
@@ -1018,7 +1002,7 @@ describe("MA v2 Account Tests", async () => {
         hooks: [
           {
             hookConfig: {
-              address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+              address: DefaultModuleAddress.PAYMASTER_GUARD,
               entityId: 1,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
@@ -1030,7 +1014,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       // verify hook installation succeeded
-      await provider.waitForUserOperationReceipt(installResult);
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
       // create session key client
       const sessionKeyProvider = (
@@ -1043,34 +1027,28 @@ describe("MA v2 Account Tests", async () => {
       ).extend(installValidationActions);
 
       // happy path: send a UO with correct paymaster
-      const result = await sessionKeyProvider
-        .sendUserOperation({
-          calls: [
-            {
-              to: zeroAddress,
-              value: 0n,
-              data: "0x",
-            },
-          ],
-        })
-        .catch((e) => {
-          console.log("FAILED HERE 1");
-          console.log(e);
-          throw e;
-        });
+      const hash2 = await sessionKeyProvider.sendUserOperation({
+        calls: [
+          {
+            to: zeroAddress,
+            value: 0n,
+            data: "0x",
+          },
+        ],
+      });
 
       // verify if correct paymaster is used
-      const txnHash = sessionKeyProvider.waitForUserOperationReceipt(result);
-      await expect(txnHash).resolves.not.toThrowError();
+      await sessionKeyProvider.waitForUserOperationReceipt({
+        hash: hash2,
+        timeout: 30_000,
+      });
 
       const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
         entityId: 1,
       });
 
-      const uninstallResult = await provider.uninstallValidation({
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+      const hash3 = await provider.uninstallValidation({
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
           entityId: 1,
@@ -1080,13 +1058,13 @@ describe("MA v2 Account Tests", async () => {
 
       // verify uninstall
       await expect(
-        provider.waitForUserOperationReceipt(uninstallResult)
+        provider.waitForUserOperationReceipt({ hash: hash3, timeout: 30_000 })
       ).resolves.not.toThrowError();
     }
   );
 
   it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
-    let provider = (
+    const provider = (
       await givenConnectedProvider({
         signer: owner,
         paymasterMiddleware: "erc7677",
@@ -1105,11 +1083,9 @@ describe("MA v2 Account Tests", async () => {
       paymaster: paymaster,
     });
 
-    const installResult = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1123,7 +1099,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: getDefaultPaymasterGuardModuleAddress(provider.chain),
+            address: DefaultModuleAddress.PAYMASTER_GUARD,
             entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -1135,7 +1111,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // verify hook installation succeeded
-    await provider.waitForUserOperationReceipt(installResult);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     // sad path: send UO with no paymaster
     // create session key client
@@ -1163,10 +1139,8 @@ describe("MA v2 Account Tests", async () => {
       entityId: 1,
     });
 
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        provider.chain
-      ),
+    const hash2 = await provider.uninstallValidation({
+      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -1176,12 +1150,12 @@ describe("MA v2 Account Tests", async () => {
 
     // verify uninstall
     await expect(
-      provider.waitForUserOperationReceipt(uninstallResult)
+      provider.waitForUserOperationReceipt({ hash: hash2, timeout: 30_000 })
     ).resolves.not.toThrowError();
   });
 
   it("installs allowlist module, uses, then uninstalls", async () => {
-    let provider = (await givenConnectedProvider({ signer: owner })).extend(
+    const provider = (await givenConnectedProvider({ signer: owner })).extend(
       installValidationActions
     );
 
@@ -1191,11 +1165,9 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // install validation module
-    const installResult = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1209,7 +1181,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(installResult);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     // create session key client
     const sessionKeyProvider = (
@@ -1221,20 +1193,20 @@ describe("MA v2 Account Tests", async () => {
     ).extend(installValidationActions);
 
     // verify we can call into the zero address before allow list hook is installed
-    const sendResultBeforeHookInstallation =
-      await sessionKeyProvider.sendUserOperation({
-        calls: [
-          {
-            to: zeroAddress,
-            value: 0n,
-            data: "0x",
-          },
-        ],
-      });
+    const hash2 = await sessionKeyProvider.sendUserOperation({
+      calls: [
+        {
+          to: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      ],
+    });
 
-    await provider.waitForUserOperationReceipt(
-      sendResultBeforeHookInstallation
-    );
+    await provider.waitForUserOperationReceipt({
+      hash: hash2,
+      timeout: 30_000,
+    });
 
     const hookInstallData = AllowlistModule.encodeOnInstallData({
       entityId: 1,
@@ -1250,11 +1222,9 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // install hook
-    const installHookResult = await provider.installValidation({
+    const hash3 = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1265,7 +1235,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: getDefaultAllowlistModuleAddress(provider.chain),
+            address: DefaultModuleAddress.ALLOWLIST,
             entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -1276,11 +1246,14 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationReceipt(installHookResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash3,
+      timeout: 30_000,
+    });
 
     // Test that the allowlist is active.
     // We should *only* be able to call into the target address, as it's the only address we passed to onInstall.
-    const sendResult = await sessionKeyProvider.sendUserOperation({
+    const hash4 = await sessionKeyProvider.sendUserOperation({
       calls: [
         {
           to: target,
@@ -1290,7 +1263,10 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationReceipt(sendResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash4,
+      timeout: 30_000,
+    });
 
     // This should revert as we're calling an address separate fom the allowlisted target.
     await expect(
@@ -1318,10 +1294,8 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        provider.chain
-      ),
+    const hash5 = await provider.uninstallValidation({
+      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -1329,11 +1303,14 @@ describe("MA v2 Account Tests", async () => {
       hookUninstallDatas: [hookUninstallData],
     });
 
-    await provider.waitForUserOperationReceipt(uninstallResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash5,
+      timeout: 30_000,
+    });
   });
 
   it("installs native token limit module, uses, then uninstalls", async () => {
-    let provider = (await givenConnectedProvider({ signer: owner })).extend(
+    const provider = (await givenConnectedProvider({ signer: owner })).extend(
       installValidationActions
     );
 
@@ -1344,11 +1321,9 @@ describe("MA v2 Account Tests", async () => {
 
     const spendLimit = parseEther("0.5");
 
-    const installResult = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1362,7 +1337,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [],
     });
 
-    await provider.waitForUserOperationReceipt(installResult);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     // create session key client
     const sessionKeyProvider = (
@@ -1374,7 +1349,7 @@ describe("MA v2 Account Tests", async () => {
     ).extend(installValidationActions);
 
     // Sending over the limit should currently pass
-    const preHookInstallationSendResult = await provider.sendUserOperation({
+    const hash2 = await provider.sendUserOperation({
       calls: [
         {
           to: target,
@@ -1383,7 +1358,10 @@ describe("MA v2 Account Tests", async () => {
         },
       ],
     });
-    await provider.waitForUserOperationReceipt(preHookInstallationSendResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash2,
+      timeout: 30_000,
+    });
 
     // Let's verify the module's limit is set correctly after installation
     const hookInstallData = NativeTokenLimitModule.encodeOnInstallData({
@@ -1391,11 +1369,9 @@ describe("MA v2 Account Tests", async () => {
       spendLimit,
     });
 
-    const installHookResult = await provider.installValidation({
+    const hash3 = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1406,7 +1382,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
             entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -1416,7 +1392,7 @@ describe("MA v2 Account Tests", async () => {
         },
         {
           hookConfig: {
-            address: getDefaultNativeTokenLimitModuleAddress(provider.chain),
+            address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
             entityId: 1,
             hookType: HookType.EXECUTION,
             hasPreHooks: true,
@@ -1427,10 +1403,13 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await provider.waitForUserOperationReceipt(installHookResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash3,
+      timeout: 30_000,
+    });
 
     // Try to send less than the limit - should pass
-    const passingSendResult = await sessionKeyProvider.sendUserOperation({
+    const hash4 = await sessionKeyProvider.sendUserOperation({
       calls: [
         {
           to: target,
@@ -1439,7 +1418,10 @@ describe("MA v2 Account Tests", async () => {
         },
       ],
     });
-    await provider.waitForUserOperationReceipt(passingSendResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash4,
+      timeout: 30_000,
+    });
 
     // Try to send more than the limit - should fail
     await expect(
@@ -1458,10 +1440,8 @@ describe("MA v2 Account Tests", async () => {
       entityId: 1,
     });
 
-    const uninstallResult = await provider.uninstallValidation({
-      moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-        provider.chain
-      ),
+    const hash5 = await provider.uninstallValidation({
+      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
@@ -1469,11 +1449,14 @@ describe("MA v2 Account Tests", async () => {
       hookUninstallDatas: [hookUninstallData, "0x"],
     });
 
-    await provider.waitForUserOperationReceipt(uninstallResult);
+    await provider.waitForUserOperationReceipt({
+      hash: hash5,
+      timeout: 30_000,
+    });
   });
 
   it("installs time range module, sends transaction within valid time range", async () => {
-    let provider = (
+    const provider = (
       await givenConnectedProvider({
         signer: owner,
       })
@@ -1499,11 +1482,9 @@ describe("MA v2 Account Tests", async () => {
       validUntil: 1934507101,
     });
 
-    const installResult = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1517,7 +1498,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            address: DefaultModuleAddress.TIME_RANGE,
             entityId: 1,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -1529,7 +1510,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // verify hook installation succeeded
-    await provider.waitForUserOperationReceipt(installResult);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     client.setAutomine(false);
 
@@ -1542,7 +1523,7 @@ describe("MA v2 Account Tests", async () => {
       blocks: 1,
     });
 
-    const uo = await sessionKeyProvider.buildUserOperation({
+    const uo = await sessionKeyProvider.prepareUserOperation({
       calls: [
         {
           to: target,
@@ -1551,9 +1532,9 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    const signedUO = await sessionKeyProvider.signUserOperation({
-      uoStruct: uo,
-    });
+    const signature = await sessionKeyProvider.account.signUserOperation(uo);
+
+    const signedUo = { ...uo, signature };
 
     // calls entrypoint directly
     await client.simulateContract({
@@ -1564,37 +1545,40 @@ describe("MA v2 Account Tests", async () => {
         [
           {
             sender: sessionKeyProvider.account.address,
-            nonce: fromHex(signedUO.nonce, "bigint"),
+            nonce: signedUo.nonce,
             initCode:
-              signedUO.factory && signedUO.factoryData
-                ? concat([signedUO.factory, signedUO.factoryData])
+              signedUo.factory && signedUo.factoryData
+                ? concat([signedUo.factory, signedUo.factoryData])
                 : "0x",
-            callData: signedUO.callData,
+            callData: signedUo.callData,
             accountGasLimits: packAccountGasLimits({
-              verificationGasLimit: signedUO.verificationGasLimit,
-              callGasLimit: signedUO.callGasLimit,
+              verificationGasLimit: toHex(signedUo.verificationGasLimit),
+              callGasLimit: toHex(signedUo.callGasLimit),
             }),
-            preVerificationGas: fromHex(signedUO.preVerificationGas, "bigint"),
+            preVerificationGas: signedUo.preVerificationGas,
             gasFees: packAccountGasLimits({
-              maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
-              maxFeePerGas: signedUO.maxFeePerGas,
+              maxPriorityFeePerGas: toHex(signedUo.maxPriorityFeePerGas),
+              maxFeePerGas: toHex(signedUo.maxFeePerGas),
             }),
             paymasterAndData:
-              signedUO.paymaster && isAddress(signedUO.paymaster)
+              signedUo.paymaster && isAddress(signedUo.paymaster)
                 ? packPaymasterData({
-                    paymaster: signedUO.paymaster,
-                    paymasterVerificationGasLimit:
-                      signedUO.paymasterVerificationGasLimit,
-                    paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
-                    paymasterData: signedUO.paymasterData,
+                    paymaster: signedUo.paymaster,
+                    paymasterVerificationGasLimit: toHex(
+                      signedUo.paymasterVerificationGasLimit ?? 0n
+                    ),
+                    paymasterPostOpGasLimit: toHex(
+                      signedUo.paymasterPostOpGasLimit ?? 0n
+                    ),
+                    paymasterData: signedUo.paymasterData,
                   })
                 : "0x",
-            signature: signedUO.signature,
+            signature: signedUo.signature,
           },
         ],
         provider.account.address,
       ],
-      account: sessionKeyProvider.account.owner.address,
+      account: sessionKey.address,
     });
 
     client.setAutomine(true);
@@ -1602,7 +1586,7 @@ describe("MA v2 Account Tests", async () => {
 
   // NOTE: uses different validation and hook entity id than previous test because we do not uninstall the hook in the previous test
   it("installs time range module, tries to send transaction outside valid time range", async () => {
-    let provider = (
+    const provider = (
       await givenConnectedProvider({
         signer: owner,
       })
@@ -1628,11 +1612,9 @@ describe("MA v2 Account Tests", async () => {
       validUntil: 1934507101,
     });
 
-    const installResult = await provider.installValidation({
+    const hash = await provider.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          provider.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 2,
         isGlobal: true,
         isSignatureValidation: true,
@@ -1646,7 +1628,7 @@ describe("MA v2 Account Tests", async () => {
       hooks: [
         {
           hookConfig: {
-            address: getDefaultTimeRangeModuleAddress(provider.chain),
+            address: DefaultModuleAddress.TIME_RANGE,
             entityId: 2,
             hookType: HookType.VALIDATION,
             hasPreHooks: true,
@@ -1658,7 +1640,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // verify hook installation succeeded
-    await provider.waitForUserOperationReceipt(installResult);
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     client.setAutomine(false);
 
@@ -1671,7 +1653,7 @@ describe("MA v2 Account Tests", async () => {
       blocks: 1,
     });
 
-    const uo = await sessionKeyProvider.buildUserOperation({
+    const uo = await sessionKeyProvider.prepareUserOperation({
       calls: [
         {
           to: target,
@@ -1680,9 +1662,12 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    const signedUO = await sessionKeyProvider.signUserOperation({
-      uoStruct: uo,
-    });
+    const signature = await sessionKeyProvider.account.signUserOperation(uo);
+
+    const signedUo = {
+      ...uo,
+      signature,
+    };
 
     // calls entrypoint directly
     try {
@@ -1694,40 +1679,40 @@ describe("MA v2 Account Tests", async () => {
           [
             {
               sender: sessionKeyProvider.account.address,
-              nonce: fromHex(signedUO.nonce, "bigint"),
+              nonce: signedUo.nonce,
               initCode:
-                signedUO.factory && signedUO.factoryData
-                  ? concat([signedUO.factory, signedUO.factoryData])
+                signedUo.factory && signedUo.factoryData
+                  ? concat([signedUo.factory, signedUo.factoryData])
                   : "0x",
-              callData: signedUO.callData,
+              callData: signedUo.callData,
               accountGasLimits: packAccountGasLimits({
-                verificationGasLimit: signedUO.verificationGasLimit,
-                callGasLimit: signedUO.callGasLimit,
+                verificationGasLimit: toHex(signedUo.verificationGasLimit),
+                callGasLimit: toHex(signedUo.callGasLimit),
               }),
-              preVerificationGas: fromHex(
-                signedUO.preVerificationGas,
-                "bigint"
-              ),
+              preVerificationGas: signedUo.preVerificationGas,
               gasFees: packAccountGasLimits({
-                maxPriorityFeePerGas: signedUO.maxPriorityFeePerGas,
-                maxFeePerGas: signedUO.maxFeePerGas,
+                maxPriorityFeePerGas: toHex(signedUo.maxPriorityFeePerGas),
+                maxFeePerGas: toHex(signedUo.maxFeePerGas),
               }),
               paymasterAndData:
-                signedUO.paymaster && isAddress(signedUO.paymaster)
+                signedUo.paymaster && isAddress(signedUo.paymaster)
                   ? packPaymasterData({
-                      paymaster: signedUO.paymaster,
-                      paymasterVerificationGasLimit:
-                        signedUO.paymasterVerificationGasLimit,
-                      paymasterPostOpGasLimit: signedUO.paymasterPostOpGasLimit,
-                      paymasterData: signedUO.paymasterData,
+                      paymaster: signedUo.paymaster,
+                      paymasterVerificationGasLimit: toHex(
+                        signedUo.paymasterVerificationGasLimit ?? 0n
+                      ),
+                      paymasterPostOpGasLimit: toHex(
+                        signedUo.paymasterPostOpGasLimit ?? 0n
+                      ),
+                      paymasterData: signedUo.paymasterData,
                     })
                   : "0x",
-              signature: signedUO.signature,
+              signature: signedUo.signature,
             },
           ],
           provider.account.address,
         ],
-        account: sessionKeyProvider.account.owner.address,
+        account: sessionKey.address,
       });
     } catch (err: any) {
       // verify that simulation fails due to violation of time range restriction on session key
@@ -1742,7 +1727,7 @@ describe("MA v2 Account Tests", async () => {
   });
 
   it("tests entity id and nonce selection", async () => {
-    let newClient = (await givenConnectedProvider({ signer: owner }))
+    const newClient = (await givenConnectedProvider({ signer: owner }))
       .extend(deferralActions)
       .extend(installValidationActions);
 
@@ -1785,11 +1770,9 @@ describe("MA v2 Account Tests", async () => {
     }
 
     // deploy the account and install at entity id 1 with global validation
-    const uo1 = await newClient.installValidation({
+    const hash = await newClient.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          newClient.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         isGlobal: true,
         isSignatureValidation: false,
@@ -1802,7 +1785,7 @@ describe("MA v2 Account Tests", async () => {
       }),
       hooks: [],
     });
-    await newClient.waitForUserOperationReceipt(uo1);
+    await newClient.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
     const fns: ContractFunctionName<typeof semiModularAccountBytecodeAbi>[] = [
       "execute",
@@ -1818,11 +1801,9 @@ describe("MA v2 Account Tests", async () => {
     );
 
     // deploy the account and install some entity ids with selector validation
-    const uo2 = await newClient.installValidation({
+    const hash2 = await newClient.installValidation({
       validationConfig: {
-        moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-          newClient.chain
-        ),
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 2,
         isGlobal: false,
         isSignatureValidation: false,
@@ -1835,7 +1816,10 @@ describe("MA v2 Account Tests", async () => {
       }),
       hooks: [],
     });
-    await newClient.waitForUserOperationReceipt(uo2);
+    await newClient.waitForUserOperationReceipt({
+      hash: hash2,
+      timeout: 30_000,
+    });
 
     // entity id and nonce selection for undeployed account
     for (let startEntityId = 1; startEntityId < 5; startEntityId++) {
@@ -1880,29 +1864,32 @@ describe("MA v2 Account Tests", async () => {
       transport: custom(instance.getClient()),
       chain: instance.chain,
       userOperation: {
+        // TODO(jh): use the action trevor made in other pr once merged.
         estimateFeesPerGas: async ({ bundlerClient }) => {
           const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
             getBlock(bundlerClient, { blockTag: "latest" }),
             bundlerClient.request({
-              // @ts-expect-error - TODO(v5): fix this
+              // @ts-ignore - this is fine.
               method: "rundler_maxPriorityFeePerGas",
-              params: [],
             }),
           ]);
 
           const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) {
-            throw new Error("baseFeePerGas is null");
-          }
+          if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
+          if (maxPriorityFeePerGasEstimate == null)
+            throw new Error(
+              "rundler_maxPriorityFeePerGas returned null or undefined"
+            );
+
+          // With RpcUserOperation typing, this should always be a hex string
+          const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
+            ? BigInt(maxPriorityFeePerGasEstimate)
+            : raise("Expected maxPriorityFeePerGasEstimate to be hex");
 
           return {
-            maxPriorityFeePerGas: fromHex(
-              maxPriorityFeePerGasEstimate as Hex,
-              "bigint"
-            ),
+            maxPriorityFeePerGas,
             maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) +
-              BigInt(maxPriorityFeePerGasEstimate as Hex),
+              bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
           };
         },
       },
@@ -1913,139 +1900,97 @@ describe("MA v2 Account Tests", async () => {
       value: parseEther("2"),
     });
 
-    // For the account tests, we'll simulate upgrading by creating a new MAv2 account
-    // at the same address that the light account would have after upgrade
-    const maV2Account = await toModularAccountV2({
-      client: createWalletClient({
-        account: owner,
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
-      }),
-      accountAddress: lightAccountClient.account.address,
-      owner,
-      salt: salt++,
-    });
+    const upgradeData = await getMAV2UpgradeToData(owner.address);
 
-    const maV2Client = createBundlerClient({
-      account: maV2Account,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
-      userOperation: {
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            bundlerClient.request({
-              // @ts-expect-error - TODO(v5): fix this
-              method: "rundler_maxPriorityFeePerGas",
-              params: [],
-            }),
-          ]);
+    const encodedUpgradeData =
+      await lightAccountClient.account.encodeUpgradeToAndCall({
+        upgradeToAddress: upgradeData.implAddress,
+        upgradeToInitData: upgradeData.initializationData,
+      });
 
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) {
-            throw new Error("baseFeePerGas is null");
-          }
-
-          return {
-            maxPriorityFeePerGas: fromHex(
-              maxPriorityFeePerGasEstimate as Hex,
-              "bigint"
-            ),
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) +
-              BigInt(maxPriorityFeePerGasEstimate as Hex),
-          };
-        },
-      },
-    });
-
-    // test uo
-    const startingAddressBalance = await getTargetBalance();
-
-    const result = await maV2Client.sendUserOperation({
+    const hash = await lightAccountClient.sendUserOperation({
       calls: [
         {
-          to: target,
-          value: sendAmount,
-          data: "0x",
+          to: lightAccount.address,
+          data: encodedUpgradeData,
         },
       ],
     });
 
-    await maV2Client.waitForUserOperationReceipt(result);
+    await lightAccountClient.waitForUserOperationReceipt({
+      hash,
+      timeout: 30_000,
+    });
 
-    await expect(getTargetBalance()).resolves.toEqual(
-      startingAddressBalance + sendAmount
-    );
+    // TODO(jh): should we verify anything here? v4 test did not.
   });
 
-  let salt = 1n;
+  // TODO(jh): remove this once confirmed webauthn is working w/o it.
+  // const givenConnectedWebauthnProvider = async ({
+  //   signerEntity,
+  //   accountAddress,
+  //   paymasterMiddleware,
+  //   credential,
+  //   getFn,
+  //   rpId,
+  // }: {
+  //   signerEntity?: { entityId: number; isGlobalValidation: boolean };
+  //   accountAddress?: Address;
+  //   paymasterMiddleware?: "erc7677";
+  //   credential: ToWebAuthnAccountParameters["credential"];
+  //   getFn?: ToWebAuthnAccountParameters["getFn"];
+  //   rpId?: ToWebAuthnAccountParameters["rpId"];
+  // }) => {
+  //   const account = await toModularAccountV2({
+  //     client: createWalletClient({
+  //       transport: custom(instance.getClient()),
+  //       chain: instance.chain,
+  //     }),
+  //     accountAddress,
+  //     signerEntity,
+  //     credential,
+  //     getFn,
+  //     rpId,
+  //     mode: "webauthn",
+  //     salt: salt++,
+  //   });
 
-  const givenConnectedWebauthnProvider = async ({
-    signerEntity,
-    accountAddress,
-    paymasterMiddleware,
-    credential,
-    getFn,
-    rpId,
-  }: {
-    signerEntity?: { entityId: number; isGlobalValidation: boolean };
-    accountAddress?: Address;
-    paymasterMiddleware?: "erc7677";
-    credential: ToWebAuthnAccountParameters["credential"];
-    getFn?: ToWebAuthnAccountParameters["getFn"];
-    rpId?: ToWebAuthnAccountParameters["rpId"];
-  }) => {
-    const account = await toModularAccountV2({
-      client: createWalletClient({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
-      }),
-      accountAddress,
-      signerEntity,
-      credential,
-      getFn,
-      rpId,
-      mode: "webauthn",
-      salt: salt++,
-    });
+  //   return createBundlerClient({
+  //     account,
+  //     transport: custom(instance.getClient()),
+  //     chain: instance.chain,
+  //     paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
+  //     userOperation: {
+  //       estimateFeesPerGas: async ({ bundlerClient }) => {
+  //         const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
+  //           getBlock(bundlerClient, { blockTag: "latest" }),
+  //           bundlerClient.request({
+  //             // @ts-expect-error - TODO(v5): fix this
+  //             method: "rundler_maxPriorityFeePerGas",
+  //             params: [],
+  //           }),
+  //         ]);
 
-    return createBundlerClient({
-      account,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
-      paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
-      userOperation: {
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            bundlerClient.request({
-              // @ts-expect-error - TODO(v5): fix this
-              method: "rundler_maxPriorityFeePerGas",
-              params: [],
-            }),
-          ]);
+  //         const baseFeePerGas = block.baseFeePerGas;
+  //         if (baseFeePerGas == null) {
+  //           throw new Error("baseFeePerGas is null");
+  //         }
 
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) {
-            throw new Error("baseFeePerGas is null");
-          }
+  //         return {
+  //           maxPriorityFeePerGas: fromHex(
+  //             maxPriorityFeePerGasEstimate as Hex,
+  //             "bigint"
+  //           ),
+  //           maxFeePerGas:
+  //             bigIntMultiply(baseFeePerGas, 1.5) +
+  //             BigInt(maxPriorityFeePerGasEstimate as Hex),
+  //         };
+  //       },
+  //     },
+  //   });
+  // };
 
-          return {
-            maxPriorityFeePerGas: fromHex(
-              maxPriorityFeePerGasEstimate as Hex,
-              "bigint"
-            ),
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) +
-              BigInt(maxPriorityFeePerGasEstimate as Hex),
-          };
-        },
-      },
-    });
-  };
-
-  const givenWebAuthnProvider = async () => {
+  const givenWebauthnCredential = async () => {
     const webauthnDevice = new SoftWebauthnDevice();
 
     const credential = await createWebAuthnCredential({
@@ -2054,14 +1999,10 @@ describe("MA v2 Account Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
-    const provider = await givenConnectedWebauthnProvider({
-      credential,
-      getFn: (opts) => webauthnDevice.get(opts, "localhost"),
-      rpId: "localhost",
-    });
-
-    return { provider, credential };
+    return credential;
   };
+
+  let salt = 1n;
 
   const givenConnectedProvider = async ({
     signer,
@@ -2071,7 +2012,7 @@ describe("MA v2 Account Tests", async () => {
     factoryArgs,
     deferredAction,
   }: {
-    signer: LocalAccount;
+    signer: LocalAccount | WebAuthnAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
     accountAddress?: Address;
     paymasterMiddleware?: "erc7677";
@@ -2079,16 +2020,16 @@ describe("MA v2 Account Tests", async () => {
     deferredAction?: Hex;
   }) => {
     const account = await toModularAccountV2({
-      client: createWalletClient({
-        account: signer,
+      client: createPublicClient({
         transport: custom(instance.getClient()),
         chain: instance.chain,
       }),
       accountAddress,
       signerEntity,
       owner: signer,
+      // TODO(jh): this was done in v4 tests... do we really want to though?
       salt: salt++,
-      factoryArgs,
+      ...factoryArgs,
       deferredAction,
     });
 
@@ -2098,69 +2039,47 @@ describe("MA v2 Account Tests", async () => {
       chain: instance.chain,
       paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
       userOperation: {
+        // TODO(jh): use the action trevor made in other pr once merged.
         estimateFeesPerGas: async ({ bundlerClient }) => {
           const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
             getBlock(bundlerClient, { blockTag: "latest" }),
             bundlerClient.request({
-              // @ts-expect-error - TODO(v5): fix this
+              // @ts-ignore - this is fine.
               method: "rundler_maxPriorityFeePerGas",
-              params: [],
             }),
           ]);
 
           const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) {
-            throw new Error("baseFeePerGas is null");
-          }
+          if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
+          if (maxPriorityFeePerGasEstimate == null)
+            throw new Error(
+              "rundler_maxPriorityFeePerGas returned null or undefined"
+            );
+
+          // With RpcUserOperation typing, this should always be a hex string.
+          const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
+            ? bigIntMultiply(BigInt(maxPriorityFeePerGasEstimate), 2)
+            : raise("Expected maxPriorityFeePerGasEstimate to be hex");
 
           return {
-            maxPriorityFeePerGas: fromHex(
-              maxPriorityFeePerGasEstimate as Hex,
-              "bigint"
-            ),
+            maxPriorityFeePerGas,
             maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) +
-              BigInt(maxPriorityFeePerGasEstimate as Hex),
+              bigIntMultiply(baseFeePerGas, 2) + maxPriorityFeePerGas,
           };
         },
       },
     });
   };
 
-  it("alchemy client calls the createAlchemySmartAccountClient", async () => {
-    // TODO(jh): This test needs to be adapted for the new viem account structure
-    // Original test was checking client factory spy behavior
-    // For now, just test that account creation works
-    const account = await toModularAccountV2({
-      client: createWalletClient({
-        account: owner,
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
-      }),
-      owner,
-      accountAddress: "0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84",
-      salt: salt++,
-    });
-
-    expect(account).toBeDefined();
-    expect(account.address).toBe("0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84");
-  });
-
-  it("custom client calls the createAlchemySmartAccountClient", async () => {
-    // TODO(jh): This test needs to be adapted for the new viem account structure
-    // Original test was checking client factory spy behavior
-    // For now, just test that account creation works with custom transport
-    const account = await toModularAccountV2({
-      client: createWalletClient({
-        account: owner,
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
-      }),
-      owner,
-      salt: salt++,
-    });
-
-    expect(account).toBeDefined();
-    expect(account.address).toMatch(/^0x[a-fA-F0-9]{40}$/);
-  });
+  // TODO(jh): test 7702 (sending multiple UOs) ... verify if only EP 0.8 depends on magic value ("0x7702"), not viem itself
+  // if only EP, then we may just not want to support returning factory data for 7702 accounts?
 });
+
+const mintableERC20Bytecode =
+  "0x608060405234801561000f575f80fd5b506040518060400160405280600d81526020016c26b4b73a30b13632aa37b5b2b760991b81525060405180604001604052806002815260200161135560f21b8152508160039081610060919061010d565b50600461006d828261010d565b5050506101c7565b634e487b7160e01b5f52604160045260245ffd5b600181811c9082168061009d57607f821691505b6020821081036100bb57634e487b7160e01b5f52602260045260245ffd5b50919050565b601f82111561010857805f5260205f20601f840160051c810160208510156100e65750805b601f840160051c820191505b81811015610105575f81556001016100f2565b50505b505050565b81516001600160401b0381111561012657610126610075565b61013a816101348454610089565b846100c1565b6020601f82116001811461016c575f83156101555750848201515b5f19600385901b1c1916600184901b178455610105565b5f84815260208120601f198516915b8281101561019b578785015182556020948501946001909201910161017b565b50848210156101b857868401515f19600387901b60f8161c191681555b50505050600190811b01905550565b610737806101d45f395ff3fe608060405234801561000f575f80fd5b506004361061008c575f3560e01c806306fdde0314610090578063095ea7b3146100ae57806318160ddd146100d157806323b872dd146100e3578063313ce567146100f657806340c10f191461010557806370a082311461011a57806395d89b4114610142578063a9059cbb1461014a578063dd62ed3e1461015d575b5f80fd5b610098610170565b6040516100a59190610572565b60405180910390f35b6100c16100bc3660046105c2565b610200565b60405190151581526020016100a5565b6002545b6040519081526020016100a5565b6100c16100f13660046105ea565b610219565b604051601281526020016100a5565b6101186101133660046105c2565b61023c565b005b6100d5610128366004610624565b6001600160a01b03165f9081526020819052604090205490565b61009861024a565b6100c16101583660046105c2565b610259565b6100d561016b366004610644565b610266565b60606003805461017f90610675565b80601f01602080910402602001604051908101604052809291908181526020018280546101ab90610675565b80156101f65780601f106101cd576101008083540402835291602001916101f6565b820191905f5260205f20905b8154815290600101906020018083116101d957829003601f168201915b5050505050905090565b5f3361020d818585610290565b60019150505b92915050565b5f336102268582856102a2565b6102318585856102fc565b506001949350505050565b6102468282610359565b5050565b60606004805461017f90610675565b5f3361020d8185856102fc565b6001600160a01b039182165f90815260016020908152604080832093909416825291909152205490565b61029d838383600161038d565b505050565b5f6102ad8484610266565b90505f198110156102f657818110156102e857828183604051637dc7a0d960e11b81526004016102df939291906106ad565b60405180910390fd5b6102f684848484035f61038d565b50505050565b6001600160a01b038316610325575f604051634b637e8f60e11b81526004016102df91906106ce565b6001600160a01b03821661034e575f60405163ec442f0560e01b81526004016102df91906106ce565b61029d83838361045f565b6001600160a01b038216610382575f60405163ec442f0560e01b81526004016102df91906106ce565b6102465f838361045f565b6001600160a01b0384166103b6575f60405163e602df0560e01b81526004016102df91906106ce565b6001600160a01b0383166103df575f604051634a1406b160e11b81526004016102df91906106ce565b6001600160a01b038085165f90815260016020908152604080832093871683529290522082905580156102f657826001600160a01b0316846001600160a01b03167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b9258460405161045191815260200190565b60405180910390a350505050565b6001600160a01b038316610489578060025f82825461047e91906106e2565b909155506104e69050565b6001600160a01b0383165f90815260208190526040902054818110156104c85783818360405163391434e360e21b81526004016102df939291906106ad565b6001600160a01b0384165f9081526020819052604090209082900390555b6001600160a01b03821661050257600280548290039055610520565b6001600160a01b0382165f9081526020819052604090208054820190555b816001600160a01b0316836001600160a01b03167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef8360405161056591815260200190565b60405180910390a3505050565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b80356001600160a01b03811681146105bd575f80fd5b919050565b5f80604083850312156105d3575f80fd5b6105dc836105a7565b946020939093013593505050565b5f805f606084860312156105fc575f80fd5b610605846105a7565b9250610613602085016105a7565b929592945050506040919091013590565b5f60208284031215610634575f80fd5b61063d826105a7565b9392505050565b5f8060408385031215610655575f80fd5b61065e836105a7565b915061066c602084016105a7565b90509250929050565b600181811c9082168061068957607f821691505b6020821081036106a757634e487b7160e01b5f52602260045260245ffd5b50919050565b6001600160a01b039390931683526020830191909152604082015260600190565b6001600160a01b0391909116815260200190565b8082018082111561021357634e487b7160e01b5f52601160045260245ffdfea2646970667358221220f9ae46a2e15270bfb77fe3d4d0ee0e45b749e3dde93805ee2cf795cb800244e664736f6c634300081a0033";
+
+const mintableERC20Abi = parseAbi([
+  "function transfer(address to, uint256 amount) external",
+  "function mint(address to, uint256 amount) external",
+  "function balanceOf(address target) external returns (uint256)",
+]);

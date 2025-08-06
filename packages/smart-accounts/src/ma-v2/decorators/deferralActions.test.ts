@@ -1,7 +1,6 @@
 import { bigIntMultiply } from "@aa-sdk/core";
 import {
   concat,
-  concatHex,
   createPublicClient,
   custom,
   isAddress,
@@ -517,7 +516,7 @@ describe("MA v2 deferral actions tests", async () => {
               "rundler_maxPriorityFeePerGas returned null or undefined"
             );
 
-          // With RpcUserOperation typing, this should always be a hex string
+          // With RpcUserOperation typing, this should always be a hex string.
           const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
             ? BigInt(maxPriorityFeePerGasEstimate)
             : raise("Expected maxPriorityFeePerGasEstimate to be hex");
