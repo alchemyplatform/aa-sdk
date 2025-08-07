@@ -8,96 +8,240 @@ Gas fees paid in the native gas token can feel foreign to users that primarily h
 
 <Markdown src="../../shared/sponsor-gas-erc20-how-it-works.mdx" />
 
-## Goal
-
-Configure your React app to enable users to pay gas fees with an ERC-20 token (for example USDC).
-
 ## Prerequisites
 
 <Markdown src="../../shared/sponsor-gas-erc20-prerequisites.mdx" />
 
-## Steps
-
-### 1 Create a Gas Manager policy
+## Create a Gas Manager policy
 
 <Markdown src="../../shared/sponsor-gas-erc20-create-policy.mdx" />
 
-### 2 Add the policy to your global config
+<Tabs>
+  <Tab title="React">
+    ## Add the policy to your global config
 
-```ts twoslash config.ts
-import { createConfig } from "@account-kit/react";
-import { sepolia } from "@account-kit/infra";
+    ```ts twoslash config.ts
+    import { createConfig } from "@account-kit/react";
+    import { sepolia } from "@account-kit/infra";
 
-export const config = createConfig({
-  apiKey: "ALCHEMY_API_KEY",
-  chain: sepolia,
-  policyId: "GAS_MANAGER_POLICY_ID", // your policy
-  policyToken: {
-    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
-    maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
-  },
-});
-```
+    export const config = createConfig({
+      apiKey: "ALCHEMY_API_KEY",
+      chain: sepolia,
+      policyId: "GAS_MANAGER_POLICY_ID", // your policy
+      policyToken: {
+        address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
+        maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
+      },
+    });
+    ```
 
-All `UserOperations` sent with the hooks will now be paid with the token configured above.
+    All `UserOperations` sent with the hooks will now be paid with the token configured above.
 
-### 3 Send a sponsored UserOperation
+    ## Send a sponsored UserOperation
 
-```tsx twoslash
-import React from "react";
-import { useSendUserOperation } from "@account-kit/react";
-import { encodeFunctionData, parseAbi } from "viem";
+    ```tsx twoslash
+    import React from "react";
+    import { useSendUserOperation } from "@account-kit/react";
+    import { encodeFunctionData, parseAbi } from "viem";
 
-export default function PayWithUsdcButton() {
-  const { sendUserOperation } = useSendUserOperation();
-  const erc20Abi = parseAbi([
-    "function approve(address spender, uint256 amount) public returns (bool)",
-  ]);
+    export default function PayWithUsdcButton() {
+      const { sendUserOperation } = useSendUserOperation();
+      const erc20Abi = parseAbi([
+        "function approve(address spender, uint256 amount) public returns (bool)",
+      ]);
 
-  return (
-    <button
-      onClick={() =>
-        sendUserOperation({
-          uo: [
-            {
-              // approve call
-              target: tokenAddress,
-              data: encodeFunctionData({
-                abi: erc20Abi,
-                functionName: "approve",
-                args: [paymasterAddress, maxTokenAmount],
-              }) as `0x${string}`,
-            },
-            {
-              target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
-              data: "0x",
-              value: 0n,
-            },
-          ],
-        })
-      }
-    >
-      Send USDC-sponsored operation
-    </button>
-  );
-}
-```
+      return (
+        <button
+          onClick={() =>
+            sendUserOperation({
+              uo: [
+                {
+                  // approve call
+                  target: tokenAddress,
+                  data: encodeFunctionData({
+                    abi: erc20Abi,
+                    functionName: "approve",
+                    args: [paymasterAddress, maxTokenAmount],
+                  }) as `0x${string}`,
+                },
+                {
+                  target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
+                  data: "0x",
+                  value: 0n,
+                },
+              ],
+            })
+          }
+        >
+          Send USDC-sponsored operation
+        </button>
+      );
+    }
+    ```
 
-### 4 (Optional) Override on a single client
+    ## (Optional) Override on a single client
 
-If you only want specific operations to use the policy, create a dedicated client instead of setting it globally.
+    If you only want specific operations to use the policy, create a dedicated client instead of setting it globally.
 
-```tsx twoslash
-const { client } = useSmartAccountClient({
-  policyId: "GAS_MANAGER_POLICY_ID",
-  policyToken: {
-    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
-    maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
-  },
-});
-```
+    ```tsx twoslash
+    const { client } = useSmartAccountClient({
+      policyId: "GAS_MANAGER_POLICY_ID",
+      policyToken: {
+        address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC_ADDRESS on sepolia (can be any ERC-20 token address enabled in your policy)
+        maxTokenAmount: 10_000_000n, // Safety limit. If using USDC, this is 10 USDC (10 * 10^6).
+      },
+    });
+    ```
 
-Use this `client` with any hook that sends UserOperations.
+    Use this `client` with any hook that sends UserOperations.
+
+  </Tab>
+  <Tab title="React Native">
+    ## Set the Policy ID globally
+
+    When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
+
+    Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
+
+    <Tip>
+      Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't
+      have one yet, you can create an API key on the [Alchemy
+      dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
+    </Tip>
+
+    ```ts twoslash config.ts
+    // @noErrors
+    import { createConfig } from "@account-kit/react-native";
+    import { sepolia } from "@account-kit/infra";
+
+    export const config = createConfig({
+      apiKey: "ALCHEMY_API_KEY",
+      chain: sepolia,
+      policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+    });
+    ```
+
+    Now you can follow the guide for [Sending user operations](/wallets/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
+
+    ## Set the gas policy ID per UserOperation
+
+    If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `useSmartAccountClient()` hook.
+
+    ```tsx twoslash
+    import React from "react";
+    import { View, Pressable, Text } from "react-native";
+    import {
+      useSmartAccountClient,
+      useSendUserOperation,
+    } from "@account-kit/react-native";
+
+    export default function MyComponent() {
+      const { client } = useSmartAccountClient({
+        policyId: "GAS_MANAGER_POLICY_ID",
+      });
+      const { sendUserOperation } = useSendUserOperation({ client });
+
+      return (
+        <View>
+          <Pressable
+            onPress={() =>
+              sendUserOperation({
+                uo: {
+                  target: "0xTARGET_ADDRESS",
+                  data: "0x",
+                  value: 0n,
+                },
+              })
+            }
+          >
+            <View>
+              <Text>Send Sponsored User Operation</Text>
+            </View>
+          </Pressable>
+        </View>
+      );
+    }
+    ```
+
+  </Tab>
+  <Tab title="Other JS">
+    ## Create a smart Account Client
+
+    Now you can create a Smart Account Client which is configured to sponsor gas.
+
+    ```tsx
+    import {
+      alchemy,
+      createAlchemySmartAccountClient,
+      sepolia,
+    } from "@account-kit/infra";
+    import { createLightAccount } from "@account-kit/smart-contracts";
+    // You can replace this with any signer you'd like
+    // We're using a LocalAccountSigner to generate a local key to sign with
+    import { LocalAccountSigner } from "@aa-sdk/core";
+    import { generatePrivateKey } from "viem/accounts";
+
+    const alchemyTransport = alchemy({
+      apiKey: "YOUR_API_KEY",
+    });
+
+    export const client = createAlchemySmartAccountClient({
+      transport: alchemyTransport,
+      policyId: "YOUR_POLICY_ID",
+      policyToken: {
+        address: tokenAddress,
+        maxTokenAmount: 10_000_000n,
+      },
+      chain: sepolia,
+      account: await createLightAccount({
+        chain: sepolia,
+        transport: alchemyTransport,
+        signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+      }),
+    });
+    ```
+
+    ## Send a sponsored UserOperation
+
+    ```tsx
+    import { client } from "./client";
+    import { encodeFunctionData, parseAbi } from "viem";
+
+    const erc20Abi = parseAbi([
+      "function approve(address spender, uint256 amount) public returns (bool)",
+    ]);
+
+    const { hash } = await client.sendUserOperation({
+      uo: [
+        {
+          // approve call
+          target: tokenAddress,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [paymasterAddress, maxTokenAmount],
+          }) as `0x${string}`,
+        },
+        {
+          // actual call
+          target: "0xTARGET_ADDRESS",
+          data: "0x",
+          value: 0n,
+        },
+      ],
+    });
+    ```
+
+    ## Estimate ERC20 token amount of a UO
+
+    <Markdown src="../../shared/estimate-gas-with-any-token.mdx" />
+
+    ## Simulate a ERC20 UO
+
+    <Markdown src="../../shared/simulate-sponsor-with-any-token.mdx" />
+
+  </Tab>
+</Tabs>
 
 ## Done
 

@@ -1,0 +1,238 @@
+---
+title: Email OTP Authentication
+description: How to implement Email OTP authentication across different frameworks
+slug: wallets/authentication/login-methods/email-otp
+---
+
+Email OTP (One-Time Password) authentication is a two-step process:
+
+1. The user enters their email address and requests a verification code
+2. The user enters the 6-digit code they receive in their inbox to complete authentication
+
+<Tabs>
+  <Tab title="React">
+    ## Overview
+
+    You can implement Email OTP authentication in two ways:
+
+    - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
+    - [Custom UI](#custom-ui) - Complete control over the user experience
+
+    ## Pre-built UI Components
+
+    Smart Wallets provides pre-built UI components that handle the entire Email OTP authentication flow with minimal code.
+
+    ### Step 1: Add Authentication Components to Your Page
+
+    Before configuring your authentication, first add one of the pre-built components to your application:
+
+    <Markdown src="../shared/modal-auth-example.mdx" />
+
+    Or:
+
+    <Markdown src="../shared/embedded-auth-example.mdx" />
+
+    ### Step 2: Configure Email OTP in UI Components
+
+    After adding the components, configure the Email OTP authentication in your application config:
+
+    ```tsx twoslash
+    import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+    import { sepolia, alchemy } from "@account-kit/infra";
+
+    const uiConfig: AlchemyAccountsUIConfig = {
+      auth: {
+        sections: [
+          [
+            {
+              type: "email",
+              emailMode: "otp",
+
+              // Optional customizations:
+              buttonLabel: "Continue with Email",
+              placeholder: "Enter your email address",
+            },
+          ],
+        ],
+      },
+    };
+
+    export const config = createConfig(
+      {
+        transport: alchemy({ apiKey: "your-api-key" }),
+        chain: sepolia,
+      },
+      uiConfig,
+    );
+    ```
+
+    ## Custom UI
+
+    If you need complete control over the user experience, you can implement your own custom UI for Email OTP authentication using Smart Wallets hooks.
+
+    ### Step 1: Send the OTP
+
+    First, prompt your user for their email address and send an OTP:
+
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate } = useAuthenticate();
+
+    // When the user submits their email
+    const handleSendCode = (email: string) => {
+      authenticate(
+        {
+          type: "email",
+          emailMode: "otp",
+          email,
+        },
+        {
+          onSuccess: () => {
+            // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+            // It still runs even if the final step completes in another tab/window.
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        },
+      );
+    };
+    ```
+
+    ### Step 2: Show OTP Input on Status Change
+
+    Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
+
+    ```tsx twoslash
+    import React from "react";
+    import { useSignerStatus } from "@account-kit/react";
+    import { AlchemySignerStatus } from "@account-kit/signer";
+
+    const TrackStatus = () => {
+      const { status } = useSignerStatus();
+
+      return (
+        <>
+          {status === AlchemySignerStatus.AWAITING_EMAIL_AUTH && (
+            <div>Prompt the user to enter the OTP code</div>
+          )}
+        </>
+      );
+    };
+    ```
+
+    ### Step 3: Verify the OTP
+
+    Once the user receives the code, they'll enter it in your application:
+
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate } = useAuthenticate();
+
+    // When the user submits the OTP code
+    const handleVerifyCode = (otpCode: string) => {
+      authenticate(
+        {
+          type: "otp",
+          otpCode,
+        },
+        {
+          onSuccess: () => {
+            // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+            // It still runs even if the final step completes in another tab/window.
+          },
+          onError: (error) => {
+            // Handle invalid code error
+          },
+        },
+      );
+    };
+    ```
+
+    ### Step 4: Check authentication status
+
+    Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+    ```tsx twoslash
+    import { useSignerStatus } from "@account-kit/react";
+
+    // Inside your component
+    const { isConnected } = useSignerStatus();
+
+    // You can use isConnected to conditionally render UI
+    ```
+  </Tab>
+  <Tab title="React Native">
+    ## React Native Email OTP Authentication
+
+    React Native content will be migrated here - combining content from:
+    - /react-native/signer/authenticating-users/authenticating-with-otp.mdx
+
+    This section will include React Native specific implementation details.
+  </Tab>
+  <Tab title="JavaScript">
+    ## Other JS Frameworks
+
+    Email OTP authentication allows you to log in and sign up users using an email address. Your users will receive six-digit code in their inbox which they can enter in your site to complete login.
+
+    <Tip>
+      For setting up an account config, see the [Signer Quickstart](/wallets/signer/quickstart).
+    </Tip>
+
+    ## Authenticate a user
+
+    ```ts twoslash
+    import { signer } from "./signer";
+
+    // send the email
+    // Promise resolves when the user is fully authenticated (OTP + optional MFA),
+    // even if final step completes in another tab/window
+    await signer.authenticate({
+      type: "email",
+      emailMode: "otp",
+      email: "user@mail.com",
+    });
+
+    // later once the user has entered the code from their email
+    // Promise resolves when the user is fully authenticated (OTP + optional MFA),
+    // even if final step completes in another tab/window
+    await signer.authenticate({
+      type: "otp",
+      otpCode: "123456",
+    });
+    ```
+
+    ### Track Authentication Status
+
+    Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to OTP/MFA prompts and completion:
+
+    ```ts twoslash
+    import { signer } from "./signer";
+    import { AlchemySignerStatus } from "@account-kit/signer";
+
+    signer.on("statusChanged", (status) => {
+      switch (status) {
+        case AlchemySignerStatus.AWAITING_EMAIL_AUTH:
+          // show OTP input UI
+          break;
+        case AlchemySignerStatus.AWAITING_MFA_AUTH:
+          // show TOTP input UI
+          break;
+        case AlchemySignerStatus.CONNECTED:
+          // authentication complete
+          break;
+      }
+    });
+    ```
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+### Add Authenticator App (TOTP) Verification (Optional)
+
+If you'd like to add a **second security step** to Email OTP, you can enable [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa). This prompts users for a **6-digit TOTP code** from their authenticator app (e.g. Google Authenticator, Authy) after they verify their email.

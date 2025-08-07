@@ -128,3 +128,6 @@ lib/
 Pods
 
 vendor
+
+# Claude AI assistant files
+.claude
