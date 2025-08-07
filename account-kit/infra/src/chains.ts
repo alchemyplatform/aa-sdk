@@ -712,3 +712,51 @@ export const teaSepolia: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const bobaSepolia: Chain = defineChain({
+  id: 28882,
+  name: "Boba Sepolia",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://boba-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://boba-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://boba-sepolia.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://sepolia.testnet.bobascan.com/",
+    },
+  },
+  testnet: true,
+});
+
+export const bobaMainnet: Chain = defineChain({
+  id: 288,
+  name: "Boba Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://boba-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://boba-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://boba-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://bobascan.com/",
+    },
+  },
+  testnet: true,
+});
