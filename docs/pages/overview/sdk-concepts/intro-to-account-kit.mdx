@@ -66,7 +66,7 @@ In Smart Wallets, this concept will manifest as a [Smart Account Signer](/wallet
 
 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
   <div style={{ flex: "1", marginRight: "10px" }}>
-With Smart Wallets, [sending transactions](/wallets/react/send-user-operations) is as simple as sending "normal" EOA transactions. However, under the hood, you're actually sending [**User Operations (UOs)**](https://www.alchemy.com/overviews/user-operations) — a standardized pseudo-transaction object — to a **Bundler**.
+With Smart Wallets, [sending transactions](/wallets/transactions/send/send-user-operations) is as simple as sending "normal" EOA transactions. However, under the hood, you're actually sending [**User Operations (UOs)**](https://www.alchemy.com/overviews/user-operations) — a standardized pseudo-transaction object — to a **Bundler**.
 
 </div>
   <div style={{ flex: "0 0 30%" }}>
@@ -80,7 +80,7 @@ With Smart Wallets, [sending transactions](/wallets/react/send-user-operations) 
 
 A User Operation (UO) is an ABI-encoded struct that describes a transaction to be sent on behalf of a user. Since SCAs cannot initiate transactions on chains without native account abstraction support, they send UOs instead. The Bundler will gather UOs from multiple smart accounts (senders) and bundle them into a single on-chain transaction.
 
-A huge benefit of smart accounts is the ability to [batch transactions](/wallets/react/send-user-operations#batch-user-operation) in one UO creating simpler user experiences. For example, you can now approve and swap in one click, rather than signing, waiting, and sending multiple transactions.
+A huge benefit of smart accounts is the ability to [batch transactions](/wallets/transactions/send/send-user-operations#batch-user-operation) in one UO creating simpler user experiences. For example, you can now approve and swap in one click, rather than signing, waiting, and sending multiple transactions.
 
 In Smart Wallets, this concept will manifest as a [Bundler Client](/wallets/concepts/bundler-client), but for simplicity you may only need a [Smart Account Client](/wallets/concepts/smart-account-client).
 
@@ -88,7 +88,7 @@ In Smart Wallets, this concept will manifest as a [Bundler Client](/wallets/conc
 
 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
   <div style={{ flex: "1", marginRight: "10px" }}>
-With gas sponsorship, your users won't need to worry about having assets in their accounts to pay for gas. Using [Smart Wallets](/wallets/react/sponsor-gas), simply configure a gas manager policy, insert your policy ID into the SDK, and let our Gas Manager handle the rest.
+With gas sponsorship, your users won't need to worry about having assets in their accounts to pay for gas. Using [Smart Wallets](/wallets/transactions/sponsor-gas/sponsor-gas-evm), simply configure a gas manager policy, insert your policy ID into the SDK, and let our Gas Manager handle the rest.
 
 </div>
   <div style={{ flex: "0 0 30%" }}>
