@@ -30,7 +30,7 @@ export const SolanaWalletButton = ({
       variant="social"
       icon={
         iconSrc && (
-          <img src={iconSrc} alt={wallet.adapter.name} height={20} width={20} />
+          <img src={iconSrc} alt={wallet.adapter.name} height={24} width={24} />
         )
       }
       onClick={handleClick}

@@ -32,7 +32,7 @@ export const WalletButton = ({
       variant="social"
       icon={
         iconSrc && (
-          <img src={iconSrc} alt={connector.name} height={20} width={20} />
+          <img src={iconSrc} alt={connector.name} height={24} width={24} />
         )
       }
       onClick={handleClick}

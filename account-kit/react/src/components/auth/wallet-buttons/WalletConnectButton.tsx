@@ -50,9 +50,9 @@ export const WalletConnectButton = ({
       variant="social"
       icon={
         logoUrl ? (
-          <img src={logoUrl} alt="WalletConnect" height={20} width={20} />
+          <img src={logoUrl} alt="WalletConnect" height={24} width={24} />
         ) : (
-          <WalletConnectIcon className="w-[25px] h-[25px]" />
+          <WalletConnectIcon className="w-6 h-6" />
         )
       }
       onClick={handleClick}
