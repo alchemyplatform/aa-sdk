@@ -12,7 +12,7 @@ import com.google.crypto.tink.subtle.EllipticCurves
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.bitcoinj.core.Base58
+import org.bitcoinj.base.Base58
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECPublicKeySpec
