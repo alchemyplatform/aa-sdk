@@ -438,9 +438,11 @@ export async function toModularAccountV2Base<
         },
       });
 
+      // TODO(jh): is something here wrong?
       if (owner.type === "webAuthn") {
+        // TODO(jh): anything wrong within here?
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash })
+          await owner.sign({ hash: hashMessage({ raw: hash }) }) // TODO(jh): do we need to hash message here?
         );
         const signature = deferredActionData
           ? concatHex([deferredActionData, validationSignature])
@@ -476,15 +478,17 @@ export async function toModularAccountV2Base<
           // Note that we get 7702 support automatically from Viem.
           return undefined;
         }
+
         const estimateGasAction = getAction(
           client,
           estimateUserOperationGas,
           "estimateUserOperationGas"
         );
 
-        const estimate = await estimateGasAction(
-          uo as UserOperation<typeof entryPoint.version>
-        );
+        const estimate = await estimateGasAction({
+          ...(uo as UserOperation<typeof entryPoint.version>),
+          entryPointAddress: entryPoint.address,
+        });
 
         const buffer = (await chainHas7212(client)) ? 10000n : 300000n;
 

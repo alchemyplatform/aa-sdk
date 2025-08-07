@@ -25,11 +25,11 @@ export class SoftWebauthnDevice {
   async create(options: any, origin: string) {
     if (
       !options.publicKey.pubKeyCredParams.some(
-        (p: any) => p.alg === -7 && p.type === "public-key",
+        (p: any) => p.alg === -7 && p.type === "public-key"
       )
     ) {
       throw new Error(
-        "Requested pubKeyCredParams does not contain supported type",
+        "Requested pubKeyCredParams does not contain supported type"
       );
     }
 
@@ -42,7 +42,7 @@ export class SoftWebauthnDevice {
 
     await this.credInit(
       options.publicKey.rp.id,
-      Buffer.from(options.publicKey.user.id),
+      Buffer.from(options.publicKey.user.id)
     );
 
     const clientData = {

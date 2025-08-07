@@ -49,7 +49,7 @@ export type PredictModularAccountV2AddressParams = {
  * @param {PredictModularAccountV2AddressParams} params The parameters for predicting the modular account address, including `factoryAddress`, `salt`, `implementationAddress`, and additional properties based on the account type.
  * @returns {Address} The predicted address for the modular account V2.
  */ export function predictModularAccountV2Address(
-  params: PredictModularAccountV2AddressParams,
+  params: PredictModularAccountV2AddressParams
 ): Address {
   const { factoryAddress, salt, implementationAddress } = params;
 
@@ -65,14 +65,14 @@ export type PredictModularAccountV2AddressParams = {
       const immutableArgs = params.ownerAddress;
       initcode = getProxyBytecodeWithImmutableArgs(
         implementationAddress,
-        immutableArgs,
+        immutableArgs
       );
       break;
     case "MA":
       combinedSalt = getCombinedSaltK1(
         params.ownerAddress,
         salt,
-        params.entityId,
+        params.entityId
       );
 
       initcode = getProxyBytecode(implementationAddress);
@@ -85,8 +85,8 @@ export type PredictModularAccountV2AddressParams = {
       combinedSalt = keccak256(
         encodePacked(
           ["uint256", "uint256", "uint256", "uint32"],
-          [x, y, salt, params.entityId],
-        ),
+          [x, y, salt, params.entityId]
+        )
       );
 
       initcode = getProxyBytecode(implementationAddress);
@@ -107,35 +107,35 @@ export type PredictModularAccountV2AddressParams = {
 function getCombinedSaltK1(
   ownerAddress: Address,
   salt: bigint,
-  entityId: number,
+  entityId: number
 ): Hex {
   return keccak256(
     encodePacked(
       ["address", "uint256", "uint32"],
-      [ownerAddress, salt, entityId],
-    ),
+      [ownerAddress, salt, entityId]
+    )
   );
 }
 
 function getProxyBytecode(implementationAddress: Address): Hex {
   return `0x603d3d8160223d3973${implementationAddress.slice(
-    2,
+    2
   )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3`;
 }
 
 function getProxyBytecodeWithImmutableArgs(
   implementationAddress: Address,
-  immutableArgs: Hex,
+  immutableArgs: Hex
 ): Hex {
   return `0x6100513d8160233d3973${implementationAddress.slice(
-    2,
+    2
   )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3${immutableArgs.slice(
-    2,
+    2
   )}`;
 }
 
 function assertNeverModularAccountV2Type(_: never): never {
   throw new Error(
-    "Unknown modular account type in predictModularAccountV2Address",
+    "Unknown modular account type in predictModularAccountV2Address"
   );
 }

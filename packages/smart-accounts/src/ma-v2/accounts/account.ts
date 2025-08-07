@@ -80,54 +80,11 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   const implementationAddress =
     implementationAddress_ ??
-    (is7702 ? DefaultAddress.SMAV2_7702 : DefaultAddress.SMAV2_BYTECODE);
-
-  const accountAddress =
-    accountAddress_ ??
-    predictModularAccountV2Address({
-      factoryAddress,
-      implementationAddress,
-      salt,
-      ...(owner.type === "webAuthn"
-        ? {
-            type: "WebAuthn",
-            entityId,
-            ownerPublicKey: owner.publicKey,
-          }
-        : {
-            ownerAddress: owner.address,
-            entityId,
-            type: "SMA", // TODO(jh): should this never be "MA"? double check w/ adam.
-          }),
-    });
-
-  let authorization: ToSmartAccountParameters["authorization"];
-  if (is7702) {
-    // TODO(v5): Ensure this works w/ our signer types.
-    if (owner.type !== "local") {
-      throw new InvalidOwnerError(
-        `Owner of type ${owner.type} is unsupported for 7702 mode.`
-      );
-    }
-    if (owner.signAuthorization == null) {
-      throw new InvalidOwnerError(
-        "Owner must implement `signAuthorization` to be used with 7702 mode."
-      );
-    }
-    if (
-      entityId === DEFAULT_OWNER_ENTITY_ID &&
-      owner.address !== accountAddress
-    ) {
-      throw new EntityIdOverrideError();
-    }
-    authorization = {
-      // The current version of Viem has some pretty strict constraints
-      // on a `PrivateKeyAccount`, but this seems safe as long as the
-      // owner is able to `signAuthorization`.
-      account: owner as PrivateKeyAccount,
-      address: DefaultAddress.SMAV2_7702,
-    };
-  }
+    (is7702
+      ? DefaultAddress.SMAV2_7702
+      : owner.type === "webAuthn"
+        ? DefaultAddress.MAV2
+        : DefaultAddress.SMAV2_BYTECODE);
 
   const getFactoryArgs = async () => {
     if (is7702) {
@@ -162,6 +119,53 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
         }),
     };
   };
+
+  const accountAddress =
+    accountAddress_ ??
+    predictModularAccountV2Address({
+      factoryAddress,
+      implementationAddress,
+      salt,
+      ...(owner.type === "webAuthn"
+        ? {
+            type: "WebAuthn",
+            ownerPublicKey: owner.publicKey,
+            entityId,
+          }
+        : {
+            type: "SMA", // TODO(jh): should this never be "MA"? double check w/ adam.
+            ownerAddress: owner.address,
+            entityId,
+          }),
+    });
+
+  let authorization: ToSmartAccountParameters["authorization"];
+  if (is7702) {
+    // TODO(v5): Ensure this works w/ our signer types.
+    if (owner.type !== "local") {
+      throw new InvalidOwnerError(
+        `Owner of type ${owner.type} is unsupported for 7702 mode.`
+      );
+    }
+    if (owner.signAuthorization == null) {
+      throw new InvalidOwnerError(
+        "Owner must implement `signAuthorization` to be used with 7702 mode."
+      );
+    }
+    if (
+      entityId === DEFAULT_OWNER_ENTITY_ID &&
+      owner.address !== accountAddress
+    ) {
+      throw new EntityIdOverrideError();
+    }
+    authorization = {
+      // The current version of Viem has some pretty strict constraints
+      // on a `PrivateKeyAccount`, but this seems safe as long as the
+      // owner is able to `signAuthorization`.
+      account: owner as PrivateKeyAccount,
+      address: DefaultAddress.SMAV2_7702,
+    };
+  }
 
   const base = await toModularAccountV2Base({
     client,

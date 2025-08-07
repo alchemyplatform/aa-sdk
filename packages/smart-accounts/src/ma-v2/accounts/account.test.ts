@@ -48,7 +48,12 @@ import { toLightAccount } from "../../light-account/accounts/account.js";
 import { deferralActions } from "../decorators/deferralActions.js";
 import { installValidationActions } from "../decorators/installValidation.js";
 import { HookType } from "../types.js";
-import { buildFullNonceKey, DefaultModuleAddress } from "../utils/account.js";
+import {
+  buildFullNonceKey,
+  DEFAULT_OWNER_ENTITY_ID,
+  DefaultAddress,
+  DefaultModuleAddress,
+} from "../utils/account.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
@@ -58,7 +63,13 @@ import { AllowlistModule } from "../modules/allowlist-module/module.js";
 import { NativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { raise } from "@alchemy/common";
-import { getMAV2UpgradeToData } from "../utils/account";
+import { getMAV2UpgradeToData } from "../utils/account.js";
+import {
+  predictModularAccountV2Address as predictModularAccountV2AddressLegacy,
+  createModularAccountV2Client,
+} from "@account-kit/smart-contracts";
+import { predictModularAccountV2Address } from "../predictAddress.js";
+import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -111,7 +122,6 @@ describe("MA v2 Account Tests", async () => {
         },
       ],
     });
-    console.log({ hash });
 
     // TODO(jh): we really need this to land quicker....
     await provider.waitForUserOperationReceipt({
@@ -128,7 +138,7 @@ describe("MA v2 Account Tests", async () => {
     const credential = await givenWebauthnCredential();
 
     const provider = await givenConnectedProvider({
-      signer: toWebAuthnAccount({ credential }),
+      signer: toWebAuthnAccount({ ...credential, rpId: "localhost" }),
     });
 
     await setBalance(instance.getClient(), {
@@ -138,6 +148,7 @@ describe("MA v2 Account Tests", async () => {
 
     const startingAddressBalance = await getTargetBalance();
 
+    // TODO(jh): UserOperation rejected because account signature check failed
     const hash = await provider.sendUserOperation({
       calls: [
         {
@@ -159,7 +170,7 @@ describe("MA v2 Account Tests", async () => {
     const credential = await givenWebauthnCredential();
 
     const provider = await givenConnectedProvider({
-      signer: toWebAuthnAccount({ credential }),
+      signer: toWebAuthnAccount(credential),
     });
 
     await setBalance(instance.getClient(), {
@@ -168,7 +179,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     const sessionKeyCredential = await givenWebauthnCredential();
-    const { x, y } = parsePublicKey(sessionKeyCredential.publicKey);
+    const { x, y } = parsePublicKey(sessionKeyCredential.credential.publicKey);
 
     // install webauthn validation module
     const hash = await provider
@@ -195,7 +206,7 @@ describe("MA v2 Account Tests", async () => {
 
     // create session key client
     const sessionKeyClient = await givenConnectedProvider({
-      signer: toWebAuthnAccount({ credential }),
+      signer: toWebAuthnAccount(sessionKeyCredential),
       accountAddress: provider.account.address,
       signerEntity: { entityId: 1, isGlobalValidation: true },
       // TODO(jh): don't need factory args here since we already installed the validation on-chain, which deployed the acct.
@@ -223,7 +234,7 @@ describe("MA v2 Account Tests", async () => {
       const credential = await givenWebauthnCredential();
 
       const provider = await givenConnectedProvider({
-        signer: toWebAuthnAccount({ credential }),
+        signer: toWebAuthnAccount(credential),
       });
 
       await setBalance(instance.getClient(), {
@@ -1925,71 +1936,6 @@ describe("MA v2 Account Tests", async () => {
     // TODO(jh): should we verify anything here? v4 test did not.
   });
 
-  // TODO(jh): remove this once confirmed webauthn is working w/o it.
-  // const givenConnectedWebauthnProvider = async ({
-  //   signerEntity,
-  //   accountAddress,
-  //   paymasterMiddleware,
-  //   credential,
-  //   getFn,
-  //   rpId,
-  // }: {
-  //   signerEntity?: { entityId: number; isGlobalValidation: boolean };
-  //   accountAddress?: Address;
-  //   paymasterMiddleware?: "erc7677";
-  //   credential: ToWebAuthnAccountParameters["credential"];
-  //   getFn?: ToWebAuthnAccountParameters["getFn"];
-  //   rpId?: ToWebAuthnAccountParameters["rpId"];
-  // }) => {
-  //   const account = await toModularAccountV2({
-  //     client: createWalletClient({
-  //       transport: custom(instance.getClient()),
-  //       chain: instance.chain,
-  //     }),
-  //     accountAddress,
-  //     signerEntity,
-  //     credential,
-  //     getFn,
-  //     rpId,
-  //     mode: "webauthn",
-  //     salt: salt++,
-  //   });
-
-  //   return createBundlerClient({
-  //     account,
-  //     transport: custom(instance.getClient()),
-  //     chain: instance.chain,
-  //     paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
-  //     userOperation: {
-  //       estimateFeesPerGas: async ({ bundlerClient }) => {
-  //         const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-  //           getBlock(bundlerClient, { blockTag: "latest" }),
-  //           bundlerClient.request({
-  //             // @ts-expect-error - TODO(v5): fix this
-  //             method: "rundler_maxPriorityFeePerGas",
-  //             params: [],
-  //           }),
-  //         ]);
-
-  //         const baseFeePerGas = block.baseFeePerGas;
-  //         if (baseFeePerGas == null) {
-  //           throw new Error("baseFeePerGas is null");
-  //         }
-
-  //         return {
-  //           maxPriorityFeePerGas: fromHex(
-  //             maxPriorityFeePerGasEstimate as Hex,
-  //             "bigint"
-  //           ),
-  //           maxFeePerGas:
-  //             bigIntMultiply(baseFeePerGas, 1.5) +
-  //             BigInt(maxPriorityFeePerGasEstimate as Hex),
-  //         };
-  //       },
-  //     },
-  //   });
-  // };
-
   const givenWebauthnCredential = async () => {
     const webauthnDevice = new SoftWebauthnDevice();
 
@@ -1999,15 +1945,19 @@ describe("MA v2 Account Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
-    return credential;
+    const getFn = (opts: CredentialRequestOptions | undefined) =>
+      webauthnDevice.get(opts, "localhost");
+
+    return { credential, getFn };
   };
 
-  let salt = 1n;
+  // let salt = 1n;
 
   const givenConnectedProvider = async ({
     signer,
     signerEntity,
     accountAddress,
+    // TODO(jh): unsure how this pm middleware works.
     paymasterMiddleware,
     factoryArgs,
     deferredAction,
@@ -2015,6 +1965,7 @@ describe("MA v2 Account Tests", async () => {
     signer: LocalAccount | WebAuthnAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
     accountAddress?: Address;
+    // TODO(jh): unsure how this pm middleware works.
     paymasterMiddleware?: "erc7677";
     factoryArgs?: { factory?: Address; factoryData?: Hex };
     deferredAction?: Hex;
@@ -2028,7 +1979,7 @@ describe("MA v2 Account Tests", async () => {
       signerEntity,
       owner: signer,
       // TODO(jh): this was done in v4 tests... do we really want to though?
-      salt: salt++,
+      // salt: salt++,
       ...factoryArgs,
       deferredAction,
     });
@@ -2037,6 +1988,7 @@ describe("MA v2 Account Tests", async () => {
       account,
       transport: custom(instance.getClient()),
       chain: instance.chain,
+      // TODO(jh): unsure how this pm middleware works.
       paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
       userOperation: {
         // TODO(jh): use the action trevor made in other pr once merged.
