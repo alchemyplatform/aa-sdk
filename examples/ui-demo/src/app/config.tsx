@@ -10,10 +10,7 @@ import { type KnownAuthProvider } from "@account-kit/signer";
 import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
 import { metaMask, coinbaseWallet } from "wagmi/connectors";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 export type Config = {
   auth: {
@@ -58,12 +55,12 @@ export const externalWalletsConfig = configForExternalWallets({
   wallets: [
     {
       featured: 0,
-      adapter: PhantomWalletAdapter,
+      adapter: SolflareWalletAdapter,
     },
     {
       featured: 1,
       connector: metaMask,
-      logoUrl: "/images/discord.svg",
+      logoUrl: "/images/metamask.svg",
     },
     {
       featured: 2,
@@ -71,15 +68,12 @@ export const externalWalletsConfig = configForExternalWallets({
       projectId: "30e7ffaff99063e68cc9870c105d905b",
     },
     {
-      adapter: SolflareWalletAdapter,
-    },
-    {
       featured: 3,
       connector: coinbaseWallet,
     },
   ],
   // moreButtonText: "More wallet options",
-  hideMoreButton: true,
+  hideMoreButton: false,
 });
 
 export const DEFAULT_CONFIG: Config = {
