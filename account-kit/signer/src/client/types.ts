@@ -39,6 +39,10 @@ export type CreateAccountParams =
       redirectParams?: URLSearchParams;
     }
   | {
+      type: "sms";
+      phone: string;
+    }
+  | {
       type: "passkey";
       email: string;
       creationOpts?: CredentialCreationOptionOverrides;
@@ -59,6 +63,11 @@ export type EmailAuthParams = {
   targetPublicKey: string;
   redirectParams?: URLSearchParams;
   multiFactors?: VerifyMfaParams[];
+};
+
+export type SmsAuthParams = {
+  phone: string;
+  targetPublicKey: string;
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -131,6 +140,7 @@ export type SignerEndpoints = [
       | (Omit<EmailAuthParams, "redirectParams"> & {
           redirectParams?: string;
         })
+      | SmsAuthParams
       | {
           passkey: {
             challenge: string;
@@ -148,10 +158,12 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/auth";
-    Body: Omit<EmailAuthParams, "redirectParams"> & {
-      redirectParams?: string;
-      multiFactors?: VerifyMfaParams[];
-    };
+    Body:
+      | (Omit<EmailAuthParams, "redirectParams"> & {
+          redirectParams?: string;
+          multiFactors?: VerifyMfaParams[];
+        })
+      | SmsAuthParams;
     Response: {
       orgId: string;
       otpId?: string;
@@ -161,7 +173,8 @@ export type SignerEndpoints = [
   {
     Route: "/v1/lookup";
     Body: {
-      email: string;
+      email?: string;
+      phone?: string;
     };
     Response: {
       orgId: string | null;
@@ -334,7 +347,7 @@ export type SignerEndpoints = [
 ];
 
 export type AuthenticatingEventMetadata = {
-  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify";
+  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify" | "sms";
 };
 
 export type AlchemySignerClientEvents = {

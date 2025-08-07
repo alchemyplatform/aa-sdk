@@ -164,11 +164,11 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-android:0.76"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  api "javax.xml.bind:jaxb-api:2.3.1"
+  api "javax.xml.bind:jaxb-api:2.4.0-b180830.0359"
   api "xerces:xercesImpl:2.12.2"
-  api "androidx.security:security-crypto:1.1.0-alpha06"
-  api "com.google.crypto.tink:tink-android:1.15.0"
-  api "org.bitcoinj:bitcoinj-core:0.16.3"
+  api "androidx.security:security-crypto:1.1.0"
+  api "com.google.crypto.tink:tink-android:1.18.0"
+  api "org.bitcoinj:bitcoinj-core:0.17"
   implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 }
 

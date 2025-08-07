@@ -265,6 +265,7 @@ const AUTHENTICATING_STATUSES: AlchemySignerStatus[] = [
   AlchemySignerStatus.AUTHENTICATING_PASSKEY,
   AlchemySignerStatus.AWAITING_EMAIL_AUTH,
   AlchemySignerStatus.AWAITING_OTP_AUTH,
+  AlchemySignerStatus.AWAITING_SMS_AUTH,
 ];
 
 /**
