@@ -6,6 +6,5 @@ export default withAccountKitUi({
   theme: {
     extend: {},
   },
-  prefix: 'alchemy-',
   plugins: [],
 });
