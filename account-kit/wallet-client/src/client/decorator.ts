@@ -1,5 +1,9 @@
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address, Hex } from "viem";
+import {
+  type WaitForCallsStatusParameters,
+  type WaitForCallsStatusReturnType,
+} from "viem/actions";
 import type { InnerWalletApiClient } from "../types.ts";
 import {
   getCallsStatus,
@@ -31,6 +35,7 @@ import {
   type SendPreparedCallsParams,
   type SendPreparedCallsResult,
 } from "./actions/sendPreparedCalls.js";
+import { waitForCallsStatus } from "./actions/waitForCallsStatus.js";
 import { signMessage, type SignMessageParams } from "./actions/signMessage.js";
 import {
   signSignatureRequest,
@@ -46,6 +51,11 @@ import {
   type SignPreparedCallsParams,
   type SignPreparedCallsResult,
 } from "./actions/signPreparedCalls.js";
+import {
+  sendCalls,
+  type SendCallsParams,
+  type SendCallsResult,
+} from "./actions/sendCalls.js";
 
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
@@ -59,10 +69,14 @@ export type SmartWalletActions<
   sendPreparedCalls: (
     params: SendPreparedCallsParams,
   ) => Promise<SendPreparedCallsResult>;
+  sendCalls: (params: SendCallsParams<TAccount>) => Promise<SendCallsResult>;
   listAccounts: (params: ListAccountsParams) => Promise<ListAccountsResult>;
   getCallsStatus: (
     params: GetCallsStatusParams,
   ) => Promise<GetCallsStatusResult>;
+  waitForCallsStatus: (
+    params: WaitForCallsStatusParameters,
+  ) => Promise<WaitForCallsStatusReturnType>;
   signSignatureRequest: (
     params: SignSignatureRequestParams,
   ) => Promise<SignSignatureRequestResult>;
@@ -87,7 +101,9 @@ export function smartWalletClientActions<
     prepareCalls: (params) => prepareCalls(client, params),
     listAccounts: (params) => listAccounts(client, signer, params),
     sendPreparedCalls: (params) => sendPreparedCalls(client, params),
+    sendCalls: (params) => sendCalls(client, signer, params),
     getCallsStatus: (params) => getCallsStatus(client, params),
+    waitForCallsStatus: (params) => waitForCallsStatus(client, params),
     signSignatureRequest: (params) => signSignatureRequest(signer, params),
     signPreparedCalls: (params) => signPreparedCalls(signer, params),
     signMessage: (params) => signMessage(client, signer, params),
