@@ -1159,6 +1159,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: alchemyGasManagerHooks
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/alchemyGasManagerHooks.mdx
                   - page: defaultLightAccountVersion
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/defaultLightAccountVersion.mdx
                   - page: getDefaultLightAccountFactoryAddress
