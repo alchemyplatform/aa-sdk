@@ -40,14 +40,18 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 ```js metro.config.js
 const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 const path = require("path");
-const projectRoot = __dirname;
+const projectRoot = __dirname; // <-- Adjust this as fits your project setup
 const config = getDefaultConfig(projectRoot);
 
 // Add aliases for file-system import based modules
 const ALIASES = {
   "@noble/hashes/crypto": path.resolve(
-    projectRoot, // <-- Adjust this as fits your project setup
+    projectRoot,
     "node_modules/@noble/hashes/crypto.js",
+  ),
+  "@sinclair/typebox": path.resolve(
+    projectRoot,
+    "node_modules/@sinclair/typebox/build/cjs/index.js",
   ),
 };
 
