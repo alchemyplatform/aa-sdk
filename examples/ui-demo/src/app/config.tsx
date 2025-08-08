@@ -51,11 +51,11 @@ export type Config = {
 export type AccountMode = "default" | "7702";
 
 export const externalWalletsConfig = configForExternalWallets({
-  wallets: ["phantom", "metamask", "wallet_connect", "coinbase"],
-  chainType: ["evm", "svm"],
+  wallets: ["wallet_connect"],
+  chainType: ["svm", "evm"],
   walletConnectProjectId: "30e7ffaff99063e68cc9870c105d905b",
   hideMoreButton: false,
-  numFeaturedWallet: 2,
+  numFeaturedWallet: 1,
 });
 console.log(externalWalletsConfig);
 export const DEFAULT_CONFIG: Config = {

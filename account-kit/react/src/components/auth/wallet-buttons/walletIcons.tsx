@@ -7,28 +7,11 @@ type IconComponent = React.ComponentType<
   React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
 >;
 
-// Mapping of wallet types to their built-in icon components
-export const getWalletIcon = (walletType: string): IconComponent | null => {
-  switch (walletType.toLowerCase()) {
-    case "metamask":
-      return MetaMaskIcon;
-    case "coinbase wallet":
-    case "coinbaseWallet":
-    case "coinbase":
-      return CoinbaseIcon;
-    case "walletconnect":
-    case "wallet connect":
-      return WalletConnectIcon;
-    default:
-      return null;
-  }
-};
-
 // Mapping for connector types to icon components
 export const getConnectorIcon = (
-  connectorType: string,
+  connectorName: string,
 ): IconComponent | null => {
-  switch (connectorType.toLowerCase()) {
+  switch (connectorName.toLowerCase()) {
     case "metamask":
       return MetaMaskIcon;
     case "coinbasewallet":

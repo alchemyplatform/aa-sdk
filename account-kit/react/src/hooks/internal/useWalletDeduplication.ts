@@ -63,14 +63,7 @@ export function useFilteredSolanaWallets() {
     });
 
     const uniqueWallets = Array.from(uniqueMap.values());
-
-    // Filter to only show installed Solana wallets if any are available
-    const installedWallets = uniqueWallets.filter(
-      (wallet) => wallet.readyState === "Installed",
-    );
-
-    // If we have installed wallets, only show those. Otherwise show all unique wallets.
-    return installedWallets.length > 0 ? installedWallets : uniqueWallets;
+    return uniqueWallets;
   }, [wallets]);
 }
 

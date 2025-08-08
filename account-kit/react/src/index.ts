@@ -89,9 +89,6 @@ export { useSolanaSignMessage } from "./hooks/useSolanaSignMessage.js";
 
 export {
   configForExternalWallets,
-  type ExternalWalletConfig,
-  type SupportedWallet,
   type ChainType,
-  type ExternalWalletUIConfig,
   type ConfigForExternalWalletsParams,
 } from "./configForExternalWallets.js";

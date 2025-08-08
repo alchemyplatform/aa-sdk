@@ -22,11 +22,11 @@ export type AuthType =
   | {
       type: "external_wallets";
       // New simplified shape
-      walletNames?: string[];
+      wallets?: string[];
       chainType?: ChainType[];
       // Optional: fallback WC config for UI-only flows
       walletConnectProjectId?: string;
-      // How many from walletNames to feature on landing
+      // How many from wallets to feature on landing
       numFeaturedWallet?: number;
       // Backwards compatible shape
       walletConnect?: import("wagmi/connectors").WalletConnectParameters;

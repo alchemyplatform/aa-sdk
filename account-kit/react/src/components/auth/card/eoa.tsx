@@ -1,3 +1,4 @@
+// eoa.tsx
 "use client";
 
 import { walletConnect } from "wagmi/connectors";
@@ -18,8 +19,51 @@ import {
   SolanaWalletButton,
 } from "../wallet-buttons/index.js";
 import { useWalletAvailability } from "../../../hooks/internal/useWalletDeduplication.js";
+import { getConnectorIcon } from "../wallet-buttons/walletIcons.js";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
+import { useMemo } from "react";
 
 export const WALLET_CONNECT = "walletConnect";
+
+// --- helpers (kept local to minimize diff) ---
+const norm = (s?: string) => (s ?? "").toLowerCase();
+const isWC = (name: string) => {
+  const n = norm(name);
+  return (
+    n === "wallet_connect" || n === "wallet connect" || n === "walletconnect"
+  );
+};
+const orderChains = (chains: string[]) =>
+  [...chains].sort((a, b) =>
+    a === "evm" && b === "svm" ? -1 : a === "svm" && b === "evm" ? 1 : 0,
+  );
+
+// Find the external_wallets section whether it's at config.sections or nested in config.auth.sections (possibly grouped)
+const getExternalWalletsSection = (
+  cfg: any,
+):
+  | { type: "external_wallets"; wallets?: string[]; chainType?: string[] }
+  | undefined => {
+  const pick = (arr: any[]) =>
+    arr?.find(
+      (s) => s && typeof s === "object" && s.type === "external_wallets",
+    );
+
+  if (Array.isArray(cfg?.sections)) {
+    const sec = pick(cfg.sections);
+    if (sec) return sec;
+  }
+  if (Array.isArray(cfg?.auth?.sections)) {
+    const groups = cfg.auth.sections;
+    const flat = groups.some(Array.isArray)
+      ? groups.reduce((acc: any[], g: any) => acc.concat(g), [])
+      : groups;
+    const sec = pick(flat);
+    if (sec) return sec;
+  }
+  return undefined;
+};
+// ---------------------------------------------
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -72,13 +116,28 @@ export const EoaConnectCard = () => {
       className={"gap-0"}
       icon={
         <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
-          <img
-            className={authStep.error ? undefined : "animate-pulse"}
-            src={connector?.icon}
-            alt={connector?.name}
-            height={28}
-            width={28}
-          />
+          {connector?.icon ? (
+            <img
+              className={authStep.error ? undefined : "animate-pulse"}
+              src={connector.icon}
+              alt={connector.name}
+              height={28}
+              width={28}
+            />
+          ) : (
+            (() => {
+              const IconComponent = getConnectorIcon(connector.name);
+              return IconComponent ? (
+                <IconComponent
+                  className={authStep.error ? undefined : "animate-pulse"}
+                  width={28}
+                  height={28}
+                />
+              ) : (
+                <div style={{ width: 28, height: 28 }} />
+              );
+            })()
+          )}
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-[1]">
             <Spinner />
           </div>
@@ -170,27 +229,143 @@ export const WalletConnectCard = () => {
 
 export const EoaPickCard = () => {
   const { walletConnectParams } = useWalletConnectAuthConfig();
-  const { hasAnyWallets, uniqueConnectors, filteredSolanaWallets } =
-    useWalletAvailability();
+  const { uniqueConnectors, filteredSolanaWallets } = useWalletAvailability();
 
-  // Use reusable wallet button components with deduplicated connectors
-  const connectorButtons = uniqueConnectors.map((connector) => (
-    <WalletButton key={connector.id} connector={connector} />
-  ));
+  // Pull the external_wallets section (wallet list + chainType)
+  const uiConfig = useUiConfig();
+  const externalSection = useMemo(
+    () => getExternalWalletsSection(uiConfig),
+    [uiConfig],
+  );
+
+  const preferredWalletNames = useMemo<string[]>(
+    () => externalSection?.wallets ?? [],
+    [externalSection],
+  );
+
+  // Chains allowed by config (default to both); keep EVM before SVM for join
+  const allowedChains = useMemo<string[]>(
+    () =>
+      Array.isArray(externalSection?.chainType) &&
+      (externalSection!.chainType as string[]).length > 0
+        ? (externalSection!.chainType as string[])
+        : ["evm", "svm"],
+    [externalSection],
+  );
+
+  const orderedChains = useMemo(
+    () => orderChains(allowedChains),
+    [allowedChains],
+  );
+
+  // Build the ordered, joined list of wallet buttons:
+  const buttons = useMemo(() => {
+    const out: JSX.Element[] = [];
+    const counted = new Set<string>();
+
+    const allNamesInEnv: string[] = [];
+
+    // Respect chain filter when discovering names
+    if (allowedChains.includes("evm")) {
+      uniqueConnectors.forEach((c) => {
+        const n = norm(c.name);
+        if (!allNamesInEnv.includes(n)) allNamesInEnv.push(n);
+      });
+      // WalletConnect is EVM-only
+      if (walletConnectParams) {
+        allNamesInEnv.push("wallet_connect");
+      }
+    }
+
+    if (allowedChains.includes("svm")) {
+      filteredSolanaWallets.forEach((w) => {
+        const n = norm(w.adapter.name);
+        if (!allNamesInEnv.includes(n)) allNamesInEnv.push(n);
+      });
+    }
+
+    const pushByName = (nameRaw: string) => {
+      const n = norm(nameRaw);
+      if (counted.has(n)) return;
+
+      // WalletConnect (EVM-only)
+      if (isWC(n)) {
+        if (walletConnectParams && allowedChains.includes("evm")) {
+          out.push(<WalletConnectButton key="walletconnect" />);
+          counted.add(n);
+        }
+        return;
+      }
+
+      const elems: JSX.Element[] = [];
+      for (const chain of orderedChains) {
+        if (chain === "evm") {
+          const conn = uniqueConnectors.find((c) => norm(c.name) === n);
+          if (conn)
+            elems.push(
+              <WalletButton key={`${conn.name}-evm`} connector={conn} />,
+            );
+        } else if (chain === "svm") {
+          const sol = filteredSolanaWallets.find(
+            (w) => norm(w.adapter.name) === n,
+          );
+          if (sol)
+            elems.push(
+              <SolanaWalletButton
+                key={`${sol.adapter.name}-svm`}
+                wallet={sol}
+              />,
+            );
+        }
+      }
+
+      if (elems.length) {
+        out.push(...elems); // join both if available under allowed chains
+        counted.add(n);
+      }
+    };
+
+    // 1) Preferred order from config (no cap)
+    for (const name of preferredWalletNames) {
+      pushByName(name);
+    }
+
+    // 2) Append any remaining wallets not listed in config
+    for (const name of allNamesInEnv) {
+      if (!counted.has(norm(name))) pushByName(name);
+    }
+
+    return out;
+  }, [
+    preferredWalletNames,
+    orderedChains,
+    uniqueConnectors,
+    filteredSolanaWallets,
+    walletConnectParams,
+    allowedChains,
+  ]);
+
+  const hasAnyVisibleWallets = useMemo(() => {
+    const evmVisible =
+      allowedChains.includes("evm") &&
+      (uniqueConnectors.length > 0 || !!walletConnectParams);
+    const svmVisible =
+      allowedChains.includes("svm") && filteredSolanaWallets.length > 0;
+    return evmVisible || svmVisible;
+  }, [
+    allowedChains,
+    uniqueConnectors,
+    filteredSolanaWallets,
+    walletConnectParams,
+  ]);
 
   return (
     <CardContent
       className="w-full"
       header="Select your wallet"
       description={
-        hasAnyWallets ? (
-          <div className="flex flex-col gap-3 w-full">
-            {connectorButtons}
-            {walletConnectParams && <WalletConnectButton />}
-            {filteredSolanaWallets.map((wallet) => (
-              <SolanaWalletButton key={wallet.adapter.name} wallet={wallet} />
-            ))}
-          </div>
+        hasAnyVisibleWallets ? (
+          <div className="flex flex-col gap-3 w-full">{buttons}</div>
         ) : (
           "No wallets available"
         )
