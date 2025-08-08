@@ -110,7 +110,7 @@
     "wagmi": "^2.12.7"
   },
   "resolutions": {
-    "viem": "2.29.2"
+    "viem": "^2.29.2"
   },
   "publishConfig": {
     "access": "public",

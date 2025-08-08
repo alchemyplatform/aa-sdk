@@ -146,6 +146,6 @@
     "@account-kit/signer": "^4.53.1",
     "@turnkey/react-native-passkey-stamper": "^1.0.14",
     "uuid": "^11.1.0",
-    "viem": "2.29.2"
+    "viem": "^2.29.2"
   }
 }
