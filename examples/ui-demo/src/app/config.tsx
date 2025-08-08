@@ -9,8 +9,7 @@ import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
-import { metaMask, coinbaseWallet } from "wagmi/connectors";
-import { SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
+// Removed unused imports - wallet types are now handled internally
 
 export type Config = {
   auth: {
@@ -52,30 +51,13 @@ export type Config = {
 export type AccountMode = "default" | "7702";
 
 export const externalWalletsConfig = configForExternalWallets({
-  wallets: [
-    {
-      featured: 0,
-      adapter: SolflareWalletAdapter,
-    },
-    {
-      featured: 1,
-      connector: metaMask,
-      logoUrl: "/images/metamask.svg",
-    },
-    {
-      featured: 2,
-      type: "WalletConnect",
-      projectId: "30e7ffaff99063e68cc9870c105d905b",
-    },
-    {
-      featured: 3,
-      connector: coinbaseWallet,
-    },
-  ],
-  // moreButtonText: "More wallet options",
+  wallets: ["phantom", "metamask", "wallet_connect", "coinbase"],
+  chainType: ["evm", "svm"],
+  walletConnectProjectId: "30e7ffaff99063e68cc9870c105d905b",
   hideMoreButton: false,
+  numFeaturedWallet: 2,
 });
-
+console.log(externalWalletsConfig);
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,

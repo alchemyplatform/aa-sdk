@@ -6,9 +6,6 @@ import { useMemo } from "react";
 import { useSolanaWallet } from "../useSolanaWallet.js";
 import { useConnectEOA } from "../../components/auth/hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../../components/auth/hooks/useWalletConnectAuthConfig.js";
-import { useAuthConfig } from "./useAuthConfig.js";
-import type { AuthType } from "../../components/auth/types.js";
-import type { ExternalWalletUIConfig } from "../../configForExternalWallets.js";
 
 /**
  * Hook to deduplicate EVM connectors
@@ -75,63 +72,6 @@ export function useFilteredSolanaWallets() {
     // If we have installed wallets, only show those. Otherwise show all unique wallets.
     return installedWallets.length > 0 ? installedWallets : uniqueWallets;
   }, [wallets]);
-}
-
-/**
- * Hook to resolve wallet logo URLs from external wallet config
- *
- * @returns {object} Object with logo URL resolver functions
- */
-export function useWalletLogoResolver() {
-  const externalWalletsConfig = useAuthConfig((auth) => {
-    const externalWalletSection = auth.sections
-      .find((x) => x.some((y) => y.type === "external_wallets"))
-      ?.find((x) => x.type === "external_wallets") as
-      | Extract<AuthType, { type: "external_wallets" }>
-      | undefined;
-
-    return externalWalletSection;
-  });
-
-  return useMemo(() => {
-    const getLogoUrlForConnector = (
-      connectorType: string,
-    ): string | undefined => {
-      if (!externalWalletsConfig?.wallets) return undefined;
-
-      const walletConfig = externalWalletsConfig.wallets.find(
-        (wallet: ExternalWalletUIConfig) =>
-          wallet.type === "evm" && wallet.id === connectorType,
-      );
-      return walletConfig?.logoUrl;
-    };
-
-    const getLogoUrlForAdapter = (adapterName: string): string | undefined => {
-      if (!externalWalletsConfig?.wallets) return undefined;
-
-      const walletConfig = externalWalletsConfig.wallets.find(
-        (wallet: ExternalWalletUIConfig) =>
-          wallet.type === "solana" && wallet.id === adapterName,
-      );
-      return walletConfig?.logoUrl;
-    };
-
-    const getLogoUrlForWalletConnect = (): string | undefined => {
-      if (!externalWalletsConfig?.wallets) return undefined;
-
-      const walletConfig = externalWalletsConfig.wallets.find(
-        (wallet: ExternalWalletUIConfig) =>
-          wallet.type === "walletconnect" && wallet.id === "WalletConnect",
-      );
-      return walletConfig?.logoUrl;
-    };
-
-    return {
-      getLogoUrlForConnector,
-      getLogoUrlForAdapter,
-      getLogoUrlForWalletConnect,
-    };
-  }, [externalWalletsConfig]);
 }
 
 /**

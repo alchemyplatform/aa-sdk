@@ -4,7 +4,6 @@ import type { Connector, CreateConnectorFn } from "wagmi";
 export interface WalletButtonProps {
   className?: string;
   onClick?: () => void;
-  logoUrl?: string;
 }
 
 export interface WalletInfo {

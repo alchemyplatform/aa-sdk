@@ -20,6 +20,8 @@ export function useSolanaAdapters(): WalletAdapter[] {
       return [];
     }
 
-    return (solanaConfig.adapters as WalletAdapter[]) || [];
+    return (
+      Array.isArray(solanaConfig.adapters) ? solanaConfig.adapters : []
+    ) as WalletAdapter[];
   }, [config.solana]);
 }

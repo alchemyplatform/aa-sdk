@@ -10,7 +10,6 @@ import type { WalletButtonProps } from "./types.js";
 export const WalletConnectButton = ({
   className,
   onClick,
-  logoUrl,
 }: WalletButtonProps) => {
   const { chain } = useChain();
   const { connect } = useConnectEOA();
@@ -48,13 +47,7 @@ export const WalletConnectButton = ({
     <Button
       className={`justify-start ${className ?? ""}`}
       variant="social"
-      icon={
-        logoUrl ? (
-          <img src={logoUrl} alt="WalletConnect" height={24} width={24} />
-        ) : (
-          <WalletConnectIcon className="w-6 h-6" />
-        )
-      }
+      icon={<WalletConnectIcon className="w-6 h-6" />}
       onClick={handleClick}
     >
       WalletConnect

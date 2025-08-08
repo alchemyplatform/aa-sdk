@@ -67,17 +67,20 @@ export const createConfig = (
     | Extract<AuthType, { type: "external_wallets" }>
     | undefined;
 
-  if (
-    externalWalletSection?.walletConnect &&
-    !props.connectors?.some((x) => "type" in x && x.type === WALLET_CONNECT)
-  ) {
-    const walletConnectAuthConfig = externalWalletSection?.walletConnect;
-    const walletConnectParams = getWalletConnectParams(
-      walletConnectAuthConfig,
-    )!;
-
-    props.connectors ??= [];
-    props.connectors.push(walletConnect(walletConnectParams));
+  // New simplified external wallets support
+  if (externalWalletSection && externalWalletSection.walletNames) {
+    // Build from names + chainType; rely on configForExternalWallets in app to supply connectors/adapters
+    // Optionally ensure WalletConnect connector is present for UI only flows
+    if (
+      externalWalletSection.walletConnectProjectId &&
+      !props.connectors?.some((x) => "type" in x && x.type === WALLET_CONNECT)
+    ) {
+      const walletConnectParams = getWalletConnectParams({
+        projectId: externalWalletSection.walletConnectProjectId,
+      })!;
+      props.connectors ??= [];
+      props.connectors.push(walletConnect(walletConnectParams));
+    }
   }
 
   const config = createCoreConfig(props);

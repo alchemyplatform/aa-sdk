@@ -17,10 +17,7 @@ import {
   WalletConnectButton,
   SolanaWalletButton,
 } from "../wallet-buttons/index.js";
-import {
-  useWalletLogoResolver,
-  useWalletAvailability,
-} from "../../../hooks/internal/useWalletDeduplication.js";
+import { useWalletAvailability } from "../../../hooks/internal/useWalletDeduplication.js";
 
 export const WALLET_CONNECT = "walletConnect";
 
@@ -173,21 +170,12 @@ export const WalletConnectCard = () => {
 
 export const EoaPickCard = () => {
   const { walletConnectParams } = useWalletConnectAuthConfig();
-  const {
-    getLogoUrlForConnector,
-    getLogoUrlForAdapter,
-    getLogoUrlForWalletConnect,
-  } = useWalletLogoResolver();
   const { hasAnyWallets, uniqueConnectors, filteredSolanaWallets } =
     useWalletAvailability();
 
   // Use reusable wallet button components with deduplicated connectors
   const connectorButtons = uniqueConnectors.map((connector) => (
-    <WalletButton
-      key={connector.id}
-      connector={connector}
-      logoUrl={getLogoUrlForConnector(connector.type)}
-    />
+    <WalletButton key={connector.id} connector={connector} />
   ));
 
   return (
@@ -198,15 +186,9 @@ export const EoaPickCard = () => {
         hasAnyWallets ? (
           <div className="flex flex-col gap-3 w-full">
             {connectorButtons}
-            {walletConnectParams && (
-              <WalletConnectButton logoUrl={getLogoUrlForWalletConnect()} />
-            )}
+            {walletConnectParams && <WalletConnectButton />}
             {filteredSolanaWallets.map((wallet) => (
-              <SolanaWalletButton
-                key={wallet.adapter.name}
-                wallet={wallet}
-                logoUrl={getLogoUrlForAdapter(wallet.adapter.name)}
-              />
+              <SolanaWalletButton key={wallet.adapter.name} wallet={wallet} />
             ))}
           </div>
         ) : (

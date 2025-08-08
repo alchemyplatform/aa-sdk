@@ -11,17 +11,14 @@ interface ExternalWalletsAuthProps {
 export const ExternalWalletsAuth = ({ config }: ExternalWalletsAuthProps) => {
   const { setAuthStep } = useAuthContext();
 
-  // Check if there are featured wallets in the new structure
-  const featuredWallets =
-    config.wallets?.filter((wallet) => typeof wallet.featured === "number") ||
-    [];
-  const hasFeaturedWallets = featuredWallets.length > 0;
+  // Show featured section if numFeaturedWallet is defined and > 1
+  const hasFeaturedWallets =
+    typeof config.numFeaturedWallet === "number" &&
+    config.numFeaturedWallet > 0;
 
   // If featured wallets are configured, render them above the button
   if (hasFeaturedWallets) {
-    const buttonText =
-      config.moreButtonText ??
-      (hasFeaturedWallets ? "More wallets" : "Continue with a wallet");
+    const buttonText = config.moreButtonText ?? "More wallets";
 
     return (
       <div className="flex flex-col gap-3 w-full">

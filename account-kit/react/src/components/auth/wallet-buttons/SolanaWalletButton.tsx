@@ -1,7 +1,9 @@
+import React from "react";
 import type { Wallet } from "@solana/wallet-adapter-react";
 import { Button } from "../../button.js";
 import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
 import type { WalletButtonProps } from "./types.js";
+import { getSolanaAdapterIcon } from "./walletIcons.js";
 
 interface SolanaWalletButtonProps extends WalletButtonProps {
   wallet: Wallet;
@@ -11,7 +13,6 @@ export const SolanaWalletButton = ({
   wallet,
   className,
   onClick,
-  logoUrl,
 }: SolanaWalletButtonProps) => {
   const { connect } = useConnectSolanaEOA();
 
@@ -22,17 +23,36 @@ export const SolanaWalletButton = ({
     connect(wallet);
   };
 
-  const iconSrc = logoUrl || wallet.adapter.icon;
+  // Get the built-in icon component for this adapter
+  const IconComponent = getSolanaAdapterIcon(wallet.adapter.name);
+
+  // Fallback to wallet.adapter.icon if no built-in icon is available
+  const fallbackIconSrc = wallet.adapter.icon;
+
+  const renderIcon = () => {
+    if (IconComponent) {
+      return React.createElement(IconComponent);
+    }
+
+    if (fallbackIconSrc) {
+      return (
+        <img
+          src={fallbackIconSrc}
+          alt={wallet.adapter.name}
+          height={24}
+          width={24}
+        />
+      );
+    }
+
+    return null;
+  };
 
   return (
     <Button
       className={`justify-start ${className ?? ""}`}
       variant="social"
-      icon={
-        iconSrc && (
-          <img src={iconSrc} alt={wallet.adapter.name} height={24} width={24} />
-        )
-      }
+      icon={renderIcon()}
       onClick={handleClick}
       fullWidthContent={true}
     >

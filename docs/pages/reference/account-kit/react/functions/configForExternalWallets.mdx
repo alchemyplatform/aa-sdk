@@ -5,7 +5,7 @@ description: Overview of the configForExternalWallets method
 slug: wallets/reference/account-kit/react/functions/configForExternalWallets
 ---
 
-Configure external wallets for Account Kit, inspired by RainbowKit's connectorsForWallets
+Configure external wallets for Account Kit with simplified wallet name-based configuration
 Handles both EVM connectors and Solana adapters, returns config for core and UI
 
 ## Import
@@ -24,21 +24,39 @@ import { configForExternalWallets } from "@account-kit/react";
 
 ### root0.wallets
 
-`WalletConfig[]`
+`SupportedWallet[]`
 
-- Array of wallet configurations
+- Array of wallet names in display order
 
-### root0.projectId
+### root0.chainType
+
+`ChainType[]`
+
+- Array of supported chain types
+
+### root0.walletConnectProjectId
 
 `string`
 
-- Fallback project ID for WalletConnect wallets that don't specify their own
+- Project ID for WalletConnect
 
 ### root0.moreButtonText
 
 `string`
 
 - Text for the "more wallets" button
+
+### root0.hideMoreButton
+
+`boolean`
+
+- Whether to hide the more button
+
+### root0.numFeaturedWallet
+
+`number`
+
+- Number of wallets to show as featured
 
 ## Returns
 
