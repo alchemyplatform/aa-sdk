@@ -37,7 +37,6 @@ function createEmptyState(): WalletContextState {
 }
 
 export function useSolanaWallet(): WalletContextState {
-  // ✅ hook is called on every render – no conditional branch
   const solana = useAlchemyAccountContext().config.solana;
   const ctx = useContext(WalletContext);
   const adapters = solana?.adapters;

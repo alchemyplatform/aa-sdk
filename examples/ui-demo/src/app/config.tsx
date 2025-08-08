@@ -56,7 +56,7 @@ export const externalWalletsConfig = configForExternalWallets({
   hideMoreButton: false,
   numFeaturedWallet: 1,
 });
-console.log(externalWalletsConfig);
+
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,

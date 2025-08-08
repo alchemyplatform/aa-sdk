@@ -16,7 +16,7 @@ export function SolanaWalletProvider({ children }: SolanaWalletProviderProps) {
   const solana = useAlchemyAccountContext().config.solana;
   const walletsAdapters = useSolanaAdapters();
 
-  // Short-circuit if no Solana adapters - connection may still be needed for embedded wallets
+  // Short-circuit if no Solana adapters - don't load the connection provider or wallet provider
   if (
     !solana ||
     !solana.adapters ||
