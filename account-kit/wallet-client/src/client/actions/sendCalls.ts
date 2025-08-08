@@ -28,7 +28,6 @@ export type SendCallsResult = SendPreparedCallsResult;
  *
  *  @example
  * ```ts
- * // First prepare the calls
  * const result = await client.sendCalls({
  *   calls: [{
  *     to: "0x1234...",
