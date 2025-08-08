@@ -207,7 +207,7 @@ export function installValidationActions<
         throw new AccountNotFoundError();
       }
 
-      const data = await encodeInstallValidation({
+      const callData = await encodeInstallValidation({
         validationConfig,
         selectors,
         installData,
@@ -217,12 +217,7 @@ export function installValidationActions<
 
       const action = getAction(client, sendUserOperation, "sendUserOperation");
       const result = await action({
-        calls: [
-          {
-            to: account.address,
-            data,
-          },
-        ],
+        callData,
         account,
       });
 
@@ -242,7 +237,7 @@ export function installValidationActions<
         throw new AccountNotFoundError();
       }
 
-      const data = await encodeUninstallValidation({
+      const callData = await encodeUninstallValidation({
         moduleAddress,
         entityId,
         uninstallData,
@@ -252,12 +247,7 @@ export function installValidationActions<
 
       const action = getAction(client, sendUserOperation, "sendUserOperation");
       const result = await action({
-        calls: [
-          {
-            to: account.address,
-            data,
-          },
-        ],
+        callData,
         account,
       });
 

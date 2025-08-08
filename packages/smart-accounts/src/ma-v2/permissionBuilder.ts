@@ -60,8 +60,8 @@ export const PermissionType = {
   ROOT: "root",
 } as const;
 
-// @ts-ignore - This is fine.
-export type PermissionType = PermissionType[keyof typeof PermissionType];
+export type PermissionType =
+  (typeof PermissionType)[keyof typeof PermissionType];
 
 export const HookIdentifier = {
   NATIVE_TOKEN_TRANSFER: "native-token-transfer",
@@ -70,8 +70,8 @@ export const HookIdentifier = {
   PREVAL_ALLOWLIST: "preval-allowlist", // aggregate of CONTRACT_ACCESS, ACCOUNT_FUNCTIONS, FUNCTIONS_ON_ALL_CONTRACTS, FUNCTIONS_ON_CONTRACT
 } as const;
 
-// @ts-ignore - This is fine.
-export type HookIdentifier = HookIdentifier[keyof typeof HookIdentifier];
+export type HookIdentifier =
+  (typeof HookIdentifier)[keyof typeof HookIdentifier];
 
 type PreExecutionHookConfig = {
   address: Address;
@@ -149,14 +149,14 @@ type Key = {
 export type Permission =
   | {
       // this permission allows transfer of native tokens from the account
-      type: PermissionType.NATIVE_TOKEN_TRANSFER;
+      type: typeof PermissionType.NATIVE_TOKEN_TRANSFER;
       data: {
         allowance: Hex;
       };
     }
   | {
       // this permission allows transfer or approval of erc20 tokens from the account
-      type: PermissionType.ERC20_TOKEN_TRANSFER;
+      type: typeof PermissionType.ERC20_TOKEN_TRANSFER;
       data: {
         address: Address; // erc20 token contract address
         allowance: Hex;
@@ -164,35 +164,35 @@ export type Permission =
     }
   | {
       // this permissions allows the key to spend gas for UOs
-      type: PermissionType.GAS_LIMIT;
+      type: typeof PermissionType.GAS_LIMIT;
       data: {
         limit: Hex;
       };
     }
   | {
       // this permission grants access to all functions in a contract
-      type: PermissionType.CONTRACT_ACCESS;
+      type: typeof PermissionType.CONTRACT_ACCESS;
       data: {
         address: Address;
       };
     }
   | {
       // this permission grants access to functions in the account
-      type: PermissionType.ACCOUNT_FUNCTIONS;
+      type: typeof PermissionType.ACCOUNT_FUNCTIONS;
       data: {
         functions: Hex[]; // function signatures
       };
     }
   | {
       // this permission grants access to a function selector in any address or contract
-      type: PermissionType.FUNCTIONS_ON_ALL_CONTRACTS;
+      type: typeof PermissionType.FUNCTIONS_ON_ALL_CONTRACTS;
       data: {
         functions: Hex[]; // function signatures
       };
     }
   | {
       // this permission grants access to specified functions on a specific contract
-      type: PermissionType.FUNCTIONS_ON_CONTRACT;
+      type: typeof PermissionType.FUNCTIONS_ON_CONTRACT;
       data: {
         address: Address;
         functions: Hex[];
@@ -200,7 +200,7 @@ export type Permission =
     }
   | {
       // this permission grants full access to everything
-      type: PermissionType.ROOT;
+      type: typeof PermissionType.ROOT;
       data?: never;
     };
 
@@ -680,39 +680,35 @@ export class PermissionBuilder {
   }
 
   private addHooks(rawHooks: RawHooks) {
-    if (rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER]) {
+    const ntt = rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER];
+    if (ntt) {
       this.hooks.push({
-        hookConfig: rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER].hookConfig,
-        initData: NativeTokenLimitModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER].initData
-        ),
+        hookConfig: ntt.hookConfig,
+        initData: NativeTokenLimitModule.encodeOnInstallData(ntt.initData),
       });
     }
 
-    if (rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER]) {
+    const erc20 = rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER];
+    if (erc20) {
       this.hooks.push({
-        hookConfig: rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER].hookConfig,
-        initData: AllowlistModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER].initData
-        ),
+        hookConfig: erc20.hookConfig,
+        initData: AllowlistModule.encodeOnInstallData(erc20.initData),
       });
     }
 
-    if (rawHooks[HookIdentifier.GAS_LIMIT]) {
+    const gl = rawHooks[HookIdentifier.GAS_LIMIT];
+    if (gl) {
       this.hooks.push({
-        hookConfig: rawHooks[HookIdentifier.GAS_LIMIT].hookConfig,
-        initData: NativeTokenLimitModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.GAS_LIMIT].initData
-        ),
+        hookConfig: gl.hookConfig,
+        initData: NativeTokenLimitModule.encodeOnInstallData(gl.initData),
       });
     }
 
-    if (rawHooks[HookIdentifier.PREVAL_ALLOWLIST]) {
+    const allowlist = rawHooks[HookIdentifier.PREVAL_ALLOWLIST];
+    if (allowlist) {
       this.hooks.push({
-        hookConfig: rawHooks[HookIdentifier.PREVAL_ALLOWLIST].hookConfig,
-        initData: AllowlistModule.encodeOnInstallData(
-          rawHooks[HookIdentifier.PREVAL_ALLOWLIST].initData
-        ),
+        hookConfig: allowlist.hookConfig,
+        initData: AllowlistModule.encodeOnInstallData(allowlist.initData),
       });
     }
   }

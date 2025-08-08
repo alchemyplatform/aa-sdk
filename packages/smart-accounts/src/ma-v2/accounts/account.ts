@@ -133,7 +133,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
             entityId,
           }
         : {
-            type: "SMA", // TODO(jh): should this never be "MA"? double check w/ adam.
+            type: "SMA", // `MA` is never used here since we only support deploying SMA & WebAuthn accounts.
             ownerAddress: owner.address,
             entityId,
           }),

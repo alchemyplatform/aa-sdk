@@ -1,4 +1,11 @@
-import { concatHex, hexToNumber, size, toHex, type Hex } from "viem";
+import {
+  concatHex,
+  hexToNumber,
+  parseErc6492Signature,
+  size,
+  toHex,
+  type Hex,
+} from "viem";
 import { SignaturePrefix } from "../types.js";
 
 // Parses out the 3 components from a deferred action
@@ -36,22 +43,23 @@ export type BuildDeferredActionDigestParams = {
  * @param {object} args The argument object containing the following:
  * @param {Hex} args.fullPreSignatureDeferredActionDigest The The data to append the signature and length to
  * @param {Hex} args.sig The signature to include in the digest
- * @param {Hex} args.signaturePrefix Prefix to append to the signature (defaults to "0x00" for EOA type)
  * @returns {Hex} The encoded digest to be prepended to the userOp signature
  */
 export const buildDeferredActionDigest = ({
   fullPreSignatureDeferredActionDigest,
   sig,
-  signaturePrefix = SignaturePrefix.EOA,
 }: BuildDeferredActionDigestParams): Hex => {
-  const prefixedSig = concatHex([signaturePrefix, sig]);
+  // 6492 sigs don't work here.
+  if (sig.endsWith("64926492")) {
+    sig = parseErc6492Signature(sig).signature;
+  }
 
-  const sigLength = size(prefixedSig);
+  const sigLength = size(sig);
 
   const encodedData = concatHex([
     fullPreSignatureDeferredActionDigest,
     toHex(sigLength, { size: 4 }),
-    prefixedSig,
+    sig,
   ]);
   return encodedData;
 };

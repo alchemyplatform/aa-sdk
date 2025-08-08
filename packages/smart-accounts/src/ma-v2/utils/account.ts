@@ -13,7 +13,9 @@ import type { ModularAccountV2Base } from "../accounts/base";
 
 export const DefaultAddress = {
   MAV2_FACTORY: "0x00000000000017c61b5bEe81050EC8eFc9c6fecd",
-  MAV2_FACTORY_WEBAUTHN: "0x55010E571dCf07e254994bfc88b9C1C8FAe31960",
+  // TODO(jh): revert after testing v4 vs v5.
+  // MAV2_FACTORY_WEBAUTHN: "0x55010E571dCf07e254994bfc88b9C1C8FAe31960",
+  MAV2_FACTORY_WEBAUTHN: "0x00000000000017c61b5bEe81050EC8eFc9c6fecd",
   SMAV2_BYTECODE: "0x000000000000c5A9089039570Dd36455b5C07383",
   SMAV2_STORAGE: "0x0000000000006E2f9d80CaEc0Da6500f005EB25A",
   SMAV2_7702: "0x69007702764179f14F51cdce752f4f775d74E139",
@@ -51,6 +53,7 @@ export async function getMAV2UpgradeToData(
     implAddress: DefaultAddress.SMAV2_STORAGE,
     initializationData: initData,
     // TODO(v5): do we need `createModularAccountV2FromExisting()` in the return type here like we had in v4 or no?
+    // Almost certainly not, but we need to clean up other parts in SDK for client-side upgrades.
   };
 }
 

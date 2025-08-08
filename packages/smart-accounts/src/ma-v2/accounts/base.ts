@@ -15,6 +15,7 @@ import {
   maxUint32,
   maxUint152,
   zeroAddress,
+  toHex,
 } from "viem";
 import {
   entryPoint07Abi,
@@ -191,7 +192,7 @@ export async function toModularAccountV2Base<
       throw new InvalidNonceKeyError(nonceKey);
     }
 
-    const fullNonceKey: bigint =
+    const fullNonceKey =
       (nonceKey << 40n) +
       (BigInt(entityId) << 8n) +
       (isGlobalValidation ? 1n : 0n);
@@ -291,8 +292,13 @@ export async function toModularAccountV2Base<
       type: "eth_signTypedData_v4",
       data: toReplaySafeTypedData({
         chainId: client.chain.id,
-        address: accountAddress,
         hash,
+        ...(entityId === DEFAULT_OWNER_ENTITY_ID
+          ? { address: accountAddress }
+          : {
+              address: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+              salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
+            }),
       }),
     };
   };
@@ -376,7 +382,9 @@ export async function toModularAccountV2Base<
         data: message,
       });
 
-      const signature = await signTypedData(client, {
+      const action = getAction(client, signTypedData, "signTypedData");
+
+      const signature = await action({
         ...data,
         account: owner,
       });
@@ -385,6 +393,7 @@ export async function toModularAccountV2Base<
     },
 
     async signTypedData(td) {
+      // TODO(jh): extract to util function.
       const isDeferredAction =
         td.primaryType === "DeferredAction" &&
         td.domain &&
@@ -417,7 +426,9 @@ export async function toModularAccountV2Base<
         data: td as TypedDataDefinition, // TODO: Try harder to satisfy this w/o casting.
       });
 
-      const signature = await signTypedData(client, {
+      const action = getAction(client, signTypedData, "signTypedData");
+
+      const signature = await action({
         ...data,
         account: owner,
       });
@@ -438,12 +449,13 @@ export async function toModularAccountV2Base<
         },
       });
 
-      // TODO(jh): is something here wrong?
       if (owner.type === "webAuthn") {
-        // TODO(jh): anything wrong within here?
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash: hashMessage({ raw: hash }) }) // TODO(jh): do we need to hash message here?
+          await owner.sign({
+            hash: hashMessage({ raw: hash }),
+          })
         );
+
         const signature = deferredActionData
           ? concatHex([deferredActionData, validationSignature])
           : validationSignature;
@@ -474,6 +486,14 @@ export async function toModularAccountV2Base<
     userOperation: {
       estimateGas: async (uo) => {
         if (owner.type !== "webAuthn") {
+          // TODO(jh): remove
+          console.log({
+            entityId,
+            accountAddress,
+            ownerAddress: owner.address,
+            uo,
+          });
+
           // Uses the default gas estimator.
           // Note that we get 7702 support automatically from Viem.
           return undefined;

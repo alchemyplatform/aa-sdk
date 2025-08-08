@@ -1,8 +1,6 @@
 import { assertNever } from "@alchemy/common";
 import {
   concatHex,
-  encodeAbiParameters,
-  encodeFunctionData,
   encodePacked,
   getContractAddress,
   keccak256,
@@ -10,8 +8,6 @@ import {
   type Hex,
 } from "viem";
 import { parsePublicKey } from "webauthn-p256";
-import { DefaultAddress, DefaultModuleAddress } from "./utils/account";
-import { accountFactoryAbi } from "./abis/accountFactoryAbi";
 
 export type PredictModularAccountV2AddressParams = {
   factoryAddress: Address;
@@ -58,8 +54,8 @@ export function predictModularAccountV2Address(
 ): Address {
   const { factoryAddress, salt, implementationAddress } = params;
 
-  // Note(v4): prediction for MA and WebAuthn is currently untested, because they are not supported as an account type yet.
-  // Prior to using this prediction logic, ensure that the counterfactual computation is correct by updating `predictAddress.test.ts` to include a test for MA and WebAuthn.
+  // Note(v4): prediction for MA is currently untested, because it is not supported as an account type yet.
+  // Prior to using this prediction logic, ensure that the counterfactual computation is correct by updating `predictAddress.test.ts` to include a test for MA.
   const { combinedSalt, initcode } = (() => {
     switch (params.type) {
       case "SMA":

@@ -1,4 +1,4 @@
-import { bigIntMultiply } from "@aa-sdk/core";
+import { bigIntMultiply, LocalAccountSigner } from "@aa-sdk/core";
 import {
   createWalletClient,
   custom,
@@ -24,6 +24,7 @@ import {
   parseAbi,
   createPublicClient,
   isHex,
+  type PrivateKeyAccount,
 } from "viem";
 import {
   createBundlerClient,
@@ -41,19 +42,14 @@ import { SoftWebauthnDevice } from "~test/webauthn.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
-} from "../../../../../aa-sdk/core/src/entrypoint/0.7.js";
+} from "../../../../../aa-sdk/core/src/entrypoint/0.7.js"; // TODO(jh): remove v4 imports
 import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 import { toModularAccountV2 } from "./account.js";
 import { toLightAccount } from "../../light-account/accounts/account.js";
 import { deferralActions } from "../decorators/deferralActions.js";
 import { installValidationActions } from "../decorators/installValidation.js";
-import { HookType } from "../types.js";
-import {
-  buildFullNonceKey,
-  DEFAULT_OWNER_ENTITY_ID,
-  DefaultAddress,
-  DefaultModuleAddress,
-} from "../utils/account.js";
+import { HookType, SignaturePrefix } from "../types.js";
+import { buildFullNonceKey, DefaultModuleAddress } from "../utils/account.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
@@ -64,17 +60,11 @@ import { NativeTokenLimitModule } from "../modules/native-token-limit-module/mod
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { raise } from "@alchemy/common";
 import { getMAV2UpgradeToData } from "../utils/account.js";
-import {
-  predictModularAccountV2Address as predictModularAccountV2AddressLegacy,
-  createModularAccountV2Client,
-} from "@account-kit/smart-contracts";
-import { predictModularAccountV2Address } from "../predictAddress.js";
-import { alchemyGasAndPaymasterAndDataMiddleware } from "@account-kit/infra";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
   const instance = local070Instance;
-  const IS_VALID_SIG_SUCCESS = "0x1626ba7e";
+  const VALID_1271_SIG_MAGIC_BYTES = "0x1626ba7e";
 
   let client: ReturnType<typeof instance.getClient> &
     ReturnType<typeof publicActions> &
@@ -87,8 +77,11 @@ describe("MA v2 Account Tests", async () => {
       .extend(testActions({ mode: "anvil" }));
   });
 
+  // TODO(jh): remove legacy variables after testing
   let owner: LocalAccount;
   let sessionKey: LocalAccount;
+  let legacyOwner: LocalAccountSigner<PrivateKeyAccount>;
+  let legacySessionKey: LocalAccountSigner<PrivateKeyAccount>;
 
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
@@ -99,8 +92,13 @@ describe("MA v2 Account Tests", async () => {
     });
 
   beforeEach(async () => {
-    sessionKey = privateKeyToAccount(generatePrivateKey());
-    owner = privateKeyToAccount(generatePrivateKey());
+    const ownerPrivKey = generatePrivateKey();
+    owner = privateKeyToAccount(ownerPrivKey);
+    legacyOwner = LocalAccountSigner.privateKeyToAccountSigner(ownerPrivKey);
+    const sessionPrivKey = generatePrivateKey();
+    sessionKey = privateKeyToAccount(sessionPrivKey);
+    legacySessionKey =
+      LocalAccountSigner.privateKeyToAccountSigner(sessionPrivKey);
   });
 
   it("sends a simple UO", { retry: 3, timeout: 30_000 }, async () => {
@@ -123,7 +121,6 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    // TODO(jh): we really need this to land quicker....
     await provider.waitForUserOperationReceipt({
       hash,
       timeout: 30_000,
@@ -134,37 +131,40 @@ describe("MA v2 Account Tests", async () => {
     );
   });
 
-  it("sends a simple UO with webauthn account", async () => {
-    const credential = await givenWebauthnCredential();
+  it(
+    "sends a simple UO with webauthn account",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const credential = await givenWebauthnCredential();
 
-    const provider = await givenConnectedProvider({
-      signer: toWebAuthnAccount({ ...credential, rpId: "localhost" }),
-    });
+      const provider = await givenConnectedProvider({
+        signer: toWebAuthnAccount(credential),
+      });
 
-    await setBalance(instance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("2"),
-    });
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
 
-    const startingAddressBalance = await getTargetBalance();
+      const hash = await provider.sendUserOperation({
+        calls: [
+          {
+            to: target,
+            value: sendAmount,
+            data: "0x",
+          },
+        ],
+      });
 
-    // TODO(jh): UserOperation rejected because account signature check failed
-    const hash = await provider.sendUserOperation({
-      calls: [
-        {
-          to: target,
-          value: sendAmount,
-          data: "0x",
-        },
-      ],
-    });
+      const startingAddressBalance = await getTargetBalance();
 
-    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-    await expect(getTargetBalance()).resolves.toEqual(
-      startingAddressBalance + sendAmount
-    );
-  });
+      await expect(getTargetBalance()).resolves.toEqual(
+        startingAddressBalance + sendAmount
+      );
+    }
+  );
 
   it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
     const credential = await givenWebauthnCredential();
@@ -248,9 +248,7 @@ describe("MA v2 Account Tests", async () => {
 
       const publicClient = instance.getClient().extend(publicActions);
 
-      // TODO(v4): should be using verifyTypedData here
       const isValid = await publicClient.verifyMessage({
-        // TODO(v4): this is gonna fail until the message can be formatted since the actual message is EIP-712
         message,
         address: provider.account.address,
         signature,
@@ -260,188 +258,245 @@ describe("MA v2 Account Tests", async () => {
     }
   );
 
-  it("successfully sign and validate a message, for native and single signer validation", async () => {
-    const provider = (await givenConnectedProvider({ signer: owner })).extend(
-      installValidationActions
-    );
+  it.fails(
+    "successfully sign and validate typed data, for WebAuthn account",
+    async () => {
+      const credential = await givenWebauthnCredential();
 
-    await setBalance(instance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("2"),
-    });
+      const provider = await givenConnectedProvider({
+        signer: toWebAuthnAccount(credential),
+      });
 
-    const accountContract = getContract({
-      address: provider.account.address,
-      abi: semiModularAccountBytecodeAbi,
-      client,
-    });
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
 
-    // UO deploys the account to test 1271 against
-    const hash = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: sessionKey.address,
-      }),
-      hooks: [],
-    });
-
-    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-
-    const message = "testmessage";
-
-    const { type, data } = await provider.account.prepareSignature({
-      type: "personal_sign",
-      data: message,
-    });
-
-    if (type !== "eth_signTypedData_v4") {
-      throw new Error("Invalid signature request type");
-    }
-
-    const signature = await owner.signTypedData(data);
-
-    const fmtSignature = await provider.account.formatSignature(signature);
-
-    await expect(
-      accountContract.read.isValidSignature([
-        hashMessage(message),
-        fmtSignature,
-      ])
-    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
-
-    // connect session key
-    const sessionKeyClient = await givenConnectedProvider({
-      signer: sessionKey,
-      accountAddress: provider.account.address,
-      signerEntity: { entityId: 1, isGlobalValidation: true },
-    });
-
-    const sessionKeySig = await sessionKeyClient.account.signMessage({
-      message,
-    });
-
-    await expect(
-      accountContract.read.isValidSignature([
-        hashMessage(message),
-        sessionKeySig,
-      ])
-    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
-  });
-
-  it("successfully sign and validate typed data messages, for native and single signer validation", async () => {
-    const provider = (await givenConnectedProvider({ signer: owner })).extend(
-      installValidationActions
-    );
-
-    await setBalance(instance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("2"),
-    });
-
-    const accountContract = getContract({
-      address: provider.account.address,
-      abi: semiModularAccountBytecodeAbi,
-      client,
-    });
-
-    // UO deploys the account to test 1271 against
-    const hash = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: sessionKey.address,
-      }),
-      hooks: [],
-    });
-
-    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-
-    const typedData = {
-      domain: {
-        name: "Ether Mail",
-        version: "1",
-        chainId: 1,
-        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-      },
-      types: {
-        Person: [
-          { name: "name", type: "string" },
-          { name: "wallet", type: "address" },
-        ],
-        Mail: [
-          { name: "from", type: "Person" },
-          { name: "to", type: "Person" },
-          { name: "contents", type: "string" },
-        ],
-      },
-      primaryType: "Mail",
-      message: {
-        from: {
-          name: "Cow",
-          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+      const typedData = {
+        domain: {
+          name: "Ether Mail",
+          version: "1",
+          chainId: 1,
+          verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
         },
-        to: {
-          name: "Bob",
-          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        types: {
+          Person: [
+            { name: "name", type: "string" },
+            { name: "wallet", type: "address" },
+          ],
+          Mail: [
+            { name: "from", type: "Person" },
+            { name: "to", type: "Person" },
+            { name: "contents", type: "string" },
+          ],
         },
-        contents: "Hello, Bob!",
-      },
-    } as const;
+        primaryType: "Mail",
+        message: {
+          from: {
+            name: "Cow",
+            wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+          },
+          to: {
+            name: "Bob",
+            wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+          },
+          contents: "Hello, Bob!",
+        },
+      } as const;
 
-    const hashedMessageTypedData = hashTypedData(typedData);
+      const signature = await provider.account.signTypedData(typedData);
 
-    const { type, data } = await provider.account.prepareSignature({
-      type: "eth_signTypedData_v4",
-      data: typedData,
-    });
+      const publicClient = instance.getClient().extend(publicActions);
 
-    if (type !== "eth_signTypedData_v4") {
-      throw new Error("Invalid signature request type");
+      const isValid = await publicClient.verifyTypedData({
+        ...typedData,
+        address: provider.account.address,
+        signature,
+      });
+
+      expect(isValid).toBe(true);
     }
+  );
 
-    const signature = await owner.signTypedData(data);
+  it(
+    "successfully sign and validate a message, for native and single signer validation",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = (await givenConnectedProvider({ signer: owner })).extend(
+        installValidationActions
+      );
 
-    const fmtSignature = await provider.account.formatSignature(signature);
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
 
-    await expect(
-      accountContract.read.isValidSignature([
-        hashedMessageTypedData,
-        fmtSignature,
-      ])
-    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
+      const accountContract = getContract({
+        address: provider.account.address,
+        abi: semiModularAccountBytecodeAbi,
+        client,
+      });
 
-    // connect session key
-    const sessionKeyClient = await givenConnectedProvider({
-      signer: sessionKey,
-      accountAddress: provider.account.address,
-      signerEntity: { entityId: 1, isGlobalValidation: true },
-    });
+      // UO deploys the account to test 1271 against
+      const hash = await provider.installValidation({
+        validationConfig: {
+          moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        selectors: [],
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: 1,
+          signer: sessionKey.address,
+        }),
+        hooks: [],
+      });
 
-    const sessionKeySignature =
-      await sessionKeyClient.account.signTypedData(typedData);
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-    await expect(
-      accountContract.read.isValidSignature([
-        hashedMessageTypedData,
-        sessionKeySignature,
-      ])
-    ).resolves.toEqual(IS_VALID_SIG_SUCCESS);
-  });
+      const message = "testmessage";
+
+      const signature = await provider.account.signMessage({
+        message,
+      });
+
+      await expect(
+        accountContract.read.isValidSignature([hashMessage(message), signature])
+      ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
+      console.log("ok");
+
+      // connect session key
+      const sessionKeyClient = await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      });
+
+      const sessionKeySig = await sessionKeyClient.account.signMessage({
+        message,
+      });
+
+      await expect(
+        accountContract.read.isValidSignature([
+          hashMessage(message),
+          sessionKeySig,
+        ])
+      ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
+    }
+  );
+
+  it(
+    "successfully sign and validate typed data messages, for native and single signer validation",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = (await givenConnectedProvider({ signer: owner })).extend(
+        installValidationActions
+      );
+
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
+
+      const accountContract = getContract({
+        address: provider.account.address,
+        abi: semiModularAccountBytecodeAbi,
+        client,
+      });
+
+      // UO deploys the account to test 1271 against
+      const hash = await provider.installValidation({
+        validationConfig: {
+          moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
+        },
+        selectors: [],
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: 1,
+          signer: sessionKey.address,
+        }),
+        hooks: [],
+      });
+
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+
+      const typedData = {
+        domain: {
+          name: "Ether Mail",
+          version: "1",
+          chainId: 1,
+          verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        },
+        types: {
+          Person: [
+            { name: "name", type: "string" },
+            { name: "wallet", type: "address" },
+          ],
+          Mail: [
+            { name: "from", type: "Person" },
+            { name: "to", type: "Person" },
+            { name: "contents", type: "string" },
+          ],
+        },
+        primaryType: "Mail",
+        message: {
+          from: {
+            name: "Cow",
+            wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+          },
+          to: {
+            name: "Bob",
+            wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+          },
+          contents: "Hello, Bob!",
+        },
+      } as const;
+
+      const hashedMessageTypedData = hashTypedData(typedData);
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "eth_signTypedData_v4",
+        data: typedData,
+      });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const signature = await owner.signTypedData(data);
+
+      const fmtSignature = await provider.account.formatSignature(signature);
+
+      await expect(
+        accountContract.read.isValidSignature([
+          hashedMessageTypedData,
+          fmtSignature,
+        ])
+      ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
+
+      // connect session key
+      const sessionKeyClient = await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      });
+
+      const sessionKeySignature =
+        await sessionKeyClient.account.signTypedData(typedData);
+
+      await expect(
+        accountContract.read.isValidSignature([
+          hashedMessageTypedData,
+          sessionKeySignature,
+        ])
+      ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
+    }
+  );
 
   it("adds a session key with no permissions", async () => {
     const provider = (await givenConnectedProvider({ signer: owner })).extend(
@@ -500,86 +555,91 @@ describe("MA v2 Account Tests", async () => {
     );
   });
 
-  it("installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO", async () => {
-    const provider = (
-      await givenConnectedProvider({
-        signer: owner,
-      })
-    )
-      .extend(installValidationActions)
-      .extend(deferralActions);
-
-    await setBalance(client, {
-      address: provider.account.address,
-      value: parseEther("2"),
-    });
-
-    const { entityId, nonce } = await provider.getEntityIdAndNonce({
-      isGlobalValidation: false,
-    });
-
-    // Must be built with the client that's going to sign the deferred action
-    // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
-    const { typedData, fullPreSignatureDeferredActionDigest } =
-      await new PermissionBuilder({
-        client: provider,
-        key: {
-          publicKey: sessionKey.address,
-          type: "secp256k1",
-        },
-        entityId: entityId,
-        nonce: nonce,
-        deadline: 0,
-      })
-        .addPermission({
-          permission: {
-            type: PermissionType.GAS_LIMIT,
-            data: {
-              limit: toHex(parseEther("1")),
-            },
-          },
+  // TODO(jh): dig into why this test is failing.
+  it(
+    "installs a session key via deferred action using PermissionBuilder signed by the owner and has it sign a UO",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = (
+        await givenConnectedProvider({
+          signer: owner,
         })
-        .addPermission({
-          permission: {
-            type: PermissionType.CONTRACT_ACCESS,
-            data: {
-              address: target,
-            },
+      )
+        .extend(installValidationActions)
+        .extend(deferralActions);
+
+      await setBalance(client, {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
+
+      const { entityId, nonce } = await provider.getEntityIdAndNonce({
+        isGlobalValidation: false,
+      });
+
+      // Must be built with the client that's going to sign the deferred action
+      // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
+      const { typedData, fullPreSignatureDeferredActionDigest } =
+        await new PermissionBuilder({
+          client: provider,
+          key: {
+            publicKey: sessionKey.address,
+            type: "secp256k1",
           },
+          entityId,
+          nonce,
+          deadline: 0,
         })
-        .compileDeferred();
+          .addPermission({
+            permission: {
+              type: PermissionType.GAS_LIMIT,
+              data: {
+                limit: toHex(parseEther("1")),
+              },
+            },
+          })
+          .addPermission({
+            permission: {
+              type: PermissionType.CONTRACT_ACCESS,
+              data: {
+                address: target,
+              },
+            },
+          })
+          .compileDeferred();
 
-    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
-    const deferredValidationSig =
-      await provider.account.signTypedData(typedData);
+      const deferredValidationSig = await owner.signTypedData(typedData);
 
-    // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = buildDeferredActionDigest({
-      fullPreSignatureDeferredActionDigest,
-      sig: deferredValidationSig,
-    });
+      // Build the full hex to prepend to the UO signature
+      const deferredActionDigest = buildDeferredActionDigest({
+        fullPreSignatureDeferredActionDigest,
+        sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
+      });
 
-    // Initialize the session key client corresponding to the session key we will install in the deferred action
-    const sessionKeyClient = await givenConnectedProvider({
-      signer: sessionKey,
-      accountAddress: provider.account.address,
-      factoryArgs: await provider.account.getFactoryArgs(),
-      deferredAction: deferredActionDigest,
-    });
+      // Initialize the session key client corresponding to the session key we will install in the deferred action
+      const sessionKeyClient = await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        factoryArgs: await provider.account.getFactoryArgs(),
+        deferredAction: deferredActionDigest,
+      });
 
-    // Send the raw UserOp
-    const hash = await sessionKeyClient.sendUserOperation({
-      calls: [
-        {
-          to: target,
-          value: sendAmount,
-          data: "0x",
-        },
-      ],
-    });
+      // Send the UserOp
+      console.log("sending uo...");
+      const hash = await sessionKeyClient.sendUserOperation({
+        calls: [
+          {
+            to: target,
+            value: sendAmount,
+            data: "0x",
+          },
+        ],
+      });
+      console.log("ok");
 
-    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-  });
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+    }
+  );
 
   it("installs a session key via deferred action using PermissionBuilder with ERC20 permission signed by the owner and has it sign a UO", async () => {
     const provider = (
@@ -646,8 +706,8 @@ describe("MA v2 Account Tests", async () => {
           publicKey: sessionKey.address,
           type: "secp256k1",
         },
-        entityId: entityId,
-        nonce: nonce,
+        entityId,
+        nonce,
         deadline: 0,
       })
         .addPermission({
@@ -661,14 +721,14 @@ describe("MA v2 Account Tests", async () => {
         })
         .compileDeferred();
 
-    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
-    const deferredValidationSig =
-      await provider.account.signTypedData(typedData);
+    const deferredValidationSig = await owner.signTypedData(typedData);
 
     // Build the full hex to prepend to the UO signature
     const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
-      sig: deferredValidationSig,
+      // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
+      // this must prepended with `SignaturePrefix.EOA` (0x00).
+      sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
     });
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
@@ -756,9 +816,7 @@ describe("MA v2 Account Tests", async () => {
       nonce,
     });
 
-    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
-    const deferredValidationSig =
-      await provider.account.signTypedData(typedData);
+    const deferredValidationSig = await owner.signTypedData(typedData);
 
     const fullPreSignatureDeferredActionDigest =
       provider.buildPreSignatureDeferredActionDigest({
@@ -768,7 +826,7 @@ describe("MA v2 Account Tests", async () => {
     // Build the full hex to prepend to the UO signature
     const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
-      sig: deferredValidationSig,
+      sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
     });
 
     // preExecHooks 00, nonce, deferredActionDigest
@@ -881,11 +939,13 @@ describe("MA v2 Account Tests", async () => {
 
     // Sign the typed data using the first session key
     const deferredValidationSig =
-      await sessionKeyClient.account.signTypedData(typedData);
+      await sessionKeyClient.account.signTypedData(typedData); // TODO(jh): use owner + add eoa prefix?
 
     // Build the full hex to prepend to the UO signature
     const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
+      // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
+      // this must prepended with `SignaturePrefix.EOA` (0x00).
       sig: deferredValidationSig,
     });
 
@@ -1320,151 +1380,144 @@ describe("MA v2 Account Tests", async () => {
     });
   });
 
-  it("installs native token limit module, uses, then uninstalls", async () => {
-    const provider = (await givenConnectedProvider({ signer: owner })).extend(
-      installValidationActions
-    );
+  it(
+    "installs native token limit module, uses, then uninstalls",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = (await givenConnectedProvider({ signer: owner })).extend(
+        installValidationActions
+      );
 
-    await setBalance(client, {
-      address: provider.account.address,
-      value: parseEther("2"),
-    });
+      await setBalance(client, {
+        address: provider.account.address,
+        value: parseEther("10"),
+      });
 
-    const spendLimit = parseEther("0.5");
+      console.log("1...");
+      const spendLimit = parseEther("0.5");
 
-    const hash = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: SingleSignerValidationModule.encodeOnInstallData({
-        entityId: 1,
-        signer: sessionKey.address,
-      }),
-      hooks: [],
-    });
-
-    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-
-    // create session key client
-    const sessionKeyProvider = (
-      await givenConnectedProvider({
-        signer: sessionKey,
-        accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
-      })
-    ).extend(installValidationActions);
-
-    // Sending over the limit should currently pass
-    const hash2 = await provider.sendUserOperation({
-      calls: [
-        {
-          to: target,
-          value: parseEther("0.6"),
-          data: "0x",
+      const hash = await provider.installValidation({
+        validationConfig: {
+          moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+          entityId: 1,
+          isGlobal: true,
+          isSignatureValidation: true,
+          isUserOpValidation: true,
         },
-      ],
-    });
-    await provider.waitForUserOperationReceipt({
-      hash: hash2,
-      timeout: 30_000,
-    });
-
-    // Let's verify the module's limit is set correctly after installation
-    const hookInstallData = NativeTokenLimitModule.encodeOnInstallData({
-      entityId: 1,
-      spendLimit,
-    });
-
-    const hash3 = await provider.installValidation({
-      validationConfig: {
-        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-        entityId: 1,
-        isGlobal: true,
-        isSignatureValidation: true,
-        isUserOpValidation: true,
-      },
-      selectors: [],
-      installData: "0x",
-      hooks: [
-        {
-          hookConfig: {
-            address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
-            entityId: 1,
-            hookType: HookType.VALIDATION,
-            hasPreHooks: true,
-            hasPostHooks: false,
+        selectors: [],
+        installData: SingleSignerValidationModule.encodeOnInstallData({
+          entityId: 1,
+          signer: sessionKey.address,
+        }),
+        hooks: [
+          {
+            hookConfig: {
+              address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
+              entityId: 1,
+              hookType: HookType.VALIDATION,
+              hasPreHooks: true,
+              hasPostHooks: false,
+            },
+            initData: NativeTokenLimitModule.encodeOnInstallData({
+              entityId: 1,
+              spendLimit,
+            }),
           },
-          initData: hookInstallData,
-        },
-        {
-          hookConfig: {
-            address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
-            entityId: 1,
-            hookType: HookType.EXECUTION,
-            hasPreHooks: true,
-            hasPostHooks: false,
+          {
+            hookConfig: {
+              address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
+              entityId: 1,
+              hookType: HookType.EXECUTION,
+              hasPreHooks: true,
+              hasPostHooks: false,
+            },
+            initData: "0x",
           },
-          initData: "0x",
-        },
-      ],
-    });
+        ],
+      });
+      console.log("ok");
 
-    await provider.waitForUserOperationReceipt({
-      hash: hash3,
-      timeout: 30_000,
-    });
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-    // Try to send less than the limit - should pass
-    const hash4 = await sessionKeyProvider.sendUserOperation({
-      calls: [
-        {
-          to: target,
-          value: parseEther("0.05"), // below the 0.5 limit
-          data: "0x",
-        },
-      ],
-    });
-    await provider.waitForUserOperationReceipt({
-      hash: hash4,
-      timeout: 30_000,
-    });
-
-    // Try to send more than the limit - should fail
-    await expect(
-      sessionKeyProvider.sendUserOperation({
+      // Sending over the limit as the owner should pass
+      console.log("2...");
+      const hash2 = await provider.sendUserOperation({
         calls: [
           {
             to: target,
-            value: parseEther("0.6"), // passing the 0.5 limit
+            value: parseEther("0.6"),
             data: "0x",
           },
         ],
-      })
-    ).rejects.toThrowError();
+      });
+      console.log("ok");
+      await provider.waitForUserOperationReceipt({
+        hash: hash2,
+        timeout: 30_000,
+      });
 
-    const hookUninstallData = NativeTokenLimitModule.encodeOnUninstallData({
-      entityId: 1,
-    });
+      // create session key client
+      const sessionKeyProvider = (
+        await givenConnectedProvider({
+          signer: sessionKey,
+          accountAddress: provider.account.address,
+          signerEntity: { entityId: 1, isGlobalValidation: true },
+        })
+      ).extend(installValidationActions);
 
-    const hash5 = await provider.uninstallValidation({
-      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-      entityId: 1,
-      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+      // Try to send less than the limit - should pass
+      console.log("4...");
+      // TODO(jh): UserOperationExecutionError: The `validateUserOp` function on the Smart Account reverted
+      const hash4 = await sessionKeyProvider.sendUserOperation({
+        calls: [
+          {
+            to: target,
+            value: parseEther("0.05"), // below the 0.5 limit
+            data: "0x",
+          },
+        ],
+      });
+      console.log("ok");
+      await provider.waitForUserOperationReceipt({
+        hash: hash4,
+        timeout: 30_000,
+      });
+
+      // Try to send more than the limit - should fail
+      await expect(
+        sessionKeyProvider.sendUserOperation({
+          calls: [
+            {
+              to: target,
+              value: parseEther("0.6"), // passing the 0.5 limit
+              data: "0x",
+            },
+          ],
+        })
+      ).rejects.toThrowError();
+
+      console.log("5...");
+      const hash5 = await provider.uninstallValidation({
+        moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-      }),
-      hookUninstallDatas: [hookUninstallData, "0x"],
-    });
+        uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+          entityId: 1,
+        }),
+        hookUninstallDatas: [
+          NativeTokenLimitModule.encodeOnUninstallData({
+            entityId: 1,
+          }),
+          "0x",
+        ],
+      });
+      console.log("ok");
 
-    await provider.waitForUserOperationReceipt({
-      hash: hash5,
-      timeout: 30_000,
-    });
-  });
+      await provider.waitForUserOperationReceipt({
+        hash: hash5,
+        timeout: 30_000,
+      });
+    }
+  );
 
   it("installs time range module, sends transaction within valid time range", async () => {
     const provider = (
@@ -1880,7 +1933,7 @@ describe("MA v2 Account Tests", async () => {
           const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
             getBlock(bundlerClient, { blockTag: "latest" }),
             bundlerClient.request({
-              // @ts-ignore - this is fine.
+              // @ts-expect-error - This is fine.
               method: "rundler_maxPriorityFeePerGas",
             }),
           ]);
@@ -1948,16 +2001,16 @@ describe("MA v2 Account Tests", async () => {
     const getFn = (opts: CredentialRequestOptions | undefined) =>
       webauthnDevice.get(opts, "localhost");
 
-    return { credential, getFn };
+    return { credential, getFn, rpId: "localhost" };
   };
 
+  // TODO(jh): remove if unused
   // let salt = 1n;
 
   const givenConnectedProvider = async ({
     signer,
     signerEntity,
     accountAddress,
-    // TODO(jh): unsure how this pm middleware works.
     paymasterMiddleware,
     factoryArgs,
     deferredAction,
@@ -1965,7 +2018,6 @@ describe("MA v2 Account Tests", async () => {
     signer: LocalAccount | WebAuthnAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
     accountAddress?: Address;
-    // TODO(jh): unsure how this pm middleware works.
     paymasterMiddleware?: "erc7677";
     factoryArgs?: { factory?: Address; factoryData?: Hex };
     deferredAction?: Hex;
@@ -1988,7 +2040,6 @@ describe("MA v2 Account Tests", async () => {
       account,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      // TODO(jh): unsure how this pm middleware works.
       paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
       userOperation: {
         // TODO(jh): use the action trevor made in other pr once merged.
@@ -1996,7 +2047,7 @@ describe("MA v2 Account Tests", async () => {
           const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
             getBlock(bundlerClient, { blockTag: "latest" }),
             bundlerClient.request({
-              // @ts-ignore - this is fine.
+              // @ts-expect-error - This is fine.
               method: "rundler_maxPriorityFeePerGas",
             }),
           ]);

@@ -1,7 +1,6 @@
 import {
   concatHex,
   encodeAbiParameters,
-  stringToHex,
   toHex,
   type Address,
   type Hash,
@@ -96,7 +95,7 @@ export function toWebAuthnSignature({
     [
       {
         authenticatorData: webauthn.authenticatorData,
-        clientDataJSON: stringToHex(webauthn.clientDataJSON),
+        clientDataJSON: webauthn.clientDataJSON,
         challengeIndex: BigInt(webauthn.challengeIndex),
         typeIndex: BigInt(webauthn.typeIndex),
         r,

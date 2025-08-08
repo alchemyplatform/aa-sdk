@@ -1,6 +1,7 @@
 import { bigIntMultiply } from "@aa-sdk/core";
 import {
   concat,
+  concatHex,
   createPublicClient,
   custom,
   isAddress,
@@ -34,6 +35,7 @@ import {
 import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js";
 import { raise } from "@alchemy/common";
 import { buildDeferredActionDigest } from "../utils/deferredActions.js";
+import { SignaturePrefix } from "../types.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
@@ -91,7 +93,9 @@ describe("MA v2 deferral actions tests", async () => {
 
     deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
-      sig,
+      // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
+      // this must prepended with `SignaturePrefix.EOA` (0x00).
+      sig: concatHex([SignaturePrefix.EOA, sig]),
     });
 
     accountAddress = provider.account.address;
@@ -329,13 +333,14 @@ describe("MA v2 deferral actions tests", async () => {
         })
         .compileDeferred();
 
-    // Sign the typed data using the owner (fallback) validation, this must be done via the account to skip 6492
     const deferredValidationSig = await owner.signTypedData(typedData);
 
     // Build the full hex to prepend to the UO signature
     const deferredActionDigest = buildDeferredActionDigest({
       fullPreSignatureDeferredActionDigest,
-      sig: deferredValidationSig,
+      // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
+      // this must prepended with `SignaturePrefix.EOA` (0x00).
+      sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
     });
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
@@ -504,7 +509,7 @@ describe("MA v2 deferral actions tests", async () => {
           const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
             getBlock(bundlerClient, { blockTag: "latest" }),
             bundlerClient.request({
-              // @ts-ignore - this is fine.
+              // @ts-expect-error - This is fine.
               method: "rundler_maxPriorityFeePerGas",
             }),
           ]);
