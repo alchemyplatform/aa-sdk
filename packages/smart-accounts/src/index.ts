@@ -1,6 +1,11 @@
 export type * from "./light-account/accounts/account.js";
 export { toLightAccount } from "./light-account/accounts/account.js";
 
+export {
+  alchemyGasManagerHooks,
+  type PolicyToken,
+} from "./alchemyGasManagerHooks.js";
+
 export type * from "./light-account/accounts/multi-owner-account.js";
 export { toMultiOwnerLightAccount } from "./light-account/accounts/multi-owner-account.js";
 
