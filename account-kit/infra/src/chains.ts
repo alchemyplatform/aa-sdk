@@ -758,5 +758,5 @@ export const bobaMainnet: Chain = defineChain({
       url: "https://bobascan.com/",
     },
   },
-  testnet: true,
+  testnet: false,
 });
