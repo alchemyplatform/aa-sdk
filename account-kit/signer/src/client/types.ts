@@ -365,7 +365,14 @@ export type SignerEndpoints = [
 ];
 
 export type AuthenticatingEventMetadata = {
-  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify" | "custom-jwt" | "sms";
+  type:
+    | "email"
+    | "passkey"
+    | "oauth"
+    | "otp"
+    | "otpVerify"
+    | "custom-jwt"
+    | "sms";
 };
 
 export type AlchemySignerClientEvents = {
