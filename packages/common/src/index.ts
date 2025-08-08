@@ -12,7 +12,9 @@ export {
   isAlchemyConnectionConfig,
   createApiKeyConfig,
   createJwtConfig,
+  createProxyConfig,
   createRpcUrlConfig,
+  createProxyUrlConfig,
 } from "./transport/connectionSchema.js";
 
 // errors
