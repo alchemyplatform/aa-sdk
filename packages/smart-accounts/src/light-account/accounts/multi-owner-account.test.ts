@@ -1,4 +1,3 @@
-import { bigIntMultiply } from "@aa-sdk/core";
 import {
   createWalletClient,
   custom,
@@ -22,6 +21,7 @@ import { local070Instance } from "~test/instances.js";
 import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
 import type { LightAccountVersion } from "../types";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
+import { bigIntMultiply } from "../../utils.js";
 
 describe("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
@@ -64,7 +64,7 @@ describe("MultiOwner Light Account Tests", () => {
       salt: 0n,
     });
     expect(provider.account.address).toMatchInlineSnapshot(
-      '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"',
+      '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"'
     );
   });
 
@@ -150,7 +150,7 @@ describe("MultiOwner Light Account Tests", () => {
         address: account.address,
         signature,
         ...typedData,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -166,7 +166,7 @@ describe("MultiOwner Light Account Tests", () => {
         address: account.address,
         message,
         signature,
-      }),
+      })
     ).toBe(true);
   });
 
@@ -202,7 +202,7 @@ describe("MultiOwner Light Account Tests", () => {
     `);
     // match with current signer
     expect(await provider.account.getOwnerAddresses()).toContain(
-      fundedAccountSigner.account.address,
+      fundedAccountSigner.account.address
     );
   });
 
@@ -298,7 +298,7 @@ describe("MultiOwner Light Account Tests", () => {
           return {
             maxPriorityFeePerGas: fromHex(
               maxPriorityFeePerGasEstimate as Hex,
-              "bigint",
+              "bigint"
             ),
             maxFeePerGas:
               bigIntMultiply(baseFeePerGas, 1.5) +

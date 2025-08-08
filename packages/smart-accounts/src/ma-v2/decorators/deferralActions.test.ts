@@ -1,4 +1,3 @@
-import { bigIntMultiply } from "@aa-sdk/core";
 import {
   concat,
   concatHex,
@@ -21,10 +20,6 @@ import { mine, setBalance, setNextBlockBaseFeePerGas } from "viem/actions";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBlock } from "viem/actions";
 import { local070Instance } from "~test/instances.js";
-import {
-  packAccountGasLimits,
-  packPaymasterData,
-} from "../../../../../aa-sdk/core/src/entrypoint/0.7"; // TODO(jh): remove v4 dep
 import { toModularAccountV2 } from "../accounts/account.js";
 import { deferralActions } from "./deferralActions.js";
 import {
@@ -36,6 +31,11 @@ import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js
 import { raise } from "@alchemy/common";
 import { buildDeferredActionDigest } from "../utils/deferredActions.js";
 import { SignaturePrefix } from "../types.js";
+import {
+  bigIntMultiply,
+  packAccountGasLimits,
+  packPaymasterData,
+} from "../../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
@@ -393,24 +393,21 @@ describe("MA v2 deferral actions tests", async () => {
                   : "0x",
               callData: signedUo.callData,
               accountGasLimits: packAccountGasLimits({
-                verificationGasLimit: toHex(signedUo.verificationGasLimit),
-                callGasLimit: toHex(signedUo.callGasLimit),
+                verificationGasLimit: signedUo.verificationGasLimit,
+                callGasLimit: signedUo.callGasLimit,
               }),
               preVerificationGas: signedUo.preVerificationGas,
               gasFees: packAccountGasLimits({
-                maxPriorityFeePerGas: toHex(signedUo.maxPriorityFeePerGas),
-                maxFeePerGas: toHex(signedUo.maxFeePerGas),
+                maxPriorityFeePerGas: signedUo.maxPriorityFeePerGas,
+                maxFeePerGas: signedUo.maxFeePerGas,
               }),
               paymasterAndData:
                 signedUo.paymaster && isAddress(signedUo.paymaster)
                   ? packPaymasterData({
                       paymaster: signedUo.paymaster,
-                      paymasterVerificationGasLimit: toHex(
-                        signedUo.paymasterVerificationGasLimit ?? 0
-                      ),
-                      paymasterPostOpGasLimit: toHex(
-                        signedUo.paymasterPostOpGasLimit ?? 0
-                      ),
+                      paymasterVerificationGasLimit:
+                        signedUo.paymasterVerificationGasLimit,
+                      paymasterPostOpGasLimit: signedUo.paymasterPostOpGasLimit,
                       paymasterData: signedUo.paymasterData,
                     })
                   : "0x",
@@ -493,8 +490,9 @@ describe("MA v2 deferral actions tests", async () => {
       owner: signer,
       accountAddress,
       deferredAction,
-      // TODO(jh): this (fka initcode) is required if using a deferred action & the account isn't deployed yet.
-      // TODO(jh): test that it is not required if the account is already deployed.
+      // If the account is not yet deployed & the signer is not the root owner, the
+      // factoryAddress & factoryData must be provided, since they are deterministic
+      // based on the original signer.
       factoryAddress: factoryArgs?.factory,
       factoryData: factoryArgs?.factoryData,
     });

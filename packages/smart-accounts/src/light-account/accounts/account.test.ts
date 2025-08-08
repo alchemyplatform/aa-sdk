@@ -1,4 +1,3 @@
-import { bigIntMultiply } from "@aa-sdk/core"; // TODO(v5): remove aa-sdk/core dependency
 import {
   createWalletClient,
   custom,
@@ -19,6 +18,7 @@ import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { toLightAccount } from "./account.js";
+import { bigIntMultiply } from "../../utils.js";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount

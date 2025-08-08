@@ -96,7 +96,30 @@ function defineInstance(params: DefineInstanceParams) {
         overrides: [
           {
             methods: bundlerMethods,
-            transport: http(rpcUrls().bundler),
+            transport: http(rpcUrls().bundler, {
+              // TODO(jh): remove these logging options are testing is done.
+              onFetchRequest(request) {
+                // Clone the request to read body without consuming it
+                const clonedRequest = request.clone();
+                clonedRequest.text().then(body => {
+                  console.log(
+                    `[BUNDLER REQUEST] ${request.method} ${request.url}:`,
+                    body
+                  );
+                });
+              },
+              onFetchResponse(response) {
+                // Clone the response to read body without consuming it
+                const clonedResponse = response.clone();
+                clonedResponse.text().then(body => {
+                  console.log(
+                    `[BUNDLER RESPONSE] ${response.url}:`,
+                    response.status,
+                    body
+                  );
+                });
+              },
+            }),
           },
           {
             methods: [
@@ -114,7 +137,29 @@ function defineInstance(params: DefineInstanceParams) {
               // alchemy_requestGasAndPaymasterAndData method.
               createClient({
                 chain,
-                transport: http(rpcUrls().bundler),
+                transport: http(rpcUrls().bundler, {
+                  onFetchRequest(request) {
+                    // Clone the request to read body without consuming it
+                    const clonedRequest = request.clone();
+                    clonedRequest.text().then(body => {
+                      console.log(
+                        `[BUNDLER REQUEST] ${request.method} ${request.url}:`,
+                        body
+                      );
+                    });
+                  },
+                  onFetchResponse(response) {
+                    // Clone the response to read body without consuming it
+                    const clonedResponse = response.clone();
+                    clonedResponse.text().then(body => {
+                      console.log(
+                        `[BUNDLER RESPONSE] ${response.url}:`,
+                        response.status,
+                        body
+                      );
+                    });
+                  },
+                }),
               }).extend(() => ({ mode: "bundler" }))
             ),
           },

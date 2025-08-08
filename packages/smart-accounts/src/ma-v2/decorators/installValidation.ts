@@ -69,7 +69,7 @@ export type InstallValidationActions<
  *
  * @example
  * ```ts
- * import { createModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@account-kit/smart-contracts";
+ * import { createModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@alchemy/smart-contracts";
  * import { Address } from "viem";
  *
  * const client = (await createModularAccountV2Client({ ... })).extend(installValidationActions);

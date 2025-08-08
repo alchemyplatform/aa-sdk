@@ -15,7 +15,6 @@ import {
   maxUint32,
   maxUint152,
   zeroAddress,
-  toHex,
 } from "viem";
 import {
   entryPoint07Abi,
@@ -153,7 +152,7 @@ export async function toModularAccountV2Base<
   let hasAssociatedExecHooks: boolean = false;
 
   if (deferredAction) {
-    let deferredActionNonce: bigint = 0n;
+    let deferredActionNonce = 0n;
     // We always update entity id and isGlobalValidation to the deferred action value since the client could be used to send multiple calls
     ({
       entityId,
@@ -254,7 +253,6 @@ export async function toModularAccountV2Base<
       entityId: Number(entityId),
     });
     if (hasAssociatedExecHooks) {
-      hasAssociatedExecHooks = false; // set to falsy value once used
       return concatHex([EXECUTE_USER_OP_SELECTOR, callData]);
     }
     if (validationData.executionHooks.length) {
@@ -327,24 +325,28 @@ export async function toModularAccountV2Base<
     async encodeCalls(calls) {
       if (calls.length === 1) {
         const call = calls[0];
-        return encodeFunctionData({
-          abi: modularAccountAbi,
-          functionName: "execute",
-          args: [call.to, call.value ?? 0n, call.data ?? "0x"],
-        });
+        return encodeCallData(
+          encodeFunctionData({
+            abi: modularAccountAbi,
+            functionName: "execute",
+            args: [call.to, call.value ?? 0n, call.data ?? "0x"],
+          })
+        );
       }
 
-      return encodeFunctionData({
-        abi: modularAccountAbi,
-        functionName: "executeBatch",
-        args: [
-          calls.map((call) => ({
-            target: call.to,
-            data: call.data ?? "0x",
-            value: call.value ?? 0n,
-          })),
-        ],
-      });
+      return encodeCallData(
+        encodeFunctionData({
+          abi: modularAccountAbi,
+          functionName: "executeBatch",
+          args: [
+            calls.map((call) => ({
+              target: call.to,
+              data: call.data ?? "0x",
+              value: call.value ?? 0n,
+            })),
+          ],
+        })
+      );
     },
 
     async getStubSignature() {
@@ -393,7 +395,6 @@ export async function toModularAccountV2Base<
     },
 
     async signTypedData(td) {
-      // TODO(jh): extract to util function.
       const isDeferredAction =
         td.primaryType === "DeferredAction" &&
         td.domain &&
@@ -459,7 +460,8 @@ export async function toModularAccountV2Base<
         const signature = deferredActionData
           ? concatHex([deferredActionData, validationSignature])
           : validationSignature;
-        deferredActionData = undefined;
+        deferredActionData = undefined; // clear once used
+        hasAssociatedExecHooks = false; // set to falsy value once used
         return concatHex(["0xff", signature]);
       }
 
@@ -478,7 +480,8 @@ export async function toModularAccountV2Base<
         ? concatHex([deferredActionData, packedSignature])
         : packedSignature;
 
-      deferredActionData = undefined;
+      deferredActionData = undefined; // clear once used
+      hasAssociatedExecHooks = false; // set to falsy value once used
 
       return signature;
     },
@@ -486,14 +489,6 @@ export async function toModularAccountV2Base<
     userOperation: {
       estimateGas: async (uo) => {
         if (owner.type !== "webAuthn") {
-          // TODO(jh): remove
-          console.log({
-            entityId,
-            accountAddress,
-            ownerAddress: owner.address,
-            uo,
-          });
-
           // Uses the default gas estimator.
           // Note that we get 7702 support automatically from Viem.
           return undefined;

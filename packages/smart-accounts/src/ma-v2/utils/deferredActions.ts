@@ -1,6 +1,7 @@
 import {
   concatHex,
   hexToNumber,
+  isErc6492Signature,
   parseErc6492Signature,
   size,
   toHex,
@@ -50,7 +51,7 @@ export const buildDeferredActionDigest = ({
   sig,
 }: BuildDeferredActionDigestParams): Hex => {
   // 6492 sigs don't work here.
-  if (sig.endsWith("64926492")) {
+  if (isErc6492Signature(sig)) {
     sig = parseErc6492Signature(sig).signature;
   }
 
