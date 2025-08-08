@@ -9,7 +9,6 @@ import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
-// Removed unused imports - wallet types are now handled internally
 
 export type Config = {
   auth: {
