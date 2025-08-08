@@ -9,7 +9,16 @@ import type {
 } from "viem/account-abstraction";
 import { deepHexlify, resolveProperties } from "@aa-sdk/core";
 import { bigIntMultiply } from "@alchemy/common";
-import type { PolicyToken } from "../middleware/gasManager.js";
+// Type for ERC-20 token context
+export type PolicyToken = {
+  address: Address;
+  maxTokenAmount?: bigint;
+  permit?: {
+    deadline: bigint;
+    nonce: bigint;
+    domain?: any;
+  };
+};
 
 // Type for the optimized RPC response
 type GasAndPaymasterAndDataResponse = {
@@ -81,7 +90,7 @@ function createGasManagerContext(
  * @example
  * ```ts
  * import { createBundlerClient } from "viem/account-abstraction";
- * import { alchemyGasManagerHooks } from "@account-kit/infra";
+ * import { alchemyGasManagerHooks } from "@alchemy/smart-accounts";
  *
  * const bundler = createBundlerClient({
  *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),

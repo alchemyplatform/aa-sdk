@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { alchemyGasManagerHooks } from "@alchemy/smart-accounts";
+import { alchemyGasManagerHooks } from "../src/alchemyGasManagerHooks.js";
 import { toHex, type Address } from "viem";
 
 describe("alchemyGasManagerHooks - Optimized Flow", () => {

@@ -63,7 +63,7 @@ export type * from "./client/types.js";
 export { getDefaultUserOperationFeeOptions } from "./defaults.js";
 export { getAlchemyPaymasterAddress } from "./gas-manager.js";
 export { alchemyFeeEstimator } from "./middleware/feeEstimator.js";
-export { alchemyGasManagerHooks } from "./hooks/alchemyGasManagerHooks.js";
+
 export type * from "./middleware/gasManager.js";
 export * from "./alchemyTrackerHeaders.js";
 export {
