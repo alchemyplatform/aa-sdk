@@ -226,6 +226,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaTransaction.mdx
               - section: Functions
                 contents:
+                  - page: configForExternalWallets
+                    path: wallets/pages/reference/account-kit/react/functions/configForExternalWallets.mdx
                   - page: createConfig
                     path: wallets/pages/reference/account-kit/react/functions/createConfig.mdx
                   - page: Hydrate
@@ -493,6 +495,12 @@ navigation:
           - section: SDK Reference
             path: wallets/pages/reference/account-kit/signer/index.mdx
             contents:
+              - section: Functions
+                contents:
+                  - page: createSolanaSponsoredTransaction
+                    path: wallets/pages/reference/account-kit/signer/functions/createSolanaSponsoredTransaction.mdx
+                  - page: createSolanaTransaction
+                    path: wallets/pages/reference/account-kit/signer/functions/createSolanaTransaction.mdx
               - section: Classes
                 contents:
                   - section: AlchemySignerWebClient

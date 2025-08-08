@@ -22,7 +22,7 @@ export const AuthSection = ({ authTypes, ...props }: AuthSectionProps) => {
           case "social":
             return <OAuth key={index} {...authType} />;
           case "external_wallets":
-            return <ExternalWalletsAuth key={index} />;
+            return <ExternalWalletsAuth key={index} config={authType} />;
           default:
             throw new Error("Not implemented");
         }

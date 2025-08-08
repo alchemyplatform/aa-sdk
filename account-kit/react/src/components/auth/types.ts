@@ -2,8 +2,11 @@ import type {
   KnownAuthProvider,
   OauthRedirectConfig,
 } from "@account-kit/signer";
-import type { WalletConnectParameters } from "wagmi/connectors";
 import { capitalize } from "../../utils.js";
+import type {
+  ChainType,
+  // ExternalWalletUIConfig,
+} from "../../configForExternalWallets.js";
 
 export type AuthType =
   | {
@@ -16,7 +19,21 @@ export type AuthType =
       placeholder?: string;
     }
   | { type: "passkey" }
-  | { type: "external_wallets"; walletConnect?: WalletConnectParameters }
+  | {
+      type: "external_wallets";
+      // New simplified shape
+      wallets?: string[];
+      chainType?: ChainType[];
+      // Optional: fallback WC config for UI-only flows
+      walletConnectProjectId?: string;
+      // How many from wallets to feature on landing
+      numFeaturedWallet?: number;
+      // Backwards compatible shape
+      walletConnect?: import("wagmi/connectors").WalletConnectParameters;
+      // wallets?: ExternalWalletUIConfig[];
+      moreButtonText?: string;
+      hideMoreButton?: boolean;
+    }
   | ({ type: "social"; scope?: string; claims?: string } & (
       | {
           authProviderId: "auth0";
