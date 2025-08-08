@@ -15,7 +15,8 @@ export type SignerEventsSchema = [
             | "oauthReturn";
           provider?: never;
         }
-      | { authType: "oauth"; provider: string };
+      | { authType: "oauth"; provider: string }
+      | { authType: "custom-jwt"; provider: string };
   },
   {
     EventName: "signer_sign_message";
