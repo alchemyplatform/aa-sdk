@@ -1950,8 +1950,64 @@ describe("MA v2 Account Tests", async () => {
       timeout: 30_000,
     });
 
-    // TODO(jh): should we verify anything here? v4 test did not.
+    // TODO(v5): should we verify anything here? v4 test did not.
   });
+
+  it(
+    "sends a simple UO using a 7702 account",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer: owner,
+        mode: "7702",
+      });
+
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("1"),
+      });
+
+      const walletClient = createWalletClient({
+        account: owner,
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+      });
+
+      const preparedAuthorization = provider.account.authorization
+        ? await walletClient.prepareAuthorization(
+            provider.account.authorization
+          )
+        : undefined;
+
+      const signedAuthorization = preparedAuthorization
+        ? await walletClient.signAuthorization(preparedAuthorization)
+        : undefined;
+
+      const hash = await provider.sendUserOperation({
+        calls: [
+          {
+            to: target,
+            data: "0x",
+          },
+        ],
+        authorization: signedAuthorization,
+      });
+
+      // TODO(jh): Seems our test infra is saying `EIP-7702 authorization
+      // lists are not supported before the Prague hardfork` somewhere.
+      // Might need new version of alloy or something?
+      const { success } = await provider.waitForUserOperationReceipt({
+        hash,
+        timeout: 30_000,
+      });
+
+      // TODO(jh): do getCode and make sure the delegation succeeded?
+
+      // TODO(jh): send a subsequent uo & ensure it works & doesn't include authorization again?
+
+      expect(success).toEqual(true);
+    }
+  );
 
   const givenWebauthnCredential = async () => {
     const webauthnDevice = new SoftWebauthnDevice();
@@ -1975,6 +2031,7 @@ describe("MA v2 Account Tests", async () => {
     paymasterMiddleware,
     factoryArgs,
     deferredAction,
+    mode,
   }: {
     signer: LocalAccount | WebAuthnAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
@@ -1982,6 +2039,7 @@ describe("MA v2 Account Tests", async () => {
     paymasterMiddleware?: "erc7677";
     factoryArgs?: { factory?: Address; factoryData?: Hex };
     deferredAction?: Hex;
+    mode?: "default" | "7702";
   }) => {
     const account = await toModularAccountV2({
       client: createPublicClient({
@@ -1993,6 +2051,7 @@ describe("MA v2 Account Tests", async () => {
       owner: signer,
       ...factoryArgs,
       deferredAction,
+      mode,
     });
 
     return createBundlerClient({
@@ -2032,9 +2091,6 @@ describe("MA v2 Account Tests", async () => {
       },
     });
   };
-
-  // TODO(jh): test 7702 (sending multiple UOs) ... verify if only EP 0.8 depends on magic value ("0x7702"), not viem itself
-  // if only EP, then we may just not want to support returning factory data for 7702 accounts?
 });
 
 const mintableERC20Bytecode =

@@ -28,7 +28,7 @@ type Mode = "default" | "7702";
 export type ModularAccountV2 = ModularAccountV2Base & {};
 
 export type ToModularAccountV2Params<
-  TMode extends "default" | "7702" = "default",
+  TMode extends Mode | undefined = Mode | undefined,
 > = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owner: JsonRpcAccount | LocalAccount | WebAuthnAccount;
@@ -88,9 +88,14 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   const getFactoryArgs = async () => {
     if (is7702) {
+      // This is only for EP 0.8.0.
+      // return {
+      //   factory: "0x7702",
+      //   factoryData: "0x",
+      // } as const;
       return {
-        factory: "0x7702",
-        factoryData: "0x",
+        factory: undefined,
+        factoryData: undefined,
       } as const;
     }
 
@@ -122,22 +127,24 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   const accountAddress =
     accountAddress_ ??
-    predictModularAccountV2Address({
-      factoryAddress,
-      implementationAddress,
-      salt,
-      ...(owner.type === "webAuthn"
-        ? {
-            type: "WebAuthn",
-            ownerPublicKey: owner.publicKey,
-            entityId,
-          }
-        : {
-            type: "SMA", // `MA` is never used here since we only support deploying SMA & WebAuthn accounts.
-            ownerAddress: owner.address,
-            entityId,
-          }),
-    });
+    (mode === "7702" && owner.type === "local"
+      ? owner.address
+      : predictModularAccountV2Address({
+          factoryAddress,
+          implementationAddress,
+          salt,
+          ...(owner.type === "webAuthn"
+            ? {
+                type: "WebAuthn",
+                ownerPublicKey: owner.publicKey,
+                entityId,
+              }
+            : {
+                type: "SMA", // `MA` is never used here since we only support deploying SMA & WebAuthn accounts.
+                ownerAddress: owner.address,
+                entityId,
+              }),
+        }));
 
   let authorization: ToSmartAccountParameters["authorization"];
   if (is7702) {
