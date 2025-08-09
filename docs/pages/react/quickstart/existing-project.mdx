@@ -50,14 +50,14 @@ export default {
 };
 ```
 
-Create a `global.css` file and import it in your app root:
+Create a `global.css` in your `app` directory and import Tailwind:
 
-```css global.css
+```css app/global.css
 @import "tailwindcss";
 ```
 
 <Tip>
-  **Using Tailwind v3?** You can skip the setup above since you've already
+  **Already using Tailwind?** You can skip the setup above since you've already
   configured it.
 </Tip>
 
@@ -108,7 +108,8 @@ import { withAccountKitUi } from "@account-kit/react/tailwind";
 
 export default withAccountKitUi(
   {
-    // Your existing tailwind config
+    // Your existing Tailwind config (if already using Tailwind).
+    // If using Tailwind v4, this will likely be left empty.
   },
   {
     // AccountKit UI theme customizations
@@ -130,8 +131,8 @@ Update your `global.css` to include the config:
 ```
 
 <Tip>
-  **Update your global.css file to include your tailwind.config.ts.** (Skip this
-  step if you're still using Tailwind v3.)
+  **Note:** If still using Tailwind v3, skip this step as the
+  `tailwind.config.ts` file is used by default.
 </Tip>
 
 **config.ts**
@@ -144,11 +145,17 @@ import { arbitrumSepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "YOUR_API_KEY" }), // Replace with your API key
+    transport: alchemy({
+      // Replace with your API key
+      apiKey: "YOUR_API_KEY",
+    }),
     chain: arbitrumSepolia,
     ssr: true,
     storage: cookieStorage,
     enablePopupOauth: true,
+    // For gas sponsorship (optional)
+    // Learn more here: https://www.alchemy.com/docs/wallets/react/sponsor-gas
+    policyId: "YOUR_POLICY_ID",
   },
   {
     auth: {
@@ -177,9 +184,9 @@ Remember to replace `"YOUR_API_KEY"` with the API key from step 2.
 </Tip>
 
 Note:
-This is set up allows you to connect to other existing external EOAs such as MetaMask using our built-in connectors and WalletConnect. Learn more [here](/react/login-methods/eoa-login.mdx)
+You can add an `"external_wallets"` auth method to your config to allow connecting existing external EOAs (such as MetaMask) using our built-in connectors and WalletConnect. Learn more [here](/wallets/react/login-methods/eoa-login)
 
-```ts twoslash [src/config.ts]
+```ts twoslash
 // @noErrors
 [
   {
@@ -198,13 +205,14 @@ Wrap your application with the Alchemy Provider to enable embedded wallet functi
 ```tsx app/providers.tsx
 "use client";
 import { config, queryClient } from "@/config";
-import { AlchemyClientState } from "@account-kit/core";
 import { AlchemyAccountProvider } from "@account-kit/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>,
+  props: PropsWithChildren<{
+    initialState?: AlchemyAccountsProviderProps["initialState"];
+  }>,
 ) => {
   return (
     <QueryClientProvider client={queryClient}>

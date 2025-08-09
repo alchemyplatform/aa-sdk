@@ -77,6 +77,8 @@ After calculating the new values, send your `userOp` again with the updated fe
 
 Our bundler supports up to 4 parallel nonces (default value from ERC-7562) for unstaked senders and unlimited parallel nonces for staked senders. See [below](/reference/bundler-faqs#what-is-the-minimum-amount-that-must-be-staked-with-the-entrypoint) for stake requirements.
 
+Unstaked accounts that attempt to exceed this limit will receive the error `Max operations (4) reached for account`. Staking the account removes the restriction. Accounts can be staked by calling `addStake(uint32 unstakeDelaySec)` on the EntryPoint contract, and later `unlockStake()` followed by `withdrawStake(address payable)` to recover the stake.
+
 Staked senders are subject to ERC-7562 reputation rules. If a sender submits a large number of userOps and subsequently invalidates them all, they may be throttled or banned.
 
 ### Can I include multiple parallel nonces in a single bundle?
@@ -174,22 +176,70 @@ EntryPoint v0.6: `0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789`
 
 We plan to deprecate support for EntryPoint v0.6 in September 2025. Please ensure that you have migrated to EntryPoint v0.7 by that time. If you have any questions or need assistance with the migration process, please file a ticket via our [Discord server](https://discord.com/channels/735965332958871634/1115787488838033538).
 
-## Compatibility with 3P Paymasters and Factories
+## Entity Staking Requirements
 
 ### What is the minimum amount that must be staked with the EntryPoint?
 
 Mainnets:
 
-- Native token: ETH --> 0.1 ETH
-- Native token: MATIC --> 100 MATIC
+| Chain Name          | Min Stake (Native Token) |
+| ------------------- | ------------------------ |
+| Ethereum Mainnet    | 0.1 ETH                  |
+| BNB Mainnet         | 0.1 BNB                  |
+| Polygon Mainnet     | 100 MATIC                |
+| Arbitrum One        | 0.1 ETH                  |
+| Optimism Mainnet    | 0.1 ETH                  |
+| Zora Mainnet        | 0.1 ETH                  |
+| Frax Mainnet        | 0.1 ETH                  |
+| Base Mainnet        | 0.1 ETH                  |
+| Polynomial Mainnet  | 0.1 ETH                  |
+| World Chain Mainnet | 0.1 ETH                  |
+| Shape Mainnet       | 0.1 ETH                  |
+| Arbitrum Nova       | 0.1 ETH                  |
+| Berachain Mainnet   | 0.1 BERA                 |
+| Anime Mainnet       | 0.1 ETH                  |
+| Race Mainnet        | 0.1 ETH                  |
+| Unichain Mainnet    | 0.1 ETH                  |
+| Soneium Mainnet     | 0.1 ETH                  |
+| Ink Mainnet         | 0.1 ETH                  |
+| Story Mainnet       | 0.1 ETH                  |
+| Celo Mainnet        | 0.1 CELO                 |
+| OpBNB Mainnet       | 0.4 BNB                  |
 
 Testnets:
 
-- Native token: ETH --> 0.1 ETH
-- Native token: MATIC --> 10 MATIC
+| Chain Name          | Min Stake (Native Token) |
+| ------------------- | ------------------------ |
+| Ethereum Sepolia    | 0.1 ETH                  |
+| BNB Testnet         | 0.1 BNB                  |
+| Polygon Amoy        | 10 MATIC                 |
+| Arbitrum Sepolia    | 0.1 ETH                  |
+| Optimism Sepolia    | 0.1 ETH                  |
+| Zora Sepolia        | 0.1 ETH                  |
+| Alchemy Sepolia     | 0.1 ETH                  |
+| Base Sepolia        | 0.1 ETH                  |
+| Polynomial Sepolia  | 0.1 ETH                  |
+| World Chain Sepolia | 0.1 ETH                  |
+| Shape Sepolia       | 0.1 ETH                  |
+| Anime Sepolia       | 0.1 ETH                  |
+| Race Sepolia        | 0.1 ETH                  |
+| Unichain Sepolia    | 0.1 ETH                  |
+| Soneium Minato      | 0.1 ETH                  |
+| Ink Sepolia         | 0.1 ETH                  |
+| Monad Testnet       | 0.1 ETH                  |
+| Openloot Sepolia    | 0.1 ETH                  |
+| Wylerchain Sepolia  | 0.1 ETH                  |
+| Gensyn Testnet      | 0.1 ETH                  |
+| Rise Testnet        | 0.1 ETH                  |
+| Story Aeneid        | 0.1 ETH                  |
+| Converge Testnet    | 0.1 ETH                  |
+| Celo Alfajores      | 0.1 CELO                 |
+| Tea Sepolia         | 0.1 ETH                  |
+| Educhain Testnet    | 0.1 ETH                  |
+| OpBNB Testnet       | 0.4 BNB                  |
 
-If a Paymaster or Factory used in the userOp does not have the above amounts staked with the Entrypoint, the userOp will be rejected.
+Paymasters and factories must have at least the above stake or their userOps will be rejected. Accounts only need to stake if they wish to exceed 4 parallel nonces in the Bundler's mempool; otherwise, userOps beyond this limit will be rejected. The same stake amounts apply to accounts.
 
 ### What is the minimum delay value?
 
-The minimum unstake delay required by Rundler is 1 Day. If a Paymaster or Factory used in the userOp does not have the "minimum delay" value configured with the Entrypoint, the userOp will be rejected.
+The minimum unstake delay required by Rundler is 1 Day. Paymasters and factories must configure at least this delay or their userOps will be rejected. Staked accounts are subject to the same delay requirement.

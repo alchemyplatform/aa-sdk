@@ -1,0 +1,72 @@
+{
+  "name": "@account-kit/wallet-client",
+  "version": "4.53.1",
+  "description": "Wallet Client for Alchemy Account Kit",
+  "author": "Alchemy",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "main": "./dist/esm/exports/index.js",
+  "module": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src/**/*.ts",
+    "package.json",
+    "!dist/**/*.tsbuildinfo",
+    "!vitest.config.ts",
+    "!.env",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
+    "!src/__tests__/**/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/exports/index.d.ts",
+      "require": "./dist/esm/exports/index.js",
+      "import": "./dist/esm/exports/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "prebuild": "tsx ./inject-version.ts",
+    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "clean": "rm -rf ./dist",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/exports/index.ts --out ../../docs/pages/reference/account-kit/wallet-client",
+    "test:e2e": "bun test ./src/**/*.e2e.test.*"
+  },
+  "dependencies": {
+    "@aa-sdk/core": "^4.53.1",
+    "@account-kit/infra": "^4.53.1",
+    "@account-kit/smart-contracts": "^4.53.1",
+    "@alchemy/wallet-api-types": "0.1.0-alpha.14",
+    "deep-equal": "^2.2.3",
+    "ox": "^0.6.12"
+  },
+  "devDependencies": {
+    "@sinclair/typebox": "^0.34.33",
+    "@types/deep-equal": "^1.0.4",
+    "@types/node": "^24.0.11",
+    "bun": "^1.2.18",
+    "bun-types": "^1.2.18"
+  },
+  "peerDependencies": {
+    "viem": "^2.29.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alchemyplatform/aa-sdk/issues"
+  },
+  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme"
+}

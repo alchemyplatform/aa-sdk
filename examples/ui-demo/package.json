@@ -12,10 +12,11 @@
     "playwright": "playwright test --ui"
   },
   "dependencies": {
-    "@account-kit/core": "^4.35.0",
-    "@account-kit/infra": "^4.35.0",
-    "@account-kit/logging": "^4.35.0",
-    "@account-kit/react": "^4.35.0",
+    "@account-kit/core": "^4.47.0",
+    "@account-kit/infra": "^4.47.0",
+    "@account-kit/logging": "^4.47.0",
+    "@account-kit/react": "^4.47.0",
+    "@account-kit/smart-contracts": "^4.47.0",
     "@headlessui/react": "^2.2.3",
     "@metaplex-foundation/umi": "^1.2.0",
     "@metaplex-foundation/umi-bundle-defaults": "^1.2.0",
@@ -45,7 +46,7 @@
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.5.0",
     "tailwind-merge": "^2.3.0",
-    "viem": "2.29.2",
+    "viem": "^2.29.2",
     "wagmi": "^2.12.7",
     "zod": "^3.0.0",
     "zustand": "^5.0.0-rc.2"

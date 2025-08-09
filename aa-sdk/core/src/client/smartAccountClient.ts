@@ -189,100 +189,113 @@ export function createSmartAccountClient(
     transport: (opts) => {
       const rpcTransport = transport(opts);
 
-      return custom({
-        name: "SmartAccountClientTransport",
-        async request({ method, params }) {
-          switch (method) {
-            case "eth_accounts": {
-              if (!client.account) {
-                throw new AccountNotFoundError();
-              }
+      return custom(
+        {
+          name: "SmartAccountClientTransport",
+          async request({ method, params }) {
+            switch (method) {
+              case "eth_accounts": {
+                if (!client.account) {
+                  throw new AccountNotFoundError();
+                }
 
-              return [client.account.address];
-            }
-            case "eth_sendTransaction":
-              if (!client.account) {
-                throw new AccountNotFoundError();
+                return [client.account.address];
               }
-              if (!client.chain) {
-                throw new ChainNotFoundError();
-              }
-              const [tx] = params as [FormattedTransactionRequest];
-              return client.sendTransaction({
-                ...tx,
-                account: client.account,
-                chain: client.chain,
-              });
-            case "eth_sign":
-              if (!client.account) {
-                throw new AccountNotFoundError();
-              }
-              const [address, data] = params!;
-              if (
-                address?.toLowerCase() !== client.account.address.toLowerCase()
-              ) {
-                throw new Error(
-                  "cannot sign for address that is not the current account",
-                );
-              }
-              return client.signMessage({
-                message: data,
-                account: client.account,
-              });
-            case "personal_sign": {
-              if (!client.account) {
-                throw new AccountNotFoundError();
-              }
-              const [data, address] = params!;
-              if (
-                address?.toLowerCase() !== client.account.address.toLowerCase()
-              ) {
-                throw new Error(
-                  "cannot sign for address that is not the current account",
-                );
-              }
-              return client.signMessage({
-                message: data,
-                account: client.account,
-              });
-            }
-            case "eth_signTypedData_v4": {
-              if (!client.account) {
-                throw new AccountNotFoundError();
-              }
-              const [address, dataParams] = params!;
-              if (
-                address?.toLowerCase() !== client.account.address.toLowerCase()
-              ) {
-                throw new Error(
-                  "cannot sign for address that is not the current account",
-                );
-              }
-              try {
-                return client.signTypedData({
+              case "eth_sendTransaction":
+                if (!client.account) {
+                  throw new AccountNotFoundError();
+                }
+                if (!client.chain) {
+                  throw new ChainNotFoundError();
+                }
+                const [tx] = params as [FormattedTransactionRequest];
+                return client.sendTransaction({
+                  ...tx,
                   account: client.account,
-                  typedData:
-                    typeof dataParams === "string"
-                      ? JSON.parse(dataParams)
-                      : dataParams,
+                  chain: client.chain,
                 });
-              } catch {
-                throw new Error("invalid JSON data params");
+              case "eth_sign":
+                if (!client.account) {
+                  throw new AccountNotFoundError();
+                }
+                const [address, data] = params!;
+                if (
+                  address?.toLowerCase() !==
+                  client.account.address.toLowerCase()
+                ) {
+                  throw new Error(
+                    "cannot sign for address that is not the current account",
+                  );
+                }
+                return client.signMessage({
+                  message: data,
+                  account: client.account,
+                });
+              case "personal_sign": {
+                if (!client.account) {
+                  throw new AccountNotFoundError();
+                }
+                const [data, address] = params!;
+                if (
+                  address?.toLowerCase() !==
+                  client.account.address.toLowerCase()
+                ) {
+                  throw new Error(
+                    "cannot sign for address that is not the current account",
+                  );
+                }
+                return client.signMessage({
+                  message: data,
+                  account: client.account,
+                });
               }
-            }
-            case "eth_chainId":
-              if (!opts.chain) {
-                throw new ChainNotFoundError();
+              case "eth_signTypedData_v4": {
+                if (!client.account) {
+                  throw new AccountNotFoundError();
+                }
+                const [address, dataParams] = params!;
+                if (
+                  address?.toLowerCase() !==
+                  client.account.address.toLowerCase()
+                ) {
+                  throw new Error(
+                    "cannot sign for address that is not the current account",
+                  );
+                }
+                try {
+                  return client.signTypedData({
+                    account: client.account,
+                    typedData:
+                      typeof dataParams === "string"
+                        ? JSON.parse(dataParams)
+                        : dataParams,
+                  });
+                } catch {
+                  throw new Error("invalid JSON data params");
+                }
               }
+              case "eth_chainId":
+                if (!opts.chain) {
+                  throw new ChainNotFoundError();
+                }
 
-              return opts.chain.id;
-            default:
-              // TODO: there's probably a number of methods we just don't support, will need to test most of them out
-              // first let's get something working though
-              return rpcTransport.request({ method, params });
-          }
+                return opts.chain.id;
+              default:
+                // TODO: there's probably a number of methods we just don't support, will need to test most of them out
+                // first let's get something working though
+                return rpcTransport.request(
+                  { method, params },
+                  // Retry count must be 0 here in order to respect the retry
+                  // count that is already specified on the underlying transport.
+                  { retryCount: 0 },
+                );
+            }
+          },
         },
-      })(opts);
+        // Retry count must be 0 here in order to respect the retry
+        // count that is already specified on the underlying transport.
+        { retryCount: 0 },
+      )(opts);
     },
   })
     .extend(() => {

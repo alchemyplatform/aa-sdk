@@ -19,6 +19,7 @@ import type {
   AuthLinkingPrompt,
   GetWebAuthnAttestationResult,
   IdTokenOnly,
+  SmsAuthParams,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -158,6 +159,42 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       }
       throw error;
     }
+  };
+
+  /**
+   * Begin authenticating a user through sms. Initializes the iframe stamper to get the target public key.
+   * This method sends a text message to the user to complete their login
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.initSmsAuth({ phone: "+1234567890" });
+   * ```
+   *
+   * @param {Omit<SmsAuthParams, "targetPublicKey">} params The parameters for sms authentication, excluding the target public key
+   * @returns {Promise<any>} The response from the authentication request
+   */
+  public override initSmsAuth = async (
+    params: Omit<SmsAuthParams, "targetPublicKey">,
+  ) => {
+    this.eventEmitter.emit("authenticating", { type: "otp" });
+    const { phone } = params;
+    const publicKey = await this.initSessionStamper();
+
+    return this.request("/v1/auth", {
+      phone,
+      targetPublicKey: publicKey,
+    });
   };
 
   /**

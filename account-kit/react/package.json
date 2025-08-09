@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.49.0",
+  "version": "4.53.1",
   "description": "React components and hooks for using Smart Wallets",
   "author": "Alchemy",
   "license": "MIT",
@@ -48,6 +48,11 @@
       "import": "./dist/esm/hooks/index.js",
       "default": "./dist/esm/hooks/index.js"
     },
+    "./experimental": {
+      "types": "./dist/types/experimental/index.d.ts",
+      "import": "./dist/esm/experimental/index.js",
+      "default": "./dist/esm/experimental/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -81,10 +86,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/core": "^4.49.0",
-    "@account-kit/infra": "^4.49.0",
-    "@account-kit/logging": "^4.49.0",
-    "@account-kit/signer": "^4.49.0",
+    "@account-kit/core": "^4.53.1",
+    "@account-kit/infra": "^4.53.1",
+    "@account-kit/logging": "^4.53.1",
+    "@account-kit/signer": "^4.53.1",
+    "@account-kit/wallet-client": "^4.53.1",
     "@solana/web3.js": "^1.98.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/zod-form-adapter": "^0.33.0",
@@ -104,7 +110,7 @@
     "wagmi": "^2.12.7"
   },
   "resolutions": {
-    "viem": "2.29.2"
+    "viem": "^2.29.2"
   },
   "publishConfig": {
     "access": "public",

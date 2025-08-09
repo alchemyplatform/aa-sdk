@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+# [4.53.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.4...v4.53.0) (2025-08-06)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+## [4.52.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.2...v4.52.3) (2025-08-04)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
+
+### Bug Fixes
+
+- re-export react hook types from react-native package ([#1789](https://github.com/alchemyplatform/aa-sdk/issues/1789)) ([f7744f9](https://github.com/alchemyplatform/aa-sdk/commit/f7744f9f792f9373f238ecd5131c8951e7696f44))
+
+## [4.52.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.0...v4.52.1) (2025-07-22)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+# [4.52.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.51.0...v4.52.0) (2025-07-18)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+# [4.51.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.1...v4.51.0) (2025-07-18)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+## [4.50.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.50.0...v4.50.1) (2025-07-14)
+
+**Note:** Version bump only for package @account-kit/react-native
+
+# [4.50.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.49.0...v4.50.0) (2025-07-14)
+
+**Note:** Version bump only for package @account-kit/react-native
+
 # [4.49.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.48.0...v4.49.0) (2025-07-10)
 
 ### Features

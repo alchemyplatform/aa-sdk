@@ -6,6 +6,7 @@ import type {
   ErrorInfo,
   User,
 } from "@account-kit/signer";
+import type { SmartWalletClient } from "@account-kit/wallet-client";
 import type { State as WagmiState } from "@wagmi/core";
 import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
@@ -93,6 +94,9 @@ export type StoreState = {
         SupportedAccount<key>
       >;
     }>;
+  };
+  smartWalletClients: {
+    [chain: number]: SmartWalletClient | undefined;
   };
   bundlerClient: ClientWithAlchemyMethods;
   // serializable state
