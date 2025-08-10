@@ -445,8 +445,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
 
     window.location.href = providerUrl;
+    
+    // Timeout for OAuth redirect in case of failure
+    const OAUTH_REDIRECT_TIMEOUT_MS = 1000;
     return new Promise((_, reject) =>
-      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000),
+      setTimeout(() => reject("Failed to redirect to OAuth provider"), OAUTH_REDIRECT_TIMEOUT_MS),
     );
   };
 
