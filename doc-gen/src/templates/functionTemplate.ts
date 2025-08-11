@@ -20,8 +20,8 @@ export const getFunctionName = (
 export function functionTemplate(
   node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
   importedName: string,
-  packageName: string,
   outputFilePath: string,
+  exportPath: string,
 ) {
   const jsDocCommentAndTags = ts.getJSDocCommentsAndTags(node);
   if (!jsDocCommentAndTags.length) return;
@@ -124,7 +124,7 @@ ${extendsClause}
 
 ## Import
 \`\`\`ts
-import { ${importStatement} } from "${packageName}";
+import { ${importStatement} } from "${exportPath}";
 \`\`\`
 
 ${exampleSection}

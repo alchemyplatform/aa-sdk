@@ -21,6 +21,20 @@ const generatedDirectories = [
   "./classes",
 ];
 
+function isValidExportDeclaration(
+  node: ts.Node,
+): node is ts.ExportDeclaration & {
+  moduleSpecifier: ts.StringLiteral;
+  exportClause: ts.NamedExports;
+} {
+  return (
+    ts.isExportDeclaration(node) &&
+    !!node.moduleSpecifier &&
+    ts.isStringLiteral(node.moduleSpecifier) &&
+    !!(node.exportClause && ts.isNamedExports(node.exportClause))
+  );
+}
+
 export async function generate(options: GenerateOptions) {
   const sourceFilePaths = Array.isArray(options.in) ? options.in : [options.in];
   const outputFilePath = path.resolve(process.cwd(), options.out);
@@ -36,7 +50,7 @@ export async function generate(options: GenerateOptions) {
   // Group files by package to handle multiple files from the same package
   const packageFiles = new Map<
     string,
-    Array<{ filePath: string; sourceFile: ts.SourceFile; packageJSON: any }>
+    Array<{ filePath: string; sourceFile: ts.SourceFile }>
   >();
 
   // First pass: collect all files and group them by package
@@ -60,7 +74,6 @@ export async function generate(options: GenerateOptions) {
     packageFiles.get(packageJSON.name)!.push({
       filePath: resolvedSourceFilePath,
       sourceFile,
-      packageJSON,
     });
   }
 
@@ -78,23 +91,20 @@ export async function generate(options: GenerateOptions) {
     for (const { filePath, sourceFile } of files) {
       logger.info(`  Processing file: ${filePath}`);
 
+      const documentationPromises: Promise<void>[] = [];
+
       sourceFile.forEachChild((node) => {
         // for now we only process re-exports
-        if (
-          !ts.isExportDeclaration(node) ||
-          !node.moduleSpecifier ||
-          !ts.isStringLiteral(node.moduleSpecifier) ||
-          !(node.exportClause && ts.isNamedExports(node.exportClause))
-        ) {
+        if (!isValidExportDeclaration(node)) {
           return;
         }
         const exportedFilePathTs = path.resolve(
           path.dirname(filePath),
-          node.moduleSpecifier.text.replace(".js", ".ts"),
+          node.moduleSpecifier.text.replace(/\.js$/, ".ts"),
         );
         const exportedFilePathTsx = path.resolve(
           path.dirname(filePath),
-          node.moduleSpecifier.text.replace(".js", ".tsx"),
+          node.moduleSpecifier.text.replace(/\.js$/, ".tsx"),
         );
 
         const isTsx = fs.existsSync(exportedFilePathTsx);
@@ -102,16 +112,20 @@ export async function generate(options: GenerateOptions) {
           ? exportedFilePathTsx
           : exportedFilePathTs;
 
-        node.exportClause.elements.forEach((element) => {
-          generateDocumentation(
-            element.name.text,
-            exportedFilePath,
-            outputFilePath,
-            packageName,
-            isTsx,
+        for (const element of node.exportClause.elements) {
+          documentationPromises.push(
+            generateDocumentation(
+              element.name.text,
+              exportedFilePath,
+              outputFilePath,
+              isTsx,
+            ),
           );
-        });
+        }
       });
+
+      // Wait for all documentation generation to complete
+      await Promise.all(documentationPromises);
     }
 
     // Generate and update the docs.yml file for this package (only once per package)
@@ -140,7 +154,6 @@ async function generateDocumentation(
   importedName: string,
   sourceFilePath: string,
   outputFilePath: string,
-  packageName: string,
   isTsx: boolean,
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
@@ -152,17 +165,24 @@ async function generateDocumentation(
     return;
   }
 
+  // Get the package.json to determine the export path
+  const packageJSON = await getPackageJson(sourceFilePath);
+  if (!packageJSON) {
+    return;
+  }
+
+  const exportPath = await getExportPathForFunction(
+    importedName,
+    sourceFilePath,
+    packageJSON,
+  );
+
   if (ts.isClassDeclaration(node)) {
-    generateClassDocs(node, outputFilePath, importedName, packageName);
+    generateClassDocs(node, outputFilePath, importedName, exportPath);
   } else {
+    // Use the resolved node directly - it should already be the correct node with JSDoc comments
     sidebarBuilder.addEntry(node, outputFilePath, importedName, isTsx);
-    generateFunctionDocs(
-      node,
-      importedName,
-      outputFilePath,
-      packageName,
-      isTsx,
-    );
+    generateFunctionDocs(node, importedName, outputFilePath, isTsx, exportPath);
   }
 }
 
@@ -182,7 +202,7 @@ function getSourceFile(filePath: string) {
 
 async function getPackageJson(
   sourcePath: string,
-): Promise<{ name: string } | null> {
+): Promise<{ name: string; exports?: Record<string, any> } | null> {
   const rootDir = resolve(sourcePath);
   const path = await findUp("package.json", { cwd: rootDir });
   if (!path) {
@@ -192,12 +212,121 @@ async function getPackageJson(
   return JSON.parse(fs.readFileSync(path, "utf-8"));
 }
 
+async function getExportPathForFunction(
+  functionName: string,
+  sourceFilePath: string,
+  packageJson: { name: string; exports?: Record<string, any> },
+): Promise<string> {
+  if (!packageJson.exports) {
+    return packageJson.name;
+  }
+
+  // Get the package root directory
+  const packageRoot = path.dirname(
+    (await findUp("package.json", { cwd: sourceFilePath })) || "",
+  );
+  if (!packageRoot) {
+    return packageJson.name;
+  }
+
+  // First, check if the function is exported from the root export (".")
+  // This is the preferred export path
+  const rootExport = packageJson.exports["."];
+  if (rootExport) {
+    const rootImportPath = rootExport.import || rootExport.default;
+    if (rootImportPath) {
+      // Check if the function is exported from the root export
+      // by examining the main index file
+      const mainIndexPath = path.resolve(
+        packageRoot,
+        rootImportPath
+          .replace(/^\.\/dist\/esm\//, "src/")
+          .replace(/\.js$/, ".ts"),
+      );
+
+      if (fs.existsSync(mainIndexPath)) {
+        const mainIndexSource = getSourceFile(mainIndexPath);
+        if (
+          mainIndexSource &&
+          isFunctionExportedFromFile(functionName, mainIndexSource)
+        ) {
+          return packageJson.name; // Prefer root export
+        }
+      }
+    }
+  }
+
+  // If not found in root export, look for named exports
+  for (const [exportPath, exportConfig] of Object.entries(
+    packageJson.exports,
+  )) {
+    if (exportPath === ".") continue; // Skip the main export (already checked)
+
+    // Get the export import path
+    const exportImportPath = exportConfig.import || exportConfig.default;
+    if (!exportImportPath) continue;
+
+    // Check if the function is exported from this named export
+    const namedExportPath = path.resolve(
+      packageRoot,
+      exportImportPath
+        .replace(/^\.\/dist\/esm\//, "src/")
+        .replace(/\.js$/, ".ts"),
+    );
+
+    if (fs.existsSync(namedExportPath)) {
+      const namedExportSource = getSourceFile(namedExportPath);
+      if (
+        namedExportSource &&
+        isFunctionExportedFromFile(functionName, namedExportSource)
+      ) {
+        return `${packageJson.name}${exportPath.replace(/^\./, "")}`;
+      }
+    }
+  }
+
+  // If no match found, return the main package name
+  return packageJson.name;
+}
+
+function isFunctionExportedFromFile(
+  functionName: string,
+  sourceFile: ts.SourceFile,
+): boolean {
+  let found = false;
+
+  function visit(node: ts.Node) {
+    if (found) return;
+
+    if (
+      ts.isExportDeclaration(node) &&
+      node.exportClause &&
+      ts.isNamedExports(node.exportClause)
+    ) {
+      // Check if this export declaration exports our function
+      for (const element of node.exportClause.elements) {
+        if (element.name.text === functionName) {
+          found = true;
+          return;
+        }
+      }
+    }
+
+    if (!found) {
+      ts.forEachChild(node, visit);
+    }
+  }
+
+  visit(sourceFile);
+  return found;
+}
+
 async function generateFunctionDocs(
   node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
   importedName: string,
   outputFilePath: string,
-  packageName: string,
   isTsx: boolean,
+  exportPath: string,
 ) {
   // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
   const outputLocation = ts.isClassElement(node)
@@ -217,8 +346,8 @@ async function generateFunctionDocs(
   const documentation = functionTemplate(
     node,
     importedName,
-    packageName,
     outputPath,
+    exportPath,
   );
   if (!documentation) {
     return;
@@ -236,7 +365,7 @@ function generateClassDocs(
   node: ts.ClassDeclaration,
   outputFilePath: string,
   importedName: string,
-  packageName: string,
+  exportPath: string,
 ) {
   const classOutputBasePath = path.resolve(
     outputFilePath,
@@ -271,8 +400,8 @@ function generateClassDocs(
         member,
         importedName,
         classOutputBasePath,
-        packageName,
         false,
+        exportPath,
       );
     }
   });
