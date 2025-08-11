@@ -1,4 +1,3 @@
-import React from "react";
 import type { Connector } from "wagmi";
 import { Button } from "../../button.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";

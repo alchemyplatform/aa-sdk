@@ -1,4 +1,3 @@
-import React from "react";
 import type { Wallet } from "@solana/wallet-adapter-react";
 import { Button } from "../../button.js";
 import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
