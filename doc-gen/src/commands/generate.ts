@@ -10,7 +10,7 @@ import * as logger from "../logger.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
 
 export type GenerateOptions = {
-  in: string;
+  in: string | string[];
   out: string;
 };
 
@@ -22,71 +22,117 @@ const generatedDirectories = [
 ];
 
 export async function generate(options: GenerateOptions) {
-  const sourceFilePath = path.resolve(process.cwd(), options.in);
+  const sourceFilePaths = Array.isArray(options.in) ? options.in : [options.in];
   const outputFilePath = path.resolve(process.cwd(), options.out);
   logger.info(
-    `Generating documentation for ${sourceFilePath} and outputting to ${outputFilePath}`,
+    `Generating documentation for ${sourceFilePaths.length} files and outputting to ${outputFilePath}`,
   );
 
-  const sourceFile = getSourceFile(sourceFilePath);
-  if (!sourceFile) {
-    logger.error(`File not found: ${sourceFilePath}`);
-    return;
-  }
-
-  const packageJSON = await getPackageJson(sourceFilePath);
-  if (!packageJSON) {
-    logger.error(`Could not find package.json for ${sourceFilePath}`);
-    return;
-  }
-
-  sidebarBuilder.clear();
-  sidebarBuilder.setPackageName(packageJSON.name);
-
-  // clean the output directory to account for deleted docs
+  // Clean the output directory to account for deleted docs
   generatedDirectories.forEach((dir) => {
     fs.emptyDirSync(path.resolve(outputFilePath, dir));
   });
 
-  sourceFile.forEachChild((node) => {
-    // for now we only process re-exports
-    if (
-      !ts.isExportDeclaration(node) ||
-      !node.moduleSpecifier ||
-      !ts.isStringLiteral(node.moduleSpecifier) ||
-      !(node.exportClause && ts.isNamedExports(node.exportClause))
-    ) {
-      return;
+  // Group files by package to handle multiple files from the same package
+  const packageFiles = new Map<
+    string,
+    Array<{ filePath: string; sourceFile: ts.SourceFile; packageJSON: any }>
+  >();
+
+  // First pass: collect all files and group them by package
+  for (const sourceFilePath of sourceFilePaths) {
+    const resolvedSourceFilePath = path.resolve(process.cwd(), sourceFilePath);
+    const sourceFile = getSourceFile(resolvedSourceFilePath);
+    if (!sourceFile) {
+      logger.error(`File not found: ${resolvedSourceFilePath}`);
+      continue;
     }
-    const exportedFilePathTs = path.resolve(
-      path.dirname(sourceFilePath),
-      node.moduleSpecifier.text.replace(".js", ".ts"),
-    );
-    const exportedFilePathTsx = path.resolve(
-      path.dirname(sourceFilePath),
-      node.moduleSpecifier.text.replace(".js", ".tsx"),
-    );
 
-    const isTsx = fs.existsSync(exportedFilePathTsx);
-    const exportedFilePath = isTsx ? exportedFilePathTsx : exportedFilePathTs;
+    const packageJSON = await getPackageJson(resolvedSourceFilePath);
+    if (!packageJSON) {
+      logger.error(`Could not find package.json for ${resolvedSourceFilePath}`);
+      continue;
+    }
 
-    node.exportClause.elements.forEach((element) => {
-      generateDocumentation(
-        element.name.text,
-        exportedFilePath,
-        outputFilePath,
-        packageJSON.name,
-        isTsx,
-      );
+    if (!packageFiles.has(packageJSON.name)) {
+      packageFiles.set(packageJSON.name, []);
+    }
+    packageFiles.get(packageJSON.name)!.push({
+      filePath: resolvedSourceFilePath,
+      sourceFile,
+      packageJSON,
     });
-  });
+  }
 
-  // Generate and update the docs.yml file with the new SDK Reference section
-  try {
-    await sidebarBuilder.updateDocsYaml();
-    logger.info("Successfully updated docs.yml for package:", packageJSON.name);
-  } catch (error) {
-    logger.error("Failed to update docs.yml:", error);
+  // Second pass: process each package with all its files
+  for (const [packageName, files] of packageFiles) {
+    logger.info(
+      `Processing package: ${packageName} with ${files.length} file(s)`,
+    );
+
+    // Initialize sidebar builder for this package
+    sidebarBuilder.clear();
+    sidebarBuilder.setPackageName(packageName);
+
+    // Process all files for this package
+    for (const { filePath, sourceFile } of files) {
+      logger.info(`  Processing file: ${filePath}`);
+
+      sourceFile.forEachChild((node) => {
+        // for now we only process re-exports
+        if (
+          !ts.isExportDeclaration(node) ||
+          !node.moduleSpecifier ||
+          !ts.isStringLiteral(node.moduleSpecifier) ||
+          !(node.exportClause && ts.isNamedExports(node.exportClause))
+        ) {
+          return;
+        }
+        const exportedFilePathTs = path.resolve(
+          path.dirname(filePath),
+          node.moduleSpecifier.text.replace(".js", ".ts"),
+        );
+        const exportedFilePathTsx = path.resolve(
+          path.dirname(filePath),
+          node.moduleSpecifier.text.replace(".js", ".tsx"),
+        );
+
+        const isTsx = fs.existsSync(exportedFilePathTsx);
+        const exportedFilePath = isTsx
+          ? exportedFilePathTsx
+          : exportedFilePathTs;
+
+        node.exportClause.elements.forEach((element) => {
+          generateDocumentation(
+            element.name.text,
+            exportedFilePath,
+            outputFilePath,
+            packageName,
+            isTsx,
+          );
+        });
+      });
+    }
+
+    // Generate and update the docs.yml file for this package (only once per package)
+    try {
+      await sidebarBuilder.updateDocsYaml();
+      logger.info(`Successfully updated docs.yml for package: ${packageName}`);
+    } catch (error) {
+      logger.error(
+        `Failed to update docs.yml for package ${packageName}:`,
+        error,
+      );
+    }
+  }
+
+  if (packageFiles.size > 0) {
+    logger.info(
+      `Completed processing ${packageFiles.size} packages:`,
+      Array.from(packageFiles.keys()).join(", "),
+    );
+  } else {
+    logger.warn("No packages were successfully processed");
   }
 }
 
