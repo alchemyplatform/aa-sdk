@@ -25,7 +25,6 @@ import { useMemo } from "react";
 
 export const WALLET_CONNECT = "walletConnect";
 
-// --- helpers (kept local to minimize diff) ---
 const norm = (s?: string) => (s ?? "").toLowerCase();
 const isWC = (name: string) => {
   const n = norm(name);
@@ -55,9 +54,7 @@ const getExternalWalletsSection = (
   }
   if (Array.isArray(cfg?.auth?.sections)) {
     const groups = cfg.auth.sections;
-    const flat = groups.some(Array.isArray)
-      ? groups.reduce((acc: any[], g: any) => acc.concat(g), [])
-      : groups;
+    const flat = groups.flat();
     const sec = pick(flat);
     if (sec) return sec;
   }

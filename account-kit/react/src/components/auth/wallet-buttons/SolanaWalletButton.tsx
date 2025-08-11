@@ -31,7 +31,7 @@ export const SolanaWalletButton = ({
 
   const renderIcon = () => {
     if (IconComponent) {
-      return React.createElement(IconComponent);
+      return <IconComponent />;
     }
 
     if (fallbackIconSrc) {

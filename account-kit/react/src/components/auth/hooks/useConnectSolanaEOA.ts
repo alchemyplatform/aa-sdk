@@ -19,9 +19,8 @@ export const useConnectSolanaEOA = () => {
   );
 
   useEffect(() => {
-    if (!publicKey) return;
-
-    if (authStep.type !== "complete") setAuthStep({ type: "complete" });
+    if (publicKey && authStep.type !== "complete")
+      setAuthStep({ type: "complete" });
   }, [publicKey, setAuthStep, authStep.type]);
 
   return {

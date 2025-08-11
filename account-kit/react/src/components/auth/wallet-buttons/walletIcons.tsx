@@ -31,11 +31,9 @@ export const getSolanaAdapterIcon = (
   switch (adapterName.toLowerCase()) {
     case "phantom":
       // For now, return null as we don't have a phantom icon yet
-      // TODO: Add PhantomIcon when available
       return null;
     case "solflare":
       // For now, return null as we don't have a solflare icon yet
-      // TODO: Add SolflareIcon when available
       return null;
     default:
       return null;

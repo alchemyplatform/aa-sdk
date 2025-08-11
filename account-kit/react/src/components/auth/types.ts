@@ -30,7 +30,6 @@ export type AuthType =
       numFeaturedWallet?: number;
       // Backwards compatible shape
       walletConnect?: import("wagmi/connectors").WalletConnectParameters;
-      // wallets?: ExternalWalletUIConfig[];
       moreButtonText?: string;
       hideMoreButton?: boolean;
     }

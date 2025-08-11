@@ -33,7 +33,7 @@ export const WalletButton = ({
 
   const renderIcon = () => {
     if (IconComponent) {
-      return React.createElement(IconComponent);
+      return <IconComponent />;
     }
 
     if (fallbackIconSrc) {

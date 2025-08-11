@@ -107,24 +107,22 @@ export const AlchemyAccountProvider = (
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
           <SolanaWalletProvider>
-            <>
-              {config.ui ? (
-                <UiConfigProvider initialConfig={config.ui}>
-                  <AuthModalContext.Provider
-                    value={{
-                      authStep,
-                      setAuthStep,
-                      resetAuthStep,
-                    }}
-                  >
-                    {children}
-                    <AuthModal />
-                  </AuthModalContext.Provider>
-                </UiConfigProvider>
-              ) : (
-                { children }
-              )}
-            </>
+            {config.ui ? (
+              <UiConfigProvider initialConfig={config.ui}>
+                <AuthModalContext.Provider
+                  value={{
+                    authStep,
+                    setAuthStep,
+                    resetAuthStep,
+                  }}
+                >
+                  {children}
+                  <AuthModal />
+                </AuthModalContext.Provider>
+              </UiConfigProvider>
+            ) : (
+              children
+            )}
           </SolanaWalletProvider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
