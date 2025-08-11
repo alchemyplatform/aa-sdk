@@ -58,13 +58,13 @@ export type EntityIdAndNonceParams = {
 
 export type DeferralActions = {
   createDeferredActionTypedDataObject: (
-    args: CreateDeferredActionTypedDataParams
+    args: CreateDeferredActionTypedDataParams,
   ) => Promise<DeferredActionReturnData>;
   buildPreSignatureDeferredActionDigest: (
-    args: BuildPreSignatureDeferredActionDigestParams
+    args: BuildPreSignatureDeferredActionDigestParams,
   ) => Hex;
   getEntityIdAndNonce: (
-    args: EntityIdAndNonceParams
+    args: EntityIdAndNonceParams,
   ) => Promise<{ nonce: bigint; entityId: number }>;
 };
 
@@ -79,7 +79,7 @@ export const deferralActions = <
   TChain extends Chain = Chain,
   TAccount extends SmartAccount = SmartAccount,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ): DeferralActions => {
   const createDeferredActionTypedDataObject = async ({
     callData,
@@ -129,7 +129,7 @@ export const deferralActions = <
 
     const encodedCallData = encodePacked(
       ["uint168", "uint48", "bytes"],
-      [validationLocator, typedData.message.deadline, typedData.message.call]
+      [validationLocator, typedData.message.deadline, typedData.message.call],
     );
 
     const encodedDataLength = size(encodedCallData);

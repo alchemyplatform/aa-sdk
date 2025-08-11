@@ -115,7 +115,7 @@ function defineInstance(params: DefineInstanceParams) {
               createClient({
                 chain,
                 transport: http(rpcUrls().bundler),
-              }).extend(() => ({ mode: "bundler" }))
+              }).extend(() => ({ mode: "bundler" })),
             ),
           },
         ],
@@ -157,7 +157,7 @@ function defineInstance(params: DefineInstanceParams) {
             api: "eth,rundler,debug",
           },
         },
-        { messageBuffer: 10 }
+        { messageBuffer: 10 },
       ),
     port: bundlerPort,
   });

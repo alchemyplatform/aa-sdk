@@ -50,7 +50,7 @@ export type PredictModularAccountV2AddressParams = {
  * @returns {Address} The predicted address for the modular account V2.
  */
 export function predictModularAccountV2Address(
-  params: PredictModularAccountV2AddressParams
+  params: PredictModularAccountV2AddressParams,
 ): Address {
   const { factoryAddress, salt, implementationAddress } = params;
 
@@ -64,11 +64,11 @@ export function predictModularAccountV2Address(
           combinedSalt: getCombinedSaltK1(
             params.ownerAddress,
             salt,
-            0xffffffff
+            0xffffffff,
           ),
           initcode: getProxyBytecodeWithImmutableArgs(
             implementationAddress,
-            params.ownerAddress
+            params.ownerAddress,
           ),
         };
       case "MA":
@@ -76,7 +76,7 @@ export function predictModularAccountV2Address(
           combinedSalt: getCombinedSaltK1(
             params.ownerAddress,
             salt,
-            params.entityId
+            params.entityId,
           ),
           initcode: getProxyBytecode(implementationAddress),
         };
@@ -86,7 +86,7 @@ export function predictModularAccountV2Address(
           combinedSalt: getCombinedSaltWebAuthn(
             { x, y },
             salt,
-            params.entityId
+            params.entityId,
           ),
           initcode: getProxyBytecode(implementationAddress),
         };
@@ -106,26 +106,26 @@ export function predictModularAccountV2Address(
 function getCombinedSaltK1(
   ownerAddress: Address,
   salt: bigint,
-  entityId: number
+  entityId: number,
 ): Hex {
   return keccak256(
     encodePacked(
       ["address", "uint256", "uint32"],
-      [ownerAddress, salt, entityId]
-    )
+      [ownerAddress, salt, entityId],
+    ),
   );
 }
 
 function getCombinedSaltWebAuthn(
   ownerPublicKey: { x: bigint; y: bigint },
   salt: bigint,
-  entityId: number
+  entityId: number,
 ): Hex {
   return keccak256(
     encodePacked(
       ["uint256", "uint256", "uint256", "uint32"],
-      [ownerPublicKey.x, ownerPublicKey.y, salt, entityId]
-    )
+      [ownerPublicKey.x, ownerPublicKey.y, salt, entityId],
+    ),
   );
 }
 
@@ -139,11 +139,11 @@ function getProxyBytecode(implementationAddress: Address): Hex {
 
 function getProxyBytecodeWithImmutableArgs(
   implementationAddress: Address,
-  immutableArgs: Hex
+  immutableArgs: Hex,
 ): Hex {
   return `0x6100513d8160233d3973${implementationAddress.slice(
-    2
+    2,
   )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3${immutableArgs.slice(
-    2
+    2,
   )}`;
 }

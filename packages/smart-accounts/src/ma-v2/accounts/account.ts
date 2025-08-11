@@ -151,12 +151,12 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
     // TODO(v5): Ensure this works w/ our signer types.
     if (owner.type !== "local") {
       throw new InvalidOwnerError(
-        `Owner of type ${owner.type} is unsupported for 7702 mode.`
+        `Owner of type ${owner.type} is unsupported for 7702 mode.`,
       );
     }
     if (owner.signAuthorization == null) {
       throw new InvalidOwnerError(
-        "Owner must implement `signAuthorization` to be used with 7702 mode."
+        "Owner must implement `signAuthorization` to be used with 7702 mode.",
       );
     }
     if (

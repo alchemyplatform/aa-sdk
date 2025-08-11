@@ -80,11 +80,11 @@ describe("bigIntMultiply", () => {
 
     it("should throw error for more than 4 decimal places", () => {
       expect(() => bigIntMultiply(100n, 1.23456)).toThrow(
-        "bigIntMultiply max precision is 4 decimal places."
+        "bigIntMultiply max precision is 4 decimal places.",
       );
 
       expect(() => bigIntMultiply(100n, 0.123456)).toThrow(
-        "bigIntMultiply max precision is 4 decimal places."
+        "bigIntMultiply max precision is 4 decimal places.",
       );
     });
   });
@@ -93,10 +93,10 @@ describe("bigIntMultiply", () => {
     it("should handle very large BigInt values", () => {
       const largeBigInt = BigInt("123456789012345678901234567890");
       expect(bigIntMultiply(largeBigInt, 2)).toBe(
-        BigInt("246913578024691357802469135780")
+        BigInt("246913578024691357802469135780"),
       );
       expect(bigIntMultiply(largeBigInt, 1.5)).toBe(
-        BigInt("185185183518518518351851851835")
+        BigInt("185185183518518518351851851835"),
       );
     });
 

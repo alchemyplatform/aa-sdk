@@ -310,7 +310,7 @@ export class PermissionBuilder {
             p.data.address === targetAddress) ||
           (p.type === PermissionType.FUNCTIONS_ON_CONTRACT &&
             "address" in p.data &&
-            p.data.address === targetAddress)
+            p.data.address === targetAddress),
       );
 
       if (existingPermissionWithSameAddress) {
@@ -368,15 +368,15 @@ export class PermissionBuilder {
             validUntil: this.deadline,
             validAfter: 0,
           },
-          DefaultModuleAddress.TIME_RANGE
-        )
+          DefaultModuleAddress.TIME_RANGE,
+        ),
       );
     }
 
     const installValidationCall = await this.compileRaw();
 
     const { typedData } = await deferralActions(
-      this.client
+      this.client,
     ).createDeferredActionTypedDataObject({
       callData: installValidationCall,
       deadline: this.deadline,
@@ -384,7 +384,7 @@ export class PermissionBuilder {
     });
 
     const preSignatureDigest = deferralActions(
-      this.client
+      this.client,
     ).buildPreSignatureDeferredActionDigest({ typedData });
 
     // Encode additional information to build the full pre-signature digest
@@ -410,7 +410,7 @@ export class PermissionBuilder {
     // Translate all permissions into raw hooks if >0
     if (this.permissions.length > 0) {
       const rawHooks = this.translatePermissions(
-        this.validationConfig.entityId
+        this.validationConfig.entityId,
       );
       // Add the translated permissions as hooks
       this.addHooks(rawHooks);
@@ -669,7 +669,7 @@ export class PermissionBuilder {
 
         // Only add the selectors if they aren't already in this.selectors
         const newSelectors = selectorsToAdd.filter(
-          (selector) => !this.selectors.includes(selector)
+          (selector) => !this.selectors.includes(selector),
         );
 
         this.selectors = [...this.selectors, ...newSelectors];

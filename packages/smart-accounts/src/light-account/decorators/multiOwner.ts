@@ -14,12 +14,12 @@ export type MultiOwnerLightAccountActions<
     args: {
       ownersToAdd: Address[];
       ownersToRemove: Address[];
-    } & GetAccountParameter<TAccount, MultiOwnerLightAccount>
+    } & GetAccountParameter<TAccount, MultiOwnerLightAccount>,
   ) => Promise<Hex>;
 };
 
 function isMultiOwnerLightAccount(
-  account: SmartAccount
+  account: SmartAccount,
 ): account is MultiOwnerLightAccount {
   return "source" in account && account.source === "MultiOwnerLightAccount";
 }
@@ -35,7 +35,7 @@ export function multiOwnerLightAccountActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ): MultiOwnerLightAccountActions<
   IsUndefined<TAccount> extends true ? undefined : MultiOwnerLightAccount
 > {

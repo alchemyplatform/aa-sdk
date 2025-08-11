@@ -20,7 +20,7 @@ export const chainHas7212 = async (client: Client): Promise<boolean> => {
 export function packAccountGasLimits(
   data:
     | Pick<UserOperation, "verificationGasLimit" | "callGasLimit">
-    | Pick<UserOperation, "maxPriorityFeePerGas" | "maxFeePerGas">
+    | Pick<UserOperation, "maxPriorityFeePerGas" | "maxFeePerGas">,
 ): Hex {
   return concat(Object.values(data).map((v) => toHex(v, { size: 16 })));
 }
@@ -56,7 +56,7 @@ export function packPaymasterData({
 export const bigIntMultiply = (
   base: number | bigint | Hex,
   multiplier: number,
-  roundingMode: "ROUND" | "FLOOR" | "CEIL" = "CEIL"
+  roundingMode: "ROUND" | "FLOOR" | "CEIL" = "CEIL",
 ) => {
   if (Number.isInteger(multiplier)) {
     return BigInt(base) * BigInt(multiplier);

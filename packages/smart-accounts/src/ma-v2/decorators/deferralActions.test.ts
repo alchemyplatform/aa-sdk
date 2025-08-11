@@ -4,7 +4,6 @@ import {
   createPublicClient,
   custom,
   isAddress,
-  isHex,
   parseEther,
   parseGwei,
   publicActions,
@@ -18,7 +17,6 @@ import { createBundlerClient } from "viem/account-abstraction";
 import { entryPoint07Abi } from "viem/account-abstraction";
 import { mine, setBalance, setNextBlockBaseFeePerGas } from "viem/actions";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { getBlock } from "viem/actions";
 import { local070Instance } from "~test/instances.js";
 import { toModularAccountV2 } from "../accounts/account.js";
 import { deferralActions } from "./deferralActions.js";
@@ -28,14 +26,10 @@ import {
   type Permission,
 } from "../permissionBuilder.js";
 import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js";
-import { raise } from "@alchemy/common";
 import { buildDeferredActionDigest } from "../utils/deferredActions.js";
 import { SignaturePrefix } from "../types.js";
-import {
-  bigIntMultiply,
-  packAccountGasLimits,
-  packPaymasterData,
-} from "../../utils.js";
+import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
+import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
@@ -153,7 +147,7 @@ describe("MA v2 deferral actions tests", async () => {
         hash: hash2,
         timeout: 10_000,
       });
-    }
+    },
   );
 
   it(
@@ -211,7 +205,7 @@ describe("MA v2 deferral actions tests", async () => {
         hash: hash2,
         timeout: 10_000,
       });
-    }
+    },
   );
 
   it("PermissionBuilder: Cannot add any permission after root", async () => {
@@ -292,7 +286,7 @@ describe("MA v2 deferral actions tests", async () => {
         })
         .compileDeferred();
     }).rejects.toThrowError(
-      /compileDeferred\(\): deadline \d+ cannot be before now \(\d+(\.\d+)?\)/
+      /compileDeferred\(\): deadline \d+ cannot be before now \(\d+(\.\d+)?\)/,
     );
   });
 
@@ -459,7 +453,7 @@ describe("MA v2 deferral actions tests", async () => {
       }).rejects.toThrow(
         new RootPermissionOnlyError({
           type: PermissionType.ROOT,
-        })
+        }),
       );
     });
   });
@@ -502,34 +496,7 @@ describe("MA v2 deferral actions tests", async () => {
       transport: custom(instance.getClient().transport),
       chain: instance.chain,
       userOperation: {
-        // TODO(jh): use the action trevor made in other pr once merged.
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            bundlerClient.request({
-              // @ts-expect-error - This is fine.
-              method: "rundler_maxPriorityFeePerGas",
-            }),
-          ]);
-
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-          if (maxPriorityFeePerGasEstimate == null)
-            throw new Error(
-              "rundler_maxPriorityFeePerGas returned null or undefined"
-            );
-
-          // With RpcUserOperation typing, this should always be a hex string.
-          const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-            ? BigInt(maxPriorityFeePerGasEstimate)
-            : raise("Expected maxPriorityFeePerGasEstimate to be hex");
-
-          return {
-            maxPriorityFeePerGas,
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
-          };
-        },
+        estimateFeesPerGas: alchemyEstimateFeesPerGas,
       },
     });
   };
@@ -543,7 +510,7 @@ describe("MA v2 deferral actions tests", async () => {
    */
   function createERC20TokenTransferPermission(
     tokenAddress: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC on Ethereum mainnet
-    allowance: string | number = "1000000000" // 1,000 USDC with 6 decimals
+    allowance: string | number = "1000000000", // 1,000 USDC with 6 decimals
   ): Permission {
     return {
       type: PermissionType.ERC20_TOKEN_TRANSFER,
@@ -561,7 +528,7 @@ describe("MA v2 deferral actions tests", async () => {
    * @returns {Permission} A NATIVE_TOKEN_TRANSFER permission
    */
   function createNativeTokenTransferPermission(
-    allowance: string | number = "1000000000000000000" // 1 ETH
+    allowance: string | number = "1000000000000000000", // 1 ETH
   ): Permission {
     return {
       type: PermissionType.NATIVE_TOKEN_TRANSFER,
@@ -578,7 +545,7 @@ describe("MA v2 deferral actions tests", async () => {
    * @returns {Permission} A GAS_LIMIT permission
    */
   function createGasLimitPermission(
-    limit: string | number = "100000" // 100k gas
+    limit: string | number = "100000", // 100k gas
   ): Permission {
     return {
       type: PermissionType.GAS_LIMIT,
@@ -595,7 +562,7 @@ describe("MA v2 deferral actions tests", async () => {
    * @returns {Permission} A CONTRACT_ACCESS permission
    */
   function createContractAccessPermission(
-    contractAddress: Address = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984" // Uniswap on Ethereum mainnet
+    contractAddress: Address = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", // Uniswap on Ethereum mainnet
   ): Permission {
     return {
       type: PermissionType.CONTRACT_ACCESS,
@@ -616,7 +583,7 @@ describe("MA v2 deferral actions tests", async () => {
       "0x095ea7b3", // approve(address,uint256)
       "0xa9059cbb", // transfer(address,uint256)
       "0x23b872dd", // transferFrom(address,address,uint256)
-    ]
+    ],
   ): Permission {
     return {
       type: PermissionType.ACCOUNT_FUNCTIONS,
@@ -636,7 +603,7 @@ describe("MA v2 deferral actions tests", async () => {
     functionSignatures: Hex[] = [
       "0x095ea7b3", // approve(address,uint256)
       "0xa9059cbb", // transfer(address,uint256)
-    ]
+    ],
   ): Permission {
     return {
       type: PermissionType.FUNCTIONS_ON_ALL_CONTRACTS,
@@ -658,7 +625,7 @@ describe("MA v2 deferral actions tests", async () => {
     functionSignatures: Hex[] = [
       "0x7ff36ab5", // swapExactETHForTokens
       "0x18cbafe5", // swapExactTokensForETH
-    ]
+    ],
   ): Permission {
     return {
       type: PermissionType.FUNCTIONS_ON_CONTRACT,

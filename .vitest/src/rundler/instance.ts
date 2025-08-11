@@ -507,7 +507,7 @@ export const rundler = defineInstance((parameters?: RundlerParameters) => {
               reject(data.toString());
             });
           },
-        }
+        },
       );
     },
     async stop() {

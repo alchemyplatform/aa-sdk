@@ -23,6 +23,7 @@ import {
 } from "../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError } from "@alchemy/common";
+import { getAction } from "viem/utils";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -120,7 +121,12 @@ export async function toLightAccount<
     },
 
     async getOwnerAddress(): Promise<Address> {
-      const owner = await readContract(client, {
+      const readContractAction = getAction(
+        client,
+        readContract,
+        "readContract",
+      );
+      const owner = await readContractAction({
         address: accountAddress,
         abi: accountAbi,
         functionName: "owner",

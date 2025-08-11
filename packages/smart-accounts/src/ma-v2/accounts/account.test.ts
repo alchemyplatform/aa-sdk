@@ -22,7 +22,6 @@ import {
   type TestActions,
   parseAbi,
   createPublicClient,
-  isHex,
 } from "viem";
 import {
   createBundlerClient,
@@ -32,7 +31,7 @@ import {
   type WebAuthnAccount,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { getBlock, setBalance } from "viem/actions";
+import { setBalance } from "viem/actions";
 import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
@@ -52,13 +51,9 @@ import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.j
 import { AllowlistModule } from "../modules/allowlist-module/module.js";
 import { NativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
-import { raise } from "@alchemy/common";
 import { getMAV2UpgradeToData } from "../utils/account.js";
-import {
-  bigIntMultiply,
-  packAccountGasLimits,
-  packPaymasterData,
-} from "../../utils.js";
+import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
+import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -118,7 +113,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     await expect(getTargetBalance()).resolves.toEqual(
-      startingAddressBalance + sendAmount
+      startingAddressBalance + sendAmount,
     );
   });
 
@@ -152,9 +147,9 @@ describe("MA v2 Account Tests", async () => {
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
       await expect(getTargetBalance()).resolves.toEqual(
-        startingAddressBalance + sendAmount
+        startingAddressBalance + sendAmount,
       );
-    }
+    },
   );
 
   it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
@@ -246,7 +241,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       expect(isValid).toBe(true);
-    }
+    },
   );
 
   it.fails(
@@ -306,7 +301,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       expect(isValid).toBe(true);
-    }
+    },
   );
 
   it(
@@ -314,7 +309,7 @@ describe("MA v2 Account Tests", async () => {
     { retry: 3, timeout: 30_000 },
     async () => {
       const provider = (await givenConnectedProvider({ signer: owner })).extend(
-        installValidationActions
+        installValidationActions,
       );
 
       await setBalance(instance.getClient(), {
@@ -354,7 +349,10 @@ describe("MA v2 Account Tests", async () => {
       });
 
       await expect(
-        accountContract.read.isValidSignature([hashMessage(message), signature])
+        accountContract.read.isValidSignature([
+          hashMessage(message),
+          signature,
+        ]),
       ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
 
       // connect session key
@@ -372,9 +370,9 @@ describe("MA v2 Account Tests", async () => {
         accountContract.read.isValidSignature([
           hashMessage(message),
           sessionKeySig,
-        ])
+        ]),
       ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
-    }
+    },
   );
 
   it(
@@ -382,7 +380,7 @@ describe("MA v2 Account Tests", async () => {
     { retry: 3, timeout: 30_000 },
     async () => {
       const provider = (await givenConnectedProvider({ signer: owner })).extend(
-        installValidationActions
+        installValidationActions,
       );
 
       await setBalance(instance.getClient(), {
@@ -466,7 +464,7 @@ describe("MA v2 Account Tests", async () => {
         accountContract.read.isValidSignature([
           hashedMessageTypedData,
           fmtSignature,
-        ])
+        ]),
       ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
 
       // connect session key
@@ -483,14 +481,14 @@ describe("MA v2 Account Tests", async () => {
         accountContract.read.isValidSignature([
           hashedMessageTypedData,
           sessionKeySignature,
-        ])
+        ]),
       ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
-    }
+    },
   );
 
   it("adds a session key with no permissions", async () => {
     const provider = (await givenConnectedProvider({ signer: owner })).extend(
-      installValidationActions
+      installValidationActions,
     );
 
     await setBalance(client, {
@@ -541,7 +539,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     await expect(getTargetBalance()).resolves.toEqual(
-      startingAddressBalance + sendAmount
+      startingAddressBalance + sendAmount,
     );
   });
 
@@ -625,7 +623,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-    }
+    },
   );
 
   it(
@@ -661,7 +659,7 @@ describe("MA v2 Account Tests", async () => {
         nonce: BigInt(
           await client.getTransactionCount({
             address: walletClient.account.address,
-          })
+          }),
         ),
       });
 
@@ -734,7 +732,7 @@ describe("MA v2 Account Tests", async () => {
           abi: mintableERC20Abi,
           functionName: "balanceOf",
           args: [target],
-        })
+        }),
       ).to.eq(0n);
 
       // Build the full UO with the deferred action signature prepend (must be session key client)
@@ -760,9 +758,9 @@ describe("MA v2 Account Tests", async () => {
           abi: mintableERC20Abi,
           functionName: "balanceOf",
           args: [target],
-        })
+        }),
       ).to.eq(900n);
-    }
+    },
   );
 
   it(
@@ -852,7 +850,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-    }
+    },
   );
 
   it(
@@ -964,12 +962,12 @@ describe("MA v2 Account Tests", async () => {
         hash: hash2,
         timeout: 30_000,
       });
-    }
+    },
   );
 
   it("uninstalls a session key", async () => {
     const provider = (await givenConnectedProvider({ signer: owner })).extend(
-      installValidationActions
+      installValidationActions,
     );
 
     await setBalance(client, {
@@ -1025,108 +1023,105 @@ describe("MA v2 Account Tests", async () => {
             data: "0x",
           },
         ],
-      })
+      }),
     ).rejects.toThrowError();
   });
 
-  it.fails(
-    "installs paymaster guard module, verifies use of valid paymaster, then uninstalls module",
-    async () => {
-      const provider = (
-        await givenConnectedProvider({
-          signer: owner,
-          paymasterMiddleware: "erc7677",
-        })
-      ).extend(installValidationActions);
+  it("installs paymaster guard module, verifies use of valid paymaster, then uninstalls module", async () => {
+    const provider = (
+      await givenConnectedProvider({
+        signer: owner,
+        paymasterMiddleware: "erc7677",
+      })
+    ).extend(installValidationActions);
 
-      await setBalance(client, {
-        address: provider.account.address,
-        value: parseEther("20"),
-      });
+    await setBalance(client, {
+      address: provider.account.address,
+      value: parseEther("20"),
+    });
 
-      const paymaster = paymaster070.getPaymasterDetails().address;
+    const paymaster = paymaster070.getPaymasterDetails().address;
 
-      const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
-        entityId: 1,
-        paymaster: paymaster,
-      });
+    const hookInstallData = PaymasterGuardModule.encodeOnInstallData({
+      entityId: 1,
+      paymaster: paymaster,
+    });
 
-      const hash = await provider.installValidation({
-        validationConfig: {
-          moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-          entityId: 1,
-          isGlobal: true,
-          isSignatureValidation: true,
-          isUserOpValidation: true,
-        },
-        selectors: [],
-        installData: SingleSignerValidationModule.encodeOnInstallData({
-          entityId: 1,
-          signer: sessionKey.address,
-        }),
-        hooks: [
-          {
-            hookConfig: {
-              address: DefaultModuleAddress.PAYMASTER_GUARD,
-              entityId: 1,
-              hookType: HookType.VALIDATION,
-              hasPreHooks: true,
-              hasPostHooks: false,
-            },
-            initData: hookInstallData,
-          },
-        ],
-      });
-
-      // verify hook installation succeeded
-      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-
-      // create session key client
-      const sessionKeyProvider = (
-        await givenConnectedProvider({
-          signer: sessionKey,
-          accountAddress: provider.account.address,
-          paymasterMiddleware: "erc7677",
-          signerEntity: { entityId: 1, isGlobalValidation: true },
-        })
-      ).extend(installValidationActions);
-
-      // happy path: send a UO with correct paymaster
-      const hash2 = await sessionKeyProvider.sendUserOperation({
-        calls: [
-          {
-            to: zeroAddress,
-            value: 0n,
-            data: "0x",
-          },
-        ],
-      });
-
-      // verify if correct paymaster is used
-      await sessionKeyProvider.waitForUserOperationReceipt({
-        hash: hash2,
-        timeout: 30_000,
-      });
-
-      const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
-        entityId: 1,
-      });
-
-      const hash3 = await provider.uninstallValidation({
+    const hash = await provider.installValidation({
+      validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
-          entityId: 1,
-        }),
-        hookUninstallDatas: [hookUninstallData],
-      });
+        isGlobal: true,
+        isSignatureValidation: true,
+        isUserOpValidation: true,
+      },
+      selectors: [],
+      installData: SingleSignerValidationModule.encodeOnInstallData({
+        entityId: 1,
+        signer: sessionKey.address,
+      }),
+      hooks: [
+        {
+          hookConfig: {
+            address: DefaultModuleAddress.PAYMASTER_GUARD,
+            entityId: 1,
+            hookType: HookType.VALIDATION,
+            hasPreHooks: true,
+            hasPostHooks: false,
+          },
+          initData: hookInstallData,
+        },
+      ],
+    });
 
-      // verify uninstall
-      await expect(
-        provider.waitForUserOperationReceipt({ hash: hash3, timeout: 30_000 })
-      ).resolves.not.toThrowError();
-    }
-  );
+    // verify hook installation succeeded
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+
+    // create session key client
+    const sessionKeyProvider = (
+      await givenConnectedProvider({
+        signer: sessionKey,
+        accountAddress: provider.account.address,
+        paymasterMiddleware: "erc7677",
+        signerEntity: { entityId: 1, isGlobalValidation: true },
+      })
+    ).extend(installValidationActions);
+
+    // happy path: send a UO with correct paymaster
+    const hash2 = await sessionKeyProvider.sendUserOperation({
+      calls: [
+        {
+          to: zeroAddress,
+          value: 0n,
+          data: "0x",
+        },
+      ],
+    });
+
+    // verify if correct paymaster is used
+    await sessionKeyProvider.waitForUserOperationReceipt({
+      hash: hash2,
+      timeout: 30_000,
+    });
+
+    const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
+      entityId: 1,
+    });
+
+    const hash3 = await provider.uninstallValidation({
+      moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+      entityId: 1,
+      uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+        entityId: 1,
+      }),
+      hookUninstallDatas: [hookUninstallData],
+    });
+
+    // verify uninstall
+    await expect(
+      provider.waitForUserOperationReceipt({ hash: hash3, timeout: 30_000 }),
+    ).resolves.not.toThrowError();
+  });
 
   it("installs paymaster guard module, verifies use of invalid paymaster, then uninstalls module", async () => {
     const provider = (
@@ -1197,7 +1192,7 @@ describe("MA v2 Account Tests", async () => {
             data: "0x",
           },
         ],
-      })
+      }),
     ).rejects.toThrowError();
 
     const hookUninstallData = PaymasterGuardModule.encodeOnUninstallData({
@@ -1215,13 +1210,13 @@ describe("MA v2 Account Tests", async () => {
 
     // verify uninstall
     await expect(
-      provider.waitForUserOperationReceipt({ hash: hash2, timeout: 30_000 })
+      provider.waitForUserOperationReceipt({ hash: hash2, timeout: 30_000 }),
     ).resolves.not.toThrowError();
   });
 
   it("installs allowlist module, uses, then uninstalls", async () => {
     const provider = (await givenConnectedProvider({ signer: owner })).extend(
-      installValidationActions
+      installValidationActions,
     );
 
     await setBalance(client, {
@@ -1343,7 +1338,7 @@ describe("MA v2 Account Tests", async () => {
             data: "0x",
           },
         ],
-      })
+      }),
     ).rejects.toThrowError();
 
     const hookUninstallData = AllowlistModule.encodeOnUninstallData({
@@ -1379,7 +1374,7 @@ describe("MA v2 Account Tests", async () => {
     { retry: 3, timeout: 30_000 },
     async () => {
       const provider = (await givenConnectedProvider({ signer: owner })).extend(
-        installValidationActions
+        installValidationActions,
       );
 
       await setBalance(client, {
@@ -1465,7 +1460,7 @@ describe("MA v2 Account Tests", async () => {
               data: "0x",
             },
           ],
-        })
+        }),
       ).rejects.toThrowError();
 
       const hash5 = await provider.uninstallValidation({
@@ -1486,7 +1481,7 @@ describe("MA v2 Account Tests", async () => {
         hash: hash5,
         timeout: 30_000,
       });
-    }
+    },
   );
 
   it("installs time range module, sends transaction within valid time range", async () => {
@@ -1746,8 +1741,8 @@ describe("MA v2 Account Tests", async () => {
       // verify that simulation fails due to violation of time range restriction on session key
       expect(
         err.metaMessages.some((str: string) =>
-          str.includes("AA22 expired or not due")
-        )
+          str.includes("AA22 expired or not due"),
+        ),
       ).toBe(true);
     }
 
@@ -1792,7 +1787,7 @@ describe("MA v2 Account Tests", async () => {
               entityId: expectedEntityId,
               isDeferredAction: true,
             }),
-          ])
+          ]),
         ).resolves.toEqual(nonce);
       }
     }
@@ -1825,7 +1820,7 @@ describe("MA v2 Account Tests", async () => {
         prepareEncodeFunctionData({
           abi: semiModularAccountBytecodeAbi,
           functionName: s,
-        }).functionName
+        }).functionName,
     );
 
     // deploy the account and install some entity ids with selector validation
@@ -1870,7 +1865,7 @@ describe("MA v2 Account Tests", async () => {
               entityId: expectedEntityId,
               isDeferredAction: true,
             }),
-          ])
+          ]),
         ).resolves.toEqual(nonce);
       }
     }
@@ -1892,34 +1887,7 @@ describe("MA v2 Account Tests", async () => {
       transport: custom(instance.getClient()),
       chain: instance.chain,
       userOperation: {
-        // TODO(jh): use the action trevor made in other pr once merged.
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            bundlerClient.request({
-              // @ts-expect-error - This is fine.
-              method: "rundler_maxPriorityFeePerGas",
-            }),
-          ]);
-
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-          if (maxPriorityFeePerGasEstimate == null)
-            throw new Error(
-              "rundler_maxPriorityFeePerGas returned null or undefined"
-            );
-
-          // With RpcUserOperation typing, this should always be a hex string
-          const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-            ? BigInt(maxPriorityFeePerGasEstimate)
-            : raise("Expected maxPriorityFeePerGasEstimate to be hex");
-
-          return {
-            maxPriorityFeePerGas,
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
-          };
-        },
+        estimateFeesPerGas: alchemyEstimateFeesPerGas,
       },
     });
 
@@ -1967,6 +1935,8 @@ describe("MA v2 Account Tests", async () => {
         value: parseEther("1"),
       });
 
+      provider.account.isDeployed;
+
       const walletClient = createWalletClient({
         account: owner,
         transport: custom(instance.getClient()),
@@ -1975,10 +1945,14 @@ describe("MA v2 Account Tests", async () => {
 
       const preparedAuthorization = provider.account.authorization
         ? await walletClient.prepareAuthorization(
-            provider.account.authorization
+            provider.account.authorization,
           )
         : undefined;
 
+      // Viem's `sendUserOperation` action DOES include preparing the authorization,
+      // if needed, but unfortunately doesn't include signing it. So we need
+      // to do this step manually. Maybe later Viem will handle it automatically?
+      // https://github.com/wevm/viem/blob/9d41203c46cf989a489ee33b3f8a12128aad4236/src/account-abstraction/actions/bundler/sendUserOperation.ts#L137
       const signedAuthorization = preparedAuthorization
         ? await walletClient.signAuthorization(preparedAuthorization)
         : undefined;
@@ -1993,20 +1967,41 @@ describe("MA v2 Account Tests", async () => {
         authorization: signedAuthorization,
       });
 
-      // TODO(jh): Seems our test infra is saying `EIP-7702 authorization
-      // lists are not supported before the Prague hardfork` somewhere.
-      // Might need new version of alloy or something?
       const { success } = await provider.waitForUserOperationReceipt({
         hash,
         timeout: 30_000,
       });
-
-      // TODO(jh): do getCode and make sure the delegation succeeded?
-
-      // TODO(jh): send a subsequent uo & ensure it works & doesn't include authorization again?
-
       expect(success).toEqual(true);
-    }
+
+      // Use `getCode` to check the delegation.
+      const publicProvider = createPublicClient({
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+      });
+      const code = await publicProvider.getCode({
+        address: provider.account.address,
+      });
+      expect((code ?? "0x").toLowerCase()).toEqual(
+        concatHex(["0xef0100", preparedAuthorization!.address]).toLowerCase(),
+      );
+
+      // Send a subsequent uo & ensure it works.
+      const hash2 = await provider.sendUserOperation({
+        calls: [
+          {
+            to: target,
+            data: "0x",
+          },
+        ],
+        authorization: signedAuthorization,
+      });
+
+      const { success: success2 } = await provider.waitForUserOperationReceipt({
+        hash: hash2,
+        timeout: 30_000,
+      });
+      expect(success2).toEqual(true);
+    },
   );
 
   const givenWebauthnCredential = async () => {
@@ -2060,34 +2055,7 @@ describe("MA v2 Account Tests", async () => {
       chain: instance.chain,
       paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
       userOperation: {
-        // TODO(jh): use the action trevor made in other pr once merged.
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            bundlerClient.request({
-              // @ts-expect-error - This is fine.
-              method: "rundler_maxPriorityFeePerGas",
-            }),
-          ]);
-
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-          if (maxPriorityFeePerGasEstimate == null)
-            throw new Error(
-              "rundler_maxPriorityFeePerGas returned null or undefined"
-            );
-
-          // With RpcUserOperation typing, this should always be a hex string.
-          const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-            ? bigIntMultiply(BigInt(maxPriorityFeePerGasEstimate), 2)
-            : raise("Expected maxPriorityFeePerGasEstimate to be hex");
-
-          return {
-            maxPriorityFeePerGas,
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 2) + maxPriorityFeePerGas,
-          };
-        },
+        estimateFeesPerGas: alchemyEstimateFeesPerGas,
       },
     });
   };

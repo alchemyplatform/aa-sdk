@@ -101,6 +101,6 @@ export function toWebAuthnSignature({
         r,
         s,
       },
-    ]
+    ],
   );
 }

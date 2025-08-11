@@ -81,7 +81,7 @@ export type BaseModularAccountV2Implementation = SmartAccountImplementation<
     encodeCallData: (callData: Hex) => Promise<Hex>;
     getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
     getValidationData: (
-      args: ValidationDataParams
+      args: ValidationDataParams,
     ) => Promise<ValidationDataView>;
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
@@ -110,12 +110,12 @@ export type ToModularAccountV2BaseParams<
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
 >(
-  params: ToModularAccountV2BaseParams<TTransport>
+  params: ToModularAccountV2BaseParams<TTransport>,
 ): Promise<ModularAccountV2Base>;
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
 >(
-  params: ToModularAccountV2BaseParams<TTransport>
+  params: ToModularAccountV2BaseParams<TTransport>,
 ): Promise<ModularAccountV2Base>;
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
@@ -143,8 +143,11 @@ export async function toModularAccountV2Base<
     throw new InvalidEntityIdError(entityId);
   }
 
-  const isAccountDeployed: () => Promise<boolean> = async () =>
-    !!(await getCode(client, { address: accountAddress }));
+  const isAccountDeployed: () => Promise<boolean> = async () => {
+    const action = getAction(client, getCode, "getCode");
+    const code = await action({ address: accountAddress });
+    return code != null && code !== "0x";
+  };
 
   // These default values signal that we should not use the set deferred action nonce
   let nonce: bigint | undefined;
@@ -160,8 +163,10 @@ export async function toModularAccountV2Base<
       nonce: deferredActionNonce,
     } = parseDeferredAction(deferredAction));
 
+    const readContractAction = getAction(client, readContract, "readContract");
+
     // Set these values if the deferred action has not been consumed. We check this with the EP.
-    const nextNonceForDeferredAction: bigint = await readContract(client, {
+    const nextNonceForDeferredAction: bigint = await readContractAction({
       ...entryPoint,
       functionName: "getNonce",
       args: [accountAddress, deferredActionNonce >> 64n],
@@ -177,7 +182,7 @@ export async function toModularAccountV2Base<
   }
 
   const getNonce = async (
-    params?: { key?: bigint | undefined } | undefined
+    params?: { key?: bigint | undefined } | undefined,
   ): Promise<bigint> => {
     if (nonce) {
       const tempNonce = nonce;
@@ -196,7 +201,9 @@ export async function toModularAccountV2Base<
       (BigInt(entityId) << 8n) +
       (isGlobalValidation ? 1n : 0n);
 
-    return readContract(client, {
+    const readContractAction = getAction(client, readContract, "readContract");
+
+    return readContractAction({
       ...entryPoint,
       functionName: "getNonce",
       args: [accountAddress, fullNonceKey],
@@ -236,7 +243,8 @@ export async function toModularAccountV2Base<
     }
 
     const { validationModuleAddress, entityId } = args;
-    return readContract(client, {
+    const readContractAction = getAction(client, readContract, "readContract");
+    return readContractAction({
       ...accountContract,
       functionName: "getValidationData",
       args: [
@@ -262,11 +270,11 @@ export async function toModularAccountV2Base<
   };
 
   const prepareSignature = async (
-    request: SignatureRequest
+    request: SignatureRequest,
   ): Promise<Extract<SignatureRequest, { type: "eth_signTypedData_v4" }>> => {
     if (owner.type === "webAuthn") {
       throw new BaseError(
-        "`prepareSignature` not supported by WebAuthn signer"
+        "`prepareSignature` not supported by WebAuthn signer",
       );
     }
 
@@ -330,7 +338,7 @@ export async function toModularAccountV2Base<
             abi: modularAccountAbi,
             functionName: "execute",
             args: [call.to, call.value ?? 0n, call.data ?? "0x"],
-          })
+          }),
         );
       }
 
@@ -345,7 +353,7 @@ export async function toModularAccountV2Base<
               value: call.value ?? 0n,
             })),
           ],
-        })
+        }),
       );
     },
 
@@ -368,10 +376,10 @@ export async function toModularAccountV2Base<
             chainId: client.chain.id,
             address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
             hash: hashMessage(message),
-          })
+          }),
         );
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash })
+          await owner.sign({ hash }),
         );
         return pack1271Signature({
           validationSignature,
@@ -409,10 +417,10 @@ export async function toModularAccountV2Base<
             address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
             hash: hashTypedData(td),
             salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-          })
+          }),
         );
         const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash })
+          await owner.sign({ hash }),
         );
         return isDeferredAction
           ? pack1271Signature({
@@ -454,7 +462,7 @@ export async function toModularAccountV2Base<
         const validationSignature = toWebAuthnSignature(
           await owner.sign({
             hash: hashMessage({ raw: hash }),
-          })
+          }),
         );
 
         const signature = deferredActionData
@@ -497,7 +505,7 @@ export async function toModularAccountV2Base<
         const estimateGasAction = getAction(
           client,
           estimateUserOperationGas,
-          "estimateUserOperationGas"
+          "estimateUserOperationGas",
         );
 
         const estimate = await estimateGasAction({

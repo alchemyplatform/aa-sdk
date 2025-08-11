@@ -1,7 +1,6 @@
 import {
   concatHex,
   hexToNumber,
-  isErc6492Signature,
   parseErc6492Signature,
   size,
   toHex,
@@ -11,7 +10,7 @@ import { SignaturePrefix } from "../types.js";
 
 // Parses out the 3 components from a deferred action
 export const parseDeferredAction = (
-  deferredAction: Hex
+  deferredAction: Hex,
 ): {
   entityId: number;
   isGlobalValidation: boolean;

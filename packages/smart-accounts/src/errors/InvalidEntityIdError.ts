@@ -13,7 +13,7 @@ export class InvalidEntityIdError extends BaseError {
    */
   constructor(entityId: number) {
     super(
-      `Entity ID used is ${entityId}, but must be less than or equal to uint32.max`
+      `Entity ID used is ${entityId}, but must be less than or equal to uint32.max`,
     );
   }
 }

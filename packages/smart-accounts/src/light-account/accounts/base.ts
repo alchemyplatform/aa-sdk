@@ -40,6 +40,7 @@ import {
 import { type LightAccountVersionConfig } from "../types.js";
 import { BaseError } from "@alchemy/common";
 import type { SignatureRequest } from "../../types.js";
+import { getAction } from "viem/utils";
 
 const SignaturePrefix = {
   EOA: "0x00",
@@ -131,8 +132,9 @@ export async function toLightAccountBase<
         x.addresses.default.impl,
     );
 
+    const getStorageAtAction = getAction(client, getStorageAt, "getStorageAt");
     // TODO(v5): This is a super fragile workflow, and we should consider not supporting this on the SmartAccount level in v5.
-    const storage = await getStorageAt(client, {
+    const storage = await getStorageAtAction({
       address: accountAddress,
       slot: EIP1967_PROXY_IMPL_STORAGE_SLOT,
     });
@@ -296,6 +298,13 @@ export async function toLightAccountBase<
     },
 
     async signMessage({ message }) {
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+      const signTypedDataAction = getAction(
+        client,
+        signTypedData,
+        "signTypedData",
+      );
+
       const { type, data } = await prepareSignature({
         type: "personal_sign",
         data: message,
@@ -303,16 +312,23 @@ export async function toLightAccountBase<
 
       const sig =
         type === "eth_signTypedData_v4"
-          ? await signTypedData(client, {
+          ? await signTypedDataAction({
               ...data,
               account: owner,
             })
-          : await signMessage(client, { account: owner, message });
+          : await signMessageAction({ account: owner, message });
 
       return formatSignature(sig);
     },
 
     async signTypedData(params) {
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+      const signTypedDataAction = getAction(
+        client,
+        signTypedData,
+        "signTypedData",
+      );
+
       const { type, data } = await prepareSignature({
         type: "eth_signTypedData_v4",
         data: params as TypedDataDefinition,
@@ -320,11 +336,11 @@ export async function toLightAccountBase<
 
       const sig =
         type === "eth_signTypedData_v4"
-          ? await signTypedData(client, {
+          ? await signTypedDataAction({
               ...data,
               account: owner,
             })
-          : await signMessage(client, { account: owner, message: data });
+          : await signMessageAction({ account: owner, message: data });
 
       return formatSignature(sig);
     },
@@ -341,7 +357,9 @@ export async function toLightAccountBase<
         },
       });
 
-      const signature = await signMessage(client, {
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+
+      const signature = await signMessageAction({
         account: owner,
         message: { raw: userOpHash },
       });

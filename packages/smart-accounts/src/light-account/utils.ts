@@ -8,6 +8,7 @@ import type {
   LightAccountVersionConfig,
   LightAccountVersionConfigs,
 } from "./types";
+import { getAction } from "viem/utils";
 
 export const lowerAddress = (addr: Address): Address =>
   addr.toLowerCase() as Address;
@@ -171,7 +172,9 @@ export async function getLightAccountImplAddress<
     (x) => x.addresses.overrides?.[chain.id]?.impl ?? x.addresses.default.impl,
   );
 
-  const storage = await getStorageAt(client, {
+  const getStorageAtAction = getAction(client, getStorageAt, "getStorageAt");
+
+  const storage = await getStorageAtAction({
     address: account.address,
     slot: EIP1967_PROXY_IMPL_STORAGE_SLOT,
   });

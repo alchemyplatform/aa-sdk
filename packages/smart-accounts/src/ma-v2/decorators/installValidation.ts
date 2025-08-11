@@ -52,14 +52,14 @@ export type InstallValidationActions<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
 > = {
   encodeInstallValidation: (
-    args: InstallValidationParams<TAccount>
+    args: InstallValidationParams<TAccount>,
   ) => Promise<Hex>;
   installValidation: (args: InstallValidationParams<TAccount>) => Promise<Hex>;
   encodeUninstallValidation: (
-    args: UninstallValidationParams<TAccount>
+    args: UninstallValidationParams<TAccount>,
   ) => Promise<Hex>;
   uninstallValidation: (
-    args: UninstallValidationParams<TAccount>
+    args: UninstallValidationParams<TAccount>,
   ) => Promise<Hex>;
 };
 
@@ -113,14 +113,14 @@ export function installValidationActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ): InstallValidationActions<
   IsUndefined<TAccount> extends true ? undefined : ModularAccountV2
 > {
   const encodeInstallValidation = async (
     args: InstallValidationParams<
       IsUndefined<TAccount> extends true ? undefined : ModularAccountV2
-    >
+    >,
   ) => {
     const {
       validationConfig,
@@ -151,17 +151,17 @@ export function installValidationActions<
           selectors,
           installData,
           hooks.map((hook: { hookConfig: HookConfig; initData: Hex }) =>
-            concatHex([serializeHookConfig(hook.hookConfig), hook.initData])
+            concatHex([serializeHookConfig(hook.hookConfig), hook.initData]),
           ),
         ],
-      })
+      }),
     );
   };
 
   const encodeUninstallValidation = async (
     args: UninstallValidationParams<
       IsUndefined<TAccount> extends true ? undefined : ModularAccountV2
-    >
+    >,
   ) => {
     const {
       moduleAddress,
@@ -187,7 +187,7 @@ export function installValidationActions<
           uninstallData,
           hookUninstallDatas,
         ],
-      })
+      }),
     );
   };
 

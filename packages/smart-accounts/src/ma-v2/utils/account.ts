@@ -39,7 +39,7 @@ export type GetMAV2UpgradeToData<
 
 // TODO(v5): add jsdoc once this is finalized & tested.
 export async function getMAV2UpgradeToData(
-  ownerAddress: Address
+  ownerAddress: Address,
 ): Promise<UpgradeToData> {
   const initData = encodeFunctionData({
     abi: semiModularAccountStorageAbi,
@@ -102,7 +102,7 @@ export function serializeModuleEntity(config: ModuleEntity): Hex {
 }
 
 export function isModularAccountV2(
-  account: SmartAccount
+  account: SmartAccount,
 ): account is ModularAccountV2Base {
   return "source" in account && account.source === "ModularAccountV2";
 }
