@@ -3,6 +3,7 @@ import { Signer } from "./signer.js";
 import type {
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
+  HandleOauthFlowFn,
   TurnkeyTekStamper,
 } from "./types.js";
 
@@ -11,27 +12,65 @@ type TekStamperAndPublicKey = {
   targetPublicKey: string;
 };
 
+export type AuthClientParams = {
+  transport: AlchemyTransport;
+  createTekStamper: CreateTekStamperFn;
+  createWebAuthnStamper: CreateWebAuthnStamperFn;
+  handleOauthFlow: HandleOauthFlowFn;
+};
+
+export type LoginWithOauthParams = {
+  type: "oauth";
+  authProviderId: string;
+  scope?: string;
+  claims?: string;
+  otherParameters?: Record<string, string>;
+  mode?: "popup" | "redirect";
+};
+
 export class AuthClient {
-  constructor(
-    private readonly transport: AlchemyTransport,
-    private readonly createTekStamper: CreateTekStamperFn,
-    private readonly createWebAuthnStamper: CreateWebAuthnStamperFn
-  ) {}
+  private readonly transport: AlchemyTransport;
+  private readonly createTekStamper: CreateTekStamperFn;
+  private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
+  private readonly handleOauthFlow: HandleOauthFlowFn;
+
+  constructor(params: AuthClientParams) {
+    this.transport = params.transport;
+    this.createTekStamper = params.createTekStamper;
+    this.createWebAuthnStamper = params.createWebAuthnStamper;
+    this.handleOauthFlow = params.handleOauthFlow;
+  }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
+  // TODO: do we care about persisting this across reloads?
+  private otpId: string | null = null;
 
-  public async sendAuthEmail(email: string): Promise<void> {
+  public async sendEmailOtp(email: string): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const otpId = await notImplemented(email, targetPublicKey);
-    // TODO: store the otpId in the session manager.
-    notImplemented(otpId);
+    this.otpId = await notImplemented(email, targetPublicKey);
   }
 
   public async submitOtpCode(otpCode: string): Promise<Signer> {
-    // TODO: load the otpId from the session manager.
-    const otpId = await notImplemented();
-    const { bundle, orgId } = await notImplemented(otpId, otpCode);
+    const { bundle, orgId } = await notImplemented(this.otpId, otpCode);
+    this.otpId = null;
     return this.completeAuthWithBundle({ bundle, orgId });
+  }
+
+  public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
+    const authUrl = await notImplemented(params);
+    const response = await this.handleOauthFlow(authUrl);
+    if (response.status === "SUCCESS") {
+      return this.completeAuthWithBundle({
+        bundle: response.bundle!,
+        orgId: response.orgId!,
+        idToken: response.idToken,
+      });
+    } else if (response.status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
+      // TODO: decide what to do here.
+      throw new Error("Account linking confirmation required");
+    } else {
+      throw new Error(`Unknown OAuth flow response: ${response.status}`);
+    }
   }
 
   public async loginWithPasskey(): Promise<Signer> {
