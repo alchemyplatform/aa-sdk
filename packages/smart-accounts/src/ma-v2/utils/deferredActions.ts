@@ -51,16 +51,14 @@ export const buildDeferredActionDigest = ({
   sig,
 }: BuildDeferredActionDigestParams): Hex => {
   // 6492 sigs don't work here.
-  if (isErc6492Signature(sig)) {
-    sig = parseErc6492Signature(sig).signature;
-  }
+  const _sig = parseErc6492Signature(sig).signature;
 
-  const sigLength = size(sig);
+  const sigLength = size(_sig);
 
   const encodedData = concatHex([
     fullPreSignatureDeferredActionDigest,
     toHex(sigLength, { size: 4 }),
-    sig,
+    _sig,
   ]);
   return encodedData;
 };
