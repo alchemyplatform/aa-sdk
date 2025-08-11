@@ -6,10 +6,10 @@ import {
 } from "@aa-sdk/core";
 import {
   alchemy,
-  alchemyEnhancedApiActions,
   createAlchemySmartAccountClient,
   polygonMumbai,
 } from "@account-kit/infra";
+import { alchemyEnhancedApiActions } from "@account-kit/infra/enhanced-apis";
 import { Alchemy, Network } from "alchemy-sdk";
 import { avalanche, type Chain } from "viem/chains";
 import { createLightAccountClient } from "./client.js";

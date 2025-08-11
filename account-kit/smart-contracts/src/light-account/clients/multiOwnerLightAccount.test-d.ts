@@ -15,12 +15,9 @@ import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types";
 import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
-import {
-  alchemy,
-  alchemyEnhancedApiActions,
-  arbitrumSepolia,
-} from "@account-kit/infra";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { Alchemy, Network } from "alchemy-sdk";
+import { alchemyEnhancedApiActions } from "@account-kit/infra/enhanced-apis";
 
 describe("Types: MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
