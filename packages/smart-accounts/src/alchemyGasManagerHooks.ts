@@ -9,6 +9,7 @@ import type {
 } from "viem/account-abstraction";
 import { deepHexlify, resolveProperties } from "@aa-sdk/core";
 import { bigIntMultiply } from "@alchemy/common";
+
 // Type for ERC-20 token context
 export type PolicyToken = {
   address: Address;
