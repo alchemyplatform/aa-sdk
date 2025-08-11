@@ -20,7 +20,7 @@ export type AlchemyEnhancedApis = {
  * @example
  * ```ts
  * import { Alchemy } from "alchemy-sdk";
- * import { alchemyEnhancedApiActions } from "@account-kit/infra";
+ * import { alchemyEnhancedApiActions } from "@account-kit/infra/enhanced-apis";
  * import { alchemySCAClient } from "./client";
  *
  * const alchemy = new Alchemy(...);
