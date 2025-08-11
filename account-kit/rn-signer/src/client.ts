@@ -55,6 +55,12 @@ export const RNSignerClientParamsSchema = z.object({
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
+export type ExportWalletResult = {
+  exportBundle: string;
+  address: string;
+  orgId: string;
+};
+
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
@@ -274,8 +280,94 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.stamper.clear();
     await this.stamper.init();
   }
-  override exportWallet(_params: unknown): Promise<boolean> {
-    throw new Error("Method not implemented.");
+
+  /**
+   * Exports the wallet's private key for the authenticated user.
+   *
+   * Note: This implementation returns true on success. To get the actual export
+   * bundle, use the `exportWalletWithResult()` method instead. React Native
+   * doesn't support iframe-based secure export like the web version.
+   *
+   * @returns {Promise<boolean>} Returns true on successful export
+   * @throws {Error} If the user is not authenticated or export fails
+   */
+  override async exportWallet(): Promise<boolean> {
+    if (!this.user) {
+      throw new Error("User must be authenticated to export wallet");
+    }
+
+    // Since we can't use iframe stamper in React Native, we need to export
+    // the private key using the regular Turnkey client with the native stamper
+    const targetPublicKey = await this.stamper.init();
+
+    const { activity } = await this.turnkeyClient.exportWalletAccount({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        address: this.user.address,
+        targetPublicKey,
+      },
+    });
+
+    // Poll for activity completion
+    const result = await this.pollActivityCompletion(
+      activity,
+      this.user.orgId,
+      "exportWalletAccountResult",
+    );
+
+    if (!result.exportBundle) {
+      throw new Error("Failed to export wallet: no export bundle returned");
+    }
+
+    // In React Native, we can't use an iframe to securely display the key
+    // The app developer should use exportWalletWithResult() to get the bundle directly
+    return true;
+  }
+
+  /**
+   * Exports the wallet and returns the export bundle directly.
+   * This is an alternative to the base exportWallet method that provides
+   * more flexibility for React Native apps.
+   *
+   * @returns {Promise<ExportWalletResult>} The export bundle and metadata
+   * @throws {Error} If the user is not authenticated or export fails
+   */
+  async exportWalletWithResult(): Promise<ExportWalletResult> {
+    if (!this.user) {
+      throw new Error("User must be authenticated to export wallet");
+    }
+
+    const targetPublicKey = await this.stamper.init();
+
+    const { activity } = await this.turnkeyClient.exportWalletAccount({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        address: this.user.address,
+        targetPublicKey,
+      },
+    });
+
+    const result = await this.pollActivityCompletion(
+      activity,
+      this.user.orgId,
+      "exportWalletAccountResult",
+    );
+
+    if (!result.exportBundle) {
+      throw new Error("Failed to export wallet: no export bundle returned");
+    }
+
+    const exportResult: ExportWalletResult = {
+      exportBundle: result.exportBundle,
+      address: this.user.address,
+      orgId: this.user.orgId,
+    };
+
+    return exportResult;
   }
 
   override targetPublicKey(): Promise<string> {
