@@ -111,7 +111,7 @@ export function alchemyGasManagerHooks(
   let cachedUserOpHash: string | null = null;
 
   // Helper to create a hash of the user operation for cache key
-  const getUserOpHash = (params: any): string => {
+  const getUserOpHash = (params: Pick<UserOperationRequest, "sender" | "nonce" | "callData">): string => {
     return JSON.stringify({
       sender: params.sender,
       nonce: params.nonce?.toString(), // Convert bigint to string
