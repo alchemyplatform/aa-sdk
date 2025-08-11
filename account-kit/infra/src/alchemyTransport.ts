@@ -190,7 +190,7 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
           overrides: [
             {
               methods: alchemyMethods,
-              transport: http(rpcUrl, { fetchOptions }),
+              transport: http(rpcUrl, { fetchOptions, retryCount }),
             },
             {
               methods: chainAgnosticMethods,
@@ -228,8 +228,15 @@ export function alchemy(config: AlchemyTransportConfig): AlchemyTransport {
       {
         key: "alchemy",
         name: "Alchemy Transport",
-        request: innerTransport(opts).request,
-        retryCount: retryCount ?? opts?.retryCount,
+        request: innerTransport({
+          ...opts,
+          // Retries are already handled above within the split transport,
+          // so `retryCount` must be 0 here for the expected behavior.
+          retryCount: 0,
+        }).request,
+        // Retries are already handled above within the split transport,
+        // so `retryCount` must be 0 here too for the expected behavior.
+        retryCount: 0,
         retryDelay,
         type: "alchemy",
       },

@@ -85,6 +85,8 @@ navigation:
                 path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+              - page: "[NEW] On-chain passkeys"
+                path: wallets/pages/react/login-methods/onchain-passkeys.mdx
               - section: Multi-factor authentication
                 contents:
                   - page: Set up MFA
@@ -505,6 +507,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/exportWallet.mdx
                       - page: initEmailAuth
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initEmailAuth.mdx
+                      - page: initSmsAuth
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/initSmsAuth.mdx
                       - page: oauthWithPopup
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
@@ -541,6 +545,10 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaFactors.mdx
                       - page: getMfaStatus
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getMfaStatus.mdx
+                      - page: getUser
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
+                      - page: getUser
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
                       - page: getUser
                         path: wallets/pages/reference/account-kit/signer/classes/BaseAlchemySigner/getUser.mdx
                       - page: listAuthMethods
@@ -605,6 +613,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/listAuthMethods.mdx
                       - page: lookupUserByEmail
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail.mdx
+                      - page: lookupUserByPhone
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByPhone.mdx
                       - page: lookupUserWithPasskey
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/lookupUserWithPasskey.mdx
                       - page: on
@@ -1216,6 +1226,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: formatSign
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/formatSign.mdx
                   - page: getCallsStatus
                     path: wallets/pages/reference/account-kit/wallet-client/functions/getCallsStatus.mdx
                   - page: grantPermissions
@@ -1224,8 +1236,14 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/functions/listAccounts.mdx
                   - page: prepareCalls
                     path: wallets/pages/reference/account-kit/wallet-client/functions/prepareCalls.mdx
+                  - page: prepareSign
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/prepareSign.mdx
                   - page: requestAccount
                     path: wallets/pages/reference/account-kit/wallet-client/functions/requestAccount.mdx
+                  - page: sendCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/sendCalls.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/sendPreparedCalls.mdx
                   - page: signMessage
                     path: wallets/pages/reference/account-kit/wallet-client/functions/signMessage.mdx
                   - page: signPreparedCalls
@@ -1234,6 +1252,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/functions/signSignatureRequest.mdx
                   - page: signTypedData
                     path: wallets/pages/reference/account-kit/wallet-client/functions/signTypedData.mdx
+                  - page: waitForCallsStatus
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/waitForCallsStatus.mdx
 
       - section: Resources
         skip-slug: true

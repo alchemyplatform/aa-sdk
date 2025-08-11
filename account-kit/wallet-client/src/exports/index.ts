@@ -21,3 +21,8 @@ export { signSignatureRequest } from "../client/actions/signSignatureRequest.js"
 export { signPreparedCalls } from "../client/actions/signPreparedCalls.js";
 export { signMessage } from "../client/actions/signMessage.js";
 export { signTypedData } from "../client/actions/signTypedData.js";
+export { sendPreparedCalls } from "../client/actions/sendPreparedCalls.js";
+export { sendCalls } from "../client/actions/sendCalls.js";
+export { waitForCallsStatus } from "../client/actions/waitForCallsStatus.js";
+export { prepareSign } from "../client/actions/prepareSign.js";
+export { formatSign } from "../client/actions/formatSign.js";

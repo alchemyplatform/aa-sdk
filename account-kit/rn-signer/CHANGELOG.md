@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.53.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.4...v4.53.0) (2025-08-06)
+
+### Features
+
+- sms auth beta ([#1835](https://github.com/alchemyplatform/aa-sdk/issues/1835)) ([b9eebf7](https://github.com/alchemyplatform/aa-sdk/commit/b9eebf7a935fa4666cf4b692692a4f14848994ac))
+
+## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.52.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.2...v4.52.3) (2025-08-04)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
 ## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
 
 **Note:** Version bump only for package @account-kit/react-native-signer

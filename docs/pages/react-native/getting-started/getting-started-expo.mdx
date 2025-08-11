@@ -76,18 +76,22 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
 const path = require("path");
-const projectRoot = __dirname;
+const projectRoot = __dirname; // <-- Adjust this as fits your project setup
 
 // Add aliases for file-system import based modules
 const ALIASES = {
   "@noble/hashes/crypto": path.resolve(
-    projectRoot, // <-- Adjust this as fits your project setup
+    projectRoot,
     "node_modules/@noble/hashes/crypto.js",
+  ),
+  "@sinclair/typebox": path.resolve(
+    projectRoot,
+    "node_modules/@sinclair/typebox/build/cjs/index.js",
   ),
 };
 
 /** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname);
+const config = getDefaultConfig(projectRoot);
 // [!code focus:9]
 // The following code ensures we have the necessary
 // shims for crypto built into our project
