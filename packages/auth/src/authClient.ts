@@ -65,36 +65,21 @@ type TekStamperAndPublicKey = {
   targetPublicKey: string;
 };
 
-type PendingOtp = {
-  otpId: string;
-  orgId: string;
+export type AuthClientParams = {
+  transport: AlchemyTransport;
+  createTekStamper: CreateTekStamperFn;
+  createWebAuthnStamper: CreateWebAuthnStamperFn;
+  handleOauthFlow: HandleOauthFlowFn;
 };
 
-/**
- * Reads and removes the specified query params from the URL.
- *
- * @param {T} keys object whose values are the query parameter keys to read and
- * remove
- * @returns {{ [K in keyof T]: string | undefined }} object with the same keys
- * as the input whose values are the values of the query params.
- */
-function getAndRemoveQueryParams<T extends Record<string, string>>(
-  keys: T,
-): { [K in keyof T]: string | undefined } {
-  const url = new URL(window.location.href);
-  const result: Record<string, string | undefined> = {};
-  let foundQueryParam = false;
-  for (const [key, param] of Object.entries(keys)) {
-    const value = url.searchParams.get(param) ?? undefined;
-    foundQueryParam ||= value != null;
-    result[key] = value;
-    url.searchParams.delete(param);
-  }
-  if (foundQueryParam) {
-    window.history.replaceState(window.history.state, "", url.toString());
-  }
-  return result as { [K in keyof T]: string | undefined };
-}
+export type LoginWithOauthParams = {
+  type: "oauth";
+  authProviderId: string;
+  scope?: string;
+  claims?: string;
+  otherParameters?: Record<string, string>;
+  mode?: "popup" | "redirect";
+};
 
 /**
  * Attempts to extract OAuth callback parameters from the current URL.
@@ -190,32 +175,21 @@ function extractOAuthCallbackParams() {
  * ```
  */
 export class AuthClient {
-  // TODO: temporary for testing before the transport is ready.
-  private readonly apiKey: string;
+  private readonly transport: AlchemyTransport;
   private readonly createTekStamper: CreateTekStamperFn;
   private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
   private readonly handleOauthFlow: HandleOauthFlowFn;
 
-  /**
-   * Creates a new AuthClient instance
-   *
-   * @param {AuthClientParams} params - Configuration parameters for the auth client
-   * @param {string} params.apiKey - API key for authentication with Alchemy services
-   * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
-   * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
-   * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
-   */
   constructor(params: AuthClientParams) {
-    this.apiKey = params.apiKey;
+    this.transport = params.transport;
     this.createTekStamper = params.createTekStamper;
     this.createWebAuthnStamper = params.createWebAuthnStamper;
     this.handleOauthFlow = params.handleOauthFlow;
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
-
   // TODO: do we care about persisting this across reloads?
-  private pendingOtp: PendingOtp | null = null;
+  private otpId: string | null = null;
 
   /**
    * Sends an OTP (One-Time Password) to the specified email address for authentication.
@@ -233,12 +207,7 @@ export class AuthClient {
    */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const { otpId, orgId } = await this.dev_request("auth", {
-      email,
-      emailMode: "otp",
-      targetPublicKey,
-    });
-    this.pendingOtp = { otpId, orgId };
+    this.otpId = await notImplemented(email, targetPublicKey);
   }
 
   /**
@@ -302,7 +271,7 @@ export class AuthClient {
    * ```
    */
   public async loginWithOauth(
-    params: LoginWithOauthParams,
+    params: LoginWithOauthParams
   ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
     const oauthConfig = await this.dev_request("prepare-oauth", {
@@ -318,11 +287,6 @@ export class AuthClient {
     const response = await this.handleOauthFlow(authUrl, params.mode);
     console.log({ response });
     if (response.status === "SUCCESS") {
-      console.log("completeAuthWithBundle", {
-        bundle: response.bundle,
-        orgId: response.orgId,
-        idToken: response.idToken,
-      });
       return this.completeAuthWithBundle({
         bundle: response.bundle!,
         orgId: response.orgId!,
@@ -436,7 +400,7 @@ export class AuthClient {
    * ```
    */
   public async loadAuthSessionState(
-    state: string,
+    state: string
   ): Promise<AuthSession | undefined> {
     const parsedState = JSON.parse(state);
 
