@@ -45,6 +45,7 @@
   "dependencies": {
     "@account-kit/infra": "*",
     "@alchemy/common": "*",
+    "@alchemy/wallet-apis": "*",
     "ox": "^0.8.5",
     "viem": "2.29.2"
   },

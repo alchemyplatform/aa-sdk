@@ -1,5 +1,5 @@
 import type { Address, Client, Transport, Chain, Hex } from "viem";
-import { hexToBigInt, fromHex, isHex } from "viem";
+import { fromHex, isHex } from "viem";
 import { getBlock } from "viem/actions";
 import type {
   GetPaymasterDataParameters,
@@ -8,8 +8,9 @@ import type {
   GetPaymasterStubDataReturnType,
 } from "viem/account-abstraction";
 import { deepHexlify, resolveProperties } from "@aa-sdk/core";
-import { bigIntMultiply } from "@alchemy/common";
-
+import { bigIntMultiply, type AlchemyTransport } from "@alchemy/common";
+import { requestGasAndPaymasterAndData } from "@alchemy/wallet-apis";
+// Note: types are not exported from wallet-apis index; use structural typing locally instead
 // Type for ERC-20 token context
 export type PolicyToken = {
   address: Address;
@@ -21,19 +22,22 @@ export type PolicyToken = {
   };
 };
 
-// Type for the optimized RPC response
+// Response is provided by wallet-apis (already bigint-formatted)
 type GasAndPaymasterAndDataResponse = {
-  callGasLimit: Hex;
-  preVerificationGas: Hex;
-  verificationGasLimit: Hex;
-  maxFeePerGas: Hex;
-  maxPriorityFeePerGas: Hex;
-  paymasterAndData?: Hex;
-  paymaster?: Address;
-  paymasterData?: Hex;
-  paymasterVerificationGasLimit?: Hex;
-  paymasterPostOpGasLimit?: Hex;
-};
+  callGasLimit?: bigint;
+  preVerificationGas?: bigint;
+  verificationGasLimit?: bigint;
+  maxFeePerGas?: bigint;
+  maxPriorityFeePerGas?: bigint;
+} & (
+  | { paymasterAndData: Hex }
+  | {
+      paymaster: Address;
+      paymasterData: Hex;
+      paymasterVerificationGasLimit: bigint;
+      paymasterPostOpGasLimit: bigint;
+    }
+);
 
 /**
  * Context for Alchemy Gas Manager calls
@@ -112,7 +116,7 @@ export function alchemyGasManagerHooks(
   let cachedUserOpHash: string | null = null;
 
   // Helper to create a hash of the user operation for cache key
-  const getUserOpHash = (params: Pick<UserOperationRequest, "sender" | "nonce" | "callData">): string => {
+  const getUserOpHash = (params: any): string => {
     return JSON.stringify({
       sender: params.sender,
       nonce: params.nonce?.toString(), // Convert bigint to string
@@ -130,24 +134,24 @@ export function alchemyGasManagerHooks(
 
         // If we have a cached result for this user op, return it
         if (cachedResult && cachedUserOpHash === userOpHash) {
-          if (cachedResult.paymasterAndData) {
+          if (
+            "paymasterAndData" in (cachedResult as any) &&
+            (cachedResult as any).paymasterAndData
+          ) {
             return {
-              paymasterAndData: cachedResult.paymasterAndData,
+              paymasterAndData: (cachedResult as any).paymasterAndData,
               isFinal: true, // We have final data from the optimized call
             };
           }
 
-          if (cachedResult.paymaster) {
+          if ((cachedResult as any).paymaster) {
+            const r = cachedResult as any;
             return {
-              paymaster: cachedResult.paymaster,
-              paymasterData: cachedResult.paymasterData || "0x",
+              paymaster: r.paymaster as Address,
+              paymasterData: (r.paymasterData as Hex) || "0x",
               paymasterVerificationGasLimit:
-                cachedResult.paymasterVerificationGasLimit
-                  ? hexToBigInt(cachedResult.paymasterVerificationGasLimit)
-                  : 100000n,
-              paymasterPostOpGasLimit: cachedResult.paymasterPostOpGasLimit
-                ? hexToBigInt(cachedResult.paymasterPostOpGasLimit)
-                : 50000n,
+                r.paymasterVerificationGasLimit ?? 100000n,
+              paymasterPostOpGasLimit: r.paymasterPostOpGasLimit ?? 50000n,
               isFinal: true,
             };
           }
@@ -169,7 +173,7 @@ export function alchemyGasManagerHooks(
         // We need the account to get dummy signature, but viem doesn't provide it
         // For now, we'll use a default dummy signature
         const dummySignature =
-          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c" as Hex;
 
         // Prepare the request
         const request = {
@@ -183,39 +187,35 @@ export function alchemyGasManagerHooks(
             : {}),
         };
 
-        // Make the optimized RPC call
-        const response = await bundlerClient.request<{
-          Method: "alchemy_requestGasAndPaymasterAndData";
-          Parameters: [typeof request];
-          ReturnType: GasAndPaymasterAndDataResponse;
-        }>({
-          method: "alchemy_requestGasAndPaymasterAndData",
-          params: [request],
-        });
+        // Make the optimized RPC call using wallet-apis action
+        const response = await requestGasAndPaymasterAndData(
+          bundlerClient as unknown as Client<AlchemyTransport, Chain>,
+          [request as any],
+        );
 
         // Cache the result
         cachedResult = response;
         cachedUserOpHash = userOpHash;
 
         // Return paymaster data for stub
-        if (response.paymasterAndData) {
+        if (
+          "paymasterAndData" in response &&
+          (response as any).paymasterAndData
+        ) {
           return {
-            paymasterAndData: response.paymasterAndData,
+            paymasterAndData: (response as any).paymasterAndData,
             isFinal: true,
           };
         }
 
-        if (response.paymaster) {
+        if ((response as any).paymaster) {
+          const r = response as any;
           return {
-            paymaster: response.paymaster,
-            paymasterData: response.paymasterData || "0x",
+            paymaster: r.paymaster as Address,
+            paymasterData: (r.paymasterData as Hex) || "0x",
             paymasterVerificationGasLimit:
-              response.paymasterVerificationGasLimit
-                ? hexToBigInt(response.paymasterVerificationGasLimit)
-                : 100000n,
-            paymasterPostOpGasLimit: response.paymasterPostOpGasLimit
-              ? hexToBigInt(response.paymasterPostOpGasLimit)
-              : 50000n,
+              r.paymasterVerificationGasLimit ?? 100000n,
+            paymasterPostOpGasLimit: r.paymasterPostOpGasLimit ?? 50000n,
             isFinal: true,
           };
         }
@@ -230,21 +230,21 @@ export function alchemyGasManagerHooks(
 
         // If we have a cached result, use it
         if (cachedResult && cachedUserOpHash === userOpHash) {
-          if (cachedResult.paymasterAndData) {
-            return { paymasterAndData: cachedResult.paymasterAndData };
+          if (
+            "paymasterAndData" in (cachedResult as any) &&
+            (cachedResult as any).paymasterAndData
+          ) {
+            return { paymasterAndData: (cachedResult as any).paymasterAndData };
           }
 
-          if (cachedResult.paymaster) {
+          if ((cachedResult as any).paymaster) {
+            const r = cachedResult as any;
             return {
-              paymaster: cachedResult.paymaster,
-              paymasterData: cachedResult.paymasterData || "0x",
+              paymaster: r.paymaster as Address,
+              paymasterData: (r.paymasterData as Hex) || "0x",
               paymasterVerificationGasLimit:
-                cachedResult.paymasterVerificationGasLimit
-                  ? hexToBigInt(cachedResult.paymasterVerificationGasLimit)
-                  : 100000n,
-              paymasterPostOpGasLimit: cachedResult.paymasterPostOpGasLimit
-                ? hexToBigInt(cachedResult.paymasterPostOpGasLimit)
-                : 50000n,
+                r.paymasterVerificationGasLimit ?? 100000n,
+              paymasterPostOpGasLimit: r.paymasterPostOpGasLimit ?? 50000n,
             };
           }
         }
@@ -272,15 +272,43 @@ export function alchemyGasManagerHooks(
       async estimateFeesPerGas(params: { bundlerClient: Client }) {
         // If we have cached gas values, return them
         if (cachedResult) {
+          const r = cachedResult as any;
           return {
-            maxFeePerGas: hexToBigInt(cachedResult.maxFeePerGas),
-            maxPriorityFeePerGas: hexToBigInt(
-              cachedResult.maxPriorityFeePerGas,
-            ),
+            maxFeePerGas: r.maxFeePerGas as bigint,
+            maxPriorityFeePerGas: r.maxPriorityFeePerGas as bigint,
           };
         }
 
-        return alchemyEstimateFeesPerGas(params)
+        // Otherwise use Alchemy's fee estimation which includes rundler_maxPriorityFeePerGas
+        const { bundlerClient } = params;
+        const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
+          getBlock(bundlerClient, { blockTag: "latest" }),
+          (bundlerClient as any).request({
+            method: "rundler_maxPriorityFeePerGas",
+            params: [],
+          }),
+        ]);
+
+        const baseFeePerGas = block.baseFeePerGas;
+        if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
+        if (maxPriorityFeePerGasEstimate == null)
+          throw new Error(
+            "rundler_maxPriorityFeePerGas returned null or undefined",
+          );
+
+        const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
+          ? fromHex(maxPriorityFeePerGasEstimate, "bigint")
+          : (() => {
+              throw new Error(
+                `Invalid hex value: ${maxPriorityFeePerGasEstimate}`,
+              );
+            })();
+
+        return {
+          maxPriorityFeePerGas,
+          maxFeePerGas:
+            bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
+        };
       },
     },
   } as const;
