@@ -6,13 +6,13 @@ export const MetaMaskIcon = ({
     <div className={`w-[20px] h-[20px] ${className ?? ""}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="62"
-        height="60"
+        width="100%"
+        height="100%"
         viewBox="0 0 62 60"
         fill="none"
         {...props}
       >
-        <g clip-path="url(#clip0_5125_10478)">
+        <g clipPath="url(#clip0_5125_10478)">
           <path
             d="M57.9316 57.9459L44.5784 53.9543L34.5087 59.9978L27.4826 59.9947L17.4067 53.9543L4.05969 57.9459L0 44.1858L4.06013 28.9142L0 16.0027L4.06013 0L24.9157 12.5095H37.0756L57.9316 0L61.9917 16.0027L57.9316 28.9142L61.9917 44.1858L57.9316 57.9459Z"
             fill="#FF5C16"

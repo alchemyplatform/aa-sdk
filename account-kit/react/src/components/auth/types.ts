@@ -24,11 +24,9 @@ export type AuthType =
       // New simplified shape
       wallets?: string[];
       chainType?: ChainType[];
-      // Optional: fallback WC config for UI-only flows
       walletConnectProjectId?: string;
       // How many from wallets to feature on landing
-      numFeaturedWallet?: number;
-      // Backwards compatible shape
+      numFeaturedWallets?: number;
       walletConnect?: import("wagmi/connectors").WalletConnectParameters;
       moreButtonText?: string;
       hideMoreButton?: boolean;

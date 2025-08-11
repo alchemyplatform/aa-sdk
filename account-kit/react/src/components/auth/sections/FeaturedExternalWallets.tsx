@@ -28,7 +28,7 @@ export const FeaturedExternalWallets = ({
   const connectors = useDeduplicatedConnectors(); // EVM connectors
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
-  const limit = config.numFeaturedWallet ?? Infinity;
+  const limit = config.numFeaturedWallets ?? Infinity;
 
   const orderedChains = useMemo<ChainType[]>(
     () => orderChains((config.chainType ?? ["evm", "svm"]) as ChainType[]),

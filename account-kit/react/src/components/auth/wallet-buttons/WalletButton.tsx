@@ -3,7 +3,7 @@ import { Button } from "../../button.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useChain } from "../../../hooks/useChain.js";
 import type { WalletButtonProps } from "./types.js";
-import { getConnectorIcon } from "./walletIcons.js";
+import { getWalletIcon } from "./walletIcons.js";
 
 interface EVMWalletButtonProps extends WalletButtonProps {
   connector: Connector;
@@ -25,7 +25,7 @@ export const WalletButton = ({
   };
 
   // Get the built-in icon component for this connector type
-  const IconComponent = getConnectorIcon(connector.type);
+  const IconComponent = getWalletIcon(connector.name);
 
   // Fallback to connector.icon if no built-in icon is available
   const fallbackIconSrc = connector.icon;

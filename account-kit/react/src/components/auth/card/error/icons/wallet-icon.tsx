@@ -1,6 +1,6 @@
 import { EOAConnectionFailed } from "../../../../../icons/EOAConnectionFailed.js";
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
-import { getConnectorIcon } from "../../../wallet-buttons/walletIcons.js";
+import { getWalletIcon } from "../../../wallet-buttons/walletIcons.js";
 
 import { WALLET_CONNECT } from "../../eoa.js";
 export const WalletIcon = ({
@@ -27,9 +27,13 @@ export const WalletIcon = ({
             ) : (
               // Try to use built-in icon as fallback
               (() => {
-                const IconComponent = getConnectorIcon(connector.name);
+                const IconComponent = getWalletIcon(connector.name);
                 return IconComponent ? (
-                  <IconComponent width={24} height={24} />
+                  <IconComponent
+                    width={24}
+                    height={24}
+                    className="w-[24px] h-[24px]"
+                  />
                 ) : (
                   // If no built-in icon exists, render a blank space with dimensions
                   <div style={{ width: 24, height: 24 }} />

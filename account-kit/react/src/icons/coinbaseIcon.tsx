@@ -6,8 +6,8 @@ export const CoinbaseIcon = ({
     <div className={`w-[20px] h-[20px] ${className ?? ""}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="60"
-        height="60"
+        width="100%"
+        height="100%"
         viewBox="0 0 60 60"
         fill="none"
         {...props}

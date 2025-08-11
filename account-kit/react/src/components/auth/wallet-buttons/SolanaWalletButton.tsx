@@ -2,7 +2,7 @@ import type { Wallet } from "@solana/wallet-adapter-react";
 import { Button } from "../../button.js";
 import { useConnectSolanaEOA } from "../hooks/useConnectSolanaEOA.js";
 import type { WalletButtonProps } from "./types.js";
-import { getSolanaAdapterIcon } from "./walletIcons.js";
+import { getWalletIcon } from "./walletIcons.js";
 
 interface SolanaWalletButtonProps extends WalletButtonProps {
   wallet: Wallet;
@@ -23,7 +23,7 @@ export const SolanaWalletButton = ({
   };
 
   // Get the built-in icon component for this adapter
-  const IconComponent = getSolanaAdapterIcon(wallet.adapter.name);
+  const IconComponent = getWalletIcon(wallet.adapter.name);
 
   // Fallback to wallet.adapter.icon if no built-in icon is available
   const fallbackIconSrc = wallet.adapter.icon;
@@ -58,7 +58,7 @@ export const SolanaWalletButton = ({
       <div className="flex items-center justify-between w-full">
         <span>{wallet.adapter.name}</span>
         <span className="bg-bg-surface-inset px-1 rounded-sm text-xs font-medium h-4 flex items-center gap-1 leading-4 text-fg-tertiary">
-          solana
+          Solana
         </span>
       </div>
     </Button>

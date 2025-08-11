@@ -11,7 +11,7 @@ export interface ConfigForExternalWalletsParams {
   walletConnectProjectId?: string;
   moreButtonText?: string;
   hideMoreButton?: boolean;
-  numFeaturedWallet?: number;
+  numFeaturedWallets?: number;
 }
 
 interface ConfigForExternalWalletsResult {
@@ -23,7 +23,7 @@ interface ConfigForExternalWalletsResult {
     chainType: ChainType[];
     moreButtonText: string;
     hideMoreButton: boolean;
-    numFeaturedWallet?: number;
+    numFeaturedWallets?: number;
   };
 }
 
@@ -59,7 +59,7 @@ export const configForExternalWallets = ({
   walletConnectProjectId,
   moreButtonText = "More wallets",
   hideMoreButton = false,
-  numFeaturedWallet,
+  numFeaturedWallets,
 }: ConfigForExternalWalletsParams): ConfigForExternalWalletsResult => {
   if (!wallets.length) {
     throw new Error("No wallets provided");
@@ -105,8 +105,8 @@ export const configForExternalWallets = ({
       chainType,
       moreButtonText,
       hideMoreButton,
-      ...(typeof numFeaturedWallet === "number" && {
-        numFeaturedWallet,
+      ...(typeof numFeaturedWallets === "number" && {
+        numFeaturedWallets,
       }),
     },
   };

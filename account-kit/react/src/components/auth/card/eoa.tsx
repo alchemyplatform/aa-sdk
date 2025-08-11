@@ -19,7 +19,7 @@ import {
   SolanaWalletButton,
 } from "../wallet-buttons/index.js";
 import { useWalletAvailability } from "../../../hooks/internal/useWalletDeduplication.js";
-import { getConnectorIcon } from "../wallet-buttons/walletIcons.js";
+import { getWalletIcon } from "../wallet-buttons/walletIcons.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { useMemo } from "react";
 
@@ -123,10 +123,10 @@ export const EoaConnectCard = () => {
             />
           ) : (
             (() => {
-              const IconComponent = getConnectorIcon(connector.name);
+              const IconComponent = getWalletIcon(connector.name);
               return IconComponent ? (
                 <IconComponent
-                  className={authStep.error ? undefined : "animate-pulse"}
+                  className={`w-[28px] h-[28px] ${authStep.error ? undefined : "animate-pulse"}`}
                   width={28}
                   height={28}
                 />
@@ -173,7 +173,7 @@ export const WalletConnectCard = () => {
   }
 
   if (authStep.error) {
-    const errorMessage = getErrorMessage(authStep.error, WALLET_CONNECT);
+    const errorMessage = getErrorMessage(authStep.error, "WalletConnect");
 
     return (
       <ConnectionError

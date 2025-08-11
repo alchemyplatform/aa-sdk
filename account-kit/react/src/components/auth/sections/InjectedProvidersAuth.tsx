@@ -11,10 +11,10 @@ interface ExternalWalletsAuthProps {
 export const ExternalWalletsAuth = ({ config }: ExternalWalletsAuthProps) => {
   const { setAuthStep } = useAuthContext();
 
-  // Show featured section if numFeaturedWallet is defined and > 1
+  // Show featured section if numFeaturedWallets is defined and > 1
   const hasFeaturedWallets =
-    typeof config.numFeaturedWallet === "number" &&
-    config.numFeaturedWallet > 0;
+    typeof config.numFeaturedWallets === "number" &&
+    config.numFeaturedWallets > 0;
 
   // If featured wallets are configured, render them above the button
   if (hasFeaturedWallets) {
