@@ -1,12 +1,13 @@
 "use client";
 
-import { useWallet, type Wallet } from "@solana/wallet-adapter-react";
+import { type Wallet } from "@solana/wallet-adapter-react";
 import { useAuthContext } from "../context.js";
 import { useCallback, useEffect } from "react";
+import { useSolanaWallet } from "../../../hooks/useSolanaWallet.js";
 
 export const useConnectSolanaEOA = () => {
   const { setAuthStep, authStep } = useAuthContext();
-  const { disconnect, select, publicKey } = useWallet();
+  const { disconnect, select, publicKey } = useSolanaWallet();
 
   const connect = useCallback(
     (wallet: Wallet) => {
