@@ -279,36 +279,7 @@ export function alchemyGasManagerHooks(
           };
         }
 
-        // Otherwise use Alchemy's fee estimation which includes rundler_maxPriorityFeePerGas
-        const { bundlerClient } = params;
-        const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-          getBlock(bundlerClient, { blockTag: "latest" }),
-          (bundlerClient as any).request({
-            method: "rundler_maxPriorityFeePerGas",
-            params: [],
-          }),
-        ]);
-
-        const baseFeePerGas = block.baseFeePerGas;
-        if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-        if (maxPriorityFeePerGasEstimate == null)
-          throw new Error(
-            "rundler_maxPriorityFeePerGas returned null or undefined",
-          );
-
-        const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-          ? fromHex(maxPriorityFeePerGasEstimate, "bigint")
-          : (() => {
-              throw new Error(
-                `Invalid hex value: ${maxPriorityFeePerGasEstimate}`,
-              );
-            })();
-
-        return {
-          maxPriorityFeePerGas,
-          maxFeePerGas:
-            bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
-        };
+        return alchemyEstimateFeesPerGas(params)
       },
     },
   } as const;
