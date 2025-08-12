@@ -1,4 +1,3 @@
-import { bigIntMultiply } from "@aa-sdk/core";
 import {
   createWalletClient,
   custom,
@@ -22,6 +21,7 @@ import { local070Instance } from "~test/instances.js";
 import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
 import type { LightAccountVersion } from "../types";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
+import { bigIntMultiply } from "../../utils.js";
 
 describe("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;

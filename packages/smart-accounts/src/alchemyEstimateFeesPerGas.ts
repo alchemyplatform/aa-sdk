@@ -60,12 +60,16 @@ export type PriorityFeeClient<
  * });
  * ```
  */
-export async function alchemyEstimateFeesPerGas({
+export async function alchemyEstimateFeesPerGas<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends Account | undefined = Account | undefined,
+>({
   bundlerClient,
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: PriorityFeeClient;
+  bundlerClient: PriorityFeeClient<TTransport, TChain, TAccount>;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{

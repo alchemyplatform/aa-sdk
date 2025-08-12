@@ -20,6 +20,7 @@ import {
 } from "../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError } from "@alchemy/common";
+import { getAction } from "viem/utils";
 
 export type MultiOwnerLightAccount = LightAccountBase<
   "MultiOwnerLightAccount",
@@ -111,7 +112,12 @@ export async function toMultiOwnerLightAccount({
     },
 
     async getOwnerAddresses(): Promise<readonly Address[]> {
-      const ownersOnChain = await readContract(client, {
+      const readContractAction = getAction(
+        client,
+        readContract,
+        "readContract",
+      );
+      const ownersOnChain = await readContractAction({
         address: accountAddress,
         abi: MultiOwnerLightAccountAbi,
         functionName: "owners",
