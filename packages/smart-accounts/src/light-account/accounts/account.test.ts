@@ -1,25 +1,22 @@
-// TODO(v5): remove aa-sdk/core dependency
-import { bigIntMultiply, LocalAccountSigner } from "@aa-sdk/core";
 import {
   createWalletClient,
   custom,
-  fromHex,
   parseEther,
   publicActions,
   type Address,
   type Call,
-  type Hex,
   type LocalAccount,
 } from "viem";
 import { createBundlerClient } from "viem/account-abstraction";
-import { generatePrivateKey } from "viem/accounts";
-import { getBlock, setBalance } from "viem/actions";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { local060Instance } from "~test/instances.js";
 import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { toLightAccount } from "./account.js";
+import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,
@@ -28,7 +25,7 @@ const versions = Object.keys(
 describe("Light Account Tests", () => {
   let instance = local060Instance;
   let client: ReturnType<typeof instance.getClient>;
-  const signerAccount = LocalAccountSigner.generatePrivateKeySigner().inner;
+  const signerAccount = privateKeyToAccount(generatePrivateKey());
 
   beforeAll(async () => {
     client = instance.getClient();
@@ -179,7 +176,7 @@ describe("Light Account Tests", () => {
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({
-      signerAccount: new LocalAccountSigner(accounts.fundedAccountOwner).inner,
+      signerAccount: accounts.fundedAccountOwner,
     });
     expect(provider.account.address).toMatchInlineSnapshot(
       '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
@@ -295,10 +292,9 @@ describe("Light Account Tests", () => {
 
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
-    const throwawaySigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const throwawaySigner = privateKeyToAccount(generatePrivateKey());
     const throwawayClient = await givenConnectedProvider({
-      signerAccount: throwawaySigner.inner,
+      signerAccount: throwawaySigner,
     });
 
     // fund the throwaway address
@@ -308,24 +304,23 @@ describe("Light Account Tests", () => {
     });
 
     // create new signer and transfer ownership
-    const newOwner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const newOwner = privateKeyToAccount(generatePrivateKey());
 
     const hash = await throwawayClient.transferOwnership({
-      newOwner: newOwner.inner.address,
+      newOwner: newOwner.address,
     });
 
     await throwawayClient.waitForUserOperationReceipt({ hash });
 
     const newOwnerClient = await givenConnectedProvider({
-      signerAccount: newOwner.inner,
+      signerAccount: newOwner,
       accountAddress: throwawayClient.account.address,
     });
 
     const newOwnerAddress = await newOwnerClient.account.getOwnerAddress();
 
-    expect(newOwnerAddress).not.toBe(await throwawaySigner.getAddress());
-    expect(newOwnerAddress).toBe(await newOwner.getAddress());
+    expect(newOwnerAddress).not.toBe(throwawaySigner.address);
+    expect(newOwnerAddress).toBe(newOwner.address);
   }, 100000);
 
   it.each(versions)(
@@ -389,33 +384,7 @@ describe("Light Account Tests", () => {
       chain: client.chain,
       paymaster: usePaymaster ? true : undefined,
       userOperation: {
-        // TODO(v5): move this to the common package so it can be reused
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            // it is a fair assumption that if someone is using this Alchemy Middleware, then they are using Alchemy RPC
-            bundlerClient.request({
-              // @ts-expect-error - TODO(v5): fix this
-              method: "rundler_maxPriorityFeePerGas",
-              params: [],
-            }),
-          ]);
-
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) {
-            throw new Error("baseFeePerGas is null");
-          }
-
-          return {
-            maxPriorityFeePerGas: fromHex(
-              maxPriorityFeePerGasEstimate as Hex,
-              "bigint",
-            ),
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) +
-              BigInt(maxPriorityFeePerGasEstimate as Hex),
-          };
-        },
+        estimateFeesPerGas: alchemyEstimateFeesPerGas,
       },
     }).extend((client) => singleOwnerLightAccountActions(client));
   };

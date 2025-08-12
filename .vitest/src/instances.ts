@@ -3,7 +3,7 @@ dotenv.config();
 
 import getPort from "get-port";
 import { createServer } from "prool";
-import { anvil } from "prool/instances";
+import { anvil, type AnvilParameters } from "prool/instances";
 import { createClient, http, type Chain, type ClientConfig } from "viem";
 import { localhost } from "viem/chains";
 import { split } from "../../aa-sdk/core/src/transport/split";
@@ -137,6 +137,9 @@ function defineInstance(params: DefineInstanceParams) {
       forkUrl: forkUrl,
       forkBlockNumber,
       chainId: chain.id,
+      // "Prague" isn't an available option here since Anvil
+      // hasn't been updated for a while, but it works fine.
+      hardfork: "Prague" as AnvilParameters["hardfork"],
     }),
     port: anvilPort,
   });

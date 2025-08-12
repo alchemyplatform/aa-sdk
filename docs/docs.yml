@@ -1118,6 +1118,17 @@ navigation:
                       - page: send
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
 
+      - section: Alchemy Wallet APIs
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/wallet-apis/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: gasManagerActions
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/gasManagerActions.mdx
+                  - page: requestGasAndPaymasterAndData
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/requestGasAndPaymasterAndData.mdx
       - section: Alchemy Common
         contents:
           - section: SDK Reference
@@ -1131,6 +1142,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/alchemyTransport.mdx
                   - page: isAlchemyConnectionConfig
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyConnectionConfig.mdx
+                  - page: bigIntMultiply
+                    path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
                   - page: split

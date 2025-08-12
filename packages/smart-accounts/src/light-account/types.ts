@@ -1,9 +1,4 @@
-import type {
-  Address,
-  Chain,
-  SignableMessage,
-  TypedDataDefinition,
-} from "viem";
+import type { Address, Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 
 export type LightAccountVersionConfigs = {
@@ -55,13 +50,3 @@ export type LightAccountEntryPointVersion<
 > = LightAccountVersionConfigs[TLightAccountType][TLightAccountVersion] extends LightAccountVersionConfig
   ? LightAccountVersionConfigs[TLightAccountType][TLightAccountVersion]["entryPointVersion"]
   : never;
-
-export type SignatureRequest =
-  | {
-      type: "personal_sign";
-      data: SignableMessage;
-    }
-  | {
-      type: "eth_signTypedData_v4";
-      data: TypedDataDefinition;
-    };
