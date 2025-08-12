@@ -45,19 +45,24 @@ All `UserOperations` sent with the hooks will now be paid with the token configu
 
 ```tsx twoslash
 import React from "react";
-import { useSendUserOperation } from "@account-kit/react";
+import {
+  useSmartAccountClient,
+  useSendUserOperation,
+} from "@account-kit/react";
+import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
 import { encodeFunctionData, parseAbi } from "viem";
 
 export default function PayWithUsdcButton() {
-  const { sendUserOperation } = useSendUserOperation();
+  const { client, isLoadingClient } = useSmartAccountClient({});
   const erc20Abi = parseAbi([
     "function approve(address spender, uint256 amount) public returns (bool)",
   ]);
+  const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.7.0");
 
   return (
     <button
       onClick={() =>
-        sendUserOperation({
+        client!.sendUserOperation({
           uo: [
             {
               // approve call
@@ -76,6 +81,7 @@ export default function PayWithUsdcButton() {
           ],
         })
       }
+      disabled={isLoadingClient}
     >
       Send USDC-sponsored operation
     </button>
@@ -83,9 +89,15 @@ export default function PayWithUsdcButton() {
 }
 ```
 
+<Tip>
+  When performing ERC-20 sponsorship, be sure to use the `sendUserOperation`
+  method on a client. Support for the `useSendUserOperation` hook is coming
+  soon.
+</Tip>
+
 ### 4 (Optional) Override on a single client
 
-If you only want specific operations to use the policy, create a dedicated client instead of setting it globally.
+If you only want specific operations to use the policy, you can specify it on a dedicated client instead of setting it globally.
 
 ```tsx twoslash
 const { client } = useSmartAccountClient({
@@ -97,7 +109,7 @@ const { client } = useSmartAccountClient({
 });
 ```
 
-Use this `client` with any hook that sends UserOperations.
+Then use `client.sendUserOperation()` to send UserOperations.
 
 ## Done
 
