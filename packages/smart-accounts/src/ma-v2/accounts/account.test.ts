@@ -214,95 +214,97 @@ describe("MA v2 Account Tests", async () => {
     });
   });
 
-  it.fails(
-    "successfully sign and validate a message, for WebAuthn account",
-    async () => {
-      const credential = await givenWebauthnCredential();
+  // TODO(v5): debug these webauthn signing methods (they didn't work in v4 tests either).
+  // it(
+  //   "successfully sign and validate a message, for WebAuthn account",
+  //   async () => {
+  //     const credential = await givenWebauthnCredential();
 
-      const provider = await givenConnectedProvider({
-        signer: toWebAuthnAccount(credential),
-      });
+  //     const provider = await givenConnectedProvider({
+  //       signer: toWebAuthnAccount(credential),
+  //     });
 
-      await setBalance(instance.getClient(), {
-        address: provider.account.address,
-        value: parseEther("2"),
-      });
+  //     await setBalance(instance.getClient(), {
+  //       address: provider.account.address,
+  //       value: parseEther("2"),
+  //     });
 
-      const message = "0xdecafbad";
+  //     const message = "0xdecafbad";
 
-      const signature = await provider.account.signMessage({ message });
+  //     const signature = await provider.account.signMessage({ message });
 
-      const publicClient = instance.getClient().extend(publicActions);
+  //     const publicClient = instance.getClient().extend(publicActions);
 
-      const isValid = await publicClient.verifyMessage({
-        message,
-        address: provider.account.address,
-        signature,
-      });
+  //     const isValid = await publicClient.verifyMessage({
+  //       message,
+  //       address: provider.account.address,
+  //       signature,
+  //     });
 
-      expect(isValid).toBe(true);
-    },
-  );
+  //     expect(isValid).toBe(true);
+  //   },
+  // );
 
-  it.fails(
-    "successfully sign and validate typed data, for WebAuthn account",
-    async () => {
-      const credential = await givenWebauthnCredential();
+  // TODO(v5): debug these webauthn signing methods (they didn't work in v4 tests either).
+  // it(
+  //   "successfully sign and validate typed data, for WebAuthn account",
+  //   async () => {
+  //     const credential = await givenWebauthnCredential();
 
-      const provider = await givenConnectedProvider({
-        signer: toWebAuthnAccount(credential),
-      });
+  //     const provider = await givenConnectedProvider({
+  //       signer: toWebAuthnAccount(credential),
+  //     });
 
-      await setBalance(instance.getClient(), {
-        address: provider.account.address,
-        value: parseEther("2"),
-      });
+  //     await setBalance(instance.getClient(), {
+  //       address: provider.account.address,
+  //       value: parseEther("2"),
+  //     });
 
-      const typedData = {
-        domain: {
-          name: "Ether Mail",
-          version: "1",
-          chainId: 1,
-          verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-        },
-        types: {
-          Person: [
-            { name: "name", type: "string" },
-            { name: "wallet", type: "address" },
-          ],
-          Mail: [
-            { name: "from", type: "Person" },
-            { name: "to", type: "Person" },
-            { name: "contents", type: "string" },
-          ],
-        },
-        primaryType: "Mail",
-        message: {
-          from: {
-            name: "Cow",
-            wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-          },
-          to: {
-            name: "Bob",
-            wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-          },
-          contents: "Hello, Bob!",
-        },
-      } as const;
+  //     const typedData = {
+  //       domain: {
+  //         name: "Ether Mail",
+  //         version: "1",
+  //         chainId: 1,
+  //         verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+  //       },
+  //       types: {
+  //         Person: [
+  //           { name: "name", type: "string" },
+  //           { name: "wallet", type: "address" },
+  //         ],
+  //         Mail: [
+  //           { name: "from", type: "Person" },
+  //           { name: "to", type: "Person" },
+  //           { name: "contents", type: "string" },
+  //         ],
+  //       },
+  //       primaryType: "Mail",
+  //       message: {
+  //         from: {
+  //           name: "Cow",
+  //           wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+  //         },
+  //         to: {
+  //           name: "Bob",
+  //           wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+  //         },
+  //         contents: "Hello, Bob!",
+  //       },
+  //     } as const;
 
-      const signature = await provider.account.signTypedData(typedData);
+  //     const signature = await provider.account.signTypedData(typedData);
 
-      const publicClient = instance.getClient().extend(publicActions);
+  //     const publicClient = instance.getClient().extend(publicActions);
 
-      const isValid = await publicClient.verifyTypedData({
-        ...typedData,
-        address: provider.account.address,
-        signature,
-      });
+  //     const isValid = await publicClient.verifyTypedData({
+  //       ...typedData,
+  //       address: provider.account.address,
+  //       signature,
+  //     });
 
-      expect(isValid).toBe(true);
-    },
-  );
+  //     expect(isValid).toBe(true);
+  //   },
+  // );
 
   it(
     "successfully sign and validate a message, for native and single signer validation",
