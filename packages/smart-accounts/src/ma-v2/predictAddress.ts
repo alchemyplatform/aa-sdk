@@ -35,7 +35,7 @@ export type PredictModularAccountV2AddressParams = {
  *
  * @example
  * ```ts
- * import { predictModularAccountV2Address } from "@alchemy/smart-contracts";
+ * import { predictModularAccountV2Address } from "@alchemy/smart-accounts";
  *
  * const accountAddress = predictModularAccountV2Address({
  *   factoryAddress: "0xFactoryAddress" as Address,

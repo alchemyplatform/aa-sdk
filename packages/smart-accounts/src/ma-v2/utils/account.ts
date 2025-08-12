@@ -82,7 +82,7 @@ export const buildFullNonceKey = ({
  *
  * @example
  * ```ts
- * import { serializeModuleEntity } from "@alchemy/smart-contracts";
+ * import { serializeModuleEntity } from "@alchemy/smart-accounts";
  * import { Address } from "viem";
  *
  * const moduleAddress: Address = "0x1234";

@@ -7,7 +7,7 @@ import { serializeModuleEntity } from "./account.js";
  *
  * @example
  * ```ts
- * import { serializeValidationConfig } from "@alchemy/smart-contracts";
+ * import { serializeValidationConfig } from "@alchemy/smart-accounts";
  * import { Address } from "viem";
  *
  * const moduleAddress: Address = "0x1234";
@@ -44,8 +44,7 @@ export function serializeValidationConfig(config: ValidationConfig): Hex {
  *
  * @example
  * ```ts
- * import { type HookType, serializeHookConfig } from "@alchemy
- * /smart-contracts";
+ * import { type HookType, serializeHookConfig } from "@alchemy/smart-accounts";
  * import { Address } from "viem";
  *
  * const moduleAddress: Address = "0x1234";
