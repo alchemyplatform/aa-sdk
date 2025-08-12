@@ -376,6 +376,7 @@ export async function toModularAccountV2Base<
             chainId: client.chain.id,
             address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
             hash: hashMessage(message),
+            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
           }),
         );
         const validationSignature = toWebAuthnSignature(
