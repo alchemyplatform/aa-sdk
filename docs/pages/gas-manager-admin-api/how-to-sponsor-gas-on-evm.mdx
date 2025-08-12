@@ -26,8 +26,27 @@ A gas manager policy defines which transactions (userOps) are eligible for gas s
 
 - **Custom rules**: sponsor gas only for certain actions (ex: swaps) or certain users (ex: power users of your app) by making a request to your server to verify sponsorship eligibility. To enable, add the following details on your policy:
 
-  - **URL**: the URL the Gas Manager will make a POST request to
-  - **Sponsor on error or timeout**: when selected, the userOp will be sponsored in the event of an error or timeout. See [Create policy](create-policy) for details on request payload and expected response.
+  - **URL**: the URL the Gas Manager will make a POST request to every time you request gas sponsorship
+  - **Sponsor on error or timeout**: when selected, the userOp will be sponsored in the event of an error or timeout.
+  - **Request Payload**
+
+    - `userOperation`: The userOp object.
+    - `policyId`: The ID of your policy.
+    - `chainId`: The ID of the network where the operation is being performed.
+    - `webhookData`: Additional data you wish to include in the request, such as proof of humanity.
+
+    Here is an example request body:
+
+    ```json
+    {
+      "userOperation": {}, // structure depends on EntryPoint version
+      "policyId": "",
+      "chainId": "",
+      "webhookData": ""
+    }
+    ```
+
+  - **Expected Result**: Your endpoint should respond with a `200` status code and a JSON body (`{ "approved": true | false }`) indicating whether to the userOp passes the custom rules. Anything other than the above will be treated as error, and the Gas Manager will sponsor the userOp only if `approveOnFailure` is `true`.
 
 - **Allowlist**: restrict wallet addresses that are eligible for sponsorship. The policy will only sponsor gas for userOps that were sent by addresses on this list.
 

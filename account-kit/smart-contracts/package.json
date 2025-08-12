@@ -77,6 +77,6 @@
     "webauthn-p256": "^0.0.10"
   },
   "peerDependencies": {
-    "viem": "2.29.2"
+    "viem": "^2.29.2"
   }
 }
