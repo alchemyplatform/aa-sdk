@@ -49,6 +49,7 @@ import {
   useSmartAccountClient,
   useSendUserOperation,
 } from "@account-kit/react";
+import { sepolia, paymasterAddress } from "@account-kit/infra";
 import { encodeFunctionData, parseAbi } from "viem";
 
 export default function PayWithUsdcButton() {
@@ -56,6 +57,7 @@ export default function PayWithUsdcButton() {
   const erc20Abi = parseAbi([
     "function approve(address spender, uint256 amount) public returns (bool)",
   ]);
+  const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.7.0");
 
   return (
     <button
@@ -86,6 +88,12 @@ export default function PayWithUsdcButton() {
   );
 }
 ```
+
+<Tip>
+  When performing ERC-20 sponsorship, be sure to use the `sendUserOperation`
+  method on a client. Support for the `useSendUserOperation` hook is coming
+  soon.
+</Tip>
 
 ### 4 (Optional) Override on a single client
 
