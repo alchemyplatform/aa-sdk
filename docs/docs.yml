@@ -88,6 +88,8 @@ navigation:
                 path: wallets/pages/concepts/bundler-client.mdx
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
+              - page: What is a signer?
+                path: wallets/pages/authentication/what-is-a-signer.mdx
               - page: Intro to Account Kit
                 path: wallets/pages/overview/sdk-concepts/intro-to-account-kit.mdx
           - section: Supported Chains
@@ -139,13 +141,13 @@ navigation:
             path: wallets/pages/react/pregenerate-wallets.mdx
           - page: UI components
             path: wallets/pages/react/ui-components.mdx
-          - page: Whitelabel
-            path: wallets/pages/react/react-hooks.mdx
-          - page: Other JS setup
-            path: wallets/pages/signer/quickstart.mdx
-          - page: What is a signer?
-            path: wallets/pages/authentication/what-is-a-signer.mdx
-          - page: Third party
+          - section: Whitelabel
+            contents:
+              - page: React
+                path: wallets/pages/react/react-hooks.mdx
+              - page: Other JS setup
+                path: wallets/pages/signer/quickstart.mdx
+          - page: Third party signers
             path: wallets/pages/third-party/signers.mdx
 
       - section: Authorization
