@@ -1,15 +1,18 @@
 import type { Address, Client, Transport, Chain, Hex } from "viem";
-import { fromHex, isHex } from "viem";
-import { getBlock } from "viem/actions";
 import type {
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
   GetPaymasterStubDataParameters,
   GetPaymasterStubDataReturnType,
+  SmartAccount,
 } from "viem/account-abstraction";
-import { deepHexlify, resolveProperties } from "@aa-sdk/core";
-import { bigIntMultiply, type AlchemyTransport } from "@alchemy/common";
+import { deepHexlify } from "@aa-sdk/core";
+import { type AlchemyTransport } from "@alchemy/common";
 import { requestGasAndPaymasterAndData } from "@alchemy/wallet-apis";
+import {
+  alchemyEstimateFeesPerGas,
+  type PriorityFeeClient,
+} from "./alchemyEstimateFeesPerGas.js";
 // Note: types are not exported from wallet-apis index; use structural typing locally instead
 // Type for ERC-20 token context
 export type PolicyToken = {
@@ -126,7 +129,7 @@ export function alchemyGasManagerHooks(
   };
 
   return {
-    paymaster: (bundlerClient: Client<Transport, Chain>) => ({
+    paymaster: (bundlerClient: Client<Transport, Chain, SmartAccount>) => ({
       async getPaymasterStubData(
         parameters: GetPaymasterStubDataParameters,
       ): Promise<GetPaymasterStubDataReturnType> {
@@ -166,14 +169,12 @@ export function alchemyGasManagerHooks(
         } = parameters;
 
         // Prepare user operation
-        const userOp = deepHexlify(
-          await resolveProperties(userOpFields as any),
-        );
+        const userOp = deepHexlify(userOpFields);
 
-        // We need the account to get dummy signature, but viem doesn't provide it
-        // For now, we'll use a default dummy signature
-        const dummySignature =
-          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c" as Hex;
+        // Get dummy signature from the account if available, otherwise use default
+        const dummySignature = bundlerClient.account?.getStubSignature
+          ? await bundlerClient.account.getStubSignature(userOp as any)
+          : ("0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c" as Hex);
 
         // Prepare the request
         const request = {
@@ -257,58 +258,36 @@ export function alchemyGasManagerHooks(
           return { paymasterAndData: stubResult.paymasterAndData };
         }
 
+        // Type narrowing ensures these fields exist after the check above
         return {
-          paymaster: stubResult.paymaster!,
-          paymasterData: stubResult.paymasterData!,
+          paymaster: stubResult.paymaster,
+          paymasterData: stubResult.paymasterData,
           paymasterVerificationGasLimit:
-            stubResult.paymasterVerificationGasLimit!,
-          paymasterPostOpGasLimit: stubResult.paymasterPostOpGasLimit!,
+            stubResult.paymasterVerificationGasLimit,
+          paymasterPostOpGasLimit: stubResult.paymasterPostOpGasLimit,
         };
       },
     }),
 
     userOperation: {
       // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
-      async estimateFeesPerGas(params: { bundlerClient: Client }) {
+      async estimateFeesPerGas(params: { bundlerClient: PriorityFeeClient }) {
         // If we have cached gas values, return them
-        if (cachedResult) {
-          const r = cachedResult as any;
+        if (cachedResult && (cachedResult as any).maxFeePerGas) {
+          const r = cachedResult as {
+            maxFeePerGas: bigint;
+            maxPriorityFeePerGas: bigint;
+          };
           return {
-            maxFeePerGas: r.maxFeePerGas as bigint,
-            maxPriorityFeePerGas: r.maxPriorityFeePerGas as bigint,
+            maxFeePerGas: r.maxFeePerGas,
+            maxPriorityFeePerGas: r.maxPriorityFeePerGas,
           };
         }
 
-        // Otherwise use Alchemy's fee estimation which includes rundler_maxPriorityFeePerGas
-        const { bundlerClient } = params;
-        const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-          getBlock(bundlerClient, { blockTag: "latest" }),
-          (bundlerClient as any).request({
-            method: "rundler_maxPriorityFeePerGas",
-            params: [],
-          }),
-        ]);
-
-        const baseFeePerGas = block.baseFeePerGas;
-        if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-        if (maxPriorityFeePerGasEstimate == null)
-          throw new Error(
-            "rundler_maxPriorityFeePerGas returned null or undefined",
-          );
-
-        const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-          ? fromHex(maxPriorityFeePerGasEstimate, "bigint")
-          : (() => {
-              throw new Error(
-                `Invalid hex value: ${maxPriorityFeePerGasEstimate}`,
-              );
-            })();
-
-        return {
-          maxPriorityFeePerGas,
-          maxFeePerGas:
-            bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
-        };
+        // Otherwise use Alchemy's fee estimation
+        return alchemyEstimateFeesPerGas({
+          bundlerClient: params.bundlerClient,
+        });
       },
     },
   } as const;
