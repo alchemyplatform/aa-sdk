@@ -71,6 +71,20 @@ export type CreateWebAuthnStamperParams = {
   credentialId: string | undefined;
 };
 
+export type HandleOauthFlowFn = (authUrl: string) => Promise<OAuthFlowResponse>;
+
+// TODO: can make this type more crisp.
+export type OAuthFlowResponse = {
+  status: "SUCCESS" | "ACCOUNT_LINKING_CONFIRMATION_REQUIRED";
+  bundle?: string;
+  orgId?: string;
+  idToken?: string;
+  email?: string;
+  providerName?: string;
+  otpId?: string;
+  error?: string;
+};
+
 export type TurnkeyStamp = {
   stampHeaderName: string;
   stampHeaderValue: string;
