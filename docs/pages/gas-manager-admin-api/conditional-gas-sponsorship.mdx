@@ -1,0 +1,72 @@
+---
+title: Conditional gas sponsorship
+description: Step-by-step guide to sponsor gas for select transactions and users.
+url: https://docs.alchemy.com/reference/conditional-gas-sponsorship
+slug: reference/conditional-gas-sponsorship
+---
+
+In this guide, you’ll learn how to enable **conditional gas sponsorship** to sponsor gas only for select transactions or users. Ex:
+
+- Sponsor gas only for swaps or txs that interact with your contracts.
+- Sponsor gas only for high-ROI users such as power users of your app or users with proof of humanity.
+
+<Info>
+  **\[Recommended]** Use our [SDK](https://www.alchemy.com/docs/wallets) to
+  create and use wallets. The SDK handles all complexity for you, making
+  development faster and easier.
+</Info>
+
+If you want to use APIs directly, follow these steps.
+
+### 1. Create a Webhook
+
+The webhook decides whether a given transaction should be sponsored. Every time you request gas sponsorship, the Gas Manager will make a POST request to your webhook.
+Your server responds with approval or rejection based on your custom rules.
+
+**Request Payload**
+
+- `userOperation`: The userOp object.
+- `policyId`: The ID of your policy.
+- `chainId`: The ID of the network.
+- `webhookData`: Optional additional data you wish to include in the request, such as proof of humanity.
+
+Here is an example request body:
+
+```json
+{
+  "userOperation": {}, // structure depends on EntryPoint version
+  "policyId": "",
+  "chainId": "",
+  "webhookData": ""
+}
+```
+
+**Expected Result**: Your endpoint should respond with a `200` status code and a JSON body (`{ "approved": true | false }`) indicating whether the userOp passes the custom rules.
+
+### 2. Create a Gas Manager Policy
+
+A gas manager policy defines which transactions (userOps) are eligible for gas sponsorship. You can customize the policy with the following rules:
+
+- **Spending rules**: limit the amount of money or the number of userOps that can be sponsored by this policy
+
+- **Custom rules**: sponsor gas only for certain actions or users by making a request to your server to verify sponsorship eligibility. To enable, add the following details on your policy:
+
+  - **URL**: the webhook URL the Gas Manager will make a POST request to every time you request gas sponsorship
+  - **Sponsor on error or timeout**: when selected, the userOp will be sponsored in the event of an error or timeout.
+
+- **Allowlist**: restrict wallet addresses that are eligible for sponsorship. The policy will only sponsor gas for userOps that were sent by addresses on this list.
+
+- **Blocklist**: ban certain addresses from receiving sponsorship under this policy.
+
+- **Sponsorship expiry period**: this is the period for which the Gas Manager signature will remain valid once it is generated.
+
+You can create a policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create/?a=api-docs) or our [Create policy API](https://www.alchemy.com/docs/wallets/api/gas-manager-admin-api/admin-api-endpoints/create-policy).
+
+### 3. Get Gas Manager's signature
+
+Use the `alchemy_requestGasAndPaymasterAndData` endpoint to get the Gas Manager's signature (`paymaster` and `paymasterData`). You'll need to pass your policy id, the API key of the app associated with the policy, the userOp, and optional webhookData that will be passed to your webhook for decision-making.
+The Gas Manager will make a request to your webhook. If approved and the userOp satisfied any additional rules defined in the policy, the Gas Manager will return the signature.
+
+### 4. Send the sponsored userOp
+
+Once you get the `paymaster` and `paymasterData` fields, you can use them in your userOp when you call [`eth_sendUserOperation`](/reference/eth-senduseroperation). The Gas Manager will pay for the gas of the userOp when it is mined.
