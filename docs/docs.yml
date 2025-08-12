@@ -149,27 +149,6 @@ navigation:
                 path: wallets/pages/signer/quickstart.mdx
           - page: Third party signers
             path: wallets/pages/third-party/signers.mdx
-
-      - section: Authorization
-        contents:
-          - link: Sending transactions
-            href: /docs/wallets/transactions/send/
-          - section: Signing
-            contents:
-              - page: Signing transactions
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Signing messages
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Sign EIP-7702 authorization
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Sign Solana transactions
-                path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
-              - section: Other signing
-                contents:
-                  - page: Sign typed data
-                    path: wallets/pages/signer/as-an-eoa.mdx
-                  - page: Sign raw hash
-                    path: wallets/pages/signer/as-an-eoa.mdx
           - section: Policies
             contents:
               - page: Overview
@@ -192,58 +171,6 @@ navigation:
             path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
           - page: Export private key
             path: wallets/pages/signer/export-private-key.mdx
-          - section: Smart Account Types
-            contents:
-              - page: Choosing a Smart Account
-                path: wallets/pages/authorization/smart-account-types/choosing-a-smart-account.mdx
-              - section: Modular Account V2
-                contents:
-                  - page: Overview
-                    path: wallets/pages/authorization/smart-account-types/modular-account-v2/overview.mdx
-                  - page: Getting started
-                    path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
-                  - page: Upgrading to MAv2
-                    path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-MAv2.mdx
-              - section: Modular Account V1
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/index.mdx
-                  - page: Getting started
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
-                  - page: Manage multiple owners
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
-                  - page: Upgrade to MAv1
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
-                  - section: Multisig
-                    contents:
-                      - page: Introduction
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
-                      - page: Getting started
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
-                      - page: Technical details
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
-                  - section: Session keys
-                    contents:
-                      - page: Overview
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
-                      - page: Getting started
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
-                      - page: Supported permissions
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
-              - section: Light Account
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/index.mdx
-                  - page: Getting started
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
-                  - page: Transfer ownership
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
-                  - page: Manage multiple owners
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
-              - page: Third party
-                path: wallets/pages/third-party/smart-contracts.mdx
-              - page: Deployed addresses
-                path: wallets/pages/smart-contracts/deployed-addresses.mdx
 
       - section: Transactions
         contents:
@@ -285,6 +212,22 @@ navigation:
                 path: wallets/pages/third-party/chains.mdx
               - page: Paymasters
                 path: wallets/pages/third-party/paymasters.mdx
+          - section: Signing
+            contents:
+              - page: Signing transactions
+                path: wallets/pages/signer/as-an-eoa.mdx
+              - page: Signing messages
+                path: wallets/pages/signer/as-an-eoa.mdx
+              - page: Sign EIP-7702 authorization
+                path: wallets/pages/signer/as-an-eoa.mdx
+              - page: Sign Solana transactions
+                path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
+              - section: Other signing
+                contents:
+                  - page: Sign typed data
+                    path: wallets/pages/signer/as-an-eoa.mdx
+                  - page: Sign raw hash
+                    path: wallets/pages/signer/as-an-eoa.mdx
           - section: Using 7702
             contents:
               - page: Overview
@@ -492,6 +435,58 @@ navigation:
           - page: Types
             slug: resources/types
             path: wallets/pages/resources/types.mdx
+          - section: Smart Account Types
+            contents:
+              - page: Choosing a Smart Account
+                path: wallets/pages/authorization/smart-account-types/choosing-a-smart-account.mdx
+              - section: Modular Account V2
+                contents:
+                  - page: Overview
+                    path: wallets/pages/authorization/smart-account-types/modular-account-v2/overview.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
+                  - page: Upgrading to MAv2
+                    path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-MAv2.mdx
+              - section: Modular Account V1
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/index.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
+                  - page: Manage multiple owners
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
+                  - page: Upgrade to MAv1
+                    path: wallets/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
+                  - section: Multisig
+                    contents:
+                      - page: Introduction
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
+                      - page: Getting started
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
+                      - page: Technical details
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
+                  - section: Session keys
+                    contents:
+                      - page: Overview
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
+                      - page: Getting started
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
+                      - page: Supported permissions
+                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
+              - section: Light Account
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/index.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
+                  - page: Transfer ownership
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
+                  - page: Manage multiple owners
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
+              - page: Third party
+                path: wallets/pages/third-party/smart-contracts.mdx
+              - page: Deployed addresses
+                path: wallets/pages/smart-contracts/deployed-addresses.mdx
           - section: Troubleshooting
             contents:
               - page: General FAQs
