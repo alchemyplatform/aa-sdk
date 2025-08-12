@@ -1,5 +1,5 @@
 export type * from "./transport/alchemy.js";
-export { alchemy, isAlchemyTransport } from "./transport/alchemy.js";
+export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 export type * from "./transport/split.js";
 export { split } from "./transport/split.js";
 export type * from "./utils/types.js";
@@ -10,11 +10,6 @@ export {
   AlchemyConnectionConfigSchema,
   validateAlchemyConnectionConfig,
   isAlchemyConnectionConfig,
-  createApiKeyConfig,
-  createJwtConfig,
-  createProxyConfig,
-  createRpcUrlConfig,
-  createProxyUrlConfig,
 } from "./transport/connectionSchema.js";
 
 // errors

@@ -1,243 +1,223 @@
 import { describe, it, expect } from "vitest";
-import { 
-  validateAlchemyConnectionConfig, 
+import {
+  validateAlchemyConnectionConfig,
   isAlchemyConnectionConfig,
-  createApiKeyConfig,
-  createJwtConfig,
-  createProxyConfig,
-  createRpcUrlConfig,
-  createProxyUrlConfig
 } from "../../src/transport/connectionSchema.js";
 import { ConnectionConfigError } from "../../src/errors/ConnectionConfigError.js";
 
-describe("AlchemyConnectionConfig Schema", () => {
-  describe("Factory Functions", () => {
+describe("AlchemyConnectionConfig V5 Schema", () => {
+  describe("Direct Configuration", () => {
     it("should create valid API key config", () => {
-      const config = createApiKeyConfig("test-key");
-      expect(config).toEqual({
-        mode: "apiKey",
-        apiKey: "test-key"
-      });
-    });
-
-    it("should create valid API key config with nodeRpcUrl", () => {
-      const config = createApiKeyConfig("test-key", {
-        nodeRpcUrl: "https://zora.rpc.com"
-      });
-      expect(config).toEqual({
-        mode: "apiKey",
-        apiKey: "test-key",
-        nodeRpcUrl: "https://zora.rpc.com"
-      });
-    });
-
-    it("should create valid API key config with chainAgnosticUrl", () => {
-      const config = createApiKeyConfig("test-key", {
-        chainAgnosticUrl: "https://api.g.alchemy.com/v2"
-      });
-      expect(config).toEqual({
-        mode: "apiKey",
-        apiKey: "test-key",
-        chainAgnosticUrl: "https://api.g.alchemy.com/v2"
-      });
-    });
-
-    it("should create valid JWT config", () => {
-      const config = createJwtConfig("test-jwt");
-      expect(config).toEqual({
-        mode: "jwt", 
-        jwt: "test-jwt"
-      });
-    });
-
-    it("should create valid JWT config with nodeRpcUrl", () => {
-      const config = createJwtConfig("test-jwt", {
-        nodeRpcUrl: "https://base.rpc.com"
-      });
-      expect(config).toEqual({
-        mode: "jwt",
-        jwt: "test-jwt",
-        nodeRpcUrl: "https://base.rpc.com"
-      });
-    });
-
-    it("should create valid proxy config", () => {
-      const config = createProxyConfig("https://proxy.example.com");
-      expect(config).toEqual({
-        mode: "proxy",
-        proxyUrl: "https://proxy.example.com"
-      });
-    });
-
-    it("should create valid proxy config with nodeRpcUrl", () => {
-      const config = createProxyConfig("https://proxy.example.com", {
-        nodeRpcUrl: "https://zora.rpc.com"
-      });
-      expect(config).toEqual({
-        mode: "proxy",
-        proxyUrl: "https://proxy.example.com",
-        nodeRpcUrl: "https://zora.rpc.com"
-      });
-    });
-
-    it("should handle deprecated createRpcUrlConfig", () => {
-      const config = createRpcUrlConfig("https://rpc.example.com");
-      expect(config).toEqual({
-        mode: "proxy",
-        proxyUrl: "https://rpc.example.com"
-      });
-    });
-
-    it("should handle deprecated createProxyUrlConfig", () => {
-      const config = createProxyUrlConfig("https://proxy.example.com");
-      expect(config).toEqual({
-        mode: "proxy",
-        proxyUrl: "https://proxy.example.com"
-      });
-    });
-  });
-
-  describe("Validation", () => {
-    it("should validate API key config", () => {
-      const config = { mode: "apiKey" as const, apiKey: "test-key" };
-      expect(() => validateAlchemyConnectionConfig(config)).not.toThrow();
+      const config = { apiKey: "test-key" };
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
       expect(isAlchemyConnectionConfig(config)).toBe(true);
     });
 
-    it("should validate API key config with nodeRpcUrl", () => {
-      const config = { 
-        mode: "apiKey" as const, 
-        apiKey: "test-key",
-        nodeRpcUrl: "https://zora.rpc.com"
-      };
-      expect(() => validateAlchemyConnectionConfig(config)).not.toThrow();
+    it("should create valid JWT config", () => {
+      const config = { jwt: "test-jwt" };
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
+      expect(isAlchemyConnectionConfig(config)).toBe(true);
+    });
+
+    it("should create valid URL config", () => {
+      const config = { url: "https://eth-mainnet.g.alchemy.com/v2/test-key" };
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
+      expect(isAlchemyConnectionConfig(config)).toBe(true);
+    });
+  });
+
+  describe("Validation - Valid Configs", () => {
+    it("should validate API key config", () => {
+      const config = { apiKey: "test-key" };
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
       expect(isAlchemyConnectionConfig(config)).toBe(true);
     });
 
     it("should validate JWT config", () => {
-      const config = { mode: "jwt" as const, jwt: "test-jwt" };
-      expect(() => validateAlchemyConnectionConfig(config)).not.toThrow();
+      const config = { jwt: "test-jwt" };
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
       expect(isAlchemyConnectionConfig(config)).toBe(true);
     });
 
-    it("should validate JWT config with nodeRpcUrl", () => {
-      const config = { 
-        mode: "jwt" as const, 
-        jwt: "test-jwt",
-        nodeRpcUrl: "https://base.rpc.com"
-      };
-      expect(() => validateAlchemyConnectionConfig(config)).not.toThrow();
+    it("should validate URL config", () => {
+      const config = { url: "https://eth-mainnet.g.alchemy.com/v2/test-key" };
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
       expect(isAlchemyConnectionConfig(config)).toBe(true);
     });
+  });
 
-    it("should validate proxy config", () => {
-      const config = { 
-        mode: "proxy" as const, 
-        proxyUrl: "https://proxy.example.com" 
-      };
-      expect(() => validateAlchemyConnectionConfig(config)).not.toThrow();
-      expect(isAlchemyConnectionConfig(config)).toBe(true);
-    });
-
-    it("should validate proxy config with nodeRpcUrl", () => {
-      const config = { 
-        mode: "proxy" as const, 
-        proxyUrl: "https://proxy.example.com",
-        nodeRpcUrl: "https://zora.rpc.com"
-      };
-      expect(() => validateAlchemyConnectionConfig(config)).not.toThrow();
-      expect(isAlchemyConnectionConfig(config)).toBe(true);
-    });
-
-    it("should reject invalid mode type", () => {
-      const config = { mode: "invalid", someField: "value" };
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
+  describe("Validation - Invalid Configs", () => {
+    it("should reject empty API key", () => {
+      const config = { apiKey: "" };
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
       expect(isAlchemyConnectionConfig(config)).toBe(false);
     });
 
-    it("should reject apiKey config with missing apiKey field", () => {
-      const config = { mode: "apiKey" }; // missing apiKey field
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
-      expect(isAlchemyConnectionConfig(config)).toBe(false);
-    });
-
-    it("should reject jwt config with missing jwt field", () => {
-      const config = { mode: "jwt" }; // missing jwt field
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
-      expect(isAlchemyConnectionConfig(config)).toBe(false);
-    });
-
-    it("should reject proxy config with missing proxyUrl field", () => {
-      const config = { mode: "proxy" }; // missing proxyUrl field
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
-      expect(isAlchemyConnectionConfig(config)).toBe(false);
-    });
-
-    it("should reject empty apiKey", () => {
-      const config = { mode: "apiKey" as const, apiKey: "" };
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
-      expect(isAlchemyConnectionConfig(config)).toBe(false);
-    });
-
-    it("should reject empty jwt", () => {
-      const config = { mode: "jwt" as const, jwt: "" };
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
+    it("should reject empty JWT", () => {
+      const config = { jwt: "" };
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
       expect(isAlchemyConnectionConfig(config)).toBe(false);
     });
 
     it("should reject invalid URL formats", () => {
       const invalidUrls = [
-        { mode: "proxy" as const, proxyUrl: "not-a-url" },
-        { mode: "apiKey" as const, apiKey: "test", nodeRpcUrl: "invalid" },
-        { mode: "jwt" as const, jwt: "test", chainAgnosticUrl: "bad-url" }
+        { url: "not-a-url" },
+        { url: "" },
+        { url: "//missing-protocol.com" },
       ];
 
-      invalidUrls.forEach(config => {
-        expect(() => validateAlchemyConnectionConfig(config)).toThrow(ConnectionConfigError);
+      invalidUrls.forEach((config) => {
+        expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+          ConnectionConfigError,
+        );
         expect(isAlchemyConnectionConfig(config)).toBe(false);
       });
+    });
+
+    it("should reject config with no valid fields", () => {
+      const config = { unknownField: "value" };
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
+      expect(isAlchemyConnectionConfig(config)).toBe(false);
+    });
+
+    it("should reject empty object", () => {
+      const config = {};
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
+      expect(isAlchemyConnectionConfig(config)).toBe(false);
+    });
+  });
+
+  describe("Union Behavior", () => {
+    it("should reject config with multiple auth methods", () => {
+      const config = {
+        apiKey: "test-key",
+        jwt: "test-jwt",
+      } as any;
+
+      // Should reject multiple auth methods
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
+      expect(isAlchemyConnectionConfig(config)).toBe(false);
+    });
+
+    it("should reject config with all three auth options", () => {
+      const config = {
+        apiKey: "test-key",
+        jwt: "test-jwt",
+        url: "https://example.com",
+      } as any;
+
+      // Should reject multiple auth methods
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
+      expect(isAlchemyConnectionConfig(config)).toBe(false);
+    });
+
+    it("should reject config with valid auth and unknown fields", () => {
+      const config = {
+        apiKey: "valid-key",
+        invalidField: "ignored",
+      } as any;
+
+      // Should reject unknown fields due to strict validation
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
+      expect(isAlchemyConnectionConfig(config)).toBe(false);
+    });
+  });
+
+  describe("Type Guards", () => {
+    it("should correctly identify valid configs", () => {
+      expect(isAlchemyConnectionConfig({ apiKey: "test" })).toBe(true);
+      expect(isAlchemyConnectionConfig({ jwt: "test" })).toBe(true);
+      expect(isAlchemyConnectionConfig({ url: "https://example.com" })).toBe(
+        true,
+      );
+    });
+
+    it("should correctly identify invalid configs", () => {
+      expect(isAlchemyConnectionConfig({})).toBe(false);
+      expect(isAlchemyConnectionConfig(null)).toBe(false);
+      expect(isAlchemyConnectionConfig(undefined)).toBe(false);
+      expect(isAlchemyConnectionConfig("string")).toBe(false);
+      expect(isAlchemyConnectionConfig(123)).toBe(false);
+      expect(isAlchemyConnectionConfig(true)).toBe(false);
+      expect(isAlchemyConnectionConfig([])).toBe(false);
+      expect(isAlchemyConnectionConfig({ unknownField: "value" })).toBe(false);
+    });
+
+    it("should handle edge cases", () => {
+      expect(isAlchemyConnectionConfig({ apiKey: "" })).toBe(false); // Empty string
+      expect(isAlchemyConnectionConfig({ apiKey: null } as any)).toBe(false); // Null value
+      expect(isAlchemyConnectionConfig({ apiKey: 123 } as any)).toBe(false); // Wrong type
     });
   });
 
   describe("Error Messages", () => {
-    it("should throw ConnectionConfigError for invalid config", () => {
-      expect(() => {
-        validateAlchemyConnectionConfig({ mode: "apiKey" }); // missing apiKey
-      }).toThrow(ConnectionConfigError);
-    });
-
-    it("should provide descriptive error for missing fields", () => {
+    it("should provide descriptive error for empty API key", () => {
       try {
-        validateAlchemyConnectionConfig({ mode: "apiKey" });
-      } catch (error) {
+        validateAlchemyConnectionConfig({ apiKey: "" });
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
         expect(error).toBeInstanceOf(ConnectionConfigError);
-        expect(error.message).toContain("Required");
+        expect(error.message).toContain("API key cannot be empty");
       }
     });
 
-    it("should provide descriptive error for invalid URLs", () => {
+    it("should provide descriptive error for empty JWT", () => {
       try {
-        validateAlchemyConnectionConfig({ 
-          mode: "proxy" as const, 
-          proxyUrl: "not-a-url" 
-        });
-      } catch (error) {
+        validateAlchemyConnectionConfig({ jwt: "" });
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error).toBeInstanceOf(ConnectionConfigError);
+        expect(error.message).toContain("JWT cannot be empty");
+      }
+    });
+
+    it("should provide descriptive error for invalid URL", () => {
+      try {
+        validateAlchemyConnectionConfig({ url: "not-a-url" });
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error).toBeInstanceOf(ConnectionConfigError);
+        expect(error.message).toContain("Invalid URL format");
+      }
+    });
+
+    it("should provide error for missing fields", () => {
+      try {
+        validateAlchemyConnectionConfig({});
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
         expect(error).toBeInstanceOf(ConnectionConfigError);
         expect(error.message).toContain("Invalid");
       }
     });
-  });
 
-  describe("Type Narrowing", () => {
-    it("should narrow types correctly with type guard", () => {
-      const unknownConfig: unknown = { mode: "apiKey", apiKey: "test" };
-      
-      if (isAlchemyConnectionConfig(unknownConfig)) {
-        // TypeScript should know the type here
-        expect(unknownConfig.mode).toBe("apiKey");
-        if (unknownConfig.mode === "apiKey") {
-          expect(unknownConfig.apiKey).toBe("test");
-        }
+    it("should provide error for wrong type", () => {
+      try {
+        validateAlchemyConnectionConfig({ apiKey: 123 } as any);
+        expect.fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error).toBeInstanceOf(ConnectionConfigError);
+        // Zod will report type mismatch
       }
     });
   });

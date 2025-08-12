@@ -10,13 +10,13 @@ export class ConnectionConfigError extends BaseError {
 
   /**
    * Creates a new ConnectionConfigError with details about the validation failure.
-   * 
+   *
    * @param {string} [details] Optional details about the specific validation failure
    */
   constructor(details?: string) {
-    const message = details 
+    const message = details
       ? `Invalid Alchemy connection configuration: ${details}`
-      : 'Invalid Alchemy connection configuration';
+      : "Invalid Alchemy connection configuration";
     super(message);
   }
 }

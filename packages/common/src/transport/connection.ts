@@ -1,6 +1,7 @@
 import type { Never } from "../utils/types";
 import type { SplitTransportParams } from "./split";
 
+// TODO(v5): remove this file and use connectionSchema.ts instead once other packages are migrated over
 type AlchemyConnectionBaseConfig =
   // TODO(v5): is this really the best devex? can we do better?
   // basic configuration for connecting to alchemy.

@@ -10,40 +10,22 @@ import {
   type TransportConfig,
 } from "viem";
 import { BaseError } from "../errors/BaseError.js";
-import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
 import { FetchError } from "../errors/FetchError.js";
 import { ServerError } from "../errors/ServerError.js";
 import { mutateRemoveTrackingHeaders } from "../tracing/updateHeaders.js";
 import { VERSION } from "../version.js";
-import { type AlchemyConnectionConfig, validateAlchemyConnectionConfig } from "./connectionSchema.js";
-import { split } from "./split.js";
 import type { HttpRequestFn, HttpRequestSchema } from "./types.js";
+import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
 
-const alchemyMethods = [
-  "eth_sendUserOperation",
-  "eth_estimateUserOperationGas",
-  "eth_getUserOperationReceipt",
-  "eth_getUserOperationByHash",
-  "eth_supportedEntryPoints",
-  "rundler_maxPriorityFeePerGas",
-  "pm_getPaymasterData",
-  "pm_getPaymasterStubData",
-  "alchemy_requestGasAndPaymasterAndData",
-];
-
-const chainAgnosticMethods = [
-  "wallet_prepareCalls",
-  "wallet_sendPreparedCalls",
-  "wallet_requestAccount",
-  "wallet_createAccount",
-  "wallet_listAccounts",
-  "wallet_createSession",
-  "wallet_getCallsStatus",
-];
-
-const DEFAULT_CHAIN_AGNOSTIC_URL = "https://api.g.alchemy.com/v2";
-
-export type AlchemyTransportConfig = AlchemyConnectionConfig & {
+/**
+ * Configuration options for the Alchemy transport.
+ * Accepts one of three authentication methods: API key, JWT token, or direct URL.
+ */
+export type AlchemyTransportConfig = (
+  | { apiKey: string }
+  | { jwt: string }
+  | { url: string }
+) & {
   /** The max number of times to retry. */
   retryCount?: TransportConfig["retryCount"] | undefined;
   /** The base delay (in ms) between retries. */
@@ -55,7 +37,7 @@ type AlchemyTransportBase<
   rpcSchema extends RpcSchema | undefined = undefined,
   httpSchema extends HttpRequestSchema | undefined = undefined,
 > = Transport<
-  "alchemy",
+  "alchemyHttp",
   {
     alchemyRpcUrl: string;
     fetchOptions: AlchemyTransportConfig["fetchOptions"];
@@ -74,8 +56,7 @@ export type AlchemyTransport<
 
 /**
  * A type guard for the transport to determine if it is an Alchemy transport.
- * Used in cases where we would like to do switching depending on the transport, where there used
- * to be two clients for a alchemy and a non alchemy, and with this switch we don't need the two seperate clients.
+ * Used in cases where we would like to do switching depending on the transport.
  *
  * @param {Transport} transport The transport to check
  * @param {Chain} chain Chain for the transport to run its function to return the transport config
@@ -85,69 +66,46 @@ export function isAlchemyTransport(
   transport: Transport,
   chain: Chain,
 ): transport is AlchemyTransport {
-  return transport({ chain }).config.type === "alchemy";
+  return transport({ chain }).config.type === "alchemyHttp";
 }
 
 /**
- * Creates an Alchemy transport with the specified configuration using a simplified schema.
- * 
- * The transport automatically handles routing based on two key factors:
- * 1. **Connection mode** (`mode`): How to connect to Alchemy services (apiKey, jwt, or proxy)
- * 2. **Node RPC URL** (`nodeRpcUrl`): Whether to use third-party RPC for blockchain operations
- * 
+ * Creates an Alchemy HTTP transport for connecting to Alchemy's services.
+ *
  * @example
- * ### Standard Chain (Alchemy has node RPC support)
+ * Using API Key:
  * ```ts
- * import { alchemy, createApiKeyConfig } from "@alchemy/common";
- * 
- * // Using factory function (recommended)
- * const transport = alchemy(createApiKeyConfig("your-api-key"));
- * 
- * // Or direct configuration
- * const transport = alchemy({
- *   mode: "apiKey",
- *   apiKey: "your-api-key"
- * });
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ apiKey: "your-api-key" });
  * ```
- * 
- * ### AA-Only Chain (no Alchemy node RPC)
+ *
+ * @example
+ * Using JWT:
  * ```ts
- * import { alchemy, createApiKeyConfig } from "@alchemy/common";
- * 
- * // Third-party RPC for blockchain operations, Alchemy for AA
- * const transport = alchemy(createApiKeyConfig("your-api-key", {
- *   nodeRpcUrl: "https://zora-node.com/rpc"
- * }));
- * 
- * // Or direct configuration
- * const transport = alchemy({
- *   mode: "apiKey",
- *   apiKey: "your-api-key",
- *   nodeRpcUrl: "https://zora-node.com/rpc"
- * });
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ jwt: "your-jwt-token" });
  * ```
- * 
- * ### Proxy Configuration
+ *
+ * @example
+ * Using URL directly:
  * ```ts
- * import { alchemy, createProxyConfig } from "@alchemy/common";
- * 
- * // Route everything through your backend
- * const transport = alchemy(createProxyConfig("https://my-backend.com/api"));
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ url: "https://eth-mainnet.g.alchemy.com/v2/your-key" });
  * ```
- * 
+ *
  * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport
+ * @param {string} [config.apiKey] - API key for Alchemy authentication
+ * @param {string} [config.jwt] - JWT token for authentication
+ * @param {string} [config.url] - Direct URL to Alchemy endpoint
  * @param {number} [config.retryDelay] - The delay between retries, in milliseconds
- * @param {number} [config.retryCount] - The number of retry attempts
+ * @param {number} [config.retryCount] - The number of retry attempts (default: 0)
  * @param {object} [config.fetchOptions] - Optional fetch options for HTTP requests
- * @param {"apiKey" | "jwt" | "proxy"} config.mode - The connection mode to use
- * @param {string} [config.apiKey] - API key for Alchemy (required when mode is "apiKey")
- * @param {string} [config.jwt] - JWT token for authentication (required when mode is "jwt")
- * @param {string} [config.proxyUrl] - Proxy URL for routing traffic (required when mode is "proxy")
- * @param {string} [config.nodeRpcUrl] - Third-party node RPC URL for AA-only chains (optional)
- * @param {string} [config.chainAgnosticUrl] - Optional chain-agnostic URL override (not available for proxy)
  * @returns {AlchemyTransport} The configured Alchemy transport function
  */
-export function alchemy<
+export function alchemyTransport<
   rpcSchema extends RpcSchema | undefined = undefined,
   httpSchema extends HttpRequestSchema | undefined = undefined,
 >(config: AlchemyTransportConfig): AlchemyTransport<rpcSchema, httpSchema> {
@@ -157,12 +115,8 @@ export function alchemy<
     fetchOptions: fetchOptions_,
     ...connectionConfig
   } = config;
-  
-  // Validate the connection configuration at runtime
-  const validatedConfig = validateAlchemyConnectionConfig(connectionConfig);
-  
+
   // Create a copy of fetch options for modification
-  // We don't want to add Alchemy headers to 3rd party nodes
   const fetchOptions = { ...fetchOptions_ };
 
   const headersAsObject = convertHeadersToObject(fetchOptions.headers);
@@ -172,154 +126,56 @@ export function alchemy<
     "Alchemy-AA-Sdk-Version": VERSION,
   };
 
-  // Set up authentication headers based on connection mode
-  if (validatedConfig.mode === 'jwt') {
+  if ("jwt" in connectionConfig) {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${validatedConfig.jwt}`,
+      Authorization: `Bearer ${connectionConfig.jwt}`,
     };
-  } else if (validatedConfig.mode === 'apiKey') {
+  } else if ("apiKey" in connectionConfig) {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${validatedConfig.apiKey}`,
+      Authorization: `Bearer ${connectionConfig.apiKey}`,
     };
   }
-  // Note: No auth headers for proxy mode - backend handles authentication
 
   const transport: AlchemyTransportBase = (opts) => {
     const { chain } = opts;
-    if (!chain) {
-      throw new ChainNotFoundError();
-    }
 
-    const { innerTransport, rpcUrl } = (() => {
-      mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
-      
-      const hasThirdPartyRpc = !!validatedConfig.nodeRpcUrl;
-      const isProxy = validatedConfig.mode === 'proxy';
-      
-      if (isProxy) {
-        // Proxy mode: route everything through the proxy URL
-        const proxyUrl = validatedConfig.proxyUrl;
-        
-        if (hasThirdPartyRpc) {
-          // AA-only chain with proxy: split between third-party RPC and proxy for AA
-          return {
-            rpcUrl: proxyUrl,
-            innerTransport: split({
-              overrides: [
-                {
-                  methods: alchemyMethods,
-                  transport: http(proxyUrl, {
-                    fetchOptions,
-                    retryCount,
-                    retryDelay,
-                  }),
-                },
-                {
-                  methods: chainAgnosticMethods,
-                  transport: http(proxyUrl, {
-                    fetchOptions,
-                    retryCount,
-                    retryDelay,
-                  }),
-                },
-              ],
-              fallback: http(validatedConfig.nodeRpcUrl, {
-                fetchOptions: fetchOptions_, // Original options without Alchemy headers
-                retryCount,
-                retryDelay,
-              }),
-            }),
-          };
-        } else {
-          // Standard chain with proxy: everything through proxy
-          return {
-            rpcUrl: proxyUrl,
-            innerTransport: http(proxyUrl, {
-              fetchOptions,
-              retryCount,
-              retryDelay,
-            }),
-          };
-        }
+    mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
+
+    const rpcUrl = (() => {
+      if ("url" in connectionConfig) {
+        return connectionConfig.url;
       }
-      
-      // Non-proxy modes (apiKey or jwt)
-      if (hasThirdPartyRpc) {
-        // AA-only chain: use third-party RPC for blockchain ops, Alchemy for AA
-        const chainAgnosticUrl = validatedConfig.chainAgnosticUrl ?? DEFAULT_CHAIN_AGNOSTIC_URL;
-        
-        return {
-          rpcUrl: chainAgnosticUrl,
-          innerTransport: split({
-            overrides: [
-              {
-                methods: alchemyMethods,
-                transport: http(chainAgnosticUrl, {
-                  fetchOptions,
-                  retryCount,
-                  retryDelay,
-                }),
-              },
-              {
-                methods: chainAgnosticMethods,
-                transport: http(chainAgnosticUrl, {
-                  fetchOptions,
-                  retryCount,
-                  retryDelay,
-                }),
-              },
-            ],
-            fallback: http(validatedConfig.nodeRpcUrl, {
-              fetchOptions: fetchOptions_, // Original options without Alchemy headers
-              retryCount,
-              retryDelay,
-            }),
-          }),
-        };
+
+      if (!chain) {
+        throw new ChainNotFoundError();
       }
-      
-      // Standard chain with direct Alchemy connection
-      if (chain.rpcUrls.alchemy == null) {
+
+      // TODO(v5): Add support for viem URLs to replace alchemy chains
+      if (!chain.rpcUrls?.alchemy?.http?.[0]) {
         throw new BaseError(
-          "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`.",
+          "Chain must include an Alchemy RPC URL. See `defineAlchemyChain` or import a chain from `@alchemy/common`.",
         );
       }
-      
-      const alchemyRpcUrl = chain.rpcUrls.alchemy.http[0];
-      const chainAgnosticUrl = validatedConfig.chainAgnosticUrl ?? DEFAULT_CHAIN_AGNOSTIC_URL;
-      
-      return {
-        rpcUrl: alchemyRpcUrl,
-        innerTransport: split({
-          overrides: [
-            {
-              methods: chainAgnosticMethods,
-              transport: http(chainAgnosticUrl, {
-                fetchOptions,
-                retryCount,
-                retryDelay,
-              }),
-            },
-          ],
-          fallback: http(alchemyRpcUrl, {
-            fetchOptions,
-            retryCount,
-            retryDelay,
-          }),
-        }),
-      };
+
+      return chain.rpcUrls.alchemy.http[0];
     })();
+
+    const innerTransport = http(rpcUrl, {
+      fetchOptions,
+      retryCount,
+      retryDelay,
+    });
 
     return createTransport(
       {
-        key: "alchemy",
-        name: "Alchemy Transport",
+        key: "alchemyHttp",
+        name: "Alchemy HTTP Transport",
         request: innerTransport(opts).request,
         retryCount: retryCount ?? opts?.retryCount,
         retryDelay,
-        type: "alchemy",
+        type: "alchemyHttp",
       },
       {
         alchemyRpcUrl: rpcUrl,
@@ -329,6 +185,7 @@ export function alchemy<
           const response = await fetch(`${rpcUrl}/${params.route}`, {
             method: params.method,
             body: params.body ? JSON.stringify(params.body) : undefined,
+            headers: fetchOptions.headers as HeadersInit,
           }).catch((error) => ({
             error: new FetchError(params.route, params.method, error),
           }));
