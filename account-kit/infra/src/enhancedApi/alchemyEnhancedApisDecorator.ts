@@ -1,8 +1,8 @@
 import type { SmartContractAccount } from "@aa-sdk/core";
 import type { Alchemy } from "alchemy-sdk";
 import type { Chain } from "viem";
-import { AlchemySdkClientSchema } from "../../schema.js";
-import type { AlchemySmartAccountClient } from "../smartAccountClient.js";
+import { AlchemySdkClientSchema } from "./schema.js";
+import type { AlchemySmartAccountClient } from "../client/smartAccountClient.js";
 
 export type AlchemyEnhancedApis = {
   core: Alchemy["core"];
@@ -20,7 +20,7 @@ export type AlchemyEnhancedApis = {
  * @example
  * ```ts
  * import { Alchemy } from "alchemy-sdk";
- * import { alchemyEnhancedApiActions } from "@account-kit/infra";
+ * import { alchemyEnhancedApiActions } from "@account-kit/infra/enhanced-apis";
  * import { alchemySCAClient } from "./client";
  *
  * const alchemy = new Alchemy(...);

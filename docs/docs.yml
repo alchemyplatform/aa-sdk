@@ -1250,6 +1250,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/functions/prepareSign.mdx
                   - page: requestAccount
                     path: wallets/pages/reference/account-kit/wallet-client/functions/requestAccount.mdx
+                  - page: sendCalls
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/sendCalls.mdx
                   - page: sendPreparedCalls
                     path: wallets/pages/reference/account-kit/wallet-client/functions/sendPreparedCalls.mdx
                   - page: signMessage
@@ -1260,6 +1262,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/functions/signSignatureRequest.mdx
                   - page: signTypedData
                     path: wallets/pages/reference/account-kit/wallet-client/functions/signTypedData.mdx
+                  - page: waitForCallsStatus
+                    path: wallets/pages/reference/account-kit/wallet-client/functions/waitForCallsStatus.mdx
 
       - section: Resources
         skip-slug: true

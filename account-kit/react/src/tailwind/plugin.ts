@@ -17,7 +17,14 @@ import { apply, getColorVariableName } from "./utils.js";
 
 type TailWindPlugin = ReturnType<typeof plugin>;
 
-const pathToMe = require.resolve("@account-kit/react");
+const pathToMe = (() => {
+  try {
+    return require.resolve("@account-kit/react");
+  } catch {
+    // Fallback for build time
+    return __filename;
+  }
+})();
 
 /**
  * Get the path to the @account-kit/react package and the tailwind content.

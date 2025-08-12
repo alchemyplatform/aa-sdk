@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
+
+### Features
+
+- unpin viem version ([#1851](https://github.com/alchemyplatform/aa-sdk/issues/1851)) ([e387e0e](https://github.com/alchemyplatform/aa-sdk/commit/e387e0ead087b893d315b072c24b3c2725ff86b6))
+
 ## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
 
 **Note:** Version bump only for package @account-kit/react-native-signer

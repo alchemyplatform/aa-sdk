@@ -2,6 +2,9 @@
   "name": "ui-demo",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -46,7 +49,7 @@
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.5.0",
     "tailwind-merge": "^2.3.0",
-    "viem": "2.29.2",
+    "viem": "^2.29.2",
     "wagmi": "^2.12.7",
     "zod": "^3.0.0",
     "zustand": "^5.0.0-rc.2"

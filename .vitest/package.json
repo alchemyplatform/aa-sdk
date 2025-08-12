@@ -10,7 +10,7 @@
     "prool": "^0.0.15",
     "tar": "^7.4.1",
     "typescript-template": "*",
-    "viem": "2.29.2"
+    "viem": "^2.29.2"
   },
   "dependencies": {
     "@aa-sdk/core": "^4.0.0-alpha.8"
