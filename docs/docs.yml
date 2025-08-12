@@ -16,7 +16,7 @@ navigation:
           - page: Overview
             slug: /
             path: wallets/pages/index.mdx
-          - section: Set up
+          - section: Get Started
             contents:
               - section: React
                 contents:
@@ -42,6 +42,8 @@ navigation:
                     path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
                   - page: Set up your client
                     path: wallets/pages/react-native/using-smart-accounts/setup-smart-account-client.mdx
+                  - page: Deep Linking
+                    path: wallets/pages/overview/react-native/deep-linking.mdx
               - section: Other JS frameworks
                 contents:
                   - page: Overview
@@ -135,16 +137,10 @@ navigation:
                 path: wallets/pages/react/customization/theme.mdx
           - page: Pregenerate wallets
             path: wallets/pages/react/pregenerate-wallets.mdx
-          - section: React setup
-            contents:
-              - page: Set up
-                path: wallets/pages/authentication/react-setup/setup.mdx
-              - page: UI components
-                path: wallets/pages/react/ui-components.mdx
-              - page: Whitelabel
-                path: wallets/pages/react/react-hooks.mdx
-          - page: React Native setup
-            path: wallets/pages/react-native/signer/setup-guide.mdx
+          - page: UI components
+            path: wallets/pages/react/ui-components.mdx
+          - page: Whitelabel
+            path: wallets/pages/react/react-hooks.mdx
           - page: Other JS setup
             path: wallets/pages/signer/quickstart.mdx
           - page: What is a signer?
