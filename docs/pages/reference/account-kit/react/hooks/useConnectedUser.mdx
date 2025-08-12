@@ -12,9 +12,9 @@ Solana, and finally the smart account user.
 Useful for building UI that needs a single "connected user" concept regardless of whether a
 smart account session exists.
 
-- If an EVM wallet is connected, returns `{ address, orgId, userId, type: "eoa" }`.
-- If a Solana wallet is connected, returns `{ solanaAddress, orgId, userId, type: "eoa" }` and
-  `address` may be undefined.
+- If an EVM wallet is connected, returns `{ address, type: "eoa", orgId?, userId? }`.
+- If a Solana wallet is connected, returns `{ solanaAddress, type: "eoa", orgId?, userId? }` and
+  `address` may be undefined. `orgId` and `userId` may also be undefined.
 - Otherwise, returns the smart account user from the store with `type: "sca"`, or `null` if no
   user exists.
 

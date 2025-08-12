@@ -8,8 +8,10 @@ import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { useSolanaWallet } from "./useSolanaWallet.js";
 import { type Address } from "viem";
 
-export type ConnectedUser = Omit<User, "address"> & {
+export type ConnectedUser = Omit<User, "address" | "orgId" | "userId"> & {
   address?: Address;
+  orgId?: string;
+  userId?: string;
 };
 export type UseConnectedUserResult =
   | (ConnectedUser & { type: "eoa" | "sca" })
@@ -23,9 +25,9 @@ export type UseConnectedUserResult =
  * Useful for building UI that needs a single "connected user" concept regardless of whether a
  * smart account session exists.
  *
- * - If an EVM wallet is connected, returns `{ address, orgId, userId, type: "eoa" }`.
- * - If a Solana wallet is connected, returns `{ solanaAddress, orgId, userId, type: "eoa" }` and
- *   `address` may be undefined.
+ * - If an EVM wallet is connected, returns `{ address, type: "eoa", orgId?, userId? }`.
+ * - If a Solana wallet is connected, returns `{ solanaAddress, type: "eoa", orgId?, userId? }` and
+ *   `address` may be undefined. `orgId` and `userId` may also be undefined.
  * - Otherwise, returns the smart account user from the store with `type: "sca"`, or `null` if no
  *   user exists.
  *
@@ -69,8 +71,6 @@ export function useConnectedUser(): UseConnectedUserResult {
 
     return {
       address: account.address,
-      orgId: account.address,
-      userId: account.address,
       type: "eoa" as const,
     };
   }, [account.address, account.status]);
@@ -84,8 +84,6 @@ export function useConnectedUser(): UseConnectedUserResult {
 
     return {
       solanaAddress,
-      orgId: solanaAddress,
-      userId: solanaAddress,
       type: "eoa" as const,
     };
   }, [solanaConnected, solanaPublicKey]);
