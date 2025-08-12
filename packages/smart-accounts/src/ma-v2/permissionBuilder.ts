@@ -154,7 +154,7 @@ type Key = {
   type: "secp256k1" | "contract";
 };
 
-type Permission =
+export type Permission =
   | {
       // this permission allows transfer of native tokens from the account
       type: typeof PermissionType.NATIVE_TOKEN_TRANSFER;

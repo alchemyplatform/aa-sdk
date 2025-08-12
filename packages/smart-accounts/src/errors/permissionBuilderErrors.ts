@@ -1,5 +1,5 @@
 import { BaseError } from "@alchemy/common";
-import type { Permission } from "../ma-v2/permissionBuilder";
+import type { Permission } from "../ma-v2/permissionBuilder.js";
 import type { Address } from "viem";
 
 /**
