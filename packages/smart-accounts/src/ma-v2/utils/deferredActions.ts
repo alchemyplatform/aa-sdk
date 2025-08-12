@@ -8,7 +8,12 @@ import {
 } from "viem";
 import { SignaturePrefix } from "../types.js";
 
-// Parses out the 3 components from a deferred action
+/**
+ * Parses out the 3 components from a deferred action.
+ *
+ * @param {Hex} deferredAction - The deferred action to parse.
+ * @returns {object} The parsed deferred action.
+ */
 export const parseDeferredAction = (
   deferredAction: Hex,
 ): {
@@ -40,10 +45,8 @@ export type BuildDeferredActionDigestParams = {
  *
  * Assumption: The client this extends is used to sign the typed data.
  *
- * @param {object} args The argument object containing the following:
- * @param {Hex} args.fullPreSignatureDeferredActionDigest The The data to append the signature and length to
- * @param {Hex} args.sig The signature to include in the digest
- * @returns {Hex} The encoded digest to be prepended to the userOp signature
+ * @param {BuildDeferredActionDigestParams} params - The parameters for building the deferred action digest.
+ * @returns {Hex} The encoded digest to be prepended to the userOp signature.
  */
 export const buildDeferredActionDigest = ({
   fullPreSignatureDeferredActionDigest,

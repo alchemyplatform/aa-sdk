@@ -11,6 +11,9 @@ import type { ModuleEntity, UpgradeToData } from "../types";
 import { semiModularAccountStorageAbi } from "../abis/semiModularAccountStorageAbi.js";
 import type { ModularAccountV2Base } from "../accounts/base";
 
+/**
+ * A mapping of default addresses for the ModularAccountV2.
+ */
 export const DefaultAddress = {
   MAV2_FACTORY: "0x00000000000017c61b5bEe81050EC8eFc9c6fecd",
   MAV2_FACTORY_WEBAUTHN: "0x55010E571dCf07e254994bfc88b9C1C8FAe31960",
@@ -20,6 +23,9 @@ export const DefaultAddress = {
   MAV2: "0x00000000000002377B26b1EdA7b0BC371C60DD4f",
 } satisfies Record<string, Address>;
 
+/**
+ * A mapping of default addresses for the ModularAccountV2 modules.
+ */
 export const DefaultModuleAddress = {
   SINGLE_SIGNER_VALIDATION: "0x00000000000099DE0BF6fA90dEB851E2A2df7d83",
   WEBAUTHN_VALIDATION: "0x0000000000001D9d34E07D9834274dF9ae575217",
@@ -29,15 +35,26 @@ export const DefaultModuleAddress = {
   ALLOWLIST: "0x00000000003e826473a313e600b5b9b791f5a59a",
 } satisfies Record<string, Address>;
 
+/**
+ * The default owner entity ID.
+ */
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
+/**
+ * The selector for the execute user operation function.
+ */
 export const EXECUTE_USER_OP_SELECTOR: Hex = "0x8DD7712F";
 
 export type GetMAV2UpgradeToData<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
 > = GetAccountParameter<TAccount>;
 
-// TODO(v5): add jsdoc once this is finalized & tested.
+/**
+ * Gets the upgrade to data for the ModularAccountV2.
+ *
+ * @param {Address} ownerAddress - The address of the owner.
+ * @returns {Promise<UpgradeToData>} The upgrade to data.
+ */
 export async function getMAV2UpgradeToData(
   ownerAddress: Address,
 ): Promise<UpgradeToData> {
@@ -63,6 +80,12 @@ export type BuildNonceParams = {
   isDirectCallValidation?: boolean;
 };
 
+/**
+ * Builds a full nonce key.
+ *
+ * @param {BuildNonceParams} params - The parameters for building a full nonce key.
+ * @returns {bigint} The full nonce key.
+ */
 export const buildFullNonceKey = ({
   nonceKey = 0n,
   entityId = 0,
@@ -101,6 +124,12 @@ export function serializeModuleEntity(config: ModuleEntity): Hex {
   return concatHex([config.moduleAddress, toHex(config.entityId, { size: 4 })]);
 }
 
+/**
+ * Checks if an account is a ModularAccountV2.
+ *
+ * @param {SmartAccount} account - The account to check.
+ * @returns {boolean} True if the account is a ModularAccountV2, false otherwise.
+ */
 export function isModularAccountV2(
   account: SmartAccount,
 ): account is ModularAccountV2Base {

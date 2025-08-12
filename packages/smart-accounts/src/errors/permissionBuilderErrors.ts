@@ -2,13 +2,19 @@ import { BaseError } from "@alchemy/common";
 import type { Permission } from "../ma-v2/permissionBuilder";
 import type { Address } from "viem";
 
+/**
+ * Abstract class representing a Permission Builder Error, subclassed by all permission builder errors.
+ */
 export abstract class PermissionBuilderError extends BaseError {}
 
+/**
+ * Error class for when a root permission is added to a permission builder.
+ */
 export class RootPermissionOnlyError extends PermissionBuilderError {
   override name = "PermissionBuilder: RootPermissionOnlyError";
 
   /**
-   * Constructor for initializing an error message indicating that an account could not be found to execute the specified action.
+   * Constructor for initializing an error message indicating that the root permission cannot be combined with other permissions.
    *
    * @param {Permission} permission The permission trying to be added atop the root permission
    */
@@ -19,6 +25,9 @@ export class RootPermissionOnlyError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when an account address is used as target.
+ */
 export class AccountAddressAsTargetError extends PermissionBuilderError {
   override name = "PermissionBuilder: AccountAddressAsTargetError";
 
@@ -34,6 +43,9 @@ export class AccountAddressAsTargetError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a duplicate target address is added to a permission builder.
+ */
 export class DuplicateTargetAddressError extends PermissionBuilderError {
   override name = "PermissionBuilder: DuplicateTargetAddressError";
 
@@ -50,6 +62,9 @@ export class DuplicateTargetAddressError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when no functions are provided to a permission builder.
+ */
 export class NoFunctionsProvidedError extends PermissionBuilderError {
   override name = "PermissionBuilder: NoFunctionsProvidedError";
 
@@ -63,6 +78,9 @@ export class NoFunctionsProvidedError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a deadline is expired.
+ */
 export class ExpiredDeadlineError extends PermissionBuilderError {
   override name = "PermissionBuilder: ExpiredDeadlineError";
 
@@ -79,6 +97,9 @@ export class ExpiredDeadlineError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a deadline is over the limit.
+ */
 export class DeadlineOverLimitError extends PermissionBuilderError {
   override name = "PermissionBuilder: DeadlineOverLimitError";
 
@@ -94,6 +115,9 @@ export class DeadlineOverLimitError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a validation config is unset.
+ */
 export class ValidationConfigUnsetError extends PermissionBuilderError {
   override name = "PermissionBuilder: ValidationConfigUnsetError";
 
@@ -107,6 +131,9 @@ export class ValidationConfigUnsetError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a multiple native token transfer permission is added to a permission builder.
+ */
 export class MultipleNativeTokenTransferError extends PermissionBuilderError {
   override name = "PermissionBuilder: MultipleNativeTokenTransferError";
 
@@ -122,6 +149,9 @@ export class MultipleNativeTokenTransferError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a zero address is provided to a permission builder.
+ */
 export class ZeroAddressError extends PermissionBuilderError {
   override name = "PermissionBuilder: ZeroAddressError";
 
@@ -135,6 +165,9 @@ export class ZeroAddressError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a multiple gas limit permission is added to a permission builder.
+ */
 export class MultipleGasLimitError extends PermissionBuilderError {
   override name = "PermissionBuilder: MultipleGasLimitError";
 
@@ -148,6 +181,9 @@ export class MultipleGasLimitError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when an unsupported permission type is added to a permission builder.
+ */
 export class UnsupportedPermissionTypeError extends PermissionBuilderError {
   override name = "PermissionBuilder: UnsupportedPermissionTypeError";
 
@@ -159,6 +195,9 @@ export class UnsupportedPermissionTypeError extends PermissionBuilderError {
   }
 }
 
+/**
+ * Error class for when a selector is not allowed.
+ */
 export class SelectorNotAllowed extends PermissionBuilderError {
   override name = "SelectorNotAllowed";
 
