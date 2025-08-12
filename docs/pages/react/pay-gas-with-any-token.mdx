@@ -49,7 +49,7 @@ import {
   useSmartAccountClient,
   useSendUserOperation,
 } from "@account-kit/react";
-import { sepolia, paymasterAddress } from "@account-kit/infra";
+import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
 import { encodeFunctionData, parseAbi } from "viem";
 
 export default function PayWithUsdcButton() {

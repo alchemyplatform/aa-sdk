@@ -47,7 +47,7 @@ All `UserOperations` sent with the hooks will now be paid with the token configu
 import React from "react";
 import { View, Pressable, Text } from "react-native";
 import { useSendUserOperation } from "@account-kit/react-native";
-import { sepolia, paymasterAddress } from "@account-kit/infra";
+import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
 
 export default function PayWithTokenButton() {
   const { client, isLoadingClient } = useSmartAccountClient({});
