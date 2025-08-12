@@ -58,6 +58,7 @@ export const createAccountKitStore = (
 
                   return {
                     address: user.address,
+                    solanaAddress: user.solanaAddress,
                     orgId: user.orgId,
                     userId: user.userId,
                     email: user.email,

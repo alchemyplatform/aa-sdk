@@ -8,6 +8,7 @@ export * from "./useBundlerClient.js";
 export * from "./useChain.js";
 export * from "./useClientActions.js";
 export * from "./useConnect.js";
+export * from "./useConnectedUser.js";
 export * from "./useConnection.js";
 export * from "./useDropAndReplaceUserOperation.js";
 export * from "./useElementHeight.js";

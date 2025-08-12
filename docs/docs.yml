@@ -218,6 +218,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useUiConfig.mdx
               - section: Other Hooks
                 contents:
+                  - page: useConnectedUser
+                    path: wallets/pages/reference/account-kit/react/hooks/useConnectedUser.mdx
                   - page: useSolanaConnection
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaConnection.mdx
                   - page: useSolanaSignMessage

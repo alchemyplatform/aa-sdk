@@ -4,7 +4,6 @@ import { getUser, watchUser } from "@account-kit/core";
 import type { User } from "@account-kit/signer";
 import { useMemo, useSyncExternalStore } from "react";
 import { useAccount as wagmi_useAccount } from "wagmi";
-import { useSolanaWallet } from "./useSolanaWallet.js";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 
 export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
@@ -35,8 +34,6 @@ export const useUser = (): UseUserResult => {
   } = config;
 
   const account = wagmi_useAccount({ config: wagmiConfig });
-  const { connected: solanaConnected, publicKey: solanaPublicKey } =
-    useSolanaWallet();
   const user = useSyncExternalStore(
     watchUser(config),
     () => getUser(config) ?? null,
@@ -62,26 +59,8 @@ export const useUser = (): UseUserResult => {
     };
   }, [account.address, account.status]);
 
-  const solanaEoaUser = useMemo(() => {
-    if (!solanaConnected || !solanaPublicKey) {
-      return null;
-    }
-
-    const solanaAddress = solanaPublicKey.toBase58();
-
-    return {
-      // Use solana address as a fallback for address field for backwards compatibility
-      address: solanaAddress as `0x${string}`,
-      solanaAddress,
-      orgId: solanaAddress,
-      userId: solanaAddress,
-      type: "eoa" as const,
-    };
-  }, [solanaConnected, solanaPublicKey]);
-
-  // Prioritize EVM wallet connection, then Solana, then smart account
+  // Prioritize EVM wallet connection, then smart account
   if (eoaUser) return eoaUser;
-  if (solanaEoaUser) return solanaEoaUser;
 
   return user;
 };
