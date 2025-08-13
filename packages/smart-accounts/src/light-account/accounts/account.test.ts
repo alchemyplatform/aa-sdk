@@ -16,7 +16,7 @@ import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { toLightAccount } from "./account.js";
-import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas";
+import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas.js";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,

@@ -15,7 +15,7 @@ export class AuthClient {
   constructor(
     private readonly transport: AlchemyTransport,
     private readonly createTekStamper: CreateTekStamperFn,
-    private readonly createWebAuthnStamper: CreateWebAuthnStamperFn
+    private readonly createWebAuthnStamper: CreateWebAuthnStamperFn,
   ) {}
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;

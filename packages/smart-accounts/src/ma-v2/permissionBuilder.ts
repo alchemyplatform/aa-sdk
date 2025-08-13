@@ -45,6 +45,9 @@ const ERC20_TRANSFER_SELECTOR = "0xa9059cbb";
 const ACCOUNT_EXECUTE_SELECTOR = "0xb61d27f6";
 const ACCOUNT_EXECUTEBATCH_SELECTOR = "0x34fcd5be";
 
+/**
+ * A pseudo-enum for permission types.
+ */
 export const PermissionType = {
   NATIVE_TOKEN_TRANSFER: "native-token-transfer",
   ERC20_TOKEN_TRANSFER: "erc20-token-transfer",
@@ -60,9 +63,13 @@ export const PermissionType = {
   ROOT: "root",
 } as const;
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type PermissionType =
   (typeof PermissionType)[keyof typeof PermissionType];
 
+/**
+ * A pseudo-enum for hook identifiers.
+ */
 export const HookIdentifier = {
   NATIVE_TOKEN_TRANSFER: "native-token-transfer",
   ERC20_TOKEN_TRANSFER: "erc20-token-transfer",
@@ -70,6 +77,7 @@ export const HookIdentifier = {
   PREVAL_ALLOWLIST: "preval-allowlist", // aggregate of CONTRACT_ACCESS, ACCOUNT_FUNCTIONS, FUNCTIONS_ON_ALL_CONTRACTS, FUNCTIONS_ON_CONTRACT
 } as const;
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookIdentifier =
   (typeof HookIdentifier)[keyof typeof HookIdentifier];
 
@@ -209,6 +217,9 @@ type Hook = {
   initData: Hex;
 };
 
+/**
+ * A builder for constructing a Permission object.
+ */
 export class PermissionBuilder {
   private client: Client<Transport, Chain, SmartAccount>;
   private validationConfig: ValidationConfig = {
@@ -226,6 +237,11 @@ export class PermissionBuilder {
   private hasAssociatedExecHooks: boolean = false;
   private deadline: number = 0;
 
+  /**
+   * Creates a PermissionBuilder instance.
+   *
+   * @param {PermissionBuilderParams} params - The parameters for creating a PermissionBuilder instance.
+   */
   constructor({
     client,
     key,
@@ -266,11 +282,23 @@ export class PermissionBuilder {
     if (deadline) this.deadline = deadline;
   }
 
+  /**
+   * Adds a selector to the permission builder.
+   *
+   * @param {Hex} selector - The selector to add.
+   * @returns {this} The permission builder instance.
+   */
   addSelector({ selector }: { selector: Hex }): this {
     this.selectors.push(selector);
     return this;
   }
 
+  /**
+   * Adds a permission to the permission builder.
+   *
+   * @param {Permission} permission - The permission to add.
+   * @returns {this} The permission builder instance.
+   */
   addPermission({ permission }: { permission: Permission }): this {
     // Check 1: If we're adding root, we can't have any other permissions
     if (permission.type === PermissionType.ROOT) {
@@ -338,6 +366,12 @@ export class PermissionBuilder {
     return this;
   }
 
+  /**
+   * Adds multiple permissions to the permission builder.
+   *
+   * @param {Permission[]} permissions - The permissions to add.
+   * @returns {this} The permission builder instance.
+   */
   addPermissions({ permissions }: { permissions: Permission[] }): this {
     // We could validate each permission here, but for simplicity we'll just add them
     // A better approach would be to call addPermission for each one
@@ -347,7 +381,11 @@ export class PermissionBuilder {
     return this;
   }
 
-  // Use for building deferred action typed data to sign
+  /**
+   * Compiles the deferred action typed data to sign.
+   *
+   * @returns {Promise<{typedData: DeferredActionTypedData, fullPreSignatureDeferredActionDigest: Hex}>} The deferred action typed data and the full pre-signature deferred action digest.
+   */
   async compileDeferred(): Promise<{
     typedData: DeferredActionTypedData;
     fullPreSignatureDeferredActionDigest: Hex;
@@ -400,7 +438,11 @@ export class PermissionBuilder {
     };
   }
 
-  // Use for direct `installValidation()` low-level calls (maybe useless)
+  /**
+   * Compiles the raw install arguments for the installValidation function.
+   *
+   * @returns {Promise<Hex>} The raw install arguments.
+   */
   async compileRaw(): Promise<Hex> {
     const account = this.client.account;
     if (!account || !isModularAccountV2(account)) {
@@ -426,7 +468,11 @@ export class PermissionBuilder {
     });
   }
 
-  // Use for compiling args to installValidation
+  /**
+   * Compiles the install arguments for the installValidation function.
+   *
+   * @returns {Promise<InstallValidationParams>} The install arguments.
+   */
   async compileInstallArgs(): Promise<InstallValidationParams> {
     const account = this.client.account;
     if (!account || !isModularAccountV2(account)) {

@@ -18,7 +18,7 @@ import { serializeModuleEntity } from "./account.js";
  *
  * const validationConfigHex = serializeValidationConfig({
  *  moduleAddress,
- *  entityId
+ *  entityId,
  *  isGlobal,
  *  isSignatureValidation,
  *  isUserOpValidation
@@ -55,7 +55,7 @@ export function serializeValidationConfig(config: ValidationConfig): Hex {
  *
  * const hookConfigHex = serializeHookConfig({
  *  moduleAddress,
- *  entityId
+ *  entityId,
  *  hookType,
  *  hasPostHooks,
  *  hasPreHooks

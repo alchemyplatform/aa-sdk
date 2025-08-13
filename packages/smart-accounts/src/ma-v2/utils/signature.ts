@@ -14,7 +14,12 @@ export type PackUOSignatureParams = {
   validationSignature: Hex;
 };
 
-// Signature packing utility for user operations
+/**
+ * Signature packing utility for user operations.
+ *
+ * @param {PackUOSignatureParams} params - The parameters for packing a user operation signature.
+ * @returns {Hex} The packed user operation signature.
+ */
 export const packUOSignature = ({
   // orderedHookData, TODO: integrate in next iteration of MAv2 sdk
   validationSignature,
@@ -28,7 +33,12 @@ export type Pack1271SignatureParams = {
   entityId: number;
 };
 
-// Signature packing utility for 1271 signatures
+/**
+ * Signature packing utility for 1271 signatures.
+ *
+ * @param {Pack1271SignatureParams} params - The parameters for packing a 1271 signature.
+ * @returns {Hex} The packed 1271 signature.
+ */
 export const pack1271Signature = ({
   validationSignature,
   entityId,
@@ -42,6 +52,12 @@ export const pack1271Signature = ({
   ]);
 };
 
+/**
+ * Converts a hash to a replay safe typed data.
+ *
+ * @param {ToReplaySafeTypedDataParams} params - The parameters for converting a hash to a replay safe typed data.
+ * @returns {object} The replay safe typed data.
+ */
 export function toReplaySafeTypedData({
   address,
   chainId,
@@ -68,7 +84,12 @@ export function toReplaySafeTypedData({
     primaryType: "ReplaySafeHash" as const,
   };
 }
-
+/**
+ * Wraps a P256 signature with the webauthn metadata.
+ *
+ * @param {ToWebAuthnSignatureParams} params - The parameters for wrapping a P256 signature with the webauthn metadata.
+ * @returns {object} The wrapped P256 signature.
+ */
 export function toWebAuthnSignature({
   webauthn,
   signature,
