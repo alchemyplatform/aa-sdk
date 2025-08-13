@@ -1177,6 +1177,9 @@ navigation:
               - page: How to sponsor gas on EVM
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
+              - page: Conditional gas sponsorship
+                path: >-
+                  wallets/pages/gas-manager-admin-api/conditional-gas-sponsorship.mdx
               - page: How to pay gas with any token
                 path: >-
                   wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
