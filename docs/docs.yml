@@ -22,9 +22,9 @@ navigation:
                 contents:
                   - page: Quickstart
                     path: wallets/pages/react/quickstart.mdx
-                  - page: New Project
+                  - page: New project
                     path: wallets/pages/react/quickstart/new-project.mdx
-                  - page: Add to Existing Project
+                  - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
                   - page: Set up your client
                     path: wallets/pages/react/how-to-set-up-smart-account-client.mdx
@@ -42,7 +42,7 @@ navigation:
                     path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
                   - page: Set up your client
                     path: wallets/pages/react-native/using-smart-accounts/setup-smart-account-client.mdx
-                  - page: Deep Linking
+                  - page: Deep linking
                     path: wallets/pages/overview/react-native/deep-linking.mdx
               - section: Other JS frameworks
                 contents:
@@ -137,8 +137,6 @@ navigation:
             contents:
               - page: Theme
                 path: wallets/pages/react/customization/theme.mdx
-          - page: Pregenerate wallets
-            path: wallets/pages/react/pregenerate-wallets.mdx
           - page: UI components
             path: wallets/pages/react/ui-components.mdx
           - section: Whitelabel
@@ -149,6 +147,8 @@ navigation:
                 path: wallets/pages/signer/quickstart.mdx
           - section: Account management
             contents:
+              - page: Pregenerate wallets
+                path: wallets/pages/react/pregenerate-wallets.mdx
               - page: User sessions
                 path: wallets/pages/signer/user-sessions.mdx
               - section: Policies
@@ -192,6 +192,20 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
+          - section: Using 7702
+            contents:
+              - page: Overview
+                path: wallets/pages/react/using-7702.mdx
+              - page: Upgrade existing embedded EOAs
+                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
+              - section: 7702 Quickstart
+                contents:
+                  - page: Intro
+                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
           - page: Retry User Operations
             path: wallets/pages/infra/drop-and-replace.mdx
           - section: Low-level infra
@@ -204,7 +218,7 @@ navigation:
                 path: wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
               - page: How to pay gas with any token
                 path: wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
-          - section: Third Party
+          - section: Third party infra
             contents:
               - page: Bundlers
                 path: wallets/pages/third-party/bundlers.mdx
@@ -228,22 +242,6 @@ navigation:
                     path: wallets/pages/signer/as-an-eoa.mdx
                   - page: Sign raw hash
                     path: wallets/pages/signer/as-an-eoa.mdx
-          - section: Using 7702
-            contents:
-              - page: Overview
-                path: wallets/pages/react/using-7702.mdx
-              - page: Upgrade existing embedded EOAs
-                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
-              - section: 7702 Quickstart
-                contents:
-                  - page: Intro
-                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
-          - link: Gas benchmarks
-            href: https://github.com/alchemyplatform/aa-benchmarks
 
       - section: API Reference
         contents:
@@ -426,6 +424,8 @@ navigation:
             href: https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md
           - link: Contributing
             href: https://github.com/alchemyplatform/aa-sdk/blob/main/CONTRIBUTING.md
+          - link: Gas benchmarks
+            href: https://github.com/alchemyplatform/aa-benchmarks
           - page: Migrating to 4.x.x
             slug: migration-guide
             path: wallets/pages/migration-guide.mdx
