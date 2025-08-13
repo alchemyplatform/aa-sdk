@@ -192,6 +192,8 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
+          - page: Retry User Operations
+            path: wallets/pages/infra/drop-and-replace.mdx
           - section: Low-level infra
             contents:
               - page: Overview
