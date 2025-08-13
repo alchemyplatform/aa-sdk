@@ -26,7 +26,7 @@ export type AlchemyTransportConfig = {
   apiKey?: string;
   /** JWT token for authentication */
   jwt?: string;
-  /** Custom RPC URL (optional - defaults to chain's Alchemy URL) */
+  /** Custom RPC URL (optional - defaults to chain's Alchemy URL, but can be used to override the chain's Alchemy URL) */
   url?: string;
   /** The max number of times to retry. */
   retryCount?: TransportConfig["retryCount"] | undefined;
@@ -123,7 +123,7 @@ export function isAlchemyTransport(
  * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport
  * @param {string} [config.apiKey] - API key for Alchemy authentication
  * @param {string} [config.jwt] - JWT token for authentication
- * @param {string} [config.url] - Direct URL to Alchemy endpoint
+ * @param {string} [config.url] - Direct URL to Alchemy endpoint or a proxy URL
  * @param {number} [config.retryDelay] - The delay between retries, in milliseconds
  * @param {number} [config.retryCount] - The number of retry attempts (default: 0)
  * @param {object} [config.fetchOptions] - Optional fetch options for HTTP requests
