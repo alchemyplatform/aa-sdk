@@ -6,7 +6,7 @@ export default mergeConfig(
   sharedConfig,
   defineProject({
     test: {
-      name: "alchemy/wallet-apis",
+      name: "alchemy/aa-infra",
     },
   }),
 );

@@ -1,7 +1,7 @@
 {
-  "name": "@alchemy/wallet-apis",
+  "name": "@alchemy/aa-infra",
   "version": "0.0.0",
-  "description": "Alchemy Wallet APIs",
+  "description": "Alchemy Account Abstraction Infrastructure",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
@@ -34,7 +34,7 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/wallet-apis",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/aa-infra",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"

@@ -1118,17 +1118,17 @@ navigation:
                       - page: send
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
 
-      - section: Alchemy Wallet APIs
+      - section: Alchemy Account Abstraction Infrastructure
         contents:
           - section: SDK Reference
-            path: wallets/pages/reference/alchemy/wallet-apis/index.mdx
+            path: wallets/pages/reference/alchemy/aa-infra/index.mdx
             contents:
               - section: Functions
                 contents:
                   - page: gasManagerActions
-                    path: wallets/pages/reference/alchemy/wallet-apis/functions/gasManagerActions.mdx
+                    path: wallets/pages/reference/alchemy/aa-infra/functions/gasManagerActions.mdx
                   - page: requestGasAndPaymasterAndData
-                    path: wallets/pages/reference/alchemy/wallet-apis/functions/requestGasAndPaymasterAndData.mdx
+                    path: wallets/pages/reference/alchemy/aa-infra/functions/requestGasAndPaymasterAndData.mdx
       - section: Alchemy Common
         contents:
           - section: SDK Reference
