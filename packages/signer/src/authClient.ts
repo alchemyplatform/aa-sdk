@@ -6,69 +6,23 @@ import type {
   TurnkeyTekStamper,
 } from "./types.js";
 import { dev_request } from "./devRequest.js";
-import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
 
-/**
- * Configuration parameters for creating an AuthClient instance
- */
 export type AuthClientParams = {
   // TODO: put this back when the transport is ready.
   // transport: AlchemyTransport;
   // TODO: this is temporary for testing before the transport is ready.
-  /** API key for authentication with Alchemy services */
   apiKey: string;
-  /** Function to create a TEK (Turnkey Ephemeral Key) stamper */
   createTekStamper: CreateTekStamperFn;
-  /** Function to create a WebAuthn stamper for passkey authentication */
   createWebAuthnStamper: CreateWebAuthnStamperFn;
-  /** Function to handle OAuth authentication flow */
   handleOauthFlow: HandleOauthFlowFn;
 };
 
-/**
- * Parameters for sending an email OTP (One-Time Password)
- */
 export type SendEmailOtpParams = {
-  /** Email address to send the OTP to */
   email: string;
 };
 
-/**
- * Parameters for submitting an OTP code for verification
- */
 export type SubmitOtpCodeParams = {
-  /** The OTP code received via email */
   otpCode: string;
-};
-
-/**
- * Parameters for OAuth authentication login
- */
-export type LoginWithOauthParams = {
-  /** Authentication type identifier */
-  type: "oauth";
-  /** OAuth provider identifier (e.g., "google", "facebook") */
-  authProviderId: string;
-  /** OAuth scope parameters */
-  scope?: string;
-  /** OAuth claims parameters */
-  claims?: string;
-  /** Additional OAuth parameters */
-  otherParameters?: Record<string, string>;
-  /** OAuth flow mode - popup or redirect */
-  mode: "popup" | "redirect";
-};
-
-type TekStamperAndPublicKey = {
-  stamper: TurnkeyTekStamper;
-  targetPublicKey: string;
-};
-
-export type AuthClientParams = {
-  transport: AlchemyTransport;
-  createTekStamper: CreateTekStamperFn;
-  createWebAuthnStamper: CreateWebAuthnStamperFn;
-  handleOauthFlow: HandleOauthFlowFn;
 };
 
 export type LoginWithOauthParams = {
@@ -80,32 +34,61 @@ export type LoginWithOauthParams = {
   mode?: "popup" | "redirect";
 };
 
+type TekStamperAndPublicKey = {
+  stamper: TurnkeyTekStamper;
+  targetPublicKey: string;
+};
+
+type PendingOtp = {
+  otpId: string;
+  orgId: string;
+};
+
 export class AuthClient {
-  private readonly transport: AlchemyTransport;
+  // TODO: temporary for testing before the transport is ready.
+  private readonly apiKey: string;
   private readonly createTekStamper: CreateTekStamperFn;
   private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
   private readonly handleOauthFlow: HandleOauthFlowFn;
 
   constructor(params: AuthClientParams) {
-    this.transport = params.transport;
+    this.apiKey = params.apiKey;
     this.createTekStamper = params.createTekStamper;
     this.createWebAuthnStamper = params.createWebAuthnStamper;
     this.handleOauthFlow = params.handleOauthFlow;
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
-  // TODO: do we care about persisting this across reloads?
-  private otpId: string | null = null;
 
-  public async sendEmailOtp(email: string): Promise<void> {
+  // TODO: do we care about persisting this across reloads?
+  private pendingOtp: PendingOtp | null = null;
+
+  public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    this.otpId = await notImplemented(email, targetPublicKey);
+    const { otpId, orgId } = await this.dev_request("auth", {
+      email,
+      emailMode: "otp",
+      targetPublicKey,
+    });
+    this.pendingOtp = { otpId, orgId };
   }
 
-  public async submitOtpCode(otpCode: string): Promise<Signer> {
-    const { bundle, orgId } = await notImplemented(this.otpId, otpCode);
-    this.otpId = null;
-    return this.completeAuthWithBundle({ bundle, orgId });
+  public async submitOtpCode({
+    otpCode,
+  }: SubmitOtpCodeParams): Promise<Signer> {
+    if (!this.pendingOtp) {
+      throw new Error("Cannot submit OTP code when none has been sent");
+    }
+    const { otpId, orgId } = this.pendingOtp;
+    const { targetPublicKey } = await this.getTekStamper();
+    const { credentialBundle } = await this.dev_request("otp", {
+      otpId,
+      otpCode,
+      orgId,
+      targetPublicKey,
+    });
+    this.pendingOtp = null;
+    return this.completeAuthWithBundle({ bundle: credentialBundle, orgId });
   }
 
   public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
