@@ -71,7 +71,7 @@ export function createWebAuthClient({
       const popup = window.open(
         authUrl,
         "_blank",
-        "popup,width=500,height=600",
+        "popup,width=500,height=600"
       );
       return new Promise((_, reject) => {
         const handleMessage = (event: MessageEvent) => {

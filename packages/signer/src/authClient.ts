@@ -77,8 +77,6 @@ export class AuthClient {
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
-  // TODO: do we care about persisting this across reloads?
-  private otpId: string | null = null;
 
   // TODO: do we care about persisting this across reloads?
   private pendingOtp: PendingOtp | null = null;
