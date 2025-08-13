@@ -226,6 +226,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaSignMessage.mdx
                   - page: useSolanaTransaction
                     path: wallets/pages/reference/account-kit/react/hooks/useSolanaTransaction.mdx
+                  - page: useSolanaWallet
+                    path: wallets/pages/reference/account-kit/react/hooks/useSolanaWallet.mdx
               - section: Functions
                 contents:
                   - page: configForExternalWallets
