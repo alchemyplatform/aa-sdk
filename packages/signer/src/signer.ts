@@ -23,7 +23,7 @@ export class Signer {
   private constructor(
     private readonly transport: AlchemyTransport,
     private readonly turnkey: TurnkeyClient,
-    private readonly user: User
+    private readonly user: User,
   ) {}
 
   public static async create({
@@ -34,7 +34,7 @@ export class Signer {
   }: CreateSignerParams): Promise<Signer> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper
+      stamper,
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
@@ -48,7 +48,7 @@ export class Signer {
 
   public signRawMessage = async (
     msg: Hex,
-    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM"
+    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM",
   ): Promise<Hex> => {
     this.throwIfDisconnected();
     // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
@@ -84,7 +84,7 @@ export class Signer {
   }
 
   public async addOauthProvider(
-    params: AddOauthProviderParams
+    params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -96,7 +96,7 @@ export class Signer {
   }
 
   public async addPasskey(
-    params: CredentialCreationOptions
+    params: CredentialCreationOptions,
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);

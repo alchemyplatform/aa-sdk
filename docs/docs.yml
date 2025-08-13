@@ -1146,6 +1146,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
+                  - page: raise
+                    path: wallets/pages/reference/alchemy/common/functions/raise.mdx
                   - page: split
                     path: wallets/pages/reference/alchemy/common/functions/split.mdx
                   - page: validateAlchemyConnectionConfig
@@ -1158,6 +1160,10 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/classes/ChainNotFoundError/constructor.mdx
                   - page: ConnectionConfigError
                     path: wallets/pages/reference/alchemy/common/classes/ConnectionConfigError/constructor.mdx
+                  - page: FetchError
+                    path: wallets/pages/reference/alchemy/common/classes/FetchError/constructor.mdx
+                  - page: ServerError
+                    path: wallets/pages/reference/alchemy/common/classes/ServerError/constructor.mdx
       - section: Alchemy Smart Accounts
         contents:
           - section: SDK Reference
@@ -1165,8 +1171,14 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: buildDeferredActionDigest
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/buildDeferredActionDigest.mdx
+                  - page: buildFullNonceKey
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/buildFullNonceKey.mdx
                   - page: defaultLightAccountVersion
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/defaultLightAccountVersion.mdx
+                  - page: deferralActions
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/deferralActions.mdx
                   - page: getDefaultLightAccountFactoryAddress
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getDefaultLightAccountFactoryAddress.mdx
                   - page: getDefaultMultiOwnerLightAccountFactoryAddress
@@ -1175,18 +1187,98 @@ navigation:
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountImplAddress.mdx
                   - page: getLightAccountVersionForAccount
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountVersionForAccount.mdx
+                  - page: getMAV2UpgradeToData
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getMAV2UpgradeToData.mdx
+                  - page: installValidationActions
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/installValidationActions.mdx
+                  - page: isModularAccountV2
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/isModularAccountV2.mdx
                   - page: multiOwnerLightAccountActions
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/multiOwnerLightAccountActions.mdx
+                  - page: pack1271Signature
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/pack1271Signature.mdx
+                  - page: packUOSignature
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/packUOSignature.mdx
+                  - page: parseDeferredAction
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/parseDeferredAction.mdx
                   - page: predictLightAccountAddress
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/predictLightAccountAddress.mdx
+                  - page: predictModularAccountV2Address
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/predictModularAccountV2Address.mdx
                   - page: predictMultiOwnerLightAccountAddress
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/predictMultiOwnerLightAccountAddress.mdx
+                  - page: serializeHookConfig
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/serializeHookConfig.mdx
+                  - page: serializeModuleEntity
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/serializeModuleEntity.mdx
+                  - page: serializeValidationConfig
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/serializeValidationConfig.mdx
                   - page: singleOwnerLightAccountActions
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/singleOwnerLightAccountActions.mdx
                   - page: toLightAccount
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/toLightAccount.mdx
+                  - page: toModularAccountV2
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/toModularAccountV2.mdx
+                  - page: toModularAccountV2Base
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/toModularAccountV2Base.mdx
                   - page: toMultiOwnerLightAccount
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/toMultiOwnerLightAccount.mdx
+                  - page: toReplaySafeTypedData
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/toReplaySafeTypedData.mdx
+                  - page: toWebAuthnSignature
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/toWebAuthnSignature.mdx
+              - section: Classes
+                contents:
+                  - page: AccountAddressAsTargetError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/AccountAddressAsTargetError/constructor.mdx
+                  - page: DeadlineOverLimitError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/DeadlineOverLimitError/constructor.mdx
+                  - page: DuplicateTargetAddressError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/DuplicateTargetAddressError/constructor.mdx
+                  - page: EntityIdOverrideError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/EntityIdOverrideError/constructor.mdx
+                  - page: ExpiredDeadlineError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/ExpiredDeadlineError/constructor.mdx
+                  - page: InvalidDeferredActionNonceError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/InvalidDeferredActionNonceError/constructor.mdx
+                  - page: InvalidEntityIdError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/InvalidEntityIdError/constructor.mdx
+                  - page: InvalidNonceKeyError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/InvalidNonceKeyError/constructor.mdx
+                  - page: InvalidOwnerError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/InvalidOwnerError/constructor.mdx
+                  - page: MultipleGasLimitError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/MultipleGasLimitError/constructor.mdx
+                  - page: MultipleNativeTokenTransferError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/MultipleNativeTokenTransferError/constructor.mdx
+                  - page: NoFunctionsProvidedError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/NoFunctionsProvidedError/constructor.mdx
+                  - section: PermissionBuilder
+                    contents:
+                      - page: addPermission
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/addPermission.mdx
+                      - page: addPermissions
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/addPermissions.mdx
+                      - page: addSelector
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/addSelector.mdx
+                      - page: compileDeferred
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/compileDeferred.mdx
+                      - page: compileInstallArgs
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/compileInstallArgs.mdx
+                      - page: compileRaw
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/compileRaw.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/alchemy/smart-accounts/classes/PermissionBuilder/constructor.mdx
+                  - page: RootPermissionOnlyError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/RootPermissionOnlyError/constructor.mdx
+                  - page: SelectorNotAllowed
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/SelectorNotAllowed/constructor.mdx
+                  - page: UnsupportedPermissionTypeError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/UnsupportedPermissionTypeError/constructor.mdx
+                  - page: ValidationConfigUnsetError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/ValidationConfigUnsetError/constructor.mdx
+                  - page: ZeroAddressError
+                    path: wallets/pages/reference/alchemy/smart-accounts/classes/ZeroAddressError/constructor.mdx
       - section: API
         contents:
           - section: Smart Wallets

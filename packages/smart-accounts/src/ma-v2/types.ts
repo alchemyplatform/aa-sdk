@@ -46,6 +46,7 @@ export const HookType = {
   VALIDATION: "0x01",
 } as const;
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookType = (typeof HookType)[keyof typeof HookType];
 
 export type HookConfig = {

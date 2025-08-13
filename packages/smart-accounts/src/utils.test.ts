@@ -1,4 +1,4 @@
-import { bigIntMultiply } from "./utils";
+import { bigIntMultiply } from "./utils.js";
 
 describe("bigIntMultiply", () => {
   describe("integer multipliers", () => {

@@ -1937,8 +1937,6 @@ describe("MA v2 Account Tests", async () => {
         value: parseEther("1"),
       });
 
-      provider.account.isDeployed;
-
       const walletClient = createWalletClient({
         account: owner,
         transport: custom(instance.getClient()),

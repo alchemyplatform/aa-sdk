@@ -107,16 +107,12 @@ export type ToModularAccountV2BaseParams<
   authorization?: ToSmartAccountParameters["authorization"];
 };
 
-export async function toModularAccountV2Base<
-  TTransport extends Transport = Transport,
->(
-  params: ToModularAccountV2BaseParams<TTransport>,
-): Promise<ModularAccountV2Base>;
-export async function toModularAccountV2Base<
-  TTransport extends Transport = Transport,
->(
-  params: ToModularAccountV2BaseParams<TTransport>,
-): Promise<ModularAccountV2Base>;
+/**
+ * Creates a ModularAccountV2Base instance.
+ *
+ * @param {ToModularAccountV2BaseParams<TTransport>} params - The parameters for creating a ModularAccountV2Base instance.
+ * @returns {Promise<ModularAccountV2Base>} A promise that resolves to a ModularAccountV2Base instance.
+ */
 export async function toModularAccountV2Base<
   TTransport extends Transport = Transport,
 >({
