@@ -1,11 +1,6 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "./CodePreview";
-import {
-  AuthCard,
-  useConnectedUser,
-  useAuthContext,
-  useUser,
-} from "@account-kit/react";
+import { AuthCard, useConnectedUser, useAuthContext } from "@account-kit/react";
 
 import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
