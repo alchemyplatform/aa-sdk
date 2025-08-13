@@ -45,6 +45,8 @@
   "dependencies": {
     "@alchemy/common": "*",
     "@alchemy/signer": "*",
+    "@turnkey/iframe-stamper": "^2.5.0",
+    "@turnkey/webauthn-stamper": "^0.5.1",
     "viem": "2.29.2"
   },
   "publishConfig": {

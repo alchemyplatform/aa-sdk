@@ -1,4 +1,3 @@
-import type { AlchemyTransport } from "@alchemy/common";
 import { Signer } from "./signer.js";
 import type {
   CreateTekStamperFn,
@@ -6,17 +5,24 @@ import type {
   HandleOauthFlowFn,
   TurnkeyTekStamper,
 } from "./types.js";
-
-type TekStamperAndPublicKey = {
-  stamper: TurnkeyTekStamper;
-  targetPublicKey: string;
-};
+import { dev_request } from "./devRequest.js";
 
 export type AuthClientParams = {
-  transport: AlchemyTransport;
+  // TODO: put this back when the transport is ready.
+  // transport: AlchemyTransport;
+  // TODO: this is temporary for testing before the transport is ready.
+  apiKey: string;
   createTekStamper: CreateTekStamperFn;
   createWebAuthnStamper: CreateWebAuthnStamperFn;
   handleOauthFlow: HandleOauthFlowFn;
+};
+
+export type SendEmailOtpParams = {
+  email: string;
+};
+
+export type SubmitOtpCodeParams = {
+  otpCode: string;
 };
 
 export type LoginWithOauthParams = {
@@ -28,32 +34,61 @@ export type LoginWithOauthParams = {
   mode?: "popup" | "redirect";
 };
 
+type TekStamperAndPublicKey = {
+  stamper: TurnkeyTekStamper;
+  targetPublicKey: string;
+};
+
+type PendingOtp = {
+  otpId: string;
+  orgId: string;
+};
+
 export class AuthClient {
-  private readonly transport: AlchemyTransport;
+  // TODO: temporary for testing before the transport is ready.
+  private readonly apiKey: string;
   private readonly createTekStamper: CreateTekStamperFn;
   private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
   private readonly handleOauthFlow: HandleOauthFlowFn;
 
   constructor(params: AuthClientParams) {
-    this.transport = params.transport;
+    this.apiKey = params.apiKey;
     this.createTekStamper = params.createTekStamper;
     this.createWebAuthnStamper = params.createWebAuthnStamper;
     this.handleOauthFlow = params.handleOauthFlow;
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
-  // TODO: do we care about persisting this across reloads?
-  private otpId: string | null = null;
 
-  public async sendEmailOtp(email: string): Promise<void> {
+  // TODO: do we care about persisting this across reloads?
+  private pendingOtp: PendingOtp | null = null;
+
+  public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    this.otpId = await notImplemented(email, targetPublicKey);
+    const { otpId, orgId } = await this.dev_request("auth", {
+      email,
+      emailMode: "otp",
+      targetPublicKey,
+    });
+    this.pendingOtp = { otpId, orgId };
   }
 
-  public async submitOtpCode(otpCode: string): Promise<Signer> {
-    const { bundle, orgId } = await notImplemented(this.otpId, otpCode);
-    this.otpId = null;
-    return this.completeAuthWithBundle({ bundle, orgId });
+  public async submitOtpCode({
+    otpCode,
+  }: SubmitOtpCodeParams): Promise<Signer> {
+    if (!this.pendingOtp) {
+      throw new Error("Cannot submit OTP code when none has been sent");
+    }
+    const { otpId, orgId } = this.pendingOtp;
+    const { targetPublicKey } = await this.getTekStamper();
+    const { credentialBundle } = await this.dev_request("otp", {
+      otpId,
+      otpCode,
+      orgId,
+      targetPublicKey,
+    });
+    this.pendingOtp = null;
+    return this.completeAuthWithBundle({ bundle: credentialBundle, orgId });
   }
 
   public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
@@ -98,7 +133,7 @@ export class AuthClient {
       throw new Error("Failed to inject credential bundle");
     }
     const signer = await Signer.create({
-      transport: this.transport,
+      apiKey: this.apiKey,
       stamper,
       orgId,
       idToken,
@@ -119,6 +154,11 @@ export class AuthClient {
       })();
     }
     return this.tekStamperPromise;
+  }
+
+  // TODO: remove this and use transport instead once it's ready.
+  private dev_request(path: string, body: unknown): Promise<any> {
+    return dev_request(this.apiKey, path, body);
   }
 }
 
