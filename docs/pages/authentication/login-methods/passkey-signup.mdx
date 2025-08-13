@@ -156,12 +156,284 @@ Passkeys provide a secure, passwordless authentication method that can be used t
     ```
   </Tab>
   <Tab title="React Native">
-    ## React Native Passkey Signup
+    <Info>
+      This guide assumes you have already followed the [Setup
+      Guide](/wallets/react-native/signer/setup-guide) and have set up the Alchemy
+      Account Provider using this
+      [guide](/wallets/react-native/signer/authenticating-users/setting-up-the-accounts-provider).
+      Please refer to the guides above for more information on how to properly setup
+      your project.
+    </Info>
 
-    React Native content will be migrated here - combining content from:
-    - /react-native/signer/authenticating-users/authenticating-with-passkeys.mdx
+    <Tip>
+      For a complete example of how we can setup a project and use the various
+      available authentication methods, please refer to our [quickstart
+      example](https://github.com/alchemyplatform/account-kit-expo-quickstart).
+    </Tip>
 
-    This section will include React Native specific implementation details for passkey signup authentication.
+    Authenticating a user is easy using the `useAuthenticate()` hook from the `@account-kit/react-native` package. Before we can use that, you'll need to configure your application to associate it with a domain you control.
+
+    ## Step 1: Set an rpId in `createConfig`
+
+    The rpId ("relaying party ID") specifies the domain on which passkeys are allowed to function. While passkeys on web applications are automatically associated with the website's domain, mobile applications must be registered with a domain to prove that they are associated.
+
+    In your call to `createConfig`, pass an `rpId` parameter set to a domain you control. Note that the scheme is always assumed to be "https://" and should be omitted.
+
+    ```typescript
+    const config = createConfig({
+      // ... other config
+      rpId: "your-domain.com",
+    });
+    ```
+
+    ## Step 2: Host a Site Association JSON
+
+    While passkeys on web applications are automatically associated with the website's domain, mobile applications must be registered on that domain to prove that they are associated. To do so, you will need to host a JSON file referencing your app on your domain. The details of doing so differ on iOS and Android.
+
+    ### iOS configuration
+
+    [More information in Apple docs](https://developer.apple.com/documentation/xcode/supporting-associated-domains)
+
+    On your webserver, set up the route
+
+    ```
+    GET https://<yourdomain>/.well-known/apple-app-site-association
+    ```
+
+    This route should serve a static JSON object containing your team id and identifier. You should replace `<team-identifier>` and `<bundle-id>` in the below snippet, so it might appear as e.g. `H123456789.com.yourapp.passkeyExample`.
+
+    ```JSON
+    {
+      "applinks": {},
+      "webcredentials": {
+        "apps": ["<team-identifier>.<bundle-id>"]
+      },
+      "appclips": {}
+    }
+    ```
+
+    Next, in XCode under "Signing & Capabilities", add a new capability of type "Associated Domains". Now add the following, replacing `<yourdomain>` with the domain on which you hosted the JSON (e.g. `your-domain.com`):
+
+    ```
+    webcredentials:<yourdomain>
+    ```
+
+    ### Android configuration
+
+    [More information in Android docs](https://developer.android.com/identity/sign-in/credential-manager#add-support-dal)
+
+    On your webserver, set up the route
+
+    ```
+    GET https://<yourdomain>/.well-known/assetlinks.json
+    ```
+
+    This route should serve a static JSON object containing the following information:
+
+    ```json
+    [
+      {
+        "relation": ["delegate_permission/common.get_login_creds"],
+        "target": {
+          "namespace": "android_app",
+          "package_name": "<your-package-name>",
+          "sha256_cert_fingerprints": ["<sha-hex-value>"]
+        }
+      }
+    ]
+    ```
+
+    You should replace `<your-package-name>` with the package name, e.g. `com.yourapp.passkeyExample`, and `"<sha-hex-value>"` with the SHA256 fingerprints of your app's [signing certificate], e.g. `"FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:12:75:91:03:3B:9C"`.
+
+    ## Step 3: Add a Passkey
+
+    You have the option of creating an account with passkey and email or with passkey alone.
+
+    <Markdown src="../../../../shared/passkey-email-warning.mdx" />
+
+    ### Option 1: Creating an account with passkey and email (recommended)
+
+    ```tsx twoslash create-passkey-and-email.tsx
+    import { useAuthenticate } from "@account-kit/react-native";
+    import React, { useState } from "react";
+    import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
+
+    function CreatePasskeyAndEmail() {
+      const { authenticate } = useAuthenticate();
+      const [email, setEmail] = useState("");
+
+      const handleCreatePasskeyAndEmail = () => {
+        // Important: Validate the email before proceeding
+        if (!isValidEmail(email)) {
+          // Handle validation error
+          return;
+        }
+        try {
+          authenticate({
+            type: "passkey",
+            email,
+          });
+
+          // Prompt the user to create a passkey, and create an account once they do.
+        } catch (e) {
+          Alert.alert("Error creating passkey. Check logs for more details.");
+
+          console.log("Error creating passkey: ", e);
+        }
+      };
+
+      return (
+        <View>
+          <Text>Enter Your Email to Create Account</Text>
+          <View>
+            <TextInput
+              value={email}
+              onChangeText={(val) => setEmail(val.toLowerCase())}
+              placeholder="john@doe.com"
+            />
+            <Pressable onPress={handleCreatePasskeyAndEmail}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                      transform: [
+                        {
+                          scale: pressed ? 0.98 : 1,
+                        },
+                      ],
+                    },
+                  ]}
+                >
+                  <Text>Sign In</Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      );
+    }
+
+    // Simple email validation function
+    const isValidEmail = (email: string) => {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+    ```
+
+    <Error>
+      It's important that you validate the email before creating an account for the
+      user. This is to prevent users from losing access to their wallets if they
+      lose their device.
+    </Error>
+
+    ### Option 2: Creating a New Account
+
+    To create an account with a passkey, use the `authenticate()` function, with the `type` set to `"passkey"` and `createNew` set to `true`.
+
+    ```tsx twoslash create-passkey.tsx
+    import { useAuthenticate } from "@account-kit/react-native";
+    import React, { useState } from "react";
+    import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
+
+    function CreatePasskey() {
+      const { authenticate } = useAuthenticate();
+
+      const handleCreatePasskey = () => {
+        try {
+          authenticate({
+            type: "passkey",
+            createNew: true,
+            // This will be the name of the saved passkey on the user's device.
+            username: "Your App user",
+          });
+        } catch (e) {
+          Alert.alert("Error creating passkey. Check logs for more details.");
+
+          console.log("Error creating passkey: ", e);
+        }
+      };
+
+      return (
+        <View>
+          <Text>Create an account with a passkey</Text>
+          <View>
+            <Pressable onPress={handleCreatePasskey}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                      transform: [
+                        {
+                          scale: pressed ? 0.98 : 1,
+                        },
+                      ],
+                    },
+                  ]}
+                >
+                  <Text>Create account</Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      );
+    }
+    ```
+
+    ## Step 4: Sign In with a Passkey
+
+    To sign in with an existing passkey, use the `authenticate()` function, with the `type` set to `"passkey"`.
+
+    ```tsx twoslash create-passkey.tsx
+    import { useAuthenticate } from "@account-kit/react-native";
+    import React, { useState } from "react";
+    import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
+
+    function SignInWithPasskey() {
+      const { authenticate } = useAuthenticate();
+
+      const handleSignIn = () => {
+        try {
+          authenticate({
+            type: "passkey",
+            createNew: false,
+          });
+        } catch (e) {
+          Alert.alert(
+            "Error signing in with passkey. Check logs for more details.",
+          );
+          console.log("Error signing in with passkey: ", e);
+        }
+      };
+
+      return (
+        <View>
+          <Text>Sign in with passkey</Text>
+          <View>
+            <Pressable onPress={handleSignIn}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                      transform: [
+                        {
+                          scale: pressed ? 0.98 : 1,
+                        },
+                      ],
+                    },
+                  ]}
+                >
+                  <Text>Sign In</Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      );
+    }
+    ```
   </Tab>
   <Tab title="JavaScript">
     ## Other JS Frameworks
