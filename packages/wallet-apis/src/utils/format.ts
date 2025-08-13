@@ -1,10 +1,10 @@
-import type { RpcGasAndFeeOverrides } from "../schema.js";
 import type {
   GasAndFeeOverridesRequest,
   RequestGasAndPaymasterAndDataResponse,
-} from "./types.js";
+} from "../actions/requestGasAndPaymasterAndData.js";
+import type { RpcGasAndFeeOverrides } from "../schema.js";
 import type { AlchemyRequestGasAndPaymasterAndDataSchema } from "../schema.js";
-import { hexToBigInt, numberToHex } from "viem";
+import { hexToBigInt, numberToHex, isHex, toHex, type Hex } from "viem";
 
 export function formatOverridesRequest(
   overrides: GasAndFeeOverridesRequest,
@@ -58,3 +58,10 @@ export function formatGasAndPaymasterResponse(
     };
   }
 }
+
+export const castToHex = (val: string | number | bigint | Hex): Hex => {
+  if (isHex(val)) {
+    return val;
+  }
+  return toHex(val);
+};

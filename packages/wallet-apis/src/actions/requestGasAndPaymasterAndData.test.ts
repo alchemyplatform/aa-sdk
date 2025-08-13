@@ -11,7 +11,7 @@ import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "@alchemy/common/chains";
 import { LocalAccountSigner } from "@aa-sdk/core";
 
-// todo(v5): migrate to using `@alchemy/smart-account` definitions of light account, rather than `@account-kit/smart-contracts`
+// TODO(v5): migrate to using `@alchemy/smart-account` definitions of light account, rather than `@account-kit/smart-contracts`
 describe("requestGasAndPaymasterAndData tests", async () => {
   it("should be able to call requestGasAndPaymasterAndData with v0.6 user operation", async () => {
     const client = local060Instance.getClient();

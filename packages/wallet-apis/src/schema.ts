@@ -3,7 +3,8 @@ import type {
   EntryPointVersion,
   RpcUserOperation,
 } from "viem/account-abstraction";
-import type { Multiplier } from "./actions/types.js";
+import type { Multiplier } from "./actions/requestGasAndPaymasterAndData";
+import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc"; // TODO(jh): this should be ok for RN since we are only importing types?
 
 export type RpcGasAndFeeOverrides<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
@@ -125,4 +126,5 @@ export type AlchemyRequestGasAndPaymasterAndDataSchema = {
 // Once you've defined this schema, import it into the schema.ts file found in the root alchemy package
 export type AlchemyWalletApisRpcSchema = [
   AlchemyRequestGasAndPaymasterAndDataSchema,
+  ...WalletServerViemRpcSchema,
 ];

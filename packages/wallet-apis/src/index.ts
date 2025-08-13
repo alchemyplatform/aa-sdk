@@ -8,5 +8,7 @@ export { requestGasAndPaymasterAndData } from "./actions/requestGasAndPaymasterA
 export type * from "./decorators/gasManager.js";
 export { gasManagerActions } from "./decorators/gasManager.js";
 
+// TODO(jh): add exports for smart wallets.
+
 // schema
 export type * from "./schema.js";

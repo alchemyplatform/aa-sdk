@@ -1,8 +1,8 @@
-import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
-import type {
-  RequestGasAndPaymasterAndDataRequest,
-  RequestGasAndPaymasterAndDataResponse,
-} from "../actions/types.js";
+import {
+  requestGasAndPaymasterAndData,
+  type RequestGasAndPaymasterAndDataRequest,
+  type RequestGasAndPaymasterAndDataResponse,
+} from "../actions/requestGasAndPaymasterAndData.js";
 import type { AlchemyTransport } from "@alchemy/common";
 import type { Client, Chain, Account } from "viem";
 
