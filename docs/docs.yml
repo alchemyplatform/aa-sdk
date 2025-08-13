@@ -207,7 +207,7 @@ navigation:
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
           - page: Retry User Operations
-            path: wallets/pages/infra/drop-and-replace.mdx
+            path: wallets/pages/transactions/retry-user-operations.mdx
           - section: Low-level infra
             contents:
               - page: Overview
