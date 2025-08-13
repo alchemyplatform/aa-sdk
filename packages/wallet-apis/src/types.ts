@@ -1,3 +1,5 @@
+import type { AlchemyTransport } from "@alchemy/common";
+import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import type {
   Address,
   Chain,
@@ -6,47 +8,23 @@ import type {
   JsonRpcAccount,
   LocalAccount,
 } from "viem";
-import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc"; // TODO(jh): can we be careful not to use any non-type imports from typebox to avoid RN issues?
-import type { AlchemyTransport } from "@alchemy/common";
+import type { InternalState } from "./internal";
 
-// export type CreateInnerClientParams<
-//   TAccount extends Address | undefined = Address | undefined,
-// > = {
-//   chain: Chain;
-//   transport: AlchemyTransport;
-//   policyIds?: string[];
-//   account?: TAccount | Address | undefined;
-// };
-
-export type InnerWalletApiClientBase<
+export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
     | { [key: string]: unknown }
     | undefined,
 > = Client<
-  AlchemyTransport, // TODO(jh): correct type for here?
+  AlchemyTransport,
   Chain,
-  // TODO(jh): is this the correct type? this will be the signer? should it never be `undefined`?
-  JsonRpcAccount<Address> | LocalAccount<Address> | undefined,
+  JsonRpcAccount<Address> | LocalAccount<Address>,
   WalletServerViemRpcSchema,
-  // TODO(jh): still have policyIds here?
-  { policyIds?: string[] } & TExtend
+  TExtend
 >;
 
-// TODO(jh): do we still want to cache?
-// export type CachedAccount = {
-//   account: SmartAccount;
-//   requestParams: RequestAccountParams;
-// };
-
-// TODO(jh): do we still want internal state?
-// export type InternalState = {
-//   setAccount: (account: CachedAccount) => void;
-//   getAccount: () => CachedAccount | undefined;
-// };
-
-export type InnerWalletApiClient = InnerWalletApiClientBase<{
-  // TODO(jh): do we need this?
-  //   internal: InternalState;
+export type InnerWalletApiClient = BaseWalletClient<{
+  internal: InternalState;
+  policyIds?: string[];
 }>;
 
 export type WithoutChainId<T> = T extends { chainId: Hex }

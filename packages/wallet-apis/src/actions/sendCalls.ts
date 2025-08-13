@@ -17,7 +17,6 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer to use
  * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)

@@ -43,7 +43,7 @@ export async function prepareSign<
   client: InnerWalletApiClient,
   params: PrepareSignParams<TAccount>,
 ): Promise<PrepareSignResult> {
-  const from = params.from ?? client.account?.address;
+  const from = params.from ?? client.internal.getAccount()?.address;
   if (!from) {
     throw new AccountNotFoundError();
   }

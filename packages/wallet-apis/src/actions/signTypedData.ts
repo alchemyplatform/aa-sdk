@@ -6,6 +6,11 @@ import {
 } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import { requestAccount } from "./requestAccount.js";
+import { prepareSign } from "./prepareSign.js";
+import { signSignatureRequest } from "./signSignatureRequest.js";
+import { formatSign } from "./formatSign.js";
+import { typedDataToJsonSafe } from "../utils/format.js";
+import { AccountNotFoundError } from "@alchemy/common";
 
 export type SignTypedDataParams = Prettify<
   TypedDataDefinition & {
@@ -47,14 +52,35 @@ export type SignTypedDataResult = Prettify<Hex>;
  * });
  * ```
  */
+
 export async function signTypedData(
   client: InnerWalletApiClient,
   params: SignTypedDataParams,
 ): Promise<SignTypedDataResult> {
   const account = await requestAccount(client, {
-    accountAddress: params.account ?? client.account?.address,
+    accountAddress: params.account ?? client.internal.getAccount()?.address,
+  });
+  if (!account) {
+    throw new AccountNotFoundError();
+  }
+
+  const prepared = await prepareSign(client, {
+    from: account.address,
+    signatureRequest: {
+      type: "eth_signTypedData_v4",
+      data: typedDataToJsonSafe(params),
+    },
   });
 
-  // TODO(jh): this needs to go through prepare & format sign on the server? this 6492 was only for signing locally w/ v4.
-  return account.signTypedDataWith6492(params);
+  const signed = await signSignatureRequest(client, prepared.signatureRequest);
+
+  const formatted = await formatSign(client, {
+    from: account.address,
+    signature: {
+      type: "ecdsa", // TODO(jh): this should be `secp256k1`, but the type is wrong.
+      data: signed.data,
+    },
+  });
+
+  return formatted.signature;
 }

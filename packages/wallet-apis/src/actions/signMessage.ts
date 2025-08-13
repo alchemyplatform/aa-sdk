@@ -6,6 +6,11 @@ import {
 } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import { requestAccount } from "./requestAccount.js";
+import { prepareSign } from "./prepareSign.js";
+import { signSignatureRequest } from "./signSignatureRequest.js";
+import { formatSign } from "./formatSign.js";
+import { signableMessageToJsonSafe } from "../utils/format.js";
+import { AccountNotFoundError } from "@alchemy/common";
 
 export type SignMessageParams = Prettify<{
   message: SignableMessage;
@@ -38,9 +43,29 @@ export async function signMessage(
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
   const account = await requestAccount(client, {
-    accountAddress: params.account ?? client.account?.address,
+    accountAddress: params.account ?? client.internal.getAccount()?.address,
+  });
+  if (!account) {
+    throw new AccountNotFoundError();
+  }
+
+  const prepared = await prepareSign(client, {
+    from: account.address,
+    signatureRequest: {
+      type: "personal_sign",
+      data: signableMessageToJsonSafe(params.message),
+    },
   });
 
-  // TODO(jh): this needs to go through prepare & format sign on the server? this 6492 was only for signing locally w/ v4.
-  return account.signMessageWith6492({ message: params.message });
+  const signed = await signSignatureRequest(client, prepared.signatureRequest);
+
+  const formatted = await formatSign(client, {
+    from: account.address,
+    signature: {
+      type: "ecdsa", // TODO(jh): this should be `secp256k1`, but the type is wrong.
+      data: signed.data,
+    },
+  });
+
+  return formatted.signature;
 }

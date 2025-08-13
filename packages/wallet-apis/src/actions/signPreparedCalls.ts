@@ -21,7 +21,7 @@ export type SignPreparedCallsResult = Prettify<
 /**
  * Signs prepared calls using the provided signer.
  *
- * @param {SmartAccountSigner} signer - The signer to use
+ * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
  */

@@ -1,8 +1,8 @@
-import { AccountNotFoundError } from "@aa-sdk/core";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import type { Static } from "@sinclair/typebox";
 import type { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
+import { AccountNotFoundError } from "@alchemy/common";
 
 export type GetAccountParam<TAccount> =
   IsUndefined<TAccount> extends true
@@ -59,18 +59,21 @@ export async function prepareCalls<
   client: InnerWalletApiClient,
   params: PrepareCallsParams<TAccount>,
 ): Promise<PrepareCallsResult> {
-  const from = params.from ?? client.account?.address;
+  const from = params.from ?? client.internal.getAccount()?.address;
   if (!from) {
     throw new AccountNotFoundError();
   }
 
-  if (client.policyIds && !params.capabilities?.paymasterService) {
-    // @ts-expect-error - TODO(jh): figure out why this is unhappy.
-    params.capabilities = {
-      ...params.capabilities,
-      paymasterService: { policyIds: client.policyIds },
-    };
-  }
+  const capabilities =
+    client.policyIds?.length && !params.capabilities?.paymasterService
+      ? {
+          ...params.capabilities,
+          paymasterService: {
+            ...params.capabilities?.paymasterService,
+            policyIds: client.policyIds,
+          },
+        }
+      : params.capabilities;
 
   return await client.request({
     method: "wallet_prepareCalls",
@@ -79,6 +82,7 @@ export async function prepareCalls<
         ...params,
         chainId: toHex(client.chain.id),
         from,
+        capabilities,
       },
     ],
   });

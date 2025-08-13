@@ -8,6 +8,8 @@ import type {
 import { vToYParity } from "ox/Signature";
 import type { InnerWalletApiClient, WithoutRawPayload } from "../types";
 import { assertNever } from "@alchemy/common";
+import { getAction } from "viem/utils";
+import { signAuthorization, signMessage, signTypedData } from "viem/actions";
 
 export type SignSignatureRequestParams = Prettify<
   WithoutRawPayload<
@@ -59,28 +61,43 @@ export async function signSignatureRequest(
   client: InnerWalletApiClient,
   params: SignSignatureRequestParams,
 ): Promise<SignSignatureRequestResult> {
-  // TODO(jh): this is all messed up. is this really how we will access the signer?
+  const actions = {
+    signMessage: getAction(client, signMessage, "signMessage"),
+    signTypedData: getAction(client, signTypedData, "signTypedData"),
+    signAuthorization: getAction(
+      client,
+      signAuthorization,
+      "signAuthorization",
+    ),
+  };
+
   switch (params.type) {
     case "personal_sign": {
       return {
         type: "secp256k1",
-        data: await client.account.signMessage(params.data),
+        data: await actions.signMessage({
+          message: params.data,
+          account: client.account,
+        }),
       };
     }
     case "eth_signTypedData_v4": {
       return {
         type: "secp256k1",
-        data: await client.account.signTypedData(params.data),
+        data: await actions.signTypedData({
+          ...params.data,
+          account: client.account,
+        }),
       };
     }
     case "eip7702Auth": {
-      if (!client.account.signAuthorization) {
-        throw new Error("Signer does not implement signAuthorization");
-      }
-      const { r, s, v, yParity } = await client.account.signAuthorization({
-        ...params.data,
-        chainId: hexToNumber(params.data.chainId),
-        nonce: hexToNumber(params.data.nonce),
+      const { r, s, v, yParity } = await actions.signAuthorization({
+        ...{
+          ...params.data,
+          chainId: hexToNumber(params.data.chainId),
+          nonce: hexToNumber(params.data.nonce),
+        },
+        account: client.account,
       });
 
       return {

@@ -47,7 +47,7 @@ export async function formatSign<
   client: InnerWalletApiClient,
   params: FormatSignParams<TAccount>,
 ): Promise<FormatSignResult> {
-  const from = params.from ?? client.account?.address;
+  const from = params.from ?? client.internal.getAccount()?.address;
   if (!from) {
     throw new AccountNotFoundError();
   }

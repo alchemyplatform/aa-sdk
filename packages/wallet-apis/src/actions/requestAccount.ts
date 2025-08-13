@@ -2,7 +2,8 @@ import type { Static } from "@sinclair/typebox";
 import type { Address } from "abitype";
 import { type Prettify } from "viem";
 import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
-import type { InnerWalletApiClient } from "../types.js";
+import deepEqual from "deep-equal";
+import type { InnerWalletApiClient } from "../types";
 
 export type RequestAccountParams = Prettify<
   Omit<
@@ -14,9 +15,7 @@ export type RequestAccountParams = Prettify<
   > & { accountAddress?: Address }
 >;
 
-export type RequestAccountResult = Prettify<
-  Static<typeof wallet_requestAccount>["ReturnType"]
->;
+export type RequestAccountResult = Prettify<{ address: Address }>;
 
 /**
  * Requests an account for the provided signer using the wallet API client.
@@ -24,7 +23,6 @@ export type RequestAccountResult = Prettify<
  * If an account already exists, the creationHint will be ignored.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer that will be associated with the account
  * @param {RequestAccountParams} [params] - Optional parameters for requesting a specific account
  * @param {string} [params.id] - Optional identifier for the account. If specified, a new account with this ID will be created even if one already exists for the signer
  * @param {object} [params.creationHint] - Optional hints to guide account creation. These are ignored if an account already exists
@@ -41,35 +39,40 @@ export async function requestAccount(
   client: InnerWalletApiClient,
   params?: RequestAccountParams,
 ): Promise<RequestAccountResult> {
-  const args =
-    (client.account && !params) || params?.accountAddress
-      ? {
-          accountAddress: params?.accountAddress ?? client.account!.address,
-          includeCounterfactualInfo: true,
-        }
-      : {
-          ...params,
-          signerAddress: client.account!.address, // TODO(jh): is this safe?
-          includeCounterfactualInfo: true,
-        };
+  const args = params?.accountAddress
+    ? {
+        accountAddress: params.accountAddress,
+        includeCounterfactualInfo: true,
+      }
+    : {
+        ...params,
+        signerAddress: client.account.address,
+        includeCounterfactualInfo: true,
+      };
 
-  // const cachedAccount = client.internal.getAccount();
+  const cachedAccount = client.internal.getAccount();
 
-  // if (
-  //   cachedAccount &&
-  //   ((args.accountAddress &&
-  //     cachedAccount.account.address === args.accountAddress) ||
-  //     deepEqual(cachedAccount.requestParams, args, { strict: true }))
-  // ) {
-  //   return cachedAccount.account;
-  // }
+  if (
+    cachedAccount &&
+    ((args.accountAddress && cachedAccount.address === args.accountAddress) ||
+      deepEqual(cachedAccount.requestParams, args, { strict: true }))
+  ) {
+    return {
+      address: cachedAccount.address,
+    };
+  }
 
-  const account = await client.request({
+  const resp = await client.request({
     method: "wallet_requestAccount",
     params: [args],
   });
 
-  // client.internal.setAccount({ account, requestParams: args });
+  client.internal.setAccount({
+    address: resp.accountAddress,
+    requestParams: args,
+  });
 
-  return account;
+  return {
+    address: resp.accountAddress,
+  };
 }

@@ -18,7 +18,6 @@ export type ListAccountsResult = Prettify<
  * Lists all smart accounts for a given signer using the wallet API client.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer for which to list accounts
  * @param {ListAccountsParams} params - Parameters for listing accounts
  * @param {string} params.signerAddress - The address of the signer to list accounts for
  * @param {number} [params.limit] - Optional maximum number of accounts to return (default: 100, max: 100)
@@ -45,7 +44,7 @@ export async function listAccounts(
   client: InnerWalletApiClient,
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
-  const signerAddress = params.signerAddress ?? client.account!.address; // TODO(jh): is this safe?
+  const signerAddress = params.signerAddress ?? client.account.address;
 
   return client.request({
     method: "wallet_listAccounts",

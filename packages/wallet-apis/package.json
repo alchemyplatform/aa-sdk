@@ -42,10 +42,12 @@
   "devDependencies": {
     "@alchemy/wallet-api-types": "^0.1.0-alpha.15",
     "@sinclair/typebox": "^0.34.38",
+    "@types/deep-equal": "^1.0.4",
     "typescript-template": "*"
   },
   "dependencies": {
     "@alchemy/common": "*",
+    "deep-equal": "^2.2.3",
     "viem": "2.29.2"
   },
   "publishConfig": {

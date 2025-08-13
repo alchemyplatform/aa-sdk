@@ -90,7 +90,7 @@ export async function grantPermissions<
   client: InnerWalletApiClient,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
-  const account = params.account ?? client.account?.address;
+  const account = params.account ?? client.internal.getAccount()?.address;
   if (!account) {
     throw new AccountNotFoundError();
   }

@@ -55,8 +55,8 @@ import {
   type GrantPermissionsResult,
 } from "../actions/grantPermissions.js";
 import { waitForCallsStatus } from "../actions/waitForCallsStatus.js";
-
-import type { InnerWalletApiClient } from "../types";
+import type { BaseWalletClient } from "../types.js";
+import { createInternalState } from "../internal.js";
 
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
@@ -91,12 +91,12 @@ export type SmartWalletActions<
   ) => Promise<GrantPermissionsResult>;
 };
 
-// TODO(jh): figure out exactly how this is used. do you extend a viem walletclient w/ it & it turns it into a smart wallet client?
 /**
  * This is a decorator that is used to add smart wallet actions to a client.
  *
- * @param {object} client - The client to add the actions to.
- * @returns {object} - The client with the actions added.
+ * @param {object} params - The parameters for the smart wallet actions.
+ * @param {string[]} params.policyIds - Optional policy IDs to use for the actions.
+ * @returns {Function} A function that takes a client and returns the client with smart wallet actions added.
  */
 // export const smartWalletActions: <
 //   TChain extends Chain | undefined = Chain | undefined,
@@ -107,26 +107,32 @@ export type SmartWalletActions<
 //   requestAccount: (params) => requestGasAndPaymasterAndData(client, params),
 // });
 export function smartWalletActions<
-  TAccount extends Address | undefined = Address | undefined, // TODO(jh): note this is the SCA ADDRESS.
->(
-  client: InnerWalletApiClient, // TODO(jh): more generic type here?
-  // signer: SmartAccountSigner, // TODO(jh): can we use the account.owner?
-): SmartWalletActions<TAccount> {
-  // TODO(jh): do we just use the client to sign & the signer on the client is managed upstream?
-  return {
-    requestAccount: (params) => requestAccount(client, params),
-    prepareCalls: (params) => prepareCalls(client, params),
-    listAccounts: (params) => listAccounts(client, params),
-    sendPreparedCalls: (params) => sendPreparedCalls(client, params),
-    sendCalls: (params) => sendCalls(client, params),
-    getCallsStatus: (params) => getCallsStatus(client, params),
-    waitForCallsStatus: (params) => waitForCallsStatus(client, params),
-    signSignatureRequest: (params) => signSignatureRequest(client, params),
-    signPreparedCalls: (params) => signPreparedCalls(client, params),
-    signMessage: (params) => signMessage(client, params),
-    signTypedData: (params) => signTypedData(client, params),
-    grantPermissions: (params) => grantPermissions(client, params),
+  // TODO(jh): does this generic even do anything now that the client.account is the SIGNER and not the SCA address? ideally we can call the actions w/ typesafety based on the account being present in the internal cache or not.
+  TAccount extends Address | undefined = Address | undefined, // TODO(jh): note this is the SCA ADDRESS, NOT the signer account address. does this still behave correctly?
+>({
+  policyIds,
+}: {
+  policyIds?: string[];
+}): (client: BaseWalletClient) => SmartWalletActions<TAccount> {
+  return (client: BaseWalletClient): SmartWalletActions<TAccount> => {
+    const _client = client.extend(() => ({
+      policyIds,
+      internal: createInternalState(),
+    }));
+
+    return {
+      requestAccount: (params) => requestAccount(_client, params),
+      prepareCalls: (params) => prepareCalls(_client, params),
+      listAccounts: (params) => listAccounts(_client, params),
+      sendPreparedCalls: (params) => sendPreparedCalls(_client, params),
+      sendCalls: (params) => sendCalls(_client, params),
+      getCallsStatus: (params) => getCallsStatus(_client, params),
+      waitForCallsStatus: (params) => waitForCallsStatus(_client, params),
+      signSignatureRequest: (params) => signSignatureRequest(_client, params),
+      signPreparedCalls: (params) => signPreparedCalls(_client, params),
+      signMessage: (params) => signMessage(_client, params),
+      signTypedData: (params) => signTypedData(_client, params),
+      grantPermissions: (params) => grantPermissions(_client, params),
+    };
   };
 }
-// TODO(jh): cache account like we did in v4?
-// TODO(jh): should we pass policyId to this?
