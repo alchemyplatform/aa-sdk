@@ -47,18 +47,20 @@ All `UserOperations` sent with the hooks will now be paid with the token configu
 import React from "react";
 import { View, Pressable, Text } from "react-native";
 import { useSendUserOperation } from "@account-kit/react-native";
+import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
 
 export default function PayWithTokenButton() {
-  const { sendUserOperation } = useSendUserOperation();
+  const { client, isLoadingClient } = useSmartAccountClient({});
   const erc20Abi = parseAbi([
     "function approve(address spender, uint256 amount) public returns (bool)",
   ]);
+  const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.7.0");
 
   return (
     <View>
       <Pressable
         onPress={() =>
-          sendUserOperation({
+          client!.sendUserOperation({
             uo: [
               {
                 // approve call
@@ -77,6 +79,7 @@ export default function PayWithTokenButton() {
             ],
           })
         }
+        disabled={isLoadingClient}
       >
         <View>
           <Text>Send token-sponsored UO</Text>
@@ -86,6 +89,12 @@ export default function PayWithTokenButton() {
   );
 }
 ```
+
+<Tip>
+  When performing ERC-20 sponsorship, be sure to use the `sendUserOperation`
+  method on a client. Support for the `useSendUserOperation` hook is coming
+  soon.
+</Tip>
 
 ### 4 (Optional) Override on a single client
 

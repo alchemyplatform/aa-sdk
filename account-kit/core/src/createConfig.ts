@@ -66,6 +66,7 @@ export const createConfig = (
     connections.push({
       transport: transportConfig,
       policyId: connectionConfig.policyId,
+      policyToken: connectionConfig.policyToken,
       chain,
     });
   } else {
@@ -86,6 +87,7 @@ export const createConfig = (
         transport: transportConfig,
         chain,
         policyId: policyId ?? connectionConfig.policyId,
+        policyToken: connectionConfig.policyToken,
       });
     });
   }
