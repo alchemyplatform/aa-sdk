@@ -10,6 +10,7 @@ const packageMap: Record<string, string> = {
   "aa-sdk/core": "aa-sdk/core",
   "aa-sdk/ethers": "aa-sdk/ethers",
   "alchemy/aa-infra": "Alchemy Account Abstraction Infrastructure",
+  "alchemy/wallet-apis": "Alchemy Smart Wallet APIs",
   "alchemy/common": "Alchemy Common",
   "alchemy/smart-accounts": "Alchemy Smart Accounts",
 };
