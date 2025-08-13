@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
+
+**Note:** Version bump only for package @account-kit/infra
+
 # [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
 
 ### Bug Fixes
