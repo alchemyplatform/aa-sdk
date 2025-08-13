@@ -8,7 +8,13 @@ import {
 import { http } from "viem";
 
 describe("Alchemy Transport Tests", () => {
-  it.each([{ url: "/api" }, { jwt: "test" }, { apiKey: "key" }])(
+  it.each([
+    { url: "/api" }, 
+    { jwt: "test" }, 
+    { apiKey: "key" },
+    { url: "https://custom.com", apiKey: "key" },
+    { url: "https://custom.com", jwt: "token" }
+  ])(
     "should successfully create a transport",
     (args) => {
       expect(() =>
@@ -41,6 +47,26 @@ describe("Alchemy Transport Tests", () => {
     it("should create transport with direct url", () => {
       const transport = alchemyTransport({
         url: "https://eth-mainnet.g.alchemy.com/v2/test-key",
+      });
+
+      expect(transport).toBeDefined();
+      expect(typeof transport).toBe("function");
+    });
+
+    it("should create transport with custom URL and API key", () => {
+      const transport = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        apiKey: "test-api-key",
+      });
+
+      expect(transport).toBeDefined();
+      expect(typeof transport).toBe("function");
+    });
+
+    it("should create transport with custom URL and JWT", () => {
+      const transport = alchemyTransport({
+        url: "https://custom-alchemy.com/v2", 
+        jwt: "test-jwt-token",
       });
 
       expect(transport).toBeDefined();
@@ -118,9 +144,86 @@ describe("Alchemy Transport Tests", () => {
       // Should use the provided URL, not the chain's URL
       expect(result.value?.alchemyRpcUrl).toBe(testUrl);
     });
+
+    it("should use custom URL with API key auth", () => {
+      const testUrl = "https://custom-alchemy.com/v2";
+      const transport = alchemyTransport({ 
+        url: testUrl, 
+        apiKey: "test-key" 
+      });
+      const result = transport({ chain: sepolia });
+
+      // Should use the custom URL
+      expect(result.value?.alchemyRpcUrl).toBe(testUrl);
+    });
+
+    it("should use custom URL with JWT auth", () => {
+      const testUrl = "https://custom-alchemy.com/v2";
+      const transport = alchemyTransport({ 
+        url: testUrl, 
+        jwt: "test-jwt" 
+      });
+      const result = transport({ chain: sepolia });
+
+      // Should use the custom URL
+      expect(result.value?.alchemyRpcUrl).toBe(testUrl);
+    });
+
+    it("should not require chain when using custom URL", () => {
+      const transport = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        apiKey: "test-key",
+      });
+
+      // URL + auth config doesn't need chain - creates transport successfully
+      const result = transport({} as any);
+      expect(result).toBeDefined();
+      expect(result.config.type).toBe("alchemyHttp");
+    });
   });
 
   describe("Headers Management", () => {
+    it("should add Authorization header when using custom URL with API key", () => {
+      const transport = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        apiKey: "test-api-key",
+      });
+
+      const result = transport({ chain: sepolia });
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+
+      expect(headers).toBeDefined();
+      expect(headers["Authorization"]).toBe("Bearer test-api-key");
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+    });
+
+    it("should add Authorization header when using custom URL with JWT", () => {
+      const transport = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        jwt: "test-jwt-token",
+      });
+
+      const result = transport({ chain: sepolia });
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+
+      expect(headers).toBeDefined();
+      expect(headers["Authorization"]).toBe("Bearer test-jwt-token");
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+    });
+
+    it("should not add Authorization header when using URL only", () => {
+      const transport = alchemyTransport({
+        url: "https://custom-endpoint.com/v2/with-embedded-key",
+      });
+
+      const result = transport({ chain: sepolia });
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+
+      expect(headers).toBeDefined();
+      expect(headers["Authorization"]).toBeUndefined();
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+    });
+
     it("should support updating headers", () => {
       const transport = alchemyTransport({
         apiKey: "test-key",
@@ -141,11 +244,17 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
 
-      // Verify transport has correct metadata
+      // Verify transport has correct metadata and headers
       expect(result.config).toBeDefined();
       expect(result.config.type).toBe("alchemyHttp");
       expect(result.config.name).toBe("Alchemy HTTP Transport");
+      
+      // Verify SDK version header is included
+      expect(headers).toBeDefined();
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+      expect(headers["Authorization"]).toBe("Bearer test-key");
     });
 
     it("should not set authorization header for direct url", () => {
@@ -154,9 +263,12 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
 
       // URL config shouldn't add auth headers (auth is in the URL)
-      expect(result.value?.fetchOptions).toBeDefined();
+      expect(headers).toBeDefined();
+      expect(headers["Authorization"]).toBeUndefined();
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
       expect(result.config.type).toBe("alchemyHttp");
     });
 
@@ -171,7 +283,12 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      expect(result.value?.fetchOptions).toBeDefined();
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+
+      expect(headers).toBeDefined();
+      expect(headers["Authorization"]).toBe("Bearer test-key");
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+      expect(headers["X-Custom-Header"]).toBe("custom-value");
     });
   });
 
@@ -203,6 +320,21 @@ describe("Alchemy Transport Tests", () => {
   });
 
   describe("Error Handling", () => {
+    it("should handle config with both apiKey and jwt (JWT takes precedence)", () => {
+      // This tests the transport behavior when schema validation is bypassed
+      const transport = alchemyTransport({
+        apiKey: "test-api-key", 
+        jwt: "test-jwt"
+      } as any);
+
+      const result = transport({ chain: sepolia });
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+
+      // JWT should take precedence over apiKey (based on implementation logic)
+      expect(headers["Authorization"]).toBe("Bearer test-jwt");
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+    });
+
     it("should provide clear error for missing chain with apiKey", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
 
@@ -237,6 +369,55 @@ describe("Alchemy Transport Tests", () => {
 
       expect(result.value?.makeHttpRequest).toBeDefined();
       expect(typeof result.value?.makeHttpRequest).toBe("function");
+    });
+  });
+
+  describe("Comprehensive Header Verification", () => {
+    it.each([
+      {
+        name: "API key only",
+        config: { apiKey: "test-api-key" },
+        expectedAuth: "Bearer test-api-key",
+        needsChain: true,
+      },
+      {
+        name: "JWT only", 
+        config: { jwt: "test-jwt" },
+        expectedAuth: "Bearer test-jwt",
+        needsChain: true,
+      },
+      {
+        name: "URL only",
+        config: { url: "https://custom.com/v2" },
+        expectedAuth: undefined,
+        needsChain: false,
+      },
+      {
+        name: "URL + API key",
+        config: { url: "https://custom.com/v2", apiKey: "test-api-key" },
+        expectedAuth: "Bearer test-api-key", 
+        needsChain: false,
+      },
+      {
+        name: "URL + JWT",
+        config: { url: "https://custom.com/v2", jwt: "test-jwt" },
+        expectedAuth: "Bearer test-jwt",
+        needsChain: false,
+      },
+    ])("should handle $name with correct headers", ({ config, expectedAuth, needsChain }) => {
+      const transport = alchemyTransport(config);
+      const chainArg = needsChain ? { chain: sepolia } : {};
+      const result = transport(chainArg);
+      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+
+      expect(headers).toBeDefined();
+      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+      
+      if (expectedAuth) {
+        expect(headers["Authorization"]).toBe(expectedAuth);
+      } else {
+        expect(headers["Authorization"]).toBeUndefined();
+      }
     });
   });
 });

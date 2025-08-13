@@ -19,13 +19,15 @@ import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
 
 /**
  * Configuration options for the Alchemy transport.
- * Accepts one of three authentication methods: API key, JWT token, or direct URL.
+ * Can specify URL, auth method, or both together.
  */
-export type AlchemyTransportConfig = (
-  | { apiKey: string }
-  | { jwt: string }
-  | { url: string }
-) & {
+export type AlchemyTransportConfig = {
+  /** API key for Alchemy authentication */
+  apiKey?: string;
+  /** JWT token for authentication */
+  jwt?: string;
+  /** Custom RPC URL (optional - defaults to chain's Alchemy URL) */
+  url?: string;
   /** The max number of times to retry. */
   retryCount?: TransportConfig["retryCount"] | undefined;
   /** The base delay (in ms) between retries. */
@@ -96,6 +98,28 @@ export function isAlchemyTransport(
  * const transport = alchemyTransport({ url: "https://eth-mainnet.g.alchemy.com/v2/your-key" });
  * ```
  *
+ * @example
+ * Using custom URL with API key:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ 
+ *   url: "https://custom-alchemy.com/v2", 
+ *   apiKey: "your-api-key" 
+ * });
+ * ```
+ *
+ * @example
+ * Using custom URL with JWT:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ 
+ *   url: "https://custom-alchemy.com/v2", 
+ *   jwt: "your-jwt-token" 
+ * });
+ * ```
+ *
  * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport
  * @param {string} [config.apiKey] - API key for Alchemy authentication
  * @param {string} [config.jwt] - JWT token for authentication
@@ -110,10 +134,12 @@ export function alchemyTransport<
   httpSchema extends HttpRequestSchema | undefined = undefined,
 >(config: AlchemyTransportConfig): AlchemyTransport<rpcSchema, httpSchema> {
   const {
+    apiKey,
+    jwt,
+    url,
     retryDelay,
     retryCount = 0,
     fetchOptions: fetchOptions_,
-    ...connectionConfig
   } = config;
 
   // Create a copy of fetch options for modification
@@ -126,15 +152,16 @@ export function alchemyTransport<
     "Alchemy-AA-Sdk-Version": VERSION,
   };
 
-  if ("jwt" in connectionConfig) {
+  // Add auth headers if apiKey or jwt is provided
+  if (jwt) {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${connectionConfig.jwt}`,
+      Authorization: `Bearer ${jwt}`,
     };
-  } else if ("apiKey" in connectionConfig) {
+  } else if (apiKey) {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${connectionConfig.apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
     };
   }
 
@@ -144,10 +171,12 @@ export function alchemyTransport<
     mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
 
     const rpcUrl = (() => {
-      if ("url" in connectionConfig) {
-        return connectionConfig.url;
+      // If URL is provided, use it directly
+      if (url) {
+        return url;
       }
 
+      // Otherwise, need chain for Alchemy URL
       if (!chain) {
         throw new ChainNotFoundError();
       }

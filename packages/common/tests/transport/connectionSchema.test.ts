@@ -101,41 +101,58 @@ describe("AlchemyConnectionConfig V5 Schema", () => {
     });
   });
 
-  describe("Union Behavior", () => {
-    it("should reject config with multiple auth methods", () => {
+  describe("Flexible Configuration Behavior", () => {
+    it("should reject config with both apiKey and jwt", () => {
       const config = {
         apiKey: "test-key",
         jwt: "test-jwt",
       } as any;
 
-      // Should reject multiple auth methods
+      // Should reject both auth methods together
       expect(() => validateAlchemyConnectionConfig(config)).toThrow(
         ConnectionConfigError,
       );
       expect(isAlchemyConnectionConfig(config)).toBe(false);
     });
 
-    it("should reject config with all three auth options", () => {
+    it("should allow url with apiKey", () => {
       const config = {
+        url: "https://custom.alchemy.com/v2",
         apiKey: "test-key",
-        jwt: "test-jwt",
-        url: "https://example.com",
-      } as any;
+      };
 
-      // Should reject multiple auth methods
-      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
-        ConnectionConfigError,
-      );
-      expect(isAlchemyConnectionConfig(config)).toBe(false);
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
+      expect(isAlchemyConnectionConfig(config)).toBe(true);
     });
 
-    it("should reject config with valid auth and unknown fields", () => {
+    it("should allow url with jwt", () => {
+      const config = {
+        url: "https://custom.alchemy.com/v2",
+        jwt: "test-jwt",
+      };
+
+      const result = validateAlchemyConnectionConfig(config);
+      expect(result).toEqual(config);
+      expect(isAlchemyConnectionConfig(config)).toBe(true);
+    });
+
+    it("should reject config with unknown fields", () => {
       const config = {
         apiKey: "valid-key",
         invalidField: "ignored",
       } as any;
 
       // Should reject unknown fields due to strict validation
+      expect(() => validateAlchemyConnectionConfig(config)).toThrow(
+        ConnectionConfigError,
+      );
+      expect(isAlchemyConnectionConfig(config)).toBe(false);
+    });
+
+    it("should reject config with no valid fields", () => {
+      const config = {};
+
       expect(() => validateAlchemyConnectionConfig(config)).toThrow(
         ConnectionConfigError,
       );

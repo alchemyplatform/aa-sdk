@@ -11,51 +11,68 @@ import { ConnectionConfigError } from "../errors/ConnectionConfigError.js";
  * 3. **URL**: Connect directly using a full RPC URL
  *
  * @example
- * Using API Key:
+ * Using API Key (uses chain's Alchemy URL):
  * ```ts
  * { apiKey: 'abc123' }
  * ```
  *
  * @example
- * Using JWT:
+ * Using JWT (uses chain's Alchemy URL):
  * ```ts
  * { jwt: 'eyJhbGc...' }
  * ```
  *
  * @example
- * Using direct URL:
+ * Using direct URL only:
  * ```ts
  * { url: 'https://eth-mainnet.g.alchemy.com/v2/your-key' }
+ * ```
+ *
+ * @example
+ * Using custom URL with API key:
+ * ```ts
+ * { url: 'https://custom-alchemy.com/v2', apiKey: 'abc123' }
+ * ```
+ *
+ * @example
+ * Using custom URL with JWT:
+ * ```ts
+ * { url: 'https://custom-alchemy.com/v2', jwt: 'eyJhbGc...' }
  * ```
  */
 
 /**
- * Main connection configuration using exclusive union.
- * Only one authentication method can be specified at a time.
+ * Main connection configuration allowing flexible combinations.
+ * Can specify URL, auth method, or both together.
  */
-const ApiKeyConfigSchema = z
+export const AlchemyConnectionConfigSchema = z
   .object({
-    apiKey: z.string().min(1, "API key cannot be empty"),
+    /** API key for Alchemy authentication */
+    apiKey: z.string().min(1, "API key cannot be empty").optional(),
+    /** JWT token for authentication */
+    jwt: z.string().min(1, "JWT cannot be empty").optional(),
+    /** Custom RPC URL (optional - defaults to chain's Alchemy URL) */
+    url: z.string().url("Invalid URL format").optional(),
   })
-  .strict();
-
-const JwtConfigSchema = z
-  .object({
-    jwt: z.string().min(1, "JWT cannot be empty"),
-  })
-  .strict();
-
-const UrlConfigSchema = z
-  .object({
-    url: z.string().url("Invalid URL format"),
-  })
-  .strict();
-
-export const AlchemyConnectionConfigSchema = z.union([
-  ApiKeyConfigSchema,
-  JwtConfigSchema,
-  UrlConfigSchema,
-]);
+  .strict()
+  .refine(
+    (data) => {
+      // Must have at least one field
+      return data.apiKey || data.jwt || data.url;
+    },
+    {
+      message: "Must specify at least one of: apiKey, jwt, or url",
+    }
+  )
+  .refine(
+    (data) => {
+      // Cannot have both apiKey and jwt
+      return !(data.apiKey && data.jwt);
+    },
+    {
+      message: "Cannot specify both apiKey and jwt - choose only one authentication method",
+    }
+  );
 
 /**
  * TypeScript type derived from the schema for external consumption.
@@ -111,8 +128,11 @@ export function validateAlchemyConnectionConfig(
  * const maybeConfig: unknown = { apiKey: 'test' };
  * if (isAlchemyConnectionConfig(maybeConfig)) {
  *   // TypeScript knows maybeConfig is AlchemyConnectionConfig here
- *   if ('apiKey' in maybeConfig) {
- *     console.log(maybeConfig.apiKey);
+ *   if (maybeConfig.apiKey) {
+ *     console.log('Using API key:', maybeConfig.apiKey);
+ *   }
+ *   if (maybeConfig.url) {
+ *     console.log('Using custom URL:', maybeConfig.url);
  *   }
  * }
  * ```
