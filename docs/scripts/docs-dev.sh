@@ -49,7 +49,7 @@ pnpm i
 pnpm exec $DOCS_DIR/scripts/insert-docs.sh aa-sdk
 
 # Start watching docs folder for changes in the background
-pnpm exec onchange "$DOCS_DIR/**/*.mdx" -- sh -c "$DOCS_DIR/scripts/insert-docs.sh aa-sdk" &
+pnpm exec onchange "$DOCS_DIR/**/*.mdx" "$DOCS_DIR/**/*.yml" -- sh -c "$DOCS_DIR/scripts/insert-docs.sh aa-sdk" &
 ONCHANGE_PID=$!
 
 # Start the docs site
