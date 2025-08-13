@@ -143,34 +143,36 @@ navigation:
             path: wallets/pages/react/ui-components.mdx
           - section: Whitelabel
             contents:
-              - page: React
+              - page: React hooks
                 path: wallets/pages/react/react-hooks.mdx
-              - page: Other JS setup
+              - page: Other JS initialization
                 path: wallets/pages/signer/quickstart.mdx
+          - section: Account management
+            contents:
+              - page: User sessions
+                path: wallets/pages/signer/user-sessions.mdx
+              - section: Policies
+                contents:
+                  - page: Overview
+                    path: wallets/pages/authorization/policies/overview.mdx
+                  - page: Key Concepts
+                    path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
+                  - page: Session key overview
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
+                  - page: Session key permissions
+                    path: wallets/pages/authorization/policies/session-key-permissions.mdx
+                  - page: Adding session keys
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
+                  - page: Using session keys
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
+                  - page: Removing session keys
+                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
+              - page: Manage account ownership
+                path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
+              - page: Export private key
+                path: wallets/pages/signer/export-private-key.mdx
           - page: Third party signers
             path: wallets/pages/third-party/signers.mdx
-          - section: Policies
-            contents:
-              - page: Overview
-                path: wallets/pages/authorization/policies/overview.mdx
-              - page: Key Concepts
-                path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
-              - page: Session key overview
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
-              - page: Session key permissions
-                path: wallets/pages/authorization/policies/session-key-permissions.mdx
-              - page: Adding session keys
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
-              - page: Using session keys
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
-              - page: Removing session keys
-                path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
-          - page: User sessions
-            path: wallets/pages/signer/user-sessions.mdx
-          - page: Manage account ownership
-            path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
-          - page: Export private key
-            path: wallets/pages/signer/export-private-key.mdx
 
       - section: Transactions
         contents:
@@ -186,12 +188,8 @@ navigation:
             contents:
               - page: EVM
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
-              - section: Solana
-                contents:
-                  - page: Overview
-                    path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
-                  - page: APIs
-                    path: wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-solana.mdx
+              - page: Solana
+                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Low-level infra
