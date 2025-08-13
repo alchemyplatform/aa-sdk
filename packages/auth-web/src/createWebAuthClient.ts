@@ -8,15 +8,9 @@ import { IframeStamper } from "@turnkey/iframe-stamper";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
-/**
- * Configuration parameters for creating a web-based AuthClient
- */
 export type WebAuthClientParams = {
-  /** API key for authentication with Alchemy services */
   apiKey: string;
-  /** Optional ID for the iframe element used by Turnkey stamper. Defaults to "turnkey-iframe" */
   iframeElementId?: string;
-  /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
   iframeContainerId?: string;
   /** Optional custom TEK stamper factory for React Native */
   createTekStamper?: CreateTekStamperFn;
@@ -109,7 +103,7 @@ export function createWebAuthClient({
           const popup = window.open(
             authUrl,
             "_blank",
-            "popup,width=500,height=600",
+            "popup,width=500,height=600"
           );
           // const eventEmitter = this.eventEmitter;
           return new Promise((resolve, reject) => {
@@ -187,8 +181,8 @@ export function createWebAuthClient({
           return new Promise((_, reject) =>
             setTimeout(
               () => reject(new Error("Redirecting to OAuth provider...")),
-              1000,
-            ),
+              1000
+            )
           );
         default:
           throw new Error(`Unsupported OAuth mode: ${mode}`);
