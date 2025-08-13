@@ -18,6 +18,7 @@ export default function Home(): ReactElement {
   const [authSession, setAuthSession] = useState<AuthSession | null>(null);
   const [signature, setSignature] = useState<string | null>(null);
 
+<<<<<<< HEAD
   useEffect(() => {
     authClient.handleOauthRedirect().then((authSession) => {
       setAuthSession(authSession);
@@ -34,15 +35,23 @@ export default function Home(): ReactElement {
     console.log("do we ever get here?");
   }, []);
 
+=======
+>>>>>>> 3ecc047e (feat(signer): end-to-end email otp with new signer)
   const handleSendEmailOtp = useCallback(async () => {
     await authClient.sendEmailOtp({ email });
     setHasSentEmail(true);
-  }, [email]);
+  }, [authClient, email]);
 
   const handleSubmitOtpCode = useCallback(async () => {
+<<<<<<< HEAD
     const authSession = await authClient.submitOtpCode({ otpCode });
     setAuthSession(authSession);
   }, [otpCode]);
+=======
+    const signer = await authClient.submitOtpCode({ otpCode });
+    setSigner(signer);
+  }, [authClient, otpCode]);
+>>>>>>> 3ecc047e (feat(signer): end-to-end email otp with new signer)
 
   const handleDisconnect = useCallback(async () => {
     authSession?.disconnect();
@@ -80,12 +89,6 @@ export default function Home(): ReactElement {
             className="btn btn-primary w-full"
           >
             Sign in
-          </button>
-          <button
-            onClick={handleOauthLogin}
-            className="btn btn-secondary w-full"
-          >
-            Sign in with Google
           </button>
         </div>
       </div>
