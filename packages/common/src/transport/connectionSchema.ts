@@ -62,7 +62,7 @@ export const AlchemyConnectionConfigSchema = z
     },
     {
       message: "Must specify at least one of: apiKey, jwt, or url",
-    }
+    },
   )
   .refine(
     (data) => {
@@ -70,8 +70,9 @@ export const AlchemyConnectionConfigSchema = z
       return !(data.apiKey && data.jwt);
     },
     {
-      message: "Cannot specify both apiKey and jwt - choose only one authentication method",
-    }
+      message:
+        "Cannot specify both apiKey and jwt - choose only one authentication method",
+    },
   );
 
 /**

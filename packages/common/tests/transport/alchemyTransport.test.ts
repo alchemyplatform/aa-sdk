@@ -10,21 +10,18 @@ import { createBundlerClient } from "viem/account-abstraction";
 
 describe("Alchemy Transport Tests", () => {
   it.each([
-    { url: "/api" }, 
-    { jwt: "test" }, 
+    { url: "/api" },
+    { jwt: "test" },
     { apiKey: "key" },
     { url: "https://custom.com", apiKey: "key" },
-    { url: "https://custom.com", jwt: "token" }
-  ])(
-    "should successfully create a transport",
-    (args) => {
-      expect(() =>
-        alchemyTransport({
-          ...args,
-        }),
-      ).not.toThrowError();
-    },
-  );
+    { url: "https://custom.com", jwt: "token" },
+  ])("should successfully create a transport", (args) => {
+    expect(() =>
+      alchemyTransport({
+        ...args,
+      }),
+    ).not.toThrowError();
+  });
 
   describe("Configuration", () => {
     it("should create transport with apiKey", () => {
@@ -66,7 +63,7 @@ describe("Alchemy Transport Tests", () => {
 
     it("should create transport with custom URL and JWT", () => {
       const transport = alchemyTransport({
-        url: "https://custom-alchemy.com/v2", 
+        url: "https://custom-alchemy.com/v2",
         jwt: "test-jwt-token",
       });
 
@@ -148,9 +145,9 @@ describe("Alchemy Transport Tests", () => {
 
     it("should use custom URL with API key auth", () => {
       const testUrl = "https://custom-alchemy.com/v2";
-      const transport = alchemyTransport({ 
-        url: testUrl, 
-        apiKey: "test-key" 
+      const transport = alchemyTransport({
+        url: testUrl,
+        apiKey: "test-key",
       });
       const result = transport({ chain: sepolia });
 
@@ -160,9 +157,9 @@ describe("Alchemy Transport Tests", () => {
 
     it("should use custom URL with JWT auth", () => {
       const testUrl = "https://custom-alchemy.com/v2";
-      const transport = alchemyTransport({ 
-        url: testUrl, 
-        jwt: "test-jwt" 
+      const transport = alchemyTransport({
+        url: testUrl,
+        jwt: "test-jwt",
       });
       const result = transport({ chain: sepolia });
 
@@ -191,7 +188,10 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       expect(headers).toBeDefined();
       expect(headers["Authorization"]).toBe("Bearer test-api-key");
@@ -205,7 +205,10 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       expect(headers).toBeDefined();
       expect(headers["Authorization"]).toBe("Bearer test-jwt-token");
@@ -218,7 +221,10 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       expect(headers).toBeDefined();
       expect(headers["Authorization"]).toBeUndefined();
@@ -245,13 +251,16 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       // Verify transport has correct metadata and headers
       expect(result.config).toBeDefined();
       expect(result.config.type).toBe("alchemyHttp");
       expect(result.config.name).toBe("Alchemy HTTP Transport");
-      
+
       // Verify SDK version header is included
       expect(headers).toBeDefined();
       expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
@@ -264,7 +273,10 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       // URL config shouldn't add auth headers (auth is in the URL)
       expect(headers).toBeDefined();
@@ -284,7 +296,10 @@ describe("Alchemy Transport Tests", () => {
       });
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       expect(headers).toBeDefined();
       expect(headers["Authorization"]).toBe("Bearer test-key");
@@ -324,12 +339,15 @@ describe("Alchemy Transport Tests", () => {
     it("should handle config with both apiKey and jwt (JWT takes precedence)", () => {
       // This tests the transport behavior when schema validation is bypassed
       const transport = alchemyTransport({
-        apiKey: "test-api-key", 
-        jwt: "test-jwt"
+        apiKey: "test-api-key",
+        jwt: "test-jwt",
       } as any);
 
       const result = transport({ chain: sepolia });
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+      const headers = result.value?.fetchOptions?.headers as Record<
+        string,
+        string
+      >;
 
       // JWT should take precedence over apiKey (based on implementation logic)
       expect(headers["Authorization"]).toBe("Bearer test-jwt");
@@ -382,7 +400,7 @@ describe("Alchemy Transport Tests", () => {
         needsChain: true,
       },
       {
-        name: "JWT only", 
+        name: "JWT only",
         config: { jwt: "test-jwt" },
         expectedAuth: "Bearer test-jwt",
         needsChain: true,
@@ -396,7 +414,7 @@ describe("Alchemy Transport Tests", () => {
       {
         name: "URL + API key",
         config: { url: "https://custom.com/v2", apiKey: "test-api-key" },
-        expectedAuth: "Bearer test-api-key", 
+        expectedAuth: "Bearer test-api-key",
         needsChain: false,
       },
       {
@@ -405,87 +423,92 @@ describe("Alchemy Transport Tests", () => {
         expectedAuth: "Bearer test-jwt",
         needsChain: false,
       },
-    ])("should handle $name with correct headers", ({ config, expectedAuth, needsChain }) => {
-      const transport = alchemyTransport(config);
-      const chainArg = needsChain ? { chain: sepolia } : {};
-      const result = transport(chainArg);
-      const headers = result.value?.fetchOptions?.headers as Record<string, string>;
+    ])(
+      "should handle $name with correct headers",
+      ({ config, expectedAuth, needsChain }) => {
+        const transport = alchemyTransport(config);
+        const chainArg = needsChain ? { chain: sepolia } : {};
+        const result = transport(chainArg);
+        const headers = result.value?.fetchOptions?.headers as Record<
+          string,
+          string
+        >;
 
-      expect(headers).toBeDefined();
-      expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
-      
-      if (expectedAuth) {
-        expect(headers["Authorization"]).toBe(expectedAuth);
-      } else {
-        expect(headers["Authorization"]).toBeUndefined();
-      }
-    });
+        expect(headers).toBeDefined();
+        expect(headers["Alchemy-AA-Sdk-Version"]).toBeDefined();
+
+        if (expectedAuth) {
+          expect(headers["Authorization"]).toBe(expectedAuth);
+        } else {
+          expect(headers["Authorization"]).toBeUndefined();
+        }
+      },
+    );
   });
 
   describe("Retry Count", () => {
-  it.each([0, 1, 2, 3])(
-    "respects retryCount of %i when used with a viem bundler client",
-    async (retryCount) => {
-      const { mockFetch, unstub } = givenMockFetchError();
+    it.each([0, 1, 2, 3])(
+      "respects retryCount of %i when used with a viem bundler client",
+      async (retryCount) => {
+        const { mockFetch, unstub } = givenMockFetchError();
 
-      const client = createBundlerClient({
-        transport: alchemyTransport({
-          url: "http://invalid",
+        const client = createBundlerClient({
+          transport: alchemyTransport({
+            url: "http://invalid",
+            retryCount,
+          }),
+          chain: sepolia,
+        });
+
+        await expect(
+          client.request({
+            // @ts-expect-error - Method doesn't matter for this test.
+            method: "eth_blockNumber",
+          }),
+        ).rejects.toThrow();
+
+        expect(mockFetch.mock.calls.length).toEqual(retryCount + 1);
+        unstub();
+      },
+    );
+
+    it.each([0, 1, 2, 3])(
+      "respects retryCount of %i when used with alchemy transport directly",
+      async (retryCount) => {
+        const { mockFetch, unstub } = givenMockFetchError();
+
+        const transport = alchemyTransport({
+          apiKey: "invalid",
           retryCount,
-        }),
-        chain: sepolia,
-      });
+        });
 
-      await expect(
-        client.request({
-          // @ts-expect-error - Method doesn't matter for this test.
-          method: "eth_blockNumber",
-        }),
-      ).rejects.toThrow();
+        const transportInstance = transport({ chain: sepolia });
 
-      expect(mockFetch.mock.calls.length).toEqual(retryCount + 1);
-      unstub();
-    },
-  );
+        await expect(
+          transportInstance.request({
+            method: "eth_blockNumber",
+          }),
+        ).rejects.toThrow();
 
-  it.each([0, 1, 2, 3])(
-    "respects retryCount of %i when used with alchemy transport directly",
-    async (retryCount) => {
-      const { mockFetch, unstub } = givenMockFetchError();
-
-      const transport = alchemyTransport({
-        apiKey: "invalid",
-        retryCount,
-      });
-
-      const transportInstance = transport({ chain: sepolia });
-
-      await expect(
-        transportInstance.request({
-          method: "eth_blockNumber",
-        }),
-      ).rejects.toThrow();
-
-      expect(mockFetch.mock.calls.length).toEqual(retryCount + 1);
-      unstub();
-    },
-  );
-});
-
-// Mocks global fetch to always return a 500 error.
-const givenMockFetchError = () => {
-  const mockFetch = vi.fn().mockResolvedValue({
-    ok: false,
-    status: 500,
-    statusText: "Internal Server Error",
-    json: () => Promise.resolve({ error: "Internal Server Error" }),
-    text: () => Promise.resolve("Internal Server Error"),
+        expect(mockFetch.mock.calls.length).toEqual(retryCount + 1);
+        unstub();
+      },
+    );
   });
-  vi.stubGlobal("fetch", mockFetch);
-  return {
-    mockFetch,
-    unstub: () => vi.unstubAllGlobals(),
+
+  // Mocks global fetch to always return a 500 error.
+  const givenMockFetchError = () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+      statusText: "Internal Server Error",
+      json: () => Promise.resolve({ error: "Internal Server Error" }),
+      text: () => Promise.resolve("Internal Server Error"),
+    });
+    vi.stubGlobal("fetch", mockFetch);
+    return {
+      mockFetch,
+      unstub: () => vi.unstubAllGlobals(),
+    };
   };
-};
-  });
-
+});

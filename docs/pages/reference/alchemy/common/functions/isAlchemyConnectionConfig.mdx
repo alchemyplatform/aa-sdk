@@ -19,8 +19,11 @@ import { isAlchemyConnectionConfig } from "@alchemy/common";
 const maybeConfig: unknown = { apiKey: "test" };
 if (isAlchemyConnectionConfig(maybeConfig)) {
   // TypeScript knows maybeConfig is AlchemyConnectionConfig here
-  if ("apiKey" in maybeConfig) {
-    console.log(maybeConfig.apiKey);
+  if (maybeConfig.apiKey) {
+    console.log("Using API key:", maybeConfig.apiKey);
+  }
+  if (maybeConfig.url) {
+    console.log("Using custom URL:", maybeConfig.url);
   }
 }
 ```
