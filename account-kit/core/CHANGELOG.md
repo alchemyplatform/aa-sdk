@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
+
+### Bug Fixes
+
+- use policyToken from config when getting smart acct client ([#1870](https://github.com/alchemyplatform/aa-sdk/issues/1870)) ([d7811ea](https://github.com/alchemyplatform/aa-sdk/commit/d7811ea14fa2b8fc57571e7dfcc04c3bb05ca0e9))
+
+# [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
+
+**Note:** Version bump only for package @account-kit/core
+
 ## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
 
 **Note:** Version bump only for package @account-kit/core

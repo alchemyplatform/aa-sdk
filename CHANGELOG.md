@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
+
+### Bug Fixes
+
+- add conditional background color to cta panel ([#1868](https://github.com/alchemyplatform/aa-sdk/issues/1868)) ([1cfe99c](https://github.com/alchemyplatform/aa-sdk/commit/1cfe99c15fb383250cfe989d82bb43b19c92561c))
+- use policyToken from config when getting smart acct client ([#1870](https://github.com/alchemyplatform/aa-sdk/issues/1870)) ([d7811ea](https://github.com/alchemyplatform/aa-sdk/commit/d7811ea14fa2b8fc57571e7dfcc04c3bb05ca0e9))
+
+# [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
+
+### Bug Fixes
+
+- split infra export to handle optional dependency ([#1860](https://github.com/alchemyplatform/aa-sdk/issues/1860)) ([1953dce](https://github.com/alchemyplatform/aa-sdk/commit/1953dceda6e5d75b6a4a82933d5960d696e3a86e))
+
+### Features
+
+- add boba sepolia and boba mainnet to aa-sdk ([#1850](https://github.com/alchemyplatform/aa-sdk/issues/1850)) ([21e29db](https://github.com/alchemyplatform/aa-sdk/commit/21e29db90f2f4b280bc3520a44525cf9382d048a))
+- add sendCalls and waitForCallsStatus to wallet client ([#1855](https://github.com/alchemyplatform/aa-sdk/issues/1855)) ([adb0b5b](https://github.com/alchemyplatform/aa-sdk/commit/adb0b5bb0077a992d83761b325a54c99d165885c))
+- add sponsorship section in hyperliquid docs ([#1861](https://github.com/alchemyplatform/aa-sdk/issues/1861)) ([2592177](https://github.com/alchemyplatform/aa-sdk/commit/25921771af1a48646312dcce487478be4a01cbad))
+- unpin viem version ([#1851](https://github.com/alchemyplatform/aa-sdk/issues/1851)) ([e387e0e](https://github.com/alchemyplatform/aa-sdk/commit/e387e0ead087b893d315b072c24b3c2725ff86b6))
+
 ## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
 
 **Note:** Version bump only for package root

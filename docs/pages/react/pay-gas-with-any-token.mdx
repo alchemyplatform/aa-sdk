@@ -39,49 +39,61 @@ Gas fees paid in the native gas token can feel foreign to users that primarily h
 
     ## Send a sponsored UserOperation
 
-    ```tsx twoslash
-    import React from "react";
-    import { useSendUserOperation } from "@account-kit/react";
-    import { encodeFunctionData, parseAbi } from "viem";
+```tsx twoslash
+import React from "react";
+import {
+  useSmartAccountClient,
+  useSendUserOperation,
+} from "@account-kit/react";
+import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
+import { encodeFunctionData, parseAbi } from "viem";
 
-    export default function PayWithUsdcButton() {
-      const { sendUserOperation } = useSendUserOperation();
-      const erc20Abi = parseAbi([
-        "function approve(address spender, uint256 amount) public returns (bool)",
-      ]);
+export default function PayWithUsdcButton() {
+  const { client, isLoadingClient } = useSmartAccountClient({});
+  const erc20Abi = parseAbi([
+    "function approve(address spender, uint256 amount) public returns (bool)",
+  ]);
+  const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.7.0");
 
-      return (
-        <button
-          onClick={() =>
-            sendUserOperation({
-              uo: [
-                {
-                  // approve call
-                  target: tokenAddress,
-                  data: encodeFunctionData({
-                    abi: erc20Abi,
-                    functionName: "approve",
-                    args: [paymasterAddress, maxTokenAmount],
-                  }) as `0x${string}`,
-                },
-                {
-                  target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
-                  data: "0x",
-                  value: 0n,
-                },
-              ],
-            })
-          }
-        >
-          Send USDC-sponsored operation
-        </button>
-      );
-    }
-    ```
+  return (
+    <button
+      onClick={() =>
+        client!.sendUserOperation({
+          uo: [
+            {
+              // approve call
+              target: tokenAddress,
+              data: encodeFunctionData({
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [paymasterAddress, maxTokenAmount],
+              }) as `0x${string}`,
+            },
+            {
+              target: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", // TARGET_ADDRESS
+              data: "0x",
+              value: 0n,
+            },
+          ],
+        })
+      }
+      disabled={isLoadingClient}
+    >
+      Send USDC-sponsored operation
+    </button>
+  );
+}
+```
 
-    ## (Optional) Override on a single client
+<Tip>
+  When performing ERC-20 sponsorship, be sure to use the `sendUserOperation`
+  method on a client. Support for the `useSendUserOperation` hook is coming
+  soon.
+</Tip>
 
-    If you only want specific operations to use the policy, create a dedicated client instead of setting it globally.
+### 4 (Optional) Override on a single client
+
+If you only want specific operations to use the policy, you can specify it on a dedicated client instead of setting it globally.
 
     ```tsx twoslash
     const { client } = useSmartAccountClient({
@@ -93,7 +105,7 @@ Gas fees paid in the native gas token can feel foreign to users that primarily h
     });
     ```
 
-    Use this `client` with any hook that sends UserOperations.
+Then use `client.sendUserOperation()` to send UserOperations.
 
   </Tab>
   <Tab title="React Native">
