@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { avalanche } from "viem/chains";
 import { sepolia } from "../../src/chains.js";
 import {
@@ -6,6 +6,7 @@ import {
   isAlchemyTransport,
 } from "../../src/transport/alchemy.js";
 import { http } from "viem";
+import { createBundlerClient } from "viem/account-abstraction";
 
 describe("Alchemy Transport Tests", () => {
   it.each([
@@ -420,4 +421,71 @@ describe("Alchemy Transport Tests", () => {
       }
     });
   });
+
+  describe("Retry Count", () => {
+  it.each([0, 1, 2, 3])(
+    "respects retryCount of %i when used with a viem bundler client",
+    async (retryCount) => {
+      const { mockFetch, unstub } = givenMockFetchError();
+
+      const client = createBundlerClient({
+        transport: alchemyTransport({
+          url: "http://invalid",
+          retryCount,
+        }),
+        chain: sepolia,
+      });
+
+      await expect(
+        client.request({
+          // @ts-expect-error - Method doesn't matter for this test.
+          method: "eth_blockNumber",
+        }),
+      ).rejects.toThrow();
+
+      expect(mockFetch.mock.calls.length).toEqual(retryCount + 1);
+      unstub();
+    },
+  );
+
+  it.each([0, 1, 2, 3])(
+    "respects retryCount of %i when used with alchemy transport directly",
+    async (retryCount) => {
+      const { mockFetch, unstub } = givenMockFetchError();
+
+      const transport = alchemyTransport({
+        apiKey: "invalid",
+        retryCount,
+      });
+
+      const transportInstance = transport({ chain: sepolia });
+
+      await expect(
+        transportInstance.request({
+          method: "eth_blockNumber",
+        }),
+      ).rejects.toThrow();
+
+      expect(mockFetch.mock.calls.length).toEqual(retryCount + 1);
+      unstub();
+    },
+  );
 });
+
+// Mocks global fetch to always return a 500 error.
+const givenMockFetchError = () => {
+  const mockFetch = vi.fn().mockResolvedValue({
+    ok: false,
+    status: 500,
+    statusText: "Internal Server Error",
+    json: () => Promise.resolve({ error: "Internal Server Error" }),
+    text: () => Promise.resolve("Internal Server Error"),
+  });
+  vi.stubGlobal("fetch", mockFetch);
+  return {
+    mockFetch,
+    unstub: () => vi.unstubAllGlobals(),
+  };
+};
+  });
+

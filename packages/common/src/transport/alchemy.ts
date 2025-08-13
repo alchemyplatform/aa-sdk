@@ -193,7 +193,9 @@ export function alchemyTransport<
 
     const innerTransport = http(rpcUrl, {
       fetchOptions,
-      retryCount,
+      // Retry count must be 0 here in order to respect the retry
+      // count that is already specified on the underlying transport.
+      retryCount: 0,
       retryDelay,
     });
 
