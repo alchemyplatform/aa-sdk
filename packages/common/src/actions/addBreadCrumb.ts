@@ -1,7 +1,7 @@
 import { createClient, type Client } from "viem";
 import { headersUpdate } from "../tracing/updateHeaders.js";
 import {
-  alchemy,
+  alchemyTransport,
   convertHeadersToObject,
   type AlchemyTransport,
 } from "../transport/alchemy.js";
@@ -23,7 +23,7 @@ export function addBreadCrumb(
 ): Client<AlchemyTransport> {
   const oldConfig = client.transport.config;
   const dynamicFetchOptions = client.transport.fetchOptions;
-  const newTransport = alchemy({ ...oldConfig });
+  const newTransport = alchemyTransport({ ...oldConfig });
   newTransport.updateHeaders(
     headersUpdate(breadcrumb)(
       convertHeadersToObject(dynamicFetchOptions?.headers),
