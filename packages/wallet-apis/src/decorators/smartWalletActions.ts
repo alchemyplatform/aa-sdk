@@ -1,9 +1,4 @@
-import type {
-  Hex,
-  WaitForCallsStatusParameters,
-  WaitForCallsStatusReturnType,
-  Address,
-} from "viem";
+import type { Hex, Address } from "viem";
 import {
   requestAccount,
   type RequestAccountParams,
@@ -30,11 +25,6 @@ import {
   type ListAccountsResult,
 } from "../actions/listAccounts.js";
 import {
-  getCallsStatus,
-  type GetCallsStatusParams,
-  type GetCallsStatusResult,
-} from "../actions/getCallsStatus.js";
-import {
   signSignatureRequest,
   type SignSignatureRequestParams,
   type SignSignatureRequestResult,
@@ -54,7 +44,6 @@ import {
   type GrantPermissionsParams,
   type GrantPermissionsResult,
 } from "../actions/grantPermissions.js";
-import { waitForCallsStatus } from "../actions/waitForCallsStatus.js";
 import type { BaseWalletClient } from "../types.js";
 import { createInternalState } from "../internal.js";
 
@@ -72,12 +61,6 @@ export type SmartWalletActions<
   ) => Promise<SendPreparedCallsResult>;
   sendCalls: (params: SendCallsParams<TAccount>) => Promise<SendCallsResult>;
   listAccounts: (params: ListAccountsParams) => Promise<ListAccountsResult>;
-  getCallsStatus: (
-    params: GetCallsStatusParams,
-  ) => Promise<GetCallsStatusResult>;
-  waitForCallsStatus: (
-    params: WaitForCallsStatusParameters,
-  ) => Promise<WaitForCallsStatusReturnType>;
   signSignatureRequest: (
     params: SignSignatureRequestParams,
   ) => Promise<SignSignatureRequestResult>;
@@ -95,7 +78,7 @@ export type SmartWalletActions<
  * This is a decorator that is used to add smart wallet actions to a client.
  *
  * @param {object} params - The parameters for the smart wallet actions.
- * @param {string[]} params.policyIds - Optional policy IDs to use for the actions.
+ * @param {Array<string>} params.policyIds - Optional policy IDs to use for the actions.
  * @returns {Function} A function that takes a client and returns the client with smart wallet actions added.
  */
 // export const smartWalletActions: <
@@ -126,8 +109,6 @@ export function smartWalletActions<
       listAccounts: (params) => listAccounts(_client, params),
       sendPreparedCalls: (params) => sendPreparedCalls(_client, params),
       sendCalls: (params) => sendCalls(_client, params),
-      getCallsStatus: (params) => getCallsStatus(_client, params),
-      waitForCallsStatus: (params) => waitForCallsStatus(_client, params),
       signSignatureRequest: (params) => signSignatureRequest(_client, params),
       signPreparedCalls: (params) => signPreparedCalls(_client, params),
       signMessage: (params) => signMessage(_client, params),
