@@ -103,9 +103,9 @@ export function isAlchemyTransport(
  * ```ts
  * import { alchemyTransport } from "@alchemy/common";
  *
- * const transport = alchemyTransport({ 
- *   url: "https://custom-alchemy.com/v2", 
- *   apiKey: "your-api-key" 
+ * const transport = alchemyTransport({
+ *   url: "https://custom-alchemy.com/v2",
+ *   apiKey: "your-api-key"
  * });
  * ```
  *
@@ -114,9 +114,9 @@ export function isAlchemyTransport(
  * ```ts
  * import { alchemyTransport } from "@alchemy/common";
  *
- * const transport = alchemyTransport({ 
- *   url: "https://custom-alchemy.com/v2", 
- *   jwt: "your-jwt-token" 
+ * const transport = alchemyTransport({
+ *   url: "https://custom-alchemy.com/v2",
+ *   jwt: "your-jwt-token"
  * });
  * ```
  *
@@ -171,12 +171,10 @@ export function alchemyTransport<
     mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
 
     const rpcUrl = (() => {
-      // If URL is provided, use it directly
       if (url) {
         return url;
       }
 
-      // Otherwise, need chain for Alchemy URL
       if (!chain) {
         throw new ChainNotFoundError();
       }
