@@ -63,7 +63,7 @@ function hasPaymasterFields(
   return "paymaster" in response && Boolean(response.paymaster);
 }
 
-// Simple cache manager for user operation results
+// Simple cache for the single user operation flow
 class UserOpCache {
   private cache: Map<string, GasAndPaymasterAndDataResponse> = new Map();
   private lastResult: GasAndPaymasterAndDataResponse | null = null;
@@ -81,6 +81,12 @@ class UserOpCache {
     return this.lastResult;
   }
 
+  delete(userOpHash: string): void {
+    this.cache.delete(userOpHash);
+    // Keep lastResult for estimateFeesPerGas
+  }
+
+  // not used right now
   clear(): void {
     this.cache.clear();
     this.lastResult = null;
@@ -250,13 +256,7 @@ export function alchemyGasManagerHooks(
       ): Promise<GetPaymasterStubDataReturnType> {
         const userOpHash = getUserOpHash(parameters);
 
-        // Return cached result if available
-        const cachedResult = cache.get(userOpHash);
-        if (cachedResult) {
-          return toStubReturn(cachedResult);
-        }
-
-        // Build and send the optimized RPC request
+        // Always make the RPC call (no cache check here)
         const request = await buildWalletApisRequest(
           parameters,
           bundlerClient,
@@ -267,7 +267,7 @@ export function alchemyGasManagerHooks(
           [request],
         );
 
-        // Cache the result
+        // Cache the result for getPaymasterData
         cache.set(userOpHash, response);
 
         return toStubReturn(response);
@@ -278,28 +278,19 @@ export function alchemyGasManagerHooks(
       ): Promise<GetPaymasterDataReturnType> {
         const userOpHash = getUserOpHash(parameters);
 
-        // Return cached result if available
+        // Always get from cache - should be populated by getPaymasterStubData
         const cachedResult = cache.get(userOpHash);
-        if (cachedResult) {
-          return toDataReturn(cachedResult);
+        if (!cachedResult) {
+          throw new Error(
+            "No cached result found. getPaymasterStubData must be called before getPaymasterData.",
+          );
         }
 
-        // If no cached result, make the call
-        // This shouldn't happen in normal operation as getPaymasterStubData is called first
-        const request = await buildWalletApisRequest(
-          parameters,
-          bundlerClient,
-          context,
-        );
-        const response = await requestGasAndPaymasterAndData(
-          bundlerClient as Client<AlchemyTransport, Chain>,
-          [request],
-        );
+        // Delete this specific entry to prevent memory leaks
+        // But keep lastResult for estimateFeesPerGas
+        cache.delete(userOpHash);
 
-        // Cache the result
-        cache.set(userOpHash, response);
-
-        return toDataReturn(response);
+        return toDataReturn(cachedResult);
       },
     }),
 
