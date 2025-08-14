@@ -121,6 +121,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+              - page: "[NEW] On-chain passkeys"
+                path: wallets/pages/react/login-methods/onchain-passkeys.mdx
           - section: MFA
             contents:
               - page: Set up MFA
