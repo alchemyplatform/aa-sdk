@@ -17,13 +17,10 @@ import { smartWalletActions } from "@alchemy/wallet-apis";
 
 ### params
 
-`@param {Array<string>} params.policyIds - Optional policy IDs to use for the actions.
-
-- `
-
-* The parameters for the smart wallet actions.
+`SmartWalletDecoratorParams`
+The global parameters for the smart wallet actions, including an optional paymaster policy ID.
 
 ## Returns
 
 `Function`
-A function that takes a client and returns the client with smart wallet actions added.
+A client decorator with smart wallet actions added.

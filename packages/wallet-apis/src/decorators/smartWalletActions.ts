@@ -74,32 +74,25 @@ export type SmartWalletActions<
   ) => Promise<GrantPermissionsResult>;
 };
 
+interface SmartWalletDecoratorParams {
+  policyIds?: string[];
+}
+
 /**
  * This is a decorator that is used to add smart wallet actions to a client.
  *
- * @param {object} params - The parameters for the smart wallet actions.
- * @param {Array<string>} params.policyIds - Optional policy IDs to use for the actions.
- * @returns {Function} A function that takes a client and returns the client with smart wallet actions added.
+ * @param {SmartWalletDecoratorParams} params The global parameters for the smart wallet actions, including an optional paymaster policy ID.
+ * @returns {Function} A client decorator with smart wallet actions added.
  */
-// export const smartWalletActions: <
-//   TChain extends Chain | undefined = Chain | undefined,
-//   TAccount extends Account | undefined = Account | undefined,
-// >(
-//   client: Client<AlchemyTransport, TChain, TAccount>,
-// ) => GasManagerActions = (client) => ({
-//   requestAccount: (params) => requestGasAndPaymasterAndData(client, params),
-// });
 export function smartWalletActions<
   // TODO(jh): does this generic even do anything now that the client.account is the SIGNER and not the SCA address? ideally we can call the actions w/ typesafety based on the account being present in the internal cache or not.
   TAccount extends Address | undefined = Address | undefined, // TODO(jh): note this is the SCA ADDRESS, NOT the signer account address. does this still behave correctly?
->({
-  policyIds,
-}: {
-  policyIds?: string[];
-}): (client: BaseWalletClient) => SmartWalletActions<TAccount> {
-  return (client: BaseWalletClient): SmartWalletActions<TAccount> => {
+>(
+  params: SmartWalletDecoratorParams,
+): (client: BaseWalletClient) => SmartWalletActions<TAccount> {
+  return (client) => {
     const _client = client.extend(() => ({
-      policyIds,
+      policyIds: params.policyIds,
       internal: createInternalState(),
     }));
 
