@@ -39,6 +39,8 @@ const chainAgnosticMethods = [
   "wallet_listAccounts",
   "wallet_createSession",
   "wallet_getCallsStatus",
+  "wallet_prepareSign",
+  "wallet_formatSign",
 ];
 
 export type AlchemyTransportConfig = AlchemyConnectionConfig & {

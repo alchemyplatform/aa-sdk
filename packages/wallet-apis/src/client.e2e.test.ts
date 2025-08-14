@@ -65,7 +65,15 @@ describe("Client E2E Tests", () => {
     transport,
     chain: arbitrumSepolia,
     account: signer,
+    smartAccountAddress: "0xTODO",
+    // smartAccountAddress: undefined,
   });
+
+  client.prepareCalls({
+    // from: "0x1234", // TODO(jh): `from` should not be required if there is an active SCA address on the client
+    calls: [{ to: "0xTODO", data: "0x" }],
+  });
+  // client.
 
   const publicClient = createPublicClient({
     chain: arbitrumSepolia,
@@ -110,18 +118,18 @@ describe("Client E2E Tests", () => {
 
   // TODO(jh): Pending this PR: https://github.com/OMGWINNING/chain-config/pull/2109
   // In v4, we just used the AK methods directly: https://github.com/alchemyplatform/aa-sdk/blob/9e8b600d5eefaa0986815ff0e243b3b1aec004ba/account-kit/wallet-client/src/client/actions/signMessage.ts#L44
-  //   it("can correctly sign a message", async () => {
-  //     const account = await client.requestAccount();
-  //     console.log({ account }); // TODO(jh): remove
-  //     const message = "hello world";
-  //     const signature = await client.signMessage({ message });
-  //     const isValid = await publicClient.verifyMessage({
-  //       address: account.address,
-  //       message: "hello world",
-  //       signature,
-  //     });
-  //     expect(isValid).toBe(true);
-  //   });
+  it("can correctly sign a message", async () => {
+    const account = await client.requestAccount();
+    console.log({ account }); // TODO(jh): remove
+    const message = "hello world";
+    const signature = await client.signMessage({ message });
+    const isValid = await publicClient.verifyMessage({
+      address: account.address,
+      message: "hello world",
+      signature,
+    });
+    expect(isValid).toBe(true);
+  });
 
   // TODO(jh): Pending this PR: https://github.com/OMGWINNING/chain-config/pull/2109
   // In v4, we just used the AK methods directly: https://github.com/alchemyplatform/aa-sdk/blob/9e8b600d5eefaa0986815ff0e243b3b1aec004ba/account-kit/wallet-client/src/client/actions/signMessage.ts#L44

@@ -50,6 +50,7 @@ import { createInternalState } from "../internal.js";
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
 > = {
+  smartAccountAddress: TAccount;
   requestAccount: (
     params?: RequestAccountParams,
   ) => Promise<RequestAccountResult>;
@@ -74,9 +75,12 @@ export type SmartWalletActions<
   ) => Promise<GrantPermissionsResult>;
 };
 
-interface SmartWalletDecoratorParams {
+type SmartWalletDecoratorParams<
+  TAccount extends Address | undefined = Address | undefined,
+> = {
   policyIds?: string[];
-}
+  smartAccountAddress: TAccount;
+};
 
 /**
  * This is a decorator that is used to add smart wallet actions to a client.
@@ -88,7 +92,7 @@ export function smartWalletActions<
   // TODO(jh): does this generic even do anything now that the client.account is the SIGNER and not the SCA address? ideally we can call the actions w/ typesafety based on the account being present in the internal cache or not.
   TAccount extends Address | undefined = Address | undefined, // TODO(jh): note this is the SCA ADDRESS, NOT the signer account address. does this still behave correctly?
 >(
-  params: SmartWalletDecoratorParams,
+  params: SmartWalletDecoratorParams<TAccount>,
 ): (client: BaseWalletClient) => SmartWalletActions<TAccount> {
   return (client) => {
     const _client = client.extend(() => ({
@@ -97,6 +101,7 @@ export function smartWalletActions<
     }));
 
     return {
+      smartAccountAddress: params.smartAccountAddress,
       requestAccount: (params) => requestAccount(_client, params),
       prepareCalls: (params) => prepareCalls(_client, params),
       listAccounts: (params) => listAccounts(_client, params),
