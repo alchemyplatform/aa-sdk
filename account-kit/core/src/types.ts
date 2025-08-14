@@ -4,6 +4,7 @@ import type {
   AlchemyTransportConfig,
   PolicyToken,
 } from "@account-kit/infra";
+
 import type {
   RNAlchemySignerSingleton as RNAlchemySigner,
   RNSignerClient,
@@ -27,6 +28,7 @@ import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { ClientStoreConfig, Store, StoredState } from "./store/types";
+import type { WalletAdapter } from "@solana/wallet-adapter-base";
 
 export type SupportedAccountTypes =
   | "MultiOwnerLightAccount"
@@ -57,6 +59,10 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
 export type AlchemyAccountsConfig = {
   store: Store;
   accountCreationHint?: CreateConfigProps["accountCreationHint"];
+  solana?: {
+    adapters?: WalletAdapter[] | "detect";
+    connection: SolanaWeb3Connection;
+  };
   _internal: {
     // if not provided, the default signer will be used
     createSigner: (config: ClientStoreConfig) => AlchemySigner;
@@ -71,6 +77,38 @@ export type AlchemyAccountsConfig = {
 export type SolanaConnection = {
   connection: SolanaWeb3Connection;
   policyId?: string;
+  /**
+   * Array of Solana wallet adapters to be used for connecting to wallets.
+   * Set to "detect" to auto-detect installed wallets, or provide explicit adapters.
+   * These adapters will be made available in the React context for wallet selection.
+   *
+   * @example
+   * ```ts
+   * import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
+   *
+   * // Auto-detect installed wallets
+   * const config = createConfig({
+   *   // ... other config
+   *   solana: {
+   *     connection: solanaConnection,
+   *     adapters: "detect"
+   *   }
+   * });
+   *
+   * // Explicit wallet configuration
+   * const config = createConfig({
+   *   // ... other config
+   *   solana: {
+   *     connection: solanaConnection,
+   *     adapters: [
+   *       new PhantomWalletAdapter(),
+   *       new SolflareWalletAdapter(),
+   *     ]
+   *   }
+   * });
+   * ```
+   */
+  adapters?: WalletAdapter[] | "detect";
 };
 
 export type Connection = {
