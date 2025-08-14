@@ -92,7 +92,7 @@ export async function grantPermissions<
   signerClient: SignerClient,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
-  const account = params.account ?? client.internal.getAccount()?.address;
+  const account = params.account ?? client.account?.address;
   if (!account) {
     throw new AccountNotFoundError();
   }

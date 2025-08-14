@@ -61,7 +61,7 @@ export async function signTypedData(
   params: SignTypedDataParams,
 ): Promise<SignTypedDataResult> {
   const account = await requestAccount(client, signerClient, {
-    accountAddress: params.account ?? client.internal.getAccount()?.address,
+    accountAddress: params.account ?? client.account?.address,
   });
   if (!account) {
     throw new AccountNotFoundError();

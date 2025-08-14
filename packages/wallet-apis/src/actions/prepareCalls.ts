@@ -54,7 +54,7 @@ export async function prepareCalls<
   client: InnerWalletApiClient,
   params: PrepareCallsParams<TAccount>,
 ): Promise<PrepareCallsResult> {
-  const from = params.from ?? client.internal.getAccount()?.address;
+  const from = params.from ?? client.account?.address;
   if (!from) {
     throw new AccountNotFoundError();
   }

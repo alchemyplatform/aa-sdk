@@ -45,7 +45,7 @@ export async function signMessage(
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
   const account = await requestAccount(client, signerClient, {
-    accountAddress: params.account ?? client.internal.getAccount()?.address,
+    accountAddress: params.account ?? client.account?.address,
   });
   if (!account) {
     throw new AccountNotFoundError();
