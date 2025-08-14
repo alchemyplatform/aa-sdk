@@ -63,13 +63,111 @@ function hasPaymasterFields(
   return "paymaster" in response && Boolean(response.paymaster);
 }
 
-function hasGasFields(
+// Simple cache manager for user operation results
+class UserOpCache {
+  private cache: Map<string, GasAndPaymasterAndDataResponse> = new Map();
+  private lastResult: GasAndPaymasterAndDataResponse | null = null;
+
+  get(userOpHash: string): GasAndPaymasterAndDataResponse | null {
+    return this.cache.get(userOpHash) || null;
+  }
+
+  set(userOpHash: string, result: GasAndPaymasterAndDataResponse): void {
+    this.cache.set(userOpHash, result);
+    this.lastResult = result;
+  }
+
+  getLastResult(): GasAndPaymasterAndDataResponse | null {
+    return this.lastResult;
+  }
+
+  clear(): void {
+    this.cache.clear();
+    this.lastResult = null;
+  }
+}
+
+// Create a hash of the user operation for cache key
+function getUserOpHash(
+  params: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
+): string {
+  return JSON.stringify({
+    sender: params.sender,
+    nonce: params.nonce?.toString(), // Convert bigint to string for stable serialization
+    callData: params.callData,
+  });
+}
+
+// Build the wallet-apis request
+async function buildWalletApisRequest(
+  parameters: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
+  bundlerClient: Client<Transport, Chain, SmartAccount>,
+  context: AlchemyGasManagerContext,
+): Promise<any> {
+  const { entryPointAddress, ...userOpFields } = parameters;
+
+  // Prepare user operation
+  const userOp = deepHexlify(userOpFields);
+
+  // Get dummy signature from the account if available, otherwise use default
+  const dummySignature = bundlerClient.account?.getStubSignature
+    ? await bundlerClient.account.getStubSignature(userOp)
+    : DEFAULT_DUMMY_SIGNATURE;
+
+  return {
+    policyId: context.policyId,
+    entryPoint: entryPointAddress,
+    userOperation: userOp,
+    dummySignature,
+    overrides: {},
+    ...(context.erc20Context ? { erc20Context: context.erc20Context } : {}),
+  };
+}
+
+// Convert response to stub return type
+function toStubReturn(
   response: GasAndPaymasterAndDataResponse,
-): response is GasAndPaymasterAndDataResponse & {
-  maxFeePerGas: bigint;
-  maxPriorityFeePerGas: bigint;
-} {
-  return Boolean(response.maxFeePerGas && response.maxPriorityFeePerGas);
+): GetPaymasterStubDataReturnType {
+  if (hasPaymasterAndData(response)) {
+    return {
+      paymasterAndData: response.paymasterAndData,
+      isFinal: true,
+    };
+  }
+
+  if (hasPaymasterFields(response)) {
+    return {
+      paymaster: response.paymaster,
+      paymasterData: response.paymasterData || "0x",
+      paymasterVerificationGasLimit:
+        response.paymasterVerificationGasLimit ?? 100000n,
+      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
+      isFinal: true,
+    };
+  }
+
+  throw new Error("No paymaster data returned from optimized call");
+}
+
+// Convert response to data return type
+function toDataReturn(
+  response: GasAndPaymasterAndDataResponse,
+): GetPaymasterDataReturnType {
+  if (hasPaymasterAndData(response)) {
+    return { paymasterAndData: response.paymasterAndData };
+  }
+
+  if (hasPaymasterFields(response)) {
+    return {
+      paymaster: response.paymaster,
+      paymasterData: response.paymasterData || "0x",
+      paymasterVerificationGasLimit:
+        response.paymasterVerificationGasLimit ?? 100000n,
+      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
+    };
+  }
+
+  throw new Error("No paymaster data returned from optimized call");
 }
 
 /**
@@ -143,92 +241,7 @@ export function alchemyGasManagerHooks(
   policyToken?: PolicyToken,
 ) {
   const context = createGasManagerContext(policyId, policyToken);
-
-  // Cache to store the result between calls
-  let cachedResult: GasAndPaymasterAndDataResponse | null = null;
-  let cachedUserOpHash: string | null = null;
-
-  // Create a hash of the user operation for cache key
-  const getUserOpHash = (
-    params: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
-  ): string => {
-    return JSON.stringify({
-      sender: params.sender,
-      nonce: params.nonce?.toString(), // Convert bigint to string for stable serialization
-      callData: params.callData,
-    });
-  };
-
-  // Build the wallet-apis request
-  async function buildWalletApisRequest(
-    parameters: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
-    bundlerClient: Client<Transport, Chain, SmartAccount>,
-  ) {
-    const { entryPointAddress, ...userOpFields } = parameters;
-
-    // Prepare user operation
-    const userOp = deepHexlify(userOpFields);
-
-    // Get dummy signature from the account if available, otherwise use default
-    const dummySignature = bundlerClient.account?.getStubSignature
-      ? await bundlerClient.account.getStubSignature(userOp)
-      : DEFAULT_DUMMY_SIGNATURE;
-
-    return {
-      policyId: context.policyId,
-      entryPoint: entryPointAddress,
-      userOperation: userOp,
-      dummySignature,
-      overrides: {},
-      ...(context.erc20Context ? { erc20Context: context.erc20Context } : {}),
-    };
-  }
-
-  // Convert response to stub return type
-  function toStubReturn(
-    response: GasAndPaymasterAndDataResponse,
-  ): GetPaymasterStubDataReturnType {
-    if (hasPaymasterAndData(response)) {
-      return {
-        paymasterAndData: response.paymasterAndData,
-        isFinal: true,
-      };
-    }
-
-    if (hasPaymasterFields(response)) {
-      return {
-        paymaster: response.paymaster,
-        paymasterData: response.paymasterData || "0x",
-        paymasterVerificationGasLimit:
-          response.paymasterVerificationGasLimit ?? 100000n,
-        paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
-        isFinal: true,
-      };
-    }
-
-    throw new Error("No paymaster data returned from optimized call");
-  }
-
-  // Convert response to data return type
-  function toDataReturn(
-    response: GasAndPaymasterAndDataResponse,
-  ): GetPaymasterDataReturnType {
-    if (hasPaymasterAndData(response)) {
-      return { paymasterAndData: response.paymasterAndData };
-    }
-
-    if (hasPaymasterFields(response)) {
-      return {
-        paymaster: response.paymaster,
-        paymasterData: response.paymasterData || "0x",
-        paymasterVerificationGasLimit:
-          response.paymasterVerificationGasLimit ?? 100000n,
-        paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
-      };
-    }
-
-    throw new Error("No paymaster data returned from optimized call");
-  }
+  const cache = new UserOpCache();
 
   return {
     paymaster: (bundlerClient: Client<Transport, Chain, SmartAccount>) => ({
@@ -238,20 +251,24 @@ export function alchemyGasManagerHooks(
         const userOpHash = getUserOpHash(parameters);
 
         // Return cached result if available
-        if (cachedResult && cachedUserOpHash === userOpHash) {
+        const cachedResult = cache.get(userOpHash);
+        if (cachedResult) {
           return toStubReturn(cachedResult);
         }
 
         // Build and send the optimized RPC request
-        const request = await buildWalletApisRequest(parameters, bundlerClient);
+        const request = await buildWalletApisRequest(
+          parameters,
+          bundlerClient,
+          context,
+        );
         const response = await requestGasAndPaymasterAndData(
           bundlerClient as Client<AlchemyTransport, Chain>,
           [request],
         );
 
         // Cache the result
-        cachedResult = response;
-        cachedUserOpHash = userOpHash;
+        cache.set(userOpHash, response);
 
         return toStubReturn(response);
       },
@@ -262,21 +279,25 @@ export function alchemyGasManagerHooks(
         const userOpHash = getUserOpHash(parameters);
 
         // Return cached result if available
-        if (cachedResult && cachedUserOpHash === userOpHash) {
+        const cachedResult = cache.get(userOpHash);
+        if (cachedResult) {
           return toDataReturn(cachedResult);
         }
 
         // If no cached result, make the call
         // This shouldn't happen in normal operation as getPaymasterStubData is called first
-        const request = await buildWalletApisRequest(parameters, bundlerClient);
+        const request = await buildWalletApisRequest(
+          parameters,
+          bundlerClient,
+          context,
+        );
         const response = await requestGasAndPaymasterAndData(
           bundlerClient as Client<AlchemyTransport, Chain>,
           [request],
         );
 
         // Cache the result
-        cachedResult = response;
-        cachedUserOpHash = userOpHash;
+        cache.set(userOpHash, response);
 
         return toDataReturn(response);
       },
@@ -285,11 +306,12 @@ export function alchemyGasManagerHooks(
     userOperation: {
       // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
       async estimateFeesPerGas(params: { bundlerClient: PriorityFeeClient }) {
-        // Return cached gas values if available
-        if (cachedResult && hasGasFields(cachedResult)) {
+        // If we have gas values from the last cached result, use them
+        const lastResult = cache.getLastResult();
+        if (lastResult?.maxFeePerGas && lastResult?.maxPriorityFeePerGas) {
           return {
-            maxFeePerGas: cachedResult.maxFeePerGas,
-            maxPriorityFeePerGas: cachedResult.maxPriorityFeePerGas,
+            maxFeePerGas: lastResult.maxFeePerGas,
+            maxPriorityFeePerGas: lastResult.maxPriorityFeePerGas,
           };
         }
 
