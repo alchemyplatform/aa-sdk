@@ -18,11 +18,11 @@ Configure your React Native app to enable users to pay gas fees with an ERC-20 t
 
 ## Steps
 
-### 1 Create a Gas Manager policy
+### 1. Create a Gas Manager policy
 
 <Markdown src="../../../shared/sponsor-gas-erc20-create-policy.mdx" />
 
-### 2 Add the policy to your global config
+### 2. Add the policy to your global config
 
 ```ts twoslash config.ts
 import { createConfig } from "@account-kit/react-native";
@@ -41,24 +41,30 @@ export const config = createConfig({
 
 All `UserOperations` sent with the hooks will now be paid with the token configured above.
 
-### 3 Send a sponsored UserOperation
+<Warning>
+  Be sure to use version **4.54.1** or later of the Account Kit SDK.
+</Warning>
+
+### 3. Send a sponsored UserOperation
 
 ```tsx twoslash
 import React from "react";
 import { View, Pressable, Text } from "react-native";
 import { useSendUserOperation } from "@account-kit/react-native";
+import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
 
 export default function PayWithTokenButton() {
-  const { sendUserOperation } = useSendUserOperation();
+  const { client, isLoadingClient } = useSmartAccountClient({});
   const erc20Abi = parseAbi([
     "function approve(address spender, uint256 amount) public returns (bool)",
   ]);
+  const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.7.0");
 
   return (
     <View>
       <Pressable
         onPress={() =>
-          sendUserOperation({
+          client!.sendUserOperation({
             uo: [
               {
                 // approve call
@@ -77,6 +83,7 @@ export default function PayWithTokenButton() {
             ],
           })
         }
+        disabled={isLoadingClient}
       >
         <View>
           <Text>Send token-sponsored UO</Text>
@@ -87,7 +94,13 @@ export default function PayWithTokenButton() {
 }
 ```
 
-### 4 (Optional) Override on a single client
+<Tip>
+  When performing ERC-20 sponsorship, be sure to use the `sendUserOperation`
+  method on a client. Support for the `useSendUserOperation` hook is coming
+  soon.
+</Tip>
+
+### 4. (Optional) Override on a single client
 
 Create a dedicated client if you only want certain operations to use the policy.
 

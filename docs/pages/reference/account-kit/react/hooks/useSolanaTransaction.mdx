@@ -5,7 +5,9 @@ description: Overview of the useSolanaTransaction method
 slug: wallets/reference/account-kit/react/hooks/useSolanaTransaction
 ---
 
-This is the hook that will be used to send a transaction.
+This is the hook that will be used to send a transaction. It will prioritize external
+connected Solana wallets, falling back to the internal signer when not connected.
+Supports sponsorship for both external wallets and internal signers.
 
 ## Import
 

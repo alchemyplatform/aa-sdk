@@ -1,9 +1,49 @@
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { describe, expect, it } from "bun:test";
-import { createPublicClient, zeroAddress, type Address, type Hex } from "viem";
+import {
+  createPublicClient,
+  zeroAddress,
+  type Address,
+  type WaitForCallsStatusReturnType,
+} from "viem";
 import { createSmartWalletClient, type SmartWalletClient } from "./index.js";
-import { sleep } from "bun";
+import type { PrepareCallsParams } from "./actions/prepareCalls.js";
+
+// We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
+const sendVariants: Array<
+  (
+    client: SmartWalletClient,
+    input: PrepareCallsParams,
+    assertCallIdsSize?: number,
+  ) => Promise<WaitForCallsStatusReturnType>
+> = [
+  // Send calls
+  async (client, input, assertCallIdsSize) => {
+    const result = await client.sendCalls(input);
+    if (assertCallIdsSize != null) {
+      expect(result.preparedCallIds).toHaveLength(assertCallIdsSize);
+    }
+    return client.waitForCallsStatus({ id: result.preparedCallIds[0] });
+  },
+  // Prepare, sign, send calls
+  async (client, input, assertCallIdsSize) => {
+    const preparedCalls = await client.prepareCalls(input);
+    const signedCalls = await client.signPreparedCalls(preparedCalls);
+    const result = await client.sendPreparedCalls({
+      ...signedCalls,
+      ...(input.capabilities?.permissions != null
+        ? { capabilities: { permissions: input.capabilities.permissions } }
+        : {}),
+    });
+
+    if (assertCallIdsSize != null) {
+      expect(result.preparedCallIds).toHaveLength(assertCallIdsSize);
+    }
+
+    return client.waitForCallsStatus({ id: result.preparedCallIds[0] });
+  },
+];
 
 describe("Client E2E Tests", () => {
   const transport = alchemy(
@@ -120,78 +160,76 @@ describe("Client E2E Tests", () => {
     expect(isValid).toBeTrue();
   });
 
-  it(
+  it.each(sendVariants)(
     "should successfully send a UO with paymaster",
-    async () => {
+    async (sendVariant) => {
       const account = await client.requestAccount();
-      const preparedCalls = await client.prepareCalls({
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
-        capabilities: {
-          paymasterService: {
-            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+
+      const result = await sendVariant(
+        client,
+        {
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            paymasterService: {
+              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+            },
           },
         },
-      });
+        1,
+      );
 
-      const signedCalls = await client.signPreparedCalls(preparedCalls);
-
-      const result = await client.sendPreparedCalls(signedCalls);
-
-      expect(result.preparedCallIds).toBeArrayOfSize(1);
-
-      await waitForUserOpSuccess(client, result.preparedCallIds[0]);
+      expect(result.status).toBe("success");
     },
     {
       timeout: 45_000,
     },
   );
 
-  it(
+  it.each(sendVariants)(
     "should successfully drop and replace a UO with repeat calls",
-    async () => {
+    async (sendVariant) => {
       const account = await client.requestAccount();
-      const preparedCalls = await client.prepareCalls({
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
-        capabilities: {
-          paymasterService: {
-            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+      const result1 = await sendVariant(
+        client,
+        {
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            paymasterService: {
+              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+            },
           },
         },
-      });
+        1,
+      );
 
-      const signedCalls = await client.signPreparedCalls(preparedCalls);
-      const result = await client.sendPreparedCalls(signedCalls);
+      expect(result1.status).toBe("success");
 
-      expect(result.preparedCallIds).toBeArrayOfSize(1);
-
-      await waitForUserOpSuccess(client, result.preparedCallIds[0]);
-
-      const prepareCalls2 = await client.prepareCalls({
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
-        capabilities: {
-          paymasterService: {
-            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+      const result2 = await sendVariant(
+        client,
+        {
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            paymasterService: {
+              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+            },
           },
         },
-      });
-      const signedCalls2 = await client.signPreparedCalls(prepareCalls2);
-      const result2 = await client.sendPreparedCalls(signedCalls2);
+        1,
+      );
 
-      expect(result2.preparedCallIds).toBeArrayOfSize(1);
-
-      await waitForUserOpSuccess(client, result2.preparedCallIds[0]);
+      expect(result2.status).toBe("success");
     },
     {
       timeout: 90_000,
     },
   );
 
-  it(
+  it.each(sendVariants)(
     "should successfully send a UO with paymaster using 7702",
-    async () => {
+    async (sendVariant) => {
       const _signer = LocalAccountSigner.privateKeyToAccountSigner(
         "0x00d35c6d307b5cddeb70aeed96ee27a551fee58bf1a43858477e6c11f9172ba8",
       );
@@ -209,30 +247,28 @@ describe("Client E2E Tests", () => {
       });
       expect(account.address).toBe(await _signer.getAddress());
 
-      const preparedCalls = await _client.prepareCalls({
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
-        capabilities: {
-          paymasterService: {
-            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+      const result = await sendVariant(
+        _client,
+        {
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            paymasterService: {
+              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+            },
           },
         },
-      });
+        1,
+      );
 
-      const signedCalls = await _client.signPreparedCalls(preparedCalls);
-
-      const result = await _client.sendPreparedCalls(signedCalls);
-
-      expect(result.preparedCallIds).toBeArrayOfSize(1);
-
-      await waitForUserOpSuccess(client, result.preparedCallIds[0]);
+      expect(result.status).toBe("success");
     },
     { timeout: 45_000 },
   );
 
-  it(
+  it.each(sendVariants)(
     "should successfully create a session with grantPermissions and send a UO",
-    async () => {
+    async (sendVariant) => {
       const account = await client.requestAccount();
 
       const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
@@ -253,30 +289,22 @@ describe("Client E2E Tests", () => {
         signer: sessionKey,
       });
 
-      const preparedCalls = await sessionKeyClient.prepareCalls({
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
-        capabilities: {
-          paymasterService: {
-            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+      const result = await sendVariant(
+        sessionKeyClient,
+        {
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            paymasterService: {
+              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+            },
+            permissions,
           },
-          permissions,
         },
-      });
+        1,
+      );
 
-      const signedCalls =
-        await sessionKeyClient.signPreparedCalls(preparedCalls);
-
-      const result = await sessionKeyClient.sendPreparedCalls({
-        ...signedCalls,
-        capabilities: {
-          permissions,
-        },
-      });
-
-      expect(result.preparedCallIds).toBeArrayOfSize(1);
-
-      await waitForUserOpSuccess(client, result.preparedCallIds[0]);
+      expect(result.status).toBe("success");
     },
     {
       timeout: 45_000,
@@ -316,25 +344,3 @@ describe("Client E2E Tests", () => {
     },
   } as const;
 });
-
-const waitForUserOpSuccess = async (
-  client: SmartWalletClient,
-  preparedCallId: Hex,
-) => {
-  const maxTimeoutMs = 1000 * 30;
-  const deadline = Date.now() + maxTimeoutMs;
-  while (Date.now() < deadline) {
-    const status = (await client.getCallsStatus(preparedCallId)).status;
-    if (status === 200) {
-      // Success.
-      return;
-    }
-    if (status !== 100) {
-      // Error.
-      throw new Error(`Get call status failed with status ${status}.`);
-    }
-    // Pending.
-    await sleep(5000);
-  }
-  throw new Error("Timed out waiting for successful call status.");
-};

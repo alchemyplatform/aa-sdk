@@ -10,6 +10,7 @@ import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { UiConfigProvider } from "./hooks/useUiConfig.js";
 import { Hydrate } from "./hydrate.js";
 import { AlchemyAccountContext } from "./AlchemyAccountContext.js";
+import { SolanaWalletProvider } from "./components/SolanaWalletProvider.js";
 import type { AlchemyClientState } from "@account-kit/core";
 import { type QueryClient } from "@tanstack/react-query";
 import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
@@ -105,22 +106,24 @@ export const AlchemyAccountProvider = (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          {config.ui ? (
-            <UiConfigProvider initialConfig={config.ui}>
-              <AuthModalContext.Provider
-                value={{
-                  authStep,
-                  setAuthStep,
-                  resetAuthStep,
-                }}
-              >
-                {children}
-                <AuthModal />
-              </AuthModalContext.Provider>
-            </UiConfigProvider>
-          ) : (
-            children
-          )}
+          <SolanaWalletProvider>
+            {config.ui ? (
+              <UiConfigProvider initialConfig={config.ui}>
+                <AuthModalContext.Provider
+                  value={{
+                    authStep,
+                    setAuthStep,
+                    resetAuthStep,
+                  }}
+                >
+                  {children}
+                  <AuthModal />
+                </AuthModalContext.Provider>
+              </UiConfigProvider>
+            ) : (
+              children
+            )}
+          </SolanaWalletProvider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>

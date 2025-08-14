@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
+
+### Bug Fixes
+
+- split infra export to handle optional dependency ([#1860](https://github.com/alchemyplatform/aa-sdk/issues/1860)) ([1953dce](https://github.com/alchemyplatform/aa-sdk/commit/1953dceda6e5d75b6a4a82933d5960d696e3a86e))
+
+### Features
+
+- add boba sepolia and boba mainnet to aa-sdk ([#1850](https://github.com/alchemyplatform/aa-sdk/issues/1850)) ([21e29db](https://github.com/alchemyplatform/aa-sdk/commit/21e29db90f2f4b280bc3520a44525cf9382d048a))
+
 ## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
 
 **Note:** Version bump only for package @account-kit/infra

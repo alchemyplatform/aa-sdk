@@ -1,11 +1,14 @@
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
-import { cookieStorage, createConfig } from "@account-kit/react";
+import {
+  cookieStorage,
+  createConfig,
+  configForExternalWallets,
+} from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { type KnownAuthProvider } from "@account-kit/signer";
 import { Connection } from "@solana/web3.js";
 import { QueryClient } from "@tanstack/react-query";
-import { walletConnect } from "wagmi/connectors";
 
 export type Config = {
   auth: {
@@ -45,6 +48,14 @@ export type Config = {
 };
 
 export type AccountMode = "default" | "7702";
+
+export const externalWalletsConfig = configForExternalWallets({
+  wallets: ["wallet_connect", "coinbase wallet"],
+  chainType: ["svm", "evm"],
+  walletConnectProjectId: "30e7ffaff99063e68cc9870c105d905b",
+  hideMoreButton: false,
+  numFeaturedWallets: 1,
+});
 
 export const DEFAULT_CONFIG: Config = {
   auth: {
@@ -110,12 +121,13 @@ export const alchemyConfig = () => {
       connectors:
         typeof window === "undefined"
           ? undefined
-          : [walletConnect({ projectId: "30e7ffaff99063e68cc9870c105d905b" })],
+          : externalWalletsConfig.connectors,
       storage: cookieStorage,
       enablePopupOauth: true,
       solana: {
         connection: solanaConnection,
         policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,
+        adapters: externalWalletsConfig.adapters,
       },
     },
     {

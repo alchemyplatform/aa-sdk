@@ -66,6 +66,7 @@ export const createConfig = (
     connections.push({
       transport: transportConfig,
       policyId: connectionConfig.policyId,
+      policyToken: connectionConfig.policyToken,
       chain,
     });
   } else {
@@ -86,6 +87,7 @@ export const createConfig = (
         transport: transportConfig,
         chain,
         policyId: policyId ?? connectionConfig.policyId,
+        policyToken: connectionConfig.policyToken,
       });
     });
   }
@@ -135,6 +137,12 @@ export const createConfig = (
   const config: AlchemyAccountsConfig = {
     store: store,
     accountCreationHint: params.accountCreationHint,
+    solana: params.solana
+      ? {
+          adapters: params.solana.adapters,
+          connection: params.solana.connection,
+        }
+      : undefined,
     _internal: {
       ssr,
       createSigner: createSigner ?? createWebSigner, // <-- Default to web signer if not provided

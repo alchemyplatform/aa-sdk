@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { toBytes, toHex, type ByteArray, type Hex } from "viem";
+import { useSolanaWallet } from "./useSolanaWallet.js";
 import type { SolanaSigner } from "@account-kit/signer";
 import type { BaseHookMutationArgs } from "../types";
 import { useSolanaSigner } from "./useSolanaSigner.js";
@@ -42,8 +43,8 @@ export type UseSolanaSignMessageParams = {
 };
 
 /**
- * This is the hook that will be used to sign a message. And have the mutation, which would
- * be the end result and the callbacks to modify
+ * This is the hook that will be used to sign a message. It will prioritize external
+ * connected Solana wallets, falling back to the internal signer when not connected.
  *
  * @example
  * ```ts
@@ -63,20 +64,33 @@ export function useSolanaSignMessage(
   opts: UseSolanaSignMessageParams,
 ): SolanaSignedMessage {
   const fallbackSigner = useSolanaSigner({});
+  const { connected: isWalletConnected, signMessage: walletSignMessage } =
+    useSolanaWallet();
   const signer = opts.signer || fallbackSigner;
+
   const mutation = useMutation({
     mutationFn: async (args: MutationParams) => {
-      if (!signer)
+      const messageBytes =
+        typeof args.message === "string" ? toBytes(args.message) : args.message;
+
+      // Use external wallet if connected
+      if (isWalletConnected && walletSignMessage) {
+        try {
+          const signature = await walletSignMessage(messageBytes);
+          return toHex(signature);
+        } catch (error) {
+          throw new Error(`External wallet signing failed: ${error}`);
+        }
+      }
+
+      // Fall back to internal signer
+      if (!signer) {
         throw new Error(
-          "The signer is null, and should be passed in or put into context",
+          "No Solana wallet connected and no internal signer available",
         );
-      return await signer
-        .signMessage(
-          typeof args.message === "string"
-            ? toBytes(args.message)
-            : args.message,
-        )
-        .then(toHex);
+      }
+
+      return await signer.signMessage(messageBytes).then(toHex);
     },
     ...opts.mutation,
   });

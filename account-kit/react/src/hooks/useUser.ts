@@ -59,6 +59,7 @@ export const useUser = (): UseUserResult => {
     };
   }, [account.address, account.status]);
 
+  // Prioritize EVM wallet connection, then smart account
   if (eoaUser) return eoaUser;
 
   return user;

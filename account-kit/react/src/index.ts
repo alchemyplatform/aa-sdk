@@ -84,5 +84,18 @@ export {
   useSolanaConnection,
   type SolanaConnection,
 } from "./hooks/useSolanaConnection.js";
+export {
+  useConnectedUser,
+  type ConnectedUser,
+  type UseConnectedUserResult,
+} from "./hooks/useConnectedUser.js";
 
 export { useSolanaSignMessage } from "./hooks/useSolanaSignMessage.js";
+
+export { useSolanaWallet } from "./hooks/useSolanaWallet.js";
+
+export {
+  configForExternalWallets,
+  type ChainType,
+  type ConfigForExternalWalletsParams,
+} from "./configForExternalWallets.js";

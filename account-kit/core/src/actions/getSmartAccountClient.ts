@@ -190,6 +190,7 @@ export function getSmartAccountClient(
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
+            policyToken: connection.policyToken,
             ...clientParams,
           }).extend(lightAccountClientActions),
           address: account.address,
@@ -202,6 +203,7 @@ export function getSmartAccountClient(
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
+            policyToken: connection.policyToken,
             ...clientParams,
           }).extend(multiOwnerLightAccountClientActions),
           address: account.address,
@@ -214,6 +216,7 @@ export function getSmartAccountClient(
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
+            policyToken: connection.policyToken,
             ...clientParams,
           })
             .extend(multiOwnerPluginActions)
@@ -232,6 +235,7 @@ export function getSmartAccountClient(
             chain: connection.chain,
             account: account,
             policyId: connection.policyId,
+            policyToken: connection.policyToken,
             ...(is7702
               ? {
                   gasEstimator: default7702GasEstimator(

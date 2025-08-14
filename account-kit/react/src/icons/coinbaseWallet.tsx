@@ -2,7 +2,7 @@ export const CoinbaseWallet = ({
   className,
   ...props
 }: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) => (
-  <div className={`w-[20px] h-[20px] ${className}`}>
+  <div className={`w-[20px] h-[20px] ${className ?? ""}`}>
     <svg
       width="100%"
       height="100%"
