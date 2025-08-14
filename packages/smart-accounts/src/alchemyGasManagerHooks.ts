@@ -63,33 +63,32 @@ function hasPaymasterFields(
   return "paymaster" in response && Boolean(response.paymaster);
 }
 
-// Simple cache for the single user operation flow
+// Simple cache for storing the latest user operation result
+// Since viem calls hooks sequentially for a single user operation,
+// we only need to store one result at a time
 class UserOpCache {
-  private cache: Map<string, GasAndPaymasterAndDataResponse> = new Map();
-  private lastResult: GasAndPaymasterAndDataResponse | null = null;
+  private cachedResult: GasAndPaymasterAndDataResponse | null = null;
+  private cachedUserOpHash: string | null = null;
 
   get(userOpHash: string): GasAndPaymasterAndDataResponse | null {
-    return this.cache.get(userOpHash) || null;
+    if (this.cachedUserOpHash === userOpHash) {
+      return this.cachedResult;
+    }
+    return null;
   }
 
   set(userOpHash: string, result: GasAndPaymasterAndDataResponse): void {
-    this.cache.set(userOpHash, result);
-    this.lastResult = result;
+    this.cachedResult = result;
+    this.cachedUserOpHash = userOpHash;
   }
 
-  getLastResult(): GasAndPaymasterAndDataResponse | null {
-    return this.lastResult;
+  getCurrent(): GasAndPaymasterAndDataResponse | null {
+    return this.cachedResult;
   }
 
-  delete(userOpHash: string): void {
-    this.cache.delete(userOpHash);
-    // Keep lastResult for estimateFeesPerGas
-  }
-
-  // not used right now
   clear(): void {
-    this.cache.clear();
-    this.lastResult = null;
+    this.cachedResult = null;
+    this.cachedUserOpHash = null;
   }
 }
 
@@ -286,10 +285,7 @@ export function alchemyGasManagerHooks(
           );
         }
 
-        // Delete this specific entry to prevent memory leaks
-        // But keep lastResult for estimateFeesPerGas
-        cache.delete(userOpHash);
-
+        // Don't delete yet - estimateFeesPerGas might need the gas values
         return toDataReturn(cachedResult);
       },
     }),
@@ -297,13 +293,19 @@ export function alchemyGasManagerHooks(
     userOperation: {
       // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
       async estimateFeesPerGas(params: { bundlerClient: PriorityFeeClient }) {
-        // If we have gas values from the last cached result, use them
-        const lastResult = cache.getLastResult();
-        if (lastResult?.maxFeePerGas && lastResult?.maxPriorityFeePerGas) {
-          return {
-            maxFeePerGas: lastResult.maxFeePerGas,
-            maxPriorityFeePerGas: lastResult.maxPriorityFeePerGas,
+        // Check if we have cached gas values from the RPC response
+        const cachedResult = cache.getCurrent();
+        if (cachedResult?.maxFeePerGas && cachedResult?.maxPriorityFeePerGas) {
+          // Use cached values and clear the cache after
+          const gasEstimates = {
+            maxFeePerGas: cachedResult.maxFeePerGas,
+            maxPriorityFeePerGas: cachedResult.maxPriorityFeePerGas,
           };
+
+          // Clear cache now that we've used all the data
+          cache.clear();
+
+          return gasEstimates;
         }
 
         // Otherwise use Alchemy's fee estimation
