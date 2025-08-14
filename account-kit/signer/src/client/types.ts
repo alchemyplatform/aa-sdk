@@ -344,6 +344,30 @@ export type SignerEndpoints = [
       };
     };
   },
+  {
+    Route: "/v1/multi-owner-prepare-delete";
+    Body: {
+      organizationId: string;
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1DeleteUsersRequest"];
+    };
+  },
+  {
+    Route: "/v1/multi-owner-delete";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        deletedUserIds: string[];
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+      };
+    };
+  },
 ];
 
 export type AuthenticatingEventMetadata = {
