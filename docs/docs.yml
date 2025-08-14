@@ -1121,7 +1121,6 @@ navigation:
       - section: Alchemy Smart Wallet APIs
         contents:
           - section: SDK Reference
-            path: wallets/pages/reference/alchemy/wallet-apis/index.mdx
             contents:
               - section: Functions
                 contents:
