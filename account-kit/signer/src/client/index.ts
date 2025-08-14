@@ -293,6 +293,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     orgId,
     connectedEventName,
     idToken,
+    accessToken,
     authenticatingType,
   }: {
     bundle: string;
@@ -300,6 +301,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User> => {
     this.eventEmitter.emit("authenticating", { type: authenticatingType });
     await this.initSessionStamper();
@@ -310,7 +312,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new Error("Failed to inject credential bundle");
     }
 
-    const user = await this.whoami(orgId, idToken);
+    const user = await this.whoami(orgId, idToken, accessToken);
 
     this.eventEmitter.emit(connectedEventName, user, bundle);
 
@@ -502,6 +504,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
+          alchemyAccessToken: accessToken,
           alchemyIsSignup: isSignup,
           alchemyError,
           alchemyOtpId: otpId,
@@ -526,6 +529,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
               orgId,
               connectedEventName: "connectedOauth",
               idToken,
+              accessToken,
               authenticatingType: "oauth",
             }).then((user) => {
               if (isSignup) {
@@ -538,6 +542,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             resolve({
               status,
               idToken,
+              accessToken,
               email,
               providerName,
               otpId,
@@ -548,6 +553,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             resolve({
               status,
               idToken,
+              accessToken,
               providerName,
             } satisfies IdTokenOnly);
             break;

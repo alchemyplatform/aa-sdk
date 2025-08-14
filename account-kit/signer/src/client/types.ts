@@ -20,6 +20,7 @@ export type User = {
   solanaAddress?: string;
   credentialId?: string;
   idToken?: string;
+  accessToken?: string;
   claims?: Record<string, unknown>;
 };
 // [!endregion User]
@@ -372,6 +373,7 @@ export type GetWebAuthnAttestationResult = {
 export type AuthLinkingPrompt = {
   status: "ACCOUNT_LINKING_CONFIRMATION_REQUIRED";
   idToken: string;
+  accessToken?: string;
   email: string;
   providerName: string;
   otpId: string;
@@ -381,6 +383,7 @@ export type AuthLinkingPrompt = {
 export type IdTokenOnly = {
   status: "FETCHED_ID_TOKEN_ONLY";
   idToken: string;
+  accessToken?: string;
   providerName: string;
 };
 
