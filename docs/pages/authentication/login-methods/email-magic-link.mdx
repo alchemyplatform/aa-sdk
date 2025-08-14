@@ -1,0 +1,384 @@
+---
+title: Email Magic Link Authentication
+description: How to implement Email Magic Link authentication across different frameworks
+slug: wallets/authentication/login-methods/email-magic-link
+---
+
+Email magic link authentication is a two-step process:
+
+1. The user enters their email address and requests a magic link
+2. The user clicks the link in their email, which redirects them back to your application to complete authentication
+
+<Tip>
+  Email OTP has been shown to have up to a 3x higher conversion rate and a
+  10-second faster flow compared to magic links. Consider using [Email
+  OTP](/wallets/authentication/login-methods/email-otp) for better user
+  experience.
+</Tip>
+
+<Tabs>
+  <Tab title="React">
+    ## Implementation Options
+
+    You can implement Email Magic Link authentication in two ways:
+
+    - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
+    - [Custom UI](#custom-ui) - Complete control over the user experience
+
+    ## Pre-built UI Components
+
+    Smart Wallets provides pre-built UI components that handle the entire Email Magic Link authentication flow with minimal code.
+
+    ### Step 1: Add Authentication Components to Your Page
+
+    Before configuring your authentication, first add one of the pre-built components to your application:
+
+    <Markdown src="../shared/modal-auth-example.mdx" />
+
+    Or:
+
+    <Markdown src="../shared/embedded-auth-example.mdx" />
+
+    ### Step 2: Configure Email Magic Link in UI Components
+
+    After adding the components, configure the Email Magic Link authentication in your application config:
+
+    ```tsx twoslash
+    import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+    import { sepolia, alchemy } from "@account-kit/infra";
+
+    const uiConfig: AlchemyAccountsUIConfig = {
+      auth: {
+        sections: [
+          [
+            {
+              type: "email",
+              emailMode: "magicLink",
+
+              // Optional customizations:
+              buttonLabel: "Continue with Email",
+              placeholder: "Enter your email address",
+            },
+          ],
+        ],
+      },
+    };
+
+    export const config = createConfig(
+      {
+        transport: alchemy({ apiKey: "your-api-key" }),
+        chain: sepolia,
+      },
+      uiConfig,
+    );
+    ```
+
+    ## Custom UI
+
+    If you need complete control over the user experience, you can implement your own custom UI for Email Magic Link authentication using Smart Wallets hooks.
+
+    ### Step 1: Send the Magic Link
+
+    First, prompt your user for their email address and send a magic link:
+
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate } = useAuthenticate();
+
+    // When the user submits their email
+    const handleSendMagicLink = (email: string) => {
+      authenticate(
+        {
+          type: "email",
+          emailMode: "magicLink",
+          email,
+        },
+        {
+          onSuccess: () => {
+            // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+            // It still runs even if the final step completes in another tab/window.
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        },
+      );
+    };
+    ```
+
+    ### Step 2: Handle the Redirect
+
+    When the user clicks the magic link in their email, they'll be redirected back to your application. You need to extract the authentication bundle from the URL and complete the authentication:
+
+    ```tsx twoslash
+    import { useEffect } from "react";
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate } = useAuthenticate();
+
+    // Handle the redirect when the component mounts
+    useEffect(() => {
+      const handleRedirect = () => {
+        const url = new URL(window.location.href);
+        const bundle = url.searchParams.get("bundle");
+
+        if (bundle) {
+          authenticate(
+            {
+              type: "email",
+              bundle,
+            },
+            {
+              onSuccess: () => {
+                // onSuccess only fires once the entire flow is done (email magic link + optional MFA).
+                // It still runs even if the final step completes in another tab/window.
+              },
+              onError: (error) => {
+                // Handle error
+              },
+            },
+          );
+        }
+      };
+
+      handleRedirect();
+    }, [authenticate]);
+    ```
+
+    ### Step 3: Track Authentication Status
+
+    Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+    ```tsx twoslash
+    import { useSignerStatus } from "@account-kit/react";
+
+    // Inside your component
+    const { isConnected } = useSignerStatus();
+
+    // You can use isConnected to conditionally render UI
+    ```
+
+  </Tab>
+  <Tab title="React Native">
+    <Info>
+      This guide assumes you have already followed the [Setup
+      Guide](/wallets/react-native/signer/setup-guide) and have set up the Alchemy
+      Account Provider using this
+      [guide](/wallets/react-native/signer/authenticating-users/setting-up-the-accounts-provider).
+      Please refer to the guides above for more information on how to properly setup
+      your project.
+    </Info>
+
+    <Tip>
+      For a complete example of how we can setup a project and use the various
+      available authentication methods, please refer to our [quickstart
+      example](https://github.com/alchemyplatform/account-kit-expo-quickstart).
+    </Tip>
+
+    ### Set the Email Mode to `Magic Link` in your Smart Wallets Dashboard
+
+    In your Alchemy Accounts Dashboard:
+
+    - Navigate to the **Smart Wallets** tab
+    - Select the config you would be using for your project and click the **Edit** button
+    - Scroll down to the **Email Mode** options in the **Email** section and select **Magic Link**
+
+      <img
+        src="/images/wallets/alchemy-dashboard-select-magic-link.png"
+        alt="Email Mode Magic Link"
+      />
+
+    - Click the **Save Changes** button
+
+    ### Send an Email Magic Link to a User
+
+    To send an email magic link to a user, you can use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `magicLink`.
+
+    ```tsx twoslash sign-in-with-magic-link.tsx
+    import { useAuthenticate } from "@account-kit/react-native";
+    import React, { useState } from "react";
+    import { Alert, View, Text, TextInput, Button, Pressable } from "react-native";
+
+    function SignInWithOtp() {
+      const { authenticate } = useAuthenticate();
+      const [email, setEmail] = useState("");
+
+      const handleUserSignInWithMagicLink = () => {
+        try {
+          authenticate({
+            email,
+            type: "email",
+          });
+
+          // Magic link sent to the user's email. Prompt the user to click the link in their email.
+        } catch (e) {
+          Alert.alert("Error sending Magic Link. Check logs for more details.");
+
+          console.log("Error sending Magic Link: ", e);
+        }
+      };
+
+      return (
+        <View>
+          <Text>Enter Your Email to Sign In</Text>
+          <View>
+            <TextInput
+              value={email}
+              onChangeText={(val) => setEmail(val.toLowerCase())}
+              placeholder="john@doe.com"
+            />
+            <Pressable onPress={handleUserSignInWithMagicLink}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                      transform: [
+                        {
+                          scale: pressed ? 0.98 : 1,
+                        },
+                      ],
+                    },
+                  ]}
+                >
+                  <Text>Sign In</Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      );
+    }
+    ```
+
+    ### Authenticate User via Deep Link
+
+    When a user clicks on the magic link in their email, it should deep link to your app if this has been setup correctly.
+
+    A `bundle` parameter present in the deep link url will be used to authenticate the user and save the user's session.
+
+    Here's an example of what this might look like:
+
+    ```tsx example.tsx twoslash
+    import { useEffect } from "react";
+    import { Linking } from "react-native";
+    import { useAuthenticate } from "@account-kit/react-native";
+
+    const App = () => {
+      const { authenticate } = useAuthenticate();
+
+      // Authenticate a user using a bundle returned from a deep link
+      const handleUserAuth = async ({ bundle }: { bundle: string }) => {
+        authenticate({ bundle, type: "email" });
+      };
+
+      // Handle incoming deep links and authenticate the user
+      const handleIncomingURL = (event: { url: string }) => {
+        const regex = /[?&]([^=#]+)=([^&#]*)/g;
+
+        let params: Record<string, string> = {};
+        let match: RegExpExecArray | null;
+
+        while ((match = regex.exec(event.url))) {
+          if (match[1] && match[2]) {
+            params[match[1]] = match[2];
+          }
+        }
+
+        if (!params.bundle) {
+          return;
+        }
+
+        handleUserAuth({
+          bundle: params.bundle ?? "",
+        });
+      };
+
+      // Create a subscription to handle incoming deep links
+      useEffect(() => {
+        const subscription = Linking.addEventListener("url", handleIncomingURL);
+
+        return () => subscription.remove();
+      }, []);
+
+      return null;
+    };
+    ```
+
+  </Tab>
+  <Tab title="JavaScript">
+    ## Other JS Frameworks
+
+    Email magic link authentication allows you to log in and sign up users using an email address. Your users will receive a link in their inbox which will redirect them to your site (configured in the dashboard) to complete login.
+
+    <Tip>
+      We recommend using the OTP email flow instead, as it is more reliable across different browser environments. OTP flows have also been shown to have up to a 3x higher conversion rate and a 10-second faster flow compared to magic link.
+
+      For setting up the OTP flow, see [Email OTP Authentication](/wallets/authentication/login-methods/email-otp).
+    </Tip>
+
+    <Tip>
+      For setting up an account config, see the [Signer Quickstart](/wallets/signer/quickstart).
+    </Tip>
+
+    ## Authenticate a user
+
+    ```ts twoslash
+    import { signer } from "./signer";
+
+    // send the email
+    // resolves when the user is fully authenticated (magic link + optional MFA), even if completion happens in another tab/window
+    await signer.authenticate({
+      type: "email",
+      emailMode: "magicLink",
+      email: "user@mail.com",
+    });
+
+    // later once the user has clicked the link
+    const url = new URL(window.location.href);
+    const bundle = url.searchParams.get("bundle");
+    if (!bundle) {
+      throw new Error("No bundle found in URL");
+    }
+
+    // resolves when the user is fully authenticated (magic link + optional MFA), even if completion happens in another tab/window
+    await signer.authenticate({
+      type: "email",
+      bundle,
+    });
+    ```
+
+    ### Track Authentication Status
+
+    Use `signer.on("statusChanged", callback)` and the `AlchemySignerStatus` enum to respond to OTP/MFA prompts and completion:
+
+    ```ts twoslash
+    import { signer } from "./signer";
+    import { AlchemySignerStatus } from "@account-kit/signer";
+
+    signer.on("statusChanged", (status) => {
+      switch (status) {
+        case AlchemySignerStatus.AWAITING_EMAIL_AUTH:
+          // show OTP input UI
+          break;
+        case AlchemySignerStatus.AWAITING_MFA_AUTH:
+          // show TOTP input UI
+          break;
+        case AlchemySignerStatus.CONNECTED:
+          // authentication complete
+          break;
+      }
+    });
+    ```
+
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+### Add Authenticator App (TOTP) Verification (Optional)
+
+Consider enabling [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa) to require users to enter a 6-digit TOTP code from their authenticator app after clicking the magic link. This extra layer of security protects user accounts if their email is compromised.
