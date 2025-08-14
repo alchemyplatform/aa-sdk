@@ -110,75 +110,66 @@ describe("Client E2E Tests", () => {
     expect(account.address).not.toEqual(account2.address);
   });
 
-  // TODO(jh): Pending this PR: https://github.com/OMGWINNING/alchemy-api-executors/pull/1521
-  // In v4, we just used the AK methods directly: https://github.com/alchemyplatform/aa-sdk/blob/9e8b600d5eefaa0986815ff0e243b3b1aec004ba/account-kit/wallet-client/src/client/actions/signMessage.ts#L44
-  // it("can correctly sign a message", async () => {
-  //   const account = await client.requestAccount();
-  //   console.log({ account }); // TODO(jh): remove
-  //   const message = "hello world";
-  //   const signature = await client.signMessage({ message });
-  //   const isValid = await publicClient.verifyMessage({
-  //     address: account.address,
-  //     message: "hello world",
-  //     signature,
-  //   });
-  //   expect(isValid).toBe(true);
-  // });
+  it("can correctly sign a message", async () => {
+    const account = await client.requestAccount();
+    const message = "hello world";
+    const signature = await client.signMessage({ message });
+    const isValid = await publicClient.verifyMessage({
+      address: account.address,
+      message: "hello world",
+      signature,
+    });
+    expect(isValid).toBe(true);
+  });
 
-  // TODO(jh): Pending this PR: https://github.com/OMGWINNING/alchemy-api-executors/pull/1521
-  // In v4, we just used the AK methods directly: https://github.com/alchemyplatform/aa-sdk/blob/9e8b600d5eefaa0986815ff0e243b3b1aec004ba/account-kit/wallet-client/src/client/actions/signMessage.ts#L44
-  //   it("can correctly sign typed data", async () => {
-  //     const account = await client.requestAccount();
-  //     const signature = await client.signTypedData(givenTypedData);
-  //     const isValid = await publicClient.verifyTypedData({
-  //       ...givenTypedData,
-  //       signature,
-  //       address: account.address,
-  //     });
-  //     expect(isValid).toBe(true);
-  //   });
+  it("can correctly sign typed data", async () => {
+    const account = await client.requestAccount();
+    const signature = await client.signTypedData(givenTypedData);
+    const isValid = await publicClient.verifyTypedData({
+      ...givenTypedData,
+      signature,
+      address: account.address,
+    });
+    expect(isValid).toBe(true);
+  });
 
-  // TODO(jh): Pending this PR: https://github.com/OMGWINNING/alchemy-api-executors/pull/1521
-  // In v4, we just used the AK methods directly: https://github.com/alchemyplatform/aa-sdk/blob/9e8b600d5eefaa0986815ff0e243b3b1aec004ba/account-kit/wallet-client/src/client/actions/signMessage.ts#L44
-  //   it("can correctly sign a message with a different account", async () => {
-  //     const account = await client.requestAccount({
-  //       id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
-  //       creationHint: { salt: "0x1" },
-  //     });
+  it("can correctly sign a message with a different account", async () => {
+    const account = await client.requestAccount({
+      id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
+      creationHint: { salt: "0x1" },
+    });
 
-  //     const message = "hello world";
-  //     const signature = await client.signMessage({
-  //       message,
-  //       account: account.address,
-  //     });
-  //     const isValid = await publicClient.verifyMessage({
-  //       address: account.address,
-  //       message: "hello world",
-  //       signature,
-  //     });
-  //     expect(isValid).toBe(true);
-  //   });
+    const message = "hello world";
+    const signature = await client.signMessage({
+      message,
+      account: account.address,
+    });
+    const isValid = await publicClient.verifyMessage({
+      address: account.address,
+      message: "hello world",
+      signature,
+    });
+    expect(isValid).toBe(true);
+  });
 
-  // TODO(jh): Pending this PR: https://github.com/OMGWINNING/alchemy-api-executors/pull/1521
-  // In v4, we just used the AK methods directly: https://github.com/alchemyplatform/aa-sdk/blob/9e8b600d5eefaa0986815ff0e243b3b1aec004ba/account-kit/wallet-client/src/client/actions/signMessage.ts#L44
-  //   it("can correctly sign typed data with a different account", async () => {
-  //     const account = await client.requestAccount({
-  //       id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
-  //       creationHint: { salt: "0x1" },
-  //     });
+  it("can correctly sign typed data with a different account", async () => {
+    const account = await client.requestAccount({
+      id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
+      creationHint: { salt: "0x1" },
+    });
 
-  //     const signature = await client.signTypedData({
-  //       ...givenTypedData,
-  //       account: account.address,
-  //     });
+    const signature = await client.signTypedData({
+      ...givenTypedData,
+      account: account.address,
+    });
 
-  //     const isValid = await publicClient.verifyTypedData({
-  //       ...givenTypedData,
-  //       signature,
-  //       address: account.address,
-  //     });
-  //     expect(isValid).toBe(true);
-  //   });
+    const isValid = await publicClient.verifyTypedData({
+      ...givenTypedData,
+      signature,
+      address: account.address,
+    });
+    expect(isValid).toBe(true);
+  });
 
   it.each(sendVariants)(
     "should successfully send a UO with paymaster",
@@ -258,6 +249,7 @@ describe("Client E2E Tests", () => {
         transport,
         chain: arbitrumSepolia,
         account: _signer,
+        smartAccountAddress: undefined,
       });
 
       const account = await _client.requestAccount({
@@ -307,6 +299,7 @@ describe("Client E2E Tests", () => {
         transport,
         chain: arbitrumSepolia,
         account: sessionKey,
+        smartAccountAddress: undefined,
       });
 
       const result = await sendVariant(
