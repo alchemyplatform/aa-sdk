@@ -15,12 +15,12 @@ import { smartWalletActions } from "@alchemy/wallet-apis";
 
 ## Parameters
 
-### params
+### signerClient
 
-`SmartWalletDecoratorParams`
-The global parameters for the smart wallet actions, including an optional paymaster policy ID.
+`SignerClient`
+The signer client for signing operations
 
 ## Returns
 
 `Function`
-A client decorator with smart wallet actions added.
+A function that takes an InnerWalletApiClient and returns smart wallet actions
