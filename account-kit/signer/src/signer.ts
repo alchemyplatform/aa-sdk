@@ -54,10 +54,11 @@ export type AuthParams =
       idToken: string;
       isNewUser?: boolean;
     }
-  | ({
+  | {
       type: "custom-jwt";
       jwt: string;
-    } & OauthProviderConfig)
+      authProviderId?: string;
+    }
   | {
       type: "otp";
       otpCode: string;

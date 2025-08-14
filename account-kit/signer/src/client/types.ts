@@ -98,7 +98,7 @@ export type OtpResponse =
 export type JwtParams = {
   jwt: string;
   targetPublicKey: string;
-  authProvider: string;
+  authProvider?: string;
   expirationSeconds?: number;
 };
 

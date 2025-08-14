@@ -295,7 +295,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       jwt: args.jwt,
       targetPublicKey,
       authProvider: args.authProvider,
-      expirationSeconds: args?.expirationSeconds,
+      expirationSeconds: args.expirationSeconds,
     });
   }
 
