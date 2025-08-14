@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
+
+### Features
+
+- update external wallet support to include Solana wallets ([#1847](https://github.com/alchemyplatform/aa-sdk/issues/1847)) ([7e33d35](https://github.com/alchemyplatform/aa-sdk/commit/7e33d35fdede8358d240fe919af54486f8b10edd))
+
 ## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
 
 **Note:** Version bump only for package @account-kit/react
