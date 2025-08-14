@@ -4,11 +4,6 @@ import type { Static } from "@sinclair/typebox";
 import type { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 
-export type GetAccountParam<TAccount> =
-  IsUndefined<TAccount> extends true
-    ? { account: Address }
-    : { account?: Address };
-
 export type PrepareCallsParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<

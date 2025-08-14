@@ -1,25 +1,31 @@
 import {
-  createWalletClient,
+  createClient,
   type Address,
   type Chain,
-  type JsonRpcAccount,
+  type Client,
   type LocalAccount,
+  type ParseAccount,
+  type Transport,
+  createWalletClient,
 } from "viem";
-import { smartWalletActions } from "./decorators/smartWalletActions.js";
-import type { AlchemyTransport } from "@alchemy/common";
+import {
+  smartWalletActions,
+  type SmartWalletActions,
+} from "./decorators/smartWalletActions.js";
+import { type AlchemyTransport } from "@alchemy/common";
+import type { SignerClient } from "./types.js";
+import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
+import { createInternalState } from "./internal.js";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
 > = {
-  account: LocalAccount | JsonRpcAccount;
+  signer: LocalAccount | SignerClient;
   transport: AlchemyTransport;
   chain: Chain;
+  account?: TAccount;
+  policyId?: string;
   policyIds?: string[];
-  // TODO(jh): unsure how i feel about this, but it gets us the typesafety of not having to specify a `from` address on every call.
-  // do the ergonomics of this feel better or worse than having to pass the `signer` or `owner` separately from the `account`?
-  // or should we not care about typesafety of including the `from` address and just try to use the account that's active
-  // in the internal cache & throw an error if there's no account or from address?
-  smartAccountAddress: TAccount;
 };
 
 /**
@@ -32,19 +38,45 @@ export type CreateSmartWalletClientParams<
  * @param {string[]} params.policyIds - Optional policy IDs for paymaster service.
  * @returns {WalletClient} A wallet client extended with smart wallet actions.
  */
-// TODO(v5): do we actually want to provide this? or just instruct consumers to extend their own wallet client w/ the actions?
 export const createSmartWalletClient = <
   TAccount extends Address | undefined = Address | undefined,
 >({
   account,
   transport,
   chain,
+  signer,
+  policyId,
   policyIds,
-  smartAccountAddress,
-}: CreateSmartWalletClientParams<TAccount>) => {
-  return createWalletClient({
-    account,
-    transport,
-    chain,
-  }).extend(smartWalletActions({ policyIds, smartAccountAddress }));
+}: CreateSmartWalletClientParams<TAccount>): Client<
+  Transport,
+  Chain,
+  ParseAccount<TAccount>,
+  WalletServerViemRpcSchema,
+  SmartWalletActions<TAccount>
+> => {
+  const baseClient = createClient({ account, transport, chain });
+
+  // If the signer is a `LocalAccount` wrap it inside of a client now so
+  // downstream actions can just use `getAction` to get signing actions
+  // and `signer.account.address` to access the address.
+  const signerClient =
+    "request" in signer
+      ? signer
+      : createWalletClient({
+          account: signer,
+          transport,
+          chain,
+        });
+
+  const _policyIds = [
+    ...(policyId ? [policyId] : []),
+    ...(policyIds?.length ? policyIds : []),
+  ];
+
+  return baseClient
+    .extend(() => ({
+      policyIds: _policyIds,
+      internal: createInternalState(),
+    }))
+    .extend(smartWalletActions(signerClient));
 };

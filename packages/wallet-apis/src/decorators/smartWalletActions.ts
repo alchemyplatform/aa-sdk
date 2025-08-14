@@ -1,4 +1,4 @@
-import type { Hex, Address } from "viem";
+import { type Hex, type Address } from "viem";
 import {
   requestAccount,
   type RequestAccountParams,
@@ -44,13 +44,20 @@ import {
   type GrantPermissionsParams,
   type GrantPermissionsResult,
 } from "../actions/grantPermissions.js";
-import type { BaseWalletClient } from "../types.js";
-import { createInternalState } from "../internal.js";
+import type { InnerWalletApiClient } from "../types.js";
+import type { SignerClient } from "../types.js";
+import {
+  getCallsStatus,
+  waitForCallsStatus,
+  type GetCallsStatusParameters,
+  type GetCallsStatusReturnType,
+  type WaitForCallsStatusParameters,
+  type WaitForCallsStatusReturnType,
+} from "viem/actions";
 
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
 > = {
-  smartAccountAddress: TAccount;
   requestAccount: (
     params?: RequestAccountParams,
   ) => Promise<RequestAccountResult>;
@@ -73,45 +80,39 @@ export type SmartWalletActions<
   grantPermissions: (
     params: GrantPermissionsParams<TAccount>,
   ) => Promise<GrantPermissionsResult>;
-};
-
-type SmartWalletDecoratorParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = {
-  policyIds?: string[];
-  smartAccountAddress: TAccount;
+  getCallsStatus: (
+    params: GetCallsStatusParameters,
+  ) => Promise<GetCallsStatusReturnType>;
+  waitForCallsStatus: (
+    params: WaitForCallsStatusParameters,
+  ) => Promise<WaitForCallsStatusReturnType>;
 };
 
 /**
  * This is a decorator that is used to add smart wallet actions to a client.
  *
- * @param {SmartWalletDecoratorParams} params The global parameters for the smart wallet actions, including an optional paymaster policy ID.
- * @returns {Function} A client decorator with smart wallet actions added.
+ * @param {SignerClient} signerClient The signer client for signing operations
+ * @returns {Function} A function that takes an InnerWalletApiClient and returns smart wallet actions
  */
-export function smartWalletActions<
-  // TODO(jh): does this generic even do anything now that the client.account is the SIGNER and not the SCA address? ideally we can call the actions w/ typesafety based on the account being present in the internal cache or not.
-  TAccount extends Address | undefined = Address | undefined, // TODO(jh): note this is the SCA ADDRESS, NOT the signer account address. does this still behave correctly?
->(
-  params: SmartWalletDecoratorParams<TAccount>,
-): (client: BaseWalletClient) => SmartWalletActions<TAccount> {
-  return (client) => {
-    const _client = client.extend(() => ({
-      policyIds: params.policyIds,
-      internal: createInternalState(),
-    }));
-
-    return {
-      smartAccountAddress: params.smartAccountAddress,
-      requestAccount: (params) => requestAccount(_client, params),
-      prepareCalls: (params) => prepareCalls(_client, params),
-      listAccounts: (params) => listAccounts(_client, params),
-      sendPreparedCalls: (params) => sendPreparedCalls(_client, params),
-      sendCalls: (params) => sendCalls(_client, params),
-      signSignatureRequest: (params) => signSignatureRequest(_client, params),
-      signPreparedCalls: (params) => signPreparedCalls(_client, params),
-      signMessage: (params) => signMessage(_client, params),
-      signTypedData: (params) => signTypedData(_client, params),
-      grantPermissions: (params) => grantPermissions(_client, params),
-    };
-  };
-}
+export const smartWalletActions =
+  <TAccount extends Address | undefined = Address | undefined>(
+    signerClient: SignerClient,
+  ) =>
+  (client: InnerWalletApiClient): SmartWalletActions<TAccount> => ({
+    // Alchemy methods.
+    requestAccount: (params) => requestAccount(client, signerClient, params),
+    prepareCalls: (params) => prepareCalls(client, params),
+    listAccounts: (params) => listAccounts(client, signerClient, params),
+    sendPreparedCalls: (params) => sendPreparedCalls(client, params),
+    sendCalls: (params) => sendCalls(client, signerClient, params), // TODO(v5): adapt this to fit viem's exact interface?
+    signSignatureRequest: (params) =>
+      signSignatureRequest(signerClient, params),
+    signPreparedCalls: (params) => signPreparedCalls(signerClient, params),
+    signMessage: (params) => signMessage(client, signerClient, params),
+    signTypedData: (params) => signTypedData(client, signerClient, params),
+    grantPermissions: (params) =>
+      grantPermissions(client, signerClient, params),
+    // Viem methods.
+    getCallsStatus: (params) => getCallsStatus(client, params),
+    waitForCallsStatus: (params) => waitForCallsStatus(client, params),
+  });

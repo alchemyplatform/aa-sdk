@@ -6,6 +6,7 @@ import {
   sendPreparedCalls,
   type SendPreparedCallsResult,
 } from "./sendPreparedCalls.js";
+import type { SignerClient } from "../types.js";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -17,6 +18,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
@@ -44,11 +46,12 @@ export async function sendCalls<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
+  signerClient: SignerClient,
   params: SendCallsParams<TAccount>,
 ): Promise<SendCallsResult> {
   const calls = await prepareCalls(client, params);
 
-  const signedCalls = await signPreparedCalls(client, calls);
+  const signedCalls = await signPreparedCalls(signerClient, calls);
 
   return await sendPreparedCalls(client, {
     ...signedCalls,

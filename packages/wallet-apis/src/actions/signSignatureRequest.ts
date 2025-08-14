@@ -6,7 +6,7 @@ import type {
   Eip7702UnsignedAuth,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
-import type { InnerWalletApiClient, WithoutRawPayload } from "../types";
+import type { SignerClient, WithoutRawPayload } from "../types";
 import { assertNever } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { signAuthorization, signMessage, signTypedData } from "viem/actions";
@@ -58,14 +58,14 @@ export type SignSignatureRequestResult = Prettify<{
  */
 
 export async function signSignatureRequest(
-  client: InnerWalletApiClient,
+  signerClient: SignerClient,
   params: SignSignatureRequestParams,
 ): Promise<SignSignatureRequestResult> {
   const actions = {
-    signMessage: getAction(client, signMessage, "signMessage"),
-    signTypedData: getAction(client, signTypedData, "signTypedData"),
+    signMessage: getAction(signerClient, signMessage, "signMessage"),
+    signTypedData: getAction(signerClient, signTypedData, "signTypedData"),
     signAuthorization: getAction(
-      client,
+      signerClient,
       signAuthorization,
       "signAuthorization",
     ),
@@ -77,7 +77,7 @@ export async function signSignatureRequest(
         type: "secp256k1",
         data: await actions.signMessage({
           message: params.data,
-          account: client.account,
+          account: signerClient.account,
         }),
       };
     }
@@ -86,7 +86,7 @@ export async function signSignatureRequest(
         type: "secp256k1",
         data: await actions.signTypedData({
           ...params.data,
-          account: client.account,
+          account: signerClient.account,
         }),
       };
     }
@@ -97,7 +97,7 @@ export async function signSignatureRequest(
           chainId: hexToNumber(params.data.chainId),
           nonce: hexToNumber(params.data.nonce),
         },
-        account: client.account,
+        account: signerClient.account,
       });
 
       return {

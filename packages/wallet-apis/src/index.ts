@@ -1,5 +1,4 @@
 // Actions.
-// TODO(v5): revisit exporting the actions themselves.
 export type * from "./actions/formatSign.js";
 export { formatSign } from "./actions/formatSign.js";
 export type * from "./actions/grantPermissions.js";
@@ -28,7 +27,3 @@ export { signTypedData } from "./actions/signTypedData.js";
 // Decorators.
 export type * from "./decorators/smartWalletActions.js";
 export { smartWalletActions } from "./decorators/smartWalletActions.js";
-
-// RPC Schema.
-// TODO(jh): this should be ok for RN since we are only importing types? do we even need to re-export this from here?
-export type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";

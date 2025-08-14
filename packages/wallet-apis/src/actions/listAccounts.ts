@@ -2,6 +2,7 @@ import type { Static } from "@sinclair/typebox";
 import type { wallet_listAccounts } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../types.ts";
 import type { Address, Prettify } from "viem";
+import type { SignerClient } from "../types";
 
 export type ListAccountsParams = Prettify<
   Omit<
@@ -18,6 +19,7 @@ export type ListAccountsResult = Prettify<
  * Lists all smart accounts for a given signer using the wallet API client.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {ListAccountsParams} params - Parameters for listing accounts
  * @param {string} params.signerAddress - The address of the signer to list accounts for
  * @param {number} [params.limit] - Optional maximum number of accounts to return (default: 100, max: 100)
@@ -42,9 +44,10 @@ export type ListAccountsResult = Prettify<
  */
 export async function listAccounts(
   client: InnerWalletApiClient,
+  signerClient: SignerClient,
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
-  const signerAddress = params.signerAddress ?? client.account.address;
+  const signerAddress = params.signerAddress ?? signerClient.account.address;
 
   return client.request({
     method: "wallet_listAccounts",

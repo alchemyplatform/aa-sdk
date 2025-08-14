@@ -8,7 +8,7 @@ import type {
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import type { Prettify } from "viem";
-import type { InnerWalletApiClient } from "../types.js";
+import type { SignerClient } from "../types.js";
 
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
 
@@ -21,17 +21,17 @@ export type SignPreparedCallsResult = Prettify<
 /**
  * Signs prepared calls using the provided signer.
  *
- * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
  */
 export async function signPreparedCalls(
-  client: InnerWalletApiClient,
+  signerClient: SignerClient,
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult> {
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
-    const signature = await signSignatureRequest(client, {
+    const signature = await signSignatureRequest(signerClient, {
       type: "eip7702Auth",
       data: {
         ...rest.data,
@@ -48,7 +48,10 @@ export async function signPreparedCalls(
     call: PreparedCall_UserOpV060 | PreparedCall_UserOpV070,
   ) => {
     const { signatureRequest, ...rest } = call;
-    const signature = await signSignatureRequest(client, signatureRequest);
+    const signature = await signSignatureRequest(
+      signerClient,
+      signatureRequest,
+    );
     return {
       ...rest,
       signature,

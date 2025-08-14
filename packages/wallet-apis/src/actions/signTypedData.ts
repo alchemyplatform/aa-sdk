@@ -11,6 +11,7 @@ import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
 import { typedDataToJsonSafe } from "../utils/format.js";
 import { AccountNotFoundError } from "@alchemy/common";
+import type { SignerClient } from "../types.js";
 
 export type SignTypedDataParams = Prettify<
   TypedDataDefinition & {
@@ -25,6 +26,7 @@ export type SignTypedDataResult = Prettify<Hex>;
  * This method requests the account associated with the signer and uses it to sign the typed data.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {TypedDataDefinition} params - The typed data to sign, following EIP-712 format
  * @returns {Promise<SignTypedDataResult>} A Promise that resolves to the signature as a hex string
  *
@@ -55,9 +57,10 @@ export type SignTypedDataResult = Prettify<Hex>;
 
 export async function signTypedData(
   client: InnerWalletApiClient,
+  signerClient: SignerClient,
   params: SignTypedDataParams,
 ): Promise<SignTypedDataResult> {
-  const account = await requestAccount(client, {
+  const account = await requestAccount(client, signerClient, {
     accountAddress: params.account ?? client.internal.getAccount()?.address,
   });
   if (!account) {
@@ -72,12 +75,15 @@ export async function signTypedData(
     },
   });
 
-  const signed = await signSignatureRequest(client, prepared.signatureRequest);
+  const signed = await signSignatureRequest(
+    signerClient,
+    prepared.signatureRequest,
+  );
 
   const formatted = await formatSign(client, {
     from: account.address,
     signature: {
-      type: "ecdsa", // TODO(jh): this should be `secp256k1`, but the type is wrong.
+      type: "ecdsa",
       data: signed.data,
     },
   });

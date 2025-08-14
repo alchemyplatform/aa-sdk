@@ -64,11 +64,8 @@ describe("Client E2E Tests", () => {
   const client = createSmartWalletClient({
     transport,
     chain: arbitrumSepolia,
-    account: signer,
-    // TODO(jh): this might feel worse than before. see how it feels to pass the owner separately again?
-    smartAccountAddress: undefined,
+    signer,
   });
-
   const publicClient = createPublicClient({
     chain: arbitrumSepolia,
     transport,
@@ -248,8 +245,7 @@ describe("Client E2E Tests", () => {
       const _client = createSmartWalletClient({
         transport,
         chain: arbitrumSepolia,
-        account: _signer,
-        smartAccountAddress: undefined,
+        signer: _signer,
       });
 
       const account = await _client.requestAccount({
@@ -298,8 +294,7 @@ describe("Client E2E Tests", () => {
       const sessionKeyClient = createSmartWalletClient({
         transport,
         chain: arbitrumSepolia,
-        account: sessionKey,
-        smartAccountAddress: undefined,
+        signer: sessionKey,
       });
 
       const result = await sendVariant(
