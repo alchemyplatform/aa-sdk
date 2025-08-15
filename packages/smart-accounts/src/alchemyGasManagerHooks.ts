@@ -8,7 +8,7 @@ import type {
 } from "viem/account-abstraction";
 import { deepHexlify } from "@aa-sdk/core";
 import { type AlchemyTransport } from "@alchemy/common";
-import { requestGasAndPaymasterAndData } from "@alchemy/wallet-apis";
+import { requestGasAndPaymasterAndData } from "@alchemy/aa-infra";
 import {
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
