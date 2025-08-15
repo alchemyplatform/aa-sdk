@@ -64,7 +64,7 @@ export type CreateTekStamperFn = () => Promise<TurnkeyTekStamper>;
  * key accessed with WebAuthn (e.g. passkeys).
  */
 export type CreateWebAuthnStamperFn = (
-  params: CreateWebAuthnStamperParams
+  params: CreateWebAuthnStamperParams,
 ) => Promise<TurnkeyStamper>;
 
 export type CreateWebAuthnStamperParams = {
