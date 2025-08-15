@@ -912,10 +912,6 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     await this.request("/v1/multi-owner-delete", {
       stampedRequest,
     });
-
-    console.log(
-      await multiOwnerClient.getOrganization({ organizationId: orgId }),
-    );
   };
 
   /**
