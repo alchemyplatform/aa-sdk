@@ -1,10 +1,8 @@
-
 ---
 title: Social Payments Demo
 description: Learn how to build a basic social payments application via smart account using Smart Wallets.
 slug: wallets/recipes/social-payments-demo
 ---
-
 
 Welcome to the world of Account Abstraction and Smart Wallets! This tutorial will guide you through building a full-featured cryptocurrency payment application using Alchemy's Account Kit SDK, just like the Palchemy demo you're exploring.
 
@@ -110,7 +108,7 @@ export const config = createConfig(
     enablePopupOauth: true, // Allow social login popups
     policyId: POLICY_ID, // For gas sponsorship
   },
-  uiConfig
+  uiConfig,
 );
 
 export const queryClient = new QueryClient();
@@ -313,7 +311,7 @@ export function useWalletBalance() {
       setLoading(true);
       try {
         const ethBalance = await alchemy.core.getBalance(
-          client.account.address
+          client.account.address,
         );
         const formattedBalance = (
           parseFloat(ethBalance.toString()) / 1e18
