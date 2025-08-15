@@ -900,20 +900,22 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
 
     const stampedRequest = await multiOwnerClient.stampDeleteUsers(
-      prepared.result,
+      prepared.result.deleteMembersRequest,
     );
-
-    const {
-      result: { updateRootQuorumRequest },
-    } = await this.request("/v1/multi-owner-delete", {
-      stampedRequest,
-    });
 
     await this.request("/v1/multi-owner-update-root-quorum", {
       stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
-        updateRootQuorumRequest,
+        prepared.result.updateRootQuorumRequest,
       ),
     });
+
+    await this.request("/v1/multi-owner-delete", {
+      stampedRequest,
+    });
+
+    console.log(
+      await multiOwnerClient.getOrganization({ organizationId: orgId }),
+    );
   };
 
   /**

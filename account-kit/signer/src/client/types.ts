@@ -353,7 +353,10 @@ export type SignerEndpoints = [
       }[];
     };
     Response: {
-      result: TurnkeyApiTypes["v1DeleteUsersRequest"];
+      result: {
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+        deleteMembersRequest: TurnkeyApiTypes["v1DeleteUsersRequest"];
+      };
     };
   },
   {
@@ -364,7 +367,6 @@ export type SignerEndpoints = [
     Response: {
       result: {
         deletedUserIds: string[];
-        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
       };
     };
   },

@@ -574,6 +574,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
                       - page: experimental_createMultiOwner
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiOwner.mdx
+                      - page: experimental_deleteFromMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_deleteFromMultiOwner.mdx
                       - page: experimental_multiOwnerSignRawMessage
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
