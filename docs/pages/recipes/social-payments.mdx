@@ -1,0 +1,629 @@
+---
+title: Social Payment Demo
+description: Learn how to build a basic social payments application via smart account using Smart Wallets.
+slug: wallets/recipes/social-payments-demo
+---
+
+Welcome to the world of Account Abstraction and Smart Wallets! This tutorial will guide you through building a full-featured cryptocurrency payment application using Alchemy's Account Kit SDK, just like the Palchemy demo you're exploring.
+
+## 🎯 What You'll Learn
+
+By the end of this tutorial, you'll understand how to:
+
+- Set up Alchemy Account Kit for smart wallet integration
+- Implement social login with email, passkey, and OAuth providers
+- Create gasless transactions with sponsored gas
+- Build a complete payment flow with escrow functionality
+- Integrate with Turnkey for secure key management
+- Handle wallet balances and blockchain interactions
+
+## 🚀 Why Account Kit?
+
+Traditional crypto wallets create friction for users:
+
+- Complex seed phrases to remember
+- Gas fees to pay for every transaction
+- Need to download and set up wallet software
+- Risk of losing access if seed phrase is lost
+
+Account Kit solves these problems with **Smart Wallets** that provide:
+
+- **Social login**: Sign in with email, Google, Facebook, or passkeys
+- **Gasless transactions**: Your app can sponsor transaction fees
+- **Account recovery**: No more lost seed phrases
+- **Progressive onboarding**: Users don't need to understand crypto to use your app
+
+---
+
+## Part 1: Setting Up the Foundation
+
+### 🔧 Prerequisites
+
+Before we start, make sure you have:
+
+- Node.js 18+ installed
+- Basic React/Next.js knowledge
+- An Alchemy account (free at [alchemy.com](https://alchemy.com))
+
+### 🏗️ Project Setup
+
+1. **Create a new Next.js project:**
+
+```bash
+npx create-next-app@latest my-wallet-app --typescript --tailwind --eslint --app
+cd my-wallet-app
+```
+
+2. **Install Account Kit dependencies:**
+
+```bash
+npm install @account-kit/react @account-kit/core @account-kit/infra
+```
+
+3. **Install additional utilities:**
+
+```bash
+npm install viem @tanstack/react-query
+```
+
+### ⚙️ Configuration
+
+Create your Account Kit configuration file `config/account-kit.ts`:
+
+```typescript
+import {
+  AlchemyAccountsUIConfig,
+  cookieStorage,
+  createConfig,
+} from "@account-kit/react";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { QueryClient } from "@tanstack/react-query";
+
+// Get your API key from https://dashboard.alchemy.com/
+const API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;
+const POLICY_ID = process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID!;
+
+// Configure the authentication methods
+const uiConfig: AlchemyAccountsUIConfig = {
+  illustrationStyle: "outline",
+  auth: {
+    sections: [
+      [{ type: "email" }], // Email-based login
+      [
+        { type: "passkey" }, // Biometric authentication
+        { type: "social", authProviderId: "google", mode: "popup" },
+        { type: "social", authProviderId: "facebook", mode: "popup" },
+      ],
+    ],
+    addPasskeyOnSignup: true, // Encourage passkey setup
+  },
+};
+
+export const config = createConfig(
+  {
+    transport: alchemy({ apiKey: API_KEY }),
+    chain: arbitrumSepolia, // Using testnet for development
+    ssr: true, // Enable server-side rendering support
+    storage: cookieStorage, // Persist sessions across page reloads
+    enablePopupOauth: true, // Allow social login popups
+    policyId: POLICY_ID, // For gas sponsorship
+  },
+  uiConfig
+);
+
+export const queryClient = new QueryClient();
+```
+
+### 🎨 Provider Setup
+
+Create a providers component `components/Providers.tsx`:
+
+```typescript
+"use client";
+import { config, queryClient } from "@/config/account-kit";
+import { AlchemyAccountProvider } from "@account-kit/react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { PropsWithChildren } from "react";
+
+export function Providers({ children }: PropsWithChildren) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AlchemyAccountProvider config={config} queryClient={queryClient}>
+        {children}
+      </AlchemyAccountProvider>
+    </QueryClientProvider>
+  );
+}
+```
+
+Update your `app/layout.tsx`:
+
+```typescript
+import { Providers } from "@/components/Providers";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+---
+
+## Part 2: User Authentication & Onboarding
+
+### 🔐 Login Component
+
+Create a beautiful login experience `components/LoginCard.tsx`:
+
+```typescript
+"use client";
+import { useAuthModal } from "@account-kit/react";
+
+export function LoginCard() {
+  const { openAuthModal } = useAuthModal();
+
+  return (
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold text-center mb-4">
+        Welcome to My Wallet App
+      </h2>
+      <p className="text-gray-600 text-center mb-6">
+        Sign in with your email, social account, or passkey to get started
+      </p>
+
+      <button
+        onClick={() => openAuthModal()}
+        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Sign In
+      </button>
+
+      <p className="text-xs text-gray-500 text-center mt-4">
+        No crypto wallet needed • Powered by Account Kit
+      </p>
+    </div>
+  );
+}
+```
+
+### 👤 User Dashboard
+
+Create a dashboard to show when users are logged in `components/Dashboard.tsx`:
+
+```typescript
+"use client";
+import {
+  useSmartAccountClient,
+  useSignerStatus,
+  useLogout,
+} from "@account-kit/react";
+
+export function Dashboard() {
+  const { client } = useSmartAccountClient({});
+  const { isConnected } = useSignerStatus();
+  const { logout } = useLogout();
+
+  if (!isConnected || !client) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">My Wallet</h1>
+          <button
+            onClick={() => logout()}
+            className="text-red-600 hover:text-red-800"
+          >
+            Sign Out
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Wallet Address
+            </label>
+            <p className="font-mono text-sm bg-gray-100 p-2 rounded">
+              {client.account?.address}
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Network
+            </label>
+            <p className="text-sm text-gray-600">
+              {client.chain?.name} (Chain ID: {client.chain?.id})
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### 🏠 Main App Component
+
+Update your `app/page.tsx`:
+
+```typescript
+"use client";
+import { useSignerStatus } from "@account-kit/react";
+import { LoginCard } from "@/components/LoginCard";
+import { Dashboard } from "@/components/Dashboard";
+
+export default function Home() {
+  const { isConnected } = useSignerStatus();
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="container mx-auto px-4">
+        {isConnected ? <Dashboard /> : <LoginCard />}
+      </div>
+    </div>
+  );
+}
+```
+
+**🎉 Checkpoint:** At this point, you have a working app with social login! Users can sign in and see their smart wallet address.
+
+---
+
+## Part 3: Wallet Operations
+
+### 💰 Reading Wallet Balances
+
+Create a custom hook for wallet balances `hooks/useWalletBalance.ts`:
+
+```typescript
+"use client";
+import { useState, useEffect } from "react";
+import { useSmartAccountClient } from "@account-kit/react";
+import { Alchemy, Network } from "alchemy-sdk";
+
+// Initialize Alchemy SDK for balance queries
+const alchemy = new Alchemy({
+  apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!,
+  network: Network.ARB_SEPOLIA,
+});
+
+export function useWalletBalance() {
+  const [balance, setBalance] = useState<string>("0");
+  const [loading, setLoading] = useState(false);
+  const { client } = useSmartAccountClient({});
+
+  useEffect(() => {
+    async function fetchBalance() {
+      if (!client?.account?.address) return;
+
+      setLoading(true);
+      try {
+        const ethBalance = await alchemy.core.getBalance(
+          client.account.address
+        );
+        const formattedBalance = (
+          parseFloat(ethBalance.toString()) / 1e18
+        ).toFixed(4);
+        setBalance(formattedBalance);
+      } catch (error) {
+        console.error("Failed to fetch balance:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBalance();
+  }, [client?.account?.address]);
+
+  return { balance, loading };
+}
+```
+
+### 💸 Sending Transactions
+
+Create a send transaction component `components/SendTransaction.tsx`:
+
+```typescript
+"use client";
+import { useState } from "react";
+import { useSmartAccountClient } from "@account-kit/react";
+import { parseEther } from "viem";
+
+export function SendTransaction() {
+  const [to, setTo] = useState("");
+  const [amount, setAmount] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [txHash, setTxHash] = useState<string | null>(null);
+  const { client } = useSmartAccountClient({});
+
+  const handleSend = async () => {
+    if (!client || !to || !amount) return;
+
+    setLoading(true);
+    try {
+      // Send ETH to another address
+      const hash = await client.sendTransaction({
+        to: to as `0x${string}`,
+        value: parseEther(amount),
+        chain: client.chain,
+      });
+
+      setTxHash(hash);
+
+      // Wait for transaction confirmation
+      const receipt = await client.waitForTransactionReceipt({ hash });
+      console.log("Transaction confirmed:", receipt);
+    } catch (error) {
+      console.error("Transaction failed:", error);
+      alert("Transaction failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
+      <h2 className="text-xl font-bold mb-4">Send ETH</h2>
+
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Recipient Address
+          </label>
+          <input
+            type="text"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            placeholder="0x..."
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Amount (ETH)
+          </label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.01"
+            step="0.001"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <button
+          onClick={handleSend}
+          disabled={loading || !to || !amount}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          {loading ? "Sending..." : "Send Transaction"}
+        </button>
+
+        {txHash && (
+          <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+            <p className="text-sm text-green-800">
+              Transaction sent! Hash:
+              <a
+                href={`https://sepolia.arbiscan.io/tx/${txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono ml-1 underline"
+              >
+                {txHash.slice(0, 10)}...
+              </a>
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+**💡 Pro Tip:** Notice how simple transaction sending is with Account Kit! No gas estimation, no nonce management, no complex wallet connection flows.
+
+---
+
+## Part 4: Advanced Features
+
+### ⛽ Gas Sponsorship
+
+One of the most powerful features of Account Kit is gas sponsorship. Your app can pay for users' transaction fees, creating a seamless Web2-like experience.
+
+**Setting up Gas Policies:**
+
+1. Go to [Alchemy Gas Manager](https://dashboard.alchemy.com/gas-manager)
+2. Create a new policy for Arbitrum Sepolia
+3. Set spending limits and rules
+4. Copy the Policy ID to your environment variables
+
+**How it works in your app:**
+
+```typescript
+// When you configure Account Kit with a policyId,
+// all transactions are automatically sponsored!
+export const config = createConfig({
+  // ... other config
+  policyId: process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID,
+});
+
+// Users can now send transactions without holding ETH for gas!
+const hash = await client.sendTransaction({
+  to: "0x...",
+  value: parseEther("0.01"),
+  // No gas fee required from user! ✨
+});
+```
+
+### 🔒 Security Best Practices
+
+When building production applications:
+
+```typescript
+// ✅ Good: Environment variables for sensitive data
+const API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+
+// ✅ Good: Validate user inputs
+function validateAddress(address: string) {
+  return /^0x[a-fA-F0-9]{40}$/.test(address);
+}
+
+// ✅ Good: Handle errors gracefully
+try {
+  const hash = await client.sendTransaction(tx);
+  // Handle success
+} catch (error) {
+  if (error.message.includes("insufficient funds")) {
+    // Show user-friendly message
+  }
+  // Log error for debugging
+}
+
+// ❌ Bad: Never log sensitive data
+console.log("Private key:", privateKey); // DON'T DO THIS
+
+// ❌ Bad: Don't ignore error handling
+await client.sendTransaction(tx); // Missing try/catch
+```
+
+### 🎛️ Advanced Configuration
+
+Customize the authentication experience:
+
+```typescript
+const uiConfig: AlchemyAccountsUIConfig = {
+  illustrationStyle: "outline", // or "filled"
+  auth: {
+    sections: [
+      // Prioritize email login
+      [{ type: "email" }],
+
+      // Secondary options
+      [
+        { type: "passkey" },
+        {
+          type: "social",
+          authProviderId: "google",
+          mode: "popup", // or "redirect"
+        },
+      ],
+    ],
+    addPasskeyOnSignup: true, // Encourage secure authentication
+  },
+
+  // Customize the modal appearance
+  modalSize: "compact", // or "wide"
+
+  // Custom branding
+  theme: {
+    borderRadius: "sm", // "sm", "md", "lg", "none"
+    primaryColor: {
+      light: "#3B82F6",
+      dark: "#60A5FA",
+    },
+  },
+};
+```
+
+---
+
+## 🚀 Next Steps & Advanced Patterns
+
+### Building More Complex Apps
+
+Now that you understand the basics, you can build more sophisticated features:
+
+1. **Multi-token Support**: Handle ERC-20 tokens, not just ETH
+2. **NFT Integration**: Display and transfer NFTs
+3. **DeFi Interactions**: Integrate with DEX protocols like Uniswap
+4. **Cross-chain**: Use Alchemy's cross-chain capabilities
+5. **Batch Transactions**: Send multiple operations in one transaction
+
+### Real-World Examples
+
+The Palchemy demo you're exploring showcases advanced patterns:
+
+- **Escrow Systems**: Using Turnkey for secure temporary wallets
+- **Email-to-Crypto**: Send crypto to email addresses
+- **Progressive Onboarding**: Recipients don't need existing wallets
+- **Production Security**: Comprehensive security considerations
+
+### Performance Tips
+
+```typescript
+// ✅ Use React Query for caching blockchain data
+const { data: balance } = useQuery({
+  queryKey: ["balance", address],
+  queryFn: () => fetchBalance(address),
+  refetchInterval: 30000, // Refresh every 30s
+});
+
+// ✅ Debounce user inputs for better UX
+const debouncedAmount = useDebounce(amount, 500);
+
+// ✅ Lazy load heavy components
+const SendTransaction = lazy(() => import("./SendTransaction"));
+```
+
+---
+
+## 🎯 Key Takeaways
+
+Building with Alchemy Account Kit gives you superpowers:
+
+1. **No Wallet Friction**: Users sign in like any Web2 app
+2. **Gasless Transactions**: Remove the biggest barrier to crypto adoption
+3. **Smart Contract Wallets**: Advanced features like account recovery and upgradability
+4. **Developer Experience**: Simple APIs that abstract blockchain complexity
+5. **Production Ready**: Battle-tested infrastructure used by top DeFi apps
+
+### The Account Abstraction Advantage
+
+Traditional wallets require users to:
+
+- ❌ Download wallet software
+- ❌ Manage seed phrases
+- ❌ Buy ETH for gas fees
+- ❌ Understand gas prices and nonces
+
+With Account Kit, users just:
+
+- ✅ Sign in with email/social
+- ✅ Use your app immediately
+- ✅ Get transactions sponsored by your app
+- ✅ Enjoy a Web2-like experience
+
+---
+
+## 📚 Additional Resources
+
+- **[Account Kit Documentation](https://accountkit.alchemy.com/)**
+- **[Alchemy University](https://university.alchemy.com/)** - Free blockchain development courses
+- **[Account Kit Examples](https://github.com/alchemyplatform/account-kit)** - More code samples
+- **[Alchemy Discord](https://discord.gg/alchemy)** - Get help from the community
+
+## 🤝 Need Help?
+
+- Check out the [Palchemy demo source code](https://github.com/alchemyplatform/palchemy-demo) for a complete example
+- Join the [Alchemy Discord](https://discord.gg/alchemy) for support
+- Read the [troubleshooting guide](https://accountkit.alchemy.com/troubleshooting)
+
+---
+
+**Happy Building! 🚀**
+
+_This tutorial covers the fundamentals of building with Account Kit. The Palchemy demo you're exploring implements these patterns and many more advanced features. Use it as a reference for building your own innovative crypto applications!_
