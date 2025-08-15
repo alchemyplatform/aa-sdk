@@ -24,6 +24,10 @@ export type CreateSmartWalletClientParams<
   transport: AlchemyTransport;
   chain: Chain;
   account?: TAccount;
+  // TODO(v5): Reconsider if the client store store the policyIds, especially as
+  // new paymaster fields (i.e. for erc-20 support) are introduced. It might make
+  // more sense for them to be stored at a higher level like in the wagmi config
+  // or hooks.
   policyId?: string;
   policyIds?: string[];
 };
@@ -58,7 +62,7 @@ export const createSmartWalletClient = <
 
   // If the signer is a `LocalAccount` wrap it inside of a client now so
   // downstream actions can just use `getAction` to get signing actions
-  // and `signer.account.address` to access the address.
+  // and `signerClient.account.address` to access the address.
   const signerClient =
     "request" in signer
       ? signer

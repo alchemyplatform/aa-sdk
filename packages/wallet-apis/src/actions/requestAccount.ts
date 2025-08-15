@@ -27,7 +27,7 @@ export type RequestAccountResult = Prettify<{ address: Address }>;
  * @param {RequestAccountParams} [params] - Optional parameters for requesting a specific account
  * @param {string} [params.id] - Optional identifier for the account. If specified, a new account with this ID will be created even if one already exists for the signer
  * @param {object} [params.creationHint] - Optional hints to guide account creation. These are ignored if an account already exists
- * @returns {Promise<RequestAccountResult>} A Promise that resolves to a SmartContractAccount instance
+ * @returns {Promise<RequestAccountResult>} A Promise that resolves to an object containing a smart account address
  *
  * @example
  * ```ts

@@ -24,6 +24,24 @@ export type SignPreparedCallsResult = Prettify<
  * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
+ *
+ * @example
+ * ```ts
+ * // Prepare a user operation call.
+ * const preparedCalls = await client.prepareCalls({
+ *   calls: [{
+ *     to: "0x1234...",
+ *     data: "0xabcdef...",
+ *     value: "0x0"
+ *   }],
+ * });
+ *
+ * // Sign the prepared calls.
+ * const signedCalls = await client.signPreparedCalls(preparedCalls);
+ *
+ * // Send the signed calls.
+ * const result = await client.sendPreparedCalls(signedCalls);
+ * ```
  */
 export async function signPreparedCalls(
   signerClient: SignerClient,
