@@ -42,6 +42,10 @@ navigation:
                     path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
                   - page: Set up your client
                     path: wallets/pages/react-native/using-smart-accounts/setup-smart-account-client.mdx
+                  - page: Signer setup
+                    path: wallets/pages/react-native/signer/setup-guide.mdx
+                  - page: Setting up the Accounts Provider
+                    path: wallets/pages/react-native/signer/authenticating-users/setting-up-the-accounts-provider.mdx
                   - page: Deep linking
                     path: wallets/pages/overview/react-native/deep-linking.mdx
               - section: Other JS frameworks
@@ -153,6 +157,8 @@ navigation:
                 path: wallets/pages/react/pregenerate-wallets.mdx
               - page: User sessions
                 path: wallets/pages/signer/user-sessions.mdx
+              - page: Using Solana Signer
+                path: wallets/pages/react/solana-wallets/get-started.mdx
               - section: Policies
                 contents:
                   - page: Overview
