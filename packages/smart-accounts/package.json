@@ -43,8 +43,9 @@
     "typescript-template": "*"
   },
   "dependencies": {
+    "@account-kit/infra": "*",
+    "@alchemy/aa-infra": "*",
     "@alchemy/common": "*",
-    "@alchemy/wallet-apis": "*",
     "ox": "^0.8.5",
     "viem": "2.29.2"
   },
