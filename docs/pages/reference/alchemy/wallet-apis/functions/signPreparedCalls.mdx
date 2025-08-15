@@ -13,6 +13,27 @@ Signs prepared calls using the provided signer.
 import { signPreparedCalls } from "@alchemy/wallet-apis";
 ```
 
+## Usage
+
+```ts
+// Prepare a user operation call.
+const preparedCalls = await client.prepareCalls({
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: "0x0",
+    },
+  ],
+});
+
+// Sign the prepared calls.
+const signedCalls = await client.signPreparedCalls(preparedCalls);
+
+// Send the signed calls.
+const result = await client.sendPreparedCalls(signedCalls);
+```
+
 ## Parameters
 
 ### signerClient
