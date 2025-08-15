@@ -1,1 +1,1 @@
-export { alchemyAuth } from "./alchemyAuth.js";
+export { alchemyAuth, type AlchemyAuthOptions } from "./alchemyAuth.js";
