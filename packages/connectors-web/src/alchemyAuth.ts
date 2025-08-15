@@ -3,7 +3,7 @@ import {
   // type Connector,
 } from "@wagmi/core";
 
-export interface AlchemyAuthWebOptions {
+export interface AlchemyAuthOptions {
   // web-specific: popup OAuth, iframe, cookie/session opts, etc.
 }
 
@@ -18,10 +18,10 @@ alchemyAuth.type = "alchemy-auth" as const;
  *
  * @see https://wagmi.sh/dev/creating-connectors
  *
- * @param {AlchemyAuthWebOptions} parameters - Optional configuration for the connector.
+ * @param {AlchemyAuthOptions} parameters - Optional configuration for the connector.
  * @returns {ReturnType<typeof createConnector>} A Wagmi connector compatible with `createConfig`.
  */
-export function alchemyAuth(parameters: AlchemyAuthWebOptions = {}) {
+export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
   // TODO: remove this
   void parameters;
 
