@@ -192,4 +192,44 @@ Batching user operations allows you to execute multiple transactions atomically 
     ```
 
   </Tab>
+  <Tab title="APIs">
+    It’s easy to send calls in batch from a single account! Simply include an array of calls when calling `wallet_sendPreparedCalls`. The calls will be batched into a single atomic user operation.
+
+    <Tip>
+    If you are unfamiliar with sending a single user operation call using Wallet APIs, check out [this guide](/wallets/transactions/send/send-user-operations) first to learn how to request a smart account and sign calls.
+    </Tip>
+
+    ```bash
+    curl --request POST \
+        --url https://api.g.alchemy.com/v2/API_KEY \
+        --header 'accept: application/json' \
+        --header 'content-type: application/json' \
+        --data '
+    {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_prepareCalls",
+        "params": [
+            {
+                "calls": [
+                    {
+                        "to": "0xTARGET_ADDRESS"
+                        "data": "0x",
+                        "value": "0x00"
+                    },
+                    {
+                        "to": "0xTARGET_ADDRESS"
+                        "data": "0x",
+                        "value": "0x00"
+                    }
+                ],
+                "from": "0xACCOUNT_ADDRESS",
+                "chainId": "0xCHAIN_ID"
+            }
+        ]
+    }
+    '
+    ```
+
+  </Tab>
 </Tabs>
