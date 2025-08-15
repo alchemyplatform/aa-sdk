@@ -78,7 +78,7 @@ navigation:
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
               - page: Social Payments Demo
                 slug: recipes/social-payments-demo
-                path: wallets/pages/recipes/social-payments.mdx
+                path: wallets/pages/recipes/social-payments-demo.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
