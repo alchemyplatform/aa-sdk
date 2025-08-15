@@ -4,7 +4,7 @@ description: Learn how to build a basic social payments application via smart ac
 slug: wallets/recipes/social-payments-demo
 ---
 
-Welcome to the world of Account Abstraction and Smart Wallets! This tutorial will guide you through building a full-featured cryptocurrency payment application using Alchemy's Account Kit SDK, just like the Palchemy demo you're exploring.
+In this tutorial, you'll build a basic social payments application using Alchemy Account Kit and smart wallets, similar to the Palchemy demo.
 
 ## 🎯 What You'll Learn
 
@@ -29,21 +29,47 @@ Traditional crypto wallets create friction for users:
 Account Kit solves these problems with **Smart Wallets** that provide:
 
 - **Social login**: Sign in with email, Google, Facebook, or passkeys
-- **Gasless transactions**: Your app can sponsor transaction fees
+- **gasless transactions**: Your app can sponsor transaction fees
 - **Account recovery**: No more lost seed phrases
 - **Progressive onboarding**: Users don't need to understand crypto to use your app
+
+## 🔧 Prerequisites
+
+Before starting this tutorial, ensure you have:
+
+### Development Environment
+
+- **Node.js 18+** installed on your machine
+- **npm** or **yarn** package manager
+- A code editor (VS Code recommended)
+- Basic knowledge of **React** and **Next.js**
+
+### Accounts & API Keys
+
+1. **Alchemy Account**: Sign up for free at [alchemy.com](https://alchemy.com)
+2. **Create an App**:
+   - Go to [Alchemy Dashboard](https://dashboard.alchemy.com)
+   - Create a new app on **Arbitrum Sepolia** network
+   - Copy your **API Key**
+3. **Gas Manager Setup**:
+   - Navigate to [Gas Manager](https://dashboard.alchemy.com/gas-manager)
+   - Create a new policy for **Arbitrum Sepolia**
+   - Set spending limits (start with $5-10 for testing)
+   - Copy your **Policy ID**
+4. **Turnkey Setup** (Optional - for advanced key management):
+   - Sign up at [Turnkey Dashboard](https://app.turnkey.com)
+   - Create your organization and get your Organization ID
+   - Generate an API keypair for authentication
+   - Follow the [Turnkey quickstart guide](https://docs.turnkey.com/getting-started/quickstart) for detailed setup
+
+### Testnet Setup
+
+- Get Arbitrum Sepolia ETH from the [faucet](https://www.alchemy.com/faucets/arbitrum-sepolia) (optional, as transactions will be gasless)
+- Have a browser wallet like MetaMask for testing (optional)
 
 ---
 
 ## Part 1: Setting Up the Foundation
-
-### 🔧 Prerequisites
-
-Before we start, make sure you have:
-
-- Node.js 18+ installed
-- Basic React/Next.js knowledge
-- An Alchemy account (free at [alchemy.com](https://alchemy.com))
 
 ### 🏗️ Project Setup
 
@@ -68,6 +94,21 @@ npm install viem @tanstack/react-query
 
 ### ⚙️ Configuration
 
+First, create a `.env.local` file in your project root with your API keys:
+
+```bash
+# .env.local
+NEXT_PUBLIC_ALCHEMY_API_KEY=your_api_key_here
+NEXT_PUBLIC_ALCHEMY_POLICY_ID=your_policy_id_here
+
+# Turnkey Configuration
+TURNKEY_API_PUBLIC_KEY=your_turnkey_public_key
+TURNKEY_API_PRIVATE_KEY=your_turnkey_private_key
+TURNKEY_ORGANIZATION_ID=your_turnkey_organization_id
+```
+
+**Important**: Replace `your_api_key_here` and `your_policy_id_here` with the actual values from your Alchemy dashboard setup above.
+
 Create your Account Kit configuration file `config/account-kit.ts`:
 
 ```typescript
@@ -79,36 +120,34 @@ import {
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
 
-// Get your API key from https://dashboard.alchemy.com/
 const API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;
 const POLICY_ID = process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID!;
 
-// Configure the authentication methods
 const uiConfig: AlchemyAccountsUIConfig = {
   illustrationStyle: "outline",
   auth: {
     sections: [
-      [{ type: "email" }], // Email-based login
+      [{ type: "email" }],
       [
-        { type: "passkey" }, // Biometric authentication
+        { type: "passkey" },
         { type: "social", authProviderId: "google", mode: "popup" },
         { type: "social", authProviderId: "facebook", mode: "popup" },
       ],
     ],
-    addPasskeyOnSignup: true, // Encourage passkey setup
+    addPasskeyOnSignup: true,
   },
 };
 
 export const config = createConfig(
   {
     transport: alchemy({ apiKey: API_KEY }),
-    chain: arbitrumSepolia, // Using testnet for development
-    ssr: true, // Enable server-side rendering support
-    storage: cookieStorage, // Persist sessions across page reloads
-    enablePopupOauth: true, // Allow social login popups
-    policyId: POLICY_ID, // For gas sponsorship
+    chain: arbitrumSepolia,
+    ssr: true,
+    storage: cookieStorage,
+    enablePopupOauth: true,
+    policyId: POLICY_ID,
   },
-  uiConfig,
+  uiConfig
 );
 
 export const queryClient = new QueryClient();
@@ -277,7 +316,12 @@ export default function Home() {
 }
 ```
 
-**🎉 Checkpoint:** At this point, you have a working app with social login! Users can sign in and see their smart wallet address.
+**🎉 Checkpoint:** At this point, you should be able to:
+
+- Run your app with `npm run dev`
+- See a login screen with social authentication options
+- Sign in using email, passkey, or social providers
+- View your smart wallet address and network information on Arbitrum Sepolia
 
 ---
 
@@ -311,7 +355,7 @@ export function useWalletBalance() {
       setLoading(true);
       try {
         const ethBalance = await alchemy.core.getBalance(
-          client.account.address,
+          client.account.address
         );
         const formattedBalance = (
           parseFloat(ethBalance.toString()) / 1e18
@@ -352,19 +396,17 @@ export function SendTransaction() {
     if (!client || !to || !amount) return;
 
     setLoading(true);
-    try {
-      // Send ETH to another address
-      const hash = await client.sendTransaction({
-        to: to as `0x${string}`,
-        value: parseEther(amount),
-        chain: client.chain,
-      });
+          try {
+        const hash = await client.sendTransaction({
+          to: to as `0x${string}`,
+          value: parseEther(amount),
+          chain: client.chain,
+        });
 
-      setTxHash(hash);
+        setTxHash(hash);
 
-      // Wait for transaction confirmation
-      const receipt = await client.waitForTransactionReceipt({ hash });
-      console.log("Transaction confirmed:", receipt);
+        const receipt = await client.waitForTransactionReceipt({ hash });
+        console.log("Transaction confirmed:", receipt);
     } catch (error) {
       console.error("Transaction failed:", error);
       alert("Transaction failed. Please try again.");
@@ -434,49 +476,56 @@ export function SendTransaction() {
 }
 ```
 
-**💡 Pro Tip:** Notice how simple transaction sending is with Account Kit! No gas estimation, no nonce management, no complex wallet connection flows.
+**🎉 Checkpoint:** At this point, you should be able to:
+
+- View your wallet balance in ETH
+- Send transactions to other addresses
+- See transaction confirmations with block explorer links
+- Experience gasless transactions (if gas policy is configured)
 
 ---
 
-## Part 4: Advanced Features
+## Part 4: Complete Your MVP
+
+Congratulations! You now have a complete social payments application with:
+
+- ✅ Social authentication (email, passkey, OAuth)
+- ✅ Smart wallet creation and management
+- ✅ Balance viewing and transaction sending
+- ✅ gasless transactions (when gas policy is configured)
+
+This covers all the core functionality needed for a basic payments app. Users can sign in seamlessly and send cryptocurrency without the typical Web3 friction.
+
+---
+
+## Part 5: Advanced Features (Optional)
+
+Ready to add more sophisticated features? Here are some advanced patterns to enhance your application:
 
 ### ⛽ Gas Sponsorship
 
-One of the most powerful features of Account Kit is gas sponsorship. Your app can pay for users' transaction fees, creating a seamless Web2-like experience.
-
-**Setting up Gas Policies:**
-
-1. Go to [Alchemy Gas Manager](https://dashboard.alchemy.com/gas-manager)
-2. Create a new policy for Arbitrum Sepolia
-3. Set spending limits and rules
-4. Copy the Policy ID to your environment variables
-
-**How it works in your app:**
+Configure automatic transaction sponsorship for a seamless user experience:
 
 ```typescript
 // When you configure Account Kit with a policyId,
-// all transactions are automatically sponsored!
+// all transactions are automatically sponsored
 export const config = createConfig({
   // ... other config
   policyId: process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID,
 });
 
-// Users can now send transactions without holding ETH for gas!
+// Users can now send transactions without holding ETH for gas
 const hash = await client.sendTransaction({
   to: "0x...",
   value: parseEther("0.01"),
-  // No gas fee required from user! ✨
 });
 ```
 
 ### 🔒 Security Best Practices
 
-When building production applications:
+Essential security patterns for production applications:
 
 ```typescript
-// ✅ Good: Environment variables for sensitive data
-const API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
-
 // ✅ Good: Validate user inputs
 function validateAddress(address: string) {
   return /^0x[a-fA-F0-9]{40}$/.test(address);
@@ -485,12 +534,10 @@ function validateAddress(address: string) {
 // ✅ Good: Handle errors gracefully
 try {
   const hash = await client.sendTransaction(tx);
-  // Handle success
 } catch (error) {
   if (error.message.includes("insufficient funds")) {
     // Show user-friendly message
   }
-  // Log error for debugging
 }
 
 // ❌ Bad: Never log sensitive data
@@ -506,35 +553,20 @@ Customize the authentication experience:
 
 ```typescript
 const uiConfig: AlchemyAccountsUIConfig = {
-  illustrationStyle: "outline", // or "filled"
+  illustrationStyle: "outline",
   auth: {
     sections: [
-      // Prioritize email login
-      [{ type: "email" }],
-
-      // Secondary options
+      [{ type: "email" }], // Prioritize email login
       [
         { type: "passkey" },
-        {
-          type: "social",
-          authProviderId: "google",
-          mode: "popup", // or "redirect"
-        },
+        { type: "social", authProviderId: "google", mode: "popup" },
       ],
     ],
-    addPasskeyOnSignup: true, // Encourage secure authentication
+    addPasskeyOnSignup: true,
   },
-
-  // Customize the modal appearance
-  modalSize: "compact", // or "wide"
-
-  // Custom branding
   theme: {
-    borderRadius: "sm", // "sm", "md", "lg", "none"
-    primaryColor: {
-      light: "#3B82F6",
-      dark: "#60A5FA",
-    },
+    borderRadius: "sm",
+    primaryColor: { light: "#3B82F6", dark: "#60A5FA" },
   },
 };
 ```
@@ -586,7 +618,7 @@ const SendTransaction = lazy(() => import("./SendTransaction"));
 Building with Alchemy Account Kit gives you superpowers:
 
 1. **No Wallet Friction**: Users sign in like any Web2 app
-2. **Gasless Transactions**: Remove the biggest barrier to crypto adoption
+2. **gasless transactions**: Remove the biggest barrier to crypto adoption
 3. **Smart Contract Wallets**: Advanced features like account recovery and upgradability
 4. **Developer Experience**: Simple APIs that abstract blockchain complexity
 5. **Production Ready**: Battle-tested infrastructure used by top DeFi apps
@@ -610,6 +642,17 @@ With Account Kit, users just:
 ---
 
 ## 📚 Additional Resources
+
+### Modular Learning
+
+If you want to integrate specific features into existing apps rather than building from scratch:
+
+- **[How to Use Smart Accounts](/wallets/concepts/intro-to-account-kit)** - Working with smart contract wallets
+- **[How to Sponsor Gas](/wallets/transactions/sponsor-gas)** - Add gas sponsorship to any app
+- **[How to Add Social Login](/wallets/authentication/login-methods/social-login)** - Integrate social authentication
+- **[How to Send gasless Transactions](/wallets/react/pay-gas-with-any-token)** - Pay gas with any token
+
+### Learning & Support
 
 - **[Account Kit Documentation](https://accountkit.alchemy.com/)**
 - **[Alchemy University](https://university.alchemy.com/)** - Free blockchain development courses
