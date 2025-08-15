@@ -39,6 +39,11 @@
     "test": "vitest",
     "test:run": "vitest run"
   },
+  "peerDependencies": {
+    "wagmi": "^2",
+    "@wagmi/core": "^2",
+    "viem": "^2"
+  },
   "devDependencies": {
     "typescript-template": "*"
   },
