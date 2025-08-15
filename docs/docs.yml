@@ -214,8 +214,16 @@ navigation:
             contents:
               # - page: Overview
               #   path: wallets/pages/transactions/low-level-infra/overview.mdx
+              - page: Infra Quickstart
+                path: wallets/pages/infra/quickstart.mdx
               - page: Bundler Quickstart
                 path: wallets/pages/bundler-api/bundler-api-quickstart.mdx
+              - page: Bundler API Endpoints
+                path: wallets/pages/bundler-api/bundler-api-endpoints/bundler-api-endpoints.mdx
+              - page: Bundler API Fee Logic
+                path: wallets/pages/bundler-api/bundler-api-fee-logic.mdx
+              - page: Gas Coverage API Endpoints
+                path: wallets/pages/gas-manager-admin-api/gas-coverage-api-endpoints/paymaster-api-endpoints.mdx
               - page: How to sponsor gas on EVM
                 path: wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
               - page: Conditional gas sponsorship
