@@ -224,6 +224,8 @@ navigation:
                 path: wallets/pages/bundler-api/bundler-api-fee-logic.mdx
               - page: Gas Coverage API Endpoints
                 path: wallets/pages/gas-manager-admin-api/gas-coverage-api-endpoints/paymaster-api-endpoints.mdx
+              - page: Gas Manager Admin API Endpoints
+                path: wallets/pages/gas-manager-admin-api/gas-manager-admin-api-endpoints/gas-manager-admin-api-endpoints.mdx
               - page: How to sponsor gas on EVM
                 path: wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
               - page: Conditional gas sponsorship
