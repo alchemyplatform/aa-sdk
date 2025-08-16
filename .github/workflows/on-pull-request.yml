@@ -67,6 +67,8 @@ jobs:
       API_KEY: ${{ secrets.API_KEY }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TEST_ALCHEMY_API_KEY: ${{ secrets.TEST_ALCHEMY_API_KEY }}
+      TEST_PAYMASTER_POLICY_ID: ${{ secrets.TEST_PAYMASTER_POLICY_ID }}
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3

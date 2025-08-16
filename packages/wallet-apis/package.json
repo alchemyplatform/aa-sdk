@@ -1,0 +1,65 @@
+{
+  "name": "@alchemy/wallet-apis",
+  "version": "0.0.0",
+  "description": "Alchemy Wallet APIs",
+  "author": "Alchemy",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "typings": "./dist/types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src/**/*.ts",
+    "!dist/**/*.tsbuildinfo",
+    "!vitest.config.ts",
+    "!.env",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
+    "!src/__tests__/**/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "prebuild": "tsx ./inject-version.ts",
+    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/wallet-apis",
+    "clean": "rm -rf ./dist",
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "devDependencies": {
+    "@alchemy/wallet-api-types": "^0.1.0-alpha.15",
+    "@sinclair/typebox": "^0.34.38",
+    "@types/deep-equal": "^1.0.4",
+    "typescript-template": "*"
+  },
+  "dependencies": {
+    "@alchemy/common": "*",
+    "deep-equal": "^2.2.3",
+    "viem": "2.29.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alchemyplatform/aa-sdk/issues"
+  },
+  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme"
+}
