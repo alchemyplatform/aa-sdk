@@ -319,8 +319,6 @@ describe("Client E2E Tests", () => {
     },
   );
 
-  // TODO(jh): test calling the client's 1193 rpc methods here.
-
   const givenTypedData = {
     types: {
       Person: [

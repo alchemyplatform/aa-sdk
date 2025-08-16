@@ -4,8 +4,11 @@ import type {
   Address,
   Chain,
   Client,
+  EIP1193Events,
+  EIP1193RequestFn,
   Hex,
   JsonRpcAccount,
+  Prettify,
   Transport,
   WalletClient,
   WalletRpcSchema,
@@ -21,19 +24,24 @@ export type ExtractRpcMethod<
   M extends T[number]["Method"],
 > = Extract<T[number], { Method: M }>;
 
-type SmartWalletClient1193Methods = [
+export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
   ExtractRpcMethod<WalletRpcSchema, "eth_accounts">,
   ExtractRpcMethod<WalletRpcSchema, "personal_sign">,
   ExtractRpcMethod<WalletRpcSchema, "eth_signTypedData_v4">,
+  ExtractRpcMethod<WalletRpcSchema, "eth_sendTransaction">,
   ExtractRpcMethod<WalletRpcSchema, "wallet_sendCalls">,
-  ExtractRpcMethod<WalletRpcSchema, "wallet_getCapabilities">,
+  // TODO(jh): add this once wallet server supports it.
+  // ExtractRpcMethod<WalletRpcSchema, "wallet_getCapabilities">,
 ];
 
-export type SmartWalletClientRpcSchema = [
-  ...WalletServerViemRpcSchema,
-  ...SmartWalletClient1193Methods,
-];
+export type SmartWalletClientEip1193Provider = Prettify<
+  EIP1193Events & {
+    request: EIP1193RequestFn<
+      [...WalletServerViemRpcSchema, ...SmartWalletClient1193Methods]
+    >;
+  }
+>;
 
 export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
@@ -43,7 +51,7 @@ export type BaseWalletClient<
   Transport<"alchemy">,
   Chain,
   JsonRpcAccount<Address> | undefined,
-  SmartWalletClientRpcSchema,
+  WalletServerViemRpcSchema,
   TExtend
 >;
 

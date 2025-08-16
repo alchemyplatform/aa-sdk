@@ -15,6 +15,7 @@ global.fetch = fetch;
 beforeAll(async () => {
   const client060 = local060Instance.getClient();
   const client070 = local070Instance.getClient();
+  console.log({ client060, client070 });
   await setAutomine(client060, true);
   await setAutomine(client070, true);
 
