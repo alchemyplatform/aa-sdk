@@ -13,6 +13,20 @@ Fees and rent are a significant barrier to entry for new users of your app. With
   - We support rent sponsorship for `createAccount` and `createAssociatedTokenAccount` programs.
   - If you need support for sponsoring rent in more programs, please contact us at wallets@alchemy.com.
 
+Our Solana Paymaster covers gas sponsorship and rent for a curated set of widely-used Solana programs and instructions. Don’t see the program you need on this list? [Get in touch with us](mailto:smart-wallets@alchemy.com).
+
+### Supported Instructions & Programs
+
+| Instruction | Program ID | Description |
+| --- | --- | --- |
+| System.transfer | `11111111111111111111111111111111` | Transfers SOL from one account to another. |
+| System.createAccount | `11111111111111111111111111111111` | Creates a new account with a specified owner and lamport balance. |
+| System.createAssociatedTokenAccount | `11111111111111111111111111111111` (via associated token logic) | Creates a token account for an SPL token. |
+| ComputeBudget Program | `ComputeBudget111111111111111111111111111111` | Requests additional compute units/prioritization fees. |
+| Jupiter DEX Aggregator | `JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4` | Token swaps and routing via Jupiter DEX. |
+| LiFi Cross-Chain Router | `3i5JeuZuUxeKtVysUnwQNGerJP2bSMX9fTFfS4Nxe3Br` | LiFi routing for cross-chain swaps. |
+| SPL Token Program | `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA` | Common SPL token operations. |
+
 We make it easy for you to sponsor fees/rent for any transaction: you don’t need to hold any tokens, we front the fees/rent for you and add it to your monthly bill.
 
 <Info>
