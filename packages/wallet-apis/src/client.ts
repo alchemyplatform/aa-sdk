@@ -104,7 +104,7 @@ export const createSmartWalletClient = <
         // TODO(jh): try harder to make this easier to be typesafe.
         switch (method) {
           case "eth_chainId": {
-            if (baseClient.chain.id) {
+            if (!baseClient.chain.id) {
               throw new ChainNotFoundError();
             }
             return toHex(baseClient.chain.id) satisfies ExtractRpcMethod<
@@ -138,7 +138,9 @@ export const createSmartWalletClient = <
               );
             }
             return (await baseClient.signMessage({
-              message: data,
+              message: {
+                raw: data,
+              },
               account,
             })) satisfies ExtractRpcMethod<
               SmartWalletClient1193Methods,

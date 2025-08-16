@@ -1,15 +1,14 @@
-import {
-  createClient,
-  createPublicClient,
-  custom,
-  hashMessage,
-  type Address,
-} from "viem";
+import { createClient, createPublicClient, custom, type Address } from "viem";
 import { alchemy } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { createSmartWalletClient } from "./client.js";
-import { signMessage, signTypedData } from "viem/actions";
+import {
+  getAddresses,
+  getChainId,
+  signMessage,
+  signTypedData,
+} from "viem/actions";
 
 describe("Provider E2E Tests", () => {
   const transport = alchemy(
@@ -26,11 +25,13 @@ describe("Provider E2E Tests", () => {
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
 
+  const account = "0x76E765e80FFAC96ac10Aa8908a8267A3B80d606D";
+
   const _client = createSmartWalletClient({
     transport,
     chain: arbitrumSepolia,
     signer,
-    account: "0x76E765e80FFAC96ac10Aa8908a8267A3B80d606D",
+    account,
   });
 
   const provider = _client.getProvider();
@@ -38,6 +39,7 @@ describe("Provider E2E Tests", () => {
   const clientFromProvider = createClient({
     account: _client.account,
     transport: custom(provider),
+    chain: arbitrumSepolia,
   });
 
   const publicClient = createPublicClient({
@@ -68,9 +70,15 @@ describe("Provider E2E Tests", () => {
     expect(isValid).toBe(true);
   });
 
-  // TODO(jh): eth_chainId
+  it("returns the correct chain id", async () => {
+    const chainId = await getChainId(clientFromProvider);
+    expect(chainId).toBe(arbitrumSepolia.id);
+  });
 
-  // TODO(jh): eth_accounts
+  it("returns the smart account address", async () => {
+    const addresses = await getAddresses(clientFromProvider);
+    expect(addresses).toEqual([account]);
+  });
 
   // TODO(jh): eth_sendTransaction (w/ or w/o paymaster, normal or 7702)
 
