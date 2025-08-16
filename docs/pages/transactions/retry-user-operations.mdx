@@ -115,4 +115,138 @@ slug: wallets/transactions/retry-user-operations
     In the above example, we only try to drop and replace once before failing completely, but you can build more complex retry logic using this combination of `waitForUserOperationTransaction` and `dropAndReplace`.
 
   </Tab>
+  <Tab title="APIs">
+
+    If fees change and your user operation gets stuck in the mempool, you can use drop and replace to resend the user operation with higher fees. Learn how to send user operations via Wallet APIs.
+
+    ## Drop-and-replace workflow
+
+    1. **Check status** of existing calls using `wallet_getCallsStatus`
+    2. **Prepare new calls** using `wallet_prepareCalls` (you may need to adjust capabilities for higher fees)
+    3. **Send the retry** using `wallet_sendPreparedCalls`
+
+    ## API Examples
+
+    ### 1. Check current call status
+
+    ```bash
+    curl -X POST https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY \
+      -H "Content-Type: application/json" \
+      -d '{
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "wallet_getCallsStatus",
+        "params": ["0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"]
+      }'
+
+    ```
+
+    Response if calls are stuck:
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "status": "PENDING",
+        "receipts": null
+      }
+    }
+
+    ```
+
+    ### 2. Prepare retry calls with higher fees
+
+    ```bash
+    curl -X POST https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY \
+      -H "Content-Type: application/json" \
+      -d '{
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "wallet_prepareCalls",
+        "params": [{
+          "version": "1.0",
+          "chainId": "0x1",
+          "from": "0x742d35Cc6634C0532925a3b8D2e7442e7b8a1a1a",
+          "calls": [
+            {
+              "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+              "data": "0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d2e7442e7b8a1a1a0000000000000000000000000000000000000000000000000000000000989680",
+              "value": "0x0"
+            }
+          ],
+          "capabilities": {
+            "paymasterService": {
+              "url": "https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY"
+            }
+          }
+        }]
+      }'
+    ```
+
+    Response (fees depend on capabilities and gas manager configuration):
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "version": "1.0",
+        "chainId": "0x1",
+        "preparedCalls": [
+          {
+            "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            "data": "0xa9059cbb...",
+            "value": "0x0",
+            "gas": "0x7530",
+            "gasPrice": "0x4A817C800"
+          }
+        ],
+        "signatureRequest": {
+          "type": "personal_sign",
+          "data": {
+            "raw": "0x1234..."
+          }
+        }
+      }
+    }
+    ```
+
+    ### 3. Send retry with signature
+
+    ```bash
+    curl -X POST https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY \
+      -H "Content-Type: application/json" \
+      -d '{
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "wallet_sendPreparedCalls",
+        "params": [{
+          "version": "1.0",
+          "chainId": "0x1",
+          "preparedCalls": [
+            {
+              "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+              "data": "0xa9059cbb...",
+              "value": "0x0",
+              "gas": "0x7530",
+              "gasPrice": "0x4A817C800"
+            }
+          ],
+          "signature": "0x1234567890abcdef..."
+        }]
+    }'
+    ```
+
+    Response with new bundle ID:
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": "0xnew_bundle_id_for_retry"
+    }
+    ```
+
+  </Tab>
 </Tabs>

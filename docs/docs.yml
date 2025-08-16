@@ -206,6 +206,8 @@ navigation:
                     path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
+          - page: Track status
+            path: wallets/pages/transactions/track-user-operation-status.mdx
           - page: Retry User Operations
             path: wallets/pages/transactions/retry-user-operations.mdx
           - section: Low-level infra
