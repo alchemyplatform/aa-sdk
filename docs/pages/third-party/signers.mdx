@@ -7,7 +7,7 @@ slug: wallets/third-party/signers
 Smart Wallets is designed to be flexible and allow you to use any Signer you want. If you choose not use our signer, you can either:
 
 1. Use a 3rd party library as a Signer that integrates with Smart Wallets.
-1. Implement [`SmartAccountSigner`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/signer/types.ts#L34) (exported in `@aa-sdk/core`).
+1. Implement [`SmartAccountSigner`](https://github.com/alchemyplatform/aa-sdk/blob/main/aa-sdk/core/src/signer/types.ts#L34) (exported in `@aa-sdk/core`).
 1. If your Signer is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant provider, you can leverage `viem`'s `WalletClient` and the [`WalletClientSigner`](/wallets/reference/aa-sdk/core/classes/WalletClientSigner/constructor) (exported in `@aa-sdk/core`).
 
 Then you can use your Signer as an owner on Smart Contracts exported from `@account-kit/smart-contracts` and with our infra Smart Account Clients exported from `@account-kit/infra`.
