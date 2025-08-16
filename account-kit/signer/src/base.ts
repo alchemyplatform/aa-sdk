@@ -81,6 +81,7 @@ type AlchemySignerStore = {
     email: string;
     providerName: string;
     idToken: string;
+    accessToken?: string;
   };
 };
 
@@ -1311,6 +1312,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     bundle,
     orgId,
     idToken,
+    accessToken,
     isNewUser,
   }: Extract<AuthParams, { type: "oauthReturn" }>): Promise<User> => {
     const user = this.inner.completeAuthWithBundle({
@@ -1319,6 +1321,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       connectedEventName: "connectedOauth",
       authenticatingType: "oauth",
       idToken,
+      accessToken,
     });
 
     this.emitNewUserEvent(isNewUser);
@@ -1774,6 +1777,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         email: prompt.email,
         providerName: prompt.providerName,
         idToken: prompt.idToken,
+        accessToken: prompt.accessToken,
       },
     });
   };

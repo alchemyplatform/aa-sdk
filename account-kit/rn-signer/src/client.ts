@@ -159,6 +159,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User> {
     if (!this.validAuthenticatingTypes.includes(params.authenticatingType)) {
       throw new Error("Unsupported authenticating type");
@@ -176,7 +177,11 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       throw new Error("Failed to inject credential bundle");
     }
 
-    const user = await this.whoami(params.orgId, params.idToken);
+    const user = await this.whoami(
+      params.orgId,
+      params.idToken,
+      params.accessToken,
+    );
 
     this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
@@ -213,6 +218,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const bundle = authResult["alchemy-bundle"] ?? "";
     const orgId = authResult["alchemy-org-id"] ?? "";
     const idToken = authResult["alchemy-id-token"] ?? "";
+    const accessToken = authResult["alchemy-access-token"];
     const isSignup = authResult["alchemy-is-signup"];
     const error = authResult["alchemy-error"];
 
@@ -226,6 +232,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
         orgId,
         connectedEventName: "connectedOauth",
         idToken,
+        accessToken,
         authenticatingType: "oauth",
       });
 
