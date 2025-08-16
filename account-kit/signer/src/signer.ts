@@ -55,6 +55,11 @@ export type AuthParams =
       isNewUser?: boolean;
     }
   | {
+      type: "custom-jwt";
+      jwt: string;
+      authProviderId?: string;
+    }
+  | {
       type: "otp";
       otpCode: string;
       multiFactors?: VerifyMfaParams[];
