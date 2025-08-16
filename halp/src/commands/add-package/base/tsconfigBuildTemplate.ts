@@ -1,0 +1,19 @@
+export function tsconfigBuildTemplate() {
+  return {
+    extends: "typescript-template/build.json",
+    exclude: [
+      "node_modules",
+      "**/*/__tests__",
+      "**/*/*.test.ts",
+      "**/*/*.test-d.ts",
+      "**/*/*.e2e.test.ts",
+      "vitest.config.ts",
+      "vitest.config.e2e.ts",
+    ],
+    include: ["src"],
+    compilerOptions: {
+      sourceMap: true,
+      jsx: "react-jsx",
+    },
+  };
+}
