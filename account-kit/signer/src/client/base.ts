@@ -879,6 +879,42 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   };
 
   /**
+   * This will remove members from an existing multi-sig account
+   *
+   * @param {string} orgId orgId of the multi-sig to remove members from
+   * @param {Address[]} members the addresses of the members to remove
+   */
+  public experimental_deleteFromMultiOwner = async (
+    orgId: string,
+    members: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const prepared = await this.request("/v1/multi-owner-prepare-delete", {
+      organizationId: orgId,
+      members: members.map((evmSignerAddress) => ({ evmSignerAddress })),
+    });
+
+    const stampedRequest = await multiOwnerClient.stampDeleteUsers(
+      prepared.result.deleteMembersRequest,
+    );
+
+    await this.request("/v1/multi-owner-update-root-quorum", {
+      stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+        prepared.result.updateRootQuorumRequest,
+      ),
+    });
+
+    await this.request("/v1/multi-owner-delete", {
+      stampedRequest,
+    });
+  };
+
+  /**
    * Returns the current user or null if no user is set.
    *
    * @returns {User | null} the current user object or null if no user is available
