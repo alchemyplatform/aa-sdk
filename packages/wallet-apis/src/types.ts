@@ -1,4 +1,3 @@
-import type { AlchemyTransport } from "@alchemy/common";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import type {
   Account,
@@ -9,18 +8,42 @@ import type {
   JsonRpcAccount,
   Transport,
   WalletClient,
+  WalletRpcSchema,
 } from "viem";
 import type { InternalState } from "./internal";
 
-type BaseWalletClient<
+export type ExtractRpcMethod<
+  T extends readonly {
+    Method: string;
+    Parameters?: unknown;
+    ReturnType: unknown;
+  }[],
+  M extends T[number]["Method"],
+> = Extract<T[number], { Method: M }>;
+
+type SmartWalletClient1193Methods = [
+  ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
+  ExtractRpcMethod<WalletRpcSchema, "eth_accounts">,
+  ExtractRpcMethod<WalletRpcSchema, "personal_sign">,
+  ExtractRpcMethod<WalletRpcSchema, "eth_signTypedData_v4">,
+  ExtractRpcMethod<WalletRpcSchema, "wallet_sendCalls">,
+  ExtractRpcMethod<WalletRpcSchema, "wallet_getCapabilities">,
+];
+
+export type SmartWalletClientRpcSchema = [
+  ...WalletServerViemRpcSchema,
+  ...SmartWalletClient1193Methods,
+];
+
+export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
     | { [key: string]: unknown }
     | undefined,
 > = Client<
-  AlchemyTransport,
+  Transport<"alchemy">,
   Chain,
   JsonRpcAccount<Address> | undefined,
-  WalletServerViemRpcSchema,
+  SmartWalletClientRpcSchema,
   TExtend
 >;
 

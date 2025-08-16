@@ -1,21 +1,32 @@
 import {
   createClient,
-  type Address,
-  type Chain,
-  type Client,
-  type LocalAccount,
-  type ParseAccount,
-  type Transport,
+  Address,
+  Chain,
+  Client,
+  LocalAccount,
+  ParseAccount,
+  Transport,
   createWalletClient,
+  custom,
+  toHex,
+  Hex,
+  WalletRpcSchema,
 } from "viem";
 import {
   smartWalletActions,
   type SmartWalletActions,
 } from "./decorators/smartWalletActions.js";
-import { type AlchemyTransport } from "@alchemy/common";
-import type { SignerClient } from "./types.js";
+import { BaseError, type AlchemyTransport } from "@alchemy/common";
+import type {
+  BaseWalletClient,
+  ExtractRpcMethod,
+  SignerClient,
+  SmartWalletClientRpcSchema,
+} from "./types.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import { createInternalState } from "./internal.js";
+import { AccountNotFoundError } from "../../../aa-sdk/core/src/errors/account.js";
+import { ChainNotFoundError } from "../../../aa-sdk/core/src/errors/client.js";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -51,14 +62,13 @@ export const createSmartWalletClient = <
   signer,
   policyId,
   policyIds,
-}: CreateSmartWalletClientParams<TAccount>): Client<
-  Transport,
-  Chain,
-  ParseAccount<TAccount>,
-  WalletServerViemRpcSchema,
+}: CreateSmartWalletClientParams<TAccount>): BaseWalletClient<
   SmartWalletActions<TAccount>
 > => {
-  const baseClient = createClient({ account, transport, chain });
+  const _policyIds = [
+    ...(policyId ? [policyId] : []),
+    ...(policyIds?.length ? policyIds : []),
+  ];
 
   // If the signer is a `LocalAccount` wrap it inside of a client now so
   // downstream actions can just use `getAction` to get signing actions
@@ -72,15 +82,122 @@ export const createSmartWalletClient = <
           chain,
         });
 
-  const _policyIds = [
-    ...(policyId ? [policyId] : []),
-    ...(policyIds?.length ? policyIds : []),
-  ];
+  const baseClient = createClient({
+    account,
+    transport: (opts) => {
+      const rpcTransport = transport(opts);
 
-  return baseClient
+      const customTransport = custom({
+        name: "SmartWalletClientTransport",
+        // TODO(jh): can we make this more typesafe to ensure every supported method is covered,
+        // get input types, and ensure we return the correct types?
+        async request({ method, params }) {
+          switch (method) {
+            case "eth_chainId": {
+              if (!opts.chain) {
+                throw new ChainNotFoundError();
+              }
+              return toHex(opts.chain.id) satisfies ExtractRpcMethod<
+                SmartWalletClientRpcSchema,
+                "eth_chainId"
+              >["ReturnType"];
+            }
+
+            case "eth_accounts": {
+              if (!account) {
+                throw new AccountNotFoundError();
+              }
+              return [account] satisfies ExtractRpcMethod<
+                SmartWalletClientRpcSchema,
+                "eth_accounts"
+              >["ReturnType"];
+            }
+
+            case "personal_sign": {
+              if (!baseClient.account) {
+                throw new AccountNotFoundError();
+              }
+              const [data, address] = params as ExtractRpcMethod<
+                SmartWalletClientRpcSchema,
+                "personal_sign"
+              >["Parameters"];
+
+              if (address?.toLowerCase() !== account?.toLowerCase()) {
+                throw new BaseError(
+                  "Cannot sign for an address other than the current account.",
+                );
+              }
+              // TODO(jh): how do we get rid of these circular errors????
+              const sig: Hex = await baseClient.signMessage({
+                message: data,
+                account: address,
+              });
+
+              return sig satisfies ExtractRpcMethod<
+                WalletRpcSchema,
+                "personal_sign"
+              >["ReturnType"];
+            }
+
+            // case "eth_sendTransaction":
+            //   if (!client.account) {
+            //     throw new AccountNotFoundError();
+            //   }
+            //   if (!client.chain) {
+            //     throw new ChainNotFoundError();
+            //   }
+            //   const [tx] = params as [FormattedTransactionRequest];
+            //   return client.sendTransaction({
+            //     ...tx,
+            //     account: client.account,
+            //     chain: client.chain,
+            //   });
+            // case "eth_signTypedData_v4": {
+            //   if (!client.account) {
+            //     throw new AccountNotFoundError();
+            //   }
+            //   const [address, dataParams] = params!;
+            //   if (
+            //     address?.toLowerCase() !== client.account.address.toLowerCase()
+            //   ) {
+            //     throw new Error(
+            //       "cannot sign for address that is not the current account",
+            //     );
+            //   }
+            //   try {
+            //     return client.signTypedData({
+            //       account: client.account,
+            //       typedData:
+            //         typeof dataParams === "string"
+            //           ? JSON.parse(dataParams)
+            //           : dataParams,
+            //     });
+            //   } catch {
+            //     throw new Error("invalid JSON data params");
+            //   }
+            // }
+            // TODO(jh): wallet_sendCalls
+            // TODO(jh): wallet_getCapabilities
+            default:
+              // TODO(jh): can even this be typesafe w/ the `WalletServerViemRpcSchema`?
+              return rpcTransport.request({ method, params });
+          }
+        },
+      })(opts);
+
+      return {
+        ...customTransport,
+        ...rpcTransport,
+        request: customTransport.request,
+      };
+    },
+    chain,
+  })
     .extend(() => ({
       policyIds: _policyIds,
       internal: createInternalState(),
     }))
     .extend(smartWalletActions(signerClient));
+
+  return baseClient;
 };
