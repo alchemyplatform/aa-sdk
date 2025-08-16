@@ -118,9 +118,9 @@ export type DropAndReplaceUserOperationParameters<
 export type WaitForUserOperationTxParameters = {
   hash: Hex;
   /**
-   * Exponential backoff paramters that can be used to override
+   * Exponential backoff parameters that can be used to override
    * the configuration on the client. If not provided, this method
-   * will use the paramters passed via the `opts` parameter on the
+   * will use the parameters passed via the `opts` parameter on the
    * smart account client.
    */
   retries?: {
