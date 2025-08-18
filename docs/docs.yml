@@ -247,7 +247,7 @@ navigation:
 
       - section: Funding
         contents:
-          - page: Sign Up (Coming Soon)
+          - page: Early Access
             path: wallets/pages/funding/signup.mdx
 
       - section: API Reference
