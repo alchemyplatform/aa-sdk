@@ -43,7 +43,6 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/infra": "*",
     "@alchemy/aa-infra": "*",
     "@alchemy/common": "*",
     "ox": "^0.8.5",

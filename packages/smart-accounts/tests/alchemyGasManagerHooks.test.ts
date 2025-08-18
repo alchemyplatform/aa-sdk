@@ -3,6 +3,16 @@ import { alchemyGasManagerHooks } from "../src/alchemyGasManagerHooks.js";
 import { toHex, type Address } from "viem";
 
 describe("alchemyGasManagerHooks - Optimized Flow", () => {
+  // Helper to create mock bundler client with required account methods
+  const createMockBundlerClient = (requestMock: any) => ({
+    request: requestMock,
+    account: {
+      getStubSignature: vi.fn().mockResolvedValue(
+        "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
+      ),
+    },
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -11,8 +21,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
     const hooks = alchemyGasManagerHooks(policyId);
 
     // Mock bundler client
-    const mockBundlerClient = {
-      request: vi.fn().mockImplementation(({ method }) => {
+    const mockBundlerClient = createMockBundlerClient(
+      vi.fn().mockImplementation(({ method }) => {
         if (method === "alchemy_requestGasAndPaymasterAndData") {
           return Promise.resolve({
             callGasLimit: "0x5208",
@@ -27,8 +37,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
           });
         }
         return Promise.resolve(null);
-      }),
-    };
+      })
+    );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
 
@@ -88,8 +98,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
     const hooks = alchemyGasManagerHooks("test-policy");
 
     // Mock bundler client
-    const mockBundlerClient = {
-      request: vi.fn().mockImplementation(({ method }) => {
+    const mockBundlerClient = createMockBundlerClient(
+      vi.fn().mockImplementation(({ method }) => {
         if (method === "alchemy_requestGasAndPaymasterAndData") {
           return Promise.resolve({
             callGasLimit: "0x5208",
@@ -101,8 +111,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
           });
         }
         return Promise.resolve(null);
-      }),
-    };
+      })
+    );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
 
@@ -133,16 +143,16 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
   it("should invalidate cache for different user operations", async () => {
     const hooks = alchemyGasManagerHooks("test-policy");
 
-    const mockBundlerClient = {
-      request: vi.fn().mockResolvedValue({
+    const mockBundlerClient = createMockBundlerClient(
+      vi.fn().mockResolvedValue({
         callGasLimit: "0x5208",
         preVerificationGas: "0x5208",
         verificationGasLimit: "0x5208",
         maxFeePerGas: "0x3b9aca00",
         maxPriorityFeePerGas: "0xf4240",
         paymasterAndData: "0xabcdef",
-      }),
-    };
+      })
+    );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
 
@@ -194,9 +204,9 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
       paymasterPostOpGasLimit: "0x7530", // 30000
     };
 
-    const mockBundlerClient = {
-      request: vi.fn().mockResolvedValueOnce(mockResponse),
-    };
+    const mockBundlerClient = createMockBundlerClient(
+      vi.fn().mockResolvedValueOnce(mockResponse)
+    );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
     const userOpParams = {
@@ -272,8 +282,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
       baseFeePerGas: "0x2540be400", // 10 gwei
     };
 
-    const mockBundlerClient = {
-      request: vi.fn().mockImplementation(({ method }) => {
+    const mockBundlerClient = createMockBundlerClient(
+      vi.fn().mockImplementation(({ method }) => {
         if (method === "eth_getBlockByNumber") {
           return Promise.resolve(mockBlock);
         }
@@ -281,8 +291,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
           return Promise.resolve("0x5f5e100"); // 0.1 gwei
         }
         return Promise.resolve(null);
-      }),
-    };
+      })
+    );
 
     // Call estimateFeesPerGas without any prior paymaster calls
     const fees = await hooks.userOperation.estimateFeesPerGas({
@@ -309,8 +319,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
   it("should handle paymasterAndData format in response", async () => {
     const hooks = alchemyGasManagerHooks("test-policy");
 
-    const mockBundlerClient = {
-      request: vi.fn().mockResolvedValue({
+    const mockBundlerClient = createMockBundlerClient(
+      vi.fn().mockResolvedValue({
         callGasLimit: "0x5208",
         preVerificationGas: "0x5208",
         verificationGasLimit: "0x5208",
@@ -318,8 +328,8 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
         maxPriorityFeePerGas: "0xf4240",
         // Using combined paymasterAndData format
         paymasterAndData: "0x9876543210abcdef9876543210abcdef98765432deadbeef",
-      }),
-    };
+      })
+    );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
 

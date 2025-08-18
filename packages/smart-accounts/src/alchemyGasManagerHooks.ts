@@ -13,9 +13,6 @@ import {
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
 } from "./alchemyEstimateFeesPerGas.js";
-// Constants
-const DEFAULT_DUMMY_SIGNATURE =
-  "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c" as Hex;
 
 // Type for ERC-20 token context
 export type PolicyToken = {
@@ -92,8 +89,8 @@ class UserOpCache {
   }
 }
 
-// Create a hash of the user operation for cache key
-function getUserOpHash(
+// Create a cache key for the user operation parameters
+function createUserOpCacheKey(
   params: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
 ): string {
   return JSON.stringify({
@@ -106,7 +103,7 @@ function getUserOpHash(
 // Build the wallet-apis request
 async function buildWalletApisRequest(
   parameters: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
-  bundlerClient: Client<Transport, Chain, SmartAccount>,
+  client: Client<Transport, Chain, SmartAccount>,
   context: AlchemyGasManagerContext,
 ): Promise<any> {
   const { entryPointAddress, ...userOpFields } = parameters;
@@ -114,10 +111,13 @@ async function buildWalletApisRequest(
   // Prepare user operation
   const userOp = deepHexlify(userOpFields);
 
-  // Get dummy signature from the account if available, otherwise use default
-  const dummySignature = bundlerClient.account?.getStubSignature
-    ? await bundlerClient.account.getStubSignature(userOp)
-    : DEFAULT_DUMMY_SIGNATURE;
+  // Get dummy signature from the account
+  if (!client.account?.getStubSignature) {
+    throw new Error(
+      "Account must implement getStubSignature for gas manager hooks",
+    );
+  }
+  const dummySignature = await client.account.getStubSignature(userOp);
 
   return {
     policyId: context.policyId,
@@ -138,9 +138,8 @@ function toStubReturn(
       paymasterAndData: response.paymasterAndData,
       isFinal: true,
     };
-  }
-
-  if (hasPaymasterFields(response)) {
+  } else {
+    // Must be paymaster fields format
     return {
       paymaster: response.paymaster,
       paymasterData: response.paymasterData || "0x",
@@ -150,8 +149,6 @@ function toStubReturn(
       isFinal: true,
     };
   }
-
-  throw new Error("No paymaster data returned from optimized call");
 }
 
 // Convert response to data return type
@@ -160,9 +157,8 @@ function toDataReturn(
 ): GetPaymasterDataReturnType {
   if (hasPaymasterAndData(response)) {
     return { paymasterAndData: response.paymasterAndData };
-  }
-
-  if (hasPaymasterFields(response)) {
+  } else {
+    // Must be paymaster fields format
     return {
       paymaster: response.paymaster,
       paymasterData: response.paymasterData || "0x",
@@ -171,8 +167,6 @@ function toDataReturn(
       paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
     };
   }
-
-  throw new Error("No paymaster data returned from optimized call");
 }
 
 /**
@@ -208,6 +202,8 @@ function createGasManagerContext(
     if (policyToken.permit !== undefined) {
       console.warn(
         "⚠️ ERC-20 permits are not supported in viem-native gas manager hooks. " +
+          "Permits require building and signing the permit message before sending the user operation, " +
+          "which is handled by middleware but not by these lower-level hooks. " +
           "Use alchemyGasManagerMiddleware() for permit support.",
       );
     }
@@ -222,7 +218,7 @@ function createGasManagerContext(
  * paymaster sponsorship in a single RPC call.
  *
  * This implementation caches the result from the first call to avoid duplicate RPC calls
- * when viem calls both getPaymasterStubData and getPaymasterData.
+ * when viem calls both estimateFeesPerGas and paymaster functions.
  *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
  * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration (permits not supported)
@@ -249,25 +245,25 @@ export function alchemyGasManagerHooks(
   const cache = new UserOpCache();
 
   return {
-    paymaster: (bundlerClient: Client<Transport, Chain, SmartAccount>) => ({
+    paymaster: (client: Client<Transport, Chain, SmartAccount>) => ({
       async getPaymasterStubData(
         parameters: GetPaymasterStubDataParameters,
       ): Promise<GetPaymasterStubDataReturnType> {
-        const userOpHash = getUserOpHash(parameters);
+        const userOpCacheKey = createUserOpCacheKey(parameters);
 
         // Always make the RPC call (no cache check here)
         const request = await buildWalletApisRequest(
           parameters,
-          bundlerClient,
+          client,
           context,
         );
         const response = await requestGasAndPaymasterAndData(
-          bundlerClient as Client<AlchemyTransport, Chain>,
+          client as Client<AlchemyTransport, Chain>,
           [request],
         );
 
         // Cache the result for getPaymasterData
-        cache.set(userOpHash, response);
+        cache.set(userOpCacheKey, response);
 
         return toStubReturn(response);
       },
@@ -275,10 +271,10 @@ export function alchemyGasManagerHooks(
       async getPaymasterData(
         parameters: GetPaymasterDataParameters,
       ): Promise<GetPaymasterDataReturnType> {
-        const userOpHash = getUserOpHash(parameters);
+        const userOpCacheKey = createUserOpCacheKey(parameters);
 
         // Always get from cache - should be populated by getPaymasterStubData
-        const cachedResult = cache.get(userOpHash);
+        const cachedResult = cache.get(userOpCacheKey);
         if (!cachedResult) {
           throw new Error(
             "No cached result found. getPaymasterStubData must be called before getPaymasterData.",
