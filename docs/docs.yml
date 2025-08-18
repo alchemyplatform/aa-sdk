@@ -1118,17 +1118,51 @@ navigation:
                       - page: send
                         path: wallets/pages/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send.mdx
 
-      - section: Alchemy Wallet APIs
+      - section: Alchemy Smart Wallet APIs
         contents:
           - section: SDK Reference
             path: wallets/pages/reference/alchemy/wallet-apis/index.mdx
             contents:
               - section: Functions
                 contents:
+                  - page: formatSign
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/formatSign.mdx
+                  - page: grantPermissions
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/grantPermissions.mdx
+                  - page: listAccounts
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/listAccounts.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/prepareCalls.mdx
+                  - page: prepareSign
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/prepareSign.mdx
+                  - page: requestAccount
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/requestAccount.mdx
+                  - page: sendCalls
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/sendCalls.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/sendPreparedCalls.mdx
+                  - page: signMessage
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/signMessage.mdx
+                  - page: signPreparedCalls
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/signPreparedCalls.mdx
+                  - page: signSignatureRequest
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/signSignatureRequest.mdx
+                  - page: signTypedData
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/signTypedData.mdx
+                  - page: smartWalletActions
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/smartWalletActions.mdx
+
+      - section: Alchemy Account Abstraction Infrastructure
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/aa-infra/index.mdx
+            contents:
+              - section: Functions
+                contents:
                   - page: gasManagerActions
-                    path: wallets/pages/reference/alchemy/wallet-apis/functions/gasManagerActions.mdx
+                    path: wallets/pages/reference/alchemy/aa-infra/functions/gasManagerActions.mdx
                   - page: requestGasAndPaymasterAndData
-                    path: wallets/pages/reference/alchemy/wallet-apis/functions/requestGasAndPaymasterAndData.mdx
+                    path: wallets/pages/reference/alchemy/aa-infra/functions/requestGasAndPaymasterAndData.mdx
       - section: Alchemy Common
         contents:
           - section: SDK Reference
