@@ -245,6 +245,11 @@ navigation:
                   - page: Sign raw hash
                     path: wallets/pages/signer/as-an-eoa.mdx
 
+      - section: Funding
+        contents:
+          - page: Sign Up (Coming Soon)
+            path: wallets/pages/funding/signup.mdx
+
       - section: API Reference
         contents:
           - section: Smart Wallets
