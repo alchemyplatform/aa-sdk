@@ -40,6 +40,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
+    "@alchemy/aa-infra": "*",
     "typescript-template": "*"
   },
   "dependencies": {

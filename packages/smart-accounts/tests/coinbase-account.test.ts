@@ -8,6 +8,7 @@ import { alchemyGasManagerHooks } from "../src/alchemyGasManagerHooks.js";
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
+import { createAlchemyBundlerClient } from "@alchemy/aa-infra";
 import { local070Instance } from "~test/instances.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {

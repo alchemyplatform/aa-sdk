@@ -126,3 +126,11 @@ export type AlchemyRequestGasAndPaymasterAndDataSchema = {
 export type AlchemyWalletApisRpcSchema = [
   AlchemyRequestGasAndPaymasterAndDataSchema,
 ];
+
+export type RundlerMaxPriorityFeePerGasSchema = {
+  Method: "rundler_maxPriorityFeePerGas";
+  Parameters: [];
+  ReturnType: RpcUserOperation["maxPriorityFeePerGas"];
+};
+
+export type RundlerRpcSchema = [RundlerMaxPriorityFeePerGasSchema];

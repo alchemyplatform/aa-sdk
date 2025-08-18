@@ -9,5 +9,14 @@ export { requestGasAndPaymasterAndData } from "./actions/requestGasAndPaymasterA
 export type * from "./decorators/gasManager.js";
 export { gasManagerActions } from "./decorators/gasManager.js";
 
+// custom functions
+export type * from "./custom/alchemyEstimateFeesPerGas.js";
+export { alchemyEstimateFeesPerGas } from "./custom/alchemyEstimateFeesPerGas.js";
+
+// custom bundler client.
+// TODO(v5): revisit exporting the bundler client constructor, vs just the custom `estimateFeesPerGas` function.
+export type * from "./alchemyBundlerClient.js";
+export { createAlchemyBundlerClient } from "./alchemyBundlerClient.js";
+
 // schema
 export type * from "./schema.js";
