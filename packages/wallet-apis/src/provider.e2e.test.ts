@@ -19,9 +19,8 @@ import {
   signTypedData,
   waitForCallsStatus,
 } from "viem/actions";
-import { createBundlerClient } from "viem/account-abstraction";
 
-describe("Provider E2E Tests", () => {
+describe("Provider E2E Tests", async () => {
   const transport = alchemy(
     process.env.ALCHEMY_PROXY_RPC_URL
       ? {
@@ -36,13 +35,11 @@ describe("Provider E2E Tests", () => {
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
 
-  const account = "0x76E765e80FFAC96ac10Aa8908a8267A3B80d606D";
-
   const _client = createSmartWalletClient({
     transport,
     chain: arbitrumSepolia,
     signer,
-    account,
+    // account,
     // TODO(v5): We can't test successful unsponsored UOs (unless we have
     // a funded test wallet) since these tests are using a real wallet
     // server instance instead of Anvil.
@@ -51,18 +48,24 @@ describe("Provider E2E Tests", () => {
 
   const provider = _client.getProvider();
 
+  await new Promise((resolve) => {
+    provider.on("connect", (data) => {
+      console.log("Connected with chainId:", data.chainId);
+      resolve(data);
+    });
+  });
+
+  const [account] = await provider.request({
+    method: "eth_accounts",
+  });
+
   const clientFromProvider = createClient({
-    account: _client.account,
+    account,
     transport: custom(provider),
     chain: arbitrumSepolia,
   });
 
   const publicClient = createPublicClient({
-    chain: arbitrumSepolia,
-    transport,
-  });
-
-  const bundlerClient = createBundlerClient({
     chain: arbitrumSepolia,
     transport,
   });
@@ -106,8 +109,7 @@ describe("Provider E2E Tests", () => {
       data: "0x",
       value: 0n,
     });
-    await bundlerClient.waitForUserOperationReceipt({ hash });
-    // TODO(jh): test w/ 7702.
+    await publicClient.waitForTransactionReceipt({ hash });
   });
 
   it("can successfully use sendCalls and waitForCallsStatus actions", async () => {
@@ -124,10 +126,8 @@ describe("Provider E2E Tests", () => {
           value: 0n,
         },
       ],
-      // TODO(jh): test capabilities here too.
     });
     await waitForCallsStatus(clientFromProvider, result);
-    // TODO(jh): test w/ 7702.
   });
 
   it("can successfully use getCallsStatus action", async () => {
@@ -143,6 +143,52 @@ describe("Provider E2E Tests", () => {
     expect(result).toBeDefined();
     const { status } = await getCallsStatus(clientFromProvider, result);
     expect(status).toBe("pending");
+  });
+
+  it("can send a call using 7702", async () => {
+    const signer = privateKeyToAccount(
+      "0x985fe592f94f96d2813ac3519b94a8ddd10cd25cf02d7b6b252588ce6b312dab",
+    );
+    const account = signer.address;
+
+    const _client = createSmartWalletClient({
+      transport,
+      chain: arbitrumSepolia,
+      signer,
+      policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+      account,
+    });
+
+    const provider = _client.getProvider();
+
+    await new Promise((resolve) => {
+      provider.on("connect", (data) => {
+        console.log("Connected with chainId:", data.chainId);
+        resolve(data);
+      });
+    });
+
+    const [resolvedAccount] = await provider.request({
+      method: "eth_accounts",
+    });
+    expect(resolvedAccount).toBe(account);
+
+    const clientFromProvider = createClient({
+      account,
+      transport: custom(provider),
+      chain: arbitrumSepolia,
+    });
+
+    const result = await sendCalls(clientFromProvider, {
+      calls: [
+        {
+          to: zeroAddress,
+          data: "0x",
+          value: 0n,
+        },
+      ],
+    });
+    await waitForCallsStatus(clientFromProvider, result);
   });
 
   const givenTypedData = {
