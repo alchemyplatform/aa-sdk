@@ -6,7 +6,7 @@ import {
   type WaitForCallsStatusReturnType,
 } from "viem";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
-import { alchemy } from "@alchemy/common";
+import { alchemyTransport } from "@alchemy/common";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra"; // TODO(v5): remove AK v4 dep
 import { createSmartWalletClient } from "./client.js";
@@ -47,10 +47,10 @@ const sendVariants: Array<
 ];
 
 describe("Client E2E Tests", () => {
-  const transport = alchemy(
+  const transport = alchemyTransport(
     process.env.ALCHEMY_PROXY_RPC_URL
       ? {
-          proxyUrl: process.env.ALCHEMY_PROXY_RPC_URL,
+          url: process.env.ALCHEMY_PROXY_RPC_URL,
         }
       : {
           apiKey: process.env.TEST_ALCHEMY_API_KEY!,
