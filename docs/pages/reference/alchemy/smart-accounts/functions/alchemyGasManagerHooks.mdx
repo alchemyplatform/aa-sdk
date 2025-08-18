@@ -10,7 +10,7 @@ Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
 paymaster sponsorship in a single RPC call.
 
 This implementation caches the result from the first call to avoid duplicate RPC calls
-when viem calls both getPaymasterStubData and getPaymasterData.
+when viem calls both estimateFeesPerGas and paymaster functions.
 
 ## Import
 

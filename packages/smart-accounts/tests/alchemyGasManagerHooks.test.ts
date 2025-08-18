@@ -7,9 +7,11 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
   const createMockBundlerClient = (requestMock: any) => ({
     request: requestMock,
     account: {
-      getStubSignature: vi.fn().mockResolvedValue(
-        "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c"
-      ),
+      getStubSignature: vi
+        .fn()
+        .mockResolvedValue(
+          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+        ),
     },
   });
 
@@ -37,7 +39,7 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
           });
         }
         return Promise.resolve(null);
-      })
+      }),
     );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
@@ -111,7 +113,7 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
           });
         }
         return Promise.resolve(null);
-      })
+      }),
     );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
@@ -151,7 +153,7 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
         maxFeePerGas: "0x3b9aca00",
         maxPriorityFeePerGas: "0xf4240",
         paymasterAndData: "0xabcdef",
-      })
+      }),
     );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
@@ -205,7 +207,7 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
     };
 
     const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockResolvedValueOnce(mockResponse)
+      vi.fn().mockResolvedValueOnce(mockResponse),
     );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
@@ -291,7 +293,7 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
           return Promise.resolve("0x5f5e100"); // 0.1 gwei
         }
         return Promise.resolve(null);
-      })
+      }),
     );
 
     // Call estimateFeesPerGas without any prior paymaster calls
@@ -328,7 +330,7 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
         maxPriorityFeePerGas: "0xf4240",
         // Using combined paymasterAndData format
         paymasterAndData: "0x9876543210abcdef9876543210abcdef98765432deadbeef",
-      })
+      }),
     );
 
     const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
