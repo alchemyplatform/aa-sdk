@@ -11,7 +11,7 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra"; // TODO(v5): remove AK v4 dep
 import { createSmartWalletClient } from "./client.js";
 
-const ALCHEMY_API_URL = "https://api.g.alchemy.com/";
+const ALCHEMY_API_URL = "https://api.g.alchemy.com/v2";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
