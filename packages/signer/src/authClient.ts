@@ -8,30 +8,54 @@ import type {
 import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
 
+/**
+ * Configuration parameters for creating an AuthClient instance
+ */
 export type AuthClientParams = {
   // TODO: put this back when the transport is ready.
   // transport: AlchemyTransport;
   // TODO: this is temporary for testing before the transport is ready.
+  /** API key for authentication with Alchemy services */
   apiKey: string;
+  /** Function to create a TEK (Turnkey Ephemeral Key) stamper */
   createTekStamper: CreateTekStamperFn;
+  /** Function to create a WebAuthn stamper for passkey authentication */
   createWebAuthnStamper: CreateWebAuthnStamperFn;
+  /** Function to handle OAuth authentication flow */
   handleOauthFlow: HandleOauthFlowFn;
 };
 
+/**
+ * Parameters for sending an email OTP (One-Time Password)
+ */
 export type SendEmailOtpParams = {
+  /** Email address to send the OTP to */
   email: string;
 };
 
+/**
+ * Parameters for submitting an OTP code for verification
+ */
 export type SubmitOtpCodeParams = {
+  /** The OTP code received via email */
   otpCode: string;
 };
 
+/**
+ * Parameters for OAuth authentication login
+ */
 export type LoginWithOauthParams = {
+  /** Authentication type identifier */
   type: "oauth";
+  /** OAuth provider identifier (e.g., "google", "facebook") */
   authProviderId: string;
+  /** OAuth scope parameters */
   scope?: string;
+  /** OAuth claims parameters */
   claims?: string;
+  /** Additional OAuth parameters */
   otherParameters?: Record<string, string>;
+  /** OAuth flow mode - popup or redirect */
   mode?: "popup" | "redirect";
 };
 
@@ -45,6 +69,26 @@ type PendingOtp = {
   orgId: string;
 };
 
+/**
+ * AuthClient handles authentication flows including email OTP, OAuth, and passkey authentication.
+ * This is a simplified authentication client that provides methods for different authentication types.
+ * 
+ * @example
+ * ```typescript
+ * const authClient = new AuthClient({
+ *   apiKey: "your-api-key",
+ *   createTekStamper: () => createIframeTekStamper(),
+ *   createWebAuthnStamper: () => createWebAuthnStamper(),
+ *   handleOauthFlow: (url) => handleOAuthPopup(url)
+ * });
+ * 
+ * // Send email OTP
+ * await authClient.sendEmailOtp({ email: "user@example.com" });
+ * 
+ * // Submit OTP code
+ * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+ * ```
+ */
 export class AuthClient {
   // TODO: temporary for testing before the transport is ready.
   private readonly apiKey: string;
@@ -52,6 +96,15 @@ export class AuthClient {
   private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
   private readonly handleOauthFlow: HandleOauthFlowFn;
 
+  /**
+   * Creates a new AuthClient instance
+   * 
+   * @param {AuthClientParams} params - Configuration parameters for the auth client
+   * @param {string} params.apiKey - API key for authentication with Alchemy services
+   * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
+   * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
+   * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
+   */
   constructor(params: AuthClientParams) {
     this.apiKey = params.apiKey;
     this.createTekStamper = params.createTekStamper;
@@ -64,6 +117,20 @@ export class AuthClient {
   // TODO: do we care about persisting this across reloads?
   private pendingOtp: PendingOtp | null = null;
 
+  /**
+   * Sends an OTP (One-Time Password) to the specified email address for authentication.
+   * The OTP will be sent to the user's email and can be submitted using submitOtpCode().
+   * 
+   * @param {SendEmailOtpParams} params - Parameters for sending the email OTP
+   * @param {string} params.email - Email address to send the OTP to
+   * @returns {Promise<void>} Promise that resolves when the OTP has been sent
+   * 
+   * @example
+   * ```typescript
+   * await authClient.sendEmailOtp({ email: "user@example.com" });
+   * // User will receive an OTP code via email
+   * ```
+   */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
     const { otpId, orgId } = await this.dev_request("auth", {
@@ -74,6 +141,24 @@ export class AuthClient {
     this.pendingOtp = { otpId, orgId };
   }
 
+  /**
+   * Submits an OTP code for verification and completes the authentication process.
+   * This method should be called after sendEmailOtp() with the code received via email.
+   * 
+   * @param {SubmitOtpCodeParams} params - Parameters for submitting the OTP code
+   * @param {string} params.otpCode - The OTP code received via email
+   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @throws {Error} If no OTP has been sent or if the code is invalid
+   * 
+   * @example
+   * ```typescript
+   * // First send OTP
+   * await authClient.sendEmailOtp({ email: "user@example.com" });
+   * 
+   * // Then submit the code received via email
+   * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+   * ```
+   */
   public async submitOtpCode({
     otpCode,
   }: SubmitOtpCodeParams): Promise<Signer> {
@@ -92,6 +177,28 @@ export class AuthClient {
     return this.completeAuthWithBundle({ bundle: credentialBundle, orgId });
   }
 
+  /**
+   * Initiates OAuth authentication with the specified provider.
+   * This method handles the complete OAuth flow including provider URL generation and response processing.
+   * 
+   * @param {LoginWithOauthParams} params - Parameters for OAuth authentication
+   * @param {string} params.authProviderId - OAuth provider identifier (e.g., "google", "facebook")
+   * @param {string} [params.scope] - OAuth scope parameters
+   * @param {string} [params.claims] - OAuth claims parameters
+   * @param {Record<string, string>} [params.otherParameters] - Additional OAuth parameters
+   * @param {"popup" | "redirect"} [params.mode] - OAuth flow mode, defaults to "redirect"
+   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @throws {Error} If OAuth flow fails or is cancelled
+   * 
+   * @example
+   * ```typescript
+   * const signer = await authClient.loginWithOauth({
+   *   type: "oauth",
+   *   authProviderId: "google",
+   *   mode: "popup"
+   * });
+   * ```
+   */
   public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
     const { targetPublicKey } = await this.getTekStamper();
     const oauthConfig = await this.dev_request("/v1/prepare-oauth", { nonce: getOauthNonce(targetPublicKey) });
@@ -111,6 +218,22 @@ export class AuthClient {
     }
   }
 
+  /**
+   * Initiates passkey (WebAuthn) authentication flow.
+   * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
+   * 
+   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @throws {Error} Currently throws "Not implemented" as this method is under development
+   * 
+   * @example
+   * ```typescript
+   * const signer = await authClient.loginWithPasskey();
+   * ```
+   * 
+   * @remarks
+   * This method is currently not implemented and will throw an error.
+   * Implementation is planned for future releases.
+   */
   public async loginWithPasskey(): Promise<Signer> {
     // TODO: figure out what the current passkey code is doing.
     const stamper = await this.createWebAuthnStamper({
