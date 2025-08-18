@@ -1,11 +1,11 @@
 import { arbitrumSepolia } from "@account-kit/infra";
 import { createSmartWalletClient } from "./client.js";
-import { alchemy } from "@alchemy/common";
+import { alchemyTransport } from "@alchemy/common";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { assertType } from "vitest";
 
 describe("Types: Smart Wallet Client Tests", () => {
-  const transport = alchemy({ apiKey: "fake" });
+  const transport = alchemyTransport({ apiKey: "fake" });
   const signer = privateKeyToAccount(generatePrivateKey());
   const chain = arbitrumSepolia;
 

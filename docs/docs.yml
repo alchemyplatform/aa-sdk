@@ -1172,24 +1172,30 @@ navigation:
                 contents:
                   - page: addBreadCrumb
                     path: wallets/pages/reference/alchemy/common/functions/addBreadCrumb.mdx
-                  - page: alchemy
-                    path: wallets/pages/reference/alchemy/common/functions/alchemy.mdx
+                  - page: alchemyTransport
+                    path: wallets/pages/reference/alchemy/common/functions/alchemyTransport.mdx
                   - page: assertNever
                     path: wallets/pages/reference/alchemy/common/functions/assertNever.mdx
                   - page: bigIntMultiply
                     path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
+                  - page: isAlchemyConnectionConfig
+                    path: wallets/pages/reference/alchemy/common/functions/isAlchemyConnectionConfig.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
                   - page: raise
                     path: wallets/pages/reference/alchemy/common/functions/raise.mdx
                   - page: split
                     path: wallets/pages/reference/alchemy/common/functions/split.mdx
+                  - page: validateAlchemyConnectionConfig
+                    path: wallets/pages/reference/alchemy/common/functions/validateAlchemyConnectionConfig.mdx
               - section: Classes
                 contents:
                   - page: AccountNotFoundError
                     path: wallets/pages/reference/alchemy/common/classes/AccountNotFoundError/constructor.mdx
                   - page: ChainNotFoundError
                     path: wallets/pages/reference/alchemy/common/classes/ChainNotFoundError/constructor.mdx
+                  - page: ConnectionConfigError
+                    path: wallets/pages/reference/alchemy/common/classes/ConnectionConfigError/constructor.mdx
                   - page: FetchError
                     path: wallets/pages/reference/alchemy/common/classes/FetchError/constructor.mdx
                   - page: ServerError

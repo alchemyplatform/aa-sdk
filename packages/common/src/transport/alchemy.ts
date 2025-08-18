@@ -10,40 +10,24 @@ import {
   type TransportConfig,
 } from "viem";
 import { BaseError } from "../errors/BaseError.js";
-import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
 import { FetchError } from "../errors/FetchError.js";
 import { ServerError } from "../errors/ServerError.js";
 import { mutateRemoveTrackingHeaders } from "../tracing/updateHeaders.js";
 import { VERSION } from "../version.js";
-import type { AlchemyConnectionConfig } from "./connection.js";
-import { split } from "./split.js";
 import type { HttpRequestFn, HttpRequestSchema } from "./types.js";
+import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
 
-const alchemyMethods = [
-  "eth_sendUserOperation",
-  "eth_estimateUserOperationGas",
-  "eth_getUserOperationReceipt",
-  "eth_getUserOperationByHash",
-  "eth_supportedEntryPoints",
-  "rundler_maxPriorityFeePerGas",
-  "pm_getPaymasterData",
-  "pm_getPaymasterStubData",
-  "alchemy_requestGasAndPaymasterAndData",
-];
-
-const chainAgnosticMethods = [
-  "wallet_prepareCalls",
-  "wallet_sendPreparedCalls",
-  "wallet_requestAccount",
-  "wallet_createAccount",
-  "wallet_listAccounts",
-  "wallet_createSession",
-  "wallet_getCallsStatus",
-  "wallet_prepareSign",
-  "wallet_formatSign",
-];
-
-export type AlchemyTransportConfig = AlchemyConnectionConfig & {
+/**
+ * Configuration options for the Alchemy transport.
+ * Can specify URL, auth method, or both together.
+ */
+export type AlchemyTransportConfig = {
+  /** API key for Alchemy authentication */
+  apiKey?: string;
+  /** JWT token for authentication */
+  jwt?: string;
+  /** Custom RPC URL (optional - defaults to chain's Alchemy URL, but can be used to override the chain's Alchemy URL) */
+  url?: string;
   /** The max number of times to retry. */
   retryCount?: TransportConfig["retryCount"] | undefined;
   /** The base delay (in ms) between retries. */
@@ -55,7 +39,7 @@ type AlchemyTransportBase<
   rpcSchema extends RpcSchema | undefined = undefined,
   httpSchema extends HttpRequestSchema | undefined = undefined,
 > = Transport<
-  "alchemy",
+  "alchemyHttp",
   {
     alchemyRpcUrl: string;
     fetchOptions: AlchemyTransportConfig["fetchOptions"];
@@ -74,8 +58,7 @@ export type AlchemyTransport<
 
 /**
  * A type guard for the transport to determine if it is an Alchemy transport.
- * Used in cases where we would like to do switching depending on the transport, where there used
- * to be two clients for a alchemy and a non alchemy, and with this switch we don't need the two seperate clients. *
+ * Used in cases where we would like to do switching depending on the transport.
  *
  * @param {Transport} transport The transport to check
  * @param {Chain} chain Chain for the transport to run its function to return the transport config
@@ -85,83 +68,81 @@ export function isAlchemyTransport(
   transport: Transport,
   chain: Chain,
 ): transport is AlchemyTransport {
-  return transport({ chain }).config.type === "alchemy";
+  return transport({ chain }).config.type === "alchemyHttp";
 }
 
 /**
- * Creates an Alchemy transport with the specified configuration options.
- * When sending all traffic to Alchemy, you must pass in one of rpcUrl, apiKey, or jwt.
- * If you want to send Bundler and Paymaster traffic to Alchemy and Node traffic to a different RPC, you must pass in alchemyConnection and nodeRpcUrl.
+ * Creates an Alchemy HTTP transport for connecting to Alchemy's services.
  *
  * @example
- * ### Basic Example
- * If the chain you're using is supported for both Bundler and Node RPCs, then you can do the following:
- * ```ts twoslash
- * import { alchemy } from "@alchemy/common";
+ * Using API Key:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
  *
- * const transport = alchemy({
- *  // NOTE: you can also pass in an rpcUrl or jwt here or rpcUrl and jwt
- *  apiKey: "your-api-key",
+ * const transport = alchemyTransport({ apiKey: "your-api-key" });
+ * ```
+ *
+ * @example
+ * Using JWT:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ jwt: "your-jwt-token" });
+ * ```
+ *
+ * @example
+ * Using URL directly:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({ url: "https://eth-mainnet.g.alchemy.com/v2/your-key" });
+ * ```
+ *
+ * @example
+ * Using custom URL with API key:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({
+ *   url: "https://custom-alchemy.com/v2",
+ *   apiKey: "your-api-key"
  * });
  * ```
  *
- * ### AA Only Chains
- * For AA-only chains, you need to specify the alchemyConnection and nodeRpcUrl since Alchemy only
- * handles the Bundler and Paymaster RPCs for these chains.
- * ```ts twoslash
- * import { alchemy } from "@alchemy/common";
+ * @example
+ * Using custom URL with JWT:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
  *
- * const transport = alchemy({
- *  alchemyConnection: {
- *    apiKey: "your-api-key",
- *  },
- *  nodeRpcUrl: "https://zora.rpc.url",
+ * const transport = alchemyTransport({
+ *   url: "https://custom-alchemy.com/v2",
+ *   jwt: "your-jwt-token"
  * });
  * ```
  *
- * ### Split Transport support
- * Sometimes, the above configuration is still too restrictive and you want to split specific JSON-RPC methods between different transports. We support
- * this by allowing you to pass in a split transport configuration to make this much simpler.
- * ```ts twoslash
- * import { alchemy } from "@alchemy/common";
- *
- * const transport = alchemy({
- *  // in this example we want to send all eth_chainId requests to a different RPC
- *  overrides: [{
- *    methods: ["eth_chainId"],
- *    transport: http("https://rpc2.url")
- *  }],
- *  // the fallback is where all other methods will be sent to
- *  fallback: http("https://rpc1.url")
- * });
- * ```
- *
- * @param {AlchemyTransportConfig} config The configuration object for the Alchemy transport.
- * @param {number} config.retryDelay Optional The delay between retries, in milliseconds.
- * @param {number} config.retryCount Optional The number of retry attempts.
- * @param {string} [config.alchemyConnection] Optional Alchemy connection configuration (if this is passed in, nodeRpcUrl is required).
- * @param {string} [config.nodeRpcUrl] Optional RPC URL for node (if this is passed in, alchemyConnection is required).
- * @param {Array<{methods: string[], transport: Transport}>} [config.overrides] When provided, fallback is also required as this sets up a split transport
- * @param {Transport} [config.fallback] Optionally required if overrides are provided, this is the fallback transport for the split transport config.
- * @param {string} [config.restConnection] Optionally required if overrides are provided rest connection config for the split transport
- * @param {string} [config.fetchOptions] Optional fetch options for HTTP requests.
- * @param {string} [config.rpcUrl] Optional RPC URL.
- * @param {string} [config.apiKey] Optional API key for Alchemy.
- * @param {string} [config.jwt] Optional JSON Web Token for authorization.
- * @returns {AlchemyTransport} The configured Alchemy transport object.
+ * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport
+ * @param {string} [config.apiKey] - API key for Alchemy authentication
+ * @param {string} [config.jwt] - JWT token for authentication
+ * @param {string} [config.url] - Direct URL to Alchemy endpoint or a proxy URL
+ * @param {number} [config.retryDelay] - The delay between retries, in milliseconds
+ * @param {number} [config.retryCount] - The number of retry attempts (default: 0)
+ * @param {object} [config.fetchOptions] - Optional fetch options for HTTP requests
+ * @returns {AlchemyTransport} The configured Alchemy transport function
  */
-export function alchemy<
+export function alchemyTransport<
   rpcSchema extends RpcSchema | undefined = undefined,
   httpSchema extends HttpRequestSchema | undefined = undefined,
 >(config: AlchemyTransportConfig): AlchemyTransport<rpcSchema, httpSchema> {
   const {
+    apiKey,
+    jwt,
+    url,
     retryDelay,
     retryCount = 0,
     fetchOptions: fetchOptions_,
-    ...connectionConfig
   } = config;
-  // we create a copy here in case we create a split transport down below
-  // we don't want to add alchemy headers to 3rd party nodes
+
+  // Create a copy of fetch options for modification
   const fetchOptions = { ...fetchOptions_ };
 
   const headersAsObject = convertHeadersToObject(fetchOptions.headers);
@@ -171,112 +152,59 @@ export function alchemy<
     "Alchemy-AA-Sdk-Version": VERSION,
   };
 
-  if (connectionConfig.jwt != null || connectionConfig.apiKey != null) {
+  // Add auth headers if apiKey or jwt is provided
+  if (jwt) {
     fetchOptions.headers = {
       ...fetchOptions.headers,
-      Authorization: `Bearer ${
-        connectionConfig.jwt ?? connectionConfig.apiKey
-      }`,
+      Authorization: `Bearer ${jwt}`,
+    };
+  } else if (apiKey) {
+    fetchOptions.headers = {
+      ...fetchOptions.headers,
+      Authorization: `Bearer ${apiKey}`,
     };
   }
 
   const transport: AlchemyTransportBase = (opts) => {
     const { chain } = opts;
-    if (!chain) {
-      throw new ChainNotFoundError();
-    }
 
-    const { innerTransport, rpcUrl } = (() => {
-      mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
-      if (
-        connectionConfig.overrides != null &&
-        connectionConfig.fallback != null
-      ) {
-        return {
-          innerTransport: split(connectionConfig),
-          rpcUrl:
-            connectionConfig.restConnection.proxyUrl ??
-            "https://api.g.alchemy.com/v2",
-        };
+    mutateRemoveTrackingHeaders(config?.fetchOptions?.headers);
+
+    const rpcUrl = (() => {
+      if (url) {
+        return url;
       }
 
-      if (!connectionConfig.proxyUrl && chain.rpcUrls.alchemy == null) {
-        // TODO(v5): update this error message to be the correct package name
+      if (!chain) {
+        throw new ChainNotFoundError();
+      }
+
+      // TODO(v5): Add support for viem URLs to replace alchemy chains
+      if (!chain.rpcUrls?.alchemy?.http?.[0]) {
         throw new BaseError(
-          "chain must include an alchemy rpc url. See `defineAlchemyChain` or import a chain from `@alchemy/common/chains`.",
+          "Chain must include an Alchemy RPC URL. See `defineAlchemyChain` or import a chain from `@alchemy/common`.",
         );
       }
 
-      const rpcUrl =
-        connectionConfig.proxyUrl == null
-          ? chain.rpcUrls.alchemy.http[0]
-          : connectionConfig.proxyUrl;
-
-      const chainAgnosticRpcUrl =
-        connectionConfig.proxyUrl == null
-          ? "https://api.g.alchemy.com/v2"
-          : connectionConfig.proxyUrl;
-
-      if (
-        connectionConfig.alchemyConnection != null &&
-        connectionConfig.nodeRpcUrl != null
-      ) {
-        return {
-          rpcUrl,
-          innerTransport: split({
-            overrides: [
-              {
-                methods: alchemyMethods,
-                transport: http(rpcUrl, {
-                  fetchOptions,
-                  retryCount,
-                  retryDelay,
-                }),
-              },
-              {
-                methods: chainAgnosticMethods,
-                transport: http(chainAgnosticRpcUrl, {
-                  fetchOptions,
-                  retryCount,
-                  retryDelay,
-                }),
-              },
-            ],
-            fallback: http(connectionConfig.nodeRpcUrl, {
-              fetchOptions: fetchOptions_,
-              retryCount,
-              retryDelay,
-            }),
-          }),
-        };
-      }
-
-      return {
-        rpcUrl,
-        innerTransport: split({
-          overrides: [
-            {
-              methods: chainAgnosticMethods,
-              transport: http(chainAgnosticRpcUrl, {
-                fetchOptions,
-                retryCount,
-                retryDelay,
-              }),
-            },
-          ],
-          fallback: http(rpcUrl, { fetchOptions, retryCount, retryDelay }),
-        }),
-      };
+      return chain.rpcUrls.alchemy.http[0];
     })();
+
+    const innerTransport = http(rpcUrl, {
+      fetchOptions,
+      // Retry count must be 0 here in order to respect the retry
+      // count that is already specified on the underlying transport.
+      retryCount: 0,
+      retryDelay,
+    });
 
     return createTransport(
       {
-        key: "alchemy",
-        name: "Alchemy Transport",
+        key: "alchemyHttp",
+        name: "Alchemy HTTP Transport",
         request: innerTransport(opts).request,
         retryCount: retryCount ?? opts?.retryCount,
         retryDelay,
-        type: "alchemy",
+        type: "alchemyHttp",
       },
       {
         alchemyRpcUrl: rpcUrl,
@@ -286,6 +214,7 @@ export function alchemy<
           const response = await fetch(`${rpcUrl}/${params.route}`, {
             method: params.method,
             body: params.body ? JSON.stringify(params.body) : undefined,
+            headers: fetchOptions.headers as HeadersInit,
           }).catch((error) => ({
             error: new FetchError(params.route, params.method, error),
           }));
