@@ -72,19 +72,19 @@ type PendingOtp = {
 /**
  * AuthClient handles authentication flows including email OTP, OAuth, and passkey authentication.
  * This is a simplified authentication client that provides methods for different authentication types.
- * 
+ *
  * @example
- * ```typescript
+ * ```ts
  * const authClient = new AuthClient({
  *   apiKey: "your-api-key",
  *   createTekStamper: () => createIframeTekStamper(),
  *   createWebAuthnStamper: () => createWebAuthnStamper(),
  *   handleOauthFlow: (url) => handleOAuthPopup(url)
  * });
- * 
+ *
  * // Send email OTP
  * await authClient.sendEmailOtp({ email: "user@example.com" });
- * 
+ *
  * // Submit OTP code
  * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
  * ```
@@ -98,7 +98,7 @@ export class AuthClient {
 
   /**
    * Creates a new AuthClient instance
-   * 
+   *
    * @param {AuthClientParams} params - Configuration parameters for the auth client
    * @param {string} params.apiKey - API key for authentication with Alchemy services
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
@@ -120,13 +120,13 @@ export class AuthClient {
   /**
    * Sends an OTP (One-Time Password) to the specified email address for authentication.
    * The OTP will be sent to the user's email and can be submitted using submitOtpCode().
-   * 
+   *
    * @param {SendEmailOtpParams} params - Parameters for sending the email OTP
    * @param {string} params.email - Email address to send the OTP to
    * @returns {Promise<void>} Promise that resolves when the OTP has been sent
-   * 
+   *
    * @example
-   * ```typescript
+   * ```ts
    * await authClient.sendEmailOtp({ email: "user@example.com" });
    * // User will receive an OTP code via email
    * ```
@@ -144,17 +144,17 @@ export class AuthClient {
   /**
    * Submits an OTP code for verification and completes the authentication process.
    * This method should be called after sendEmailOtp() with the code received via email.
-   * 
+   *
    * @param {SubmitOtpCodeParams} params - Parameters for submitting the OTP code
    * @param {string} params.otpCode - The OTP code received via email
    * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} If no OTP has been sent or if the code is invalid
-   * 
+   *
    * @example
-   * ```typescript
+   * ```ts
    * // First send OTP
    * await authClient.sendEmailOtp({ email: "user@example.com" });
-   * 
+   *
    * // Then submit the code received via email
    * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
    * ```
@@ -180,7 +180,7 @@ export class AuthClient {
   /**
    * Initiates OAuth authentication with the specified provider.
    * This method handles the complete OAuth flow including provider URL generation and response processing.
-   * 
+   *
    * @param {LoginWithOauthParams} params - Parameters for OAuth authentication
    * @param {string} params.authProviderId - OAuth provider identifier (e.g., "google", "facebook")
    * @param {string} [params.scope] - OAuth scope parameters
@@ -189,9 +189,9 @@ export class AuthClient {
    * @param {"popup" | "redirect"} [params.mode] - OAuth flow mode, defaults to "redirect"
    * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} If OAuth flow fails or is cancelled
-   * 
+   *
    * @example
-   * ```typescript
+   * ```ts
    * const signer = await authClient.loginWithOauth({
    *   type: "oauth",
    *   authProviderId: "google",
@@ -201,8 +201,15 @@ export class AuthClient {
    */
   public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
     const { targetPublicKey } = await this.getTekStamper();
-    const oauthConfig = await this.dev_request("/v1/prepare-oauth", { nonce: getOauthNonce(targetPublicKey) });
-    const authUrl = getOauthProviderUrl({ oauthParams: params, turnkeyPublicKey: targetPublicKey, oauthCallbackUrl: "localhost:8081", oauthConfig });
+    const oauthConfig = await this.dev_request("/v1/prepare-oauth", {
+      nonce: getOauthNonce(targetPublicKey),
+    });
+    const authUrl = getOauthProviderUrl({
+      oauthParams: params,
+      turnkeyPublicKey: targetPublicKey,
+      oauthCallbackUrl: "localhost:8081",
+      oauthConfig,
+    });
     const response = await this.handleOauthFlow(authUrl);
     if (response.status === "SUCCESS") {
       return this.completeAuthWithBundle({
@@ -221,18 +228,14 @@ export class AuthClient {
   /**
    * Initiates passkey (WebAuthn) authentication flow.
    * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
-   * 
+   *
    * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} Currently throws "Not implemented" as this method is under development
-   * 
+   *
    * @example
-   * ```typescript
+   * ```ts
    * const signer = await authClient.loginWithPasskey();
    * ```
-   * 
-   * @remarks
-   * This method is currently not implemented and will throw an error.
-   * Implementation is planned for future releases.
    */
   public async loginWithPasskey(): Promise<Signer> {
     // TODO: figure out what the current passkey code is doing.

@@ -1,5 +1,11 @@
 import { sha256 } from "viem";
-import { AuthProviderConfig, AuthProviderCustomization, GetOauthProviderUrlArgs, KnownAuthProvider, OauthState } from "./types";
+import type {
+  AuthProviderConfig,
+  AuthProviderCustomization,
+  GetOauthProviderUrlArgs,
+  KnownAuthProvider,
+  OauthState,
+} from "./types";
 
 const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
   KnownAuthProvider,
@@ -28,7 +34,7 @@ const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
  * @returns {AuthProviderCustomization | undefined} default customization parameters
  */
 export function getDefaultProviderCustomization(
-  knownAuthProviderId: KnownAuthProvider,
+  knownAuthProviderId: KnownAuthProvider
 ): AuthProviderCustomization | undefined {
   return DEFAULT_PROVIDER_CUSTOMIZATION[knownAuthProviderId];
 }
@@ -49,9 +55,11 @@ export function getOauthNonce(turnkeyPublicKey: string): string {
  * @param {ArrayBuffer | Uint8Array | string} challenge - The data to encode
  * @returns {string} Base64 URL encoded string
  */
-export function base64UrlEncode(challenge: ArrayBuffer | Uint8Array | string): string {
+export function base64UrlEncode(
+  challenge: ArrayBuffer | Uint8Array | string
+): string {
   let bytes: Uint8Array;
-  
+
   if (typeof challenge === "string") {
     bytes = new TextEncoder().encode(challenge);
   } else if (challenge instanceof ArrayBuffer) {
@@ -59,9 +67,9 @@ export function base64UrlEncode(challenge: ArrayBuffer | Uint8Array | string): s
   } else {
     bytes = challenge;
   }
-  
+
   // Convert to base64 using btoa (browser-compatible)
-  let binaryString = '';
+  let binaryString = "";
   for (let i = 0; i < bytes.length; i++) {
     binaryString += String.fromCharCode(bytes[i]);
   }
@@ -125,9 +133,7 @@ export class OAuthProvidersError extends Error {
  *
  * @returns {string} returns the OAuth provider's url
  */
-export function getOauthProviderUrl(
-  args: GetOauthProviderUrlArgs,
-): string {
+export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
   const {
     oauthParams,
     turnkeyPublicKey,
@@ -157,8 +163,10 @@ export function getOauthProviderUrl(
   let authProvider: AuthProviderConfig | undefined;
   for (let i = 0; i < authProviders.length; i++) {
     const provider = authProviders[i];
-    if (provider.id === authProviderId &&
-        !!provider.isCustomProvider === !!isCustomProvider) {
+    if (
+      provider.id === authProviderId &&
+      !!provider.isCustomProvider === !!isCustomProvider
+    ) {
       authProvider = provider;
       break;
     }
@@ -174,8 +182,9 @@ export function getOauthProviderUrl(
     providedOtherParameters;
 
   if (!isCustomProvider) {
-    const defaultCustomization =
-      getDefaultProviderCustomization(authProviderId as KnownAuthProvider);
+    const defaultCustomization = getDefaultProviderCustomization(
+      authProviderId as KnownAuthProvider
+    );
     scope ??= defaultCustomization?.scope;
     claims ??= defaultCustomization?.claims;
     otherParameters ??= defaultCustomization?.otherParameters;
@@ -194,7 +203,7 @@ export function getOauthProviderUrl(
     expirationSeconds,
     redirectUrl:
       mode === "redirect"
-        ? usesRelativeUrl
+        ? usesRelativeUrl && redirectUrl // added check here that redirectUrl is defined
           ? resolveRelativeUrl(redirectUrl)
           : redirectUrl
         : undefined,
@@ -202,7 +211,7 @@ export function getOauthProviderUrl(
     fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
   };
   const state = base64UrlEncode(
-    new TextEncoder().encode(JSON.stringify(stateObject)),
+    new TextEncoder().encode(JSON.stringify(stateObject))
   );
   const authUrl = new URL(authEndpoint);
   const params: Record<string, string> = {

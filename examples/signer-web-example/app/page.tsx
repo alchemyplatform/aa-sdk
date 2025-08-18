@@ -17,6 +17,15 @@ export default function Home(): ReactElement {
   const [signer, setSigner] = useState<Signer | null>(null);
   const [signature, setSignature] = useState<string | null>(null);
 
+  const handleOauthLogin = useCallback(async () => {
+    const signer = await authClient.loginWithOauth({
+      type: "oauth",
+      authProviderId: "google",
+      mode: "popup",
+    });
+    setSigner(signer);
+  }, [authClient]);
+
   const handleSendEmailOtp = useCallback(async () => {
     await authClient.sendEmailOtp({ email });
     setHasSentEmail(true);
@@ -63,6 +72,12 @@ export default function Home(): ReactElement {
             className="btn btn-primary w-full"
           >
             Sign in
+          </button>
+          <button
+            onClick={handleOauthLogin}
+            className="btn btn-secondary w-full"
+          >
+            Sign in with Google
           </button>
         </div>
       </div>
