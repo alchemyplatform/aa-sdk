@@ -49,7 +49,7 @@ const sendVariants: Array<
 ];
 
 describe("Client E2E Tests", () => {
-  const transport = alchemyTransport(
+  const apiTransport = alchemyTransport(
     process.env.ALCHEMY_PROXY_RPC_URL
       ? {
           url: process.env.ALCHEMY_PROXY_RPC_URL,
@@ -60,18 +60,28 @@ describe("Client E2E Tests", () => {
         },
   );
 
+  const publicTransport = alchemyTransport(
+    process.env.ALCHEMY_PROXY_RPC_URL
+      ? {
+          url: process.env.ALCHEMY_PROXY_RPC_URL,
+        }
+      : {
+          apiKey: process.env.TEST_ALCHEMY_API_KEY!,
+        },
+  );
+
   const signer = privateKeyToAccount(
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
 
   const client = createSmartWalletClient({
-    transport,
+    transport: apiTransport,
     chain: arbitrumSepolia,
     signer,
   });
   const publicClient = createPublicClient({
     chain: arbitrumSepolia,
-    transport,
+    transport: publicTransport,
   });
 
   it("should successfully get & caches a counterfactual address", async () => {
@@ -246,7 +256,7 @@ describe("Client E2E Tests", () => {
       );
 
       const _client = createSmartWalletClient({
-        transport,
+        transport: apiTransport,
         chain: arbitrumSepolia,
         signer: _signer,
       });
@@ -295,7 +305,7 @@ describe("Client E2E Tests", () => {
       });
 
       const sessionKeyClient = createSmartWalletClient({
-        transport,
+        transport: apiTransport,
         chain: arbitrumSepolia,
         signer: sessionKey,
       });
