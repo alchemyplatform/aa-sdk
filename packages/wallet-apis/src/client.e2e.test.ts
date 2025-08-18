@@ -11,6 +11,8 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra"; // TODO(v5): remove AK v4 dep
 import { createSmartWalletClient } from "./client.js";
 
+const ALCHEMY_API_URL = "https://api.g.alchemy.com/";
+
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
   (
@@ -53,6 +55,7 @@ describe("Client E2E Tests", () => {
           url: process.env.ALCHEMY_PROXY_RPC_URL,
         }
       : {
+          url: ALCHEMY_API_URL,
           apiKey: process.env.TEST_ALCHEMY_API_KEY!,
         },
   );
