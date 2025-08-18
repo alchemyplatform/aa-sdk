@@ -6,6 +6,7 @@ import type {
   TurnkeyTekStamper,
 } from "./types.js";
 import { dev_request } from "./devRequest.js";
+import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
 
 export type AuthClientParams = {
   // TODO: put this back when the transport is ready.
@@ -92,7 +93,9 @@ export class AuthClient {
   }
 
   public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
-    const authUrl = await notImplemented(params);
+    const { targetPublicKey } = await this.getTekStamper();
+    const oauthConfig = await this.dev_request("/v1/prepare-oauth", { nonce: getOauthNonce(targetPublicKey) });
+    const authUrl = getOauthProviderUrl({ oauthParams: params, turnkeyPublicKey: targetPublicKey, oauthCallbackUrl: "localhost:8081", oauthConfig });
     const response = await this.handleOauthFlow(authUrl);
     if (response.status === "SUCCESS") {
       return this.completeAuthWithBundle({

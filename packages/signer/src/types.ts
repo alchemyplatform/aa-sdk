@@ -89,3 +89,65 @@ export type TurnkeyStamp = {
   stampHeaderName: string;
   stampHeaderValue: string;
 };
+
+/*
+Oauth flow types
+*/
+export type KnownAuthProvider =
+  | "google" 
+  | "apple"
+  | "facebook"
+  | "twitch"
+  | "auth0";
+
+
+export type OauthParams = { // TO DO: determine if flattening this type is optimal
+  authProviderId: string;
+  isCustomProvider?: boolean;
+  auth0Connection?: string;
+  scope?: string;
+  claims?: string;
+  otherParameters?: Record<string, string>;
+  mode?: "redirect" | "popup";
+  redirectUrl?: string;
+  expirationSeconds?: number;
+  fetchIdTokenOnly?: boolean;
+};
+
+export type OauthConfig = {
+  codeChallenge: string;
+  requestKey: string;
+  authProviders: AuthProviderConfig[];
+};
+
+export type AuthProviderConfig = {
+  id: string;
+  isCustomProvider?: boolean;
+  clientId: string;
+  authEndpoint: string;
+};
+
+export type OauthState = {
+  authProviderId: string;
+  isCustomProvider?: boolean;
+  requestKey: string;
+  turnkeyPublicKey: string;
+  expirationSeconds?: number;
+  redirectUrl?: string;
+  openerOrigin?: string;
+  fetchIdTokenOnly?: boolean;
+};
+
+export type GetOauthProviderUrlArgs = {
+  oauthParams: OauthParams;
+  turnkeyPublicKey: string;
+  oauthCallbackUrl: string;
+  oauthConfig: OauthConfig;
+  usesRelativeUrl?: boolean;
+};
+
+export type AuthProviderCustomization = {
+  scope: string;
+  claims?: string;
+  otherParameters?: Record<string, string>;
+};
