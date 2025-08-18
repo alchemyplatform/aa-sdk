@@ -1,14 +1,25 @@
-import { createClient, createPublicClient, custom, type Address } from "viem";
+import {
+  createClient,
+  createPublicClient,
+  custom,
+  zeroAddress,
+  type Address,
+} from "viem";
 import { alchemy } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { createSmartWalletClient } from "./client.js";
 import {
   getAddresses,
+  getCallsStatus,
   getChainId,
+  sendCalls,
+  sendTransaction,
   signMessage,
   signTypedData,
+  waitForCallsStatus,
 } from "viem/actions";
+import { createBundlerClient } from "viem/account-abstraction";
 
 describe("Provider E2E Tests", () => {
   const transport = alchemy(
@@ -32,6 +43,10 @@ describe("Provider E2E Tests", () => {
     chain: arbitrumSepolia,
     signer,
     account,
+    // TODO(v5): We can't test successful unsponsored UOs (unless we have
+    // a funded test wallet) since these tests are using a real wallet
+    // server instance instead of Anvil.
+    policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
   });
 
   const provider = _client.getProvider();
@@ -43,6 +58,11 @@ describe("Provider E2E Tests", () => {
   });
 
   const publicClient = createPublicClient({
+    chain: arbitrumSepolia,
+    transport,
+  });
+
+  const bundlerClient = createBundlerClient({
     chain: arbitrumSepolia,
     transport,
   });
@@ -80,13 +100,50 @@ describe("Provider E2E Tests", () => {
     expect(addresses).toEqual([account]);
   });
 
-  // TODO(jh): eth_sendTransaction (w/ or w/o paymaster, normal or 7702)
+  it("can successfully use sendTransaction action", async () => {
+    const hash = await sendTransaction(clientFromProvider, {
+      to: zeroAddress,
+      data: "0x",
+      value: 0n,
+    });
+    await bundlerClient.waitForUserOperationReceipt({ hash });
+    // TODO(jh): test w/ 7702.
+  });
 
-  // TODO(jh): wallet_sendCalls (w/ or w/o paymaster, normal or 7702)
+  it("can successfully use sendCalls and waitForCallsStatus actions", async () => {
+    const result = await sendCalls(clientFromProvider, {
+      calls: [
+        {
+          to: zeroAddress,
+          data: "0x",
+          value: 0n,
+        },
+        {
+          to: zeroAddress,
+          data: "0x",
+          value: 0n,
+        },
+      ],
+      // TODO(jh): test capabilities here too.
+    });
+    await waitForCallsStatus(clientFromProvider, result);
+    // TODO(jh): test w/ 7702.
+  });
 
-  // TODO(jh): wallet_getCallsStatus
-
-  // TODO(jh): wallet_waitForCallsStatus
+  it("can successfully use getCallsStatus action", async () => {
+    const result = await sendCalls(clientFromProvider, {
+      calls: [
+        {
+          to: zeroAddress,
+          data: "0x",
+          value: 0n,
+        },
+      ],
+    });
+    expect(result).toBeDefined();
+    const { status } = await getCallsStatus(clientFromProvider, result);
+    expect(status).toBe("pending");
+  });
 
   const givenTypedData = {
     types: {

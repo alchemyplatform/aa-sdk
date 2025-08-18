@@ -26,7 +26,7 @@ import { AccountNotFoundError } from "../../../aa-sdk/core/src/errors/account.js
 import { ChainNotFoundError } from "../../../aa-sdk/core/src/errors/client.js";
 import type { SmartWalletClientEip1193Provider } from "./types.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
-import EventEmitter from "events"; // TODO(jh): will this work in browser?
+import EventEmitter from "events"; // TODO(jh): do we need to polyfill this for browser?
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -96,6 +96,7 @@ export const createSmartWalletClient = <
 
   return {
     ...baseClient,
+    // TODO(jh): pull this out to another file so this doesn't get so large?
     getProvider: () => {
       // TODO(v5): actually emit the required events: https://eips.ethereum.org/EIPS/eip-1193#events
       const eventEmitter = new EventEmitter();
@@ -171,6 +172,8 @@ export const createSmartWalletClient = <
             >["ReturnType"];
           }
 
+          // eslint-disable-next-line no-fallthrough
+          case "wallet_sendTransaction":
           case "eth_sendTransaction": {
             if (!account) {
               throw new AccountNotFoundError();
@@ -194,11 +197,14 @@ export const createSmartWalletClient = <
             // TS a bit unhappy b/c it doesn't believe that the account has to be defined.
             const result = await baseClient.sendCalls({
               calls: [{ to, data, value }],
+              // TODO(v5): do we need to support any overrides here?
             } as PrepareCallsParams<TAccount>);
 
-            const txHash = sliceHex(result.preparedCallIds[0], 32); // TODO(jh): do we really want to do this?
+            const uoHash = sliceHex(result.preparedCallIds[0], 32); // TODO(v5): do we really want to do this?
 
-            return txHash satisfies ExtractRpcMethod<
+            // TODO(jh): is it weird that `sendTransaction` is returning
+            // a UO hash instead of txn hash? what did we do in v4?
+            return uoHash satisfies ExtractRpcMethod<
               SmartWalletClient1193Methods,
               "eth_sendTransaction"
             >["ReturnType"];
