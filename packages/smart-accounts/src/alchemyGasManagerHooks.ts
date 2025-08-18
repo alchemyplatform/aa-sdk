@@ -49,17 +49,6 @@ function hasPaymasterAndData(
   return "paymasterAndData" in response && Boolean(response.paymasterAndData);
 }
 
-function hasPaymasterFields(
-  response: GasAndPaymasterAndDataResponse,
-): response is GasAndPaymasterAndDataResponse & {
-  paymaster: Address;
-  paymasterData: Hex;
-  paymasterVerificationGasLimit: bigint;
-  paymasterPostOpGasLimit: bigint;
-} {
-  return "paymaster" in response && Boolean(response.paymaster);
-}
-
 // Simple cache for storing the latest user operation result
 // Since viem calls hooks sequentially for a single user operation,
 // we only need to store one result at a time
