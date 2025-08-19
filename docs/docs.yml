@@ -111,7 +111,7 @@ navigation:
                 path: wallets/pages/authentication/login-methods/social-login.mdx
               - page: Custom social providers
                 path: wallets/pages/react/login-methods/social-providers.mdx
-              - page: Bring Your Own Authentication
+              - page: Bring your own authentication
                 path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
               - page: Passkey signup
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
