@@ -1,10 +1,4 @@
-import {
-  type Address,
-  type Client,
-  type Transport,
-  type Chain,
-  type Hex,
-} from "viem";
+import { type Address, type Client, type Transport, type Chain } from "viem";
 import type {
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
@@ -25,15 +19,6 @@ export type PolicyToken = {
   address: Address;
   maxTokenAmount?: bigint;
 };
-
-// Type guards
-function hasPaymasterAndData(
-  response: RequestGasAndPaymasterAndDataResponse,
-): response is RequestGasAndPaymasterAndDataResponse & {
-  paymasterAndData: Hex;
-} {
-  return "paymasterAndData" in response && Boolean(response.paymasterAndData);
-}
 
 // Simple cache for storing the latest user operation result
 // Since viem calls hooks sequentially for a single user operation,
@@ -86,19 +71,19 @@ function createUserOpCacheKey(
 function toStubReturn(
   response: RequestGasAndPaymasterAndDataResponse,
 ): GetPaymasterStubDataReturnType {
-  if (hasPaymasterAndData(response)) {
+  if ("paymasterAndData" in response) {
+    // For EP v0.6
     return {
       paymasterAndData: response.paymasterAndData,
       isFinal: true,
     };
   } else {
-    // Must be paymaster fields format
+    // For EP v0.7
     return {
       paymaster: response.paymaster,
-      paymasterData: response.paymasterData || "0x",
-      paymasterVerificationGasLimit:
-        response.paymasterVerificationGasLimit ?? 100000n,
-      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
+      paymasterData: response.paymasterData,
+      paymasterVerificationGasLimit: response.paymasterVerificationGasLimit,
+      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
       isFinal: true,
     };
   }
@@ -231,17 +216,17 @@ export function alchemyGasManagerHooks(
 
         // Don't delete yet - estimateFeesPerGas might need the gas values
         // Convert response to data return type
-        if (hasPaymasterAndData(cachedResult)) {
+        if ("paymasterAndData" in cachedResult) {
+          // For EP v0.6
           return { paymasterAndData: cachedResult.paymasterAndData };
         } else {
-          // Must be paymaster fields format
+          // For EP v0.7
           return {
             paymaster: cachedResult.paymaster,
-            paymasterData: cachedResult.paymasterData || "0x",
+            paymasterData: cachedResult.paymasterData,
             paymasterVerificationGasLimit:
-              cachedResult.paymasterVerificationGasLimit ?? 100000n,
-            paymasterPostOpGasLimit:
-              cachedResult.paymasterPostOpGasLimit ?? 50000n,
+              cachedResult.paymasterVerificationGasLimit,
+            paymasterPostOpGasLimit: cachedResult.paymasterPostOpGasLimit,
           };
         }
       },
