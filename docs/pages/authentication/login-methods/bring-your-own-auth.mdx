@@ -1,10 +1,10 @@
 ---
-title: Custom JWT Authentication
+title: Bring Your Own Authentication
 description: Integrate your existing authentication system with Alchemy Smart Wallets using JWT tokens
-slug: wallets/authentication/login-methods/custom-jwt-auth
+slug: wallets/authentication/login-methods/bring-your-own-auth
 ---
 
-Custom JWT authentication enables you to integrate your existing OIDC-compliant authentication system with Alchemy Smart Wallets. Users can maintain their familiar login experience while gaining access to smart wallet functionality.
+Integrate your existing authentication provider and add smart wallet functionality to your app without changing your users' login experience. We support JWT-based and OIDC-compliant authentication providers.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Before implementing JWT authentication, verify that your authentication system m
 
 ### 1. OIDC Compliance
 
-Your authentication system must be **OpenID Connect (OIDC) compliant** and capable of issuing **JWT tokens**.
+Your authentication system must be [**OpenID Connect (OIDC) compliant**](https://auth0.com/docs/authenticate/protocols/openid-connect-protocol#openid-and-jwts) and capable of issuing **JWT tokens**.
 
 ### 2. Required Endpoints
 
@@ -50,9 +50,8 @@ Your JWTs must contain these claims:
 **Important**: The `nonce` claim must be `toHex(sha256(targetPublicKey))` **without** the leading `0x`.
 
 <Note>
-  You can obtain the audience claim from your Smart Wallet configuration in the
-  [Alchemy
-  Dashboard](https://dashboard.alchemypreview.com/services/smart-wallets/configuration).
+  You can generate the `targetPublicKey` from the [Alchemy Signer
+  SDK](/wallets/reference/account-kit/signer/classes/AlchemySignerWebClient/targetPublicKey)
 </Note>
 
 <Tip>
@@ -64,6 +63,12 @@ Your JWTs must contain these claims:
   The combination of (`iss`, `sub`, `aud`) acts as a unique user identifier.
   Ensure these values are consistent for each user.
 </Warning>
+
+### 4. Audience Claim
+
+The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain the audience claim from your Smart Wallet configuration in the [Alchemy Dashboard](https://dashboard.alchemy.com/accounts/config/create).
+
+<img src="/images/wallets/bring-your-own-auth.png" alt="Audience Claim" />
 
 ## Implementation Guide
 
@@ -249,14 +254,10 @@ Use [jwt.io](https://jwt.io/) to decode and validate your JWT structure before i
 
 ## Next Steps
 
-### Multi-Factor Authentication
+### Sending a User Operation
 
-Enhance security by adding [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa) to your JWT authentication flow.
+Once your users have been authenticated, you can start [sending user operations](/wallets/transactions/send/send-user-operations).
 
-### Session Management
+### Sponsor Gas for a User Operation
 
-Learn about [User Sessions](/wallets/signer/user-sessions) to manage authenticated user state.
-
-### Smart Account Features
-
-Explore advanced features like [Session Keys](/wallets/smart-contracts/modular-account-v2/session-keys/) and [Gas Sponsorship](/wallets/react/sponsor-gas).
+Start [sponsoring gas fees](/wallets/transactions/sponsor-gas/sponsor-gas) for transactions via the Gas Manager.
