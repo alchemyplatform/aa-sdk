@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.56.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.55.0...v4.56.0) (2025-08-18)
+
+### Features
+
+- multi owner delete users ([#1883](https://github.com/alchemyplatform/aa-sdk/issues/1883)) ([df8fb40](https://github.com/alchemyplatform/aa-sdk/commit/df8fb40cacb70ac08d21e7ff7340614ea6692ffe))
+
 # [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
 
 ### Features

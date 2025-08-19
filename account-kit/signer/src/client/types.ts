@@ -362,6 +362,32 @@ export type SignerEndpoints = [
       };
     };
   },
+  {
+    Route: "/v1/multi-owner-prepare-delete";
+    Body: {
+      organizationId: string;
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: {
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+        deleteMembersRequest: TurnkeyApiTypes["v1DeleteUsersRequest"];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-delete";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        deletedUserIds: string[];
+      };
+    };
+  },
 ];
 
 export type AuthenticatingEventMetadata = {

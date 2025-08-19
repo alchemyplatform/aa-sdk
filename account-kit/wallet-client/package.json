@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/wallet-client",
-  "version": "4.55.0",
+  "version": "4.56.0",
   "description": "Wallet Client for Alchemy Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -40,9 +40,9 @@
     "test:e2e": "bun test ./src/**/*.e2e.test.*"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.55.0",
-    "@account-kit/infra": "^4.55.0",
-    "@account-kit/smart-contracts": "^4.55.0",
+    "@aa-sdk/core": "^4.56.0",
+    "@account-kit/infra": "^4.56.0",
+    "@account-kit/smart-contracts": "^4.56.0",
     "@alchemy/wallet-api-types": "0.1.0-alpha.14",
     "deep-equal": "^2.2.3",
     "ox": "^0.6.12"

@@ -247,6 +247,11 @@ navigation:
                   - page: Sign raw hash
                     path: wallets/pages/signer/as-an-eoa.mdx
 
+      - section: Funding
+        contents:
+          - page: Early Access
+            path: wallets/pages/funding/signup.mdx
+
       - section: API Reference
         contents:
           - section: Smart Wallets
@@ -578,6 +583,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
                       - page: experimental_createMultiOwner
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiOwner.mdx
+                      - page: experimental_deleteFromMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_deleteFromMultiOwner.mdx
                       - page: experimental_multiOwnerSignRawMessage
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors
