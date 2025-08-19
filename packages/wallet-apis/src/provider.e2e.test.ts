@@ -5,7 +5,7 @@ import {
   zeroAddress,
   type Address,
 } from "viem";
-import { alchemy } from "@alchemy/common";
+import { alchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { createSmartWalletClient } from "./client.js";
@@ -21,12 +21,13 @@ import {
 } from "viem/actions";
 
 describe("Provider E2E Tests", async () => {
-  const transport = alchemy(
+  const transport = alchemyTransport(
     process.env.ALCHEMY_PROXY_RPC_URL
       ? {
-          proxyUrl: process.env.ALCHEMY_PROXY_RPC_URL,
+          url: process.env.ALCHEMY_PROXY_RPC_URL,
         }
       : {
+          url: "https://api.g.alchemy.com/v2",
           apiKey: process.env.TEST_ALCHEMY_API_KEY!,
         },
   );
@@ -39,7 +40,6 @@ describe("Provider E2E Tests", async () => {
     transport,
     chain: arbitrumSepolia,
     signer,
-    // account,
     // TODO(v5): We can't test successful unsponsored UOs (unless we have
     // a funded test wallet) since these tests are using a real wallet
     // server instance instead of Anvil.
@@ -67,7 +67,9 @@ describe("Provider E2E Tests", async () => {
 
   const publicClient = createPublicClient({
     chain: arbitrumSepolia,
-    transport,
+    transport: alchemyTransport({
+      apiKey: process.env.TEST_ALCHEMY_API_KEY!,
+    }),
   });
 
   it("can correctly sign a message", async () => {

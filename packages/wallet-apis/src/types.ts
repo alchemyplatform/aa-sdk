@@ -16,7 +16,7 @@ export type BaseWalletClient<
     | { [key: string]: unknown }
     | undefined,
 > = Client<
-  Transport<"alchemy">,
+  Transport<"alchemyHttp">,
   Chain,
   JsonRpcAccount<Address> | undefined,
   WalletServerViemRpcSchema,
