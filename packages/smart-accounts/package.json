@@ -40,9 +40,11 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
+    "@alchemy/aa-infra": "*",
     "typescript-template": "*"
   },
   "dependencies": {
+    "@alchemy/aa-infra": "*",
     "@alchemy/common": "*",
     "ox": "^0.8.5",
     "viem": "2.29.2"

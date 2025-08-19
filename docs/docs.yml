@@ -1159,6 +1159,10 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: alchemyEstimateFeesPerGas
+                    path: wallets/pages/reference/alchemy/aa-infra/functions/alchemyEstimateFeesPerGas.mdx
+                  - page: createAlchemyBundlerClient
+                    path: wallets/pages/reference/alchemy/aa-infra/functions/createAlchemyBundlerClient.mdx
                   - page: gasManagerActions
                     path: wallets/pages/reference/alchemy/aa-infra/functions/gasManagerActions.mdx
                   - page: requestGasAndPaymasterAndData
@@ -1209,6 +1213,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: alchemyGasManagerHooks
+                    path: wallets/pages/reference/alchemy/smart-accounts/functions/alchemyGasManagerHooks.mdx
                   - page: buildDeferredActionDigest
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/buildDeferredActionDigest.mdx
                   - page: buildFullNonceKey

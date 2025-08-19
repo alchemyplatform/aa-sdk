@@ -13,9 +13,9 @@ import type {
   SmartAccount,
 } from "viem/account-abstraction";
 import { BaseError, bigIntMultiply } from "@alchemy/common";
-import type { AlchemyRpcSchema } from "./types";
+import type { RundlerRpcSchema } from "../schema.js";
 
-export const alchemyRpcSchema = rpcSchema<AlchemyRpcSchema>();
+export const alchemyRpcSchema = rpcSchema<RundlerRpcSchema>();
 
 /**
  * Error thrown when an invalid hex value is encountered during fee estimation.
@@ -33,24 +33,24 @@ export type PriorityFeeClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
   account extends Account | undefined = Account | undefined,
-> = Client<transport, chain, account, AlchemyRpcSchema>;
+> = Client<transport, chain, account, RundlerRpcSchema>;
 
 /**
- * Alchemy-flavoured `estimateFeesPerGas` callback for viem Bundler Clients.
+ * A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
  *
  * It fetches:
  * 1. `baseFeePerGas` from the latest block.
- * 2. `maxPriorityFeePerGas` via Alchemy's custom `rundler_maxPriorityFeePerGas` RPC.
+ * 2. `maxPriorityFeePerGas` via `rundler_maxPriorityFeePerGas`.
  *
  * It then returns `maxFeePerGas = baseFee * 1.5 + priority` (aligns with viem default).
  *
- * @param {PriorityFeeClient} bundlerClient  Bundler client with the rundler RPC method.
+ * @param {PriorityFeeClient} bundlerClient Bundler client with the rundler RPC method.
  * @returns {Promise<{maxFeePerGas: bigint, maxPriorityFeePerGas: bigint}>} Estimated fee values.
  *
  * @example
  * ```ts
  * import { createBundlerClient } from "viem/account-abstraction";
- * import { alchemyEstimateFeesPerGas } from "./alchemyEstimateFeesPerGas.js";
+ * import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
  *
  * const bundler = createBundlerClient({
  *   transport: http("<rundler-url>"),

@@ -29,7 +29,7 @@ import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js
 import { buildDeferredActionDigest } from "../utils/deferredActions.js";
 import { SignaturePrefix } from "../types.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
-import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas.js";
+import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
