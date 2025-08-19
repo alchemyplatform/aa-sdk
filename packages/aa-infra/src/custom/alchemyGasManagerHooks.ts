@@ -13,12 +13,12 @@ import type {
   SmartAccount,
 } from "viem/account-abstraction";
 import { type AlchemyTransport } from "@alchemy/common";
+import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
+import type { RequestGasAndPaymasterAndDataResponse } from "../actions/types.js";
 import {
-  requestGasAndPaymasterAndData,
-  type RequestGasAndPaymasterAndDataResponse,
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
-} from "@alchemy/aa-infra";
+} from "./alchemyEstimateFeesPerGas.js";
 
 // Type for ERC-20 token context
 export type PolicyToken = {
