@@ -16,11 +16,9 @@ import { type AlchemyTransport } from "@alchemy/common";
 import {
   requestGasAndPaymasterAndData,
   type RequestGasAndPaymasterAndDataResponse,
-} from "@alchemy/aa-infra";
-import {
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
-} from "./alchemyEstimateFeesPerGas.js";
+} from "@alchemy/aa-infra";
 
 // Type for ERC-20 token context
 export type PolicyToken = {
