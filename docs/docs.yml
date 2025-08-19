@@ -1198,6 +1198,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/classes/ConnectionConfigError/constructor.mdx
                   - page: FetchError
                     path: wallets/pages/reference/alchemy/common/classes/FetchError/constructor.mdx
+                  - page: InvalidRequestError
+                    path: wallets/pages/reference/alchemy/common/classes/InvalidRequestError/constructor.mdx
                   - page: ServerError
                     path: wallets/pages/reference/alchemy/common/classes/ServerError/constructor.mdx
       - section: Alchemy Smart Accounts

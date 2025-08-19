@@ -106,7 +106,7 @@ export const createEip1193ProviderFromClient = <
             if (
               address?.toLowerCase() !== client.account.address.toLowerCase()
             ) {
-              throw new Error(
+              throw new InvalidRequestError(
                 "Cannot sign for an address other than the current account.",
               );
             }
