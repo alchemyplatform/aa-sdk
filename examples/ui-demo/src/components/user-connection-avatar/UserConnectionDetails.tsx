@@ -9,7 +9,7 @@ import {
   useLogout,
   useSigner,
   useSignerStatus,
-  useUser,
+  useConnectedUser,
 } from "@account-kit/react";
 import { useMemo } from "react";
 import { Hex } from "viem";
@@ -23,7 +23,7 @@ export function UserConnectionDetails({
   deploymentStatus,
   delegationAddress,
 }: UserConnectionDetailsProps) {
-  const user = useUser();
+  const user = useConnectedUser();
   const signer = useSigner();
   const signerAddress = useSignerAddress();
   const status = useSignerStatus();
@@ -52,7 +52,8 @@ export function UserConnectionDetails({
     return user.solanaAddress ?? null;
   }, [solanaSigner, user?.solanaAddress]);
 
-  const isEOAUser = user?.type === "eoa";
+  const isExternalSolanaUser = user?.type === "eoa" && !!user?.solanaAddress;
+  const isExternalEvmUser = user?.type === "eoa" && !user?.solanaAddress;
 
   if (!user) return null;
 
@@ -66,22 +67,25 @@ export function UserConnectionDetails({
         <UserAddressTooltip
           linkEnabled
           address={solanaAddress}
-          href={`https://explorer.solana.com/address/${solanaSigner?.address}?cluster=devnet`}
+          href={`https://explorer.solana.com/address/${solanaAddress}?cluster=devnet`}
         />
       </div>
     );
   };
 
-  if (isEOAUser) {
+  if (isExternalEvmUser || isExternalSolanaUser) {
     return (
       <div className="flex flex-col gap-2">
-        {/* EOA Address */}
-        <div className="flex flex-row justify-between">
-          <span className="text-md md:text-sm text-fg-secondary">
-            EOA Address
-          </span>
-          <UserAddressTooltip address={user?.address} linkEnabled />
-        </div>
+        {/* Address */}
+        {isExternalEvmUser && (
+          <div className="flex flex-row justify-between">
+            <span className="text-md md:text-sm text-fg-secondary">
+              EOA Address
+            </span>
+            <UserAddressTooltip address={user?.address} linkEnabled />
+          </div>
+        )}
+
         <SolanaAddressDetails />
 
         {/* Logout */}

@@ -1,4 +1,4 @@
-import { useLogout } from "@account-kit/react";
+import { useConnectedUser, useLogout } from "@account-kit/react";
 import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { UserIcon } from "../icons/user";
@@ -6,24 +6,52 @@ import { WalletIcon } from "../icons/wallet";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
+  const user = useConnectedUser();
+  const isExternalSolana = user?.type === "eoa" && user?.solanaAddress;
   return (
     <div className="flex flex-col items-center justify-center px-6 lg:px-0">
       <p className="text-demo-fg-secondary lg:text-fg-secondary text-sm text-center mt-4 lg:mt-0">
-        <span>
-          Want to experience{" "}
-          <span
-            style={{
-              background: "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            gasless checkout?
-          </span>
-        </span>
-        <br />
-        <span>Login with an email instead</span>
+        {isExternalSolana ? (
+          <>
+            <span>
+              You are connected with a Solana wallet.
+              <span
+                style={{
+                  background:
+                    "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                {" "}
+                Sponsored transactions enabled
+              </span>
+              .
+            </span>
+            <br />
+            <span>Use the actions to sign messages or send gasless txns.</span>
+          </>
+        ) : (
+          <>
+            <span>
+              Want to experience{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                gasless checkout?
+              </span>
+            </span>
+            <br />
+            <span>Login with an email instead</span>
+          </>
+        )}
       </p>
       <div className="flex flex-col lg:flex-row w-full mt-4">
         <button
@@ -32,7 +60,7 @@ export const EOAPostLoginActions = () => {
             logout();
           }}
         >
-          Switch Login
+          {isExternalSolana ? "Switch Login Method" : "Switch Login"}
         </button>
         <a
           href="https://www.alchemy.com/docs/wallets/"
