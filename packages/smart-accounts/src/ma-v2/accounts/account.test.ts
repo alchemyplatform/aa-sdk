@@ -53,7 +53,7 @@ import { NativeTokenLimitModule } from "../modules/native-token-limit-module/mod
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
-import { alchemyEstimateFeesPerGas } from "../../alchemyEstimateFeesPerGas.js";
+import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
