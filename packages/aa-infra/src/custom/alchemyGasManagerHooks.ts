@@ -26,49 +26,55 @@ export type PolicyToken = {
   maxTokenAmount?: bigint;
 };
 
-// Use the response type from aa-infra
-type GasAndPaymasterAndDataResponse = RequestGasAndPaymasterAndDataResponse;
-
 // Type guards
 function hasPaymasterAndData(
-  response: GasAndPaymasterAndDataResponse,
-): response is GasAndPaymasterAndDataResponse & { paymasterAndData: Hex } {
+  response: RequestGasAndPaymasterAndDataResponse,
+): response is RequestGasAndPaymasterAndDataResponse & {
+  paymasterAndData: Hex;
+} {
   return "paymasterAndData" in response && Boolean(response.paymasterAndData);
 }
 
 // Simple cache for storing the latest user operation result
 // Since viem calls hooks sequentially for a single user operation,
 // we only need to store one result at a time
-class UserOpCache {
-  private cachedResult: GasAndPaymasterAndDataResponse | null = null;
-  private cachedUserOpHash: string | null = null;
+type UserOpRequestKey = string;
 
-  get(userOpHash: string): GasAndPaymasterAndDataResponse | null {
-    if (this.cachedUserOpHash === userOpHash) {
+class UserOpCache {
+  private cachedResult: RequestGasAndPaymasterAndDataResponse | null = null;
+  private cachedUserOpRequestKey: UserOpRequestKey | null = null;
+
+  get(
+    userOpRequestKey: UserOpRequestKey,
+  ): RequestGasAndPaymasterAndDataResponse | null {
+    if (this.cachedUserOpRequestKey === userOpRequestKey) {
       return this.cachedResult;
     }
     return null;
   }
 
-  set(userOpHash: string, result: GasAndPaymasterAndDataResponse): void {
+  set(
+    userOpRequestKey: UserOpRequestKey,
+    result: RequestGasAndPaymasterAndDataResponse,
+  ): void {
     this.cachedResult = result;
-    this.cachedUserOpHash = userOpHash;
+    this.cachedUserOpRequestKey = userOpRequestKey;
   }
 
-  getCurrent(): GasAndPaymasterAndDataResponse | null {
+  getCurrent(): RequestGasAndPaymasterAndDataResponse | null {
     return this.cachedResult;
   }
 
   clear(): void {
     this.cachedResult = null;
-    this.cachedUserOpHash = null;
+    this.cachedUserOpRequestKey = null;
   }
 }
 
 // Create a cache key for the user operation parameters
 function createUserOpCacheKey(
   params: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
-): string {
+): UserOpRequestKey {
   return JSON.stringify({
     sender: params.sender,
     nonce: params.nonce?.toString(), // Convert bigint to string for stable serialization
@@ -78,7 +84,7 @@ function createUserOpCacheKey(
 
 // Convert response to stub return type
 function toStubReturn(
-  response: GasAndPaymasterAndDataResponse,
+  response: RequestGasAndPaymasterAndDataResponse,
 ): GetPaymasterStubDataReturnType {
   if (hasPaymasterAndData(response)) {
     return {
