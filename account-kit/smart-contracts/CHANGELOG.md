@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.57.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.56.0...v4.57.0) (2025-08-19)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
 # [4.56.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.55.0...v4.56.0) (2025-08-18)
 
 **Note:** Version bump only for package @account-kit/smart-contracts
