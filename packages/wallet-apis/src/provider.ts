@@ -23,15 +23,14 @@ export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_signTypedData_v4">,
   ExtractRpcMethod<WalletRpcSchema, "eth_sendTransaction">,
   ExtractRpcMethod<WalletRpcSchema, "wallet_sendCalls">,
-  // TODO(v5): add this once wallet server supports it.
-  // ExtractRpcMethod<WalletRpcSchema, "wallet_getCapabilities">,
+  // We automatically get wallet_getCallsStatus & wallet_getCapabilities
+  // from the underlying rpc w/o any translation.
+  ...WalletServerViemRpcSchema,
 ];
 
 export type SmartWalletClientEip1193Provider = Prettify<
   EIP1193Events & {
-    request: EIP1193RequestFn<
-      [...WalletServerViemRpcSchema, ...SmartWalletClient1193Methods]
-    >;
+    request: EIP1193RequestFn<SmartWalletClient1193Methods>;
   }
 >;
 
