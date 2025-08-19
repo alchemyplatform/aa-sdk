@@ -4,7 +4,7 @@ description: How to bring in your own EOAs to Smart Wallets
 slug: wallets/react/login-methods/eoa-login
 ---
 
-## Define
+## Overview
 
 You can allow users to log in by connecting their existing external wallets using Smart Wallets — including EVM EOAs and Solana wallets. This works with our pre-built UI or your own custom UI.
 Depending on what method you choose, you can bring in the wallet:
@@ -14,7 +14,7 @@ Depending on what method you choose, you can bring in the wallet:
   - Solana: users connect an external Solana wallet (e.g. Phantom). While this is not a smart account, you can optionally enable gas sponsorship for Solana transactions via a policy.
 - **As an owner and signer of a new smart account (EVM)**: users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new smart wallet will have AA features like sponsorship and batching.
 
-## Integrate
+## Setup
 
 Easily log in with popular wallets like **MetaMask**, **Rabby**, **Phantom**, and more.
 Note the differences:
@@ -115,7 +115,7 @@ export const externalWalletsConfig = configForExternalWallets({
 });
 ```
 
-## Verify
+## UI behavior
 
 ### How the UI behaves
 
@@ -123,6 +123,8 @@ export const externalWalletsConfig = configForExternalWallets({
 - **All wallets**: same ordering; any detected wallets not in `wallets` are appended.
 - **Filtering**: respects `chainType`. For example, `["svm"]` shows only Solana; `["evm"]` shows only EVM (and WalletConnect if configured).
 - **WalletConnect**: EVM-only; shown when `walletConnectProjectId` is provided and `chainType` includes `"evm"`.
+
+## Solana usage
 
 ### Detect an external Solana wallet at runtime
 
@@ -163,7 +165,7 @@ await sendTransaction({
 await signMessage({ message: "Hello from Solana dApp!" });
 ```
 
-## Operate
+## Custom UI
 
 ### Custom UI
 
