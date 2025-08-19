@@ -201,13 +201,13 @@ export class AuthClient {
    */
   public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
     const { targetPublicKey } = await this.getTekStamper();
-    const oauthConfig = await this.dev_request("/v1/prepare-oauth", {
+    const oauthConfig = await this.dev_request("prepare-oauth", {
       nonce: getOauthNonce(targetPublicKey),
     });
     const authUrl = getOauthProviderUrl({
       oauthParams: params,
       turnkeyPublicKey: targetPublicKey,
-      oauthCallbackUrl: "localhost:8081",
+      oauthCallbackUrl: "https://signer.alchemy.com/callback",
       oauthConfig,
     });
     const response = await this.handleOauthFlow(authUrl);

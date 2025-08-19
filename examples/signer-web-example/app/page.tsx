@@ -19,6 +19,7 @@ export default function Home(): ReactElement {
   const [signature, setSignature] = useState<string | null>(null);
 
   const handleOauthLogin = useCallback(async () => {
+    console.log("Logging in with OAuth...");
     const signer = await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
