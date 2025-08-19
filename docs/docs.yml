@@ -111,6 +111,8 @@ navigation:
                 path: wallets/pages/authentication/login-methods/social-login.mdx
               - page: Custom social providers
                 path: wallets/pages/react/login-methods/social-providers.mdx
+              - page: Bring your own authentication
+                path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
               - page: Passkey signup
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
               - page: Passkey login
@@ -493,6 +495,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
+                      - page: submitJwt
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitJwt.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
