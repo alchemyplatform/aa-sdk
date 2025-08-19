@@ -7,9 +7,8 @@ import {
   type EIP1193RequestFn,
   type EIP1193Events,
 } from "viem";
-import { BaseError } from "@alchemy/common";
+import { AccountNotFoundError, BaseError } from "@alchemy/common";
 import type { ExtractRpcMethod, BaseWalletClient } from "./types.js";
-import { AccountNotFoundError } from "../../../aa-sdk/core/src/errors/account.js";
 import { ChainNotFoundError } from "../../../aa-sdk/core/src/errors/client.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
