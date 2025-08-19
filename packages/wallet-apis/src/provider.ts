@@ -61,7 +61,7 @@ export const createEip1193ProviderFromClient = <
       switch (method) {
         case "eth_chainId": {
           return handler<"eth_chainId">(async () => {
-            if (!client.chain.id) {
+            if (client.chain.id == null) {
               throw new ChainNotFoundError();
             }
             return toHex(client.chain.id);
@@ -141,10 +141,10 @@ export const createEip1193ProviderFromClient = <
               from: client.account.address,
               // TODO(v5): do we need to support any overrides here?
             } as PrepareCallsParams<TAccount>);
-            const uoResult = await client.waitForCallsStatus({
+            const callStatusResult = await client.waitForCallsStatus({
               id: result.preparedCallIds[0],
             });
-            const txHash = uoResult.receipts?.[0]?.transactionHash;
+            const txHash = callStatusResult.receipts?.[0]?.transactionHash;
             if (!txHash) {
               throw new InvalidRequestError("Missing transaction hash.");
             }
@@ -164,8 +164,11 @@ export const createEip1193ProviderFromClient = <
             if (!client.chain) {
               throw new ChainNotFoundError();
             }
-            if (chainId !== toHex(client.chain.id)) {
-              throw new InvalidRequestError("Invalid chain ID.");
+            const clientChainId = toHex(client.chain.id);
+            if (chainId !== clientChainId) {
+              throw new InvalidRequestError(
+                `Invalid chain ID (expected ${clientChainId}).`,
+              );
             }
             if (calls.some((it) => it.to == null)) {
               throw new InvalidRequestError("'to' is required.");

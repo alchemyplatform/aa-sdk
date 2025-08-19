@@ -54,10 +54,7 @@ export const createSmartWalletClient = <
 }: CreateSmartWalletClientParams<TAccount>): BaseWalletClient<
   SmartWalletActions<TAccount>
 > & { getProvider: () => SmartWalletClientEip1193Provider } => {
-  const _policyIds = [
-    ...(policyId ? [policyId] : []),
-    ...(policyIds?.length ? policyIds : []),
-  ];
+  const _policyIds = [...(policyId ? [policyId] : []), ...(policyIds ?? [])];
 
   // If the signer is a `LocalAccount` wrap it inside of a client now so
   // downstream actions can just use `getAction` to get signing actions
