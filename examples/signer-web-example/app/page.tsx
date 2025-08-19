@@ -1,5 +1,6 @@
 "use client";
-import { createWebAuthClient, Signer } from "@alchemy/signer-web";
+import { Signer } from "@alchemy/signer";
+import { createWebAuthClient } from "@alchemy/signer-web";
 import { ReactElement, useCallback, useState } from "react";
 
 const apiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;

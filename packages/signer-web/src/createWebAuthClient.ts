@@ -1,6 +1,5 @@
-import { AuthClient } from "@alchemy/signer";
+import { AuthClient, OauthCancelledError } from "@alchemy/signer";
 import { IframeStamper } from "@turnkey/iframe-stamper";
-import { OauthCancelledError } from "../../signer/src/errors.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -20,30 +19,33 @@ export type WebAuthClientParams = {
  * Creates a web-based AuthClient configured for browser environments.
  * This function sets up an AuthClient with iframe-based TEK stamper for secure key management
  * and popup-based OAuth flow for social authentication.
- *
+ * 
  * The created AuthClient supports:
  * - Email OTP authentication
  * - OAuth authentication via popup windows
  * - Secure key management through Turnkey iframe stamper
- *
+ * 
  * @param {WebAuthClientParams} params - Configuration parameters for the web auth client
+ * @param {string} params.apiKey - API key for authentication with Alchemy services
+ * @param {string} [params.iframeElementId="turnkey-iframe"] - ID for the iframe element used by Turnkey stamper
+ * @param {string} [params.iframeContainerId="turnkey-iframe-container"] - ID for the container element that holds the iframe
  * @returns {AuthClient} A configured AuthClient instance ready for web-based authentication
- *
+ * 
  * @example
  * ```ts
  * import { createWebAuthClient } from "@alchemy/signer-web";
- *
+ * 
  * const authClient = createWebAuthClient({
  *   apiKey: "your-alchemy-api-key",
  *   iframeContainerId: "my-iframe-container"
  * });
- *
+ * 
  * // Send email OTP
  * await authClient.sendEmailOtp({ email: "user@example.com" });
- *
+ * 
  * // Submit OTP code
  * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
- *
+ * 
  * // OAuth login
  * const signer = await authClient.loginWithOauth({
  *   type: "oauth",
@@ -51,9 +53,9 @@ export type WebAuthClientParams = {
  *   mode: "popup"
  * });
  * ```
- *
+ * 
  * @throws {Error} May throw errors related to DOM manipulation or network requests
- *
+ * 
  * @see {@link AuthClient} for the full API of the returned client
  */
 // TODO: take a transport instead of apiKey once it's ready.
