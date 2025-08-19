@@ -1,6 +1,7 @@
 // actions
 // TODO(v5): revisit exporting the actions or decorators for running `alchemy_*` gas manager methods, instead of just the custom functions to attach to a viem smart account.
 export type * from "./actions/requestGasAndPaymasterAndData.js";
+export type * from "./actions/types.js";
 export { requestGasAndPaymasterAndData } from "./actions/requestGasAndPaymasterAndData.js";
 
 // decorators

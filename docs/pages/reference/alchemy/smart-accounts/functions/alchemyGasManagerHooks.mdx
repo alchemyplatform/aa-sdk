@@ -12,6 +12,11 @@ paymaster sponsorship in a single RPC call.
 This implementation caches the result from the first call to avoid duplicate RPC calls
 when viem calls both estimateFeesPerGas and paymaster functions.
 
+Note: ERC-20 permits are not supported in these viem-native hooks. Permits require
+building and signing the permit message before sending the user operation, which is
+handled by middleware but not by these lower-level hooks. Use alchemyGasManagerMiddleware()
+for permit support.
+
 ## Import
 
 ```ts
@@ -44,7 +49,7 @@ const bundler = createBundlerClient({
 
 `PolicyToken`
 
-- Optional ERC-20 token configuration (permits not supported)
+- Optional ERC-20 token configuration for paying gas with tokens
 
 ## Returns
 

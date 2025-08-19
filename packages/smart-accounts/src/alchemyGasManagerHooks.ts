@@ -1,4 +1,10 @@
-import type { Address, Client, Transport, Chain, Hex } from "viem";
+import {
+  type Address,
+  type Client,
+  type Transport,
+  type Chain,
+  type Hex,
+} from "viem";
 import type {
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
@@ -6,9 +12,11 @@ import type {
   GetPaymasterStubDataReturnType,
   SmartAccount,
 } from "viem/account-abstraction";
-import { deepHexlify } from "@aa-sdk/core";
 import { type AlchemyTransport } from "@alchemy/common";
-import { requestGasAndPaymasterAndData } from "@alchemy/aa-infra";
+import {
+  requestGasAndPaymasterAndData,
+  type RequestGasAndPaymasterAndDataResponse,
+} from "@alchemy/aa-infra";
 import {
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
@@ -18,29 +26,10 @@ import {
 export type PolicyToken = {
   address: Address;
   maxTokenAmount?: bigint;
-  permit?: {
-    deadline: bigint;
-    nonce: bigint;
-    domain?: any;
-  };
 };
 
-// Response is provided by wallet-apis (already bigint-formatted)
-type GasAndPaymasterAndDataResponse = {
-  callGasLimit?: bigint;
-  preVerificationGas?: bigint;
-  verificationGasLimit?: bigint;
-  maxFeePerGas?: bigint;
-  maxPriorityFeePerGas?: bigint;
-} & (
-  | { paymasterAndData: Hex }
-  | {
-      paymaster: Address;
-      paymasterData: Hex;
-      paymasterVerificationGasLimit: bigint;
-      paymasterPostOpGasLimit: bigint;
-    }
-);
+// Use the response type from aa-infra
+type GasAndPaymasterAndDataResponse = RequestGasAndPaymasterAndDataResponse;
 
 // Type guards
 function hasPaymasterAndData(
@@ -89,35 +78,6 @@ function createUserOpCacheKey(
   });
 }
 
-// Build the wallet-apis request
-async function buildWalletApisRequest(
-  parameters: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
-  client: Client<Transport, Chain, SmartAccount>,
-  context: AlchemyGasManagerContext,
-): Promise<any> {
-  const { entryPointAddress, ...userOpFields } = parameters;
-
-  // Prepare user operation
-  const userOp = deepHexlify(userOpFields);
-
-  // Get dummy signature from the account
-  if (!client.account?.getStubSignature) {
-    throw new Error(
-      "Account must implement getStubSignature for gas manager hooks",
-    );
-  }
-  const dummySignature = await client.account.getStubSignature(userOp);
-
-  return {
-    policyId: context.policyId,
-    entryPoint: entryPointAddress,
-    userOperation: userOp,
-    dummySignature,
-    overrides: {},
-    ...(context.erc20Context ? { erc20Context: context.erc20Context } : {}),
-  };
-}
-
 // Convert response to stub return type
 function toStubReturn(
   response: GasAndPaymasterAndDataResponse,
@@ -136,24 +96,6 @@ function toStubReturn(
         response.paymasterVerificationGasLimit ?? 100000n,
       paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
       isFinal: true,
-    };
-  }
-}
-
-// Convert response to data return type
-function toDataReturn(
-  response: GasAndPaymasterAndDataResponse,
-): GetPaymasterDataReturnType {
-  if (hasPaymasterAndData(response)) {
-    return { paymasterAndData: response.paymasterAndData };
-  } else {
-    // Must be paymaster fields format
-    return {
-      paymaster: response.paymaster,
-      paymasterData: response.paymasterData || "0x",
-      paymasterVerificationGasLimit:
-        response.paymasterVerificationGasLimit ?? 100000n,
-      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
     };
   }
 }
@@ -187,15 +129,6 @@ function createGasManagerContext(
       tokenAddress: policyToken.address,
       maxTokenAmount: policyToken.maxTokenAmount,
     };
-
-    if (policyToken.permit !== undefined) {
-      console.warn(
-        "⚠️ ERC-20 permits are not supported in viem-native gas manager hooks. " +
-          "Permits require building and signing the permit message before sending the user operation, " +
-          "which is handled by middleware but not by these lower-level hooks. " +
-          "Use alchemyGasManagerMiddleware() for permit support.",
-      );
-    }
   }
 
   return context;
@@ -209,8 +142,13 @@ function createGasManagerContext(
  * This implementation caches the result from the first call to avoid duplicate RPC calls
  * when viem calls both estimateFeesPerGas and paymaster functions.
  *
+ * Note: ERC-20 permits are not supported in these viem-native hooks. Permits require
+ * building and signing the permit message before sending the user operation, which is
+ * handled by middleware but not by these lower-level hooks. Use alchemyGasManagerMiddleware()
+ * for permit support.
+ *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
- * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration (permits not supported)
+ * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration for paying gas with tokens
  * @returns {{ paymaster: Function, userOperation: { estimateFeesPerGas: Function } }} Hooks for createBundlerClient
  *
  * @example
@@ -241,11 +179,28 @@ export function alchemyGasManagerHooks(
         const userOpCacheKey = createUserOpCacheKey(parameters);
 
         // Always make the RPC call (no cache check here)
-        const request = await buildWalletApisRequest(
-          parameters,
-          client,
-          context,
-        );
+        const { entryPointAddress, ...userOpFields } = parameters;
+
+        // Get dummy signature from the account
+        if (!client.account) {
+          throw new Error(
+            "No account found on client. Client must have an account to use gas manager hooks.",
+          );
+        }
+        const dummySignature =
+          await client.account.getStubSignature(userOpFields);
+
+        const request = {
+          policyId: context.policyId,
+          entryPoint: entryPointAddress,
+          userOperation: userOpFields,
+          dummySignature,
+          overrides: {},
+          ...(context.erc20Context
+            ? { erc20Context: context.erc20Context }
+            : {}),
+        };
+
         const response = await requestGasAndPaymasterAndData(
           client as Client<AlchemyTransport, Chain>,
           [request],
@@ -271,7 +226,20 @@ export function alchemyGasManagerHooks(
         }
 
         // Don't delete yet - estimateFeesPerGas might need the gas values
-        return toDataReturn(cachedResult);
+        // Convert response to data return type
+        if (hasPaymasterAndData(cachedResult)) {
+          return { paymasterAndData: cachedResult.paymasterAndData };
+        } else {
+          // Must be paymaster fields format
+          return {
+            paymaster: cachedResult.paymaster,
+            paymasterData: cachedResult.paymasterData || "0x",
+            paymasterVerificationGasLimit:
+              cachedResult.paymasterVerificationGasLimit ?? 100000n,
+            paymasterPostOpGasLimit:
+              cachedResult.paymasterPostOpGasLimit ?? 50000n,
+          };
+        }
       },
     }),
 

@@ -24,9 +24,9 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
 
     // Mock bundler client
     const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockImplementation(({ method }) => {
+      vi.fn().mockImplementation(async ({ method }) => {
         if (method === "alchemy_requestGasAndPaymasterAndData") {
-          return Promise.resolve({
+          return {
             callGasLimit: "0x5208",
             preVerificationGas: "0x5208",
             verificationGasLimit: "0x5208",
@@ -36,9 +36,9 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
             paymasterData: "0xabcdef",
             paymasterVerificationGasLimit: "0x186a0",
             paymasterPostOpGasLimit: "0xc350",
-          });
+          };
         }
-        return Promise.resolve(null);
+        return null;
       }),
     );
 
@@ -101,18 +101,18 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
 
     // Mock bundler client
     const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockImplementation(({ method }) => {
+      vi.fn().mockImplementation(async ({ method }) => {
         if (method === "alchemy_requestGasAndPaymasterAndData") {
-          return Promise.resolve({
+          return {
             callGasLimit: "0x5208",
             preVerificationGas: "0x5208",
             verificationGasLimit: "0x5208",
             maxFeePerGas: "0x3b9aca00", // 1 gwei
             maxPriorityFeePerGas: "0xf4240", // 0.001 gwei
             paymasterAndData: "0x1234567890abcdef",
-          });
+          };
         }
-        return Promise.resolve(null);
+        return null;
       }),
     );
 
@@ -285,14 +285,14 @@ describe("alchemyGasManagerHooks - Optimized Flow", () => {
     };
 
     const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockImplementation(({ method }) => {
+      vi.fn().mockImplementation(async ({ method }) => {
         if (method === "eth_getBlockByNumber") {
-          return Promise.resolve(mockBlock);
+          return mockBlock;
         }
         if (method === "rundler_maxPriorityFeePerGas") {
-          return Promise.resolve("0x5f5e100"); // 0.1 gwei
+          return "0x5f5e100"; // 0.1 gwei
         }
-        return Promise.resolve(null);
+        return null;
       }),
     );
 
