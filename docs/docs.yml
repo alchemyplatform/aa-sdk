@@ -292,15 +292,6 @@ navigation:
               - api: UserOp Simulation Endpoints
                 api-name: user-op-sim
                 slug: useroperation-simulation-endpoints
-              - section: EntryPoint Revert Codes
-                contents:
-                  - page: EntryPoint v0.7 Revert Codes
-                    path: >-
-                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v07-revert-codes.mdx
-                  - page: EntryPoint v0.6 Revert Codes
-                    path: >-
-                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v06-revert-codes.mdx
-                slug: entrypoint-revert-codes
             slug: bundler-api
 
       - section: SDK Reference
@@ -1132,6 +1123,15 @@ navigation:
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
               - page: Bundler RPC Errors
                 path: wallets/pages/bundler-api/bundler-rpc-errors.mdx
+              - section: EntryPoint Revert Codes
+                contents:
+                  - page: EntryPoint v0.7 Revert Codes
+                    path: >-
+                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v07-revert-codes.mdx
+                  - page: EntryPoint v0.6 Revert Codes
+                    path: >-
+                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v06-revert-codes.mdx
+                slug: entrypoint-revert-codes
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx
