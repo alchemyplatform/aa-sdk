@@ -71,20 +71,17 @@ export const createSmartWalletClient = <
           chain,
         });
 
-  const baseClient: BaseWalletClient<SmartWalletActions<TAccount>> =
-    createClient({
-      account,
-      transport,
-      chain,
-    })
-      .extend(() => ({
-        policyIds: _policyIds,
-        internal: createInternalState(),
-      }))
-      .extend(smartWalletActions(signerClient));
-
-  return {
-    ...baseClient,
-    getProvider: () => createEip1193ProviderFromClient(baseClient),
-  };
+  return createClient({
+    account,
+    transport,
+    chain,
+  })
+    .extend(() => ({
+      policyIds: _policyIds,
+      internal: createInternalState(),
+    }))
+    .extend(smartWalletActions<TAccount>(signerClient))
+    .extend((_client) => ({
+      getProvider: () => createEip1193ProviderFromClient<TAccount>(_client),
+    }));
 };

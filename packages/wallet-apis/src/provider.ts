@@ -6,8 +6,13 @@ import {
   type Prettify,
   type EIP1193RequestFn,
   type EIP1193Events,
+  ProviderRpcError,
 } from "viem";
-import { AccountNotFoundError, BaseError } from "@alchemy/common";
+import {
+  AccountNotFoundError,
+  BaseError,
+  InvalidRequestError,
+} from "@alchemy/common";
 import type { ExtractRpcMethod, BaseWalletClient } from "./types.js";
 import { ChainNotFoundError } from "../../../aa-sdk/core/src/errors/client.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
@@ -48,132 +53,177 @@ export const createEip1193ProviderFromClient = <
       type: "json-rpc",
       address: account.address,
     };
-    eventEmitter.emit("connect", { chainId: client.chain.id });
+    eventEmitter.emit("connect", { chainId: toHex(client.chain.id) });
   })();
 
   const request = (async ({ method, params }) => {
-    switch (method) {
-      case "eth_chainId": {
-        return handler<"eth_chainId">(async () => {
-          if (!client.chain.id) {
-            throw new ChainNotFoundError();
-          }
-          return toHex(client.chain.id);
-        })(params);
-      }
+    try {
+      switch (method) {
+        case "eth_chainId": {
+          return handler<"eth_chainId">(async () => {
+            if (!client.chain.id) {
+              throw new ChainNotFoundError();
+            }
+            return toHex(client.chain.id);
+          })(params);
+        }
 
-      case "eth_accounts": {
-        return handler<"eth_accounts">(async () => {
-          if (!client.account) {
-            throw new AccountNotFoundError();
-          }
-          return [client.account.address];
-        })(params);
-      }
+        case "eth_accounts": {
+          return handler<"eth_accounts">(async () => {
+            if (!client.account) {
+              throw new AccountNotFoundError();
+            }
+            return [client.account.address];
+          })(params);
+        }
 
-      case "personal_sign": {
-        return handler<"personal_sign">(async ([data, address]) => {
-          if (!client.account) {
-            throw new AccountNotFoundError();
-          }
-          if (
-            address?.toLowerCase() !== client.account.address?.toLowerCase()
-          ) {
-            throw new BaseError(
-              "Cannot sign for an address other than the current account.",
-            );
-          }
-          return await client.signMessage({
-            message: {
-              raw: data,
-            },
-            account: client.account.address,
+        case "personal_sign": {
+          return handler<"personal_sign">(async ([data, address]) => {
+            if (!client.account) {
+              throw new AccountNotFoundError();
+            }
+            if (
+              address?.toLowerCase() !== client.account.address?.toLowerCase()
+            ) {
+              throw new InvalidRequestError(
+                "Cannot sign for an address other than the current account.",
+              );
+            }
+            return await client.signMessage({
+              message: {
+                raw: data,
+              },
+              account: client.account.address,
+            });
+          })(params);
+        }
+
+        case "eth_signTypedData_v4": {
+          return handler<"eth_signTypedData_v4">(async ([address, tdJson]) => {
+            if (!client.account) {
+              throw new AccountNotFoundError();
+            }
+            if (
+              address?.toLowerCase() !== client.account.address.toLowerCase()
+            ) {
+              throw new Error(
+                "Cannot sign for an address other than the current account.",
+              );
+            }
+            return await client.signTypedData({
+              account: client.account.address,
+              ...(JSON.parse(tdJson) as TypedDataDefinition),
+            });
+          })(params);
+        }
+
+        // eslint-disable-next-line no-fallthrough
+        case "wallet_sendTransaction":
+        case "eth_sendTransaction": {
+          return handler<"eth_sendTransaction">(async ([tx]) => {
+            if (!client.account) {
+              throw new AccountNotFoundError();
+            }
+            if (!client.chain) {
+              throw new ChainNotFoundError();
+            }
+            const { to, data, value, from } = tx;
+            if (!to) {
+              throw new InvalidRequestError("'to' is required.");
+            }
+            if (from?.toLowerCase() !== client.account.address.toLowerCase()) {
+              throw new InvalidRequestError(
+                "Cannot use 'from' address other than connected account.",
+              );
+            }
+            const result = await client.sendCalls({
+              calls: [{ to, data, value }],
+              from: client.account.address,
+              // TODO(v5): do we need to support any overrides here?
+            } as PrepareCallsParams<TAccount>);
+            const uoResult = await client.waitForCallsStatus({
+              id: result.preparedCallIds[0],
+            });
+            const txHash = uoResult.receipts?.[0]?.transactionHash;
+            if (!txHash) {
+              throw new InvalidRequestError("Missing transaction hash.");
+            }
+            return txHash;
+          })(params);
+        }
+
+        case "wallet_sendCalls": {
+          return handler<"wallet_sendCalls">(async (_params) => {
+            if (!_params) {
+              throw new InvalidRequestError("Params are required.");
+            }
+            const [{ calls, capabilities, chainId, from }] = _params;
+            if (!client.account) {
+              throw new AccountNotFoundError();
+            }
+            if (!client.chain) {
+              throw new ChainNotFoundError();
+            }
+            if (chainId !== toHex(client.chain.id)) {
+              throw new InvalidRequestError("Invalid chain ID.");
+            }
+            if (calls.some((it) => it.to == null)) {
+              throw new InvalidRequestError("'to' is required.");
+            }
+            if (from?.toLowerCase() !== client.account.address.toLowerCase()) {
+              throw new InvalidRequestError(
+                "Cannot use 'from' address other than connected account.",
+              );
+            }
+            const result = await client.sendCalls({
+              calls: calls.map((c) => ({
+                to: c.to!,
+                data: c.data,
+                value: c.value,
+              })),
+              from: client.account.address,
+              capabilities,
+            } as PrepareCallsParams<TAccount>);
+            return {
+              id: result.preparedCallIds[0],
+            };
+          })(params);
+        }
+
+        // TODO(v5): For now, any other methods fall through to the wallet server
+        // api. We may want to change this behavior later depending on how we
+        // handle request routing within the wagmi connector.
+        default:
+          return client.request({
+            method: method as any,
+            params: params as any,
           });
-        })(params);
       }
-
-      case "eth_signTypedData_v4": {
-        return handler<"eth_signTypedData_v4">(async ([address, tdJson]) => {
-          if (!client.account) {
-            throw new AccountNotFoundError();
-          }
-          if (address?.toLowerCase() !== client.account.address.toLowerCase()) {
-            throw new Error(
-              "Cannot sign for an address other than the current account.",
-            );
-          }
-          return await client.signTypedData({
-            account: client.account.address,
-            ...(JSON.parse(tdJson) as TypedDataDefinition),
-          });
-        })(params);
+    } catch (err) {
+      if (err instanceof ChainNotFoundError) {
+        throw new ProviderRpcError(err, {
+          code: 4901,
+          shortMessage: err.message,
+        });
       }
-
-      // eslint-disable-next-line no-fallthrough
-      case "wallet_sendTransaction":
-      case "eth_sendTransaction": {
-        return handler<"eth_sendTransaction">(async ([tx]) => {
-          if (!client.account) {
-            throw new AccountNotFoundError();
-          }
-          if (!client.chain) {
-            throw new ChainNotFoundError();
-          }
-          const { to, data, value } = tx;
-          if (!to) {
-            throw new BaseError("'to' is required.");
-          }
-          const result = await client.sendCalls({
-            calls: [{ to, data, value }],
-            from: client.account.address,
-            // TODO(v5): do we need to support any overrides here?
-          } as PrepareCallsParams<TAccount>);
-          const uoResult = await client.waitForCallsStatus({
-            id: result.preparedCallIds[0],
-          });
-          const txHash = uoResult.receipts?.[0]?.transactionHash;
-          if (!txHash) {
-            throw new BaseError("Missing transaction hash.");
-          }
-          return txHash;
-        })(params);
+      if (err instanceof AccountNotFoundError) {
+        throw new ProviderRpcError(err, {
+          code: 4100,
+          shortMessage: err.message,
+        });
       }
-
-      case "wallet_sendCalls": {
-        return handler<"wallet_sendCalls">(async (_params) => {
-          if (!_params) {
-            throw new BaseError("Params are required.");
-          }
-          const [{ calls, capabilities, chainId }] = _params;
-          if (!client.account) {
-            throw new AccountNotFoundError();
-          }
-          if (!client.chain) {
-            throw new ChainNotFoundError();
-          }
-          if (chainId !== toHex(client.chain.id)) {
-            throw new BaseError("Invalid chain ID.");
-          }
-          if (calls.some((it) => it.to == null)) {
-            throw new BaseError("'to' is required.");
-          }
-          const result = await client.sendCalls({
-            calls: calls.map((c) => ({
-              to: c.to!,
-              data: c.data,
-              value: c.value,
-            })),
-            from: client.account.address,
-            capabilities,
-          } as PrepareCallsParams<TAccount>);
-          return {
-            id: result.preparedCallIds[0],
-          };
-        })(params);
+      if (err instanceof InvalidRequestError) {
+        throw new ProviderRpcError(err, {
+          code: -32600,
+          shortMessage: err.message,
+        });
       }
-
-      default:
-        return client.request({ method: method as any, params: params as any });
+      const unexpectedErr =
+        err instanceof BaseError ? err : new BaseError(`${err}`);
+      throw new ProviderRpcError(unexpectedErr, {
+        code: -32603,
+        shortMessage: unexpectedErr.message,
+      });
     }
   }) as SmartWalletClientEip1193Provider["request"];
 

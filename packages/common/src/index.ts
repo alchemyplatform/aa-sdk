@@ -25,6 +25,7 @@ export { AccountNotFoundError } from "./errors/AccountNotFoundError.js";
 export { ConnectionConfigError } from "./errors/ConnectionConfigError.js";
 export { FetchError } from "./errors/FetchError.js";
 export { ServerError } from "./errors/ServerError.js";
+export { InvalidRequestError } from "./errors/InvalidRequestError.js";
 
 // actions
 export type * from "./actions/addBreadCrumb.js";

@@ -3,9 +3,13 @@ import {
   createPublicClient,
   custom,
   zeroAddress,
+  type Account,
   type Address,
+  type Chain,
+  type Client,
+  type Transport,
 } from "viem";
-import { alchemyTransport } from "@alchemy/common";
+import { alchemyTransport, type AlchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "@account-kit/infra";
 import { createSmartWalletClient } from "./client.js";
@@ -21,55 +25,61 @@ import {
 } from "viem/actions";
 
 describe("Provider E2E Tests", async () => {
-  const transport = alchemyTransport(
-    process.env.ALCHEMY_PROXY_RPC_URL
-      ? {
-          url: process.env.ALCHEMY_PROXY_RPC_URL,
-        }
-      : {
-          url: "https://api.g.alchemy.com/v2",
-          apiKey: process.env.TEST_ALCHEMY_API_KEY!,
-        },
-  );
-
-  const signer = privateKeyToAccount(
-    "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
-  );
-
-  const _client = createSmartWalletClient({
-    transport,
-    chain: arbitrumSepolia,
-    signer,
-    // TODO(v5): We can't test successful unsponsored UOs (unless we have
-    // a funded test wallet) since these tests are using a real wallet
-    // server instance instead of Anvil.
-    policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-  });
-
-  const provider = _client.getProvider();
-
-  await new Promise((resolve) => {
-    provider.on("connect", (data) => {
-      console.log("Connected with chainId:", data.chainId);
-      resolve(data);
-    });
-  });
-
-  const [account] = await provider.request({
-    method: "eth_accounts",
-  });
-
-  const clientFromProvider = createClient({
-    account,
-    transport: custom(provider),
-    chain: arbitrumSepolia,
-  });
+  let clientFromProvider: Client<Transport, Chain, Account>;
+  let transport: AlchemyTransport;
+  let account: Address;
 
   const publicClient = createPublicClient({
     chain: arbitrumSepolia,
     transport: alchemyTransport({
       apiKey: process.env.TEST_ALCHEMY_API_KEY!,
     }),
+  });
+
+  beforeAll(async () => {
+    transport = alchemyTransport(
+      process.env.ALCHEMY_PROXY_RPC_URL
+        ? {
+            url: process.env.ALCHEMY_PROXY_RPC_URL,
+          }
+        : {
+            url: "https://api.g.alchemy.com/v2",
+            apiKey: process.env.TEST_ALCHEMY_API_KEY!,
+          },
+    );
+
+    const signer = privateKeyToAccount(
+      "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
+    );
+
+    const _client = createSmartWalletClient({
+      transport,
+      chain: arbitrumSepolia,
+      signer,
+      // TODO(v5): We can't test successful unsponsored UOs (unless we have
+      // a funded test wallet) since these tests are using a real wallet
+      // server instance instead of Anvil.
+      policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+    });
+
+    const provider = _client.getProvider();
+
+    await new Promise((resolve) => {
+      provider.on("connect", (data) => {
+        console.log("Connected with chainId:", data.chainId);
+        resolve(data);
+      });
+    });
+
+    [account] = await provider.request({
+      method: "eth_accounts",
+    });
+
+    clientFromProvider = createClient({
+      account,
+      transport: custom(provider),
+      chain: arbitrumSepolia,
+    });
   });
 
   it("can correctly sign a message", async () => {
@@ -148,40 +158,40 @@ describe("Provider E2E Tests", async () => {
   });
 
   it("can send a call using 7702", async () => {
-    const signer = privateKeyToAccount(
+    const signer7702 = privateKeyToAccount(
       "0x985fe592f94f96d2813ac3519b94a8ddd10cd25cf02d7b6b252588ce6b312dab",
     );
-    const account = signer.address;
+    const account = signer7702.address;
 
     const _client = createSmartWalletClient({
       transport,
       chain: arbitrumSepolia,
-      signer,
+      signer: signer7702,
       policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
       account,
     });
 
-    const provider = _client.getProvider();
+    const provider7702 = _client.getProvider();
 
     await new Promise((resolve) => {
-      provider.on("connect", (data) => {
+      provider7702.on("connect", (data) => {
         console.log("Connected with chainId:", data.chainId);
         resolve(data);
       });
     });
 
-    const [resolvedAccount] = await provider.request({
+    const [resolvedAccount] = await provider7702.request({
       method: "eth_accounts",
     });
     expect(resolvedAccount).toBe(account);
 
-    const clientFromProvider = createClient({
+    const clientFromProvider7702 = createClient({
       account,
-      transport: custom(provider),
+      transport: custom(provider7702),
       chain: arbitrumSepolia,
     });
 
-    const result = await sendCalls(clientFromProvider, {
+    const result = await sendCalls(clientFromProvider7702, {
       calls: [
         {
           to: zeroAddress,
@@ -190,8 +200,10 @@ describe("Provider E2E Tests", async () => {
         },
       ],
     });
-    await waitForCallsStatus(clientFromProvider, result);
+    await waitForCallsStatus(clientFromProvider7702, result);
   });
+
+  // TODO(v5): to add test for getCapabilities once it's live in prod.
 
   const givenTypedData = {
     types: {
