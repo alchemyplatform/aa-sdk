@@ -36,7 +36,7 @@ export type PriorityFeeClient<
 > = Client<transport, chain, account, RundlerRpcSchema>;
 
 /**
- * A custom `estimateFeesPerGas`function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
+ * A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
  *
  * It fetches:
  * 1. `baseFeePerGas` from the latest block.
