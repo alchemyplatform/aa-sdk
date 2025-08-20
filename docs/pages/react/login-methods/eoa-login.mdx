@@ -6,25 +6,17 @@ slug: wallets/react/login-methods/eoa-login
 
 ## Overview
 
-You can allow users to log in by connecting their existing external wallets using Smart Wallets — including EVM EOAs and Solana wallets. This works with our pre-built UI or your own custom UI.
-Depending on what method you choose, you can bring in the wallet:
+Connect users with their existing wallets — EVM EOAs (e.g., MetaMask) and Solana wallets (e.g., Phantom) — via our auth modal or your own UI.
 
-- Connect existing wallets: EVM EOAs (e.g., MetaMask) and Solana wallets (e.g., Phantom)
-- External wallets act as wallets (not smart accounts). EVM EOAs don’t get AA features; Solana can be gas‑sponsored with a policy.
-- EOAs can also be used as smart wallet owners on EVM for AA features like sponsorship and batching.
+- EVM EOAs behave as regular wallets (no AA features).
+- Solana wallets are external wallets; you can enable sponsored gas with a policy.
+- You can optionally use an EVM EOA as a smart wallet owner to unlock AA features like sponsorship and batching.
 
 ## Setup
 
-Easily log in with popular wallets like **MetaMask**, **Rabby**, **Phantom**, and more.
-Note the differences:
-
-- **EVM external EOAs**: no smart account features (no sponsorship, batching, etc.).
-- **Solana external wallets**: not a smart account, but you can sponsor gas via a Solana policy if configured.
-
-Our SDK supports external wallets out of the box, so you can seamlessly support both Web2 users with social login and Web3 users who want to bring their own wallets. We support enabling external wallets in 2 ways:
-
-1. **Automatically detect and display all wallet extensions available in the user's browser.** (_Note: if the user has no wallet extensions installed, nothing will be displayed_)
-2. **WalletConnect for other EVM wallets**
+- Auto-detect installed wallet extensions.
+- Optionally add WalletConnect for other EVM wallets.
+- Configure once with `configForExternalWallets()` and spread its outputs into `createConfig()` and the auth modal.
 
 ### Quick setup: EVM + Solana external wallets
 
@@ -97,7 +89,7 @@ export const config = createConfig(
 );
 ```
 
-Backwards compatibility: you can still pass EVM `connectors` and Solana `adapters` directly into `createConfig()` without using the helper.
+You can still pass EVM `connectors` and Solana `adapters` directly into `createConfig()` without using the helper.
 
 In order to access other EVM providers via `WalletConnect`, provide a WalletConnect Project ID in your external wallets config. You can create a WalletConnect project ID [here](https://cloud.reown.com/sign-in).
 

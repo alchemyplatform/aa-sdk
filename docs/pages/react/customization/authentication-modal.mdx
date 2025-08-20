@@ -4,7 +4,7 @@ description: Learn how to customize the various sections that show up in your au
 slug: wallets/react/customization/authentication-modal
 ---
 
-## Overview
+## What you can customize
 
 What you can customize in the auth modal:
 
@@ -12,11 +12,11 @@ What you can customize in the auth modal:
 - Sections: layout of login methods (email, passkey, social, external wallets)
 - External wallets: featured and all-wallets views, order, chain filtering (EVM/Solana), WalletConnect, and more via `configForExternalWallets()`
 
-## Integrate
+## Customize the modal
 
 ### Custom headers
 
-The auth modal, by default, shows a `Sign in` text header. This header is fully cusomizable by you, allowing you to change the text or add an icon.
+The auth modal, by default, shows a `Sign in` text header. This header is fully customizable by you, allowing you to change the text or add an icon.
 To customize the header text, you can override either of the `header` or `hideSignInText` options of the `auth` config when calling `createConfig`.
 
 ### Changing the header text
@@ -123,9 +123,9 @@ export const config = createConfig(
 );
 ```
 
-Backwards compatibility: you can still pass EVM `connectors` and Solana `adapters` directly into `createConfig()` without the helper.
+You can still pass EVM `connectors` and Solana `adapters` directly into `createConfig()` without the helper.
 
-## Verify
+## How it behaves
 
 How the external wallets UI behaves:
 
@@ -134,7 +134,7 @@ How the external wallets UI behaves:
 - Filtering: respects `chainType` (e.g., `["svm"]` hides EVM + WalletConnect)
 - WalletConnect: EVM‑only; shown when `walletConnectProjectId` is set and `chainType` includes `"evm"`
 
-## Operate
+## Programmatic usage
 
 Programmatic flows when you want to bypass the modal:
 
