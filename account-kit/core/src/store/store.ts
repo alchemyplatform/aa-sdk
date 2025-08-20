@@ -193,6 +193,7 @@ const createInitialStoreState = (
     ),
     smartAccountClients: createEmptySmartAccountClientState(chains),
     smartWalletClients: createEmptySmartWalletClientState(chains),
+    user: undefined,
   };
 
   if ("solana" in params && params.solana) {
