@@ -4,7 +4,17 @@ description: Learn how to customize the various sections that show up in your au
 slug: wallets/react/customization/authentication-modal
 ---
 
-## Custom headers
+## Overview
+
+What you can customize in the auth modal:
+
+- Header: text or custom React node
+- Sections: layout of login methods (email, passkey, social, external wallets)
+- External wallets: featured and all-wallets views, order, chain filtering (EVM/Solana), WalletConnect, and more via `configForExternalWallets()`
+
+## Integrate
+
+### Custom headers
 
 The auth modal, by default, shows a `Sign in` text header. This header is fully cusomizable by you, allowing you to change the text or add an icon.
 To customize the header text, you can override either of the `header` or `hideSignInText` options of the `auth` config when calling `createConfig`.
@@ -52,4 +62,96 @@ export const confg = createConfig(
     },
   },
 );
+```
+
+### External wallets (EVM + Solana)
+
+Use `configForExternalWallets()` once, then spread its outputs into your config and UI. This powers Featured + All Wallets views, merges EVM/Solana variants by name, and enables WalletConnect (EVM‑only) when configured.
+
+```ts twoslash
+// @noErrors
+import {
+  createConfig,
+  cookieStorage,
+  configForExternalWallets,
+} from "@account-kit/react";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { Connection } from "@solana/web3.js";
+
+export const externalWalletsConfig = configForExternalWallets({
+  // Preferred order (case-insensitive). Use "wallet_connect" for WalletConnect.
+  wallets: ["wallet_connect", "phantom", "metamask", "coinbase wallet"],
+  // Which chains to surface (filter to ["evm"] or ["svm"] if needed)
+  chainType: ["svm", "evm"],
+  // EVM-only
+  walletConnectProjectId: "your-project-id",
+  // Built-in Featured section controls
+  hideMoreButton: false,
+  numFeaturedWallets: 4,
+});
+
+export const config = createConfig(
+  {
+    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
+    chain: sepolia,
+    storage: cookieStorage,
+    solana: {
+      connection: new Connection(
+        `https://solana-devnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`,
+      ),
+      adapters: externalWalletsConfig.adapters,
+      // optional
+      policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,
+    },
+    connectors: externalWalletsConfig.connectors,
+  },
+  {
+    auth: {
+      sections: [
+        [{ type: "email" }],
+        [
+          { type: "passkey" },
+          { type: "social", authProviderId: "google", mode: "popup" },
+        ],
+        [
+          // Spread the pre-configured UI for external wallets
+          { type: "external_wallets", ...externalWalletsConfig.uiConfig },
+        ],
+      ],
+    },
+  },
+);
+```
+
+Backwards compatibility: you can still pass EVM `connectors` and Solana `adapters` directly into `createConfig()` without the helper.
+
+## Verify
+
+How the external wallets UI behaves:
+
+- Featured: uses your `wallets` order; EVM then Solana for the same name (counts once); capped by `numFeaturedWallets`
+- All Wallets: same ordering; detected wallets not in `wallets` are appended
+- Filtering: respects `chainType` (e.g., `["svm"]` hides EVM + WalletConnect)
+- WalletConnect: EVM‑only; shown when `walletConnectProjectId` is set and `chainType` includes `"evm"`
+
+## Operate
+
+Programmatic flows when you want to bypass the modal:
+
+```ts twoslash
+// @noErrors
+import { useConnect } from "@account-kit/react";
+
+const { connect, connectors } = useConnect();
+const metaMask = connectors.find((c) => c.id === "metaMask");
+await connect({ connector: metaMask! });
+```
+
+```ts twoslash
+// @noErrors
+import { useSolanaWallet } from "@account-kit/react";
+
+const { select, wallets } = useSolanaWallet();
+const phantom = wallets.find((w) => w.name.toLowerCase() === "phantom");
+if (phantom) await select(phantom.adapter.name);
 ```

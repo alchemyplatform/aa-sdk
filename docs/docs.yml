@@ -139,6 +139,8 @@ navigation:
             contents:
               - page: Theme
                 path: wallets/pages/react/customization/theme.mdx
+              - page: Authentication modal
+                path: wallets/pages/react/customization/authentication-modal.mdx
           - page: UI components
             path: wallets/pages/react/ui-components.mdx
           - section: Whitelabel

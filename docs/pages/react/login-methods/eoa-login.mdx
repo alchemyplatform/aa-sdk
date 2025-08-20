@@ -9,10 +9,9 @@ slug: wallets/react/login-methods/eoa-login
 You can allow users to log in by connecting their existing external wallets using Smart Wallets — including EVM EOAs and Solana wallets. This works with our pre-built UI or your own custom UI.
 Depending on what method you choose, you can bring in the wallet:
 
-- **As a "pure" external wallet**:
-  - EVM: users connect and transact directly from their EOAs. These wallets don’t support smart account features like gas sponsorship or batching.
-  - Solana: users connect an external Solana wallet (e.g. Phantom). While this is not a smart account, you can optionally enable gas sponsorship for Solana transactions via a policy.
-- **As an owner and signer of a new smart account (EVM)**: users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new smart wallet will have AA features like sponsorship and batching.
+- Connect existing wallets: EVM EOAs (e.g., MetaMask) and Solana wallets (e.g., Phantom)
+- External wallets act as wallets (not smart accounts). EVM EOAs don’t get AA features; Solana can be gas‑sponsored with a policy.
+- EOAs can also be used as smart wallet owners on EVM for AA features like sponsorship and batching.
 
 ## Setup
 
@@ -26,10 +25,6 @@ Our SDK supports external wallets out of the box, so you can seamlessly support 
 
 1. **Automatically detect and display all wallet extensions available in the user's browser.** (_Note: if the user has no wallet extensions installed, nothing will be displayed_)
 2. **WalletConnect for other EVM wallets**
-
-With Smart Wallets, users can still connect to their existing wallets without sacrificing compatibility or convenience.
-
-Our hooks handle whether the user is connected with a smart wallet, an EVM EOA, or an external Solana wallet. External wallets sign and send transactions directly, with the caveats described above.
 
 ### Quick setup: EVM + Solana external wallets
 
@@ -117,57 +112,12 @@ export const externalWalletsConfig = configForExternalWallets({
 
 ## UI behavior
 
-### How the UI behaves
-
 - **Featured wallets**: uses your `wallets` order; EVM and Solana variants of the same name are joined (EVM shown first) and count as one toward the featured cap.
 - **All wallets**: same ordering; any detected wallets not in `wallets` are appended.
 - **Filtering**: respects `chainType`. For example, `["svm"]` shows only Solana; `["evm"]` shows only EVM (and WalletConnect if configured).
 - **WalletConnect**: EVM-only; shown when `walletConnectProjectId` is provided and `chainType` includes `"evm"`.
 
-## Solana usage
-
-### Detect an external Solana wallet at runtime
-
-```ts twoslash
-// @noErrors
-import { useConnectedUser } from "@account-kit/react";
-
-const user = useConnectedUser();
-const isExternalSolanaWallet = user?.type === "eoa" && !!user?.solanaAddress;
-```
-
-### Solana: sign and send
-
-When a user connects an external Solana wallet, you can sign messages and send transactions. If you provide a Solana `policyId` in `createConfig()`, the SDK can sponsor gas automatically.
-
-```ts twoslash
-// @noErrors
-import {
-  useSolanaTransaction,
-  useSolanaSignMessage,
-  useConnectedUser,
-} from "@account-kit/react";
-import { PublicKey } from "@solana/web3.js";
-
-const user = useConnectedUser();
-const { sendTransaction } = useSolanaTransaction();
-const { signMessage } = useSolanaSignMessage();
-
-// Send a sponsored transfer
-await sendTransaction({
-  transfer: {
-    toAddress: new PublicKey(user?.solanaAddress ?? "").toBase58(),
-    amount: 1_000_000, // lamports
-  },
-});
-
-// Sign a message
-await signMessage({ message: "Hello from Solana dApp!" });
-```
-
 ## Custom UI
-
-### Custom UI
 
 ### Bring in an EOA via Connectors
 
