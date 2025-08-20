@@ -192,34 +192,38 @@ navigation:
             path: wallets/pages/transactions/overview.mdx
           - section: Send
             contents:
-              - page: EVM
+              - page: Send A Transaction
                 path: wallets/pages/transactions/send/evm-user-ops.mdx
-              - page: Solana
+              - page: Batch Send Transactions
+                path: wallets/pages/transactions/send/batch-user-ops.mdx
+              - page: Retry Transactions
+                path: wallets/pages/transactions/retry-user-operations.mdx
+              - page: Solana Support
                 path: wallets/pages/transactions/send/solana-user-ops.mdx
-          - page: Batch
-            path: wallets/pages/transactions/send/batch-user-ops.mdx
-          - section: Sponsor gas
-            contents:
-              - page: EVM
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
-              - page: Solana
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
-          - page: Pay gas with any token
-            path: wallets/pages/react/pay-gas-with-any-token.mdx
-          - section: Using 7702
-            contents:
-              - page: Overview
-                path: wallets/pages/react/using-7702.mdx
-              - page: Upgrade existing embedded EOAs
-                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
-              - section: 7702 Quickstart
+              - section: Using 7702
                 contents:
-                  - page: Intro
-                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
+                  - page: Overview
+                    path: wallets/pages/react/using-7702.mdx
+                  - page: Upgrade existing embedded EOAs
+                    path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
+                  - section: 7702 Quickstart
+                    contents:
+                      - page: Intro
+                        path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
+                      - page: Using SDK
+                        path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
+                      - page: Using API
+                        path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
+          - section: Sponsor Gas
+            contents:
+              - page: Sponsor UserOps
+                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
+              - page: Pay Gas With Any Token
+                path: wallets/pages/react/pay-gas-with-any-token.mdx
+              - page: Solana Support
+                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+          - page: Swaps (Beta)
+            path: wallets/pages/transactions/swaps.mdx
           - page: Retry User Operations
             path: wallets/pages/transactions/retry-user-operations.mdx
           - section: Low-level infra
@@ -244,7 +248,7 @@ navigation:
                 path: wallets/pages/gas-manager-admin-api/conditional-gas-sponsorship.mdx
               - page: How to pay gas with any token
                 path: wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
-          - section: Third party infra
+          - section: Third Party Infra
             contents:
               - page: Bundlers
                 path: wallets/pages/third-party/bundlers.mdx
