@@ -1,9 +1,11 @@
 import { type Address, type Client, type Transport, type Chain } from "viem";
 import type {
+  BundlerClientConfig,
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
   GetPaymasterStubDataParameters,
   GetPaymasterStubDataReturnType,
+  PaymasterActions,
   SmartAccount,
 } from "viem/account-abstraction";
 import { type AlchemyTransport } from "@alchemy/common";
@@ -123,6 +125,18 @@ function createGasManagerContext(
   return context;
 }
 
+export type AlchemyGasManagerHooks = {
+  paymaster: {
+    getPaymasterStubData: PaymasterActions["getPaymasterStubData"];
+    getPaymasterData: PaymasterActions["getPaymasterData"];
+  };
+  userOperation: {
+    estimateFeesPerGas: NonNullable<
+      NonNullable<BundlerClientConfig["userOperation"]>["estimateFeesPerGas"]
+    >;
+  };
+};
+
 /**
  * Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
  * `alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and
@@ -153,9 +167,10 @@ function createGasManagerContext(
  * });
  * ```
  */
-export function alchemyGasManagerHooks(
+export async function alchemyGasManagerHooks(
   policyId: string | string[],
   policyToken?: PolicyToken,
+  // TODO(v5): specify the return type as Promise<AlchemyGasManagerHooks>
 ) {
   const context = createGasManagerContext(policyId, policyToken);
   const cache = new UserOpCache();
