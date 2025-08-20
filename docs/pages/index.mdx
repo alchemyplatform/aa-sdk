@@ -4,31 +4,54 @@ description: Build zero-friction user onboarding and transactions end-to-end wit
 slug: wallets
 ---
 
+import { SmartContractIcon } from "../components/icons/SmartContractIcon";
+
 <img src="/images/wallets/overviewHeader.png" alt="smart wallets overview" />
-<CardGroup cols={2}>
-  <Card
-    title="Start with our React Quickstart"
+
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "2rem",
+    gap: "1.5rem",
+  }}
+>
+  <Button
     icon="bolt"
-    iconPosition="top"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react/quickstart"
-  ></Card>
-  <Card
-    title="Try our demo"
-    icon="user-plus"
-    iconPosition="top"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
+    style={{
+      backgroundColor: "var(--accent-2, #ECF3FF)",
+      color: "black",
+      padding: "2rem 2rem",
+      fontWeight: "bold",
+      fontSize: "1.2rem",
+    }}
+  >
+    React Quickstart
+  </Button>
+  <Button
+    icon="fa-regular fa-play"
     href="https://demo.alchemy.com/"
-  ></Card>
-</CardGroup>
+    style={{
+      backgroundColor: "#363FF9",
+      color: "white",
+      padding: "2rem 2rem",
+      fontWeight: "bold",
+      fontSize: "1.2rem",
+    }}
+  >
+    Try our demo
+  </Button>
+</div>
 
 ## Everything you need for onchain applications
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card
+    small
     title="Seamless user onboarding"
     icon="user-plus"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
     Email, social, biometric, or EOA login.
@@ -36,15 +59,15 @@ slug: wallets
   <Card
     title="Gasless transactions"
     icon="gas-pump"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
     Remove gas fees for users to drive transaction growth.
   </Card>
   <Card
     title="Whitelabel UI"
-    icon="bolt"
-    iconPosition="top"
+    icon="fa-solid fa-pencil"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
     Pre-built UI components and fully whitelabel solutions.
@@ -52,24 +75,23 @@ slug: wallets
   <Card
     title="Security at scale"
     icon="shield"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
-    Non-cutosidal security and built-in controls and compliance, securing $150B+
-    in transactions for over 7 years.
+    Non-cutosidal security and built-in controls and compliance.
   </Card>
   <Card
     title="Powerful wallet policies"
     icon="sliders"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
     Set permissions, spend limits, and automations across chains.
   </Card>
   <Card
     title="Batching"
-    icon="screwdriver-wrench"
-    iconPosition="top"
+    icon="bolt"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
     Multiple transactions in one click on EVM and Solana.
@@ -84,7 +106,7 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   <Card
     title="React"
     icon="fa-brands fa-react"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react/overview"
   >
@@ -93,7 +115,7 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   <Card
     title="React Native"
     icon="fa-brands fa-react"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react-native/overview"
   >
@@ -101,8 +123,8 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   </Card>
   <Card
     title="Other JS Frameworks"
-    icon="ellipsis"
-    iconPosition="top"
+    icon="fa-brands fa-js"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/core/overview"
   >
@@ -110,8 +132,8 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   </Card>
   <Card
     title="APIs"
-    icon="wrench"
-    iconPosition="top"
+    icon="fa-solid fa-code"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/reference/smart-wallet-quickstart"
   >
@@ -124,8 +146,8 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
 <CardGroup cols={2}>
   <Card
     title="Build a new app"
-    icon="fa-brands fa-react"
-    iconPosition="top"
+    icon="wrench"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react/overview"
   >
@@ -134,8 +156,8 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   </Card>
   <Card
     title="Upgrade existing wallets"
-    icon="fa-brands fa-react"
-    iconPosition="top"
+    icon="fa-solid fa-chevrons-up"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react-native/overview"
   >
@@ -143,8 +165,8 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   </Card>
   <Card
     title="Bring your app onchain"
-    icon="ellipsis"
-    iconPosition="top"
+    icon="fa-regular fa-globe-pointer"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/core/overview"
   >
@@ -152,8 +174,8 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   </Card>
   <Card
     title="Manage wallets from your backend"
-    icon="wrench"
-    iconPosition="top"
+    icon="fa-solid fa-server"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/reference/smart-wallet-quickstart"
   >
@@ -166,17 +188,17 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
 <CardGroup cols={3}>
   <Card
     title="Support"
-    icon="fa-brands fa-react"
-    iconPosition="top"
+    icon="fa-solid fa-question"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/resources/faqs"
   >
-    Troubleshoot issues or get in touch with us for hands on support.
+    Troubleshoot issues or get in touch.
   </Card>
   <Card
     title="Recipes"
-    icon="fa-brands fa-react"
-    iconPosition="top"
+    icon="fa-solid fa-book"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/recipes/overview"
   >
@@ -184,12 +206,12 @@ Use the SDK for everything or pick and choose the pieces you want for ultimate c
   </Card>
   <Card
     title="Pricing"
-    icon="ellipsis"
-    iconPosition="top"
+    icon="fa-solid fa-dollar-sign"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/core/overview"
   >
-    Save costs as you scale with one provider for all of your onchain needs.
+    Save costs as you scale.
   </Card>
 </CardGroup>
 
