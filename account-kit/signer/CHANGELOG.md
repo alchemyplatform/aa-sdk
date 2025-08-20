@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.57.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.56.0...v4.57.0) (2025-08-19)
+
+### Features
+
+- add jwt auth with docs ([#1712](https://github.com/alchemyplatform/aa-sdk/issues/1712)) ([8a201d9](https://github.com/alchemyplatform/aa-sdk/commit/8a201d9d485f9544ae5249b5d253835361794224))
+
+# [4.56.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.55.0...v4.56.0) (2025-08-18)
+
+### Features
+
+- multi owner delete users ([#1883](https://github.com/alchemyplatform/aa-sdk/issues/1883)) ([df8fb40](https://github.com/alchemyplatform/aa-sdk/commit/df8fb40cacb70ac08d21e7ff7340614ea6692ffe))
+
 # [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
 
 ### Features

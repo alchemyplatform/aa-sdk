@@ -29,6 +29,8 @@ import type {
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   MfaFactor,
+  JwtParams,
+  JwtResponse,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -254,6 +256,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse>;
+
+  public abstract submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">,
+  ): Promise<JwtResponse>;
 
   public abstract disconnect(): Promise<void>;
 
@@ -875,6 +881,42 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
         updateRootQuorumRequest,
       ),
+    });
+  };
+
+  /**
+   * This will remove members from an existing multi-sig account
+   *
+   * @param {string} orgId orgId of the multi-sig to remove members from
+   * @param {Address[]} members the addresses of the members to remove
+   */
+  public experimental_deleteFromMultiOwner = async (
+    orgId: string,
+    members: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const prepared = await this.request("/v1/multi-owner-prepare-delete", {
+      organizationId: orgId,
+      members: members.map((evmSignerAddress) => ({ evmSignerAddress })),
+    });
+
+    const stampedRequest = await multiOwnerClient.stampDeleteUsers(
+      prepared.result.deleteMembersRequest,
+    );
+
+    await this.request("/v1/multi-owner-update-root-quorum", {
+      stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+        prepared.result.updateRootQuorumRequest,
+      ),
+    });
+
+    await this.request("/v1/multi-owner-delete", {
+      stampedRequest,
     });
   };
 

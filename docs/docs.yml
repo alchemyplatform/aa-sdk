@@ -115,6 +115,8 @@ navigation:
                 path: wallets/pages/authentication/login-methods/social-login.mdx
               - page: Custom social providers
                 path: wallets/pages/react/login-methods/social-providers.mdx
+              - page: Bring your own authentication
+                path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
               - page: Passkey signup
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
               - page: Passkey login
@@ -262,6 +264,11 @@ navigation:
                     path: wallets/pages/signer/as-an-eoa.mdx
                   - page: Sign raw hash
                     path: wallets/pages/signer/as-an-eoa.mdx
+
+      - section: Funding
+        contents:
+          - page: Early Access
+            path: wallets/pages/funding/signup.mdx
 
       - section: API Reference
         contents:
@@ -506,6 +513,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup.mdx
                       - page: oauthWithRedirect
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect.mdx
+                      - page: submitJwt
+                        path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitJwt.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/account-kit/signer/classes/AlchemySignerWebClient/submitOtpCode.mdx
                       - page: targetPublicKey
@@ -592,6 +601,8 @@ navigation:
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createApiKey.mdx
                       - page: experimental_createMultiOwner
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_createMultiOwner.mdx
+                      - page: experimental_deleteFromMultiOwner
+                        path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_deleteFromMultiOwner.mdx
                       - page: experimental_multiOwnerSignRawMessage
                         path: wallets/pages/reference/account-kit/signer/classes/BaseSignerClient/experimental_multiOwnerSignRawMessage.mdx
                       - page: getMfaFactors

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
+
+### Bug Fixes
+
+- initial store bug on first load ([#1903](https://github.com/alchemyplatform/aa-sdk/issues/1903)) ([2ef53e7](https://github.com/alchemyplatform/aa-sdk/commit/2ef53e721ca3755bb70e098860e3b683b433f9ab))
+
+# [4.57.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.56.0...v4.57.0) (2025-08-19)
+
+**Note:** Version bump only for package @account-kit/core
+
+# [4.56.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.55.0...v4.56.0) (2025-08-18)
+
+**Note:** Version bump only for package @account-kit/core
+
 # [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
 
 ### Features
