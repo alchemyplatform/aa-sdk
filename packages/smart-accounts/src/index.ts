@@ -32,6 +32,14 @@ export {
   LightAccountUnsupported1271Impls,
 } from "./light-account/utils.js";
 
+export {
+  lightAccountStaticImplV1_0_1,
+  lightAccountStaticImplV1_0_2,
+  lightAccountStaticImplV1_1_0,
+  lightAccountStaticImplV2_0_0,
+  multiOwnerLightAccountStaticImplV2_0_0,
+} from "./light-account/lightAccountStaticImpl.js";
+
 export type * from "./ma-v2/accounts/account.js";
 export { toModularAccountV2 } from "./ma-v2/accounts/account.js";
 
