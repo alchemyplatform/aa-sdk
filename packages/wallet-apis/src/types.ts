@@ -1,4 +1,3 @@
-import type { AlchemyTransport } from "@alchemy/common";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import type {
   Account,
@@ -12,12 +11,12 @@ import type {
 } from "viem";
 import type { InternalState } from "./internal";
 
-type BaseWalletClient<
+export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
     | { [key: string]: unknown }
     | undefined,
 > = Client<
-  AlchemyTransport,
+  Transport<"alchemyHttp">,
   Chain,
   JsonRpcAccount<Address> | undefined,
   WalletServerViemRpcSchema,
@@ -40,3 +39,12 @@ export type WithoutRawPayload<T> = T extends { rawPayload: Hex }
   : T;
 
 export type Expect<T extends true> = T;
+
+export type ExtractRpcMethod<
+  T extends readonly {
+    Method: string;
+    Parameters?: unknown;
+    ReturnType: unknown;
+  }[],
+  M extends T[number]["Method"],
+> = Extract<T[number], { Method: M }>;

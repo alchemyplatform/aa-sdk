@@ -2,10 +2,7 @@ import {
   createClient,
   type Address,
   type Chain,
-  type Client,
   type LocalAccount,
-  type ParseAccount,
-  type Transport,
   createWalletClient,
 } from "viem";
 import {
@@ -13,9 +10,12 @@ import {
   type SmartWalletActions,
 } from "./decorators/smartWalletActions.js";
 import { type AlchemyTransport } from "@alchemy/common";
-import type { SignerClient } from "./types.js";
-import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
+import type { BaseWalletClient, SignerClient } from "./types.js";
 import { createInternalState } from "./internal.js";
+import {
+  createEip1193ProviderFromClient,
+  type SmartWalletClientEip1193Provider,
+} from "./provider.js";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -51,14 +51,10 @@ export const createSmartWalletClient = <
   signer,
   policyId,
   policyIds,
-}: CreateSmartWalletClientParams<TAccount>): Client<
-  Transport,
-  Chain,
-  ParseAccount<TAccount>,
-  WalletServerViemRpcSchema,
+}: CreateSmartWalletClientParams<TAccount>): BaseWalletClient<
   SmartWalletActions<TAccount>
-> => {
-  const baseClient = createClient({ account, transport, chain });
+> & { getProvider: () => SmartWalletClientEip1193Provider } => {
+  const _policyIds = [...(policyId ? [policyId] : []), ...(policyIds ?? [])];
 
   // If the signer is a `LocalAccount` wrap it inside of a client now so
   // downstream actions can just use `getAction` to get signing actions
@@ -72,15 +68,17 @@ export const createSmartWalletClient = <
           chain,
         });
 
-  const _policyIds = [
-    ...(policyId ? [policyId] : []),
-    ...(policyIds?.length ? policyIds : []),
-  ];
-
-  return baseClient
+  return createClient({
+    account,
+    transport,
+    chain,
+  })
     .extend(() => ({
       policyIds: _policyIds,
       internal: createInternalState(),
     }))
-    .extend(smartWalletActions(signerClient));
+    .extend(smartWalletActions<TAccount>(signerClient))
+    .extend((_client) => ({
+      getProvider: () => createEip1193ProviderFromClient<TAccount>(_client),
+    }));
 };

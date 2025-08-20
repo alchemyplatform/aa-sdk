@@ -38,6 +38,7 @@
     "postbuild": "yarn lint:write",
     "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*' --filter='./packages/*'",
     "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
+    "build:v5": "turbo run build --filter='./packages/*'",
     "build:examples": "turbo run build",
     "clean": "yarn clean:turbo && yarn clean:node_modules",
     "clean:turbo": "turbo run clean",
