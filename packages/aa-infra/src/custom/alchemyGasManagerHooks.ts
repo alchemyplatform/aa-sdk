@@ -167,7 +167,7 @@ export type AlchemyGasManagerHooks = {
  * });
  * ```
  */
-export async function alchemyGasManagerHooks(
+export function alchemyGasManagerHooks(
   policyId: string | string[],
   policyToken?: PolicyToken,
   // TODO(v5): specify the return type as Promise<AlchemyGasManagerHooks>
