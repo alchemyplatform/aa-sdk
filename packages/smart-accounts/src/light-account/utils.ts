@@ -1,4 +1,4 @@
-import { BaseError, ChainNotFoundError } from "@alchemy/common";
+import { BaseError, ChainNotFoundError, lowerAddress } from "@alchemy/common";
 import { hexToNumber, trim, type Address, type Chain } from "viem";
 import { getStorageAt } from "viem/actions";
 import type { LightAccountBase } from "./accounts/base";
@@ -8,9 +8,6 @@ import type {
   LightAccountVersionConfigs,
 } from "./types";
 import { getAction } from "viem/utils";
-
-export const lowerAddress = (addr: Address): Address =>
-  addr.toLowerCase() as Address;
 
 /**
  * Account version registry interface that defines the light account versions

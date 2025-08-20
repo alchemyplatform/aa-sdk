@@ -19,10 +19,9 @@ import {
   LightAccountUnsupported1271Factories,
   defaultLightAccountVersion,
   getDefaultLightAccountFactoryAddress,
-  lowerAddress,
 } from "../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
-import { BaseError } from "@alchemy/common";
+import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
 
 export type LightAccount<

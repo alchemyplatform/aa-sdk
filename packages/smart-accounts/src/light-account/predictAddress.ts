@@ -12,8 +12,8 @@ import {
 import { LightAccountAbi_v1 } from "./abis/LightAccountAbi_v1.js";
 import { OZ_ERC1967Proxy_ConstructorAbi } from "./abis/OZ_ERC1967Proxy.js";
 import type { LightAccountVersionConfigs } from "./types.js";
-import { AccountVersionRegistry, lowerAddress } from "./utils.js";
-import { BaseError } from "@alchemy/common";
+import { AccountVersionRegistry } from "./utils.js";
+import { BaseError, lowerAddress } from "@alchemy/common";
 
 export type PredictLightAccountAddressParams = {
   factoryAddress: Address;

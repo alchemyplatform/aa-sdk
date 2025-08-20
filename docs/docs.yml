@@ -1188,6 +1188,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyConnectionConfig.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
+                  - page: lowerAddress
+                    path: wallets/pages/reference/alchemy/common/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/alchemy/common/functions/raise.mdx
                   - page: split
