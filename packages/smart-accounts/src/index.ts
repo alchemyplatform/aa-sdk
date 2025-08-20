@@ -28,7 +28,6 @@ export {
   getDefaultLightAccountFactoryAddress,
   getDefaultMultiOwnerLightAccountFactoryAddress,
   getLightAccountImplAddress,
-  getLightAccountVersionForAccount,
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,
 } from "./light-account/utils.js";
