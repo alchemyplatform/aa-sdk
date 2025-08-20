@@ -299,7 +299,7 @@ navigation:
                 path: wallets/pages/gas-manager-admin-api/conditional-gas-sponsorship.mdx
               - page: How to pay gas with any token
                 path: wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
-          - section: Third party infra
+          - section: Third Party Infra
             contents:
               - page: Bundlers
                 path: wallets/pages/third-party/bundlers.mdx
