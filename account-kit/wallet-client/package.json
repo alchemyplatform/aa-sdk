@@ -43,7 +43,7 @@
     "@aa-sdk/core": "^4.57.1",
     "@account-kit/infra": "^4.57.1",
     "@account-kit/smart-contracts": "^4.57.1",
-    "@alchemy/wallet-api-types": "0.1.0-alpha.14",
+    "@alchemy/wallet-api-types": "0.1.0-alpha.16",
     "deep-equal": "^2.2.3",
     "ox": "^0.6.12"
   },

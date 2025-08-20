@@ -4,11 +4,13 @@ import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { Static } from "@sinclair/typebox";
 import { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
 import {
+  PreparedCall_Permit,
   type PreparedCall_Authorization,
   type PreparedCall_UserOpV060,
   type PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
+import { InvalidRequestError } from "ox/RpcResponse";
 
 export type SignPreparedCallsParams = PrepareCallsResult;
 
@@ -53,11 +55,23 @@ export async function signPreparedCalls(
     call: PreparedCall_UserOpV060 | PreparedCall_UserOpV070,
   ) => {
     const { signatureRequest, ...rest } = call;
+
+    if (!signatureRequest) {
+      throw new InvalidRequestError({
+        message:
+          "Signature request is required for signing user operation calls. Ensure `onlyEstimation` is set to `false` when calling `prepareCalls`.",
+      });
+    }
+
     const signature = await signSignatureRequest(signer, signatureRequest);
     return {
       ...rest,
       signature,
     };
+  };
+
+  const signPaymasterPermitCall = async (_call: PreparedCall_Permit) => {
+    throw new Error("Not implemented");
   };
 
   return params.type === "array"
@@ -71,5 +85,7 @@ export async function signPreparedCalls(
           ),
         ),
       }
-    : signUserOperationCall(params);
+    : params.type === "paymaster-permit"
+      ? signPaymasterPermitCall(params)
+      : signUserOperationCall(params);
 }

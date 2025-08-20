@@ -274,26 +274,45 @@ navigation:
         contents:
           - section: Smart Wallets
             contents:
-              - section: Wallet API Endpoints
-                contents:
-                  - api: Wallet API Endpoints
-                    api-name: wallet-api
-                    flattened: true
-              - section: Signer API Endpoints
-                contents:
-                  - api: Signer API Endpoints
-                    api-name: accounts
-                    flattened: true
-              - section: Session Keys
+              - section: Wallet API Capabilities
                 contents:
                   - page: Overview
-                    path: wallets/pages/smart-wallets/session-keys/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/session-keys/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/session-keys/api.mdx
-              - page: How to stamp requests
-                path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
+                    path: wallets/pages/smart-wallets/capabilities/overview.mdx
+                  - section: Session Keys
+                    contents:
+                      - page: Overview
+                        path: wallets/pages/smart-wallets/capabilities/session-keys/index.mdx
+                      - page: Using SDK
+                        path: wallets/pages/smart-wallets/capabilities/session-keys/sdk.mdx
+                      - page: Using API
+                        path: wallets/pages/smart-wallets/capabilities/session-keys/api.mdx
+                  - section: Pay Gas with Any Token
+                    contents:
+                      - page: Overview
+                        path: wallets/pages/smart-wallets/capabilities/paymaster/erc20/overview.mdx
+                      # TODO: Add SDK docs for erc20 paymaster capability
+                      # - page: Using SDK
+                      #   path: wallets/pages/smart-wallets/capabilities/paymaster/erc20/sdk.mdx
+                      - page: Using API
+                        path: wallets/pages/smart-wallets/capabilities/paymaster/erc20/api.mdx
+                  # TODO: Add docs for these capabilities
+                  # - section: Sponsor Transactions
+                  # - section: EIP-7702 Authorization
+                  # - section: Parallel Transactions
+              - section: How-To Guides
+                contents:
+                  - page: How to stamp requests
+                    path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
+              - section: Wallet API Reference
+                contents:
+                  - api: Wallet API Reference
+                    api-name: wallet-api
+                    flattened: true
+              - section: Signer API Reference
+                contents:
+                  - api: Signer API Reference
+                    api-name: accounts
+                    flattened: true
             slug: smart-wallets
           - section: Gas Manager
             contents:
