@@ -1,24 +1,20 @@
-import {
-  type Address,
-  type Client,
-  type Transport,
-  type Chain,
-  type Hex,
-} from "viem";
+import { type Address, type Client, type Transport, type Chain } from "viem";
 import type {
+  BundlerClientConfig,
   GetPaymasterDataParameters,
   GetPaymasterDataReturnType,
   GetPaymasterStubDataParameters,
   GetPaymasterStubDataReturnType,
+  PaymasterActions,
   SmartAccount,
 } from "viem/account-abstraction";
 import { type AlchemyTransport } from "@alchemy/common";
+import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
+import type { RequestGasAndPaymasterAndDataResponse } from "../actions/types.js";
 import {
-  requestGasAndPaymasterAndData,
-  type RequestGasAndPaymasterAndDataResponse,
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
-} from "@alchemy/aa-infra";
+} from "./alchemyEstimateFeesPerGas.js";
 
 // Type for ERC-20 token context
 export type PolicyToken = {
@@ -26,49 +22,46 @@ export type PolicyToken = {
   maxTokenAmount?: bigint;
 };
 
-// Use the response type from aa-infra
-type GasAndPaymasterAndDataResponse = RequestGasAndPaymasterAndDataResponse;
-
-// Type guards
-function hasPaymasterAndData(
-  response: GasAndPaymasterAndDataResponse,
-): response is GasAndPaymasterAndDataResponse & { paymasterAndData: Hex } {
-  return "paymasterAndData" in response && Boolean(response.paymasterAndData);
-}
-
 // Simple cache for storing the latest user operation result
 // Since viem calls hooks sequentially for a single user operation,
 // we only need to store one result at a time
-class UserOpCache {
-  private cachedResult: GasAndPaymasterAndDataResponse | null = null;
-  private cachedUserOpHash: string | null = null;
+type UserOpRequestKey = string;
 
-  get(userOpHash: string): GasAndPaymasterAndDataResponse | null {
-    if (this.cachedUserOpHash === userOpHash) {
+class UserOpCache {
+  private cachedResult: RequestGasAndPaymasterAndDataResponse | null = null;
+  private cachedUserOpRequestKey: UserOpRequestKey | null = null;
+
+  get(
+    userOpRequestKey: UserOpRequestKey,
+  ): RequestGasAndPaymasterAndDataResponse | null {
+    if (this.cachedUserOpRequestKey === userOpRequestKey) {
       return this.cachedResult;
     }
     return null;
   }
 
-  set(userOpHash: string, result: GasAndPaymasterAndDataResponse): void {
+  set(
+    userOpRequestKey: UserOpRequestKey,
+    result: RequestGasAndPaymasterAndDataResponse,
+  ): void {
     this.cachedResult = result;
-    this.cachedUserOpHash = userOpHash;
+    this.cachedUserOpRequestKey = userOpRequestKey;
   }
 
-  getCurrent(): GasAndPaymasterAndDataResponse | null {
+  getCurrent(): RequestGasAndPaymasterAndDataResponse | null {
     return this.cachedResult;
   }
 
   clear(): void {
     this.cachedResult = null;
-    this.cachedUserOpHash = null;
+    this.cachedUserOpRequestKey = null;
   }
 }
 
 // Create a cache key for the user operation parameters
 function createUserOpCacheKey(
   params: GetPaymasterStubDataParameters | GetPaymasterDataParameters,
-): string {
+): UserOpRequestKey {
   return JSON.stringify({
     sender: params.sender,
     nonce: params.nonce?.toString(), // Convert bigint to string for stable serialization
@@ -78,21 +71,21 @@ function createUserOpCacheKey(
 
 // Convert response to stub return type
 function toStubReturn(
-  response: GasAndPaymasterAndDataResponse,
+  response: RequestGasAndPaymasterAndDataResponse,
 ): GetPaymasterStubDataReturnType {
-  if (hasPaymasterAndData(response)) {
+  if ("paymasterAndData" in response) {
+    // For EP v0.6
     return {
       paymasterAndData: response.paymasterAndData,
       isFinal: true,
     };
   } else {
-    // Must be paymaster fields format
+    // For EP v0.7
     return {
       paymaster: response.paymaster,
-      paymasterData: response.paymasterData || "0x",
-      paymasterVerificationGasLimit:
-        response.paymasterVerificationGasLimit ?? 100000n,
-      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit ?? 50000n,
+      paymasterData: response.paymasterData,
+      paymasterVerificationGasLimit: response.paymasterVerificationGasLimit,
+      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
       isFinal: true,
     };
   }
@@ -132,6 +125,18 @@ function createGasManagerContext(
   return context;
 }
 
+export type AlchemyGasManagerHooks = {
+  paymaster: {
+    getPaymasterStubData: PaymasterActions["getPaymasterStubData"];
+    getPaymasterData: PaymasterActions["getPaymasterData"];
+  };
+  userOperation: {
+    estimateFeesPerGas: NonNullable<
+      NonNullable<BundlerClientConfig["userOperation"]>["estimateFeesPerGas"]
+    >;
+  };
+};
+
 /**
  * Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
  * `alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and
@@ -165,6 +170,7 @@ function createGasManagerContext(
 export function alchemyGasManagerHooks(
   policyId: string | string[],
   policyToken?: PolicyToken,
+  // TODO(v5): specify the return type as Promise<AlchemyGasManagerHooks>
 ) {
   const context = createGasManagerContext(policyId, policyToken);
   const cache = new UserOpCache();
@@ -225,17 +231,17 @@ export function alchemyGasManagerHooks(
 
         // Don't delete yet - estimateFeesPerGas might need the gas values
         // Convert response to data return type
-        if (hasPaymasterAndData(cachedResult)) {
+        if ("paymasterAndData" in cachedResult) {
+          // For EP v0.6
           return { paymasterAndData: cachedResult.paymasterAndData };
         } else {
-          // Must be paymaster fields format
+          // For EP v0.7
           return {
             paymaster: cachedResult.paymaster,
-            paymasterData: cachedResult.paymasterData || "0x",
+            paymasterData: cachedResult.paymasterData,
             paymasterVerificationGasLimit:
-              cachedResult.paymasterVerificationGasLimit ?? 100000n,
-            paymasterPostOpGasLimit:
-              cachedResult.paymasterPostOpGasLimit ?? 50000n,
+              cachedResult.paymasterVerificationGasLimit,
+            paymasterPostOpGasLimit: cachedResult.paymasterPostOpGasLimit,
           };
         }
       },

@@ -12,6 +12,8 @@ export { gasManagerActions } from "./decorators/gasManager.js";
 // custom functions
 export type * from "./custom/alchemyEstimateFeesPerGas.js";
 export { alchemyEstimateFeesPerGas } from "./custom/alchemyEstimateFeesPerGas.js";
+export type * from "./custom/alchemyGasManagerHooks.js";
+export { alchemyGasManagerHooks } from "./custom/alchemyGasManagerHooks.js";
 
 // custom bundler client.
 // TODO(v5): revisit exporting the bundler client constructor, vs just the custom `estimateFeesPerGas` function.

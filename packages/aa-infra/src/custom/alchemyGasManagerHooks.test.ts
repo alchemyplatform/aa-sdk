@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { alchemyGasManagerHooks } from "../src/alchemyGasManagerHooks.js";
 import { toHex, type Address } from "viem";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { alchemyGasManagerHooks } from "./alchemyGasManagerHooks.js";
 
 describe("alchemyGasManagerHooks - Optimized Flow", () => {
   // Helper to create mock bundler client with required account methods
