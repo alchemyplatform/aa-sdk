@@ -26,6 +26,8 @@ navigation:
                     path: wallets/pages/react/quickstart/new-project.mdx
                   - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
+                  - page: Tailwind CSS setup
+                    path: wallets/pages/react/tailwind-setup.mdx
                   - page: Set up your client
                     path: wallets/pages/react/how-to-set-up-smart-account-client.mdx
                   - page: Multi-chain setup
@@ -137,6 +139,8 @@ navigation:
                 path: wallets/pages/signer/authentication/mfa.mdx
           - section: Customization
             contents:
+              - page: Tailwind CSS setup
+                path: wallets/pages/react/tailwind-setup.mdx
               - page: Theme
                 path: wallets/pages/react/customization/theme.mdx
           - page: UI components

@@ -40,25 +40,10 @@ pnpm add -D tailwindcss @tailwindcss/postcss postcss
 
 **Set up Tailwind CSS**
 
-Create a `postcss.config.mjs` file and add the Tailwind plugin:
-
-```js twoslash postcss.config.mjs
-export default {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
-};
-```
-
-Create a `global.css` in your `app` directory and import Tailwind:
-
-```css app/global.css
-@import "tailwindcss";
-```
+Account Kit requires Tailwind CSS to be properly configured. For detailed setup instructions, see the [complete Tailwind setup guide](/wallets/react/tailwind-setup).
 
 <Tip>
-  **Already using Tailwind?** You can skip the setup above since you've already
-  configured it.
+  **Already using Tailwind?** Check the [Tailwind setup guide](/wallets/react/tailwind-setup#existing-tailwind-installation) for instructions on integrating Account Kit with your existing Tailwind configuration.
 </Tip>
 
 ## 2. Get your API Key
@@ -101,41 +86,9 @@ You can customize these by visiting our [demo app](https://demo.alchemy.com/) - 
 
 Here's a basic configuration to get you started:
 
-**tailwind.config.ts**
+For complete Tailwind configuration instructions including `tailwind.config.ts` setup, CSS imports, and theme customization options, see the [Tailwind setup guide](/wallets/react/tailwind-setup).
 
-```ts tailwind.config.ts
-import { withAccountKitUi } from "@account-kit/react/tailwind";
-
-export default withAccountKitUi(
-  {
-    // Your existing Tailwind config (if already using Tailwind).
-    // If using Tailwind v4, this will likely be left empty.
-  },
-  {
-    // AccountKit UI theme customizations
-  },
-);
-```
-
-<Tip>
-  **Important:** If your `tailwind.config.ts` already contains any existing
-  config information, be sure to wrap it with `withAccountKitUi` as shown above.
-  Don't replace your existing config - just wrap it!
-</Tip>
-
-Update your `global.css` to include the config:
-
-```css global.css
-@import "tailwindcss";
-@config '../../tailwind.config.ts';
-```
-
-<Tip>
-  **Note:** If still using Tailwind v3, skip this step as the
-  `tailwind.config.ts` file is used by default.
-</Tip>
-
-**config.ts**
+**Authentication config.ts**
 
 ```ts twoslash src/config.ts
 // @noErrors

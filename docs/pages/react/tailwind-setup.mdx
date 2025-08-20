@@ -1,0 +1,309 @@
+---
+title: Tailwind CSS Setup
+description: Complete guide to setting up Tailwind CSS with Account Kit React components
+slug: wallets/react/tailwind-setup
+---
+
+Account Kit's React components require Tailwind CSS to be configured in your project. This guide walks you through the complete setup process for both new and existing Tailwind installations.
+
+## Prerequisites
+
+- React 18+
+- TypeScript 5+
+- Node.js 16+
+
+## Quick Setup (New Tailwind Installation)
+
+If you don't have Tailwind CSS in your project yet, follow these steps:
+
+### 1. Install Dependencies
+
+<CodeBlocks>
+
+```bash yarn
+yarn add -D tailwindcss @tailwindcss/postcss postcss
+```
+
+```bash npm
+npm install -D tailwindcss @tailwindcss/postcss postcss
+```
+
+```bash pnpm
+pnpm add -D tailwindcss @tailwindcss/postcss postcss
+```
+
+</CodeBlocks>
+
+### 2. Configure PostCSS
+
+Create a `postcss.config.mjs` file in your project root:
+
+```js postcss.config.mjs
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+```
+
+### 3. Create Tailwind Config with Account Kit
+
+Create a `tailwind.config.ts` file using Account Kit's Tailwind plugin:
+
+```ts tailwind.config.ts
+import { withAccountKitUi } from "@account-kit/react/tailwind";
+
+export default withAccountKitUi(
+  {
+    // Your existing Tailwind config (if any)
+    content: [
+      "./src/**/*.{js,ts,jsx,tsx,mdx}",
+      "./app/**/*.{js,ts,jsx,tsx,mdx}",
+      "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+      "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    ],
+  },
+  {
+    // Account Kit UI theme customizations (optional)
+    // See customization guide below for available options
+  },
+);
+```
+
+### 4. Import Tailwind Styles
+
+Create or update your global CSS file to include Tailwind:
+
+<Tabs>
+<Tab title="Tailwind v4 (Recommended)">
+
+```css app/globals.css
+@import "tailwindcss";
+@config '../tailwind.config.ts';
+```
+
+</Tab>
+<Tab title="Tailwind v3">
+
+```css app/globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+</Tab>
+</Tabs>
+
+## Existing Tailwind Installation
+
+If you already have Tailwind CSS configured in your project:
+
+### 1. Update Your Tailwind Config
+
+Wrap your existing configuration with Account Kit's plugin:
+
+```ts tailwind.config.ts
+import { withAccountKitUi } from "@account-kit/react/tailwind";
+
+export default withAccountKitUi(
+  {
+    // Your existing Tailwind config - DON'T replace, just wrap!
+    content: [
+      "./src/**/*.{js,ts,jsx,tsx,mdx}",
+      // ... your existing content patterns
+    ],
+    theme: {
+      // ... your existing theme customizations
+    },
+    plugins: [
+      // ... your existing plugins
+    ],
+  },
+  {
+    // Account Kit UI theme customizations
+  },
+);
+```
+
+### 2. Update CSS Import (Tailwind v4 only)
+
+If using Tailwind v4, update your CSS to reference the config:
+
+```css app/globals.css
+@import "tailwindcss";
+@config '../tailwind.config.ts';
+```
+
+## Theme Customization
+
+Account Kit provides extensive theming options through the second parameter of `withAccountKitUi`:
+
+### Colors
+
+Customize the color palette for both light and dark modes:
+
+```ts tailwind.config.ts
+import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
+
+export default withAccountKitUi(
+  {
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  },
+  {
+    colors: {
+      "btn-primary": createColorSet("#3b82f6", "#1d4ed8"),
+      "fg-accent-brand": createColorSet("#3b82f6", "#60a5fa"),
+      active: createColorSet("#94a3b8", "#94a3b8"),
+    },
+  },
+);
+```
+
+### Border Radius
+
+Customize border radius across all components:
+
+```ts tailwind.config.ts
+export default withAccountKitUi(
+  {
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  },
+  {
+    borderRadius: "md", // Options: "none", "xs", "sm", "md", "lg"
+  },
+);
+```
+
+### Available Color Variables
+
+Account Kit supports these color customizations:
+
+**Border Colors:**
+- `active` - Border color when input is focused
+- `static` - Border color when input is not focused  
+- `critical` - Border color for error states
+
+**Button Colors:**
+- `btn-primary` - Primary button background
+- `btn-secondary` - Secondary button background
+- `btn-auth` - Authentication button background
+
+**Text Colors:**
+- `fg-primary` - Primary text color
+- `fg-secondary` - Secondary text color
+- `fg-tertiary` - Tertiary text color
+- `fg-invert` - Inverted text color
+- `fg-disabled` - Disabled text color
+- `fg-accent-brand` - Brand accent color
+- `fg-critical` - Critical/error text color
+
+**Background Colors:**
+- `bg-surface-default` - Default background
+- `bg-surface-subtle` - Subtle background
+- `bg-surface-inset` - Inset component background
+- `bg-surface-critical` - Critical component background
+- `bg-surface-error` - Error component background  
+- `bg-surface-success` - Success component background
+- `bg-surface-warning` - Warning component background
+
+## Framework-Specific Setup
+
+### Next.js
+
+For Next.js projects, make sure to import your global CSS in `app/layout.tsx`:
+
+```tsx app/layout.tsx
+import "./globals.css";
+
+// ... rest of your layout
+```
+
+### Create React App
+
+Import your global CSS in `src/index.js` or `src/index.tsx`:
+
+```tsx src/index.tsx
+import "./index.css";
+
+// ... rest of your index file
+```
+
+### Vite
+
+Import your global CSS in `src/main.tsx`:
+
+```tsx src/main.tsx
+import "./index.css";
+
+// ... rest of your main file
+```
+
+## Testing Your Setup
+
+To verify Tailwind is working correctly with Account Kit:
+
+1. Start your development server
+2. Add a simple Account Kit component to test:
+
+```tsx
+import { useAuthModal } from "@account-kit/react";
+
+export function TestComponent() {
+  const { openAuthModal } = useAuthModal();
+  
+  return (
+    <button 
+      className="akui-btn akui-btn-primary"
+      onClick={openAuthModal}
+    >
+      Test Auth Modal
+    </button>
+  );
+}
+```
+
+3. The button should render with Account Kit styling
+
+## Troubleshooting
+
+### Styles Not Loading
+
+If Account Kit components appear unstyled:
+
+1. **Verify CSS import**: Make sure you're importing your global CSS file
+2. **Check config path**: Ensure the `@config` path in your CSS matches your config file location
+3. **Restart dev server**: Sometimes a restart is needed after config changes
+4. **Verify content paths**: Make sure your Tailwind content array includes all component files
+
+### Build Errors
+
+If you encounter build errors:
+
+1. **TypeScript config**: Ensure your `tsconfig.json` includes the Tailwind config file
+2. **PostCSS version**: Make sure you're using compatible PostCSS versions
+3. **Import paths**: Verify all import paths in your config are correct
+
+### Dark Mode Issues
+
+If dark mode isn't working correctly:
+
+1. **Color sets**: Ensure you're using `createColorSet` for colors that should change between modes
+2. **CSS variables**: Check that CSS custom properties are being generated correctly
+3. **Theme detection**: Verify your app has proper dark mode detection
+
+## Next Steps
+
+After setting up Tailwind CSS:
+
+- [Customize your theme](/wallets/react/customization/theme) with colors and styling
+- [Set up authentication](/wallets/react/quickstart) in your React app
+- [Use UI components](/wallets/react/ui-components) for pre-built authentication flows
+- [Explore React hooks](/wallets/react/react-hooks) for custom UI implementations
+
+## Need Help?
+
+If you're still having issues with Tailwind setup:
+
+1. Check the [interactive demo](https://demo.alchemy.com/) for working configuration examples
+2. Review the [troubleshooting guide](/wallets/resources/faqs)
+3. Join our [Discord community](https://discord.gg/alchemy) for support
