@@ -2,7 +2,7 @@ import { UserAvatar } from "./UserAvatar";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
-import { useUser } from "@account-kit/react";
+import { useConnectedUser } from "@account-kit/react";
 import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
 
@@ -22,7 +22,7 @@ const UserConnectionAvatar = ({
       primaryColor,
     }),
   );
-  const user = useUser();
+  const user = useConnectedUser();
 
   const isEOAUser = user?.type === "eoa";
 
@@ -33,7 +33,10 @@ const UserConnectionAvatar = ({
   return (
     <div className="flex flex-row items-center min-w-0 overflow-hidden">
       <div className="relative w-[40px] h-[40px]">
-        <UserAvatar address={user.address} primaryColor={primaryColor[theme]} />
+        <UserAvatar
+          address={user.address ?? user.solanaAddress ?? ""}
+          primaryColor={primaryColor[theme]}
+        />
         {showDeploymentStatus && (
           <div
             className={cn(
@@ -56,7 +59,7 @@ const UserConnectionAvatar = ({
         <div className="flex flex-row items-center min-w-0">
           <h3 className="text-fg-primary font-semibold text-left tracking-[-0.32px] text-base text-ellipsis w-full">
             {isEOAUser ? (
-              truncateAddress(user.address)
+              truncateAddress(user.address ?? user.solanaAddress ?? "")
             ) : (
               <span className="block w-full overflow-hidden text-ellipsis">
                 {user.email ?? (user.claims?.nickname as string) ?? "User"}

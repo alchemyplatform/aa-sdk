@@ -2,7 +2,7 @@ import { CodePreviewSwitch } from "@/components/shared/CodePreviewSwitch";
 import ExternalLink from "@/components/shared/ExternalLink";
 import { cn } from "@/lib/utils";
 import { Metrics } from "@/metrics";
-import { useUser } from "@account-kit/react";
+import { useConnectedUser } from "@account-kit/react";
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 
 export function PreviewNav({
@@ -12,7 +12,7 @@ export function PreviewNav({
   showCode: boolean;
   setShowCode: (showCode: boolean) => void;
 }) {
-  const user = useUser();
+  const user = useConnectedUser();
   return (
     <div
       className={cn(

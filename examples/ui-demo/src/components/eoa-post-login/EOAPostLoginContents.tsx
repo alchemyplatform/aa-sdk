@@ -30,7 +30,7 @@ export const EOAPostLoginActions = () => {
               .
             </span>
             <br />
-            <span>Use the actions to sign messages or send gasless txns.</span>
+            <span>Use the hooks to sign messages or send gasless txns.</span>
           </>
         ) : (
           <>
