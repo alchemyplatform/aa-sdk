@@ -69,7 +69,6 @@ export const confg = createConfig(
 Use `configForExternalWallets()` once, then spread its outputs into your config and UI. This powers Featured + All Wallets views, merges EVM/Solana variants by name, and enables WalletConnect (EVM‑only) when configured.
 
 ```ts twoslash
-// @noErrors
 import {
   createConfig,
   cookieStorage,
@@ -139,7 +138,6 @@ How the external wallets UI behaves:
 Programmatic flows when you want to bypass the modal:
 
 ```ts twoslash
-// @noErrors
 import { useConnect } from "@account-kit/react";
 
 const { connect, connectors } = useConnect();
@@ -148,7 +146,6 @@ await connect({ connector: metaMask! });
 ```
 
 ```ts twoslash
-// @noErrors
 import { useSolanaWallet } from "@account-kit/react";
 
 const { select, wallets } = useSolanaWallet();
