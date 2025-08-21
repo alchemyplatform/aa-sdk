@@ -1188,6 +1188,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyConnectionConfig.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
+                  - page: lowerAddress
+                    path: wallets/pages/reference/alchemy/common/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/alchemy/common/functions/raise.mdx
                   - page: split
@@ -1229,8 +1231,6 @@ navigation:
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getDefaultMultiOwnerLightAccountFactoryAddress.mdx
                   - page: getLightAccountImplAddress
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountImplAddress.mdx
-                  - page: getLightAccountVersionForAccount
-                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountVersionForAccount.mdx
                   - page: getMAV2UpgradeToData
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getMAV2UpgradeToData.mdx
                   - page: installValidationActions

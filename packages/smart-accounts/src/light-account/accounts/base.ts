@@ -35,10 +35,9 @@ import type {
 import {
   AccountVersionRegistry,
   EIP1967_PROXY_IMPL_STORAGE_SLOT,
-  lowerAddress,
 } from "../utils.js";
 import { type LightAccountVersionConfig } from "../types.js";
-import { BaseError } from "@alchemy/common";
+import { BaseError, lowerAddress } from "@alchemy/common";
 import type { SignatureRequest } from "../../types.js";
 import { getAction } from "viem/utils";
 

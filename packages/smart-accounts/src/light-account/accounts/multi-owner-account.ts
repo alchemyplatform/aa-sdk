@@ -14,12 +14,9 @@ import { readContract } from "viem/actions";
 import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js";
 import { MultiOwnerLightAccountFactoryAbi } from "../abis/MultiOwnerLightAccountFactoryAbi.js";
 import { predictMultiOwnerLightAccountAddress } from "../predictAddress.js";
-import {
-  getDefaultMultiOwnerLightAccountFactoryAddress,
-  lowerAddress,
-} from "../utils.js";
+import { getDefaultMultiOwnerLightAccountFactoryAddress } from "../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
-import { BaseError } from "@alchemy/common";
+import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
 
 export type MultiOwnerLightAccount = LightAccountBase<

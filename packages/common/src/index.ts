@@ -9,6 +9,7 @@ export type * from "./utils/types.js";
 export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
 export { bigIntMultiply } from "./utils/bigint.js";
+export { lowerAddress } from "./utils/lowerAddress.js";
 
 // config
 export type { AlchemyConnectionConfig } from "./transport/connectionSchema.js";

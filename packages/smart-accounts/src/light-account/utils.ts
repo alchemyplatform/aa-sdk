@@ -1,17 +1,13 @@
-import { BaseError, ChainNotFoundError } from "@alchemy/common";
-import { hexToBigInt, hexToNumber, trim, type Address, type Chain } from "viem";
+import { BaseError, ChainNotFoundError, lowerAddress } from "@alchemy/common";
+import { hexToNumber, trim, type Address, type Chain } from "viem";
 import { getStorageAt } from "viem/actions";
 import type { LightAccountBase } from "./accounts/base";
 import type {
   LightAccountType,
   LightAccountVersion,
-  LightAccountVersionConfig,
   LightAccountVersionConfigs,
 } from "./types";
 import { getAction } from "viem/utils";
-
-export const lowerAddress = (addr: Address): Address =>
-  addr.toLowerCase() as Address;
 
 /**
  * Account version registry interface that defines the light account versions
@@ -197,72 +193,4 @@ export async function getLightAccountImplAddress<
   }
 
   return trim(storage);
-}
-
-/**
- * Get the light account version definition for the given light account and chain
- *
- * @template {LightAccountBase} TAccount
- * @param {LightAccountBase} account the light account to get the version for
- * @param {Chain} chain - the chain to get the version for
- * @returns {Promise<LightAccountVersionConfig>} the light account version definition for the given light account and chain
- */
-export async function getLightAccountVersionForAccount<
-  TAccount extends LightAccountBase,
->(account: TAccount, chain: Chain): Promise<LightAccountVersionConfig> {
-  const type = account.source;
-
-  const { factory } = await account.getFactoryArgs();
-  const impl = await getLightAccountImplAddress(account);
-
-  const implToVersion = new Map(
-    (
-      Object.entries(AccountVersionRegistry[type]) as [
-        LightAccountVersion<LightAccountType>,
-        LightAccountVersionConfig<TAccount["entryPoint"]["version"]>,
-      ][]
-    ).map(([version, def]) => {
-      if (
-        def.addresses.overrides != null &&
-        chain.id in def.addresses.overrides
-      ) {
-        return [def.addresses.overrides[chain.id].impl, version];
-      }
-
-      return [def.addresses.default.impl, version];
-    }),
-  );
-
-  const factoryToVersion = new Map(
-    (
-      Object.entries(AccountVersionRegistry[type]) as [
-        LightAccountVersion<LightAccountType>,
-        LightAccountVersionConfig<TAccount["entryPoint"]["version"]>,
-      ][]
-    ).map(([version, def]) => {
-      if (
-        def.addresses.overrides != null &&
-        chain.id in def.addresses.overrides
-      ) {
-        return [def.addresses.overrides[chain.id].factory, version];
-      }
-
-      return [def.addresses.default.factory, version];
-    }),
-  );
-
-  const version =
-    hexToBigInt(impl) !== 0n
-      ? implToVersion.get(lowerAddress(impl))
-      : factory
-        ? factoryToVersion.get(lowerAddress(factory))
-        : undefined;
-
-  if (!version) {
-    throw new BaseError(
-      `Could not determine ${account.source} version for chain ${chain.id}`,
-    );
-  }
-
-  return AccountVersionRegistry[type][version];
 }
