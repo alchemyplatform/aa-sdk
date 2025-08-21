@@ -1,8 +1,8 @@
 import type { Address, Chain, Client, Hex, IsUndefined, Transport } from "viem";
 import { sendUserOperation, type SmartAccount } from "viem/account-abstraction";
 import { getAction } from "viem/utils";
-import type { GetAccountParameter } from "../../types";
-import type { MultiOwnerLightAccount } from "../accounts/multi-owner-account";
+import type { GetAccountParameter } from "../../types.js";
+import type { MultiOwnerLightAccount } from "../accounts/multi-owner-account.js";
 import { AccountNotFoundError } from "@alchemy/common";
 
 export type MultiOwnerLightAccountActions<

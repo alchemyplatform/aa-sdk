@@ -6,10 +6,10 @@ import {
   type Hex,
 } from "viem";
 import type { SmartAccount } from "viem/account-abstraction";
-import type { GetAccountParameter } from "../../types";
-import type { ModuleEntity, UpgradeToData } from "../types";
+import type { GetAccountParameter } from "../../types.js";
+import type { ModuleEntity, UpgradeToData } from "../types.js";
 import { semiModularAccountStorageAbi } from "../abis/semiModularAccountStorageAbi.js";
-import type { ModularAccountV2Base } from "../accounts/base";
+import type { ModularAccountV2Base } from "../accounts/base.js";
 
 /**
  * A mapping of default addresses for the ModularAccountV2.

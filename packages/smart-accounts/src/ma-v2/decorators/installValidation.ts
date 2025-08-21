@@ -9,9 +9,9 @@ import {
   concatHex,
   encodeFunctionData,
 } from "viem";
-import type { HookConfig, ValidationConfig } from "../types";
-import type { ModularAccountV2 } from "../accounts/account";
-import type { GetAccountParameter } from "../../types";
+import type { HookConfig, ValidationConfig } from "../types.js";
+import type { ModularAccountV2 } from "../accounts/account.js";
+import type { GetAccountParameter } from "../../types.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { type SmartAccount, sendUserOperation } from "viem/account-abstraction";
 import { getAction } from "viem/utils";

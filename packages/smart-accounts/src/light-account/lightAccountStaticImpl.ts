@@ -13,11 +13,11 @@ import {
   predictLightAccountAddress,
   predictMultiOwnerLightAccountAddress,
 } from "./predictAddress.js";
-import { AccountVersionRegistry as lightAccountVersionRegistry } from "./utils.js";
 import { LightAccountAbi_v2 } from "./abis/LightAccountAbi_v2.js";
 import { LightAccountFactoryAbi_v2 } from "./abis/LightAccountFactoryAbi_v2.js";
 import { MultiOwnerLightAccountAbi } from "./abis/MultiOwnerLightAccountAbi.js";
 import { MultiOwnerLightAccountFactoryAbi } from "./abis/MultiOwnerLightAccountFactoryAbi.js";
+import { lowerAddress } from "@alchemy/common";
 
 export type LightAccountFactoryArgs = {
   owner: Address;
@@ -53,16 +53,12 @@ const lightAccountV1Base = {
 
 export const lightAccountStaticImplV1_0_1: LightAccountV1StaticImpl = {
   ...lightAccountV1Base,
-  accountImplementation:
-    lightAccountVersionRegistry.LightAccount["v1.0.1"].addresses.default.impl,
-  factoryAddress:
-    lightAccountVersionRegistry.LightAccount["v1.0.1"].addresses.default
-      .factory,
+  factoryAddress: lowerAddress("0x000000893A26168158fbeaDD9335Be5bC96592E2"),
+  accountImplementation: lowerAddress(
+    "0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0",
+  ),
   predictAccountAddress: (factoryArgs) => {
     return predictLightAccountAddress({
-      factoryAddress:
-        lightAccountVersionRegistry.LightAccount["v1.0.1"].addresses.default
-          .factory,
       salt: factoryArgs.salt,
       ownerAddress: factoryArgs.owner,
       version: "v1.0.1",
@@ -72,16 +68,12 @@ export const lightAccountStaticImplV1_0_1: LightAccountV1StaticImpl = {
 
 export const lightAccountStaticImplV1_0_2: LightAccountV1StaticImpl = {
   ...lightAccountV1Base,
-  accountImplementation:
-    lightAccountVersionRegistry.LightAccount["v1.0.2"].addresses.default.impl,
-  factoryAddress:
-    lightAccountVersionRegistry.LightAccount["v1.0.2"].addresses.default
-      .factory,
+  accountImplementation: lowerAddress(
+    "0x5467b1947F47d0646704EB801E075e72aeAe8113",
+  ),
+  factoryAddress: lowerAddress("0x00000055C0b4fA41dde26A74435ff03692292FBD"),
   predictAccountAddress: (factoryArgs) => {
     return predictLightAccountAddress({
-      factoryAddress:
-        lightAccountVersionRegistry.LightAccount["v1.0.2"].addresses.default
-          .factory,
       salt: factoryArgs.salt,
       ownerAddress: factoryArgs.owner,
       version: "v1.0.2",
@@ -91,16 +83,12 @@ export const lightAccountStaticImplV1_0_2: LightAccountV1StaticImpl = {
 
 export const lightAccountStaticImplV1_1_0: LightAccountV1StaticImpl = {
   ...lightAccountV1Base,
-  accountImplementation:
-    lightAccountVersionRegistry.LightAccount["v1.1.0"].addresses.default.impl,
-  factoryAddress:
-    lightAccountVersionRegistry.LightAccount["v1.1.0"].addresses.default
-      .factory,
+  accountImplementation: lowerAddress(
+    "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba",
+  ),
+  factoryAddress: lowerAddress("0x00004EC70002a32400f8ae005A26081065620D20"),
   predictAccountAddress: (factoryArgs) => {
     return predictLightAccountAddress({
-      factoryAddress:
-        lightAccountVersionRegistry.LightAccount["v1.1.0"].addresses.default
-          .factory,
       salt: factoryArgs.salt,
       ownerAddress: factoryArgs.owner,
       version: "v1.1.0",
@@ -127,12 +115,11 @@ export const lightAccountStaticImplV2_0_0: StaticSmartAccountImplementation<
 > = {
   ...lightAccountV2Base,
   accountAbi: LightAccountAbi_v2,
-  accountImplementation:
-    lightAccountVersionRegistry.LightAccount["v2.0.0"].addresses.default.impl,
+  accountImplementation: lowerAddress(
+    "0x8E8e658E22B12ada97B402fF0b044D6A325013C7",
+  ),
   factoryAbi: LightAccountFactoryAbi_v2,
-  factoryAddress:
-    lightAccountVersionRegistry.LightAccount["v2.0.0"].addresses.default
-      .factory,
+  factoryAddress: lowerAddress("0x0000000000400CdFef5E2714E63d8040b700BC24"),
   getFactoryData: (factoryArgs) => {
     return encodeFunctionData({
       abi: LightAccountFactoryAbi_v2,
@@ -142,9 +129,6 @@ export const lightAccountStaticImplV2_0_0: StaticSmartAccountImplementation<
   },
   predictAccountAddress: (factoryArgs) => {
     return predictLightAccountAddress({
-      factoryAddress:
-        lightAccountVersionRegistry.LightAccount["v2.0.0"].addresses.default
-          .factory,
       salt: factoryArgs.salt,
       ownerAddress: factoryArgs.owner,
       version: "v2.0.0",
@@ -167,13 +151,11 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
 > = {
   ...lightAccountV2Base,
   accountAbi: MultiOwnerLightAccountAbi,
-  accountImplementation:
-    lightAccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses
-      .default.impl,
+  accountImplementation: lowerAddress(
+    "0xd2c27F9eE8E4355f71915ffD5568cB3433b6823D",
+  ),
   factoryAbi: MultiOwnerLightAccountFactoryAbi,
-  factoryAddress:
-    lightAccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses
-      .default.factory,
+  factoryAddress: lowerAddress("0x000000000019d2Ee9F2729A65AfE20bb0020AefC"),
   getFactoryData: (factoryArgs) => {
     return encodeFunctionData({
       abi: MultiOwnerLightAccountFactoryAbi,
@@ -183,9 +165,6 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
   },
   predictAccountAddress: (factoryArgs) => {
     return predictMultiOwnerLightAccountAddress({
-      factoryAddress:
-        lightAccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses
-          .default.factory,
       salt: factoryArgs.salt,
       ownerAddresses: factoryArgs.owners,
     });

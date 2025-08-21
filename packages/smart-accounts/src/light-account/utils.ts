@@ -1,70 +1,10 @@
 import { BaseError, ChainNotFoundError, lowerAddress } from "@alchemy/common";
-import { hexToNumber, trim, type Address, type Chain } from "viem";
+import { hexToNumber, trim, type Address } from "viem";
 import { getStorageAt } from "viem/actions";
-import type { LightAccountBase } from "./accounts/base";
-import type {
-  LightAccountType,
-  LightAccountVersion,
-  LightAccountVersionConfigs,
-} from "./types";
 import { getAction } from "viem/utils";
-
-/**
- * Account version registry interface that defines the light account versions
- * and the version definition for each light account type
- *
- */
-export const AccountVersionRegistry: LightAccountVersionConfigs = {
-  LightAccount: {
-    "v1.0.1": {
-      entryPointVersion: "0.6",
-      addresses: {
-        default: {
-          factory: lowerAddress("0x000000893A26168158fbeaDD9335Be5bC96592E2"),
-          impl: lowerAddress("0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0"),
-        },
-      },
-    },
-    "v1.0.2": {
-      entryPointVersion: "0.6",
-      addresses: {
-        default: {
-          factory: lowerAddress("0x00000055C0b4fA41dde26A74435ff03692292FBD"),
-          impl: lowerAddress("0x5467b1947F47d0646704EB801E075e72aeAe8113"),
-        },
-      },
-    },
-    "v1.1.0": {
-      entryPointVersion: "0.6",
-      addresses: {
-        default: {
-          factory: lowerAddress("0x00004EC70002a32400f8ae005A26081065620D20"),
-          impl: lowerAddress("0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba"),
-        },
-      },
-    },
-    "v2.0.0": {
-      entryPointVersion: "0.7",
-      addresses: {
-        default: {
-          factory: lowerAddress("0x0000000000400CdFef5E2714E63d8040b700BC24"),
-          impl: lowerAddress("0x8E8e658E22B12ada97B402fF0b044D6A325013C7"),
-        },
-      },
-    },
-  },
-  MultiOwnerLightAccount: {
-    "v2.0.0": {
-      entryPointVersion: "0.7",
-      addresses: {
-        default: {
-          factory: lowerAddress("0x000000000019d2Ee9F2729A65AfE20bb0020AefC"),
-          impl: lowerAddress("0xd2c27F9eE8E4355f71915ffD5568cB3433b6823D"),
-        },
-      },
-    },
-  },
-};
+import type { LightAccountBase } from "./accounts/base.js";
+import type { LightAccountType, LightAccountVersion } from "./registry.js";
+import { AccountVersionRegistry } from "./registry.js";
 
 // TODO(v5): The pattern of getDefaultXYZAddress(…) doesn’t really make sense as a standalone.
 // We built this expecting lots of diverging addresses per chain, but in practice we have none
@@ -81,44 +21,6 @@ export const AccountVersionRegistry: LightAccountVersionConfigs = {
 export const defaultLightAccountVersion = <
   TLightAccountType extends LightAccountType,
 >(): LightAccountVersion<TLightAccountType> => "v2.0.0";
-
-/**
- * Utility method returning the default light account factory address given a Chain object
- *
- * @param {Chain} chain - a Chain object
- * @param {LightAccountVersion} version - the version of the light account to get the factory address for
- * @returns {Address} address for the given chain
- * @throws if the chain doesn't have an address currently deployed
- */
-export const getDefaultLightAccountFactoryAddress = (
-  chain: Chain,
-  version: LightAccountVersion<"LightAccount">,
-): Address => {
-  return (
-    AccountVersionRegistry.LightAccount[version].addresses.overrides?.[chain.id]
-      ?.factory ??
-    AccountVersionRegistry.LightAccount[version].addresses.default.factory
-  );
-};
-
-/**
- * Utility method returning the default multi owner light account factory address given a Chain object
- *
- * @param {Chain} chain - a Chain object
- * @param {LightAccountVersion<"LightAccount">} version - the version of the light account to get the factory address for
- * @returns {Address} an Address for the given chain
- */
-export const getDefaultMultiOwnerLightAccountFactoryAddress = (
-  chain: Chain,
-  version: LightAccountVersion<"MultiOwnerLightAccount">,
-) => {
-  return (
-    AccountVersionRegistry.MultiOwnerLightAccount[version].addresses
-      .overrides?.[chain.id]?.factory ??
-    AccountVersionRegistry.MultiOwnerLightAccount[version].addresses.default
-      .factory
-  );
-};
 
 /**
  * Can be used to check if the account with one of the following implementation addresses
@@ -138,10 +40,7 @@ export const LightAccountUnsupported1271Impls = [
  * Light accounts with versions v1.0.1 and v1.0.2 do not support 1271 signing.
  */
 export const LightAccountUnsupported1271Factories = new Set(
-  LightAccountUnsupported1271Impls.map((x) => [
-    x.addresses.default.factory,
-    ...Object.values(x.addresses.overrides ?? {}).map((z) => z.factory),
-  ]).flat(),
+  LightAccountUnsupported1271Impls.map((x) => [x.factoryAddress]).flat(),
 );
 
 export const EIP1967_PROXY_IMPL_STORAGE_SLOT =
@@ -165,7 +64,7 @@ export async function getLightAccountImplAddress<
   const type = account.source;
 
   const expectedImplAddresses = Object.values(AccountVersionRegistry[type]).map(
-    (x) => x.addresses.overrides?.[chain.id]?.impl ?? x.addresses.default.impl,
+    (x) => x.accountImplementation,
   );
 
   const getStorageAtAction = getAction(client, getStorageAt, "getStorageAt");

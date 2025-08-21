@@ -20,13 +20,10 @@ export {
   predictMultiOwnerLightAccountAddress,
 } from "./light-account/predictAddress.js";
 
-export type * from "./light-account/types.js";
-
+export { AccountVersionRegistry } from "./light-account/registry.js";
+export type * from "./light-account/registry.js";
 export {
-  AccountVersionRegistry,
   defaultLightAccountVersion,
-  getDefaultLightAccountFactoryAddress,
-  getDefaultMultiOwnerLightAccountFactoryAddress,
   getLightAccountImplAddress,
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,

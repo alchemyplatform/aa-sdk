@@ -2,8 +2,8 @@ import { AccountNotFoundError } from "@alchemy/common";
 import type { Address, Chain, Client, Hex, IsUndefined, Transport } from "viem";
 import { sendUserOperation, type SmartAccount } from "viem/account-abstraction";
 import { getAction } from "viem/utils";
-import type { GetAccountParameter } from "../../types";
-import type { LightAccount } from "../accounts/account";
+import type { GetAccountParameter } from "../../types.js";
+import type { LightAccount } from "../accounts/account.js";
 
 export type LightAccountActions<
   TAccount extends LightAccount | undefined = LightAccount | undefined,

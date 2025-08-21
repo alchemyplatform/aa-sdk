@@ -1225,10 +1225,6 @@ navigation:
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/defaultLightAccountVersion.mdx
                   - page: deferralActions
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/deferralActions.mdx
-                  - page: getDefaultLightAccountFactoryAddress
-                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getDefaultLightAccountFactoryAddress.mdx
-                  - page: getDefaultMultiOwnerLightAccountFactoryAddress
-                    path: wallets/pages/reference/alchemy/smart-accounts/functions/getDefaultMultiOwnerLightAccountFactoryAddress.mdx
                   - page: getLightAccountImplAddress
                     path: wallets/pages/reference/alchemy/smart-accounts/functions/getLightAccountImplAddress.mdx
                   - page: getMAV2UpgradeToData
