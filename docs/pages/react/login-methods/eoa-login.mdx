@@ -117,6 +117,8 @@ return (
 For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core` to bring in these EOAs as your smart wallet owner. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
 By making your EOA an owner of a smart account, you will have access to AA feature through your new smart wallet.
 
+You can use [`useUser`](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useUser) to detect if a user is connected. This [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUser.ts) returns the current user information, either from an Externally Owned Account (EOA) or a Smart Account, and is the best way to check if a user is logged in for both Smart Account contract users and EOAs.
+
 ```ts twoslash
 // @noErrors
 import { WalletClientSigner, type SmartAccountSigner } from "@aa-sdk/core";
