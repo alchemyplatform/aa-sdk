@@ -4,6 +4,13 @@ export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 export type * from "./transport/split.js";
 export { split } from "./transport/split.js";
 
+// chain registry utilities
+export {
+  getAlchemyRpcUrl,
+  isChainSupported,
+  getSupportedChainIds,
+} from "./transport/chainRegistry.js";
+
 // utils
 export type * from "./utils/types.js";
 export { assertNever } from "./utils/assertNever.js";

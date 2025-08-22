@@ -8,7 +8,7 @@ import {
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import { alchemyTransport } from "@alchemy/common";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia } from "@account-kit/infra"; // TODO(v5): remove AK v4 dep
+import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 
 const ALCHEMY_API_URL = "https://api.g.alchemy.com/v2";

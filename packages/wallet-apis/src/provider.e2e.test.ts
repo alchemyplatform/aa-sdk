@@ -11,7 +11,7 @@ import {
 } from "viem";
 import { alchemyTransport, type AlchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia } from "@account-kit/infra";
+import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import {
   getAddresses,

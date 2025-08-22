@@ -8,7 +8,7 @@ import {
   entryPoint07Address,
 } from "viem/account-abstraction";
 import { generatePrivateKey } from "viem/accounts";
-import { sepolia } from "@alchemy/common/chains";
+import { sepolia } from "viem/chains";
 import { LocalAccountSigner } from "@aa-sdk/core";
 
 // todo(v5): migrate to using `@alchemy/smart-account` definitions of light account, rather than `@account-kit/smart-contracts`

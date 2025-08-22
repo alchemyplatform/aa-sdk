@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { avalanche } from "viem/chains";
-import { sepolia } from "../../src/chains.js";
+import { avalanche, sepolia } from "viem/chains";
 import {
   alchemyTransport,
   isAlchemyTransport,
@@ -110,10 +109,10 @@ describe("Alchemy Transport Tests", () => {
       expect(result.config.type).toBe("alchemyHttp");
     });
 
-    it("should throw error when chain doesn't have Alchemy RPC URL", () => {
+    it("should throw error when chain is not supported by Alchemy", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
       expect(() => transport({ chain: avalanche })).toThrowError(
-        "Chain must include an Alchemy RPC URL",
+        `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
       );
     });
 
@@ -126,12 +125,12 @@ describe("Alchemy Transport Tests", () => {
       expect(result.config.key).toBe("alchemyHttp");
     });
 
-    it("should extract RPC URL from chain for apiKey config", () => {
+    it("should extract RPC URL from registry for apiKey config", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
       const result = transport({ chain: sepolia });
 
-      // Verify it's using the chain's Alchemy RPC URL
-      expect(result.value?.alchemyRpcUrl).toContain("sepolia");
+      // Verify it's using the registry Alchemy RPC URL for sepolia
+      expect(result.value?.alchemyRpcUrl).toBe("https://eth-sepolia.g.alchemy.com/v2");
     });
 
     it("should use direct URL ignoring chain", () => {
@@ -331,7 +330,7 @@ describe("Alchemy Transport Tests", () => {
     expect(() =>
       alchemyTransport({ apiKey: "some_key" })({ chain: avalanche }),
     ).toThrowError(
-      `Chain must include an Alchemy RPC URL. See \`defineAlchemyChain\` or import a chain from \`@alchemy/common\`.`,
+      `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
     );
   });
 
@@ -372,8 +371,9 @@ describe("Alchemy Transport Tests", () => {
         transport({ chain: avalanche });
         expect.fail("Should have thrown an error");
       } catch (error: any) {
-        expect(error.message).toContain("Alchemy RPC URL");
-        expect(error.message).toContain("defineAlchemyChain");
+        expect(error.message).toContain(`Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`);
+        expect(error.message).toContain("alchemyTransport({ url:");
+        expect(error.message).toContain("http(");
       }
     });
   });
