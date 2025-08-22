@@ -156,7 +156,21 @@ export function useSendCalls<
 
         const client = clientHeaderTrack(_client, "reactUseSendCalls");
 
-        const preparedCalls = await client.prepareCalls(params);
+        let preparedCalls = await client.prepareCalls(params);
+
+        if (preparedCalls.type === "paymaster-permit") {
+          const signature = await client.signSignatureRequest(
+            preparedCalls.signatureRequest,
+          );
+
+          const params = {
+            calls: preparedCalls.modifiedRequest.calls,
+            capabilities: preparedCalls.modifiedRequest.capabilities,
+            paymasterPermitSignature: signature,
+          };
+
+          preparedCalls = await client.prepareCalls(params);
+        }
 
         const signedCalls = await client.signPreparedCalls(preparedCalls);
 
