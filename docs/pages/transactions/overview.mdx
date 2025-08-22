@@ -8,7 +8,7 @@ Smart Wallets' transaction system transforms how users interact with blockchain 
 
 ## What Makes Smart Wallets Transactions Different?
 
-Traditional blockchain transactions can be complex and expensive for users. Smart Wallets' infrastructure solves these challenges by introducing **User Operations** (UOs) - a more flexible and user-friendly approach to blockchain interactions.
+Smart Wallet transactions are powered by ERC-4337 account abstraction, which enables powerful features like gas sponsorship and modular smart accounts. This technology foundation also supports advanced capabilities including EIP-7702 integration for upgrading existing EOAs and robust transaction retry mechanisms for improved reliability.
 
 ### Key Advantages
 
@@ -24,23 +24,6 @@ Traditional blockchain transactions can be complex and expensive for users. Smar
 
 **Flexible gas payments**: Allow users to pay transaction fees with any ERC-20 token, not just native gas tokens.
 
-## Core Concepts
-
-### User Operations vs Transactions
-
-While traditional transactions are limited by the capabilities of Externally Owned Accounts (EOAs), **User Operations** leverage smart contract accounts to provide enhanced functionality:
-
-- **Traditional transactions**: Limited to simple value transfers and contract calls, require native gas tokens
-- **User Operations**: Support batching, gas sponsorship, custom validation logic, and flexible fee payment options
-
-### Smart Account Types
-
-Smart Wallets supports multiple smart account implementations:
-
-- **ModularAccountV2**: Our recommended default with ERC-6900 compliance and EIP-7702 support
-- **LightAccount**: Lightweight implementation optimized for gas efficiency
-- **MultiOwnerLightAccount**: Supports multiple owners for shared account management
-
 ### Gas Management
 
 Smart Wallets provides sophisticated gas management through three approaches:
@@ -49,18 +32,18 @@ Smart Wallets provides sophisticated gas management through three approaches:
 2. **ERC-20 payments**: Users pay gas with stablecoins or custom tokens
 3. **Traditional payments**: Standard ETH/native token gas payments
 
-## Multi-Chain Capabilities
+### Multi-chain Capabilities
 
-### EVM Support
+#### EVM Support
 
-Send User Operations across all major EVM chains with features including:
+Send transctions across all major EVM chains with features including:
 
 - Single and batch operations
 - Gas sponsorship and ERC-20 fee payments
 - EIP-7702 delegation for existing EOAs
 - Transaction retry and replacement mechanisms
 
-### Solana Integration
+#### Solana Integration
 
 Native Solana support with specialized features:
 
@@ -73,31 +56,33 @@ Native Solana support with specialized features:
 
 <Steps>
 
-<Step title="Construction">
-  User Operations are constructed with target addresses, data payloads, and
-  value transfers. Multiple operations can be batched into a single atomic
-  transaction for gas efficiency and atomic execution.
+<Step title="Authenticate">
+  Users must first authenticate to access their smart wallet before sending
+  transactions. This process verifies user identity through various methods like
+  email OTP, social login, or passkeys, creating a secure connection to their
+  smart account. Learn more about [authentication options and
+  implementation](/wallets/authentication/overview).
 </Step>
 
-<Step title="Signing">
+<Step title="Preparing Transactions">
+  Transactions are constructed with target addresses, data payloads, and value
+  transfers. Multiple operations can be batched into a single atomic transaction
+  for gas efficiency and atomic execution.
+</Step>
+
+<Step title="Signing Transactions">
   Smart accounts handle complex signing logic, including multi-signature
   coordination and custom validation rules. The system supports various signing
   methods from simple EOA signatures to advanced multi-party authorization.
 </Step>
 
-<Step title="Gas Estimation and Sponsorship">
-  The system automatically estimates gas costs and applies sponsorship policies
-  when configured. Gas Manager policies determine whether transactions are
-  sponsored, paid with ERC-20 tokens, or use traditional gas payments.
+<Step title="Sending Transactions">
+  Transactions are submitted to the blockchain with built-in retry mechanisms
+  and status tracking. The system automatically estimates gas costs and applies
+  sponsorship policies when configured.
 </Step>
 
-<Step title="Submission and Monitoring">
-  Operations are submitted to the blockchain with built-in retry mechanisms and
-  status tracking. The system handles network congestion, fee fluctuations, and
-  provides real-time status updates throughout the process.
-</Step>
-
-<Step title="Confirmation">
+<Step title="Monitoring Transactions">
   Real-time status updates and transaction hash tracking provide seamless user
   experience. Once confirmed, the transaction results are available with
   detailed execution information and any relevant event logs.
@@ -105,39 +90,11 @@ Native Solana support with specialized features:
 
 </Steps>
 
-## Advanced Features
-
-### EIP-7702 Integration
-
-Transform existing EOAs into smart accounts without requiring new addresses:
-
-- Backward compatibility with existing wallets
-- Gradual migration path for existing users
-- Full smart account feature access
-
-### Retry Mechanisms
-
-Built-in transaction retry and replacement capabilities:
-
-- Drop and replace for stuck transactions
-- Automatic fee bumping
-- Custom retry logic support
-
-### Signing Flexibility
-
-Support for various signing scenarios:
-
-- Standard transaction signing
-- Typed data signing (EIP-712)
-- Raw hash signing
-- Multi-signature coordination
-- EIP-7702 authorization signing
-
-## What's Next?
+## Next Steps
 
 Ready to implement transactions in your application? Here are the recommended next steps:
 
-- **[Send your first transaction](/wallets/transactions/send/send-user-operations)**: Learn the basics of sending User Operations
+- **[Send your first transaction](/wallets/transactions/send/send-user-operations)**: Learn the basics of sending transactions
 - **[Enable gas sponsorship](/wallets/transactions/sponsor-gas/sponsor-gas-evm)**: Remove gas barriers for your users
 - **[Implement batching](/wallets/transactions/send/batch-user-operations)**: Optimize costs with atomic batch operations
 - **[Explore EIP-7702](/wallets/react/using-7702)**: Upgrade existing EOAs to smart accounts
