@@ -46,8 +46,10 @@ export type EntryPointFromAccountRegistry<
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
 > =
   (typeof AccountVersionRegistry)[TLightAccountType][TLightAccountVersion] extends StaticSmartAccountImplementation<
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     infer _7702,
     infer entryPointVersion,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     infer _factoryArgs,
     infer entryPointAbi extends Abi
   >

@@ -117,13 +117,11 @@ export async function toLightAccountBase<
     upgradeToAddress: Address;
     upgradeToInitData: Hex;
   }): Promise<Hex> => {
-    const expectedImplAddresses = Object.values(
-      AccountVersionRegistry[type],
-    ).map(
-      (x) =>
-        x.addresses.overrides?.[client.chain.id]?.impl ??
-        x.addresses.default.impl,
-    );
+    const expectedImplAddresses = (
+      Object.values(
+        AccountVersionRegistry[type],
+      ) as StaticSmartAccountImplementation<false>[]
+    ).map((x) => x.accountImplementation);
 
     const getStorageAtAction = getAction(client, getStorageAt, "getStorageAt");
     // TODO(v5): This is a super fragile workflow, and we should consider not supporting this on the SmartAccount level in v5.
