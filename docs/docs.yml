@@ -117,12 +117,28 @@ navigation:
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
-              - page: Connect EOAs
-                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Add passkey
                 path: wallets/pages/react/add-passkey.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+          - section: UI components
+            contents:
+              - page: Using UI components
+                path: wallets/pages/react/ui-components.mdx
+              - page: Theme & branding
+                path: wallets/pages/react/theme.mdx
+          - section: Whitelabel
+            contents:
+              - page: React hooks
+                path: wallets/pages/react/react-hooks.mdx
+              - page: Other JS initialization
+                path: wallets/pages/signer/quickstart.mdx
+          - section: Connectors
+            contents:
+              - page: Connect external wallets
+                path: wallets/pages/react/login-methods/eoa-login.mdx
+              - page: Customize
+                path: wallets/pages/react/connectors/customization.mdx
           - section: MFA
             contents:
               - page: Set up MFA
@@ -135,20 +151,6 @@ navigation:
                 path: wallets/pages/react/mfa/social-login.mdx
               - page: Other JS MFA
                 path: wallets/pages/signer/authentication/mfa.mdx
-          - section: UI components
-            contents:
-              - page: Using UI components
-                path: wallets/pages/react/ui-components.mdx
-              - page: Theme & branding
-                path: wallets/pages/react/customization/theme.mdx
-              - page: Customizing connectors
-                path: wallets/pages/react/customization/connectors.mdx
-          - section: Whitelabel
-            contents:
-              - page: React hooks
-                path: wallets/pages/react/react-hooks.mdx
-              - page: Other JS initialization
-                path: wallets/pages/signer/quickstart.mdx
           - section: Account management
             contents:
               - page: Pregenerate wallets

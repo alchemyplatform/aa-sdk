@@ -1,12 +1,12 @@
 ---
 title: Styling Connectors
 description: Customize external wallet connectors including ordering and features wallets
-slug: wallets/react/customization/connectors
+slug: wallets/react/connectors/customization
 ---
 
 ### External wallets (EVM + Solana)
 
-Use `configForExternalWallets()` once, then spread its outputs into your config and UI. This powers Featured + All Wallets views, merges EVM/Solana variants by name, and enables WalletConnect (EVM‑only) when configured.
+Use `configForExternalWallets()` to specify external wallets you want to support, then add to your UI configuration. This allows you to features wallets, merge EVM/Solana variants by name, and enable WalletConnect.
 
 ```ts twoslash
 import {
