@@ -18,6 +18,7 @@ import { toModularAccountV2 } from "./accounts/account.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
 import { DefaultAddress } from "./utils/account.js";
+import { webAuthnFactoryAbi } from "./abis/webAuthnFactoryAbi.js";
 
 describe("MAv2 Counterfactual Address Tests", () => {
   const instanceV070 = local070Instance;
@@ -124,7 +125,7 @@ describe("MAv2 Counterfactual Address Tests", () => {
       const getAccountInitCode = async () => {
         const { factory } = await modularAccountV2.getFactoryArgs();
         const factoryData = encodeFunctionData({
-          abi: accountFactoryAbi,
+          abi: webAuthnFactoryAbi,
           functionName: "createWebAuthnAccount",
           args: [x, y, salt, entityId],
         });
