@@ -42,6 +42,10 @@ navigation:
                     path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
                   - page: Set up your client
                     path: wallets/pages/react-native/using-smart-accounts/setup-smart-account-client.mdx
+                  - page: Signer setup
+                    path: wallets/pages/react-native/signer/setup-guide.mdx
+                  - page: Setting up the Accounts Provider
+                    path: wallets/pages/react-native/signer/authenticating-users/setting-up-the-accounts-provider.mdx
                   - page: Deep linking
                     path: wallets/pages/overview/react-native/deep-linking.mdx
               - section: Other JS frameworks
@@ -123,6 +127,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+              - page: "[NEW] On-chain passkeys"
+                path: wallets/pages/react/login-methods/onchain-passkeys.mdx
           - section: MFA
             contents:
               - page: Set up MFA
@@ -153,6 +159,8 @@ navigation:
                 path: wallets/pages/react/pregenerate-wallets.mdx
               - page: User sessions
                 path: wallets/pages/signer/user-sessions.mdx
+              - page: Using Solana Signer
+                path: wallets/pages/react/solana-wallets/get-started.mdx
               - section: Policies
                 contents:
                   - page: Overview
@@ -214,8 +222,18 @@ navigation:
             contents:
               # - page: Overview
               #   path: wallets/pages/transactions/low-level-infra/overview.mdx
+              - page: Infra Quickstart
+                path: wallets/pages/infra/quickstart.mdx
               - page: Bundler Quickstart
                 path: wallets/pages/bundler-api/bundler-api-quickstart.mdx
+              - page: Bundler API Endpoints
+                path: wallets/pages/bundler-api/bundler-api-endpoints/bundler-api-endpoints.mdx
+              - page: Bundler API Fee Logic
+                path: wallets/pages/bundler-api/bundler-api-fee-logic.mdx
+              - page: Gas Coverage API Endpoints
+                path: wallets/pages/gas-manager-admin-api/gas-coverage-api-endpoints/paymaster-api-endpoints.mdx
+              - page: Gas Manager Admin API Endpoints
+                path: wallets/pages/gas-manager-admin-api/gas-manager-admin-api-endpoints/gas-manager-admin-api-endpoints.mdx
               - page: How to sponsor gas on EVM
                 path: wallets/pages/gas-manager-admin-api/how-to-sponsor-gas-on-evm.mdx
               - page: Conditional gas sponsorship
@@ -1042,6 +1060,9 @@ navigation:
       - section: Resources
         skip-slug: true
         contents:
+          - page: Features
+            slug: wallets/resources/features
+            path: wallets/pages/features.mdx
           - link: GitHub
             href: https://github.com/alchemyplatform/aa-sdk
           - link: Changelog
