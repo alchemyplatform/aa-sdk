@@ -48,7 +48,7 @@ navigation:
                     path: wallets/pages/react-native/signer/authenticating-users/setting-up-the-accounts-provider.mdx
                   - page: Deep linking
                     path: wallets/pages/overview/react-native/deep-linking.mdx
-              - section: Other JS frameworks
+              - section: Other Javascript frameworks
                 contents:
                   - page: Overview
                     path: wallets/pages/core/overview.mdx
@@ -135,7 +135,7 @@ navigation:
                 path: wallets/pages/react/mfa/email-magic-link.mdx
               - page: Social login
                 path: wallets/pages/react/mfa/social-login.mdx
-              - page: Other JS MFA
+              - page: Other Javascript MFA
                 path: wallets/pages/signer/authentication/mfa.mdx
           - section: Customization
             contents:
@@ -147,7 +147,7 @@ navigation:
             contents:
               - page: React hooks
                 path: wallets/pages/react/react-hooks.mdx
-              - page: Other JS initialization
+              - page: Other Javascript initialization
                 path: wallets/pages/signer/quickstart.mdx
           - section: Account management
             contents:
@@ -435,7 +435,7 @@ navigation:
                   - page: createConfig
                     path: wallets/pages/reference/account-kit/react-native/functions/createConfig.mdx
 
-          - section: Other JS Frameworks
+          - section: Other Javascript Frameworks
             slug: core
             path: wallets/pages/reference/account-kit/core/index.mdx
             contents:
