@@ -135,8 +135,6 @@ navigation:
                 path: wallets/pages/react/mfa/email-magic-link.mdx
               - page: Social login
                 path: wallets/pages/react/mfa/social-login.mdx
-              - page: Other Javascript MFA
-                path: wallets/pages/signer/authentication/mfa.mdx
           - section: Customization
             contents:
               - page: Theme
