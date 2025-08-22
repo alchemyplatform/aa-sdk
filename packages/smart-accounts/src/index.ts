@@ -1,3 +1,4 @@
+// LightAccount
 export type * from "./light-account/accounts/account.js";
 export { toLightAccount } from "./light-account/accounts/account.js";
 
@@ -37,6 +38,8 @@ export {
   multiOwnerLightAccountStaticImplV2_0_0,
 } from "./light-account/lightAccountStaticImpl.js";
 
+// ModularAccountV2
+
 export type * from "./ma-v2/accounts/account.js";
 export { toModularAccountV2 } from "./ma-v2/accounts/account.js";
 
@@ -48,6 +51,13 @@ export { deferralActions } from "./ma-v2/decorators/deferralActions.js";
 
 export type * from "./ma-v2/decorators/installValidation.js";
 export { installValidationActions } from "./ma-v2/decorators/installValidation.js";
+
+export {
+  semiModularAccountV2StaticImpl,
+  semiModularAccount7702StaticImpl,
+  webAuthnModularAccountV2StaticImpl,
+} from "./ma-v2/mav2StaticImpl.js";
+export type * from "./ma-v2/mav2StaticImpl.js";
 
 // Modules.
 export { AllowlistModule } from "./ma-v2/modules/allowlist-module/module.js";
