@@ -196,6 +196,22 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Solana
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+              - section: Sign
+                contents:
+                  - page: Signing transactions
+                    path: wallets/pages/signer/as-an-eoa.mdx
+                  - page: Signing messages
+                    path: wallets/pages/signer/signing-messages.mdx
+                  - page: Sign EIP-7702 authorization
+                    path: wallets/pages/signer/as-an-eoa.mdx
+                  - page: Sign Solana transactions
+                    path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
+                  - section: Other signing
+                    contents:
+                      - page: Sign typed data
+                        path: wallets/pages/signer/as-an-eoa.mdx
+                      - page: Sign raw hash
+                        path: wallets/pages/signer/as-an-eoa.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Using 7702
@@ -244,22 +260,6 @@ navigation:
                 path: wallets/pages/third-party/chains.mdx
               - page: Paymasters
                 path: wallets/pages/third-party/paymasters.mdx
-          - section: Signing
-            contents:
-              - page: Signing transactions
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Signing messages
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Sign EIP-7702 authorization
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Sign Solana transactions
-                path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
-              - section: Other signing
-                contents:
-                  - page: Sign typed data
-                    path: wallets/pages/signer/as-an-eoa.mdx
-                  - page: Sign raw hash
-                    path: wallets/pages/signer/as-an-eoa.mdx
 
       - section: Funding
         contents:
