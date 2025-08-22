@@ -38,3 +38,6 @@ export { InvalidRequestError } from "./errors/InvalidRequestError.js";
 // actions
 export type * from "./actions/addBreadCrumb.js";
 export { addBreadCrumb } from "./actions/addBreadCrumb.js";
+
+// chains (convenience exports for Alchemy-supported chains)
+export * from "./chains.js";
