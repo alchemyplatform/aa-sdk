@@ -199,9 +199,9 @@ navigation:
                   - page: Signing transactions
                     path: wallets/pages/signer/as-an-eoa.mdx
                   - page: Signing messages
-                    path: wallets/pages/signer/as-an-eoa.mdx
+                    path: wallets/pages/signer/quickstart.mdx
                   - page: Sign EIP-7702 authorization
-                    path: wallets/pages/signer/as-an-eoa.mdx
+                    path: wallets/pages/react/using-7702.mdx
                   - page: Sign Solana transactions
                     path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
                   - section: Other signing
