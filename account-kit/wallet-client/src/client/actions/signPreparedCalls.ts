@@ -1,5 +1,5 @@
 import type { PrepareCallsResult } from "./prepareCalls.ts";
-import type { SmartAccountSigner } from "@aa-sdk/core";
+import { BaseError, type SmartAccountSigner } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { Static } from "@sinclair/typebox";
 import { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
@@ -9,7 +9,7 @@ import {
   type PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
-import { InvalidRequestError } from "ox/RpcResponse";
+import { assertNever } from "../../utils.js";
 
 export type SignPreparedCallsParams = PrepareCallsResult;
 
@@ -56,10 +56,9 @@ export async function signPreparedCalls(
     const { signatureRequest, ...rest } = call;
 
     if (!signatureRequest) {
-      throw new InvalidRequestError({
-        message:
-          "Signature request is required for signing user operation calls. Ensure `onlyEstimation` is set to `false` when calling `prepareCalls`.",
-      });
+      throw new BaseError(
+        "Signature request is required for signing user operation calls. Ensure `onlyEstimation` is set to `false` when calling `prepareCalls`.",
+      );
     }
 
     const signature = await signSignatureRequest(signer, signatureRequest);
@@ -85,9 +84,14 @@ export async function signPreparedCalls(
     params.type === "user-operation-v070"
   ) {
     return signUserOperationCall(params);
-  } else {
-    throw new Error(
+  } else if (params.type === "paymaster-permit") {
+    throw new BaseError(
       `Invalid call type ${params.type} for signing prepared calls`,
+    );
+  } else {
+    return assertNever(
+      params,
+      `Unexpected call type in ${params} for signing prepared calls`,
     );
   }
 }
