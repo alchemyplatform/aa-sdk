@@ -120,35 +120,36 @@ export const accountFactoryAbi = [
     outputs: [],
     stateMutability: "payable",
   },
-  {
-    type: "function",
-    name: "createAccount",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract ModularAccount",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
+  // Omitted, as this has been deprecated in favor of createSemiModularAccount.
+  // {
+  //   type: "function",
+  //   name: "createAccount",
+  //   inputs: [
+  //     {
+  //       name: "owner",
+  //       type: "address",
+  //       internalType: "address",
+  //     },
+  //     {
+  //       name: "salt",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "entityId",
+  //       type: "uint32",
+  //       internalType: "uint32",
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       name: "",
+  //       type: "address",
+  //       internalType: "contract ModularAccount",
+  //     },
+  //   ],
+  //   stateMutability: "nonpayable",
+  // },
   {
     type: "function",
     name: "createSemiModularAccount",
@@ -173,69 +174,71 @@ export const accountFactoryAbi = [
     ],
     stateMutability: "nonpayable",
   },
-  {
-    type: "function",
-    name: "createWebAuthnAccount",
-    inputs: [
-      {
-        name: "ownerX",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "ownerY",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract ModularAccount",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "getAddress",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
+  // Omitted, as this has been deprecated in favor of using the webAuthn factory.
+  // {
+  //   type: "function",
+  //   name: "createWebAuthnAccount",
+  //   inputs: [
+  //     {
+  //       name: "ownerX",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "ownerY",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "salt",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "entityId",
+  //       type: "uint32",
+  //       internalType: "uint32",
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       name: "",
+  //       type: "address",
+  //       internalType: "contract ModularAccount",
+  //     },
+  //   ],
+  //   stateMutability: "nonpayable",
+  // },
+  // Omitted, as this has been deprecated in favor of using the webAuthn factory.
+  // {
+  //   type: "function",
+  //   name: "getAddress",
+  //   inputs: [
+  //     {
+  //       name: "owner",
+  //       type: "address",
+  //       internalType: "address",
+  //     },
+  //     {
+  //       name: "salt",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "entityId",
+  //       type: "uint32",
+  //       internalType: "uint32",
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       name: "",
+  //       type: "address",
+  //       internalType: "address",
+  //     },
+  //   ],
+  //   stateMutability: "view",
+  // },
   {
     type: "function",
     name: "getAddressSemiModular",
@@ -260,103 +263,106 @@ export const accountFactoryAbi = [
     ],
     stateMutability: "view",
   },
-  {
-    type: "function",
-    name: "getAddressWebAuthn",
-    inputs: [
-      {
-        name: "ownerX",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "ownerY",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getSalt",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes32",
-        internalType: "bytes32",
-      },
-    ],
-    stateMutability: "pure",
-  },
-  {
-    type: "function",
-    name: "getSaltWebAuthn",
-    inputs: [
-      {
-        name: "ownerX",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "ownerY",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "salt",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes32",
-        internalType: "bytes32",
-      },
-    ],
-    stateMutability: "pure",
-  },
+  // Omitted, as this has been deprecated in favor of using the webAuthn factory.
+  // {
+  //   type: "function",
+  //   name: "getAddressWebAuthn",
+  //   inputs: [
+  //     {
+  //       name: "ownerX",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "ownerY",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "salt",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "entityId",
+  //       type: "uint32",
+  //       internalType: "uint32",
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       name: "",
+  //       type: "address",
+  //       internalType: "address",
+  //     },
+  //   ],
+  //   stateMutability: "view",
+  // },
+  // Omitted, as this has been deprecated in favor of using getSaltSemiModular.
+  // {
+  //   type: "function",
+  //   name: "getSalt",
+  //   inputs: [
+  //     {
+  //       name: "owner",
+  //       type: "address",
+  //       internalType: "address",
+  //     },
+  //     {
+  //       name: "salt",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "entityId",
+  //       type: "uint32",
+  //       internalType: "uint32",
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       name: "",
+  //       type: "bytes32",
+  //       internalType: "bytes32",
+  //     },
+  //   ],
+  //   stateMutability: "pure",
+  // },
+  // Omitted, as this has been deprecated in favor of using the webAuthn factory.
+  // {
+  //   type: "function",
+  //   name: "getSaltWebAuthn",
+  //   inputs: [
+  //     {
+  //       name: "ownerX",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "ownerY",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "salt",
+  //       type: "uint256",
+  //       internalType: "uint256",
+  //     },
+  //     {
+  //       name: "entityId",
+  //       type: "uint32",
+  //       internalType: "uint32",
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       name: "",
+  //       type: "bytes32",
+  //       internalType: "bytes32",
+  //     },
+  //   ],
+  //   stateMutability: "pure",
+  // },
   {
     type: "function",
     name: "owner",

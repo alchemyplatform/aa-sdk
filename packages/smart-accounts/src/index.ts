@@ -39,7 +39,6 @@ export {
 } from "./light-account/lightAccountStaticImpl.js";
 
 // ModularAccountV2
-
 export type * from "./ma-v2/accounts/account.js";
 export { toModularAccountV2 } from "./ma-v2/accounts/account.js";
 

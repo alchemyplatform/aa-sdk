@@ -18,6 +18,7 @@ import type { SignerEntity } from "../types.js";
 import { predictModularAccountV2Address } from "../predictAddress.js";
 import { parsePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
+import { webAuthnFactoryAbi } from "../abis/webAuthnFactoryAbi.js";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
@@ -106,7 +107,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
         factoryData:
           factoryData_ ??
           encodeFunctionData({
-            abi: accountFactoryAbi,
+            abi: webAuthnFactoryAbi,
             functionName: "createWebAuthnAccount",
             args: [x, y, salt, entityId],
           }),
