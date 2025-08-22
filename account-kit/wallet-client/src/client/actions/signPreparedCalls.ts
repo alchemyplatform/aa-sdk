@@ -7,7 +7,6 @@ import {
   type PreparedCall_Authorization,
   type PreparedCall_UserOpV060,
   type PreparedCall_UserOpV070,
-  PreparedCall_Permit,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
 import { InvalidRequestError } from "ox/RpcResponse";
@@ -70,22 +69,25 @@ export async function signPreparedCalls(
     };
   };
 
-  const signPaymasterPermitCall = async (_call: PreparedCall_Permit) => {
-    throw new Error("ERC20 paymaster permit calls are not supported");
-  };
-
-  return params.type === "array"
-    ? {
-        type: "array" as const,
-        data: await Promise.all(
-          params.data.map((call) =>
-            call.type === "authorization"
-              ? signAuthorizationCall(call)
-              : signUserOperationCall(call),
-          ),
+  if (params.type === "array") {
+    return {
+      type: "array" as const,
+      data: await Promise.all(
+        params.data.map((call) =>
+          call.type === "authorization"
+            ? signAuthorizationCall(call)
+            : signUserOperationCall(call),
         ),
-      }
-    : params.type === "paymaster-permit"
-      ? signPaymasterPermitCall(params)
-      : signUserOperationCall(params);
+      ),
+    };
+  } else if (
+    params.type === "user-operation-v060" ||
+    params.type === "user-operation-v070"
+  ) {
+    return signUserOperationCall(params);
+  } else {
+    throw new Error(
+      `Invalid call type ${params.type} for signing prepared calls`,
+    );
+  }
 }
