@@ -135,14 +135,14 @@ navigation:
                 path: wallets/pages/react/mfa/social-login.mdx
               - page: Other JS MFA
                 path: wallets/pages/signer/authentication/mfa.mdx
-          - section: Customization
+          - section: UI components
             contents:
-              - page: Theme
+              - page: Using UI components
+                path: wallets/pages/react/ui-components.mdx
+              - page: Theme & branding
                 path: wallets/pages/react/customization/theme.mdx
-              - page: Authentication modal
-                path: wallets/pages/react/customization/authentication-modal.mdx
-          - page: UI components
-            path: wallets/pages/react/ui-components.mdx
+              - page: Customizing connectors
+                path: wallets/pages/react/customization/connectors.mdx
           - section: Whitelabel
             contents:
               - page: React hooks

@@ -1,17 +1,26 @@
 ---
-title: Custom theme
-description: Learn how to customize the theme of the Account Kit React components
+title: Theme & appearance
+description: Customize logo, colors, radius, illustrations, and the auth modal header for React components
 slug: wallets/react/customization/theme
 ---
 
-When using React components in your app, you can customize both 1) overall [theme](#colors) and 2) [authentication components](#custom-authentication-component).
+UI components are fully customizable so you can match your app's branding.
 
-Most theme customizations are passed through using `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
+What you can customize in the pre-built authentication component:
+
+- Overall theme: colors, radius, illustrations, custom css
+- Header: text, logo, custom component
+- External wallet connectors: featured wallets, specify order, chain filtering (EVM/Solana), WalletConnect, and more via `configForExternalWallets()`. See [EOA connectors](/docs/wallets/react/customization/eoa-connectors) for more details.
 
 <Tip>
-  The easiest way to configure your UI components, is using the [Demo
-  App](https://demo.alchemy.com/).
+  Preview your branding and autogenerate a styled component using the [Demo
+  App](https://demo.alchemy.com/). You can simply copy and paste the code into
+  your project.
 </Tip>
+
+# Theme
+
+Theme customizations and styling are passed through `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
 
 ## Colors
 
@@ -69,7 +78,7 @@ export const tailwindConfig = withAccountKitUi(
     colors: {
       active: createColorSet("#94A3B8", "#94A3B8"),
     },
-  },
+  }
 );
 ```
 
@@ -87,7 +96,7 @@ export const tailwindConfig = withAccountKitUi(
   },
   {
     borderRadius: "md",
-  },
+  }
 );
 ```
 
@@ -117,17 +126,18 @@ const config = createConfig(
   {
     // ... other ui config options
     illustrationStyle: "outline",
-  },
+  }
 );
 ```
 
-## Custom authentication component
+# Branding the header
 
-The auth modal, by default, shows a `Sign in` text header. This header is fully customizable, allowing you to change the text or add an icon.
+To customize the header, you can override either of the `header` or `hideSignInText` options of the `auth` config when calling `createConfig`.
 
-### Customize header text
+## Changing the header text
 
-To customize the header text, you can override the `header` or `hideSignInText` options of the [`auth`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/types.ts) config when calling `createConfig`.
+The auth modal, by default, shows a `Sign in` text header.
+
 In this example, we hide the default header text and replace it with our own.
 
 ```tsx twoslash
@@ -137,7 +147,7 @@ import { sepolia, alchemy } from "@account-kit/infra";
 
 export const confg = createConfig(
   {
-    transport: alchemy({ apiKey: "YOUR_KEY" }),
+    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
     chain: sepolia,
   },
   {
@@ -145,11 +155,11 @@ export const confg = createConfig(
       header: "Sign in with your account", // [!code ++]
       hideSignInText: true, // [!code ++]
     },
-  },
+  }
 );
 ```
 
-### Adding an icon
+## Adding an icon
 
 In this example, we leave the `Sign in` text in the modal and add an icon above it.
 
@@ -160,13 +170,13 @@ import { sepolia, alchemy } from "@account-kit/infra";
 
 export const confg = createConfig(
   {
-    transport: alchemy({ apiKey: "YOUR_KEY" }),
+    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
     chain: sepolia,
   },
   {
     auth: {
       header: <img src="img.src" />, // [!code ++]
     },
-  },
+  }
 );
 ```

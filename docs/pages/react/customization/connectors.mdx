@@ -1,68 +1,8 @@
 ---
-title: Customizing Authentication Modal
-description: Learn how to customize the various sections that show up in your auth modal
-slug: wallets/react/customization/authentication-modal
+title: Styling Connectors
+description: Customize external wallet connectors including ordering and features wallets
+slug: wallets/react/customization/connectors
 ---
-
-## What you can customize
-
-What you can customize in the auth modal:
-
-- Header: text or custom React node
-- Sections: layout of login methods (email, passkey, social, external wallets)
-- External wallets: featured and all-wallets views, order, chain filtering (EVM/Solana), WalletConnect, and more via `configForExternalWallets()`
-
-## Customize the modal
-
-### Custom headers
-
-The auth modal, by default, shows a `Sign in` text header. This header is fully customizable by you, allowing you to change the text or add an icon.
-To customize the header text, you can override either of the `header` or `hideSignInText` options of the `auth` config when calling `createConfig`.
-
-### Changing the header text
-
-In this example, we hide the default header text and replace it with our own.
-
-```tsx twoslash
-// @jsx: react-jsx
-import { createConfig } from "@account-kit/react";
-import { sepolia, alchemy } from "@account-kit/infra";
-
-export const confg = createConfig(
-  {
-    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
-    chain: sepolia,
-  },
-  {
-    auth: {
-      header: "Sign in with your account", // [!code ++]
-      hideSignInText: true, // [!code ++]
-    },
-  },
-);
-```
-
-### Adding an icon
-
-In this example, we leave the `Sign in` text in the modal and add an icon above it.
-
-```tsx twoslash
-// @jsx: react-jsx
-import { createConfig } from "@account-kit/react";
-import { sepolia, alchemy } from "@account-kit/infra";
-
-export const confg = createConfig(
-  {
-    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
-    chain: sepolia,
-  },
-  {
-    auth: {
-      header: <img src="img.src" />, // [!code ++]
-    },
-  },
-);
-```
 
 ### External wallets (EVM + Solana)
 
@@ -96,7 +36,7 @@ export const config = createConfig(
     storage: cookieStorage,
     solana: {
       connection: new Connection(
-        `https://solana-devnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`,
+        `https://solana-devnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
       ),
       adapters: externalWalletsConfig.adapters,
       // optional
@@ -118,7 +58,7 @@ export const config = createConfig(
         ],
       ],
     },
-  },
+  }
 );
 ```
 
