@@ -17,8 +17,9 @@ slug: wallets
   <Button
     icon="bolt"
     href="/wallets/react/quickstart"
+    className="react-quickstart-cta"
     style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--accent-2, #ECF3FF)",
       color: "black",
       padding: "2rem 2rem",
       fontSize: "1rem",
@@ -39,6 +40,15 @@ slug: wallets
     Try our demo
   </Button>
 </div>
+
+<style>
+  {`@media (prefers-color-scheme: dark) {
+    .react-quickstart-cta {
+      background-color: white !important;
+      color: black !important;
+    }
+  }`}
+</style>
 
 ## Everything you need for onchain applications
 
