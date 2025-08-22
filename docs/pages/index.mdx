@@ -1,196 +1,216 @@
 ---
 title: Smart Wallets
-description: Smart Wallets is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+description: Build zero-friction user onboarding and transactions end-to-end with one SDK.
 slug: wallets
 ---
 
-<Tip style={{ background: "#ECF3FF" }}>
-  Getting started in web3 should feel just like logging into any app. [Our
-  wallet demo shows how easy it can be.](https://demo.alchemy.com/)
-</Tip>
+<img src="/images/wallets/overviewHeader.png" alt="smart wallets overview" />
 
-<img
-  src="/images/wallets/smart-wallets-overview.png"
-  alt="alchemy account ui overview"
-/>
-
-Make blockchain operations seamless with Alchemy Smart Wallets.
-
-Onboard everyone with familiar login through email, social, existing wallet, or your own auth system. Get users transacting as easily as you do in web2 applications with no gas fees for users and invisible signing.
-
-Our docs guide you through it all with step-by-step instructions, plug-n-play components, and ready-to-use code examples.
-
-## Core features
-
-<CardGroup cols={3}>
-  <Card
-    title="Web2 UX, onchain"
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "2rem",
+    gap: "1.5rem",
+  }}
+>
+  <Button
     icon="bolt"
-    iconPosition="top"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/react/quickstart"
+    style={{
+      backgroundColor: "var(--accent-2, #ECF3FF)",
+      color: "black",
+      padding: "2rem 2rem",
+      fontSize: "1rem",
+    }}
   >
-    No blockchain complexity, just seamless familiar experiences.
-  </Card>
+    React Quickstart
+  </Button>
+  <Button
+    icon="fa-regular fa-play"
+    href="https://demo.alchemy.com/"
+    style={{
+      backgroundColor: "#363FF9",
+      color: "white",
+      padding: "2rem 2rem",
+      fontSize: "1rem",
+    }}
+  >
+    Try our demo
+  </Button>
+</div>
+
+## Everything you need for onchain applications
+
+<CardGroup cols={2}>
   <Card
+    small
     title="Seamless user onboarding"
     icon="user-plus"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/authentication/login-methods/email-otp"
   >
-    Email or wallet login, customized to your brand.
+    Email, social, biometric, or EOA login.
   </Card>
   <Card
     title="Gasless transactions"
     icon="gas-pump"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/transactions/sponsor-gas/sponsor-gas"
   >
     Remove gas fees for users to drive transaction growth.
   </Card>
   <Card
-    title="Powerful wallet policies"
-    icon="sliders"
-    iconPosition="top"
+    title="Whitelabel UI"
+    icon="fa-solid fa-pencil"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/react/customization/theme"
   >
-    Set permissions, spend limits, and automations across chains.
+    Pre-built UI components and fully whitelabel solutions.
   </Card>
   <Card
     title="Security at scale"
     icon="shield"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
   >
-    Built-in controls and compliance, securing $150B+ in transactions for over 7
-    years.
+    Non-custodial security and built-in compliance.
   </Card>
   <Card
-    title="All-in-one platform"
-    icon="screwdriver-wrench"
-    iconPosition="top"
+    title="Powerful wallet policies"
+    icon="sliders"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/signer/policies/overview"
   >
-    Comprehensive documentation, SDKs, code examples, and legendary support.
+    Set permissions and automations across chains.
+  </Card>
+  <Card
+    title="Batching"
+    icon="bolt"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/transactions/send/batch-user-operations"
+  >
+    Multiple transactions in one click on EVM and Solana.
   </Card>
 </CardGroup>
-
-<div style={{ background: 'var(--accent-2, #ECF3FF)', borderRadius: '24px', padding: '1rem', textAlign: 'center' }}>
-  <h2 style={{ marginTop: "1em", marginBottom: "1em", cursor: "auto"}}>Ship everything in minutes</h2>
-  <p>
-    Save time and costs shipping zero-friction user flows end to end with one complete SDK. 
-    Check out popular features in the demo and start building with the quickstart.
-  </p>
-
-  <p style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-      <a href="https://demo.alchemy.com/"
-         style={{ background: '#ffffff', color: '#475569', border: '1px solid #E2E8F0', height: '36px', padding: '0 16px', borderRadius: '6px', lineHeight: 1, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-        Try the demo
-      </a>
-      <a href="/wallets/react/quickstart"
-         style={{ background: '#363FF9', color: '#ffffff', borderRadius: '6px', height: '36px', padding: '0 16px', lineHeight: 1, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-        Get started in React
-      </a>
-    </p>
-</div>
 
 ## Frameworks
 
-Use the SDK for everything, or pick and choose the pieces you want to use. The SDK is published in lower level packages so you can flexibly build custom solutions, giving you ultimate control over your stack.
+Use the SDK for everything or pick and choose the pieces you want for ultimate control over your stack.
 
 <CardGroup cols={2}>
   <Card
+    title="React"
+    icon="fa-brands fa-react"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/react/quickstart"
+  >
+    Pre-built React components and hooks.
+  </Card>
+  <Card
     title="React Native"
     icon="fa-brands fa-react"
-    iconPosition="top"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react-native/overview"
   >
-    Mobile apps with React Native
+    Native mobile wallet experiences.
   </Card>
   <Card
     title="Other JS Frameworks"
-    icon="ellipsis"
-    iconPosition="top"
+    icon="fa-brands fa-js"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/core/overview"
   >
-    Svelte, Vue, etc.
+    Framework-agnostic implementation.
   </Card>
   <Card
-    title="Infra"
-    icon="wrench"
-    iconPosition="top"
+    title="APIs"
+    icon="fa-solid fa-code"
+    iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
-    href="/wallets/transactions/low-level-infra/overview"
+    href="/reference/smart-wallet-quickstart"
   >
-    Integrate with Alchemy's infra
-  </Card>
-  <Card
-    title="Smart Contracts"
-    icon="file-contract"
-    iconPosition="top"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
-    href="/wallets/smart-contracts/choosing-a-smart-account"
-  >
-    Use Alchemy's Smart Contracts
-  </Card>
-  <Card
-    title="Signer"
-    icon="pen-clip"
-    iconPosition="top"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
-    href="/wallets/signer/what-is-a-signer"
-  >
-    Use Alchemy's Signer
-  </Card>
-  <Card
-    title="EIP-7702"
-    icon="diamond"
-    iconPosition="top"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
-    href="/wallets/react/using-7702"
-  >
-    Upgrade EOAs to smart accounts
+    Server-side wallet management.
   </Card>
 </CardGroup>
 
-### Popular use cases
+## Common starting places
 
-- **DeFi Application:** Provide DeFi services with social recovery, spending limits, and automated transaction execution.
-- **Financial Services:** Offer access to 24/7 global crypto markets, all without crypto on the balance sheet.
-- **AI Agent:** Deploy programmable wallets designed for AI with execution, automation, and security controls.
-- **Consumer Social App:** Enable users to mint and trade social tokens without ever seeing a blockchain transaction or gas fee.
-- **Gaming Platform:** Players can earn, trade, and use in-game assets across multiple games without managing wallets.
+<CardGroup cols={2}>
+  <Card
+    title="Build a new app"
+    icon="wrench"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/react/quickstart"
+  >
+    Build an onchain app from scratch with wallets and transactions.
+  </Card>
+  <Card
+    title="Upgrade existing wallets"
+    icon="fa-solid fa-chevrons-up"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/react/using-7702"
+  >
+    Upgrade to smart wallets using EIP-7702 or direct wagmi integration.
+  </Card>
+  <Card
+    title="Bring your app onchain"
+    icon="fa-regular fa-globe-pointer"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/authentication/login-methods/bring-your-own-auth"
+  >
+    Add wallet and transaction functionality to existing web2 applications.
+  </Card>
+  <Card
+    title="Manage wallets in backend"
+    icon="fa-solid fa-server"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/reference/smart-wallet-quickstart"
+  >
+    Server-side applications with signing and sending on your backend.
+  </Card>
+</CardGroup>
 
-## Build once, scale everywhere
+## Resources
 
-Leverage the [#1 smart wallet provider](https://www.bundlebear.com/erc4337-factories/all) to deploy and grow your app to millions of users. [Save costs](https://www.alchemy.com/blog/the-most-affordable-smart-wallet) as you scale and never worry about going down with 99.99% uptime.
-
-Don’t see a feature you’re looking for? [Get in touch with us](mailto:smart-wallets@alchemy.com).
-
-| Feature                   | Description                                                                       |
-| ------------------------- | --------------------------------------------------------------------------------- |
-| **Social Login**          | Google, Apple, Discord, Twitter authentication                                    |
-| **Email/SMS**             | Email and phone number based wallet creation                                      |
-| **Gas Sponsorship**       | Sponsor gas fees with flexible policies                                           |
-| **Batching transactions** | Group and execute multiple actions in a single onchain transaction                |
-| **Multi-owner accounts**  | Allow multiple independent addresses to control and manage the same smart wallet  |
-| **Token Balances**        | Getting token balances, metadata and more                                         |
-| **Spending Limits**       | Daily, weekly, or per-transaction limits                                          |
-| **Session Keys**          | Temporary keys for specific operations                                            |
-| **Social Recovery**       | Recover wallets through trusted contacts                                          |
-| **EOA connection**        | Allow web3 native users to bring their existing EOA without additional connectors |
-| **White-labeled UI**      | Customize the wallet interface to match your brand’s look and feel.               |
-| **BYO JWT Auth**          | Bring your existing authentication system to secure wallets (JWT + OIDC)          |
-| **EIP-7702 Support**      | Upgrade EOA to smart wallets                                                      |
-| **Multi-factor Auth**     | Adds an extra layer of security by requiring multiple forms of verification       |
-| **Passkeys**              | Onchain and offchain passkey authentication                                       |
-| **Prices API**            | Fetch current and historical token prices                                         |
-| **Webhooks**              | On-chain event notifications                                                      |
-| **Modular Plug-ins**      | ERC-6900 modular smart contract accounts for advanced functionality.              |
-| **Alchemy Bridge**        | A secure and efficient cross-chain bridge                                         |
-| **Multi-signature**       | Multiple signature requirements for transactions                                  |
-| **APIs**                  | Extend functionality                                                              |
-| **Ethereum**              | Ethereum mainnet and testnets                                                     |
-| **EVM L2s**               | All Ethereum compatible mainnet and testnets                                      |
-| **Solana**                | Solana mainnet and testnet                                                        |
+<CardGroup cols={1}>
+  <Card
+    title="Support"
+    icon="fa-solid fa-question"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/resources/faqs"
+  >
+    Troubleshoot issues or get in touch.
+  </Card>
+  <Card
+    title="Recipes"
+    icon="fa-solid fa-book"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/recipes/overview"
+  >
+    Implement common features with end-to-end guides.
+  </Card>
+  <Card
+    title="Pricing"
+    icon="fa-solid fa-dollar-sign"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="https://wallet-calculator.alchemy.com/"
+  >
+    Save costs as you scale.
+  </Card>
+</CardGroup>

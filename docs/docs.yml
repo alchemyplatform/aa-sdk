@@ -1069,6 +1069,9 @@ navigation:
       - section: Resources
         skip-slug: true
         contents:
+          - page: Features
+            slug: wallets/resources/features
+            path: wallets/pages/features.mdx
           - link: GitHub
             href: https://github.com/alchemyplatform/aa-sdk
           - link: Changelog
