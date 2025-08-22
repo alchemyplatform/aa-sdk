@@ -96,12 +96,8 @@ navigation:
                 path: wallets/pages/authentication/what-is-a-signer.mdx
               - page: Intro to Account Kit
                 path: wallets/pages/overview/sdk-concepts/intro-to-account-kit.mdx
-          - section: Supported Chains
-            contents:
-              - page: Gas Sponsorship Supported Chains
-                path: wallets/pages/gas-manager-admin-api/gas-manager-supported-chains.mdx
-              - page: Bundler Supported Chains
-                path: wallets/pages/bundler-api/bundler-supported-chains.mdx
+          - page: Supported Chains
+            path: wallets/pages/overview/supported-chains.mdx
 
       - section: Authentication
         contents:
