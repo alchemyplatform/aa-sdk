@@ -18,7 +18,10 @@ export async function POST(
     headers[key] = value;
   });
 
-  const res = await fetch(env.ALCHEMY_API_URL + `/${params.routes.join("/")}`, {
+  const url = env.ALCHEMY_API_URL + `/${params.routes.join("/")}`;
+  console.log({ url });
+
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       ...headers,

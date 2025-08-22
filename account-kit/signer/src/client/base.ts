@@ -357,6 +357,27 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
   };
 
+  public initOtp = async (
+    type: "email" | "sms",
+    contact: string,
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    const stampedRequest = await this.turnkeyClient.stampInitOtp({
+      type: "ACTIVITY_TYPE_INIT_OTP",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        contact,
+        otpType: type === "email" ? "OTP_TYPE_EMAIL" : "OTP_TYPE_SMS",
+      },
+    });
+    await this.request("/v1/init-otp", {
+      stampedRequest,
+    });
+  };
+
   /**
    * Handles the creation of authenticators using WebAuthn attestation and the provided options. Requires the user to be authenticated.
    *

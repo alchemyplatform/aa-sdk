@@ -194,6 +194,15 @@ export type SignerEndpoints = [
     };
   },
   {
+    Route: "/v1/init-otp";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      otpId: string;
+    };
+  },
+  {
     Route: "/v1/sign-payload";
     Body: {
       stampedRequest: TSignedRequest;
