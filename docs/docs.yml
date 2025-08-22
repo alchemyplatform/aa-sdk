@@ -1184,10 +1184,16 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/assertNever.mdx
                   - page: bigIntMultiply
                     path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
+                  - page: getAlchemyRpcUrl
+                    path: wallets/pages/reference/alchemy/common/functions/getAlchemyRpcUrl.mdx
+                  - page: getSupportedChainIds
+                    path: wallets/pages/reference/alchemy/common/functions/getSupportedChainIds.mdx
                   - page: isAlchemyConnectionConfig
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyConnectionConfig.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
+                  - page: isChainSupported
+                    path: wallets/pages/reference/alchemy/common/functions/isChainSupported.mdx
                   - page: lowerAddress
                     path: wallets/pages/reference/alchemy/common/functions/lowerAddress.mdx
                   - page: raise
