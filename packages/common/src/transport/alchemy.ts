@@ -16,6 +16,7 @@ import { mutateRemoveTrackingHeaders } from "../tracing/updateHeaders.js";
 import { VERSION } from "../version.js";
 import type { HttpRequestFn, HttpRequestSchema } from "./types.js";
 import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
+import { getAlchemyRpcUrl } from "./chainRegistry.js";
 
 /**
  * Configuration options for the Alchemy transport.
@@ -179,14 +180,26 @@ export function alchemyTransport<
         throw new ChainNotFoundError();
       }
 
-      // TODO(v5): Add support for viem URLs to replace alchemy chains
-      if (!chain.rpcUrls?.alchemy?.http?.[0]) {
-        throw new BaseError(
-          "Chain must include an Alchemy RPC URL. See `defineAlchemyChain` or import a chain from `@alchemy/common`.",
-        );
+      const alchemyUrl = getAlchemyRpcUrl(chain.id);
+      if (alchemyUrl) {
+        return alchemyUrl;
       }
 
-      return chain.rpcUrls.alchemy.http[0];
+      // Fallback: check for legacy alchemy RPC URLs in chain definition
+      if (chain.rpcUrls?.alchemy?.http?.[0]) {
+        return chain.rpcUrls.alchemy.http[0];
+      }
+
+      throw new BaseError(
+        `Chain ${chain.id} (${chain.name}) is not supported by Alchemy. To use this chain:\n\n` +
+          `1. Use a direct RPC URL:\n` +
+          `   alchemyTransport({ url: "https://your-alchemy-endpoint.com/v2/your-key" })\n\n` +
+          `2. Add alchemy RPC to your chain definition:\n` +
+          `   defineChain({ rpcUrls: { alchemy: { http: ["https://your-alchemy-url/v2"] }}})\n\n` +
+          `3. Or use a standard RPC provider:\n` +
+          `   import { http } from "viem";\n` +
+          `   http("https://your-standard-rpc.com")`,
+      );
     })();
 
     const innerTransport = http(rpcUrl, {

@@ -1,4 +1,4 @@
-import { arbitrumSepolia } from "@account-kit/infra";
+import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { alchemyTransport } from "@alchemy/common";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";

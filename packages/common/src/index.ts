@@ -4,6 +4,13 @@ export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 export type * from "./transport/split.js";
 export { split } from "./transport/split.js";
 
+// chain registry utilities
+export {
+  getAlchemyRpcUrl,
+  isChainSupported,
+  getSupportedChainIds,
+} from "./transport/chainRegistry.js";
+
 // utils
 export type * from "./utils/types.js";
 export { assertNever } from "./utils/assertNever.js";
@@ -31,3 +38,6 @@ export { InvalidRequestError } from "./errors/InvalidRequestError.js";
 // actions
 export type * from "./actions/addBreadCrumb.js";
 export { addBreadCrumb } from "./actions/addBreadCrumb.js";
+
+// chains (convenience exports for Alchemy-supported chains)
+export * from "./chains.js";
