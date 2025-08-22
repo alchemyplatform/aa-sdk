@@ -17,7 +17,7 @@ describe("Custom Chains Tests", () => {
 
     it("should work with alchemyTransport when registry supported", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
-      
+
       // This should work if worldChain is in the registry
       const chainTransport = transport({ chain: worldChain });
       expect(chainTransport.value?.alchemyRpcUrl).toBeDefined();
@@ -25,9 +25,9 @@ describe("Custom Chains Tests", () => {
 
     it("should work with explicit URL for any custom chain", () => {
       const customUrl = "https://custom-alchemy-endpoint.com/v2/key";
-      const transport = alchemyTransport({ 
-        apiKey: "test-key", 
-        url: customUrl 
+      const transport = alchemyTransport({
+        apiKey: "test-key",
+        url: customUrl,
       });
 
       const chainTransport = transport({ chain: fraxtalSepolia });

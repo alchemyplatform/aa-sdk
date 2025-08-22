@@ -39,8 +39,8 @@ describe("Chain Registry Tests", () => {
 
     it("should be consistent with getAlchemyRpcUrl", () => {
       const testChainIds = [1, 11155111, 42161, 999999, 0];
-      
-      testChainIds.forEach(chainId => {
+
+      testChainIds.forEach((chainId) => {
         const hasUrl = getAlchemyRpcUrl(chainId) !== undefined;
         const isSupported = isChainSupported(chainId);
         expect(isSupported).toBe(hasUrl);
@@ -52,13 +52,13 @@ describe("Chain Registry Tests", () => {
     it("should return an array of numbers", () => {
       const chainIds = getSupportedChainIds();
       expect(Array.isArray(chainIds)).toBe(true);
-      expect(chainIds.every(id => typeof id === "number")).toBe(true);
+      expect(chainIds.every((id) => typeof id === "number")).toBe(true);
     });
 
     it("should return all chain IDs from the mapping", () => {
       const chainIds = getSupportedChainIds();
       const mappingKeys = Object.keys(ALCHEMY_RPC_MAPPING).map(Number);
-      
+
       expect(chainIds.sort()).toEqual(mappingKeys.sort());
     });
   });

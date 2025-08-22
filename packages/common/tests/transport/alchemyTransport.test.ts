@@ -130,7 +130,9 @@ describe("Alchemy Transport Tests", () => {
       const result = transport({ chain: sepolia });
 
       // Verify it's using the registry Alchemy RPC URL for sepolia
-      expect(result.value?.alchemyRpcUrl).toBe("https://eth-sepolia.g.alchemy.com/v2");
+      expect(result.value?.alchemyRpcUrl).toBe(
+        "https://eth-sepolia.g.alchemy.com/v2",
+      );
     });
 
     it("should use direct URL ignoring chain", () => {
@@ -371,7 +373,9 @@ describe("Alchemy Transport Tests", () => {
         transport({ chain: avalanche });
         expect.fail("Should have thrown an error");
       } catch (error: any) {
-        expect(error.message).toContain(`Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`);
+        expect(error.message).toContain(
+          `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
+        );
         expect(error.message).toContain("alchemyTransport({ url:");
         expect(error.message).toContain("http(");
       }
