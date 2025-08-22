@@ -11,7 +11,9 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { local070Instance } from "~test/instances.js";
 
 describe("Viem AA - Coinbase Smart Account", () => {
-  let client: ReturnType<typeof local070Instance.getClient>;
+  // Using 'any' type because local070Instance.getClient() returns a client with custom extensions
+  // (mode: "anvil") that aren't part of standard viem types. This is test infrastructure only.
+  let client: any;
 
   beforeAll(async () => {
     client = local070Instance.getClient();
@@ -54,7 +56,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
       value: parseEther("2.0"),
     });
 
-    const recipient = "0x000000000000000000000000000000000000dEaD";
+    const recipient = "0x000000000000000000000000000000000000dEaD" as `0x${string}`;
     const amount = parseEther("0.1");
 
     const initialBalance = await getBalance(client, {
@@ -68,7 +70,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
         {
           to: recipient,
           value: amount,
-          data: "0x",
+          data: "0x" as `0x${string}`,
         },
       ],
     });
@@ -123,7 +125,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
         {
           to: account.address,
           value: 0n,
-          data: "0x",
+          data: "0x" as `0x${string}`,
         },
       ],
     });
