@@ -1,5 +1,5 @@
 import { defineProject, mergeConfig } from "vitest/config";
-import { sharedConfig } from "../../.vitest/vitest.shared";
+import { sharedConfig } from "../../.vitest/vitest.shared.js";
 
 export default mergeConfig(
   // @ts-ignore this does work

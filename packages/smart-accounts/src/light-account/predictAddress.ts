@@ -11,15 +11,14 @@ import {
 } from "viem";
 import { LightAccountAbi_v1 } from "./abis/LightAccountAbi_v1.js";
 import { OZ_ERC1967Proxy_ConstructorAbi } from "./abis/OZ_ERC1967Proxy.js";
-import type { LightAccountVersionConfigs } from "./types.js";
-import { AccountVersionRegistry } from "./utils.js";
+import { AccountVersionRegistry } from "./registry.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 
 export type PredictLightAccountAddressParams = {
-  factoryAddress: Address;
+  version: keyof typeof AccountVersionRegistry.LightAccount;
   salt: bigint;
   ownerAddress: Address;
-  version: keyof LightAccountVersionConfigs["LightAccount"];
+  factoryAddress?: Address;
 };
 
 /**
@@ -34,16 +33,21 @@ export function predictLightAccountAddress({
   ownerAddress,
   version,
 }: PredictLightAccountAddressParams): Address {
+  const factoryAddress_ =
+    factoryAddress != null
+      ? lowerAddress(factoryAddress)
+      : AccountVersionRegistry.LightAccount[version].factoryAddress;
+
   const implementationAddress =
     // If we aren't using the default factory address, we compute the implementation address from the factory's `create` deployment.
     // This is accurate for both LA v1 and v2 factories. If we are using the default factory address, we use the implementation address from the registry.
-    lowerAddress(factoryAddress) !==
-    AccountVersionRegistry.LightAccount[version].addresses.default.factory
+    factoryAddress_ !==
+    AccountVersionRegistry.LightAccount[version].factoryAddress
       ? getContractAddress({
-          from: factoryAddress,
+          from: factoryAddress_,
           nonce: 1n,
         })
-      : AccountVersionRegistry.LightAccount[version].addresses.default.impl;
+      : AccountVersionRegistry.LightAccount[version].accountImplementation;
 
   switch (version) {
     case "v1.0.1":
@@ -51,7 +55,7 @@ export function predictLightAccountAddress({
     case "v1.1.0":
       // Same proxy initcode for all LA v1 factories
       return getContractAddress({
-        from: factoryAddress,
+        from: factoryAddress_,
         opcode: "CREATE2",
         salt: toHex(salt, { size: 32 }),
         bytecode: encodeDeployData({
@@ -80,7 +84,7 @@ export function predictLightAccountAddress({
       const initCode = getLAv2ProxyBytecode(implementationAddress);
 
       return getContractAddress({
-        from: factoryAddress,
+        from: factoryAddress_,
         opcode: "CREATE2",
         salt: combinedSalt,
         bytecode: initCode,
@@ -92,9 +96,9 @@ export function predictLightAccountAddress({
 }
 
 export type PredictMultiOwnerLightAccountAddressParams = {
-  factoryAddress: Address;
   salt: bigint;
   ownerAddresses: Address[];
+  factoryAddress?: Address;
   // There's just one version of the MultiOwnerLightAccount for now, so skip requiring the version as a parameter.
 };
 
@@ -114,22 +118,26 @@ export type PredictMultiOwnerLightAccountAddressParams = {
  * @returns {Address} Predicted account address for the multi-owner light account.
  */
 export function predictMultiOwnerLightAccountAddress({
-  factoryAddress,
   salt,
   ownerAddresses,
+  factoryAddress,
 }: PredictMultiOwnerLightAccountAddressParams): Address {
+  const factoryAddress_ =
+    factoryAddress != null
+      ? lowerAddress(factoryAddress)
+      : AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].factoryAddress;
+
   const implementationAddress =
     // If we aren't using the default factory address, we compute the implementation address from the factory's `create` deployment.
     // This is accurate for both LA v1 and v2 factories. If we are using the default factory address, we use the implementation address from the registry.
-    factoryAddress !==
-    AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses.default
-      .factory
+    factoryAddress_ !==
+    AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].factoryAddress
       ? getContractAddress({
-          from: factoryAddress,
+          from: factoryAddress_,
           nonce: 1n,
         })
-      : AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"].addresses
-          .default.impl;
+      : AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"]
+          .accountImplementation;
 
   const combinedSalt = keccak256(
     encodeAbiParameters(
@@ -141,7 +149,7 @@ export function predictMultiOwnerLightAccountAddress({
   const initCode: Hex = getLAv2ProxyBytecode(implementationAddress);
 
   return getContractAddress({
-    from: factoryAddress,
+    from: factoryAddress_,
     opcode: "CREATE2",
     salt: combinedSalt,
     bytecode: initCode,

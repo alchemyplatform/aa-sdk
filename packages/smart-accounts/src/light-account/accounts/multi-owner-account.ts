@@ -14,10 +14,10 @@ import { readContract } from "viem/actions";
 import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js";
 import { MultiOwnerLightAccountFactoryAbi } from "../abis/MultiOwnerLightAccountFactoryAbi.js";
 import { predictMultiOwnerLightAccountAddress } from "../predictAddress.js";
-import { getDefaultMultiOwnerLightAccountFactoryAddress } from "../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
+import { AccountVersionRegistry } from "../registry.js";
 
 export type MultiOwnerLightAccount = LightAccountBase<
   "MultiOwnerLightAccount",
@@ -49,10 +49,8 @@ export async function toMultiOwnerLightAccount({
   salt = 0n,
   owners = [],
   accountAddress: accountAddress_,
-  factoryAddress = getDefaultMultiOwnerLightAccountFactoryAddress(
-    client.chain,
-    "v2.0.0",
-  ),
+  factoryAddress = AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"]
+    .factoryAddress,
 }: ToMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
   const signer = owners[0];
 

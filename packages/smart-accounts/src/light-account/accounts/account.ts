@@ -14,11 +14,13 @@ import { LightAccountAbi_v2 } from "../abis/LightAccountAbi_v2.js";
 import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
 import { LightAccountFactoryAbi_v2 } from "../abis/LightAccountFactoryAbi_v2.js";
 import { predictLightAccountAddress } from "../predictAddress.js";
-import type { LightAccountVersion } from "../types.js";
+import {
+  type LightAccountVersion,
+  AccountVersionRegistry,
+} from "../registry.js";
 import {
   LightAccountUnsupported1271Factories,
   defaultLightAccountVersion,
-  getDefaultLightAccountFactoryAddress,
 } from "../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
@@ -59,7 +61,7 @@ export async function toLightAccount<
   salt: salt_ = 0n,
   accountAddress: accountAddress_,
   version = defaultLightAccountVersion() as TLightAccountVersion,
-  factoryAddress = getDefaultLightAccountFactoryAddress(client.chain, version),
+  factoryAddress = AccountVersionRegistry.LightAccount[version].factoryAddress,
 }: ToLightAccountParams<TLightAccountVersion>): Promise<
   LightAccount<TLightAccountVersion>
 > {

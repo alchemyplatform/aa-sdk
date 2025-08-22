@@ -17,10 +17,6 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import {
-  entryPoint06Abi,
-  entryPoint06Address,
-  entryPoint07Abi,
-  entryPoint07Address,
   getUserOperationHash,
   toSmartAccount,
   type SmartAccount,
@@ -28,17 +24,17 @@ import {
 } from "viem/account-abstraction";
 import { getStorageAt, signMessage, signTypedData } from "viem/actions";
 import type {
-  LightAccountEntryPointVersion,
+  EntryPointFromAccountRegistry,
   LightAccountType,
   LightAccountVersion,
-} from "../types.js";
-import {
-  AccountVersionRegistry,
-  EIP1967_PROXY_IMPL_STORAGE_SLOT,
-} from "../utils.js";
-import { type LightAccountVersionConfig } from "../types.js";
+} from "../registry.js";
+import { EIP1967_PROXY_IMPL_STORAGE_SLOT } from "../utils.js";
+import { AccountVersionRegistry } from "../registry.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
-import type { SignatureRequest } from "../../types.js";
+import type {
+  SignatureRequest,
+  StaticSmartAccountImplementation,
+} from "../../types.js";
 import { getAction } from "viem/utils";
 
 const SignaturePrefix = {
@@ -52,13 +48,11 @@ export type BaseLightAccountImplementation<
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
 > = SmartAccountImplementation<
-  ["0.6"] extends LightAccountEntryPointVersion<
+  EntryPointFromAccountRegistry<TLightAccountType, TLightAccountVersion>["abi"],
+  EntryPointFromAccountRegistry<
     TLightAccountType,
     TLightAccountVersion
-  >
-    ? typeof entryPoint06Abi
-    : typeof entryPoint07Abi,
-  LightAccountEntryPointVersion<TLightAccountType, TLightAccountVersion>,
+  >["version"],
   {
     getLightAccountVersion: () => TLightAccountVersion;
     source: TLightAccountType;
@@ -123,13 +117,11 @@ export async function toLightAccountBase<
     upgradeToAddress: Address;
     upgradeToInitData: Hex;
   }): Promise<Hex> => {
-    const expectedImplAddresses = Object.values(
-      AccountVersionRegistry[type],
-    ).map(
-      (x) =>
-        x.addresses.overrides?.[client.chain.id]?.impl ??
-        x.addresses.default.impl,
-    );
+    const expectedImplAddresses = (
+      Object.values(
+        AccountVersionRegistry[type],
+      ) as StaticSmartAccountImplementation<false>[]
+    ).map((x) => x.accountImplementation);
 
     const getStorageAtAction = getAction(client, getStorageAt, "getStorageAt");
     // TODO(v5): This is a super fragile workflow, and we should consider not supporting this on the SmartAccount level in v5.
@@ -224,30 +216,14 @@ export async function toLightAccountBase<
       : signature;
   };
 
-  const entryPointVersion = (
-    AccountVersionRegistry[type][version] as LightAccountVersionConfig
-  ).entryPointVersion;
-
-  const entryPoint =
-    entryPointVersion === "0.6"
-      ? {
-          abi: entryPoint06Abi,
-          address: entryPoint06Address as Address,
-          version: "0.6" as const,
-        }
-      : {
-          abi: entryPoint07Abi,
-          address: entryPoint07Address as Address,
-          version: "0.7" as const,
-        };
+  const entryPoint = (
+    AccountVersionRegistry[type][version] as StaticSmartAccountImplementation
+  ).entryPoint;
 
   return await toSmartAccount({
     getFactoryArgs,
     client,
-    entryPoint: entryPoint as BaseLightAccountImplementation<
-      TLightAccountType,
-      TLightAccountVersion
-    >["entryPoint"],
+    entryPoint,
 
     async getAddress() {
       return accountAddress;

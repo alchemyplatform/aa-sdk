@@ -13,8 +13,8 @@ import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { local060Instance } from "~test/instances.js";
 import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
-import type { LightAccountVersion } from "../types.js";
-import { AccountVersionRegistry } from "../utils.js";
+import type { LightAccountVersion } from "../registry.js";
+import { AccountVersionRegistry } from "../registry.js";
 import { toLightAccount } from "./account.js";
 import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
 

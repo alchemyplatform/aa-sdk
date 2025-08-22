@@ -19,7 +19,7 @@ import { getBlock, setBalance } from "viem/actions";
 import { accounts, poolId } from "~test/constants.js";
 import { local070Instance } from "~test/instances.js";
 import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
-import type { LightAccountVersion } from "../types";
+import type { LightAccountVersion } from "../registry.js";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
 import { bigIntMultiply } from "../../utils.js";
 

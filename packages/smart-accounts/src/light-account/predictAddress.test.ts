@@ -17,7 +17,7 @@ import {
   predictLightAccountAddress,
   predictMultiOwnerLightAccountAddress,
 } from "./predictAddress.js";
-import type { LightAccountVersion } from "./types.js";
+import type { LightAccountVersion } from "./registry.js";
 
 describe("Light Account Counterfactual Address Tests", () => {
   const instanceV060 = local060Instance;
