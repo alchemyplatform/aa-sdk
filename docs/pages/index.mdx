@@ -4,40 +4,61 @@ description: Build zero-friction user onboarding and transactions end-to-end wit
 slug: wallets
 ---
 
-<img src="/images/wallets/overviewHeader.png" alt="smart wallets overview" />
+<style>{`
+.fern-card {
+  font-size: 14px;
+}
 
-<div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "2rem",
-    gap: "1.5rem",
-  }}
->
-  <Button
+/* Responsive hero images */
+.hero-image-desktop {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 1010px;
+  margin: 0 auto;
+}
+
+.hero-image-mobile {
+  display: none;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .hero-image-desktop {
+    display: none;
+  }
+  
+  .hero-image-mobile {
+    display: block;
+  }
+}
+`}</style>
+
+<img src="/images/overviewHeader.png" alt="smart wallets overview" className="hero-image-desktop" />
+<img src="/images/overviewHeaderMobile.png" alt="smart wallets overview" className="hero-image-mobile" />
+
+<CardGroup cols={2}>
+  <Card
+    title="React Quickstart"
     icon="bolt"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
     href="/wallets/react/quickstart"
-    style={{
-      backgroundColor: "var(--accent-2, #ECF3FF)",
-      padding: "2rem",
-      fontSize: "1rem",
-    }}
   >
-    React Quickstart
-  </Button>
-  <Button
+    Build an onchain app from scratch with wallets and transactions.
+  </Card>
+  <Card
+    title="Try our demo"
     icon="fa-regular fa-play"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
     href="https://demo.alchemy.com/"
-    style={{
-      backgroundColor: "#363FF9",
-      color: "white",
-      padding: "2rem 2rem",
-      fontSize: "1rem",
-    }}
   >
-    Try our demo
-  </Button>
-</div>
+    See Alchemy Smart Wallets in action with our interactive demo.
+  </Card>
+</CardGroup>
 
 ## Everything you need for onchain applications
 
