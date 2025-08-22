@@ -6,199 +6,339 @@ slug: wallets/transactions/sponsor-gas/sponsor-gas
 
 Gas fees are a significant barrier to entry for new users of your app. With Smart Wallets you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
 
-## 1. Create a Gas Manager policy
-
-<Markdown src="../../shared/create-gas-policy.mdx" />
-
 <Tabs>
-  <Tab title="React">
-    ## 2. Set the Policy ID globally
+  <Tab title="EVM">
+    ## 1. Create a Gas Manager policy
 
-    When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
+    <Markdown src="../../shared/create-gas-policy.mdx" />
 
-    ![Policy ID](/images/wallets/policy-id.png)
+    <Tabs>
+      <Tab title="React">
+        ## 2. Set the Policy ID globally
 
-    Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
+        When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
-    <Tip>
-      Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
-    </Tip>
+        ![Policy ID](/images/wallets/policy-id.png)
 
-    ```ts twoslash config.ts
-    // @noErrors
-    import { createConfig } from "@account-kit/react";
-    import { sepolia } from "@account-kit/infra";
+        Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
-    export const config = createConfig({
-      apiKey: "ALCHEMY_API_KEY",
-      chain: sepolia,
-      policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
-    });
-    ```
+        <Tip>
+          Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
+        </Tip>
 
-    Now you can follow the guide for [Sending user operations](/wallets/transactions/send/send-user-operations) to send sponsored UOs from your smart account!
+        ```ts twoslash config.ts
+        // @noErrors
+        import { createConfig } from "@account-kit/react";
+        import { sepolia } from "@account-kit/infra";
 
-    ## 3. Set the gas policy ID per UserOperation
+        export const config = createConfig({
+          apiKey: "ALCHEMY_API_KEY",
+          chain: sepolia,
+          policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+        });
+        ```
 
-    If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the [`useSmartAccountClient`](/wallets/reference/account-kit/react/hooks/useSmartAccountClient) hook.
+        Now you can follow the guide for [Sending user operations](/wallets/transactions/send/send-user-operations) to send sponsored UOs from your smart account!
 
-    ```tsx twoslash
-    import React from "react";
-    import {
-      useSmartAccountClient,
-      useSendUserOperation,
-    } from "@account-kit/react";
+        ## 3. Set the gas policy ID per UserOperation
 
-    export default function MyComponent() {
-      const { client } = useSmartAccountClient({
-        policyId: "GAS_MANAGER_POLICY_ID",
-      });
-      const { sendUserOperation } = useSendUserOperation({ client });
+        If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the [`useSmartAccountClient`](/wallets/reference/account-kit/react/hooks/useSmartAccountClient) hook.
 
-      return (
-        <button
-          onClick={() =>
-            sendUserOperation({
-              uo: {
-                target: "0xTARGET_ADDRESS",
-                data: "0x",
-                value: 0n,
-              },
-            })
-          }
-        >
-          Send Sponsored User Operation
-        </button>
-      );
-    }
-    ```
+        ```tsx twoslash
+        import React from "react";
+        import {
+          useSmartAccountClient,
+          useSendUserOperation,
+        } from "@account-kit/react";
 
-  </Tab>
-  <Tab title="React Native">
-    ## 2. Set the Policy ID globally
+        export default function MyComponent() {
+          const { client } = useSmartAccountClient({
+            policyId: "GAS_MANAGER_POLICY_ID",
+          });
+          const { sendUserOperation } = useSendUserOperation({ client });
 
-    When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
+          return (
+            <button
+              onClick={() =>
+                sendUserOperation({
+                  uo: {
+                    target: "0xTARGET_ADDRESS",
+                    data: "0x",
+                    value: 0n,
+                  },
+                })
+              }
+            >
+              Send Sponsored User Operation
+            </button>
+          );
+        }
+        ```
 
-    Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
+      </Tab>
+      <Tab title="React Native">
+        ## 2. Set the Policy ID globally
 
-    <Tip>
-      Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't
-      have one yet, you can create an API key on the [Alchemy
-      dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
-    </Tip>
+        When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
-    ```ts twoslash config.ts
-    // @noErrors
-    import { createConfig } from "@account-kit/react-native";
-    import { sepolia } from "@account-kit/infra";
+        Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
-    export const config = createConfig({
-      apiKey: "ALCHEMY_API_KEY",
-      chain: sepolia,
-      policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
-    });
-    ```
+        <Tip>
+          Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't
+          have one yet, you can create an API key on the [Alchemy
+          dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
+        </Tip>
 
-    Now you can follow the guide for [Sending user operations](/wallets/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
+        ```ts twoslash config.ts
+        // @noErrors
+        import { createConfig } from "@account-kit/react-native";
+        import { sepolia } from "@account-kit/infra";
 
-    ## 3. Set the gas policy ID per UserOperation
+        export const config = createConfig({
+          apiKey: "ALCHEMY_API_KEY",
+          chain: sepolia,
+          policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+        });
+        ```
 
-    If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `useSmartAccountClient()` hook.
+        Now you can follow the guide for [Sending user operations](/wallets/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
 
-    ```tsx twoslash
-    import React from "react";
-    import { View, Pressable, Text } from "react-native";
-    import {
-      useSmartAccountClient,
-      useSendUserOperation,
-    } from "@account-kit/react-native";
+        ## 3. Set the gas policy ID per UserOperation
 
-    export default function MyComponent() {
-      const { client } = useSmartAccountClient({
-        policyId: "GAS_MANAGER_POLICY_ID",
-      });
-      const { sendUserOperation } = useSendUserOperation({ client });
+        If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `useSmartAccountClient()` hook.
 
-      return (
-        <View>
-          <Pressable
-            onPress={() =>
-              sendUserOperation({
-                uo: {
-                  target: "0xTARGET_ADDRESS",
-                  data: "0x",
-                  value: 0n,
-                },
-              })
-            }
-          >
+        ```tsx twoslash
+        import React from "react";
+        import { View, Pressable, Text } from "react-native";
+        import {
+          useSmartAccountClient,
+          useSendUserOperation,
+        } from "@account-kit/react-native";
+
+        export default function MyComponent() {
+          const { client } = useSmartAccountClient({
+            policyId: "GAS_MANAGER_POLICY_ID",
+          });
+          const { sendUserOperation } = useSendUserOperation({ client });
+
+          return (
             <View>
-              <Text>Send Sponsored User Operation</Text>
+              <Pressable
+                onPress={() =>
+                  sendUserOperation({
+                    uo: {
+                      target: "0xTARGET_ADDRESS",
+                      data: "0x",
+                      value: 0n,
+                    },
+                  })
+                }
+              >
+                <View>
+                  <Text>Send Sponsored User Operation</Text>
+                </View>
+              </Pressable>
             </View>
-          </Pressable>
-        </View>
-      );
-    }
-    ```
+          );
+        }
+        ```
 
+      </Tab>
+      <Tab title="Other Javascript">
+        ## 2. Set the Policy ID globally
+
+        When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `sendUserOperation` method to be sponsored by the policy you created.
+
+        ![Policy ID](/images/wallets/policy-id.png)
+
+        Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
+
+        <Tip>
+          Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
+        </Tip>
+
+        ```ts twoslash
+        import { createConfig } from "@account-kit/core";
+        import { sepolia, alchemy } from "@account-kit/infra";
+
+        export const config = createConfig({
+          transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
+          chain: sepolia,
+          policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
+        });
+        ```
+
+        Now you can follow the guide for [Sending user operations](/wallets/core/send-user-operations) to send sponsored UOs from your smart account!
+
+        ## 3. Set the gas policy ID per Client
+
+        If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `watchSmartAccountClient` function.
+
+        ```ts twoslash
+        import { watchSmartAccountClient } from "@account-kit/core";
+        import { config } from "./config";
+
+        // How you actually store this state variable
+        // depends on the framework you're using
+        let clientState;
+
+        // The watch smart account client will handle all of the possible state changes
+        // that can impact this client:
+        //  - Signer status
+        //  - Account instantiation
+        //  - Chain changes
+        const clientSubscription = watchSmartAccountClient(
+          {
+            type: "LightAccount",
+            policyId: "GAS_MANAGER_POLICY_ID",
+          },
+          config,
+        )((clientState_) => {
+          clientState = clientState_;
+        });
+
+        // .. do stuff with the client state
+        ```
+
+        This client is now configured to sponsor gas using your gas policy. You can now send sponsored UOs from this client using the `sendUserOperation` method.
+
+      </Tab>
+    </Tabs>
   </Tab>
-  <Tab title="Other Javascript">
-    ## 2. Set the Policy ID globally
+  <Tab title="Solana">
+    Once you've [created](/react/solana-wallets/get-started) a smart wallet on Solana, sponsor Solana transaction fees with your Smart Wallets to enable users to transact without holding SOL. Powered by Smart Wallets, this removes a major barrier to entry for new users of your app.
 
-    When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `sendUserOperation` method to be sponsored by the policy you created.
+    Implement sponsorship either globally (applying to all transactions) or on a per-transaction basis with policies defining what you want to sponsor for users:
 
-    ![Policy ID](/images/wallets/policy-id.png)
+    - **Fees** cover the cost of executing transactions.
+    - **Rent** is required to store data on-chain.
+      - _We support rent sponsorship for `createAccount` and `createAssociatedTokenAccount` programs. If you need support for sponsoring rent in custom programs, please contact us at [wallets@alchemy.com](mailto:wallets@alchemy.com)._
 
-    Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
+    See our [recommendations](https://www.alchemy.com/support/best-practices-to-limit-gas-manager-spend) for gas manager spending.
 
-    <Tip>
-      Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
-    </Tip>
+    ### Create a Gas Manager policy
 
-    ```ts twoslash
-    import { createConfig } from "@account-kit/core";
-    import { sepolia, alchemy } from "@account-kit/infra";
+    A gas manager policy defines which transactions are eligible for sponsorship. You can customize the policy to limit the amount of money or the number of transactions that can be sponsored.
 
-    export const config = createConfig({
-      transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
-      chain: sepolia,
-      policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
-    });
-    ```
+    You can create a policy in the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create/?a=api-docs).
 
-    Now you can follow the guide for [Sending user operations](/wallets/core/send-user-operations) to send sponsored UOs from your smart account!
+    Now you should have a Gas policy created with a policy id you can use to sponsor fees and rent for your users.
 
-    ## 3. Set the gas policy ID per Client
+    <Tabs>
+      <Tab title="React">
+        ## Global sponsorship
 
-    If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `watchSmartAccountClient` function.
+        To apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config. Replace the API key and Policy Id with your keys from the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration).
 
-    ```ts twoslash
-    import { watchSmartAccountClient } from "@account-kit/core";
-    import { config } from "./config";
+        ```tsx config.ts
+        import { cookieStorage, createConfig } from "@account-kit/react";
+        import { Connection } from "@solana/web3.js";
 
-    // How you actually store this state variable
-    // depends on the framework you're using
-    let clientState;
+        createConfig({
+          ...otherConfig
+          solana: {
+            connection: new Connection(
+              "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
+              {
+                wsEndpoint: "wss://api.devnet.solana.com",
+                commitment: "confirmed",
+              }
+            ),
+            policyId: "<PolicyId>"
+          }
+        }
+        ```
 
-    // The watch smart account client will handle all of the possible state changes
-    // that can impact this client:
-    //  - Signer status
-    //  - Account instantiation
-    //  - Chain changes
-    const clientSubscription = watchSmartAccountClient(
-      {
-        type: "LightAccount",
-        policyId: "GAS_MANAGER_POLICY_ID",
-      },
-      config,
-    )((clientState_) => {
-      clientState = clientState_;
-    });
+        This setup applies sponsorship to all Solana transactions sent from wallets created with this configuration (e.g. this will be applied to usage of the `useSolana…` hooks).
 
-    // .. do stuff with the client state
-    ```
+        ### Per transaction sponsorship
 
-    This client is now configured to sponsor gas using your gas policy. You can now send sponsored UOs from this client using the `sendUserOperation` method.
+        Alternatively, to apply sponsorship conditionally for each transaction, you can pass a `policyId` to the `useSolanaTransaction` hook.
 
+        ```tsx [sponsor-solana-gas.ts]
+        import { useSolanaTransaction } from "@account-kit/react";
+        import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
+
+        function MyComponent() {
+          const policyId = "<YourPolicyId>";
+
+          const { sendTransaction, signer } = useSolanaTransaction({
+            policyId,
+          });
+
+          if (!signer) {
+            return <div>Loading signer...</div>;
+          }
+
+          return (
+            <button
+              onClick={() =>
+                sendTransaction({
+                  transfer: {
+                    toAddress: "<ToAddress>",
+                    amount: 1000000,
+                  },
+                })
+              }
+            >
+              Send Sponsored Transaction
+            </button>
+          );
+        }
+        ```
+
+        Congrats! You're now creating smart wallets on Solana with social login and sending sponsored transactions to create a zero-friction experience from sign-up to transaction. Reach out with any feature request or questions.
+
+      </Tab>
+      <Tab title="APIs">
+        ### Prepare a Serialized Solana Transaction
+
+        Here’s an example of creating a serialized transfer transaction using javascript:
+
+        <CodeGroup>
+          ```javascript
+
+        const instructions = [
+          solanaWeb3.SystemProgram.transfer({
+            fromPubkey: from,
+            toPubkey: to,
+            lamports: amount,
+          })
+        ];
+
+        const recentBlockHash = await connection.getLatestBlockhash();
+        const message = new solanaWeb3.TransactionMessage({
+          payerKey: new solanaWeb3.PublicKey("Amh6quo1FcmL16Qmzdugzjq3Lv1zXzTW7ktswyLDzits"), // Set this to an address different than any other address included in the tx. This field will be updated by the alchemy_requestFeePayer API in Step 3.
+          recentBlockhash: recentBlockhash,
+          instructions,
+        }).compileToV0Message();
+
+            const transaction = new solanaWeb3.VersionedTransaction(message);
+            const serializedTx = Buffer.from(transaction.serialize()).toString("base64");
+
+        ````
+        </CodeGroup>
+
+        ### Request sponsorship for the Serialized Transaction
+
+        To sponsor fees and rent on Solana, 1) the `payerKey` field of the transaction needs to be set to the feePayer wallet that will pay for the gas, 2) the feePayer wallet needs to sign the transaction.
+
+        You can get the `feePayer` address and the feePayer signature through [alchemy_requestFeePayer](/reference/alchemy-requestfeepayer) using your gas policy id and the serialized transaction. The Gas Manager will update the `feePayer` and add the signature to the `serializedTransaction` if and only the transaction satisfies the rules defined in your policy.
+
+        ### Sign and broadcast the Transaction
+
+        Here is an example of signing and broadcasting a transaction using javascript:
+
+        <CodeGroup>
+        ```javascript javascript
+        const tx = VersionedTransaction.deserialize(decodeBase64(serializedTx));
+        tx.sign([keypair]);
+        const signature = await connection.sendRawTransaction(tx.serialize());
+        ````
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
   </Tab>
 </Tabs>

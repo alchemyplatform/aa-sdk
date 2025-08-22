@@ -190,12 +190,8 @@ navigation:
                 path: wallets/pages/transactions/send/solana-user-ops.mdx
           - page: Batch
             path: wallets/pages/transactions/send/batch-user-ops.mdx
-          - section: Sponsor gas
-            contents:
-              - page: EVM
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
-              - page: Solana
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+          - page: Sponsor gas
+            path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Using 7702
