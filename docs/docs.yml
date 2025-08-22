@@ -196,12 +196,12 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Solana
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
-              - section: Sign
+              - section: Signing
                 contents:
                   - page: Signing transactions
                     path: wallets/pages/signer/as-an-eoa.mdx
                   - page: Signing messages
-                    path: wallets/pages/signer/signing-messages.mdx
+                    path: wallets/pages/signer/as-an-eoa.mdx
                   - page: Sign EIP-7702 authorization
                     path: wallets/pages/signer/as-an-eoa.mdx
                   - page: Sign Solana transactions
