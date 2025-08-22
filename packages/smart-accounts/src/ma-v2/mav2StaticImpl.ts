@@ -37,6 +37,11 @@ const semiModularAccountBase = {
   accountAbi: semiModularAccountBytecodeAbi,
 } satisfies Partial<SemiModularAccountV2StaticImpl>;
 
+/**
+ * Static implementation logic for SemiModularAccountV2.
+ *
+ * TODO(v5): update JSDoc format when doc-gen supports structs or records.
+ */
 export const semiModularAccountV2StaticImpl: SemiModularAccountV2StaticImpl = {
   ...semiModularAccountBase,
   accountImplementation: lowerAddress(DefaultMAV2Address.SMAV2_BYTECODE),
@@ -69,6 +74,11 @@ export type SemiModularAccount7702StaticImpl = StaticSmartAccountImplementation<
   typeof accountFactoryAbi
 >;
 
+/**
+ * Static implementation logic for SemiModularAccount7702.
+ *
+ * TODO(v5): update JSDoc format when doc-gen supports structs or records.
+ */
 export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
   {
     ...semiModularAccountBase,
@@ -91,6 +101,11 @@ export type WebAuthnModularAccountV2StaticImpl =
     typeof webAuthnFactoryAbi
   >;
 
+/**
+ * Static implementation logic for WebAuthnModularAccountV2.
+ *
+ * TODO(v5): update JSDoc format when doc-gen supports structs or records.
+ */
 export const webAuthnModularAccountV2StaticImpl: WebAuthnModularAccountV2StaticImpl =
   {
     entryPoint,
