@@ -377,6 +377,7 @@ describe("Alchemy Transport Tests", () => {
           `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
         );
         expect(error.message).toContain("alchemyTransport({ url:");
+        expect(error.message).toContain("defineChain({ rpcUrls: { alchemy:");
         expect(error.message).toContain("http(");
       }
     });
