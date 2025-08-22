@@ -40,15 +40,19 @@ slug: wallets
 </div>
 
 <style>{`
-  .react-quickstart-btn {
-    background-color: var(--accent-2, #ECF3FF);
-    color: black;
+  :root {
+    --react-quickstart-btn-bg: var(--accent-2, #ECF3FF);
+    --react-quickstart-btn-color: black;
   }
-  @media (prefers-color-scheme: dark) {
-    .react-quickstart-btn {
-      background-color: #4B5563;
-      color: white;
-    }
+
+  html[data-theme='dark'] {
+    --react-quickstart-btn-bg: #6B7280;
+    --react-quickstart-btn-color: white;
+  }
+
+  .react-quickstart-btn {
+    background-color: var(--react-quickstart-btn-bg);
+    color: var(--react-quickstart-btn-color);
   }
 `}</style>
 
