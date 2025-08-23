@@ -115,7 +115,7 @@ With the returned signature request, all you have to do is sign the signature re
 
 If using an Alchemy Signer, you can learn how to stamp the request on the frontend [here](/docs/reference/how-to-stamp-requests). When using the Alchemy Signer, it's easiest to sign the `signatureRequest.rawPayload` directly.
 
-If you are using a library such as Viem that supports the `personal_sign` method, you should use that to sign the hash (since the `signatureRequest.type` is `"personal_sign"`).
+If you are using a library such as Viem that supports the `personal_sign` method, you should use that to sign the hash `signatureRequest.data.raw` (since the `signatureRequest.type` is `"personal_sign"`).
 
 ### 4. Send the Prepared Calls!
 
