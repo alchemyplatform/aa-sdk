@@ -56,7 +56,7 @@ export type LoginWithOauthParams = {
   /** Additional OAuth parameters */
   otherParameters?: Record<string, string>;
   /** OAuth flow mode - popup or redirect */
-  mode?: "popup" | "redirect";
+  mode: "popup" | "redirect";
 };
 
 type TekStamperAndPublicKey = {
@@ -205,13 +205,20 @@ export class AuthClient {
       nonce: getOauthNonce(targetPublicKey),
     });
     const authUrl = getOauthProviderUrl({
-      oauthParams: params,
+      oauthParams:
+        params.mode === "redirect" ? { ...params, redirectUrl: "/" } : params, // TO DO: clean up redirect vs popup path
       turnkeyPublicKey: targetPublicKey,
       oauthCallbackUrl: "https://signer.alchemy.com/callback",
       oauthConfig,
     });
-    const response = await this.handleOauthFlow(authUrl);
+    const response = await this.handleOauthFlow(authUrl, params.mode);
+    console.log({ response });
     if (response.status === "SUCCESS") {
+      console.log("completeAuthWithBundle", {
+        bundle: response.bundle,
+        orgId: response.orgId,
+        idToken: response.idToken,
+      });
       return this.completeAuthWithBundle({
         bundle: response.bundle!,
         orgId: response.orgId!,

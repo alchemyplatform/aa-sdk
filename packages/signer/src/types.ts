@@ -71,7 +71,10 @@ export type CreateWebAuthnStamperParams = {
   credentialId: string | undefined;
 };
 
-export type HandleOauthFlowFn = (authUrl: string) => Promise<OAuthFlowResponse>;
+export type HandleOauthFlowFn = (
+  authUrl: string,
+  mode: "popup" | "redirect"
+) => Promise<OAuthFlowResponse>;
 
 // TODO: can make this type more crisp.
 export type OAuthFlowResponse = {
@@ -94,21 +97,21 @@ export type TurnkeyStamp = {
 Oauth flow types
 */
 export type KnownAuthProvider =
-  | "google" 
+  | "google"
   | "apple"
   | "facebook"
   | "twitch"
   | "auth0";
 
-
-export type OauthParams = { // TO DO: determine if flattening this type is optimal
+export type OauthParams = {
+  // TO DO: determine if flattening this type is optimal
   authProviderId: string;
   isCustomProvider?: boolean;
   auth0Connection?: string;
   scope?: string;
   claims?: string;
   otherParameters?: Record<string, string>;
-  mode?: "redirect" | "popup";
+  mode: "redirect" | "popup";
   redirectUrl?: string;
   expirationSeconds?: number;
   fetchIdTokenOnly?: boolean;

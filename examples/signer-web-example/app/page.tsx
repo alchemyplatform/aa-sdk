@@ -23,7 +23,7 @@ export default function Home(): ReactElement {
     const signer = await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
-      mode: "popup",
+      mode: "redirect",
     });
     setSigner(signer);
   }, [authClient]);
