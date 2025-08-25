@@ -200,20 +200,6 @@ navigation:
                 path: wallets/pages/transactions/retry-user-operations.mdx
               - page: Solana
                 path: wallets/pages/transactions/send/solana-user-ops.mdx
-              - section: Using 7702
-                contents:
-                  - page: Overview
-                    path: wallets/pages/react/using-7702.mdx
-                  - page: Upgrade existing embedded EOAs
-                    path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
-                  - section: 7702 Quickstart
-                    contents:
-                      - page: Intro
-                        path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
-                      - page: Using SDK
-                        path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
-                      - page: Using API
-                        path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
           - section: Sponsor Gas
             contents:
               - page: Sponsor gas
@@ -224,8 +210,20 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Swaps (Beta)
             path: wallets/pages/transactions/swaps.mdx
-          - page: Retry User Operations
-            path: wallets/pages/transactions/retry-user-operations.mdx
+          - section: Using 7702
+            contents:
+              - page: Overview
+                path: wallets/pages/react/using-7702.mdx
+              - page: Upgrade existing embedded EOAs
+                path: wallets/pages/smart-contracts/modular-account-v2/using-7702.mdx
+              - section: 7702 Quickstart
+                contents:
+                  - page: Intro
+                    path: wallets/pages/smart-wallets/7702-quickstart/index.mdx
+                  - page: Using SDK
+                    path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
+                  - page: Using API
+                    path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
           - section: Low-level infra
             contents:
               # - page: Overview
