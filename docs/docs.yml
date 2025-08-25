@@ -192,7 +192,7 @@ navigation:
             path: wallets/pages/transactions/overview.mdx
           - section: Send
             contents:
-              - page: Send A Transaction
+              - page: Send transactions
                 path: wallets/pages/transactions/send/evm-user-ops.mdx
               - page: Batch Send Transactions
                 path: wallets/pages/transactions/send/batch-user-ops.mdx
