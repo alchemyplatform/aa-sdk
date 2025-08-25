@@ -11,6 +11,10 @@ servers:
     name: Ethereum Mainnet
   - url: https://eth-sepolia.g.alchemy.com/v2
     name: Ethereum Sepolia
+  - url: https://anime-mainnet.g.alchemy.com/v2
+    name: Anime Mainnet
+  - url: https://anime-sepolia.g.alchemy.com/v2
+    name: Anime Sepolia
   - url: https://arb-mainnet.g.alchemy.com/v2
     name: Arbitrum Mainnet
   - url: https://arb-sepolia.g.alchemy.com/v2
@@ -59,6 +63,8 @@ servers:
     name: Polynomial Mainnet
   - url: https://polynomial-sepolia.g.alchemy.com/v2
     name: Polynomial Sepolia
+  - url: https://rise-testnet.g.alchemy.com/v2
+    name: Rise Testnet
   - url: https://shape-mainnet.g.alchemy.com/v2
     name: Shape Mainnet
   - url: https://shape-sepolia.g.alchemy.com/v2
@@ -71,6 +77,10 @@ servers:
     name: Soneium Mainnet
   - url: https://soneium-minato.g.alchemy.com/v2
     name: Soneium Minato
+  - url: https://story-mainnet.g.alchemy.com/v2
+    name: Story Mainnet
+  - url: https://story-aeneid.g.alchemy.com/v2
+    name: Story Aeneid
   - url: https://tea-sepolia.g.alchemy.com/v2
     name: Tea Sepolia
   - url: https://unichain-mainnet.g.alchemy.com/v2
