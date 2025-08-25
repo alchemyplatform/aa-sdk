@@ -190,20 +190,56 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/transactions/overview.mdx
+          - page: Send Transactions
+            path: wallets/pages/transactions/send-transactions.mdx
+          - page: Sign Requests
+            path: wallets/pages/transactions/sign-requests.mdx
+          - page: Using EIP-7702
+            path: wallets/pages/transactions/using-eip-7702.mdx
+          - page: Send Batched Transactions
+            path: wallets/pages/transactions/send-batched-transactions.mdx
+          - page: Sponsor Gas
+            path: wallets/pages/transactions/sponsor-gas.mdx
+          - page: Pay Gas With Any Token
+            path: wallets/pages/transactions/pay-gas-with-any-token.mdx
+          - page: Swap Tokens
+            path: wallets/pages/transactions/swap-tokens.mdx
+          - page: Send Parallel Transactions
+            path: wallets/pages/transactions/send-parallel-transactions.mdx
+          - page: Retry Transactions
+            path: wallets/pages/transactions/retry-transactions.mdx
+          - page: Track Transaction Status
+            path: wallets/pages/transactions/track-transaction-status.mdx
+          - section: Solana
+            contents:
+              - page: Overview
+                path: wallets/pages/transactions/solana/overview.mdx
+          - page: Coming Soon
+            path: wallets/pages/transactions/coming-soon.mdx
+
+      - section: Low-Level Infra
+        contents:
+          - page: Overview
+            path: wallets/pages/low-level-infra/overview.mdx
+
+      - section: PRE-BLITZ TO REMOVE Transactions
+        contents:
+          - page: Overview
+            path: wallets/pages/TO-REMOVE-transactions/overview.mdx
           - section: Send
             contents:
               - page: EVM
-                path: wallets/pages/transactions/send/evm-user-ops.mdx
+                path: wallets/pages/TO-REMOVE-transactions/send/evm-user-ops.mdx
               - page: Solana
-                path: wallets/pages/transactions/send/solana-user-ops.mdx
+                path: wallets/pages/TO-REMOVE-transactions/send/solana-user-ops.mdx
           - page: Batch
-            path: wallets/pages/transactions/send/batch-user-ops.mdx
+            path: wallets/pages/TO-REMOVE-transactions/send/batch-user-ops.mdx
           - section: Sponsor gas
             contents:
               - page: EVM
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
+                path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Solana
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+                path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Using 7702
@@ -221,7 +257,7 @@ navigation:
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
           - page: Retry User Operations
-            path: wallets/pages/transactions/retry-user-operations.mdx
+            path: wallets/pages/TO-REMOVE-transactions/retry-user-operations.mdx
           - section: Low-level infra
             contents:
               # - page: Overview
