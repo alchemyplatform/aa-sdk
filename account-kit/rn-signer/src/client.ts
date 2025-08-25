@@ -38,6 +38,8 @@ import {
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
+import { generateP256KeyPair, hpkeDecrypt } from "@turnkey/crypto";
+import { MMKV } from "react-native-mmkv";
 import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper";
 import { parseSearchParams } from "./utils/parseUrlParams";
@@ -55,15 +57,21 @@ export const RNSignerClientParamsSchema = z.object({
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
+export type ExportWalletParams = {
+  exportAs?: "PRIVATE_KEY" | "SEED_PHRASE";
+};
+
 export type ExportWalletResult = {
-  exportBundle: string;
+  privateKey?: string;
+  seedPhrase?: string;
   address: string;
-  orgId: string;
+  exportAs: "PRIVATE_KEY" | "SEED_PHRASE";
 };
 
 // TODO: need to emit events
-export class RNSignerClient extends BaseSignerClient<undefined> {
+export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
   private stamper = NativeTEKStamper;
+  private storage = new MMKV();
   oauthCallbackUrl: string;
   rpId: string | undefined;
   private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
@@ -283,91 +291,147 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
   /**
    * Exports the wallet's private key for the authenticated user.
+   * 
+   * This uses the local storage approach recommended by Turnkey for mobile contexts.
+   * A P256 key pair is generated locally, the public key is used to encrypt the export,
+   * and the private key is used to decrypt the bundle locally.
    *
-   * Note: This implementation returns true on success. To get the actual export
-   * bundle, use the `exportWalletWithResult()` method instead. React Native
-   * doesn't support iframe-based secure export like the web version.
-   *
+   * @param {ExportWalletParams} params Export parameters
+   * @param {string} params.exportAs Whether to export as PRIVATE_KEY or SEED_PHRASE (defaults to PRIVATE_KEY)
    * @returns {Promise<boolean>} Returns true on successful export
    * @throws {Error} If the user is not authenticated or export fails
    */
-  override async exportWallet(): Promise<boolean> {
-    if (!this.user) {
-      throw new Error("User must be authenticated to export wallet");
-    }
-
-    // Since we can't use iframe stamper in React Native, we need to export
-    // the private key using the regular Turnkey client with the native stamper
-    const targetPublicKey = await this.stamper.init();
-
-    const { activity } = await this.turnkeyClient.exportWalletAccount({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        address: this.user.address,
-        targetPublicKey,
-      },
-    });
-
-    // Poll for activity completion
-    const result = await this.pollActivityCompletion(
-      activity,
-      this.user.orgId,
-      "exportWalletAccountResult",
-    );
-
-    if (!result.exportBundle) {
-      throw new Error("Failed to export wallet: no export bundle returned");
-    }
-
-    // In React Native, we can't use an iframe to securely display the key
-    // The app developer should use exportWalletWithResult() to get the bundle directly
+  override async exportWallet(params?: ExportWalletParams): Promise<boolean> {
+    await this.exportWalletWithResult(params);
     return true;
   }
 
   /**
-   * Exports the wallet and returns the export bundle directly.
-   * This is an alternative to the base exportWallet method that provides
-   * more flexibility for React Native apps.
-   *
-   * @returns {Promise<ExportWalletResult>} The export bundle and metadata
+   * Exports the wallet and returns the decrypted private key or seed phrase.
+   * 
+   * @param {ExportWalletParams} params Export parameters
+   * @returns {Promise<ExportWalletResult>} The decrypted export data
    * @throws {Error} If the user is not authenticated or export fails
    */
-  async exportWalletWithResult(): Promise<ExportWalletResult> {
+  async exportWalletWithResult(params?: ExportWalletParams): Promise<ExportWalletResult> {
     if (!this.user) {
       throw new Error("User must be authenticated to export wallet");
     }
 
-    const targetPublicKey = await this.stamper.init();
+    const exportAs = params?.exportAs || "PRIVATE_KEY";
+    
+    // Step 1: Generate a P256 key pair for encryption
+    const embeddedKey = generateP256KeyPair();
+    
+    // Step 2: Save the private key in secure storage
+    const keyId = `export_key_${Date.now()}`;
+    this.storage.set(keyId, embeddedKey.privateKey);
+    
+    try {
+      let exportBundle: string;
+      
+      if (exportAs === "PRIVATE_KEY") {
+        // Step 3a: Export as private key
+        const { activity } = await this.turnkeyClient.exportWalletAccount({
+          organizationId: this.user.orgId,
+          type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
+          timestampMs: Date.now().toString(),
+          parameters: {
+            address: this.user.address,
+            targetPublicKey: embeddedKey.publicKeyUncompressed,
+          },
+        });
 
-    const { activity } = await this.turnkeyClient.exportWalletAccount({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
-      timestampMs: Date.now().toString(),
-      parameters: {
+        const result = await this.pollActivityCompletion(
+          activity,
+          this.user.orgId,
+          "exportWalletAccountResult",
+        );
+        
+        if (!result.exportBundle) {
+          throw new Error("Failed to export wallet: no export bundle returned");
+        }
+        
+        exportBundle = result.exportBundle;
+      } else {
+        // Step 3b: Export as seed phrase (need to find the wallet first)
+        const { wallets } = await this.turnkeyClient.getWallets({
+          organizationId: this.user.orgId,
+        });
+        
+        const walletAccounts = await Promise.all(
+          wallets.map(({ walletId }) =>
+            this.turnkeyClient.getWalletAccounts({
+              organizationId: this.user!.orgId,
+              walletId,
+            }),
+          ),
+        ).then((x) => x.flatMap((x) => x.accounts));
+        
+        const walletAccount = walletAccounts.find(
+          (x) => x.address === this.user!.address,
+        );
+
+        if (!walletAccount) {
+          throw new Error("Could not find wallet account");
+        }
+
+        const { activity } = await this.turnkeyClient.exportWallet({
+          organizationId: this.user.orgId,
+          type: "ACTIVITY_TYPE_EXPORT_WALLET",
+          timestampMs: Date.now().toString(),
+          parameters: {
+            walletId: walletAccount.walletId,
+            targetPublicKey: embeddedKey.publicKeyUncompressed,
+          },
+        });
+
+        const result = await this.pollActivityCompletion(
+          activity,
+          this.user.orgId,
+          "exportWalletResult",
+        );
+        
+        if (!result.exportBundle) {
+          throw new Error("Failed to export wallet: no export bundle returned");
+        }
+        
+        exportBundle = result.exportBundle;
+      }
+
+      // Step 4: Decrypt the export bundle using HPKE
+      // The export bundle is hex-encoded, so we need to convert it to bytes
+      const bundleBytes = Buffer.from(exportBundle, 'hex');
+      const encappedKeyBuf = bundleBytes.slice(0, 65);
+      const ciphertextBuf = bundleBytes.slice(65);
+      
+      const decryptedData = hpkeDecrypt({
+        encappedKeyBuf,
+        ciphertextBuf,
+        receiverPriv: embeddedKey.privateKey,
+      });
+
+      // Step 5: Parse the decrypted data
+      const exportData = JSON.parse(new TextDecoder().decode(decryptedData));
+      
+      // Return the result based on export type
+      const result: ExportWalletResult = {
         address: this.user.address,
-        targetPublicKey,
-      },
-    });
-
-    const result = await this.pollActivityCompletion(
-      activity,
-      this.user.orgId,
-      "exportWalletAccountResult",
-    );
-
-    if (!result.exportBundle) {
-      throw new Error("Failed to export wallet: no export bundle returned");
+        exportAs,
+      };
+      
+      if (exportAs === "PRIVATE_KEY") {
+        result.privateKey = exportData.privateKey;
+      } else {
+        result.seedPhrase = exportData.mnemonic;
+      }
+      
+      return result;
+      
+    } finally {
+      // Step 6: Clean up - remove the embedded key from storage
+      this.storage.delete(keyId);
     }
-
-    const exportResult: ExportWalletResult = {
-      exportBundle: result.exportBundle,
-      address: this.user.address,
-      orgId: this.user.orgId,
-    };
-
-    return exportResult;
   }
 
   override targetPublicKey(): Promise<string> {
