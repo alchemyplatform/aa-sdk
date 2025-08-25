@@ -80,6 +80,9 @@ navigation:
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
+              - page: Upgrade to Smart Accounts
+                slug: recipes/upgrade-to-smart-accounts
+                path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
