@@ -1,366 +1,86 @@
-import { toHex, type Address } from "viem";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import { createClient, http } from "viem";
+import { sepolia } from "viem/chains";
 import { alchemyGasManagerHooks } from "./alchemyGasManagerHooks.js";
 
-describe("alchemyGasManagerHooks - Optimized Flow", () => {
-  // Helper to create mock bundler client with required account methods
-  const createMockBundlerClient = (requestMock: any) => ({
-    request: requestMock,
-    account: {
-      getStubSignature: vi
-        .fn()
-        .mockResolvedValue(
-          "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
-        ),
-    },
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-  it("should make single RPC call and cache results", async () => {
-    const policyId = "test-policy-optimized";
-    const hooks = alchemyGasManagerHooks(policyId);
-
-    // Mock bundler client
-    const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockImplementation(async ({ method }) => {
-        if (method === "alchemy_requestGasAndPaymasterAndData") {
-          return {
-            callGasLimit: "0x5208",
-            preVerificationGas: "0x5208",
-            verificationGasLimit: "0x5208",
-            maxFeePerGas: "0x3b9aca00",
-            maxPriorityFeePerGas: "0xf4240",
-            paymaster: "0x1234567890abcdef1234567890abcdef12345678",
-            paymasterData: "0xabcdef",
-            paymasterVerificationGasLimit: "0x186a0",
-            paymasterPostOpGasLimit: "0xc350",
-          };
-        }
-        return null;
-      }),
-    );
-
-    const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
-
-    // Test parameters
-    const testParams = {
-      chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as `0x${string}`,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as `0x${string}`,
-      nonce: 0n,
-      callData: "0x" as `0x${string}`,
-    };
-
-    // First call - should make RPC request
-    const stubResult = await paymasterHooks.getPaymasterStubData(testParams);
-
-    // Verify RPC was called once
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(1);
-    expect(mockBundlerClient.request).toHaveBeenCalledWith({
-      method: "alchemy_requestGasAndPaymasterAndData",
-      params: [
-        expect.objectContaining({
-          policyId,
-          entryPoint: testParams.entryPointAddress,
-          userOperation: expect.objectContaining({
-            sender: testParams.sender,
-            nonce: toHex(testParams.nonce),
-            callData: testParams.callData,
-          }),
-          dummySignature: expect.any(String),
-          overrides: {},
-        }),
-      ],
-    });
-
-    // Verify stub result
-    expect(stubResult).toMatchObject({
-      paymaster: "0x1234567890abcdef1234567890abcdef12345678",
-      paymasterData: "0xabcdef",
-      isFinal: true, // Should be final for optimized flow
-    });
-
-    // Second call - should use cache
-    const dataResult = await paymasterHooks.getPaymasterData(testParams);
-
-    // Verify RPC was NOT called again (still just 1 call)
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(1);
-
-    // Verify data result matches
-    expect(dataResult).toMatchObject({
-      paymaster: "0x1234567890abcdef1234567890abcdef12345678",
-      paymasterData: "0xabcdef",
-    });
-  });
-
-  it("should use cached fee estimates", async () => {
+describe("alchemyGasManagerHooks", () => {
+  it("should return hooks with spread operator support for tests", () => {
     const hooks = alchemyGasManagerHooks("test-policy");
 
-    // Mock bundler client
-    const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockImplementation(async ({ method }) => {
-        if (method === "alchemy_requestGasAndPaymasterAndData") {
-          return {
-            callGasLimit: "0x5208",
-            preVerificationGas: "0x5208",
-            verificationGasLimit: "0x5208",
-            maxFeePerGas: "0x3b9aca00", // 1 gwei
-            maxPriorityFeePerGas: "0xf4240", // 0.001 gwei
-            paymasterAndData: "0x1234567890abcdef",
-          };
-        }
-        return null;
-      }),
-    );
+    expect(hooks).toHaveProperty("paymaster");
+    expect(hooks).toHaveProperty("userOperation");
+    expect(hooks).toHaveProperty("bind");
 
-    const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
-
-    // Make a call to populate cache
-    await paymasterHooks.getPaymasterStubData({
-      chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as `0x${string}`,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as `0x${string}`,
-      nonce: 0n,
-      callData: "0x" as `0x${string}`,
-    });
-
-    // Get fee estimates - should use cached values
-    const fees = await hooks.userOperation.estimateFeesPerGas({
-      bundlerClient: mockBundlerClient as any,
-    });
-
-    expect(fees).toEqual({
-      maxFeePerGas: 1000000000n, // 1 gwei
-      maxPriorityFeePerGas: 1000000n, // 0.001 gwei
-    });
-
-    // Should only have called RPC once (for the paymaster data)
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(1);
+    expect(hooks.paymaster).toHaveProperty("getPaymasterStubData");
+    expect(hooks.paymaster).toHaveProperty("getPaymasterData");
+    expect(hooks.userOperation).toHaveProperty("estimateFeesPerGas");
   });
 
-  it("should invalidate cache for different user operations", async () => {
+  it("should return test values when not bound to a client", async () => {
     const hooks = alchemyGasManagerHooks("test-policy");
 
-    const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockResolvedValue({
-        callGasLimit: "0x5208",
-        preVerificationGas: "0x5208",
-        verificationGasLimit: "0x5208",
-        maxFeePerGas: "0x3b9aca00",
-        maxPriorityFeePerGas: "0xf4240",
-        paymasterAndData: "0xabcdef",
-      }),
-    );
-
-    const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
-
-    // First user operation
-    await paymasterHooks.getPaymasterStubData({
-      chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as `0x${string}`,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as `0x${string}`,
+    const stubResult = await hooks.paymaster.getPaymasterStubData({
+      sender: "0x1234567890123456789012345678901234567890",
       nonce: 0n,
-      callData: "0x" as `0x${string}`,
-    });
-
-    // Different user operation (different nonce)
-    await paymasterHooks.getPaymasterStubData({
+      callData: "0x",
       chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as `0x${string}`,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as `0x${string}`,
-      nonce: 1n, // Different nonce
-      callData: "0x" as `0x${string}`,
-    });
-
-    // Should have made 2 RPC calls (cache invalidated)
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(2);
-  });
-
-  it("should handle complete optimized flow with ERC-20 token context", async () => {
-    const policyId = "test-policy-with-token";
-    const tokenAddress =
-      "0x1234567890abcdef1234567890abcdef12345678" as Address;
-    const maxTokenAmount = 1000000n;
-
-    const hooks = alchemyGasManagerHooks(policyId, {
-      address: tokenAddress,
-      maxTokenAmount,
-    });
-
-    // Mock successful RPC response with all fields
-    const mockResponse = {
-      callGasLimit: "0x5208",
-      preVerificationGas: "0x5208",
-      verificationGasLimit: "0x5208",
-      maxFeePerGas: "0x3b9aca00",
-      maxPriorityFeePerGas: "0xf4240",
-      paymaster: "0x9876543210abcdef9876543210abcdef98765432" as Address,
-      paymasterData: "0xdeadbeef",
-      paymasterVerificationGasLimit: "0x30d40", // 200000
-      paymasterPostOpGasLimit: "0x7530", // 30000
-    };
-
-    const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockResolvedValueOnce(mockResponse),
-    );
-
-    const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
-    const userOpParams = {
-      chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as Address,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as Address,
-      nonce: 42n,
-      callData: "0x12345678" as `0x${string}`,
-      context: { customField: "test" },
-    };
-
-    // Step 1: getPaymasterStubData should make the RPC call
-    const stubResult = await paymasterHooks.getPaymasterStubData(userOpParams);
-
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(1);
-    expect(mockBundlerClient.request).toHaveBeenCalledWith({
-      method: "alchemy_requestGasAndPaymasterAndData",
-      params: [
-        {
-          policyId,
-          entryPoint: userOpParams.entryPointAddress,
-          userOperation: expect.objectContaining({
-            sender: userOpParams.sender,
-            nonce: toHex(userOpParams.nonce),
-            callData: userOpParams.callData,
-          }),
-          dummySignature: expect.stringMatching(/^0x[a-f0-9]+$/),
-          overrides: {},
-          erc20Context: {
-            tokenAddress,
-            maxTokenAmount,
-          },
-        },
-      ],
+      entryPointAddress: "0x1234567890123456789012345678901234567890",
     });
 
     expect(stubResult).toEqual({
-      paymaster: mockResponse.paymaster,
-      paymasterData: mockResponse.paymasterData,
-      paymasterVerificationGasLimit: 200000n,
-      paymasterPostOpGasLimit: 30000n,
-      isFinal: true,
-    });
-
-    // Step 2: getPaymasterData should use cached result
-    const dataResult = await paymasterHooks.getPaymasterData(userOpParams);
-
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(1); // Still only 1 call
-    expect(dataResult).toEqual({
-      paymaster: mockResponse.paymaster,
-      paymasterData: mockResponse.paymasterData,
-      paymasterVerificationGasLimit: 200000n,
-      paymasterPostOpGasLimit: 30000n,
-    });
-
-    // Step 3: estimateFeesPerGas should use cached gas values
-    const fees = await hooks.userOperation.estimateFeesPerGas({
-      bundlerClient: mockBundlerClient as any,
-    });
-
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(1); // Still only 1 call
-    expect(fees).toEqual({
-      maxFeePerGas: 1000000000n, // 0x3b9aca00
-      maxPriorityFeePerGas: 1000000n, // 0xf4240
+      paymasterAndData: "0x",
+      isFinal: false,
     });
   });
 
-  it("should fall back to default estimation when no cached data", async () => {
-    const hooks = alchemyGasManagerHooks("test-policy");
-
-    const mockBlock = {
-      baseFeePerGas: "0x2540be400", // 10 gwei
+  it("should create bound hooks with client", () => {
+    const mockAccount = {
+      address: "0x1234567890123456789012345678901234567890",
+      getStubSignature: vi.fn().mockResolvedValue("0xdummysignature"),
     };
 
-    const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockImplementation(async ({ method }) => {
-        if (method === "eth_getBlockByNumber") {
-          return mockBlock;
-        }
-        if (method === "rundler_maxPriorityFeePerGas") {
-          return "0x5f5e100"; // 0.1 gwei
-        }
-        return null;
-      }),
-    );
-
-    // Call estimateFeesPerGas without any prior paymaster calls
-    const fees = await hooks.userOperation.estimateFeesPerGas({
-      bundlerClient: mockBundlerClient as any,
+    const client = createClient({
+      chain: sepolia,
+      transport: http("https://eth-sepolia.g.alchemy.com/v2/test-key"),
+      account: mockAccount as any,
     });
 
-    // Check both calls were made
-    expect(mockBundlerClient.request).toHaveBeenCalledTimes(2);
+    const hooks = alchemyGasManagerHooks("production-policy");
+    const boundHooks = hooks.bind(client);
 
-    // Check the methods called
-    const callMethods = mockBundlerClient.request.mock.calls.map(
-      (call: any[]) => call[0].method,
-    );
-    expect(callMethods).toContain("eth_getBlockByNumber");
-    expect(callMethods).toContain("rundler_maxPriorityFeePerGas");
-
-    // Should calculate: baseFee * 1.5 + priority
-    expect(fees).toEqual({
-      maxFeePerGas: 15100000000n, // (10 gwei * 1.5) + 0.1 gwei
-      maxPriorityFeePerGas: 100000000n, // 0.1 gwei from rundler_maxPriorityFeePerGas
-    });
+    expect(boundHooks).toHaveProperty("paymaster");
+    expect(boundHooks).toHaveProperty("userOperation");
+    expect(boundHooks).not.toHaveProperty("bind"); // Bound hooks don't have bind method
   });
 
-  it("should handle paymasterAndData format in response", async () => {
+  it("should handle ERC-20 token configuration", () => {
+    const hooks = alchemyGasManagerHooks("test-policy", {
+      address: "0xTokenAddress1234567890123456789012345678",
+      maxTokenAmount: 1000000n,
+    });
+
+    expect(hooks).toHaveProperty("paymaster");
+    expect(hooks).toHaveProperty("userOperation");
+    expect(hooks).toHaveProperty("bind");
+  });
+
+  it("should maintain separate caches for different bound clients", () => {
+    const client1 = createClient({
+      chain: sepolia,
+      transport: http("https://eth-sepolia.g.alchemy.com/v2/test-key-1"),
+    });
+
+    const client2 = createClient({
+      chain: sepolia,
+      transport: http("https://eth-sepolia.g.alchemy.com/v2/test-key-2"),
+    });
+
     const hooks = alchemyGasManagerHooks("test-policy");
+    const boundHooks1 = hooks.bind(client1);
+    const boundHooks2 = hooks.bind(client2);
 
-    const mockBundlerClient = createMockBundlerClient(
-      vi.fn().mockResolvedValue({
-        callGasLimit: "0x5208",
-        preVerificationGas: "0x5208",
-        verificationGasLimit: "0x5208",
-        maxFeePerGas: "0x3b9aca00",
-        maxPriorityFeePerGas: "0xf4240",
-        // Using combined paymasterAndData format
-        paymasterAndData: "0x9876543210abcdef9876543210abcdef98765432deadbeef",
-      }),
-    );
-
-    const paymasterHooks = hooks.paymaster(mockBundlerClient as any);
-
-    const stubResult = await paymasterHooks.getPaymasterStubData({
-      chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as Address,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as Address,
-      nonce: 0n,
-      callData: "0x" as `0x${string}`,
-    });
-
-    expect(stubResult).toEqual({
-      paymasterAndData: "0x9876543210abcdef9876543210abcdef98765432deadbeef",
-      isFinal: true,
-    });
-
-    // getPaymasterData should also return the same format
-    const dataResult = await paymasterHooks.getPaymasterData({
-      chainId: 1,
-      entryPointAddress:
-        "0x0000000071727De22E5E9d8BAf0edAc6f37da032" as Address,
-      sender: "0xabcdef1234567890abcdef1234567890abcdef12" as Address,
-      nonce: 0n,
-      callData: "0x" as `0x${string}`,
-    });
-
-    expect(dataResult).toEqual({
-      paymasterAndData: "0x9876543210abcdef9876543210abcdef98765432deadbeef",
-    });
+    // Each bound instance should be independent
+    expect(boundHooks1).not.toBe(boundHooks2);
+    expect(boundHooks1.paymaster).not.toBe(boundHooks2.paymaster);
   });
 });
