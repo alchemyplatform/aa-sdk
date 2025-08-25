@@ -218,7 +218,7 @@ navigation:
             contents:
               - page: Sponsor gas
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
-              - page: Pay Gas With Any Token
+              - page: Pay gas with any token
                 path: wallets/pages/react/pay-gas-with-any-token.mdx
               - page: Solana Support
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
