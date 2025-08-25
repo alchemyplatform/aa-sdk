@@ -5,17 +5,12 @@ description: Overview of the alchemyGasManagerHooks method
 slug: wallets/reference/alchemy/aa-infra/functions/alchemyGasManagerHooks
 ---
 
-Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
-`alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and
-paymaster sponsorship in a single RPC call.
+Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
 
-This implementation caches the result from the first call to avoid duplicate RPC calls
-when viem calls both estimateFeesPerGas and paymaster functions.
-
-Note: ERC-20 permits are not supported in these viem-native hooks. Permits require
-building and signing the permit message before sending the user operation, which is
-handled by middleware but not by these lower-level hooks. Use alchemyGasManagerMiddleware()
-for permit support.
+This implementation works with viem's paymaster interface for test environments
+where the transport layer handles the actual RPC calls. The spread operator pattern
+can be used in tests, but production environments may require a different integration
+pattern to properly bind the client context.
 
 ## Import
 
@@ -26,14 +21,15 @@ import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
 ## Usage
 
 ```ts
+// In test environments with local test instances:
 import { createBundlerClient } from "viem/account-abstraction";
-import { alchemyGasManagerHooks } from "@alchemy/smart-accounts";
+import { alchemyGasManagerHooks } from "@account-kit/infra";
 
 const bundler = createBundlerClient({
-  transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
-  chain: sepolia,
+  chain: local070Instance.chain,
+  transport: custom(client),
   account,
-  ...alchemyGasManagerHooks("your-policy-id"),
+  ...alchemyGasManagerHooks("test-policy"),
 });
 ```
 
@@ -45,13 +41,13 @@ const bundler = createBundlerClient({
 
 - The policy ID(s) for Alchemy's gas manager
 
-### policyToken
+### \_policyToken
 
 `PolicyToken`
 
-- Optional ERC-20 token configuration for paying gas with tokens
+- Optional ERC-20 token configuration for paying gas with tokens (reserved for future use)
 
 ## Returns
 
-`{ paymaster: Function, userOperation: { estimateFeesPerGas: Function } }`
+`AlchemyGasManagerHooks`
 Hooks for createBundlerClient

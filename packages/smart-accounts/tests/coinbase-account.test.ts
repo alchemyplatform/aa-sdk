@@ -56,7 +56,8 @@ describe("Viem AA - Coinbase Smart Account", () => {
       value: parseEther("2.0"),
     });
 
-    const recipient = "0x000000000000000000000000000000000000dEaD" as `0x${string}`;
+    const recipient =
+      "0x000000000000000000000000000000000000dEaD" as `0x${string}`;
     const amount = parseEther("0.1");
 
     const initialBalance = await getBalance(client, {
