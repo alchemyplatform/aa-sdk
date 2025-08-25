@@ -99,7 +99,7 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
     });
     ```
 
-    Now you can follow the guide for [Sending user operations](/wallets/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
+    Now you can follow the guide for [Sending user operations](/wallets/transactions/send/send-user-operations) to send sponsored UOs from your smart account!
 
     ## 3. Set the gas policy ID per UserOperation
 
@@ -199,6 +199,46 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
     ```
 
     This client is now configured to sponsor gas using your gas policy. You can now send sponsored UOs from this client using the `sendUserOperation` method.
+
+  </Tab>
+  <Tab title="APIs">
+    When sending a user operation with Wallet APIs, the only thing you need to do to sponsor gas is add your Policy ID to your request params at `capabilites.paymasterService.policyId` when making a `wallet_prepareCalls` call.
+
+    <Tip>
+    If you are unfamiliar with sending an unsponsored user operation using Wallet APIs, check out [this guide](/wallets/transactions/send/send-user-operations) first to learn how to request a smart account and sign calls.
+    </Tip>
+
+    ```bash
+    curl --request POST \
+        --url https://api.g.alchemy.com/v2/API_KEY \
+        --header 'accept: application/json' \
+        --header 'content-type: application/json' \
+        --data '
+    {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_prepareCalls",
+        "params": [
+            {
+                "calls": [
+                    {
+                        "to": "0xTARGET_ADDRESS"
+                        "data": "0x",
+                        "value": "0x00"
+                    }
+                ],
+                "from": "0xACCOUNT_ADDRESS",
+                "chainId": "0xCHAIN_ID",
+                "capabilities": {
+                  "paymasterService": {
+                    "policyId": "YOUR_GAS_MANAGER_POLICY_ID"
+                  }
+                }
+            }
+        ]
+    }
+    '
+    ```
 
   </Tab>
 </Tabs>
