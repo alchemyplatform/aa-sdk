@@ -85,6 +85,7 @@ The implementation uses a hybrid approach:
 Creates gas manager hooks with bind support.
 
 **Parameters:**
+
 - `policyId`: `string | string[]` - Your Alchemy Gas Manager policy ID(s)
 - `policyToken`: `PolicyToken` (optional) - ERC-20 token configuration
 
@@ -95,6 +96,7 @@ Creates gas manager hooks with bind support.
 Binds the hooks to a client for production use.
 
 **Parameters:**
+
 - `client`: `Client` - A viem client with Alchemy transport and smart account
 
 **Returns:** `AlchemyGasManagerHooks` - Bound hooks ready for production use
