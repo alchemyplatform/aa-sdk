@@ -1,7 +1,7 @@
 "use client";
 import { Signer } from "@alchemy/signer";
 import { createWebAuthClient } from "@alchemy/signer-web";
-import { ReactElement, useCallback, useState } from "react";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 
 const apiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;
 
@@ -18,14 +18,20 @@ export default function Home(): ReactElement {
   const [signer, setSigner] = useState<Signer | null>(null);
   const [signature, setSignature] = useState<string | null>(null);
 
+  useEffect(() => {
+    authClient.handleOauthRedirect().then((signer) => {
+      setSigner(signer);
+    });
+  }, []);
+
   const handleOauthLogin = useCallback(async () => {
     console.log("Logging in with OAuth...");
-    const signer = await authClient.loginWithOauth({
+    await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
       mode: "redirect",
     });
-    setSigner(signer);
+    console.log("do we ever get here?");
   }, [authClient]);
 
   const handleSendEmailOtp = useCallback(async () => {

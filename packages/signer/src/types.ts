@@ -76,6 +76,8 @@ export type HandleOauthFlowFn = (
   mode: "popup" | "redirect"
 ) => Promise<OAuthFlowResponse>;
 
+export type HandleOauthCallbackFn = () => Promise<OAuthFlowResponse | null>;
+
 // TODO: can make this type more crisp.
 export type OAuthFlowResponse = {
   status: "SUCCESS" | "ACCOUNT_LINKING_CONFIRMATION_REQUIRED";
