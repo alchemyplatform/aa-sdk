@@ -101,6 +101,8 @@ navigation:
 
       - section: Authentication
         contents:
+          - page: Overview
+            path: wallets/pages/authentication/overview.mdx
           - section: Login methods
             contents:
               - page: Email OTP
@@ -180,6 +182,8 @@ navigation:
 
       - section: Transactions
         contents:
+          - page: Overview
+            path: wallets/pages/transactions/overview.mdx
           - section: Send
             contents:
               - page: EVM
