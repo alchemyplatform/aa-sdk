@@ -29,6 +29,8 @@ import type {
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   MfaFactor,
+  JwtParams,
+  JwtResponse,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -254,6 +256,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse>;
+
+  public abstract submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">,
+  ): Promise<JwtResponse>;
 
   public abstract disconnect(): Promise<void>;
 
