@@ -1,0 +1,33 @@
+---
+title: Track user operation status
+description: Learn how to track the status of a user operation
+slug: wallets/transactions/track-user-operation-status
+---
+
+Once you send userOps, you can check the status to confirm they have been included onchain.
+
+<Tabs>
+  <Tab title="APIs">
+    After sending userOps using wallet_sendPreparedCalls and getting the array of prepared call IDs, call wallet_getCallsStatus to check the status of the calls.
+
+    ```bash
+    curl --request POST \
+        --url https://api.g.alchemy.com/v2/API_KEY \
+        --header 'accept: application/json' \
+        --header 'content-type: application/json' \
+        --data '
+    {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_getCallsStatus",
+        "params": [
+            "0xPREPARED_CALL_ID"
+        ]
+    }
+    '
+    ```
+
+    See [**here**](https://www.alchemy.com/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status) for all of the possible results.
+
+  </Tab>
+</Tabs>

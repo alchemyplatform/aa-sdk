@@ -4,7 +4,7 @@ description: Learn how to send user operations using Smart Wallets across differ
 slug: wallets/transactions/send/send-user-operations
 ---
 
-Once your users have been authenticated, you can start sending user operations! Smart Wallets makes it easy to send single or batched user operations across different frameworks.
+Once your users have been authenticated, you can start sending user operations! Smart Wallets makes it easy to send user operations across different frameworks.
 
 <Tabs>
   <Tab title="React">
@@ -179,4 +179,139 @@ Once your users have been authenticated, you can start sending user operations! 
     ```
 
   </Tab>
+  <Tab title="APIs">
+    Learn how to send user operations via Wallet APIs.
+
+    ### 1. Request a Smart Account
+
+    Given an owner address, call **`wallet_requestAccount`** to request the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
+
+    - If you want to use social sign up / log in, you can simply use the [SDK](/docs/wallets/react/getting-started) to authenticate user’s and retrieve their signer address.
+    - If instead, you want to generate and control wallets with a custodial owner, you can generate any public private key pair (e.g. any EOA).
+
+    ```bash
+    curl --request POST \
+        --url https://api.g.alchemy.com/v2/API_KEY \
+        --header 'accept: application/json' \
+        --header 'content-type: application/json' \
+        --data '
+    {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_requestAccount",
+        "params": [
+            {
+                "signerAddress": "0xOWNER_ADDRESS"
+            }
+        ]
+    }
+    '
+    ```
+
+    This will return the smart account address associated with the given signer:
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "accountAddress": "0xACCOUNT_ADDRESS",
+        "id": "abcde..."
+      }
+    }
+    ```
+
+    <Tip>
+
+    In the above example, we use **`ModularAccountV2`** as the underlying Smart Account type, which is our default and recommended account. To learn more about all the account options, check out our guide [**on choosing a smart account**](/wallets/smart-contracts/choosing-a-smart-account).
+
+    </Tip>
+
+    ### 2. Prepare
+
+    Now that we have an account, it’s time to prepare some calls! Be sure to include the call data (`to` address, `data`, and `value`), `from` address, and `chainId`.
+
+    ```bash
+    curl --request POST \
+        --url https://api.g.alchemy.com/v2/API_KEY \
+        --header 'accept: application/json' \
+        --header 'content-type: application/json' \
+        --data '
+    {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_prepareCalls",
+        "params": [
+            {
+                "calls": [
+                    {
+                        "to": "0xTARGET_ADDRESS",
+                        "data": "0x",
+                        "value": "0x00"
+                    }
+                ],
+                "from": "0xACCOUNT_ADDRESS",
+                "chainId": "0xCHAIN_ID" // e.g. "0x66eee" for Arbitrum Sepolia
+            }
+        ]
+    }
+    '
+    ```
+
+    This will return the user operation struct (the **`data`** field) and a signature request, for example:
+
+    ```json
+    {
+        "type": "user-operation-v070",
+        "data": {...userOpStruct},
+        "chainId": "0xCHAIN_ID",
+        "signatureRequest": {
+            "type": "personal_sign",
+            "data": {
+                "raw": "0xHASH_TO_SIGN",
+            },
+            "rawPayload": "0xRAW_PAYLOAD_TO_SIGN"
+        }
+    }
+    ```
+
+    ### 3. Sign the userOp
+
+    Once you have the above response, all you have to do is sign the signature request using the account owner (which you provided in Step 1).
+
+    If using an Alchemy Signer, you can learn how to stamp the request on the frontend [**here**](https://www.alchemy.com/docs/reference/how-to-stamp-requests). When using the Alchemy Signer, it’s easiest to sign the **`signatureRequest.rawPayload`** directly.
+
+    If you are using a library such as Viem that supports the **`personal_sign`** method, you should use that to sign the `signatureRequest.data` field.
+
+    ### 4. Send the Prepared Calls!
+
+    By combing the `userOpStruct` from Step 2 with the signature from Step 3, you’re ready to send the call!
+
+    ```bash
+    curl --request POST \
+        --url https://api.g.alchemy.com/v2/API_KEY \
+        --header 'accept: application/json' \
+        --header 'content-type: application/json' \
+        --data '
+    {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_sendPreparedCalls",
+        "params": [
+            {
+                "type": "user-operation-v070",
+                "data": {...userOpStruct}, // the data returned in Step 2
+                "chainId": "0xCHAIN_ID",
+                "signature": {
+                    "type": "secp256k1",
+                    "data": "0xUSEROP_SIGNATURE" // your signature from Step 3
+                             }
+            }
+        ]
+    }
+    '
+    ```
+
+  </Tab>
+
 </Tabs>
