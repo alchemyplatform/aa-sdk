@@ -96,9 +96,6 @@
     }
   },
   "lint-staged": {
-    "**/src/**/*.{tsx,jsx,ts,js}": [
-      "yarn lint:write"
-    ],
     "**/*.{mdx,md,js,jsx,ts,tsx}": [
       "eslint --fix --max-warnings 0",
       "prettier --write"
