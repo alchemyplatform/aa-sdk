@@ -192,20 +192,24 @@ navigation:
             path: wallets/pages/transactions/overview.mdx
           - section: Send
             contents:
-              - page: EVM
+              - page: Send transactions
                 path: wallets/pages/transactions/send/evm-user-ops.mdx
+              - page: Batch transactions
+                path: wallets/pages/transactions/send/batch-user-ops.mdx
+              - page: Retry Transactions
+                path: wallets/pages/transactions/retry-user-operations.mdx
               - page: Solana
                 path: wallets/pages/transactions/send/solana-user-ops.mdx
-          - page: Batch
-            path: wallets/pages/transactions/send/batch-user-ops.mdx
-          - section: Sponsor gas
+          - section: Sponsor Gas
             contents:
-              - page: EVM
+              - page: Sponsor gas
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
-              - page: Solana
+              - page: Pay gas with any token
+                path: wallets/pages/react/pay-gas-with-any-token.mdx
+              - page: Sponsor Solana fees
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
-          - page: Pay gas with any token
-            path: wallets/pages/react/pay-gas-with-any-token.mdx
+          - page: Swaps (Beta)
+            path: wallets/pages/transactions/swaps.mdx
           - section: Using 7702
             contents:
               - page: Overview
@@ -220,8 +224,6 @@ navigation:
                     path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
-          - page: Retry User Operations
-            path: wallets/pages/transactions/retry-user-operations.mdx
           - section: Low-level infra
             contents:
               # - page: Overview
