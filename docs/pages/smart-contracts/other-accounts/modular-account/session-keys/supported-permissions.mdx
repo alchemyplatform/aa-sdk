@@ -41,7 +41,7 @@ Permissions start with the following default values:
 | Access control list      | Type: allowlist <br /> The list starts empty. When the allowlist is empty, all calls will be denied.                                             |
 | Time range               | Unlimited                                                                                                                                        |
 | Native token spend limit | 0 <br /> This means all calls spending the native token will be denied, unless the limit is updated or removed.                                  |
-| ERC-20 spend limit       | Unset. If you want to enabled an ERC-20 spend limit, add the ERC-20 token contract to the access control list and set the spending limit amount. |
+| ERC-20 spend limit       | Unset. If you want to enable an ERC-20 spend limit, add the ERC-20 token contract to the access control list and set the spending limit amount. |
 | Gas spend limits         | Unset. When defining the session key’s permissions, you should specify either a gas spending limit or a required paymaster.                      |
 
 ## Using the PermissionsBuilder
@@ -50,7 +50,7 @@ To construct the data to set a key's permissions, you will need to use the `Sess
 
 The permissions data may be specified in 3 places:
 
-- In the Session Key Plugin's `onInstall` data, setting the intial permissions for a session key added at install time.
+- In the Session Key Plugin's `onInstall` data, setting the initial permissions for a session key added at install time.
 - As data for the initial permissions of a session key added via `addSessionKey`.
 - As a parameter to the `updateKeyPermissions` function, to change the permissions of an existing key.
 
