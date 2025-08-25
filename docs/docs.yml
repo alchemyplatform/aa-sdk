@@ -20,10 +20,12 @@ navigation:
             contents:
               - section: React
                 contents:
+                  - page: Installation
+                    path: wallets/pages/react/installation.mdx
+                  - page: Setup
+                    path: wallets/pages/react/setup.mdx
                   - page: Quickstart
                     path: wallets/pages/react/quickstart.mdx
-                  - page: New project
-                    path: wallets/pages/react/quickstart/new-project.mdx
                   - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
                   - page: Set up your client
@@ -105,6 +107,8 @@ navigation:
 
       - section: Authentication
         contents:
+          - page: Overview
+            path: wallets/pages/authentication/overview.mdx
           - section: Login methods
             contents:
               - page: Email OTP
@@ -186,6 +190,8 @@ navigation:
 
       - section: Transactions
         contents:
+          - page: Overview
+            path: wallets/pages/transactions/overview.mdx
           - section: Send
             contents:
               - page: EVM
@@ -1069,6 +1075,9 @@ navigation:
       - section: Resources
         skip-slug: true
         contents:
+          - page: Features
+            slug: wallets/resources/features
+            path: wallets/pages/features.mdx
           - link: GitHub
             href: https://github.com/alchemyplatform/aa-sdk
           - link: Changelog

@@ -1,12 +1,16 @@
 ---
 title: Custom theme
-description: Learn how to customize the theme of the Account Kit React components
+description: Learn how to customize the theme of your Smart Wallets app
 slug: wallets/react/customization/theme
 ---
 
 When using React components in your app, you can customize both 1) overall [theme](#colors) and 2) [authentication components](#custom-authentication-component).
 
 Most theme customizations are passed through using `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
+
+<Tip>
+  **Need to set up Tailwind first?** See the [complete Tailwind setup guide](/wallets/react/tailwind-setup) for installation and configuration instructions.
+</Tip>
 
 <Tip>
   The easiest way to configure your UI components, is using the [Demo
@@ -72,6 +76,59 @@ export const tailwindConfig = withAccountKitUi(
   },
 );
 ```
+
+### Customizing Multiple Colors
+
+You can customize multiple color properties at once for comprehensive theming:
+
+```ts tailwind.config.ts
+import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
+
+export default withAccountKitUi(
+  {
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  },
+  {
+    colors: {
+      "btn-primary": createColorSet("#3b82f6", "#1d4ed8"),
+      "fg-accent-brand": createColorSet("#3b82f6", "#60a5fa"),
+      active: createColorSet("#94a3b8", "#94a3b8"),
+    },
+  },
+);
+```
+
+### Available Color Variables
+
+Account Kit supports these color customizations:
+
+**Border Colors:**
+- `active` - Border color when input is focused
+- `static` - Border color when input is not focused  
+- `critical` - Border color for error states
+
+**Button Colors:**
+- `btn-primary` - Primary button background
+- `btn-secondary` - Secondary button background
+- `btn-auth` - Authentication button background
+
+**Text Colors:**
+- `fg-primary` - Primary text color
+- `fg-secondary` - Secondary text color
+- `fg-tertiary` - Tertiary text color
+- `fg-invert` - Inverted text color
+- `fg-disabled` - Disabled text color
+- `fg-accent-brand` - Brand accent color
+- `fg-critical` - Critical/error text color
+
+**Background Colors:**
+- `bg-surface-default` - Default background
+- `bg-surface-subtle` - Subtle background
+- `bg-surface-inset` - Inset component background
+- `bg-surface-critical` - Critical component background
+- `bg-surface-error` - Error component background  
+- `bg-surface-success` - Success component background
+- `bg-surface-warning` - Warning component background
 
 ## Borders
 
