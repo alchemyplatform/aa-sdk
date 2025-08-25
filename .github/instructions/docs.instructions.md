@@ -1,10 +1,13 @@
 ---
-applyTo: "docs/**"
+applyTo: "**/*.mdx"
 ---
 
 # Alchemy Documentation Review Instructions
 
 You are reviewing documentation changes for the Alchemy Account Kit project. Your role is to ensure all documentation follows the established style guidelines and maintains consistency across the project.
+
+Apply the [docs contribution guidelines](./docs.instructions.md) to all documentation.
+
 
 ## Primary Responsibilities
 
