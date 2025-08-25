@@ -194,7 +194,7 @@ navigation:
             contents:
               - page: Send transactions
                 path: wallets/pages/transactions/send/evm-user-ops.mdx
-              - page: Batch Send Transactions
+              - page: Batch transactions
                 path: wallets/pages/transactions/send/batch-user-ops.mdx
               - page: Retry Transactions
                 path: wallets/pages/transactions/retry-user-operations.mdx
