@@ -357,6 +357,7 @@ export class AuthClient {
    * }
    * ```
    */
+  // TO DO: move this to the web signer client.
   public async handleOauthRedirect(): Promise<Signer | null> {
     // // First, check if we're currently on a page with OAuth callback parameters
     const callbackParams = extractOAuthCallbackParams();
