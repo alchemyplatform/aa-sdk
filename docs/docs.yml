@@ -220,7 +220,7 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Pay gas with any token
                 path: wallets/pages/react/pay-gas-with-any-token.mdx
-              - page: Solana Support
+              - page: Sponsor Solana fees
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Swaps (Beta)
             path: wallets/pages/transactions/swaps.mdx
