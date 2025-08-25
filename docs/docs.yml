@@ -216,7 +216,7 @@ navigation:
                         path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
           - section: Sponsor Gas
             contents:
-              - page: Sponsor UserOps
+              - page: Sponsor gas
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Pay Gas With Any Token
                 path: wallets/pages/react/pay-gas-with-any-token.mdx
