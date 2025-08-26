@@ -6,23 +6,13 @@ link: /react/send-user-operations
 slug: wallets/react/quickstart
 ---
 
-Learn how to create embedded wallets with social login and how to send sponsored transactions from Alchemy Smart Wallets.
+Follow this guide to create an app with embedded wallets with, social login and ability to send sponsored transactions.
 
 ![preview-img](https://alchemyapi-res.cloudinary.com/image/upload/v1755789660/docs/Screenshot_2025-08-21_at_8.20.55_AM_g13fhu.png)
 
-We built a specialized [Quickstart component in the Alchemy Dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart). Let's use that to set up our own app!
+> You can also follow the [Quickstart in the Dashboard](https://dashboard.alchemy.com/services/smart-wallets/quickstart).
 
-<Tip>
-  Check out what you can build using our [Demo App](https://demo.alchemy.com/).
-</Tip>
-
-## 1. Use template repo
-
-Go to https://dashboard.alchemy.com/services/smart-wallets/quickstart to get started.
-
-![Alchemy Dashboard Smart Wallets Quickstart](https://alchemyapi-res.cloudinary.com/image/upload/v1755748422/docs/Screenshot_2025-08-20_at_8.53.37_PM_ydyhrj.png)
-
-Copy-paste the following from `Step 1` in the Dashboard into your terminal:
+## 1. Clone template repo
 
 <CodeBlocks>
 ```bash
@@ -32,8 +22,6 @@ cd my-smart-wallets-app
 </CodeBlocks>
 
 ## 2. Set up environment
-
-![Set up environment](https://alchemyapi-res.cloudinary.com/image/upload/v1755748556/docs/Screenshot_2025-08-20_at_8.55.51_PM_wxj3eo.png)
 
 Once you have your project cloned down and you are in the `my-smart-wallets-app` level in your terminal, go to your project's root, create a `.env` file and copy-paste the following into it:
 
@@ -45,10 +33,10 @@ NEXT_PUBLIC_ALCHEMY_POLICY_ID=YOUR_PAYMASTER_POLICY_ID
 ```
 </CodeBlocks>
 
-Remember: you must create a [`Configuration`](https://dashboard.alchemy.com/services/smart-wallets/configuration) and a [`Paymaster Policy`](https://dashboard.alchemy.com/services/gas-manager/configuration) if you want to use Alchemy Smart Wallets.
+Remember: you must create a [`Configuration`](https://dashboard.alchemy.com/services/smart-wallets/configuration) and a [`Paymaster Policy`](https://dashboard.alchemy.com/services/gas-manager/configuration) if you want to use Smart Wallets.
 
 <Warning>
-  Both the `Configuration` and the `Policy ID` must be linked to the application behind your Alchemy API Key!
+  Both the `Configuration` and the `Policy ID` must be linked to the application behind your API Key!
 </Warning>
 
 ## 3. Run app
@@ -64,7 +52,6 @@ npm run dev
 Your `localhost:3000` should now display the following:
 
 ![preview](https://alchemyapi-res.cloudinary.com/image/upload/v1755749524/docs/Screenshot_2025-08-20_at_9.11.59_PM_p4ah4z.png)
-
 
 ## 4. Log in and view the app
 
@@ -87,5 +74,3 @@ In the Dashboard, you can set your app up with:
 - Social login methods
 - Gas sponsorship
 - Customized styling
-
-![next steps](https://alchemyapi-res.cloudinary.com/image/upload/v1755749915/docs/Screenshot_2025-08-20_at_9.18.27_PM_eiwybl.png)
