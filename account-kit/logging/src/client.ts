@@ -1,12 +1,9 @@
-import { AnalyticsBrowser } from "@segment/analytics-next";
 import { v4 as uuid } from "uuid";
 import { WRITE_IN_DEV } from "./_writeKey.js";
-import { fetchRemoteWriteKey } from "./fetchRemoteWriteKey.js";
 import { noopLogger } from "./noop.js";
-import { ContextAllowlistPlugin } from "./plugins/contextAllowlist.js";
-import { DevDestinationPlugin } from "./plugins/devDestination.js";
 import type { EventsSchema, InnerLogger, LoggerContext } from "./types";
 import { isClientDevMode } from "./utils.js";
+import { fetchRemoteProjectId } from "./fetchRemoteProjectId.js";
 
 const ANON_ID_STORAGE_KEY = "account-kit:anonId";
 
@@ -29,6 +26,37 @@ function getOrCreateAnonId(): AnonId {
   return anon;
 }
 
+function loadHeap(projectId: string): Promise<void> {
+  if (!window.heap) {
+    // Use `"https://static.alchemyapi.io/scripts/anayltics/heap-analytics-script.js"`, but it's an old
+    const scriptSrc = `
+    // Load Heap Analytics
+    window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://cdn.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady","addPageviewProperties","removePageviewProperty","clearPageviewProperties","trackPageview"],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(var p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
+    heap.load('${projectId}', { trackingServer: "https://heapdata.alchemy.com", disableTextCapture: true, disableInteractionTextCapture: true, eventPropertiesStorage: 'localstorage', metadataStorage: 'localstorage', disableInteractionEvents: ['click', 'submit', 'change'], disablePageviewAutocapture: true });
+  `;
+    const script = document.createElement("script");
+    script.innerHTML = scriptSrc;
+    document.head.appendChild(script);
+  }
+
+  return new Promise((resolve, reject) => {
+    if (window.heap && window.heap.loaded) {
+      resolve();
+    }
+
+    const startTime = Date.now();
+    const checkInterval = setInterval(() => {
+      if (window.heap && window.heap.loaded) {
+        clearInterval(checkInterval);
+        resolve();
+      } else if (Date.now() - startTime > 1000 * 10) {
+        clearInterval(checkInterval);
+        reject(new Error("Heap analytics failed to load within timeout"));
+      }
+    }, 50);
+  });
+}
+
 export function createClientLogger<Schema extends EventsSchema = []>(
   context: LoggerContext,
 ): InnerLogger<Schema> {
@@ -42,50 +70,48 @@ export function createClientLogger<Schema extends EventsSchema = []>(
     return noopLogger;
   }
 
-  const analytics = new AnalyticsBrowser();
-  const writeKey = fetchRemoteWriteKey();
+  const projectId = fetchRemoteProjectId();
 
   const { id: anonId } = getOrCreateAnonId();
-  analytics.setAnonymousId(anonId);
-  analytics.register(ContextAllowlistPlugin);
-  analytics.debug(isDev);
 
-  if (isDev) {
-    // Super weird behaviour, but if I don't add some kind of log here,
-    // then I don't actually get logs in the console
-    console.log(`[Metrics] metrics initialized for ${context.package}`);
-  }
-
-  // This lets us log events in the console
-  if (isDev) {
-    analytics.register(DevDestinationPlugin);
-  }
-
-  const ready: Promise<unknown> = writeKey.then((writeKey) => {
-    if (writeKey == null) {
-      return;
+  const ready: Promise<boolean> = projectId.then(async (projectId) => {
+    if (projectId == null) {
+      return false;
     }
 
-    analytics.load(
-      {
-        writeKey,
-        // we disable these settings in dev so we don't fetch anything from segment
-        cdnSettings: isDev
-          ? {
-              integrations: {},
-            }
-          : undefined,
-      },
-      // further we disable the segment integration dev
-      {
-        disableClientPersistence: true,
-        integrations: {
-          "Segment.io": !isDev,
-        },
-      },
-    );
+    try {
+      await loadHeap(projectId);
 
-    return analytics.ready();
+      const transformerFn = (messages: unknown[]) => {
+        console.log({ messages }); // TODO(jh): remove
+        return messages.map((message: any) => {
+          if (message.type !== "core_track" || message.info?.isAutotrack) {
+            // Heap gets stuck if the transformer doesn't return the
+            // message that it's expecting to get back, so you can't
+            // just completely filter things out. We could potentially
+            // just strip out certain fields here, but we can't drop events.
+            return message;
+          }
+          return message;
+        });
+      };
+      window.heap.addTransformerFn(
+        "aaSdkHeapMetadataTransformer",
+        transformerFn,
+        "metadata",
+      );
+      window.heap.addTransformerFn(
+        "aaSdkHeapGeneralTransformer",
+        transformerFn,
+        "general",
+      );
+
+      window.heap.identify(anonId);
+      return true;
+    } catch (error) {
+      console.warn("Heap analytics failed to load:", error);
+      return false;
+    }
   });
 
   return {
@@ -94,7 +120,13 @@ export function createClientLogger<Schema extends EventsSchema = []>(
       anonId,
     },
     trackEvent: async ({ name, data }) => {
-      if (!(await writeKey)) {
+      const properties = { ...data, ...context };
+
+      if (isDev) {
+        console.info(`[Metrics] ${name} ${JSON.stringify(properties)}`);
+      }
+
+      if (!(await ready)) {
         return noopLogger.trackEvent({
           name,
           // @ts-expect-error
@@ -102,7 +134,7 @@ export function createClientLogger<Schema extends EventsSchema = []>(
         });
       }
 
-      await analytics.track(name, { ...data, ...context });
+      window.heap.track(name, properties);
     },
   };
 }

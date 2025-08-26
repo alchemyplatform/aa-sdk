@@ -1,11 +1,11 @@
 import { vi } from "vitest";
 import * as writeKeyConfig from "./_writeKey.js";
-import * as fetchKeyModule from "./fetchRemoteWriteKey.js";
+import * as fetchProjectIdModule from "./fetchRemoteProjectId.js";
 import { noopLogger } from "./noop.js";
 import type { LoggerContext } from "./types.js";
 
 const devSpy = vi.spyOn(writeKeyConfig, "WRITE_IN_DEV", "get");
-const keySpy = vi.spyOn(fetchKeyModule, "fetchRemoteWriteKey");
+const projectIdSpy = vi.spyOn(fetchProjectIdModule, "fetchRemoteProjectId");
 
 type TestSchema = [
   {
@@ -27,7 +27,7 @@ describe("Client Logger", () => {
     // @ts-ignore this does exist
     global.jsdom.reconfigure({ url: "http://localhost" });
 
-    keySpy.mockImplementation(async () => undefined);
+    projectIdSpy.mockImplementation(async () => undefined);
   });
 
   it("should not log events if no write key", async () => {
@@ -54,7 +54,7 @@ describe("Client Logger", () => {
   });
 
   it("should create a valid logger if not localhost", async () => {
-    keySpy.mockImplementation(() => Promise.resolve("test-key"));
+    projectIdSpy.mockImplementation(() => Promise.resolve("test-key"));
     // @ts-ignore this does exist
     global.jsdom.reconfigure({ url: "https://test.com" });
 
@@ -62,56 +62,5 @@ describe("Client Logger", () => {
 
     const logger = createClientLogger<TestSchema>(loggerContext);
     expect(logger).not.toBe(noopLogger);
-  });
-
-  it("should create a console logger in dev", async () => {
-    const fetchSpy = vi.spyOn(global, "fetch");
-    keySpy.mockImplementation(() => Promise.resolve("test-key"));
-    devSpy.mockImplementation(() => true);
-    const consoleSpy = vi.spyOn(console, "log");
-    consoleSpy.mockImplementation(() => {});
-
-    const { createClientLogger } = await import("./client.js");
-
-    const logger = createClientLogger<TestSchema>(loggerContext);
-    expect(logger).not.toBe(noopLogger);
-    await logger._internal.ready;
-
-    await logger.trackEvent({ name: "test", data: { test: true } });
-    expect(fetchSpy).toHaveBeenCalledTimes(0);
-
-    expect(JSON.parse(consoleSpy.mock.calls[1][0])).toMatchInlineSnapshot(
-      {
-        timestamp: expect.any(String),
-        messageId: expect.any(String),
-        anonymousId: expect.any(String),
-      },
-      `
-      {
-        "anonymousId": Any<String>,
-        "context": {
-          "page": {
-            "path": "/",
-            "referrer": "",
-            "search": "",
-            "title": "",
-            "url": "http://localhost/",
-          },
-        },
-        "event": "test",
-        "integrations": {
-          "Segment.io": false,
-        },
-        "messageId": Any<String>,
-        "properties": {
-          "package": "test/signer",
-          "test": true,
-          "version": "1.0.0",
-        },
-        "timestamp": Any<String>,
-        "type": "track",
-      }
-    `,
-    );
   });
 });
