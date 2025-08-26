@@ -49,3 +49,21 @@ export type PerformanceEvent = {
     functionName: string;
   };
 };
+
+interface HeapAnalytics {
+  loaded: boolean;
+  identify(userId: string): void;
+  track(eventName: string, properties?: Record<string, unknown>): void;
+  addTransformerFn(
+    name: string,
+    // TODO(jh): heap doesn't specify type for this here: https://developers.heap.io/reference/client-side-apis-overview
+    transformerFn: unknown,
+    pipeline: "metadata" | "general",
+  ): void;
+}
+
+declare global {
+  interface Window {
+    heap: HeapAnalytics;
+  }
+}
