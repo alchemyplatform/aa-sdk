@@ -4,11 +4,12 @@ import {
   bundlerActions,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
+
 import { getBlockNumber, setBalance, getBalance } from "viem/actions";
 import { parseEther, custom, publicActions } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
 import { local070Instance } from "~test/instances.js";
+import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
 
 describe("Viem AA - Coinbase Smart Account", () => {
   // Using 'any' type because local070Instance.getClient() returns a client with custom extensions
@@ -42,17 +43,15 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    // Create and bind gas manager hooks with a client that has the account
-    const gasManagerHooks = alchemyGasManagerHooks("test-policy");
+    // Create a client with the account for gas manager hooks
     const clientWithAccount = { ...client, account };
-    const boundHooks = gasManagerHooks.bind(clientWithAccount);
 
     // Create a bundler client that uses the Alchemy gas manager
     const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...boundHooks,
+      ...alchemyGasManagerHooks("test-policy", { client: clientWithAccount }),
     });
 
     // Fund the account
@@ -111,17 +110,15 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    // Create and bind gas manager hooks with a client that has the account
-    const gasManagerHooks = alchemyGasManagerHooks("test-policy");
+    // Create a client with the account for gas manager hooks
     const clientWithAccount = { ...client, account };
-    const boundHooks = gasManagerHooks.bind(clientWithAccount);
 
     // Create a bundler client that uses the Alchemy gas manager
     const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...boundHooks,
+      ...alchemyGasManagerHooks("test-policy", { client: clientWithAccount }),
     }).extend(bundlerActions);
 
     // Fund and deploy the account

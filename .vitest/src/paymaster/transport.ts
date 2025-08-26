@@ -82,7 +82,7 @@ export const paymasterTransport = (
             },
           ];
 
-          // For test-policy, don't use a paymaster
+          // Use paymaster for production-like behavior, but mock for test-policy to avoid deployment issues
           const usePaymaster = policyId !== "test-policy";
 
           const isPMv7 =

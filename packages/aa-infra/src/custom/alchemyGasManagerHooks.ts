@@ -81,57 +81,54 @@ export type AlchemyGasManagerHooks = {
   };
 };
 
-// Extended type that includes the bind method for production use
-export type AlchemyGasManagerHooksWithBind = AlchemyGasManagerHooks & {
-  bind: (
-    client: Client<Transport, Chain, SmartAccount>,
-  ) => AlchemyGasManagerHooks;
+export type AlchemyGasManagerConfig = {
+  client?: Client<Transport, Chain, SmartAccount>;
 };
 
 /**
  * Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
  *
- * You must use the `.bind(client)` method to create hooks that can make RPC calls.
- * The bound hooks will call `alchemy_requestGasAndPaymasterAndData` to get paymaster data.
- *
- * In test environments with custom transports, the transport layer intercepts these RPC calls
- * and provides the appropriate paymaster data.
- *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
- * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration for paying gas with tokens
- * @returns {AlchemyGasManagerHooksWithBind} Hooks with bind method
+ * @param {PolicyToken | AlchemyGasManagerConfig} [configOrToken] - Optional configuration or ERC-20 token configuration
+ * @returns {AlchemyGasManagerHooks} Hooks for createBundlerClient
  *
  * @example
  * ```ts
  * import { createBundlerClient, createClient, http } from "viem";
  * import { alchemyGasManagerHooks } from "@account-kit/infra";
  *
- * // Create a client with appropriate transport
  * const client = createClient({
  *   chain: sepolia,
  *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
  *   account, // Your smart account
  * });
  *
- * // Create and bind gas manager hooks
- * const gasManagerHooks = alchemyGasManagerHooks("your-policy-id");
- * const boundHooks = gasManagerHooks.bind(client);
- *
- * // Create bundler client with bound hooks
  * const bundler = createBundlerClient({
  *   chain: sepolia,
  *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
  *   account,
- *   ...boundHooks,
+ *   ...alchemyGasManagerHooks("your-policy-id", { client }),
  * });
  * ```
  */
 export function alchemyGasManagerHooks(
   policyId: string | string[],
-  policyToken?: PolicyToken,
-): AlchemyGasManagerHooksWithBind {
-  // Create a cache instance that can be shared across bound hooks
-  const sharedCache = new UserOpCache();
+  configOrToken?: PolicyToken | AlchemyGasManagerConfig,
+): AlchemyGasManagerHooks {
+  // Parse config/token parameter
+  let policyToken: PolicyToken | undefined;
+  let initialClient: Client<Transport, Chain, SmartAccount> | undefined;
+
+  if (configOrToken) {
+    // Check if it's a config object with client property
+    if ("client" in configOrToken) {
+      const config = configOrToken as AlchemyGasManagerConfig;
+      initialClient = config.client;
+    } else {
+      // It's a PolicyToken (has address property)
+      policyToken = configOrToken as PolicyToken;
+    }
+  }
 
   // Helper to create gas manager context
   const createContext = () => {
@@ -151,23 +148,17 @@ export function alchemyGasManagerHooks(
     return context;
   };
 
-  // Create the hooks with optional client binding
+  // Create the hooks with client
   const createHooks = (
-    client?: Client<Transport, Chain, SmartAccount>,
+    client: Client<Transport, Chain, SmartAccount>,
   ): AlchemyGasManagerHooks => {
-    const cache = client ? new UserOpCache() : sharedCache;
+    const cache = new UserOpCache();
 
     return {
       paymaster: {
         async getPaymasterStubData(
           parameters: GetPaymasterStubDataParameters,
         ): Promise<GetPaymasterStubDataReturnType> {
-          if (!client) {
-            throw new Error(
-              "Gas manager hooks must be bound to a client. Use .bind(client) before spreading the hooks.",
-            );
-          }
-
           // For test environments, we need to make the RPC call here
           // The test transport will intercept and return the correct paymaster
           const userOpCacheKey = createUserOpCacheKey(parameters);
@@ -220,12 +211,6 @@ export function alchemyGasManagerHooks(
         async getPaymasterData(
           parameters: GetPaymasterDataParameters,
         ): Promise<GetPaymasterDataReturnType> {
-          if (!client) {
-            throw new Error(
-              "Gas manager hooks must be bound to a client. Use .bind(client) before spreading the hooks.",
-            );
-          }
-
           const userOpCacheKey = createUserOpCacheKey(parameters);
 
           // Check if we have a cached result
@@ -309,13 +294,12 @@ export function alchemyGasManagerHooks(
     };
   };
 
-  // Create the default hooks (for test environments)
-  const defaultHooks = createHooks();
+  // Client is required for gas manager hooks to work
+  if (!initialClient) {
+    throw new Error(
+      "Gas manager hooks require a client. Pass it via config: alchemyGasManagerHooks(policyId, { client })",
+    );
+  }
 
-  // Add the bind method
-  return {
-    ...defaultHooks,
-    bind: (client: Client<Transport, Chain, SmartAccount>) =>
-      createHooks(client),
-  };
+  return createHooks(initialClient);
 }
