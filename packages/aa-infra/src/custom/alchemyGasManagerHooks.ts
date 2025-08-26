@@ -194,7 +194,7 @@ export function alchemyGasManagerHooks(
           if ("paymasterAndData" in response) {
             return {
               paymasterAndData: response.paymasterAndData,
-              isFinal: false,
+              isFinal: true,
             };
           } else {
             return {
@@ -217,35 +217,47 @@ export function alchemyGasManagerHooks(
           let response = cache.get(userOpCacheKey);
 
           if (!response) {
-            // No cached result, make the RPC call
-            const { entryPointAddress, ...userOpFields } = parameters;
-
-            // Get dummy signature from the account
-            if (!client.account) {
-              throw new Error(
-                "No account found on client. Client must have an account to use gas manager hooks.",
-              );
-            }
-            const dummySignature =
-              await client.account.getStubSignature(userOpFields);
-
-            const context = createContext();
-            const request = {
-              ...context,
-              entryPoint: entryPointAddress,
-              userOperation: userOpFields,
-              dummySignature,
-              overrides: {},
-            };
-
-            // Use the requestGasAndPaymasterAndData action
-            response = await requestGasAndPaymasterAndData(client as any, [
-              request,
-            ]);
-
-            // Cache the result
-            cache.set(userOpCacheKey, response);
+            // No cached result, fetch and cache the paymaster data
+            response = await fetchAndCachePaymasterData(parameters, client, userOpCacheKey);
           }
+
+// ... elsewhere in the file, add this shared function:
+
+async function fetchAndCachePaymasterData(
+  parameters: PaymasterAndDataParameters,
+  client: Client,
+  cacheKey: string,
+) {
+  const { entryPointAddress, ...userOpFields } = parameters;
+
+  // Get dummy signature from the account
+  if (!client.account) {
+    throw new Error(
+      "No account found on client. Client must have an account to use gas manager hooks.",
+    );
+  }
+  const dummySignature =
+    await client.account.getStubSignature(userOpFields);
+
+  const context = createContext();
+  const request = {
+    ...context,
+    entryPoint: entryPointAddress,
+    userOperation: userOpFields,
+    dummySignature,
+    overrides: {},
+  };
+
+  // Use the requestGasAndPaymasterAndData action
+  const response = await requestGasAndPaymasterAndData(client as any, [
+    request,
+  ]);
+
+  // Cache the result
+  cache.set(cacheKey, response);
+  
+  return response;
+}
 
           // Convert response to data return type
           if ("paymasterAndData" in response) {
