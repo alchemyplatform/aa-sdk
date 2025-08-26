@@ -211,6 +211,11 @@ export function alchemyGasManagerHooks(
               "No account found on client. Client must have an account to use gas manager hooks.",
             );
           }
+          if (!client.account.getStubSignature) {
+            throw new Error(
+              "Account must have getStubSignature method to use gas manager hooks.",
+            );
+          }
           const dummySignature =
             await client.account.getStubSignature(userOpFields);
 
