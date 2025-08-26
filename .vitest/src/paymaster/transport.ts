@@ -70,16 +70,21 @@ export const paymasterTransport = (
           // UserOperationRequest is slightly different, but so far the only issue we've needed to patch is loading
           // the dummy signature into the UO's signature. More may come up as we increase test coverage.
           // TODO(v5): cast as viem RpcUserOperation instead of aa-sdk/core's UserOperationRequest.
-          const [{ userOperation, entryPoint, dummySignature, overrides }] =
-            args.params as [
-              {
-                policyId: string;
-                entryPoint: Address;
-                dummySignature: Hex;
-                userOperation: UserOperationRequest;
-                overrides?: UserOperationOverrides;
-              },
-            ];
+          const [
+            { userOperation, entryPoint, dummySignature, overrides, policyId },
+          ] = args.params as [
+            {
+              policyId: string;
+              entryPoint: Address;
+              dummySignature: Hex;
+              userOperation: UserOperationRequest;
+              overrides?: UserOperationOverrides;
+            },
+          ];
+
+          // For test-policy, don't use a paymaster
+          const usePaymaster = policyId !== "test-policy";
+
           const isPMv7 =
             entryPoint.toLowerCase() ===
             paymaster070.entryPointAddress.toLowerCase();
@@ -108,9 +113,11 @@ export const paymasterTransport = (
             params: [],
           });
 
-          const stubData = isPMv7
-            ? paymaster070.getPaymasterStubData()
-            : paymaster060.getPaymasterStubData();
+          const stubData = usePaymaster
+            ? isPMv7
+              ? paymaster070.getPaymasterStubData()
+              : paymaster060.getPaymasterStubData()
+            : { paymasterAndData: "0x" };
 
           uo = {
             ...uo,
@@ -136,9 +143,11 @@ export const paymasterTransport = (
               : {}),
           };
 
-          const pmFields = isPMv7
-            ? await paymaster070.getPaymasterData(uo, client)
-            : await paymaster060.getPaymasterData(uo, client);
+          const pmFields = usePaymaster
+            ? isPMv7
+              ? await paymaster070.getPaymasterData(uo, client)
+              : await paymaster060.getPaymasterData(uo, client)
+            : { paymasterAndData: "0x" };
 
           return {
             ...uo,

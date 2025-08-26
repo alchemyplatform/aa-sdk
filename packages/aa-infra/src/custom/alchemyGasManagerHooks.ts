@@ -10,6 +10,7 @@ import type {
 } from "viem/account-abstraction";
 import type { RequestGasAndPaymasterAndDataResponse } from "../actions/types.js";
 import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
+
 import {
   alchemyEstimateFeesPerGas,
   type PriorityFeeClient,
@@ -90,40 +91,38 @@ export type AlchemyGasManagerHooksWithBind = AlchemyGasManagerHooks & {
 /**
  * Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
  *
- * For production use, you must use the `.bind(client)` method to create hooks that can
- * make RPC calls. For test environments, the spread operator pattern works directly.
+ * You must use the `.bind(client)` method to create hooks that can make RPC calls.
+ * The bound hooks will call `alchemy_requestGasAndPaymasterAndData` to get paymaster data.
+ *
+ * In test environments with custom transports, the transport layer intercepts these RPC calls
+ * and provides the appropriate paymaster data.
  *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
  * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration for paying gas with tokens
- * @returns {AlchemyGasManagerHooksWithBind} Hooks with bind method for production use
+ * @returns {AlchemyGasManagerHooksWithBind} Hooks with bind method
  *
  * @example
  * ```ts
- * // For production with Alchemy transport:
  * import { createBundlerClient, createClient, http } from "viem";
  * import { alchemyGasManagerHooks } from "@account-kit/infra";
  *
+ * // Create a client with appropriate transport
  * const client = createClient({
  *   chain: sepolia,
  *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
+ *   account, // Your smart account
  * });
  *
+ * // Create and bind gas manager hooks
  * const gasManagerHooks = alchemyGasManagerHooks("your-policy-id");
  * const boundHooks = gasManagerHooks.bind(client);
  *
+ * // Create bundler client with bound hooks
  * const bundler = createBundlerClient({
  *   chain: sepolia,
  *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
  *   account,
  *   ...boundHooks,
- * });
- *
- * // For tests with local instances:
- * const bundler = createBundlerClient({
- *   chain: local070Instance.chain,
- *   transport: custom(client),
- *   account,
- *   ...alchemyGasManagerHooks("test-policy"),
  * });
  * ```
  */
@@ -136,13 +135,19 @@ export function alchemyGasManagerHooks(
 
   // Helper to create gas manager context
   const createContext = () => {
-    const context: any = { policyId };
-    if (policyToken) {
-      context.erc20Context = {
-        tokenAddress: policyToken.address,
-        maxTokenAmount: policyToken.maxTokenAmount,
-      };
+    const context: any = {};
+
+    if (policyId) {
+      context.policyId = Array.isArray(policyId) ? policyId[0] : policyId;
     }
+
+    if (policyToken) {
+      context.erc20Address = policyToken.address;
+      if (policyToken.maxTokenAmount) {
+        context.erc20MaxCost = `0x${policyToken.maxTokenAmount.toString(16)}`;
+      }
+    }
+
     return context;
   };
 
@@ -157,15 +162,14 @@ export function alchemyGasManagerHooks(
         async getPaymasterStubData(
           parameters: GetPaymasterStubDataParameters,
         ): Promise<GetPaymasterStubDataReturnType> {
-          // If no client is bound, return test values
           if (!client) {
-            return {
-              paymasterAndData: "0x",
-              isFinal: false,
-            };
+            throw new Error(
+              "Gas manager hooks must be bound to a client. Use .bind(client) before spreading the hooks.",
+            );
           }
 
-          // Production implementation with client
+          // For test environments, we need to make the RPC call here
+          // The test transport will intercept and return the correct paymaster
           const userOpCacheKey = createUserOpCacheKey(parameters);
           const { entryPointAddress, ...userOpFields } = parameters;
 
@@ -187,27 +191,28 @@ export function alchemyGasManagerHooks(
             overrides: {},
           };
 
+          // Use the requestGasAndPaymasterAndData action
           const response = await requestGasAndPaymasterAndData(client as any, [
             request,
           ]);
 
-          // Cache the result for getPaymasterData
+          // Cache the result
           cache.set(userOpCacheKey, response);
 
-          // Return stub data
+          // Return stub data (not final)
           if ("paymasterAndData" in response) {
             return {
               paymasterAndData: response.paymasterAndData,
-              isFinal: true,
+              isFinal: false,
             };
           } else {
             return {
               paymaster: response.paymaster,
-              paymasterData: response.paymasterData,
+              paymasterData: response.paymasterData || "0x",
               paymasterVerificationGasLimit:
                 response.paymasterVerificationGasLimit,
               paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
-              isFinal: true,
+              isFinal: false,
             };
           }
         },
@@ -215,33 +220,62 @@ export function alchemyGasManagerHooks(
         async getPaymasterData(
           parameters: GetPaymasterDataParameters,
         ): Promise<GetPaymasterDataReturnType> {
-          const userOpCacheKey = createUserOpCacheKey(parameters);
-
-          // Check if we have cached result from getPaymasterStubData
-          const cachedResult = cache.get(userOpCacheKey);
-          if (cachedResult) {
-            // We have cached data from a previous call
-            // Convert response to data return type
-            if ("paymasterAndData" in cachedResult) {
-              // For EP v0.6
-              return { paymasterAndData: cachedResult.paymasterAndData };
-            } else {
-              // For EP v0.7
-              return {
-                paymaster: cachedResult.paymaster,
-                paymasterData: cachedResult.paymasterData,
-                paymasterVerificationGasLimit:
-                  cachedResult.paymasterVerificationGasLimit,
-                paymasterPostOpGasLimit: cachedResult.paymasterPostOpGasLimit,
-              };
-            }
+          if (!client) {
+            throw new Error(
+              "Gas manager hooks must be bound to a client. Use .bind(client) before spreading the hooks.",
+            );
           }
 
-          // No cached result - in test environments, the transport handles this
-          // Return default values that the test transport will intercept
-          return {
-            paymasterAndData: "0x",
-          };
+          const userOpCacheKey = createUserOpCacheKey(parameters);
+
+          // Check if we have a cached result
+          let response = cache.get(userOpCacheKey);
+
+          if (!response) {
+            // No cached result, make the RPC call
+            const { entryPointAddress, ...userOpFields } = parameters;
+
+            // Get dummy signature from the account
+            if (!client.account) {
+              throw new Error(
+                "No account found on client. Client must have an account to use gas manager hooks.",
+              );
+            }
+            const dummySignature =
+              await client.account.getStubSignature(userOpFields);
+
+            const context = createContext();
+            const request = {
+              ...context,
+              entryPoint: entryPointAddress,
+              userOperation: userOpFields,
+              dummySignature,
+              overrides: {},
+            };
+
+            // Use the requestGasAndPaymasterAndData action
+            response = await requestGasAndPaymasterAndData(client as any, [
+              request,
+            ]);
+
+            // Cache the result
+            cache.set(userOpCacheKey, response);
+          }
+
+          // Convert response to data return type
+          if ("paymasterAndData" in response) {
+            // For EP v0.6
+            return { paymasterAndData: response.paymasterAndData };
+          } else {
+            // For EP v0.7
+            return {
+              paymaster: response.paymaster,
+              paymasterData: response.paymasterData,
+              paymasterVerificationGasLimit:
+                response.paymasterVerificationGasLimit,
+              paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
+            };
+          }
         },
       },
 
