@@ -38,6 +38,20 @@ The response must include these minimum fields:
 
 ### 3. JWT Structure Requirements
 
+#### JWT Header Requirements
+
+Your JWT header must include:
+
+| Field | Description                                            | Example   |
+| ----- | ------------------------------------------------------ | --------- |
+| `alg` | Algorithm used to sign the JWT                         | `"RS256"` |
+| `typ` | Token type                                             | `"JWT"`   |
+| `kid` | Key ID that matches the `kid` field from your JWKs URI | `"key-1"` |
+
+**Important**: The `kid` field in the JWT header must correspond to a key identifier from your JWKS endpoint to enable proper key lookup during token verification.
+
+#### JWT Payload Requirements
+
 Your JWTs must contain these claims:
 
 | Claim   | Description                              | Example                                                 |

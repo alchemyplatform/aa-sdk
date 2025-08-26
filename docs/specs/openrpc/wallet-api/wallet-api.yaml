@@ -257,23 +257,126 @@ methods:
                         - "sessionId"
                         - "signature"
                 paymasterService:
-                  anyOf:
-                    - description: "Single Policy ID"
-                      type: "object"
+                  allOf:
+                    - anyOf:
+                        - description: "Single policy ID"
+                          type: "object"
+                          properties:
+                            policyId:
+                              description: "The policy ID to use"
+                              type: "string"
+                          required:
+                            - "policyId"
+                        - description: "Multiple policy IDs"
+                          type: "object"
+                          properties:
+                            policyIds:
+                              description: "The policy IDs to use"
+                              type: "array"
+                              items:
+                                type: "string"
+                          required:
+                            - "policyIds"
+                    - type: "object"
                       properties:
-                        policyId:
-                          type: "string"
-                      required:
-                        - "policyId"
-                    - description: "Array of Policy IDs"
-                      type: "object"
-                      properties:
-                        policyIds:
-                          type: "array"
-                          items:
-                            type: "string"
-                      required:
-                        - "policyIds"
+                        onlyEstimation:
+                          description: "If true, will only estimate fees. Skips signature request and gas sponsorship"
+                          type: "boolean"
+                        erc20:
+                          description: "ERC20 Paymaster Settings"
+                          allOf:
+                            - type: "object"
+                              properties:
+                                tokenAddress:
+                                  description: "The address of the token to pay gas with"
+                                  type: "string"
+                                  pattern: "^0x(.*)$"
+                                maxTokenAmount:
+                                  description: "The maximum amount of tokens to allow during ERC20 gas payment"
+                                  type: "string"
+                                  pattern: "^0x(.*)$"
+                              required:
+                                - "tokenAddress"
+                            - anyOf:
+                                - description: "ERC20 Paymaster Settings for pre-op policies"
+                                  type: "object"
+                                  properties:
+                                    preOpSettings:
+                                      description: "ERC20 Paymaster Settings for pre-op policies"
+                                      anyOf:
+                                        - description: "Settings for manually injecting a Permit signature for ERC20 gas payment"
+                                          type: "object"
+                                          properties:
+                                            autoPermit:
+                                              description: "Settings for automatically injecting a Permit signature for ERC20 gas payment"
+                                              type: "object"
+                                              properties:
+                                                below:
+                                                  description: "The amount below which a Permit signature will be injected"
+                                                  type: "string"
+                                                  pattern: "^0x(.*)$"
+                                                amount:
+                                                  description: "The amount of tokens to Permit to the paymaster for gas payment"
+                                                  type: "string"
+                                                  pattern: "^0x(.*)$"
+                                                durationSeconds:
+                                                  description: "The duration of the Permit signature in seconds"
+                                                  type: "string"
+                                                  pattern: "^0x(.*)$"
+                                              required:
+                                                - "below"
+                                                - "amount"
+                                          required:
+                                            - "autoPermit"
+                                        - description: "Details of the returned Permit signature"
+                                          type: "object"
+                                          properties:
+                                            permitDetails:
+                                              description: "Details of the returned Permit signature"
+                                              type: "object"
+                                              properties:
+                                                deadline:
+                                                  description: "The deadline in the signed Permit object"
+                                                  type: "string"
+                                                  pattern: "^0x(.*)$"
+                                                value:
+                                                  description: "The value in the signed Permit object"
+                                                  type: "string"
+                                                  pattern: "^0x(.*)$"
+                                              required:
+                                                - "deadline"
+                                                - "value"
+                                          required:
+                                            - "permitDetails"
+                                  required:
+                                    - "preOpSettings"
+                                - description: "ERC20 Paymaster Settings for post-op policies"
+                                  type: "object"
+                                  properties:
+                                    postOpSettings:
+                                      description: "ERC20 Paymaster Settings for post-op policies"
+                                      type: "object"
+                                      properties:
+                                        autoApprove:
+                                          description: "Settings for automatically injecting an approval for ERC20 gas payment"
+                                          type: "object"
+                                          properties:
+                                            below:
+                                              description: "The amount below which an approval will be injected"
+                                              type: "string"
+                                              pattern: "^0x(.*)$"
+                                            amount:
+                                              description: "The amount of tokens to approve to the paymaster for gas payment"
+                                              type: "string"
+                                              pattern: "^0x(.*)$"
+                                          required:
+                                            - "below"
+                                            - "amount"
+                                  required:
+                                    - "postOpSettings"
+                                - description: "No auto approval (requires manual ERC20 approvals to paymaster contract)"
+                                  type: "object"
+                                  properties: {}
                 gasParamsOverride:
                   minProperties: 1
                   type: "object"
@@ -393,6 +496,102 @@ methods:
                       pattern: "^0x(.*)$"
                   required:
                     - "nonceKey"
+            paymasterPermitSignature:
+              anyOf:
+                - description: "Secp256k1 signature"
+                  type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum:
+                        - "secp256k1"
+                    data:
+                      anyOf:
+                        - description: "Hex-encoded signature"
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        - description: "r, s, yParity"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            yParity:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "yParity"
+                        - description: "r, s, v"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            v:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "v"
+                  required:
+                    - "type"
+                    - "data"
+                - description: "ECDSA signature (alias for secp256k1)"
+                  type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum:
+                        - "ecdsa"
+                    data:
+                      anyOf:
+                        - description: "Hex-encoded signature"
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        - description: "r, s, yParity"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            yParity:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "yParity"
+                        - description: "r, s, v"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            v:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "v"
+                  required:
+                    - "type"
+                    - "data"
           required:
             - "calls"
             - "from"
@@ -569,11 +768,26 @@ methods:
                                 - "type"
                                 - "data"
                                 - "rawPayload"
+                        feePayment:
+                          type: "object"
+                          properties:
+                            sponsored:
+                              type: "boolean"
+                            tokenAddress:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            maxAmount:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "sponsored"
+                            - "tokenAddress"
+                            - "maxAmount"
                       required:
                         - "type"
                         - "data"
                         - "chainId"
-                        - "signatureRequest"
+                        - "feePayment"
                     - description: "Prepared User Operation (Entrypoint v0.7.0)"
                       type: "object"
                       properties:
@@ -728,11 +942,26 @@ methods:
                                 - "type"
                                 - "data"
                                 - "rawPayload"
+                        feePayment:
+                          type: "object"
+                          properties:
+                            sponsored:
+                              type: "boolean"
+                            tokenAddress:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            maxAmount:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "sponsored"
+                            - "tokenAddress"
+                            - "maxAmount"
                       required:
                         - "type"
                         - "data"
                         - "chainId"
-                        - "signatureRequest"
+                        - "feePayment"
                     - description: "Prepared EIP-7702 Authorization"
                       type: "object"
                       properties:
@@ -934,11 +1163,26 @@ methods:
                       - "type"
                       - "data"
                       - "rawPayload"
+              feePayment:
+                type: "object"
+                properties:
+                  sponsored:
+                    type: "boolean"
+                  tokenAddress:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                  maxAmount:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                required:
+                  - "sponsored"
+                  - "tokenAddress"
+                  - "maxAmount"
             required:
               - "type"
               - "data"
               - "chainId"
-              - "signatureRequest"
+              - "feePayment"
           - description: "Prepared User Operation (Entrypoint v0.7.0)"
             type: "object"
             properties:
@@ -1093,10 +1337,530 @@ methods:
                       - "type"
                       - "data"
                       - "rawPayload"
+              feePayment:
+                type: "object"
+                properties:
+                  sponsored:
+                    type: "boolean"
+                  tokenAddress:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                  maxAmount:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                required:
+                  - "sponsored"
+                  - "tokenAddress"
+                  - "maxAmount"
             required:
               - "type"
               - "data"
               - "chainId"
+              - "feePayment"
+          - description: "Prepared ERC-7597 Permit Signature Request for the paymaster"
+            type: "object"
+            properties:
+              type:
+                description: "ERC-7597 Permit Signature Request for the paymaster"
+                type: "string"
+                enum:
+                  - "paymaster-permit"
+              modifiedRequest:
+                type: "object"
+                properties:
+                  calls:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        to:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        data:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        value:
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                      required:
+                        - "to"
+                  from:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                  chainId:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                  capabilities:
+                    type: "object"
+                    properties:
+                      permissions:
+                        anyOf:
+                          - description: "Permissions context"
+                            type: "object"
+                            properties:
+                              context:
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                            required:
+                              - "context"
+                          - description: "Remote permission"
+                            type: "object"
+                            properties:
+                              sessionId:
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              signature:
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                            required:
+                              - "sessionId"
+                              - "signature"
+                      paymasterService:
+                        allOf:
+                          - anyOf:
+                              - description: "Single policy ID"
+                                type: "object"
+                                properties:
+                                  policyId:
+                                    description: "The policy ID to use"
+                                    type: "string"
+                                required:
+                                  - "policyId"
+                              - description: "Multiple policy IDs"
+                                type: "object"
+                                properties:
+                                  policyIds:
+                                    description: "The policy IDs to use"
+                                    type: "array"
+                                    items:
+                                      type: "string"
+                                required:
+                                  - "policyIds"
+                          - type: "object"
+                            properties:
+                              onlyEstimation:
+                                description: "If true, will only estimate fees. Skips signature request and gas sponsorship"
+                                type: "boolean"
+                              erc20:
+                                description: "ERC20 Paymaster Settings"
+                                allOf:
+                                  - type: "object"
+                                    properties:
+                                      tokenAddress:
+                                        description: "The address of the token to pay gas with"
+                                        type: "string"
+                                        pattern: "^0x(.*)$"
+                                      maxTokenAmount:
+                                        description: "The maximum amount of tokens to allow during ERC20 gas payment"
+                                        type: "string"
+                                        pattern: "^0x(.*)$"
+                                    required:
+                                      - "tokenAddress"
+                                  - anyOf:
+                                      - description: "ERC20 Paymaster Settings for pre-op policies"
+                                        type: "object"
+                                        properties:
+                                          preOpSettings:
+                                            description: "ERC20 Paymaster Settings for pre-op policies"
+                                            anyOf:
+                                              - description: "Settings for manually injecting a Permit signature for ERC20 gas payment"
+                                                type: "object"
+                                                properties:
+                                                  autoPermit:
+                                                    description: "Settings for automatically injecting a Permit signature for ERC20 gas payment"
+                                                    type: "object"
+                                                    properties:
+                                                      below:
+                                                        description: "The amount below which a Permit signature will be injected"
+                                                        type: "string"
+                                                        pattern: "^0x(.*)$"
+                                                      amount:
+                                                        description: "The amount of tokens to Permit to the paymaster for gas payment"
+                                                        type: "string"
+                                                        pattern: "^0x(.*)$"
+                                                      durationSeconds:
+                                                        description: "The duration of the Permit signature in seconds"
+                                                        type: "string"
+                                                        pattern: "^0x(.*)$"
+                                                    required:
+                                                      - "below"
+                                                      - "amount"
+                                                required:
+                                                  - "autoPermit"
+                                              - description: "Details of the returned Permit signature"
+                                                type: "object"
+                                                properties:
+                                                  permitDetails:
+                                                    description: "Details of the returned Permit signature"
+                                                    type: "object"
+                                                    properties:
+                                                      deadline:
+                                                        description: "The deadline in the signed Permit object"
+                                                        type: "string"
+                                                        pattern: "^0x(.*)$"
+                                                      value:
+                                                        description: "The value in the signed Permit object"
+                                                        type: "string"
+                                                        pattern: "^0x(.*)$"
+                                                    required:
+                                                      - "deadline"
+                                                      - "value"
+                                                required:
+                                                  - "permitDetails"
+                                        required:
+                                          - "preOpSettings"
+                                      - description: "ERC20 Paymaster Settings for post-op policies"
+                                        type: "object"
+                                        properties:
+                                          postOpSettings:
+                                            description: "ERC20 Paymaster Settings for post-op policies"
+                                            type: "object"
+                                            properties:
+                                              autoApprove:
+                                                description: "Settings for automatically injecting an approval for ERC20 gas payment"
+                                                type: "object"
+                                                properties:
+                                                  below:
+                                                    description: "The amount below which an approval will be injected"
+                                                    type: "string"
+                                                    pattern: "^0x(.*)$"
+                                                  amount:
+                                                    description: "The amount of tokens to approve to the paymaster for gas payment"
+                                                    type: "string"
+                                                    pattern: "^0x(.*)$"
+                                                required:
+                                                  - "below"
+                                                  - "amount"
+                                        required:
+                                          - "postOpSettings"
+                                      - description: "No auto approval (requires manual ERC20 approvals to paymaster contract)"
+                                        type: "object"
+                                        properties: {}
+                      gasParamsOverride:
+                        minProperties: 1
+                        type: "object"
+                        properties:
+                          preVerificationGas:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                          verificationGasLimit:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                          callGasLimit:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                          paymasterVerificationGasLimit:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                          paymasterPostOpGasLimit:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                          maxFeePerGas:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                          maxPriorityFeePerGas:
+                            anyOf:
+                              - description: "Absolute"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "Multiplier"
+                                type: "object"
+                                properties:
+                                  multiplier:
+                                    type: "number"
+                                required:
+                                  - "multiplier"
+                      eip7702Auth:
+                        anyOf:
+                          - description: "Specify EIP-7702 delegation"
+                            type: "object"
+                            properties:
+                              account:
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              delegation:
+                                anyOf:
+                                  - type: "string"
+                                    enum:
+                                      - "0x69007702764179f14F51cdce752f4f775d74E139"
+                                  - type: "string"
+                                    enum:
+                                      - "ModularAccountV2"
+                            required:
+                              - "delegation"
+                          - description: "Default EIP-7702 delegation"
+                            type: "boolean"
+                            enum:
+                              - true
+                      nonceOverride:
+                        type: "object"
+                        properties:
+                          nonceKey:
+                            description: "Override nonce key as hex string"
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                        required:
+                          - "nonceKey"
+                  paymasterPermitSignature:
+                    anyOf:
+                      - description: "Secp256k1 signature"
+                        type: "object"
+                        properties:
+                          type:
+                            type: "string"
+                            enum:
+                              - "secp256k1"
+                          data:
+                            anyOf:
+                              - description: "Hex-encoded signature"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "r, s, yParity"
+                                type: "object"
+                                properties:
+                                  r:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  s:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  yParity:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                required:
+                                  - "r"
+                                  - "s"
+                                  - "yParity"
+                              - description: "r, s, v"
+                                type: "object"
+                                properties:
+                                  r:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  s:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  v:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                required:
+                                  - "r"
+                                  - "s"
+                                  - "v"
+                        required:
+                          - "type"
+                          - "data"
+                      - description: "ECDSA signature (alias for secp256k1)"
+                        type: "object"
+                        properties:
+                          type:
+                            type: "string"
+                            enum:
+                              - "ecdsa"
+                          data:
+                            anyOf:
+                              - description: "Hex-encoded signature"
+                                type: "string"
+                                pattern: "^0x(.*)$"
+                              - description: "r, s, yParity"
+                                type: "object"
+                                properties:
+                                  r:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  s:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  yParity:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                required:
+                                  - "r"
+                                  - "s"
+                                  - "yParity"
+                              - description: "r, s, v"
+                                type: "object"
+                                properties:
+                                  r:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  s:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                  v:
+                                    type: "string"
+                                    pattern: "^0x(.*)$"
+                                required:
+                                  - "r"
+                                  - "s"
+                                  - "v"
+                        required:
+                          - "type"
+                          - "data"
+                required:
+                  - "calls"
+                  - "from"
+                  - "chainId"
+              data:
+                type: "object"
+                properties:
+                  domain:
+                    type: "object"
+                    properties:
+                      chainId:
+                        type: "integer"
+                      name:
+                        type: "string"
+                      salt:
+                        type: "string"
+                        pattern: "^0x(.*)$"
+                      verifyingContract:
+                        type: "string"
+                        pattern: "^0x(.*)$"
+                      version:
+                        type: "string"
+                  types:
+                    type: "object"
+                    patternProperties:
+                      ^(.*)$:
+                        type: "array"
+                        items:
+                          type: "object"
+                          properties:
+                            name:
+                              type: "string"
+                            type:
+                              type: "string"
+                          required:
+                            - "name"
+                            - "type"
+                  primaryType:
+                    type: "string"
+                  message:
+                    type: "object"
+                    patternProperties:
+                      ^(.*)$: {}
+                required:
+                  - "types"
+                  - "primaryType"
+                  - "message"
+              signatureRequest:
+                description: "Typed data"
+                type: "object"
+                properties:
+                  type:
+                    type: "string"
+                    enum:
+                      - "eth_signTypedData_v4"
+                  data:
+                    type: "object"
+                    properties:
+                      domain:
+                        type: "object"
+                        properties:
+                          chainId:
+                            type: "integer"
+                          name:
+                            type: "string"
+                          salt:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                          verifyingContract:
+                            type: "string"
+                            pattern: "^0x(.*)$"
+                          version:
+                            type: "string"
+                      types:
+                        type: "object"
+                        patternProperties:
+                          ^(.*)$:
+                            type: "array"
+                            items:
+                              type: "object"
+                              properties:
+                                name:
+                                  type: "string"
+                                type:
+                                  type: "string"
+                              required:
+                                - "name"
+                                - "type"
+                      primaryType:
+                        type: "string"
+                      message:
+                        type: "object"
+                        patternProperties:
+                          ^(.*)$: {}
+                    required:
+                      - "types"
+                      - "primaryType"
+                      - "message"
+                  rawPayload:
+                    description: "Raw payload that can be signed if using a signer that supports signing raw bytes (such as an Alchemy Signer)"
+                    type: "string"
+                    pattern: "^0x(.*)$"
+                required:
+                  - "type"
+                  - "data"
+                  - "rawPayload"
+            required:
+              - "type"
+              - "modifiedRequest"
+              - "data"
               - "signatureRequest"
 
     examples:
@@ -1135,6 +1899,10 @@ methods:
               data:
                 raw: "0xc69e468aa6fafb5c7298c02841e76f976b433018266af39a5807bc29ea9ad392"
               rawPayload: "0x2a8073568c8fad3edf15f70c3471a7fff18e1d57c650a501ab47f57a5c1f0e39"
+            feePayment:
+              sponsored: false
+              tokenAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+              maxAmount: "0x1f34"
 
   - name: wallet_sendPreparedCalls
     description: This method is used after signing the signatureRequest returned from prepareCalls to submit a user operation
@@ -2400,18 +3168,101 @@ methods:
               type: "string"
               pattern: "^0x(.*)$"
             signature:
-              type: "object"
-              properties:
-                type:
-                  type: "string"
-                  enum:
-                    - "ecdsa"
-                data:
-                  type: "string"
-                  pattern: "^0x(.*)$"
-              required:
-                - "type"
-                - "data"
+              anyOf:
+                - description: "Secp256k1 signature"
+                  type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum:
+                        - "secp256k1"
+                    data:
+                      anyOf:
+                        - description: "Hex-encoded signature"
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        - description: "r, s, yParity"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            yParity:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "yParity"
+                        - description: "r, s, v"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            v:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "v"
+                  required:
+                    - "type"
+                    - "data"
+                - description: "ECDSA signature (alias for secp256k1)"
+                  type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum:
+                        - "ecdsa"
+                    data:
+                      anyOf:
+                        - description: "Hex-encoded signature"
+                          type: "string"
+                          pattern: "^0x(.*)$"
+                        - description: "r, s, yParity"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            yParity:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "yParity"
+                        - description: "r, s, v"
+                          type: "object"
+                          properties:
+                            r:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            s:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                            v:
+                              type: "string"
+                              pattern: "^0x(.*)$"
+                          required:
+                            - "r"
+                            - "s"
+                            - "v"
+                  required:
+                    - "type"
+                    - "data"
             capabilities:
               type: "object"
               properties:
@@ -2617,6 +3468,53 @@ methods:
                       - "0x1057eff9529142aa3b74adcaacfce5b99a09d80c9f2e38e35ea1f27535e61477"
                       - "0x000000000000000000000000f13223cca0ae9786dd91dffe1f4e834c71ccdc2d"
                       - "0x0000000000000000000000002cc0c7981d846b9f2a16276556f6e8cb52bfb633"
+
+  - name: wallet_getCapabilities
+    description: This method is used to request capabilities from a wallet
+    params:
+      - name: getCapabilitiesRequest
+        required: true
+        schema:
+          type: "array"
+          items:
+            - type: "string"
+              pattern: "^0x(.*)$"
+            - type: "array"
+              items:
+                type: "string"
+                pattern: "^0x(.*)$"
+          additionalItems: false
+          minItems: 1
+          maxItems: 2
+
+    result:
+      name: getCapabilitiesResponse
+      schema:
+        type: "object"
+        patternProperties:
+          ^0x(.*)$:
+            type: "object"
+            patternProperties:
+              ^(.*)$: {}
+
+    examples:
+      - name: "wallet_getCapabilities example"
+        params:
+          - name: "Request"
+            value:
+              - - "0xd46e8dd67c5d32be8058bb8eb970870f07244567"
+                - - "0x2105"
+                  - "0x14A34"
+        result:
+          name: "Response"
+          value:
+            0x0:
+              atomic:
+                status: "supported"
+              paymasterService:
+                supported: true
+              eip7702Auth:
+                supported: true
 
   - name: wallet_listAccounts
     description: This method is used to list all smart accounts for a given signer.
