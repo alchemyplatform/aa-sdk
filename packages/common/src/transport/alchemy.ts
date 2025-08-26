@@ -34,6 +34,11 @@ export type AlchemyTransportConfig = {
   /** The base delay (in ms) between retries. */
   retryDelay?: TransportConfig["retryDelay"] | undefined;
   fetchOptions?: NoUndefined<HttpTransportConfig["fetchOptions"]>;
+  /** HTTP transport options for debugging and configuration */
+  httpOptions?: Pick<
+    HttpTransportConfig,
+    "onFetchRequest" | "onFetchResponse" | "timeout" | "batch"
+  >;
 };
 
 type AlchemyTransportBase<
@@ -121,6 +126,21 @@ export function isAlchemyTransport(
  * });
  * ```
  *
+ * @example
+ * Using HTTP debugging options:
+ * ```ts
+ * import { alchemyTransport } from "@alchemy/common";
+ *
+ * const transport = alchemyTransport({
+ *   apiKey: "your-api-key",
+ *   httpOptions: {
+ *     onFetchRequest: (request) => console.log("Request:", request),
+ *     onFetchResponse: (response) => console.log("Response:", response),
+ *     timeout: 30000
+ *   }
+ * });
+ * ```
+ *
  * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport
  * @param {string} [config.apiKey] - API key for Alchemy authentication
  * @param {string} [config.jwt] - JWT token for authentication
@@ -128,6 +148,7 @@ export function isAlchemyTransport(
  * @param {number} [config.retryDelay] - The delay between retries, in milliseconds
  * @param {number} [config.retryCount] - The number of retry attempts (default: 0)
  * @param {object} [config.fetchOptions] - Optional fetch options for HTTP requests
+ * @param {object} [config.httpOptions] - HTTP transport options for debugging (onFetchRequest, onFetchResponse, timeout, batch)
  * @returns {AlchemyTransport} The configured Alchemy transport function
  */
 export function alchemyTransport<
@@ -141,6 +162,7 @@ export function alchemyTransport<
     retryDelay,
     retryCount = 0,
     fetchOptions: fetchOptions_,
+    httpOptions,
   } = config;
 
   // Create a copy of fetch options for modification
@@ -208,6 +230,8 @@ export function alchemyTransport<
       // count that is already specified on the underlying transport.
       retryCount: 0,
       retryDelay,
+      // Pass through HTTP debugging options
+      ...httpOptions,
     });
 
     return createTransport(
