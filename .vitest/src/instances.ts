@@ -161,7 +161,8 @@ function defineInstance(params: DefineInstanceParams) {
         { messageBuffer: 10 },
       );
 
-      // Rundler will fork the Anvil state
+      // Deploy paymaster on Anvil before the bundler starts
+      // We need to do this synchronously, so we'll use a different approach
       return rundlerInstance;
     },
     port: bundlerPort,
@@ -192,6 +193,24 @@ function defineInstance(params: DefineInstanceParams) {
       // This still gives us isolation because each workspace should have its own pool id
       if ((await getPort({ port: anvilPort })) === anvilPort) {
         await anvilServer.start();
+
+        // Deploy paymaster on Anvil before starting bundler
+        const anvilClient = createClient({
+          chain,
+          transport: http(rpcUrls().anvil),
+        }).extend(() => ({ mode: "anvil" }));
+
+        // Import paymaster based on entry point version
+        const { paymaster060 } = await import("./paymaster/paymaster060.js");
+        const { paymaster070 } = await import("./paymaster/paymaster070.js");
+        const paymaster =
+          entryPointVersion === "0.6.0" ? paymaster060 : paymaster070;
+
+        // Deploy the paymaster contract
+        await paymaster.deployPaymasterContract(anvilClient);
+
+        // Wait a bit to ensure deployment is fully processed
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       if ((await getPort({ port: bundlerPort })) === bundlerPort) {
         await bundlerServer.start();
