@@ -7,9 +7,6 @@ slug: wallets/reference/alchemy/aa-infra/functions/alchemyGasManagerHooks
 
 Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
 
-For production use, you must use the `.bind(client)` method to create hooks that can
-make RPC calls. For test environments, the spread operator pattern works directly.
-
 ## Import
 
 ```ts
@@ -19,31 +16,20 @@ import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
 ## Usage
 
 ```ts
-// For production with Alchemy transport:
 import { createBundlerClient, createClient, http } from "viem";
 import { alchemyGasManagerHooks } from "@account-kit/infra";
 
 const client = createClient({
   chain: sepolia,
   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
+  account, // Your smart account
 });
-
-const gasManagerHooks = alchemyGasManagerHooks("your-policy-id");
-const boundHooks = gasManagerHooks.bind(client);
 
 const bundler = createBundlerClient({
   chain: sepolia,
   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
   account,
-  ...boundHooks,
-});
-
-// For tests with local instances:
-const bundler = createBundlerClient({
-  chain: local070Instance.chain,
-  transport: custom(client),
-  account,
-  ...alchemyGasManagerHooks("test-policy"),
+  ...alchemyGasManagerHooks("your-policy-id", { client }),
 });
 ```
 
@@ -55,13 +41,13 @@ const bundler = createBundlerClient({
 
 - The policy ID(s) for Alchemy's gas manager
 
-### policyToken
+### configOrToken
 
-`PolicyToken`
+`PolicyToken | AlchemyGasManagerConfig`
 
-- Optional ERC-20 token configuration for paying gas with tokens
+- Optional configuration or ERC-20 token configuration
 
 ## Returns
 
-`AlchemyGasManagerHooksWithBind`
-Hooks with bind method for production use
+`AlchemyGasManagerHooks`
+Hooks for createBundlerClient
