@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.58.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.1...v4.58.0) (2025-08-25)
+
+### Bug Fixes
+
+- add a section on installing plugins to get getting started page ([#1902](https://github.com/alchemyplatform/aa-sdk/issues/1902)) ([14f14ff](https://github.com/alchemyplatform/aa-sdk/commit/14f14ffcf40f27b9412b8ecc00e57ef917f036e4))
+- button contrast on wallet homepage ([#1924](https://github.com/alchemyplatform/aa-sdk/issues/1924)) ([59fa164](https://github.com/alchemyplatform/aa-sdk/commit/59fa1641d0939e4a3070a7c4ab2f84679dd3dc42))
+- update docs for v0.6 deprecation timeline ([#1915](https://github.com/alchemyplatform/aa-sdk/issues/1915)) ([c44c871](https://github.com/alchemyplatform/aa-sdk/commit/c44c87167c417a1a2110a8c848b621fc53d76bf9))
+
+### Features
+
+- add accessToken field to user object ([#1879](https://github.com/alchemyplatform/aa-sdk/issues/1879)) ([7483563](https://github.com/alchemyplatform/aa-sdk/commit/748356306e9aaf597b1b2e55218ec04c222983eb))
+- add cursor rules and auth/transaction overview ([#1909](https://github.com/alchemyplatform/aa-sdk/issues/1909)) ([6a41b63](https://github.com/alchemyplatform/aa-sdk/commit/6a41b6313bba7eb357083c1b6b224c0baaf0f239))
+- add docs github instructions ([#1936](https://github.com/alchemyplatform/aa-sdk/issues/1936)) ([e3d7b5f](https://github.com/alchemyplatform/aa-sdk/commit/e3d7b5fa02ad92701c9aed02979a51fd45af91b0))
+
 ## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
 
 ### Bug Fixes
