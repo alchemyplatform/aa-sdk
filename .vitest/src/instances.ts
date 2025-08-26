@@ -145,9 +145,8 @@ function defineInstance(params: DefineInstanceParams) {
   });
 
   const bundlerServer = createServer({
-    instance: (key) => {
-      // Create the rundler instance
-      const rundlerInstance = rundler(
+    instance: (key) =>
+      rundler(
         {
           binary: rundlerBinaryPath,
           // ...(entryPointVersion === "0.6.0"
@@ -159,11 +158,7 @@ function defineInstance(params: DefineInstanceParams) {
           },
         },
         { messageBuffer: 10 },
-      );
-
-      // Rundler will fork the Anvil state
-      return rundlerInstance;
-    },
+      ),
     port: bundlerPort,
   });
 
