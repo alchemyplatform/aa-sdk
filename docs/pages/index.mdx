@@ -17,27 +17,10 @@ slug: wallets
   max-width: 1010px;
   margin: 0 auto;
 }
-
-.hero-image-mobile {
-  display: none;
-  width: 100%;
-  height: auto;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .hero-image-desktop {
-    display: none;
-  }
-  
-  .hero-image-mobile {
-    display: block;
-  }
-}
 `}</style>
 
 <img src="/images/wallets/overviewHeader.png" alt="smart wallets overview" className="hero-image-desktop" />
-<img src="/images/wallets/overviewHeaderMobile.png" alt="smart wallets overview" className="hero-image-mobile" />
+
 
 <CardGroup cols={2}>
   <Card
@@ -51,9 +34,7 @@ slug: wallets
   </Card>
   <Card
     title="Try our demo"
-    icon="fa-regular fa-play"
-    iconPosition="left"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
+    icon="fa-solid fa-play"
     href="https://demo.alchemy.com/"
   >
     See Alchemy Smart Wallets in action with our interactive demo.
