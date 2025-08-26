@@ -41,3 +41,6 @@ export { addBreadCrumb } from "./actions/addBreadCrumb.js";
 
 // chains (convenience exports for Alchemy-supported chains)
 export * from "./chains.js";
+
+// Adding a dummy console to trigger CI
+console.log("dummy export");
