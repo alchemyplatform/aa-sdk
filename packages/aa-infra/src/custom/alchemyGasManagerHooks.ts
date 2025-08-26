@@ -136,7 +136,7 @@ export function alchemyGasManagerHooks(
     const context: any = {};
 
     if (policyId) {
-      context.policyId = Array.isArray(policyId) ? policyId[0] : policyId;
+      context.policyId = policyId;
     }
 
     if (policyToken) {
