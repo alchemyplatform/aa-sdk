@@ -120,13 +120,12 @@ export function alchemyGasManagerHooks(
   let initialClient: Client<Transport, Chain, SmartAccount> | undefined;
 
   if (configOrToken) {
-    // Check if it's a config object with client property
-    if ("client" in configOrToken) {
-      const config = configOrToken as AlchemyGasManagerConfig;
-      initialClient = config.client;
-    } else {
-      // It's a PolicyToken (has address property)
+    // Check if it's a PolicyToken (has address property)
+    if ('address' in configOrToken) {
       policyToken = configOrToken as PolicyToken;
+    } else {
+      // It's a config object
+      initialClient = (configOrToken as AlchemyGasManagerConfig).client;
     }
   }
 
