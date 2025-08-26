@@ -89,7 +89,7 @@ export type AlchemyGasManagerConfig = {
  * Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
  *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
- * @param {PolicyToken | AlchemyGasManagerConfig} [configOrToken] - Optional configuration or ERC-20 token configuration
+ * @param {PolicyToken | AlchemyGasManagerConfig} configOrToken - Configuration or ERC-20 token configuration
  * @returns {AlchemyGasManagerHooks} Hooks for createBundlerClient
  *
  * @example
@@ -113,20 +113,22 @@ export type AlchemyGasManagerConfig = {
  */
 export function alchemyGasManagerHooks(
   policyId: string | string[],
-  configOrToken?: PolicyToken | AlchemyGasManagerConfig,
+  configOrToken: PolicyToken | AlchemyGasManagerConfig,
 ): AlchemyGasManagerHooks {
   // Parse config/token parameter
   let policyToken: PolicyToken | undefined;
-  let initialClient: Client<Transport, Chain, SmartAccount> | undefined;
+  let initialClient: Client<Transport, Chain, SmartAccount>;
 
-  if (configOrToken) {
-    // Check if it's a PolicyToken (has address property)
-    if ('address' in configOrToken) {
-      policyToken = configOrToken as PolicyToken;
-    } else {
-      // It's a config object
-      initialClient = (configOrToken as AlchemyGasManagerConfig).client;
-    }
+  // Check if it's a config object with client property
+  if ("client" in configOrToken) {
+    const config = configOrToken as AlchemyGasManagerConfig;
+    initialClient = config.client!;
+  } else {
+    // It's a PolicyToken (has address property)
+    policyToken = configOrToken as PolicyToken;
+    throw new Error(
+      "Gas manager hooks require a client. Pass it via config: alchemyGasManagerHooks(policyId, { client })",
+    );
   }
 
   // Helper to create gas manager context
@@ -235,20 +237,22 @@ export function alchemyGasManagerHooks(
           // Cache the result
           cache.set(userOpCacheKey, response);
 
-          // Return stub data (not final)
+          // Return stub data - Alchemy Gas Manager provides complete data, so isFinal is true for both EP versions
           if ("paymasterAndData" in response) {
+            // For EP v0.6
             return {
               paymasterAndData: response.paymasterAndData,
               isFinal: true,
             };
           } else {
+            // For EP v0.7
             return {
               paymaster: response.paymaster,
               paymasterData: response.paymasterData || "0x",
               paymasterVerificationGasLimit:
                 response.paymasterVerificationGasLimit,
               paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
-              isFinal: false,
+              isFinal: true, // Alchemy Gas Manager provides complete data
             };
           }
         },
@@ -317,11 +321,6 @@ export function alchemyGasManagerHooks(
   };
 
   // Client is required for gas manager hooks to work
-  if (!initialClient) {
-    throw new Error(
-      "Gas manager hooks require a client. Pass it via config: alchemyGasManagerHooks(policyId, { client })",
-    );
-  }
 
   return createHooks(initialClient);
 }
