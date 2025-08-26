@@ -28,11 +28,11 @@ function getOrCreateAnonId(): AnonId {
 
 function loadHeap(projectId: string): Promise<void> {
   if (!window.heap) {
-    // We ideally load from `"https://static.alchemyapi.io/scripts/anayltics/heap-analytics-script.js"`, but it's an old version.
+    // TODO(jh): The dashboard loads Heap from `"https://static.alchemyapi.io/scripts/anayltics/heap-analytics-script.js"`, but it's an old version.
     const scriptSrc = `
     // Load Heap Analytics
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://cdn.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady","addPageviewProperties","removePageviewProperty","clearPageviewProperties","trackPageview"],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(var p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
-    heap.load('${projectId}', { trackingServer: "https://heapdata.alchemy.com", disableTextCapture: true, disableInteractionTextCapture: true, eventPropertiesStorage: 'localstorage', metadataStorage: 'localstorage', disableInteractionEvents: ['click', 'submit', 'change'], disablePageviewAutocapture: true });
+    heap.load('${projectId}', { trackingServer: "https://heapdata.alchemy.com", disableTextCapture: true, disableInteractionTextCapture: true, eventPropertiesStorage: 'localstorage', metadataStorage: 'localstorage', disableInteractionEvents: ['click', 'submit', 'change'], disablePageviewAutocapture: true, disableSessionReplay: true });
   `;
     const script = document.createElement("script");
     script.innerHTML = scriptSrc;
@@ -82,31 +82,10 @@ export function createClientLogger<Schema extends EventsSchema = []>(
     try {
       await loadHeap(projectId);
 
-      const transformerFn = (messages: unknown[]) => {
-        console.log({ messages }); // TODO(jh): remove
-        return messages.map((message: any) => {
-          if (message.type !== "core_track" || message.info?.isAutotrack) {
-            // Heap gets stuck if the transformer doesn't return the
-            // message that it's expecting to get back, so you can't
-            // just completely filter things out. We could potentially
-            // just strip out certain fields here, but we can't drop events.
-            return message;
-          }
-          return message;
-        });
-      };
-      window.heap.addTransformerFn(
-        "aaSdkHeapMetadataTransformer",
-        transformerFn,
-        "metadata",
-      );
-      window.heap.addTransformerFn(
-        "aaSdkHeapGeneralTransformer",
-        transformerFn,
-        "general",
-      );
+      if (window.heap.getIdentify() !== anonId) {
+        window.heap.identify(anonId);
+      }
 
-      window.heap.identify(anonId);
       return true;
     } catch (error) {
       console.warn("Heap analytics failed to load:", error);
