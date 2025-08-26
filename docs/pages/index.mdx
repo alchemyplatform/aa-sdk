@@ -19,8 +19,11 @@ slug: wallets
 }
 `}</style>
 
-<img src="/images/wallets/overviewHeader.png" alt="smart wallets overview" className="hero-image-desktop" />
-
+<img
+  src="/images/wallets/overviewHeader.png"
+  alt="smart wallets overview"
+  className="hero-image-desktop"
+/>
 
 <CardGroup cols={2}>
   <Card
@@ -33,11 +36,11 @@ slug: wallets
     Build an onchain app from scratch with wallets and transactions.
   </Card>
   <Card
-    title="Try our demo"
+    title="Try demo"
     icon="fa-solid fa-play"
     href="https://demo.alchemy.com/"
   >
-    See Alchemy Smart Wallets in action with our interactive demo.
+    See Smart Wallets in action with an interactive demo.
   </Card>
 </CardGroup>
 
@@ -46,7 +49,7 @@ slug: wallets
 <CardGroup cols={2}>
   <Card
     small
-    title="Seamless user onboarding"
+    title="User onboarding"
     icon="user-plus"
     iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
@@ -64,6 +67,15 @@ slug: wallets
     Remove gas fees for users to drive transaction growth.
   </Card>
   <Card
+    title="Batching"
+    icon="bolt"
+    iconPosition="left"
+    style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/transactions/send/batch-user-operations"
+  >
+    Multiple transactions in one click on EVM and Solana.
+  </Card>
+  <Card
     title="Whitelabel UI"
     icon="fa-solid fa-pencil"
     iconPosition="left"
@@ -73,15 +85,16 @@ slug: wallets
     Pre-built UI components and fully whitelabel solutions.
   </Card>
   <Card
-    title="Security at scale"
+    title="Funding flows"
     icon="shield"
     iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
+    href="/wallets/pages/funding/signup"
   >
-    Non-custodial security and built-in compliance.
+    Instant fiat onramping for payments.
   </Card>
   <Card
-    title="Powerful wallet policies"
+    title="Secure policy engine"
     icon="sliders"
     iconPosition="left"
     style={{ textAlign: "left", alignItems: "flex-start" }}
@@ -89,20 +102,9 @@ slug: wallets
   >
     Set permissions and automations across chains.
   </Card>
-  <Card
-    title="Batching"
-    icon="bolt"
-    iconPosition="left"
-    style={{ textAlign: "left", alignItems: "flex-start" }}
-    href="/wallets/transactions/send/batch-user-operations"
-  >
-    Multiple transactions in one click on EVM and Solana.
-  </Card>
 </CardGroup>
 
 ## Frameworks
-
-Use the SDK for everything or pick and choose the pieces you want for ultimate control over your stack.
 
 <CardGroup cols={2}>
   <Card
