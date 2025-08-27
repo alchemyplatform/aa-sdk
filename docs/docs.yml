@@ -156,7 +156,7 @@ navigation:
           - section: Customization
             contents:
               - page: Theme
-                path: wallets/pages/react/customization/theme.mdx
+                path: wallets/pages/react/theme.mdx
           - page: UI components
             path: wallets/pages/react/ui-components.mdx
           - section: Whitelabel
