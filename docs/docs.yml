@@ -52,8 +52,12 @@ navigation:
                 contents:
                   - page: Overview
                     path: wallets/pages/core/overview.mdx
-                  - page: Quickstart
+                  - page: Quickstart (Original)
                     path: wallets/pages/core/quickstart.mdx
+                  - page: Quickstart (Cursor)
+                    path: wallets/pages/core/quickstart-cursor.mdx
+                  - page: Quickstart (Github Copilot)
+                    path: wallets/pages/core/quickstart-copilot.mdx
                   - page: Multi-chain setup
                     path: wallets/pages/core/multi-chain-apps.mdx
                   - page: Server-side rendering
