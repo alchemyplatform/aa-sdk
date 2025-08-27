@@ -12,13 +12,13 @@ Gas fees paid in the native gas token can feel foreign to users that primarily h
 
 <Markdown src="../../shared/sponsor-gas-erc20-prerequisites.mdx" />
 
-## Create a Gas Manager policy
+## 1. Create a Gas Manager policy
 
 <Markdown src="../../shared/sponsor-gas-erc20-create-policy.mdx" />
 
 <Tabs>
   <Tab title="React">
-    ## Add the policy to your global config
+    ## 2. Add the policy to your global config
 
     ```ts twoslash config.ts
     import { createConfig } from "@account-kit/react";
@@ -41,7 +41,7 @@ Gas fees paid in the native gas token can feel foreign to users that primarily h
       Be sure to use version **4.54.1** or later of the Account Kit SDK.
     </Warning>
 
-    ## Send a sponsored UserOperation
+    ## 3. Send a sponsored UserOperation
 
 ```tsx twoslash
 import React from "react";
@@ -113,7 +113,7 @@ Then use `client.sendUserOperation()` to send UserOperations.
 
   </Tab>
   <Tab title="React Native">
-    ## Set the Policy ID globally
+    ## 2. Set the Policy ID globally
 
     When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
@@ -139,7 +139,7 @@ Then use `client.sendUserOperation()` to send UserOperations.
 
     Now you can follow the guide for [Sending user operations](/wallets/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
 
-    ## Set the gas policy ID per UserOperation
+    ## 3. Set the gas policy ID per UserOperation
 
     If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `useSmartAccountClient()` hook.
 
@@ -180,8 +180,8 @@ Then use `client.sendUserOperation()` to send UserOperations.
     ```
 
   </Tab>
-  <Tab title="Other JS">
-    ## Create a smart Account Client
+  <Tab title="Other Javascript">
+    ## 2. Create a smart Account Client
 
     Now you can create a Smart Account Client which is configured to sponsor gas.
 
@@ -217,7 +217,7 @@ Then use `client.sendUserOperation()` to send UserOperations.
     });
     ```
 
-    ## Send a sponsored UserOperation
+    ## 3. Send a sponsored UserOperation
 
     ```tsx
     import { client } from "./client";
@@ -248,11 +248,11 @@ Then use `client.sendUserOperation()` to send UserOperations.
     });
     ```
 
-    ## Estimate ERC20 token amount of a UO
+    ## 4. Estimate ERC20 token amount of a UO
 
     <Markdown src="../../shared/estimate-gas-with-any-token.mdx" />
 
-    ## Simulate a ERC20 UO
+    ## 5. Simulate a ERC20 UO
 
     <Markdown src="../../shared/simulate-sponsor-with-any-token.mdx" />
 

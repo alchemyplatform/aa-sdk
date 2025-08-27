@@ -24,7 +24,7 @@ Theme customizations and styling are passed through `withAccountKitUi`, the Acco
 
 ## Colors
 
-The [Account Kit Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overiddable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
+The [Account Kit Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overridable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
 
 ### Border colors
 
@@ -78,13 +78,13 @@ export const tailwindConfig = withAccountKitUi(
     colors: {
       active: createColorSet("#94A3B8", "#94A3B8"),
     },
-  }
+  },
 );
 ```
 
 ## Borders
 
-Similar to colors, the Account Theme object passed to `withAccountKitUi` supports an overiddable `borderRadius` field to customize the border radius size. The default value is `sm` which is an `8px` border radius.
+Similar to colors, the Account Theme object passed to `withAccountKitUi` supports an overridable `borderRadius` field to customize the border radius size. The default value is `sm` which is an `8px` border radius.
 
 ```ts twoslash
 import { withAccountKitUi } from "@account-kit/react/tailwind";
@@ -96,7 +96,7 @@ export const tailwindConfig = withAccountKitUi(
   },
   {
     borderRadius: "md",
-  }
+  },
 );
 ```
 
@@ -126,7 +126,7 @@ const config = createConfig(
   {
     // ... other ui config options
     illustrationStyle: "outline",
-  }
+  },
 );
 ```
 
@@ -145,7 +145,7 @@ In this example, we hide the default header text and replace it with our own.
 import { createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
-export const confg = createConfig(
+export const config = createConfig(
   {
     transport: alchemy({ apiKey: "YOUR_API_KEY" }),
     chain: sepolia,
@@ -155,7 +155,7 @@ export const confg = createConfig(
       header: "Sign in with your account", // [!code ++]
       hideSignInText: true, // [!code ++]
     },
-  }
+  },
 );
 ```
 
@@ -168,7 +168,7 @@ In this example, we leave the `Sign in` text in the modal and add an icon above 
 import { createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
-export const confg = createConfig(
+export const config = createConfig(
   {
     transport: alchemy({ apiKey: "YOUR_API_KEY" }),
     chain: sepolia,
@@ -177,6 +177,6 @@ export const confg = createConfig(
     auth: {
       header: <img src="img.src" />, // [!code ++]
     },
-  }
+  },
 );
 ```

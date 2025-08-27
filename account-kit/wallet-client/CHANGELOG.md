@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
+
+### Bug Fixes
+
+- **wallet-client:** improve error handling in signPreparedCalls ([0b2a6c9](https://github.com/alchemyplatform/aa-sdk/commit/0b2a6c96a869a34ca930d1e0bf8e2307d94fd469))
+
+### Features
+
+- **wallet-client:** add support for erc20 paymaster in wallet-client and useSendCalls ([7b0f092](https://github.com/alchemyplatform/aa-sdk/commit/7b0f0929254c707fd009ae90e392b39b9cb029a2))
+- **wallet-client:** update types for erc20 capability, add API reference ([428ee9d](https://github.com/alchemyplatform/aa-sdk/commit/428ee9d49e5529d4a43e8a1547b11919c0c8cd9a))
+
+# [4.58.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.1...v4.58.0) (2025-08-25)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
 ## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
 
 **Note:** Version bump only for package @account-kit/wallet-client

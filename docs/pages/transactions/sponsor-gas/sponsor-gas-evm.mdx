@@ -6,13 +6,13 @@ slug: wallets/transactions/sponsor-gas/sponsor-gas
 
 Gas fees are a significant barrier to entry for new users of your app. With Smart Wallets you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
 
-## Create a Gas Manager policy
+## 1. Create a Gas Manager policy
 
 <Markdown src="../../shared/create-gas-policy.mdx" />
 
 <Tabs>
   <Tab title="React">
-    ## Set the Policy ID globally
+    ## 2. Set the Policy ID globally
 
     When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
@@ -38,7 +38,7 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
 
     Now you can follow the guide for [Sending user operations](/wallets/transactions/send/send-user-operations) to send sponsored UOs from your smart account!
 
-    ## Set the gas policy ID per UserOperation
+    ## 3. Set the gas policy ID per UserOperation
 
     If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the [`useSmartAccountClient`](/wallets/reference/account-kit/react/hooks/useSmartAccountClient) hook.
 
@@ -75,7 +75,7 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
 
   </Tab>
   <Tab title="React Native">
-    ## Set the Policy ID globally
+    ## 2. Set the Policy ID globally
 
     When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `useSendUserOperation` hook to be sponsored by the policy you created.
 
@@ -101,7 +101,7 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
 
     Now you can follow the guide for [Sending user operations](/wallets/react-native/using-smart-accounts/send-user-operations) to send sponsored UOs from your smart account!
 
-    ## Set the gas policy ID per UserOperation
+    ## 3. Set the gas policy ID per UserOperation
 
     If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `useSmartAccountClient()` hook.
 
@@ -142,8 +142,8 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
     ```
 
   </Tab>
-  <Tab title="Other JS">
-    ## Set the Policy ID globally
+  <Tab title="Other Javascript">
+    ## 2. Set the Policy ID globally
 
     When creating your Account Kit config, you can optionally pass in a Gas Policy ID. This will enable all UOs sent by the `sendUserOperation` method to be sponsored by the policy you created.
 
@@ -168,7 +168,7 @@ Gas fees are a significant barrier to entry for new users of your app. With Smar
 
     Now you can follow the guide for [Sending user operations](/wallets/core/send-user-operations) to send sponsored UOs from your smart account!
 
-    ## Set the gas policy ID per Client
+    ## 3. Set the gas policy ID per Client
 
     If you want more control over which UOs are sponsored, then you can set the policy ID on a specific instance of the `Smart Account Client` returned by the `watchSmartAccountClient` function.
 

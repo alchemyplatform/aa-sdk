@@ -63,7 +63,7 @@ export const config = createConfig(
     connectors: externalWalletsConfig.connectors,
     solana: {
       connection: new Connection(
-        `https://solana-devnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
+        `https://solana-devnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`,
       ),
       adapters: externalWalletsConfig.adapters,
       // optional gas sponsor for Solana
@@ -85,7 +85,7 @@ export const config = createConfig(
       addPasskeyOnSignup: true,
       showSignInText: true,
     },
-  }
+  },
 );
 ```
 
@@ -173,7 +173,7 @@ const walletClient = createWalletClient({
 
 export const signer: SmartAccountSigner = new WalletClientSigner(
   walletClient,
-  "json-rpc"
+  "json-rpc",
 );
 
 // Connect your signer to your smart account

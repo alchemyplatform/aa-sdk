@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/signer",
-  "version": "4.57.1",
+  "version": "4.59.0",
   "description": "Core interfaces and clients for interfacing with the Alchemy Signer API",
   "author": "Alchemy",
   "license": "MIT",
@@ -48,8 +48,8 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.57.1",
-    "@account-kit/logging": "^4.57.1",
+    "@aa-sdk/core": "^4.59.0",
+    "@account-kit/logging": "^4.59.0",
     "@noble/curves": "^1.9.2",
     "@noble/hashes": "1.7.1",
     "@noble/secp256k1": "^2.3.0",
