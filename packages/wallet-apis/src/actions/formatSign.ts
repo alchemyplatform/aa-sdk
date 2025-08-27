@@ -1,6 +1,6 @@
 import type { Static } from "@sinclair/typebox";
 import type { wallet_formatSign } from "@alchemy/wallet-api-types/rpc";
-import type { InnerWalletApiClient, WithoutChainId } from "../types.ts";
+import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import { AccountNotFoundError } from "@alchemy/common";
 
@@ -8,7 +8,7 @@ export type FormatSignParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
   Omit<
-    WithoutChainId<
+    OptionalChainId<
       Static<
         (typeof wallet_formatSign)["properties"]["Request"]["properties"]["params"]
       >[0]
@@ -54,6 +54,8 @@ export async function formatSign<
 
   return client.request({
     method: "wallet_formatSign",
-    params: [{ ...params, from, chainId: toHex(client.chain.id) }],
+    params: [
+      { ...params, from, chainId: params.chainId ?? toHex(client.chain.id) },
+    ],
   });
 }

@@ -1,10 +1,10 @@
 import type { Static } from "@sinclair/typebox";
 import { toHex, type Prettify } from "viem";
 import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
-import type { InnerWalletApiClient, WithoutChainId } from "../types.ts";
+import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 
 export type SendPreparedCallsParams = Prettify<
-  WithoutChainId<
+  OptionalChainId<
     Static<
       (typeof wallet_sendPreparedCalls)["properties"]["Request"]["properties"]["params"]
     >[0]
@@ -57,7 +57,7 @@ export async function sendPreparedCalls(
         ? params
         : {
             ...params,
-            chainId: toHex(client.chain.id),
+            chainId: params.chainId ?? toHex(client.chain.id),
           },
     ],
   });

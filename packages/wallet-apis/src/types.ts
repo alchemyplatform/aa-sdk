@@ -30,8 +30,8 @@ export type InnerWalletApiClient = BaseWalletClient<{
 
 export type SignerClient = WalletClient<Transport, Chain, Account>;
 
-export type WithoutChainId<T> = T extends { chainId: Hex }
-  ? Omit<T, "chainId">
+export type OptionalChainId<T> = T extends { chainId: Hex }
+  ? Omit<T, "chainId"> & { chainId?: Hex | undefined }
   : T;
 
 export type WithoutRawPayload<T> = T extends { rawPayload: Hex }
