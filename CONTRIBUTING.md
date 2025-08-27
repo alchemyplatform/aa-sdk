@@ -26,6 +26,7 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
    - Confirm that your code passes format checks with `yarn run lint:check`.
 
 8. **Docs Changes**:
+
    - To run docs locally: `yarn docs:dev`.
    - To build docs: `yarn fern:gen`.
    - When editing or adding new docs, make sure you follow the [docs contributing guidelines](docs/CONTRIBUTING.md)
