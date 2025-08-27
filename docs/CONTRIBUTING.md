@@ -1,144 +1,289 @@
-# Wallet docs contributing style guidelines
+# Wallet Documentation Contributing Guidelines
 
-When writing or proofreading documentation for Alchemy projects, follow these style guidelines
+<!-- AI ASSISTANT INSTRUCTIONS START -->
+## 🤖 AI Assistant Guidelines
 
-# Principles
+**ROLE**: You are helping write documentation for Alchemy's Smart Wallets product. Always follow these rules when generating or editing content.
 
-- **Simplify and abstract** - hide Account Abstraction and blockchain complexity, focus on developer outcomes not implementation details
-    - Not this: Send a UserOperation to the bundler and use a paymaster
-    - This: Send gasless transactions
-- **Standardize** - Consistent terminology, voice, and document structure
-- **Be actionable** - Clear instructions that help developers achieve their goals quickly
+**CORE PRINCIPLES**:
+- SIMPLIFY: Hide blockchain complexity, focus on developer outcomes
+- STANDARDIZE: Use consistent terminology and voice
+- ACTIONABLE: Provide clear, direct instructions
 
-Follow the [Google Developer Documentation Style Guide](https://developers.google.com/style) as the foundation.
+**TERMINOLOGY ENFORCEMENT**:
+- ALWAYS use approved terms from the "Approved Terms" section
+- NEVER use terms from the "Prohibited Terms" section
+- REPLACE prohibited terms with their approved alternatives
 
-# 1. Terminology standards
+**VOICE REQUIREMENTS**:
+- Use second person ("you") not first person ("we", "I")
+- Use active voice, not passive voice
+- Be direct and confident, avoid qualifiers like "perhaps", "might"
+- Follow Google Developer Documentation Style Guide standards
 
-**Approved terms**
+<!-- AI ASSISTANT INSTRUCTIONS END -->
 
-- "Smart Wallets" (primary product term)
-- "smart account" (lowercase in text)
-- “aa-sdk” in code only
-- "gasless" (not "gas-less")
-- “onchain” not on-chain
-- "transactions" (not "user operations")
-- "sponsor gas" (not "gas manager")
-- “pay gas with any token” (not “ERC20 paymaster”)
+## Overview
 
-**Off-limit terms** 
+When writing or editing documentation for Alchemy Smart Wallets, follow these comprehensive style guidelines. These rules ensure consistency, clarity, and developer-focused content that abstracts away blockchain complexity.
 
-Unless absolutely necessary, avoid advanced technical or AA related terms as much as possible. Only use these when discussing low level or advanced implementation details where developers need to be aware of assumptions and have choices. 
+**Foundation**: Follow the [Google Developer Documentation Style Guide](https://developers.google.com/style) as the base standard.
 
-- "Account Abstraction" or "AA”
-- “ERC-4337”
-- "user operation" or "user ops" → use "transactions"
-- "bundler" → use "sending transactions"
-- "entrypoint" → implementation detail
-- "smart contract account" → use "wallet"
-- "Account Kit" → use "Smart Wallets"
-- "gas manager" → use "sponsor gas" or “pay gas with any token”  (except "Gas Manager API")
-- “paymaster" (except for "paymaster contract")
-- "Signer" → use “authentication” or “owner”
-- “modular account v2”, “light account v1”, any other account factory implementations → use “smart account”
-- “aa-sdk” → only allowed in code
+---
 
-**Brand references**
+## 1. Core Principles
 
-- Don’t use "Alchemy" or "our"
-    - e.g. not “Alchemy Smart Wallets” just “Smart Wallets”
-    - e.g. not “our smart account” just “smart accounts”
+### Simplify and Abstract
+- **Goal**: Hide Account Abstraction and blockchain complexity
+- **Focus**: Developer outcomes, not implementation details
+- **Example**:
+  - ❌ **Don't**: "Send a UserOperation to the bundler and use a paymaster"
+  - ✅ **Do**: "Send gasless transactions"
 
-# 2. Voice and tone
+### Standardize
+- **Goal**: Consistent terminology, voice, and document structure across all docs
+- **Application**: Use identical terms for identical concepts
 
-**Voice and tone**
+### Be Actionable  
+- **Goal**: Clear instructions that help developers achieve goals quickly
+- **Implementation**: Direct commands, specific steps, working examples
 
-- Use second person voice ("you" instead of "we" or "I") - follow the google [second person voice](https://developers.google.com/style/person) reference and rules
-- Avoid first-person plural: "We recommend...”
-- Be concise, direct, actionable, and opinionated on the default path
-    - Use active voice, not passive voice: "Create a wallet” not “A wallet should be created”
-    - Direct commands: "Install the SDK" not "You need to install...”
-- Avoid unnecessary qualifiers ("perhaps", "might want to") - be opinionated and help devs go down the best recommended path
-- Use consistent terminology throughout documents
+---
 
-**Capitalization rules**
+## 2. Terminology Standards
 
-- Capitalize product terms like “Smart Wallets”
-- Only capitalize first word in titles and sidebar names
-- Capitalize proper API names: "Gas Manager API" and "Bundler API"
-- Capitalize type primitive definitions: `Provider`, `Signer`, `Account`
+### ✅ Approved Terms (ALWAYS USE)
 
-# 3. Content structure rules
+| Term | Usage | Context |
+|------|-------|---------|
+| `"Smart Wallets"` | Primary product term | Capitalize when referring to the product |
+| `"smart account"` | Technical term | Lowercase in general text |
+| `"aa-sdk"` | Code references only | Never in prose, only in code blocks |
+| `"gasless"` | Payment model | Not "gas-less" |
+| `"onchain"` | Blockchain reference | Not "on-chain" |
+| `"transactions"` | User actions | Not "user operations" |
+| `"sponsor gas"` | Gas payment feature | Not "gas manager" |
+| `"pay gas with any token"` | ERC20 payment feature | Not "ERC20 paymaster" |
 
-**Titles and headers** 
+### ❌ Prohibited Terms (NEVER USE)
 
-- Do not use AA-specific or implementation specific terms in titles
-- Use developer-friendly, outcome-focused titles
-- Example: "Sponsor gas" not "Gas Manager Quickstart”
-- Keep sidebar names and titles limited to a few words to avoid wrapping and keep to 1 line
+**Replacement Rules**:
 
-**Other rules**
+| Prohibited Term | ➡️ Use Instead | Exception |
+|----------------|----------------|-----------|
+| `"Account Abstraction"` or `"AA"` | Avoid entirely | Only in advanced technical docs |
+| `"ERC-4337"` | Avoid entirely | Only when discussing protocol specifics |
+| `"user operation"` or `"user ops"` | `"transactions"` | Never |
+| `"bundler"` | `"sending transactions"` | Never |
+| `"entrypoint"` | Avoid entirely | Implementation detail |
+| `"smart contract account"` | `"wallet"` | Never |
+| `"Account Kit"` | `"Smart Wallets"` | Never |
+| `"gas manager"` | `"sponsor gas"` or `"pay gas with any token"` | Except "Gas Manager API" |
+| `"paymaster"` | Context-specific replacement | Except "paymaster contract" |
+| `"Signer"` | `"authentication"` or `"owner"` | Never |
+| `"modular account v2"`, `"light account v1"` | `"smart account"` | Never |
 
-- Link to other docs instead of repeating content
+### 🏷️ Brand Reference Rules
 
-# 3. Code and technical references
+**Company References**:
+- ❌ **Don't use**: "Alchemy" or "our" in documentation
+- ✅ **Examples**:
+  - ❌ "Alchemy Smart Wallets" → ✅ "Smart Wallets"
+  - ❌ "our smart account" → ✅ "smart accounts"
 
-- Include pre-requisites and assumptions where needed
-    - e.g. [Before](https://www.alchemy.com/docs/wallets/authentication/login-methods/social-login) implementing social login in your application, you need to configure your Smart Wallets dashboard and application…
-    - e.g. Ensure you are on alpha version xyz
-- Use backticks for all code references, function names, and technical terms
-- Include language specification in code blocks
-- Every piece of example code should be standalone, compilable, and working.
-- Apply `twoslash` to all examples for typechecking
-- Split code examples into multiple files to reduce example length. For example see how Viem does this: [https://viem.sh/docs/actions/wallet/getCallsStatus](https://viem.sh/docs/actions/wallet/getCallsStatus)
-    - Use an `example.ts` tab to show the highlighted code, and a `config.ts` tab to setup the required client.
-    - Every example should only require:
-        1. aa-sdk install
-        2. Retrieve required configs (API keys, Policy IDs, private key)
-        3. Copy the 2+ files
-        4. Run `example.ts`
-- Highlight and focus on the critical part of the example using Fern highlighting in code blocks https://buildwithfern.com/learn/docs/writing-content/components/code-blocks
-- Use snippets for common configuration to avoid duplicate code snippets
+---
 
-# 4. Markdown formatting
+## 3. Voice and Tone Standards
 
-- Implement the [Google Markdown Style Guide](https://google.github.io/styleguide/docguide/style.html) for formatting
-- Follow remark-lint rules for consistent formatting
-- Consistent bullet point formatting rules
-- Use proper heading hierarchy (H1 → H2 → H3)
-- Include alt text for images
-- If a guide for a feature supports multiple frameworks, split into tabs for each framework within one document
-    - e.g. React, React Native, Other JavaScript tabs
-- Use relative links
-    - For example use [/wallets/…] not [https://www.alchemy.com/docs/wallets/authentication/overview](https://www.alchemy.com/docs/wallets/authentication/overview)
-- No broken or circular references
+### 📝 Voice Requirements
 
-# Quality checklist
+**Second Person Voice** (REQUIRED):
+- ✅ **Use**: "you" throughout documentation
+- ❌ **Avoid**: "we", "I", "one"
+- ❌ **Never**: "We recommend..." → ✅ **Use**: "Recommended approach:"
 
-### Terminology Check
+**Active Voice** (REQUIRED):
+- ✅ **Use**: "Create a wallet"
+- ❌ **Avoid**: "A wallet should be created"
 
-- [ ]  No off-limit terms used
-- [ ]  Approved terms used correctly
-- [ ]  Proper capitalization applied
-- [ ]  No AA terms in headers
+**Direct Commands** (REQUIRED):
+- ✅ **Use**: "Install the SDK"
+- ❌ **Avoid**: "You need to install..." or "You should install..."
 
-### Style Check
+### 🎯 Tone Requirements
 
-- [ ]  Follows Google style guidelines
-- [ ]  Second-person voice throughout
-- [ ]  Active voice used
-- [ ]  Direct, confident tone
-- [ ]  Outcome-focused titles
+**Be Confident and Opinionated**:
+- ❌ **Avoid qualifiers**: "perhaps", "might want to", "you may wish to"
+- ✅ **Be direct**: State the recommended approach clearly
 
-### Code Check
+**Consistency**:
+- Use identical terminology for identical concepts across all documents
+- Maintain consistent voice throughout each document
 
-- [ ]  Twoslash applied to snippets
-- [ ]  Language specified
-- [ ]  Code properly formatted with backticks
+### 📐 Capitalization Rules
 
-### Format Check
+| Type | Rule | Examples |
+|------|------|----------|
+| **Product terms** | Capitalize | "Smart Wallets" |
+| **Titles and sidebar names** | Capitalize first word only | "Getting started with authentication" |
+| **API names** | Capitalize proper nouns | "Gas Manager API", "Bundler API" |
+| **Type definitions** | Capitalize | `Provider`, `Signer`, `Account` |
 
-- [ ]  Proper markdown hierarchy
-- [ ]  Relative links used
-- [ ]  No broken or circular references
-- [ ]  Links used instead of repetition
-- [ ]  Consistent spacing and formatting
+---
+
+## 4. Content Structure Rules
+
+### 📋 Headers and Titles
+
+**Requirements**:
+- ❌ **No AA-specific terms** in titles or headers
+- ✅ **Use developer-friendly, outcome-focused titles**
+- ✅ **Keep concise** for sidebar navigation (avoid wrapping)
+
+**Examples**:
+- ❌ "Gas Manager Quickstart" → ✅ "Sponsor gas"
+- ❌ "UserOp Configuration" → ✅ "Configure transactions"
+
+### 🔗 Content Organization
+
+**Link Strategy**:
+- **Link to existing docs** instead of repeating content
+- **Use relative links**: `/wallets/...` not full URLs
+- **Ensure no broken or circular references**
+
+---
+
+## 5. Code and Technical Standards
+
+### 📋 Prerequisites and Setup
+
+**Always Include**:
+- Prerequisites and assumptions
+- Version requirements
+- Configuration steps
+
+**Examples**:
+```markdown
+Before implementing social login, configure your Smart Wallets dashboard...
+Ensure you are using aa-sdk version 3.x or later...
+```
+
+### 💻 Code Block Requirements
+
+**Formatting Rules**:
+- ✅ **Use backticks** for all code references, function names, technical terms
+- ✅ **Include language specification** in code blocks
+- ✅ **Apply `twoslash`** to all examples for type checking
+
+**Example Structure**:
+````markdown
+```ts twoslash
+// Your example code here
+```
+````
+
+### 🏗️ Example Standards
+
+**Every Example Must Be**:
+1. **Standalone** - can be copied and run independently
+2. **Compilable** - passes type checking
+3. **Working** - produces expected results
+
+**Example Organization**:
+- Split long examples into multiple files
+- Use `example.ts` tab for main code
+- Use `config.ts` tab for setup
+- Follow this pattern:
+  1. Install aa-sdk
+  2. Get required configs (API keys, Policy IDs, private key)
+  3. Copy the files
+  4. Run `example.ts`
+
+**Highlighting**:
+- Use [Fern highlighting](https://buildwithfern.com/learn/docs/writing-content/components/code-blocks) to focus on critical parts
+- Use snippets for common configuration to avoid duplication
+
+---
+
+## 6. Markdown Formatting Standards
+
+### 📝 Structure Requirements
+
+**Follow**:
+- [Google Markdown Style Guide](https://google.github.io/styleguide/docguide/style.html)
+- Remark-lint rules for consistency
+- Proper heading hierarchy (H1 → H2 → H3)
+
+**Framework Support**:
+- If a guide supports multiple frameworks, use tabs within one document
+- Example tabs: React, React Native, Other JavaScript
+
+**Links and References**:
+- ✅ **Use relative links**: `[/wallets/authentication]`
+- ❌ **Avoid full URLs**: `[https://www.alchemy.com/docs/...]`
+- ✅ **Include alt text** for all images
+- ✅ **Verify no broken links**
+
+---
+
+## 7. Quality Assurance Checklist
+
+### ✅ Pre-Publish Validation
+
+**Terminology Validation**:
+- [ ] No prohibited terms used anywhere in the document
+- [ ] All approved terms used correctly and consistently
+- [ ] Proper capitalization applied throughout
+- [ ] No AA-specific terms in headers or titles
+
+**Voice and Style Validation**:
+- [ ] Follows Google Developer Documentation Style Guide
+- [ ] Second-person voice used throughout ("you" not "we")
+- [ ] Active voice used consistently
+- [ ] Direct, confident tone without unnecessary qualifiers
+- [ ] Outcome-focused titles and headers
+
+**Code and Technical Validation**:
+- [ ] Twoslash applied to all code snippets
+- [ ] Language specified for all code blocks
+- [ ] All code references properly formatted with backticks
+- [ ] Examples are standalone, compilable, and working
+- [ ] Prerequisites clearly stated
+
+**Format and Structure Validation**:
+- [ ] Proper markdown hierarchy maintained
+- [ ] All links are relative and functional
+- [ ] No broken or circular references
+- [ ] Content links to existing docs instead of repeating information
+- [ ] Consistent spacing and formatting throughout
+
+### 🔧 AI Assistant Validation
+
+**For AI Tools** (GitHub Copilot, Cursor, etc.):
+- [ ] Document follows structured format for easy parsing
+- [ ] Clear do/don't examples provided
+- [ ] Terminology rules explicitly stated with replacements
+- [ ] Voice requirements clearly defined
+- [ ] Code standards include specific formatting requirements
+
+---
+
+## 8. Implementation Guide
+
+### For Human Contributors
+
+1. **Before Writing**: Review this entire guide
+2. **While Writing**: Reference the approved/prohibited terms tables
+3. **Before Submitting**: Complete the quality checklist
+4. **When Editing**: Ensure consistency with existing docs
+
+### For AI Assistants
+
+1. **Priority Order**: Terminology > Voice > Structure > Style
+2. **Conflict Resolution**: When in doubt, choose the simpler, more developer-friendly option
+3. **Validation**: Cross-reference every term against the approved/prohibited lists
+4. **Consistency**: Maintain identical terminology across all generated content
+
+---
+
+*This document is the definitive style guide for Smart Wallets documentation. All content must conform to these standards.*
