@@ -4,7 +4,13 @@ import { DeploymentStatusIndicator } from "@/components/user-connection-avatar/D
 import { useSignerAddress } from "@/hooks/useSignerAddress";
 import { useConfigStore } from "@/state";
 import { baseSepolia } from "@account-kit/infra";
-import { useAccount, useLogout, useConnectedUser } from "@account-kit/react";
+import {
+  useAccount,
+  useLogout,
+  useSigner,
+  useSignerStatus,
+  useUser,
+} from "@account-kit/react";
 import { useMemo } from "react";
 import { Hex } from "viem";
 import { UserAddressTooltip } from "./UserAddressLink";
@@ -17,30 +23,36 @@ export function UserConnectionDetails({
   deploymentStatus,
   delegationAddress,
 }: UserConnectionDetailsProps) {
-  const user = useConnectedUser();
+  const user = useUser();
+  const signer = useSigner();
   const signerAddress = useSignerAddress();
+  const status = useSignerStatus();
   const { logout } = useLogout();
   const { theme, primaryColor, accountMode } = useConfigStore(
     ({ ui: { theme, primaryColor }, accountMode }) => ({
       theme,
       primaryColor,
       accountMode,
-    }),
+    })
   );
   const scaAccount = useAccount({
     type: "ModularAccountV2",
     accountParams: { mode: accountMode },
   });
+  const solanaSigner = useMemo(() => {
+    if (!signer) return;
+    if (!status.isConnected) return;
+    return signer.toSolanaSigner();
+  }, [signer, status.isConnected]);
 
   const solanaAddress = useMemo(() => {
-    // if (!solanaSigner) return null;
+    if (!solanaSigner) return null;
     if (!user?.solanaAddress) return null;
 
     return user.solanaAddress ?? null;
-  }, [user?.solanaAddress]);
+  }, [solanaSigner, user?.solanaAddress]);
 
-  const isExternalSolanaUser = user?.type === "eoa" && !!user?.solanaAddress;
-  const isExternalEvmUser = user?.type === "eoa" && !user?.solanaAddress;
+  const isEOAUser = user?.type === "eoa";
 
   if (!user) return null;
 
@@ -54,25 +66,22 @@ export function UserConnectionDetails({
         <UserAddressTooltip
           linkEnabled
           address={solanaAddress}
-          href={`https://explorer.solana.com/address/${solanaAddress}?cluster=devnet`}
+          href={`https://explorer.solana.com/address/${solanaSigner?.address}?cluster=devnet`}
         />
       </div>
     );
   };
 
-  if (isExternalEvmUser || isExternalSolanaUser) {
+  if (isEOAUser) {
     return (
       <div className="flex flex-col gap-2">
-        {/* Address */}
-        {isExternalEvmUser && (
-          <div className="flex flex-row justify-between">
-            <span className="text-md md:text-sm text-fg-secondary">
-              EOA Address
-            </span>
-            <UserAddressTooltip address={user?.address ?? null} linkEnabled />
-          </div>
-        )}
-
+        {/* EOA Address */}
+        <div className="flex flex-row justify-between">
+          <span className="text-md md:text-sm text-fg-secondary">
+            EOA Address
+          </span>
+          <UserAddressTooltip address={user?.address} linkEnabled />
+        </div>
         <SolanaAddressDetails />
 
         {/* Logout */}

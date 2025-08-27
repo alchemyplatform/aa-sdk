@@ -2,7 +2,7 @@ import { CodePreviewSwitch } from "@/components/shared/CodePreviewSwitch";
 import ExternalLink from "@/components/shared/ExternalLink";
 import { cn } from "@/lib/utils";
 import { Metrics } from "@/metrics";
-import { useConnectedUser } from "@account-kit/react";
+import { useUser } from "@account-kit/react";
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
 
 export function PreviewNav({
@@ -12,19 +12,19 @@ export function PreviewNav({
   showCode: boolean;
   setShowCode: (showCode: boolean) => void;
 }) {
-  const user = useConnectedUser();
+  const user = useUser();
   return (
     <div
       className={cn(
         `w-full p-6 top-0 left-0 border-border z-10 relative lg:sticky lg:after:hidden after:content-[''] after:absolute after:bottom-0 after:left-6 after:right-6 after:h-[1px] after:bg-border`,
         !user && !showCode && "hidden lg:block lg:absolute",
-        (user || showCode) && "lg:border-b",
+        (user || showCode) && "lg:border-b"
       )}
     >
       <div
         className={cn(
           "flex justify-between items-start",
-          !showCode && !user && "justify-end",
+          !showCode && !user && "justify-end"
         )}
       >
         {!showCode && user && <RenderUserConnectionAvatar />}

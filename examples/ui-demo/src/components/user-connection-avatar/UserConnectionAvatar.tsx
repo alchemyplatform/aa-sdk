@@ -2,7 +2,7 @@ import { UserAvatar } from "./UserAvatar";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
-import { useConnectedUser } from "@account-kit/react";
+import { useUser } from "@account-kit/react";
 import { DeploymentStatusIndicator } from "./DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
 
@@ -20,9 +20,9 @@ const UserConnectionAvatar = ({
     ({ ui: { theme, primaryColor }, accountMode }) => ({
       theme,
       primaryColor,
-    }),
+    })
   );
-  const user = useConnectedUser();
+  const user = useUser();
 
   const isEOAUser = user?.type === "eoa";
 
@@ -33,16 +33,13 @@ const UserConnectionAvatar = ({
   return (
     <div className="flex flex-row items-center min-w-0 overflow-hidden">
       <div className="relative w-[40px] h-[40px]">
-        <UserAvatar
-          address={user.address ?? user.solanaAddress ?? ""}
-          primaryColor={primaryColor[theme]}
-        />
+        <UserAvatar address={user.address} primaryColor={primaryColor[theme]} />
         {showDeploymentStatus && (
           <div
             className={cn(
               "p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
               deploymentStatus && "p-[1px]",
-              theme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]",
+              theme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]"
             )}
           >
             <DeploymentStatusIndicator
@@ -59,7 +56,7 @@ const UserConnectionAvatar = ({
         <div className="flex flex-row items-center min-w-0">
           <h3 className="text-fg-primary font-semibold text-left tracking-[-0.32px] text-base text-ellipsis w-full">
             {isEOAUser ? (
-              truncateAddress(user.address ?? user.solanaAddress ?? "")
+              truncateAddress(user.address)
             ) : (
               <span className="block w-full overflow-hidden text-ellipsis">
                 {user.email ?? (user.claims?.nickname as string) ?? "User"}
@@ -70,7 +67,7 @@ const UserConnectionAvatar = ({
             <ChevronDown
               className={cn(
                 "transition-transform stroke-fg-primary",
-                isFocused && "rotate-180",
+                isFocused && "rotate-180"
               )}
             />
           </div>
