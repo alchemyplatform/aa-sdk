@@ -21,7 +21,7 @@ export const DepositAndSwapsCard = () => {
       imageSlot={
         <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
           <Image
-            src="/images/deposits.png"
+            src="/images/deposits-swaps.svg"
             alt="Physical coins of ethereum and bitcoin being swapped"
             width={300}
             height={300}
