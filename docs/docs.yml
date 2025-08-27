@@ -260,7 +260,7 @@ navigation:
                         path: wallets/pages/signer/as-an-eoa.mdx
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
-            path: wallets/pages/react/pay-gas-with-any-token.mdx
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - section: Using 7702
             contents:
               - page: Overview
