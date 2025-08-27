@@ -81,21 +81,12 @@ describe("Viem AA - Coinbase Smart Account", () => {
     });
 
     // Verify that paymaster fields are filled by the gas manager hooks
-    // For test-policy, the transport mocks the paymaster data as "0x"
-    // For v0.6, we use paymasterAndData field instead of separate fields
-    if ("paymasterAndData" in userOp) {
-      expect(userOp.paymasterAndData).toBeDefined();
-      expect(userOp.paymasterAndData).toBe("0x"); // Mocked for test-policy
-    } else {
-      // v0.7 fields
-      expect(userOp.paymaster).toBeDefined();
-      expect(userOp.paymaster).toMatch(/^0x[a-fA-F0-9]{40}$/);
-      expect(userOp.paymasterVerificationGasLimit).toBeDefined();
-      expect(userOp.paymasterVerificationGasLimit).toBeGreaterThan(0n);
-      expect(userOp.paymasterPostOpGasLimit).toBeDefined();
-      expect(userOp.paymasterPostOpGasLimit).toBeGreaterThanOrEqual(0n);
-      expect(userOp.paymasterData).toBeDefined();
-    }
+    // The paymaster is now deployed and returns real data
+    // Coinbase accounts use v0.6 with paymasterAndData field
+    expect(userOp.paymasterAndData).toBeDefined();
+    expect(userOp.paymasterAndData).not.toBe("0x");
+    // Should contain paymaster address (20 bytes) + data
+    expect(userOp.paymasterAndData.length).toBeGreaterThan(42); // 0x + 40 hex chars for address
 
     // Send the user operation
     const userOpHash = await bundlerClient.sendUserOperation({
@@ -169,21 +160,12 @@ describe("Viem AA - Coinbase Smart Account", () => {
     });
 
     // Verify that paymaster fields are filled by the gas manager hooks
-    // For test-policy, the transport mocks the paymaster data as "0x"
-    // For v0.6, we use paymasterAndData field instead of separate fields
-    if ("paymasterAndData" in deployOp) {
-      expect(deployOp.paymasterAndData).toBeDefined();
-      expect(deployOp.paymasterAndData).toBe("0x"); // Mocked for test-policy
-    } else {
-      // v0.7 fields
-      expect(deployOp.paymaster).toBeDefined();
-      expect(deployOp.paymaster).toMatch(/^0x[a-fA-F0-9]{40}$/);
-      expect(deployOp.paymasterVerificationGasLimit).toBeDefined();
-      expect(deployOp.paymasterVerificationGasLimit).toBeGreaterThan(0n);
-      expect(deployOp.paymasterPostOpGasLimit).toBeDefined();
-      expect(deployOp.paymasterPostOpGasLimit).toBeGreaterThanOrEqual(0n);
-      expect(deployOp.paymasterData).toBeDefined();
-    }
+    // The paymaster is now deployed and returns real data
+    // Coinbase accounts use v0.6 with paymasterAndData field
+    expect(deployOp.paymasterAndData).toBeDefined();
+    expect(deployOp.paymasterAndData).not.toBe("0x");
+    // Should contain paymaster address (20 bytes) + data
+    expect(deployOp.paymasterAndData.length).toBeGreaterThan(42); // 0x + 40 hex chars for address
 
     // Deploy by sending a simple transaction to self
     const deployHash = await bundlerClient.sendUserOperation({
