@@ -66,7 +66,7 @@ Fix: Remove qualifiers, use direct statements
 ### Technical Term Formatting:
 - **ALL** function names, variables, and technical terms MUST use backticks
 - Code blocks MUST specify language: `ts`, `jsx`, `bash`
-- Examples MUST include `twoslash` for TypeScript: ````ts twoslash
+- Examples MUST include `twoslash` for TypeScript: ```ts twoslash
 
 ### Missing Backticks Detection:
 ```regex
