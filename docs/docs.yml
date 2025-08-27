@@ -190,25 +190,25 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/transactions/overview.mdx
-          - page: Send Transactions
+          - page: Send transactions
             path: wallets/pages/transactions/send-transactions.mdx
-          - page: Sign Requests
+          - page: Sign requests
             path: wallets/pages/transactions/sign-requests.mdx
           - page: Using EIP-7702
             path: wallets/pages/transactions/using-eip-7702.mdx
-          - page: Send Batched Transactions
+          - page: Send batched transactions
             path: wallets/pages/transactions/send-batched-transactions.mdx
-          - page: Sponsor Gas
+          - page: Sponsor gas
             path: wallets/pages/transactions/sponsor-gas.mdx
-          - page: Pay Gas With Any Token
+          - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token.mdx
-          - page: Swap Tokens
+          - page: "[NEW] Swap tokens"
             path: wallets/pages/transactions/swap-tokens.mdx
-          - page: Send Parallel Transactions
+          - page: Send parallel transactions
             path: wallets/pages/transactions/send-parallel-transactions.mdx
-          - page: Retry Transactions
+          - page: Retry transactions
             path: wallets/pages/transactions/retry-transactions.mdx
-          - page: Track Transaction Status
+          - page: Track transaction status
             path: wallets/pages/transactions/track-transaction-status.mdx
           - section: Solana
             contents:

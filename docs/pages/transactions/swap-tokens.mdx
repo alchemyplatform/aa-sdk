@@ -1,0 +1,80 @@
+---
+title: Swaps (Alpha)
+slug: wallets/transactions/swap-tokens
+---
+
+The Swap API is the easiest way to integrate single-chain token swaps in your app. Cross-chain swaps are coming soon!
+
+Key benefits:
+
+- **Single-step flows:** Batch approve + swap + post-swap action (ex: deposits, transfers, contract calls) into a single transaction - made possible by smart wallets
+- **Low latency:**
+  - Built natively into Smart Wallets. Enables preparing gasless swaps with a single API call
+  - No need to make calls to two providers to perform a swap
+- **Simplified stack:** No need for third-party swap integrations
+
+Key use cases:
+
+- Native token swaps: Enable users to do gasless swaps without ever leaving your app
+- Transact with any token: Let users transact with any token they have in their wallet (ex: ETH, WLD), while your contracts still receive your preferred token(ex: USDC).
+
+<Tip>
+    The Swaps API is in early access. The service is production ready, however there may be changes in the future to simplify the endpoint. We will let you know if/when that happens.
+
+    [Request early access!](https://alchemyapi.typeform.com/to/pkjSr57v)
+
+</Tip>
+
+# The Swap flow
+
+## **Flow**
+
+1. Request a swap quote
+2. Sign the prepared calls (swap + post swap action)
+3. Send prepared calls (swap + post swap action)
+4. Poll for confirmation
+
+## **Swap options**
+
+```tsx
+// Mode 1: Swap exact input amount
+{
+  fromAmount: "0x2710";
+} // Swap exactly 0.01 USDC (10000 in hex, 6 decimals)
+
+// Mode 2: Get minimum output amount
+{
+  minimumToAmount: "0x5AF3107A4000";
+} // Get at least 0.0001 ETH (18 decimals). We calculate how much USDC you need to spend to get at least your desired ETH amount!
+```
+
+<Tabs>
+  <Tab title="React"></Tab>
+  <Tab title="Other JS"></Tab>
+  <Tab title="APIs"></Tab>
+</Tabs>
+
+# FAQs
+
+## What chains are supported?
+
+Chains supported (for now) are: Ethereum, Arbitrum, Base, Berachain, BSC/BNB, Ink, Monad, Optimism, Polygon, Unichain and World Chain mainnets.
+
+## Does the Swap API support cross-chain swaps?
+
+Currently, the Swap API supports only single-chain swaps. Cross-chain swaps are coming soon!
+
+## How do you encode values?
+
+Values are simply passed as hexadecimal strings. The Swap API doesn't add complexity to consider decimals, so 0x01 is always the smallest amount of a given asset.
+1 ETH, or DAI (18 decimals) is `0xDE0B6B3A7640000`
+1 USDC (6 decimals) is `0xF4240`
+This removes any ambiguity— if it’s numerical, it’s a hex.
+
+## What is the expiry?
+
+The expiry is an informational indicator of when you can expect to be able to process the swap request. If you’re at/near the expiry, it might be a good time to request a new quote.
+
+## What if I’m using React?
+
+Use the `@account-kit/react` package to access a `smartWalletClient`. This package automatically uses the Signer for user authentication & signing. [Check out the docs for getting started with React to learn more](/wallets/react/quickstart).
