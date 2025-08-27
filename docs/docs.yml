@@ -206,9 +206,9 @@ navigation:
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - page: "[NEW] Swap tokens"
             path: wallets/pages/transactions/swap-tokens.mdx
-          - page: Send Parallel Transactions
+          - page: Send parallel transactions
             path: wallets/pages/transactions/send-parallel-transactions.mdx
-          - page: Retry Transactions
+          - page: Retry transactions
             path: wallets/pages/transactions/retry-transactions.mdx
           - section: Solana
             contents:
