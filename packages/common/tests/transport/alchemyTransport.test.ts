@@ -81,6 +81,24 @@ describe("Alchemy Transport Tests", () => {
       expect(result.config.retryCount).toBe(3);
       expect(result.config.retryDelay).toBe(1000);
     });
+
+    it("should accept HTTP debugging options", () => {
+      const onFetchRequest = vi.fn();
+      const onFetchResponse = vi.fn();
+
+      const transport = alchemyTransport({
+        apiKey: "test-key",
+        onFetchRequest,
+        onFetchResponse,
+        timeout: 30000,
+      });
+
+      expect(transport).toBeDefined();
+      expect(typeof transport).toBe("function");
+
+      const result = transport({ chain: sepolia });
+      expect(result).toBeDefined();
+    });
   });
 
   describe("Chain Validation", () => {
