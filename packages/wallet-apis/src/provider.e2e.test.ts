@@ -16,6 +16,7 @@ import { createSmartWalletClient } from "./client.js";
 import {
   getAddresses,
   getCallsStatus,
+  getCapabilities,
   getChainId,
   sendCalls,
   sendTransaction,
@@ -203,7 +204,49 @@ describe("Provider E2E Tests", async () => {
     await waitForCallsStatus(clientFromProvider7702, result);
   });
 
-  // TODO(v5): to add test for getCapabilities once it's live in prod.
+  it("can successfully use getCapabilities action", async () => {
+    const capabilities = await getCapabilities(clientFromProvider);
+    expect(capabilities).toMatchInlineSnapshot(`
+      {
+        "0": {
+          "atomic": {
+            "status": "supported",
+          },
+          "eip7702Auth": {
+            "supported": true,
+          },
+          "gasParamsOverride": {
+            "supported": true,
+          },
+          "nonceOverride": {
+            "supported": true,
+          },
+          "paymasterService": {
+            "supported": true,
+          },
+          "permissions": {
+            "keyTypes": [
+              "secp256k1",
+            ],
+            "permissionTypes": [
+              "native-token-transfer",
+              "erc20-token-transfer",
+              "gas-limit",
+              "contract-access",
+              "account-functions",
+              "functions-on-all-contracts",
+              "functions-on-contract",
+              "root",
+            ],
+            "signerTypes": [
+              "keys",
+            ],
+            "supported": true,
+          },
+        },
+      }
+    `);
+  });
 
   const givenTypedData = {
     types: {
