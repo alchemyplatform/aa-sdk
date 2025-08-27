@@ -1,4 +1,4 @@
-import type { InnerWalletApiClient } from "../types.ts";
+import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { Static } from "@sinclair/typebox";
 import type { wallet_prepareSign } from "@alchemy/wallet-api-types/rpc";
@@ -7,11 +7,13 @@ import { AccountNotFoundError } from "@alchemy/common";
 export type PrepareSignParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  Omit<
-    Static<
-      (typeof wallet_prepareSign)["properties"]["Request"]["properties"]["params"]
-    >[0],
-    "from" | "chainId"
+  OptionalChainId<
+    Omit<
+      Static<
+        (typeof wallet_prepareSign)["properties"]["Request"]["properties"]["params"]
+      >[0],
+      "from"
+    >
   > &
     (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
 >;
@@ -50,6 +52,12 @@ export async function prepareSign<
 
   return client.request({
     method: "wallet_prepareSign",
-    params: [{ ...params, from, chainId: toHex(client.chain.id) }],
+    params: [
+      {
+        ...params,
+        from,
+        chainId: params.chainId ?? toHex(client.chain.id),
+      },
+    ],
   });
 }
