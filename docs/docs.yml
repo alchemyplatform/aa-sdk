@@ -130,7 +130,7 @@ navigation:
               - page: Using UI components
                 path: wallets/pages/react/ui-components.mdx
               - page: Theme & branding
-                path: wallets/pages/react/theme.mdx
+                path: wallets/pages/react/customization/theme.mdx
           - section: Whitelabel
             contents:
               - page: React hooks
@@ -153,18 +153,6 @@ navigation:
                 path: wallets/pages/react/mfa/email-magic-link.mdx
               - page: Social login
                 path: wallets/pages/react/mfa/social-login.mdx
-          - section: Customization
-            contents:
-              - page: Theme
-                path: wallets/pages/react/theme.mdx
-          - page: UI components
-            path: wallets/pages/react/ui-components.mdx
-          - section: Whitelabel
-            contents:
-              - page: React hooks
-                path: wallets/pages/react/react-hooks.mdx
-              - page: Other Javascript initialization
-                path: wallets/pages/signer/quickstart.mdx
           - section: Account management
             contents:
               - page: Pregenerate wallets

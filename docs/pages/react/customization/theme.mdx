@@ -1,7 +1,7 @@
 ---
 title: Theme & appearance
 description: Customize logo, colors, radius, illustrations, and the auth modal header for React components
-slug: wallets/react/theme
+slug: wallets/react/customization/theme
 ---
 
 UI components are fully customizable so you can match your app's branding.
@@ -78,7 +78,7 @@ export const tailwindConfig = withAccountKitUi(
     colors: {
       active: createColorSet("#94A3B8", "#94A3B8"),
     },
-  },
+  }
 );
 ```
 
@@ -96,7 +96,7 @@ export const tailwindConfig = withAccountKitUi(
   },
   {
     borderRadius: "md",
-  },
+  }
 );
 ```
 
@@ -126,7 +126,7 @@ const config = createConfig(
   {
     // ... other ui config options
     illustrationStyle: "outline",
-  },
+  }
 );
 ```
 
@@ -155,7 +155,7 @@ export const config = createConfig(
       header: "Sign in with your account", // [!code ++]
       hideSignInText: true, // [!code ++]
     },
-  },
+  }
 );
 ```
 
@@ -177,6 +177,6 @@ export const config = createConfig(
     auth: {
       header: <img src="img.src" />, // [!code ++]
     },
-  },
+  }
 );
 ```

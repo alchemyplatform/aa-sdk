@@ -165,7 +165,10 @@ test("code preview", async ({ page }) => {
   await expect(page.getByText("Export configuration")).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Fully customize styling here." }),
-  ).toHaveAttribute("href", "https://www.alchemy.com/docs/wallets/react/theme");
+  ).toHaveAttribute(
+    "href",
+    "https://www.alchemy.com/docs/wallets/react/customization/theme",
+  );
   await codePreviewSwitch.click();
   await expect(codePreviewSwitch).not.toBeChecked();
 });

@@ -46,7 +46,7 @@ export function PreviewNav({
                 name: "codepreview_theme_customization_clicked",
               })
             }
-            href="https://www.alchemy.com/docs/wallets/react/theme"
+            href="https://www.alchemy.com/docs/wallets/react/customization/theme"
             className="font-semibold text-blue-600"
           >
             Fully customize styling here.
