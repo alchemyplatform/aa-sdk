@@ -15,10 +15,9 @@ Follow this guide to create an app with embedded wallets with, social login and 
 ## 1. Clone template repo
 
 <CodeBlocks>
-```bash
-npx create-next-app my-smart-wallets-app -e https://github.com/alchemyplatform/smart-wallets-quickstart
-cd my-smart-wallets-app
-```
+  ```bash npx create-next-app my-smart-wallets-app -e
+  https://github.com/alchemyplatform/smart-wallets-quickstart cd
+  my-smart-wallets-app ```
 </CodeBlocks>
 
 ## 2. Set up environment
@@ -26,28 +25,23 @@ cd my-smart-wallets-app
 Once you have your project cloned down and you are in the `my-smart-wallets-app` level in your terminal, go to your project's root, create a `.env` file and copy-paste the following into it:
 
 <CodeBlocks>
-```shell
-# Paste this in your .env file
-NEXT_PUBLIC_ALCHEMY_API_KEY=YOUR_ALCHEMY_API_KEY
-NEXT_PUBLIC_ALCHEMY_POLICY_ID=YOUR_PAYMASTER_POLICY_ID
-```
+  ```shell # Paste this in your .env file
+  NEXT_PUBLIC_ALCHEMY_API_KEY=YOUR_ALCHEMY_API_KEY
+  NEXT_PUBLIC_ALCHEMY_POLICY_ID=YOUR_PAYMASTER_POLICY_ID ```
 </CodeBlocks>
 
 Remember: you must create a [`Configuration`](https://dashboard.alchemy.com/services/smart-wallets/configuration) and a [`Paymaster Policy`](https://dashboard.alchemy.com/services/gas-manager/configuration) if you want to use Smart Wallets.
 
 <Warning>
-  Both the `Configuration` and the `Policy ID` must be linked to the application behind your API Key!
+  Both the `Configuration` and the `Policy ID` must be linked to the application
+  behind your API Key!
 </Warning>
 
 ## 3. Run app
 
 In your terminal, run:
 
-<CodeBlocks>
-```bash
-npm run dev
-```
-</CodeBlocks>
+<CodeBlocks>```bash npm run dev ```</CodeBlocks>
 
 Your `localhost:3000` should now display the following:
 
