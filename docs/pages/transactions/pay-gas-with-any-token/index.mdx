@@ -1,0 +1,163 @@
+---
+title: Pay Gas With Any Token
+description: Enable your users to pay gas with ERC-20 tokens like USDC via Gas Manager
+slug: wallets/transactions/sponsor-gas/pay-gas-with-any-token/overview
+---
+
+Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app's own token. With our smart wallet, you can enable your users to pay for gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
+
+<Tip>
+  *How it works:* To enable this capability you will need to create a Gas
+  Manager policy. When a user pays for gas with an ERC-20 token, we front the
+  gas using the network's native gas token and transfer the ERC-20 tokens from
+  the user's wallet to a wallet you control. The equivalent USD amount and the
+  admin fee is then added to your monthly invoice.
+</Tip>
+
+## Prerequisites
+
+- Smart Wallets already installed and configured in your project.
+- An Alchemy API key.
+
+## Create a Gas Manager Policy
+
+To enable your users to pay gas using an ERC-20 token, you need to create a "Pay gas with any token" policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create). You can customize the policy with the following:
+
+- Receiving address: **you must specify** an address you own where the users' ERC-20 tokens will be sent to as they pay for gas. The token transfer to this address is orchestrated by the paymaster contract and happens automatically at transaction time.
+- Tokens: **you must select** which tokens users should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
+- ERC-20 transfer mode: choose when the user's token payment occurs. See more details on the modes [below]()
+  - [Recommended] Post-Operation: No upfront allowance is required. The user signs an approval inside the same calls batch, and the paymaster pulls the token after the operation has executed. If that post-operation transfer fails, the entire batch is reverted and you (the developer) pay the gas fee.
+  - Pre-Operation: The paymaster must have an allowance prior to the operation. This can be done either through a prior call to `approve()` or by using an [ERC-7597 Permit](https://eips.ethereum.org/EIPS/eip-7597) signature. If the required allowance isn't in place when the user operation is submitted, it will be rejected.
+- Sponsorship expiry period: this is the period for which the Gas Manager signature and ERC-20 exchange rate will remain valid once generated.
+
+<img
+  src="/images/wallets/erc-20-policy-create.png"
+  alt="Creating an ERC-20 sponsorship policy"
+/>
+
+Now you should have a Gas policy created with a policy id you can use to enable gas payments with ERC-20 tokens.
+
+<img
+  src="/images/wallets/erc-20-sponsorship-policy.png"
+  alt="viewing your ERC-20 sponsorship policy"
+/>
+
+### ERC-20 Gas Manager Modes
+
+Post-Operation mode is recommended in most cases. It:
+
+- Is the most gas efficient as it only requires a single transfer.
+- Works with all ERC-20 tokens.
+- Only ever requires a single signature from the user.
+
+However, because tokens are deducted after execution, it is possible that you (the sponsoring developer) may be required to pay for gas without receiving sufficient ERC-20 payment.
+You must ensure that the user will have enough token left over to pay for gas after the operation, else it won't receive payment from the user for gas and the operation will revert.
+If the operation preformed will result in a static amount of the user’s ERC-20 token balance after execution and you can account for this before submitting the operation, use PostOp mode.
+
+Examples of static amounts:
+
+- Payments, purchases, and deposits
+- Operations unrelated to the ERC-20 token
+
+Examples of dynamic amounts:
+
+- Swaps of the ERC-20 payment token
+
+If you are sponsoring operations that result in dynamic amounts of the ERC-20 token left over, you should consider using PreOp mode.
+
+## Use With Wallet APIs
+
+To pay gas with any token using Wallet APIs, use the `paymasterService` capability's `erc20` field.
+There, you can configure the token to be used for the particular request and control auto-injecting approvals when needed.
+
+For a full list of settings for the `paymasterService` capability in the [`wallet_prepareCalls` API reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls).
+
+### Estimating Gas Payments
+
+You may want to show your users the gas cost in their chosen gas token, prior to signing and sending their request. To do this, you must use the `prepareCalls` hook/action/api over the `sendCalls` version
+as `sendCalls` won't surface the fee payment information during sign and send.
+
+The return type of `prepareCalls` contains a `feePayment` field containing fee information. This information can be displayed to the user prior to signing the operation. For example:
+
+```
+  "feePayment": {
+    "sponsored": false,
+    "tokenAddress": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "maxAmount": "0x1d33"
+  }
+```
+
+Its important to note that calling `prepareCalls` using the ERC-20 paymaster capability will count against your gas manager policy's pending total. If you intend on making many
+calls to surface the best price, it is recommended to set the `onlyEstimation` parameter for estimation, and then remove only when the user is intending on signing the result.
+
+<Warning>
+  Requests to `prepareCalls` count against your gas manager policy's pending
+  total. Use `onlyEstimation` if the intention is to query for the fee and not
+  to sign the operation. Note that `onlyEstimation` will not work with the
+  `sendCalls` requests and must be used with `prepareCalls`.
+</Warning>
+
+### Auto-Injected Approvals
+
+The Wallet APIs can be configured to automatically inject the required approvals into the operation when needed. The settings for this depend on the mode being used.
+
+#### Post-Operation Mode
+
+In post-operation mode, you can set the paymaster service capability to automatically inject approvals to the paymaster contract using the `erc20.postOp.autoApprove` field.
+The approval will be batched with the provided calls to ensure its in place before the transfer to the paymaster during post-operation.
+To save gas, the approval is only injected if the sender's existing allowance on the paymaster contract is less than the `below` parameter. The injected approval will be set to
+the `amount` parameter.
+
+Developers should set `below` high enough such that it will reasonably cover the gas cost for their most expensive operations. Developers should set `amount` to a value
+they feel comfortable to maintaining an allowance on the paymaster contract. It is not recommended to set a large `amount` for security purposes.
+
+#### Pre-Operation Mode
+
+<Note>
+  This is an advanced feature, it is recommended to use Post-Operation Mode for
+  most use cases.
+</Note>
+
+In pre-operation mode, you can set the paymaster service capability to automatically return a request for a Permit signature using the `erc20.preOp.autoPermit` field.
+This permit will allow an allowance to be set on the paymaster contract from the sender prior to any token transfers needed during pre operation.
+
+To be eligible for auto-injected permits, the ERC-20 gas token must:
+
+1. Be [ERC-7597](https://eips.ethereum.org/EIPS/eip-7597) compliant.
+2. Expose a `version()` function.
+3. Utilize the canonical `DOMAIN_SEPARATOR` outlined in [ERC-2612](https://eips.ethereum.org/EIPS/eip-2612).
+
+If the user already has an allowance on the paymaster contract, the normal flow is used. If the user needs an
+approval, the following steps are used to inject the permit:
+
+1. The prepare request returns a signature request for the paymaster permit.
+2. The user signs the permit request and the signature request back in a second prepare request.
+3. The permit signature is injected into the paymaster contract calldata, and a normal operation is returned.
+4. The user proceeds as normal, signing and sending the operation.
+
+## Usage
+
+See the [`wallet_prepareCalls` API reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls) for full descriptions of
+the parameters used in the following examples.
+
+Choose your client type.
+
+<Tabs>
+  <Tab title="SDK">
+    <Info>Required SDK version: ^v4.59.1</Info>
+
+    Choose your framework.
+    <Tabs>
+      <Tab title="React">
+        <Markdown src="react.mdx" />
+      </Tab>
+      <Tab title="JavaScript">
+        <Markdown src="client.mdx" />
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="API">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>

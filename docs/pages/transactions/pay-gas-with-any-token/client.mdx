@@ -1,0 +1,67 @@
+Use the `paymasterService` capability on the smart wallet client `sendCalls` or `prepareCalls` actions.
+
+<CodeBlocks>
+
+```ts twoslash title="sendCalls.ts"
+import { client, config } from "./client.ts";
+
+const { preparedCallIds } = await client.sendCalls({
+  capabilities: {
+    paymasterService: {
+      policyId: config.policyId,
+      erc20: {
+        tokenAddress: config.gasToken,
+        postOpSettings: {
+          autoApprove: {
+            below: config.approveBelow,
+            amount: config.approveAmount,
+          },
+        },
+      },
+    },
+  },
+  calls: [
+    {
+      to: "0x0000000000000000000000000000000000000000",
+      value: "0x00",
+      data: "0x",
+    },
+  ],
+});
+```
+
+```ts twoslash title="client.ts"
+import "dotenv/config";
+import { Address, Hex, toHex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+  gasToken: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" as Address, // USDC on sepolia
+  approveBelow: toHex(1000000n), // 1 USDC
+  approveAmount: toHex(10000000n), // 10 USDC
+};
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>

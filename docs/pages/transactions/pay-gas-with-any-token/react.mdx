@@ -1,0 +1,67 @@
+Use the `useSendCalls` hook and the `paymasterService` capability parameter to send calls with
+an ERC20 token paymaster. You can also use the `usePrepareCalls` hook to only prepare the operation for signing.
+
+<CodeBlocks>
+
+```ts twoslash title="sendCalls.tsx" focus={6-8,12-26}
+import { useSendCalls, useSmartWalletClient } from "@account-kit/react/experimental";
+import { Address } from "viem";
+import { config } from "./config";
+
+export default function SendCalls({ account }: { account: Address }) {
+  const { sendCallsAsync } = useSendCalls({
+    client: useSmartWalletClient({ account }),
+  });
+
+  const handleSend = async () => {
+    try {
+      const { ids } = await sendCallsAsync({
+        capabilities: {
+          paymasterService: {
+            policyId: config.policyId,
+            erc20: {
+              tokenAddress: config.gasToken,
+              postOpSettings: {
+                autoApprove: {
+                  below: config.approveBelow,
+                  amount: config.approveAmount,
+                },
+              },
+            },
+          }
+        },
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x00",
+            data: "0x",
+          }
+        ]
+      });
+
+      console.log("Transaction sent with ID:", ids[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return (
+    <button onClick={handleSend}>
+      Click to Send
+    </button>
+  );
+}
+```
+
+```ts twoslash title="config.ts"
+import { Address, toHex } from "viem";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+  gasToken: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" as Address, // USDC on Sepolia
+  approveBelow: toHex(1000000n), // 1 USDC
+  approveAmount: toHex(10000000n), // 10 USDC
+};
+```
+
+</CodeBlocks>
