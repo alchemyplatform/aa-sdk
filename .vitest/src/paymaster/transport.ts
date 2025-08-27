@@ -82,13 +82,33 @@ export const paymasterTransport = (
             },
           ];
 
-          // For now, mock the paymaster for test-policy to avoid deployment issues
-          // TODO: Fix paymaster deployment timing to enable real paymaster logic
-          const usePaymaster = policyId !== "test-policy";
-
           const isPMv7 =
             entryPoint.toLowerCase() ===
             paymaster070.entryPointAddress.toLowerCase();
+
+          // Check if paymaster is deployed - if not, deploy it
+          let usePaymaster = true;
+
+          if (policyId === "test-policy") {
+            // Check if paymaster is deployed
+            const paymaster = isPMv7 ? paymaster070 : paymaster060;
+            const paymasterAddress = paymaster.getPaymasterDetails().address;
+
+            const code = await client.request({
+              method: "eth_getCode",
+              params: [paymasterAddress, "latest"],
+            });
+
+            if (code === "0x" || code === null) {
+              // Deploy paymaster on-demand for tests
+              try {
+                await paymaster.deployPaymasterContract(client);
+              } catch (error) {
+                console.error(`Failed to deploy paymaster:`, error);
+                usePaymaster = false;
+              }
+            }
+          }
 
           let uo = {
             ...userOperation,
