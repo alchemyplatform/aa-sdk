@@ -26,20 +26,9 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
    - Confirm that your code passes format checks with `yarn run lint:check`.
 
 8. **Docs Changes**:
-
-   - We use `vitepress` for our docs located in the `site` folder.
-   - To run docs locally: `yarn dev` from the `site` folder.
-   - To build docs: `yarn build` from the `site` folder.
-   - When editing or adding new docs, make sure you follow the guidelines mentioned below:
-     - Follow the [Google style guidelines](https://developers.google.com/style) for docs content.
-     - Additional Guidelines:
-       - Use terms consistently (e.g., "smart account", not "Smart Account").
-       - Use `LightAccount` for code references, "Light Account" in text.
-       - Use "gasless" over "gas-less".
-       - Write documentation in the [second person voice](https://developers.google.com/style/person).
-       - Capitalize "Gas Manager API" and "Bundler API".
-       - Capitalize definitions for type primitives like `Provider`, `Signer`, `Account`.
-       - `UserOperation` instead of UserOperation during first occurrence of it in a doc, then UO for subsequent occurrences.
+   - To run docs locally: `yarn docs:dev`.
+   - To build docs: `yarn fern:gen`.
+   - When editing or adding new docs, make sure you follow the [docs contributing guidelines](docs/CONTRIBUTING.md)
 
 9. **Committing Changes**: Commit your changes using a standardized message format.
 
