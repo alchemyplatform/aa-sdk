@@ -1,13 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
-import { type Chain, type Hex, type Address } from "viem";
+import { type Chain, type Hex, type Address, toHex, slice } from "viem";
 import { useToast } from "@/hooks/useToast";
 import { type AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
-import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../utils/constants";
+import {
+  DEMO_USDC_ADDRESS_6_DECIMALS,
+  DEMO_USDC_APPROVAL_AMOUNT,
+  DEMO_USDC_APPROVE_BELOW_AMOUNT,
+} from "../utils/constants";
 import { AccountMode } from "@/app/config";
+import {
+  useSmartWalletClient,
+  useSendCalls,
+} from "@account-kit/react/experimental";
 
 const ERC20_SPONSORSHIP_POLICY_ID =
-  process.env.NEXT_PUBLIC_ERC20_SPONSORSHIP_POLICY_ID;
+  process.env.NEXT_PUBLIC_ERC20_SPONSORSHIP_POLICY_ID!;
 
 export type UserOperationCall = {
   target: Address;
@@ -44,11 +52,14 @@ export const useSendUOsErc20Sponsorship = (
 
   const { client, isLoadingClient } = useModularAccountV2Client({
     ...clientOptions,
-    policyId: ERC20_SPONSORSHIP_POLICY_ID,
-    policyToken: {
-      address: DEMO_USDC_ADDRESS_6_DECIMALS,
-      maxTokenAmount: BigInt(100_000_000_000_000),
-    },
+  });
+
+  const smartWalletClient = useSmartWalletClient({
+    account: client?.account?.address,
+  });
+
+  const { sendCallsAsync } = useSendCalls({
+    client: smartWalletClient,
   });
 
   const {
@@ -66,12 +77,41 @@ export const useSendUOsErc20Sponsorship = (
       if (!client.account) {
         throw new Error("Smart account not connected or address not available");
       }
+      if (!smartWalletClient) {
+        throw new Error("Smart wallet client not ready");
+      }
 
-      const userOpHash = await client.sendUserOperation({
-        uo: userOperations,
+      const { ids } = await sendCallsAsync({
+        calls: userOperations.map((x) => ({
+          to: x.target,
+          data: x.data,
+          value: x.value ? toHex(x.value) : undefined,
+        })),
+        capabilities: {
+          paymasterService: {
+            policyId: ERC20_SPONSORSHIP_POLICY_ID,
+            erc20: {
+              tokenAddress: DEMO_USDC_ADDRESS_6_DECIMALS,
+              postOpSettings: {
+                autoApprove: {
+                  below: toHex(DEMO_USDC_APPROVE_BELOW_AMOUNT),
+                  amount: toHex(DEMO_USDC_APPROVAL_AMOUNT),
+                },
+              },
+            },
+          },
+        },
       });
 
-      return client.waitForUserOperationTransaction(userOpHash);
+      const { status } = await smartWalletClient.waitForCallsStatus({
+        id: ids[0],
+      });
+      if (status === "success") {
+        return slice(ids[0], 32);
+      }
+      throw new Error(
+        `User operation with id ${ids[0]} failed to execute after 60 seconds`,
+      );
     },
     onError: (err: Error) => {
       console.error("UOs Sending Error:", err);

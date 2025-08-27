@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
+
+### Features
+
+- **wallet-client:** add support for erc20 paymaster in wallet-client and useSendCalls ([7b0f092](https://github.com/alchemyplatform/aa-sdk/commit/7b0f0929254c707fd009ae90e392b39b9cb029a2))
+
 # [4.58.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.1...v4.58.0) (2025-08-25)
 
 **Note:** Version bump only for package @account-kit/react
