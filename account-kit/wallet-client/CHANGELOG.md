@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
+
+### Bug Fixes
+
+- **wallet-client:** improve error handling in signPreparedCalls ([0b2a6c9](https://github.com/alchemyplatform/aa-sdk/commit/0b2a6c96a869a34ca930d1e0bf8e2307d94fd469))
+
+### Features
+
+- **wallet-client:** add support for erc20 paymaster in wallet-client and useSendCalls ([7b0f092](https://github.com/alchemyplatform/aa-sdk/commit/7b0f0929254c707fd009ae90e392b39b9cb029a2))
+- **wallet-client:** update types for erc20 capability, add API reference ([428ee9d](https://github.com/alchemyplatform/aa-sdk/commit/428ee9d49e5529d4a43e8a1547b11919c0c8cd9a))
+
+# [4.58.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.1...v4.58.0) (2025-08-25)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+# [4.57.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.56.0...v4.57.0) (2025-08-19)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+# [4.56.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.55.0...v4.56.0) (2025-08-18)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+# [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+# [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
+
+### Features
+
+- add sendCalls and waitForCallsStatus to wallet client ([#1855](https://github.com/alchemyplatform/aa-sdk/issues/1855)) ([adb0b5b](https://github.com/alchemyplatform/aa-sdk/commit/adb0b5bb0077a992d83761b325a54c99d165885c))
+- unpin viem version ([#1851](https://github.com/alchemyplatform/aa-sdk/issues/1851)) ([e387e0e](https://github.com/alchemyplatform/aa-sdk/commit/e387e0ead087b893d315b072c24b3c2725ff86b6))
+
+## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+# [4.53.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.4...v4.53.0) (2025-08-06)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+## [4.52.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.3...v4.52.4) (2025-08-04)
+
+### Bug Fixes
+
+- only use typebox for types in `wallet-client` ([#1843](https://github.com/alchemyplatform/aa-sdk/issues/1843)) ([41b8ef8](https://github.com/alchemyplatform/aa-sdk/commit/41b8ef844180e51294e820f4c41c0dc4e63193f7))
+
+## [4.52.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.2...v4.52.3) (2025-08-04)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
 ## [4.52.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.52.1...v4.52.2) (2025-07-22)
 
 **Note:** Version bump only for package @account-kit/wallet-client

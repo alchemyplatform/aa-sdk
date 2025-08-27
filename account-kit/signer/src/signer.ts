@@ -22,6 +22,10 @@ export type AuthParams =
     }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
+      type: "sms";
+      phone: string;
+    }
+  | {
       type: "passkey";
       email: string;
       creationOpts?: CredentialCreationOptionOverrides;
@@ -48,7 +52,13 @@ export type AuthParams =
       bundle: string;
       orgId: string;
       idToken: string;
+      accessToken?: string;
       isNewUser?: boolean;
+    }
+  | {
+      type: "custom-jwt";
+      jwt: string;
+      authProviderId?: string;
     }
   | {
       type: "otp";
@@ -146,6 +156,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       oauthBundle: "alchemy-bundle",
       oauthOrgId: "alchemy-org-id",
       idToken: "alchemy-id-token",
+      accessToken: "alchemy-access-token",
       isSignup: "aa-is-signup",
       otpId: "alchemy-otp-id",
       email: "alchemy-email",
@@ -159,6 +170,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       oauthBundle,
       oauthOrgId,
       idToken,
+      accessToken,
       isSignup,
       otpId,
       email,
@@ -193,6 +205,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       return {
         status,
         idToken,
+        accessToken,
         email,
         providerName: authProvider,
         otpId,
@@ -218,6 +231,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
         bundle: oauthBundle,
         orgId: oauthOrgId,
         idToken,
+        accessToken,
         isNewUser,
       });
     }

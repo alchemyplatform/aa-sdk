@@ -29,6 +29,8 @@ import type {
   GetOauthProviderUrlArgs,
   GetWebAuthnAttestationResult,
   MfaFactor,
+  JwtParams,
+  JwtResponse,
   OauthConfig,
   OauthParams,
   OauthState,
@@ -47,6 +49,7 @@ import type {
   OauthProviderInfo,
   IdTokenOnly,
   AuthMethods,
+  SmsAuthParams,
 } from "./types.js";
 import { VERSION } from "../version.js";
 import { secp256k1 } from "@noble/curves/secp256k1";
@@ -182,6 +185,18 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       return response;
     }
 
+    if (params.type === "sms") {
+      this.eventEmitter.emit("authenticating", { type: "otp" });
+      const { phone } = params;
+      const publicKey = await this.initSessionStamper();
+
+      const response = await this.request("/v1/signup", {
+        phone,
+        targetPublicKey: publicKey,
+      });
+      return response;
+    }
+
     this.eventEmitter.emit("authenticating", { type: "passkey" });
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
@@ -218,12 +233,17 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     params: Omit<EmailAuthParams, "targetPublicKey">,
   ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }>;
 
+  public abstract initSmsAuth(
+    params: Omit<SmsAuthParams, "targetPublicKey">,
+  ): Promise<{ orgId: string; otpId?: string }>;
+
   public abstract completeAuthWithBundle(params: {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User>;
 
   public abstract oauthWithRedirect(
@@ -237,6 +257,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   public abstract submitOtpCode(
     args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse>;
+
+  public abstract submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">,
+  ): Promise<JwtResponse>;
 
   public abstract disconnect(): Promise<void>;
 
@@ -512,12 +536,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    *
    * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
    * @param {string} idToken an OIDC ID token containing additional user information
+   * @param {string} accessToken an access token which if provided will be added to the user
    * @returns {Promise<User>} A promise that resolves to the user object
    * @throws {Error} if no organization ID is provided when there is no current user
    */
   public whoami = async (
     orgId = this.user?.orgId,
     idToken?: string,
+    accessToken?: string,
   ): Promise<User> => {
     if (this.user) {
       return this.user;
@@ -542,6 +568,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       if (typeof claims.email === "string") {
         user.email = claims.email;
       }
+    }
+
+    if (accessToken) {
+      user.accessToken = accessToken;
     }
 
     const credentialId = (() => {
@@ -643,6 +673,16 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   public lookupUserByEmail = async (email: string) => {
     return this.request("/v1/lookup", { email });
+  };
+
+  /**
+   * Looks up information based on a phone number.
+   *
+   * @param {string} phone the phone number to look up
+   * @returns {Promise<any>} the result of the lookup request
+   */
+  public lookupUserByPhone = async (phone: string) => {
+    return this.request("/v1/lookup", { phone });
   };
 
   /**
@@ -848,6 +888,42 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
         updateRootQuorumRequest,
       ),
+    });
+  };
+
+  /**
+   * This will remove members from an existing multi-sig account
+   *
+   * @param {string} orgId orgId of the multi-sig to remove members from
+   * @param {Address[]} members the addresses of the members to remove
+   */
+  public experimental_deleteFromMultiOwner = async (
+    orgId: string,
+    members: Address[],
+  ) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const multiOwnerClient = this.experimental_createMultiOwnerTurnkeyClient();
+
+    const prepared = await this.request("/v1/multi-owner-prepare-delete", {
+      organizationId: orgId,
+      members: members.map((evmSignerAddress) => ({ evmSignerAddress })),
+    });
+
+    const stampedRequest = await multiOwnerClient.stampDeleteUsers(
+      prepared.result.deleteMembersRequest,
+    );
+
+    await this.request("/v1/multi-owner-update-root-quorum", {
+      stampedRequest: await multiOwnerClient.stampUpdateRootQuorum(
+        prepared.result.updateRootQuorumRequest,
+      ),
+    });
+
+    await this.request("/v1/multi-owner-delete", {
+      stampedRequest,
     });
   };
 

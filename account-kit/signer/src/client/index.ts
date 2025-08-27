@@ -14,11 +14,14 @@ import type {
   ExportWalletParams,
   OauthConfig,
   OtpParams,
+  JwtParams,
+  JwtResponse,
   User,
   SubmitOtpCodeResponse,
   AuthLinkingPrompt,
   GetWebAuthnAttestationResult,
   IdTokenOnly,
+  SmsAuthParams,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -161,6 +164,42 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   /**
+   * Begin authenticating a user through sms. Initializes the iframe stamper to get the target public key.
+   * This method sends a text message to the user to complete their login
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.initSmsAuth({ phone: "+1234567890" });
+   * ```
+   *
+   * @param {Omit<SmsAuthParams, "targetPublicKey">} params The parameters for sms authentication, excluding the target public key
+   * @returns {Promise<any>} The response from the authentication request
+   */
+  public override initSmsAuth = async (
+    params: Omit<SmsAuthParams, "targetPublicKey">,
+  ) => {
+    this.eventEmitter.emit("authenticating", { type: "otp" });
+    const { phone } = params;
+    const publicKey = await this.initSessionStamper();
+
+    return this.request("/v1/auth", {
+      phone,
+      targetPublicKey: publicKey,
+    });
+  };
+
+  /**
    * Authenticates using an OTP code which was previously received via email.
    *
    * @example
@@ -223,6 +262,44 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   }
 
   /**
+   * Authenticates using a custom issued JWT
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.submitJwt({
+   *   jwt: "custom-issued-jwt",
+   *   authProvider: "auth-provider-name",
+   * });
+   * ```
+   *
+   * @param {Omit<JwtParams, "targetPublicKey">} args The parameters for the JWT request, excluding the target public key.
+   * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle.
+   */
+  public override async submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">,
+  ): Promise<JwtResponse> {
+    this.eventEmitter.emit("authenticating", { type: "custom-jwt" });
+    const targetPublicKey = await this.initSessionStamper();
+    return this.request("/v1/auth-jwt", {
+      jwt: args.jwt,
+      targetPublicKey,
+      authProvider: args.authProvider,
+      expirationSeconds: args.expirationSeconds,
+    });
+  }
+
+  /**
    * Completes auth for the user by injecting a credential bundle and retrieving
    * the user information based on the provided organization ID. Emits events
    * during the process.
@@ -256,6 +333,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     orgId,
     connectedEventName,
     idToken,
+    accessToken,
     authenticatingType,
   }: {
     bundle: string;
@@ -263,6 +341,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User> => {
     this.eventEmitter.emit("authenticating", { type: authenticatingType });
     await this.initSessionStamper();
@@ -273,7 +352,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new Error("Failed to inject credential bundle");
     }
 
-    const user = await this.whoami(orgId, idToken);
+    const user = await this.whoami(orgId, idToken, accessToken);
 
     this.eventEmitter.emit(connectedEventName, user, bundle);
 
@@ -465,6 +544,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
+          alchemyAccessToken: accessToken,
           alchemyIsSignup: isSignup,
           alchemyError,
           alchemyOtpId: otpId,
@@ -489,6 +569,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
               orgId,
               connectedEventName: "connectedOauth",
               idToken,
+              accessToken,
               authenticatingType: "oauth",
             }).then((user) => {
               if (isSignup) {
@@ -501,6 +582,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             resolve({
               status,
               idToken,
+              accessToken,
               email,
               providerName,
               otpId,
@@ -511,6 +593,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             resolve({
               status,
               idToken,
+              accessToken,
               providerName,
             } satisfies IdTokenOnly);
             break;

@@ -1,0 +1,236 @@
+---
+title: Social Login Authentication
+description: How to implement Social Login authentication across different frameworks
+slug: wallets/authentication/login-methods/social-login
+---
+
+Social login authentication allows users to authenticate using OAuth providers like Google, Facebook, or custom providers through Auth0. There are two authentication flows available:
+
+1. **Redirect flow**: Redirects the user to the provider's login page and back to your application
+2. **Popup flow**: Opens the provider's login page in a popup window without leaving your application
+
+<Tabs>
+  <Tab title="React">
+    ## Prerequisites
+
+    Before implementing social login in your application, you need to configure your Smart Wallets dashboard and application:
+
+    1. **Follow the Setup Instructions in the Getting Started Guide**:
+       - See the [Getting Started with Authentication](/wallets/react/quickstart) page for complete setup instructions
+       - Pay special attention to the social authentication provider configuration and whitelisted origins setup
+
+    2. **Key Configuration Requirements**:
+       - Enable desired social providers in your Smart Wallets dashboard
+       - Add your application's domain to the whitelisted origins
+       - Set `enablePopupOauth: true` in your config if using popup flow
+
+    ## Implementation Options
+
+    You can implement Social Login authentication in two ways:
+
+    - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
+    - [Custom UI](#custom-ui) - Complete control over the user experience
+
+    ## Pre-built UI Components
+
+    Smart Wallets provides pre-built UI components that handle the entire Social Login authentication flow with minimal code.
+
+    ### Step 1: Add Authentication Components to Your Page
+
+    Before configuring your authentication, first add one of the pre-built components to your application:
+
+    <Markdown src="../shared/modal-auth-example.mdx" />
+
+    Or:
+
+    <Markdown src="../shared/embedded-auth-example.mdx" />
+
+    ### Step 2: Configure Social Login in UI Components
+
+    After adding the components, configure the Social Login authentication in your application config:
+
+    ```tsx twoslash
+    import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+    import { sepolia, alchemy } from "@account-kit/infra";
+
+    const uiConfig: AlchemyAccountsUIConfig = {
+      auth: {
+        sections: [
+          [
+            // Include social login providers
+            { type: "social", authProviderId: "google", mode: "popup" },
+            { type: "social", authProviderId: "facebook", mode: "popup" },
+            { type: "social", authProviderId: "apple", mode: "popup" },
+          ],
+        ],
+      },
+    };
+
+    export const config = createConfig(
+      {
+        transport: alchemy({ apiKey: "your-api-key" }),
+        chain: sepolia,
+        // Required for popup flow
+        enablePopupOauth: true,
+      },
+      uiConfig,
+    );
+    ```
+
+    ## Custom UI
+
+    If you need complete control over the user experience, you can implement your own custom UI for Social Login authentication using Smart Wallets hooks.
+
+    ### Step 1: Configure Your Application
+
+    Before implementing social login, make sure you've:
+
+    1. Set up your authentication providers in the Smart Wallets dashboard
+    2. If using popup flow, set `enablePopupOauth: true` in your Account Kit configuration
+
+    ### Step 2: Implement the Authentication
+
+    Create buttons or UI elements for each social provider you want to support:
+
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    // Inside your component
+    const { authenticate, isPending } = useAuthenticate();
+
+    // For redirect flow
+    const handleGoogleRedirectLogin = () => {
+      authenticate(
+        {
+          type: "oauth",
+          authProviderId: "google",
+          mode: "redirect",
+          redirectUrl: "/", // Redirect to this page after authentication
+        },
+        {
+          onError: (error) => {
+            // Handle error
+            // The page will redirect on success, so no need for onSuccess handler
+          },
+        },
+      );
+    };
+
+    // For popup flow
+    const handleGooglePopupLogin = () => {
+      authenticate(
+        {
+          type: "oauth",
+          authProviderId: "google",
+          mode: "popup",
+        },
+        {
+          onSuccess: () => {
+            // Authentication successful!
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        },
+      );
+    };
+    ```
+
+  </Tab>
+
+  <Tab title="React Native">
+    <Info>
+      This guide assumes you have already followed the [Setup
+      Guide](/wallets/react-native/signer/setup-guide) and have set up the Alchemy
+      Account Provider using this
+      [guide](/wallets/react-native/signer/authenticating-users/setting-up-the-accounts-provider).
+      Please refer to the guides above for more information on how to properly setup
+      your project.
+    </Info>
+
+    <Tip>
+      For a complete example of how we can setup a project and use the various
+      available authentication methods, please refer to our [quickstart
+      example](https://github.com/alchemyplatform/account-kit-expo-quickstart).
+    </Tip>
+
+    ## Authenticate a User via Social Auth
+
+    To authenticate a user via **social auth**, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `OAuth`, the `redirectUrl` set to your app's deep link, the `mode` set to `redirect` and the `authProviderId` set to the social auth provider you want to use.
+
+    Here is an example, authenticating a user via Google:
+
+    ```tsx twoslash example.tsx
+    import React from "react";
+    import { View, Text, Pressable, Alert } from "react-native";
+    import { useAuthenticate } from "@account-kit/react-native";
+
+    function SignInWithSocialAuth() {
+      const { authenticate } = useAuthenticate();
+
+      const handleUserSignInWithGoogle = () => {
+        try {
+          authenticate({
+            type: "oauth",
+            redirectUrl: "<your-app-scheme>://<your-auth-callback-route>",
+            mode: "redirect",
+            authProviderId: "google",
+          });
+        } catch (e) {
+          Alert.alert("Error authenticating user. Check logs for more details.");
+
+          console.log("Error authenticating user: ", e);
+        }
+      };
+
+      return (
+        <View>
+          <Text>Sign In with Google</Text>
+          <Pressable onPress={handleUserSignInWithGoogle}>
+            <Text>Sign In</Text>
+          </Pressable>
+        </View>
+      );
+    }
+    ```
+
+    <Tip>
+      Ensure that you have added your app's scheme to your `Whitelisted Origins` in
+      the [Alchemy Dashboard](https://dashboard.alchemy.com/).
+    </Tip>
+
+  </Tab>
+  <Tab title="JavaScript">
+    ## Other Javascript Frameworks
+
+    Social login authentication allows you to log in and sign up users using an OAuth provider, such as Google Sign-In or Facebook Login. You can also configure custom providers through Auth0.
+
+    <Tip>
+      To set up configurations to enable social login, see the [Signer Quickstart](/wallets/signer/quickstart) to enable a social policy in the dashboard.
+    </Tip>
+
+    ## Authenticate a user
+
+    ```ts twoslash
+    import { signer } from "./signer";
+
+    await signer.authenticate({
+      type: "oauth",
+      authProviderId: "google", // Choose between the auth providers you selected to support from your auth policy
+      mode: "redirect", // Alternatively, you can choose "popup" mode
+      redirectUrl: "/", // After logging in, redirect to the index page
+    });
+    ```
+
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+### Enabling Authenticator App (TOTP) MFA
+
+If you want to require a second factor for Social Login, see [Social Login with Multi-Factor Authentication](/wallets/react/mfa/social-login). Once users have set up a TOTP-based authenticator app, they'll be prompted for their 6-digit code automatically.
+
+### Custom Social Providers
+
+For custom OAuth providers like GitHub, Twitter, etc., see the [Custom Social Providers](/wallets/react/login-methods/social-providers) documentation.

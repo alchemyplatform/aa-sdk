@@ -10,11 +10,19 @@ cli
   .command("generate", "Generate documentation")
   .option(
     "--in <path>",
-    "[string] path to source file containing public exports",
+    "[string] path to source file containing public exports (can specify multiple times for multiple files)",
   )
   .option("--out <path>", "[string] path to output directory")
+  .example(
+    (name) =>
+      `${name} generate --in src/index.ts --in src/components.ts --out docs`,
+  )
   .example((name) => `${name} generate --in src/index.ts --out docs`)
-  .action(async (options: GenerateOptions) => generate(options));
+  .action(async (options: GenerateOptions) => {
+    // Ensure options.in is always an array
+    const inputPaths = Array.isArray(options.in) ? options.in : [options.in];
+    generate({ ...options, in: inputPaths });
+  });
 
 cli.help();
 cli.version(VERSION);

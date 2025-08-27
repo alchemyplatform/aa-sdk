@@ -29,9 +29,12 @@ import {
   type OauthConfig,
   type OauthParams,
   type OtpParams,
+  type JwtParams,
+  type JwtResponse,
   type User,
   type SubmitOtpCodeResponse,
   type CredentialCreationOptionOverrides,
+  type SmsAuthParams,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -139,12 +142,40 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     }
   }
 
+  override async initSmsAuth(
+    params: Omit<SmsAuthParams, "targetPublicKey">,
+  ): Promise<{ orgId: string; otpId?: string }> {
+    this.eventEmitter.emit("authenticating", { type: "sms" });
+    const { phone } = params;
+    const targetPublicKey = await this.stamper.init();
+
+    return this.request("/v1/auth", {
+      phone,
+      targetPublicKey,
+    });
+  }
+
+  override async submitJwt(
+    args: Omit<JwtParams, "targetPublicKey">,
+  ): Promise<JwtResponse> {
+    this.eventEmitter.emit("authenticating", { type: "custom-jwt" });
+
+    const publicKey = await this.stamper.init();
+    return this.request("/v1/auth-jwt", {
+      jwt: args.jwt,
+      targetPublicKey: publicKey,
+      authProvider: args.authProvider,
+      expirationSeconds: args.expirationSeconds,
+    });
+  }
+
   override async completeAuthWithBundle(params: {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User> {
     if (!this.validAuthenticatingTypes.includes(params.authenticatingType)) {
       throw new Error("Unsupported authenticating type");
@@ -162,7 +193,11 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       throw new Error("Failed to inject credential bundle");
     }
 
-    const user = await this.whoami(params.orgId, params.idToken);
+    const user = await this.whoami(
+      params.orgId,
+      params.idToken,
+      params.accessToken,
+    );
 
     this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
@@ -199,6 +234,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     const bundle = authResult["alchemy-bundle"] ?? "";
     const orgId = authResult["alchemy-org-id"] ?? "";
     const idToken = authResult["alchemy-id-token"] ?? "";
+    const accessToken = authResult["alchemy-access-token"];
     const isSignup = authResult["alchemy-is-signup"];
     const error = authResult["alchemy-error"];
 
@@ -212,6 +248,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
         orgId,
         connectedEventName: "connectedOauth",
         idToken,
+        accessToken,
         authenticatingType: "oauth",
       });
 

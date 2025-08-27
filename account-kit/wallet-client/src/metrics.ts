@@ -42,6 +42,12 @@ export type CoreEventsSchema = [
     };
   },
   {
+    EventName: "send_calls";
+  },
+  {
+    EventName: "wait_for_calls_status";
+  },
+  {
     EventName: "sign_message";
   },
   {

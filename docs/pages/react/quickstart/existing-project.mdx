@@ -50,9 +50,9 @@ export default {
 };
 ```
 
-Create a `global.css` file and import it in your app root:
+Create a `global.css` in your `app` directory and import Tailwind:
 
-```css global.css
+```css app/global.css
 @import "tailwindcss";
 ```
 
@@ -154,7 +154,7 @@ export const config = createConfig(
     storage: cookieStorage,
     enablePopupOauth: true,
     // For gas sponsorship (optional)
-    // Learn more here: https://www.alchemy.com/docs/wallets/react/sponsor-gas
+    // Learn more here: https://www.alchemy.com/docs/wallets/transactions/sponsor-gas/sponsor-gas-evm
     policyId: "YOUR_POLICY_ID",
   },
   {
@@ -326,7 +326,7 @@ Congratulations! You now have embedded smart wallets working in your React appli
 
 Now that you have basic authentication working, you can explore additional features:
 
-- [Send user operations](/wallets/react/send-user-operations) to perform transactions
+- [Send user operations](/wallets/transactions/send/send-user-operations) to perform transactions
 - [Customize your UI components](/wallets/react/ui-components) for advanced styling
-- [Add gas sponsorship](/wallets/react/sponsor-gas) for gasless transactions
+- [Add gas sponsorship](/wallets/transactions/sponsor-gas/sponsor-gas) for gasless transactions
 - [Set up multi-factor authentication](/wallets/react/mfa/setup-mfa) for enhanced security

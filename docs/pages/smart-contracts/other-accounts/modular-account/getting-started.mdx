@@ -73,3 +73,9 @@ const accountClient = await createMultiOwnerModularAccountClient({
 ```
 
 Next, if you want to use a different `signer` with a smart account signer, check out [choosing a signer](/wallets/signer/what-is-a-signer). Otherwise, if you are ready to get on-chain, go to [send user operations](/wallets/infra/send-user-operations).
+
+## Installing plugins
+
+Modular Accounts follow the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard for extensibility using plugins. Plugins can add new validation logic, execution capabilities, and hooks to your account, and can be installed or uninstalled via the account's Plugin Manager.
+
+To learn how to add and remove plugins (for example, installing the Session Key Plugin), see the guide on [Installing & uninstalling plugins](/wallets/smart-contracts/other-accounts/modular-account/manage-plugins/install-plugins).
