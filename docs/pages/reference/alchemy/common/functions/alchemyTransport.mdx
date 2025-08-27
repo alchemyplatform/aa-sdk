@@ -29,7 +29,7 @@ const transport = alchemyTransport({ apiKey: "your-api-key" });
 
 `AlchemyTransportConfig`
 
-- The configuration object for the Alchemy transport
+- The configuration object for the Alchemy transport (extends viem's HttpTransportConfig)
 
 ### config.apiKey
 
@@ -49,17 +49,35 @@ const transport = alchemyTransport({ apiKey: "your-api-key" });
 
 - Direct URL to Alchemy endpoint or a proxy URL
 
-### config.retryDelay
+### config.onFetchRequest
+
+`Function`
+
+- Callback for debugging outgoing requests
+
+### config.onFetchResponse
+
+`Function`
+
+- Callback for debugging responses
+
+### config.timeout
 
 `number`
 
-- The delay between retries, in milliseconds
+- Request timeout in milliseconds
 
 ### config.retryCount
 
 `number`
 
-- The number of retry attempts (default: 0)
+- The number of retry attempts
+
+### config.retryDelay
+
+`number`
+
+- The delay between retries, in milliseconds
 
 ### config.fetchOptions
 
