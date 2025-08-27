@@ -4,10 +4,8 @@ import {
   type Chain,
   type EIP1193RequestFn,
   type HttpTransportConfig,
-  type NoUndefined,
   type RpcSchema,
   type Transport,
-  type TransportConfig,
 } from "viem";
 import { BaseError } from "../errors/BaseError.js";
 import { FetchError } from "../errors/FetchError.js";
@@ -20,26 +18,21 @@ import { getAlchemyRpcUrl } from "./chainRegistry.js";
 
 /**
  * Configuration options for the Alchemy transport.
- * Can specify URL, auth method, or both together.
+ * Extends viem's HttpTransportConfig with Alchemy-specific options while omitting
+ * options that are not relevant or supported by Alchemy.
  */
-export type AlchemyTransportConfig = {
+export interface AlchemyTransportConfig
+  extends Omit<
+    HttpTransportConfig,
+    "batch" | "key" | "methods" | "name" | "raw"
+  > {
   /** API key for Alchemy authentication */
   apiKey?: string;
   /** JWT token for authentication */
   jwt?: string;
   /** Custom RPC URL (optional - defaults to chain's Alchemy URL, but can be used to override the chain's Alchemy URL) */
   url?: string;
-  /** The max number of times to retry. */
-  retryCount?: TransportConfig["retryCount"] | undefined;
-  /** The base delay (in ms) between retries. */
-  retryDelay?: TransportConfig["retryDelay"] | undefined;
-  fetchOptions?: NoUndefined<HttpTransportConfig["fetchOptions"]>;
-  /** HTTP transport options for debugging and configuration */
-  httpOptions?: Pick<
-    HttpTransportConfig,
-    "onFetchRequest" | "onFetchResponse" | "timeout" | "batch"
-  >;
-};
+}
 
 type AlchemyTransportBase<
   rpcSchema extends RpcSchema | undefined = undefined,
@@ -133,20 +126,23 @@ export function isAlchemyTransport(
  *
  * const transport = alchemyTransport({
  *   apiKey: "your-api-key",
- *   httpOptions: {
- *     onFetchRequest: (request) => console.log("Request:", request),
- *     onFetchResponse: (response) => console.log("Response:", response),
- *     timeout: 30000
- *   }
+ *   onFetchRequest: (request) => console.log("Request:", request),
+ *   onFetchResponse: (response) => console.log("Response:", response),
+ *   timeout: 30000,
+ *   retryCount: 3,
+ *   retryDelay: 1000
  * });
  * ```
  *
- * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport
+ * @param {AlchemyTransportConfig} config - The configuration object for the Alchemy transport (extends viem's HttpTransportConfig)
  * @param {string} [config.apiKey] - API key for Alchemy authentication
  * @param {string} [config.jwt] - JWT token for authentication
  * @param {string} [config.url] - Direct URL to Alchemy endpoint or a proxy URL
+ * @param {Function} [config.onFetchRequest] - Callback for debugging outgoing requests
+ * @param {Function} [config.onFetchResponse] - Callback for debugging responses
+ * @param {number} [config.timeout] - Request timeout in milliseconds
+ * @param {number} [config.retryCount] - The number of retry attempts
  * @param {number} [config.retryDelay] - The delay between retries, in milliseconds
- * @param {number} [config.retryCount] - The number of retry attempts (default: 0)
  * @param {object} [config.fetchOptions] - Optional fetch options for HTTP requests
  * @param {object} [config.httpOptions] - HTTP transport options for debugging (onFetchRequest, onFetchResponse, timeout, batch)
  * @returns {AlchemyTransport} The configured Alchemy transport function
@@ -159,10 +155,10 @@ export function alchemyTransport<
     apiKey,
     jwt,
     url,
-    retryDelay,
-    retryCount = 0,
     fetchOptions: fetchOptions_,
-    httpOptions,
+    retryCount,
+    retryDelay,
+    ...httpTransportConfig
   } = config;
 
   // Create a copy of fetch options for modification
@@ -225,13 +221,14 @@ export function alchemyTransport<
     })();
 
     const innerTransport = http(rpcUrl, {
+      // Standard viem options are passed through to the underlying transport, with
+      // the exception of retryCount and retryDelay because those are handled by
+      // the outer Alchemy transport.
+      ...httpTransportConfig,
       fetchOptions,
       // Retry count must be 0 here in order to respect the retry
       // count that is already specified on the underlying transport.
       retryCount: 0,
-      retryDelay,
-      // Pass through HTTP debugging options
-      ...httpOptions,
     });
 
     return createTransport(

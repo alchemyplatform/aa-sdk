@@ -88,11 +88,9 @@ describe("Alchemy Transport Tests", () => {
 
       const transport = alchemyTransport({
         apiKey: "test-key",
-        httpOptions: {
-          onFetchRequest,
-          onFetchResponse,
-          timeout: 30000,
-        },
+        onFetchRequest,
+        onFetchResponse,
+        timeout: 30000,
       });
 
       expect(transport).toBeDefined();
