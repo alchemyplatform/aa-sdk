@@ -63,6 +63,11 @@ export type UseSendCallsResult<
  * or fall back to regular EOA transactions when connected to an EOA wallet. It handles the complete
  * flow of preparing, signing, and sending calls.
  *
+ * <Note>
+ * If using this hook with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
+ * from the user. It is recommended to use the `usePrepareCalls` hook instead to manually handle the permit signature.
+ * </Note>
+ *
  * @template TEntryPointVersion - The entry point version to use for user operations (defaults to EntryPointVersion)
  *
  * @param {UseSendCallsParams} params - Configuration parameters for the hook
