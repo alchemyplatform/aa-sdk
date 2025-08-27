@@ -140,10 +140,12 @@ export function alchemyGasManagerHooks(
     }
 
     if (policyToken) {
-      context.erc20Address = policyToken.address;
-      if (policyToken.maxTokenAmount) {
-        context.erc20MaxCost = `0x${policyToken.maxTokenAmount.toString(16)}`;
-      }
+      context.erc20Context = {
+        tokenAddress: policyToken.address,
+        maxTokenAmount: policyToken.maxTokenAmount
+          ? `0x${policyToken.maxTokenAmount.toString(16)}`
+          : undefined,
+      };
     }
 
     return context;
@@ -201,41 +203,13 @@ export function alchemyGasManagerHooks(
         async getPaymasterStubData(
           parameters: GetPaymasterStubDataParameters,
         ): Promise<GetPaymasterStubDataReturnType> {
-          // For test environments, we need to make the RPC call here
-          // The test transport will intercept and return the correct paymaster
           const userOpCacheKey = createUserOpCacheKey(parameters);
-          const { entryPointAddress, ...userOpFields } = parameters;
 
-          // Get dummy signature from the account
-          if (!client.account) {
-            throw new Error(
-              "No account found on client. Client must have an account to use gas manager hooks.",
-            );
-          }
-          if (!client.account.getStubSignature) {
-            throw new Error(
-              "Account must have getStubSignature method to use gas manager hooks.",
-            );
-          }
-          const dummySignature =
-            await client.account.getStubSignature(userOpFields);
-
-          const context = createContext();
-          const request = {
-            ...context,
-            entryPoint: entryPointAddress,
-            userOperation: userOpFields,
-            dummySignature,
-            overrides: {},
-          };
-
-          // Use the requestGasAndPaymasterAndData action
-          const response = await requestGasAndPaymasterAndData(client as any, [
-            request,
-          ]);
-
-          // Cache the result
-          cache.set(userOpCacheKey, response);
+          // Reuse the existing helper function
+          const response = await fetchAndCachePaymasterData(
+            parameters,
+            userOpCacheKey,
+          );
 
           // Return stub data - Alchemy Gas Manager provides complete data, so isFinal is true for both EP versions
           if ("paymasterAndData" in response) {
