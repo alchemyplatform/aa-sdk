@@ -82,7 +82,8 @@ export const paymasterTransport = (
             },
           ];
 
-          // Use paymaster for production-like behavior, but mock for test-policy to avoid deployment issues
+          // For now, mock the paymaster for test-policy to avoid deployment issues
+          // TODO: Fix paymaster deployment timing to enable real paymaster logic
           const usePaymaster = policyId !== "test-policy";
 
           const isPMv7 =

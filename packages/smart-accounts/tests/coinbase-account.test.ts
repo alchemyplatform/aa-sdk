@@ -68,6 +68,35 @@ describe("Viem AA - Coinbase Smart Account", () => {
       address: recipient,
     });
 
+    // Prepare the user operation to verify paymaster fields
+    const userOp = await bundlerClient.prepareUserOperation({
+      account,
+      calls: [
+        {
+          to: recipient,
+          value: amount,
+          data: "0x" as `0x${string}`,
+        },
+      ],
+    });
+
+    // Verify that paymaster fields are filled by the gas manager hooks
+    // For test-policy, the transport mocks the paymaster data as "0x"
+    // For v0.6, we use paymasterAndData field instead of separate fields
+    if ("paymasterAndData" in userOp) {
+      expect(userOp.paymasterAndData).toBeDefined();
+      expect(userOp.paymasterAndData).toBe("0x"); // Mocked for test-policy
+    } else {
+      // v0.7 fields
+      expect(userOp.paymaster).toBeDefined();
+      expect(userOp.paymaster).toMatch(/^0x[a-fA-F0-9]{40}$/);
+      expect(userOp.paymasterVerificationGasLimit).toBeDefined();
+      expect(userOp.paymasterVerificationGasLimit).toBeGreaterThan(0n);
+      expect(userOp.paymasterPostOpGasLimit).toBeDefined();
+      expect(userOp.paymasterPostOpGasLimit).toBeGreaterThanOrEqual(0n);
+      expect(userOp.paymasterData).toBeDefined();
+    }
+
     // Send the user operation
     const userOpHash = await bundlerClient.sendUserOperation({
       account,
@@ -126,6 +155,35 @@ describe("Viem AA - Coinbase Smart Account", () => {
       address: account.address,
       value: parseEther("1.0"),
     });
+
+    // Prepare deployment operation to verify paymaster fields
+    const deployOp = await bundlerClient.prepareUserOperation({
+      account,
+      calls: [
+        {
+          to: account.address,
+          value: 0n,
+          data: "0x" as `0x${string}`,
+        },
+      ],
+    });
+
+    // Verify that paymaster fields are filled by the gas manager hooks
+    // For test-policy, the transport mocks the paymaster data as "0x"
+    // For v0.6, we use paymasterAndData field instead of separate fields
+    if ("paymasterAndData" in deployOp) {
+      expect(deployOp.paymasterAndData).toBeDefined();
+      expect(deployOp.paymasterAndData).toBe("0x"); // Mocked for test-policy
+    } else {
+      // v0.7 fields
+      expect(deployOp.paymaster).toBeDefined();
+      expect(deployOp.paymaster).toMatch(/^0x[a-fA-F0-9]{40}$/);
+      expect(deployOp.paymasterVerificationGasLimit).toBeDefined();
+      expect(deployOp.paymasterVerificationGasLimit).toBeGreaterThan(0n);
+      expect(deployOp.paymasterPostOpGasLimit).toBeDefined();
+      expect(deployOp.paymasterPostOpGasLimit).toBeGreaterThanOrEqual(0n);
+      expect(deployOp.paymasterData).toBeDefined();
+    }
 
     // Deploy by sending a simple transaction to self
     const deployHash = await bundlerClient.sendUserOperation({
