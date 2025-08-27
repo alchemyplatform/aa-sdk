@@ -33,7 +33,7 @@ export function UserConnectionDetails({
       theme,
       primaryColor,
       accountMode,
-    })
+    }),
   );
   const scaAccount = useAccount({
     type: "ModularAccountV2",
