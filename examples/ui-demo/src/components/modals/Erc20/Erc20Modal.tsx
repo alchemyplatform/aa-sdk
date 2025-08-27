@@ -16,7 +16,6 @@ import { MintStages } from "@/components/small-cards/MintStages";
 import { ModalCTAButton } from "../../shared/ModalCTAButton";
 import { getNftMintBatchUOs } from "./utils";
 import { useEstimateGasErc20Sponsorship } from "../../../hooks/useEstimateGasErc20Sponsorship";
-import { useGetEthPrice } from "../../../hooks/useGetEthPrice";
 import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../utils/constants";
 
 type Erc20ModalProps = {
@@ -45,8 +44,6 @@ export function Erc20Modal({
       mode: accountMode,
     },
   });
-
-  const { data: ethPriceData, isLoading: isLoadingEthPrice } = useGetEthPrice();
 
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
   const transport = alchemy({
@@ -142,19 +139,12 @@ export function Erc20Modal({
 
   useEffect(() => {
     const fetchAndEstimateFee = async () => {
-      if (
-        isOpen &&
-        accountAddress &&
-        ethPriceData?.price &&
-        !isLoadingEthPrice
-      ) {
+      if (isOpen && accountAddress) {
         try {
           const uos = await getNftMintBatchUOs(accountAddress);
           const feeResult = await estimateMintNftFee(uos);
-          if (feeResult && feeResult.feeEth) {
-            const calculatedNetworkFee =
-              parseFloat(feeResult.feeEth) * ethPriceData.price;
-            setNetworkFee(calculatedNetworkFee);
+          if (feeResult && feeResult.feeUsd) {
+            setNetworkFee(feeResult.feeUsd);
           } else {
             console.warn("Fee estimation did not return expected data.");
             setNetworkFee(0);
@@ -162,23 +152,11 @@ export function Erc20Modal({
         } catch (error) {
           setNetworkFee(0);
         }
-      } else if (isOpen && accountAddress && !isLoadingEthPrice) {
-        setNetworkFee(0);
-        if (!ethPriceData?.price) {
-          console.warn("ETH price not available for fee estimation.");
-        }
       }
     };
 
     fetchAndEstimateFee();
-  }, [
-    isOpen,
-    accountAddress,
-    estimateMintNftFee,
-    ethPriceData?.price,
-    isLoadingEthPrice,
-    balance,
-  ]);
+  }, [isOpen, accountAddress, estimateMintNftFee, balance]);
 
   useEffect(() => {
     resetMintNft();

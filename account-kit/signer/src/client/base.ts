@@ -243,6 +243,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User>;
 
   public abstract oauthWithRedirect(
@@ -535,12 +536,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    *
    * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
    * @param {string} idToken an OIDC ID token containing additional user information
+   * @param {string} accessToken an access token which if provided will be added to the user
    * @returns {Promise<User>} A promise that resolves to the user object
    * @throws {Error} if no organization ID is provided when there is no current user
    */
   public whoami = async (
     orgId = this.user?.orgId,
     idToken?: string,
+    accessToken?: string,
   ): Promise<User> => {
     if (this.user) {
       return this.user;
@@ -565,6 +568,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       if (typeof claims.email === "string") {
         user.email = claims.email;
       }
+    }
+
+    if (accessToken) {
+      user.accessToken = accessToken;
     }
 
     const credentialId = (() => {
