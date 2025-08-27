@@ -101,11 +101,51 @@ export const paymasterTransport = (
 
             if (code === "0x" || code === null) {
               // Deploy paymaster on-demand for tests
-              try {
-                await paymaster.deployPaymasterContract(client);
-              } catch (error) {
-                console.error(`Failed to deploy paymaster:`, error);
-                usePaymaster = false;
+              // Use a global deployment lock to prevent race conditions
+              const globalKey =
+                `__paymasterDeploymentInProgress_${paymasterAddress}` as any;
+              if (!global[globalKey]) {
+                try {
+                  global[globalKey] = true;
+
+                  // Check again in case another process deployed while we were waiting
+                  const latestCode = await client.request({
+                    method: "eth_getCode",
+                    params: [paymasterAddress, "latest"],
+                  });
+
+                  if (latestCode === "0x" || latestCode === null) {
+                    await paymaster.deployPaymasterContract(client);
+                  }
+                } catch (error) {
+                  console.error(`Failed to deploy paymaster:`, error);
+                  usePaymaster = false;
+                } finally {
+                  global[globalKey] = false;
+                }
+              } else {
+                // Another process is already deploying, wait for it to complete
+                console.log(
+                  "Waiting for paymaster deployment from another process...",
+                );
+                // Simple polling to wait for deployment
+                let retries = 10;
+                while (retries > 0) {
+                  await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 500ms
+                  const deployedCode = await client.request({
+                    method: "eth_getCode",
+                    params: [paymasterAddress, "latest"],
+                  });
+                  if (deployedCode !== "0x" && deployedCode !== null) {
+                    break; // Deployment completed
+                  }
+                  retries--;
+                }
+
+                if (retries === 0) {
+                  console.error("Timeout waiting for paymaster deployment");
+                  usePaymaster = false;
+                }
               }
             }
           }
