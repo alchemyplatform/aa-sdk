@@ -8,13 +8,13 @@ slug: wallets/transactions/retries
 
 <Tabs>
   <Tab title="React">
-    The drop and replace functionality is supported using the `useDropAndReplaceUserOperation()` hook. User operations can be seamlessly retried by:
+    Use the provided `useDropAndReplaceUserOperation()` hook to drop and replace. You can retry a user operation by:
 
-    1. Using the `useSendUserOperation()` hook, which supplies a `sendUserOperationAsync()` method to send the initial user operation; this returns a hash for the pending user operation
-    2. Using the `useWaitForUserOperationTransaction()` hook to wait on the pending user operation
-    3. Using the `useDropAndReplaceUserOperation()` hook if the user operation is stuck in the mempool to cancel the existing operation and resubmit a user operation with an adjusted gas fee
+    1. Calling `sendUserOperationAsync()` from `useSendUserOperation()` to send the initial user operation; it returns the pending user operation hash
+    2. Using the `useWaitForUserOperationTransaction()` hook to wait for the pending user operation
+    3. Using the `useDropAndReplaceUserOperation()` hook if the user operation is stuck in the mempool to cancel the existing operation and resubmit with an adjusted gas fee
 
-    This example implements the above flow and is wrapped in a retry function that will retry the flow a configurable number of times.
+    The example below implements this flow and wraps it in a retry helper with a configurable number of attempts.
 
     ```tsx twoslash
     import React from "react";
@@ -134,12 +134,12 @@ slug: wallets/transactions/retries
 
     <Markdown src="../../shared/infra/client.mdx" />
 
-    Once you've initialized it you can:
-    1. Call `sendUserOperation()` to send the initial user operation; this returns a hash for the pending user operation
-    2. Call `waitForUserOperationTransaction({ hash })` on the pending user operation
-    3. If `waitForUserOperationTransaction({ hash })` errors, you can drop and replace it with `dropAndReplaceUserOperation()`
+    Once initialized, you can:
+    1. Send the initial user operation with `sendUserOperation()`; it returns the pending user operation hash
+    2. Wait for the pending user operation with `waitForUserOperationTransaction({ hash })`
+    3. If `waitForUserOperationTransaction({ hash })` errors, drop and replace with `dropAndReplaceUserOperation()`
 
-    This example implements the above flow and is wrapped in a retry function that will retry the flow a configurable number of times.
+    The example then wraps this flow in a retry helper with a configurable number of attempts.
 
     ```ts twoslash example.ts
     import { client } from "./client";
