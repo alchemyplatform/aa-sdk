@@ -56,7 +56,7 @@ slug: wallets/transactions/retries
       function waitForUserOperationTransactionPromise(hash: `0x${string}`) {
         return new Promise<`0x${string}`>((resolve, reject) => {
           waitForUserOperationTransaction(
-            { hash, retries: { maxRetries: 3, intervalMs: 500 } },
+            { hash, retries: { maxRetries: 3, intervalMs: 5_000 } },
             { onSuccess: resolve, onError: reject },
           );
         });
@@ -75,6 +75,7 @@ slug: wallets/transactions/retries
           if (params.maxReplacements <= 0) throw e;
           const { hash: newHash } =
             await dropAndReplaceUserOperation({ uoToDrop: params.request });
+          console.log("Replaced user operation hash:", newHash);
           return waitUntilMinedWithRetries({
             hash: newHash as `0x${string}`,
             request: params.request,
@@ -95,11 +96,12 @@ slug: wallets/transactions/retries
                 },
               });
 
-              await waitUntilMinedWithRetries({
+              const minedTxHash = await waitUntilMinedWithRetries({
                 hash,
                 request,
                 maxReplacements: MAX_REPLACEMENTS,
               });
+              console.log("Mined transaction hash:", minedTxHash);
             }}
             disabled={
               isSendingUserOperation ||
@@ -121,8 +123,6 @@ slug: wallets/transactions/retries
       );
     }
     ```
-
-    You can also build a more complex retry logic in a case you want more control over how many times you want to retry a failed user operation.
 
   </Tab>
   <Tab title="JavaScript">
@@ -185,8 +185,6 @@ slug: wallets/transactions/retries
     ```
 
     </CodeBlocks>
-
-    In the above example, we only try to drop and replace once before failing completely, but you can build more complex retry logic using this combination of `waitForUserOperationTransaction` and `dropAndReplace`.
 
   </Tab>
 </Tabs>
