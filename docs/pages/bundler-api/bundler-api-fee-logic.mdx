@@ -71,5 +71,5 @@ You can deploy a smart contract account in two ways:
 
 - For [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata) we offer the ability to override our fee estimates with the `feeOverride` parameters.
 
-  - Default settings: baseFee increased by 50% and priorityFee by 5%.
+  - We default to increasing baseFee by 50% and priorityFee by 5%.
   - **Note**: The feeOverride parameters don't include preVerificationGas (PVG) . The method will always increase the estimated PVG by 5% to give the UO a better chance to mine if the L1 /L2 fee ratio changes. If you would like to modify this value, its recommended you use [alchemy_requestPaymasterAndData](/reference/alchemy-requestpaymasteranddata) instead.
