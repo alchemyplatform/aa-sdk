@@ -1,7 +1,7 @@
 ---
 title: FAQs
-description: Frequently asked questions about the Bundler
-subtitle: Frequently asked questions about the Bundler
+description: Frequently asked questions about sending transactions
+subtitle: Frequently asked questions about sending transactions
 url: https://docs.alchemy.com/reference/bundler-faqs
 slug: reference/bundler-faqs
 ---
@@ -28,7 +28,7 @@ For EIP-1559 fee markets, the base fee is fixed per block. To prioritize the inc
 This is a possible but rare scenario and can occur due to several reasons:
 
 - The userOp is replaced by another userOp from the same sender with the same nonce.
-- The signature of the Gas Manager has expired, rendering the userOp ineligible for sponsorship.
+- The gas sponsorship signature has expired, rendering the userOp ineligible for sponsorship.
 - The validation function of the userOp fails when it is being bundled into a transaction for on-chain submission.
 - The mempool runs out of memory, causing the bundler to drop userOps with the lowest fees.
 
