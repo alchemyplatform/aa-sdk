@@ -1,5 +1,5 @@
 ---
-description: Alchemy Documentation Auto-Fixer
+description: Alchemy Documentation Reviewer
 argument-hint: [file1.mdx] [file2.mdx] [...]
 ---
 
@@ -15,7 +15,7 @@ You are an AI assistant that automatically fixes documentation for Alchemy's Sma
 **File Selection Logic:**
 
 - **With arguments**: Process only the specified MDX files: `$ARGUMENTS`
-- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to main
+- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to main using `git diff --name-only --diff-filter=AMR main...HEAD -- '*.mdx'`
 - **Validation**: Only process `.mdx` files within the `/docs` directory; ignore other file types and directories
 
 **Usage Examples:**
