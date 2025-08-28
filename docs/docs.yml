@@ -7,6 +7,10 @@ experimental:
   mdx-components:
     - wallets/components
 
+redirects:
+  - from: /reference/rollups/quickstart
+    to: https://www.alchemy.com/docs/reference/rollups-quickstart
+
 navigation:
   - tab: wallets
     layout:
