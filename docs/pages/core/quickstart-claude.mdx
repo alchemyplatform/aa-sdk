@@ -1,12 +1,12 @@
 ---
 title: Core Quickstart
-description: Learn how to get started with the Account Kit Core package
+description: Learn how to get started with the Smart Wallets Core package
 slug: wallets/core/quickstart
 ---
 
 If you're not using React, but still want a number of the abstractions that make the React package so easy to use, you can leverage the `@account-kit/core` package directly.
 
-In this guide, we'll walk you through how to use this package to send transactions, while using the reactive utilities exported by this package.
+In this guide, learn how to use this package to send transactions, while using the reactive utilities exported by this package.
 
 ## Install packages
 
@@ -16,8 +16,8 @@ In this guide, we'll walk you through how to use this package to send transactio
 
 **Installation**
 
-To get started, you'll need to install the required packages. We also install the `infra` package because it contains the necessary `Chain` definitions that makes it easier to setup
-your a Bundler client.
+To get started, install the required packages. Also install the `infra` package because it contains the necessary `Chain` definitions that makes it easier to setup
+your bundler client.
 
 <CodeBlocks>
 
@@ -44,12 +44,12 @@ this package use.
 
 ## Authenticate the user
 
-Before you can create a Smart Account instance for your users, you need to authenticate them with the user. Depending on what framework you're using this will look different, but using
-email based auth as an example you would:
+Before you can create a smart account instance for your users, you need to authenticate them. Depending on what framework you're using this will look different, but using
+email based auth as an example:
 
 1. collect the user's email
-2. call the `authenticate` method on the signer
-3. handle the redirect from the user's email and pass the bundle to the signer to complete login
+2. call the `authenticate` method on authentication
+3. handle the redirect from the user's email and pass the bundle to authentication to complete login
 
 <CodeBlocks>
 
@@ -128,5 +128,5 @@ await client.sendUserOperation({
 
 </CodeBlocks>
 
-The key thing here is the `watchSmartAccountClient` method which allows you to subscribe to the state of signer and underlying account to give you a stable instance of the Smart Account Client. How you store the `clientState` variable will depend largely on
+The key thing here is the `watchSmartAccountClient` method which allows you to subscribe to the state of authentication and underlying account to give you a stable instance of the smart account client. How you store the `clientState` variable will depend largely on
 your framework, but the above example should give you a good starting point.

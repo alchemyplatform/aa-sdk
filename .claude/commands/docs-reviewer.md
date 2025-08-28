@@ -1,134 +1,27 @@
 ---
 description: Alchemy Documentation Auto-Fixer
+argument-hint: [file1.mdx] [file2.mdx] [...]
 ---
 
 # Alchemy Smart Wallets Documentation Reviewer
 
-You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to changed MDX files within the `/docs` directory in the current branch (compared to main) to ensure compliance with contribution guidelines. Only process MDX files that have been modified, added, or renamed in the current git branch. Process fixes in the priority order below.
+You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory to ensure compliance with contribution guidelines defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md)
 
-## 🎯 Review Priority Order (CRITICAL)
+**⚠️ CRITICAL**: Do not modify existing code snippets beyond formatting (indentation, language tags). Code changes can break functionality.
 
-1. **TERMINOLOGY ENFORCEMENT** (Highest Priority)
-2. **VOICE AND TONE COMPLIANCE**
-3. **CODE FORMATTING STANDARDS**
-4. **CONTENT STRUCTURE VALIDATION**
 
-## 🚫 Terminology Enforcement (PRIORITY 1)
+## 📁 File Selection
 
-Flag these prohibited terms and provide exact replacements:
+**File Selection Logic:**
 
-### Critical Replacements:
+- **With arguments**: Process only the specified MDX files: `$ARGUMENTS`
+- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to main
+- **Validation**: Only process `.mdx` files within the `/docs` directory; ignore other file types and directories
 
-| ❌ **NEVER USE**                   | ✅ **REPLACE WITH**             | **Template Comment**                                                                                    |
-| ---------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `"Account Abstraction"` or `"AA"`  | Remove entirely                 | "Remove Account Abstraction terminology per [style guide](/docs/CONTRIBUTING.md#terminology-standards)" |
-| `"user operation"` or `"user ops"` | `"transactions"`                | "Use 'transactions' instead of 'user operations' per our terminology standards"                         |
-| `"bundler"`                        | `"sending transactions"`        | "Replace 'bundler' with 'sending transactions' to hide implementation details"                          |
-| `"Account Kit"`                    | `"Smart Wallets"`               | "Use 'Smart Wallets' instead of 'Account Kit' per our branding guidelines"                              |
-| `"gas manager"`                    | `"sponsor gas"`                 | "Use 'sponsor gas' instead of 'gas manager' unless referring to Gas Manager API"                        |
-| `"Signer"`                         | `"authentication"` or `"owner"` | "Replace 'Signer' with 'authentication' or 'owner' for clarity"                                         |
+**Usage Examples:**
 
-### Brand Reference Violations:
+- `/docs-reviewer` - Process all changed MDX files in current branch
+- `/docs-reviewer docs/pages/core/quickstart.mdx` - Process single file
+- `/docs-reviewer docs/pages/core/quickstart.mdx docs/pages/react/overview.mdx` - Process multiple files
 
-- ❌ `"Alchemy Smart Wallets"` → ✅ `"Smart Wallets"`
-- ❌ `"our smart account"` → ✅ `"smart accounts"`
-- ❌ `"we recommend"` → ✅ `"recommended approach:"`
-
-## 🗣️ Voice and Tone Validation (PRIORITY 2)
-
-**SYSTEMATIC CHECKS:**
-
-### Second Person Voice (REQUIRED):
-
-```regex
-Pattern to flag: \b(we|our|us|I|my|one should)\b
-Replacement: "you" or restructure with direct commands
-```
-
-**Examples:**
-
-- ❌ `"We recommend installing..."` → ✅ `"Install..."`
-- ❌ `"Our SDK provides..."` → ✅ `"The SDK provides..."`
-- ❌ `"You should configure..."` → ✅ `"Configure..."`
-
-### Active Voice Detection:
-
-```regex
-Pattern to flag: \b(is|are|was|were|been)\s+(created|configured|implemented|used)\b
-Fix: Convert to active voice with direct commands
-```
-
-### Confidence Level Check:
-
-```regex
-Pattern to flag: \b(perhaps|might|maybe|possibly|you may wish|you might want)\b
-Fix: Remove qualifiers, use direct statements
-```
-
-## 💻 Code Standards Validation (PRIORITY 3)
-
-**AUTOMATED CHECKS:**
-
-### Technical Term Formatting:
-
-- **ALL** function names, variables, and technical terms MUST use backticks
-- Code blocks MUST specify language: `ts`, `jsx`, `bash`
-- Examples MUST include `twoslash` for TypeScript: ```ts twoslash
-
-### Missing Backticks Detection:
-
-```regex
-Common patterns to flag (not exhaustive):
-- SDK method names without backticks
-- Configuration properties without backticks
-- Package names in prose without backticks
-```
-
-## 📋 Review Decision Tree
-
-### 1. CRITICAL ISSUES (Request Changes):
-
-- ✅ Any prohibited terminology found
-- ✅ First-person voice ("we", "our", "I")
-- ✅ Headers containing AA-specific terms
-- ✅ Missing backticks on technical terms
-
-### 2. MAJOR ISSUES (Request Changes):
-
-- ✅ Passive voice in instructions
-- ✅ Broken or incorrect relative links
-- ✅ Code blocks without language specification
-- ✅ Examples missing prerequisites
-
-### 3. MINOR ISSUES (Suggest Changes):
-
-- ✅ Inconsistent capitalization
-- ✅ Verbose explanations that could be more direct
-- ✅ Missing alt text on images
--
-
-## ✅ Checklist
-
-- [ ] **NO prohibited terms** anywhere in the document
-- [ ] **Second person voice** used throughout ("you" not "we/I")
-- [ ] **Active voice** for all instructions
-- [ ] **Direct commands** without qualifiers
-- [ ] **Backticks** around all technical terms
-- [ ] **Language specified** in all code blocks
-- [ ] **Working examples** with prerequisites
-- [ ] **Relative links** (not full URLs)
-- [ ] **No broken links** or circular references
-
-## 🎯 Success Criteria
-
-- Zero terminology violations detected
-- Consistent second-person active voice throughout
-- All technical terms properly formatted
-- Examples are standalone and functional
-- Headers focus on developer outcomes, not implementation
-
----
-
-**Reference**: All standards defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md)
-
-**AI Assistant Note**: This document is structured for systematic validation. Process each section in priority order for consistent, thorough reviews.
+**Note**: When processing specific files via arguments, they will be reviewed regardless of git status. When no arguments are provided, only changed files in the current branch are processed.
