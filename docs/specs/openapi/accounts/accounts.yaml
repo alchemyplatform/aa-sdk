@@ -312,7 +312,6 @@ paths:
       summary: Authenticate with JWT
       description: >
         Authenticates a user using a JSON Web Token (JWT) for secure access to their Smart Wallet functionalities. This endpoint validates the provided JWT token and can be used for authenticating an existing user or to pregenerate a wallet.
-        This feature is in private access. Please fill out the [form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736) or reach out to us at smart-wallets@alchemy.com to get access
       security:
         - apiKey: []
       x-readme:
