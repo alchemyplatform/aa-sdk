@@ -5,3 +5,9 @@ export const DEMO_USDC_ADDRESS_6_DECIMALS: Address =
 
 export const DEMO_NFT_USDC_MINTABLE_ADDRESS: Address =
   "0x6413f6Ac87222F68dF9a2F74fe4c00a1D87d780f";
+
+// Amount below which the paymaster will auto-approve the ERC20 token
+export const DEMO_USDC_APPROVE_BELOW_AMOUNT: number = 1000000; // 1 SWUSDC
+
+// Amount to approve the paymaster for ERC20 gas payment
+export const DEMO_USDC_APPROVAL_AMOUNT: number = 10000000; // 10 SWUSDC

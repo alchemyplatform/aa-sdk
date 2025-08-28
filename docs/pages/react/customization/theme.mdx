@@ -1,21 +1,40 @@
 ---
 title: Custom theme
-description: Learn how to customize the theme of the Account Kit React components
+description: Customize the theme of your Smart Wallets app
 slug: wallets/react/customization/theme
 ---
 
-When using React components in your app, you can customize both 1) overall [theme](#colors) and 2) [authentication components](#custom-authentication-component).
+UI components are fully customizable so you can match your app's branding.
 
-Most theme customizations are passed through using `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
+What you can customize in the pre-built authentication component:
+
+- Overall theme: colors, radius, illustrations, custom css
+- Header: text, logo, custom component
+- External wallet connectors: featured wallets, specify order, chain filtering (EVM/Solana), WalletConnect, and more via `configForExternalWallets()`. See [EOA connectors](/docs/wallets/react/customization/eoa-connectors) for more details.
+
+<Tip>
+  **Need to set up Tailwind first?** See the [complete Tailwind setup
+  guide](/wallets/react/tailwind-setup) for installation and configuration
+  instructions.
+</Tip>
 
 <Tip>
   The easiest way to configure your UI components, is using the [Demo
   App](https://demo.alchemy.com/).
+
+Preview your branding and autogenerate a styled component using the [Demo
+App](https://demo.alchemy.com/). You can simply copy and paste the code into
+your project.
+
 </Tip>
+
+# Theme
+
+Theme customizations and styling are passed through `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
 
 ## Colors
 
-The [Account Kit Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overiddable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
+The [Account Kit Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overridable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
 
 ### Border colors
 
@@ -73,9 +92,66 @@ export const tailwindConfig = withAccountKitUi(
 );
 ```
 
+### Customizing Multiple Colors
+
+You can customize multiple color properties at once for comprehensive theming:
+
+```ts tailwind.config.ts
+import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
+
+export default withAccountKitUi(
+  {
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  },
+  {
+    colors: {
+      "btn-primary": createColorSet("#3b82f6", "#1d4ed8"),
+      "fg-accent-brand": createColorSet("#3b82f6", "#60a5fa"),
+      active: createColorSet("#94a3b8", "#94a3b8"),
+    },
+  },
+);
+```
+
+### Available Color Variables
+
+Account Kit supports these color customizations:
+
+**Border Colors:**
+
+- `active` - Border color when input is focused
+- `static` - Border color when input is not focused
+- `critical` - Border color for error states
+
+**Button Colors:**
+
+- `btn-primary` - Primary button background
+- `btn-secondary` - Secondary button background
+- `btn-auth` - Authentication button background
+
+**Text Colors:**
+
+- `fg-primary` - Primary text color
+- `fg-secondary` - Secondary text color
+- `fg-tertiary` - Tertiary text color
+- `fg-invert` - Inverted text color
+- `fg-disabled` - Disabled text color
+- `fg-accent-brand` - Brand accent color
+- `fg-critical` - Critical/error text color
+
+**Background Colors:**
+
+- `bg-surface-default` - Default background
+- `bg-surface-subtle` - Subtle background
+- `bg-surface-inset` - Inset component background
+- `bg-surface-critical` - Critical component background
+- `bg-surface-error` - Error component background
+- `bg-surface-success` - Success component background
+- `bg-surface-warning` - Warning component background
+
 ## Borders
 
-Similar to colors, the Account Theme object passed to `withAccountKitUi` supports an overiddable `borderRadius` field to customize the border radius size. The default value is `sm` which is an `8px` border radius.
+Similar to colors, the Account Theme object passed to `withAccountKitUi` supports an overridable `borderRadius` field to customize the border radius size. The default value is `sm` which is an `8px` border radius.
 
 ```ts twoslash
 import { withAccountKitUi } from "@account-kit/react/tailwind";
@@ -121,13 +197,14 @@ const config = createConfig(
 );
 ```
 
-## Custom authentication component
+# Branding the header
 
-The auth modal, by default, shows a `Sign in` text header. This header is fully cusomizable, allowing you to change the text or add an icon.
+To customize the header, you can override either of the `header` or `hideSignInText` options of the `auth` config when calling `createConfig`.
 
-### Customize header text
+## Changing the header text
 
-To customize the header text, you can override the `header` or `hideSignInText` options of the [`auth`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/types.ts) config when calling `createConfig`.
+The auth modal, by default, shows a `Sign in` text header.
+
 In this example, we hide the default header text and replace it with our own.
 
 ```tsx twoslash
@@ -135,9 +212,9 @@ In this example, we hide the default header text and replace it with our own.
 import { createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
-export const confg = createConfig(
+export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "YOUR_KEY" }),
+    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
     chain: sepolia,
   },
   {
@@ -149,7 +226,7 @@ export const confg = createConfig(
 );
 ```
 
-### Adding an icon
+## Adding an icon
 
 In this example, we leave the `Sign in` text in the modal and add an icon above it.
 
@@ -158,9 +235,9 @@ In this example, we leave the `Sign in` text in the modal and add an icon above 
 import { createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
-export const confg = createConfig(
+export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "YOUR_KEY" }),
+    transport: alchemy({ apiKey: "YOUR_API_KEY" }),
     chain: sepolia,
   },
   {
