@@ -20,13 +20,16 @@ Your authentication system must be [**OpenID Connect (OIDC) compliant**](https:/
 
 Host a discovery endpoint at: `<YOUR_API_DOMAIN>/.well-known/openid-configuration`
 
-The response must include these minimum fields:
+The response must include these required fields from the [**OpenID spec**](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata):
 
 ```json
 {
   "issuer": "<YOUR_API_DOMAIN>",
   "jwks_uri": "<YOUR_JWKS_ENDPOINT_URL>",
-  "id_token_signing_alg_values_supported": ["RS256"]
+  "id_token_signing_alg_values_supported": ["RS256"],
+  "authorization_endpoint": "<YOUR_AUTH_ENDPOINT>",
+  "response_types_supported": ["<YOUR_SUPPORTED_RESPONSE_TYPE>"],
+  "subject_types_supported": ["<YOUR_SUPPORTED_SUBJECT_TYPE>"]
 }
 ```
 
@@ -37,6 +40,20 @@ The response must include these minimum fields:
 - `id_token_signing_alg_values_supported`: Must include "RS256" algorithm
 
 ### 3. JWT Structure Requirements
+
+#### JWT Header Requirements
+
+Your JWT header must include:
+
+| Field | Description                                            | Example   |
+| ----- | ------------------------------------------------------ | --------- |
+| `alg` | Algorithm used to sign the JWT                         | `"RS256"` |
+| `typ` | Token type                                             | `"JWT"`   |
+| `kid` | Key ID that matches the `kid` field from your JWKs URI | `"key-1"` |
+
+**Important**: The `kid` field in the JWT header must correspond to a key identifier from your JWKS endpoint to enable proper key lookup during token verification.
+
+#### JWT Payload Requirements
 
 Your JWTs must contain these claims:
 
