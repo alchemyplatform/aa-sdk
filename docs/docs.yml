@@ -36,18 +36,16 @@ navigation:
                 contents:
                   - page: Overview
                     path: wallets/pages/react-native/overview.mdx
-                  - page: Expo setup
-                    path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
-                  - page: Bare React Native setup
-                    path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
-                  - page: Set up your client
-                    path: wallets/pages/react-native/using-smart-accounts/setup-smart-account-client.mdx
-                  - page: Signer setup
-                    path: wallets/pages/react-native/signer/setup-guide.mdx
-                  - page: Setting up the Accounts Provider
-                    path: wallets/pages/react-native/signer/authenticating-users/setting-up-the-accounts-provider.mdx
-                  - page: Deep linking
-                    path: wallets/pages/overview/react-native/deep-linking.mdx
+                  - page: Quickstart with Expo
+                    path: wallets/pages/react-native/getting-started/getting-started-quickstart.mdx
+                  - section: From Scratch
+                    contents:
+                      - page: Expo Setup
+                        path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
+                      - page: Bare React Native Setup
+                        path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
+                      - page: Integrate Smart Wallets
+                        path: wallets/pages/react-native/getting-started/integrate-smart-wallets.mdx
               - section: Other JS frameworks
                 contents:
                   - page: Overview
