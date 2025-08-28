@@ -70,19 +70,55 @@ export const paymasterTransport = (
           // UserOperationRequest is slightly different, but so far the only issue we've needed to patch is loading
           // the dummy signature into the UO's signature. More may come up as we increase test coverage.
           // TODO(v5): cast as viem RpcUserOperation instead of aa-sdk/core's UserOperationRequest.
-          const [{ userOperation, entryPoint, dummySignature, overrides }] =
-            args.params as [
-              {
-                policyId: string;
-                entryPoint: Address;
-                dummySignature: Hex;
-                userOperation: UserOperationRequest;
-                overrides?: UserOperationOverrides;
-              },
-            ];
+          const [
+            { userOperation, entryPoint, dummySignature, overrides, policyId },
+          ] = args.params as [
+            {
+              policyId: string;
+              entryPoint: Address;
+              dummySignature: Hex;
+              userOperation: UserOperationRequest;
+              overrides?: UserOperationOverrides;
+            },
+          ];
+
           const isPMv7 =
             entryPoint.toLowerCase() ===
             paymaster070.entryPointAddress.toLowerCase();
+
+          // Check if paymaster is deployed
+          let usePaymaster = true;
+
+          // For test-policy, check if paymaster is deployed
+          if (policyId === "test-policy") {
+            const paymaster = isPMv7 ? paymaster070 : paymaster060;
+            const paymasterAddress = paymaster.getPaymasterDetails().address;
+
+            try {
+              const code = await client.request({
+                method: "eth_getCode",
+                params: [paymasterAddress, "latest"],
+              });
+
+              if (code === "0x" || code === null) {
+                // Paymaster not deployed, deploy it now
+                console.log(`Deploying paymaster at ${paymasterAddress}...`);
+                try {
+                  await paymaster.deployPaymasterContract(client);
+                  console.log(
+                    `Paymaster deployed successfully at ${paymasterAddress}`,
+                  );
+                  usePaymaster = true;
+                } catch (deployError) {
+                  console.error(`Failed to deploy paymaster:`, deployError);
+                  usePaymaster = false;
+                }
+              }
+            } catch (error) {
+              console.error("Error checking paymaster deployment:", error);
+              usePaymaster = false;
+            }
+          }
 
           let uo = {
             ...userOperation,
@@ -108,9 +144,11 @@ export const paymasterTransport = (
             params: [],
           });
 
-          const stubData = isPMv7
-            ? paymaster070.getPaymasterStubData()
-            : paymaster060.getPaymasterStubData();
+          const stubData = usePaymaster
+            ? isPMv7
+              ? paymaster070.getPaymasterStubData()
+              : paymaster060.getPaymasterStubData()
+            : { paymasterAndData: "0x" };
 
           uo = {
             ...uo,
@@ -136,9 +174,11 @@ export const paymasterTransport = (
               : {}),
           };
 
-          const pmFields = isPMv7
-            ? await paymaster070.getPaymasterData(uo, client)
-            : await paymaster060.getPaymasterData(uo, client);
+          const pmFields = usePaymaster
+            ? isPMv7
+              ? await paymaster070.getPaymasterData(uo, client)
+              : await paymaster060.getPaymasterData(uo, client)
+            : { paymasterAndData: "0x" };
 
           return {
             ...uo,
