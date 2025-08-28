@@ -2,24 +2,20 @@
 description: Alchemy Documentation Auto-Fixer
 ---
 
-# Alchemy Smart Wallets Documentation Auto-Fixer
+# Alchemy Smart Wallets Documentation Reviewer
 
-You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to all MDX files within the `/docs` directory to ensure compliance with contribution guidelines. Process fixes in the priority order below.
+You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to changed MDX files within the `/docs` directory in the current branch (compared to main) to ensure compliance with contribution guidelines. Only process MDX files that have been modified, added, or renamed in the current git branch. Process fixes in the priority order below.
 
-## 🎯 Auto-Fix Priority Order (CRITICAL)
+## 🎯 Review Priority Order (CRITICAL)
 
 1. **TERMINOLOGY ENFORCEMENT** (Highest Priority)
 2. **VOICE AND TONE COMPLIANCE**
 3. **CODE FORMATTING STANDARDS**
 4. **CONTENT STRUCTURE VALIDATION**
 
-## 🚀 Auto-Fix Process
-
-**IMPORTANT**: You MUST automatically apply ALL fixes found. Do not just flag issues - implement the corrections directly using the Edit tool.
-
 ## 🚫 Terminology Enforcement (PRIORITY 1)
 
-**IMMEDIATE REJECTION** - Flag these prohibited terms and provide exact replacements:
+Flag these prohibited terms and provide exact replacements:
 
 ### Critical Replacements:
 
@@ -109,61 +105,9 @@ Common patterns to flag (not exhaustive):
 - ✅ Inconsistent capitalization
 - ✅ Verbose explanations that could be more direct
 - ✅ Missing alt text on images
+-
 
-## 🤖 AI-Optimized Feedback Templates
-
-**Copy these exact templates for common issues:**
-
-### Terminology Violation:
-
-```
-**TERMINOLOGY ISSUE**: Replace "[PROHIBITED_TERM]" with "[APPROVED_TERM]" per our style guide.
-
-Reference: [Terminology Standards](/docs/CONTRIBUTING.md#terminology-standards)
-
-Specific fix: [EXACT_REPLACEMENT_TEXT]
-```
-
-### Voice Issue:
-
-```
-**VOICE ISSUE**: Convert to second person active voice.
-
-Current: "[CURRENT_TEXT]"
-Suggested: "[IMPROVED_TEXT]"
-
-Reference: [Voice Standards](/docs/CONTRIBUTING.md#voice-and-tone-standards)
-```
-
-### Code Formatting:
-
-```
-**FORMATTING ISSUE**: Technical terms need backticks.
-
-Fix: Wrap `[TERM]` in backticks for proper formatting.
-
-Reference: [Code Standards](/docs/CONTRIBUTING.md#code-and-technical-standards)
-```
-
-### Missing Language Specification:
-
-```
-**CODE BLOCK ISSUE**: Add language specification to code blocks.
-
-Change:
-\`\`\`
-[code]
-\`\`\`
-
-To:
-\`\`\`ts twoslash
-[code]
-\`\`\`
-```
-
-## ✅ Pre-Approval Checklist
-
-**Before approving ANY documentation, verify:**
+## ✅ Checklist
 
 - [ ] **NO prohibited terms** anywhere in the document
 - [ ] **Second person voice** used throughout ("you" not "we/I")
@@ -177,20 +121,11 @@ To:
 
 ## 🎯 Success Criteria
 
-**APPROVE when:**
-
 - Zero terminology violations detected
 - Consistent second-person active voice throughout
 - All technical terms properly formatted
 - Examples are standalone and functional
 - Headers focus on developer outcomes, not implementation
-
-**REQUEST CHANGES when:**
-
-- Any prohibited terminology found
-- Voice violations present
-- Missing technical formatting
-- Broken or non-functional examples
 
 ---
 
