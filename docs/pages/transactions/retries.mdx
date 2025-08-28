@@ -4,22 +4,30 @@ description: Learn how to use Drop and Replace to retry failing user operations.
 slug: wallets/transactions/retries
 ---
 
+<Markdown src="../../shared/infra/drop-and-replace-description.mdx" />
+
 <Tabs>
   <Tab title="React">
-    ## What is Drop and Replace?
+    The drop and replace functionality is supported using the `useDropAndReplaceUserOperation()` hook. User operations can be seamlessly retried by:
 
-    If fees change and your user operation gets stuck in the mempool, you can use drop and replace to resend the user operation with higher fees.
+    1. Using the `useSendUserOperation()` hook, which supplies a `sendUserOperationAsync()` method to send the initial user operation; this returns a hash for the pending user operation
+    2. Using the `useWaitForUserOperationTransaction()` hook to wait on the pending user operation
+    3. Using the `useDropAndReplaceUserOperation()` hook if the user operation is stuck in the mempool to cancel the existing operation and resubmit a user operation with an adjusted gas fee
 
-    Here's a quick example of how to use the `useDropAndReplaceUserOperation()` hook to drop and replace a user operation.
+    This example implements the above flow and is wrapped in a retry function that will retry the flow a configurable number of times.
 
     ```tsx twoslash
     import React from "react";
     import { View, Pressable, Text } from "react-native";
     import {
+      useWaitForUserOperationTransaction,
       useDropAndReplaceUserOperation,
       useSendUserOperation,
       useSmartAccountClient,
     } from "@account-kit/react-native";
+
+    // Configure how many drop-and-replace attempts to try if timeouts persist
+    const MAX_REPLACEMENTS = 3;
 
     export function ComponentWithDropAndReplaceUO() {
       const { client } = useSmartAccountClient({});
@@ -28,6 +36,11 @@ slug: wallets/transactions/retries
         useSendUserOperation({
           client,
         });
+
+      const {
+        waitForUserOperationTransaction,
+        isWaitingForUserOperationTransaction,
+      } = useWaitForUserOperationTransaction({ client });
 
       const { dropAndReplaceUserOperation, isDroppingAndReplacingUserOperation } =
         useDropAndReplaceUserOperation({
@@ -38,14 +51,43 @@ slug: wallets/transactions/retries
           onError: (error) => {
             // [optional] Do something with the error
           },
-          // [optional] ...additional mutationArgs
         });
+
+      function waitForUserOperationTransactionPromise(hash: `0x${string}`) {
+        return new Promise<`0x${string}`>((resolve, reject) => {
+          waitForUserOperationTransaction(
+            { hash, retries: { maxRetries: 3, intervalMs: 500 } },
+            { onSuccess: resolve, onError: reject },
+          );
+        });
+      }
+
+      // On failure retry and drop and replace, no backoff is required because a backoff is already
+      // waited for in the waitForUserOperationTransaction function
+      async function waitUntilMinedWithRetries(params: {
+        hash: `0x${string}`;
+        request: any;
+        maxReplacements: number;
+      }): Promise<`0x${string}`> {
+        try {
+          return await waitForUserOperationTransactionPromise(params.hash);
+        } catch (e) {
+          if (params.maxReplacements <= 0) throw e;
+          const { hash: newHash } =
+            await dropAndReplaceUserOperation({ uoToDrop: params.request });
+          return waitUntilMinedWithRetries({
+            hash: newHash as `0x${string}`,
+            request: params.request,
+            maxReplacements: params.maxReplacements - 1,
+          });
+        }
+      }
 
       return (
         <View>
           <Pressable
             onPress={async () => {
-              const { request } = await sendUserOperationAsync({
+              const { hash, request } = await sendUserOperationAsync({
                 uo: {
                   target: "0xTARGET_ADDRESS",
                   data: "0x",
@@ -53,11 +95,17 @@ slug: wallets/transactions/retries
                 },
               });
 
-              dropAndReplaceUserOperation({
-                uoToDrop: request,
+              await waitUntilMinedWithRetries({
+                hash,
+                request,
+                maxReplacements: MAX_REPLACEMENTS,
               });
             }}
-            disabled={isSendingUserOperation || isDroppingAndReplacingUserOperation}
+            disabled={
+              isSendingUserOperation ||
+              isDroppingAndReplacingUserOperation ||
+              isWaitingForUserOperationTransaction
+            }
           >
             <View>
               <Text>
@@ -78,14 +126,24 @@ slug: wallets/transactions/retries
 
   </Tab>
   <Tab title="JavaScript">
-    <Markdown src="../../shared/infra/drop-and-replace-description.mdx" />
 
     <CodeBlocks>
+
+    We will be using the smart account client directly to send a user operation, wait for it, and replace it if it times out. Below is an example of how
+    to instantiate and initialize the smart account client.
+
+    <Markdown src="../../shared/infra/client.mdx" />
+
+    Once you've initialized it you can:
+    1. Call `sendUserOperation()` to send the initial user operation; this returns a hash for the pending user operation
+    2. Call `waitForUserOperationTransaction({ hash })` on the pending user operation
+    3. If `waitForUserOperationTransaction({ hash })` errors, you can drop and replace it with `dropAndReplaceUserOperation()`
+
+    This example implements the above flow and is wrapped in a retry function that will retry the flow a configurable number of times.
 
     ```ts twoslash example.ts
     import { client } from "./client";
 
-    // 1. send a user operation
     const { hash, request } = await client.sendUserOperation({
       uo: {
         target: "0xTARGET_ADDRESS",
@@ -94,21 +152,37 @@ slug: wallets/transactions/retries
       },
     });
 
-    try {
-      // 2. wait for it to be mined
-      const txHash = await client.waitForUserOperationTransaction({ hash });
-    } catch (e) {
-      // 3. if it fails, resubmit the user operation via drop and replace
-      const { hash: newHash } = await client.dropAndReplaceUserOperation({
-        uoToDrop: request,
-      });
-
-      // 4. wait for the new user operation to be mined
-      await client.waitForUserOperationTransaction({ hash: newHash });
+    // On failure retry and drop and replace, no backoff is required because a backoff is already
+    // waited for in the waitForUserOperationTransaction function
+    async function waitUntilMinedWithRetries(params: {
+      hash: `0x${string}`;
+      request: any;
+      maxReplacements: number;
+    }): Promise<`0x${string}`> {
+      try {
+        return await client.waitForUserOperationTransaction({
+          hash: params.hash,
+          retries: { maxRetries: 3, intervalMs: 5_000 },
+        });
+      } catch (e) {
+        if (params.maxReplacements <= 0) throw e;
+        const { hash: newHash } =
+          await client.dropAndReplaceUserOperation({ uoToDrop: params.request });
+        return waitUntilMinedWithRetries({
+          hash: newHash as `0x${string}`,
+          request: params.request,
+          maxReplacements: params.maxReplacements - 1,
+        });
+      }
     }
-    ```
 
-    <Markdown src="../../shared/infra/client.mdx" />
+    const minedTxHash = await waitUntilMinedWithRetries({
+      hash,
+      request,
+      maxReplacements: 3,
+    });
+    console.log("Mined transaction hash:", minedTxHash);
+    ```
 
     </CodeBlocks>
 
