@@ -1,7 +1,5 @@
 ---
 description: Alchemy Documentation Reviewer
-globs: "**/*.mdx"
-alwaysApply: true
 ---
 
 # Alchemy Smart Wallets Documentation Reviewer
