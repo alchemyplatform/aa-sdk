@@ -20,10 +20,12 @@ navigation:
             contents:
               - section: React
                 contents:
+                  - page: Installation
+                    path: wallets/pages/react/installation.mdx
+                  - page: Setup
+                    path: wallets/pages/react/setup.mdx
                   - page: Quickstart
                     path: wallets/pages/react/quickstart.mdx
-                  - page: New project
-                    path: wallets/pages/react/quickstart/new-project.mdx
                   - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
                   - page: Set up your client
