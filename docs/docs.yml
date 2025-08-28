@@ -20,10 +20,12 @@ navigation:
             contents:
               - section: React
                 contents:
+                  - page: Installation
+                    path: wallets/pages/react/installation.mdx
+                  - page: Setup
+                    path: wallets/pages/react/setup.mdx
                   - page: Quickstart
                     path: wallets/pages/react/quickstart.mdx
-                  - page: New project
-                    path: wallets/pages/react/quickstart/new-project.mdx
                   - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
                   - page: Set up your client
@@ -46,7 +48,7 @@ navigation:
                         path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
                       - page: Integrate Smart Wallets
                         path: wallets/pages/react-native/getting-started/integrate-smart-wallets.mdx
-              - section: Other JS frameworks
+              - section: Other JavaScript frameworks
                 contents:
                   - page: Overview
                     path: wallets/pages/core/overview.mdx
@@ -94,12 +96,8 @@ navigation:
                 path: wallets/pages/authentication/what-is-a-signer.mdx
               - page: Intro to Account Kit
                 path: wallets/pages/overview/sdk-concepts/intro-to-account-kit.mdx
-          - section: Supported Chains
-            contents:
-              - page: Gas Sponsorship Supported Chains
-                path: wallets/pages/gas-manager-admin-api/gas-manager-supported-chains.mdx
-              - page: Bundler Supported Chains
-                path: wallets/pages/bundler-api/bundler-supported-chains.mdx
+          - page: Supported Chains
+            path: wallets/pages/overview/supported-chains.mdx
 
       - section: Authentication
         contents:
@@ -121,14 +119,30 @@ navigation:
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
-              - page: Connect EOAs
-                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Add passkey
                 path: wallets/pages/react/add-passkey.mdx
-              - page: Adding and removing login methods
-                path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
               - page: "[NEW] On-chain passkeys"
                 path: wallets/pages/react/login-methods/onchain-passkeys.mdx
+              - page: Adding and removing login methods
+                path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+          - section: UI components
+            contents:
+              - page: Using UI components
+                path: wallets/pages/react/ui-components.mdx
+              - page: Theme & branding
+                path: wallets/pages/react/customization/theme.mdx
+          - section: Whitelabel
+            contents:
+              - page: React hooks
+                path: wallets/pages/react/react-hooks.mdx
+              - page: Other JS initialization
+                path: wallets/pages/signer/quickstart.mdx
+          - section: Connectors
+            contents:
+              - page: Connect external wallets
+                path: wallets/pages/react/login-methods/eoa-login.mdx
+              - page: Customize
+                path: wallets/pages/react/connectors/customization.mdx
           - section: MFA
             contents:
               - page: Set up MFA
@@ -139,20 +153,6 @@ navigation:
                 path: wallets/pages/react/mfa/email-magic-link.mdx
               - page: Social login
                 path: wallets/pages/react/mfa/social-login.mdx
-              - page: Other JS MFA
-                path: wallets/pages/signer/authentication/mfa.mdx
-          - section: Customization
-            contents:
-              - page: Theme
-                path: wallets/pages/react/customization/theme.mdx
-          - page: UI components
-            path: wallets/pages/react/ui-components.mdx
-          - section: Whitelabel
-            contents:
-              - page: React hooks
-                path: wallets/pages/react/react-hooks.mdx
-              - page: Other JS initialization
-                path: wallets/pages/signer/quickstart.mdx
           - section: Account management
             contents:
               - page: Pregenerate wallets
@@ -202,6 +202,22 @@ navigation:
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Solana
                 path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+              - section: Signing
+                contents:
+                  - page: Signing transactions
+                    path: wallets/pages/signer/as-an-eoa.mdx
+                  - page: Signing messages
+                    path: wallets/pages/signer/quickstart.mdx
+                  - page: Sign EIP-7702 authorization
+                    path: wallets/pages/react/using-7702.mdx
+                  - page: Sign Solana transactions
+                    path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
+                  - section: Other signing
+                    contents:
+                      - page: Sign typed data
+                        path: wallets/pages/signer/as-an-eoa.mdx
+                      - page: Sign raw hash
+                        path: wallets/pages/signer/as-an-eoa.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Using 7702
@@ -218,8 +234,8 @@ navigation:
                     path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
-          - page: Retry User Operations
-            path: wallets/pages/transactions/retry-user-operations.mdx
+          - page: Retries
+            path: wallets/pages/transactions/retries.mdx
           - section: Low-level infra
             contents:
               # - page: Overview
@@ -250,22 +266,6 @@ navigation:
                 path: wallets/pages/third-party/chains.mdx
               - page: Paymasters
                 path: wallets/pages/third-party/paymasters.mdx
-          - section: Signing
-            contents:
-              - page: Signing transactions
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Signing messages
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Sign EIP-7702 authorization
-                path: wallets/pages/signer/as-an-eoa.mdx
-              - page: Sign Solana transactions
-                path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
-              - section: Other signing
-                contents:
-                  - page: Sign typed data
-                    path: wallets/pages/signer/as-an-eoa.mdx
-                  - page: Sign raw hash
-                    path: wallets/pages/signer/as-an-eoa.mdx
 
       - section: Funding
         contents:
@@ -441,7 +441,7 @@ navigation:
                   - page: createConfig
                     path: wallets/pages/reference/account-kit/react-native/functions/createConfig.mdx
 
-          - section: Other JS Frameworks
+          - section: Other Javascript Frameworks
             slug: core
             path: wallets/pages/reference/account-kit/core/index.mdx
             contents:
