@@ -50,7 +50,8 @@ There are two scenarios where you would get a different contract address:
 <Accordion title="Answer">
   Yes! The optional salt value on Light Account enables the ability to have
   multiple accounts under a single signer. This value defaults to 0. You can set
-  it when you create [light account](#TODO).
+  it when you create [light
+  account](/wallets/smart-contracts/other-accounts/light-account/getting-started).
 </Accordion>
 
 ### How can I upgrade from Simple Account to Light Account?
@@ -140,8 +141,9 @@ We recommend adding error handling when sending a UO to handle potential gas and
 <Accordion title="Answer">
   We front the gas for your application and put the USD equivalent on your bill
   at the end of the month. No need to worry about pre-funding the Gas Manager or
-  conversions, we’ve got you covered! You can follow [this guide](#TODO) for
-  more details on how to sponsor `UserOperation`s.
+  conversions, the service handles this! You can follow [this
+  guide](/wallets/gas-manager-admin-api/how-to-sponsor-gas-on-evm) for more
+  details on how to sponsor transactions.
 </Accordion>
 
 ### What are my gas sponsorship limits?
@@ -164,7 +166,7 @@ We recommend adding error handling when sending a UO to handle potential gas and
 <Accordion title="Answer">
   In your Gas Manager policy, you can configure spending rules per address, per
   app, and/or policy wide limits. See how to set up these policies
-  [here](#TODO).
+  [here](/wallets/gas-manager-admin-api/gas-manager-admin-api-endpoints/gas-manager-admin-api-endpoints).
 </Accordion>
 
 ### How to Authenticate Users and Verify User Sessions on the Backend?

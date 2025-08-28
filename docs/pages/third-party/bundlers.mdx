@@ -21,7 +21,7 @@ const client = createSmartAccountClient({
 });
 ```
 
-You can see that we set the `transport` to `http("https://polygon-mumbai.g.alchemy.com/v2/demo")`. You can swap out that the url in the `http` function to
+You can see that we set the `transport` to `http("https://polygon-mumbai.g.alchemy.com/v2/demo")`. You can swap out that the `url` in the `http` function to
 any other provider's URL.
 
 <Warning>
@@ -33,7 +33,7 @@ any other provider's URL.
 
 ## Splitting Bundler traffic and Node RPC traffic
 
-It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/wallets/reference/aa-sdk/core/functions/split) transport and passing it to your `createSmartAccountClient` call. For example:
+To use a different RPC provider for your bundler traffic and your node traffic, This is a common use case, and you can do this by leveraging the [`split`](/wallets/reference/aa-sdk/core/functions/split) `transport` and passing it to your `createSmartAccountClient` call. For example:
 
 ### Using Alchemy Bundler and Gas Manager with 3rd Party Node RPCs
 

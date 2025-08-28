@@ -12,7 +12,7 @@ slug: reference/bundler-faqs
 
 To understand the status of a userOp you can use the `eth_getUserOperationByHash` method as follows: loop over `eth_getUserOperationByHash` for as long as you are willing to wait for the userOp to land. If it still returns `null` after the timeout, there are two possibilities:
 
-1. **The userOp is still pending**: This is the most common scenario and typically means *the fees are too low*. In this case, you should drop and replace the userOp with higher fees.
+1. **The userOp is still pending**: This is the most common scenario and typically means *the fees are too low*. In this case, drop and replace the userOp with higher fees.
 2. **The userOp has been dropped**: The most common (but rare) reason is that they paymaster signature has expired. However, this should rarely happen if you set a reasonable sponsorship expiry time, unless there is a significant delay in sending the userOp after the paymaster signs it.
 
 ### How can I get push notifications for mined userOps?
@@ -54,7 +54,7 @@ To handle these errors, you should:
 
 ### What is a `Replacement Underpriced` error and how can I resolve it?
 
-You might get a `"Replacement Underpriced Error"` when using `eth_sendUserOperation`. This error occurs when a user already has an existing userOp in the mempool. userOps can become "stuck" in the mempool if their gas fee limits are too low to be included in a bundle.
+You may encounter a `"Replacement Underpriced Error"` when using `eth_sendUserOperation`. This error occurs when a user already has an existing userOp in the mempool. userOps can become "stuck" in the mempool if their gas fee limits are too low to be included in a bundle.
 
 To resolve this, you need to increase both `maxFeePerGas` and `maxPriorityFeePerGas` by at least 10%.
 
@@ -148,7 +148,7 @@ This check is intended to prevent user operations from taking up gas limit space
 
 - For [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata) we offer the ability to override our fee estimates with the `feeOverride` parameters.
 
-  - We default to increasing baseFee by 50% and priorityFee by 5%.
+  - Default settings: baseFee increased by 50% and priorityFee by 5%.
   - **Note**: The feeOverride parameters don't include preVerificationGas (PVG). The method will always increase the estimated PVG by 5% to give the UO a better chance to mine if the L1 /L2 fee ratio changes. If you would like to modify this value, its recommended you use [alchemy_requestPaymasterAndData](/reference/alchemy-requestpaymasteranddata) instead.
 
 ## EntryPoint
@@ -161,7 +161,7 @@ We currently support versions v0.6 and v0.7 of ERC-4337. If you need support for
 
 The latest version of ERC-4337 is v0.7, which introduces optimizations aimed at improving the experience for both developers and end users. These include gas savings for users, optimized data structures, better gas estimation, simplified postOp logic, and structured errors during validation.
 
-The appropriate version to use is determined by the smart contract account for which you are trying to send a userOp. Typically, a smart contract account will be written to be compatible with either v0.6 or v0.7. To determine which version is compatible, you should look at the smart contract account’s source code and check the first parameter of the `validateUserOp` function. If it has type `UserOperation`, the account uses v0.6. If the parameter type is `PackedUserOperation`, the account uses v0.7.
+The appropriate version to use is determined by the smart contract account for which you are trying to send a userOp. Typically, a smart contract account will be written to be compatible with either v0.6 or v0.7. To determine which version is compatible, look at the smart contract account's source code and check the first parameter of the `validateUserOp` function. If it has type `UserOperation`, the account uses v0.6. If the parameter type is `PackedUserOperation`, the account uses v0.7.
 
 For more information about the differences between the versions, refer to the specifications for [ERC-4337 v0.6.0](https://github.com/eth-infinitism/account-abstraction/blob/v0.6.0/eip/EIPS/eip-4337.md) and [ERC-4337 v0.7.0](https://github.com/eth-infinitism/account-abstraction/blob/v0.7.0/erc/ERCS/erc-4337.md), particularly the description of the user operation fields.
 
