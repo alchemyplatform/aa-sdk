@@ -1,6 +1,11 @@
-import { type AlchemyTransport } from "@alchemy/common";
 import { TurnkeyClient } from "@turnkey/http";
-import { type Hex } from "viem";
+import {
+  hashMessage,
+  hashTypedData,
+  type HashTypedDataParameters,
+  type Hex,
+  type SignableMessage,
+} from "viem";
 import type {
   AddOauthProviderParams,
   AuthMethods,
@@ -9,47 +14,63 @@ import type {
   TurnkeyStamper,
   User,
 } from "./types";
+import { dev_request } from "./devRequest.js";
 
 export type CreateSignerParams = {
-  transport: AlchemyTransport;
+  // TODO: replace apiKey with transport once it's ready.
+  // transport: AlchemyTransport;
+  apiKey: string;
   stamper: TurnkeyStamper;
   orgId: string;
   idToken: string | undefined;
+};
+
+export type SignRawPayloadParams = {
+  payload: string;
+  mode: "SOLANA" | "ETHEREUM";
+};
+
+export type SignMessageParams = {
+  message: SignableMessage;
 };
 
 export class Signer {
   private isDisconnected = false;
 
   private constructor(
-    private readonly transport: AlchemyTransport,
+    // TODO: replace apiKey with transport once it's ready.
+    private readonly apiKey: string,
     private readonly turnkey: TurnkeyClient,
-    private readonly user: User,
+    private readonly user: User
   ) {}
 
   public static async create({
-    transport,
+    apiKey,
     stamper,
     orgId,
-    idToken,
+    idToken: _,
   }: CreateSignerParams): Promise<Signer> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper,
+      stamper
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
     });
     // TODO: use the transport to make this call once it's finalized.
-    const whoamiResponse = await notImplemented(transport, stampedRequest);
+    const whoamiResponse = await dev_request(apiKey, "whoami", {
+      stampedRequest,
+    });
     // TODO: combine whoami response with idToken to get the full user object.
-    const user = await notImplemented(whoamiResponse, idToken);
-    return new Signer(transport, turnkey, user);
+    // For now, just return the whoami response.
+    const user = whoamiResponse;
+    return new Signer(apiKey, turnkey, user);
   }
 
-  public signRawMessage = async (
-    msg: Hex,
-    mode: "SOLANA" | "ETHEREUM" = "ETHEREUM",
-  ): Promise<Hex> => {
+  public signRawPayload = async ({
+    payload,
+    mode,
+  }: SignRawPayloadParams): Promise<Hex> => {
     this.throwIfDisconnected();
     // TODO: we need to add backwards compatibility for users who signed up before we added Solana support
 
@@ -63,15 +84,31 @@ export class Signer {
           mode === "ETHEREUM"
             ? "HASH_FUNCTION_NO_OP"
             : "HASH_FUNCTION_NOT_APPLICABLE",
-        payload: msg,
+        payload,
         signWith:
           mode === "ETHEREUM" ? this.user.address : this.user.solanaAddress!,
       },
     });
 
-    // TODO: use transport once it's finalized.
-    return notImplemented(this.transport, stampedRequest);
+    const { signature } = await this.dev_request("sign-payload", {
+      stampedRequest,
+    });
+    return signature;
   };
+
+  public signMessage({ message }: SignMessageParams): Promise<Hex> {
+    return this.signRawPayload({
+      payload: hashMessage(message),
+      mode: "ETHEREUM",
+    });
+  }
+
+  public signTypedData(typedData: HashTypedDataParameters): Promise<Hex> {
+    return this.signRawPayload({
+      payload: hashTypedData(typedData),
+      mode: "ETHEREUM",
+    });
+  }
 
   public async listAuthMethods(): Promise<AuthMethods> {
     this.throwIfDisconnected();
@@ -84,7 +121,7 @@ export class Signer {
   }
 
   public async addOauthProvider(
-    params: AddOauthProviderParams,
+    params: AddOauthProviderParams
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -96,7 +133,7 @@ export class Signer {
   }
 
   public async addPasskey(
-    params: CredentialCreationOptions,
+    params: CredentialCreationOptions
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -116,6 +153,11 @@ export class Signer {
     if (this.isDisconnected) {
       throw new Error("Signer is disconnected");
     }
+  }
+
+  // TODO: remove this and use transport instead once it's ready.
+  private dev_request(path: string, body: unknown): Promise<any> {
+    return dev_request(this.apiKey, path, body);
   }
 }
 

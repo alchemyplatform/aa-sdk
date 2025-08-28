@@ -12,6 +12,8 @@
   "include": ["src"],
   "compilerOptions": {
     "sourceMap": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "rootDir": "./src",
+    "outDir": "./dist"
   }
 }

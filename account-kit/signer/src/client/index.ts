@@ -133,7 +133,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<any>} The response from the authentication request
    */
   public override initEmailAuth = async (
-    params: Omit<EmailAuthParams, "targetPublicKey">,
+    params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
     this.eventEmitter.emit("authenticating", { type: "otp" });
     const { email, emailMode, expirationSeconds } = params;
@@ -187,7 +187,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<{ bundle: string }>} A promise that resolves to an object containing the credential bundle.
    */
   public override async submitOtpCode(
-    args: Omit<OtpParams, "targetPublicKey">,
+    args: Omit<OtpParams, "targetPublicKey">
   ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
     const targetPublicKey = await this.initSessionStamper();
@@ -218,7 +218,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     // Otherwise, it's truly an error:
     throw new Error(
-      "Failed to submit OTP code. Server did not return required fields.",
+      "Failed to submit OTP code. Server did not return required fields."
     );
   }
 
@@ -359,7 +359,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     // clearing it, so we need to create a new instance.
     const stamper = new IframeStamper({
       iframeContainer: document.getElementById(
-        this.iframeConfig.iframeContainerId,
+        this.iframeConfig.iframeContainerId
       ),
       iframeElementId: this.iframeConfig.iframeElementId,
       iframeUrl: "https://auth.turnkey.com",
@@ -396,7 +396,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<never>} A promise that will never resolve, only reject if the redirection fails
    */
   public override oauthWithRedirect = async (
-    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>,
+    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>
   ): Promise<User | IdTokenOnly> => {
     const turnkeyPublicKey = await this.initSessionStamper();
 
@@ -409,7 +409,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     window.location.href = providerUrl;
     return new Promise((_, reject) =>
-      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000),
+      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000)
     );
   };
 
@@ -440,7 +440,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<User>} A promise that resolves to a `User` object containing the authenticated user information
    */
   public override oauthWithPopup = async (
-    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>,
+    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>
   ): Promise<User | AuthLinkingPrompt | IdTokenOnly> => {
     const turnkeyPublicKey = await this.initSessionStamper();
     const oauthParams = args;
@@ -452,7 +452,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const popup = window.open(
       providerUrl,
       "_blank",
-      "popup,width=500,height=600",
+      "popup,width=500,height=600"
     );
     const eventEmitter = this.eventEmitter;
     return new Promise((resolve, reject) => {
@@ -564,7 +564,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     options?: CredentialCreationOptionOverrides,
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
-    },
+    }
   ): Promise<GetWebAuthnAttestationResult> => {
     const challenge = generateRandomBuffer();
     const authenticatorUserId = generateRandomBuffer();
@@ -651,7 +651,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   }
 
   protected override async initWebauthnStamper(
-    user: User | undefined = this.user,
+    user: User | undefined = this.user
   ): Promise<void> {
     this.setStamper(this.webauthnStamper);
     if (user && user.credentialId) {
