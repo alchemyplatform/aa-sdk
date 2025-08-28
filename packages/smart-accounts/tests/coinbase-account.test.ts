@@ -81,7 +81,6 @@ describe("Viem AA - Coinbase Smart Account", () => {
     });
 
     // Verify that paymaster fields are filled by the gas manager hooks
-    // The paymaster is now deployed and returns real data
     // Coinbase accounts use v0.6 with paymasterAndData field
     expect(userOp.paymasterAndData).toBeDefined();
     expect(userOp.paymasterAndData).not.toBe("0x");
@@ -160,7 +159,6 @@ describe("Viem AA - Coinbase Smart Account", () => {
     });
 
     // Verify that paymaster fields are filled by the gas manager hooks
-    // The paymaster is now deployed and returns real data
     // Coinbase accounts use v0.6 with paymasterAndData field
     expect(deployOp.paymasterAndData).toBeDefined();
     expect(deployOp.paymasterAndData).not.toBe("0x");
