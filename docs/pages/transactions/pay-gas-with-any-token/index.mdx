@@ -25,7 +25,9 @@ With smart wallets, you can allow users to pay for gas with any ERC-20 token, st
 
 # Assumptions
 
-The recommended/default way to these policies with "post-operation" mode. This mode requires users to hold enough of the gas token in their wallet after their operation completes to pay the gas fee. If the balance is insufficient, the transaction reverts and you sponsor any gas used without ERC-20 payment.
+The recommended/default way to use these policies is with "post-operation" mode.
+This mode requires users to hold enough of the gas token in their wallet after their operation completes to pay the gas fee.
+If the balance is insufficient, the transaction reverts and you sponsor any gas used without ERC-20 payment.
 
 If this doesn't work for your use case, see the [ERC-20 gas payment modes](#erc-20-gas-payment-modes) section below for more options.
 
