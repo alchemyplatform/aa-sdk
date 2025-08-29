@@ -19,7 +19,7 @@ export const SmallCardsWrapper = () => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:my-6 items-center w-full">
       {/* TODO(jh): remove these buttons after dogfooding */}
-      <div className="flex gap-3 justify-center p-2">
+      <div className="flex gap-3 justify-center p-2 xl:col-span-3 flex-wrap">
         <button
           className="bg-blue-200 rounded-md p-2"
           onClick={async () => {
