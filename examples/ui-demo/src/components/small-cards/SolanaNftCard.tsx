@@ -148,11 +148,13 @@ export const SolanaNftCard = () => {
     }
   };
 
+  const uri = "/images/piggy-bank.svg";
+
   const imageSlot = (
     <div className="w-full h-full bg-[#DCFCE7] flex justify-center items-center relative">
       <Image
-        src="/images/duckImage.png"
-        alt="Solana Duck NFT"
+        src={uri}
+        alt="Piggy Bank"
         width={300}
         height={300}
         className="w-full h-full object-cover object-top"
