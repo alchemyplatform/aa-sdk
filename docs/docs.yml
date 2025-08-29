@@ -1076,6 +1076,63 @@ navigation:
                       - page: signTypedData
                         path: wallets/pages/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData.mdx
 
+      - section: Alchemy Wagmi Core
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/wagmi-core/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: createConfig
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/createConfig.mdx
+                  - page: sendEmailOtp
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
+                  - page: submitOtpCode
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/submitOtpCode.mdx
+
+      - section: Alchemy Wagmi Connector Web
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/connectors-web/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: alchemyAuth
+                    path: wallets/pages/reference/alchemy/connectors-web/functions/alchemyAuth.mdx
+
+      - section: Alchemy Web Signer
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/signer-web/index.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: createWebAuthClient
+                    path: wallets/pages/reference/alchemy/signer-web/functions/createWebAuthClient.mdx
+      - section: Alchemy Signer
+        contents:
+          - section: SDK Reference
+            path: wallets/pages/reference/alchemy/signer/index.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - section: AuthClient
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/constructor.mdx
+                      - page: handleOauthRedirect
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/handleOauthRedirect.mdx
+                      - page: loginWithOauth
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/loginWithOauth.mdx
+                      - page: loginWithPasskey
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/loginWithPasskey.mdx
+                      - page: sendEmailOtp
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/sendEmailOtp.mdx
+                      - page: submitOtpCode
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/submitOtpCode.mdx
+                  - page: OauthCancelledError
+                    path: wallets/pages/reference/alchemy/signer/classes/OauthCancelledError/constructor.mdx
+
       - section: aa-sdk/ethers
         contents:
           - section: SDK Reference

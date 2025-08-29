@@ -13,6 +13,10 @@ const packageMap: Record<string, string> = {
   "alchemy/wallet-apis": "Alchemy Smart Wallet APIs",
   "alchemy/common": "Alchemy Common",
   "alchemy/smart-accounts": "Alchemy Smart Accounts",
+  "alchemy/wagmi-core": "Alchemy Wagmi Core",
+  "alchemy/connectors-web": "Alchemy Wagmi Connector Web",
+  "alchemy/signer-web": "Alchemy Web Signer",
+  "alchemy/signer": "Alchemy Signer",
 };
 
 export default packageMap;

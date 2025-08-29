@@ -32,17 +32,17 @@ export default function Home(): ReactElement {
       mode: "redirect",
     });
     console.log("do we ever get here?");
-  }, [authClient]);
+  }, []);
 
   const handleSendEmailOtp = useCallback(async () => {
     await authClient.sendEmailOtp({ email });
     setHasSentEmail(true);
-  }, [authClient, email]);
+  }, [email]);
 
   const handleSubmitOtpCode = useCallback(async () => {
     const signer = await authClient.submitOtpCode({ otpCode });
     setSigner(signer);
-  }, [authClient, otpCode]);
+  }, [otpCode]);
 
   const handleDisconnect = useCallback(async () => {
     signer?.disconnect();
