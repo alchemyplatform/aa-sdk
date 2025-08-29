@@ -9,15 +9,6 @@ export const DepositAndSwapsCard = () => {
 
   return (
     <Card
-      badgeSlot={
-        <Badge
-          text="New!"
-          className="text-white"
-          style={{
-            background: "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
-          }}
-        />
-      }
       imageSlot={
         <div className="w-full h-full bg-[#8797D5] flex justify-center items-center relative">
           <Image
