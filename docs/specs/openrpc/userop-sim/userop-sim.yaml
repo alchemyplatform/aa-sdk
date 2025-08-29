@@ -8,9 +8,29 @@ info:
   version: 0.0.0
 servers:
   - url: https://eth-mainnet.g.alchemy.com/v2
-    name: Mainnet
+    name: Ethereum Mainnet
+  - url: https://eth-holesky.g.alchemy.com/v2
+    name: Ethereum Holešky
+  - url: https://eth-hoodi.g.alchemy.com/v2
+    name: Ethereum Hoodi
   - url: https://eth-sepolia.g.alchemy.com/v2
-    name: Sepolia
+    name: Ethereum Sepolia
+  - url: https://arb-mainnet.g.alchemy.com/v2
+    name: Arbitrum Mainnet
+  - url: https://arb-sepolia.g.alchemy.com/v2
+    name: Arbitrum Sepolia
+  - url: https://base-mainnet.g.alchemy.com/v2
+    name: Base Mainnet
+  - url: https://base-sepolia.g.alchemy.com/v2
+    name: Base Sepolia
+  - url: https://polygon-mainnet.g.alchemy.com/v2
+    name: Polygon Mainnet
+  - url: https://polygon-amoy.g.alchemy.com/v2
+    name: Polygon Amoy
+  - url: https://opt-mainnet.g.alchemy.com/v2
+    name: OP Mainnet Mainnet
+  - url: https://opt-sepolia.g.alchemy.com/v2
+    name: OP Mainnet Sepolia
 methods:
   - name: alchemy_simulateUserOperationAssetChanges
     description: |
