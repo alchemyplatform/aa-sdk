@@ -346,7 +346,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
-    if (email.trim() && !verificationToken) {
+    if (email && !verificationToken) {
       throw new Error("Verification token is required to change email.");
     }
     const stampedRequest = await this.turnkeyClient.stampUpdateUserEmail({
@@ -364,7 +364,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
     this.user = {
       ...this.user,
-      email,
+      email: email || undefined,
     };
   };
 
@@ -428,7 +428,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     });
     this.user = {
       ...this.user,
-      phone,
+      phone: phone || undefined,
     };
   };
 

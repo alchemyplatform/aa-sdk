@@ -1,6 +1,11 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "./CodePreview";
-import { AuthCard, useConnectedUser, useAuthContext } from "@account-kit/react";
+import {
+  AuthCard,
+  useConnectedUser,
+  useAuthContext,
+  useAuthenticate,
+} from "@account-kit/react";
 
 import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
@@ -40,10 +45,39 @@ const RenderContent = () => {
     }
   }, [authStep.type, user]);
 
+  const { authenticate } = useAuthenticate();
+
   if (showAuthCard) {
     return (
       <div className="flex flex-1 justify-center items-center">
         <div className="hidden lg:flex flex-col gap-2 w-[368px]">
+          {/* TODO(jh): remove these buttons after dogfooding */}
+          <div className="flex gap-3 justify-center p-2">
+            <button
+              className="bg-blue-200 rounded-md p-2"
+              onClick={async () => {
+                const input = window.prompt("Enter phone:");
+                authenticate({
+                  type: "sms",
+                  phone: input!,
+                });
+              }}
+            >
+              Send login SMS
+            </button>
+            <button
+              className="bg-blue-200 rounded-md p-2"
+              onClick={async () => {
+                const input = window.prompt("Enter phone:");
+                authenticate({
+                  type: "otp",
+                  otpCode: input!,
+                });
+              }}
+            >
+              Enter SMS code
+            </button>
+          </div>
           <div
             className="radius bg-bg-surface-default overflow-hidden"
             style={{
