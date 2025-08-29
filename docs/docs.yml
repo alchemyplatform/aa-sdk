@@ -14,8 +14,9 @@ navigation:
         skip-slug: true
         contents:
           - page: Overview
-            slug: /
             path: wallets/pages/index.mdx
+          - page: Quickstart
+            path: wallets/pages/react/quickstart.mdx
           - section: Get Started
             contents:
               - section: React
@@ -25,6 +26,7 @@ navigation:
                   - page: Setup
                     path: wallets/pages/react/setup.mdx
                   - page: Quickstart
+                    slug: /wallets/react/quickstart
                     path: wallets/pages/react/quickstart.mdx
                   - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
