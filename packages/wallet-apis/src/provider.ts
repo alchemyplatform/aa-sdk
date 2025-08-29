@@ -19,6 +19,7 @@ import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import EventEmitter from "events"; // TODO(v5): do we need to polyfill this for browser?
+import { getCapabilities } from "viem/actions";
 
 export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
@@ -190,6 +191,12 @@ export const createEip1193ProviderFromClient = <
             return {
               id: result.preparedCallIds[0],
             };
+          })(params);
+        }
+
+        case "wallet_getCapabilities": {
+          return handler<"wallet_getCapabilities">(async () => {
+            return await getCapabilities(client);
           })(params);
         }
 

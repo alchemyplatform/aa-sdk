@@ -49,10 +49,13 @@ import type { SignerClient } from "../types.js";
 import {
   getCallsStatus,
   waitForCallsStatus,
+  getCapabilities,
   type GetCallsStatusParameters,
   type GetCallsStatusReturnType,
   type WaitForCallsStatusParameters,
   type WaitForCallsStatusReturnType,
+  type GetCapabilitiesParameters,
+  type GetCapabilitiesReturnType,
 } from "viem/actions";
 
 export type SmartWalletActions<
@@ -86,6 +89,9 @@ export type SmartWalletActions<
   waitForCallsStatus: (
     params: WaitForCallsStatusParameters,
   ) => Promise<WaitForCallsStatusReturnType>;
+  getCapabilities: (
+    params?: GetCapabilitiesParameters | undefined,
+  ) => Promise<GetCapabilitiesReturnType>;
 };
 
 /**
@@ -115,4 +121,5 @@ export const smartWalletActions =
     // Viem methods.
     getCallsStatus: (params) => getCallsStatus(client, params),
     waitForCallsStatus: (params) => waitForCallsStatus(client, params),
+    getCapabilities: (params) => getCapabilities(client, params),
   });

@@ -120,6 +120,53 @@ describe("Client E2E Tests", () => {
     expect(account.address).not.toEqual(account2.address);
   });
 
+  it("should successfully get capabilities", async () => {
+    const account = await client.requestAccount(); // Ensure account is known
+    const capabilities = await client.getCapabilities({
+      account: account.address,
+    });
+    expect(capabilities).toMatchInlineSnapshot(`
+      {
+        "0": {
+          "atomic": {
+            "status": "supported",
+          },
+          "eip7702Auth": {
+            "supported": true,
+          },
+          "gasParamsOverride": {
+            "supported": true,
+          },
+          "nonceOverride": {
+            "supported": true,
+          },
+          "paymasterService": {
+            "supported": true,
+          },
+          "permissions": {
+            "keyTypes": [
+              "secp256k1",
+            ],
+            "permissionTypes": [
+              "native-token-transfer",
+              "erc20-token-transfer",
+              "gas-limit",
+              "contract-access",
+              "account-functions",
+              "functions-on-all-contracts",
+              "functions-on-contract",
+              "root",
+            ],
+            "signerTypes": [
+              "keys",
+            ],
+            "supported": true,
+          },
+        },
+      }
+    `);
+  });
+
   it("can correctly sign a message", async () => {
     const account = await client.requestAccount();
     const message = "hello world";
