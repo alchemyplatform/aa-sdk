@@ -310,6 +310,8 @@ Ensure you are using aa-sdk version 3.x or later...
 
 ### For AI Assistants
 
+**⚠️ CRITICAL**: Do not modify existing code snippets beyond formatting (indentation, language tags). Code changes can break functionality.
+
 1. **Priority Order**: Terminology > Voice > Structure > Style
 2. **Conflict Resolution**: When in doubt, choose the simpler, more developer-friendly option
 3. **Validation**: Cross-reference every term against the approved/prohibited lists
