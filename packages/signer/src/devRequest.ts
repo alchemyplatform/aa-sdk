@@ -2,7 +2,7 @@
 export async function dev_request(
   apiKey: string,
   path: string,
-  body: unknown
+  body: unknown,
 ): Promise<any> {
   const response = await fetch(`https://api.g.alchemy.com/signer/v1/${path}`, {
     method: "post",

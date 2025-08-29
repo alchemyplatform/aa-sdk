@@ -73,7 +73,7 @@ export type CreateWebAuthnStamperParams = {
 
 export type HandleOauthFlowFn = (
   authUrl: string,
-  mode: "popup" | "redirect"
+  mode: "popup" | "redirect",
 ) => Promise<OAuthFlowResponse>;
 
 export type HandleOauthCallbackFn = () => Promise<OAuthFlowResponse | null>;
