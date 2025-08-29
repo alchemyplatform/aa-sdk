@@ -1,5 +1,6 @@
 const { getDefaultConfig } = require("expo/metro-config");
 const path = require("path");
+const fs = require("fs");
 
 // Find the project and workspace directories
 const projectRoot = __dirname;
@@ -41,6 +42,28 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
 			type: "sourceFile",
 		};
 	}
+
+	// Handle .js/.jsx extensions on TypeScript files
+  if (
+    (moduleName.startsWith(".") || moduleName.startsWith("/")) &&
+    (moduleName.endsWith(".js") || moduleName.endsWith(".jsx"))
+  ) {
+    const moduleFilePath = path.resolve(
+      context.originModulePath,
+      "..",
+      moduleName
+    );
+
+    // if the file exists, we won't remove extension, and we'll fall back to normal resolution.
+    if (!fs.existsSync(moduleFilePath)) {
+      return context.resolveRequest(
+        context,
+        moduleName.replace(/\.[^/.]+$/, ""),
+        platform
+      );
+    }
+  }
+	
 	return context.resolveRequest(context, moduleName, platform);
 };
 
