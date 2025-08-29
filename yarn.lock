@@ -15376,11 +15376,6 @@ expo-constants@~17.0.3, expo-constants@~17.0.5, expo-constants@~17.0.8:
     "@expo/config" "~10.0.11"
     "@expo/env" "~0.4.2"
 
-expo-doctor@^1.17.2:
-  version "1.17.2"
-  resolved "https://registry.yarnpkg.com/expo-doctor/-/expo-doctor-1.17.2.tgz#a358c6b045b4c799feae852d190ef14e4c2bd2c9"
-  integrity sha512-GzrOscosrvmXx/e90uL1XYWEuqcaVVZppQ0VySE30BpXyGAlj80AAs2n/+x4M9JaeZIhi0aWNGI7lhCTN0pedw==
-
 expo-file-system@~18.0.12:
   version "18.0.12"
   resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-18.0.12.tgz#6ceeeb0725f6c5faaf58112f18c073c2acfb3027"
