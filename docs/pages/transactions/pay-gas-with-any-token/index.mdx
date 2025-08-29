@@ -4,7 +4,7 @@ description: Enable your users to pay gas with ERC-20 tokens like USDC via Gas M
 slug: wallets/transactions/sponsor-gas/pay-gas-with-any-token/overview
 ---
 
-Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app's own token. With our smart wallet, you can enable your users to pay for gas with ERC-20 tokens beyond the native gas token, like USDC or your own custom tokens, streamlining the user experience.
+Gas fees paid in the native token can feel foreign to users that primarily hold stablecoins or your app's own token. With our smart wallet, you can allow your users to pay for gas with any ERC-20 token, streamlining the user experience.
 
 <Tip>
   *How it works:* To enable this capability you will need to create a Gas
@@ -19,13 +19,14 @@ Gas fees paid in the native gas token can feel foreign to users that primarily h
 - Smart Wallets already installed and configured in your project.
 - An Alchemy API key.
 
+See the [setup page](/docs/wallets/pages/react/setup.mdx) for instructions.
+
 ## Create a Gas Manager Policy
 
 To enable your users to pay gas using an ERC-20 token, you need to create a "Pay gas with any token" policy via the [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager/policy/create). You can customize the policy with the following:
 
-- Receiving address: **you must specify** an address you own where the users' ERC-20 tokens will be sent to as they pay for gas. The token transfer to this address is orchestrated by the paymaster contract and happens automatically at transaction time.
-- Tokens: **you must select** which tokens users should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
-- ERC-20 transfer mode: choose when the user's token payment occurs. See more details on the modes [below]()
+- Receiving address: **you must specify** an address you own to receive the users' ERC20 tokens spent on gas. The token transfer to this address happens automatically at transaction time and is orchestrated by the paymaster contract.- Tokens: **you must select** which tokens users should be able to pay gas with. Learn more [here](https://www.alchemy.com/docs/reference/gas-manager-faqs).
+- ERC-20 transfer mode: choose when the user's token payment occurs. See more details on the modes [below](#erc-20-gas-manager-modes)
   - [Recommended] Post-Operation: No upfront allowance is required. The user signs an approval inside the same calls batch, and the paymaster pulls the token after the operation has executed. If that post-operation transfer fails, the entire batch is reverted and you (the developer) pay the gas fee.
   - Pre-Operation: The paymaster must have an allowance prior to the operation. This can be done either through a prior call to `approve()` or by using an [ERC-7597 Permit](https://eips.ethereum.org/EIPS/eip-7597) signature. If the required allowance isn't in place when the user operation is submitted, it will be rejected.
 - Sponsorship expiry period: this is the period for which the Gas Manager signature and ERC-20 exchange rate will remain valid once generated.
@@ -67,10 +68,10 @@ If you are sponsoring operations that result in dynamic amounts of the ERC-20 to
 
 ## Use With Wallet APIs
 
-To pay gas with any token using Wallet APIs, use the `paymasterService` capability's `erc20` field.
+To pay gas with any token using Wallet APIs, use the `erc20` field on the `paymasterService` capability.
 There, you can configure the token to be used for the particular request and control auto-injecting approvals when needed.
 
-For a full list of settings for the `paymasterService` capability in the [`wallet_prepareCalls` API reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls).
+For a full list of settings on the `paymasterService` capability, see the [`wallet_prepareCalls` API reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls).
 
 ### Estimating Gas Payments
 
@@ -151,7 +152,7 @@ Choose your client type.
       <Tab title="React">
         <Markdown src="react.mdx" />
       </Tab>
-      <Tab title="JavaScript">
+      <Tab title="Typescript">
         <Markdown src="client.mdx" />
       </Tab>
     </Tabs>
