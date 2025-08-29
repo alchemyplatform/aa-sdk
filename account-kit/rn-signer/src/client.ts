@@ -2,8 +2,6 @@
 import "react-native-get-random-values";
 import "./utils/buffer-polyfill";
 import "./utils/mmkv-localstorage-polyfill";
-
-/* eslint-disable import/extensions */
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   createPasskey,
@@ -291,7 +289,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
 
   /**
    * Exports the wallet's private key for the authenticated user.
-   * 
+   *
    * This uses the local storage approach recommended by Turnkey for mobile contexts.
    * A P256 key pair is generated locally, the public key is used to encrypt the export,
    * and the private key is used to decrypt the bundle locally.
@@ -308,28 +306,30 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
 
   /**
    * Exports the wallet and returns the decrypted private key or seed phrase.
-   * 
+   *
    * @param {ExportWalletParams} params Export parameters
    * @returns {Promise<ExportWalletResult>} The decrypted export data
    * @throws {Error} If the user is not authenticated or export fails
    */
-  async exportWalletWithResult(params?: ExportWalletParams): Promise<ExportWalletResult> {
+  async exportWalletWithResult(params?: ExportWalletParams): Promise<any> {
     if (!this.user) {
       throw new Error("User must be authenticated to export wallet");
     }
 
     const exportAs = params?.exportAs || "PRIVATE_KEY";
-    
+
     // Step 1: Generate a P256 key pair for encryption
     const embeddedKey = generateP256KeyPair();
-    
+
     // Step 2: Save the private key in secure storage
     const keyId = `export_key_${Date.now()}`;
     this.storage.set(keyId, embeddedKey.privateKey);
-    
+
+    console.log("exportWalletWithResult");
+
     try {
       let exportBundle: string;
-      
+
       if (exportAs === "PRIVATE_KEY") {
         // Step 3a: Export as private key
         const { activity } = await this.turnkeyClient.exportWalletAccount({
@@ -347,18 +347,18 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
           this.user.orgId,
           "exportWalletAccountResult",
         );
-        
+
         if (!result.exportBundle) {
           throw new Error("Failed to export wallet: no export bundle returned");
         }
-        
+
         exportBundle = result.exportBundle;
       } else {
         // Step 3b: Export as seed phrase (need to find the wallet first)
         const { wallets } = await this.turnkeyClient.getWallets({
           organizationId: this.user.orgId,
         });
-        
+
         const walletAccounts = await Promise.all(
           wallets.map(({ walletId }) =>
             this.turnkeyClient.getWalletAccounts({
@@ -367,7 +367,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
             }),
           ),
         ).then((x) => x.flatMap((x) => x.accounts));
-        
+
         const walletAccount = walletAccounts.find(
           (x) => x.address === this.user!.address,
         );
@@ -391,43 +391,54 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
           this.user.orgId,
           "exportWalletResult",
         );
-        
+
         if (!result.exportBundle) {
           throw new Error("Failed to export wallet: no export bundle returned");
         }
-        
+
         exportBundle = result.exportBundle;
       }
 
-      // Step 4: Decrypt the export bundle using HPKE
-      // The export bundle is hex-encoded, so we need to convert it to bytes
-      const bundleBytes = Buffer.from(exportBundle, 'hex');
-      const encappedKeyBuf = bundleBytes.slice(0, 65);
-      const ciphertextBuf = bundleBytes.slice(65);
-      
+      // Step 4: Parse the export bundle and decrypt using HPKE
+      // The export bundle is a JSON string containing version, data, etc.
+      const bundleJson = JSON.parse(exportBundle);
+
+      // The data field contains another JSON string that's hex-encoded
+      const innerDataHex = bundleJson.data;
+      const innerDataJson = JSON.parse(
+        Buffer.from(innerDataHex, "hex").toString(),
+      );
+
+      // Extract the encapped public key and ciphertext from the inner data
+      const encappedPublicKeyHex = innerDataJson.encappedPublic;
+      const ciphertextHex = innerDataJson.ciphertext;
+
+      const encappedKeyBuf = Buffer.from(encappedPublicKeyHex, "hex");
+      const ciphertextBuf = Buffer.from(ciphertextHex, "hex");
+
+      // Decrypt the data using HPKE
       const decryptedData = hpkeDecrypt({
-        encappedKeyBuf,
-        ciphertextBuf,
+        ciphertextBuf: ciphertextBuf,
+        encappedKeyBuf: encappedKeyBuf,
         receiverPriv: embeddedKey.privateKey,
       });
 
-      // Step 5: Parse the decrypted data
-      const exportData = JSON.parse(new TextDecoder().decode(decryptedData));
-      
-      // Return the result based on export type
+      // Step 5: Process the decrypted data based on export type
       const result: ExportWalletResult = {
         address: this.user.address,
         exportAs,
       };
-      
+
       if (exportAs === "PRIVATE_KEY") {
-        result.privateKey = exportData.privateKey;
+        // For private key, the decrypted data is the raw private key bytes
+        // Convert to hex string with 0x prefix
+        result.privateKey = "0x" + Buffer.from(decryptedData).toString("hex");
       } else {
-        result.seedPhrase = exportData.mnemonic;
+        // For seed phrase, the decrypted data is the mnemonic string
+        result.seedPhrase = new TextDecoder().decode(decryptedData);
       }
-      
+
       return result;
-      
     } finally {
       // Step 6: Clean up - remove the embedded key from storage
       this.storage.delete(keyId);
