@@ -325,8 +325,6 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
     const keyId = `export_key_${Date.now()}`;
     this.storage.set(keyId, embeddedKey.privateKey);
 
-    console.log("exportWalletWithResult");
-
     try {
       let exportBundle: string;
 
