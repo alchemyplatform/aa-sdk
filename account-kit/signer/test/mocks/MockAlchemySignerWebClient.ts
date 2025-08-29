@@ -96,7 +96,7 @@ class MockAlchemySignerWebClient extends AlchemySignerWebClient {
   };
 
   // Network-related method overrides
-  public override lookupUserByEmail = async (email: string) => {
+  public override lookupUserByEmail = async (_email: string) => {
     // Return a mock result so we pretend this user always exists in "mock-org-id"
     return { orgId: "mock-org-id" };
   };
@@ -104,7 +104,7 @@ class MockAlchemySignerWebClient extends AlchemySignerWebClient {
   // Override request() to avoid calling fetch
   public override request = vi
     .fn()
-    .mockImplementation(async (route: string, body: any) => {
+    .mockImplementation(async (route: string, _body: any) => {
       // Return mock responses based on the route
       if (route === "/v1/signer-config") {
         return { email: { mode: "otp" } };

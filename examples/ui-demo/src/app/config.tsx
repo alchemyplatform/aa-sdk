@@ -124,6 +124,9 @@ export const alchemyConfig = () => {
           : externalWalletsConfig.connectors,
       storage: cookieStorage,
       enablePopupOauth: true,
+      sessionConfig: {
+        expirationTimeMs: 1000 * 60 * 60 * 2, // 2 hrs
+      },
       solana: {
         connection: solanaConnection,
         policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,

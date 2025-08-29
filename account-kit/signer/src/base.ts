@@ -842,15 +842,17 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * without first validating that the user owns this email account.
    *
    * @param {string} email The email to set for the user
+   * @param {string} verificationToken The verification token for the email
    * @returns {Promise<void>} A promise that resolves when the email is set
    * @throws {NotAuthenticatedError} If the user is not authenticated
    */
-  setEmail: (email: string) => Promise<void> = SignerLogger.profiled(
-    "BaseAlchemySigner.setEmail",
-    async (email) => {
-      return this.inner.setEmail(email);
-    },
-  );
+  setEmail: (email: string, verificationToken: string) => Promise<void> =
+    SignerLogger.profiled(
+      "BaseAlchemySigner.setEmail",
+      async (email, verificationToken) => {
+        return this.inner.setEmail(email, verificationToken);
+      },
+    );
 
   /**
    * Removes the email for the authenticated user, disallowing them from login with that email.
@@ -862,6 +864,40 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     "BaseAlchemySigner.removeEmail",
     async () => {
       return this.inner.removeEmail();
+    },
+  );
+
+  /**
+   * Sets the phone number for the authenticated user, allowing them to login with that
+   * phone number.
+   *
+   * You must contact Alchemy to enable this feature for your team, as there are
+   * important security considerations. In particular, you must not call this
+   * without first validating that the user owns this phone number.
+   *
+   * @param {string} phone The phone number to set for the user
+   * @param {string} verificationToken The verification token for the phone number
+   * @returns {Promise<void>} A promise that resolves when the phone number is set
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  setPhoneNumber: (phone: string, verificationToken: string) => Promise<void> =
+    SignerLogger.profiled(
+      "BaseAlchemySigner.setPhoneNumber",
+      async (phone, verificationToken) => {
+        return this.inner.setPhoneNumber(phone, verificationToken);
+      },
+    );
+
+  /**
+   * Removes the phone number for the authenticated user, disallowing them from login with that phone number.
+   *
+   * @returns {Promise<void>} A promise that resolves when the phone number is removed
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  removePhoneNumber: () => Promise<void> = SignerLogger.profiled(
+    "BaseAlchemySigner.removePhoneNumber",
+    async () => {
+      return this.inner.removePhoneNumber();
     },
   );
 

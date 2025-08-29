@@ -14,6 +14,7 @@ export type CredentialCreationOptionOverrides = {
 // [!region User]
 export type User = {
   email?: string;
+  phone?: string;
   orgId: string;
   userId: string;
   address: Address;
@@ -196,10 +197,21 @@ export type SignerEndpoints = [
   {
     Route: "/v1/init-otp";
     Body: {
-      stampedRequest: TSignedRequest;
+      contact: string;
+      otpType: "OTP_TYPE_SMS" | "OTP_TYPE_EMAIL";
     };
     Response: {
       otpId: string;
+    };
+  },
+  {
+    Route: "/v1/verify-otp";
+    Body: {
+      otpId: string;
+      otpCode: string;
+    };
+    Response: {
+      verificationToken: string;
     };
   },
   {
@@ -213,6 +225,13 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/update-email-auth";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
+    Route: "/v1/update-phone-auth";
     Body: {
       stampedRequest: TSignedRequest;
     };
