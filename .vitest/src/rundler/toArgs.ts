@@ -49,8 +49,9 @@ export function toArgs(
 /** Converts to a --flag-case string. */
 export function toFlagCase(str: string, separator = "-") {
   const keys = [];
-  for (let i = 0; i < str.split(".").length; i++) {
-    const key = str.split(".")[i];
+  const parts = str.split(".");
+  for (let i = 0; i < parts.length; i++) {
+    const key = parts[i];
     if (!key) continue;
     keys.push(
       key
