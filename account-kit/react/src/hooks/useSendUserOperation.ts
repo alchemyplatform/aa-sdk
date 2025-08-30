@@ -131,8 +131,10 @@ export function useSendUserOperation<
   params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>,
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
   const { client: _client, waitForTxn = false, ...mutationArgs } = params;
-  const smartWalletClient = useSmartWalletClient({
-    account: params.client?.account.address,
+  const { client: smartWalletClient } = useSmartWalletClient({
+    accountParams: {
+      accountAddress: params.client?.account.address,
+    },
   });
 
   const { sendCallsAsync } = useSendCalls<TEntryPointVersion>({

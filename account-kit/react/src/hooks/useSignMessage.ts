@@ -74,8 +74,10 @@ export function useSignMessage(
   config: UseSignMessageArgs,
 ): UseSignMessageResult {
   const { client: _client, ...mutationArgs } = config;
-  const smartWalletClient = useSmartWalletClient({
-    account: _client?.account.address,
+  const { client: smartWalletClient } = useSmartWalletClient({
+    accountParams: {
+      accountAddress: _client?.account.address,
+    },
   });
 
   const {

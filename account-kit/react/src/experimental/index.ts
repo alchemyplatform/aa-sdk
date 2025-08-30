@@ -1,5 +1,5 @@
-export { useCallsStatus } from "./hooks/useGetCallsStatus.js";
-export type * from "./hooks/useGetCallsStatus.js";
+export { useCallsStatus } from "./hooks/useCallsStatus.js";
+export type * from "./hooks/useCallsStatus.js";
 export { useGrantPermissions } from "./hooks/useGrantPermissions.js";
 export type * from "./hooks/useGrantPermissions.js";
 export { usePrepareCalls } from "./hooks/usePrepareCalls.js";
@@ -10,3 +10,5 @@ export { useSendPreparedCalls } from "./hooks/useSendPreparedCalls.js";
 export type * from "./hooks/useSendPreparedCalls.js";
 export { useSmartWalletClient } from "./hooks/useSmartWalletClient.js";
 export type * from "./hooks/useSmartWalletClient.js";
+export { useWaitForCallsStatus } from "./hooks/useWaitForCallsStatus.js";
+export type * from "./hooks/useWaitForCallsStatus.js";

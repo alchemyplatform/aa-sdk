@@ -64,8 +64,10 @@ export function useWaitForUserOperationTransaction(
   config: UseWaitForUserOperationTransactionArgs,
 ): UseWaitForUserOperationTransactionResult {
   const { client } = config;
-  const smartWalletClient = useSmartWalletClient({
-    account: client?.account.address,
+  const { client: smartWalletClient } = useSmartWalletClient({
+    accountParams: {
+      accountAddress: client?.account.address,
+    },
   });
   const { queryClient } = useAlchemyAccountContext();
 

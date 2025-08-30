@@ -73,8 +73,10 @@ export function useSignTypedData(
   args: UseSignTypedDataArgs,
 ): UseSignTypedDataResult {
   const { client: _client, ...mutationArgs } = args;
-  const smartWalletClient = useSmartWalletClient({
-    account: _client?.account.address,
+  const { client: smartWalletClient } = useSmartWalletClient({
+    accountParams: {
+      accountAddress: _client?.account.address,
+    },
   });
 
   const {

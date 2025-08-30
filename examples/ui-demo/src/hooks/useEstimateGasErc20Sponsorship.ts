@@ -1,7 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { type Chain, type Hex, type Address, toHex } from "viem";
-import { type AlchemyTransport } from "@account-kit/infra";
-import { useModularAccountV2Client } from "./useModularAccountV2Client";
+import { type Hex, type Address, toHex } from "viem";
 import {
   DEMO_USDC_ADDRESS_6_DECIMALS,
   DEMO_USDC_APPROVAL_AMOUNT,
@@ -23,11 +21,7 @@ export type UserOperationCall = {
 };
 
 export interface UseEstimateGasErc20SponsorshipParams {
-  clientOptions: {
-    mode: AccountMode;
-    chain: Chain;
-    transport: AlchemyTransport;
-  };
+  accountMode: AccountMode;
 }
 
 type EstimateGasErc20SponsorshipResult = {
@@ -49,18 +43,15 @@ export interface UseEstimateGasErc20SponsorshipReturn {
 export const useEstimateGasErc20Sponsorship = (
   params: UseEstimateGasErc20SponsorshipParams,
 ): UseEstimateGasErc20SponsorshipReturn => {
-  const { clientOptions } = params;
-
-  const { client, isLoadingClient } = useModularAccountV2Client({
-    ...clientOptions,
-  });
-
-  const smartWalletClient = useSmartWalletClient({
-    account: client?.account?.address,
+  const { client, isLoading: isLoadingClient } = useSmartWalletClient({
+    type: "ModularAccountV2",
+    accountParams: {
+      mode: params.accountMode,
+    },
   });
 
   const { prepareCallsAsync } = usePrepareCalls({
-    client: smartWalletClient,
+    client,
   });
 
   const {
@@ -77,12 +68,6 @@ export const useEstimateGasErc20Sponsorship = (
   >({
     mutationFn: async (userOperations: UserOperationCall[]) => {
       if (!client) {
-        throw new Error("Smart account client not ready");
-      }
-      if (!client.account) {
-        throw new Error("Smart account not connected or address not available");
-      }
-      if (!smartWalletClient) {
         throw new Error("Smart wallet client not ready");
       }
 

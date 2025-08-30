@@ -1,8 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { type Chain, type Hex, type Address, toHex, slice } from "viem";
+import { type Hex, type Address, toHex, slice } from "viem";
 import { useToast } from "@/hooks/useToast";
-import { type AlchemyTransport } from "@account-kit/infra";
-import { useModularAccountV2Client } from "./useModularAccountV2Client";
 import {
   DEMO_USDC_ADDRESS_6_DECIMALS,
   DEMO_USDC_APPROVAL_AMOUNT,
@@ -25,11 +23,7 @@ export type UserOperationCall = {
 
 export interface UseSendUOsErc20SponsorshipParams {
   toastText: string;
-  clientOptions: {
-    mode: AccountMode;
-    chain: Chain;
-    transport: AlchemyTransport;
-  };
+  accountMode: AccountMode;
 }
 
 export interface UseSendUOsErc20SponsorshipReturn {
@@ -47,19 +41,17 @@ export interface UseSendUOsErc20SponsorshipReturn {
 export const useSendUOsErc20Sponsorship = (
   params: UseSendUOsErc20SponsorshipParams,
 ): UseSendUOsErc20SponsorshipReturn => {
-  const { clientOptions } = params;
   const { setToast } = useToast();
 
-  const { client, isLoadingClient } = useModularAccountV2Client({
-    ...clientOptions,
-  });
-
-  const smartWalletClient = useSmartWalletClient({
-    account: client?.account?.address,
+  const { client, isLoading: isLoadingClient } = useSmartWalletClient({
+    type: "ModularAccountV2",
+    accountParams: {
+      mode: params.accountMode,
+    },
   });
 
   const { sendCallsAsync } = useSendCalls({
-    client: smartWalletClient,
+    client,
   });
 
   const {
@@ -72,12 +64,6 @@ export const useSendUOsErc20Sponsorship = (
   } = useMutation<Hex | undefined, Error, UserOperationCall[]>({
     mutationFn: async (userOperations: UserOperationCall[]) => {
       if (!client) {
-        throw new Error("Smart account client not ready");
-      }
-      if (!client.account) {
-        throw new Error("Smart account not connected or address not available");
-      }
-      if (!smartWalletClient) {
         throw new Error("Smart wallet client not ready");
       }
 
@@ -103,7 +89,7 @@ export const useSendUOsErc20Sponsorship = (
         },
       });
 
-      const { status } = await smartWalletClient.waitForCallsStatus({
+      const { status } = await client.waitForCallsStatus({
         id: ids[0],
       });
       if (status === "success") {
