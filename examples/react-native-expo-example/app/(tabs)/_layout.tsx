@@ -23,6 +23,17 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+			
+			<Tabs.Screen
+				name="passkey"
+				options={{
+					title: "Passkey",
+					tabBarIcon: ({ color }) => (
+						<FontAwesome6 size={28} name="fingerprint" color={color} />
+					),
+				}}
+			/>
+
 		</Tabs>
 	);
 }
