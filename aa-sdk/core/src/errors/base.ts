@@ -18,7 +18,7 @@ type BaseErrorParameters = {
 
 /**
  * A custom error class that extends from `ViemBaseError`. This class allows for error messages to include links to relevant documentation based on provided `docsPath` and `docsSlug` parameters.
- * This is based on on viem's BaseError type (obviously from the import and extend)
+ * This is based on viem's BaseError type (obviously from the import and extend)
  * we want the errors here to point to our docs if we supply a docsPath though
  */
 export class BaseError extends ViemBaseError {
