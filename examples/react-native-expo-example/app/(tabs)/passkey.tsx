@@ -82,33 +82,6 @@ export default function PasskeyScreen() {
     }
   };
 
-  const handleLoginWithPasskey = async () => {
-    try {
-      console.log("=== PASSKEY LOGIN START ===");
-      console.log("User before auth:", user);
-      
-      setIsAuthenticating(true);
-      const result = await authenticate({
-        type: "passkey",
-        createNew: false,
-      });
-      
-      console.log("=== PASSKEY LOGIN RESULT ===");
-      console.log("Auth result:", result);
-      console.log("User after auth:", user);
-      
-      Alert.alert("Success", "Check console for auth details!");
-    } catch (e: any) {
-      console.error("=== PASSKEY LOGIN ERROR ===");
-      console.error("Full error:", e);
-      console.error("Error message:", e?.message);
-      console.error("Error code:", e?.code);
-      Alert.alert("Error", `Error: ${e?.message || "Unknown error"}`);
-    } finally {
-      setIsAuthenticating(false);
-    }
-  };
-
   if (user) {
     return (
       <View style={styles.container}>
@@ -172,30 +145,6 @@ export default function PasskeyScreen() {
           >
             <Text style={styles.buttonText}>
               {isCreating ? "Creating..." : "Create Passkey Account"}
-            </Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.divider} />
-
-        {/* Login with Existing Passkey Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Login with Existing Passkey</Text>
-          <Text style={styles.description}>
-            Use an existing passkey saved on this device
-          </Text>
-          <Pressable
-            style={({ pressed }) => [
-              styles.button,
-              styles.loginButton,
-              pressed && styles.buttonPressed,
-              isAuthenticating && styles.buttonDisabled
-            ]}
-            onPress={handleLoginWithPasskey}
-            disabled={isAuthenticating}
-          >
-            <Text style={styles.buttonText}>
-              {isAuthenticating ? "Authenticating..." : "Login with Passkey"}
             </Text>
           </Pressable>
         </View>
