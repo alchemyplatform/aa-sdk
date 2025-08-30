@@ -34,9 +34,21 @@
         {
           "ios": {
             "deploymentTarget": "17.0"
+          },
+          "android": {
+            "kotlinVersion": "1.9.25",
+            "minSdkVersion": 29
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f4fc5d4f-ac2f-4d99-b9ee-2da5bd924300"
+      }
+    }
   }
 }

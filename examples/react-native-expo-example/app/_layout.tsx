@@ -1,7 +1,3 @@
-// Add global shims
-import "node-libs-react-native/globals.js";
-import "react-native-get-random-values";
-
 import {createConfig, AlchemyAccountProvider} from "@account-kit/react-native"
 
 import {alchemy, sepolia} from '@account-kit/infra'
@@ -16,8 +12,9 @@ const queryClient = new QueryClient()
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
 export default function RootLayout() {
-	const configParams = ({
+	const config = createConfig({
 		chain: sepolia,
+		rpId: "example.com",
 		transport: alchemy({
 			apiKey: API_KEY!,
 		}),
@@ -28,8 +25,6 @@ export default function RootLayout() {
 			expirationTimeMs: 1000 * 60 * 60 * 24 , // <-- Adjust the session expiration time as needed (currently 24 hours)
 		}
 	})
-
-	const config = createConfig(configParams)
 	
 	return (
 		<AlchemyAccountProvider config={config} queryClient={queryClient}>

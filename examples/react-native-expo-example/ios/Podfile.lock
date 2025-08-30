@@ -1,5 +1,5 @@
 PODS:
-  - account-kit-react-native-signer (4.17.0):
+  - account-kit-react-native-signer (4.59.1):
     - Base58Swift
     - DoubleConversion
     - glog
@@ -107,6 +107,7 @@ PODS:
     - React-RCTText (= 0.76.5)
     - React-RCTVibration (= 0.76.5)
   - React-callinvoker (0.76.5)
+  - React-Codegen (0.1.0)
   - React-Core (0.76.5):
     - glog
     - hermes-engine
@@ -1327,6 +1328,13 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-passkey (3.1.0):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - ReactCommon/turbomodule/core
   - react-native-safe-area-context (4.12.0):
     - DoubleConversion
     - glog
@@ -1711,7 +1719,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - "account-kit-react-native-signer (from `../node_modules/@account-kit/react-native-signer`)"
+  - "account-kit-react-native-signer (from `../../../node_modules/@account-kit/react-native-signer`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
@@ -1759,6 +1767,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-mmkv (from `../../../node_modules/react-native-mmkv`)
+  - react-native-passkey (from `../../../node_modules/react-native-passkey`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1795,11 +1804,12 @@ SPEC REPOS:
   trunk:
     - Base58Swift
     - BigInt
+    - React-Codegen
     - SocketRocket
 
 EXTERNAL SOURCES:
   account-kit-react-native-signer:
-    :path: "../node_modules/@account-kit/react-native-signer"
+    :path: "../../../node_modules/@account-kit/react-native-signer"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -1891,6 +1901,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-mmkv:
     :path: "../../../node_modules/react-native-mmkv"
+  react-native-passkey:
+    :path: "../../../node_modules/react-native-passkey"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -1955,7 +1967,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  account-kit-react-native-signer: a48450e9d497ea26553f47d4a619031f399eee92
+  account-kit-react-native-signer: 4ad3509a04bd417196d4e47c5559db77c3326684
   Base58Swift: 53d551f0b33d9478fa63b3445e453a772d6b31a7
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
@@ -1979,6 +1991,7 @@ SPEC CHECKSUMS:
   RCTTypeSafety: e9a6e7d48184646eb0610295b74c0dd02768cbb2
   React: fffb3cf1b0d7aee03c4eb4952b2d58783615e9fa
   React-callinvoker: 3c6ecc0315d42924e01b3ddc25cf2e49d33da169
+  React-Codegen: 4b8b4817cea7a54b83851d4c1f91f79aa73de30a
   React-Core: 1a5ddefb00dd72644171dd39bb4bbcd7849c70f0
   React-CoreModules: 8de64f712fe272ed08f37aaf64633ddf793e70d3
   React-cxxreact: e204185e1da1c843fec2bbb10bcc5b5800355dfa
@@ -2003,6 +2016,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 7eb5d69e1154e7743487ef0c8d7261e5b59afb32
   React-microtasksnativemodule: 01dd998649ff5f8814846b7eee84c4d57f5d3671
   react-native-mmkv: b4af3744580f08e1ffc7761103b408d313b2f772
+  react-native-passkey: 3aac247c18127443ef4a002b59d8e12dc7e99f2e
   react-native-safe-area-context: 0f16e24dc808e9f0ced17f2bdcec692b2376fb68
   React-nativeconfig: f7ab6c152e780b99a8c17448f2d99cf5f69a2311
   React-NativeModulesApple: 9aeb901b9bfcc9235e912445fb3cf4780a99baf4
