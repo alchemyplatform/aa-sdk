@@ -17,6 +17,7 @@ import { ModalCTAButton } from "../../shared/ModalCTAButton";
 import { getNftMintBatchUOs } from "./utils";
 import { useEstimateGasErc20Sponsorship } from "../../../hooks/useEstimateGasErc20Sponsorship";
 import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../utils/constants";
+import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
 type Erc20ModalProps = {
   isOpen: boolean;
@@ -50,6 +51,9 @@ export function Erc20Modal({
     rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
   });
 
+  const { isDeployed, refetch: refetchDeploymentStatus } =
+    useDeploymentStatus();
+
   const {
     balance,
     isLoading: isLoadingBalance,
@@ -77,7 +81,7 @@ export function Erc20Modal({
     txHash: mintNftTxHash,
     reset: resetMintNft,
   } = useSendUOsErc20Sponsorship({
-    clientOptions: { mode: accountMode, chain, transport },
+    accountMode,
     toastText: "NFT minted successfully",
   });
 
@@ -85,7 +89,7 @@ export function Erc20Modal({
     estimateGasAsync: estimateMintNftFee,
     isEstimating: isEstimatingGas,
   } = useEstimateGasErc20Sponsorship({
-    clientOptions: { mode: accountMode, chain, transport },
+    accountMode,
   });
 
   const balanceFloat = parseFloat(balance ?? "0");
@@ -125,6 +129,9 @@ export function Erc20Modal({
       const uos = await getNftMintBatchUOs(accountAddress);
       await mintNftAsync(uos);
       await refetchBalance();
+      if (!isDeployed) {
+        refetchDeploymentStatus();
+      }
       onNftMinted?.();
     } catch (e) {
       console.error("Failed to buy NFT:", e);
