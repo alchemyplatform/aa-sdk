@@ -68,7 +68,7 @@ export const useSendUOsErc20Sponsorship = (
     reset,
   } = useMutation<Hex | undefined, Error, UserOperationCall[]>({
     mutationFn: async (userOperations: UserOperationCall[]) => {
-      if (!client) {
+      if (!client || !smartWalletClient) {
         throw new Error("Smart wallet client not ready");
       }
 
