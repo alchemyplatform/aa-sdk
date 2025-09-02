@@ -135,9 +135,7 @@ export function alchemyGasManagerHooks(
   const createContext = () => {
     const context: any = {};
 
-    if (policyId) {
-      context.policyId = policyId;
-    }
+    context.policyId = policyId;
 
     if (policyToken) {
       context.erc20Context = {
