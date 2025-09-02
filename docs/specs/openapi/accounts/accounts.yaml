@@ -333,7 +333,7 @@ paths:
                     **Required OIDC Claims:**
                     - `iss` (Issuer): The identity of the OIDC provider. Should be the same as issuer URL specified in your /.well-known/openid-configuration, for example see the [Google OpenID configuration](https://accounts.google.com/.well-known/openid-configuration)
                     - `sub` (Subject): A unique identifier that identifies the user with this auth provider.
-                    - `aud` (Audience): A unique identifier for the project communicated by us after registration on the [google form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736)
+                    - `aud` (Audience): A unique identifier for the project that can be found on the [Alchemy Dashboard](https://dashboard.alchemy.com/accounts/config/create).
                     - `exp` (Expiration): Token expiration time as Unix timestamp
                     - `iat` (Issued At): Token issuance time as Unix timestamp
                     - `nonce` (Nonce): toHex(sha256(targetPublicKey)) without the leading 0x
@@ -349,9 +349,6 @@ paths:
                     }
                     ```
                   example: "eyJhbGciOiJSUzI1NiIsImtpZCI6Im15LWtl..."
-                authProvider:
-                  type: string
-                  description: Name of your application as entered on [google form](https://docs.google.com/forms/d/e/1FAIpQLScXdFYBAgGretrepXYFl35BhXDSxR541QA36MSrthrkZeL9Dw/viewform?usp=sharing&ouid=113369902822959187736). Please reach out to us if you've lost this!
                 targetPublicKey:
                   $ref: "#/components/schemas/targetPublicKey"
                   description: Required for authentication. Optional for pregeneration.
@@ -360,7 +357,6 @@ paths:
 
               required:
                 - jwt
-                - authProvider
       responses:
         "200":
           description: JWT authentication successful. User is now authenticated or wallet has been pregenerated.
