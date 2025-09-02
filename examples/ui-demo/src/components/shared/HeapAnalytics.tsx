@@ -1,14 +1,13 @@
 "use client";
 
 import Script from "next/script";
-import type { FC } from "react";
 
 const HEAP_APP_ID = process.env.NEXT_PUBLIC_HEAP_APP_ID;
 
 export const ALCHEMY_ANALYTICS_JS_URL =
   "https://static.alchemyapi.io/scripts/anayltics/alchemy-analytics.js";
 
-export const HeapAnalytics: FC = () => {
+export const HeapAnalytics = () => {
   if (!HEAP_APP_ID) {
     console.log("Heap App ID is not set.");
     return null;
