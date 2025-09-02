@@ -71,7 +71,14 @@ export const paymasterTransport = (
           // the dummy signature into the UO's signature. More may come up as we increase test coverage.
           // TODO(v5): cast as viem RpcUserOperation instead of aa-sdk/core's UserOperationRequest.
           const [
-            { userOperation, entryPoint, dummySignature, overrides, policyId },
+            {
+              userOperation,
+              entryPoint,
+              dummySignature,
+              overrides,
+              policyId,
+              erc20Context,
+            },
           ] = args.params as [
             {
               policyId: string;
@@ -79,6 +86,10 @@ export const paymasterTransport = (
               dummySignature: Hex;
               userOperation: UserOperationRequest;
               overrides?: UserOperationOverrides;
+              erc20Context?: {
+                tokenAddress: Address;
+                maxTokenAmount?: string;
+              };
             },
           ];
 
@@ -88,6 +99,13 @@ export const paymasterTransport = (
 
           // Check if paymaster is deployed
           let usePaymaster = true;
+
+          // Log if ERC-20 context is being used
+          if (erc20Context) {
+            console.log(
+              `Using ERC-20 token payment with token: ${erc20Context.tokenAddress}${erc20Context.maxTokenAmount ? `, max amount: ${erc20Context.maxTokenAmount}` : ""}`,
+            );
+          }
 
           // For test-policy, check if paymaster is deployed
           if (policyId === "test-policy") {

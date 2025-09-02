@@ -16,11 +16,7 @@ import {
   type PriorityFeeClient,
 } from "./alchemyEstimateFeesPerGas.js";
 
-// Type for ERC-20 token context
-export type PolicyToken = {
-  address: Address;
-  maxTokenAmount?: bigint;
-};
+// Note: PolicyToken type is now integrated into AlchemyGasManagerConfig
 
 // Simple cache for storing the latest user operation result
 // Since viem calls hooks sequentially for a single user operation,
@@ -82,17 +78,20 @@ export type AlchemyGasManagerHooks = {
 };
 
 export type AlchemyGasManagerConfig = {
-  client?: Client<Transport, Chain, SmartAccount>;
+  client: Client<Transport, Chain, SmartAccount>;
+  address?: Address;
+  maxTokenAmount?: bigint;
 };
 
 /**
  * Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
  *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
- * @param {PolicyToken | AlchemyGasManagerConfig} configOrToken - Configuration or ERC-20 token configuration
+ * @param {AlchemyGasManagerConfig} config - Configuration including client and optional ERC-20 token settings
  * @returns {AlchemyGasManagerHooks} Hooks for createBundlerClient
  *
  * @example
+ * Basic usage:
  * ```ts
  * import { createBundlerClient, createClient, http } from "viem";
  * import { alchemyGasManagerHooks } from "@account-kit/infra";
@@ -100,36 +99,36 @@ export type AlchemyGasManagerConfig = {
  * const client = createClient({
  *   chain: sepolia,
  *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
- *   account, // Your smart account
  * });
  *
  * const bundler = createBundlerClient({
  *   chain: sepolia,
- *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
+ *   transport: custom(client),
  *   account,
  *   ...alchemyGasManagerHooks("your-policy-id", { client }),
+ * });
+ * ```
+ *
+ * @example
+ * With ERC-20 token payment:
+ * ```ts
+ * const bundler = createBundlerClient({
+ *   chain: sepolia,
+ *   transport: custom(client),
+ *   account,
+ *   ...alchemyGasManagerHooks("your-policy-id", {
+ *     client,
+ *     address: "0xUSDC_ADDRESS", // ERC-20 token address
+ *     maxTokenAmount: 10_000_000n // Max tokens to spend
+ *   }),
  * });
  * ```
  */
 export function alchemyGasManagerHooks(
   policyId: string | string[],
-  configOrToken: PolicyToken | AlchemyGasManagerConfig,
+  config: AlchemyGasManagerConfig,
 ): AlchemyGasManagerHooks {
-  // Parse config/token parameter
-  let policyToken: PolicyToken | undefined;
-  let initialClient: Client<Transport, Chain, SmartAccount>;
-
-  // Check if it's a config object with client property
-  if ("client" in configOrToken) {
-    const config = configOrToken as AlchemyGasManagerConfig;
-    initialClient = config.client!;
-  } else {
-    // It's a PolicyToken (has address property)
-    policyToken = configOrToken as PolicyToken;
-    throw new Error(
-      "Gas manager hooks require a client. Pass it via config: alchemyGasManagerHooks(policyId, { client })",
-    );
-  }
+  const { client, address, maxTokenAmount } = config;
 
   // Helper to create gas manager context
   const createContext = () => {
@@ -137,11 +136,12 @@ export function alchemyGasManagerHooks(
 
     context.policyId = policyId;
 
-    if (policyToken) {
+    // Add ERC-20 context if token address is provided
+    if (address) {
       context.erc20Context = {
-        tokenAddress: policyToken.address,
-        maxTokenAmount: policyToken.maxTokenAmount
-          ? `0x${policyToken.maxTokenAmount.toString(16)}`
+        tokenAddress: address,
+        maxTokenAmount: maxTokenAmount
+          ? `0x${maxTokenAmount.toString(16)}`
           : undefined,
       };
     }
@@ -292,6 +292,5 @@ export function alchemyGasManagerHooks(
   };
 
   // Client is required for gas manager hooks to work
-
-  return createHooks(initialClient);
+  return createHooks(client);
 }

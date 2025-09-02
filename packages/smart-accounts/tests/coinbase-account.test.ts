@@ -216,4 +216,68 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     expect(isValid).toBe(true);
   }, 60_000);
+
+  it("should send transactions with ERC-20 token gas payment", async () => {
+    const owner = privateKeyToAccount(generatePrivateKey());
+    const account = await toCoinbaseSmartAccount({
+      client,
+      owners: [owner],
+    });
+
+    // Create a bundler client using Alchemy gas manager hooks with ERC-20 token payment
+    const bundlerClient = createBundlerClient({
+      account,
+      chain: local070Instance.chain,
+      transport: custom(client),
+      ...alchemyGasManagerHooks("test-policy", { 
+        client,
+        address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC address
+        maxTokenAmount: 10_000_000n, // 10 USDC
+      }),
+    });
+
+    // Fund the account
+    await setBalance(client, {
+      address: account.address,
+      value: parseEther("10"),
+    });
+
+    // Get a user operation to check the paymaster details
+    const userOp = await bundlerClient.prepareUserOperation({
+      account,
+      calls: [
+        {
+          to: account.address,
+          value: 0n,
+          data: "0x" as `0x${string}`,
+        },
+      ],
+    });
+
+    // Verify that paymaster fields are filled by the gas manager hooks
+    // Coinbase accounts use v0.6 with paymasterAndData field
+    expect(userOp.paymasterAndData).toBeDefined();
+    expect(userOp.paymasterAndData).not.toBe("0x");
+    // Should contain paymaster address (20 bytes) + data
+    expect(userOp.paymasterAndData.length).toBeGreaterThan(42); // 0x + 40 hex chars for address
+
+    // Send a transaction to self
+    const hash = await bundlerClient.sendUserOperation({
+      account,
+      calls: [
+        {
+          to: account.address,
+          value: 0n,
+          data: "0x" as `0x${string}`,
+        },
+      ],
+    });
+
+    const receipt = await bundlerClient.waitForUserOperationReceipt({
+      hash,
+    });
+
+    expect(receipt.success).toBe(true);
+    expect(receipt.userOpHash).toBe(hash);
+  });
 });

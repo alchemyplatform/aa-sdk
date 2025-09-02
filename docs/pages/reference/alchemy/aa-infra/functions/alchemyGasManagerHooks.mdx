@@ -33,6 +33,23 @@ const bundler = createBundlerClient({
 });
 ```
 
+## Usage with ERC-20 Token Payment
+
+You can configure the gas manager to accept ERC-20 tokens as payment:
+
+```ts
+const bundler = createBundlerClient({
+  chain: sepolia,
+  transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
+  account,
+  ...alchemyGasManagerHooks("your-policy-id", { 
+    client,
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC address
+    maxTokenAmount: 10_000_000n, // Max 10 USDC
+  }),
+});
+```
+
 ## Parameters
 
 ### policyId
@@ -41,11 +58,14 @@ const bundler = createBundlerClient({
 
 - The policy ID(s) for Alchemy's gas manager
 
-### configOrToken
+### config
 
-`PolicyToken | AlchemyGasManagerConfig`
+`AlchemyGasManagerConfig`
 
-- Configuration or ERC-20 token configuration
+Configuration object containing:
+- `client`: A viem client instance used for making RPC calls to the Gas Manager (required)
+- `address?`: ERC-20 token contract address for token gas payment (optional)
+- `maxTokenAmount?`: Maximum amount of tokens to spend (optional)
 
 ## Returns
 
