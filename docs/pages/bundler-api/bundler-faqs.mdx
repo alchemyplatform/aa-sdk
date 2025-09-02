@@ -85,7 +85,7 @@ To debug these errors, you should:
 - Isolate the first 4 bytes of `revertData`.
 - Paste into a signatures DB (e.g. [openchain.xyz/signatures](openchain.xyz/signatures)).
   - If it matches a known error, you’ll see the standard signature.
-  - If not, it’s a **custom error** - check the contract’s ABI or source for error ... declarations.
+  - If not, it's a **custom error** - check the contract's ABI or source for error declarations.
 - Decode any arguments (using a tool like [openchain.xyz/tools/abi](openchain.xyz/tools/abi) or your ABI).
 - Map the error back to the contract source code to understand under what conditions it reverts.
 
