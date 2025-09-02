@@ -37,7 +37,6 @@ import {
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
 import { generateP256KeyPair, hpkeDecrypt } from "@turnkey/crypto";
-import { MMKV } from "react-native-mmkv";
 import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper";
 import { parseSearchParams } from "./utils/parseUrlParams";
@@ -69,7 +68,6 @@ export type ExportWalletResult = {
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
   private stamper = NativeTEKStamper;
-  private storage = new MMKV();
   oauthCallbackUrl: string;
   rpId: string | undefined;
   private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
@@ -290,9 +288,8 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
   /**
    * Exports the wallet's private key for the authenticated user.
    *
-   * This uses the local storage approach recommended by Turnkey for mobile contexts.
    * A P256 key pair is generated locally, the public key is used to encrypt the export,
-   * and the private key is used to decrypt the bundle locally.
+   * and the private key is kept in memory to decrypt the bundle locally.
    *
    * @param {ExportWalletParams} params Export parameters
    * @param {string} params.exportAs Whether to export as PRIVATE_KEY or SEED_PHRASE (defaults to PRIVATE_KEY)
@@ -321,15 +318,11 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
     // Step 1: Generate a P256 key pair for encryption
     const embeddedKey = generateP256KeyPair();
 
-    // Step 2: Save the private key in secure storage
-    const keyId = `export_key_${Date.now()}`;
-    this.storage.set(keyId, embeddedKey.privateKey);
-
     try {
       let exportBundle: string;
 
       if (exportAs === "PRIVATE_KEY") {
-        // Step 3a: Export as private key
+        // Step 2a: Export as private key
         const { activity } = await this.turnkeyClient.exportWalletAccount({
           organizationId: this.user.orgId,
           type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
@@ -352,7 +345,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
 
         exportBundle = result.exportBundle;
       } else {
-        // Step 3b: Export as seed phrase (need to find the wallet first)
+        // Step 2b: Export as seed phrase (need to find the wallet first)
         const { wallets } = await this.turnkeyClient.getWallets({
           organizationId: this.user.orgId,
         });
@@ -397,7 +390,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
         exportBundle = result.exportBundle;
       }
 
-      // Step 4: Parse the export bundle and decrypt using HPKE
+      // Step 3: Parse the export bundle and decrypt using HPKE
       // The export bundle is a JSON string containing version, data, etc.
       const bundleJson = JSON.parse(exportBundle);
 
@@ -421,7 +414,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
         receiverPriv: embeddedKey.privateKey,
       });
 
-      // Step 5: Process the decrypted data based on export type
+      // Step 4: Process the decrypted data based on export type
       const result: ExportWalletResult = {
         address: this.user.address,
         exportAs,
@@ -438,8 +431,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
 
       return result;
     } finally {
-      // Step 6: Clean up - remove the embedded key from storage
-      this.storage.delete(keyId);
+      // No cleanup needed - key is only in memory
     }
   }
 
