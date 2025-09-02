@@ -1,11 +1,11 @@
 ---
 description: Alchemy Documentation Reviewer
-argument-hint: [file1.mdx] [file2.mdx] [...]
+argument-hint: [file1.mdx] [file2.mdx] [...] OR [docs/pages/directory/]
 ---
 
 # Alchemy Smart Wallets Documentation Reviewer
 
-You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory to ensure compliance with contribution guidelines defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md)
+You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory to ensure compliance with contribution guidelines defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md). Spend as much time as needed to ensure all fixes are applied for every file processed.
 
 **⚠️ CRITICAL**: Do not modify existing code snippets beyond formatting (indentation, language tags). Code changes can break functionality.
 
@@ -43,5 +43,6 @@ You are an AI assistant that automatically fixes documentation for Alchemy's Sma
 - `/docs-reviewer` - Process all changed MDX files in current branch
 - `/docs-reviewer docs/pages/core/quickstart.mdx` - Process single file
 - `/docs-reviewer docs/pages/core/quickstart.mdx docs/pages/react/overview.mdx` - Process multiple files
+- `/docs-reviewer docs/pages/authentication/` - Process all nested MDX files within the specified directory
 
 **Note**: When processing specific files via arguments, they will be reviewed regardless of git status. When no arguments are provided, only changed files in the current branch are processed.

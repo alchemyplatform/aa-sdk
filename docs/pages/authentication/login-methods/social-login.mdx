@@ -13,7 +13,7 @@ Social login authentication allows users to authenticate using OAuth providers l
   <Tab title="React">
     ## Prerequisites
 
-    Before implementing social login in your application, you need to configure your Smart Wallets dashboard and application:
+    Before implementing social login in your application, configure your Smart Wallets dashboard and application:
 
     1. **Follow the Setup Instructions in the Getting Started Guide**:
        - See the [Getting Started with Authentication](/wallets/react/quickstart) page for complete setup instructions
@@ -26,7 +26,7 @@ Social login authentication allows users to authenticate using OAuth providers l
 
     ## Implementation Options
 
-    You can implement Social Login authentication in two ways:
+    Implement Social Login authentication in two ways:
 
     - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
     - [Custom UI](#custom-ui) - Complete control over the user experience
@@ -47,7 +47,7 @@ Social login authentication allows users to authenticate using OAuth providers l
 
     ### Step 2: Configure Social Login in UI Components
 
-    After adding the components, configure the Social Login authentication in your application config:
+    After adding the components, configure Social Login authentication in your application config:
 
     ```tsx twoslash
     import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
@@ -79,11 +79,11 @@ Social login authentication allows users to authenticate using OAuth providers l
 
     ## Custom UI
 
-    If you need complete control over the user experience, you can implement your own custom UI for Social Login authentication using Smart Wallets hooks.
+    If you need complete control over the user experience, implement your own custom UI for Social Login authentication using Smart Wallets hooks.
 
     ### Step 1: Configure Your Application
 
-    Before implementing social login, make sure you've:
+    Before implementing social login, complete these steps:
 
     1. Set up your authentication providers in the Smart Wallets dashboard
     2. If using popup flow, set `enablePopupOauth: true` in your Account Kit configuration
@@ -156,7 +156,7 @@ Social login authentication allows users to authenticate using OAuth providers l
 
     ## Authenticate a User via Social Auth
 
-    To authenticate a user via **social auth**, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `OAuth`, the `redirectUrl` set to your app's deep link, the `mode` set to `redirect` and the `authProviderId` set to the social auth provider you want to use.
+    To authenticate a user via **social auth**, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `OAuth`, the `redirectUrl` set to your app's deep link, the `mode` set to `redirect` and the `authProviderId` set to the social auth provider to use.
 
     Here is an example, authenticating a user via Google:
 
@@ -195,7 +195,7 @@ Social login authentication allows users to authenticate using OAuth providers l
     ```
 
     <Tip>
-      Ensure that you have added your app's scheme to your `Whitelisted Origins` in
+      Add your app's scheme to your Whitelisted Origins in
       the [Alchemy Dashboard](https://dashboard.alchemy.com/).
     </Tip>
 
@@ -229,7 +229,7 @@ Social login authentication allows users to authenticate using OAuth providers l
 
 ### Enabling Authenticator App (TOTP) MFA
 
-If you want to require a second factor for Social Login, see [Social Login with Multi-Factor Authentication](/wallets/react/mfa/social-login). Once users have set up a TOTP-based authenticator app, they'll be prompted for their 6-digit code automatically.
+To require a second factor for Social Login, see [Social Login with Multi-Factor Authentication](/wallets/react/mfa/social-login). Once users set up a TOTP-based authenticator app, they're prompted for their 6-digit code automatically.
 
 ### Custom Social Providers
 

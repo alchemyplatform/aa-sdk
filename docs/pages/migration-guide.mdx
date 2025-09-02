@@ -118,7 +118,7 @@ The `signMessageWith6492` and `signTypedDataWith6492` methods have been removed 
 The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorhip doesn't cause you to use up your
 gas sponsorship limits. If your User Operation is eligible, then you can sign the UO with `client.signUserOperation` and send it with `client.sendRawUserOperation`.
 
-```ts
+```ts twoslash
 import { SmartAccountProvider } from "@aa-sdk/core"; // [!code --]
 import { getDefaultEntryPointAddress } from "@aa-sdk/core"; // [!code --]
 import { http } from "viem"; // [!code ++]
@@ -138,7 +138,7 @@ const client = createSmartAccountClient({ // [!code ++]
 The `SmartAccountProvider` in previous versions had a number of `with*` functions that mapped to the corresponding middleware functions on the provider.
 The concept of the middlewares is still present in this version, but their configuration has been moved to the `SmartAccountClient` creator. For example,
 
-```ts
+```ts twoslash
 import { SmartAccountProvider } from "@aa-sdk/core"; // [!code --]
 import { getDefaultEntryPointAddress } from "@aa-sdk/core"; // [!code --]
 import { http } from "viem"; // [!code ++]
@@ -168,7 +168,7 @@ To support the various ways of connecting to a smart account, the signatures of 
 
 The next big change is the removal of the class-based `BaseSmartContractAccount` that all accounts extended from. This has been replaced with a `SmartContractAccount` type that extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is now an `async` action. To get started with the new accounts (using `LightAccount` as an example), you will have to make the following changes:
 
-```ts
+```ts twoslash
 import {
   LightSmartContractAccount, // [!code --]
   createLightAccount, // [!code ++]
@@ -199,7 +199,7 @@ so that you don't have to pass the account to every method.
 
 #### Option 1: Passing the Account to the Client Methods
 
-```ts
+```ts twoslash
 import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   createBundlerClient,
@@ -244,7 +244,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 Hoisting the account is similar to using `.connect` in previous versions. You simply create your client with an account passed in to it.
 
-```ts
+```ts twoslash
 import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   createBundlerClient,
@@ -288,7 +288,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 In prior versions, using your own smart contract account implementations required that you extend `BaseSmartContractAccount`. In version 3.x.x, you can use the `toSmartContractAccount` method which will allow you to use any account with `SmartAccountClient`. `toSmartContractAccount` has the form of:
 
-```ts
+```ts twoslash
 type toSmartContractAccount = <
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -323,7 +323,7 @@ type toSmartContractAccount = <
 
 The `signTypedData` method found on `SmartAccountSigner` has been updated to match the signature found on `SmartContractAccount` and viem's `Account`.
 
-```ts
+```ts twoslash
 (params: SignTypedDataParams) => Promise<Hex>; // [!code --]
 
 <
@@ -353,7 +353,7 @@ The `Percent` type and `PercentSchema` have been removed in favor of the `Multip
 
 Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multipliaction of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
 
-```ts
+```ts twoslash
 createModularAccountAlchemyClient({
     ...
     opts: {
