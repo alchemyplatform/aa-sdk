@@ -113,6 +113,7 @@ export type SignupResponse = {
   orgId: string;
   userId?: string;
   address?: Address;
+  solanaAddress?: string;
   otpId?: string;
 };
 
