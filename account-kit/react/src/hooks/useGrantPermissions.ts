@@ -61,13 +61,10 @@ export type UseGrantPermissionsResult = {
  * import { useGrantPermissions, useSmartAccountClient } from "@account-kit/react";
  *
  * function PermissionsComponent() {
- *   const { client } = useSmartAccountClient();
+ *   const { client } = useSmartAccountClient({});
  *   const {
  *     grantPermissions,
- *     grantPermissionsAsync,
- *     grantPermissionsResult,
  *     isGrantingPermissions,
- *     error
  *   } = useGrantPermissions({ client });
  *
  *   const handleGrantPermissions = () => {

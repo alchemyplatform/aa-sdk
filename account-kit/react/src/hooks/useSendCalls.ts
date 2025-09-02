@@ -57,7 +57,7 @@ export type UseSendCallsResult<
   >;
   sendCallsResult: MutationResult | undefined;
   isSendingCalls: boolean;
-  sendCallsError: Error | null;
+  error: Error | null;
 };
 
 /**
@@ -82,11 +82,11 @@ export type UseSendCallsResult<
  * - `sendCallsAsync`: Async function to send calls (returns Promise)
  * - `sendCallsResult`: The result of the last successful call execution
  * - `isSendingCalls`: Boolean indicating if calls are currently being sent
- * - `sendCallsError`: Error from the last failed call execution, if any
+ * - `error`: Error from the last failed call execution, if any
  *
  * @example
  * ```tsx
- * const { sendCalls, sendCallsAsync, isSendingCalls, sendCallsError } = useSendCalls();
+ * const { sendCalls, sendCallsAsync, isSendingCalls, error } = useSendCalls();
  *
  * // Send a single call
  * await sendCallsAsync({
@@ -131,7 +131,7 @@ export function useSendCalls<
     mutateAsync: sendCallsAsync,
     data: sendCallsResult,
     isPending: isSendingCalls,
-    error: sendCallsError,
+    error,
   } = useMutation(
     {
       mutationFn: async (
@@ -222,6 +222,6 @@ export function useSendCalls<
     sendCallsAsync: ReactLogger.profiled("sendCallsAsync", sendCallsAsync),
     sendCallsResult,
     isSendingCalls,
-    sendCallsError,
+    error,
   };
 }
