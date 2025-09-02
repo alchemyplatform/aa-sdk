@@ -8,6 +8,8 @@ export function createLogger<Schema extends EventsSchema = []>(
 ): EventLogger<Schema>;
 
 export function createLogger(_context: LoggerContext): EventLogger {
+  // We are currently not logging events from the SDK (as Sept 2, 2025), so
+  // a no-op logger is always used. This will be further explored in v5.
   const innerLogger = noopLogger;
 
   const logger: EventLogger = {
