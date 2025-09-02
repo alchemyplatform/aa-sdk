@@ -26,7 +26,11 @@ export default function Home() {
   const user = useUser();
   return (
     <main
-      className={`flex flex-col h-auto lg:bg-bg-main min-h-screen lg:min-h-0 lg:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
+      className={`flex flex-col h-auto min-h-screen lg:min-h-0 lg:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
+      style={{
+        background:
+          "linear-gradient(97.91deg, rgba(84, 152, 255, 0.1) 6.1%, rgba(137, 64, 255, 0.1) 103.66%), rgba(241, 241, 241, 0.1)",
+      }}
     >
       <TopNav />
       <div
