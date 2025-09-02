@@ -78,8 +78,8 @@ export const DEFAULT_CONFIG: Config = {
   ui: {
     theme: "light",
     primaryColor: {
-      light: "#E82594",
-      dark: "#FF66CC",
+      light: "#363FF9",
+      dark: "#363FF9",
     },
     borderRadius: "sm",
     illustrationStyle: "outline",
