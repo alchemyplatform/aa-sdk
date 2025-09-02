@@ -162,21 +162,20 @@ export function alchemyGasManagerHooks(
       parameters: GetPaymasterDataParameters,
       cacheKey: string,
     ) {
-      const { entryPointAddress, ...userOpFields } = parameters;
+      const { entryPointAddress, account, ...userOpFields } = parameters as any;
 
-      // Get dummy signature from the account
-      if (!client.account) {
+      // Get dummy signature from the account passed in parameters
+      if (!account) {
         throw new Error(
-          "No account found on client. Client must have an account to use gas manager hooks.",
+          "No account found in parameters. Account must be provided to use gas manager hooks.",
         );
       }
-      if (!client.account.getStubSignature) {
+      if (!account.getStubSignature) {
         throw new Error(
           "Account must have getStubSignature method to use gas manager hooks.",
         );
       }
-      const dummySignature =
-        await client.account.getStubSignature(userOpFields);
+      const dummySignature = await account.getStubSignature(userOpFields);
 
       const context = createContext();
       const request = {

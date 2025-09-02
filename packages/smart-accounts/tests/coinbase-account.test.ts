@@ -43,15 +43,12 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    // Create a client with the account for gas manager hooks
-    const clientWithAccount = { ...client, account };
-
-    // Create a bundler client that uses the Alchemy gas manager
+    // Create a bundler client using Alchemy gas manager hooks with test client
     const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...alchemyGasManagerHooks("test-policy", { client: clientWithAccount }),
+      ...alchemyGasManagerHooks("test-policy", { client }),
     });
 
     // Fund the account
@@ -129,15 +126,12 @@ describe("Viem AA - Coinbase Smart Account", () => {
       owners: [owner],
     });
 
-    // Create a client with the account for gas manager hooks
-    const clientWithAccount = { ...client, account };
-
-    // Create a bundler client that uses the Alchemy gas manager
+    // Create a bundler client using Alchemy gas manager hooks with test client
     const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
-      ...alchemyGasManagerHooks("test-policy", { client: clientWithAccount }),
+      ...alchemyGasManagerHooks("test-policy", { client }),
     }).extend(bundlerActions);
 
     // Fund and deploy the account
