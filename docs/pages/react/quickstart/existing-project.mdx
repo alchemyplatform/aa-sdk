@@ -114,7 +114,7 @@ export default withAccountKitUi(
   },
   {
     // AccountKit UI theme customizations
-  }
+  },
 );
 ```
 
@@ -169,18 +169,18 @@ export const config = createConfig(
       ],
       addPasskeyOnSignup: true,
     },
-  }
+  },
 );
 
 export const queryClient = new QueryClient();
 ```
 
-Remember to replace `"YOUR_API_KEY"` with the API key from step 2.
+Remember to replace `"YOUR_API_KEY"` with your app's API Key.
 
 <Tip>
   **Important:** The chain you import (like `arbitrumSepolia`) must come from
   the `@account-kit/infra` package, not from `viem`. Additionally, make sure
-  this chain is enabled in both your Alchemy app and Account Kit config policy
+  this chain is enabled in both your Alchemy app and Smart Wallets config policy
   in the dashboard.
 </Tip>
 
@@ -197,11 +197,11 @@ You can add an `"external_wallets"` auth method to your config to allow connecti
 ];
 ```
 
-## 4. Set up the Alchemy Provider
+## Initializing Alchemy Provider
 
 Wrap your application with the Alchemy Provider to enable embedded wallet functionality.
 
-**Create providers.tsx**
+### 1. Create a file: `providers.tsx`
 
 ```tsx app/providers.tsx
 "use client";
@@ -216,7 +216,7 @@ import { PropsWithChildren } from "react";
 export const Providers = (
   props: PropsWithChildren<{
     initialState?: AlchemyAccountsProviderProps["initialState"];
-  }>
+  }>,
 ) => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -232,7 +232,7 @@ export const Providers = (
 };
 ```
 
-**Update your layout.tsx**
+### 2. Update your `layout.tsx`
 
 ```tsx app/layout.tsx
 import { config } from "@/config";
@@ -258,7 +258,7 @@ export default async function RootLayout({
   const headersList = await headers();
   const initialState = cookieToInitialState(
     config,
-    headersList.get("cookie") ?? undefined
+    headersList.get("cookie") ?? undefined,
   );
 
   return (
@@ -271,7 +271,7 @@ export default async function RootLayout({
 }
 ```
 
-## 5. Add authentication to your app
+### 3. Add authentication to your app
 
 Now you can use the Alchemy React components to add wallet authentication anywhere in your app.
 
@@ -317,21 +317,42 @@ export default function Home() {
 }
 ```
 
-## 6. Test your integration
-
-1. Start your development server
-2. Navigate to your app in the browser
-3. Click the "Login" button
-4. Try authenticating with different methods (email, social login, etc.)
-5. Once authenticated, you should see the success message with the user's information
-
-Congratulations! You now have embedded smart wallets working in your React application.
-
-## What's next?
-
 Now that you have basic authentication working, you can explore additional features:
 
-- [Send user operations](/wallets/transactions/send/send-user-operations) to perform transactions
-- [Customize your UI components](/wallets/react/ui-components) for advanced styling
-- [Add gas sponsorship](/wallets/transactions/sponsor-gas/sponsor-gas) for gasless transactions
-- [Set up multi-factor authentication](/wallets/react/mfa/setup-mfa) for enhanced security
+<CardGroup cols={2}>
+  <Card
+    title="Send User Operations"
+    icon="bolt"
+    href="/wallets/transactions/send/send-user-operations"
+  >
+    Learn how to perform transactions by sending user operations with your smart wallet.
+  </Card>
+
+{" "}
+
+<Card
+  title="Customize UI Components"
+  icon="fa-solid fa-pencil"
+  href="/wallets/react/ui-components"
+>
+  Customize and style the UI components to match your application's design.
+</Card>
+
+{" "}
+
+<Card
+  title="Add Gas Sponsorship"
+  icon="gas-pump"
+  href="/wallets/transactions/sponsor-gas/sponsor-gas"
+>
+  Enable gasless transactions by setting up gas sponsorship for your users.
+</Card>
+
+  <Card
+    title="Multi-Factor Authentication"
+    icon="shield"
+    href="/wallets/react/mfa/setup-mfa"
+  >
+    Enhance security by implementing multi-factor authentication for your users.
+  </Card>
+</CardGroup>

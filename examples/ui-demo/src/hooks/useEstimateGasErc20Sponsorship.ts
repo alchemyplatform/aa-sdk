@@ -1,12 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
-import { type Chain, type Hex, type Address, formatEther } from "viem";
+import { type Chain, type Hex, type Address, toHex } from "viem";
 import { type AlchemyTransport } from "@account-kit/infra";
 import { useModularAccountV2Client } from "./useModularAccountV2Client";
-import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../utils/constants";
+import {
+  DEMO_USDC_ADDRESS_6_DECIMALS,
+  DEMO_USDC_APPROVAL_AMOUNT,
+  DEMO_USDC_APPROVE_BELOW_AMOUNT,
+} from "../utils/constants";
 import { AccountMode } from "@/app/config";
+import {
+  usePrepareCalls,
+  useSmartWalletClient,
+} from "@account-kit/react/experimental";
 
 const ERC20_SPONSORSHIP_POLICY_ID =
-  process.env.NEXT_PUBLIC_ERC20_SPONSORSHIP_POLICY_ID;
+  process.env.NEXT_PUBLIC_ERC20_SPONSORSHIP_POLICY_ID!;
 
 export type UserOperationCall = {
   target: Address;
@@ -23,10 +31,7 @@ export interface UseEstimateGasErc20SponsorshipParams {
 }
 
 type EstimateGasErc20SponsorshipResult = {
-  totalGas: bigint;
-  gasPrice: bigint;
-  feeWei: bigint;
-  feeEth: string;
+  feeUsd: number;
 };
 
 export interface UseEstimateGasErc20SponsorshipReturn {
@@ -48,11 +53,14 @@ export const useEstimateGasErc20Sponsorship = (
 
   const { client, isLoadingClient } = useModularAccountV2Client({
     ...clientOptions,
-    policyId: ERC20_SPONSORSHIP_POLICY_ID,
-    policyToken: {
-      address: DEMO_USDC_ADDRESS_6_DECIMALS,
-      maxTokenAmount: BigInt(100_000_000_000_000),
-    },
+  });
+
+  const smartWalletClient = useSmartWalletClient({
+    account: client?.account?.address,
+  });
+
+  const { prepareCallsAsync } = usePrepareCalls({
+    client: smartWalletClient,
   });
 
   const {
@@ -74,61 +82,49 @@ export const useEstimateGasErc20Sponsorship = (
       if (!client.account) {
         throw new Error("Smart account not connected or address not available");
       }
+      if (!smartWalletClient) {
+        throw new Error("Smart wallet client not ready");
+      }
 
-      return estimateFee(userOperations);
+      const result = await prepareCallsAsync({
+        calls: userOperations.map((x) => ({
+          to: x.target,
+          data: x.data,
+          value: x.value ? toHex(x.value) : undefined,
+        })),
+        capabilities: {
+          paymasterService: {
+            policyId: ERC20_SPONSORSHIP_POLICY_ID,
+            onlyEstimation: true,
+            erc20: {
+              tokenAddress: DEMO_USDC_ADDRESS_6_DECIMALS,
+              postOpSettings: {
+                autoApprove: {
+                  below: toHex(DEMO_USDC_APPROVE_BELOW_AMOUNT),
+                  amount: toHex(DEMO_USDC_APPROVAL_AMOUNT),
+                },
+              },
+            },
+          },
+        },
+      });
+
+      let feePayment;
+      if (result.type === "user-operation-v060") {
+        feePayment = result.feePayment;
+      } else if (result.type === "user-operation-v070") {
+        feePayment = result.feePayment;
+      } else {
+        throw new Error(
+          `Unknown user operation type ${result.type} for fee estimation`,
+        );
+      }
+
+      return {
+        feeUsd: Number(feePayment.maxAmount) / 10 ** 6,
+      };
     },
   });
-
-  const estimateFee = async (userOperations: UserOperationCall[]) => {
-    if (!client) throw new Error("Smart account client not ready");
-    if (!client.account)
-      throw new Error("Smart account not connected or address not available");
-    const [uoStruct, latestBlock, { maxFeePerGas, maxPriorityFeePerGas }] =
-      await Promise.all([
-        client.buildUserOperation({ uo: userOperations }),
-        client.getBlock(),
-        client.estimateFeesPerGas(),
-      ]);
-
-    const toBig = (v?: Hex | number | bigint): bigint =>
-      v == null
-        ? BigInt(0)
-        : typeof v === "bigint"
-          ? v
-          : typeof v === "number"
-            ? BigInt(v)
-            : BigInt(v);
-
-    let totalGas =
-      toBig(uoStruct.preVerificationGas) +
-      toBig(uoStruct.verificationGasLimit) +
-      toBig(uoStruct.callGasLimit);
-
-    if ("paymasterPostOpGasLimit" in uoStruct) {
-      totalGas += toBig(uoStruct.paymasterPostOpGasLimit);
-    }
-
-    const baseFee = latestBlock.baseFeePerGas;
-
-    let gasPrice: bigint;
-    if (baseFee == null) {
-      gasPrice = maxFeePerGas;
-    } else {
-      const effectiveGasPrice = baseFee + maxPriorityFeePerGas;
-      gasPrice =
-        effectiveGasPrice < maxFeePerGas ? effectiveGasPrice : maxFeePerGas;
-    }
-
-    const feeWei = totalGas * gasPrice;
-    const feeEth = formatEther(feeWei);
-
-    return {
-      totalGas,
-      gasPrice,
-      feeWei,
-      feeEth,
-    } as const;
-  };
 
   return {
     isLoadingClient,
