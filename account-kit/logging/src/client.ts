@@ -29,6 +29,11 @@ function getOrCreateAnonId(): AnonId {
   return anon;
 }
 
+/**
+ * @deprecated Note that Segment is no longer used as of Spet 2, 2025. We will migrate to a new metrics provider in v5.
+ * @param {LoggerContext} context - The logger context configuration
+ * @returns {InnerLogger<Schema>} The inner logger instance
+ */
 export function createClientLogger<Schema extends EventsSchema = []>(
   context: LoggerContext,
 ): InnerLogger<Schema> {
