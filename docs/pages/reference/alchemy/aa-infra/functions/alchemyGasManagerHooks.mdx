@@ -16,53 +16,20 @@ import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
 ## Usage
 
 ```ts
-import { createBundlerClient } from "viem/account-abstraction";
-import { custom } from "viem";
-import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
+import { createBundlerClient, createClient, http } from "viem";
+import { alchemyGasManagerHooks } from "@account-kit/infra";
 
-// Create a bundler client with gas manager hooks
-const bundlerClient = createBundlerClient({
-  account,
-  chain: sepolia,
-  transport: custom(client),
-  ...alchemyGasManagerHooks("your-policy-id", { client }),
-});
-```
-
-The spread operator (`...`) is used to merge the gas manager hooks into the bundler client configuration. The hooks handle gas sponsorship automatically through Alchemy's Gas Manager.
-
-## Example
-
-Here's a complete example showing how to use the gas manager hooks:
-
-```ts
-import { createClient, http, custom } from "viem";
-import { createBundlerClient } from "viem/account-abstraction";
-import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
-import { sepolia } from "viem/chains";
-
-// First, create a viem client
 const client = createClient({
   chain: sepolia,
   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
-});
-
-// Then, create a bundler client with gas manager hooks
-const bundlerClient = createBundlerClient({
   account, // Your smart account
-  chain: sepolia,
-  transport: custom(client),
-  ...alchemyGasManagerHooks("your-policy-id", { client }),
 });
 
-// Now you can send sponsored user operations
-const userOpHash = await bundlerClient.sendUserOperation({
+const bundler = createBundlerClient({
+  chain: sepolia,
+  transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
   account,
-  calls: [{
-    to: "0x...",
-    value: 0n,
-    data: "0x...",
-  }],
+  ...alchemyGasManagerHooks("your-policy-id", { client }),
 });
 ```
 
@@ -72,25 +39,15 @@ const userOpHash = await bundlerClient.sendUserOperation({
 
 `string | string[]`
 
-The Gas Manager policy ID(s) obtained from your Alchemy dashboard.
+- The policy ID(s) for Alchemy's gas manager
 
-### config
+### configOrToken
 
-`AlchemyGasManagerConfig`
+`PolicyToken | AlchemyGasManagerConfig`
 
-Configuration object containing:
-- `client`: A viem client instance used for making RPC calls to the Gas Manager
+- Configuration or ERC-20 token configuration
 
 ## Returns
 
 `AlchemyGasManagerHooks`
-
-Returns an object containing `paymaster` and `userOperation` hooks that can be spread into `createBundlerClient`:
-- `paymaster`: Handles gas sponsorship through Alchemy's Gas Manager
-- `userOperation`: Provides optimized fee estimation
-
-## Notes
-
-- The hooks automatically handle the integration with Alchemy's Gas Manager
-- No need to manually configure paymaster middleware or fee estimation
-- The account is automatically accessed from viem's bundler client context
+Hooks for createBundlerClient
