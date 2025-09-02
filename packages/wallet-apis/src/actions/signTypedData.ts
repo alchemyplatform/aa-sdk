@@ -10,7 +10,6 @@ import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
 import { typedDataToJsonSafe } from "../utils/format.js";
-import { AccountNotFoundError } from "@alchemy/common";
 import type { SignerClient } from "../types.js";
 
 export type SignTypedDataParams = Prettify<
@@ -60,12 +59,12 @@ export async function signTypedData(
   signerClient: SignerClient,
   params: SignTypedDataParams,
 ): Promise<SignTypedDataResult> {
-  const account = await requestAccount(client, signerClient, {
-    accountAddress: params.account ?? client.account?.address,
-  });
-  if (!account) {
-    throw new AccountNotFoundError();
-  }
+  const accountAddress = params.account ?? client.account?.address;
+  const account = await requestAccount(
+    client,
+    signerClient,
+    accountAddress != null ? { accountAddress } : undefined,
+  );
 
   const prepared = await prepareSign(client, {
     from: account.address,

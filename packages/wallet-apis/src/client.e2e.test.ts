@@ -6,12 +6,10 @@ import {
   type WaitForCallsStatusReturnType,
 } from "viem";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
-import { alchemyTransport } from "@alchemy/common";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
-
-const ALCHEMY_API_URL = "https://api.g.alchemy.com/v2";
+import { apiTransport, publicTransport } from "./testSetup.js";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
@@ -49,27 +47,6 @@ const sendVariants: Array<
 ];
 
 describe("Client E2E Tests", () => {
-  const apiTransport = alchemyTransport(
-    process.env.ALCHEMY_PROXY_RPC_URL
-      ? {
-          url: process.env.ALCHEMY_PROXY_RPC_URL,
-        }
-      : {
-          url: ALCHEMY_API_URL,
-          apiKey: process.env.TEST_ALCHEMY_API_KEY!,
-        },
-  );
-
-  const publicTransport = alchemyTransport(
-    process.env.ALCHEMY_PROXY_RPC_URL
-      ? {
-          url: process.env.ALCHEMY_PROXY_RPC_URL,
-        }
-      : {
-          apiKey: process.env.TEST_ALCHEMY_API_KEY!,
-        },
-  );
-
   const signer = privateKeyToAccount(
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
