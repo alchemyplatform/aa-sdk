@@ -5,7 +5,7 @@ import {
   type UseQueryOptions,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { type Hex } from "viem";
+import type { Hex } from "viem";
 import { ClientUndefinedHookError } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
