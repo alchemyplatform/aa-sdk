@@ -1,18 +1,19 @@
 import { BaseError, clientHeaderTrack } from "@aa-sdk/core";
-import type { GetSmartWalletClientResult } from "@account-kit/core/experimental";
 import type { getCallsStatus } from "@account-kit/wallet-client";
 import {
   useQuery,
   type UseQueryOptions,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { type Address, type Hex } from "viem";
+import type { Hex } from "viem";
 import { ClientUndefinedHookError } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
+import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
-export type UseGetCallsStatusParams = {
-  client: GetSmartWalletClientResult<Address> | undefined;
+export type UseCallsStatusParams = {
+  client: UseSmartAccountClientResult["client"] | undefined;
   callId: Hex | undefined;
   queryOptions?: Omit<UseQueryOptions<QueryResult>, "queryKey" | "queryFn">;
 };
@@ -43,17 +44,20 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  * }
  * ```
  *
- * @param {UseGetCallsStatusParams} params - Parameters for the hook
+ * @param {UseCallsStatusParams} params - Parameters for the hook
  * @param {GetSmartWalletClientResult<Address> | undefined} params.client - Smart wallet client instance. The hook will not fetch until this is defined.
  * @param {Hex | undefined} params.callId - A call ID (hex string) returned from `sendPreparedCalls`. The hook will not fetch until this is defined.
  *
  * @returns {UseCallsStatusResult} Query result
  */
 export function useCallsStatus(
-  params: UseGetCallsStatusParams,
+  params: UseCallsStatusParams,
 ): UseCallsStatusResult {
-  const { client, callId } = params;
+  const { callId } = params;
   const { queryClient } = useAlchemyAccountContext();
+  const smartWalletClient = useSmartWalletClient({
+    account: params.client?.account.address,
+  });
 
   return useQuery<QueryResult>(
     {
@@ -61,19 +65,22 @@ export function useCallsStatus(
       queryFn: ReactLogger.profiled(
         "useCallsStatus",
         async (): Promise<QueryResult> => {
-          if (!client) {
+          if (!smartWalletClient) {
             throw new ClientUndefinedHookError("useCallsStatus");
           }
           if (!callId) {
             throw new BaseError("Expected callId to be defined");
           }
 
-          const _client = clientHeaderTrack(client, "reactUseCallsStatus");
+          const _smartWalletClient = clientHeaderTrack(
+            smartWalletClient,
+            "reactUseCallsStatus",
+          );
 
-          return await _client.getCallsStatus(callId);
+          return await _smartWalletClient.getCallsStatus(callId);
         },
       ),
-      enabled: !!client && !!params.callId,
+      enabled: !!params.client && !!params.callId && !!smartWalletClient,
       ...params.queryOptions,
     },
     queryClient,
