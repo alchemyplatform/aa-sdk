@@ -1,11 +1,13 @@
+"use client";
+
 import { clientHeaderTrack } from "@aa-sdk/core";
 import type { waitForCallsStatus } from "@account-kit/wallet-client";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import { ClientUndefinedHookError } from "../../errors.js";
-import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
-import { ReactLogger } from "../../metrics.js";
+import { ClientUndefinedHookError } from "../errors.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import { ReactLogger } from "../metrics.js";
 import type { WaitForCallsStatusParameters } from "viem/actions";
-import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export interface UseWaitForCallsStatusParams
@@ -23,7 +25,7 @@ export type UseWaitForCallsStatusResult = UseQueryResult<QueryResult>;
  *
  * @example
  * ```tsx
- * import { useWaitForCallsStatus } from "@account-kit/react/experimental";
+ * import { useWaitForCallsStatus } from "@account-kit/react";
  *
  * function MyComponent() {
  *   const { data: result, isLoading, error } = useWaitForCallsStatus({

@@ -1,3 +1,5 @@
+"use client";
+
 import { BaseError, clientHeaderTrack } from "@aa-sdk/core";
 import type { getCallsStatus } from "@account-kit/wallet-client";
 import {
@@ -6,10 +8,10 @@ import {
   type UseQueryResult,
 } from "@tanstack/react-query";
 import type { Hex } from "viem";
-import { ClientUndefinedHookError } from "../../errors.js";
-import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
-import { ReactLogger } from "../../metrics.js";
-import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import { ClientUndefinedHookError } from "../errors.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import { ReactLogger } from "../metrics.js";
+import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UseCallsStatusParams = {
@@ -30,7 +32,7 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  *
  * @example
  * ```tsx
- * import { useCallsStatus } from "@account-kit/react/experimental";
+ * import { useCallsStatus } from "@account-kit/react";
  *
  * function MyComponent() {
  *   const { data: callsStatus, isLoading, error } = useCallsStatus({
