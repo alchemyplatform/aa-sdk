@@ -1155,17 +1155,18 @@ export abstract class BaseSignerClient<
       organizationId: this.user.orgId,
     });
 
-    const walletAccounts = await Promise.all(
+    const walletAccountResponses = await Promise.all(
       wallets.map(({ walletId }) =>
         this.turnkeyClient.getWalletAccounts({
           organizationId: this.user!.orgId,
           walletId,
         }),
       ),
-    ).then((x) => x.flatMap((x) => x.accounts));
+    );
+    const walletAccounts = walletAccountResponses.flatMap((x) => x.accounts);
 
     const walletAccount = walletAccounts.find(
-      (x) => x.address === this.user!.address,
+      (x) => x.address.toLowerCase() === this.user!.address.toLowerCase(),
     );
 
     if (!walletAccount) {

@@ -344,7 +344,7 @@ export class RNSignerClient extends BaseSignerClient<
         );
 
         const walletAccount = walletAccounts.find(
-          (x) => x.address === this.user!.address,
+          (x) => x.address.toLowerCase() === this.user!.address.toLowerCase(),
         );
 
         if (!walletAccount) {
