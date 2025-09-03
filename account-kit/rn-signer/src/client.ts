@@ -6,7 +6,6 @@ import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   createPasskey,
   PasskeyStamper,
-  type AuthenticatorTransport,
 } from "@turnkey/react-native-passkey-stamper";
 import {
   stringify as uuidStringify,
@@ -481,7 +480,6 @@ export class RNSignerClient extends BaseSignerClient<
               {
                 id: user.credentialId,
                 type: "public-key",
-                transports: ["internal", "hybrid"] as AuthenticatorTransport[],
               },
             ]
           : undefined,

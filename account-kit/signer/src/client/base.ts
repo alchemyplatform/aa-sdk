@@ -223,6 +223,7 @@ export abstract class BaseSignerClient<
       address: result.address!,
       userId: result.userId!,
       credentialId: attestation.credentialId,
+      solanaAddress: result.solanaAddress,
     };
     this.initWebauthnStamper(this.user, params.creationOpts);
     this.eventEmitter.emit("connectedPasskey", this.user);
