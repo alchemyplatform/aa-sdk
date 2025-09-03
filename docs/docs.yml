@@ -210,10 +210,8 @@ navigation:
             path: wallets/pages/transactions/retry-transactions.mdx
           - page: Track transaction status
             path: wallets/pages/transactions/track-transaction-status.mdx
-          - section: Solana
-            contents:
-              - page: Overview
-                path: wallets/pages/transactions/solana/overview.mdx
+          - page: Sponsor gas on Solana
+            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
           - page: Coming Soon
             path: wallets/pages/transactions/coming-soon.mdx
 

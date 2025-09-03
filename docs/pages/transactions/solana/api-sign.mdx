@@ -1,0 +1,34 @@
+<CodeBlocks>
+
+```ts twoslash title="example.ts"
+import { Keypair, VersionedTransaction } from "@solana/web3.js";
+import { connection } from "./config.ts";
+import { result } from "./request.ts";
+
+const tx = VersionedTransaction.deserialize(
+  Buffer.from(result.serializedTransaction, "base64"),
+);
+
+tx.sign([Keypair.fromSecretKey(new Uint8Array(64))]);
+
+const signature = await connection.sendRawTransaction(tx.serialize());
+```
+
+```ts twoslash title="config.ts"
+import { Connection } from "@solana/web3.js";
+
+export const ALCHEMY_API_KEY = "<API_KEY>";
+
+export const connection = new Connection(
+  `https://solana-devnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+  { commitment: "confirmed" },
+);
+```
+
+```ts twoslash title="request.ts"
+// Result from the request step
+// Sponsored serialized transaction returned by alchemy_requestFeePayer
+export const sponsoredSerializedTransaction = "<base64-serialized-tx>";
+```
+
+</CodeBlocks>

@@ -1,0 +1,35 @@
+<CodeBlocks>
+
+```tsx twoslash title="sponsor-solana-gas.ts"
+import { useSolanaTransaction } from "@account-kit/react";
+import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
+
+function MyComponent() {
+  const policyId = "<YourPolicyId>";
+
+  const { sendTransaction, signer } = useSolanaTransaction({
+    policyId,
+  });
+
+  if (!signer) {
+    return <div>Loading signer...</div>;
+  }
+
+  return (
+    <button
+      onClick={() =>
+        sendTransaction({
+          transfer: {
+            toAddress: "<ToAddress>",
+            amount: 1000000,
+          },
+        })
+      }
+    >
+      Send Sponsored Transaction
+    </button>
+  );
+}
+```
+
+</CodeBlocks>

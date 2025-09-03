@@ -1,0 +1,21 @@
+<CodeBlocks>
+
+```tsx twoslash title="config.ts"
+import { cookieStorage, createConfig } from "@account-kit/react";
+import { Connection } from "@solana/web3.js";
+createConfig({
+  ...otherConfig
+  solana: {
+    connection: new Connection(
+      "https://solana-devnet.g.alchemy.com/v2/<API_KEY>",
+      {
+        wsEndpoint: "wss://api.devnet.solana.com",
+        commitment: "confirmed",
+      }
+    ),
+    policyId: "<PolicyId>"
+  }
+}
+```
+
+</CodeBlocks>

@@ -1,0 +1,42 @@
+<CodeBlocks>
+
+```ts twoslash title="example.ts"
+import * as solanaWeb3 from "@solana/web3.js";
+import { connection } from "./config.ts";
+
+const instructions = [
+  solanaWeb3.SystemProgram.transfer({
+    fromPubkey: from,
+    toPubkey: to,
+    lamports: amount,
+  }),
+];
+
+const { blockhash } = await connection.getLatestBlockhash();
+
+const message = new solanaWeb3.TransactionMessage({
+  payerKey: new solanaWeb3.PublicKey(
+    "Amh6quo1FcmL16Qmzdugzjq3Lv1zXzTW7ktswyLDzits",
+  ), // Placeholder: Set this to an address different than any other address included in the tx, will be replaced by alchemy's feePayer
+  recentBlockhash: blockhash,
+  instructions,
+}).compileToV0Message();
+
+const transaction = new solanaWeb3.VersionedTransaction(message);
+export const serializedTx = Buffer.from(transaction.serialize()).toString(
+  "base64",
+);
+```
+
+```ts twoslash title="config.ts"
+import { Connection } from "@solana/web3.js";
+
+export const ALCHEMY_API_KEY = "<API_KEY>";
+
+export const connection = new Connection(
+  `https://solana-devnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+  { commitment: "confirmed" },
+);
+```
+
+</CodeBlocks>

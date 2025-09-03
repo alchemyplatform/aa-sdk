@@ -1,0 +1,63 @@
+---
+title: How to sponsor fees on Solana
+description: How to sponsor fees on Solana
+slug: wallets/transactions/solana/overview
+---
+
+Let users send gasless transactions on Solana by sponsoring transaction fees and rent with Smart Wallets. This removes a major barrier to entry for new users of your app and the need for them to hold any SOL.
+
+## How it works
+
+Once you've [created](/react/solana-wallets/get-started) a smart wallet on Solana, enable sponsorship with a policy that defines which transactions are covered and any limits. When a transaction meets the policy, fees and rent are fronted in SOL by Alchemy's fee payer so the user doesn’t need SOL. The equivalent USD amount and the admin fee are then added to your monthly invoice.
+
+- Fees: the cost of executing transactions
+- Rent: the minimum payment to store data onchain
+  - Rent sponsorship is supported for `createAccount` and `createAssociatedTokenAccount`. If you need support for custom programs, contact [wallets@alchemy.com](mailto:wallets@alchemy.com).
+
+## Prerequisites
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- Smart Wallets for Solana set up in your project: [/react/solana-wallets/get-started](/react/solana-wallets/get-started)
+- A sponsorship policy to cover fees and/or rent: [create a policy](https://dashboard.alchemy.com/gas-manager/policy/create/)
+
+## Implementation
+
+<Info>Required SDK version: ^v4.59.1</Info>
+<Tabs>
+  <Tab title="React">
+    ## Global sponsorship
+
+    To apply a sponsorship policy to all transactions sent by the Solana wallet provider, you can configure fee and rent sponsorship at the Alchemy configuration level by passing a `policyId` into your Solana config. Replace the API key and Policy Id with your keys from the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration). This setup applies sponsorship to all Solana transactions sent from wallets created with this configuration (e.g. this will be applied to usage of the `useSolana…` hooks).
+    <Markdown src="react-global.mdx" />
+
+
+    ### Per transaction sponsorship
+
+    Alternatively, to apply sponsorship conditionally for each transaction, you can pass a `policyId` to the `useSolanaTransaction` hook.
+
+    <Markdown src="react-per-transaction.mdx" />
+
+    Congrats! You’re now creating smart wallets on Solana with social login and sending sponsored transactions to create a zero-friction experience from sign-up to transaction. Reach out with any feature request or questions.
+
+  </Tab>
+  <Tab title="APIs">
+    ### Prepare a Serialized Solana Transaction
+
+    Here’s an example of creating a serialized transfer transaction using javascript:
+    <Markdown src="api-prepare.mdx" />
+
+    ### Request sponsorship for the Serialized Transaction
+
+    To sponsor fees and rent on Solana, 1) the `payerKey` field of the transaction needs to be set to the feePayer wallet that will pay for the gas, 2) the feePayer wallet needs to sign the transaction.
+
+    You can get the `feePayer` address and the feePayer signature through [`alchemy_requestFeePayer`](/reference/alchemy-requestfeepayer) using your gas policy id and the serialized transaction. The Gas Manager will update the `feePayer` and add the signature to the `serializedTransaction` if and only the transaction satisfies the rules defined in your policy.
+
+    <Markdown src="api-request.mdx" />
+
+    ### Sign and broadcast the Transaction
+
+    Here is an example of signing and broadcasting a transaction using javascript:
+    <Markdown src="api-sign.mdx" />
+
+  </Tab>
+</Tabs>
