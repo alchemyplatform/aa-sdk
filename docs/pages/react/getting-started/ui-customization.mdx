@@ -13,11 +13,9 @@ Create two configuration files that will customize your authentication methods a
 1. In your project root, create a `config.ts` file
 2. In your project root, create a `tailwind.config.ts` file
 
-You can customize these by visiting our [demo app](https://demo.alchemy.com/) - use the interactive sandbox to explore different authentication methods and styling options. When ready, click 'Code preview' to export your customized configuration files.
-
 ### Basic configuration example
 
-Here's a basic configuration to get you started:
+Start with a basic configuration:
 
 **tailwind.config.ts**
 
@@ -64,16 +62,15 @@ import { arbitrumSepolia, alchemy } from "@account-kit/infra";
 export const config = createConfig(
   {
     transport: alchemy({
-      // Replace with your API key
-      apiKey: "YOUR_API_KEY",
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
     }),
     chain: arbitrumSepolia,
     ssr: true,
     storage: cookieStorage,
     enablePopupOauth: true,
-    // For gas sponsorship (optional)
+    // For gas sponsorship
     // Learn more here: https://www.alchemy.com/docs/wallets/transactions/sponsor-gas/sponsor-gas-evm
-    policyId: "YOUR_POLICY_ID",
+    policyId: process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID;,
   },
   {
     auth: {
@@ -92,8 +89,6 @@ export const config = createConfig(
 export const queryClient = new QueryClient();
 ```
 
-Remember to replace `"YOUR_API_KEY"` with your app's API Key.
-
 <Tip>
   **Important:** The chain you import (like `arbitrumSepolia`) must come from
   the `@account-kit/infra` package, not from `viem`. Additionally, make sure
@@ -102,7 +97,7 @@ Remember to replace `"YOUR_API_KEY"` with your app's API Key.
 </Tip>
 
 Note:
-You can add an `"external_wallets"` auth method to your config to allow connecting existing external EOAs (such as MetaMask) using our built-in connectors and WalletConnect. Learn more [here](/wallets/react/login-methods/eoa-login)
+You can add an `"external_wallets"` auth method to your config to allow connecting existing external EOAs (such as MetaMask) using our built-in connectors and WalletConnect. Learn more [here](/wallets/react/login-methods/eoa-login).
 
 ```ts twoslash
 // @noErrors
@@ -113,3 +108,15 @@ You can add an `"external_wallets"` auth method to your config to allow connecti
   },
 ];
 ```
+
+### Customization
+
+Customize both configuration files by visiting our [demo app](https://demo.alchemy.com/) - use the interactive sandbox to explore different authentication methods and styling options. When ready, click 'Code preview' to export your customized configuration files.
+
+<Tip>
+  You can also follow these links to learn more about [using UI
+  Components](/docs/wallets/react/ui-components) and
+  [theming](/docs/wallets/react/ui-components).
+</Tip>
+
+Finally, to the last step: integration into the application.

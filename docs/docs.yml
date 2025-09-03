@@ -16,24 +16,24 @@ navigation:
           - page: Overview
             slug: /
             path: wallets/pages/index.mdx
-          - link: Quickstart
-            href: https://www.alchemy.com/docs/wallets/react/quickstart
+          - page: Quickstart
+            path: wallets/pages/react/getting-started/quickstart-at-top.mdx
           - section: Get Started
             contents:
               - section: React
                 contents:
                   - page: Quickstart
-                    path: wallets/pages/react/quickstart.mdx
+                    path: wallets/pages/react/getting-started/quickstart-in-section.mdx
                   - section: From scratch
                     contents:
                       - page: Initialization
-                        path: wallets/pages/react/installation.mdx
+                        path: wallets/pages/react/getting-started/initialization.mdx
                       - page: Environment setup
-                        path: wallets/pages/react/setup.mdx
+                        path: wallets/pages/react/getting-started/setup.mdx
                       - page: UI Customization
-                        path: wallets/pages/react/quickstart/ui-customization.mdx
+                        path: wallets/pages/react/getting-started/ui-customization.mdx
                       - page: App Integration
-                        path: wallets/pages/react/quickstart/existing-project.mdx
+                        path: wallets/pages/react/getting-started/existing-project.mdx
               - section: React Native
                 contents:
                   - page: Overview
