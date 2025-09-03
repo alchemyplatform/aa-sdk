@@ -16,26 +16,24 @@ navigation:
           - page: Overview
             slug: /
             path: wallets/pages/index.mdx
-          - link: Quickstart
-            href: https://www.alchemy.com/docs/wallets/react/quickstart
+          - page: Quickstart
+            path: wallets/pages/react/getting-started/quickstart-at-top.mdx
           - section: Get Started
             contents:
               - section: React
                 contents:
-                  - page: Installation
-                    path: wallets/pages/react/installation.mdx
-                  - page: Setup
-                    path: wallets/pages/react/setup.mdx
                   - page: Quickstart
-                    path: wallets/pages/react/quickstart.mdx
-                  - page: Add to existing project
-                    path: wallets/pages/react/quickstart/existing-project.mdx
-                  - page: Set up your client
-                    path: wallets/pages/react/how-to-set-up-smart-account-client.mdx
-                  - page: Multi-chain setup
-                    path: wallets/pages/react/multi-chain-apps.mdx
-                  - page: Server-side rendering
-                    path: wallets/pages/react/ssr.mdx
+                    path: wallets/pages/react/getting-started/quickstart-in-section.mdx
+                  - section: From scratch
+                    contents:
+                      - page: Initialization
+                        path: wallets/pages/react/getting-started/initialization.mdx
+                      - page: Environment setup
+                        path: wallets/pages/react/getting-started/setup.mdx
+                      - page: UI Customization
+                        path: wallets/pages/react/getting-started/ui-customization.mdx
+                      - page: App Integration
+                        path: wallets/pages/react/getting-started/existing-project.mdx
               - section: React Native
                 contents:
                   - page: Overview
@@ -84,6 +82,11 @@ navigation:
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
+              - page: Upgrade to Smart Accounts
+                slug: recipes/upgrade-to-smart-accounts
+                path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
+              - page: Multi-chain setup
+                path: wallets/pages/react/multi-chain-apps.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
@@ -1161,6 +1164,8 @@ navigation:
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
               - page: Bundler RPC Errors
                 path: wallets/pages/bundler-api/bundler-rpc-errors.mdx
+              - page: Server-side rendering
+                path: wallets/pages/react/ssr.mdx
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx
