@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Bug Fixes
+
+- react native ios passkeys ([#1986](https://github.com/alchemyplatform/aa-sdk/issues/1986)) ([8c9f473](https://github.com/alchemyplatform/aa-sdk/commit/8c9f47330fb926bafbbf24239c69a03521ed2bd3))
+
 ## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
 
 **Note:** Version bump only for package @account-kit/react-native-signer
