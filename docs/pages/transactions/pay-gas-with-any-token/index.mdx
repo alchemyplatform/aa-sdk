@@ -23,22 +23,35 @@ We recommend using "post-operation" mode for most use cases. This mode requires 
 
 <Tabs>
   <Tab title="React">
-    <Info>Required SDK version: ^v4.59.1</Info>
     <Markdown src="react.mdx" />
   </Tab>
-  <Tab title="Typescript">
-    <Info>Required SDK version: ^v4.59.1</Info>
+  <Tab title="Javascript">
     <Markdown src="client.mdx" />
   </Tab>
   <Tab title="API">
-    See the [`wallet_prepareCalls` API
-    reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
-    for full descriptions of the parameters used in the following examples.
     <Markdown src="api-postop.mdx" />
   </Tab>
 </Tabs>
 
 ## Advanced
+
+<Accordion title="Usage with prepare calls">
+
+Pay gas with any token also works with the prepare calls methods in the various frameworks. Usage of the capability will be the same as when using send calls. It is recommended to use prepare calls if you want to inspect the prepared call prior to prompting the user for signature.
+
+<Tabs>
+  <Tab title="React">TODO - add link to `usePrepareCalls`</Tab>
+  <Tab title="Javascript">
+    See the [`prepareCalls` SDK
+    reference](/docs/wallets/reference/account-kit/wallet-client/functions/prepareCalls)
+  </Tab>
+  <Tab title="API">
+    See the [`wallet_prepareCalls` API
+    reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
+  </Tab>
+</Tabs>
+
+</Accordion>
 
 <Accordion title="ERC-20 gas payment modes">
 The configured mode determines when the user's token payment occurs.
@@ -148,4 +161,10 @@ approval, the following steps inject the permit:
 
 ## Next steps
 
-TODO
+Build more:
+
+- [Sponsor gas for users](/docs/wallets/transactions/sponsor-gas/sponsor-gas)
+
+Troubleshooting:
+
+- [Gas manager errors](/docs/reference/gas-manager-errors)
