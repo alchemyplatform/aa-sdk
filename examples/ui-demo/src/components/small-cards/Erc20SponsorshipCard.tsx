@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Card } from "./Card";
-import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { ShoppingBag } from "lucide-react";
 import { useState } from "react";

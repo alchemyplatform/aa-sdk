@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Bug Fixes
+
+- solana address not initialized ([#1985](https://github.com/alchemyplatform/aa-sdk/issues/1985)) ([5a377fa](https://github.com/alchemyplatform/aa-sdk/commit/5a377fadd0bc7b06723199724e156eebe207e1cc))
+
 ## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
 
 **Note:** Version bump only for package @account-kit/signer
