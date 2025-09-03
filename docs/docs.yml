@@ -30,8 +30,8 @@ navigation:
                         path: wallets/pages/react/installation.mdx
                       - page: Environment setup
                         path: wallets/pages/react/setup.mdx
-                      - page: Account Kit UI
-                        path: wallets/pages/react/quickstart/existing-project.mdx
+                      - page: UI Customization
+                        path: wallets/pages/react/quickstart/ui-customization.mdx
                       - page: App Integration
                         path: wallets/pages/react/quickstart/existing-project.mdx
               - section: React Native
@@ -85,6 +85,8 @@ navigation:
               - page: Upgrade to Smart Accounts
                 slug: recipes/upgrade-to-smart-accounts
                 path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
+              - page: Multi-chain setup
+                path: wallets/pages/react/multi-chain-apps.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
@@ -1160,6 +1162,8 @@ navigation:
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
               - page: Bundler RPC Errors
                 path: wallets/pages/bundler-api/bundler-rpc-errors.mdx
+              - page: Server-side rendering
+                path: wallets/pages/react/ssr.mdx
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx
