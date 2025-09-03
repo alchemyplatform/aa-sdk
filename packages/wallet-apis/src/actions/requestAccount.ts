@@ -3,12 +3,18 @@ import type { Address } from "abitype";
 import type { Prettify, UnionOmit } from "viem";
 import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
-import type { InnerWalletApiClient, SignerClient } from "../types";
+import type {
+  InnerWalletApiClient,
+  OptionalSignerAddress,
+  SignerClient,
+} from "../types";
 
 export type RequestAccountParams = Prettify<
-  UnionOmit<
-    Static<typeof wallet_requestAccount>["Request"]["params"][0],
-    "includeCounterfactualInfo"
+  OptionalSignerAddress<
+    UnionOmit<
+      Static<typeof wallet_requestAccount>["Request"]["params"][0],
+      "includeCounterfactualInfo"
+    >
   >
 >;
 
@@ -50,6 +56,7 @@ export async function requestAccount(
             includeCounterfactualInfo: true,
           }
         : {
+            ...params,
             signerAddress:
               params?.signerAddress ?? signerClient.account.address,
             includeCounterfactualInfo: true,

@@ -34,6 +34,10 @@ export type OptionalChainId<T> = T extends { chainId: Hex }
   ? Omit<T, "chainId"> & { chainId?: Hex | undefined }
   : T;
 
+export type OptionalSignerAddress<T> = T extends { signerAddress: Address }
+  ? Omit<T, "signerAddress"> & { signerAddress?: Address | undefined }
+  : T;
+
 export type WithoutRawPayload<T> = T extends { rawPayload: Hex }
   ? Omit<T, "rawPayload">
   : T;
