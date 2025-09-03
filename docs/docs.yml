@@ -16,6 +16,8 @@ navigation:
           - page: Overview
             slug: /
             path: wallets/pages/index.mdx
+          - link: Quickstart
+            href: https://www.alchemy.com/docs/wallets/react/quickstart
           - section: Get Started
             contents:
               - section: React
