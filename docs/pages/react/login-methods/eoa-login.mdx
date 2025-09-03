@@ -1,53 +1,77 @@
 ---
-title: Connect with EOAs
-description: How to bring in your own EOAs to Smart Wallets
+title: Connect external wallets
+description: How to connect external wallets on EVM and Solana
 slug: wallets/react/login-methods/eoa-login
 ---
 
-You can allow users to login by connecting their existing EOA using Smart Wallets. This can be done using our pre-built UI components or custom UI - no need for a separate wallet connector!
-Depending on what method you choose, you can bring in your EOA:
+# Overview
 
-- **As a "pure" EOA**: users connect and transact directly from their EOAs. These wallets don’t support smart account features like gas sponsorship or batching.
-- **As an owner and signer of a new smart account**: users will maintain self-custody and sign with their EOA for each transaction. They will not be able to use funds from the EOA directly, but their new smart wallet have AA features like sponsorship and batching.
+Connectors let users authenticate with existing **external wallets**. We support both **EVM** (e.g., MetaMask, Coinbase, WalletConnect) and **Solana** (e.g., Phantom) wallets via UI components or custom UI. and can surface them together in your auth modal.
 
-## Pre-built Components
+- EVM EOAs behave as regular wallets (no smart wallet features like sponsorship).
+- You can optionally use an EVM EOA as a smart wallet owner to unlock smart wallet features like sponsorship and batching.
+- Solana wallets are external wallets; you can enable sponsored gas with a policy.
 
-Easily log in into your existing EOAs using popular wallet providers like **MetaMask**, **Rabby**, **Phantom**, and more.
-**Note:** Since this is not a smart account, users will not get sponsorship, batching, or other features, and instead they will use their EOA as normal.
+## Pre-built UI connectors
 
-Our SDK supports external wallet connection out of the box, so you can seamlessly support both Web2 users with social login and Web3 users who want to bring their own EOAs.We support enabling users to bring their existing EOA in 2 ways:
+- Auto-detect browser installed wallet extensions.
+- Optionally add WalletConnect for other EVM wallets.
+- Configure once with `configForExternalWallets()` and pass into the UI components using `createConfig()`.
 
-1. **Automatically detect and display all wallet extensions available in the user's browser.** (_Note: if the user has no wallet extensions installed, nothing will be displayed_)
-2. **WalletConnect for all other EOAs**
+You can fully customize wallet connector UI to define features wallets, ordering, and more. See how [here](/docs/wallets/react/connectors/customization).
 
-With Smart Wallets, users can still connect to their existing wallets without sacrificing compatibility or convenience.
+### Detect and display EVM + Solana wallets
 
-Our hooks will handle checking if the connected wallet is a smart wallet or an existing EOA.
-Transactions can be signed and sent in the same way, but external EOA wallets don't have access to Account Abstraction benefits such as gas abstraction, batching, etc.
-These EOAs will simply function as EOAs.
-
-In order to access these external wallet providers, just make sure to include configure `type: "external_wallets"` in your config:
+Use the helper to generate EVM connectors, Solana adapters, and UI customization in one place. Add to UI components by updating your `createConfig`.
 
 ```ts twoslash [src/config.ts]
 // @noErrors
-import { createConfig, cookieStorage } from "@account-kit/react";
+import {
+  createConfig,
+  cookieStorage,
+  configForExternalWallets,
+} from "@account-kit/react";
 import { alchemy, sepolia } from "@account-kit/infra";
+import { Connection } from "@solana/web3.js";
+
+// Keep external wallets settings in one place
+export const externalWalletsConfig = configForExternalWallets({
+  // Preferred order (case-insensitive). Use "wallet_connect" for WalletConnect.
+  wallets: ["wallet_connect", "phantom", "metamask", "coinbase wallet"],
+  // Surface both EVM and Solana wallets (filter to ["evm"] or ["svm"] if desired)
+  chainType: ["svm", "evm"],
+  // EVM-only WalletConnect support (omit to disable)
+  walletConnectProjectId: "your-project-id",
+  // Controls the built-in Featured section
+  hideMoreButton: false,
+  numFeaturedWallets: 4,
+});
 
 export const config = createConfig(
   {
-    // alchemy config
-    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
-    chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
-    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
-    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
-    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
-    // optional config to override default session manager config
+    transport: alchemy({ apiKey: "your_api_key" }),
+    chain: sepolia,
+    ssr: true,
+    storage: cookieStorage,
+    enablePopupOauth: true,
     sessionConfig: {
       expirationTimeMs: 1000 * 60 * 60, // 60 minutes (default is 15 min)
     },
+    /**
+     * External wallets (EVM + Solana)
+     */
+    connectors: externalWalletsConfig.connectors,
+    solana: {
+      connection: new Connection(
+        `https://solana-devnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`,
+      ),
+      adapters: externalWalletsConfig.adapters,
+      // optional gas sponsor for Solana
+      policyId: process.env.NEXT_PUBLIC_SOLANA_POLICY_ID,
+    },
   },
   {
-    // authentication ui config - your customizations here
+    // Authentication ui config - your customizations here
     auth: {
       sections: [
         [{ type: "email" }],
@@ -56,12 +80,7 @@ export const config = createConfig(
           { type: "social", authProviderId: "google", mode: "popup" },
           { type: "social", authProviderId: "facebook", mode: "popup" },
         ],
-        [
-          {
-            type: "external_wallets",
-            walletConnect: { projectId: "your-project-id" },
-          },
-        ],
+        [{ type: "external_wallets", ...externalWalletsConfig.uiConfig }],
       ],
       addPasskeyOnSignup: true,
       showSignInText: true,
@@ -70,23 +89,28 @@ export const config = createConfig(
 );
 ```
 
-In order to access other providers via `WalletConnect`, **also** add `walletConnect: { projectId: "your-project-id" }` to your config. You create a `WalletConnect` id [here](https://cloud.reown.com/sign-in).
+If you don't need customization, you can manually pass EVM `connectors` and Solana `adapters` directly into `createConfig()` without using the helper.
+
+### Wallet connect
+
+If you want to access other EVM providers via `WalletConnect`, provide a WalletConnect Project ID in your external wallets config. You can create a WalletConnect project ID [here](https://cloud.reown.com/sign-in).
 
 ```ts twoslash
 // @noErrors
-[
-  {
-    type: "external_wallets",
-    walletConnect: { projectId: "your-project-id" },
-  },
-];
+export const externalWalletsConfig = configForExternalWallets({
+  wallets: ["wallet_connect", "metamask", "phantom"],
+  chainType: ["evm", "svm"],
+  walletConnectProjectId: "your-project-id",
+});
 ```
 
-## Custom UI
+## Custom connectors
 
-### Bring in an EOA via Connectors
+If you don't want to use pre-built UI components, you can use React hooks to customize your EOA connection.
 
-If you need complete control over the user experience, you can customize your EOA connection. For example, use the [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect) hook to allow users to connect their EOA via available connectors:
+### EVM connectors
+
+Use the [useConnect](https://www.alchemy.com/docs/wallets/reference/account-kit/react/hooks/useConnect) hook to allow users to connect their EOA via available connectors:
 
 ```tsx twoslash
 // @noErrors
@@ -112,7 +136,23 @@ return (
 );
 ```
 
-### Bring in an EOA as a Smart Wallet Owner
+### Programmatic login with a Solana adapter
+
+Use the Solana wallet hook to select a specific adapter without showing the modal:
+
+```ts twoslash
+// @noErrors
+import { useSolanaWallet } from "@account-kit/react";
+
+const { select, wallets } = useSolanaWallet();
+const phantom = wallets.find((w) => w.name.toLowerCase() === "phantom");
+
+if (phantom) {
+  await select(phantom.adapter.name);
+}
+```
+
+## Bring in an EOA as a Smart Wallet Owner
 
 For local wallets or JSON-RPC wallets that support the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) standard (like MetaMask, Coinbase Wallet, etc.), you can use `WalletClientSigner` from `@aa-sdk/core` to bring in these EOAs as your smart wallet owner. More info [here](https://www.alchemy.com/docs/wallets/third-party/signers).
 By making your EOA an owner of a smart account, you will have access to AA feature through your new smart wallet.

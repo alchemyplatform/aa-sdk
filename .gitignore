@@ -129,5 +129,4 @@ Pods
 
 vendor
 
-# Claude AI assistant files
-.claude
+.claude/settings.local.json

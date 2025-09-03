@@ -2,8 +2,8 @@ import {
   clientHeaderTrack,
   type EntryPointVersion,
   type UserOperationRequest,
+  AccountNotFoundError,
 } from "@aa-sdk/core";
-import type { GetSmartWalletClientResult } from "@account-kit/core/experimental";
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import {
   useMutation,
@@ -19,9 +19,11 @@ import {
 } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
+import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UseSendCallsParams = {
-  client: GetSmartWalletClientResult<Address> | undefined;
+  client: UseSmartAccountClientResult["client"] | undefined;
 };
 
 type MutationParams = Prettify<
@@ -62,6 +64,11 @@ export type UseSendCallsResult<
  * This hook provides functionality to execute calls on a smart account using Account Abstraction,
  * or fall back to regular EOA transactions when connected to an EOA wallet. It handles the complete
  * flow of preparing, signing, and sending calls.
+ *
+ * <Note>
+ * If using this hook with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
+ * from the user. It is recommended to use the `usePrepareCalls` hook instead to manually handle the permit signature.
+ * </Note>
  *
  * @template TEntryPointVersion - The entry point version to use for user operations (defaults to EntryPointVersion)
  *
@@ -106,13 +113,15 @@ export type UseSendCallsResult<
 export function useSendCalls<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 >(params: UseSendCallsParams): UseSendCallsResult<TEntryPointVersion> {
-  const { client: _client } = params;
   const {
     queryClient,
     config: {
       _internal: { wagmiConfig },
     },
   } = useAlchemyAccountContext();
+  const smartWalletClient = useSmartWalletClient({
+    account: params.client?.account.address,
+  });
   const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
@@ -150,17 +159,40 @@ export function useSendCalls<
           };
         }
 
-        if (!_client) {
+        if (!smartWalletClient) {
           throw new ClientUndefinedHookError("useSendCalls");
         }
 
-        const client = clientHeaderTrack(_client, "reactUseSendCalls");
+        if (!smartWalletClient.account) {
+          throw new AccountNotFoundError();
+        }
 
-        const preparedCalls = await client.prepareCalls(params);
+        const _smartWalletClient = clientHeaderTrack(
+          smartWalletClient,
+          "reactUseSendCalls",
+        );
 
-        const signedCalls = await client.signPreparedCalls(preparedCalls);
+        let preparedCalls = await _smartWalletClient.prepareCalls(params);
 
-        const { preparedCallIds } = await client.sendPreparedCalls(signedCalls);
+        if (preparedCalls.type === "paymaster-permit") {
+          const signature = await _smartWalletClient.signSignatureRequest(
+            preparedCalls.signatureRequest,
+          );
+
+          const params = {
+            calls: preparedCalls.modifiedRequest.calls,
+            capabilities: preparedCalls.modifiedRequest.capabilities,
+            paymasterPermitSignature: signature,
+          };
+
+          preparedCalls = await _smartWalletClient.prepareCalls(params);
+        }
+
+        const signedCalls =
+          await _smartWalletClient.signPreparedCalls(preparedCalls);
+
+        const { preparedCallIds } =
+          await _smartWalletClient.sendPreparedCalls(signedCalls);
 
         const uoCall =
           signedCalls.type === "array"

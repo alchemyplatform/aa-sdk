@@ -1,0 +1,41 @@
+---
+title: Initialization
+description: Build Alchemy Smart Wallets in a new app
+slug: wallets/react/installation
+---
+
+In this doc and the three following we will build a Next.js application with Alchemy Smart Wallets from scratch. If you're using any other tech stack, follow along with the key points of integration and adjust as needed!
+
+## Create a new Next.js app
+
+Start by initializing a new [Next.js app](https://nextjs.org/). Run:
+
+```bash
+npx create-next-app@latest
+```
+
+## Install Dependencies
+
+You will need these three libraries:
+
+- **@account-kit/infra**: Core interfaces and functions for Smart Wallets ([learn more](wallets/reference/account-kit/infra))
+- **@account-kit/react**: React Hooks, components and utilities for Smart Wallets ([learn more](wallets/reference/account-kit/react))
+- **@tanstack/react-query**: A required async state library to make smart wallet react hooks easier to use ([learn more about this library's motivation here](https://tanstack.com/query/latest/docs/framework/react/overview))
+
+Go ahead and install them to the project with a single command:
+
+<CodeBlocks>
+
+```bash npm
+npm install @account-kit/infra @account-kit/react @tanstack/react-query
+```
+
+```bash pnpm
+pnpm add @account-kit/infra @account-kit/react @tanstack/react-query
+```
+
+```bash yarn
+yarn add @account-kit/infra @account-kit/react @tanstack/react-query
+```
+
+</CodeBlocks>

@@ -1,5 +1,4 @@
-import { clientHeaderTrack } from "@aa-sdk/core";
-import type { GetSmartWalletClientResult } from "@account-kit/core/experimental";
+import { AccountNotFoundError, clientHeaderTrack } from "@aa-sdk/core";
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import {
   useMutation,
@@ -14,9 +13,11 @@ import {
 } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
+import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UseGrantPermissionsParams = {
-  client: GetSmartWalletClientResult<Address> | undefined;
+  client: UseSmartAccountClientResult["client"] | undefined;
 };
 
 type MutationParams = Prettify<
@@ -51,13 +52,15 @@ export type UseGrantPermissionsResult = {
 export function useGrantPermissions(
   params: UseGrantPermissionsParams,
 ): UseGrantPermissionsResult {
-  const { client: _client } = params;
   const {
     queryClient,
     config: {
       _internal: { wagmiConfig },
     },
   } = useAlchemyAccountContext();
+  const smartWalletClient = useSmartWalletClient({
+    account: params.client?.account.address,
+  });
   const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
@@ -73,13 +76,20 @@ export function useGrantPermissions(
           throw new UnsupportedEOAActionError("useGrantPermissions", "mutate");
         }
 
-        if (!_client) {
+        if (!smartWalletClient) {
           throw new ClientUndefinedHookError("useGrantPermissions");
         }
 
-        const client = clientHeaderTrack(_client, "reactUseGrantPermissions");
+        if (!smartWalletClient.account) {
+          throw new AccountNotFoundError();
+        }
 
-        return client.grantPermissions(params);
+        const _smartWalletClient = clientHeaderTrack(
+          smartWalletClient,
+          "reactUseGrantPermissions",
+        );
+
+        return _smartWalletClient.grantPermissions(params);
       },
     },
     queryClient,

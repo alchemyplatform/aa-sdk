@@ -16,8 +16,8 @@ import { MintStages } from "@/components/small-cards/MintStages";
 import { ModalCTAButton } from "../../shared/ModalCTAButton";
 import { getNftMintBatchUOs } from "./utils";
 import { useEstimateGasErc20Sponsorship } from "../../../hooks/useEstimateGasErc20Sponsorship";
-import { useGetEthPrice } from "../../../hooks/useGetEthPrice";
 import { DEMO_USDC_ADDRESS_6_DECIMALS } from "../../../utils/constants";
+import { useDeploymentStatus } from "@/hooks/useDeploymentStatus";
 
 type Erc20ModalProps = {
   isOpen: boolean;
@@ -46,12 +46,13 @@ export function Erc20Modal({
     },
   });
 
-  const { data: ethPriceData, isLoading: isLoadingEthPrice } = useGetEthPrice();
-
   const chain = accountMode === "7702" ? baseSepolia : arbitrumSepolia;
   const transport = alchemy({
     rpcUrl: accountMode === "7702" ? "/api/rpc-base-sepolia" : "/api/rpc",
   });
+
+  const { isDeployed, refetch: refetchDeploymentStatus } =
+    useDeploymentStatus();
 
   const {
     balance,
@@ -80,7 +81,7 @@ export function Erc20Modal({
     txHash: mintNftTxHash,
     reset: resetMintNft,
   } = useSendUOsErc20Sponsorship({
-    clientOptions: { mode: accountMode, chain, transport },
+    accountMode,
     toastText: "NFT minted successfully",
   });
 
@@ -88,7 +89,7 @@ export function Erc20Modal({
     estimateGasAsync: estimateMintNftFee,
     isEstimating: isEstimatingGas,
   } = useEstimateGasErc20Sponsorship({
-    clientOptions: { mode: accountMode, chain, transport },
+    accountMode,
   });
 
   const balanceFloat = parseFloat(balance ?? "0");
@@ -128,6 +129,9 @@ export function Erc20Modal({
       const uos = await getNftMintBatchUOs(accountAddress);
       await mintNftAsync(uos);
       await refetchBalance();
+      if (!isDeployed) {
+        refetchDeploymentStatus();
+      }
       onNftMinted?.();
     } catch (e) {
       console.error("Failed to buy NFT:", e);
@@ -142,19 +146,12 @@ export function Erc20Modal({
 
   useEffect(() => {
     const fetchAndEstimateFee = async () => {
-      if (
-        isOpen &&
-        accountAddress &&
-        ethPriceData?.price &&
-        !isLoadingEthPrice
-      ) {
+      if (isOpen && accountAddress) {
         try {
           const uos = await getNftMintBatchUOs(accountAddress);
           const feeResult = await estimateMintNftFee(uos);
-          if (feeResult && feeResult.feeEth) {
-            const calculatedNetworkFee =
-              parseFloat(feeResult.feeEth) * ethPriceData.price;
-            setNetworkFee(calculatedNetworkFee);
+          if (feeResult && feeResult.feeUsd) {
+            setNetworkFee(feeResult.feeUsd);
           } else {
             console.warn("Fee estimation did not return expected data.");
             setNetworkFee(0);
@@ -162,23 +159,11 @@ export function Erc20Modal({
         } catch (error) {
           setNetworkFee(0);
         }
-      } else if (isOpen && accountAddress && !isLoadingEthPrice) {
-        setNetworkFee(0);
-        if (!ethPriceData?.price) {
-          console.warn("ETH price not available for fee estimation.");
-        }
       }
     };
 
     fetchAndEstimateFee();
-  }, [
-    isOpen,
-    accountAddress,
-    estimateMintNftFee,
-    ethPriceData?.price,
-    isLoadingEthPrice,
-    balance,
-  ]);
+  }, [isOpen, accountAddress, estimateMintNftFee, balance]);
 
   useEffect(() => {
     resetMintNft();
