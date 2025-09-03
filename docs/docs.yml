@@ -200,6 +200,8 @@ navigation:
             path: wallets/pages/transactions/send-batched-transactions.mdx
           - page: Sponsor gas
             path: wallets/pages/transactions/sponsor-gas.mdx
+          - page: Sponsor gas on Solana
+            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token.mdx
           - page: "[NEW] Swap tokens"
@@ -210,8 +212,6 @@ navigation:
             path: wallets/pages/transactions/retry-transactions.mdx
           - page: Track transaction status
             path: wallets/pages/transactions/track-transaction-status.mdx
-          - page: Sponsor gas on Solana
-            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
           - page: Coming Soon
             path: wallets/pages/transactions/coming-soon.mdx
 
