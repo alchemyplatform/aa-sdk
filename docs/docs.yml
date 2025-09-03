@@ -7,11 +7,6 @@ experimental:
   mdx-components:
     - wallets/components
 
-redirects:
-  - source: /docs/quickstart-redirect
-    destination: /docs/wallets/react/quickstart
-    permanent: true
-
 navigation:
   - tab: wallets
     layout:
@@ -19,10 +14,9 @@ navigation:
         skip-slug: true
         contents:
           - page: Overview
-            slug: /
             path: wallets/pages/index.mdx
           - page: Quickstart
-            path: wallets/pages/react/quickstart-redirect.mdx
+            path: wallets/pages/react/quickstart.mdx
           - section: Get Started
             contents:
               - section: React
@@ -32,6 +26,7 @@ navigation:
                   - page: Setup
                     path: wallets/pages/react/setup.mdx
                   - page: Quickstart
+                    slug: /wallets/react/quickstart
                     path: wallets/pages/react/quickstart.mdx
                   - page: Add to existing project
                     path: wallets/pages/react/quickstart/existing-project.mdx
@@ -140,8 +135,6 @@ navigation:
                 path: wallets/pages/react/ui-components.mdx
               - page: Theme & branding
                 path: wallets/pages/react/customization/theme.mdx
-              - page: Tailwind setup
-                path: wallets/pages/react/customization/tailwind-setup.mdx
           - section: Whitelabel
             contents:
               - page: React hooks
