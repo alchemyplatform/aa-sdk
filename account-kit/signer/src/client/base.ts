@@ -81,7 +81,10 @@ const withHexPrefix = (hex: string) => `0x${hex}` as const;
 /**
  * Base class for all Alchemy Signer clients
  */
-export abstract class BaseSignerClient<TExportWalletParams = unknown> {
+export abstract class BaseSignerClient<
+  TExportWalletParams = unknown,
+  TExportWalletOutput = boolean,
+> {
   private _user: User | undefined;
   private connectionConfig: ConnectionConfig;
   protected turnkeyClient: TurnkeyClient;
@@ -264,7 +267,9 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract disconnect(): Promise<void>;
 
-  public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
+  public abstract exportWallet(
+    params: TExportWalletParams,
+  ): Promise<TExportWalletOutput>;
 
   public abstract targetPublicKey(): Promise<string>;
 

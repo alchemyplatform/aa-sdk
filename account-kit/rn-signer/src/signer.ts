@@ -52,18 +52,6 @@ export class RNAlchemySignerSingleton extends BaseAlchemySigner<RNSignerClient> 
     }
     return this.instance;
   }
-
-  /**
-   * Exports the wallet and returns the decrypted private key or seed phrase.
-   * This is the recommended method for React Native apps.
-   *
-   * @param {import("./client").ExportWalletParams} params Export parameters
-   * @returns {Promise<import("./client").ExportWalletResult>} The decrypted export data
-   * @throws {Error} If the user is not authenticated or export fails
-   */
-  async exportWalletWithResult(params?: import("./client").ExportWalletParams) {
-    return this.inner.exportWalletWithResult(params);
-  }
 }
 
 /**

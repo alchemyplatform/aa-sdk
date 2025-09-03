@@ -66,7 +66,10 @@ export type ExportWalletResult = {
 };
 
 // TODO: need to emit events
-export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
+export class RNSignerClient extends BaseSignerClient<
+  ExportWalletParams,
+  ExportWalletResult
+> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
   rpId: string | undefined;
@@ -286,29 +289,13 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletParams> {
   }
 
   /**
-   * Exports the wallet's private key for the authenticated user.
-   *
-   * A P256 key pair is generated locally, the public key is used to encrypt the export,
-   * and the private key is kept in memory to decrypt the bundle locally.
-   *
-   * @param {ExportWalletParams} params Export parameters
-   * @param {string} params.exportAs Whether to export as PRIVATE_KEY or SEED_PHRASE (defaults to PRIVATE_KEY)
-   * @returns {Promise<boolean>} Returns true on successful export
-   * @throws {Error} If the user is not authenticated or export fails
-   */
-  override async exportWallet(params?: ExportWalletParams): Promise<boolean> {
-    await this.exportWalletWithResult(params);
-    return true;
-  }
-
-  /**
    * Exports the wallet and returns the decrypted private key or seed phrase.
    *
    * @param {ExportWalletParams} params Export parameters
    * @returns {Promise<ExportWalletResult>} The decrypted export data
    * @throws {Error} If the user is not authenticated or export fails
    */
-  async exportWalletWithResult(params?: ExportWalletParams): Promise<any> {
+  async exportWallet(params?: ExportWalletParams): Promise<ExportWalletResult> {
     if (!this.user) {
       throw new Error("User must be authenticated to export wallet");
     }
