@@ -1,24 +1,28 @@
-## What is drop and replace?
+Network fees can change quickly. When fees rise, pending transactions may become underpriced and stop progressing. Without retries, these transactions may never confirm. To keep your app reliable, you should use retries.
 
-If fees change and your user operation gets stuck in the mempool, you can use drop and replace to resend the user operation with higher fees. This is most useful
-when used in combination with [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) to ensure the transaction is mined
-and then resend the user operation with higher fees if waiting times out.
+**Why retries matter**
 
-Drop and replace works by resubmitting a user operation with the greater of:
+- Production reliability: Proper wait and retry mechanisms ensure transactions don’t get stuck and fail silently.
+- Fee volatility: Gas markets fluctuate constantly, especially on testnets, so transactions can become underpriced and take much longer to mine.
+- Automatic recovery: With retries, you can automatically replace stuck transactions with higher fees so they continue to progress.
 
-1. 10% higher fees
-2. The current minimum fees
+## How it works
 
-We export a `dropAndReplace` function from `@aa-sdk/core` that you can use to handle this flow for you and is automatically added to the Smart Account Client.
+Drop and replace resubmits a transaction with whichever is greater:
 
-## How to drop and replace effectively
+- 10% higher fees
+- The current minimum fees
 
-Let's run through an example that uses drop and replace if waiting for a user operation to mine times out.
+The SDK exports a 'dropAndReplace' function from' @aa-sdk/core.' It’s already included in the Smart Account Client, so you can use it directly.
+
+Here’s a common production flow:
+
+1. Send a transaction with 'sendUserOperation'
+2. Wait for confirmation using 'waitForUserOperationTransaction'
+3. If waiting times out, call 'dropAndReplace' to resend the transaction with higher fees
 
 <Warning>
-  If sponsoring gas, like in the example below, each call to `sendUserOperation`
-  and `dropAndReplace` will generate pending gas sponsorships in your dashboard.
-  This can result in you hitting your gas manager limit. At the moment, pending
-  sponsorships expire after 10 minutes of inactivity, but it is possible that
-  retrying excessively can temporarily exhaust your sponsorship limits.
+  If you sponsor gas, each retry creates a pending gas sponsorship in your
+  dashboard. - Pending sponsorships expire after 10 minutes of inactivity. -
+  Excessive retries can temporarily exhaust your sponsorship limit.
 </Warning>
