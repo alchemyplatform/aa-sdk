@@ -138,6 +138,8 @@ navigation:
                 path: wallets/pages/react/ui-components.mdx
               - page: Theme & branding
                 path: wallets/pages/react/customization/theme.mdx
+              - page: Tailwind setup
+                path: wallets/pages/react/customization/tailwind-setup.mdx
           - section: Whitelabel
             contents:
               - page: React hooks
