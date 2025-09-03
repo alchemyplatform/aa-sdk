@@ -11,6 +11,7 @@ import { headers } from "next/headers";
 import { alchemyConfig } from "./config";
 import "./globals.css";
 import { Providers } from "./providers";
+import { HeapAnalytics } from "@/components/shared/HeapAnalytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,6 +45,7 @@ export default function RootLayout({
     >
       <head>
         <GoogleAnalytics />
+        <HeapAnalytics />
       </head>
       <body className={inter.className}>
         <Providers initialState={initialState} initialConfig={initialConfig}>
