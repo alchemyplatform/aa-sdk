@@ -1,0 +1,25 @@
+{
+  "name": "connectors-web-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@alchemy/connectors-web": "*",
+    "@wagmi/connectors": "latest",
+    "@wagmi/core": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "viem": "latest"
+  },
+  "devDependencies": {
+    "@wagmi/cli": "latest",
+    "buffer": "^6.0.3",
+    "typescript": "^5.8.3",
+    "vite": "^5.2.11"
+  }
+}
