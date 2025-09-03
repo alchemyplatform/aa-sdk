@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Bug Fixes
+
+- add required open id config fields ([#1958](https://github.com/alchemyplatform/aa-sdk/issues/1958)) ([7533913](https://github.com/alchemyplatform/aa-sdk/commit/7533913596a3a64b200236e1ddd36928553d32d2))
+- react native ios passkeys ([#1986](https://github.com/alchemyplatform/aa-sdk/issues/1986)) ([8c9f473](https://github.com/alchemyplatform/aa-sdk/commit/8c9f47330fb926bafbbf24239c69a03521ed2bd3))
+- solana address not initialized ([#1985](https://github.com/alchemyplatform/aa-sdk/issues/1985)) ([5a377fa](https://github.com/alchemyplatform/aa-sdk/commit/5a377fadd0bc7b06723199724e156eebe207e1cc))
+- **wallet-client:** handle permits in sendCalls action, add clarifying docs ([50039e0](https://github.com/alchemyplatform/aa-sdk/commit/50039e01d6a4137db4fa5668c52442deda3cc12e))
+
+### Features
+
+- add docs reviewer claude code command ([#1959](https://github.com/alchemyplatform/aa-sdk/issues/1959)) ([a3ca371](https://github.com/alchemyplatform/aa-sdk/commit/a3ca371e42e40ecd84cedb90b7e98bb1466ab3c4))
+- add quick start, tailwind and setup guide ([#1912](https://github.com/alchemyplatform/aa-sdk/issues/1912)) ([40fbfe1](https://github.com/alchemyplatform/aa-sdk/commit/40fbfe15f41586c4896feb63b3630276e76d53a2))
+- new hooks accept old client for account ([#1974](https://github.com/alchemyplatform/aa-sdk/issues/1974)) ([19d0365](https://github.com/alchemyplatform/aa-sdk/commit/19d036564bca2ea5adf912c3122e619cbf69fb5a))
+- remove segment & add heap to demo app ([#1983](https://github.com/alchemyplatform/aa-sdk/issues/1983)) ([658bd54](https://github.com/alchemyplatform/aa-sdk/commit/658bd54c9cd4b0c59bd804cdc85ddef1caa3164f))
+- **specs:** update server endpoints from Daikon ([#1963](https://github.com/alchemyplatform/aa-sdk/issues/1963)) ([c491ad4](https://github.com/alchemyplatform/aa-sdk/commit/c491ad4da07d4e995128ff3c43c92ab8b7c4f45d))
+
 ## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
 
 **Note:** Version bump only for package root

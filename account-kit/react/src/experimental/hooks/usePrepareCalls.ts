@@ -1,4 +1,3 @@
-import type { GetSmartWalletClientResult } from "@account-kit/core/experimental";
 import { type Address, type Prettify } from "viem";
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import {
@@ -6,7 +5,7 @@ import {
   type UseMutateFunction,
   useMutation,
 } from "@tanstack/react-query";
-import { clientHeaderTrack } from "@aa-sdk/core";
+import { clientHeaderTrack, AccountNotFoundError } from "@aa-sdk/core";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import {
   ClientUndefinedHookError,
@@ -14,9 +13,11 @@ import {
 } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
+import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UsePrepareCallsParams = {
-  client: GetSmartWalletClientResult<Address> | undefined;
+  client: UseSmartAccountClientResult["client"] | undefined;
 };
 
 type MutationParams = Prettify<
@@ -83,13 +84,16 @@ export type UsePrepareCallsResult = {
 export function usePrepareCalls(
   params: UsePrepareCallsParams,
 ): UsePrepareCallsResult {
-  const { client: _client } = params;
   const {
     queryClient,
     config: {
       _internal: { wagmiConfig },
     },
   } = useAlchemyAccountContext();
+  const smartWalletClient = useSmartWalletClient({
+    account: params.client?.account.address,
+  });
+
   const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
@@ -104,13 +108,20 @@ export function usePrepareCalls(
         if (isConnected) {
           throw new UnsupportedEOAActionError("usePrepareCalls", "mutate");
         }
-        if (!_client) {
+        if (!smartWalletClient) {
           throw new ClientUndefinedHookError("usePrepareCalls");
         }
 
-        const client = clientHeaderTrack(_client, "reactUsePrepareCalls");
+        if (!smartWalletClient.account) {
+          throw new AccountNotFoundError();
+        }
 
-        const preparedCalls = await client.prepareCalls(params);
+        const _smartWalletClient = clientHeaderTrack(
+          smartWalletClient,
+          "reactUsePrepareCalls",
+        );
+
+        const preparedCalls = await _smartWalletClient.prepareCalls(params);
 
         return preparedCalls;
       },

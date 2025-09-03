@@ -2,8 +2,8 @@ import {
   clientHeaderTrack,
   type EntryPointVersion,
   type UserOperationRequest,
+  AccountNotFoundError,
 } from "@aa-sdk/core";
-import type { GetSmartWalletClientResult } from "@account-kit/core/experimental";
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import {
   useMutation,
@@ -19,9 +19,11 @@ import {
 } from "../../errors.js";
 import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
 import { ReactLogger } from "../../metrics.js";
+import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UseSendCallsParams = {
-  client: GetSmartWalletClientResult<Address> | undefined;
+  client: UseSmartAccountClientResult["client"] | undefined;
 };
 
 type MutationParams = Prettify<
@@ -111,13 +113,15 @@ export type UseSendCallsResult<
 export function useSendCalls<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 >(params: UseSendCallsParams): UseSendCallsResult<TEntryPointVersion> {
-  const { client: _client } = params;
   const {
     queryClient,
     config: {
       _internal: { wagmiConfig },
     },
   } = useAlchemyAccountContext();
+  const smartWalletClient = useSmartWalletClient({
+    account: params.client?.account.address,
+  });
   const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
@@ -155,16 +159,23 @@ export function useSendCalls<
           };
         }
 
-        if (!_client) {
+        if (!smartWalletClient) {
           throw new ClientUndefinedHookError("useSendCalls");
         }
 
-        const client = clientHeaderTrack(_client, "reactUseSendCalls");
+        if (!smartWalletClient.account) {
+          throw new AccountNotFoundError();
+        }
 
-        let preparedCalls = await client.prepareCalls(params);
+        const _smartWalletClient = clientHeaderTrack(
+          smartWalletClient,
+          "reactUseSendCalls",
+        );
+
+        let preparedCalls = await _smartWalletClient.prepareCalls(params);
 
         if (preparedCalls.type === "paymaster-permit") {
-          const signature = await client.signSignatureRequest(
+          const signature = await _smartWalletClient.signSignatureRequest(
             preparedCalls.signatureRequest,
           );
 
@@ -174,12 +185,14 @@ export function useSendCalls<
             paymasterPermitSignature: signature,
           };
 
-          preparedCalls = await client.prepareCalls(params);
+          preparedCalls = await _smartWalletClient.prepareCalls(params);
         }
 
-        const signedCalls = await client.signPreparedCalls(preparedCalls);
+        const signedCalls =
+          await _smartWalletClient.signPreparedCalls(preparedCalls);
 
-        const { preparedCallIds } = await client.sendPreparedCalls(signedCalls);
+        const { preparedCallIds } =
+          await _smartWalletClient.sendPreparedCalls(signedCalls);
 
         const uoCall =
           signedCalls.type === "array"
