@@ -30,7 +30,7 @@ const serializedSponsoredTransaction = data.result?.serializedTransaction;
 ```ts twoslash title="config.ts"
 export const ALCHEMY_API_KEY = "<API_KEY>";
 export const POLICY_ID = "<PolicyId>";
-const RPC_URL = `https://solana-devnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
+export const RPC_URL = `https://solana-devnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
 
 interface AlchemyFeePayerResponse {
   result?: {

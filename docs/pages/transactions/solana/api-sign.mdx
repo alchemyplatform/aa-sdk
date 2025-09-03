@@ -1,23 +1,28 @@
 <CodeBlocks>
 
 ```ts twoslash title="example.ts"
-import { Keypair, VersionedTransaction } from "@solana/web3.js";
-import { connection } from "./config.ts";
-import { result } from "./request.ts";
+import { VersionedTransaction } from "@solana/web3.js";
+import { connection, keypair } from "./config.ts";
+import { sponsoredSerializedTransaction } from "./request.ts";
 
 const tx = VersionedTransaction.deserialize(
-  Buffer.from(result.serializedTransaction, "base64"),
+  Buffer.from(sponsoredSerializedTransaction, "base64"),
 );
 
-tx.sign([Keypair.fromSecretKey(new Uint8Array(64))]);
+tx.sign([keypair]);
 
 const signature = await connection.sendRawTransaction(tx.serialize());
 ```
 
 ```ts twoslash title="config.ts"
-import { Connection } from "@solana/web3.js";
+import { Connection, Keypair } from "@solana/web3.js";
 
 export const ALCHEMY_API_KEY = "<API_KEY>";
+const SOLANA_SECRET_KEY_BASE64 = "<SOLANA_SECRET_KEY>";
+const secretKey = new Uint8Array(
+  Buffer.from(SOLANA_SECRET_KEY_BASE64, "base64"),
+);
+export const keypair = Keypair.fromSecretKey(secretKey);
 
 export const connection = new Connection(
   `https://solana-devnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,

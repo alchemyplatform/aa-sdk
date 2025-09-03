@@ -2,13 +2,13 @@
 
 ```ts twoslash title="example.ts"
 import * as solanaWeb3 from "@solana/web3.js";
-import { connection } from "./config.ts";
+import { connection, keypair } from "./config.ts";
 
 const instructions = [
   solanaWeb3.SystemProgram.transfer({
-    fromPubkey: from,
-    toPubkey: to,
-    lamports: amount,
+    fromPubkey: keypair.publicKey,
+    toPubkey: keypair.publicKey,
+    lamports: 5,
   }),
 ];
 
@@ -32,6 +32,11 @@ export const serializedTx = Buffer.from(transaction.serialize()).toString(
 import { Connection } from "@solana/web3.js";
 
 export const ALCHEMY_API_KEY = "<API_KEY>";
+const SOLANA_SECRET_KEY_BASE64 = "<SOLANA_SECRET_KEY>";
+const secretKey = new Uint8Array(
+  Buffer.from(SOLANA_SECRET_KEY_BASE64, "base64"),
+);
+export const keypair = Keypair.fromSecretKey(secretKey);
 
 export const connection = new Connection(
   `https://solana-devnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
