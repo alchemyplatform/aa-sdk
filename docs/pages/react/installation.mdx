@@ -1,39 +1,41 @@
 ---
-title: Installation
-description: How to install Alchemy Smart Wallets.
+title: Initialization
+description: Build Alchemy Smart Wallets in a new app
 slug: wallets/react/installation
 ---
 
-## Prerequisites
+In this doc and the three following we will build a Next.js application with Alchemy Smart Wallets from scratch. If you're using any other tech stack, follow along with the key points of integration and adjust as needed!
 
-- `React 18` or higher
-- `TypeScript 5` or higher
+## Create a new Next.js app
 
-## Installation
+Start by initializing a new [Next.js app](https://nextjs.org/). Run:
 
-Install the [`@account-kit/infra`](https://www.npmjs.com/package/@account-kit/infra) and [`@account-kit/react`](https://www.npmjs.com/package/@account-kit/react) packages along with required dependencies:
+```bash
+npx create-next-app@latest
+```
+
+## Install Dependencies
+
+You will need these three libraries:
+
+- **@account-kit/infra**: Core interfaces and functions for Smart Wallets ([learn more](wallets/reference/account-kit/infra))
+- **@account-kit/react**: React Hooks, components and utilities for Smart Wallets ([learn more](wallets/reference/account-kit/react))
+- **@tanstack/react-query**: An async state library we depend on to make our async hooks easier to use ([learn more about this library's motivation here](https://tanstack.com/query/latest/docs/framework/react/overview))
+
+Go ahead and install them to the project with a single command:
 
 <CodeBlocks>
 
 ```bash npm
 npm install @account-kit/infra @account-kit/react @tanstack/react-query
-npm install -D tailwindcss @tailwindcss/postcss postcss
 ```
 
 ```bash pnpm
 pnpm add @account-kit/infra @account-kit/react @tanstack/react-query
-pnpm add -D tailwindcss @tailwindcss/postcss postcss
 ```
 
 ```bash yarn
 yarn add @account-kit/infra @account-kit/react @tanstack/react-query
-yarn add -D tailwindcss @tailwindcss/postcss postcss
 ```
 
 </CodeBlocks>
-
-## Demo App
-
-<Tip>
-  Check out what you can build using our [Demo App](https://demo.alchemy.com/).
-</Tip>

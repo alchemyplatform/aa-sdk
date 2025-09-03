@@ -1,93 +1,12 @@
 ---
-title: Add to Existing Project
+title: Configuration and login
 description: Learn how to integrate Alchemy Smart Wallets into your existing React application with embedded wallets and authentication.
-text: Add to Existing Project
+text: Configuration and login
 link: /react/quickstart/existing-project
 slug: wallets/react/quickstart/existing-project
 ---
 
-**By the end of this tutorial, you'll have embedded smart wallets with authentication integrated into your existing React application, allowing users to login without seed phrases and perform gasless transactions.**
-
-This tutorial assumes you're using a React application with Next.js app router. If you're using a different setup, the core concepts remain the same but you may need to adapt the provider setup to your framework.
-
-## 1. Install the packages
-
-Install the React and Infra packages from Smart Wallets along with required dependencies.
-
-**Prerequisites**
-
-- Next.js 15+
-- React 18+
-- TypeScript 5+
-
-<CodeBlocks>
-
-```bash yarn
-yarn add @account-kit/infra @account-kit/react @tanstack/react-query
-yarn add -D tailwindcss @tailwindcss/postcss postcss
-```
-
-```bash npm
-npm install @account-kit/infra @account-kit/react @tanstack/react-query
-npm install -D tailwindcss @tailwindcss/postcss postcss
-```
-
-```bash pnpm
-pnpm add @account-kit/infra @account-kit/react @tanstack/react-query
-pnpm add -D tailwindcss @tailwindcss/postcss postcss
-```
-
-</CodeBlocks>
-
-**Set up Tailwind CSS**
-
-Create a `postcss.config.mjs` file and add the Tailwind plugin:
-
-```js twoslash postcss.config.mjs
-export default {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
-};
-```
-
-Create a `global.css` in your `app` directory and import Tailwind:
-
-```css app/global.css
-@import "tailwindcss";
-```
-
-<Tip>
-  **Already using Tailwind?** You can skip the setup above since you've already
-  configured it.
-</Tip>
-
-## 2. Get your API Key
-
-1. **Create an app** in the [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
-   - Make sure your desired network is enabled under the Networks tab
-2. **Create a new configuration** in your [Smart Wallets Dashboard](https://dashboard.alchemy.com/services/smart-wallets/configuration)
-
-   - Apply the config to your app from step 1
-
-   <img
-     src="/images/wallets/getting-started/apply-config-to-app.png"
-     alt="Apply your config to the app from the first step"
-     style={{ width: "50%" }}
-   />
-
-   - Enable the authentication methods you want (email, social login, etc.)
-   - For testing, use `http://localhost:3000` as your redirect URL
-
-3. **Copy your API key** from the dashboard - you'll need it for the next step
-
-   <img
-     src="/images/wallets/getting-started/get-api-key.png"
-     alt="How to copy the API key"
-     style={{ width: "50%" }}
-   />
-
-## 3. Configure your authentication and styling
+## Configure your authentication and styling
 
 Create two configuration files that will customize your authentication methods and UI styles.
 

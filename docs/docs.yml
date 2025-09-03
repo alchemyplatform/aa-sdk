@@ -20,20 +20,18 @@ navigation:
             contents:
               - section: React
                 contents:
-                  - page: Installation
-                    path: wallets/pages/react/installation.mdx
-                  - page: Setup
-                    path: wallets/pages/react/setup.mdx
                   - page: Quickstart
                     path: wallets/pages/react/quickstart.mdx
-                  - page: Add to existing project
-                    path: wallets/pages/react/quickstart/existing-project.mdx
-                  - page: Set up your client
-                    path: wallets/pages/react/how-to-set-up-smart-account-client.mdx
-                  - page: Multi-chain setup
-                    path: wallets/pages/react/multi-chain-apps.mdx
-                  - page: Server-side rendering
-                    path: wallets/pages/react/ssr.mdx
+                  - section: From scratch
+                    contents:
+                      - page: Initialization
+                        path: wallets/pages/react/installation.mdx
+                      - page: Environment setup
+                        path: wallets/pages/react/setup.mdx
+                      - page: Account Kit UI
+                        path: wallets/pages/react/quickstart/existing-project.mdx
+                      - page: App Integration
+                        path: wallets/pages/react/quickstart/existing-project.mdx
               - section: React Native
                 contents:
                   - page: Overview

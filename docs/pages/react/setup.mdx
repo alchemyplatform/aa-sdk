@@ -11,3 +11,10 @@ To use Smart Wallets, you need to:
 2. Create a **`configuration`** in the [`Smart Wallets` dashboard](https://dashboard.alchemy.com/services/smart-wallets/configuration) to enable login methods.
 
 3. Create a policy in your [gas manager dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) to set rules for sponsorship.
+
+Create a `.env` at root of your project:
+
+```
+NEXT_PUBLIC_ALCHEMY_API_KEY=YOUR_ALCHEMY_API_KEY
+NEXT_PUBLIC_ALCHEMY_POLICY_ID=YOUR_PAYMASTER_POLICY_ID
+```
