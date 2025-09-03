@@ -1,0 +1,71 @@
+---
+title: title [Action-oriented, outcome-focused title]
+description: Short description of the guide
+slug: wallets/...
+---
+
+[1-2 sentences describing the developer outcome]
+
+- This should answer what this feature/guide is and when to use it
+- Remember to focus on developer outcomes, not implementation details
+- If more in-depth explanation is needed - that info should be in an explainer doc and linked to or advanced section
+
+## How it works
+
+1-2 paragraphs describing the how it works
+
+[Any technical deep details that are **required** to successfully test] - this should NOT be explainers or deep dives that expose complexity. Only required info
+
+[Call out any defaults we are using or assumptions we are making - point to advanced section for followups on these points]
+
+## Prerequisites
+
+List any setup or knowledge required:
+
+- Alchemy project + dashboard access
+- Relevant SDK or API setup
+- Auth keys or config initialized
+- Assumptions or constraints on framework or version
+
+Example:
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx).
+- [A "pay gas with any token" policy](https://dashboard.alchemy.com/gas-manager/policy/create).
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Info>Required SDK version: ^v4.59.1</Info>
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="Javascript">
+    <Info>Required SDK version: ^v4.59.1</Info>
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="API">
+    See the [`wallet_prepareCalls` API
+    reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
+    for full descriptions of the parameters used in the following examples.
+    <Markdown src="api-postop.mdx" />
+  </Tab>
+</Tabs>
+
+## Advanced
+
+<Accordion title="Advanced section 1">
+  [Details about advanced options / implementations / explainers]
+</Accordion>
+<Accordion title="Advanced section 2">
+  [Details about advanced options / implementations / explainers]
+</Accordion>
+
+## Next steps
+
+- Build more: [Next logical How-to Guide or step]
+  - e.g. now that you’ve logged users in with email, send a transaction.
+- Learn more: [Recipe that includes this step]
+  - Reference: [API Reference]
+- Explanations**:** [Conceptual background or technical deep dive]
+- [Link to related troubleshooting]
