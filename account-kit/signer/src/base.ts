@@ -963,7 +963,7 @@ export abstract class BaseAlchemySigner<
    * ```
    *
    * @param {unknown} params export wallet parameters
-   * @returns {Promise<boolean | ExportWalletResult>} the result of the wallet export operation
+   * @returns {Promise<boolean | string>} the result of the wallet export operation
    */
   exportWallet = async (
     params: Parameters<(typeof this.inner)["exportWallet"]>[0],

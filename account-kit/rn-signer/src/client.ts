@@ -57,17 +57,12 @@ export type ExportWalletParams = {
   exportAs?: "PRIVATE_KEY" | "SEED_PHRASE";
 };
 
-export type ExportWalletResult = {
-  privateKey?: string;
-  seedPhrase?: string;
-  address: string;
-  exportAs: "PRIVATE_KEY" | "SEED_PHRASE";
-};
+export type ExportWalletResult = string;
 
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<
   ExportWalletParams,
-  ExportWalletResult
+  string
 > {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
@@ -291,10 +286,10 @@ export class RNSignerClient extends BaseSignerClient<
    * Exports the wallet and returns the decrypted private key or seed phrase.
    *
    * @param {ExportWalletParams} params Export parameters
-   * @returns {Promise<ExportWalletResult>} The decrypted export data
+   * @returns {Promise<string>} The decrypted private key or seed phrase
    * @throws {Error} If the user is not authenticated or export fails
    */
-  async exportWallet(params?: ExportWalletParams): Promise<ExportWalletResult> {
+  async exportWallet(params?: ExportWalletParams): Promise<string> {
     if (!this.user) {
       throw new Error("User must be authenticated to export wallet");
     }
@@ -401,21 +396,14 @@ export class RNSignerClient extends BaseSignerClient<
       });
 
       // Step 4: Process the decrypted data based on export type
-      const result: ExportWalletResult = {
-        address: this.user.address,
-        exportAs,
-      };
-
       if (exportAs === "PRIVATE_KEY") {
         // For private key, the decrypted data is the raw private key bytes
         // Convert to hex string with 0x prefix
-        result.privateKey = "0x" + Buffer.from(decryptedData).toString("hex");
+        return "0x" + Buffer.from(decryptedData).toString("hex");
       } else {
         // For seed phrase, the decrypted data is the mnemonic string
-        result.seedPhrase = new TextDecoder().decode(decryptedData);
+        return new TextDecoder().decode(decryptedData);
       }
-
-      return result;
     } finally {
       // No cleanup needed - key is only in memory
     }
