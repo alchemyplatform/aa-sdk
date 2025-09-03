@@ -225,14 +225,16 @@ describe("Viem AA - Coinbase Smart Account", () => {
     });
 
     // Create a bundler client using Alchemy gas manager hooks with ERC-20 token payment
+    // Using a test token address since we're in a local test environment
+    const testTokenAddress = "0x0000000000000000000000000000000000000001";
     const bundlerClient = createBundlerClient({
       account,
       chain: local070Instance.chain,
       transport: custom(client),
       ...alchemyGasManagerHooks("test-policy", {
         client,
-        address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC address
-        maxTokenAmount: 10_000_000n, // 10 USDC
+        address: testTokenAddress, // Test token address
+        maxTokenAmount: 10_000_000n, // Max tokens to spend
       }),
     });
 
