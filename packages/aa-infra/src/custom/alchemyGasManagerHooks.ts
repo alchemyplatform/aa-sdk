@@ -11,10 +11,7 @@ import type {
 import type { RequestGasAndPaymasterAndDataResponse } from "../actions/types.js";
 import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
 
-import {
-  alchemyEstimateFeesPerGas,
-  type PriorityFeeClient,
-} from "./alchemyEstimateFeesPerGas.js";
+import { alchemyEstimateFeesPerGas } from "./alchemyEstimateFeesPerGas.js";
 
 // Note: PolicyToken type is now integrated into AlchemyGasManagerConfig
 
@@ -72,13 +69,15 @@ export type AlchemyGasManagerHooks = {
   };
   userOperation: {
     estimateFeesPerGas: NonNullable<
-      NonNullable<BundlerClientConfig["userOperation"]>["estimateFeesPerGas"]
+      NonNullable<
+        BundlerClientConfig<Transport, Chain, SmartAccount>["userOperation"]
+      >["estimateFeesPerGas"]
     >;
   };
 };
 
 export type AlchemyGasManagerConfig = {
-  client: Client<Transport, Chain, SmartAccount>;
+  client: Client;
   address?: Address;
   maxTokenAmount?: bigint;
 };
@@ -93,8 +92,10 @@ export type AlchemyGasManagerConfig = {
  * @example
  * Basic usage:
  * ```ts
- * import { createBundlerClient, createClient, http } from "viem";
- * import { alchemyGasManagerHooks } from "@account-kit/infra";
+ * import { createClient, http, custom } from "viem";
+ * import { createBundlerClient } from "viem/account-abstraction";
+ * import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
+ * import { sepolia } from "viem/chains";
  *
  * const client = createClient({
  *   chain: sepolia,
@@ -104,7 +105,7 @@ export type AlchemyGasManagerConfig = {
  * const bundler = createBundlerClient({
  *   chain: sepolia,
  *   transport: custom(client),
- *   account,
+ *   account, // Your smart account
  *   ...alchemyGasManagerHooks("your-policy-id", { client }),
  * });
  * ```
@@ -150,9 +151,7 @@ export function alchemyGasManagerHooks(
   };
 
   // Create the hooks with client
-  const createHooks = (
-    client: Client<Transport, Chain, SmartAccount>,
-  ): AlchemyGasManagerHooks => {
+  const createHooks = (client: Client): AlchemyGasManagerHooks => {
     const cache = new UserOpCache();
 
     // Helper function to fetch and cache paymaster data
@@ -263,7 +262,7 @@ export function alchemyGasManagerHooks(
 
       userOperation: {
         // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
-        async estimateFeesPerGas(params: { bundlerClient: PriorityFeeClient }) {
+        async estimateFeesPerGas(params: { bundlerClient: Client }) {
           // Check if we have cached gas values from the RPC response
           const cachedResult = cache.getCurrent();
           if (

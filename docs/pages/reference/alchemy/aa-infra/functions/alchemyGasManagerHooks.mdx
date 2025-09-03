@@ -15,11 +15,11 @@ import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
 
 ## Usage
 
-Basic usage:
-
 ```ts
-import { createBundlerClient, createClient, http } from "viem";
-import { alchemyGasManagerHooks } from "@account-kit/infra";
+import { createClient, http, custom } from "viem";
+import { createBundlerClient } from "viem/account-abstraction";
+import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
+import { sepolia } from "viem/chains";
 
 const client = createClient({
   chain: sepolia,
@@ -29,8 +29,25 @@ const client = createClient({
 const bundler = createBundlerClient({
   chain: sepolia,
   transport: custom(client),
-  account,
+  account, // Your smart account
   ...alchemyGasManagerHooks("your-policy-id", { client }),
+});
+```
+
+## Usage with ERC-20 Token Payment
+
+You can configure the gas manager to accept ERC-20 tokens as payment:
+
+```ts
+const bundler = createBundlerClient({
+  chain: sepolia,
+  transport: custom(client),
+  account, // Your smart account
+  ...alchemyGasManagerHooks("your-policy-id", {
+    client,
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC address
+    maxTokenAmount: 10_000_000n, // Max 10 USDC
+  }),
 });
 ```
 
@@ -46,7 +63,11 @@ const bundler = createBundlerClient({
 
 `AlchemyGasManagerConfig`
 
-- Configuration including client and optional ERC-20 token settings
+Configuration object containing:
+
+- `client`: A viem client instance used for making RPC calls to the Gas Manager (required)
+- `address?`: ERC-20 token contract address for token gas payment (optional)
+- `maxTokenAmount?`: Maximum amount of tokens to spend (optional)
 
 ## Returns
 
