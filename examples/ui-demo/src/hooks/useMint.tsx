@@ -43,7 +43,6 @@ export const useMint = (props: {
 
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const [mintStarted, setMintStarted] = useState(false);
-  const [minedTxHash, setMinedTxHash] = useState<string | undefined>(undefined);
   const isLoading =
     Object.values(status).some((x) => x === "loading") ||
     isLoadingClient ||
@@ -51,7 +50,7 @@ export const useMint = (props: {
     activeChain.id !== props.chain.id;
   const { setToast } = useToast();
 
-  const handleSuccess = useCallback(() => {
+  const handleSuccess = () => {
     setStatus(() => ({
       batch: "success",
       gas: "success",
@@ -76,24 +75,24 @@ export const useMint = (props: {
       ),
       open: true,
     });
-  }, [isDeployed, refetchDeploymentStatus, setToast]);
+  };
 
-  const handleError = useCallback(
-    (error: Error) => {
-      console.error(error);
-      setStatus(initialValuePropState);
-      setMintStarted(false);
-      setToast({
-        type: "error",
-        text: "There was a problem with that action",
-        open: true,
-      });
-    },
-    [setToast],
-  );
+  const handleError = (error: Error) => {
+    console.error(error);
+    setStatus(initialValuePropState);
+    setMintStarted(false);
+    setToast({
+      type: "error",
+      text: "There was a problem with that action",
+      open: true,
+    });
+  };
 
-  const { sendUserOperationAsync } = useSendUserOperation({
+  const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
     client,
+    waitForTxn: true,
+    onError: handleError,
+    onSuccess: handleSuccess,
     onMutate: () => {
       setMintStarted(true);
       setTimeout(() => {
@@ -132,77 +131,24 @@ export const useMint = (props: {
       batch: "loading",
     });
 
-    try {
-      const result = await sendUserOperationAsync({
-        uo: {
-          target: props.contractAddress,
-          data: encodeFunctionData({
-            abi: AccountKitNftMinterABI,
-            functionName: "mintTo",
-            args: [client.getAddress()],
-          }),
-        },
-        overrides: {
-          maxPriorityFeePerGas: BigInt(0),
-          maxFeePerGas: BigInt(1),
-        },
-      });
-
-      const MAX_REPLACEMENTS = 3;
-
-      const waitUntilMinedWithRetries = async (params: {
-        hash: `0x${string}`;
-        request?: any;
-        maxReplacements: number;
-      }): Promise<`0x${string}`> => {
-        try {
-          return await client.waitForUserOperationTransaction({
-            hash: params.hash,
-            retries: { maxRetries: 3, intervalMs: 5_000, multiplier: 1 },
-          });
-        } catch (e) {
-          console.warn(
-            "waitForUserOperationTransaction failed; attempting drop-and-replace",
-            { error: e, remainingReplacements: params.maxReplacements },
-          );
-          if (params.maxReplacements <= 0 || !params.request) throw e;
-          const { hash: newHash } = await client.dropAndReplaceUserOperation({
-            uoToDrop: params.request,
-          });
-          console.log("Replaced user operation hash:", newHash);
-          return waitUntilMinedWithRetries({
-            hash: newHash as `0x${string}`,
-            request: params.request,
-            maxReplacements: params.maxReplacements - 1,
-          });
-        }
-      };
-
-      const minedHash = await waitUntilMinedWithRetries({
-        hash: result.hash as `0x${string}`,
-        request: (result as any).request,
-        maxReplacements: MAX_REPLACEMENTS,
-      });
-
-      setMinedTxHash(minedHash);
-      handleSuccess();
-    } catch (error) {
-      handleError(error as Error);
-    }
-  }, [
-    client,
-    props.contractAddress,
-    sendUserOperationAsync,
-    handleError,
-    handleSuccess,
-  ]);
+    sendUserOperation({
+      uo: {
+        target: props.contractAddress,
+        data: encodeFunctionData({
+          abi: AccountKitNftMinterABI,
+          functionName: "mintTo",
+          args: [client.getAddress()],
+        }),
+      },
+    });
+  }, [client, props.contractAddress, sendUserOperation]);
 
   const transactionUrl = useMemo(() => {
-    if (!client?.chain?.blockExplorers || !minedTxHash) {
+    if (!client?.chain?.blockExplorers || !sendUserOperationResult?.hash) {
       return undefined;
     }
-    return `${client.chain.blockExplorers.default.url}/tx/${minedTxHash}`;
-  }, [client, minedTxHash]);
+    return `${client.chain.blockExplorers.default.url}/tx/${sendUserOperationResult.hash}`;
+  }, [client, sendUserOperationResult?.hash]);
 
   return {
     isLoading,

@@ -64,25 +64,24 @@ slug: wallets/transactions/retries
 
       // On failure retry and drop and replace, no backoff is required because a backoff is already
       // waited for in the waitForUserOperationTransaction function
-      async function waitUntilMinedWithRetries(params: {
+      const waitUntilMinedWithRetries = async (params: {
         hash: `0x${string}`;
         request: any;
         maxReplacements: number;
-      }): Promise<`0x${string}`> {
+      }): Promise<`0x${string}`> => {
         try {
           return await waitForUserOperationTransactionPromise(params.hash);
         } catch (e) {
           if (params.maxReplacements <= 0) throw e;
           const { hash: newHash } =
             await dropAndReplaceUserOperation({ uoToDrop: params.request });
-          console.log("Replaced user operation hash:", newHash);
           return waitUntilMinedWithRetries({
             hash: newHash as `0x${string}`,
             request: params.request,
             maxReplacements: params.maxReplacements - 1,
           });
         }
-      }
+      };
 
       return (
         <View>
@@ -139,7 +138,7 @@ slug: wallets/transactions/retries
 
     The example then wraps this flow in a retry helper with a configurable number of attempts.
 
-    ```ts twoslash example.ts
+    ```ts twoslash
     import { client } from "./client";
 
     const { hash, request } = await client.sendUserOperation({
@@ -152,15 +151,15 @@ slug: wallets/transactions/retries
 
     // On failure retry and drop and replace, no backoff is required because a backoff is already
     // waited for in the waitForUserOperationTransaction function
-    async function waitUntilMinedWithRetries(params: {
+    const waitUntilMinedWithRetries = async (params: {
       hash: `0x${string}`;
       request: any;
       maxReplacements: number;
-    }): Promise<`0x${string}`> {
+    }): Promise<`0x${string}`> => {
       try {
         return await client.waitForUserOperationTransaction({
           hash: params.hash,
-          retries: { maxRetries: 3, intervalMs: 5_000 },
+          retries: { maxRetries: 3, intervalMs: 5_000, multiplier: 1 },
         });
       } catch (e) {
         if (params.maxReplacements <= 0) throw e;
@@ -172,7 +171,7 @@ slug: wallets/transactions/retries
           maxReplacements: params.maxReplacements - 1,
         });
       }
-    }
+    };
 
     const minedTxHash = await waitUntilMinedWithRetries({
       hash,
