@@ -40,6 +40,7 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 ```js metro.config.js
 const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 const path = require("path");
+const fs = require("fs");
 const projectRoot = __dirname; // <-- Adjust this as fits your project setup
 const config = getDefaultConfig(projectRoot);
 
