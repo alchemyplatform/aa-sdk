@@ -76,6 +76,7 @@ Create or edit your `metro.config.js` file in the root of your project so that i
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
 const path = require("path");
+const fs = require("fs");
 const projectRoot = __dirname; // <-- Adjust this as fits your project setup
 
 // Add aliases for file-system import based modules
@@ -109,6 +110,28 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
       type: "sourceFile",
     };
   }
+
+  // Handle .js/.jsx extensions on TypeScript files
+  if (
+    (moduleName.startsWith(".") || moduleName.startsWith("/")) &&
+    (moduleName.endsWith(".js") || moduleName.endsWith(".jsx"))
+  ) {
+    const moduleFilePath = path.resolve(
+      context.originModulePath,
+      "..",
+      moduleName,
+    );
+
+    // if the file exists, we won't remove extension, and we'll fall back to normal resolution.
+    if (!fs.existsSync(moduleFilePath)) {
+      return context.resolveRequest(
+        context,
+        moduleName.replace(/\.[^/.]+$/, ""),
+        platform,
+      );
+    }
+  }
+
   return context.resolveRequest(context, moduleName, platform);
 };
 
@@ -306,6 +329,6 @@ Our packages list a minimum version of React as 18.2.0, but the latest version o
 }
 ```
 
-## Next steps
+## Next Steps
 
-Now setup the [signer](/wallets/react-native/signer/setup-guide)!
+Move on to [setup accounts](/docs/wallets/react-native/getting-started/accounts-setup)!
