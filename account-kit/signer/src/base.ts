@@ -960,11 +960,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * ```
    *
    * @param {unknown} params export wallet parameters
-   * @returns {boolean} true if the wallet was exported successfully
+   * @returns {Promise<unknown>} the result of the wallet export operation
    */
-  exportWallet: (
-    params: Parameters<(typeof this.inner)["exportWallet"]>[0],
-  ) => Promise<boolean> = async (params) => {
+  exportWallet: TClient["exportWallet"] = async (params) => {
     return this.inner.exportWallet(params);
   };
 

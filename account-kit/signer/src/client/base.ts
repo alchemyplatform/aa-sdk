@@ -15,7 +15,6 @@ import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { resolveRelativeUrl } from "../utils/resolveRelativeUrl.js";
-import { assertNever } from "../utils/typeAssertions.js";
 import type {
   AlchemySignerClientEvent,
   AlchemySignerClientEvents,
@@ -81,7 +80,10 @@ const withHexPrefix = (hex: string) => `0x${hex}` as const;
 /**
  * Base class for all Alchemy Signer clients
  */
-export abstract class BaseSignerClient<TExportWalletParams = unknown> {
+export abstract class BaseSignerClient<
+  TExportWalletParams = unknown,
+  TExportWalletOutput = unknown,
+> {
   private _user: User | undefined;
   private connectionConfig: ConnectionConfig;
   protected turnkeyClient: TurnkeyClient;
@@ -135,29 +137,6 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   protected setStamper(stamper: TurnkeyClient["stamper"]) {
     this.turnkeyClient.stamper = stamper;
-  }
-
-  /**
-   * Exports wallet credentials based on the specified type, either as a SEED_PHRASE or PRIVATE_KEY.
-   *
-   * @param {object} params The parameters for exporting the wallet
-   * @param {ExportWalletStamper} params.exportStamper The stamper used for exporting the wallet
-   * @param {"SEED_PHRASE" | "PRIVATE_KEY"} params.exportAs Specifies the format for exporting the wallet, either as a SEED_PHRASE or PRIVATE_KEY
-   * @returns {Promise<boolean>} A promise that resolves to true if the export is successful
-   */
-  protected exportWalletInner(params: {
-    exportStamper: ExportWalletStamper;
-    exportAs: "SEED_PHRASE" | "PRIVATE_KEY";
-  }): Promise<boolean> {
-    const { exportAs } = params;
-    switch (exportAs) {
-      case "PRIVATE_KEY":
-        return this.exportAsPrivateKey(params.exportStamper);
-      case "SEED_PHRASE":
-        return this.exportAsSeedPhrase(params.exportStamper);
-      default:
-        assertNever(exportAs, `Unknown export mode: ${exportAs}`);
-    }
   }
 
   /**
@@ -265,7 +244,9 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract disconnect(): Promise<void>;
 
-  public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
+  public abstract exportWallet(
+    params: TExportWalletParams,
+  ): Promise<TExportWalletOutput>;
 
   public abstract targetPublicKey(): Promise<string>;
 
@@ -1141,94 +1122,6 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   // #endregion
 
   // #region PRIVATE METHODS
-  private exportAsSeedPhrase = async (stamper: ExportWalletStamper) => {
-    if (!this.user) {
-      throw new NotAuthenticatedError();
-    }
-
-    const { wallets } = await this.turnkeyClient.getWallets({
-      organizationId: this.user.orgId,
-    });
-
-    const walletAccounts = await Promise.all(
-      wallets.map(({ walletId }) =>
-        this.turnkeyClient.getWalletAccounts({
-          organizationId: this.user!.orgId,
-          walletId,
-        }),
-      ),
-    ).then((x) => x.flatMap((x) => x.accounts));
-
-    const walletAccount = walletAccounts.find(
-      (x) => x.address === this.user!.address,
-    );
-
-    if (!walletAccount) {
-      throw new Error(
-        `Could not find wallet associated with ${this.user.address}`,
-      );
-    }
-
-    const { activity } = await this.turnkeyClient.exportWallet({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_EXPORT_WALLET",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        walletId: walletAccount!.walletId,
-        targetPublicKey: stamper.publicKey()!,
-      },
-    });
-
-    const { exportBundle } = await this.pollActivityCompletion(
-      activity,
-      this.user.orgId,
-      "exportWalletResult",
-    );
-
-    const result = await stamper.injectWalletExportBundle(
-      exportBundle,
-      this.user.orgId,
-    );
-
-    if (!result) {
-      throw new Error("Failed to inject wallet export bundle");
-    }
-
-    return result;
-  };
-
-  private exportAsPrivateKey = async (stamper: ExportWalletStamper) => {
-    if (!this.user) {
-      throw new NotAuthenticatedError();
-    }
-
-    const { activity } = await this.turnkeyClient.exportWalletAccount({
-      organizationId: this.user.orgId,
-      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
-      timestampMs: Date.now().toString(),
-      parameters: {
-        address: this.user.address,
-        targetPublicKey: stamper.publicKey()!,
-      },
-    });
-
-    const { exportBundle } = await this.pollActivityCompletion(
-      activity,
-      this.user.orgId,
-      "exportWalletAccountResult",
-    );
-
-    const result = await stamper.injectKeyExportBundle(
-      exportBundle,
-      this.user.orgId,
-    );
-
-    if (!result) {
-      throw new Error("Failed to inject wallet export bundle");
-    }
-
-    return result;
-  };
 
   /**
    * Returns the authentication url for the selected OAuth Proivder

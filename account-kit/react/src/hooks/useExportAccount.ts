@@ -1,7 +1,11 @@
 "use client";
 
 import { DEFAULT_IFRAME_CONTAINER_ID } from "@account-kit/core";
-import type { ExportWalletParams as ExportAccountParams } from "@account-kit/signer";
+import type {
+  AlchemyWebSigner,
+  ExportWalletParams as ExportAccountParams,
+  ExportWalletOutput,
+} from "@account-kit/signer";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { createElement, useCallback, type CSSProperties } from "react";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
@@ -10,7 +14,7 @@ import { useSigner } from "./useSigner.js";
 
 export type UseExportAccountMutationArgs = {
   params?: ExportAccountParams;
-} & BaseHookMutationArgs<boolean, void>;
+} & BaseHookMutationArgs<ExportWalletOutput, void>;
 
 /**
  * Props for the `ExportAccountComponent` component. This component is
@@ -30,7 +34,7 @@ export type ExportAccountComponentProps = {
 };
 
 export type UseExportAccountResult = {
-  exportAccount: UseMutateFunction<boolean, Error, void, unknown>;
+  exportAccount: UseMutateFunction<ExportWalletOutput, Error, void, unknown>;
   isExported: boolean;
   isExporting: boolean;
   error: Error | null;
@@ -66,7 +70,7 @@ export function useExportAccount(
 ): UseExportAccountResult {
   const { params, ...mutationArgs } = args ?? {};
   const { queryClient } = useAlchemyAccountContext();
-  const signer = useSigner();
+  const signer = useSigner<AlchemyWebSigner>();
   const { iframeContainerId } = params ?? {
     iframeContainerId: DEFAULT_IFRAME_CONTAINER_ID,
   };

@@ -2,8 +2,6 @@
 import "react-native-get-random-values";
 import "./utils/buffer-polyfill";
 import "./utils/mmkv-localstorage-polyfill";
-
-/* eslint-disable import/extensions */
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   createPasskey,
@@ -37,6 +35,8 @@ import {
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
+import { generateP256KeyPair, hpkeDecrypt } from "@turnkey/crypto";
+import { toHex } from "viem";
 import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper";
 import { parseSearchParams } from "./utils/parseUrlParams";
@@ -54,8 +54,17 @@ export const RNSignerClientParamsSchema = z.object({
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
+export type ExportWalletParams = {
+  exportAs?: "PRIVATE_KEY" | "SEED_PHRASE";
+};
+
+export type ExportWalletResult = string;
+
 // TODO: need to emit events
-export class RNSignerClient extends BaseSignerClient<undefined> {
+export class RNSignerClient extends BaseSignerClient<
+  ExportWalletParams,
+  string
+> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
   rpId: string | undefined;
@@ -273,8 +282,132 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     this.stamper.clear();
     await this.stamper.init();
   }
-  override exportWallet(_params: unknown): Promise<boolean> {
-    throw new Error("Method not implemented.");
+
+  /**
+   * Exports the wallet and returns the decrypted private key or seed phrase.
+   *
+   * @param {ExportWalletParams} params - Export parameters
+   * @returns {Promise<string>} The decrypted private key or seed phrase
+   * @throws {Error} If the user is not authenticated or export fails
+   */
+  async exportWallet(params?: ExportWalletParams): Promise<string> {
+    if (!this.user) {
+      throw new Error("User must be authenticated to export wallet");
+    }
+
+    const exportAs = params?.exportAs || "PRIVATE_KEY";
+
+    // Step 1: Generate a P256 key pair for encryption
+    const embeddedKey = generateP256KeyPair();
+
+    try {
+      let exportBundle: string;
+
+      if (exportAs === "PRIVATE_KEY") {
+        // Step 2a: Export as private key
+        const { activity } = await this.turnkeyClient.exportWalletAccount({
+          organizationId: this.user.orgId,
+          type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
+          timestampMs: Date.now().toString(),
+          parameters: {
+            address: this.user.address,
+            targetPublicKey: embeddedKey.publicKeyUncompressed,
+          },
+        });
+
+        const result = await this.pollActivityCompletion(
+          activity,
+          this.user.orgId,
+          "exportWalletAccountResult",
+        );
+
+        if (!result.exportBundle) {
+          throw new Error("Failed to export wallet: no export bundle returned");
+        }
+
+        exportBundle = result.exportBundle;
+      } else {
+        // Step 2b: Export as seed phrase (need to find the wallet first)
+        const { wallets } = await this.turnkeyClient.getWallets({
+          organizationId: this.user.orgId,
+        });
+
+        const walletAccountResponses = await Promise.all(
+          wallets.map(({ walletId }) =>
+            this.turnkeyClient.getWalletAccounts({
+              organizationId: this.user!.orgId,
+              walletId,
+            }),
+          ),
+        );
+        const walletAccounts = walletAccountResponses.flatMap(
+          (x) => x.accounts,
+        );
+
+        const walletAccount = walletAccounts.find(
+          (x) => x.address.toLowerCase() === this.user!.address.toLowerCase(),
+        );
+
+        if (!walletAccount) {
+          throw new Error("Could not find wallet account");
+        }
+
+        const { activity } = await this.turnkeyClient.exportWallet({
+          organizationId: this.user.orgId,
+          type: "ACTIVITY_TYPE_EXPORT_WALLET",
+          timestampMs: Date.now().toString(),
+          parameters: {
+            walletId: walletAccount.walletId,
+            targetPublicKey: embeddedKey.publicKeyUncompressed,
+          },
+        });
+
+        const result = await this.pollActivityCompletion(
+          activity,
+          this.user.orgId,
+          "exportWalletResult",
+        );
+
+        if (!result.exportBundle) {
+          throw new Error("Failed to export wallet: no export bundle returned");
+        }
+
+        exportBundle = result.exportBundle;
+      }
+
+      // Step 3: Parse the export bundle and decrypt using HPKE
+      // The export bundle is a JSON string containing version, data, etc.
+      const bundleJson = JSON.parse(exportBundle);
+
+      // The data field contains another JSON string that's hex-encoded
+      const innerDataHex = bundleJson.data;
+      const innerDataJson = JSON.parse(
+        Buffer.from(innerDataHex, "hex").toString(),
+      );
+
+      // Extract the encapped public key and ciphertext from the inner data
+      const encappedPublicKeyHex = innerDataJson.encappedPublic;
+      const ciphertextHex = innerDataJson.ciphertext;
+
+      const encappedKeyBuf = Buffer.from(encappedPublicKeyHex, "hex");
+      const ciphertextBuf = Buffer.from(ciphertextHex, "hex");
+
+      // Decrypt the data using HPKE
+      const decryptedData = hpkeDecrypt({
+        ciphertextBuf: ciphertextBuf,
+        encappedKeyBuf: encappedKeyBuf,
+        receiverPriv: embeddedKey.privateKey,
+      });
+
+      // Step 4: Process the decrypted data based on export type
+      if (exportAs === "PRIVATE_KEY") {
+        return toHex(decryptedData);
+      } else {
+        return new TextDecoder().decode(decryptedData);
+      }
+    } finally {
+      // No cleanup needed - key is only in memory
+    }
   }
 
   override targetPublicKey(): Promise<string> {
