@@ -54,13 +54,8 @@ export const RNSignerClientParamsSchema = z.object({
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
-export enum ExportWalletAs {
-  PRIVATE_KEY = "PRIVATE_KEY",
-  SEED_PHRASE = "SEED_PHRASE",
-}
-
 export type ExportWalletParams = {
-  exportAs?: ExportWalletAs;
+  format?: "PRIVATE_KEY" | "SEED_PHRASE";
 };
 
 export type ExportWalletResult = string;
@@ -300,7 +295,7 @@ export class RNSignerClient extends BaseSignerClient<
       throw new Error("User must be authenticated to export wallet");
     }
 
-    const exportAs = params?.exportAs || ExportWalletAs.PRIVATE_KEY;
+    const exportAs = params?.format || "PRIVATE_KEY";
 
     // Step 1: Generate a P256 key pair for encryption
     const embeddedKey = generateP256KeyPair();
@@ -308,7 +303,7 @@ export class RNSignerClient extends BaseSignerClient<
     try {
       let exportBundle: string;
 
-      if (exportAs === ExportWalletAs.PRIVATE_KEY) {
+      if (exportAs === "PRIVATE_KEY") {
         // Step 2a: Export as private key
         const { activity } = await this.turnkeyClient.exportWalletAccount({
           organizationId: this.user.orgId,
@@ -405,7 +400,7 @@ export class RNSignerClient extends BaseSignerClient<
       });
 
       // Step 4: Process the decrypted data based on export type
-      if (exportAs === ExportWalletAs.PRIVATE_KEY) {
+      if (exportAs === "PRIVATE_KEY") {
         return toHex(decryptedData);
       } else {
         return new TextDecoder().decode(decryptedData);
