@@ -16,18 +16,12 @@ export type MintStatus = {
 };
 
 export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
-  const {
-    isLoading,
-    status,
-    mintStarted,
-    handleCollectNFT,
-    uri,
-    transactionUrl,
-  } = useMint({
-    mode: accountMode === "7702" ? "7702" : "default",
-    contractAddress: nftContractAddress,
-    chain: accountMode === "7702" ? baseSepolia : arbitrumSepolia,
-  });
+  const { isLoading, status, mintStarted, handleCollectNFT, transactionUrl } =
+    useMint({
+      mode: accountMode === "7702" ? "7702" : "default",
+      contractAddress: nftContractAddress,
+      chain: accountMode === "7702" ? baseSepolia : arbitrumSepolia,
+    });
   const buttonText = !mintStarted
     ? "Collect NFT"
     : isLoading
@@ -60,6 +54,8 @@ export const MintCard = ({ accountMode }: { accountMode: AccountMode }) => {
       </div>
     </>
   );
+
+  const uri = "/images/gassless-transactions.svg";
 
   const image = uri ? (
     <Image

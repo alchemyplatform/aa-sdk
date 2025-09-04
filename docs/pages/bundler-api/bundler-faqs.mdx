@@ -71,6 +71,24 @@ To do so, follow the next steps:
 
 After calculating the new values, send your `userOp` again with the updated fees and it should go through successfully.
 
+### What are `-32521: Execution reverted` errors and how can I debug them?
+
+These occur when the `userOp` reverts during execution. These errors typically contain `revertData`, which are optional bytes with additional information about the revert.
+
+What revertData contains:
+
+1. **First 4 bytes**: the error selector (e.g., 0x08c379a0 = Error(string)). This is the Keccak-256 hash of the error signature.
+2. **Remaining bytes**: ABI-encoded arguments for that error (if any).
+
+To debug these errors, you should:
+
+- Isolate the first 4 bytes of `revertData`.
+- Paste into a signatures DB (e.g. [openchain.xyz/signatures](openchain.xyz/signatures)).
+  - If it matches a known error, you’ll see the standard signature.
+  - If not, it's a **custom error** - check the contract's ABI or source for error declarations.
+- Decode any arguments (using a tool like [openchain.xyz/tools/abi](openchain.xyz/tools/abi) or your ABI).
+- Map the error back to the contract source code to understand under what conditions it reverts.
+
 ## Parallel nonces
 
 ### What is the maximum number of supported parallel nonces?
