@@ -1,24 +1,22 @@
 ## What is drop and replace?
 
-If fees change and your user operation gets stuck in the mempool, you can use drop and replace to resend the user operation with higher fees. This is most useful
-when used in combination with [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) to ensure the transaction is mined
-and then resend the user operation with higher fees if waiting times out.
+If fees change and your transaction gets stuck in the mempool, use drop and replace to resend the transaction with higher fees. This works best with [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) to ensure the transaction is mined; if waiting times out, resend the transaction with higher fees.
 
-Drop and replace works by resubmitting a user operation with the greater of:
+Drop and replace works by resubmitting the transaction with the greater of:
 
 1. 10% higher fees
 2. The current minimum fees
 
-We export a `dropAndReplace` function from `@aa-sdk/core` that you can use to handle this flow for you and is automatically added to the Smart Account Client.
+The `dropAndReplace` function in `@aa-sdk/core` handles this flow and is automatically available on the `Smart Account Client`.
 
 ## How to drop and replace effectively
 
-Let's run through an example that uses drop and replace if waiting for a user operation to mine times out.
+The example below uses drop and replace when waiting for a transaction to mine times out.
 
 <Warning>
   If sponsoring gas, like in the example below, each call to `sendUserOperation`
-  and `dropAndReplace` will generate pending gas sponsorships in your dashboard.
-  This can result in you hitting your gas manager limit. At the moment, pending
-  sponsorships expire after 10 minutes of inactivity, but it is possible that
-  retrying excessively can temporarily exhaust your sponsorship limits.
+  and `dropAndReplace` generates pending gas sponsorships in your dashboard.
+  This can result in you hitting your sponsorship limit. Pending sponsorships
+  expire after 10 minutes of inactivity, but retrying excessively can
+  temporarily exhaust your sponsorship limits.
 </Warning>

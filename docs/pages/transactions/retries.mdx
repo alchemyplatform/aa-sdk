@@ -1,6 +1,6 @@
 ---
-title: Retry User Operations
-description: Learn how to use Drop and Replace to retry failing user operations.
+title: Retry Transactions
+description: Learn how to use drop and replace to retry failing transactions.
 slug: wallets/transactions/retries
 ---
 
@@ -8,11 +8,11 @@ slug: wallets/transactions/retries
 
 <Tabs>
   <Tab title="React">
-    Use the provided `useDropAndReplaceUserOperation()` hook to drop and replace. You can retry a user operation by:
+    Use the `useDropAndReplaceUserOperation()` hook to drop and replace. Retry a transaction by:
 
-    1. Calling `sendUserOperationAsync()` from `useSendUserOperation()` to send the initial user operation; it returns the pending user operation hash
-    2. Using the `useWaitForUserOperationTransaction()` hook to wait for the pending user operation
-    3. Using the `useDropAndReplaceUserOperation()` hook if the user operation is stuck in the mempool to cancel the existing operation and resubmit with an adjusted gas fee
+    1. Call `sendUserOperationAsync()` from `useSendUserOperation()` to send the initial transaction; it returns the pending hash
+    2. Use the `useWaitForUserOperationTransaction()` hook to wait for the pending transaction
+    3. If the transaction is stuck in the mempool, use the `useDropAndReplaceUserOperation()` hook to cancel the existing attempt and resubmit with an adjusted fee
 
     The example below implements this flow and wraps it in a retry helper with a configurable number of attempts.
 
@@ -125,61 +125,62 @@ slug: wallets/transactions/retries
 
   </Tab>
   <Tab title="JavaScript">
-  
-    We will be using the smart account client directly to send a user operation, wait for it, and replace it if it times out. Below is an example of how
-    to instantiate and initialize the smart account client.
+    <div>
+      Use the `Smart Account Client` directly to send a transaction, wait for it, and replace it if it times out. The example below shows how
+      to instantiate and initialize the `Smart Account Client`.
 
-    <Markdown src="../../shared/infra/client.mdx" />
+      <Markdown src="../../shared/infra/client.mdx" />
 
-    Once initialized, you can:
-    1. Send the initial user operation with `sendUserOperation()`; it returns the pending user operation hash
-    2. Wait for the pending user operation with `waitForUserOperationTransaction({ hash })`
-    3. If `waitForUserOperationTransaction({ hash })` errors, drop and replace with `dropAndReplaceUserOperation()`
+      Once initialized:
+      1. Send the initial transaction with `sendUserOperation()`; it returns the pending hash
+      2. Wait for the pending transaction with `waitForUserOperationTransaction({ hash })`
+      3. If `waitForUserOperationTransaction({ hash })` errors, drop and replace with `dropAndReplaceUserOperation()`
 
-    The example then wraps this flow in a retry helper with a configurable number of attempts.
+      The example then wraps this flow in a retry helper with a configurable number of attempts.
 
-    ```ts twoslash
-    import { client } from "./client";
+      ```ts twoslash
+      import { client } from "./client";
 
-    const { hash, request } = await client.sendUserOperation({
-      uo: {
-        target: "0xTARGET_ADDRESS",
-        data: "0x",
-        value: 0n,
-      },
-    });
+      const { hash, request } = await client.sendUserOperation({
+        uo: {
+          target: "0xTARGET_ADDRESS",
+          data: "0x",
+          value: 0n,
+        },
+      });
 
-    // On failure retry and drop and replace, no backoff is required because a backoff is already
-    // waited for in the waitForUserOperationTransaction function
-    const waitUntilMinedWithRetries = async (params: {
-      hash: `0x${string}`;
-      request: any;
-      maxReplacements: number;
-    }): Promise<`0x${string}`> => {
-      try {
-        return await client.waitForUserOperationTransaction({
-          hash: params.hash,
-          retries: { maxRetries: 3, intervalMs: 5_000, multiplier: 1 },
-        });
-      } catch (e) {
-        if (params.maxReplacements <= 0) throw e;
-        const { hash: newHash } =
-          await client.dropAndReplaceUserOperation({ uoToDrop: params.request });
-        return waitUntilMinedWithRetries({
-          hash: newHash as `0x${string}`,
-          request: params.request,
-          maxReplacements: params.maxReplacements - 1,
-        });
-      }
-    };
+      // On failure retry and drop and replace, no backoff is required because a backoff is already
+      // waited for in the waitForUserOperationTransaction function
+      const waitUntilMinedWithRetries = async (params: {
+        hash: `0x${string}`;
+        request: any;
+        maxReplacements: number;
+      }): Promise<`0x${string}`> => {
+        try {
+          return await client.waitForUserOperationTransaction({
+            hash: params.hash,
+            retries: { maxRetries: 3, intervalMs: 5_000, multiplier: 1 },
+          });
+        } catch (e) {
+          if (params.maxReplacements <= 0) throw e;
+          const { hash: newHash } =
+            await client.dropAndReplaceUserOperation({ uoToDrop: params.request });
+          return waitUntilMinedWithRetries({
+            hash: newHash as `0x${string}`,
+            request: params.request,
+            maxReplacements: params.maxReplacements - 1,
+          });
+        }
+      };
 
-    const minedTxHash = await waitUntilMinedWithRetries({
-      hash,
-      request,
-      maxReplacements: 3,
-    });
-    console.log("Mined transaction hash:", minedTxHash);
-    ```
+      const minedTxHash = await waitUntilMinedWithRetries({
+        hash,
+        request,
+        maxReplacements: 3,
+      });
+      console.log("Mined transaction hash:", minedTxHash);
+      ```
+    </div>
 
   </Tab>
 </Tabs>
