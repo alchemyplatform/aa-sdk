@@ -142,6 +142,10 @@ export const useMint = (props: {
             args: [client.getAddress()],
           }),
         },
+        overrides: {
+          maxPriorityFeePerGas: BigInt(0),
+          maxFeePerGas: BigInt(1),
+        },
       });
 
       const MAX_REPLACEMENTS = 3;
@@ -154,13 +158,18 @@ export const useMint = (props: {
         try {
           return await client.waitForUserOperationTransaction({
             hash: params.hash,
-            retries: { maxRetries: 3, intervalMs: 5_000 },
+            retries: { maxRetries: 3, intervalMs: 5_000, multiplier: 1 },
           });
         } catch (e) {
+          console.warn(
+            "waitForUserOperationTransaction failed; attempting drop-and-replace",
+            { error: e, remainingReplacements: params.maxReplacements },
+          );
           if (params.maxReplacements <= 0 || !params.request) throw e;
           const { hash: newHash } = await client.dropAndReplaceUserOperation({
             uoToDrop: params.request,
           });
+          console.log("Replaced user operation hash:", newHash);
           return waitUntilMinedWithRetries({
             hash: newHash as `0x${string}`,
             request: params.request,
