@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@alchemy/connectors-web": "*",
+    "@alchemy/wagmi-core": "*",
     "@wagmi/connectors": "latest",
     "@wagmi/core": "latest",
     "react": "^18.3.1",

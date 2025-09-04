@@ -1,6 +1,7 @@
 import { baseAccount, injected, walletConnect } from '@wagmi/connectors'
 import { createConfig, http } from '@wagmi/core'
 import { mainnet, sepolia } from '@wagmi/core/chains'
+import { alchemyAuth } from '@alchemy/connectors-web'
 
 export const config = createConfig({
   chains: [mainnet, sepolia],
@@ -8,6 +9,9 @@ export const config = createConfig({
     injected(),
     baseAccount(),
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
+    alchemyAuth({
+      apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
+    }),
   ],
   transports: {
     [mainnet.id]: http(),
