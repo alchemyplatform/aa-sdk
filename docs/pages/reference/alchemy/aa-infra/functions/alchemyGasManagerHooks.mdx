@@ -15,6 +15,8 @@ import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
 
 ## Usage
 
+Basic usage:
+
 ```ts
 import { createClient, http, custom } from "viem";
 import { createBundlerClient } from "viem/account-abstraction";
@@ -46,11 +48,7 @@ const bundler = createBundlerClient({
 
 `AlchemyGasManagerConfig`
 
-Configuration object containing:
-
-- `client`: A viem client instance used for making RPC calls to the Gas Manager (required)
-- `address?`: ERC-20 token contract address for token gas payment (optional)
-- `maxTokenAmount?`: Maximum amount of tokens to spend (optional)
+- Configuration including client and optional ERC-20 token settings
 
 ## Returns
 
