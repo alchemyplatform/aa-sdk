@@ -1,0 +1,128 @@
+---
+title: UI Customization
+description: Learn how to customize the login UI for smart wallets
+text: UI Customization
+link: /react/quickstart/ui-customization
+slug: wallets/react/quickstart/ui-customization
+---
+
+<Tip>
+  This guide assumes you're using Next.js, if you're using a different framework
+  or need more info checkout our [full tailwind setup
+  guide](/docs/wallets/react/tailwind-setup)
+</Tip>
+
+Create two configuration files that will customize your authentication methods and UI styles.
+
+### Create your configuration files
+
+1. In your project root, create a `config.ts` file
+2. In your project root, create a `tailwind.config.ts` file
+
+### Basic configuration example
+
+Start with a basic configuration:
+
+**tailwind.config.ts**
+
+```ts tailwind.config.ts
+import { withAccountKitUi } from "@account-kit/react/tailwind";
+
+export default withAccountKitUi(
+  {
+    // Your existing Tailwind config (if already using Tailwind).
+    // If using Tailwind v4, this will likely be left empty.
+  },
+  {
+    // AccountKit UI theme customizations
+  },
+);
+```
+
+<Tip>
+  **Important:** If your `tailwind.config.ts` already contains any existing
+  config information, be sure to wrap it with `withAccountKitUi` as shown above.
+  Don't replace your existing config - just wrap it!
+</Tip>
+
+Update your `global.css` to include the config:
+
+```css global.css
+@import "tailwindcss";
+@config '../../tailwind.config.ts';
+```
+
+<Tip>
+  **Note:** If still using Tailwind v3, skip this step as the
+  `tailwind.config.ts` file is used by default.
+</Tip>
+
+**config.ts**
+
+```ts twoslash src/config.ts
+// @noErrors
+import { createConfig, cookieStorage } from "@account-kit/react";
+import { QueryClient } from "@tanstack/react-query";
+import { arbitrumSepolia, alchemy } from "@account-kit/infra";
+
+export const config = createConfig(
+  {
+    transport: alchemy({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+    }),
+    chain: arbitrumSepolia,
+    ssr: true,
+    storage: cookieStorage,
+    enablePopupOauth: true,
+    // For gas sponsorship
+    // Learn more here: https://www.alchemy.com/docs/wallets/transactions/sponsor-gas/sponsor-gas-evm
+    policyId: process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID,
+  },
+  {
+    auth: {
+      sections: [
+        [{ type: "email" }],
+        [
+          { type: "passkey" },
+          { type: "social", authProviderId: "google", mode: "popup" },
+        ],
+      ],
+      addPasskeyOnSignup: true,
+    },
+  },
+);
+
+export const queryClient = new QueryClient();
+```
+
+<Tip>
+  **Important:** The chain you import (like `arbitrumSepolia`) must come from
+  the `@account-kit/infra` package, not from `viem`. Additionally, make sure
+  this chain is enabled in both your Alchemy app and Smart Wallets config policy
+  in the dashboard.
+</Tip>
+
+Note:
+You can add an `"external_wallets"` auth method to your config to allow connecting existing external EOAs (such as MetaMask) using our built-in connectors and WalletConnect. Learn more [here](/wallets/react/login-methods/eoa-login).
+
+```ts twoslash
+// @noErrors
+[
+  {
+    type: "external_wallets",
+    walletConnect: { projectId: "your-project-id" },
+  },
+];
+```
+
+### Customization
+
+Customize both configuration files by visiting our [demo app](https://demo.alchemy.com/) - use the interactive sandbox to explore different authentication methods and styling options. When ready, click 'Code preview' to export your customized configuration files.
+
+<Tip>
+  You can also follow these links to learn more about [using UI
+  Components](/docs/wallets/react/ui-components) and
+  [theming](/docs/wallets/react/ui-components).
+</Tip>
+
+Finally, to the last step: integration into the application.

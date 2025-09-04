@@ -16,7 +16,7 @@ import {
 import { slice, toHex, type Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { ClientUndefinedHookError } from "../errors.js";
-import { useSendCalls } from "../experimental/hooks/useSendCalls.js";
+import { useSendCalls } from "./useSendCalls.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
