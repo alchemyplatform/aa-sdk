@@ -35,7 +35,7 @@ export type BundlerRpcSchema = [
   },
   {
     Method: "eth_getUserOperationReceipt";
-    Parameters: [Hash];
+    Parameters: [Hash, "pending" | "latest" | undefined];
     ReturnType: UserOperationReceipt | null;
   },
   {
@@ -94,9 +94,13 @@ export type BundlerActions = {
    * calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
    *
    * @param hash - the hash of the UserOperation to get the receipt for
+   * @param tag - if client want to get receipt for different block tag.
    * @returns - a user operation receipt or null if not found
    */
-  getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
+  getUserOperationReceipt(
+    hash: Hash,
+    tag?: "pending" | "latest",
+  ): Promise<UserOperationReceipt | null>;
 
   /**
    * calls `eth_supportedEntryPoints` and returns the entry points the RPC supports

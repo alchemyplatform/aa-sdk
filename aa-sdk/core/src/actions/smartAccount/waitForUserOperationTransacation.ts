@@ -65,7 +65,7 @@ export const waitForUserOperationTransaction: <
     );
 
     const receipt = await client
-      .getUserOperationReceipt(hash as `0x${string}`)
+      .getUserOperationReceipt(hash as `0x${string}`, args.tag)
       .catch((e) => {
         Logger.error(
           `[SmartAccountProvider] waitForUserOperationTransaction error fetching receipt for ${hash}: ${e}`,

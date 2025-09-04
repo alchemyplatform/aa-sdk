@@ -118,6 +118,10 @@ export type DropAndReplaceUserOperationParameters<
 export type WaitForUserOperationTxParameters = {
   hash: Hex;
   /**
+   * The tag to use for the UO status.
+   */
+  tag?: "pending" | "latest";
+  /**
    * Exponential backoff paramters that can be used to override
    * the configuration on the client. If not provided, this method
    * will use the paramters passed via the `opts` parameter on the
