@@ -1,3 +1,5 @@
+"use client";
+
 import { AccountNotFoundError, clientHeaderTrack } from "@aa-sdk/core";
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import {
@@ -10,10 +12,10 @@ import { useAccount as wagmi_useAccount } from "wagmi";
 import {
   ClientUndefinedHookError,
   UnsupportedEOAActionError,
-} from "../../errors.js";
-import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
-import { ReactLogger } from "../../metrics.js";
-import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+} from "../errors.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import { ReactLogger } from "../metrics.js";
+import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UseGrantPermissionsParams = {
@@ -49,6 +51,50 @@ export type UseGrantPermissionsResult = {
   error: Error | null;
 };
 
+/**
+ * React hook for granting permissions on the smart account to a given keypair
+ * This enables dapps to request specific permissions from smart accounts, such as spending limits or execution permissions.
+ * Returns an error if called with an EOA wallet connection.
+ *
+ * @example
+ * ```tsx
+ * import { useGrantPermissions, useSmartAccountClient } from "@account-kit/react";
+ *
+ * function PermissionsComponent() {
+ *   const { client } = useSmartAccountClient({});
+ *   const {
+ *     grantPermissions,
+ *     isGrantingPermissions,
+ *   } = useGrantPermissions({ client });
+ *
+ *   const handleGrantPermissions = () => {
+ *     grantPermissions({
+ *       permissions: [
+ *         {
+ *           type: "native-token-spending-limit",
+ *           data: {
+ *             amount: "1000000000000000000", // 1 ETH in wei
+ *           },
+ *         },
+ *       ],
+ *       expiry: Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
+ *     });
+ *   };
+ *
+ *   return (
+ *     <button
+ *       onClick={handleGrantPermissions}
+ *       disabled={isGrantingPermissions}
+ *     >
+ *       {isGrantingPermissions ? "Granting..." : "Grant Permissions"}
+ *     </button>
+ *   );
+ * }
+ * ```
+ *
+ * @param {UseGrantPermissionsParams} params Configuration object containing the smart account client
+ * @returns {UseGrantPermissionsResult} Object containing mutation functions, loading state, result, and error
+ */
 export function useGrantPermissions(
   params: UseGrantPermissionsParams,
 ): UseGrantPermissionsResult {
