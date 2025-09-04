@@ -59,9 +59,7 @@ import {
 import { assertNever } from "./utils/typeAssertions.js";
 import { hashAuthorization } from "viem/utils";
 
-export interface BaseAlchemySignerParams<
-  TClient extends BaseSignerClient<any, any>,
-> {
+export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
   sessionConfig?: Omit<SessionManagerParams, "client">;
   initialError?: ErrorInfo;
@@ -120,9 +118,8 @@ type GetUserParams =
  * Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
  * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
  */
-export abstract class BaseAlchemySigner<
-  TClient extends BaseSignerClient<any, any>,
-> implements SmartAccountAuthenticator<AuthParams, User, TClient>
+export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
+  implements SmartAccountAuthenticator<AuthParams, User, TClient>
 {
   signerType: "alchemy-signer" | "rn-alchemy-signer" = "alchemy-signer";
   inner: TClient;
@@ -963,11 +960,9 @@ export abstract class BaseAlchemySigner<
    * ```
    *
    * @param {unknown} params export wallet parameters
-   * @returns {Promise<boolean | string>} the result of the wallet export operation
+   * @returns {Promise<unknown>} the result of the wallet export operation
    */
-  exportWallet = async (
-    params: Parameters<(typeof this.inner)["exportWallet"]>[0],
-  ) => {
+  exportWallet: TClient["exportWallet"] = async (params) => {
     return this.inner.exportWallet(params);
   };
 

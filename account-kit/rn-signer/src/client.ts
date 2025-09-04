@@ -55,7 +55,7 @@ export const RNSignerClientParamsSchema = z.object({
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
 export type ExportWalletParams = {
-  format?: "PRIVATE_KEY" | "SEED_PHRASE";
+  exportAs?: "PRIVATE_KEY" | "SEED_PHRASE";
 };
 
 export type ExportWalletResult = string;
@@ -295,7 +295,7 @@ export class RNSignerClient extends BaseSignerClient<
       throw new Error("User must be authenticated to export wallet");
     }
 
-    const exportAs = params?.format || "PRIVATE_KEY";
+    const exportAs = params?.exportAs || "PRIVATE_KEY";
 
     // Step 1: Generate a P256 key pair for encryption
     const embeddedKey = generateP256KeyPair();
