@@ -1,3 +1,5 @@
+"use client";
+
 import { type Address, type Prettify } from "viem";
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import {
@@ -10,10 +12,10 @@ import { useAccount as wagmi_useAccount } from "wagmi";
 import {
   ClientUndefinedHookError,
   UnsupportedEOAActionError,
-} from "../../errors.js";
-import { useAlchemyAccountContext } from "../../hooks/useAlchemyAccountContext.js";
-import { ReactLogger } from "../../metrics.js";
-import type { UseSmartAccountClientResult } from "../../hooks/useSmartAccountClient.js";
+} from "../errors.js";
+import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
+import { ReactLogger } from "../metrics.js";
+import type { UseSmartAccountClientResult } from "../hooks/useSmartAccountClient.js";
 import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type UseSendPreparedCallsParams = {

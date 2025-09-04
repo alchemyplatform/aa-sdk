@@ -32,11 +32,6 @@
       "import": "./dist/esm/environments/web/index.js",
       "default": "./dist/esm/environments/web/index.js"
     },
-    "./experimental": {
-      "types": "./dist/types/experimental/index.d.ts",
-      "import": "./dist/esm/experimental/index.js",
-      "default": "./dist/esm/experimental/index.js"
-    },
     "./package.json": "./package.json"
   },
   "scripts": {

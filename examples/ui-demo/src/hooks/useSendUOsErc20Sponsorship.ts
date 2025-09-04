@@ -7,10 +7,7 @@ import {
   DEMO_USDC_APPROVE_BELOW_AMOUNT,
 } from "../utils/constants";
 import { AccountMode } from "@/app/config";
-import {
-  useSmartWalletClient,
-  useSendCalls,
-} from "@account-kit/react/experimental";
+import { useSmartWalletClient, useSendCalls } from "@account-kit/react";
 import { useSmartAccountClient } from "@account-kit/react";
 
 const ERC20_SPONSORSHIP_POLICY_ID =
