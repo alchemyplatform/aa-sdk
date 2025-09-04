@@ -59,10 +59,17 @@ export enum ExportWalletAs {
   SEED_PHRASE = "SEED_PHRASE",
 }
 
+export type ExportWalletParams = {
+  exportAs?: ExportWalletAs;
+};
+
 export type ExportWalletResult = string;
 
 // TODO: need to emit events
-export class RNSignerClient extends BaseSignerClient<ExportWalletAs, string> {
+export class RNSignerClient extends BaseSignerClient<
+  ExportWalletParams,
+  string
+> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
   rpId: string | undefined;
@@ -284,16 +291,16 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletAs, string> {
   /**
    * Exports the wallet and returns the decrypted private key or seed phrase.
    *
-   * @param {ExportWalletAs} exportAs - The format to export the wallet as, either PRIVATE_KEY or SEED_PHRASE. Defaults to PRIVATE_KEY.
+   * @param {ExportWalletParams} params - Export parameters
    * @returns {Promise<string>} The decrypted private key or seed phrase
    * @throws {Error} If the user is not authenticated or export fails
    */
-  async exportWallet(
-    exportAs: ExportWalletAs = ExportWalletAs.PRIVATE_KEY,
-  ): Promise<string> {
+  async exportWallet(params?: ExportWalletParams): Promise<string> {
     if (!this.user) {
       throw new Error("User must be authenticated to export wallet");
     }
+
+    const exportAs = params?.exportAs || ExportWalletAs.PRIVATE_KEY;
 
     // Step 1: Generate a P256 key pair for encryption
     const embeddedKey = generateP256KeyPair();
@@ -398,7 +405,7 @@ export class RNSignerClient extends BaseSignerClient<ExportWalletAs, string> {
       });
 
       // Step 4: Process the decrypted data based on export type
-      if (exportAs === "PRIVATE_KEY") {
+      if (exportAs === ExportWalletAs.PRIVATE_KEY) {
         return toHex(decryptedData);
       } else {
         return new TextDecoder().decode(decryptedData);
