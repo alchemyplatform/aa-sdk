@@ -40,14 +40,16 @@ navigation:
                     path: wallets/pages/react-native/overview.mdx
                   - page: Quickstart with Expo
                     path: wallets/pages/react-native/getting-started/getting-started-quickstart.mdx
-                  - section: From Scratch
+                  - section: From scratch
                     contents:
-                      - page: Expo Setup
+                      - page: Using Expo
                         path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
-                      - page: Bare React Native Setup
+                      - page: Using Bare React Native
                         path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
-                      - page: Integrate Smart Wallets
-                        path: wallets/pages/react-native/getting-started/integrate-smart-wallets.mdx
+                      - page: Accounts setup
+                        path: wallets/pages/react-native/getting-started/accounts-setup.mdx
+                      - page: Smart Account Client
+                        path: wallets/pages/react-native/getting-started/smart-account-client.mdx
               - section: Other JavaScript frameworks
                 contents:
                   - page: Overview

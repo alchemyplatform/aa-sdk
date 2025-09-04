@@ -11,7 +11,7 @@ slug: wallets/react-native/getting-started/getting-started-rn-bare
   guide](/wallets/react-native/getting-started/getting-started-expo) instead.
 </Info>
 
-We would go through the steps to get your environment setup for using Smart Wallets within a Bare React Native application.
+Here are the steps to get your environment setup for using Smart Wallets within a Bare React Native application.
 
 <Markdown src="../../../shared/react-native/prerequisites.mdx" />
 
@@ -47,11 +47,11 @@ const config = getDefaultConfig(projectRoot);
 const ALIASES = {
   "@noble/hashes/crypto": path.resolve(
     projectRoot,
-    "node_modules/@noble/hashes/crypto.js"
+    "node_modules/@noble/hashes/crypto.js",
   ),
   "@sinclair/typebox": path.resolve(
     projectRoot,
-    "node_modules/@sinclair/typebox/build/cjs/index.js"
+    "node_modules/@sinclair/typebox/build/cjs/index.js",
   ),
 };
 
@@ -69,6 +69,28 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
       type: "sourceFile",
     };
   }
+
+  // Handle .js/.jsx extensions on TypeScript files
+  if (
+    (moduleName.startsWith(".") || moduleName.startsWith("/")) &&
+    (moduleName.endsWith(".js") || moduleName.endsWith(".jsx"))
+  ) {
+    const moduleFilePath = path.resolve(
+      context.originModulePath,
+      "..",
+      moduleName,
+    );
+
+    // if the file exists, we won't remove extension, and we'll fall back to normal resolution.
+    if (!fs.existsSync(moduleFilePath)) {
+      return context.resolveRequest(
+        context,
+        moduleName.replace(/\.[^/.]+$/, ""),
+        platform,
+      );
+    }
+  }
+
   return context.resolveRequest(context, moduleName, platform);
 };
 
@@ -147,4 +169,4 @@ npx react-native run-android
 
 ## Next Steps
 
-Move on to [integrate smart wallets](/docs/wallets/react-native/getting-started/integrate-smart-wallets)!
+Move on to [setup accounts](/docs/wallets/react-native/getting-started/accounts-setup)!
