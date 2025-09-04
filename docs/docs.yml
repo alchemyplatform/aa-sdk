@@ -16,22 +16,24 @@ navigation:
           - page: Overview
             slug: /
             path: wallets/pages/index.mdx
+          - page: Quickstart
+            path: wallets/pages/react/getting-started/quickstart-at-top.mdx
           - section: Get Started
             contents:
               - section: React
                 contents:
                   - page: Quickstart
-                    path: wallets/pages/react/quickstart.mdx
-                  - page: New project
-                    path: wallets/pages/react/quickstart/new-project.mdx
-                  - page: Add to existing project
-                    path: wallets/pages/react/quickstart/existing-project.mdx
-                  - page: Set up your client
-                    path: wallets/pages/react/how-to-set-up-smart-account-client.mdx
-                  - page: Multi-chain setup
-                    path: wallets/pages/react/multi-chain-apps.mdx
-                  - page: Server-side rendering
-                    path: wallets/pages/react/ssr.mdx
+                    path: wallets/pages/react/getting-started/quickstart-in-section.mdx
+                  - section: From scratch
+                    contents:
+                      - page: Initialization
+                        path: wallets/pages/react/getting-started/initialization.mdx
+                      - page: Environment setup
+                        path: wallets/pages/react/getting-started/setup.mdx
+                      - page: UI Customization
+                        path: wallets/pages/react/getting-started/ui-customization.mdx
+                      - page: App Integration
+                        path: wallets/pages/react/getting-started/existing-project.mdx
               - section: React Native
                 contents:
                   - page: Overview
@@ -80,6 +82,11 @@ navigation:
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
+              - page: Upgrade to Smart Accounts
+                slug: recipes/upgrade-to-smart-accounts
+                path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
+              - page: Multi-chain setup
+                path: wallets/pages/react/multi-chain-apps.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
@@ -119,14 +126,32 @@ navigation:
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
               - page: Passkey login
                 path: wallets/pages/react/login-methods/passkey-login.mdx
-              - page: Connect EOAs
-                path: wallets/pages/react/login-methods/eoa-login.mdx
               - page: Add passkey
                 path: wallets/pages/react/add-passkey.mdx
-              - page: Adding and removing login methods
-                path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
               - page: "[NEW] On-chain passkeys"
                 path: wallets/pages/react/login-methods/onchain-passkeys.mdx
+              - page: Adding and removing login methods
+                path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+          - section: UI components
+            contents:
+              - page: Using UI components
+                path: wallets/pages/react/ui-components.mdx
+              - page: Theme & branding
+                path: wallets/pages/react/customization/theme.mdx
+              - page: Tailwind setup
+                path: wallets/pages/react/customization/tailwind-setup.mdx
+          - section: Whitelabel
+            contents:
+              - page: React hooks
+                path: wallets/pages/react/react-hooks.mdx
+              - page: Other JS initialization
+                path: wallets/pages/signer/quickstart.mdx
+          - section: Connectors
+            contents:
+              - page: Connect external wallets
+                path: wallets/pages/react/login-methods/eoa-login.mdx
+              - page: Customize
+                path: wallets/pages/react/connectors/customization.mdx
           - section: MFA
             contents:
               - page: Set up MFA
@@ -137,18 +162,6 @@ navigation:
                 path: wallets/pages/react/mfa/email-magic-link.mdx
               - page: Social login
                 path: wallets/pages/react/mfa/social-login.mdx
-          - section: Customization
-            contents:
-              - page: Theme
-                path: wallets/pages/react/customization/theme.mdx
-          - page: UI components
-            path: wallets/pages/react/ui-components.mdx
-          - section: Whitelabel
-            contents:
-              - page: React hooks
-                path: wallets/pages/react/react-hooks.mdx
-              - page: Other Javascript initialization
-                path: wallets/pages/signer/quickstart.mdx
           - section: Account management
             contents:
               - page: Pregenerate wallets
@@ -1151,6 +1164,8 @@ navigation:
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
               - page: Bundler RPC Errors
                 path: wallets/pages/bundler-api/bundler-rpc-errors.mdx
+              - page: Server-side rendering
+                path: wallets/pages/react/ssr.mdx
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx

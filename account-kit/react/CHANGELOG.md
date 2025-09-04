@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Bug Fixes
+
+- **wallet-client:** handle permits in sendCalls action, add clarifying docs ([50039e0](https://github.com/alchemyplatform/aa-sdk/commit/50039e01d6a4137db4fa5668c52442deda3cc12e))
+
+### Features
+
+- new hooks accept old client for account ([#1974](https://github.com/alchemyplatform/aa-sdk/issues/1974)) ([19d0365](https://github.com/alchemyplatform/aa-sdk/commit/19d036564bca2ea5adf912c3122e619cbf69fb5a))
+
+## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
+
+**Note:** Version bump only for package @account-kit/react
+
 # [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
 
 ### Features

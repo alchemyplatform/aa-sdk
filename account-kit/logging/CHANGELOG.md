@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Features
+
+- remove segment & add heap to demo app ([#1983](https://github.com/alchemyplatform/aa-sdk/issues/1983)) ([658bd54](https://github.com/alchemyplatform/aa-sdk/commit/658bd54c9cd4b0c59bd804cdc85ddef1caa3164f))
+
+## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
+
+**Note:** Version bump only for package @account-kit/logging
+
 # [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
 
 **Note:** Version bump only for package @account-kit/logging
