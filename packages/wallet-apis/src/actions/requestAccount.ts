@@ -1,18 +1,21 @@
 import type { Static } from "@sinclair/typebox";
 import type { Address } from "abitype";
-import type { Prettify } from "viem";
+import type { Prettify, UnionOmit } from "viem";
 import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
-import type { InnerWalletApiClient, SignerClient } from "../types";
+import type {
+  InnerWalletApiClient,
+  OptionalSignerAddress,
+  SignerClient,
+} from "../types";
 
 export type RequestAccountParams = Prettify<
-  Omit<
-    Extract<
+  OptionalSignerAddress<
+    UnionOmit<
       Static<typeof wallet_requestAccount>["Request"]["params"][0],
-      { signerAddress: Address }
-    >,
-    "signerAddress" | "includeCounterfactualInfo"
-  > & { accountAddress?: Address }
+      "includeCounterfactualInfo"
+    >
+  >
 >;
 
 export type RequestAccountResult = Prettify<{ address: Address }>;
@@ -47,14 +50,15 @@ export async function requestAccount(
           accountAddress: client.account.address,
           includeCounterfactualInfo: true,
         }
-      : params?.accountAddress
+      : params != null && "accountAddress" in params
         ? {
             accountAddress: params.accountAddress,
             includeCounterfactualInfo: true,
           }
         : {
             ...params,
-            signerAddress: signerClient.account.address,
+            signerAddress:
+              params?.signerAddress ?? signerClient.account.address,
             includeCounterfactualInfo: true,
           };
 
