@@ -97,9 +97,6 @@ export const paymasterTransport = (
             entryPoint.toLowerCase() ===
             paymaster070.entryPointAddress.toLowerCase();
 
-          // Check if paymaster is deployed
-          let usePaymaster = true;
-
           // Log if ERC-20 context is being used
           if (erc20Context) {
             console.log(
@@ -107,35 +104,10 @@ export const paymasterTransport = (
             );
           }
 
-          // For test-policy, check if paymaster is deployed
+          // For test-policy, ensure paymaster is deployed
           if (policyId === "test-policy") {
             const paymaster = isPMv7 ? paymaster070 : paymaster060;
-            const paymasterAddress = paymaster.getPaymasterDetails().address;
-
-            try {
-              const code = await client.request({
-                method: "eth_getCode",
-                params: [paymasterAddress, "latest"],
-              });
-
-              if (code === "0x" || code === null) {
-                // Paymaster not deployed, deploy it now
-                console.log(`Deploying paymaster at ${paymasterAddress}...`);
-                try {
-                  await paymaster.deployPaymasterContract(client);
-                  console.log(
-                    `Paymaster deployed successfully at ${paymasterAddress}`,
-                  );
-                  usePaymaster = true;
-                } catch (deployError) {
-                  console.error(`Failed to deploy paymaster:`, deployError);
-                  usePaymaster = false;
-                }
-              }
-            } catch (error) {
-              console.error("Error checking paymaster deployment:", error);
-              usePaymaster = false;
-            }
+            await paymaster.deployPaymasterContract(client);
           }
 
           let uo = {
@@ -162,11 +134,9 @@ export const paymasterTransport = (
             params: [],
           });
 
-          const stubData = usePaymaster
-            ? isPMv7
-              ? paymaster070.getPaymasterStubData()
-              : paymaster060.getPaymasterStubData()
-            : { paymasterAndData: "0x" };
+          const stubData = isPMv7
+            ? paymaster070.getPaymasterStubData()
+            : paymaster060.getPaymasterStubData();
 
           uo = {
             ...uo,
@@ -192,11 +162,9 @@ export const paymasterTransport = (
               : {}),
           };
 
-          const pmFields = usePaymaster
-            ? isPMv7
-              ? await paymaster070.getPaymasterData(uo, client)
-              : await paymaster060.getPaymasterData(uo, client)
-            : { paymasterAndData: "0x" };
+          const pmFields = isPMv7
+            ? await paymaster070.getPaymasterData(uo, client)
+            : await paymaster060.getPaymasterData(uo, client);
 
           return {
             ...uo,
