@@ -46,10 +46,8 @@ navigation:
                         path: wallets/pages/react-native/getting-started/getting-started-expo.mdx
                       - page: Using Bare React Native
                         path: wallets/pages/react-native/getting-started/getting-started-rn-bare.mdx
-                      - page: Accounts setup
-                        path: wallets/pages/react-native/getting-started/accounts-setup.mdx
-                      - page: Smart Account Client
-                        path: wallets/pages/react-native/getting-started/smart-account-client.mdx
+                      - page: App integration
+                        path: wallets/pages/react-native/getting-started/app-integration.mdx
               - section: Other JavaScript frameworks
                 contents:
                   - page: Overview
