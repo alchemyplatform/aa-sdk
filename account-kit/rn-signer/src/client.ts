@@ -36,6 +36,7 @@ import {
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
 import { generateP256KeyPair, hpkeDecrypt } from "@turnkey/crypto";
+import { toHex } from "viem";
 import { InAppBrowserUnavailableError } from "./errors";
 import NativeTEKStamper from "./NativeTEKStamper";
 import { parseSearchParams } from "./utils/parseUrlParams";
@@ -53,17 +54,15 @@ export const RNSignerClientParamsSchema = z.object({
 
 export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
-export type ExportWalletParams = {
-  exportAs?: "PRIVATE_KEY" | "SEED_PHRASE";
-};
+export enum ExportWalletAs {
+  PRIVATE_KEY = "PRIVATE_KEY",
+  SEED_PHRASE = "SEED_PHRASE",
+}
 
 export type ExportWalletResult = string;
 
 // TODO: need to emit events
-export class RNSignerClient extends BaseSignerClient<
-  ExportWalletParams,
-  string
-> {
+export class RNSignerClient extends BaseSignerClient<ExportWalletAs, string> {
   private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
   rpId: string | undefined;
@@ -285,16 +284,16 @@ export class RNSignerClient extends BaseSignerClient<
   /**
    * Exports the wallet and returns the decrypted private key or seed phrase.
    *
-   * @param {ExportWalletParams} params Export parameters
+   * @param {ExportWalletAs} exportAs - The format to export the wallet as, either PRIVATE_KEY or SEED_PHRASE. Defaults to PRIVATE_KEY.
    * @returns {Promise<string>} The decrypted private key or seed phrase
    * @throws {Error} If the user is not authenticated or export fails
    */
-  async exportWallet(params?: ExportWalletParams): Promise<string> {
+  async exportWallet(
+    exportAs: ExportWalletAs = ExportWalletAs.PRIVATE_KEY,
+  ): Promise<string> {
     if (!this.user) {
       throw new Error("User must be authenticated to export wallet");
     }
-
-    const exportAs = params?.exportAs || "PRIVATE_KEY";
 
     // Step 1: Generate a P256 key pair for encryption
     const embeddedKey = generateP256KeyPair();
@@ -302,7 +301,7 @@ export class RNSignerClient extends BaseSignerClient<
     try {
       let exportBundle: string;
 
-      if (exportAs === "PRIVATE_KEY") {
+      if (exportAs === ExportWalletAs.PRIVATE_KEY) {
         // Step 2a: Export as private key
         const { activity } = await this.turnkeyClient.exportWalletAccount({
           organizationId: this.user.orgId,
@@ -400,11 +399,8 @@ export class RNSignerClient extends BaseSignerClient<
 
       // Step 4: Process the decrypted data based on export type
       if (exportAs === "PRIVATE_KEY") {
-        // For private key, the decrypted data is the raw private key bytes
-        // Convert to hex string with 0x prefix
-        return "0x" + Buffer.from(decryptedData).toString("hex");
+        return toHex(decryptedData);
       } else {
-        // For seed phrase, the decrypted data is the mnemonic string
         return new TextDecoder().decode(decryptedData);
       }
     } finally {
