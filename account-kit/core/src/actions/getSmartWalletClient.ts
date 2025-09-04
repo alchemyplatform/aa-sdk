@@ -3,11 +3,11 @@ import {
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
 import type { Address } from "viem";
-import { getAlchemyTransport } from "../../actions/getAlchemyTransport.js";
-import { getConnection } from "../../actions/getConnection.js";
-import { getSigner } from "../../actions/getSigner.js";
-import { getSignerStatus } from "../../actions/getSignerStatus.js";
-import type { AlchemyAccountsConfig } from "../../types.js";
+import { getAlchemyTransport } from "./getAlchemyTransport.js";
+import { getConnection } from "./getConnection.js";
+import { getSigner } from "./getSigner.js";
+import { getSignerStatus } from "./getSignerStatus.js";
+import type { AlchemyAccountsConfig } from "../types.js";
 
 export type GetSmartWalletClientResult<
   TAccount extends Address | undefined = Address | undefined,
@@ -24,6 +24,29 @@ export function getSmartWalletClient<
   params?: GetSmartWalletClientParams<TAccount>,
 ): GetSmartWalletClientResult<TAccount>;
 
+/**
+ * Creates and returns a Smart Wallet Client instance.
+ * Returns undefined if running in a server environment or if no signer is connected.
+ * Caches clients by chain ID & address for performance optimization.
+ *
+ * @example
+ * ```ts
+ * import { getSmartWalletClient } from "@account-kit/core";
+ * // see createConfig for more information on how to create a config
+ * import { config } from "./config.js";
+ *
+ * const client = getSmartWalletClient(config);
+ *
+ * // With specific account address
+ * const clientWithAccount = getSmartWalletClient(config, {
+ *   account: "0x1234..."
+ * });
+ * ```
+ *
+ * @param {AlchemyAccountsConfig} config The configuration containing the client store and connection information
+ * @param {GetSmartWalletClientParams} [params] Optional parameters including account address
+ * @returns {GetSmartWalletClientResult} The Smart Wallet Client instance or undefined if not available
+ */
 export function getSmartWalletClient(
   config: AlchemyAccountsConfig,
   params?: GetSmartWalletClientParams,
