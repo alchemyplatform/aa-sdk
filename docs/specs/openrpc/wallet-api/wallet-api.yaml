@@ -192,9 +192,9 @@ methods:
     examples:
       - name: "wallet_requestAccount example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - signerAddress: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+              signerAddress: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
         result:
           name: "Response"
           value:
@@ -1866,16 +1866,16 @@ methods:
     examples:
       - name: "wallet_prepareCalls example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - calls:
-                  - to: "0x1234567890123456789012345678901234567890"
-                    data: "0x"
-                from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
-                chainId: "0x01"
-                capabilities:
-                  paymasterService:
-                    policyId: "11111111-2222-3333-4444-555555555555"
+              calls:
+                - to: "0x1234567890123456789012345678901234567890"
+                  data: "0x"
+              from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+              chainId: "0x01"
+              capabilities:
+                paymasterService:
+                  policyId: "11111111-2222-3333-4444-555555555555"
         result:
           name: "Response"
           value:
@@ -2796,26 +2796,26 @@ methods:
     examples:
       - name: "wallet_sendPreparedCalls example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - type: "user-operation-v070"
-                data:
-                  sender: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
-                  nonce: "0x10000000000000000"
-                  callData: "0x34fcd5be0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
-                  paymaster: "0x3f222Df6aB18C1E10d0Ec136503c3B0dfd929048"
-                  paymasterData: "0x0000000000000000682d7e7c9fa6f71c28c31141a11ac9eb2bdbe898ddbd42a4f7085f8bb3380ba75dd9231a386e24fe5a84777217c907391e983b5b0f78a4a9d0fd1c8631dd22c10e106b461c"
-                  paymasterPostOpGasLimit: "0x0"
-                  paymasterVerificationGasLimit: "0x74d3"
-                  maxPriorityFeePerGas: "0x60e4b0"
-                  maxFeePerGas: "0x1bf52290"
-                  callGasLimit: "0x2bb8"
-                  verificationGasLimit: "0xc845"
-                  preVerificationGas: "0x14b74"
-                chainId: "0x66eee"
-                signature:
-                  type: "secp256k1"
-                  data: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
+              type: "user-operation-v070"
+              data:
+                sender: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+                nonce: "0x10000000000000000"
+                callData: "0x34fcd5be0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000"
+                paymaster: "0x3f222Df6aB18C1E10d0Ec136503c3B0dfd929048"
+                paymasterData: "0x0000000000000000682d7e7c9fa6f71c28c31141a11ac9eb2bdbe898ddbd42a4f7085f8bb3380ba75dd9231a386e24fe5a84777217c907391e983b5b0f78a4a9d0fd1c8631dd22c10e106b461c"
+                paymasterPostOpGasLimit: "0x0"
+                paymasterVerificationGasLimit: "0x74d3"
+                maxPriorityFeePerGas: "0x60e4b0"
+                maxFeePerGas: "0x1bf52290"
+                callGasLimit: "0x2bb8"
+                verificationGasLimit: "0xc845"
+                preVerificationGas: "0x14b74"
+              chainId: "0x66eee"
+              signature:
+                type: "secp256k1"
+                data: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
         result:
           name: "Response"
           value:
@@ -3118,20 +3118,21 @@ methods:
     examples:
       - name: "wallet_createSession example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - account: "0xafdABa1E09e82F780721963eba39bA9e6d9FE4d2"
-                chainId: "0x01"
-                key:
-                  publicKey: "0x647bbf38CD0E116d1672405aE17a775572a84e03"
-                  type: "secp256k1"
-                permissions:
-                  - type: "root"
-                expirySec: 1747969653
+              account: "0xafdABa1E09e82F780721963eba39bA9e6d9FE4d2"
+              chainId: "0x01"
+              key:
+                publicKey: "0x647bbf38CD0E116d1672405aE17a775572a84e03"
+                type: "secp256k1"
+              permissions:
+                - type: "root"
+              expirySec: 1747969653
         result:
           name: "Response"
           value:
             sessionId: "0xcd8b2d07a6fa76f1e8a5eaa8f3a7883c"
+            chainId: "0x1"
             signatureRequest:
               type: "eth_signTypedData_v4"
               data:
@@ -3309,13 +3310,13 @@ methods:
     examples:
       - name: "wallet_formatSign example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
-                chainId: "0x01"
-                signature:
-                  type: "ecdsa"
-                  data: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
+              from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+              chainId: "0x01"
+              signature:
+                type: "ecdsa"
+                data: "0xb1a055089b1ba8387ed435f2bd0afe7ff69f22b928cdfdea1b5323c64d6af387164de3fa6febf031b544de46a84d6fb7f084b9798ddfaba820950c257139a7321b"
         result:
           name: "Response"
           value:
@@ -3351,6 +3352,21 @@ methods:
                 type: "number"
                 enum:
                   - 100
+              - title: "Preconfirmed"
+                description: "Batch has been preconfirmed onchain"
+                type: "number"
+                enum:
+                  - 110
+              - title: "Preconfirmed Onchain Failure"
+                description: "Batch reverted *completely* in a preconfirmation and only changes related to gas charge may have been included onchain"
+                type: "number"
+                enum:
+                  - 115
+              - title: "Preconfirmed Partial Onchain Failure"
+                description: "Batch reverted *partially* in a preconfirmation and some changes related to batch calls may have been included onchain"
+                type: "number"
+                enum:
+                  - 116
               - title: "Confirmed"
                 description: "Batch has been included onchain without reverts, receipts array contains info of all calls"
                 type: "number"
@@ -3428,9 +3444,8 @@ methods:
     examples:
       - name: "wallet_getCallsStatus example"
         params:
-          - name: "Request"
-            value:
-              - "0x0000000000000000000000000000000000000000000000000000000000066eee1057eff9529142aa3b74adcaacfce5b99a09d80c9f2e38e35ea1f27535e61477"
+          - name: "param0"
+            value: "0x0000000000000000000000000000000000000000000000000000000000066eee1057eff9529142aa3b74adcaacfce5b99a09d80c9f2e38e35ea1f27535e61477"
         result:
           name: "Response"
           value:
@@ -3475,17 +3490,28 @@ methods:
       - name: getCapabilitiesRequest
         required: true
         schema:
-          type: "array"
-          items:
-            - type: "string"
-              pattern: "^0x(.*)$"
-            - type: "array"
+          anyOf:
+            - description: "Wallet address only"
+              type: "array"
               items:
-                type: "string"
-                pattern: "^0x(.*)$"
-          additionalItems: false
+                - type: "string"
+                  pattern: "^0x(.*)$"
+              additionalItems: false
+              minItems: 1
+              maxItems: 1
+            - description: "Wallet address and chain ids"
+              type: "array"
+              items:
+                - type: "string"
+                  pattern: "^0x(.*)$"
+                - type: "array"
+                  items:
+                    type: "string"
+                    pattern: "^0x(.*)$"
+              additionalItems: false
+              minItems: 2
+              maxItems: 2
           minItems: 1
-          maxItems: 2
 
     result:
       name: getCapabilitiesResponse
@@ -3500,11 +3526,12 @@ methods:
     examples:
       - name: "wallet_getCapabilities example"
         params:
-          - name: "Request"
+          - name: "param0"
+            value: "0xd46e8dd67c5d32be8058bb8eb970870f07244567"
+          - name: "param1"
             value:
-              - - "0xd46e8dd67c5d32be8058bb8eb970870f07244567"
-                - - "0x2105"
-                  - "0x14A34"
+              - "0x2105"
+              - "0x14A34"
         result:
           name: "Response"
           value:
@@ -3577,9 +3604,9 @@ methods:
     examples:
       - name: "wallet_listAccounts example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - signerAddress: "0x6275B53E98D07c729108A177207634eA22F5A748"
+              signerAddress: "0x6275B53E98D07c729108A177207634eA22F5A748"
         result:
           name: "Response"
           value:
@@ -3803,14 +3830,14 @@ methods:
     examples:
       - name: "wallet_prepareSign example"
         params:
-          - name: "Request"
+          - name: "param0"
             value:
-              - from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
-                chainId: "0x01"
-                signatureRequest:
-                  type: "personal_sign"
-                  data:
-                    raw: "0x48656c6c6f20576f726c6421"
+              from: "0xa363219d7C0b8673df17529D469Db9eFF0f35D2A"
+              chainId: "0x01"
+              signatureRequest:
+                type: "personal_sign"
+                data:
+                  raw: "0x48656c6c6f20576f726c6421"
         result:
           name: "Response"
           value:
