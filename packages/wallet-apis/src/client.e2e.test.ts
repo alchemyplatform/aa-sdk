@@ -74,7 +74,7 @@ describe("Client E2E Tests", () => {
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     fetchSpy.mockRestore();
-  }, 30_000);
+  });
 
   it("should successfully request account with different salt", async () => {
     const account = await client.requestAccount({
@@ -85,7 +85,7 @@ describe("Client E2E Tests", () => {
     expect(account.address).toMatchInlineSnapshot(
       `"0xdfdd407b9569D40BEFa503208753E59cAc9713fA"`,
     );
-  }, 30_000);
+  });
 
   it("should not cache account if different inputs provided", async () => {
     const account = await client.requestAccount();
@@ -95,7 +95,7 @@ describe("Client E2E Tests", () => {
     });
 
     expect(account.address).not.toEqual(account2.address);
-  }, 30_000);
+  });
 
   it("should successfully get capabilities", async () => {
     const account = await client.requestAccount(); // Ensure account is known
@@ -142,7 +142,7 @@ describe("Client E2E Tests", () => {
         },
       }
     `);
-  }, 45_000);
+  });
 
   it("can correctly sign a message", async () => {
     const account = await client.requestAccount();
@@ -154,7 +154,7 @@ describe("Client E2E Tests", () => {
       signature,
     });
     expect(isValid).toBe(true);
-  }, 30_000);
+  });
 
   it("can correctly sign typed data", async () => {
     const account = await client.requestAccount();
@@ -165,7 +165,7 @@ describe("Client E2E Tests", () => {
       address: account.address,
     });
     expect(isValid).toBe(true);
-  }, 30_000);
+  });
 
   it("can correctly sign a message with a different account", async () => {
     const account = await client.requestAccount({
@@ -184,7 +184,7 @@ describe("Client E2E Tests", () => {
       signature,
     });
     expect(isValid).toBe(true);
-  }, 30_000);
+  });
 
   it("can correctly sign typed data with a different account", async () => {
     const account = await client.requestAccount({
@@ -203,7 +203,7 @@ describe("Client E2E Tests", () => {
       address: account.address,
     });
     expect(isValid).toBe(true);
-  }, 30_000);
+  });
 
   it.each(sendVariants)(
     "should successfully send a UO with paymaster",
@@ -226,7 +226,7 @@ describe("Client E2E Tests", () => {
 
       expect(result.status).toBe("success");
     },
-    45_000,
+    60_000,
   );
 
   it.each(sendVariants)(
@@ -304,7 +304,7 @@ describe("Client E2E Tests", () => {
 
       expect(result.status).toBe("success");
     },
-    45_000,
+    60_000,
   );
 
   it.each(sendVariants)(
