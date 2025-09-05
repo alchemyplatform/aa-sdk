@@ -207,53 +207,48 @@ describe.sequential("MultiOwner Light Account Tests", () => {
     );
   });
 
-  it.retry(2)(
-    "should update ownership successfully",
-    async () => {
-      // create a throwaway address
-      const throwawaySigner = createWalletClient({
-        account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(client.transport),
-        chain: client.chain,
-      });
+  it("should update ownership successfully", async () => {
+    // create a throwaway address
+    const throwawaySigner = createWalletClient({
+      account: privateKeyToAccount(generatePrivateKey()),
+      transport: custom(client.transport),
+      chain: client.chain,
+    });
 
-      const throwawayClient = await givenConnectedProvider({
-        signer: throwawaySigner,
-      });
+    const throwawayClient = await givenConnectedProvider({
+      signer: throwawaySigner,
+    });
 
-      // fund the throwaway address
-      await setBalance(client, {
-        address: throwawayClient.account.address,
-        value: 200000000000000000n,
-      });
+    // fund the throwaway address
+    await setBalance(client, {
+      address: throwawayClient.account.address,
+      value: 200000000000000000n,
+    });
 
-      // create new signer and transfer ownership
-      const newOwner = createWalletClient({
-        account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(client.transport),
-        chain: client.chain,
-      });
+    // create new signer and transfer ownership
+    const newOwner = createWalletClient({
+      account: privateKeyToAccount(generatePrivateKey()),
+      transport: custom(client.transport),
+      chain: client.chain,
+    });
 
-      const hash = await throwawayClient.updateOwners({
-        ownersToAdd: [newOwner.account.address],
-        ownersToRemove: [throwawaySigner.account.address],
-      });
+    const hash = await throwawayClient.updateOwners({
+      ownersToAdd: [newOwner.account.address],
+      ownersToRemove: [throwawaySigner.account.address],
+    });
 
-      await throwawayClient.waitForUserOperationReceipt({ hash });
+    await throwawayClient.waitForUserOperationReceipt({ hash });
 
-      const newOwnerClient = await givenConnectedProvider({
-        signer: newOwner,
-        accountAddress: throwawayClient.account.address,
-      });
+    const newOwnerClient = await givenConnectedProvider({
+      signer: newOwner,
+      accountAddress: throwawayClient.account.address,
+    });
 
-      const newOwnerAddresses =
-        await newOwnerClient.account.getOwnerAddresses();
+    const newOwnerAddresses = await newOwnerClient.account.getOwnerAddresses();
 
-      expect(newOwnerAddresses).not.toContain(throwawaySigner.account.address);
-      expect(newOwnerAddresses).toContain(newOwner.account.address);
-    },
-    100000,
-  );
+    expect(newOwnerAddresses).not.toContain(throwawaySigner.account.address);
+    expect(newOwnerAddresses).toContain(newOwner.account.address);
+  }, 100000);
 
   // TODO(v5): implement test for upgrading account to MSCA?
 
