@@ -105,6 +105,7 @@ The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain
 
     ```tsx twoslash
     import { AlchemySignerWebClient } from "@account-kit/signer";
+    import { sha256, toBytes } from 'viem'
 
     const client = new AlchemySignerWebClient({
       connection: {
@@ -119,7 +120,7 @@ The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain
     const targetPublicKey = await client.targetPublicKey();
 
     // Use this in your JWT's nonce claim
-    // nonce = toHex(sha256(targetPublicKey)) without the '0x'
+    const nonce = sha256(stringToBytes(publicKey)).slice(2)
     ```
 
     ### Step 3: Create and Submit JWT
