@@ -142,7 +142,7 @@ export function alchemyGasManagerHooks(
       context.erc20Context = {
         tokenAddress: address,
         maxTokenAmount: maxTokenAmount
-          ? `0x${maxTokenAmount.toString(16)}`
+          ? toHex(maxTokenAmount)
           : undefined,
       };
     }
