@@ -120,7 +120,7 @@ The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain
     const targetPublicKey = await client.targetPublicKey();
 
     // Use this in your JWT's nonce claim
-    const nonce = sha256(stringToBytes(publicKey)).slice(2)
+    const nonce = sha256(stringToBytes(targetPublicKey)).slice(2)
     ```
 
     ### Step 3: Create and Submit JWT
