@@ -127,7 +127,6 @@ methods:
         description: The `userOpHash` of the `UserOperation` to get the receipt for (as returned by `eth_sendUserOperation`).
         schema:
           $ref: "../_shared_wallets/components.yaml#/components/schemas/hash32"
-    params:
       - name: tag
         required: false
         description: The blocktag for checking the UO status. \"pending\" or \"latest\". Defaults to \"latest\".".
