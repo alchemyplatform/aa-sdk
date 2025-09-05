@@ -241,7 +241,7 @@ navigation:
               - page: EVM
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Solana
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+                path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
               - section: Signing
                 contents:
                   - page: Signing transactions
