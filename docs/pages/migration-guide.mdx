@@ -48,7 +48,7 @@ For more detailed examples, see the relevant Quickstart guides, depending on whi
 
 ### Hooks: `useSendTransaction` and `useSendTransactions` removed
 
-These methods have been removed since `useSendUserOperation` can be used to send transactions and transactions. If you were using `useSendTransaction` or `useSendTransactions`, you can replace them with
+These methods have been removed since `useSendUserOperation` can be used to send transactions. If you were using `useSendTransaction` or `useSendTransactions`, you can replace them with
 `useSendUserOperation` and pass in `waitForTxn: true` so that all `sendUserOperation` calls will wait for the transaction to be mined.
 
 ### Utils: `verifyEIP6492Signature` removed
