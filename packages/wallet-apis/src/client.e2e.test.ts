@@ -47,13 +47,6 @@ const sendVariants: Array<
 ];
 
 describe("Client E2E Tests", () => {
-  if (
-    !process.env.TEST_ALCHEMY_API_KEY ||
-    !process.env.TEST_PAYMASTER_POLICY_ID
-  ) {
-    it.skip("skipped: missing TEST_ALCHEMY_API_KEY or TEST_PAYMASTER_POLICY_ID", () => {});
-    return;
-  }
   const signer = privateKeyToAccount(
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
