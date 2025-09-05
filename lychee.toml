@@ -1,0 +1,6 @@
+
+# Base URL or website root directory to check relative URLs.
+base_url = "https://www.alchemy.com"
+
+# Exclude links that end with .mdx or .png
+exclude = [".*\\.mdx$", ".*\\.png$"]
