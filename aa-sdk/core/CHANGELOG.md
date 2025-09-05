@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+### Features
+
+- **flashblock:** add tag to eth_getUserOperationReceipt ([#2005](https://github.com/alchemyplatform/aa-sdk/issues/2005)) ([f099aea](https://github.com/alchemyplatform/aa-sdk/commit/f099aea0b5524d65604b5775002aded147b40f97))
+
 ## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
 
 **Note:** Version bump only for package @aa-sdk/core

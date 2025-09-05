@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+### Bug Fixes
+
+- add nonce code snippet to byo auth ([#2013](https://github.com/alchemyplatform/aa-sdk/issues/2013)) ([624aff4](https://github.com/alchemyplatform/aa-sdk/commit/624aff4c8afd5fcac214d2fdca0f2dc2a936256f))
+- quick pass to fix typos ([#1939](https://github.com/alchemyplatform/aa-sdk/issues/1939)) ([911043c](https://github.com/alchemyplatform/aa-sdk/commit/911043c50bd78d600ab4d841122ff84347953b19))
+- update instructions ([#2012](https://github.com/alchemyplatform/aa-sdk/issues/2012)) ([372b067](https://github.com/alchemyplatform/aa-sdk/commit/372b067badb047c553a88465027397ab74ee10d3))
+
+### Features
+
+- export wallet ([#1858](https://github.com/alchemyplatform/aa-sdk/issues/1858)) ([bc856e1](https://github.com/alchemyplatform/aa-sdk/commit/bc856e1bcc8138cb22db296ffd81e90c43eda9f9))
+- **flashblock:** add tag to eth_getUserOperationReceipt ([#2005](https://github.com/alchemyplatform/aa-sdk/issues/2005)) ([f099aea](https://github.com/alchemyplatform/aa-sdk/commit/f099aea0b5524d65604b5775002aded147b40f97))
+
 ## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
 
 ### Bug Fixes
