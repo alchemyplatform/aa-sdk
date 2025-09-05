@@ -23,7 +23,8 @@ import type { LightAccountVersion } from "../registry.js";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
 import { bigIntMultiply } from "../../utils.js";
 
-describe("MultiOwner Light Account Tests", () => {
+// Run sequentially to avoid interference across tests sharing anvil/rundler state
+describe.sequential("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
   let client: ReturnType<typeof instance.getClient>;
   let salt: bigint = BigInt(poolId());

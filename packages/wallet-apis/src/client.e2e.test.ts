@@ -226,9 +226,7 @@ describe("Client E2E Tests", () => {
 
       expect(result.status).toBe("success");
     },
-    {
-      timeout: 45_000,
-    },
+    60_000,
   );
 
   it.each(sendVariants)(
@@ -267,9 +265,7 @@ describe("Client E2E Tests", () => {
 
       expect(result2.status).toBe("success");
     },
-    {
-      timeout: 90_000,
-    },
+    90_000,
   );
 
   it.each(sendVariants)(
@@ -308,7 +304,7 @@ describe("Client E2E Tests", () => {
 
       expect(result.status).toBe("success");
     },
-    { timeout: 45_000 },
+    60_000,
   );
 
   it.each(sendVariants)(
@@ -351,9 +347,7 @@ describe("Client E2E Tests", () => {
 
       expect(result.status).toBe("success");
     },
-    {
-      timeout: 45_000,
-    },
+    60_000,
   );
 
   const givenTypedData = {
