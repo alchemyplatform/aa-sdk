@@ -105,7 +105,7 @@ The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain
 
     ```tsx twoslash
     import { AlchemySignerWebClient } from "@account-kit/signer";
-    import { sha256, toBytes } from 'viem'
+    import { sha256, stringToBytes } from 'viem'
 
     const client = new AlchemySignerWebClient({
       connection: {
