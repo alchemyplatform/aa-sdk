@@ -36,6 +36,32 @@ export const config = createConfig({
 });
 ```
 
+## Change chains
+
+Once your app is configured to use multiple chains, you can switch between them at any time using the [`useChain`](/wallets/reference/account-kit/react/hooks/useChain) hook.
+
+```tsx twoslash
+import React from "react";
+import { useChain } from "@account-kit/react";
+import { mainnet, sepolia } from "@account-kit/infra";
+
+export default function MyComponent() {
+  const { chain, setChain } = useChain();
+
+  return (
+    <div>
+      <p>Current chain: {chain.name}</p>
+      <button onClick={() => setChain({ chain: mainnet })}>
+        Switch to Mainnet
+      </button>
+      <button onClick={() => setChain({ chain: sepolia })}>
+        Switch to Sepolia
+      </button>
+    </div>
+  );
+}
+```
+
   </Tab>
   <Tab title="Other Javascript">
 
@@ -65,12 +91,9 @@ export const config = createConfig({
 });
 ```
 
-  </Tab>
-</Tabs>
-
 ## Change chains
 
-Once your app is configured to use multiple chains, you can switch between them at any time.
+Once your app is configured to use multiple chains, you can switch between them at any time using the [`setChain`](/wallets/reference/account-kit/core/functions/setChain) function.
 
 <Tip>
   Changing the chain will trigger state changes in your app (eg. the
@@ -79,38 +102,6 @@ Once your app is configured to use multiple chains, you can switch between them 
   the various `watch*` methods that subscribe to the state changes that impact
   them.
 </Tip>
-
-<Tabs>
-  <Tab title="React">
-
-Use the [`useChain`](/wallets/reference/account-kit/react/hooks/useChain) hook to switch between chains:
-
-```tsx twoslash
-import React from "react";
-import { useChain } from "@account-kit/react";
-import { mainnet, sepolia } from "@account-kit/infra";
-
-export default function MyComponent() {
-  const { chain, setChain } = useChain();
-
-  return (
-    <div>
-      <p>Current chain: {chain.name}</p>
-      <button onClick={() => setChain({ chain: mainnet })}>
-        Switch to Mainnet
-      </button>
-      <button onClick={() => setChain({ chain: sepolia })}>
-        Switch to Sepolia
-      </button>
-    </div>
-  );
-}
-```
-
-  </Tab>
-  <Tab title="Other Javascript">
-
-Use the [`setChain`](/wallets/reference/account-kit/core/functions/setChain) function to switch between chains:
 
 <CodeBlocks>
 
