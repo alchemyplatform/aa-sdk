@@ -72,8 +72,8 @@ jobs:
   check_broken_links:
     name: Check Broken Links
     runs-on: ubuntu-latest
-    # TODO: Remove this after fixing all broken links
-    continue-on-error: true
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3
