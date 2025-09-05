@@ -11,8 +11,13 @@ In this doc and the three following we will build a Next.js application with Alc
 Start by initializing a new [Next.js app](https://nextjs.org/). Run:
 
 ```bash
-npx create-next-app@latest
+npx create-next-app@latest \
+  --typescript \
+  --tailwind \
+  --app
 ```
+
+This command passes in flags to use Typescript, Tailwind and the next app router. The following docs in this guide will expect you to use these.
 
 ## Install Dependencies
 
