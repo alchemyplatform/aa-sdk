@@ -205,7 +205,7 @@ navigation:
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token.mdx
           - page: "[NEW] Swap tokens"
-            path: wallets/pages/transactions/swap-tokens.mdx
+            path: wallets/pages/transactions/swap-tokens/index.mdx
           - page: Send parallel transactions
             path: wallets/pages/transactions/send-parallel-transactions.mdx
           - page: Retry transactions
