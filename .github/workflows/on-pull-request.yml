@@ -21,6 +21,36 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: echo "$TITLE" | yarn commitlint
+
+  lint_docs:
+    name: Lint Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install Vale
+        run: |
+          wget -O vale.tar.gz https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_64-bit.tar.gz
+          tar -xzf vale.tar.gz
+          sudo mv vale /usr/local/bin/
+          vale --version
+
+      - name: Run documentation linting
+        run: yarn lint:docs
   
   lint:
     name: Lint
