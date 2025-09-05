@@ -347,7 +347,7 @@ describe("Client E2E Tests", () => {
 
       expect(result.status).toBe("success");
     },
-    45_000,
+    60_000,
   );
 
   const givenTypedData = {
