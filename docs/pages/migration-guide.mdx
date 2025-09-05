@@ -7,7 +7,7 @@ slug: wallets/migration-guide
 
 Below are the steps to migrate your project from older versions of the `aa-sdk` and `account-kit` to the latest version.
 
-## Migrating to version v4.x.x
+## Migrating to Version V4.X.X
 
 ### Packages
 
@@ -19,7 +19,7 @@ All of the v3 packages have been renamed or removed. The new packages are as fol
 - `@alchemy/aa-accounts` -> `@account-kit/smart-contracts`
 - `@alchemy/aa-signers` -> removed
 
-### AA signers
+### AA Signers
 
 The `@alchemy/aa-signers` package has been deprecated. The signers in that package are still compatible with v4, but they will not be receiving future support and the interfaces are not guaranteed to work with future versions of the SDK.
 If you want to integrate a 3rd party signer, it's still very easy if the signer exposes an EIP-1193 interface. See [this guide](/wallets/third-party/signers).
@@ -75,7 +75,7 @@ The Alchemy `Chain` definitions have been moved from `@aa-sdk/core` to `@account
 
 This method on the `AccountSigner` has been renamed.
 
-### Accounts: Default LightAccount version is now v2.0.0
+### Accounts: Default LightAccount Version Is Now v2.0.0
 
 If you were creating LightAccounts for users without explicitly specifying the version (ie. in `createLightAccount` or `useAccount` or `useSmartAccountClient`), you should manually specify the previous default of `v1.1.0`.
 
@@ -92,11 +92,11 @@ Due to a clash in the typing of viem's `Account` type, the `getNonce` method has
 
 The version of viem has been updated to `2.20.0` and been added as a peer dependency. If you have viem listed as a dependency, make sure it is updated to `2.20.0`.
 
-### Dropped CJS support
+### Dropped CJS Support
 
 Due to our dependency on `wagmi` in the `core` and `react` packages, those packages no longer support `cjs` builds. To keep things consistent across all of our packages, we've dropped CJS support in all the packages in this repo. See [this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) guide on how to migrate from CJS to ESM.
 
-## Migrating to version 3.x.x
+## Migrating to Version 3.X.X
 
 This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.
 To address this, version 3.x.x of the SDK switches to an approach more idiomatic to `viem`.
@@ -160,7 +160,7 @@ const client = createSmartAccountClient({ // [!code ++]
 });
 ```
 
-### Client: signature changes on methods
+### Client: Signature Changes on Methods
 
 To support the various ways of connecting to a smart account, the signatures of the methods on `SmartAccountClient` have changed. Almost all methods now have an optional param for `account` and have been converted into single argument functions that take an object with the their properties instead.
 
@@ -334,7 +334,7 @@ The `signTypedData` method found on `SmartAccountSigner` has been updated to mat
 ) => Promise<Hex>;
 ```
 
-### Ethers: Removed methods
+### Ethers: Removed Methods
 
 The `with*` methods have been removed from the Provider and Signer classes.
 The `connect` methods has been removed in favor of immutable properties on the Provider and Signer classes. See updated AccountSigner constructor below.
