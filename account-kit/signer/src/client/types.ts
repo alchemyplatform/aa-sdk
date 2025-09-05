@@ -30,6 +30,8 @@ export type ExportWalletParams = {
   iframeElementId?: string;
 };
 
+export type ExportWalletOutput = boolean;
+
 export type CreateAccountParams =
   | {
       type: "email";
