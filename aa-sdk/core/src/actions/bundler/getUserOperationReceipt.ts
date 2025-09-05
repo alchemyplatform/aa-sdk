@@ -8,9 +8,15 @@ export const getUserOperationReceipt = async <
   client: TClient,
   args: {
     hash: Hex;
-    tag?: "pending" | "latest";
+    tag: "pending" | "latest" | undefined;
   },
 ): Promise<UserOperationReceipt | null> => {
+  if (args.tag === undefined) {
+    return client.request({
+      method: "eth_getUserOperationReceipt",
+      params: [args.hash],
+    });
+  }
   return client.request({
     method: "eth_getUserOperationReceipt",
     params: [args.hash, args.tag],

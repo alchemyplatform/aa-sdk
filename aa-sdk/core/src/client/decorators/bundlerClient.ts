@@ -35,7 +35,7 @@ export type BundlerRpcSchema = [
   },
   {
     Method: "eth_getUserOperationReceipt";
-    Parameters: [Hash, "pending" | "latest" | undefined];
+    Parameters: [Hash, ("pending" | "latest")?];
     ReturnType: UserOperationReceipt | null;
   },
   {
@@ -137,6 +137,9 @@ export const bundlerActions: <
   getUserOperationByHash: async (hash) =>
     getUserOperationByHash(client, { hash }),
   getSupportedEntryPoints: async () => getSupportedEntryPoints(client),
-  getUserOperationReceipt: async (hash) =>
-    getUserOperationReceipt(client, { hash }),
+  getUserOperationReceipt: async (hash, tag?) =>
+    getUserOperationReceipt(client, {
+      hash,
+      tag,
+    }),
 });
