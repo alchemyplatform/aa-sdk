@@ -32,30 +32,6 @@ export const config = () =>
 
 This setting will defer hydration of the account state to the client after the initial mount.
 
-  </Tab>
-  <Tab title="Core">
-
-```ts twoslash
-import { createConfig } from "@account-kit/core";
-import { sepolia, alchemy } from "@account-kit/infra";
-
-export const config = createConfig({
-  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
-  chain: sepolia,
-  ssr: true, // [!code ++]
-});
-```
-
-This setting will defer hydration of the account kit state until you can call the `hydrate` method on mount.
-
-  </Tab>
-</Tabs>
-
-## Hydrate the Account State
-
-<Tabs>
-  <Tab title="React">
-
 ## Persisting the Account State
 
 ### Cookie Storage
@@ -190,7 +166,22 @@ export const config = () =>
 </CodeBlocks>
 
   </Tab>
-  <Tab title="Core">
+  <Tab title="Other Javascript">
+
+```ts twoslash
+import { createConfig } from "@account-kit/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const config = createConfig({
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
+  chain: sepolia,
+  ssr: true, // [!code ++]
+});
+```
+
+This setting will defer hydration of the account kit state until you can call the `hydrate` method on mount.
+
+## Hydrate the Account State
 
 Now that you've set up your config for SSR, you will have to manually hydrate the state on the client. This can be done by calling the `hydrate` method exported by Smart Wallets core.
 
