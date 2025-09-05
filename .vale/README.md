@@ -39,6 +39,9 @@ yarn lint:docs
 
 - **`.vale.ini`** - Main Vale configuration file
 - **`styles/SmartWallets/`** - Custom style rules directory
+- **`styles/config/vocabularies/SmartWallets/`** - Vocabulary system
+  - `accept.txt` - Technical terms that are accepted (enforces exact casing)
+  - `reject.txt` - Prohibited terms that should be avoided
 
 ### Custom Style Rules
 
@@ -138,7 +141,6 @@ Edit the relevant `.yml` file in `styles/SmartWallets/` and test changes.
 ### Vocabulary
 
 Add approved terms to `styles/SmartWallets/vocab.txt` to prevent spelling errors.
-
 
 ### Testing Changes
 

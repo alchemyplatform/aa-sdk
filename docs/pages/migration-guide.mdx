@@ -115,7 +115,7 @@ The `signMessageWith6492` and `signTypedDataWith6492` methods have been removed 
 
 ### Client: `checkGasSponsorshipEligibility` return type updated
 
-The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorhip doesn't cause you to use up your
+The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorship doesn't cause you to use up your
 gas sponsorship limits. If your User Operation is eligible, then you can sign the UO with `client.signUserOperation` and send it with `client.sendRawUserOperation`.
 
 ```ts
@@ -315,7 +315,7 @@ type toSmartContractAccount = <
 
 `chain` and `transport` have been added to the constructor and `rpcClient` has been removed.
 
-### Account: SimpleAccount and LightAccount intialization params
+### Account: SimpleAccount and LightAccount initialization params
 
 `index` is now called `salt`
 
@@ -351,7 +351,7 @@ The `AccountSigner` now takes in a `SmartContractAccount` as a param in its cons
 
 The `Percent` type and `PercentSchema` have been removed in favor of the `Multiplier` type and `MultiplierSchema`.
 
-Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multipliaction of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
+Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multiplication of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
 
 ```ts
 createModularAccountAlchemyClient({
