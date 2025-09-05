@@ -44,7 +44,7 @@ jobs:
 
       - name: Install Vale
         run: |
-          wget -O vale.tar.gz https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_64-bit.tar.gz
+          wget -O vale.tar.gz https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_Linux_64-bit.tar.gz
           tar -xzf vale.tar.gz
           sudo mv vale /usr/local/bin/
           vale --version
