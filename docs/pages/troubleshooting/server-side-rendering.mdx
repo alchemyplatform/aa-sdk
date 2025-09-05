@@ -26,7 +26,7 @@ export const config = () =>
     // required
     transport: alchemy({ rpcUrl: "/api/rpc" }),
     chain: sepolia,
-    ssr: true, // [!code ++]
+    ssr: true,
   });
 ```
 
@@ -38,24 +38,23 @@ This setting will defer hydration of the account state to the client after the i
 
 To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
 
-```ts twoslash config.ts
+```ts{4,8,9} twoslash config.ts
 import {
   createConfig,
-  cookieStorage, // [!code ++]
+  cookieStorage,
 } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();
 
-// [!code focus:99]
 export const config = () =>
   createConfig({
     // required
     transport: alchemy({ rpcUrl: "/api/rpc" }),
     chain: sepolia,
-    ssr: true, // [!code ++]
-    storage: cookieStorage, // [!code ++]
+    ssr: true,
+    storage: cookieStorage,
   });
 ```
 
@@ -67,7 +66,7 @@ If you are using NextJS App Directory, you can read the cookie state and pass it
 
 <CodeBlocks>
 
-```tsx twoslash layout.tsx filename=layout.tsx
+```tsx twoslash app/layout.tsx
 // @noErrors
 import React from "react";
 import { cookieToInitialState } from "@account-kit/core";
@@ -107,7 +106,7 @@ export default function RootLayout({
 }
 ```
 
-```tsx twoslash providers.tsx filename=providers.tsx
+```tsx twoslash app/providers.tsx
 // @noErrors
 "use client";
 
@@ -145,7 +144,7 @@ export const Providers = (
 };
 ```
 
-```tsx twoslash config.ts filename=config.ts
+```tsx twoslash config.ts
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
@@ -168,14 +167,14 @@ export const config = () =>
   </Tab>
   <Tab title="Other Javascript">
 
-```ts twoslash
+```ts{6} twoslash
 import { createConfig } from "@account-kit/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
   transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   chain: sepolia,
-  ssr: true, // [!code ++]
+  ssr: true,
 });
 ```
 
@@ -201,7 +200,7 @@ if (typeof window !== "undefined") {
 }
 ```
 
-```ts twoslash config.ts filename="config.ts"
+```ts twoslash config.ts
 import { createConfig } from "@account-kit/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 
@@ -219,17 +218,14 @@ export const config = createConfig({
 To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
 
 ```ts twoslash
-import {
-  createConfig,
-  cookieStorage, // [!code ++]
-} from "@account-kit/core";
+import { createConfig, cookieStorage } from "@account-kit/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
   transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   chain: sepolia,
-  ssr: true, // [!code ++]
-  storage: cookieStorage, // [!code ++]
+  ssr: true,
+  storage: cookieStorage,
 });
 ```
 
@@ -244,7 +240,7 @@ import { config } from "./config";
 // this is an example of how to get the cookie on the client
 // but on the server you might get it from the `req.cookies` object
 // it all depends on your framework
-const initialState = cookieToInitialState(config, document.cookie); // [!code ++]
+const initialState = cookieToInitialState(config, document.cookie);
 const { onMount } = hydrate(config, initialState);
 
 if (typeof window !== "undefined") {
@@ -252,7 +248,7 @@ if (typeof window !== "undefined") {
 }
 ```
 
-```ts twoslash config.ts filename="config.ts"
+```ts twoslash config.ts
 import { createConfig, cookieStorage } from "@account-kit/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 
