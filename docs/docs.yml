@@ -198,8 +198,8 @@ navigation:
             path: wallets/pages/transactions/sign-requests.mdx
           - page: Using EIP-7702
             path: wallets/pages/transactions/using-eip-7702/index.mdx
-          - page: Send batched transactions
-            path: wallets/pages/transactions/send-batched-transactions.mdx
+          - page: Send batch transactions
+            path: wallets/pages/transactions/send-batch-transactions/index.mdx
           - page: Sponsor gas
             path: wallets/pages/transactions/sponsor-gas/index.mdx
           - page: Pay gas with any token

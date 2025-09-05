@@ -1,0 +1,152 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+Use the `useSendCalls` hook to send a batched transaction. You can also use the `usePrepareCalls` hook to only prepare the transaction for signing.
+
+<CodeBlocks>
+
+```ts twoslash title="sendCalls.tsx" focus={9-11,21-43}
+import {
+  useSendCalls,
+  useSmartWalletClient,
+} from "@account-kit/react/experimental";
+import { type Address, encodeFunctionData, erc20Abi, parseEther } from "viem";
+import { swapAbi } from "./swapAbi";
+
+export default function SendCalls({ account }: { account: Address }) {
+  const { sendCallsAsync } = useSendCalls({
+    client: useSmartWalletClient({ account }),
+  });
+
+  const DEMO_USDC_ADDRESS: Address =
+    "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443";
+
+  const DEMO_SWAP_ADDRESS: Address =
+    "0xB0AEC4c25E8332256A91bBaf169E3C32dfC3C33C";
+
+  const handleSend = async () => {
+    try {
+      const { ids } = await sendCallsAsync({
+        calls: [
+          // To batch, simply specify multiple calls in the calls array
+          {
+            // approve 5000 USDC to the swap contract
+            to: DEMO_USDC_ADDRESS,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [DEMO_SWAP_ADDRESS, parseEther("5000")],
+            }),
+          },
+          {
+            // swap 5000 USDC to 1 WETH
+            to: DEMO_SWAP_ADDRESS,
+            data: encodeFunctionData({
+              abi: swapAbi,
+              functionName: "swapUSDCtoWETH",
+              args: [parseEther("5000"), parseEther("1")],
+            }),
+          },
+        ],
+      });
+
+      console.log("Transaction sent with ID:", ids[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return <button onClick={handleSend}>Click to Send</button>;
+}
+```
+
+```ts twoslash title="swapAbi.ts"
+export const swapAbi = [
+  {
+    type: "constructor",
+    inputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "mint",
+    inputs: [
+      {
+        name: "amount1",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "amount2",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "swapUSDCtoWETH",
+    inputs: [
+      {
+        name: "amountIn",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "amountOut",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "swapWETHtoUSDC",
+    inputs: [
+      {
+        name: "amountIn",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "amountOut",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "usdc",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract ERC20Mintable",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "weth",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract ERC20Mintable",
+      },
+    ],
+    stateMutability: "view",
+  },
+] as const;
+```
+
+</CodeBlocks>
