@@ -254,6 +254,23 @@ navigation:
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-evm.mdx
               - page: Solana
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
+              - section: Signing
+                contents:
+                  - page: Signing transactions
+                    path: wallets/pages/signer/as-an-eoa.mdx
+                  - page: Signing messages
+                    path: wallets/pages/signer/quickstart.mdx
+                  - page: Sign EIP-7702 authorization
+                    path: wallets/pages/react/using-7702.mdx
+                  - page: Sign Solana transactions
+                    path: wallets/pages/signer/solana-wallets/solana-signer-package.mdx
+                  - section: Other signing
+                    contents:
+                      - page: Sign typed data
+                        path: wallets/pages/signer/as-an-eoa.mdx
+                      - page: Sign raw hash
+                        path: wallets/pages/signer/as-an-eoa.mdx
+                path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Using 7702
@@ -270,8 +287,8 @@ navigation:
                     path: wallets/pages/smart-wallets/7702-quickstart/sdk.mdx
                   - page: Using API
                     path: wallets/pages/smart-wallets/7702-quickstart/api.mdx
-          - page: Retry User Operations
-            path: wallets/pages/TO-REMOVE-transactions/retry-user-operations.mdx
+          - page: Retries
+            path: wallets/pages/TO-REMOVE-transactions/retries.mdx
           - section: Low-level infra
             contents:
               # - page: Overview
