@@ -47,7 +47,10 @@ const sendVariants: Array<
 ];
 
 describe.sequential("Client E2E Tests", () => {
-  if (!process.env.TEST_ALCHEMY_API_KEY || !process.env.TEST_PAYMASTER_POLICY_ID) {
+  if (
+    !process.env.TEST_ALCHEMY_API_KEY ||
+    !process.env.TEST_PAYMASTER_POLICY_ID
+  ) {
     it.skip("skipped: missing TEST_ALCHEMY_API_KEY or TEST_PAYMASTER_POLICY_ID", () => {});
     return;
   }
@@ -65,48 +68,62 @@ describe.sequential("Client E2E Tests", () => {
     transport: publicTransport,
   });
 
-  it.retry(2)("should successfully get & caches a counterfactual address", async () => {
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+  it.retry(2)(
+    "should successfully get & caches a counterfactual address",
+    async () => {
+      const fetchSpy = vi.spyOn(globalThis, "fetch");
 
-    const account = await client.requestAccount();
-    expect(account.address).toMatchInlineSnapshot(
-      `"0x76E765e80FFAC96ac10Aa8908a8267A3B80d606D"`,
-    );
+      const account = await client.requestAccount();
+      expect(account.address).toMatchInlineSnapshot(
+        `"0x76E765e80FFAC96ac10Aa8908a8267A3B80d606D"`,
+      );
 
-    const accountAgain = await client.requestAccount();
-    expect(accountAgain).toEqual(account);
+      const accountAgain = await client.requestAccount();
+      expect(accountAgain).toEqual(account);
 
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
-    fetchSpy.mockRestore();
-  }, 30_000);
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      fetchSpy.mockRestore();
+    },
+    30_000,
+  );
 
-  it.retry(2)("should successfully request account with different salt", async () => {
-    const account = await client.requestAccount({
-      id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
-      creationHint: { salt: "0x1" },
-    });
+  it.retry(2)(
+    "should successfully request account with different salt",
+    async () => {
+      const account = await client.requestAccount({
+        id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
+        creationHint: { salt: "0x1" },
+      });
 
-    expect(account.address).toMatchInlineSnapshot(
-      `"0xdfdd407b9569D40BEFa503208753E59cAc9713fA"`,
-    );
-  }, 30_000);
+      expect(account.address).toMatchInlineSnapshot(
+        `"0xdfdd407b9569D40BEFa503208753E59cAc9713fA"`,
+      );
+    },
+    30_000,
+  );
 
-  it.retry(2)("should not cache account if different inputs provided", async () => {
-    const account = await client.requestAccount();
-    const account2 = await client.requestAccount({
-      id: "2a3320b4-6ed2-4833-a488-5188e9bdd9d2",
-      creationHint: { salt: "0x2" },
-    });
+  it.retry(2)(
+    "should not cache account if different inputs provided",
+    async () => {
+      const account = await client.requestAccount();
+      const account2 = await client.requestAccount({
+        id: "2a3320b4-6ed2-4833-a488-5188e9bdd9d2",
+        creationHint: { salt: "0x2" },
+      });
 
-    expect(account.address).not.toEqual(account2.address);
-  }, 30_000);
+      expect(account.address).not.toEqual(account2.address);
+    },
+    30_000,
+  );
 
-  it.retry(2)("should successfully get capabilities", async () => {
-    const account = await client.requestAccount(); // Ensure account is known
-    const capabilities = await client.getCapabilities({
-      account: account.address,
-    });
-    expect(capabilities).toMatchInlineSnapshot(`
+  it.retry(2)(
+    "should successfully get capabilities",
+    async () => {
+      const account = await client.requestAccount(); // Ensure account is known
+      const capabilities = await client.getCapabilities({
+        account: account.address,
+      });
+      expect(capabilities).toMatchInlineSnapshot(`
       {
         "0": {
           "atomic": {
@@ -146,68 +163,86 @@ describe.sequential("Client E2E Tests", () => {
         },
       }
     `);
-  }, 45_000);
+    },
+    45_000,
+  );
 
-  it.retry(2)("can correctly sign a message", async () => {
-    const account = await client.requestAccount();
-    const message = "hello world";
-    const signature = await client.signMessage({ message });
-    const isValid = await publicClient.verifyMessage({
-      address: account.address,
-      message: "hello world",
-      signature,
-    });
-    expect(isValid).toBe(true);
-  }, 30_000);
+  it.retry(2)(
+    "can correctly sign a message",
+    async () => {
+      const account = await client.requestAccount();
+      const message = "hello world";
+      const signature = await client.signMessage({ message });
+      const isValid = await publicClient.verifyMessage({
+        address: account.address,
+        message: "hello world",
+        signature,
+      });
+      expect(isValid).toBe(true);
+    },
+    30_000,
+  );
 
-  it.retry(2)("can correctly sign typed data", async () => {
-    const account = await client.requestAccount();
-    const signature = await client.signTypedData(givenTypedData);
-    const isValid = await publicClient.verifyTypedData({
-      ...givenTypedData,
-      signature,
-      address: account.address,
-    });
-    expect(isValid).toBe(true);
-  }, 30_000);
+  it.retry(2)(
+    "can correctly sign typed data",
+    async () => {
+      const account = await client.requestAccount();
+      const signature = await client.signTypedData(givenTypedData);
+      const isValid = await publicClient.verifyTypedData({
+        ...givenTypedData,
+        signature,
+        address: account.address,
+      });
+      expect(isValid).toBe(true);
+    },
+    30_000,
+  );
 
-  it.retry(2)("can correctly sign a message with a different account", async () => {
-    const account = await client.requestAccount({
-      id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
-      creationHint: { salt: "0x1" },
-    });
+  it.retry(2)(
+    "can correctly sign a message with a different account",
+    async () => {
+      const account = await client.requestAccount({
+        id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
+        creationHint: { salt: "0x1" },
+      });
 
-    const message = "hello world";
-    const signature = await client.signMessage({
-      message,
-      account: account.address,
-    });
-    const isValid = await publicClient.verifyMessage({
-      address: account.address,
-      message: "hello world",
-      signature,
-    });
-    expect(isValid).toBe(true);
-  }, 30_000);
+      const message = "hello world";
+      const signature = await client.signMessage({
+        message,
+        account: account.address,
+      });
+      const isValid = await publicClient.verifyMessage({
+        address: account.address,
+        message: "hello world",
+        signature,
+      });
+      expect(isValid).toBe(true);
+    },
+    30_000,
+  );
 
-  it.retry(2)("can correctly sign typed data with a different account", async () => {
-    const account = await client.requestAccount({
-      id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
-      creationHint: { salt: "0x1" },
-    });
+  it.retry(2)(
+    "can correctly sign typed data with a different account",
+    async () => {
+      const account = await client.requestAccount({
+        id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
+        creationHint: { salt: "0x1" },
+      });
 
-    const signature = await client.signTypedData({
-      ...givenTypedData,
-      account: account.address,
-    });
+      const signature = await client.signTypedData({
+        ...givenTypedData,
+        account: account.address,
+      });
 
-    const isValid = await publicClient.verifyTypedData({
-      ...givenTypedData,
-      signature,
-      address: account.address,
-    });
-    expect(isValid).toBe(true);
-  }, 30_000);
+      const isValid = await publicClient.verifyTypedData({
+        ...givenTypedData,
+        signature,
+        address: account.address,
+      });
+      expect(isValid).toBe(true);
+    },
+    30_000,
+  );
 
   it.each(sendVariants)(
     "should successfully send a UO with paymaster",

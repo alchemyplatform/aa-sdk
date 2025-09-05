@@ -26,7 +26,10 @@ import {
 } from "viem/actions";
 
 describe.sequential("Provider E2E Tests", async () => {
-  if (!process.env.TEST_ALCHEMY_API_KEY || !process.env.TEST_PAYMASTER_POLICY_ID) {
+  if (
+    !process.env.TEST_ALCHEMY_API_KEY ||
+    !process.env.TEST_PAYMASTER_POLICY_ID
+  ) {
     it.skip("skipped: missing TEST_ALCHEMY_API_KEY or TEST_PAYMASTER_POLICY_ID", () => {});
     return;
   }
