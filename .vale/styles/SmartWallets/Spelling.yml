@@ -1,0 +1,10 @@
+# Custom spelling rule that uses our vocabulary
+# Allows technical terms specific to Smart Wallets documentation
+
+extends: spelling
+message: "Did you really mean '%s'?"
+level: error
+
+# Use custom vocabulary file
+ignore:
+  - vocab.txt

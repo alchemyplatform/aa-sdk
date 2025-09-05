@@ -1,0 +1,52 @@
+# Terminology substitution rules based on CONTRIBUTING.md
+# Enforces approved terms and prohibits banned terms
+
+extends: substitution
+message: "Use '%s' instead of '%s'"
+level: error
+ignorecase: true
+
+# Replacement rules from CONTRIBUTING.md prohibited terms table
+swap:
+  # Account Abstraction terms - avoid entirely
+  '(?i)Account\s+Abstraction': "smart account functionality"
+  '(?i)\bAA\b(?!\s*-\s*SDK)': "smart account"
+
+  # ERC-4337 - avoid entirely
+  "(?i)ERC-4337": "smart account standard"
+
+  # User operations -> transactions
+  '(?i)user\s+operations?': "transactions"
+  '(?i)user\s+ops?': "transactions"
+  "(?i)UserOps?": "transactions"
+
+  # Bundler -> sending transactions
+  "(?i)bundler": "transaction processing"
+
+  # Smart contract account -> wallet
+  '(?i)smart\s+contract\s+accounts?': "wallets"
+
+  # Account Kit -> Smart Wallets
+  '(?i)Account\s+Kit': "Smart Wallets"
+
+  # Gas manager -> specific replacements
+  '(?i)gas\s+manager(?!\s+API)': "sponsor gas"
+
+  # Paymaster -> context-specific (except paymaster contract)
+  '(?i)paymaster(?!\s+contract)': "gas sponsorship"
+
+  # Signer -> authentication/owner
+  '(?i)Signer(?!\.|\s*\()': "authentication"
+
+  # Account versions -> smart account
+  '(?i)modular\s+account\s+v2': "smart account"
+  '(?i)light\s+account\s+v1': "smart account"
+
+  # Spacing corrections
+  "(?i)gas-less": "gasless"
+  "(?i)on-chain": "onchain"
+
+  # Brand references - remove "Alchemy" and "our"
+  '(?i)Alchemy\s+Smart\s+Wallets': "Smart Wallets"
+  '(?i)our\s+smart\s+accounts?': "smart accounts"
+  '(?i)our\s+wallets?': "wallets"

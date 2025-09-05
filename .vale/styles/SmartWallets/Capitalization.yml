@@ -1,0 +1,27 @@
+# Capitalization rules for headings only
+# Enforces proper capitalization per CONTRIBUTING.md guidelines
+
+extends: capitalization
+message: "Use sentence case for headings: '%s'"
+level: error
+scope: heading
+
+# Match patterns and their required capitalization
+match: $title
+style: sentence
+exceptions:
+  - Smart Wallets
+  - Gas Manager API
+  - Bundler API
+  - API
+  - SDK
+  - JSON
+  - HTTP
+  - HTTPS
+  - URL
+  - ID
+  - UI
+  - UX
+  - OAuth
+  - JWT
+  - OIDC
