@@ -51,7 +51,7 @@
     "lint:docs": "vale docs/**/*.mdx",
     "prepare": "husky install && yarn turbo prepare",
     "docs:dev": "./docs/scripts/docs-dev.sh",
-    "docs:broken-links": "lychee docs",
+    "docs:broken-links": "lychee docs --root-dir /docs",
     "version": "yarn build:libs"
   },
   "devDependencies": {
