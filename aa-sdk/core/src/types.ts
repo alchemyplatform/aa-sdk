@@ -293,6 +293,8 @@ export interface UserOperationReceipt {
   logs: string[];
   /* The TransactionReceipt object for the entire bundle, not only for this UserOperation. */
   receipt: TransactionReceipt;
+  /* The status of the useroperation. Could be "Mined" or "Preconfirmed". */
+  status: string;
 }
 // [!endregion UserOperationReceipt]
 
