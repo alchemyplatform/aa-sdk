@@ -10,15 +10,15 @@ slug: wallets/smart-wallet-quickstart/sdk
 You're going to need `@account-kit/wallet-client`, `@account-kit/infra`, optionally `@aa-sdk/core` if you use a `LocalAccountSigner`, and optionally `viem` if you want to verify a signed message.
 
 <CodeGroup>
-```shell npm
+```bash npm
 npm install @account-kit/wallet-client @account-kit/infra @aa-sdk/core
 ```
 
-```shell bun
+```bash bun
 bun add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
 ```
 
-```shell yarn
+```bash yarn
 yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
 ```
 
@@ -28,7 +28,7 @@ yarn add @account-kit/wallet-client @account-kit/infra @aa-sdk/core
 
 Given a signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](/docs/wallets/signer/what-is-a-signer#alchemy-signer)), all you need to do is follow a few simple steps to start sending user ops with Wallet APIs!
 
-```ts
+```ts twoslash
 import { createSmartWalletClient } from "@account-kit/wallet-client";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -50,7 +50,7 @@ const client = createSmartWalletClient({
 
 A counterfactual address is the account address associated with the given signer-- but the account contract hasn't been deployed yet.
 
-```ts
+```ts twoslash
 const account = await client.requestAccount();
 
 // get the address
@@ -59,7 +59,7 @@ const address = account.address;
 
 ### 4. Sign A Message
 
-```ts
+```ts twoslash
 import { createPublicClient } from "viem";
 
 const message = "we are so back";
@@ -80,7 +80,7 @@ const isValid = await publicClient.verifyMessage({
 
 ### 5. Sign Typed Data
 
-```ts
+```ts twoslash
 // assuming you have a typedData variable
 const signature = await client.signTypedData({ typedData });
 
@@ -93,7 +93,7 @@ const isValid = await publicClient.verifyTypedData({
 
 ### 6. Send A UserOp
 
-```ts
+```ts twoslash
 import { zeroAddress } from "viem";
 
 const account = await client.requestAccount();

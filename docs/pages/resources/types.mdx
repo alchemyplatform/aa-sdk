@@ -10,7 +10,7 @@ An array of `UserOperationCallData`, representing a sequence of `UserOperations`
 
 <Accordion title="BatchUserOperationCallData">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:BatchUserOperationCallData]
 ```
 
@@ -22,7 +22,7 @@ A type that can be a hexadecimal string prefixed with [`Hex`](https://viem.sh/do
 
 <Accordion title="BigNumberish">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/utils/schema.ts:BigNumberish]
 ```
 
@@ -34,7 +34,7 @@ An object type that may contain optional `min` and `max` fields, each of which a
 
 <Accordion title="BigNumberishRange">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/utils/schema.ts:BigNumberishRange]
 ```
 
@@ -46,7 +46,7 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 
 <Accordion title="BundlerAction">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/client/decorators/bundlerClient.ts:BundlerActions]
 ```
 
@@ -58,7 +58,7 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 
 <Accordion title="BundlerClient">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/client/bundlerClient.ts:BundlerClient]
 ```
 
@@ -70,7 +70,7 @@ Middleware represents different operations involved in the [`SmartAccountClient`
 
 <Accordion title="ClientMiddleware">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddleware]
 ```
 
@@ -82,7 +82,7 @@ Configuration object to configure `ClientMiddleware` of the [`SmartAccountClient
 
 <Accordion title="ClientMiddlewareFn">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/client/types.ts:ClientMiddlewareConfig]
 ```
 
@@ -94,7 +94,7 @@ Each middleware is a function that takes in a user operation object, `UserOperat
 
 <Accordion title="ClientMiddlewareFn">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddlewareFn]
 ```
 
@@ -106,7 +106,7 @@ An object type that defines the interface for `EntryPoint` functions for packing
 
 <Accordion title="EntryPointDef">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/entrypoint/types.ts:EntryPointDef]
 ```
 
@@ -118,7 +118,7 @@ An object type with a required `multipler` field, which is a `number` value with
 
 <Accordion title="Multiplier">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/utils/schema.ts:Multiplier]
 ```
 
@@ -130,7 +130,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 <Accordion title="SmartAccountAuthenticator">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/signer/types.ts:SmartAccountAuthenticator]
 ```
 
@@ -142,7 +142,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 <Accordion title="SmartAccountClient">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/client/smartAccountClient.ts:SmartAccountClient]
 ```
 
@@ -154,7 +154,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 <Accordion title="SmartAccountClientAction">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/client/smartAccountClient.ts:SmartAccountClientActions]
 ```
 
@@ -166,7 +166,7 @@ An interface representing a signer capable of signing messages and typed data. I
 
 <Accordion title="SmartAccountSigner">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/signer/types.ts:SmartAccountSigner]
 ```
 
@@ -178,7 +178,7 @@ As smart contract accounts are essentially the contract codes that operate on th
 
 <Accordion title="SmartContractAccount">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts:SmartContractAccount]
 ```
 
@@ -195,7 +195,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 
 <Accordion title="ToSmartContractAccountParams">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts:ToSmartContractAccountParams]
 ```
 
@@ -207,7 +207,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 
 <Accordion title="User">
 
-```ts
+```ts twoslash
 // [!include ~/../account-kit/signer/src/client/types.ts:User]
 ```
 
@@ -219,7 +219,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 
 <Accordion title="UserOperationCallData">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationCallData]
 ```
 
@@ -231,7 +231,7 @@ An interface that defines the structure for the response received from the RPC m
 
 <Accordion title="UserOperationEstimateGasResponse">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationEstimateGasResponse]
 ```
 
@@ -243,7 +243,7 @@ Partial structure for overriding default values in a `UserOperationStruct`, such
 
 <Accordion title="UserOperationOverrides">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationOverrides]
 ```
 
@@ -255,7 +255,7 @@ An interface that defines the structure for the response received from the RPC m
 
 <Accordion title="UserOperationReceipt">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationReceipt]
 ```
 
@@ -267,7 +267,7 @@ Interface for the request format required for a JSON-RPC request to `eth_sendUse
 
 <Accordion title="UserOperationRequest">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationRequest]
 ```
 
@@ -279,7 +279,7 @@ An interface that defines the structure for the response received from the RPC m
 
 <Accordion title="UserOperationResponse">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationResponse]
 ```
 
@@ -291,7 +291,7 @@ Interface for structuring a `UserOperation`, with fields similar to `UserOperati
 
 <Accordion title="UserOperationStruct">
 
-```ts
+```ts twoslash
 // [!include ~/../aa-sdk/core/src/types.ts:UserOperationStruct]
 ```
 
