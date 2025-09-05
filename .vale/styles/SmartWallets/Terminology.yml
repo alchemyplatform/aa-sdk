@@ -29,14 +29,8 @@ swap:
   # Account Kit -> Smart Wallets
   '(?i)Account\s+Kit': "Smart Wallets"
 
-  # Gas manager -> specific replacements
-  '(?i)gas\s+manager(?!\s+API)': "sponsor gas"
-
   # Paymaster -> context-specific (except paymaster contract)
   '(?i)paymaster(?!\s+contract)': "gas sponsorship"
-
-  # Signer -> authentication/owner
-  '(?i)Signer(?!\.|\s*\()': "authentication"
 
   # Account versions -> smart account
   '(?i)modular\s+account\s+v2': "smart account"
