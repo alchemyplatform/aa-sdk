@@ -1,0 +1,122 @@
+---
+title: Bundler RPC Errors
+description: Learn about the different Bundler error codes.
+subtitle: Learn about the different Bundler error codes.
+url: https://docs.alchemy.com/reference/bundler-rpc-errors
+slug: reference/bundler-rpc-errors
+---
+
+This document provides a list of the JSON-RPC errors that you might encounter when using the Bundler API. These are in addition to the [standard JSON-RPC error codes](/reference/error-reference#json-rpc-error-codes) returned by a bad method call.
+
+### `-32500`: Rejected by EntryPoint’s `simulateValidation`
+
+- **Description**: The `userOp` is rejected by entryPoint's `simulateValidation`, during account creation or validation. The `-32500` error code may be accompanied by an additional [`AAxx` revert code](/reference/entrypoint-revert-codes) provided by the EntryPoint to give additional guidance.
+
+**Data Fields**:
+
+- `reason`: Optional string providing the main reason for the rejection.
+- `inner_reason`: Optional string providing additional details for the rejection.
+- `revert_data`: Optional bytes containing additional data related to the rejection.
+
+### `-32501`: Rejected by paymaster's `validatePaymasterUserOp`
+
+- **Description**: The `userOp` is rejected by paymaster's `validatePaymasterUserOp`.
+
+**Data Fields**:
+
+- `paymaster`: Address of the paymaster.
+- `reason`: String providing the reason for the rejection.
+
+### `-32502`: Opcode violation
+
+- **Description**: The `userOp` does an Opcode violation or tries to access inaccessible storage. Before submitting `userOps`, bundlers must make sure `userOps` don't grief the bundler by accessing banned opcodes when checking a signature.
+
+**Data Fields**:
+
+- `entity`: Type of entity (e.g., paymaster, sender) accessing the storage.
+
+- `opcode`: Opcode that caused the violation.
+
+- Additional fields (when associated with `StakeTooLow`):
+
+  - `needs_stake`: Entity that needs staking.
+  - `accessing_entity`: Type of entity accessing the storage.
+  - `accessed_address`: Address of the accessed storage.
+  - `accessed_entity`: Optional type of accessed entity.
+  - `slot`: Storage slot accessed.
+  - `minimum_stake`: Minimum required stake.
+  - `minimum_unstake_delay`: Minimum required unstake delay.
+
+### `-32503`: Out of time range
+
+- **Description**: Either the account or the paymaster returned a time-range, and it is already expired or will expire soon.
+
+**Data Fields**:
+
+- `valid_until`: Timestamp indicating the valid until time.
+- `valid_after`: Timestamp indicating the valid after time.
+- `paymaster`: Optional address of the paymaster.
+
+### `-32504`: Throttled or banned
+
+- **Description**: The `userOp` was rejected because the paymaster or aggregator is throttled or banned.
+
+**Data Fields**:
+
+- `entity`: Type of entity (e.g., paymaster, aggregator) that is throttled or banned.
+- `address`: Address of the entity.
+
+### `-32505`: Stake or unstake-delay too low
+
+- **Description**: The `userOp` was rejected because the paymaster's or signature aggregator's stake or unstake delay was too low.
+
+**Data Fields**:
+
+- `needs_stake`: Entity that needs staking.
+- `accessing_entity`: Type of entity accessing the storage.
+- `accessed_address`: Address of the accessed storage.
+- `accessed_entity`: Optional type of accessed entity.
+- `slot`: Storage slot accessed.
+- `minimum_stake`: Minimum required stake.
+- `minimum_unstake_delay`: Minimum required unstake delay.
+
+### `-32506`: Unsupported aggregator
+
+- **Description**: The `userOp` was rejected because the wallet specified unsupported signature aggregator.
+
+**Data Fields**:
+
+- `aggregator`: Address of the unsupported aggregator.
+
+### `-32507`: Invalid signature
+
+- **Description**: The `userOp` was rejected because it contains an invalid signature from the sender or the paymaster.
+
+**Data Fields**:
+
+- No additional data fields.
+
+### `-32521`: Execution reverted
+
+- **Description**: The `userOp` was reverted during the execution phase.
+
+**Data Fields**:
+
+- `revert_data`: Optional bytes containing additional data related to the revert.
+
+### `-32602`: Invalid `userOp`
+
+- **Description**: The `userOp` struct/fields sent to the bundler were invalid.
+
+**Data Fields**:
+
+- `current_max_priority_fee`: Optional U256 containing the current maximum priority fee.
+- `current_max_fee`: Optional U256 containing the current maximum fee.
+
+### `-32603`: Internal error
+
+Description: Internal JSON-RPC error.
+
+**Data Fields**:
+
+- No additional data fields.

@@ -216,11 +216,19 @@ navigation:
                 path: wallets/pages/transactions/solana/overview.mdx
           - page: Coming Soon
             path: wallets/pages/transactions/coming-soon.mdx
-
-      - section: Low-Level Infra
-        contents:
-          - page: Overview
-            path: wallets/pages/low-level-infra/overview.mdx
+          - section: Low-Level Infra
+            path: wallets/pages/transactions/bundler/bundler-api-quickstart.mdx
+            contents:
+              - page: Api Endpoints
+                path: wallets/pages/transactions/bundler/bundler-api-quickstart.mdx
+              - section: Using SDK
+                contents:
+                  - page: Estimate User Operation
+                    path: wallets/pages/transactions/bundler/bundler-api-quickstart.mdx
+                  - page: Send User Operation
+                    path: wallets/pages/transactions/bundler/bundler-api-quickstart.mdx
+              - section: Bundler FAQs
+                path: wallets/pages/transactions/bundler/bundler-faqs.mdx
 
       - section: PRE-BLITZ TO REMOVE Transactions
         contents:
@@ -1190,9 +1198,9 @@ navigation:
               - page: Gas Manager Errors
                 path: wallets/pages/gas-manager-admin-api/gas-manager-errors.mdx
               - page: Bundler FAQs
-                path: wallets/pages/bundler-api/bundler-faqs.mdx
+                path: wallets/pages/transactions/bundler/bundler-faqs.mdx
               - page: Bundler RPC Errors
-                path: wallets/pages/bundler-api/bundler-rpc-errors.mdx
+                path: wallets/pages/transactions/bundler/bundler-rpc-errors.mdx
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx

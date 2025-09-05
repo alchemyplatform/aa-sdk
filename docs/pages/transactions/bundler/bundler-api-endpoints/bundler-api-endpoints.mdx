@@ -1,0 +1,22 @@
+---
+title: Bundler API Endpoints
+description: Use the BUndler APIs to send userOps in EVM networks.
+subtitle: Use the BUndler APIs to send userOps in EVM networks.
+url: https://docs.alchemy.com/reference/bundler-api-endpoints
+slug: reference/bundler-api-endpoints
+---
+
+## What exactly is the Bundler API?
+
+The Bundler APIs are a collection of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace) compliant JSON-RPC endpoints.
+
+## Methods
+
+| Method                                                                  | Description                                                                                                                  |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [eth_sendUserOperation](/reference/eth-senduseroperation)               | Sends a userOp to the given EVM network.                                                                                     |
+| [eth_estimateUserOperationGas](/reference/eth-estimateuseroperationgas) | Estimates the gas values for a `userOp`.                                                                                     |
+| [eth_supportedEntryPoints](/reference/eth-supportedentrypoints)         | Returns an array of the `entryPoint` addresses supported by the client.                                                      |
+| [eth_getUserOperationByHash](/reference/eth-getuseroperationbyhash)     | Returns a `userOp` based on a hash (`userOpHash`).                                                                           |
+| [eth_getUserOperationReceipt](/reference/eth-getuseroperationreceipt)   | Get the `UserOperationReceipt` based on the `userOpHash` value.                                                              |
+| [rundler_maxPriorityFeePerGas](/reference/rundler-maxpriorityfeepergas) | Returns a fee per gas that is an estimate of how much users should set as a priority fee in `userOps` for Rundler endpoints. |
