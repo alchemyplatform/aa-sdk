@@ -41,6 +41,7 @@ export {
   inkSepolia,
   mekong,
   monadTestnet,
+  monadMainnet,
   openlootSepolia,
   gensynTestnet,
   riseTestnet,
