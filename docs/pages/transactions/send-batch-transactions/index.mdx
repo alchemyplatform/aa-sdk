@@ -1,16 +1,16 @@
 ---
 title: Send batch transactions
 description: Batch multiple calls together into one transaction
-slug: wallets/transactions/send-batched-transactions/
+slug: wallets/transactions/send-batch-transactions/
 ---
 
 Using Alchemy Smart Wallets, you can batch multiple actions (such as token transfers, approvals, or swaps) into a single transaction. Users will no longer need multiple confirmations or pop-ups to handle sequential actions. This helps you speed up how users interact with your app and improve the user experience.
 
 ## How it works
 
-Smart wallets support running a batch of actions, called "calls", in a single transaction. These actions are atomic, which means if any of them fail (revert), the the entire batched transaction will revert. This protects users from ever accidentally having part of a batch, but not all, apply.
+Smart wallets support running a batch of actions, called "calls", in a single transaction. These actions are atomic, which means if any of them fail (revert), the entire batched transaction will revert. This protects users from ever accidentally having part of a batch, but not all, apply.
 
-To use this feature, you just need to specify multiple calls to make. The parameter type accepts accepts an array of calls, and each element should contain the action you want the wallet to take.
+To use this feature, you just need to specify multiple calls to make. The parameter type accepts an array of calls, and each element should contain the action you want the wallet to take.
 
 ## Prerequisites
 
