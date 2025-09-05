@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+### Features
+
+- export wallet ([#1858](https://github.com/alchemyplatform/aa-sdk/issues/1858)) ([bc856e1](https://github.com/alchemyplatform/aa-sdk/commit/bc856e1bcc8138cb22db296ffd81e90c43eda9f9))
+
 ## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
 
 **Note:** Version bump only for package @account-kit/react
