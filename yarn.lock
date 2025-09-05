@@ -14916,6 +14916,11 @@ feaxios@^0.0.23:
   dependencies:
     is-retry-allowed "^3.0.0"
 
+fern-api@^0.70.4:
+  version "0.70.4"
+  resolved "https://registry.yarnpkg.com/fern-api/-/fern-api-0.70.4.tgz#d7fcc080c8bb40553927e7dbbaa5fb1d0b42aa2d"
+  integrity sha512-uM1EyvJIxb/XoYis16oorHKOnTd/mwjmVe3273Qv0uKrJFP3ElR/zvlwk94JLTJbiXa3sPbnzpcLl0ItAAVkrA==
+
 fetch-blob@^3.1.2, fetch-blob@^3.1.4:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/fetch-blob/-/fetch-blob-3.2.0.tgz#f09b8d4bbd45adc6f0c20b7e787e793e309dcce9"

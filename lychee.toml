@@ -1,0 +1,13 @@
+
+# Base URL or website root directory to check relative URLs.
+base_url = "https://www.alchemy.com"
+
+# Enable link caching. This can be helpful to avoid checking the same links on
+# multiple runs.
+cache = true
+
+# Comma-separated list of accepted status codes for valid links.
+accept = [401]
+
+# Exclude links that end with .mdx or .png
+exclude = [".*\\.mdx$", ".*\\.png$"]
