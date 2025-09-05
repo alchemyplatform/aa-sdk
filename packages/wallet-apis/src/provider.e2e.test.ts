@@ -25,7 +25,11 @@ import {
   waitForCallsStatus,
 } from "viem/actions";
 
-describe("Provider E2E Tests", async () => {
+describe.sequential("Provider E2E Tests", async () => {
+  if (!process.env.TEST_ALCHEMY_API_KEY || !process.env.TEST_PAYMASTER_POLICY_ID) {
+    it.skip("skipped: missing TEST_ALCHEMY_API_KEY or TEST_PAYMASTER_POLICY_ID", () => {});
+    return;
+  }
   let clientFromProvider: Client<Transport, Chain, Account>;
   let transport: AlchemyTransport;
   let account: Address;

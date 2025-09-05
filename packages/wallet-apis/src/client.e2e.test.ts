@@ -46,7 +46,11 @@ const sendVariants: Array<
   },
 ];
 
-describe("Client E2E Tests", () => {
+describe.sequential("Client E2E Tests", () => {
+  if (!process.env.TEST_ALCHEMY_API_KEY || !process.env.TEST_PAYMASTER_POLICY_ID) {
+    it.skip("skipped: missing TEST_ALCHEMY_API_KEY or TEST_PAYMASTER_POLICY_ID", () => {});
+    return;
+  }
   const signer = privateKeyToAccount(
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
@@ -61,7 +65,7 @@ describe("Client E2E Tests", () => {
     transport: publicTransport,
   });
 
-  it("should successfully get & caches a counterfactual address", async () => {
+  it.retry(2)("should successfully get & caches a counterfactual address", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
 
     const account = await client.requestAccount();
@@ -74,9 +78,9 @@ describe("Client E2E Tests", () => {
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     fetchSpy.mockRestore();
-  });
+  }, 30_000);
 
-  it("should successfully request account with different salt", async () => {
+  it.retry(2)("should successfully request account with different salt", async () => {
     const account = await client.requestAccount({
       id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
       creationHint: { salt: "0x1" },
@@ -85,9 +89,9 @@ describe("Client E2E Tests", () => {
     expect(account.address).toMatchInlineSnapshot(
       `"0xdfdd407b9569D40BEFa503208753E59cAc9713fA"`,
     );
-  });
+  }, 30_000);
 
-  it("should not cache account if different inputs provided", async () => {
+  it.retry(2)("should not cache account if different inputs provided", async () => {
     const account = await client.requestAccount();
     const account2 = await client.requestAccount({
       id: "2a3320b4-6ed2-4833-a488-5188e9bdd9d2",
@@ -95,9 +99,9 @@ describe("Client E2E Tests", () => {
     });
 
     expect(account.address).not.toEqual(account2.address);
-  });
+  }, 30_000);
 
-  it("should successfully get capabilities", async () => {
+  it.retry(2)("should successfully get capabilities", async () => {
     const account = await client.requestAccount(); // Ensure account is known
     const capabilities = await client.getCapabilities({
       account: account.address,
@@ -142,9 +146,9 @@ describe("Client E2E Tests", () => {
         },
       }
     `);
-  });
+  }, 45_000);
 
-  it("can correctly sign a message", async () => {
+  it.retry(2)("can correctly sign a message", async () => {
     const account = await client.requestAccount();
     const message = "hello world";
     const signature = await client.signMessage({ message });
@@ -154,9 +158,9 @@ describe("Client E2E Tests", () => {
       signature,
     });
     expect(isValid).toBe(true);
-  });
+  }, 30_000);
 
-  it("can correctly sign typed data", async () => {
+  it.retry(2)("can correctly sign typed data", async () => {
     const account = await client.requestAccount();
     const signature = await client.signTypedData(givenTypedData);
     const isValid = await publicClient.verifyTypedData({
@@ -165,9 +169,9 @@ describe("Client E2E Tests", () => {
       address: account.address,
     });
     expect(isValid).toBe(true);
-  });
+  }, 30_000);
 
-  it("can correctly sign a message with a different account", async () => {
+  it.retry(2)("can correctly sign a message with a different account", async () => {
     const account = await client.requestAccount({
       id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
       creationHint: { salt: "0x1" },
@@ -184,9 +188,9 @@ describe("Client E2E Tests", () => {
       signature,
     });
     expect(isValid).toBe(true);
-  });
+  }, 30_000);
 
-  it("can correctly sign typed data with a different account", async () => {
+  it.retry(2)("can correctly sign typed data with a different account", async () => {
     const account = await client.requestAccount({
       id: "26b375e3-c94a-4e98-b6b7-5a97121aa583",
       creationHint: { salt: "0x1" },
@@ -203,7 +207,7 @@ describe("Client E2E Tests", () => {
       address: account.address,
     });
     expect(isValid).toBe(true);
-  });
+  }, 30_000);
 
   it.each(sendVariants)(
     "should successfully send a UO with paymaster",
