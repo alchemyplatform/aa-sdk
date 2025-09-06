@@ -6,7 +6,6 @@ slug: wallets/reference/account-kit/react/hooks/useSendVerificationCode
 ---
 
 A custom hook to send OTP verification codes to email or SMS for account verification.
-Returns an OTP ID that can be used with verification code to complete authentication.
 
 ## Import
 
@@ -21,7 +20,7 @@ import { useSendVerificationCode } from "@account-kit/react";
 
 const { sendVerificationCode, isSendingCode, error } = useSendVerificationCode({
   onSuccess: (data) => {
-    console.log("OTP sent, ID:", data.otpId);
+    console.log("OTP sent");
   },
   onError: (error) => console.error(error),
 });
