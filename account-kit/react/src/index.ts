@@ -49,6 +49,8 @@ export type * from "./hooks/useRemovePasskey.js";
 export { useRemovePasskey } from "./hooks/useRemovePasskey.js";
 export type * from "./hooks/useSendUserOperation.js";
 export { useSendUserOperation } from "./hooks/useSendUserOperation.js";
+export type * from "./hooks/useSendVerificationCode.js";
+export { useSendVerificationCode } from "./hooks/useSendVerificationCode.js";
 export type * from "./hooks/useSetEmail.js";
 export { useSetEmail } from "./hooks/useSetEmail.js";
 export type * from "./hooks/useSigner.js";

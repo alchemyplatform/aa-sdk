@@ -49,6 +49,7 @@ import type {
   IdTokenOnly,
   AuthMethods,
   SmsAuthParams,
+  VerificationOtp,
 } from "./types.js";
 import { VERSION } from "../version.js";
 import { secp256k1 } from "@noble/curves/secp256k1";
@@ -291,52 +292,177 @@ export abstract class BaseSignerClient<
    * Sets the email for the authenticated user, allowing them to login with that
    * email.
    *
-   * You must contact Alchemy to enable this feature for your team, as there are
-   * important security considerations. In particular, you must not call this
-   * without first validating that the user owns this email account.
+   * @deprecated You must contact Alchemy to enable this feature for your team,
+   * as there are important security considerations. In particular, you must not
+   * call this without first validating that the user owns this email account.
+   * Recommended to use the email verification flow instead.
    *
    * @param {string} email The email to set for the user
-   * @returns {Promise<void>} A promise that resolves when the email is set
+   * @returns {Promise<void>} A promise that resolves to the updated email
    * @throws {NotAuthenticatedError} If the user is not authenticated
    */
-  public setEmail = async (email: string): Promise<void> => {
-    if (!email) {
-      throw new Error(
-        "Email must not be empty. Use removeEmail() to remove email auth.",
-      );
+  public setEmail(email: string): Promise<string>;
+
+  /**
+   * Sets the email for the authenticated user, allowing them to login with that
+   * email.  Must be called after calling `initOtp` with the email.
+   *
+   * @param {VerificationOtp} otp The OTP verification object including the OTP ID and OTP code
+   * @returns {Promise<void>} A promise that resolves to the updated email
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public setEmail(otp: VerificationOtp): Promise<string>;
+
+  /**
+   * Implementation for setEmail method with optional OTP verification.
+   *
+   * @param {string | VerificationOtp} params An OTP object containing the OTP ID & OTP code (or an email address for legacy usage)
+   * @returns {Promise<void>} A promise that resolves to the updated email address
+   */
+  public async setEmail(params: string | VerificationOtp): Promise<string> {
+    if (typeof params === "string") {
+      // Legacy use, requires team flag.
+      const contact = params;
+      if (!contact) {
+        throw new Error(
+          "Email must not be empty. Use removeEmail() to remove email auth.",
+        );
+      }
+      await this.updateEmail(contact);
+      return contact;
     }
-    await this.updateEmail(email);
-  };
+
+    const { verificationToken } = await this.request("/v1/verify-otp", {
+      otpId: params.id,
+      otpCode: params.code,
+    });
+    const { contact } = jwtDecode<{ contact: string }>(verificationToken);
+    await this.updateEmail(contact, verificationToken);
+    return contact;
+  }
 
   /**
    * Removes the email for the authenticated user, disallowing them from login with that email.
    *
-   * @returns {Promise<void>} A promise that resolves when the email is removed
+   * @returns {Promise<string>} A promise that resolves when the email is removed
    * @throws {NotAuthenticatedError} If the user is not authenticated
    */
   public removeEmail = async (): Promise<void> => {
-    // This is a hack to remove the email for the user. Turnkey does not
-    // support clearing the email once set, so we set it to a known
-    // inaccessible address instead.
-    await this.updateEmail("not.enabled@example.invalid");
+    await this.updateEmail("");
   };
 
-  private updateEmail = async (email: string): Promise<void> => {
+  private updateEmail = async (
+    email: string,
+    verificationToken?: string,
+  ): Promise<void> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
-    const stampedRequest = await this.turnkeyClient.stampUpdateUser({
-      type: "ACTIVITY_TYPE_UPDATE_USER",
+
+    // Unverified use is legacy & requires team flag.
+    const isUnverified = email && !verificationToken;
+
+    const stampedRequest = isUnverified
+      ? await this.turnkeyClient.stampUpdateUser({
+          type: "ACTIVITY_TYPE_UPDATE_USER",
+          timestampMs: Date.now().toString(),
+          organizationId: this.user.orgId,
+          parameters: {
+            userId: this.user.userId,
+            userEmail: email,
+          },
+        })
+      : await this.turnkeyClient.stampUpdateUserEmail({
+          type: "ACTIVITY_TYPE_UPDATE_USER_EMAIL",
+          timestampMs: Date.now().toString(),
+          organizationId: this.user.orgId,
+          parameters: {
+            userId: this.user.userId,
+            userEmail: email,
+            verificationToken,
+          },
+        });
+
+    await this.request("/v1/update-email-auth", {
+      stampedRequest,
+    });
+    this.user = {
+      ...this.user,
+      email: email || undefined,
+    };
+  };
+
+  /**
+   * Updates the phone number for the authenticated user, allowing them to login with that
+   * phone number. Must be called after calling `initOtp` with the phone number.
+   *
+   * @param {VerificationOtp} otp The OTP object including the OTP ID and OTP code
+   * @returns {Promise<void>} A promise that resolves when the phone number is set
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public setPhoneNumber = async (otp: VerificationOtp): Promise<void> => {
+    const { verificationToken } = await this.request("/v1/verify-otp", {
+      otpId: otp.id,
+      otpCode: otp.code,
+    });
+    const { contact } = jwtDecode<{ contact: string }>(verificationToken);
+    await this.updatePhoneNumber(contact, verificationToken);
+  };
+
+  /**
+   * Removes the phone number for the authenticated user, disallowing them from login with that phone number.
+   *
+   * @returns {Promise<void>} A promise that resolves when the phone number is removed
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  public removePhoneNumber = async (): Promise<void> => {
+    await this.updatePhoneNumber("");
+  };
+
+  private updatePhoneNumber = async (
+    phone: string,
+    verificationToken?: string,
+  ): Promise<void> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+    if (phone.trim() && !verificationToken) {
+      throw new Error("Verification token is required to change phone number.");
+    }
+    const stampedRequest = await this.turnkeyClient.stampUpdateUserPhoneNumber({
+      type: "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
       timestampMs: Date.now().toString(),
       organizationId: this.user.orgId,
       parameters: {
         userId: this.user.userId,
-        userEmail: email,
-        userTagIds: [],
+        userPhoneNumber: phone,
+        verificationToken,
       },
     });
-    await this.request("/v1/update-email-auth", {
+    await this.request("/v1/update-phone-auth", {
       stampedRequest,
+    });
+    this.user = {
+      ...this.user,
+      phone: phone || undefined,
+    };
+  };
+
+  /**
+   * Initiates an OTP (One-Time Password) verification process for a user contact.
+   *
+   * @param {("email" | "sms")} type - The type of OTP to send, either "email" or "sms"
+   * @param {string} contact - The email address or phone number to send the OTP to
+   * @returns {Promise<{ otpId: string }>} A promise that resolves to an object containing the OTP ID
+   * @throws {NotAuthenticatedError} When no user is currently authenticated
+   */
+  public initOtp = async (
+    type: "email" | "sms",
+    contact: string,
+  ): Promise<{ otpId: string }> => {
+    return await this.request("/v1/init-otp", {
+      otpType: type === "email" ? "OTP_TYPE_EMAIL" : "OTP_TYPE_SMS",
+      contact,
     });
   };
 
@@ -761,7 +887,9 @@ export abstract class BaseSignerClient<
 
       return {
         stampHeaderName: "X-Stamp",
-        stampHeaderValue: base64UrlEncode(Buffer.from(JSON.stringify(stamp))),
+        stampHeaderValue: base64UrlEncode(
+          Buffer.from(JSON.stringify(stamp)).buffer,
+        ),
       };
     },
   });
@@ -1230,7 +1358,7 @@ export abstract class BaseSignerClient<
       fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
     };
     const state = base64UrlEncode(
-      new TextEncoder().encode(JSON.stringify(stateObject)),
+      new TextEncoder().encode(JSON.stringify(stateObject)).buffer,
     );
     const authUrl = new URL(authEndpoint);
     const params: Record<string, string> = {
