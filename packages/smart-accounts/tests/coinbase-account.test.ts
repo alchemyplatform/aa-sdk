@@ -79,6 +79,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
     // Wait for the user operation to be included
     const receipt = await bundlerClient.waitForUserOperationReceipt({
       hash: userOpHash,
+      timeout: 120_000,
     });
 
     expect(receipt).toBeDefined();
@@ -92,7 +93,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
 
     // Account should be deployed after the first user operation
     expect(await account.isDeployed()).toBe(true);
-  }, 60_000);
+  }, 120_000);
 
   it("should verify signature using EIP-1271 after deployment", async () => {
     const owner = privateKeyToAccount(generatePrivateKey());

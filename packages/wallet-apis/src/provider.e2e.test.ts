@@ -25,7 +25,7 @@ import {
   waitForCallsStatus,
 } from "viem/actions";
 
-describe("Provider E2E Tests", async () => {
+describe.sequential("Provider E2E Tests", async () => {
   let clientFromProvider: Client<Transport, Chain, Account>;
   let transport: AlchemyTransport;
   let account: Address;
