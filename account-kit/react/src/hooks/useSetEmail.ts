@@ -34,8 +34,8 @@ export type UseSetEmailResult = {
 /**
  * A custom hook to set an email address for an already authenticated account.
  *
- * **Note:** For the OTP-based approach, you should first use the `useSendVerificationCode`
- * hook to send a verification code to the email address before calling this hook.
+ * **Note:** You should first use the `useSendVerificationCode` hook to send
+ * a verification code to the email address before calling this hook.
  *
  * @param {UseSetEmailMutationArgs} [mutationArgs] Optional arguments for the setEmail mutation
  * @returns {UseSetEmailResult} An object containing functions and state for setting the email
@@ -45,11 +45,10 @@ export type UseSetEmailResult = {
  * import { useSetEmail, useSendVerificationCode } from "@account-kit/react";
  *
  * // First, send verification code
- * const { sendVerificationCodeAsync } = useSendVerificationCode();
+ * const { sendVerificationCode } = useSendVerificationCode();
  *
  * const {
  *   setEmail,
- *   setEmailAsync,
  *   isSettingEmail,
  *   error
  * } = useSetEmail({
@@ -59,13 +58,13 @@ export type UseSetEmailResult = {
  *   onError: (error) => console.error(error),
  * });
  *
- * // Step 1: Send verification code to email (use useSendVerificationCode hook)
- * await sendVerificationCodeAsync({
+ * // Step 1: Send verification code to email
+ * await sendVerificationCode({
  *   type: "email",
  *   contact: "user@example.com"
  * });
  *
- * // Step 2: Set email with verification code
+ * // Step 2: Update email using verification code
  * setEmail({
  *   verificationCode: "123456" // code user received
  * });
@@ -85,7 +84,7 @@ export function useSetEmail(
     mutate: setEmail,
     mutateAsync: setEmailAsync,
     isPending: isSettingEmail,
-    error: setEmailError,
+    error,
   } = useMutation(
     {
       mutationFn: async (input: SetEmailParams) => {
@@ -124,6 +123,6 @@ export function useSetEmail(
     setEmail: ReactLogger.profiled("setEmail", setEmail),
     setEmailAsync: ReactLogger.profiled("setEmailAsync", setEmailAsync),
     isSettingEmail,
-    error: setEmailError,
+    error,
   };
 }

@@ -39,7 +39,6 @@ export type UseSendVerificationCodeMutationArgs = BaseHookMutationArgs<
 
 /**
  * A custom hook to send OTP verification codes to email or SMS for account verification.
- * Returns an OTP ID that can be used with verification code to complete authentication.
  *
  * @param {UseSendVerificationCodeMutationArgs} [mutationArgs] Optional arguments for the mutation
  * @returns {UseSendVerificationCodeResult} An object containing functions and state for sending verification codes
@@ -54,7 +53,7 @@ export type UseSendVerificationCodeMutationArgs = BaseHookMutationArgs<
  *   error
  * } = useSendVerificationCode({
  *   onSuccess: (data) => {
- *     console.log("OTP sent, ID:", data.otpId);
+ *     console.log("OTP sent");
  *   },
  *   onError: (error) => console.error(error),
  * });

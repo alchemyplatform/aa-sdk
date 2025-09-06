@@ -295,7 +295,7 @@ export abstract class BaseSignerClient<
    * @deprecated You must contact Alchemy to enable this feature for your team,
    * as there are important security considerations. In particular, you must not
    * call this without first validating that the user owns this email account.
-   * Use setEmail(email, otp) instead.
+   * Recommended to use the email verification flow instead.
    *
    * @param {string} email The email to set for the user
    * @returns {Promise<void>} A promise that resolves to the updated email
