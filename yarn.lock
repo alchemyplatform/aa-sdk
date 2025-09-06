@@ -7,78 +7,6 @@
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.1.2.tgz#9af8deaf3f236c1c6ee99cc5349051475e5dcc83"
   integrity sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==
 
-"@account-kit/infra@4.17.0":
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/@account-kit/infra/-/infra-4.17.0.tgz#e4f112481529c4034235d0a0a1afffe7e7d6c928"
-  integrity sha512-PjQq88bz9sdv9AAYh7pMPE6ftcs1s/0uE5ObW6WE2GpXCEFybFuF13vkzG+8xLdVb3DpI0qJeN5k4eCzKzwMbA==
-  dependencies:
-    "@aa-sdk/core" "^4.17.0"
-    "@account-kit/logging" "^4.17.0"
-    eventemitter3 "^5.0.1"
-    zod "^3.22.4"
-  optionalDependencies:
-    alchemy-sdk "^3.0.0"
-
-"@account-kit/react-native-signer@4.17.0":
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/@account-kit/react-native-signer/-/react-native-signer-4.17.0.tgz#1a9d0c085b5cabe7e19b1f4b996ac4de440ebadd"
-  integrity sha512-AsPWcRgVUZhIfkqiAStH+nFDHlOOLs6VSfPdEenW+sZUtUKjWrE8BPIlmy0fJqDkyNyiTJkCvRDJD2+M+camfw==
-  dependencies:
-    "@aa-sdk/core" "^4.17.0"
-    "@account-kit/signer" "^4.17.0"
-    viem "^2.21.40"
-
-"@account-kit/react-native@4.17.0":
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/@account-kit/react-native/-/react-native-4.17.0.tgz#28f66cd5a819afc6e66a12697afce04b701ab97d"
-  integrity sha512-Y1u6U6JePVTPA5QBwxgOv5B5nTEKc6s8mmWWtbPDI+F8sIotaf9umH43h8tWt0wvDlusn9mTh45iwZU96KPNRA==
-  dependencies:
-    "@account-kit/core" "^4.17.0"
-    "@account-kit/infra" "^4.17.0"
-    "@account-kit/react" "^4.17.0"
-    "@account-kit/react-native-signer" "^4.17.0"
-    "@account-kit/signer" "^4.17.0"
-    "@noble/hashes" "1.7.1"
-    crypto-browserify "^3.12.1"
-    node-libs-react-native "^1.2.1"
-    react-native-get-random-values "^1.11.0"
-    stream-browserify "^3.0.0"
-    zustand "^5.0.0-rc.2"
-
-"@account-kit/react@4.17.0":
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/@account-kit/react/-/react-4.17.0.tgz#7789504aec3d63899ad48ecd9d88e26d734bf22c"
-  integrity sha512-/OFpDHPz4H7XR3hH+Z5+5N4Z2gBSNPJ1oe+Q05Z63FU2T9sdRxr2W3yCfLwsbJ4N/gLS8ssKBBUMCVOSAP44Fg==
-  dependencies:
-    "@account-kit/core" "^4.17.0"
-    "@account-kit/infra" "^4.17.0"
-    "@account-kit/logging" "^4.17.0"
-    "@account-kit/signer" "^4.17.0"
-    "@tanstack/react-form" "^0.33.0"
-    "@tanstack/zod-form-adapter" "^0.33.0"
-    "@wagmi/connectors" "^5.1.15"
-    react-remove-scroll "^2.5.10"
-    tailwindcss "^3.4.3"
-    zod "^3.22.4"
-    zustand "^5.0.0-rc.2"
-  optionalDependencies:
-    alchemy-sdk "^3.0.0"
-
-"@account-kit/signer@4.17.0":
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/@account-kit/signer/-/signer-4.17.0.tgz#fca992679b042a0a589dd9be4c431ae085d6cceb"
-  integrity sha512-kuJxGx/Fu4LLHRH2miEz5ycKlNFc7y8EEwRvE5OQ7e2cqRp/tOQYKKYDO4TvhcUZeRoFtwW39bmTVoKiihhBcg==
-  dependencies:
-    "@aa-sdk/core" "^4.17.0"
-    "@account-kit/logging" "^4.17.0"
-    "@solana/web3.js" "^1.98.0"
-    "@turnkey/http" "^2.6.2"
-    "@turnkey/iframe-stamper" "^1.0.0"
-    "@turnkey/viem" "^0.4.8"
-    "@turnkey/webauthn-stamper" "^0.4.3"
-    jwt-decode "^4.0.0"
-    zod "^3.22.4"
-
 "@adobe/css-tools@^4.4.0":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.3.tgz#beebbefb0264fdeb32d3052acae0e0d94315a9a2"
@@ -8239,24 +8167,6 @@
     "@turnkey/encoding" "0.2.1"
     sha256-uint8array "^0.10.7"
 
-"@turnkey/api-key-stamper@0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.4.tgz#b5a8224aa3c6bbdd1f7259ed2c1d047abe8a8d6f"
-  integrity sha512-KXvf2yV3OkSrZYEnHSgOwy2XS7Q4+XNwRkgRhDNsiYvgz8KNGLbqXg0/aAlkTIUT7NYODZ3iaGMml0DtyzGeDQ==
-  dependencies:
-    "@noble/curves" "^1.3.0"
-    "@turnkey/encoding" "0.4.0"
-    sha256-uint8array "^0.10.7"
-
-"@turnkey/api-key-stamper@0.4.5":
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.5.tgz#a5b75297d38ef20ac5d0891732ee342955ec64b5"
-  integrity sha512-8UeYt/2WtMrK2uSFzjiRXdCVc9SmKlMVuA4f1Z+SlxcsW0wlEpNM/7bd8N4VVVAjoE8Yy50Vhk3ylfQFtlaKsQ==
-  dependencies:
-    "@noble/curves" "^1.3.0"
-    "@turnkey/encoding" "0.4.0"
-    sha256-uint8array "^0.10.7"
-
 "@turnkey/api-key-stamper@0.4.7":
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.7.tgz#79a22260e89752d9fe8599b6b6934b69b4d43365"
@@ -8298,11 +8208,6 @@
   resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.2.1.tgz#ccde2afe97d0ab39911fe005ce473faa5a681e92"
   integrity sha512-9GgsbW/fa5PMhLbg4URRCwzLhvfwp6JXkPUGvXlPJxAqNhJeFrZNEJUhuz3pmHFxj5unLrHaSXjWS7Q/fi6x2w==
 
-"@turnkey/encoding@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.4.0.tgz#9d06efe6447322bcc9eb4d51b48961054a3c102d"
-  integrity sha512-ptLgcpWVt34KTPx0omF2QLJrosW6I//clCJ4G2+yngYFCzrdR0yBchV/BOcfME67mK1v3MmauyXl9AAnQTmB4Q==
-
 "@turnkey/encoding@0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.5.0.tgz#415d721383c8267a8ca173cef34298a325a6a57d"
@@ -8318,27 +8223,7 @@
     "@turnkey/webauthn-stamper" "0.5.0"
     cross-fetch "^3.1.5"
 
-"@turnkey/http@3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-3.4.0.tgz#c4fd36e58b08bed046abf167f8794695de07c3dd"
-  integrity sha512-7sXPlOlF3YVqLFoBm2YyaO5d0aQXpfsij2BgtOHfhLmPkMWm5yMz2T7UlI3lf67SftwweOQ+5/ZkD9oJwi95tg==
-  dependencies:
-    "@turnkey/api-key-stamper" "0.4.5"
-    "@turnkey/encoding" "0.4.0"
-    "@turnkey/webauthn-stamper" "0.5.0"
-    cross-fetch "^3.1.5"
-
-"@turnkey/http@^2.6.2":
-  version "2.22.0"
-  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.22.0.tgz#89233e44f467dbb289351832f76700d9b550a5d3"
-  integrity sha512-nkzSIiur68PDEXh0E6fPpgrev0qeMfnVjeh/nWePZpS6TwJ7NGw1i4WRqZ1VkQ+ODmCD2ztKMzUhii9b4pzURg==
-  dependencies:
-    "@turnkey/api-key-stamper" "0.4.4"
-    "@turnkey/encoding" "0.4.0"
-    "@turnkey/webauthn-stamper" "0.5.0"
-    cross-fetch "^3.1.5"
-
-"@turnkey/http@^3.11.0":
+"@turnkey/http@3.11.0", "@turnkey/http@^3.11.0":
   version "3.11.0"
   resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-3.11.0.tgz#45a2c584538e011f09260202b950581a88c5d2f7"
   integrity sha512-9HetrzUbXoo/CaXzeIlu+wg0lKUYTXPckrwT+95xb0VVLo2vS9WMWvc8Qhi138HnZxFzeqaeJ7/r8gFBV04HrQ==
@@ -8353,26 +8238,21 @@
   resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-2.0.0.tgz#9cbd30457c8c5d6bec913b870755c5cda7e47c6a"
   integrity sha512-14IPfloVCV3ngoxsy3KoEUbEtYYxPU5H6T4WcNzY8Z67A1NJZfipk6pTaN5h3efkUm208G2TvDd63sZOdbyuxQ==
 
-"@turnkey/iframe-stamper@^1.0.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-1.2.0.tgz#bba478e391a266833f1a5960b9f1df9de5934fb8"
-  integrity sha512-OXbCVVzypa0AXa6dcNpfu8Q0xY/sq2nGXwhesrUQmE7V5I5nYYHZE3sQv54lErToX6H6YyDR9Z1DuPzEUkYTjw==
-
 "@turnkey/iframe-stamper@^2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-2.5.0.tgz#4543458a3ac380c96f239c6c2a997c03bac0bd7b"
   integrity sha512-XjntbA5CNjxGRH+loceAlVLL9PG9Q4Y7p5zjBm4DeKclhD6lpUl9h8INArMEXIFbfLwLjjS6Q+SmQG4BHvNY6A==
 
-"@turnkey/react-native-passkey-stamper@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@turnkey/react-native-passkey-stamper/-/react-native-passkey-stamper-1.0.14.tgz#a157d988705f2e3fc67a04c6872481397568cbef"
-  integrity sha512-kipUjbL6YHU10ifpHJYabZorKhpnv0Crvx/pzB9eptcPF9nLTT+mn5RnJtgRYdkj7uwbnBIxyxG5GZhcAJ7pNA==
+"@turnkey/react-native-passkey-stamper@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@turnkey/react-native-passkey-stamper/-/react-native-passkey-stamper-1.1.4.tgz#d245b5a1028d11cffbb296f4c6e45a2310d65275"
+  integrity sha512-7rMyt+PjEOFWez6PzqgKwv0xy0zmZ1Rg0+I39bTRpAjoHKs3oUMVEbBMd+SNYUNR/901if2jmrQiYkHepdTOUw==
   dependencies:
-    "@turnkey/encoding" "0.4.0"
-    "@turnkey/http" "3.4.0"
-    buffer "^6.0.3"
-    react-native-passkey "^3.0.0"
-    sha256-uint8array "^0.10.7"
+    "@turnkey/encoding" "0.5.0"
+    "@turnkey/http" "3.11.0"
+    buffer "6.0.3"
+    react-native-passkey "3.0.0"
+    sha256-uint8array "0.10.7"
 
 "@turnkey/sdk-browser@1.5.0":
   version "1.5.0"
@@ -21647,7 +21527,12 @@ react-native-mmkv@^3.1.0:
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-3.2.0.tgz#460723eb23b9cc92c65b0416eae9874a6ddf5b82"
   integrity sha512-9y7K//1MaU46TFrXkyU0wT5VGk9Y2FDLFV6NPl+z3jTbm2G7SC1UIxneF6CfhSmBX5CfKze9SO7kwDuRx7flpQ==
 
-react-native-passkey@^3.0.0, react-native-passkey@^3.1.0:
+react-native-passkey@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-passkey/-/react-native-passkey-3.0.0.tgz#f81255bca91c0b64b4dc940df9b4f5b53d4131c2"
+  integrity sha512-U26Jaz8BeN+LxB9a5rwJiDHIYNBj7sobfnlQnkfyuqylKnSHxzThOnYcJq3WGCSzTYNI5DT0xUtArQkc482fkQ==
+
+react-native-passkey@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-passkey/-/react-native-passkey-3.1.0.tgz#26617ed0cc115c6037e2537d264955d852395168"
   integrity sha512-qOJ0q7AqbUOGXDOObcfiOJo1BOnG+lIQMEgltgeqmyMC+2XDlr7YrOQZgLwZbXheGC7BXPpwMSev/gxkgbt3xw==
@@ -22732,7 +22617,7 @@ sha.js@^2.4.0, sha.js@^2.4.11, sha.js@^2.4.8:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-sha256-uint8array@^0.10.7:
+sha256-uint8array@0.10.7, sha256-uint8array@^0.10.7:
   version "0.10.7"
   resolved "https://registry.yarnpkg.com/sha256-uint8array/-/sha256-uint8array-0.10.7.tgz#c751fc914f4227b26d996980562065fa4eadcf99"
   integrity sha512-1Q6JQU4tX9NqsDGodej6pkrUVQVNapLZnvkwIhddH/JqzBZF1fSaxSWNY6sziXBE8aEa2twtGkXUrwzGeZCMpQ==
@@ -24868,7 +24753,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.29.2, viem@2.33.3, viem@>=2.23.11, viem@^2.1.1, viem@^2.21.40, viem@^2.29.2:
+viem@2.23.2, viem@2.29.2, viem@2.33.3, viem@>=2.23.11, viem@^2.1.1, viem@^2.29.2:
   version "2.33.3"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.33.3.tgz#b69d7ff9edf649d1b7d9218e0225bcadc83a8caa"
   integrity sha512-aWDr6i6r3OfNCs0h9IieHFhn7xQJJ8YsuA49+9T5JRyGGAkWhLgcbLq2YMecgwM7HdUZpx1vPugZjsShqNi7Gw==

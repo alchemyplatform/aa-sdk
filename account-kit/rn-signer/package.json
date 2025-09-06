@@ -145,7 +145,7 @@
     "@aa-sdk/core": "^4.61.0",
     "@account-kit/signer": "^4.61.0",
     "@turnkey/crypto": "^2.5.0",
-    "@turnkey/react-native-passkey-stamper": "^1.0.14",
+    "@turnkey/react-native-passkey-stamper": "^1.1.4",
     "uuid": "^11.1.0",
     "viem": "^2.29.2",
     "zod": "^3.22.4"
