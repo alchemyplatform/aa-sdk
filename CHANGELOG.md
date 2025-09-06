@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.62.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.61.0...v4.62.0) (2025-09-06)
+
+### Features
+
+- fix expo example ([#1972](https://github.com/alchemyplatform/aa-sdk/issues/1972)) ([d6161dd](https://github.com/alchemyplatform/aa-sdk/commit/d6161ddc4a5018b7d856c51842d8e6d760ecc60b))
+- signer email/sms verification ([#1964](https://github.com/alchemyplatform/aa-sdk/issues/1964)) ([07d3bff](https://github.com/alchemyplatform/aa-sdk/commit/07d3bff1578c4f043c871da5edcab8feeb8cb105))
+
 # [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
 
 ### Bug Fixes
