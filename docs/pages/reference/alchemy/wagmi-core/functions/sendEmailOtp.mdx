@@ -5,7 +5,7 @@ description: Overview of the sendEmailOtp method
 slug: wallets/reference/alchemy/wagmi-core/functions/sendEmailOtp
 ---
 
-Phase 1 of email OTP auth — request an OTP to be sent to the provided email.
+Phase 1 of 2 of email OTP auth — request an OTP to be sent to the provided email.
 
 ## Import
 
@@ -19,16 +19,21 @@ import { sendEmailOtp } from "@alchemy/wagmi-core";
 
 `Config`
 
-- The shared Wagmi/Alchemy config.
+- The shared Wagmi/Alchemy config
 
 ### parameters
 
 `SendEmailOtpParameters`
 
-- Parameters for the OTP request.
+- Parameters for the OTP request
 
 ### parameters.email
 
 `string`
 
-- The user's email address to receive the OTP.
+- The user's email address to receive the OTP
+
+## Returns
+
+`Promise<SendEmailOtpReturnType>`
+Promise that resolves when the OTP has been sent

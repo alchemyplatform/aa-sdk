@@ -13,7 +13,10 @@ export async function dev_request(
     body: JSON.stringify(body),
   });
   if (response.status !== 200) {
-    throw new Error(`Failed to request ${path}`);
+    const errorText = await response.text();
+    throw new Error(
+      `Failed to request ${path} (${response.status}): ${errorText}`,
+    );
   }
   return response.json();
 }

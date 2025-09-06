@@ -67,6 +67,14 @@ export class Signer {
     return new Signer(apiKey, turnkey, user);
   }
 
+  public getAddress(): string {
+    return this.user.address;
+  }
+
+  public getUser(): User {
+    return this.user;
+  }
+
   public signRawPayload = async ({
     payload,
     mode,

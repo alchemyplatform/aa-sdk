@@ -5,7 +5,7 @@ description: Overview of the alchemyAuth method
 slug: wallets/reference/alchemy/connectors-web/functions/alchemyAuth
 ---
 
-Creates the Alchemy Auth connector for Wagmi (scaffolded).
+Creates the Alchemy Auth connector for Wagmi.
 
 This function returns a connector factory via Wagmi's `createConnector`.
 
@@ -23,7 +23,25 @@ import { alchemyAuth } from "@alchemy/connectors-web";
 
 `AlchemyAuthOptions`
 
-- Optional configuration for the connector.
+- Configuration for the connector
+
+### parameters.apiKey
+
+`string`
+
+- API key for authentication with Alchemy services
+
+### parameters.iframeElementId
+
+`string`
+
+- Optional ID for the iframe element used by Turnkey stamper
+
+### parameters.iframeContainerId
+
+`string`
+
+- Optional ID for the container element that holds the iframe
 
 ## Returns
 
