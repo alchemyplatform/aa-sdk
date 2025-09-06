@@ -7,7 +7,7 @@ slug: wallets/migration-guide
 
 Below are the steps to migrate your project from older versions of the `aa-sdk` and `account-kit` to the latest version.
 
-## Migrating to version v4.x.x
+## Migrating to Version V4.X.X
 
 ### Packages
 
@@ -19,7 +19,7 @@ All of the v3 packages have been renamed or removed. The new packages are as fol
 - `@alchemy/aa-accounts` -> `@account-kit/smart-contracts`
 - `@alchemy/aa-signers` -> removed
 
-### AA signers
+### Smart Account Signers
 
 The `@alchemy/aa-signers` package has been deprecated. The signers in that package are still compatible with v4, but they will not be receiving future support and the interfaces are not guaranteed to work with future versions of the SDK.
 If you want to integrate a 3rd party signer, it's still very easy if the signer exposes an EIP-1193 interface. See [this guide](/wallets/third-party/signers).
@@ -40,7 +40,7 @@ For Smart Account Clients, the `create*AlchemyClient` methods have been updated 
 
 The `alchemyFeeEstimator` and `alchemyUserOperationSimulator` middleware methods now no longer take in a `ClientWithAlchemyMethods` (returned by `createAlchemyPublicRpcClient`) and instead take in an `AlchemyTransport` as well.
 
-The `AlchemyTransport` is a type of `viem` transport that makes it easier to configure your communication with Alchemy RPC. It supports splitting traffic between Alchemy's AA infra and other Node providers (if needed). The `AlchemyTransport` has been added to `@account-kit/infra` and is exported as `alchemy`.
+The `AlchemyTransport` is a type of `viem` transport that makes it easier to configure your communication with Alchemy RPC. It supports splitting traffic between Alchemy's smart account infra and other Node providers (if needed). The `AlchemyTransport` has been added to `@account-kit/infra` and is exported as `alchemy`.
 
 Creating a config with `@account-kit/core` or `@account-kit/react` has been updated to accept an `AlchemyTransport` and the parameters of `createConfig` have been simplified as a result. You will now need to replace your `rpcUrl` or `apiKey` params with `transport: alchemy({...})`.
 
@@ -48,7 +48,7 @@ For more detailed examples, see the relevant Quickstart guides, depending on whi
 
 ### Hooks: `useSendTransaction` and `useSendTransactions` removed
 
-These methods have been removed since `useSendUserOperation` can be used to send transactions and user operations. If you were using `useSendTransaction` or `useSendTransactions`, you can replace them with
+These methods have been removed since `useSendUserOperation` can be used to send transactions. If you were using `useSendTransaction` or `useSendTransactions`, you can replace them with
 `useSendUserOperation` and pass in `waitForTxn: true` so that all `sendUserOperation` calls will wait for the transaction to be mined.
 
 ### Utils: `verifyEIP6492Signature` removed
@@ -75,7 +75,7 @@ The Alchemy `Chain` definitions have been moved from `@aa-sdk/core` to `@account
 
 This method on the `AccountSigner` has been renamed.
 
-### Accounts: Default LightAccount version is now v2.0.0
+### Accounts: Default LightAccount Version Is Now v2.0.0
 
 If you were creating LightAccounts for users without explicitly specifying the version (ie. in `createLightAccount` or `useAccount` or `useSmartAccountClient`), you should manually specify the previous default of `v1.1.0`.
 
@@ -92,11 +92,11 @@ Due to a clash in the typing of viem's `Account` type, the `getNonce` method has
 
 The version of viem has been updated to `2.20.0` and been added as a peer dependency. If you have viem listed as a dependency, make sure it is updated to `2.20.0`.
 
-### Dropped CJS support
+### Dropped CJS Support
 
 Due to our dependency on `wagmi` in the `core` and `react` packages, those packages no longer support `cjs` builds. To keep things consistent across all of our packages, we've dropped CJS support in all the packages in this repo. See [this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) guide on how to migrate from CJS to ESM.
 
-## Migrating to version 3.x.x
+## Migrating to Version 3.X.X
 
 This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.
 To address this, version 3.x.x of the SDK switches to an approach more idiomatic to `viem`.
@@ -115,8 +115,8 @@ The `signMessageWith6492` and `signTypedDataWith6492` methods have been removed 
 
 ### Client: `checkGasSponsorshipEligibility` return type updated
 
-The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorhip doesn't cause you to use up your
-gas sponsorship limits. If your User Operation is eligible, then you can sign the UO with `client.signUserOperation` and send it with `client.sendRawUserOperation`.
+The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a transaction as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorship doesn't cause you to use up your
+gas sponsorship limits. If your transaction is eligible, then you can sign the UO with `client.signUserOperation` and send it with `client.sendRawUserOperation`.
 
 ```ts
 import { SmartAccountProvider } from "@aa-sdk/core"; // [!code --]
@@ -160,7 +160,7 @@ const client = createSmartAccountClient({ // [!code ++]
 });
 ```
 
-### Client: signature changes on methods
+### Client: Signature Changes on Methods
 
 To support the various ways of connecting to a smart account, the signatures of the methods on `SmartAccountClient` have changed. Almost all methods now have an optional param for `account` and have been converted into single argument functions that take an object with the their properties instead.
 
@@ -286,7 +286,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 ### Account: Custom Accounts
 
-In prior versions, using your own smart contract account implementations required that you extend `BaseSmartContractAccount`. In version 3.x.x, you can use the `toSmartContractAccount` method which will allow you to use any account with `SmartAccountClient`. `toSmartContractAccount` has the form of:
+In prior versions, using your own wallet implementations required that you extend `BaseSmartContractAccount`. In version 3.x.x, you can use the `toSmartContractAccount` method which will allow you to use any account with `SmartAccountClient`. `toSmartContractAccount` has the form of:
 
 ```ts
 type toSmartContractAccount = <
@@ -315,7 +315,7 @@ type toSmartContractAccount = <
 
 `chain` and `transport` have been added to the constructor and `rpcClient` has been removed.
 
-### Account: SimpleAccount and LightAccount intialization params
+### Account: SimpleAccount and LightAccount initialization params
 
 `index` is now called `salt`
 
@@ -334,7 +334,7 @@ The `signTypedData` method found on `SmartAccountSigner` has been updated to mat
 ) => Promise<Hex>;
 ```
 
-### Ethers: Removed methods
+### Ethers: Removed Methods
 
 The `with*` methods have been removed from the Provider and Signer classes.
 The `connect` methods has been removed in favor of immutable properties on the Provider and Signer classes. See updated AccountSigner constructor below.
@@ -351,7 +351,7 @@ The `AccountSigner` now takes in a `SmartContractAccount` as a param in its cons
 
 The `Percent` type and `PercentSchema` have been removed in favor of the `Multiplier` type and `MultiplierSchema`.
 
-Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multipliaction of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
+Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multiplication of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
 
 ```ts
 createModularAccountAlchemyClient({

@@ -1,0 +1,20 @@
+# Voice and tone rules based on CONTRIBUTING.md
+# Enforces second-person voice and active voice requirements
+
+extends: existence
+message: "Use second-person voice ('you') instead of first-person"
+level: error
+ignorecase: true
+
+# Detect first-person usage that should be second-person
+tokens:
+  - '\bwe\s+recommend\b'
+  - '\bour\s+approach\b'
+  - '\bwe\s+suggest\b'
+  - '\bwe\s+provide\b'
+  - '\bwe\s+offer\b'
+  - '\bwe\s+support\b'
+  - '\bI\s+recommend\b'
+  - '\bone\s+should\b'
+  - '\bone\s+can\b'
+  - '\bone\s+needs\s+to\b'
