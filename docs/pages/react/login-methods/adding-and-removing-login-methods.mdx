@@ -40,15 +40,7 @@ export default function MyPage() {
 
 ## Setting email auth
 
-To set an account's email, use the `useSetEmail` hook.
-
-<Warning>
-  **If you set a user's email, it is critical that you verify that they own the email first**, to prevent malicious users from squatting on emails that have not yet been added to accounts.
-
-Because of the security implications, the ability to set emails on existing accounts is disabled by default. If you would like it enabled for your team, please [reach
-out](mailto:support@alchemy.com).
-
-</Warning>
+To set an account's email, use the `useSendVerificationCode` and `useSetEmail` hooks. Emails must be verified before they are set.
 
 <Warning>
   An account may have at most one email address associated with it. If an
@@ -57,13 +49,33 @@ out](mailto:support@alchemy.com).
 </Warning>
 
 ```tsx twoslash
-import { useSetEmail } from "@account-kit/react";
+import { useSetEmail, useSendVerificationCode } from "@account-kit/react";
 
 export default function MyPage() {
+  const { sendVerificationCode } = useSendVerificationCode();
   const { setEmail } = useSetEmail();
 
   return (
-    <button onClick={() => setEmail("user@example.com")}>Change email</button>
+    <>
+      <button
+        onClick={() => {
+          sendVerificationCode({
+            email: "user@example.com",
+          });
+        }}
+      >
+        Send verification code
+      </button>
+      <button
+        onClick={() =>
+          setEmail({
+            verificationCode: "code user received in email",
+          })
+        }
+      >
+        Update email
+      </button>
+    </>
   );
 }
 ```
