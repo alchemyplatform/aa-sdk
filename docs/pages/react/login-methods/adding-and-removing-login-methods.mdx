@@ -60,7 +60,8 @@ export default function MyPage() {
       <button
         onClick={() => {
           sendVerificationCode({
-            email: "user@example.com",
+            type: "email",
+            contact: "user@example.com",
           });
         }}
       >
