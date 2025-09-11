@@ -27,7 +27,7 @@ export async function estimateAndSendUserOperation() {
   if (!privateKey) throw new Error('PRIVATE_KEY is required');
   const privateKeyHex = privateKey as Hex;
   const account = await createModularAccountV2({
-    signer: LocalAccountSigner.privateKeyToAccountSigner(privateKey),
+    signer: LocalAccountSigner.privateKeyToAccountSigner(privateKeyHex),
     chain: baseSepolia,
     transport,
   });
