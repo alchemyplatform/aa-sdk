@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.62.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.0...v4.62.1) (2025-09-11)
+
+### Bug Fixes
+
+- add userTagIds to legacy stampUpdateUser request ([#2027](https://github.com/alchemyplatform/aa-sdk/issues/2027)) ([4baa660](https://github.com/alchemyplatform/aa-sdk/commit/4baa66052c1968340353375241edf2b8f3928225))
+
 # [4.62.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.61.0...v4.62.0) (2025-09-06)
 
 ### Features
