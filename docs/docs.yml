@@ -203,7 +203,7 @@ navigation:
           - page: Sponsor gas
             path: wallets/pages/transactions/sponsor-gas.mdx
           - page: Pay gas with any token
-            path: wallets/pages/transactions/pay-gas-with-any-token.mdx
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - page: "[NEW] Swap tokens"
             path: wallets/pages/transactions/swap-tokens.mdx
           - page: Send parallel transactions

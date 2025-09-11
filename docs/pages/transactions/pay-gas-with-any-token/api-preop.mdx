@@ -1,7 +1,7 @@
 <Steps>
   <Step title="(If Needed) Request Account">
     If the user does not yet have a smart account, you must create one.
-```bash twoslash
+```bash
   ACCOUNT_ADDRESS=$(curl --request POST \
   --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
   --header 'accept: application/json' \
@@ -13,7 +13,6 @@
   "params": [
     { 
       "signerAddress": "'$SIGNER_ADDRESS'",
-      "includeCounterfactualInfo": true 
     }
   ]
 }
@@ -22,7 +21,7 @@
   </Step>
   <Step title="Initial Prepare Calls">
     Prepare calls using the `paymasterService` capability.
-```bash twoslash
+```bash
 curl --request POST \
   --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
   --header 'accept: application/json' \
