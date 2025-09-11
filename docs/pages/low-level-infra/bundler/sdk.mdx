@@ -6,34 +6,42 @@ The `@account-kit/infra` library enables direct interaction with Alchemy's ERC-4
 
 <CodeBlocks>
 
+```ts twoslash title="config.tsx"
+import { alchemy, sepolia } from "@account-kit/infra";
+
+const YOUR_API_KEY = "<YOUR_API_KEY>";
+export const YOUR_PRIVATE_KEY = "<YOUR_PRIVATE_KEY>";
+export const chain = sepolia;
+
+export const transport = alchemy({
+  apiKey: YOUR_API_KEY,
+});
+```
+
 ```ts twoslash title="estimateAndSendUserOperation.tsx"
 import {
-  alchemy,
   alchemyFeeEstimator,
   createAlchemySmartAccountClient,
-  baseSepolia,
 } from "@account-kit/infra";
 import { createModularAccountV2 } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { entryPoint07Address } from "viem/account-abstraction";
 import type { Hex } from "viem";
+import {
+  chain,
+  transport
+  YOUR_PRIVATE_KEY,
+} from "./config.ts";
 
 export async function estimateAndSendUserOperation() {
-  const apiKey = process.env.ALCHEMY_API_KEY;
-  if (!apiKey) throw new Error("ALCHEMY_API_KEY is required");
-  const transport = alchemy({ apiKey });
-
-  const privateKey = process.env.PRIVATE_KEY;
-  if (!privateKey) throw new Error("PRIVATE_KEY is required");
-  const privateKeyHex = privateKey as Hex;
   const account = await createModularAccountV2({
-    signer: LocalAccountSigner.privateKeyToAccountSigner(privateKeyHex),
-    chain: baseSepolia,
+    signer: LocalAccountSigner.privateKeyToAccountSigner(YOUR_PRIVATE_KEY),
+    chain,
     transport,
   });
   const client = createAlchemySmartAccountClient({
     account,
-    chain: baseSepolia,
+    chain,
     transport,
     feeEstimator: alchemyFeeEstimator(transport),
   });
@@ -66,20 +74,13 @@ export async function estimateAndSendUserOperation() {
 ```
 
 ```ts twoslash title="getUserOperationByHash.tsx"
-import {
-  alchemy,
-  baseSepolia,
-  createAlchemyPublicRpcClient,
-} from "@account-kit/infra";
+import { createAlchemyPublicRpcClient } from "@account-kit/infra";
+import { chain, transport } from "./config.ts";
 import type { Hash } from "viem";
 
 export async function getUserOperationByHash(uoHash: Hash) {
-  const apiKey = process.env.ALCHEMY_API_KEY;
-  if (!apiKey) throw new Error("ALCHEMY_API_KEY is required");
-  const transport = alchemy({ apiKey });
-
   const client = createAlchemyPublicRpcClient({
-    chain: baseSepolia,
+    chain,
     transport,
   });
   try {
