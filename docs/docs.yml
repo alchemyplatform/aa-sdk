@@ -207,7 +207,7 @@ navigation:
           - page: "[NEW] Swap tokens"
             path: wallets/pages/transactions/swap-tokens/index.mdx
           - page: Send parallel transactions
-            path: wallets/pages/transactions/send-parallel-transactions.mdx
+            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
           - page: Retry transactions
             path: wallets/pages/transactions/retry-transactions.mdx
           - page: Track transaction status
