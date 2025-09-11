@@ -1,0 +1,12 @@
+---
+title: Bundler Overview
+description: Raw EIP-4337 Bundler APIs for advanced developers
+slug: wallets/transactions/low-level-infra/bundler/overview
+---
+
+The Bundler is a key component in the ERC-4337 Account Abstraction stack, responsible for collecting, validating, and bundling UserOperations (UserOps) into transactions that are submitted to the EntryPoint contract on the blockchain. In Alchemy's Account Kit, the Bundler APIs provide direct access to our high-performance, scalable bundler infrastructure (powered by Rundler), enabling developers to interact with a production-grade ERC-4337 bundler for reliable on-chain submission of UserOps.
+These APIs are part of the `@account-kit/infra` library, allowing advanced customization when building smart wallet applications. They follow the standard ERC-4337 JSON-RPC endpoints and support versions v0.6 and v0.7 of the protocol, with optimizations for gas estimation, validation, and error handling to ensure UserOps land efficiently while protecting against attacks.
+
+For full control, bring your own smart contracts or signers while leveraging Alchemy's bundler for scalability. If you prefer a higher-level abstraction, use the Wallet APIs or aa-sdk instead.
+
+<markdown src="../../shared/infra/api-endpoints/bundler.mdx"></markdown>
