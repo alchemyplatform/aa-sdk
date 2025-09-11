@@ -74,7 +74,11 @@ import {
 import type { Hash } from "viem";
 
 export async function getUserOperationByHash(uoHash: Hash) {
-  const transport = alchemy({ apiKey: process.env.ALCHEMY_API_KEY! });
+
+  const apiKey = process.env.ALCHEMY_API_KEY;
+  if (!apiKey) throw new Error('ALCHEMY_API_KEY is required');
+  const transport = alchemy({ apiKey });
+
   const client = createAlchemyPublicRpcClient({
     chain: baseSepolia,
     transport,
