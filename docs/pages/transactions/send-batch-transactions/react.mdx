@@ -5,16 +5,14 @@ Use the `useSendCalls` hook to send a batched transaction. You can also use the 
 <CodeBlocks>
 
 ```ts twoslash title="sendCalls.tsx" focus={9-11,21-43}
-import {
-  useSendCalls,
-  useSmartWalletClient,
-} from "@account-kit/react/experimental";
-import { type Address, encodeFunctionData, erc20Abi, parseEther } from "viem";
+import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
+import { type Address, encodeFunctionData, erc20Abi, parseUnits } from "viem";
 import { swapAbi } from "./swapAbi";
 
-export default function SendCalls({ account }: { account: Address }) {
+export default function SendCalls() {
+  const { client } = useSmartAccountClient({});
   const { sendCallsAsync } = useSendCalls({
-    client: useSmartWalletClient({ account }),
+    client,
   });
 
   const DEMO_USDC_ADDRESS: Address =
@@ -34,7 +32,7 @@ export default function SendCalls({ account }: { account: Address }) {
             data: encodeFunctionData({
               abi: erc20Abi,
               functionName: "approve",
-              args: [DEMO_SWAP_ADDRESS, parseEther("5000")],
+              args: [DEMO_SWAP_ADDRESS, parseUnits("5000", 6)],
             }),
           },
           {
@@ -43,7 +41,7 @@ export default function SendCalls({ account }: { account: Address }) {
             data: encodeFunctionData({
               abi: swapAbi,
               functionName: "swapUSDCtoWETH",
-              args: [parseEther("5000"), parseEther("1")],
+              args: [parseUnits("5000", 6), parseUnits("1", 18)],
             }),
           },
         ],

@@ -9,7 +9,7 @@ You can batch transactions using either the smart wallet client `sendCalls` or `
 <CodeBlocks>
 
 ```ts twoslash title="sendCalls.ts"
-import { Address, erc20Abi, encodeFunctionData, parseEther } from "viem";
+import { Address, erc20Abi, encodeFunctionData, parseUnits } from "viem";
 import { client } from "./client";
 import { swapAbi } from "./swapAbi";
 
@@ -26,7 +26,7 @@ const { preparedCallIds } = await client.sendCalls({
       data: encodeFunctionData({
         abi: erc20Abi,
         functionName: "approve",
-        args: [DEMO_SWAP_ADDRESS, parseEther("5000")],
+        args: [DEMO_SWAP_ADDRESS, parseUnits("5000", 6)],
       }),
     },
     {
@@ -35,7 +35,7 @@ const { preparedCallIds } = await client.sendCalls({
       data: encodeFunctionData({
         abi: swapAbi,
         functionName: "swapUSDCtoWETH",
-        args: [parseEther("5000"), parseEther("1")],
+        args: [parseUnits("5000", 6), parseUnits("1", 18)],
       }),
     },
   ],
