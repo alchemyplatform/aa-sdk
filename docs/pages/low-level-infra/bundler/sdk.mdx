@@ -6,7 +6,7 @@ The `@account-kit/infra` library enables direct interaction with Alchemy's ERC-4
 
 <CodeBlocks>
 
-```ts twoslash title="config.tsx"
+```ts twoslash title="config.ts"
 import { alchemy, sepolia } from "@account-kit/infra";
 
 const YOUR_API_KEY = "<YOUR_API_KEY>";
@@ -18,7 +18,7 @@ export const transport = alchemy({
 });
 ```
 
-```ts twoslash title="estimateAndSendUserOperation.tsx"
+```ts twoslash title="estimateAndSendUserOperation.ts"
 import {
   alchemyFeeEstimator,
   createAlchemySmartAccountClient,
@@ -73,7 +73,7 @@ export async function estimateAndSendUserOperation() {
 }
 ```
 
-```ts twoslash title="getUserOperationByHash.tsx"
+```ts twoslash title="getUserOperationByHash.ts"
 import { createAlchemyPublicRpcClient } from "@account-kit/infra";
 import { chain, transport } from "./config.ts";
 import type { Hash } from "viem";
