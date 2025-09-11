@@ -2,14 +2,14 @@
 ```ts twoslash title="config.ts"
 import { alchemy, sepolia } from "@account-kit/infra";
 
-const ALCHEMY_API_KEY = "<ALCHEMY_API_KEY>";
+const YOUR_API_KEY = "<YOUR_API_KEY>";
 
 export const chain = sepolia;
 
-export const policyId = "<ALCHEMY_POLICY_ID>";
+export const policyId = "<POLICY_ID>";
 
 export const transport = alchemy({
-  apiKey: ALCHEMY_API_KEY,
+  apiKey: YOUR_API_KEY,
 });
 ```
 
