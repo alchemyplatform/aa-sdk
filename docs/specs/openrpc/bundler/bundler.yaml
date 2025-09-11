@@ -127,6 +127,12 @@ methods:
         description: The `userOpHash` of the `UserOperation` to get the receipt for (as returned by `eth_sendUserOperation`).
         schema:
           $ref: "../_shared_wallets/components.yaml#/components/schemas/hash32"
+      - name: tag
+        required: false
+        description: The blocktag for checking the UO status. \"pending\" or \"latest\". Defaults to \"latest\".".
+        schema:
+          type: string
+          enum: ["pending", "latest"]
     result:
       name: UserOperationReceipt
       description: "`UserOperationReceipt` object representing the outcome of a `UserOperation`."
@@ -145,6 +151,7 @@ methods:
             "reason",
             "logs",
             "receipt",
+            "status",
           ]
         properties:
           userOpHash:
@@ -290,6 +297,9 @@ methods:
               type:
                 type: string
                 description: The type of the transaction.
+          status:
+            type: string
+            description: The status of the `UserOperation`. Could be \"Mined\" or \"Preconfirmed\"."
     examples:
       - name: eth_getUserOperationReceipt example
         params:
@@ -313,6 +323,7 @@ methods:
               blockHash: "0x58a945e1558810523df00490ff28cbe111b37851c44679ce5be1eeaebb4b4907"
               blockNumber: "0xeb8822"
               transactionIndex: "0x4e"
+            status: "Mined"
 
   - name: eth_supportedEntryPoints
     description: |

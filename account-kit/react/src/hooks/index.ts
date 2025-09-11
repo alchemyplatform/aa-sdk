@@ -21,6 +21,7 @@ export * from "./useRemoveOauthProvider.js";
 export * from "./useRemovePasskey.js";
 export * from "./useResizeObserver.js";
 export * from "./useSendUserOperation.js";
+export * from "./useSendVerificationCode.js";
 export * from "./useSetEmail.js";
 export * from "./useSigner.js";
 export * from "./useSignerStatus.js";

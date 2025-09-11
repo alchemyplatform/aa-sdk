@@ -1,16 +1,23 @@
 ---
-title: Server Side Rendering
-description: An overview on how to use React Hooks with Server Side Rendering
-slug: wallets/react/ssr
+title: Server-side Rendering
+description: Learn how to use Smart Wallets with server-side rendering.
+slug: wallets/troubleshooting/ssr
 ---
 
 > ⚠️ **Common Issue**: If SSR is not set up correctly, you may see sessions resetting or users getting logged out unexpectedly. Make sure to follow this guide fully to preserve session state.
 
-When using the React hooks exported by Smart Wallets in a server-side rendered setting, you will see inconsistencies of the user state between the server and the client. This will lead to flashes of content when a user is logged in. To avoid this, the account state can be optimistically loaded on the server and passed to the client.
+When using Smart Wallets in a server-side rendered setting, you will see inconsistencies of the user state between the server and the client. This will lead to flashes of content when a user is logged in. To avoid this, the account state can be optimistically loaded on the server and passed to the client.
 
-To enable this setting, you can set `ssr: true` when creating a config. We also make the config a function, so that we can call it once per request which allows for request-based isolation of the account state.
+## Update your config
 
-```ts twoslash config.ts
+To enable server-side rendering support, you need to set `ssr: true` when creating a config.
+
+<Tabs>
+  <Tab title="React">
+
+When using React, you should also make the config a function so that you can call it once per request, which allows for request-based isolation of the account state.
+
+```ts twoslash config.ts {9}
 import { createConfig } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -19,7 +26,7 @@ export const config = () =>
     // required
     transport: alchemy({ rpcUrl: "/api/rpc" }),
     chain: sepolia,
-    ssr: true, // [!code ++]
+    ssr: true,
   });
 ```
 
@@ -31,24 +38,20 @@ This setting will defer hydration of the account state to the client after the i
 
 To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
 
-```ts twoslash config.ts
-import {
-  createConfig,
-  cookieStorage, // [!code ++]
-} from "@account-kit/react";
+```ts twoslash config.ts {1,12-13}
+import { createConfig, cookieStorage } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();
 
-// [!code focus:99]
 export const config = () =>
   createConfig({
     // required
     transport: alchemy({ rpcUrl: "/api/rpc" }),
     chain: sepolia,
-    ssr: true, // [!code ++]
-    storage: cookieStorage, // [!code ++]
+    ssr: true,
+    storage: cookieStorage,
   });
 ```
 
@@ -60,7 +63,7 @@ If you are using NextJS App Directory, you can read the cookie state and pass it
 
 <CodeBlocks>
 
-```tsx twoslash layout.tsx filename=layout.tsx
+```tsx twoslash app/layout.tsx
 // @noErrors
 import React from "react";
 import { cookieToInitialState } from "@account-kit/core";
@@ -100,7 +103,7 @@ export default function RootLayout({
 }
 ```
 
-```tsx twoslash providers.tsx filename=providers.tsx
+```tsx twoslash app/providers.tsx
 // @noErrors
 "use client";
 
@@ -138,7 +141,7 @@ export const Providers = (
 };
 ```
 
-```tsx twoslash config.ts filename=config.ts
+```tsx twoslash config.ts
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
@@ -157,3 +160,104 @@ export const config = () =>
 ```
 
 </CodeBlocks>
+
+  </Tab>
+  <Tab title="Other Javascript">
+
+```ts twoslash
+import { createConfig } from "@account-kit/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const config = createConfig({
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
+  chain: sepolia,
+  ssr: true,
+});
+```
+
+This setting will defer hydration of the account kit state until you can call the `hydrate` method on mount.
+
+## Hydrate the Account State
+
+Now that you've set up your config for SSR, you will have to manually hydrate the state on the client. This can be done by calling the `hydrate` method exported by Smart Wallets core.
+
+<CodeBlocks>
+
+```ts twoslash hydrate.ts
+import { hydrate } from "@account-kit/core";
+import { config } from "./config";
+
+const { onMount } = hydrate(config);
+
+// when your component has mounted on the client, call the onMount method
+// how you do this will depend on your framework, but here we'll just check for `window`
+// to be defined
+if (typeof window !== "undefined") {
+  onMount();
+}
+```
+
+```ts twoslash config.ts
+import { createConfig } from "@account-kit/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+
+export const config = createConfig({
+  transport: alchemy({ apiKey: "YOUR_API_KEY" }),
+  chain: sepolia,
+  ssr: true,
+});
+```
+
+</CodeBlocks>
+
+## Persisting the Account State
+
+To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
+
+```ts twoslash {7-8}
+import { createConfig, cookieStorage } from "@account-kit/core"; // Add cookieStorage import
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const config = createConfig({
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
+  chain: sepolia,
+  ssr: true,
+  storage: cookieStorage,
+});
+```
+
+Now you can get the initial state from cookies and pass it to the `hydrate` method to hydrate the account state on the client or on the server.
+
+<CodeBlocks>
+
+```ts twoslash hydrate.ts {7}
+import { cookieToInitialState, hydrate } from "@account-kit/core";
+import { config } from "./config";
+
+// this is an example of how to get the cookie on the client
+// but on the server you might get it from the `req.cookies` object
+// it all depends on your framework
+const initialState = cookieToInitialState(config, document.cookie);
+const { onMount } = hydrate(config, initialState);
+
+if (typeof window !== "undefined") {
+  onMount();
+}
+```
+
+```ts twoslash config.ts {7-8}
+import { createConfig, cookieStorage } from "@account-kit/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const config = createConfig({
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
+  chain: sepolia,
+  ssr: true,
+  storage: cookieStorage,
+});
+```
+
+</CodeBlocks>
+
+  </Tab>
+</Tabs>
