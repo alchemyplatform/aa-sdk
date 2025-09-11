@@ -233,6 +233,15 @@ navigation:
                 contents:
                   - page: API Endpoints
                     path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
+          - section: Bundler
+            path: wallets/pages/low-level-infra/bundler/overview.mdx
+            contents:
+              - page: API Endpoints
+                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
+              - page: Using SDK
+                path: wallets/pages/low-level-infra/bundler/sdk.mdx
+              - page: Bundler FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
 
       - section: PRE-BLITZ TO REMOVE Transactions
         contents:

@@ -1,0 +1,100 @@
+<Info>**Required SDK version**: ^v4.59.1</Info>
+
+## Using the `@account-kit/infra` Library for UserOperation Management
+
+The `@account-kit/infra` library enables direct interaction with Alchemy's ERC-4337 bundler for advanced UserOperation management. The `alchemyFeeEstimator` function leverages underlying APIs, including `rundler_maxPriorityFeePerGas` and `eth_estimateUserOperation`, to estimate gas fees for UserOperations. Below are examples demonstrating how to estimate and send a UserOperation and how to retrieve a UserOperation by its hash using low-level Bundler APIs.
+
+<CodeBlocks>
+
+```ts twoslash title="estimateAndSendUserOperation.tsx"
+import {
+  alchemy,
+  alchemyFeeEstimator,
+  createAlchemySmartAccountClient,
+  baseSepolia,
+} from "@account-kit/infra";
+import { createModularAccountV2 } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { entryPoint07Address } from "viem/account-abstraction";
+import type { Hex } from "viem";
+
+export async function estimateAndSendUserOperation() {
+  const apiKey = process.env.ALCHEMY_API_KEY;
+  if (!apiKey) throw new Error("ALCHEMY_API_KEY is required");
+  const transport = alchemy({ apiKey });
+
+  const privateKey = process.env.PRIVATE_KEY;
+  if (!privateKey) throw new Error("PRIVATE_KEY is required");
+  const privateKeyHex = privateKey as Hex;
+  const account = await createModularAccountV2({
+    signer: LocalAccountSigner.privateKeyToAccountSigner(privateKeyHex),
+    chain: baseSepolia,
+    transport,
+  });
+  const client = createAlchemySmartAccountClient({
+    account,
+    chain: baseSepolia,
+    transport,
+    feeEstimator: alchemyFeeEstimator(transport),
+  });
+  try {
+    let uo = await client.buildUserOperation({
+      uo: {
+        data: "0x",
+        target: "0x0000000000000000000000000000000000000000",
+      },
+    });
+    const uoWithSig = await client.signUserOperation({ uoStruct: uo });
+    const sendResult = await client.sendRawUserOperation(
+      uoWithSig,
+      entryPoint07Address,
+    );
+    await client.waitForUserOperationTransaction({
+      hash: sendResult,
+      retries: {
+        intervalMs: 100,
+        maxRetries: 600,
+        multiplier: 0,
+      },
+    });
+    const receipt = await client.getUserOperationReceipt(sendResult as Hex);
+    console.log("UserOperation receipt:", receipt);
+  } catch (error) {
+    console.error("Error processing UserOperation:", error);
+  }
+}
+```
+
+```ts twoslash title="getUserOperationByHash.tsx"
+import {
+  alchemy,
+  baseSepolia,
+  createAlchemyPublicRpcClient,
+} from "@account-kit/infra";
+import type { Hash } from "viem";
+
+export async function getUserOperationByHash(uoHash: Hash) {
+  const apiKey = process.env.ALCHEMY_API_KEY;
+  if (!apiKey) throw new Error("ALCHEMY_API_KEY is required");
+  const transport = alchemy({ apiKey });
+
+  const client = createAlchemyPublicRpcClient({
+    chain: baseSepolia,
+    transport,
+  });
+  try {
+    let userOp = await client.getUserOperationByHash(uoHash);
+    console.log("User Operation: ", userOp);
+  } catch (error) {
+    console.error("Error processing UserOperation:", error);
+  }
+}
+```
+
+</CodeBlocks>
+
+<Info>
+  Make sure that you environment is set with your correct `ALCHEMY_API_KEY` and
+  `PRIVATE_KEY`. These examples assume familiarity with ERC-4337 and proper
+  configuration of the EntryPoint contract (`entryPoint07Address`).
+</Info>
