@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { ThreeStarsIcon } from "../icons/three-stars";
 import { MFAModal } from "../modals/MFA/MFAModal";
 import { useMFA, useUser } from "@account-kit/react";
 import { Card } from "./Card";
+import Image from "next/image";
 
 export function MFACard() {
   const [isMfaActive, setIsMfaActive] = useState(false);
@@ -26,9 +26,14 @@ export function MFACard() {
   return (
     <Card
       imageSlot={
-        <div className="w-full h-full bg-[#DCE9FF] flex justify-center items-center">
-          <ThreeStarsIcon className="h-8 w-8 sm:h-[74px] sm:w-[74px] xl:h-[86px] xl:w-[86px]" />
-        </div>
+        <Image
+          src="/images/multi-factor-auth.svg"
+          alt="Physical coins of ethereum and bitcoin being swapped"
+          width={300}
+          height={300}
+          className="w-full h-full object-cover object-[0_40%]"
+          priority
+        />
       }
       heading={
         <div className="flex items-center justify-between flex-col sm:flex-row">

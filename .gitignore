@@ -128,3 +128,5 @@ lib/
 Pods
 
 vendor
+
+.claude/settings.local.json

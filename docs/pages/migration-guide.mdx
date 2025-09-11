@@ -15,7 +15,7 @@ All of the v3 packages have been renamed or removed. The new packages are as fol
 
 - `@alchemy/aa-core` -> `@aa-sdk/core`
 - `@alchemy/aa-ethers` -> `@aa-sdk/ethers`
-- `@alchmey/aa-alchemy` -> split into `@account-kit/signer`, `@account-kit/infra`, `@account-kit/core`, `@account-kit/react`
+- `@alchemy/aa-alchemy` -> split into `@account-kit/signer`, `@account-kit/infra`, `@account-kit/core`, `@account-kit/react`
 - `@alchemy/aa-accounts` -> `@account-kit/smart-contracts`
 - `@alchemy/aa-signers` -> removed
 
@@ -36,7 +36,7 @@ use the guide above to integrate with any signer of your choice.
 
 The new `Transport` type: `AlchemyTransport` has been added. This impacts how Alchemy clients, middleware, and configs are created.
 
-For Smart Account Clients, the `create*AlchemyClient` methods have been updated to take a new `transport` property (of type `AlchemyTrasnport`) instead of `rpcUrl` or `apiKey` directly.
+For Smart Account Clients, the `create*AlchemyClient` methods have been updated to take a new `transport` property (of type `AlchemyTransport`) instead of `rpcUrl` or `apiKey` directly.
 
 The `alchemyFeeEstimator` and `alchemyUserOperationSimulator` middleware methods now no longer take in a `ClientWithAlchemyMethods` (returned by `createAlchemyPublicRpcClient`) and instead take in an `AlchemyTransport` as well.
 

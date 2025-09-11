@@ -1,12 +1,12 @@
 import { EOAConnectionFailed } from "../../../../../icons/EOAConnectionFailed.js";
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
+import { getWalletIcon } from "../../../wallet-buttons/walletIcons.js";
 
-import type { Connector } from "@wagmi/core";
 import { WALLET_CONNECT } from "../../eoa.js";
 export const WalletIcon = ({
   connector,
 }: {
-  connector: Connector | typeof WALLET_CONNECT;
+  connector: { icon: string | undefined; name: string } | typeof WALLET_CONNECT;
 }) => {
   const isWalletConnect = connector === WALLET_CONNECT;
   return (
@@ -16,12 +16,31 @@ export const WalletIcon = ({
         {isWalletConnect ? (
           <WalletConnectIcon className="w-[24px] h-[24px]" />
         ) : (
-          <img
-            src={connector?.icon}
-            alt={connector?.name}
-            height={24}
-            width={24}
-          />
+          <>
+            {connector?.icon ? (
+              <img
+                src={connector.icon}
+                alt={connector.name}
+                height={24}
+                width={24}
+              />
+            ) : (
+              // Try to use built-in icon as fallback
+              (() => {
+                const IconComponent = getWalletIcon(connector.name);
+                return IconComponent ? (
+                  <IconComponent
+                    width={24}
+                    height={24}
+                    className="w-[24px] h-[24px]"
+                  />
+                ) : (
+                  // If no built-in icon exists, render a blank space with dimensions
+                  <div style={{ width: 24, height: 24 }} />
+                );
+              })()
+            )}
+          </>
         )}
       </div>
       <div className="absolute bottom-[0] right-[0] w-[16px] h-[16px] flex items-center justify-center z-[1]">

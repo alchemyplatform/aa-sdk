@@ -11,10 +11,7 @@ export function TopNav() {
     e.stopPropagation();
     e.preventDefault();
     Metrics.trackEvent({ name: "get_api_key_clicked" });
-    window.open(
-      `${links.dashboard}&utm_id=${Metrics._internal.anonId}`,
-      "_blank",
-    );
+    window.open(`${links.dashboard}&utm_id=${Metrics.getUserId()}`, "_blank");
   }, []);
 
   return (

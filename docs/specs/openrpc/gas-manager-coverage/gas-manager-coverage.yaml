@@ -8,9 +8,83 @@ info:
   version: 0.0.0
 servers:
   - url: https://eth-mainnet.g.alchemy.com/v2
-    name: Mainnet
+    name: Ethereum Mainnet
   - url: https://eth-sepolia.g.alchemy.com/v2
-    name: Sepolia
+    name: Ethereum Sepolia
+  - url: https://arb-mainnet.g.alchemy.com/v2
+    name: Arbitrum Mainnet
+  - url: https://arb-sepolia.g.alchemy.com/v2
+    name: Arbitrum Sepolia
+  - url: https://arbnova-mainnet.g.alchemy.com/v2
+    name: Arbitrum Nova Mainnet
+  - url: https://base-mainnet.g.alchemy.com/v2
+    name: Base Mainnet
+  - url: https://base-sepolia.g.alchemy.com/v2
+    name: Base Sepolia
+  - url: https://berachain-mainnet.g.alchemy.com/v2
+    name: Berachain Mainnet
+  - url: https://bnb-mainnet.g.alchemy.com/v2
+    name: BNB Smart Chain Mainnet
+  - url: https://bnb-testnet.g.alchemy.com/v2
+    name: BNB Smart Chain Testnet
+  - url: https://celo-mainnet.g.alchemy.com/v2
+    name: Celo Mainnet
+  - url: https://celo-alfajores.g.alchemy.com/v2
+    name: Celo Alfajores
+  - url: https://frax-mainnet.g.alchemy.com/v2
+    name: Frax Mainnet
+  - url: https://gensyn-testnet.g.alchemy.com/v2
+    name: Gensyn Testnet
+  - url: https://hyperliquid-mainnet.g.alchemy.com/v2
+    name: Hyperliquid Mainnet
+  - url: https://ink-mainnet.g.alchemy.com/v2
+    name: Ink Mainnet
+  - url: https://ink-sepolia.g.alchemy.com/v2
+    name: Ink Sepolia
+  - url: https://polygon-mainnet.g.alchemy.com/v2
+    name: Polygon Mainnet
+  - url: https://polygon-amoy.g.alchemy.com/v2
+    name: Polygon Amoy
+  - url: https://monad-testnet.g.alchemy.com/v2
+    name: Monad Testnet
+  - url: https://opbnb-mainnet.g.alchemy.com/v2
+    name: opBNB Mainnet
+  - url: https://opbnb-testnet.g.alchemy.com/v2
+    name: opBNB Testnet
+  - url: https://opt-mainnet.g.alchemy.com/v2
+    name: OP Mainnet Mainnet
+  - url: https://opt-sepolia.g.alchemy.com/v2
+    name: OP Mainnet Sepolia
+  - url: https://polynomial-mainnet.g.alchemy.com/v2
+    name: Polynomial Mainnet
+  - url: https://polynomial-sepolia.g.alchemy.com/v2
+    name: Polynomial Sepolia
+  - url: https://shape-mainnet.g.alchemy.com/v2
+    name: Shape Mainnet
+  - url: https://shape-sepolia.g.alchemy.com/v2
+    name: Shape Sepolia
+  - url: https://solana-mainnet.g.alchemy.com/v2
+    name: Solana Mainnet
+  - url: https://solana-devnet.g.alchemy.com/v2
+    name: Solana Devnet
+  - url: https://soneium-mainnet.g.alchemy.com/v2
+    name: Soneium Mainnet
+  - url: https://soneium-minato.g.alchemy.com/v2
+    name: Soneium Minato
+  - url: https://tea-sepolia.g.alchemy.com/v2
+    name: Tea Sepolia
+  - url: https://unichain-mainnet.g.alchemy.com/v2
+    name: Unichain Mainnet
+  - url: https://unichain-sepolia.g.alchemy.com/v2
+    name: Unichain Sepolia
+  - url: https://worldchain-mainnet.g.alchemy.com/v2
+    name: World Chain Mainnet
+  - url: https://worldchain-sepolia.g.alchemy.com/v2
+    name: World Chain Sepolia
+  - url: https://zora-mainnet.g.alchemy.com/v2
+    name: Zora Mainnet
+  - url: https://zora-sepolia.g.alchemy.com/v2
+    name: Zora Sepolia
 methods:
   - name: "alchemy_requestGasAndPaymasterAndData"
     description: |

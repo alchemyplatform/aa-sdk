@@ -1,0 +1,129 @@
+---
+title: Overview
+description: Comprehensive guide to authentication methods and user onboarding with Alchemy Smart Wallets
+slug: wallets/authentication/overview
+---
+
+Authentication is the process by which users verify their identity to access your application. In web3, providing users with seamless login experiences for their decentralized applications and blockchain wallets is essential for creating exceptional user experiences that drive adoption.
+
+## Why Seamless Authentication Matters in Web3
+
+Traditional blockchain authentication creates significant barriers to user adoption that generally don't exist in web2 experiences:
+
+- **Complex private key management** - Users must securely store and manage cryptographic keys
+- **Wallet installation requirements** - Additional software downloads and setup
+- **Technical knowledge barriers** - Understanding of blockchain concepts and wallet security
+- **Poor user experience** - Lengthy onboarding flows and confusing interfaces
+
+Alchemy Smart Wallets solves these challenges by providing seamless and familiar login methods while maintaining the security and decentralization benefits of blockchain technology.
+
+## Features
+
+### Multiple Login Methods
+
+Choose from a variety of authentication options to match your users' preferences:
+
+- **[Email OTP](/wallets/authentication/login-methods/email-otp)** - Passwordless login with 6-digit verification codes
+- **[Email Magic Links](/wallets/authentication/login-methods/email-magic-link)** - One-click authentication via secure email links
+- **[Social Login](/wallets/authentication/login-methods/social-login)** - OAuth with Google, Apple, Discord, Twitter, and more
+- **[Passkey Authentication](/wallets/authentication/login-methods/passkey-signup)** - Biometric and hardware-based passwordless login
+- **[Bring Your Own Auth](/wallets/authentication/login-methods/bring-your-own-auth)** - Integrate existing JWT/OIDC authentication systems
+- And more!
+
+### Flexible Implementation Options
+
+Implement authentication in the way that best fits your application:
+
+- **Pre-built UI Components** - Deploy quickly with minimal code using `<AuthCard />` or `<AuthModal />`
+- **Custom UI Integration** - Build completely custom experiences with headless React hooks
+- **Modal or Embedded Flows** - Choose between popup modals or embedded authentication forms
+- **Whitelabel Solutions** - Customize theming and branding to match your application
+
+### Framework Support
+
+Alchemy Smart Wallets authentication works across multiple platforms:
+
+- **React** - Full-featured hooks, components, and TypeScript support
+- **React Native** - Mobile-optimized authentication flows for iOS and Android
+- **Other JavaScript Frameworks** - Svelte, Vue, and vanilla JavaScript support
+- **Backend Integration** - Server-side authentication validation and user management
+
+### Enterprise-Grade Security
+
+- **Non-custodial Architecture** - Users maintain full control over their private keys
+- **Secure Enclave Storage** - Keys generated and stored in hardware security modules
+- **Multi-Factor Authentication (MFA)** - Additional security layers for high-value operations
+- **Account Recovery** - Flexible recovery options through trusted contacts or backup methods
+
+### Multi-Factor Authentication (MFA)
+
+Add additional security layers for sensitive operations:
+
+- **Email OTP MFA** - Secondary verification via email codes
+- **Email Magic Link MFA** - Additional verification via email links
+- **Social Login MFA** - Secondary authentication through social providers
+
+## Implementation Approaches
+
+### Quick Start with Pre-built Components
+
+Deploy authentication in minutes with minimal code:
+
+```tsx twoslash
+import { AuthCard } from "@account-kit/react";
+
+function App() {
+  return (
+    <div>
+      <h1>Welcome to My App</h1>
+      <AuthCard />
+    </div>
+  );
+}
+```
+
+### Custom UI with React Hooks
+
+Build completely custom authentication experiences:
+
+```tsx twoslash
+import {
+  useAuthenticate,
+  useSignerStatus,
+  useAuthModal,
+} from "@account-kit/react";
+
+function CustomAuth() {
+  const { authenticate } = useAuthenticate();
+  const { isInitializing, isConnected } = useSignerStatus();
+  const { openAuthModal } = useAuthModal();
+
+  const handleEmailAuth = async () => {
+    await authenticate({
+      type: "email",
+      email: "user@example.com",
+    });
+  };
+
+  if (isInitializing) return <div>Loading...</div>;
+  if (isConnected) return <div>Welcome back!</div>;
+
+  return (
+    <div>
+      <button onClick={handleEmailAuth}>Login with Email</button>
+      <button onClick={openAuthModal}>Show Auth Modal</button>
+    </div>
+  );
+}
+```
+
+## Next Steps
+
+Ready to implement authentication? Start with these guides:
+
+1. **[React Quickstart](/wallets/react/quickstart)** - Complete React setup with authentication
+2. **[Email OTP Guide](/wallets/authentication/login-methods/email-otp)** - Implement email-based authentication
+3. **[Social Login Setup](/wallets/authentication/login-methods/social-login)** - Configure OAuth providers
+4. **[Custom UI Implementation](/wallets/react/react-hooks)** - Build custom authentication experiences
+
+After authenticating users, you can generate wallets for them and they can start sending transactions with just a few clicks.

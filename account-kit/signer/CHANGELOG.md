@@ -3,6 +3,74 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.62.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.61.0...v4.62.0) (2025-09-06)
+
+### Features
+
+- signer email/sms verification ([#1964](https://github.com/alchemyplatform/aa-sdk/issues/1964)) ([07d3bff](https://github.com/alchemyplatform/aa-sdk/commit/07d3bff1578c4f043c871da5edcab8feeb8cb105))
+
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+### Features
+
+- export wallet ([#1858](https://github.com/alchemyplatform/aa-sdk/issues/1858)) ([bc856e1](https://github.com/alchemyplatform/aa-sdk/commit/bc856e1bcc8138cb22db296ffd81e90c43eda9f9))
+
+## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Bug Fixes
+
+- solana address not initialized ([#1985](https://github.com/alchemyplatform/aa-sdk/issues/1985)) ([5a377fa](https://github.com/alchemyplatform/aa-sdk/commit/5a377fadd0bc7b06723199724e156eebe207e1cc))
+
+## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.58.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.1...v4.58.0) (2025-08-25)
+
+### Features
+
+- add accessToken field to user object ([#1879](https://github.com/alchemyplatform/aa-sdk/issues/1879)) ([7483563](https://github.com/alchemyplatform/aa-sdk/commit/748356306e9aaf597b1b2e55218ec04c222983eb))
+
+## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.57.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.56.0...v4.57.0) (2025-08-19)
+
+### Features
+
+- add jwt auth with docs ([#1712](https://github.com/alchemyplatform/aa-sdk/issues/1712)) ([8a201d9](https://github.com/alchemyplatform/aa-sdk/commit/8a201d9d485f9544ae5249b5d253835361794224))
+
+# [4.56.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.55.0...v4.56.0) (2025-08-18)
+
+### Features
+
+- multi owner delete users ([#1883](https://github.com/alchemyplatform/aa-sdk/issues/1883)) ([df8fb40](https://github.com/alchemyplatform/aa-sdk/commit/df8fb40cacb70ac08d21e7ff7340614ea6692ffe))
+
+# [4.55.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.1...v4.55.0) (2025-08-14)
+
+### Features
+
+- update external wallet support to include Solana wallets ([#1847](https://github.com/alchemyplatform/aa-sdk/issues/1847)) ([7e33d35](https://github.com/alchemyplatform/aa-sdk/commit/7e33d35fdede8358d240fe919af54486f8b10edd))
+
+## [4.54.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.54.0...v4.54.1) (2025-08-12)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.54.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.1...v4.54.0) (2025-08-12)
+
+### Features
+
+- unpin viem version ([#1851](https://github.com/alchemyplatform/aa-sdk/issues/1851)) ([e387e0e](https://github.com/alchemyplatform/aa-sdk/commit/e387e0ead087b893d315b072c24b3c2725ff86b6))
+
 ## [4.53.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.53.0...v4.53.1) (2025-08-06)
 
 **Note:** Version bump only for package @account-kit/signer

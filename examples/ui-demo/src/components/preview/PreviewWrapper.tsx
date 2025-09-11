@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { CodePreview } from "./CodePreview";
-import { AuthCard, useUser, useAuthContext } from "@account-kit/react";
+import { AuthCard, useConnectedUser, useAuthContext } from "@account-kit/react";
 
 import { MobileSplashPage } from "./MobileSplashPage";
 import { EOAPostLogin } from "../eoa-post-login/EOAPostLogin";
@@ -25,7 +25,7 @@ export function PreviewWrapper({ showCode }: { showCode: boolean }) {
   );
 }
 const RenderContent = () => {
-  const user = useUser();
+  const user = useConnectedUser();
   const { authStep } = useAuthContext();
   const [showAuthCard, setShowAuthCard] = useState(() => !user);
 

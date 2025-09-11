@@ -10,7 +10,7 @@ import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
-import { useSmartWalletClient } from "../experimental/hooks/useSmartWalletClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 import { signTypedData as wagmi_signTypedData } from "@wagmi/core";
 import { useAccount as wagmi_useAccount } from "wagmi";
 

@@ -1,0 +1,47 @@
+---
+title: Supported Permissions for Session Keys
+description: Explore the supported permission types you can apply to session keys to safely delegate access in smart accounts.
+slug: wallets/smart-contracts/modular-account-v2/session-key-permissions
+---
+
+## What Permissions Can You Apply to Session Keys?
+
+Session keys work best when they are tightly scoped. Our smart wallets, specifically Modular Account V2, gives you a flexible set of built-in permission types. These permissions are validated onchain removing any dependency on an offchain engine and increasing security of users' wallets.
+
+Use these to limit what a key can do, for how long, where it can call, and how much it can spend.
+
+### Time Range
+
+Supports limiting keys with a start and/or expiry time ranges
+
+### ERC-20 Spending Limits
+
+Supports limiting how much of a specific ERC-20 token a key may spend
+
+### **Gas and native token spending limits**
+
+Supports limiting how much native tokens, e.g. ETH on mainnet, a key may spend
+
+### Access Control Lists
+
+Supports limiting function selectors and/or external contracts that a key may interact with.
+
+### Internal Selector Allowlist
+
+Supports limiting what functions a key may call on the Modular Account (e.g. installing or uninstalling modules, or upgrading the account)
+
+> You can combine multiple permissions on a single session key. These can be layered to match the minimum required access for your use case.
+
+## Composing Permissions: Fine-Grained Control
+
+Permissions are composable. You can apply multiple permissions to a single session key to tightly define its behavior.
+
+Example: You could create a session key that:
+
+- Only works between June 1–June 15
+- Can call just one staking contract
+- Spend no more than 100 USDC
+
+Use Case: In Alchemy's modular wallet [demo](https://demo.alchemy.com/), one key is scoped to auto-stake a user's funds once a day, but only within a capped budget and only on a verified contract.
+
+By combining permissions, you can build tailored, safe delegation schemes — perfect for dapps, relayers, and complex workflows.

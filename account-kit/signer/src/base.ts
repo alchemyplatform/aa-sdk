@@ -81,6 +81,7 @@ type AlchemySignerStore = {
     email: string;
     providerName: string;
     idToken: string;
+    accessToken?: string;
   };
 };
 
@@ -112,6 +113,10 @@ type GetUserParams =
       type: "phone";
       value: string;
     };
+
+type VerificationParams = {
+  verificationCode: string;
+};
 
 /**
  * Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
@@ -330,6 +335,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return this.handleOauthReturn(params);
           case "otp":
             return this.authenticateWithOtp(params);
+          case "custom-jwt":
+            return this.authenticateWithJwt(params);
           default:
             assertNever(type, `Unknown auth type: ${type}`);
         }
@@ -381,6 +388,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           name: "signer_authnticate",
           data: {
             authType: isAnon ? "passkey_anon" : "passkey_email",
+          },
+        });
+        return;
+      }
+      case "custom-jwt": {
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: {
+            authType: "custom-jwt",
+            provider: params.authProviderId,
           },
         });
         return;
@@ -821,24 +838,59 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     )(params);
   }
 
-  /*
+  /**
    * Sets the email for the authenticated user, allowing them to login with that
    * email.
    *
-   * You must contact Alchemy to enable this feature for your team, as there are
-   * important security considerations. In particular, you must not call this
-   * without first validating that the user owns this email account.
+   * @deprecated You must contact Alchemy to enable this feature for your team,
+   * as there are important security considerations. In particular, you must not
+   * call this without first validating that the user owns this email account.
+   * It is recommended to now use the email verification flow instead.
    *
    * @param {string} email The email to set for the user
-   * @returns {Promise<void>} A promise that resolves when the email is set
+   * @returns {Promise<string>} A promise that resolves to the updated email address
    * @throws {NotAuthenticatedError} If the user is not authenticated
    */
-  setEmail: (email: string) => Promise<void> = SignerLogger.profiled(
-    "BaseAlchemySigner.setEmail",
-    async (email) => {
-      return this.inner.setEmail(email);
-    },
-  );
+  setEmail(email: string): Promise<string>;
+
+  /**
+   * Uses a verification code to update a user's email, allowing them to login
+   * with that email. `sendVerificationCode` should be called first to obtain
+   * the code.
+   *
+   * @param {VerificationParams} params An object containing the verification code
+   * @param {string} params.verificationCode The OTP verification code
+   * @returns {Promise<string>} A promise that resolves to the updated email address
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  setEmail(params: VerificationParams): Promise<string>;
+
+  /**
+   * Implementation for setEmail method.
+   *
+   * @param {string | VerificationParams} params An object containing the verificationCode (or simply an email for legacy usage)
+   * @returns {Promise<void>} A promise that resolves when the email is set
+   */
+  async setEmail(params: string | VerificationParams): Promise<string> {
+    return SignerLogger.profiled(
+      "BaseAlchemySigner.setEmail",
+      async (params: string | { verificationCode: string }) => {
+        if (typeof params === "string") {
+          // Deprecated usage for backwards compatibility.
+          const email = params;
+          return await this.inner.setEmail(email);
+        }
+        const { otpId } = this.store.getState();
+        if (!otpId) {
+          throw new Error("Missing OTP ID");
+        }
+        return await this.inner.setEmail({
+          id: otpId,
+          code: params.verificationCode,
+        });
+      },
+    )(params);
+  }
 
   /**
    * Removes the email for the authenticated user, disallowing them from login with that email.
@@ -849,7 +901,65 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   removeEmail: () => Promise<void> = SignerLogger.profiled(
     "BaseAlchemySigner.removeEmail",
     async () => {
-      return this.inner.removeEmail();
+      await this.inner.removeEmail();
+    },
+  );
+
+  /**
+   * Sets the phone number for the authenticated user, allowing them to login with that
+   * phone number. `sendVerificationCode` should be called first to obtain the code.
+   *
+   * @param {VerificationParams} params An object containing the verification code
+   * @param {string} params.verificationCode The OTP verification code
+   * @returns {Promise<void>} A promise that resolves when the phone number is set
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  setPhoneNumber: (params: VerificationParams) => Promise<void> =
+    SignerLogger.profiled(
+      "BaseAlchemySigner.setPhoneNumber",
+      async ({ verificationCode }) => {
+        const { otpId } = this.store.getState();
+        if (!otpId) {
+          throw new Error("Missing OTP ID");
+        }
+        await this.inner.setPhoneNumber({
+          id: otpId,
+          code: verificationCode,
+        });
+      },
+    );
+
+  /**
+   * Removes the phone number for the authenticated user, disallowing them from login with that phone number.
+   *
+   * @returns {Promise<void>} A promise that resolves when the phone number is removed
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  removePhoneNumber: () => Promise<void> = SignerLogger.profiled(
+    "BaseAlchemySigner.removePhoneNumber",
+    async () => {
+      await this.inner.removePhoneNumber();
+    },
+  );
+
+  /**
+   * Initiates an OTP (One-Time Password) verification process for a user contact.
+   * Use this method before calling `setEmail` with verification code to verify ownership of the email address.
+   *
+   * @param {"email" | "sms"} type The type of OTP to send, either "email" or "sms"
+   * @param {string} contact The email address or phone number to send the OTP to
+   * @returns {Promise<{ otpId: string }>} A promise that resolves to an object containing the OTP ID
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
+  sendVerificationCode: (
+    type: "email" | "sms",
+    contact: string,
+  ) => Promise<{ otpId: string }> = SignerLogger.profiled(
+    "BaseAlchemySigner.sendVerificationCode",
+    async (type, contact) => {
+      const { otpId } = await this.inner.initOtp(type, contact);
+      this.store.setState({ otpId });
+      return { otpId };
     },
   );
 
@@ -947,11 +1057,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * ```
    *
    * @param {unknown} params export wallet parameters
-   * @returns {boolean} true if the wallet was exported successfully
+   * @returns {Promise<unknown>} the result of the wallet export operation
    */
-  exportWallet: (
-    params: Parameters<(typeof this.inner)["exportWallet"]>[0],
-  ) => Promise<boolean> = async (params) => {
+  exportWallet: TClient["exportWallet"] = async (params) => {
     return this.inner.exportWallet(params);
   };
 
@@ -1213,6 +1321,26 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.inner.listAuthMethods();
   };
 
+  private authenticateWithJwt = async (
+    args: Extract<AuthParams, { type: "custom-jwt" }>,
+  ): Promise<User> => {
+    const { credentialBundle, orgId, isSignUp } = await this.inner.submitJwt({
+      jwt: args.jwt,
+      authProvider: args.authProviderId,
+      expirationSeconds: this.getExpirationSeconds(),
+    });
+
+    const user = await this.inner.completeAuthWithBundle({
+      bundle: credentialBundle,
+      orgId: orgId,
+      connectedEventName: "connectedJwt",
+      authenticatingType: "custom-jwt",
+    });
+
+    this.emitNewUserEvent(isSignUp);
+    return user;
+  };
+
   private authenticateWithOtp = async (
     args: Extract<AuthParams, { type: "otp" }>,
   ): Promise<User> => {
@@ -1311,6 +1439,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     bundle,
     orgId,
     idToken,
+    accessToken,
     isNewUser,
   }: Extract<AuthParams, { type: "oauthReturn" }>): Promise<User> => {
     const user = this.inner.completeAuthWithBundle({
@@ -1319,6 +1448,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       connectedEventName: "connectedOauth",
       authenticatingType: "oauth",
       idToken,
+      accessToken,
     });
 
     this.emitNewUserEvent(isNewUser);
@@ -1399,6 +1529,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return AlchemySignerStatus.AWAITING_OTP_AUTH;
           case "sms":
             return AlchemySignerStatus.AWAITING_SMS_AUTH;
+          case "custom-jwt":
+            return AlchemySignerStatus.AUTHENTICATING_JWT;
           default:
             assertNever(type, "unhandled authenticating type");
         }
@@ -1774,6 +1906,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         email: prompt.email,
         providerName: prompt.providerName,
         idToken: prompt.idToken,
+        accessToken: prompt.accessToken,
       },
     });
   };

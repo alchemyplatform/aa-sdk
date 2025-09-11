@@ -1,0 +1,29 @@
+---
+title: Upgrade to Smart Accounts
+description: Learn how to upgrade existing wallets to smart accounts with two different approaches.
+slug: wallets/recipes/upgrade-to-smart-accounts
+---
+
+Smart accounts unlock seamless transaction flows and advanced features like social login, gas sponsorship, batching, multi-owner accounts, and more. You can easily upgrade your existing wallet connection and user authentication to smart wallets.
+
+If you have an app that currently uses an EOA connector, such as Rainbow Kit, for user's wallets, you can add on Smart Wallets by swapping out the EOA connector for social login and our pre-built UI for EOA connection. This will enable you to use React hooks for wallet connection, social login, and sending of transactions.
+
+If you have an existing embedded EOA wallet, you can enable gas sponsorship and batching, by upgrading wallets using EIP-7702.
+
+<CardGroup cols={2}>
+  <Card
+    title="Add Smart Wallets to existing Wagmi frontend"
+    href="/wallets/react/quickstart/existing-project"
+    icon="bolt"
+  >
+    Add smart wallet functionality to existing React applications with EOA
+    connectors and Wagmi.
+  </Card>
+  <Card
+    title="Upgrade EOAs to Smart Wallets using EIP-7702"
+    href="/wallets/smart-contracts/modular-account-v2/using-7702"
+    icon="arrow-up"
+  >
+    Upgrade existing embedded EOA wallets to smart wallets using EIP-7702.
+  </Card>
+</CardGroup>

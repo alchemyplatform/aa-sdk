@@ -18,11 +18,13 @@ import { createLightAccountClient } from "./client.js";
 import {
   alchemy,
   polygonMumbai,
-  alchemyEnhancedApiActions,
   type AlchemyTransport,
   type AlchemySmartAccountClient,
-  type AlchemyEnhancedApis,
 } from "@account-kit/infra";
+import {
+  alchemyEnhancedApiActions,
+  type AlchemyEnhancedApis,
+} from "@account-kit/infra/enhanced-apis";
 import { Alchemy, Network } from "alchemy-sdk";
 
 describe("Types: Light Account Tests", () => {

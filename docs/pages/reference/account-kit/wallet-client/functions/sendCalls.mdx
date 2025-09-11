@@ -7,6 +7,13 @@ slug: wallets/reference/account-kit/wallet-client/functions/sendCalls
 
 Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
 
+<Note>
+  If using this action with an ERC-20 paymaster in pre-operation mode with
+  `autoPermit`, the contents of the permit will be hidden from the user. It is
+  recommended to use the `prepareCalls` action instead to manually handle the
+  permit signature.
+</Note>
+
 ## Import
 
 ```ts

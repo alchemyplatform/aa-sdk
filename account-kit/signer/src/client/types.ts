@@ -7,6 +7,15 @@ import type {
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
+// [!region VerificationOtp]
+export type VerificationOtp = {
+  /** The OTP ID returned from initOtp */
+  id: string;
+  /** The OTP code received by the user */
+  code: string;
+};
+// [!endregion VerificationOtp]
+
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
 } & Pick<CredentialCreationOptions, "signal">;
@@ -14,12 +23,14 @@ export type CredentialCreationOptionOverrides = {
 // [!region User]
 export type User = {
   email?: string;
+  phone?: string;
   orgId: string;
   userId: string;
   address: Address;
   solanaAddress?: string;
   credentialId?: string;
   idToken?: string;
+  accessToken?: string;
   claims?: Record<string, unknown>;
 };
 // [!endregion User]
@@ -28,6 +39,8 @@ export type ExportWalletParams = {
   iframeContainerId: string;
   iframeElementId?: string;
 };
+
+export type ExportWalletOutput = boolean;
 
 export type CreateAccountParams =
   | {
@@ -95,10 +108,24 @@ export type OtpResponse =
       multiFactors: MfaFactor[];
     };
 
+export type JwtParams = {
+  jwt: string;
+  targetPublicKey: string;
+  authProvider?: string;
+  expirationSeconds?: number;
+};
+
+export type JwtResponse = {
+  isSignUp: boolean;
+  orgId: string;
+  credentialBundle: string;
+};
+
 export type SignupResponse = {
   orgId: string;
   userId?: string;
   address?: Address;
+  solanaAddress?: string;
   otpId?: string;
 };
 
@@ -181,6 +208,26 @@ export type SignerEndpoints = [
     };
   },
   {
+    Route: "/v1/init-otp";
+    Body: {
+      contact: string;
+      otpType: "OTP_TYPE_SMS" | "OTP_TYPE_EMAIL";
+    };
+    Response: {
+      otpId: string;
+    };
+  },
+  {
+    Route: "/v1/verify-otp";
+    Body: {
+      otpId: string;
+      otpCode: string;
+    };
+    Response: {
+      verificationToken: string;
+    };
+  },
+  {
     Route: "/v1/sign-payload";
     Body: {
       stampedRequest: TSignedRequest;
@@ -191,6 +238,13 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/update-email-auth";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
+    Route: "/v1/update-phone-auth";
     Body: {
       stampedRequest: TSignedRequest;
     };
@@ -262,6 +316,11 @@ export type SignerEndpoints = [
     Response: {
       multiFactors: MfaFactor[];
     };
+  },
+  {
+    Route: "/v1/auth-jwt";
+    Body: JwtParams;
+    Response: JwtResponse;
   },
   {
     Route: "/v1/signer-config";
@@ -344,10 +403,43 @@ export type SignerEndpoints = [
       };
     };
   },
+  {
+    Route: "/v1/multi-owner-prepare-delete";
+    Body: {
+      organizationId: string;
+      members: {
+        evmSignerAddress: Address;
+      }[];
+    };
+    Response: {
+      result: {
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+        deleteMembersRequest: TurnkeyApiTypes["v1DeleteUsersRequest"];
+      };
+    };
+  },
+  {
+    Route: "/v1/multi-owner-delete";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        deletedUserIds: string[];
+      };
+    };
+  },
 ];
 
 export type AuthenticatingEventMetadata = {
-  type: "email" | "passkey" | "oauth" | "otp" | "otpVerify" | "sms";
+  type:
+    | "email"
+    | "passkey"
+    | "oauth"
+    | "otp"
+    | "otpVerify"
+    | "custom-jwt"
+    | "sms";
 };
 
 export type AlchemySignerClientEvents = {
@@ -358,6 +450,7 @@ export type AlchemySignerClientEvents = {
   connectedPasskey(user: User): void;
   connectedOauth(user: User, bundle: string): void;
   connectedOtp(user: User, bundle: string): void;
+  connectedJwt(user: User, bundle: string): void;
   disconnected(): void;
 };
 
@@ -372,6 +465,7 @@ export type GetWebAuthnAttestationResult = {
 export type AuthLinkingPrompt = {
   status: "ACCOUNT_LINKING_CONFIRMATION_REQUIRED";
   idToken: string;
+  accessToken?: string;
   email: string;
   providerName: string;
   otpId: string;
@@ -381,6 +475,7 @@ export type AuthLinkingPrompt = {
 export type IdTokenOnly = {
   status: "FETCHED_ID_TOKEN_ONLY";
   idToken: string;
+  accessToken?: string;
   providerName: string;
 };
 
@@ -454,6 +549,7 @@ export type AddOauthProviderParams = {
 
 export type AuthMethods = {
   email?: string;
+  phone?: string;
   oauthProviders: OauthProviderInfo[];
   passkeys: PasskeyInfo[];
 };

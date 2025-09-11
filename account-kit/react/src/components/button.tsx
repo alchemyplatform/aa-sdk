@@ -14,13 +14,16 @@ type ButtonProps = (
       HTMLButtonElement
     >,
     "variant" | "ref"
-  >;
+  > & {
+    fullWidthContent?: boolean;
+  };
 
 export const Button = ({
   variant,
   children,
   icon,
   className,
+  fullWidthContent,
   ...props
 }: ButtonProps) => {
   const btnClass = (() => {
@@ -40,7 +43,9 @@ export const Button = ({
   return (
     <button className={`akui-btn ${btnClass} ${className ?? ""}`} {...props}>
       {icon && <span>{icon}</span>}
-      <div className="akui-btn-content">{children}</div>
+      <div className={`akui-btn-content ${fullWidthContent ? "w-full" : ""}`}>
+        {children}
+      </div>
     </button>
   );
 };

@@ -2,6 +2,7 @@
 
 import { disconnect } from "@account-kit/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
+import { useSolanaWallet } from "./useSolanaWallet.js";
 import { useOptionalAuthContext } from "../components/auth/context.js";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -16,6 +17,7 @@ export type UseLogoutResult = {
 
 /**
  * Provides a [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useLogout.ts) to log out a user, disconnecting the signer and triggering the disconnectAsync function.
+ * This will disconnect both EVM and Solana wallets.
  *
  * @param {UseLogoutMutationArgs} [mutationArgs] optional arguments to customize the mutation behavior
  * @returns {UseLogoutResult} an object containing the logout function, a boolean indicating if logout is in progress, and any error encountered during logout
@@ -38,6 +40,7 @@ export function useLogout(
 ): UseLogoutResult {
   const { queryClient, config } = useAlchemyAccountContext();
   const authContext = useOptionalAuthContext();
+  const { disconnect: disconnectSolana } = useSolanaWallet();
 
   const {
     mutate: logout,
@@ -46,7 +49,8 @@ export function useLogout(
   } = useMutation(
     {
       mutationFn: async () => {
-        await disconnect(config);
+        // Disconnect from both EVM and Solana wallets
+        await Promise.all([disconnect(config), disconnectSolana()]);
         authContext?.resetAuthStep();
       },
       ...mutationArgs,

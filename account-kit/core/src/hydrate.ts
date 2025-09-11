@@ -71,11 +71,6 @@ export function hydrate(
         config,
       ),
     });
-  } else if (!config.store.persist.hasHydrated()) {
-    config.store.setState({
-      ...config.store.getInitialState(),
-      user: undefined,
-    });
   }
 
   const initialWagmiState =
