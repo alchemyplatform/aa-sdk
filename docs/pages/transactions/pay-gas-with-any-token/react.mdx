@@ -1,21 +1,23 @@
-<Info>Required SDK version: ^v4.59.1</Info>
+<Info>Required SDK version: ^v4.61.0</Info>
 
 Use the `useSendCalls` hook and the `paymasterService` capability parameter to send calls with
 an ERC20 token paymaster. You can also use the `usePrepareCalls` hook to only prepare the operation for signing.
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.tsx" focus={6-8,12-26}
-import { useSendCalls, useSmartWalletClient } from "@account-kit/react/experimental";
-import { Address } from "viem";
-import { config } from "./config";
+```ts twoslash title="sendCalls.tsx" focus={5-7,14-27}
+import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
+import { config } from "@/app/components/config";
 
-export default function SendCalls({ account }: { account: Address }) {
-  const { sendCallsAsync } = useSendCalls({
-    client: useSmartWalletClient({ account }),
-  });
+export default function SendCalls() {
+  const { client } = useSmartAccountClient({});
+  const { sendCallsAsync } = useSendCalls({ client });
 
   const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+
     try {
       const { ids } = await sendCallsAsync({
         capabilities: {
@@ -30,7 +32,7 @@ export default function SendCalls({ account }: { account: Address }) {
                 },
               },
             },
-          }
+          },
         },
         calls: [
           {
