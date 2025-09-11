@@ -50,8 +50,10 @@
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
     "lint:write": "eslint . --fix && yarn fern:gen && prettier --loglevel warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
+    "lint:docs": "vale docs/**/*.mdx",
     "prepare": "husky install && yarn turbo prepare",
     "docs:dev": "./docs/scripts/docs-dev.sh",
+    "docs:broken-links": "lychee docs --root-dir /docs",
     "version": "yarn build:libs"
   },
   "devDependencies": {
@@ -73,6 +75,8 @@
     "jsdom": "^25.0.1",
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",
+    "markdownlint": "^0.38.0",
+    "mdx2vast": "^0.3.0",
     "node-fetch": "^3.3.1",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",

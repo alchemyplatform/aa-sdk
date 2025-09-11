@@ -370,6 +370,7 @@ export abstract class BaseSignerClient<
           parameters: {
             userId: this.user.userId,
             userEmail: email,
+            userTagIds: [],
           },
         })
       : await this.turnkeyClient.stampUpdateUserEmail({
