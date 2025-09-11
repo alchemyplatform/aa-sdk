@@ -29,7 +29,7 @@ export const serializedTx = Buffer.from(transaction.serialize()).toString(
 ```
 
 ```ts twoslash title="config.ts"
-import { Connection } from "@solana/web3.js";
+import { Connection, Keypair } from "@solana/web3.js";
 
 export const ALCHEMY_API_KEY = "<API_KEY>";
 const SOLANA_SECRET_KEY_BASE64 = "<SOLANA_SECRET_KEY>";
