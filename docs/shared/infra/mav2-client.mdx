@@ -1,14 +1,11 @@
 ```ts twoslash title="config.ts"
-import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
-import type { Hex } from "viem";
-import { generatePrivateKey } from "viem/accounts";
 
 const ALCHEMY_API_KEY = "<ALCHEMY_API_KEY>";
 
 export const chain = sepolia;
 
-export const POLICY_ID = "<ALCHEMY_POLICY_ID>";
+export const policyId = "<ALCHEMY_POLICY_ID>";
 
 export const transport = alchemy({
   apiKey: ALCHEMY_API_KEY,
@@ -17,7 +14,9 @@ export const transport = alchemy({
 
 ```ts twoslash title="client.ts"
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
-import { chain, transport, signer, policyId } from "./config";
+import { chain, transport, policyId } from "./config";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey } from "viem/accounts";
 
 export const client = await createModularAccountV2Client({
   chain,
