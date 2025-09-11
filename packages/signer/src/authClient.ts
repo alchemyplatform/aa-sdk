@@ -116,6 +116,10 @@ export class AuthClient {
     return notImplemented(stamper);
   }
 
+  public async loadFromStorableState(state): Promise<unknown> {
+    return notImplemented();
+  }
+
   // TODO: ... and many more.
 
   private async completeAuthWithBundle({
