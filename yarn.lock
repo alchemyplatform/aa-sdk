@@ -7,6 +7,78 @@
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.1.2.tgz#9af8deaf3f236c1c6ee99cc5349051475e5dcc83"
   integrity sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==
 
+"@account-kit/infra@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/infra/-/infra-4.17.0.tgz#e4f112481529c4034235d0a0a1afffe7e7d6c928"
+  integrity sha512-PjQq88bz9sdv9AAYh7pMPE6ftcs1s/0uE5ObW6WE2GpXCEFybFuF13vkzG+8xLdVb3DpI0qJeN5k4eCzKzwMbA==
+  dependencies:
+    "@aa-sdk/core" "^4.17.0"
+    "@account-kit/logging" "^4.17.0"
+    eventemitter3 "^5.0.1"
+    zod "^3.22.4"
+  optionalDependencies:
+    alchemy-sdk "^3.0.0"
+
+"@account-kit/react-native-signer@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react-native-signer/-/react-native-signer-4.17.0.tgz#1a9d0c085b5cabe7e19b1f4b996ac4de440ebadd"
+  integrity sha512-AsPWcRgVUZhIfkqiAStH+nFDHlOOLs6VSfPdEenW+sZUtUKjWrE8BPIlmy0fJqDkyNyiTJkCvRDJD2+M+camfw==
+  dependencies:
+    "@aa-sdk/core" "^4.17.0"
+    "@account-kit/signer" "^4.17.0"
+    viem "^2.21.40"
+
+"@account-kit/react-native@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react-native/-/react-native-4.17.0.tgz#28f66cd5a819afc6e66a12697afce04b701ab97d"
+  integrity sha512-Y1u6U6JePVTPA5QBwxgOv5B5nTEKc6s8mmWWtbPDI+F8sIotaf9umH43h8tWt0wvDlusn9mTh45iwZU96KPNRA==
+  dependencies:
+    "@account-kit/core" "^4.17.0"
+    "@account-kit/infra" "^4.17.0"
+    "@account-kit/react" "^4.17.0"
+    "@account-kit/react-native-signer" "^4.17.0"
+    "@account-kit/signer" "^4.17.0"
+    "@noble/hashes" "1.7.1"
+    crypto-browserify "^3.12.1"
+    node-libs-react-native "^1.2.1"
+    react-native-get-random-values "^1.11.0"
+    stream-browserify "^3.0.0"
+    zustand "^5.0.0-rc.2"
+
+"@account-kit/react@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/react/-/react-4.17.0.tgz#7789504aec3d63899ad48ecd9d88e26d734bf22c"
+  integrity sha512-/OFpDHPz4H7XR3hH+Z5+5N4Z2gBSNPJ1oe+Q05Z63FU2T9sdRxr2W3yCfLwsbJ4N/gLS8ssKBBUMCVOSAP44Fg==
+  dependencies:
+    "@account-kit/core" "^4.17.0"
+    "@account-kit/infra" "^4.17.0"
+    "@account-kit/logging" "^4.17.0"
+    "@account-kit/signer" "^4.17.0"
+    "@tanstack/react-form" "^0.33.0"
+    "@tanstack/zod-form-adapter" "^0.33.0"
+    "@wagmi/connectors" "^5.1.15"
+    react-remove-scroll "^2.5.10"
+    tailwindcss "^3.4.3"
+    zod "^3.22.4"
+    zustand "^5.0.0-rc.2"
+  optionalDependencies:
+    alchemy-sdk "^3.0.0"
+
+"@account-kit/signer@4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@account-kit/signer/-/signer-4.17.0.tgz#fca992679b042a0a589dd9be4c431ae085d6cceb"
+  integrity sha512-kuJxGx/Fu4LLHRH2miEz5ycKlNFc7y8EEwRvE5OQ7e2cqRp/tOQYKKYDO4TvhcUZeRoFtwW39bmTVoKiihhBcg==
+  dependencies:
+    "@aa-sdk/core" "^4.17.0"
+    "@account-kit/logging" "^4.17.0"
+    "@solana/web3.js" "^1.98.0"
+    "@turnkey/http" "^2.6.2"
+    "@turnkey/iframe-stamper" "^1.0.0"
+    "@turnkey/viem" "^0.4.8"
+    "@turnkey/webauthn-stamper" "^0.4.3"
+    jwt-decode "^4.0.0"
+    zod "^3.22.4"
+
 "@adobe/css-tools@^4.4.0":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.3.tgz#beebbefb0264fdeb32d3052acae0e0d94315a9a2"
@@ -3893,6 +3965,11 @@
   dependencies:
     eslint-scope "5.1.1"
 
+"@noble/ciphers@0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-0.5.3.tgz#48b536311587125e0d0c1535f73ec8375cd76b23"
+  integrity sha512-B0+6IIHiqEs3BPMT0hcRmHvEj2QHOLu+uwt+tqDDeVd0oyVzh7BPrDcPjRnV1PV/5LaknXJJQvOuRGR0zQJz+w==
+
 "@noble/ciphers@1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-1.2.1.tgz#3812b72c057a28b44ff0ad4aff5ca846e5b9cdc9"
@@ -3902,6 +3979,13 @@
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-1.3.0.tgz#f64b8ff886c240e644e5573c097f86e5b43676dc"
   integrity sha512-2I0gnIVPtfnMw9ee9h1dJG7tp81+8Ob3OJb3Mv37rx5L40/b0i7djjCVvGOVqc9AEIQyvyu1i6ypKdFw8R8gQw==
+
+"@noble/curves@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.4.0.tgz#f05771ef64da724997f69ee1261b2417a49522d6"
+  integrity sha512-p+4cb332SFCrReJkCYe8Xzm0OWi4Jji5jVdIZRL/PmacmDkFNw6MrrV+gGpiPxLHbV+zKFRywUWbaseT+tZRXg==
+  dependencies:
+    "@noble/hashes" "1.4.0"
 
 "@noble/curves@1.4.2", "@noble/curves@~1.4.0":
   version "1.4.2"
@@ -8151,6 +8235,24 @@
     "@tufjs/canonical-json" "2.0.0"
     minimatch "^9.0.4"
 
+"@turnkey/api-key-stamper@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.1.tgz#cd052f58f1732a7fde7a6fea2c1eb4192fe1e878"
+  integrity sha512-9gKvlc2ll3u56qSnEnYRaUaAxxVGWqeDnQiFm+x0PSK6hdpyhDzmHuN+5YA6DfkY6awZTpv1ealUJKFSfPMMUQ==
+  dependencies:
+    "@noble/curves" "^1.3.0"
+    "@turnkey/encoding" "0.2.1"
+    sha256-uint8array "^0.10.7"
+
+"@turnkey/api-key-stamper@0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.4.tgz#b5a8224aa3c6bbdd1f7259ed2c1d047abe8a8d6f"
+  integrity sha512-KXvf2yV3OkSrZYEnHSgOwy2XS7Q4+XNwRkgRhDNsiYvgz8KNGLbqXg0/aAlkTIUT7NYODZ3iaGMml0DtyzGeDQ==
+  dependencies:
+    "@noble/curves" "^1.3.0"
+    "@turnkey/encoding" "0.4.0"
+    sha256-uint8array "^0.10.7"
+
 "@turnkey/api-key-stamper@0.4.7":
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.7.tgz#79a22260e89752d9fe8599b6b6934b69b4d43365"
@@ -8159,6 +8261,21 @@
     "@noble/curves" "^1.3.0"
     "@turnkey/encoding" "0.5.0"
     sha256-uint8array "^0.10.7"
+
+"@turnkey/crypto@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@turnkey/crypto/-/crypto-0.2.1.tgz#d03b61ddfcbdba4c3e1498d2ba83d150c64b84fd"
+  integrity sha512-+iRRe7Uo1G1gnE9H9VndCMOpUZ/LKXC7Zj3ouJFNQQXt5Tl0jrRnTL3k4/1jR09phcezBRGRWeannN9cmWW+Pw==
+  dependencies:
+    "@noble/ciphers" "0.5.3"
+    "@noble/curves" "1.4.0"
+    "@noble/hashes" "1.4.0"
+    "@turnkey/encoding" "0.2.1"
+    bs58check "3.0.1"
+    react-native "0.74.0"
+    react-native-get-random-values "1.11.0"
+    react-native-quick-base64 "2.1.2"
+    typescript "5.0.4"
 
 "@turnkey/crypto@2.6.0":
   version "2.6.0"
@@ -8185,10 +8302,30 @@
     bs58 "6.0.0"
     bs58check "4.0.0"
 
+"@turnkey/encoding@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.2.1.tgz#ccde2afe97d0ab39911fe005ce473faa5a681e92"
+  integrity sha512-9GgsbW/fa5PMhLbg4URRCwzLhvfwp6JXkPUGvXlPJxAqNhJeFrZNEJUhuz3pmHFxj5unLrHaSXjWS7Q/fi6x2w==
+
+"@turnkey/encoding@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.4.0.tgz#9d06efe6447322bcc9eb4d51b48961054a3c102d"
+  integrity sha512-ptLgcpWVt34KTPx0omF2QLJrosW6I//clCJ4G2+yngYFCzrdR0yBchV/BOcfME67mK1v3MmauyXl9AAnQTmB4Q==
+
 "@turnkey/encoding@0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.5.0.tgz#415d721383c8267a8ca173cef34298a325a6a57d"
   integrity sha512-nRlKRQa6B5/xltGUKN1iKo4h4YC/0iFz0fAuFFZevc+YGDj7ddAP/3HkWmVvLmdoicUgs9rxvWbLRlgqPkbwzQ==
+
+"@turnkey/http@2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.13.0.tgz#0d27f248ec94a231fe77b6aceb05318e349bc5bc"
+  integrity sha512-nXVsves8g/Bw/vRGPH21E3xCJbcJh+Zgc2NCbERyaYPaOhXSkx8hRfn4yW4B6gZOkDv/DadWKOFETXWUzTvAYw==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.1"
+    "@turnkey/encoding" "0.2.1"
+    "@turnkey/webauthn-stamper" "0.5.0"
+    cross-fetch "^3.1.5"
 
 "@turnkey/http@3.11.0", "@turnkey/http@^3.11.0":
   version "3.11.0"
@@ -8200,10 +8337,30 @@
     "@turnkey/webauthn-stamper" "0.5.1"
     cross-fetch "^3.1.5"
 
+"@turnkey/http@^2.6.2":
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.22.0.tgz#89233e44f467dbb289351832f76700d9b550a5d3"
+  integrity sha512-nkzSIiur68PDEXh0E6fPpgrev0qeMfnVjeh/nWePZpS6TwJ7NGw1i4WRqZ1VkQ+ODmCD2ztKMzUhii9b4pzURg==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.4"
+    "@turnkey/encoding" "0.4.0"
+    "@turnkey/webauthn-stamper" "0.5.0"
+    cross-fetch "^3.1.5"
+
+"@turnkey/iframe-stamper@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-2.0.0.tgz#9cbd30457c8c5d6bec913b870755c5cda7e47c6a"
+  integrity sha512-14IPfloVCV3ngoxsy3KoEUbEtYYxPU5H6T4WcNzY8Z67A1NJZfipk6pTaN5h3efkUm208G2TvDd63sZOdbyuxQ==
+
 "@turnkey/iframe-stamper@2.5.0", "@turnkey/iframe-stamper@^2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-2.5.0.tgz#4543458a3ac380c96f239c6c2a997c03bac0bd7b"
   integrity sha512-XjntbA5CNjxGRH+loceAlVLL9PG9Q4Y7p5zjBm4DeKclhD6lpUl9h8INArMEXIFbfLwLjjS6Q+SmQG4BHvNY6A==
+
+"@turnkey/iframe-stamper@^1.0.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-1.2.0.tgz#bba478e391a266833f1a5960b9f1df9de5934fb8"
+  integrity sha512-OXbCVVzypa0AXa6dcNpfu8Q0xY/sq2nGXwhesrUQmE7V5I5nYYHZE3sQv54lErToX6H6YyDR9Z1DuPzEUkYTjw==
 
 "@turnkey/indexed-db-stamper@1.1.1":
   version "1.1.1"
@@ -8224,6 +8381,23 @@
     react-native-passkey "3.0.0"
     sha256-uint8array "0.10.7"
 
+"@turnkey/sdk-browser@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/sdk-browser/-/sdk-browser-1.5.0.tgz#3451a5b1cc581e71a381340005804932ac4958de"
+  integrity sha512-0MtdC20DrmB9WiiPUwYu/o7PzcSspojbjOF9TKFEsJIZpo3yQK7mQZyPhovAVXCxk7KP3SqS9qcDdpAe5/oMzA==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.1"
+    "@turnkey/crypto" "0.2.1"
+    "@turnkey/encoding" "0.2.1"
+    "@turnkey/http" "2.13.0"
+    "@turnkey/iframe-stamper" "2.0.0"
+    "@turnkey/webauthn-stamper" "0.5.0"
+    bs58check "^3.0.1"
+    buffer "^6.0.3"
+    cross-fetch "^3.1.5"
+    elliptic "^6.5.5"
+    hpke-js "^1.2.7"
+
 "@turnkey/sdk-browser@5.9.0":
   version "5.9.0"
   resolved "https://registry.yarnpkg.com/@turnkey/sdk-browser/-/sdk-browser-5.9.0.tgz#f619801a98df85bd322af935a13a8d7e9dc38abf"
@@ -8242,6 +8416,17 @@
     buffer "^6.0.3"
     cross-fetch "^3.1.5"
     hpke-js "^1.2.7"
+
+"@turnkey/sdk-server@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/sdk-server/-/sdk-server-1.3.0.tgz#95783163e9e585f426f0a899ceae6e44e0e369fc"
+  integrity sha512-uChLAU0EYtnSmg4qZUwGEi+HOY9Xqrczrfbggzq1dO4CAsTxG5mUfTSIR742n1LAZMlGGdJlvqcADcbLBZMApA==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.1"
+    "@turnkey/http" "2.13.0"
+    buffer "^6.0.3"
+    cross-fetch "^3.1.5"
+    elliptic "^6.5.5"
 
 "@turnkey/sdk-server@4.8.0":
   version "4.8.0"
@@ -8272,6 +8457,18 @@
     "@turnkey/sdk-server" "4.8.0"
     cross-fetch "^4.0.0"
 
+"@turnkey/viem@^0.4.8":
+  version "0.4.31"
+  resolved "https://registry.yarnpkg.com/@turnkey/viem/-/viem-0.4.31.tgz#3219c688812840a455294f4c721b648733330c12"
+  integrity sha512-yHq3+5u63diNYny2fG+i43mtSv0LtSEgOE64q0Kdq6D42nU8lbTstU+0dY939a/lXmrZOGYzSUJmU/coWg4Whg==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.1"
+    "@turnkey/http" "2.13.0"
+    "@turnkey/sdk-browser" "1.5.0"
+    "@turnkey/sdk-server" "1.3.0"
+    cross-fetch "^4.0.0"
+    typescript "^5.1"
+
 "@turnkey/wallet-stamper@1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@turnkey/wallet-stamper/-/wallet-stamper-1.0.9.tgz#a336942226276a79b3ade1a4f012eeaab3520488"
@@ -8281,6 +8478,13 @@
     "@turnkey/encoding" "0.5.0"
   optionalDependencies:
     viem "^2.21.35"
+
+"@turnkey/webauthn-stamper@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/webauthn-stamper/-/webauthn-stamper-0.5.0.tgz#014b8c20b1732af49dacb04f396edf010d3b7f47"
+  integrity sha512-iUbTUwD4f4ibdLy5PWWb7ITEz4S4VAP9/mNjFhoRY3cKVVTDfmykrVTKjPOIHWzDgAmLtgrLvySIIC9ZBVENBw==
+  dependencies:
+    sha256-uint8array "^0.10.7"
 
 "@turnkey/webauthn-stamper@0.5.1":
   version "0.5.1"
@@ -11441,6 +11645,14 @@ bs58check@2.1.2, bs58check@^2.1.2:
     bs58 "^4.0.0"
     create-hash "^1.1.0"
     safe-buffer "^5.1.2"
+
+bs58check@3.0.1, bs58check@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/bs58check/-/bs58check-3.0.1.tgz#2094d13720a28593de1cba1d8c4e48602fdd841c"
+  integrity sha512-hjuuJvoWEybo7Hn/0xOrczQKKEKD63WguEjlhLExYs2wUBcebDC1jDNK17eEAD2lYfw82d5ASC1d7K3SWszjaQ==
+  dependencies:
+    "@noble/hashes" "^1.2.0"
+    bs58 "^5.0.0"
 
 bs58check@4.0.0, bs58check@^4.0.0:
   version "4.0.0"
@@ -21466,7 +21678,7 @@ react-native-gesture-handler@^2.21.2:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
 
-react-native-get-random-values@^1.11.0:
+react-native-get-random-values@1.11.0, react-native-get-random-values@^1.11.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.11.0.tgz#1ca70d1271f4b08af92958803b89dccbda78728d"
   integrity sha512-4BTbDbRmS7iPdhYLRcz3PGFIpFJBwNZg9g42iwa2P6FOv9vZj/xJc678RZXnLNZzd0qd7Q3CCF6Yd+CU2eoXKQ==
@@ -21514,6 +21726,13 @@ react-native-passkey@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-passkey/-/react-native-passkey-3.1.0.tgz#26617ed0cc115c6037e2537d264955d852395168"
   integrity sha512-qOJ0q7AqbUOGXDOObcfiOJo1BOnG+lIQMEgltgeqmyMC+2XDlr7YrOQZgLwZbXheGC7BXPpwMSev/gxkgbt3xw==
+
+react-native-quick-base64@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-2.1.2.tgz#062b09b165c1530095fe99b94544c948318dbe99"
+  integrity sha512-xghaXpWdB0ji8OwYyo0fWezRroNxiNFCNFpGUIyE7+qc4gA/IGWnysIG5L0MbdoORv8FkTKUvfd6yCUN5R2VFA==
+  dependencies:
+    base64-js "^1.5.1"
 
 react-native-randombytes@^3.5.1:
   version "3.6.1"
@@ -21570,7 +21789,7 @@ react-native-webview@^11.26.0:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
-react-native@0.76.5, react-native@0.76.9:
+react-native@0.74.0, react-native@0.76.5, react-native@0.76.9:
   version "0.76.5"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.76.5.tgz#3ce43d3c31f46cfd98e56ef2dfc70866c04ad185"
   integrity sha512-op2p2kB+lqMF1D7AdX4+wvaR0OPFbvWYs+VBE7bwsb99Cn9xISrLRLAgFflZedQsa5HvnOGrULhtnmItbIKVVw==
@@ -24111,10 +24330,20 @@ typeforce@^1.18.0:
   resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.18.0.tgz#d7416a2c5845e085034d70fcc5b6cc4a90edbfdc"
   integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
 
+typescript@5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
+  integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
+
 "typescript@>=3 < 6", "typescript@^4.6.4 || ^5.2.2", typescript@^5, typescript@^5.0.4, typescript@^5.8.3:
   version "5.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
   integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==
+
+typescript@^5.1:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.2.tgz#d93450cddec5154a2d5cabe3b8102b83316fb2a6"
+  integrity sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==
 
 ua-is-frozen@^0.1.2:
   version "0.1.2"
@@ -24719,7 +24948,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.29.2, viem@2.33.3, viem@>=2.23.11, viem@^2.1.1, viem@^2.21.35, viem@^2.29.2:
+viem@2.23.2, viem@2.29.2, viem@2.33.3, viem@>=2.23.11, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.29.2:
   version "2.33.3"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.33.3.tgz#b69d7ff9edf649d1b7d9218e0225bcadc83a8caa"
   integrity sha512-aWDr6i6r3OfNCs0h9IieHFhn7xQJJ8YsuA49+9T5JRyGGAkWhLgcbLq2YMecgwM7HdUZpx1vPugZjsShqNi7Gw==

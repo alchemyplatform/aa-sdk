@@ -24,6 +24,7 @@ export {
   useSigner,
   useSignerStatus,
   useSetEmail,
+  useSendVerificationCode,
   useSignMessage,
   useSignTypedData,
   useSmartAccountClient,
