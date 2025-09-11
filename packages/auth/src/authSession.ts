@@ -100,7 +100,7 @@ export class AuthSession {
     private readonly user: User,
     private readonly bundle?: string,
     private readonly authType?: AuthType,
-    private readonly credentialId?: string,
+    private readonly credentialId?: string
   ) {}
 
   /**
@@ -135,7 +135,7 @@ export class AuthSession {
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper,
+      stamper
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
@@ -159,7 +159,7 @@ export class AuthSession {
       user,
       bundle,
       authType,
-      credentialId,
+      credentialId
     );
   }
 
@@ -343,7 +343,7 @@ export class AuthSession {
    * @returns {Promise<OauthProviderInfo>} A promise that resolves to the added provider info
    */
   public async addOauthProvider(
-    params: AddOauthProviderParams,
+    params: AddOauthProviderParams
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -367,7 +367,7 @@ export class AuthSession {
    * @returns {Promise<PasskeyInfo>} A promise that resolves to the created passkey info
    */
   public async addPasskey(
-    params: CredentialCreationOptions,
+    params: CredentialCreationOptions
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -440,7 +440,7 @@ export class AuthSession {
     } else {
       if (!this.bundle) {
         throw new Error(
-          "Bundle is required for non-passkey authentication types",
+          "Bundle is required for non-passkey authentication types"
         );
       }
       return JSON.stringify({
