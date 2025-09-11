@@ -223,6 +223,8 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/low-level-infra/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/low-level-infra/quickstart.mdx
 
       - section: PRE-BLITZ TO REMOVE Transactions
         contents:
