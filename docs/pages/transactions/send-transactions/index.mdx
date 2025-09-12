@@ -1,0 +1,77 @@
+---
+title: Send transactions
+description: Execute a single transaction
+slug: wallets/transactions/send-transactions
+---
+
+This guide will teach you how to send a single EVM transaction. Smart Wallets make it easy!
+
+## Prerequisites
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup)
+  {/* TODO(jh): should we explain how to use a faucet, or do all of our faucets now require min balances to prevent abuse? */}
+- A funded Smart Wallet to cover gas fees
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="react.mdx" />
+  </Tab>
+  {/* TODO(jh): are we really just recommending the smart wallet client (w/ a PK
+  signer) in other frameworks now instead of ak/core? also confirm no separate
+  RN examples. */}
+  <Tab title="Javascript">
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="API">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>
+
+## Advanced
+
+<Accordion title="Encoding function data">
+
+If you need to encode function data (instead of just sending value), it is easy to do using Viem or Foundry.
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="encoding-function-data/react.mdx" />
+  </Tab>
+  <Tab title="Javascript">
+    <Markdown src="encoding-function-data/client.mdx" />
+  </Tab>
+  <Tab title="API">
+    <Markdown src="encoding-function-data/api.mdx" />
+  </Tab>
+</Tabs>
+
+</Accordion>
+
+<Accordion title="Usage with prepare calls">
+
+Instead of using the `sendCalls` abstraction, you can prepare and send calls using underlying methods in React or using the Javascript client. Usage of the capability will be the same as when using send calls. It is recommended to use prepare calls if you want to inspect the prepared call prior to prompting the user for signature.
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="prepare-calls/react.mdx" />
+  </Tab>
+  <Tab title="Javascript">
+    <Markdown src="prepare-calls/client.mdx" />
+  </Tab>
+</Tabs>
+
+</Accordion>
+
+## Next steps
+
+Build more:
+
+- [Sponsor gas for users](/docs/wallets/transactions/sponsor-gas)
+- [Send batch transactions](/docs/wallets/transactions/send-batch-transactions)
+
+Troubleshooting:
+
+- [Common errors](/docs/wallets/resources/faqs#common-errors)
