@@ -1,0 +1,141 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+Use the `useSendCalls` hook to send and retry transactions. When retrying, don't specify a `nonceOverride` - the client automatically uses the same nonce to replace the stuck transaction.
+
+You'll need both `ALCHEMY_API_KEY` and `ALCHEMY_POLICY_ID` environment variables set to follow along!
+
+<CodeBlocks>
+
+```ts twoslash title="retryTransaction.tsx"
+import { config } from "@/app/config";
+import {
+  useSendCalls,
+  useSmartAccountClient,
+  useSigner,
+} from "@account-kit/react";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { alchemy } from "@account-kit/infra";
+import { useState } from "react";
+
+export default function RetryTransaction() {
+  const { client } = useSmartAccountClient({});
+  const { sendCallsAsync } = useSendCalls({ client });
+  const signer = useSigner();
+  const [callId, setCallId] = useState<string | null>(null);
+  const [isStuck, setIsStuck] = useState(false);
+
+  const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+    if (!signer) {
+      throw new Error("Signer not connected");
+    }
+
+    try {
+      const { ids } = await sendCallsAsync({
+        capabilities: {
+          paymasterService: {
+            policyId: config.policyId,
+          },
+        },
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x00",
+            data: "0x",
+          },
+        ],
+      });
+
+      console.log("Transaction sent:", ids[0]);
+      setCallId(ids[0]!);
+
+      const walletClient = createSmartWalletClient({
+        transport: alchemy({
+          apiKey: config.alchemyApiKey,
+        }),
+        account: client.getAddress(),
+        chain: client.chain!,
+        signer,
+      });
+
+      // Check status after a delay
+      setTimeout(async () => {
+        const status = await walletClient.getCallsStatus(ids[0]!);
+        if (status.status === 100) {
+          setIsStuck(true);
+          console.log("Transaction is stuck in mempool");
+        }
+      }, 3000); // Check after 3 seconds
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleRetry = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+    if (!callId) {
+      throw new Error("Call ID not available");
+    }
+    if (!signer) {
+      throw new Error("Signer not connected");
+    }
+
+    try {
+      // Re-send without nonceOverride to replace stuck transaction
+      const { ids } = await sendCallsAsync({
+        capabilities: {
+          paymasterService: {
+            policyId: config.policyId,
+          },
+        },
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x00",
+            data: "0x",
+          },
+        ],
+      });
+
+      console.log("Replacement transaction sent:", ids[0]);
+      setIsStuck(false);
+
+      const walletClient = createSmartWalletClient({
+        transport: alchemy({
+          apiKey: config.alchemyApiKey,
+        }),
+        account: client.getAddress(),
+        chain: client.chain!,
+        signer,
+      });
+
+      const result = await walletClient.waitForCallsStatus({ id: ids[0]! });
+      console.log("Replacement confirmed:", result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleSend}>Send Transaction</button>
+      {isStuck && (
+        <button onClick={handleRetry}>Replace Stuck Transaction</button>
+      )}
+    </div>
+  );
+}
+```
+
+```ts twoslash title="config.ts"
+export const config = {
+  alchemyApiKey: process.env.ALCHEMY_API_KEY!,
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+};
+```
+
+</CodeBlocks>
