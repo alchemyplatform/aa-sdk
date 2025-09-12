@@ -10,6 +10,7 @@ import {
 import type {
   AddOauthProviderParams,
   AuthMethods,
+  AuthSessionState,
   OauthProviderInfo,
   PasskeyInfo,
   TurnkeyStamper,
@@ -44,7 +45,7 @@ export class AuthSession {
     // TODO: replace apiKey with transport once it's ready.
     private readonly apiKey: string,
     private readonly turnkey: TurnkeyClient,
-    private readonly user: User
+    private readonly user: User,
   ) {}
 
   public static async create({
@@ -55,7 +56,7 @@ export class AuthSession {
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper
+      stamper,
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
@@ -132,7 +133,7 @@ export class AuthSession {
   }
 
   public async addOauthProvider(
-    params: AddOauthProviderParams
+    params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -144,7 +145,7 @@ export class AuthSession {
   }
 
   public async addPasskey(
-    params: CredentialCreationOptions
+    params: CredentialCreationOptions,
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -160,8 +161,9 @@ export class AuthSession {
     (this.turnkey.stamper as TurnkeyStamper).clear?.();
   }
 
-  public async getStorableState(): Promise<unknown> {
+  public async getAuthSessionState(): Promise<AuthSessionState> {
     this.throwIfDisconnected();
+    // TODO: retrieve and deserialize AuthSessionState from wagmi connector
     return notImplemented();
   }
 

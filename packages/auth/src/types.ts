@@ -64,7 +64,7 @@ export type CreateTekStamperFn = () => Promise<TurnkeyTekStamper>;
  * key accessed with WebAuthn (e.g. passkeys).
  */
 export type CreateWebAuthnStamperFn = (
-  params: CreateWebAuthnStamperParams
+  params: CreateWebAuthnStamperParams,
 ) => Promise<TurnkeyStamper>;
 
 export type CreateWebAuthnStamperParams = {
@@ -151,3 +151,14 @@ export type AuthProviderCustomization = {
   claims?: string;
   otherParameters?: Record<string, string>;
 };
+
+// Signer state types
+export type AuthSessionState =
+  | {
+      type: "email" | "oauth" | "otp";
+      bundle: string;
+      expirationDateMs: number;
+      user: User;
+      chainId: number;
+    }
+  | { type: "passkey"; user: User; expirationDateMs: number; chainId: number };
