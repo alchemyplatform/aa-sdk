@@ -382,16 +382,30 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useAccount.mdx
                   - page: useSmartAccountClient
                     path: wallets/pages/reference/account-kit/react/hooks/useSmartAccountClient.mdx
+                  - page: useSmartWalletClient
+                    path: wallets/pages/reference/account-kit/react/hooks/useSmartWalletClient.mdx
               - section: Smart Account Actions
                 contents:
+                  - page: useSendCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendCalls.mdx
+                  - page: usePrepareCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/usePrepareCalls.mdx
+                  - page: useSendPreparedCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendPreparedCalls.mdx
+                  - page: useWaitForCallsStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useWaitForCallsStatus.mdx
+                  - page: useCallsStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useCallsStatus.mdx
+                  - page: useGrantPermissions
+                    path: wallets/pages/reference/account-kit/react/hooks/useGrantPermissions.mdx
                   - page: useChain
                     path: wallets/pages/reference/account-kit/react/hooks/useChain.mdx
                   - page: useClientActions
                     path: wallets/pages/reference/account-kit/react/hooks/useClientActions.mdx
-                  - page: useDropAndReplaceUserOperation
-                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
                   - page: useSendUserOperation
                     path: wallets/pages/reference/account-kit/react/hooks/useSendUserOperation.mdx
+                  - page: useDropAndReplaceUserOperation
+                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
                   - page: useSignMessage
                     path: wallets/pages/reference/account-kit/react/hooks/useSignMessage.mdx
                   - page: useSignTypedData
@@ -453,6 +467,68 @@ navigation:
                 contents:
                   - page: convertSignerStatusToState
                     path: wallets/pages/reference/account-kit/core/functions/convertSignerStatusToState.mdx
+                  - page: cookieStorage
+                    path: wallets/pages/reference/account-kit/core/functions/cookieStorage.mdx
+                  - page: cookieToInitialState
+                    path: wallets/pages/reference/account-kit/core/functions/cookieToInitialState.mdx
+                  - page: createAccount
+                    path: wallets/pages/reference/account-kit/core/functions/createAccount.mdx
+                  - page: createConfig
+                    path: wallets/pages/reference/account-kit/core/functions/createConfig.mdx
+                  - page: createDefaultAccountState
+                    path: wallets/pages/reference/account-kit/core/functions/createDefaultAccountState.mdx
+                  - page: defaultAccountState
+                    path: wallets/pages/reference/account-kit/core/functions/defaultAccountState.mdx
+                  - page: disconnect
+                    path: wallets/pages/reference/account-kit/core/functions/disconnect.mdx
+                  - page: getAccount
+                    path: wallets/pages/reference/account-kit/core/functions/getAccount.mdx
+                  - page: getBundlerClient
+                    path: wallets/pages/reference/account-kit/core/functions/getBundlerClient.mdx
+                  - page: getChain
+                    path: wallets/pages/reference/account-kit/core/functions/getChain.mdx
+                  - page: getConnection
+                    path: wallets/pages/reference/account-kit/core/functions/getConnection.mdx
+                  - page: getSigner
+                    path: wallets/pages/reference/account-kit/core/functions/getSigner.mdx
+                  - page: getSignerStatus
+                    path: wallets/pages/reference/account-kit/core/functions/getSignerStatus.mdx
+                  - page: getSmartAccountClient
+                    path: wallets/pages/reference/account-kit/core/functions/getSmartAccountClient.mdx
+                  - page: getSolanaConnection
+                    path: wallets/pages/reference/account-kit/core/functions/getSolanaConnection.mdx
+                  - page: getUser
+                    path: wallets/pages/reference/account-kit/core/functions/getUser.mdx
+                  - page: hydrate
+                    path: wallets/pages/reference/account-kit/core/functions/hydrate.mdx
+                  - page: parseCookie
+                    path: wallets/pages/reference/account-kit/core/functions/parseCookie.mdx
+                  - page: reconnect
+                    path: wallets/pages/reference/account-kit/core/functions/reconnect.mdx
+                  - page: setChain
+                    path: wallets/pages/reference/account-kit/core/functions/setChain.mdx
+                  - page: watchAccount
+                    path: wallets/pages/reference/account-kit/core/functions/watchAccount.mdx
+                  - page: watchBundlerClient
+                    path: wallets/pages/reference/account-kit/core/functions/watchBundlerClient.mdx
+                  - page: watchChain
+                    path: wallets/pages/reference/account-kit/core/functions/watchChain.mdx
+                  - page: watchConnection
+                    path: wallets/pages/reference/account-kit/core/functions/watchConnection.mdx
+                  - page: watchSigner
+                    path: wallets/pages/reference/account-kit/core/functions/watchSigner.mdx
+                  - page: watchSignerStatus
+                    path: wallets/pages/reference/account-kit/core/functions/watchSignerStatus.mdx
+                  - page: watchSmartAccountClient
+                    path: wallets/pages/reference/account-kit/core/functions/watchSmartAccountClient.mdx
+                  - page: watchSolanaConnection
+                    path: wallets/pages/reference/account-kit/core/functions/watchSolanaConnection.mdx
+                  - page: watchUser
+                    path: wallets/pages/reference/account-kit/core/functions/watchUser.mdx
+              - section: Classes
+                contents:
+                  - page: ClientOnlyPropertyError
+                    path: wallets/pages/reference/account-kit/core/classes/ClientOnlyPropertyError/constructor.mdx
 
           - section: Infra
             path: wallets/pages/reference/account-kit/infra/index.mdx
