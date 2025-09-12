@@ -15,7 +15,6 @@ export interface UseWaitForCallsStatusParams
   extends Omit<WaitForCallsStatusParameters, "id"> {
   client: UseSmartAccountClientResult["client"] | undefined;
   id: Hex | undefined;
-  enabled?: boolean;
 }
 
 type QueryResult = Awaited<ReturnType<typeof waitForCallsStatus>>;
@@ -47,7 +46,6 @@ export type UseWaitForCallsStatusResult = UseQueryResult<QueryResult>;
 export function useWaitForCallsStatus({
   client,
   id,
-  enabled = true,
   ...params
 }: UseWaitForCallsStatusParams): UseWaitForCallsStatusResult {
   const { queryClient } = useAlchemyAccountContext();
@@ -79,7 +77,7 @@ export function useWaitForCallsStatus({
           });
         },
       ),
-      enabled: !!(client && smartWalletClient && id && enabled),
+      enabled: !!(client && smartWalletClient && id),
     },
     queryClient,
   );
