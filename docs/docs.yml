@@ -261,6 +261,8 @@ navigation:
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
+          - page: Using flashblocks for pre-confirmation
+            path: wallets/pages/transactions/use-flashblocks.mdx
           - section: Using 7702
             contents:
               - page: Overview
@@ -299,6 +301,8 @@ navigation:
                 path: wallets/pages/gas-manager-admin-api/conditional-gas-sponsorship.mdx
               - page: How to pay gas with any token
                 path: wallets/pages/gas-manager-admin-api/how-to-pay-gas-with-any-token.mdx
+              - page: How to use AA with Flashblocks
+                path: wallets/pages/transactions/low-level-infra/use-flashblocks-with-aa.mdx
           - section: Third party infra
             contents:
               - page: Bundlers
