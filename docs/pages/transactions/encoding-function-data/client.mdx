@@ -1,3 +1,38 @@
-{/* TODO(jh): show sending a simple call using viem to encode function data */}
+You can use Viem to encode function call data.
 
-TODO
+{/* TODO(jh): highlight the lines where we encode the function data */}
+
+<CodeBlocks>
+```ts twoslash title="sendCalls.ts" maxLines=999
+import { client } from "./client.ts";
+import { encodeFunctionData } from "viem";
+import { exampleAbi } from "./abi.ts"
+
+await client.sendCalls({
+calls: [
+{
+to: "0x0000000000000000000000000000000000000000",
+data: encodeFunctionData({
+abi: exampleAbi,
+functionName: "mintTo",
+args: [client.account!.address],
+}),
+},
+],
+});
+
+````
+
+```ts twoslash title="abi.ts" maxLines=999
+export const exampleAbi = [
+  {
+    inputs: [{ name: "recipient", type: "address" }],
+    name: "mintTo",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+] as const;
+````
+
+</CodeBlocks>
