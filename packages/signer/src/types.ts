@@ -71,7 +71,12 @@ export type CreateWebAuthnStamperParams = {
   credentialId: string | undefined;
 };
 
-export type HandleOauthFlowFn = (authUrl: string) => Promise<OAuthFlowResponse>;
+export type HandleOauthFlowFn = (
+  authUrl: string,
+  mode: "popup" | "redirect",
+) => Promise<OAuthFlowResponse>;
+
+export type HandleOauthCallbackFn = () => Promise<OAuthFlowResponse | null>;
 
 // TODO: can make this type more crisp.
 export type OAuthFlowResponse = {

@@ -1,46 +1,62 @@
-import { AuthClient } from "@alchemy/signer";
+import { AuthClient, OauthCancelledError } from "@alchemy/signer";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 
+const CHECK_CLOSE_INTERVAL = 500;
+
 /**
- * Configuration parameters for creating a web-based authentication client.
+ * Configuration parameters for creating a web-based AuthClient
  */
 export type WebAuthClientParams = {
-  /** The API key for authentication with Alchemy services */
+  /** API key for authentication with Alchemy services */
   apiKey: string;
-  /** The ID for the iframe element used by Turnkey. Defaults to "turnkey-iframe" */
+  /** Optional ID for the iframe element used by Turnkey stamper. Defaults to "turnkey-iframe" */
   iframeElementId?: string;
-  /** The ID for the container element that will hold the iframe. Defaults to "turnkey-iframe-container" */
+  /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
   iframeContainerId?: string;
 };
 
 /**
- * Creates a web-based authentication client configured for browser environments.
+ * Creates a web-based AuthClient configured for browser environments.
+ * This function sets up an AuthClient with iframe-based TEK stamper for secure key management
+ * and popup-based OAuth flow for social authentication.
  *
- * This function sets up an AuthClient with Turnkey's IframeStamper for secure key management
- * in web applications. The iframe is automatically created and managed in the DOM.
+ * The created AuthClient supports:
+ * - Email OTP authentication
+ * - OAuth authentication via popup windows
+ * - Secure key management through Turnkey iframe stamper
+ *
+ * @param {WebAuthClientParams} params - Configuration parameters for the web auth client
+ * @param {string} params.apiKey - API key for authentication with Alchemy services
+ * @param {string} [params.iframeElementId] - ID for the iframe element used by Turnkey stamper
+ * @param {string} [params.iframeContainerId] - ID for the container element that holds the iframe
+ * @returns {AuthClient} A configured AuthClient instance ready for web-based authentication
  *
  * @example
  * ```ts
  * import { createWebAuthClient } from "@alchemy/signer-web";
  *
  * const authClient = createWebAuthClient({
- *   apiKey: "your-api-key",
- *   iframeElementId: "my-turnkey-iframe",
+ *   apiKey: "your-alchemy-api-key",
  *   iframeContainerId: "my-iframe-container"
  * });
  *
- * // Send OTP via email
+ * // Send email OTP
  * await authClient.sendEmailOtp({ email: "user@example.com" });
  *
- * // Submit OTP code to authenticate
+ * // Submit OTP code
  * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+ *
+ * // OAuth login
+ * const signer = await authClient.loginWithOauth({
+ *   type: "oauth",
+ *   authProviderId: "google",
+ *   mode: "popup"
+ * });
  * ```
  *
- * @param {WebAuthClientParams} params - Configuration parameters for the auth client
- * @param {string} params.apiKey - The API key for authentication with Alchemy services
- * @param {string} [params.iframeElementId] - The ID for the iframe element used by Turnkey
- * @param {string} [params.iframeContainerId] - The ID for the container element that will hold the iframe
- * @returns {AuthClient} A configured AuthClient instance ready for web-based authentication
+ * @throws {Error} May throw errors related to DOM manipulation or network requests
+ *
+ * @see {@link AuthClient} for the full API of the returned client
  */
 // TODO: take a transport instead of apiKey once it's ready.
 export function createWebAuthClient({
@@ -72,6 +88,96 @@ export function createWebAuthClient({
     },
 
     createWebAuthnStamper: () => Promise.reject(new Error("Not implemented")),
-    handleOauthFlow: () => Promise.reject(new Error("Not implemented")),
+    handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
+      switch (mode) {
+        case "popup":
+          const popup = window.open(
+            authUrl,
+            "_blank",
+            "popup,width=500,height=600",
+          );
+          // const eventEmitter = this.eventEmitter;
+          return new Promise((resolve, reject) => {
+            const handleMessage = (event: MessageEvent) => {
+              if (!event.data) {
+                return;
+              }
+              const {
+                alchemyStatus: status,
+                alchemyBundle: bundle,
+                alchemyOrgId: orgId,
+                alchemyIdToken: idToken,
+                alchemyIsSignup: isSignup,
+                alchemyError,
+                alchemyOtpId: otpId,
+                alchemyEmail: email,
+                alchemyAuthProvider: providerName,
+              } = event.data;
+              console.log({ isSignup }); // TO DO: remove, added this to get lint to stop complaining
+              if (alchemyError) {
+                cleanup();
+                popup?.close();
+                reject(new alchemyError());
+              }
+              if (!status) {
+                // This message isn't meant for us.
+                return;
+              }
+              cleanup();
+              popup?.close();
+              switch (status) {
+                case "SUCCESS":
+                  resolve({
+                    status,
+                    bundle,
+                    orgId,
+                    // connectedEventName: "connectedOauth",
+                    idToken,
+                    // authenticatingType: "oauth",
+                  });
+                  break;
+                case "ACCOUNT_LINKING_CONFIRMATION_REQUIRED":
+                  resolve({
+                    status,
+                    idToken,
+                    email,
+                    providerName,
+                    otpId,
+                    orgId,
+                  });
+                  break;
+                default:
+                  reject(new Error(`Unknown status: ${status}`));
+              }
+            }; // handleMessage
+
+            window.addEventListener("message", handleMessage);
+
+            const checkCloseIntervalId = setInterval(() => {
+              if (popup?.closed) {
+                cleanup();
+                reject(new OauthCancelledError());
+              }
+            }, CHECK_CLOSE_INTERVAL);
+
+            const cleanup = () => {
+              window.removeEventListener("message", handleMessage);
+              clearInterval(checkCloseIntervalId);
+            };
+          });
+
+        case "redirect":
+          // No OAuth callback detected, so initiate the redirect
+          window.location.href = authUrl;
+          return new Promise((_, reject) =>
+            setTimeout(
+              () => reject(new Error("Redirecting to OAuth provider...")),
+              1000,
+            ),
+          );
+        default:
+          throw new Error(`Unsupported OAuth mode: ${mode}`);
+      }
+    },
   });
 }
