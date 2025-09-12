@@ -1,0 +1,62 @@
+<Info>Required SDK version: ^v4.62.2</Info>
+
+You can use React hooks to prepare, sign, and send transactions.
+
+<CodeBlocks>
+
+```tsx twoslash title="sendCalls.tsx" maxLines=999 focus={10-15,22-39}
+import {
+  usePrepareCalls,
+  useSmartAccountClient,
+  useSendPreparedCalls,
+  useSmartWalletClient,
+} from "@account-kit/react";
+import { parseEther, toHex } from "viem";
+
+export default function SendCalls() {
+  const { client } = useSmartAccountClient({});
+  const { prepareCallsAsync } = usePrepareCalls({ client });
+  const { sendPreparedCallsAsync } = useSendPreparedCalls({ client });
+  const smartWalletClient = useSmartWalletClient({
+    account: client?.account.address,
+  });
+
+  const handleSend = async () => {
+    if (!client || !smartWalletClient) {
+      throw new Error("Client not connected");
+    }
+
+    const preparedCalls = await prepareCallsAsync({
+      calls: [
+        {
+          to: "0x0000000000000000000000000000000000000000",
+          value: toHex(parseEther("0")),
+          data: "0x",
+        },
+      ],
+    });
+
+    console.log({ preparedCalls }); // Here you can inspect the prepared calls before signing.
+
+    const signedCalls =
+      await smartWalletClient.signPreparedCalls(preparedCalls);
+
+    const sentCalls = await sendPreparedCallsAsync(signedCalls);
+
+    console.log({ sentCalls });
+  };
+
+  return (
+    <button onClick={handleSend} disabled={!client || !smartWalletClient}>
+      Send
+    </button>
+  );
+}
+```
+
+</CodeBlocks>
+
+See the [`usePrepareCalls`](/docs/wallets/reference/account-kit/react/hooks/usePrepareCalls),
+[`useSendPreparedCalls`](/docs/wallets/reference/account-kit/react/hooks/useSendPreparedCalls), and
+[`useSmartWalletClient`](/docs/wallets/reference/account-kit/react/hooks/useSmartWalletClient) SDK reference for
+full descriptions of the parameters used in the above example.
