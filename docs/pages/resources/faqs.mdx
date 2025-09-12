@@ -60,7 +60,7 @@ There are two scenarios where you would get a different contract address:
 
 You can call `upgradeToAndCall` on the Simple Account with these params:
 
-- `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
+- `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/tree/develop/deployments) - make sure to use the implementation address, not the factory address)
   - For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
 - `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner on the account, usually the same owner as what the account used as Simple Account.
   - In solidity (foundry) you can use abi.encodeCall and in viem you can use [encodeFunctionData](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount)

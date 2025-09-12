@@ -4,3 +4,6 @@ base_url = "https://www.alchemy.com"
 
 # Exclude links that end with .mdx or .png
 exclude = [".*\\.mdx$", ".*\\.png$"]
+
+# Comma-separated list of accepted status codes for valid links.
+accept = [200, 403]

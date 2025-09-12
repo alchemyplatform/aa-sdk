@@ -7,7 +7,7 @@ slug: reference/wallet-apis-session-keys/api
 
 ### 1. Request an Account for the Owner Signer
 
-Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/concepts/smart-account-signer) address can be any signer (or public key) that has the ability to sign transactions.
+Given an owner address, call `wallet_requestAccount` to return the smart account address for that owner. The [owner](/docs/wallets/signer/what-is-a-signer) address can be any signer (or public key) that has the ability to sign transactions.
 
 - If you want to use social sign up / log in, you can simply use the [SDK](/docs/wallets/react/getting-started) to authenticate users and retrieve their signer address
 - If instead, you want to generate and control wallets with a custodied owner, you can generate any public private key pair (e.g. any EOA)
