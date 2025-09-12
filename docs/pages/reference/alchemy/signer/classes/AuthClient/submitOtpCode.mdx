@@ -5,23 +5,12 @@ description: Overview of the submitOtpCode method
 slug: wallets/reference/alchemy/signer/classes/AuthClient/submitOtpCode
 ---
 
-Submits an OTP code for verification and completes the authentication process.
-This method should be called after sendEmailOtp() with the code received via email.
+Submits the OTP code received via email to complete authentication.
 
 ## Import
 
 ```ts
 import { AuthClient } from "@alchemy/signer";
-```
-
-## Usage
-
-```ts
-// First send OTP
-await authClient.sendEmailOtp({ email: "user@example.com" });
-
-// Then submit the code received via email
-const signer = await authClient.submitOtpCode({ otpCode: "123456" });
 ```
 
 ## Parameters
@@ -30,7 +19,7 @@ const signer = await authClient.submitOtpCode({ otpCode: "123456" });
 
 `SubmitOtpCodeParams`
 
-- Parameters for submitting the OTP code
+- The parameters for submitting the OTP
 
 ### params.otpCode
 
@@ -41,4 +30,4 @@ const signer = await authClient.submitOtpCode({ otpCode: "123456" });
 ## Returns
 
 `Promise<Signer>`
-Promise that resolves to an authenticated Signer instance
+A promise that resolves to a Signer instance upon successful authentication
