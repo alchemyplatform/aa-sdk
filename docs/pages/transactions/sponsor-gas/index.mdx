@@ -1,0 +1,64 @@
+---
+title: Sponsor gas
+description: Sponsor gas fees for your users
+slug: wallets/transactions/sponsor-gas
+---
+
+Gas fees are a significant barrier to entry for new users of your app.
+With Smart Wallets you can remove this barrier by sponsoring gas fees for transactions via the Gas Manager.
+
+## How it works
+
+When a user requests gas sponsorship using a configured policy, the policy engine will determine if that transaction is eligible for sponsorship.
+If eligible, when the user sends the transaction the Gas Manager will pay for the gas fee upfront. The Gas Manager will make a note of the sponsored cost
+and bill the sponsoring developer in fiat.
+
+## Prerequisites
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx).
+- [A gas sponsorship policy](https://dashboard.alchemy.com/gas-manager/policy/create).
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="Javascript">
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="API">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>
+
+## Advanced
+
+<Accordion title="Usage with prepare calls">
+
+Gas sponsorship also works with the prepare calls methods in the various frameworks. Usage of the capability will be the same as when using send calls. It is recommended to use prepare calls if you want to inspect the prepared call prior to prompting the user for signature.
+
+<Tabs>
+  <Tab title="React">TODO - add link to `usePrepareCalls`</Tab>
+  <Tab title="Javascript">
+    See the [`prepareCalls` SDK
+    reference](/docs/wallets/reference/account-kit/wallet-client/functions/prepareCalls)
+  </Tab>
+  <Tab title="API">
+    See the [`wallet_prepareCalls` API
+    reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
+  </Tab>
+</Tabs>
+
+</Accordion>
+
+## Next steps
+
+Build more:
+
+- [Pay gas with any token](/docs/wallets/transactions/pay-gas-with-any-token)
+
+Troubleshooting:
+
+- [Gas manager errors](/docs/reference/gas-manager-errors)
