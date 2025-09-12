@@ -201,7 +201,7 @@ navigation:
           - page: Send batched transactions
             path: wallets/pages/transactions/send-batched-transactions.mdx
           - page: Sponsor gas
-            path: wallets/pages/transactions/sponsor-gas.mdx
+            path: wallets/pages/transactions/sponsor-gas/index.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - page: "[NEW] Swap tokens"
