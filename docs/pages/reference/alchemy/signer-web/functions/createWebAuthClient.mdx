@@ -5,15 +5,10 @@ description: Overview of the createWebAuthClient method
 slug: wallets/reference/alchemy/signer-web/functions/createWebAuthClient
 ---
 
-Creates a web-based AuthClient configured for browser environments.
-This function sets up an AuthClient with iframe-based TEK stamper for secure key management
-and popup-based OAuth flow for social authentication.
+Creates a web-based authentication client configured for browser environments.
 
-The created AuthClient supports:
-
-- Email OTP authentication
-- OAuth authentication via popup windows
-- Secure key management through Turnkey iframe stamper
+This function sets up an AuthClient with Turnkey's IframeStamper for secure key management
+in web applications. The iframe is automatically created and managed in the DOM.
 
 ## Import
 
@@ -27,22 +22,16 @@ import { createWebAuthClient } from "@alchemy/signer-web";
 import { createWebAuthClient } from "@alchemy/signer-web";
 
 const authClient = createWebAuthClient({
-  apiKey: "your-alchemy-api-key",
+  apiKey: "your-api-key",
+  iframeElementId: "my-turnkey-iframe",
   iframeContainerId: "my-iframe-container",
 });
 
-// Send email OTP
+// Send OTP via email
 await authClient.sendEmailOtp({ email: "user@example.com" });
 
-// Submit OTP code
+// Submit OTP code to authenticate
 const signer = await authClient.submitOtpCode({ otpCode: "123456" });
-
-// OAuth login
-const signer = await authClient.loginWithOauth({
-  type: "oauth",
-  authProviderId: "google",
-  mode: "popup",
-});
 ```
 
 ## Parameters
@@ -51,25 +40,25 @@ const signer = await authClient.loginWithOauth({
 
 `WebAuthClientParams`
 
-- Configuration parameters for the web auth client
+- Configuration parameters for the auth client
 
 ### params.apiKey
 
 `string`
 
-- API key for authentication with Alchemy services
+- The API key for authentication with Alchemy services
 
 ### params.iframeElementId
 
 `string`
 
-- ID for the iframe element used by Turnkey stamper
+- The ID for the iframe element used by Turnkey
 
 ### params.iframeContainerId
 
 `string`
 
-- ID for the container element that holds the iframe
+- The ID for the container element that will hold the iframe
 
 ## Returns
 
