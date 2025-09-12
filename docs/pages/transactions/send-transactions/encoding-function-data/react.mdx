@@ -1,9 +1,7 @@
-You can use Viem to encode function call data.
-
-{/* TODO(jh): highlight the lines where we encode the function data */}
+In React, you can use [Viem](https://viem.sh/docs/contract/encodeFunctionData) to encode function call data.
 
 <CodeBlocks>
-```ts twoslash title="sendCalls.tsx" maxLines=999
+```tsx twoslash title="sendCalls.tsx" maxLines=999 focus={20-24}
 import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
 import { encodeFunctionData } from "viem";
 import { exampleAbi } from "./abi.ts"
@@ -14,10 +12,10 @@ export default function SendCalls() {
     client,
   });
 
-const handleSend = async () => {
-if (!client) {
-throw new Error("Smart account client not connected");
-}
+  const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
 
     sendCalls({
       calls: [
@@ -31,14 +29,13 @@ throw new Error("Smart account client not connected");
         },
       ],
     });
+  };
 
-};
-
-return (
-<button onClick={handleSend} disabled={!client || isSendingCalls}>
-{isSendingCalls ? "Sending..." : "Send"}
-</button>
-);
+  return (
+    <button onClick={handleSend} disabled={!client || isSendingCalls}>
+      {isSendingCalls ? "Sending..." : "Send"}
+    </button>
+  ) 
 }
 
 ````

@@ -3,20 +3,20 @@
   [foundry](https://getfoundry.sh/) to sign a raw payload.
 </Info>
 
-See the [`wallet_prepareCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls),
-[`wallet_sendPreparedCalls`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls),
-and [`wallet_getCallsStatus`](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status)
+See the [`wallet_prepareCalls`](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls),
+[`wallet_sendPreparedCalls`](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls),
+and [`wallet_getCallsStatus`](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status)
 API reference for full descriptions of the parameters used in the following example.
 
 <Steps>
-    <Step title="Declare your secrets">
+  <Step title="Declare your secrets">
 ```bash twoslash maxLines=999
 ALCHEMY_API_KEY=your-alchemy-api-key
-CHAIN_ID=0x66eee # Your desired chain ID in hex
+CHAIN_ID=0x66eee # Your desired chain ID as hex
 SIGNER_ADDRESS=your-signer-address
 SIGNER_PRIVATE_KEY=your-signer-private-key
 ```
-    </Step>
+  </Step>
 
   <Step title="(If Needed) Request Account">
     If the user does not yet have a smart account, you must create one.
@@ -83,8 +83,8 @@ SIGNATURE=$(cast wallet sign --private-key "$SIGNER_PRIVATE_KEY" "$SIGNATURE_PAY
 
   </Step>
 
-<Step title="Send the Prepared Calls">
-  Send the signed calls using `wallet_sendPreparedCalls`.
+  <Step title="Send the Prepared Calls">
+    Send the signed calls using `wallet_sendPreparedCalls`.
   
 ```bash twoslash maxLines=999
 SEND_CALLS_RESPONSE=$(echo '{}' | jq -n \
@@ -111,13 +111,11 @@ SEND_CALLS_RESPONSE=$(echo '{}' | jq -n \
     --data @-)
 
 CALL_ID=$(echo $SEND_CALLS_RESPONSE | jq -r '.result.preparedCallIds[0]')
+```
+  </Step>
 
-````
-
-</Step>
-
-<Step title="Check the Calls Status">
-  Finally check the calls status using `wallet_getCallsStatus`.
+  <Step title="Check the Calls Status">
+    Finally check the calls status using `wallet_getCallsStatus`.
 
 ```bash twoslash maxLines=999
 curl --request POST \
@@ -132,8 +130,8 @@ curl --request POST \
     "'$CALL_ID'"
   ]
 }'
-````
+```
 
-</Step>
+  </Step>
 
 </Steps>

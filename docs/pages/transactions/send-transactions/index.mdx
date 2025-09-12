@@ -9,23 +9,19 @@ This guide will teach you how to send a single EVM transaction. Smart Wallets ma
 ## Prerequisites
 
 - API key from your [dashboard](https://dashboard.alchemy.com/apps)
-- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup)
-  {/* TODO(jh): should we explain how to use a faucet, or do all of our faucets now require min balances to prevent abuse? */}
-- A funded Smart Wallet to cover gas fees
+- [Smart Wallets installed and configured in your project](/docs/wallets/react/setup)
+- A funded Smart Wallet to cover gas fees ([or a gas manager policy to sponsor gas](/docs/wallets/transactions/sponsor-gas))
 
 ## Implementation
 
 <Tabs>
-  <Tab title="React">
+  <Tab title="React" language="react">
     <Markdown src="react.mdx" />
   </Tab>
-  {/* TODO(jh): are we really just recommending the smart wallet client (w/ a PK
-  signer) in other frameworks now instead of ak/core? also confirm no separate
-  RN examples. */}
-  <Tab title="Javascript">
+  <Tab title="JavaScript" language="typescript">
     <Markdown src="client.mdx" />
   </Tab>
-  <Tab title="API">
+  <Tab title="API" language="bash">
     <Markdown src="api.mdx" />
   </Tab>
 </Tabs>
@@ -34,16 +30,16 @@ This guide will teach you how to send a single EVM transaction. Smart Wallets ma
 
 <Accordion title="Encoding function data">
 
-If you need to encode function data (instead of just sending value), it is easy to do using Viem or Foundry.
+If you need to encode function data (instead of just sending value), it is easy to do so using Viem or Foundry.
 
 <Tabs>
-  <Tab title="React">
+  <Tab title="React" language="react">
     <Markdown src="encoding-function-data/react.mdx" />
   </Tab>
-  <Tab title="Javascript">
+  <Tab title="JavaScript" language="typescript">
     <Markdown src="encoding-function-data/client.mdx" />
   </Tab>
-  <Tab title="API">
+  <Tab title="API" language="bash">
     <Markdown src="encoding-function-data/api.mdx" />
   </Tab>
 </Tabs>
@@ -52,13 +48,13 @@ If you need to encode function data (instead of just sending value), it is easy 
 
 <Accordion title="Usage with prepare calls">
 
-Instead of using the `sendCalls` abstraction, you can prepare and send calls using underlying methods in React or using the Javascript client. Usage of the capability will be the same as when using send calls. It is recommended to use prepare calls if you want to inspect the prepared call prior to prompting the user for signature.
+Instead of using the `sendCalls` abstraction, you can prepare and send calls using underlying methods in React or using the JavaScript client. Usage of the capability will be the same as when using send calls. It is recommended to use `prepareCalls` if you want to inspect the prepared call prior to prompting the user for signature.
 
 <Tabs>
-  <Tab title="React">
+  <Tab title="React" language="react">
     <Markdown src="prepare-calls/react.mdx" />
   </Tab>
-  <Tab title="Javascript">
+  <Tab title="JavaScript" language="typescript">
     <Markdown src="prepare-calls/client.mdx" />
   </Tab>
 </Tabs>

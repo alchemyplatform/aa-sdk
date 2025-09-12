@@ -4,7 +4,7 @@ You can use smart wallet client actions to prepare, sign, and send transactions.
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.ts" maxLines=999
+```ts twoslash title="sendCalls.ts" maxLines=999 focus={4-20}
 import { parseEther, toHex } from "viem";
 import { client } from "./client.ts";
 
@@ -34,7 +34,6 @@ import {
   createSmartWalletClient,
   type SmartWalletClientParams,
 } from "@account-kit/wallet-client";
-import { generatePrivateKey } from "viem/accounts";
 
 const clientParams: SmartWalletClientParams = {
   transport: alchemy({
@@ -42,7 +41,7 @@ const clientParams: SmartWalletClientParams = {
   }),
   chain: sepolia,
   signer: LocalAccountSigner.privateKeyToAccountSigner(
-    "your-wallet-private-key" as Hex,
+    "0x-your-wallet-private-key",
   ),
 };
 
