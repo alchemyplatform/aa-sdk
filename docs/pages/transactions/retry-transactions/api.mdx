@@ -36,7 +36,7 @@ For other potential responses, [check out the API reference!](https://www.alchem
 
 </Step>
 
-<Step title="Send initial transaction">
+<Step title="Send the initial transaction">
 
 ```bash
 curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
@@ -91,7 +91,7 @@ Sign the `raw` field and send the transaction as usual. TODO: link => send trans
 
 </Step>
 
-<Step title="Check transaction status">
+<Step title="Check the transaction status">
 
 After sending the transaction and getting a `PREPARED_CALL_ID`, monitor its status:
 
@@ -130,7 +130,7 @@ If `status` remains 100 (Pending) for too long, proceed to retry.
 
 </Step>
 
-<Step title="Re-prepare the same call with default nonce">
+<Step title="Re-prepare the same call">
 
 To replace the stuck transaction, re-prepare the same call. This will automatically use the same nonce as the pending transaction as long as you don't override the nonce!
 
