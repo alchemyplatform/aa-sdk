@@ -32,6 +32,7 @@ import {
   type SubmitOtpCodeResponse,
   type CredentialCreationOptionOverrides,
   type SmsAuthParams,
+  type IdTokenOnly,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -210,9 +211,10 @@ export class RNSignerClient extends BaseSignerClient<
     this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
   }
+
   override oauthWithRedirect = async (
     args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<User> => {
+  ): Promise<User | IdTokenOnly> => {
     // Ensure the In-App Browser required for authentication is available
     if (!(await InAppBrowser.isAvailable())) {
       throw new InAppBrowserUnavailableError();
@@ -233,7 +235,6 @@ export class RNSignerClient extends BaseSignerClient<
     });
     const redirectUrl = args.redirectUrl;
     const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
-
     if (res.type !== "success" || !res.url) {
       throw new OauthFailedError("An error occured completing your request");
     }
@@ -245,26 +246,40 @@ export class RNSignerClient extends BaseSignerClient<
     const accessToken = authResult["alchemy-access-token"];
     const isSignup = authResult["alchemy-is-signup"];
     const error = authResult["alchemy-error"];
+    const status = authResult["alchemy-status"];
+    const providerName = authResult["alchemy-auth-provider"];
 
     if (error) {
       throw new OauthFailedError(error);
     }
 
-    if (bundle && orgId && idToken) {
-      const user = await this.completeAuthWithBundle({
-        bundle,
-        orgId,
-        connectedEventName: "connectedOauth",
-        idToken,
-        accessToken,
-        authenticatingType: "oauth",
-      });
-
-      if (isSignup) {
-        this.eventEmitter.emit("newUserSignup");
+    if (status === "FETCHED_ID_TOKEN_ONLY") {
+      // This supports the add auth provider flow
+      if (idToken && providerName) {
+        return {
+          status: "FETCHED_ID_TOKEN_ONLY",
+          idToken,
+          accessToken,
+          providerName,
+        };
       }
+    } else {
+      // This supports the sign in with auth flow
+      if (bundle && orgId && idToken) {
+        const user = await this.completeAuthWithBundle({
+          bundle,
+          orgId,
+          connectedEventName: "connectedOauth",
+          idToken,
+          accessToken,
+          authenticatingType: "oauth",
+        });
 
-      return user;
+        if (isSignup) {
+          this.eventEmitter.emit("newUserSignup");
+        }
+        return user;
+      }
     }
 
     // Throw the Alchemy error if available, otherwise throw a generic error.
