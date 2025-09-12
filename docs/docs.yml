@@ -240,8 +240,8 @@ navigation:
             contents:
               - page: EVM
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-evm.mdx
-              - page: Solana
-                path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
+              # - page: Solana
+                # path: wallets/pages/transactions/sponsor-gas/sponsor-gas-solana.mdx
               - section: Signing
                 contents:
                   - page: Signing transactions
@@ -258,7 +258,7 @@ navigation:
                         path: wallets/pages/signer/as-an-eoa.mdx
                       - page: Sign raw hash
                         path: wallets/pages/signer/as-an-eoa.mdx
-                path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
+                # path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/react/pay-gas-with-any-token.mdx
           - section: Using 7702
