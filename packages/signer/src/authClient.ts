@@ -4,6 +4,7 @@ import type {
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
   TurnkeyTekStamper,
+  AuthSessionState,
 } from "./types.js";
 import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
@@ -394,6 +395,28 @@ export class AuthClient {
       credentialId: undefined,
     });
     return notImplemented(stamper);
+  }
+
+  /**
+   * Loads a signer from a previously saved authentication session state.
+   *
+   * @param {AuthSessionState} state - The saved authentication session state
+   * @returns {Promise<Signer | undefined>} A promise that resolves to a Signer instance if the session is valid, undefined otherwise
+   */
+  public async loadAuthSessionState(
+    state: AuthSessionState,
+  ): Promise<Signer | undefined> {
+    const { type, expirationDateMs, user } = state;
+    if (expirationDateMs > Date.now()) {
+      if (type === "passkey") {
+        return this.loginWithPasskey();
+      } else {
+        const { bundle } = state;
+        const { orgId, idToken } = user;
+        return this.completeAuthWithBundle({ bundle, orgId, idToken });
+      }
+    }
+    return undefined;
   }
 
   // TODO: ... and many more.

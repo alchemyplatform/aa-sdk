@@ -156,3 +156,14 @@ export type AuthProviderCustomization = {
   claims?: string;
   otherParameters?: Record<string, string>;
 };
+
+// Signer state types
+export type AuthSessionState =
+  | {
+      type: "email" | "oauth" | "otp";
+      bundle: string;
+      expirationDateMs: number;
+      user: User;
+      chainId: number;
+    }
+  | { type: "passkey"; user: User; expirationDateMs: number; chainId: number };

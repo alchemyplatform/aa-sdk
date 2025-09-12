@@ -9,6 +9,7 @@ import {
 import type {
   AddOauthProviderParams,
   AuthMethods,
+  AuthSessionState,
   OauthProviderInfo,
   PasskeyInfo,
   TurnkeyStamper,
@@ -147,6 +148,12 @@ export class Signer {
   public async disconnect(): Promise<void> {
     this.isDisconnected = true;
     (this.turnkey.stamper as TurnkeyStamper).clear?.();
+  }
+
+  public async getAuthSessionState(): Promise<AuthSessionState> {
+    this.throwIfDisconnected();
+    // TODO: retrieve and deserialize AuthSessionState from wagmi connector
+    return notImplemented();
   }
 
   private throwIfDisconnected(): void {
