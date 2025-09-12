@@ -28,6 +28,13 @@ Before you begin, ensure you have:
 - A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy
 - A signer to own the account and sign messages
 
+<Info>
+  If the original transaction is already being mined, the replacement
+  transaction may be dropped. In this case, you won't be able to retrieve data
+  using the replacement's call ID, and the original transaction will be
+  included!
+</Info>
+
 <Tabs>
   <Tab title="React">
     <Markdown src="react.mdx" />

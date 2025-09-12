@@ -1,0 +1,105 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+See the [`sendCalls` SDK
+reference](/docs/wallets/reference/account-kit/wallet-client/functions/sendCalls)
+for full descriptions of the parameters used in the following example.
+
+When re-sending calls without a `nonceOverride`, the client automatically uses the same nonce as the pending transaction, replacing it.
+
+You'll need the following env variables:
+
+- `ALCHEMY_API_KEY`: An [Alchemy API Key](https://dashboard.alchemy.com/apps)
+- `ALCHEMY_POLICY_ID`: A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy ID
+- `PRIVATE_KEY`: A private key for a signer
+
+<CodeBlocks>
+
+```ts twoslash title="retryTransaction.ts"
+import { client, config } from "./client.ts";
+
+// Send initial transaction
+const { preparedCallIds } = await client.sendCalls({
+  capabilities: {
+    paymasterService: {
+      policyId: config.policyId,
+    },
+  },
+  calls: [
+    {
+      to: "0x0000000000000000000000000000000000000000",
+      value: "0x00",
+      data: "0x",
+    },
+  ],
+});
+
+console.log("Initial transaction:", preparedCallIds[0]);
+
+// Check status
+const status = await client.getCallsStatus({
+  id: preparedCallIds[0]!,
+});
+
+console.log("Transaction status:", status.status);
+
+// If stuck (status 100), send replacement
+if (status.status === 100) {
+  console.log("Transaction pending, sending replacement...");
+
+  // Re-send without nonceOverride to replace stuck transaction
+  const { preparedCallIds: replacementIds } = await client.sendCalls({
+    capabilities: {
+      paymasterService: {
+        policyId: config.policyId,
+      },
+    },
+    calls: [
+      {
+        to: "0x0000000000000000000000000000000000000000",
+        value: "0x00",
+        data: "0x",
+      },
+    ],
+  });
+
+  console.log("Replacement transaction:", replacementIds[0]);
+
+  // Wait for replacement to confirm
+  const result = await client.waitForCallsStatus(preparedCallIds[0]!);
+
+  console.log("Replacement confirmed:", result);
+}
+```
+
+```ts twoslash title="client.ts"
+import "dotenv/config";
+import { type Address, type Hex, toHex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+};
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>
