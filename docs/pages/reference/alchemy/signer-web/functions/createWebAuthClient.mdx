@@ -5,10 +5,15 @@ description: Overview of the createWebAuthClient method
 slug: wallets/reference/alchemy/signer-web/functions/createWebAuthClient
 ---
 
-Creates a web-based authentication client configured for browser environments.
+Creates a web-based AuthClient configured for browser environments.
+This function sets up an AuthClient with iframe-based TEK stamper for secure key management
+and popup-based OAuth flow for social authentication.
 
-This function sets up an AuthClient with Turnkey's IframeStamper for secure key management
-in web applications. The iframe is automatically created and managed in the DOM.
+The created AuthClient supports:
+
+- Email OTP authentication
+- OAuth authentication via popup windows
+- Secure key management through Turnkey iframe stamper
 
 ## Import
 
@@ -22,16 +27,22 @@ import { createWebAuthClient } from "@alchemy/signer-web";
 import { createWebAuthClient } from "@alchemy/signer-web";
 
 const authClient = createWebAuthClient({
-  apiKey: "your-api-key",
-  iframeElementId: "my-turnkey-iframe",
+  apiKey: "your-alchemy-api-key",
   iframeContainerId: "my-iframe-container",
 });
 
-// Send OTP via email
+// Send email OTP
 await authClient.sendEmailOtp({ email: "user@example.com" });
 
-// Submit OTP code to authenticate
+// Submit OTP code
 const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+
+// OAuth login
+const signer = await authClient.loginWithOauth({
+  type: "oauth",
+  authProviderId: "google",
+  mode: "popup",
+});
 ```
 
 ## Parameters
@@ -40,25 +51,25 @@ const signer = await authClient.submitOtpCode({ otpCode: "123456" });
 
 `WebAuthClientParams`
 
-- Configuration parameters for the auth client
+- Configuration parameters for the web auth client
 
 ### params.apiKey
 
 `string`
 
-- The API key for authentication with Alchemy services
+- API key for authentication with Alchemy services
 
 ### params.iframeElementId
 
 `string`
 
-- The ID for the iframe element used by Turnkey
+- ID for the iframe element used by Turnkey stamper
 
 ### params.iframeContainerId
 
 `string`
 
-- The ID for the container element that will hold the iframe
+- ID for the container element that holds the iframe
 
 ## Returns
 

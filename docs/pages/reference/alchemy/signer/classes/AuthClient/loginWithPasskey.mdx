@@ -5,7 +5,8 @@ description: Overview of the loginWithPasskey method
 slug: wallets/reference/alchemy/signer/classes/AuthClient/loginWithPasskey
 ---
 
-Authenticates a user using a passkey.
+Initiates passkey (WebAuthn) authentication flow.
+This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
 
 ## Import
 
@@ -13,7 +14,13 @@ Authenticates a user using a passkey.
 import { AuthClient } from "@alchemy/signer";
 ```
 
+## Usage
+
+```ts
+const signer = await authClient.loginWithPasskey();
+```
+
 ## Returns
 
 `Promise<Signer>`
-A promise that resolves to a Signer instance upon successful authentication
+Promise that resolves to an authenticated Signer instance
