@@ -1,0 +1,41 @@
+---
+title: Retry Transactions
+slug: wallets/transactions/retry-transactions
+---
+
+Replace stuck transactions by re-preparing and sending calls again without waiting, easily.
+
+Key use cases:
+
+- Replace transactions stuck due to low gas prices
+- Speed up pending transactions by increasing gas fees
+- Override transactions that have been pending for too long
+- Cancel stuck transactions by replacing with a no-op
+
+## The Retry flow
+
+1. Send initial transaction
+2. Monitor transaction status
+3. If stuck/pending too long, re-prepare the same call
+4. Send with higher gas to replace the stuck transaction
+5. Original transaction gets dropped from mempool
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- An [Alchemy API Key](https://dashboard.alchemy.com/apps)
+- A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy
+- A signer to own the account and sign messages
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="Other JS">
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="APIs">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>

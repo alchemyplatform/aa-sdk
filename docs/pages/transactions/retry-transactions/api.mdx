@@ -1,0 +1,266 @@
+You will need to fill in values wrapped in curly braces like `{SIGNER_ADDRESS}`.
+
+<Steps>
+
+<Step title="(If needed) Request an account">
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "wallet_requestAccount",
+    "params": [
+      {
+        "signerAddress": "{SIGNER_ADDRESS}"
+      }
+    ]
+  }'
+```
+
+This returns:
+
+```bash
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "accountAddress": "ACCOUNT_ADDRESS",
+    "id": "ACCOUNT_ID"
+  }
+}
+```
+
+For other potential responses, [check out the API reference!](https://www.alchemy.com/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account)
+
+</Step>
+
+<Step title="Send initial transaction">
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "wallet_prepareCalls",
+    "params": [
+      {
+        "calls": [
+          {
+            "to": "{TO_ADDRESS}",
+            "value": "{VALUE}",
+            "data": "{DATA}"
+          }
+        ],
+        "from": "{ACCOUNT_ADDRESS}",
+        "chainId": "{CHAIN_ID}",
+        "capabilities": {
+          "paymasterService": {
+            "policyId": "{PAYMASTER_POLICY_ID}"
+          }
+        }
+      }
+    ]
+  }'
+```
+
+This returns:
+
+```bash
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "type": "user-operation-v070",
+    "data": "USER_OPERATION_DATA",
+    "chainId": "CHAIN_ID",
+    "signatureRequest": {
+      "type": "personal_sign",
+      "data": {
+        "raw": "HASH_TO_SIGN"
+      },
+      "rawPayload": "RAW_PAYLOAD"
+    }
+  }
+}
+```
+
+Sign the `raw` field and send the transaction as usual. TODO: link => send transactions.
+
+</Step>
+
+<Step title="Check transaction status">
+
+After sending the transaction and getting a `PREPARED_CALL_ID`, monitor its status:
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_getCallsStatus",
+    "params": [
+      [
+        "{PREPARED_CALL_ID}"
+      ]
+    ],
+    "id": 1
+  }'
+```
+
+This returns:
+
+```bash
+{
+  "id": "1",
+  "jsonrpc": "2.0",
+  "result": {
+    "id": "PREPARED_CALL_ID",
+    "chainId": "CHAIN_ID",
+    "atomic": true,
+    "status": 100,
+    "receipts": []
+  }
+}
+```
+
+If `status` remains 100 (Pending) for too long, proceed to retry.
+
+</Step>
+
+<Step title="Re-prepare the same call with default nonce">
+
+To replace the stuck transaction, re-prepare the same call. This will automatically use the same nonce as the pending transaction as long as you don't override the nonce!
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "wallet_prepareCalls",
+    "params": [
+      {
+        "calls": [
+          {
+            "to": "{SAME_TO_ADDRESS}",
+            "value": "{SAME_VALUE}",
+            "data": "{SAME_DATA}"
+          }
+        ],
+        "from": "{ACCOUNT_ADDRESS}",
+        "chainId": "{CHAIN_ID}",
+        "capabilities": {
+          "paymasterService": {
+            "policyId": "{PAYMASTER_POLICY_ID}"
+          }
+        }
+      }
+    ]
+  }'
+```
+
+This will return a new signature request with updated gas prices:
+
+```bash
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "type": "user-operation-v070",
+    "data": "NEW_USER_OPERATION_DATA",
+    "chainId": "CHAIN_ID",
+    "signatureRequest": {
+      "type": "personal_sign",
+      "data": {
+        "raw": "NEW_HASH_TO_SIGN"
+      },
+      "rawPayload": "NEW_RAW_PAYLOAD"
+    }
+  }
+}
+```
+
+</Step>
+
+<Step title="Sign and send the replacement transaction">
+
+Sign the new signature request and send it:
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_sendPreparedCalls",
+    "params": [
+      {
+        "type": "user-operation-v070",
+        "data": "{NEW_USER_OPERATION_DATA}",
+        "chainId": "{CHAIN_ID}",
+        "signature": {
+          "type": "secp256k1",
+          "data": "{NEW_SIGNATURE}"
+        }
+      }
+    ],
+    "id": 1
+  }'
+```
+
+This returns:
+
+```bash
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "preparedCallIds": [
+      "NEW_PREPARED_CALL_ID"
+    ]
+  }
+}
+```
+
+The replacement transaction will use the same nonce as the stuck transaction, causing the original to be dropped from the mempool.
+
+</Step>
+
+<Step title="Monitor the replacement transaction">
+
+Check the status of your replacement transaction:
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_getCallsStatus",
+    "params": [
+      [
+        "{NEW_PREPARED_CALL_ID}"
+      ]
+    ],
+    "id": 1
+  }'
+```
+
+Note that the status codes are:
+| Code | Title |
+|------|--------------------------|
+| 100 | Pending |
+| 200 | Confirmed |
+| 400 | Offchain Failure |
+| 500 | Onchain Failure |
+| 600 | Partial Onchain Failure |
+
+</Step>
+
+</Steps>
+
+<Tip>
+  To cancel a stuck transaction entirely, send a no-op replacement (same `from`
+  and `to` address with empty data).
+</Tip>
