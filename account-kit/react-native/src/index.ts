@@ -6,7 +6,6 @@ import "node-libs-react-native/globals.js";
 export {
   useAccount,
   useAddOauthProvider,
-  useAddPasskey,
   useAuthenticate,
   useAuthError,
   useBundlerClient,
@@ -16,10 +15,7 @@ export {
   useExportAccount,
   useListAuthMethods,
   useLogout,
-  useMFA,
   useRemoveEmail,
-  useRemoveOauthProvider,
-  useRemovePasskey,
   useSendUserOperation,
   useSigner,
   useSignerStatus,
@@ -31,7 +27,6 @@ export {
   useSolanaSigner,
   useSolanaConnection,
   useSolanaTransaction,
-  useUiConfig,
   useUser,
   useWaitForUserOperationTransaction,
 } from "@account-kit/react/hooks";
