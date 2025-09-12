@@ -65,7 +65,7 @@ if (status.status === 100) {
   console.log("Replacement transaction:", replacementIds[0]);
 
   // Wait for replacement to confirm
-  const result = await client.waitForCallsStatus(preparedCallIds[0]!);
+  const result = await client.waitForCallsStatus(replacementIds[0]!);
 
   console.log("Replacement confirmed:", result);
 }
