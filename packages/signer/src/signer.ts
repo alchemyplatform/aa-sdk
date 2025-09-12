@@ -9,6 +9,7 @@ import {
 import type {
   AddOauthProviderParams,
   AuthMethods,
+  AuthSessionState,
   OauthProviderInfo,
   PasskeyInfo,
   TurnkeyStamper,
@@ -41,7 +42,7 @@ export class Signer {
     // TODO: replace apiKey with transport once it's ready.
     private readonly apiKey: string,
     private readonly turnkey: TurnkeyClient,
-    private readonly user: User
+    private readonly user: User,
   ) {}
 
   public static async create({
@@ -52,7 +53,7 @@ export class Signer {
   }: CreateSignerParams): Promise<Signer> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper
+      stamper,
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
@@ -121,7 +122,7 @@ export class Signer {
   }
 
   public async addOauthProvider(
-    params: AddOauthProviderParams
+    params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -133,7 +134,7 @@ export class Signer {
   }
 
   public async addPasskey(
-    params: CredentialCreationOptions
+    params: CredentialCreationOptions,
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -149,8 +150,9 @@ export class Signer {
     (this.turnkey.stamper as TurnkeyStamper).clear?.();
   }
 
-  public async getStorableState(): Promise<unknown> {
+  public async getAuthSessionState(): Promise<AuthSessionState> {
     this.throwIfDisconnected();
+    // TODO: retrieve and deserialize AuthSessionState from wagmi connector
     return notImplemented();
   }
 
