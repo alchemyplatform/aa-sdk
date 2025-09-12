@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.62.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.1...v4.62.2) (2025-09-12)
+
+### Bug Fixes
+
+- don't wait for call status until call id is defined ([#2034](https://github.com/alchemyplatform/aa-sdk/issues/2034)) ([3c6a7da](https://github.com/alchemyplatform/aa-sdk/commit/3c6a7da7c5ecb06e9550f71861e2e268d2dd92c4))
+
+### Features
+
+- add vale and lychee for docs linting ([#2015](https://github.com/alchemyplatform/aa-sdk/issues/2015)) ([515128c](https://github.com/alchemyplatform/aa-sdk/commit/515128c2553c8adeaba7bc525324e961e22be9bd))
+
 ## [4.62.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.0...v4.62.1) (2025-09-11)
 
 ### Bug Fixes
