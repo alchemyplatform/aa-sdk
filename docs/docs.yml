@@ -1126,6 +1126,8 @@ navigation:
                     contents:
                       - page: constructor
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/constructor.mdx
+                      - page: handleOauthRedirect
+                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/handleOauthRedirect.mdx
                       - page: loadAuthSessionState
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/loadAuthSessionState.mdx
                       - page: loginWithOauth
