@@ -1,10 +1,11 @@
 In JavaScript, you can use [Viem](https://viem.sh/docs/contract/encodeFunctionData) to encode function call data.
 
 <CodeBlocks>
+
 ```ts twoslash title="sendCalls.ts" maxLines=999 focus={9-13}
 import { encodeFunctionData } from "viem";
 import { client } from "./client.ts";
-import { exampleAbi } from "./abi.ts"
+import { exampleAbi } from "./abi.ts";
 
 await client.sendCalls({
   calls: [
