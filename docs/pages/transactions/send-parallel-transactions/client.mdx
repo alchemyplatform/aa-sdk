@@ -1,0 +1,101 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+See the [`sendCalls` SDK
+reference](/docs/wallets/reference/account-kit/wallet-client/functions/sendCalls)
+for full descriptions of the parameters used in the following example.
+
+Use the `nonceOverride` capability on the smart wallet client's `sendCalls` or `prepareCalls` action.
+
+You'll need the following env variables:
+
+- `ALCHEMY_API_KEY`: An [Alchemy API Key](https://dashboard.alchemy.com/apps)
+- `ALCHEMY_POLICY_ID`: A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy ID
+- `PRIVATE_KEY`: A private key for a signer
+
+<CodeBlocks>
+
+```ts twoslash title="sendParallelCalls.ts"
+import { client, config } from "./client.ts";
+
+const [
+  { preparedCallIds: preparedCallIdsOne },
+  { preparedCallIds: preparedCallIdsTwo },
+] = await Promise.all([
+  client.sendCalls({
+    capabilities: {
+      paymasterService: {
+        policyId: config.policyId,
+      },
+      nonceOverride: {
+        nonceKey: "0x01",
+      },
+    },
+    calls: [
+      {
+        to: "0x0000000000000000000000000000000000000000",
+        value: "0x00",
+        data: "0x",
+      },
+    ],
+  }),
+  client.sendCalls({
+    capabilities: {
+      paymasterService: {
+        policyId: config.policyId,
+      },
+      nonceOverride: {
+        nonceKey: "0x02",
+      },
+    },
+    calls: [
+      {
+        to: "0x0000000000000000000000000000000000000000",
+        value: "0x00",
+        data: "0x",
+      },
+    ],
+  }),
+]);
+
+console.log("sendCalls result:", { preparedCallIdsOne, preparedCallIdsTwo });
+
+const callStatusResults = await Promise.all([
+  client.waitForCallsStatus({ id: preparedCallIdsOne[0]! }),
+  client.waitForCallsStatus({ id: preparedCallIdsTwo[0]! }),
+]);
+
+console.log("Calls status results:", callStatusResults);
+```
+
+```ts twoslash title="client.ts"
+import "dotenv/config";
+import { type Address, type Hex, toHex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+};
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>

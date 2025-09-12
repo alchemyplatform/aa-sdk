@@ -99,12 +99,11 @@ Note the `signatureRequest`! This is what you now have to sign, and the returned
 </Step>
 
 <Step title="Sign the signature request">
-
-To sign the signature request, you should sign the `raw` field (note, this is not a string! You need to pass it to your signer as raw bytes, generally like so: `{ raw: "0x..." }`) with your signer of choice.
-
-This should use the `personal_sign` RPC method, as noted by the `type` in the `signatureRequest`.
-
-Alternatively, you can sign the raw payload with a simple `eth_sign` but this RPC method is not favored due to security concerns.
+    To sign the signature request, you should sign the `raw` field (note, this is not a string! You need to pass it to your signer as raw bytes, generally like so: `{ raw: "0x..." }`) with your signer of choice.
+    
+    This should use the `personal_sign` RPC method, as noted by the `type` in the `signatureRequest`.
+    
+    Alternatively, you can sign the raw payload with a simple `eth_sign` but this RPC method is not favored due to security concerns.
 
 </Step>
 
