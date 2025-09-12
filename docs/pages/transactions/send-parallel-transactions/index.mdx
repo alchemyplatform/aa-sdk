@@ -3,7 +3,7 @@ title: Send parallel transactions
 slug: wallets/transactions/send-parallel-transactions
 ---
 
-You can easily send multiple parallel transactions at once with Alchemy Wallet APIs.
+You can easily send multiple parallel transactions at once with Alchemy Wallet APIs. Note that you don't need to send parallel transactions for batching calls! This is for sending new transactions when, for example, there's already a transaction in the mempool from your account.
 
 ## Prerequisites
 
@@ -12,6 +12,8 @@ Before you begin, ensure you have:
 - An [Alchemy API Key](https://dashboard.alchemy.com/apps)
 - A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy
 - A signer to own the account and sign messages
+
+<Info>The `nonceKey` override must fit into a `uint152`!</Info>
 
 <Tabs>
   <Tab title="React">Coming soon!</Tab>
