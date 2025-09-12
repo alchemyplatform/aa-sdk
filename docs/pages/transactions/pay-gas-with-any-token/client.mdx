@@ -38,7 +38,7 @@ const { preparedCallIds } = await client.sendCalls({
 
 ```ts twoslash title="client.ts"
 import "dotenv/config";
-import { Address, Hex, toHex } from "viem";
+import { type Address, type Hex, toHex } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 import { createSmartWalletClient } from "@account-kit/wallet-client";

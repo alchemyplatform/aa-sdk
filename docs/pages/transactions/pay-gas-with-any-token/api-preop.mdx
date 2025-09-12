@@ -12,7 +12,7 @@
   "method": "wallet_requestAccount",
   "params": [
     { 
-      "signerAddress": "'$SIGNER_ADDRESS'",
+      "signerAddress": "'$SIGNER_ADDRESS'"
     }
   ]
 }
@@ -60,7 +60,7 @@ curl --request POST \
   </Step>
   <Step title="(If Needed) Sign Permit Request">
     If the response to step 2 is a type `paymaster-permit`, then the user must sign the signature request and return via a second call to `wallet_prepareCalls`. Else, skip to step 5.
-    The `data` field on the `paymaster-permit` response contains a [EIP-2612](https://eips.ethereum.org/EIPS/eip-2612) Permit typed message. It is recommended that the user
+    The `data` field on the `paymaster-permit` response contains a [Permit typed message](https://eips.ethereum.org/EIPS/eip-2612). It is recommended that the user
     checks the fields of this message prior to calculating its hash. The `signatureRequest` field on the `paymaster-permit` response is a required signature over the calculated
     hash. This is typically an ERC-712 typed signature envelope with a field for the hash to sign over.
   </Step>

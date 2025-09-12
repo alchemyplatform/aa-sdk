@@ -1,22 +1,22 @@
 ---
 title: Pay gas with any token
-description: Enable users to pay gas with ERC-20 tokens like USDC
-slug: wallets/transactions/sponsor-gas/pay-gas-with-any-token/overview
+description: Enable users to pay gas with tokens like USDC
+slug: wallets/transactions/pay-gas-with-any-token
 ---
 
 Gas fees paid in the native token can feel foreign to users that primarily hold stablecoins or your app's own token.
-With smart wallets, you can allow users to pay for gas with any ERC-20 token, streamlining the user experience.
+With Smart Wallets, you can allow users to pay for gas with any token, streamlining the user experience.
 
 ## How it works
 
-When a user pays for gas with an ERC-20 token, the gas is fronted using the network's native gas token and the ERC-20 tokens are transferred from the user's wallet to a wallet you configure in the policy. The equivalent USD amount and the admin fee are then added to your monthly invoice.
+When a user pays for gas with a token, the gas is fronted using the network's native gas token and the payment tokens are transferred from the user's wallet to a wallet you configure in the policy.
+The equivalent USD amount and the admin fee are then added to the developer's monthly invoice.
 
-We recommend using "post-operation" mode for most use cases. This mode requires users to hold enough of the gas token in their wallet after their operation completes to pay the gas fee. If the balance is insufficient, the transaction reverts and you sponsor any gas used without ERC-20 payment. If this doesn't work for your use case, see the [ERC-20 gas payment modes](#erc-20-gas-payment-modes) section below for more options.
+Post-operation mode is recommended. This mode requires users to hold enough of the gas token in their wallet after their operation completes to pay the gas fee. If the balance is insufficient, the transaction reverts and you sponsor any gas used without token payment. If this doesn't work for your use case, see the [Token gas payment modes](#token-gas-payment-modes) section below for more options.
 
 ## Prerequisites
 
 - API key from your [dashboard](https://dashboard.alchemy.com/apps)
-- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx).
 - [A "pay gas with any token" policy](https://dashboard.alchemy.com/gas-manager/policy/create).
 
 ## Implementation
@@ -40,25 +40,28 @@ We recommend using "post-operation" mode for most use cases. This mode requires 
 Pay gas with any token also works with the prepare calls methods in the various frameworks. Usage of the capability will be the same as when using send calls. It is recommended to use prepare calls if you want to inspect the prepared call prior to prompting the user for signature.
 
 <Tabs>
-  <Tab title="React">TODO - add link to `usePrepareCalls`</Tab>
+  <Tab title="React">
+    See the [`usePrepareCalls` react
+    hook](/wallets/reference/account-kit/react/hooks/usePrepareCalls)
+  </Tab>
   <Tab title="Javascript">
     See the [`prepareCalls` SDK
-    reference](/docs/wallets/reference/account-kit/wallet-client/functions/prepareCalls)
+    reference](/wallets/reference/account-kit/wallet-client/functions/prepareCalls)
   </Tab>
   <Tab title="API">
     See the [`wallet_prepareCalls` API
-    reference](/docs/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
+    reference](/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
   </Tab>
 </Tabs>
 
 </Accordion>
 
-<Accordion title="ERC-20 gas payment modes">
+<Accordion title="Token gas payment modes">
 The configured mode determines when the user's token payment occurs.
 
 **[Recommended] Post-Operation**
 
-- No upfront allowance is required
+- No upfront allowance is required.
 - The user signs an approval inside the same calls batch, and the paymaster pulls the token after the operation has executed.
 - If that post-operation transfer fails, the entire batch is reverted and you (the developer) pay the gas fee.
 
@@ -68,26 +71,26 @@ The configured mode determines when the user's token payment occurs.
 - This can be done either through a prior call to `approve()` or by using an [ERC-7597 Permit](https://eips.ethereum.org/EIPS/eip-7597) signature.
 - If the required allowance isn't in place when the user operation is submitted, it will be rejected.
 
-We recommend using post-operation mode for most use cases. This mode:
+Post-operation mode is recommended for most use cases. This mode:
 
 - Is the most gas efficient as it only requires a single transfer.
 - Works with all ERC-20 tokens.
 - Only ever requires a single signature from the user.
 
-However, because tokens are deducted after execution, you may be required to pay for gas without receiving sufficient ERC-20 payment.
-Ensure that users have enough token left over to pay for gas after the operation, otherwise you won't receive payment from users for gas and the operation will revert.
-If the operation results in a static amount of the user’s ERC-20 token balance after execution and you can account for this before submitting the operation, use PostOp mode.
+However, because tokens are deducted after execution, the developer may be required to pay for gas without receiving sufficient token payment.
+The developer should ensure that users have enough token left over to pay for gas after the operation, otherwise they won't receive payment from users for gas and the operation will revert.
+If the operation results in a static amount of the user’s token balance after execution and the developer can account for this before submitting the operation, use PostOp mode.
 
 Examples of static amounts:
 
 - Payments, purchases, and deposits
-- Operations unrelated to the ERC-20 token
+- Operations unrelated to the payment token
 
 Examples of dynamic amounts:
 
-- Swaps of the ERC-20 payment token
+- Swaps that include the payment token
 
-If you sponsor operations that result in dynamic amounts of the ERC-20 token left over, consider using pre-operation mode. See an example implementation below.
+If you sponsor operations that result in dynamic amounts of the payment token left over, consider using pre-operation mode. See an example implementation below.
 
 </Accordion>
 
@@ -110,7 +113,7 @@ The return type of `prepareCalls` contains a `feePayment` field containing fee i
   }
 ```
 
-Calling `prepareCalls` using the ERC-20 paymaster capability counts against your policy's pending total. If you intend on making many
+Calling `prepareCalls` using the token paymaster capability counts against your policy's pending total. If you intend on making many
 calls to surface the best price, set the `onlyEstimation` parameter for estimation, and then remove only when the user intends to sign the result.
 
 <Warning>
@@ -143,7 +146,7 @@ you feel comfortable maintaining as an allowance on the paymaster contract. Sett
 In pre-operation mode, you can set the paymaster service capability to automatically return a request for a Permit signature using the `erc20.preOp.autoPermit` field.
 This permit will allow an allowance to be set on the paymaster contract from the sender prior to any token transfers needed during pre operation.
 
-To be eligible for auto-injected permits, the ERC-20 gas token must:
+To be eligible for auto-injected permits, the payment gas token must:
 
 1. Be [ERC-7597](https://eips.ethereum.org/EIPS/eip-7597) compliant.
 2. Expose a `version()` function.
@@ -163,7 +166,7 @@ approval, the following steps inject the permit:
 
 Build more:
 
-- [Sponsor gas for users](/docs/wallets/transactions/sponsor-gas/sponsor-gas)
+- [Sponsor gas for users](/wallets/transactions/sponsor-gas)
 
 Troubleshooting:
 

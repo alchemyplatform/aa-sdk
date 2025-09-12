@@ -1,13 +1,19 @@
 <Info>Required SDK version: ^v4.61.0</Info>
 
 Use the `useSendCalls` hook and the `paymasterService` capability parameter to send calls with
-an ERC20 token paymaster. You can also use the `usePrepareCalls` hook to only prepare the operation for signing.
+an ERC20 token paymaster.
+
+**Prerequisites**
+
+- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx).
+
+See the [`useSendCalls` SDK reference](/wallets/reference/account-kit/react/hooks/useSendCalls) for parameter descriptions.
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.tsx" focus={5-7,14-27}
+```tsx twoslash title="sendCalls.tsx" focus={5-7,14-27}
 import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
-import { config } from "@/app/components/config";
+import { config } from "./config";
 
 export default function SendCalls() {
   const { client } = useSmartAccountClient({});
@@ -39,26 +45,22 @@ export default function SendCalls() {
             to: "0x0000000000000000000000000000000000000000",
             value: "0x00",
             data: "0x",
-          }
-        ]
+          },
+        ],
       });
 
       console.log("Transaction sent with ID:", ids[0]);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  return (
-    <button onClick={handleSend}>
-      Click to Send
-    </button>
-  );
+  return <button onClick={handleSend}>Click to Send</button>;
 }
 ```
 
 ```ts twoslash title="config.ts"
-import { Address, toHex } from "viem";
+import { type Address, toHex } from "viem";
 
 export const config = {
   policyId: process.env.ALCHEMY_POLICY_ID!,
