@@ -5,7 +5,7 @@ description: Overview of the AuthClient method
 slug: wallets/reference/alchemy/signer/classes/AuthClient/constructor
 ---
 
-Creates a new AuthClient instance.
+Creates a new AuthClient instance
 
 ## Import
 
@@ -20,3 +20,27 @@ import { AuthClient } from "@alchemy/auth";
 `AuthClientParams`
 
 - Configuration parameters for the auth client
+
+### params.apiKey
+
+`string`
+
+- API key for authentication with Alchemy services
+
+### params.createTekStamper
+
+`CreateTekStamperFn`
+
+- Function to create a TEK stamper
+
+### params.createWebAuthnStamper
+
+`CreateWebAuthnStamperFn`
+
+- Function to create a WebAuthn stamper
+
+### params.handleOauthFlow
+
+`HandleOauthFlowFn`
+
+- Function to handle OAuth authentication flow

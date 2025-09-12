@@ -5,7 +5,8 @@ description: Overview of the loginWithOauth method
 slug: wallets/reference/alchemy/signer/classes/AuthClient/loginWithOauth
 ---
 
-Authenticates a user using OAuth provider.
+Initiates OAuth authentication with the specified provider.
+This method handles the complete OAuth flow including provider URL generation and response processing.
 
 ## Import
 
@@ -23,13 +24,53 @@ const authSession = await authClient.loginWithOauth({
 });
 ```
 
+## Usage
+
+```ts
+const signer = await authClient.loginWithOauth({
+  type: "oauth",
+  authProviderId: "google",
+  mode: "popup",
+});
+```
+
 ## Parameters
 
 ### params
 
 `LoginWithOauthParams`
 
-- The OAuth authentication parameters
+- Parameters for OAuth authentication
+
+### params.authProviderId
+
+`string`
+
+- OAuth provider identifier (e.g., "google", "facebook")
+
+### params.scope
+
+`string`
+
+- OAuth scope parameters
+
+### params.claims
+
+`string`
+
+- OAuth claims parameters
+
+### params.otherParameters
+
+`Record<string, string>`
+
+- Additional OAuth parameters
+
+### params.mode
+
+`"popup" | "redirect"`
+
+- OAuth flow mode, defaults to "redirect"
 
 ## Returns
 
