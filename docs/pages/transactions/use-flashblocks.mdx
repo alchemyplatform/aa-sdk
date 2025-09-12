@@ -1,0 +1,111 @@
+---
+title: Using flashblocks for pre-confirmation
+description: A quick guide to use flashblocks for pre-confirmation transactions
+slug: wallets/transactions/use-flashblocks.mdx
+---
+
+Flashblocks gives developers near-instant transaction visibility, reducing perceived block time from 2 seconds to 200 milliseconds. This enables apps to deliver faster, smoother user experiences for high-frequency use cases like DEXs, onchain gaming, and real-time interactions.
+
+With Flashblocks, developers can treat pending transactions as effectively confirmed within 200 ms, unlocking UX patterns that were previously impractical onchain.
+
+Flashblocks is enabled for developers on Base Sepolia and Mainnets. When other chains support flashblocks, support will be added accordingly.
+
+For General flashblocks support, please read [Flashblocks API Quickstart](https://www.alchemy.com/docs/reference/base-flashblocks-api-quickstart).
+
+**Prerequisites**
+
+- minimum Typescript version of 5
+
+## Get UserOperation with pre-confirmation state
+
+<Tabs>
+  <Tab title="React">
+    ## React
+
+Using React with Flashblocks is the same as [sending a UserOperation](/wallets/transactions/send/send-user-operations); the only difference is adding a waitForTxnTag: "pending" argument when using the useSendUserOperation hook.
+
+<Tip>
+  In the below example, we use `ModularAccountV2` as the underlying Smart
+  Contract type, which is our default and recommended account. To learn more
+  about all the account options, check out our guide [on choosing a smart
+  account](/wallets/smart-contracts/choosing-a-smart-account).
+</Tip>
+
+    ```tsx twoslash
+    import React from "react";
+    import {
+      type UseSendUserOperationResult,
+      useSendUserOperation,
+      useSmartAccountClient,
+    } from "@account-kit/react";
+
+    export default function MyOpSenderComponent() {
+      const { client } = useSmartAccountClient({});
+
+      const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+        client,
+        // optional parameter that will wait for the transaction to be mined before returning
+        waitForTxn: true,
+        waitForTxnTag: "pending",
+        onSuccess: ({ hash, request }) => {
+          // [optional] Do something with the hash and request
+        },
+        onError: (error) => {
+          // [optional] Do something with the error
+        },
+      });
+
+      return (
+        <div>
+          <button
+            onClick={() =>
+              sendUserOperation({
+                uo: {
+                  target: "0xTARGET_ADDRESS",
+                  data: "0x",
+                  value: 0n,
+                },
+              })
+            }
+            disabled={isSendingUserOperation}
+          >
+            {isSendingUserOperation ? "Sending..." : "Send UO"}
+          </button>
+        </div>
+      );
+    }
+    ```
+
+  </Tab>
+  <Tab title="Wallet SDK">
+    ## Wallet SDK
+
+    Fetching a pre-confirmed UserOperation works the same way as fetching a mined UserOperation - you just need to pass a block tag to indicate that you want the pre-confirmed UO.
+
+    ```ts twoslash
+    	// Send a user operation as always
+    	const { hash } = await client.sendUserOperation(...);
+
+    	// Wait for user operation with "pending" tag.
+    	// This is how you get userOperation pre-confirmation
+    	await client.waitForUserOperationTransaction({hash, tag: "pending"});
+
+    	// Or, get user operation receipt with "pending" tag.
+    	let receipt = await client.getUserOperationReceipt(hash, "pending");
+
+    	// There is a new field "status" in the receipt struct, it indicates if a userOperation receipt is mined or pre-confirmed
+    	// receipt:  {
+    	//  userOpHash: '...',
+    	//	...
+    	//  status: 'preconfirmed' | 'mined'
+    	//}
+    ```
+
+  </Tab>
+  <Tab title="Wallet API">
+    ## Wallet API
+
+    New statuses - `Preconfirmed`, `Preconfirmed Onchain Failure`, and `Preconfirmed Partial Onchain Failure` -  have been introduced to indicate the UserOperation status when calling wallet_getCallsStatus.
+
+  </Tab>
+</Tabs>

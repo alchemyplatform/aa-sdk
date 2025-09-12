@@ -1,0 +1,82 @@
+---
+title: How to use AA with Flashblocks
+description: A quick guide to use flashblocks for pre-confirmation transactions with AA infra
+slug: wallets/transactions/low-level-infra/use-flashblocks-with-aa.mdx
+---
+
+Flashblocks are a transaction pre-confirmation feature that provides near-instant transaction feedback by streaming partial block updates every 200 milliseconds. This significantly reduces the effective block time from Base’s standard 2 seconds to just 200 milliseconds, a 10x increase.
+
+Flashblocks is great for developers who demand instant UX such as decentralized exchanges, onchain gaming, and other high-frequency applications.
+
+Flashblocks is enabled for developers on Base Sepolia and Mainnets. When other chains support flashblocks, support will be added accordingly.
+
+For General flashblocks support, please read [Flashblocks API Quickstart](https://www.alchemy.com/docs/reference/base-flashblocks-api-quickstart).
+
+## Integrate with flashblocks
+
+To get pre-confirmed UserOperations with flashblocks, use "pending" block tag with APIs that support flashblocks.
+
+<Tabs>
+  <Tab title="Wallet SDK">
+    ## Wallet SDK
+
+    Fetching a pre-confirmed UserOperation works the same way as fetching a mined UserOperation - you just need to pass a block tag to indicate that you want the pre-confirmed UO.
+
+    ```ts twoslash
+
+    	// Send a user operation as always
+    	const { hash } = await client.sendUserOperation(...);
+
+    	// Wait for user operation with "pending" tag.
+    	// This is how you get userOperation pre-confirmation
+    	await client.waitForUserOperationTransaction({hash, tag: "pending"});
+
+    	// Or, get user operation with Receipt with "pending" tag.
+    	let receipt = await client.getUserOperationReceipt(hash, "pending");
+
+    	// There is a new field "status" in the receipt struct, it indicates if a userOperation receipt is mined or pre-confirmed
+    	// receipt:  {
+    	//  userOpHash: '...',
+    	//	...
+    	//  status: 'preconfirmed'
+    	//}
+    ```
+
+  </Tab>
+
+  <Tab title="JsonRPC">
+    ## JsonRPC
+
+    `eth_getUserOperationReceipt` now accepts an additional `BlockTag` argument to specify the block from which to retrieve the UserOperation receipt.
+
+    ```json
+    // Add a block tag when calling eth_getUserOperationReceipt.
+    // request
+    {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "eth_getUserOperationReceipt",
+        "params": [
+            "0x1e4503ae4fbc2c78db63ad772bdf040869aee6f7e31f38e719d41b625bdffc72",
+            "pending"
+        ]
+    }
+
+    // response
+    {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "userOpHash": "0x1e4503ae4fbc2c78db63ad772bdf040869aee6f7e31f38e719d41b625bdffc72",
+            ...
+            "status": "preconfirmed"
+        }
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
+## Caveat
+
+Flashblocks only enables transaction pre-confirmation before a full block is emitted. However the onchain state won’t change until a full block is emitted. Thus, a follow up transaction can’t be submitted on the same nonce key via wallet APIs or bundler until the transaction is fully confirmed.
