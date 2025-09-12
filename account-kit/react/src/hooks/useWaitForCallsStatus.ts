@@ -47,7 +47,7 @@ export type UseWaitForCallsStatusResult = UseQueryResult<QueryResult>;
 export function useWaitForCallsStatus({
   client,
   id,
-  enabled,
+  enabled = true,
   ...params
 }: UseWaitForCallsStatusParams): UseWaitForCallsStatusResult {
   const { queryClient } = useAlchemyAccountContext();
@@ -79,7 +79,7 @@ export function useWaitForCallsStatus({
           });
         },
       ),
-      enabled: !!(client && smartWalletClient && id && (enabled ?? true)),
+      enabled: !!(client && smartWalletClient && id && enabled),
     },
     queryClient,
   );
