@@ -10,7 +10,7 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
+import { NotAuthenticatedError, OAuthProvidersError, UnsupportedFeatureError } from "../errors.js";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -175,6 +175,13 @@ export abstract class BaseSignerClient<
         targetPublicKey: publicKey,
       });
       return response;
+    }
+
+    if (params.type === "apiKey") {
+      // Accounts created with API keys should always be created server-side, otherwise
+      // it opens up a potential risk of users being able to create an account associated
+      // with an email address that is not their own.
+      throw new UnsupportedFeatureError("API key auth");
     }
 
     this.eventEmitter.emit("authenticating", { type: "passkey" });
