@@ -1,0 +1,76 @@
+If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to our smart wallets by connecting your existing signer.
+
+**Requirements**
+Your signer or embedded wallet provider must support `signAuthorization` in order to be compatible with EIP-7702 delegations.
+To bring your own signer, you'll create a `SmartAccountSigner` interface that implements `signAuthorization`.
+See the details for the interface requirements [here](/wallets/third-party/signers#implementing-smartaccountauthenticator-or-smartaccountsigner).
+
+For example, you can upgrade an existing Privy embedded EOA by extending `WalletClientSigner` to include the `signAuthorization` method exposed by Privy.
+
+<CodeBlocks>
+
+```ts twoslash example.ts
+import {
+  AuthorizationRequest,
+  SmartAccountSigner,
+  WalletClientSigner,
+} from "@aa-sdk/core";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+import { SignedAuthorization } from "viem/experimental";
+import { useSignAuthorization, useWallets } from "@privy-io/react-auth";
+
+const { wallets } = useWallets();
+const embeddedWallet = wallets.find((x) => x.walletClientType === "privy"); // or any other EIP-1193 provider
+const { signAuthorization } = useSignAuthorization();
+
+const baseSigner = new WalletClientSigner(
+  createWalletClient({
+    account: embeddedWallet!.address as Hex,
+    chain: sepolia,
+    transport: custom(await embeddedWallet!.getEthereumProvider()),
+  }),
+  "privy",
+);
+
+const signer: SmartAccountSigner = {
+  ...baseSigner,
+  signAuthorization: async (
+    unsignedAuth: AuthorizationRequest<number>,
+  ): Promise<SignedAuthorization<number>> => {
+    const contractAddress =
+      unsignedAuth.contractAddress ?? unsignedAuth.address;
+
+    const signature = await signAuthorization({
+      ...unsignedAuth,
+      contractAddress,
+    });
+
+    return {
+      ...unsignedAuth,
+      ...{
+        r: signature.r!,
+        s: signature.s!,
+        v: signature.v!,
+      },
+      address: contractAddress,
+    };
+  },
+};
+
+const signerAddress = await signer.getAddress();
+
+const client = createSmartWalletClient({
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer,
+  // hoist the signer address as the account when using 7702 mode
+  account: signerAddress,
+});
+
+// use the smart wallet client as normal with the 3rd party signer
+```
+
+</CodeBlocks>
