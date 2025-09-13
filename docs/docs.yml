@@ -197,7 +197,7 @@ navigation:
           - page: Sign requests
             path: wallets/pages/transactions/sign-requests.mdx
           - page: Using EIP-7702
-            path: wallets/pages/transactions/using-eip-7702.mdx
+            path: wallets/pages/transactions/using-eip-7702/index.mdx
           - page: Send batched transactions
             path: wallets/pages/transactions/send-batched-transactions.mdx
           - page: Sponsor gas
