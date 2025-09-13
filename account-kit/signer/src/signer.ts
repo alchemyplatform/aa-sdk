@@ -11,6 +11,13 @@ import type {
 } from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
+export type ApiKeyAuthParams = {
+  apiKey: {
+    publicKey: string;
+    privateKey: string;
+  };
+} & ({ createNew: true } | { orgId: string, createNew?: false })
+
 export type AuthParams =
   | {
       type: "email";
@@ -64,7 +71,8 @@ export type AuthParams =
       type: "otp";
       otpCode: string;
       multiFactors?: VerifyMfaParams[];
-    };
+    }
+  | ({ type: "apiKey" } & ApiKeyAuthParams);
 
 export type OauthProviderConfig =
   | {
