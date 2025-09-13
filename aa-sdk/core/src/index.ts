@@ -150,6 +150,7 @@ export {
   pick,
   resolveProperties,
   takeBytes,
+  unpackSignRawMessageBytes,
   toRecord,
 } from "./utils/index.js";
 export { getUserOperationError } from "./actions/smartAccount/getUserOperationError.js";

@@ -1,7 +1,7 @@
 import {
-  takeBytes,
   type SmartAccountAuthenticator,
   type AuthorizationRequest,
+  unpackSignRawMessageBytes,
 } from "@aa-sdk/core";
 import {
   hashMessage,
@@ -40,7 +40,7 @@ import {
   type IdTokenOnly,
   type AuthMethods,
 } from "./client/types.js";
-import { NotAuthenticatedError } from "./errors.js";
+import { NotAuthenticatedError, UnsupportedFeatureError } from "./errors.js";
 import { SignerLogger } from "./metrics.js";
 import {
   SessionManager,
@@ -83,12 +83,6 @@ type AlchemySignerStore = {
     idToken: string;
     accessToken?: string;
   };
-};
-
-type UnpackedSignature = {
-  r: `0x${string}`;
-  s: `0x${string}`;
-  v: bigint;
 };
 
 type InternalStore = Mutate<
@@ -337,6 +331,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return this.authenticateWithOtp(params);
           case "custom-jwt":
             return this.authenticateWithJwt(params);
+          case "apiKey":
+            throw new UnsupportedFeatureError("API key auth");
           default:
             assertNever(type, `Unknown auth type: ${type}`);
         }
@@ -418,6 +414,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           name: "signer_authnticate",
           data: { authType: "otp" },
         });
+        break;
+      case "apiKey":
         break;
       default:
         assertNever(type, `Unknown auth type: ${type}`);
@@ -638,7 +636,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         keccak256(serializedTx),
       );
 
-      const signature = this.unpackSignRawMessageBytes(signatureHex);
+      const signature = unpackSignRawMessageBytes(signatureHex);
 
       return serializeFn(tx, signature);
     },
@@ -680,7 +678,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const hashedAuthorization = hashAuthorization(unsignedAuthorization);
       const signedAuthorizationHex =
         await this.inner.signRawMessage(hashedAuthorization);
-      const signature = this.unpackSignRawMessageBytes(signedAuthorizationHex);
+      const signature = unpackSignRawMessageBytes(signedAuthorizationHex);
       const { address, contractAddress, ...unsignedAuthorizationRest } =
         unsignedAuthorization;
 
@@ -723,16 +721,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     mfaFactorId?: string;
   } => {
     return this.store.getState().mfaStatus;
-  };
-
-  private unpackSignRawMessageBytes = (
-    hex: `0x${string}`,
-  ): UnpackedSignature => {
-    return {
-      r: takeBytes(hex, { count: 32 }),
-      s: takeBytes(hex, { count: 32, offset: 32 }),
-      v: BigInt(takeBytes(hex, { count: 1, offset: 64 })),
-    };
   };
 
   /**
