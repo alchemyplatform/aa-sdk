@@ -42,7 +42,7 @@ const status = await client.getCallsStatus({
 
 console.log("Transaction status:", status.status);
 
-// If stuck (status 100), send replacement
+// If still pending (status 100), send replacement
 if (status.status === 100) {
   console.log("Transaction pending, sending replacement...");
 
