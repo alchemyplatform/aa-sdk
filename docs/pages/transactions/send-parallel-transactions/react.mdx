@@ -10,23 +10,23 @@ You'll need both `ALCHEMY_API_KEY` and `ALCHEMY_POLICY_ID` environment variables
 import { config } from "@/app/config";
 import {
   useSendCalls,
-  useSigner,
   useSmartAccountClient,
+  useSmartWalletClient,
 } from "@account-kit/react";
-import { createSmartWalletClient } from "@account-kit/wallet-client";
-import { alchemy } from "@account-kit/infra";
 
 export default function SendParallelCalls() {
   const { client } = useSmartAccountClient({});
   const { sendCallsAsync } = useSendCalls({ client });
-  const signer = useSigner();
+  const walletClient = useSmartWalletClient({
+    account: client?.account.address,
+  });
 
   const handleSend = async () => {
     if (!client) {
       throw new Error("Smart account client not connected");
     }
-    if (!signer) {
-      throw new Error("Signer not connected");
+    if (!walletClient) {
+      throw new Error("Smart wallet client not connected");
     }
 
     try {
@@ -70,15 +70,6 @@ export default function SendParallelCalls() {
       console.log("id of sent call one: ", idsOne);
       console.log("id of sent call two: ", idsTwo);
 
-      const walletClient = createSmartWalletClient({
-        transport: alchemy({
-          apiKey: config.alchemyApiKey,
-        }),
-        account: client.getAddress(),
-        chain: client.chain!,
-        signer,
-      });
-
       const result = await Promise.all([
         walletClient.waitForCallsStatus({ id: idsOne[0]! }),
         walletClient.waitForCallsStatus({ id: idsTwo[0]! }),
@@ -89,7 +80,6 @@ export default function SendParallelCalls() {
       console.error(error);
     }
   };
-
   return <button onClick={handleSend}>Click to Send</button>;
 }
 ```
