@@ -1,9 +1,9 @@
 ---
-title: How to pay gas with any token using an ERC-20 Paymaster
+title: Pay Gas with Any ERC20 Token
 description: Learn how to enable gas payments with ERC-20 tokens.
 subtitle: Learn how to enable gas payments with ERC-20 tokens.
 url: https://docs.alchemy.com/reference/how-to-pay-gas-with-any-token
-slug: reference/how-to-pay-gas-with-any-token
+slug: wallets/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token
 ---
 
 Gas fees paid in the native gas token can feel foreign to users that primarily hold stablecoins or your app’s own token.
@@ -55,8 +55,8 @@ Once you get the `paymaster` and `paymasterData` fields, you can use them in
 
 ## Example script
 
-```ts
-const { ethers } = require("ethers");
+```ts twoslash
+import { ethers } from "ethers";
 
 // --- Constants ---
 
@@ -81,18 +81,43 @@ const ENTRYPOINT_ABI = [
     ],
     stateMutability: "view",
   },
-];
+] as const;
 
 // Alchemy RPC URL for Sepolia testnet
-const ALCHEMY_RPC_URL = "";
+const ALCHEMY_RPC_URL = "YOUR_ALCHEMY_RPC_URL";
 // Alchemy Gas Manager RPC URL for Sepolia testnet
-const ALCHEMY_GAS_MANAGER_URL = "";
+const ALCHEMY_GAS_MANAGER_URL = "YOUR_ALCHEMY_GAS_MANAGER_URL";
 
 // Policy ID for the Alchemy Gas Manager
-const ALCHEMY_POLICY_ID = "";
+const ALCHEMY_POLICY_ID = "YOUR_POLICY_ID";
 
 // Address of the ERC20 token to be used for gas payment
 const ERC20_TOKEN_ADDRESS = "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238"; // USDC
+
+// --- Types ---
+
+interface UserOperation {
+  sender: string;
+  nonce: string;
+  initCode: string;
+  callData: string;
+  signature: string;
+  paymasterAndData?: string;
+  preVerificationGas?: string;
+  verificationGasLimit?: string;
+  callGasLimit?: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
+}
+
+interface GasAndPaymasterData {
+  paymasterAndData: string;
+  preVerificationGas: string;
+  verificationGasLimit: string;
+  callGasLimit: string;
+  maxFeePerGas: string;
+  maxPriorityFeePerGas: string;
+}
 
 // --- Ethers.js Setup ---
 
@@ -111,11 +136,10 @@ const entryPoint = new ethers.Contract(
 /**
  * Requests gas fee estimations and paymaster data from Alchemy.
  * This function constructs and sends a request to the 'alchemy_requestGasAndPaymasterAndData' RPC method.
- * @param {object} uo - The user operation object.
- * @returns {Promise<object>} A promise that resolves to the result object from Alchemy,
- *                            containing paymasterAndData and gas estimations.
  */
-async function requestGasAndPaymaster(uo) {
+async function requestGasAndPaymaster(
+  uo: UserOperation,
+): Promise<GasAndPaymasterData> {
   const body = JSON.stringify({
     id: 1,
     jsonrpc: "2.0",
@@ -153,11 +177,8 @@ async function requestGasAndPaymaster(uo) {
 /**
  * Sends a user operation to the bundler via Alchemy.
  * This function constructs and sends a request to the 'eth_sendUserOperation' RPC method.
- * @param {object} uo - The complete user operation object, including paymaster data and gas estimations.
- * @returns {Promise<void>} A promise that resolves when the request is sent.
- *                          The bundler's response (including userOpHash) is logged to the console.
  */
-async function sendUserOperation(uo) {
+async function sendUserOperation(uo: UserOperation): Promise<void> {
   const body = JSON.stringify({
     id: 1,
     jsonrpc: "2.0",
@@ -180,12 +201,12 @@ async function sendUserOperation(uo) {
 
 // Define the initial user operation object
 // This object contains the core details of the transaction to be executed.
-const userOp = {
-  sender: "0x", // Smart account address
+const userOp: UserOperation = {
+  sender: "0xYOUR_SMART_ACCOUNT_ADDRESS", // Smart account address
   nonce: "0x", // Initial nonce (will be updated)
   initCode: "0x", // Set to "0x" if the smart account is already deployed
-  callData: "0x", // Encoded function call data
-  signature: "0x", // Dummy signature, should be replaced after requesting paymaster data
+  callData: "0xYOUR_CALL_DATA", // Encoded function call data
+  signature: "0xYOUR_DUMMY_SIGNATURE", // Dummy signature, should be replaced after requesting paymaster data
 };
 
 // IIFE (Immediately Invoked Function Expression) to run the async operations
@@ -199,7 +220,7 @@ const userOp = {
   const paymasterAndGasData = await requestGasAndPaymaster(userOp);
 
   // Combine the original userOp with the data returned by Alchemy (paymasterAndData, gas limits, etc.)
-  const userOpWithGas = { ...userOp, ...paymasterAndGasData }; // Spread order matters: userOp properties can be overwritten by paymasterAndGasData if names clash (e.g. if userOp had gas fields)
+  const userOpWithGas: UserOperation = { ...userOp, ...paymasterAndGasData };
 
   console.log(
     "Final UserOperation with Gas and Paymaster Data:",

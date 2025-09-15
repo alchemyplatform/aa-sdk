@@ -226,6 +226,14 @@ navigation:
                 contents:
                   - page: API Endpoints
                     path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
+                  - section: Using SDK
+                    contents:
+                      - page: Basic Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
+                      - page: Conditional Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
+                      - page: Pay Gas with Any ERC20 Token
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
           - section: Bundler
             path: wallets/pages/low-level-infra/bundler/overview.mdx
             contents:
@@ -235,6 +243,14 @@ navigation:
                 path: wallets/pages/low-level-infra/bundler/sdk.mdx
               - page: Bundler FAQs
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
+          - section: Third Party Infrastructure
+            contents:
+              - page: Third Party Bundlers
+                path: wallets/pages/low-level-infra/third-party-infrastructure/bundlers.mdx
+              - page: Third Party Chains
+                path: wallets/pages/low-level-infra/third-party-infrastructure/chains.mdx
+              - page: Third Party Paymasters
+                path: wallets/pages/low-level-infra/third-party-infrastructure/paymasters.mdx
 
       - section: Funding
         contents:

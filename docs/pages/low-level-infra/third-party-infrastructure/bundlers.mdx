@@ -1,7 +1,7 @@
 ---
-title: 3rd Party Bundlers
+title: Third Party Bundlers
 description: Learn how to use a different RPC provider with Smart Wallets
-slug: wallets/third-party/bundlers
+slug: wallets/low-level-infra/third-party-infrastructure/bundlers
 ---
 
 The `SmartAccountClient` within `@aa-sdk/core` is unopinionated about which bundler you use, so you can connect to any RPC provider really simply.
@@ -75,9 +75,3 @@ const clientWithSplit = createPublicClient({
   }),
 });
 ```
-
-## Zora and Fraxtal
-
-Using a split Bundler and Node RPC setup is required for Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks since Alchemy currently only supports Account Abstraction endpoints for those networks. Please refer to documentation from [Frax](https://docs.frax.com/fraxtal/network/network-information) and [Zora](https://docs.zora.co/) about RPC options.
-
-See [this guide](/wallets/third-party/chains) for more information on using AA only chains with Smart Wallets.
