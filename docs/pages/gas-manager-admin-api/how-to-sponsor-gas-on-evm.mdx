@@ -64,7 +64,7 @@ Now you should have a Gas policy created with a policy id you can use to sponsor
 
 When sending a userOp, you can specify the `paymaster` and `paymasterData` fields in the `userOp` object. These fields are related to the signature of the Gas Manager that will sponsor the userOp.
 
-You can get these fields through [`alchemy_requestGasAndPaymasterAndData`](/reference/alchemy-requestgasandpaymasteranddata) using your gas policy id, the API key of the app associated with the policy, and a userOp. The Gas Manager signature will be generated if and only if the userOp satisfies the rules defined in your gas policy.
+You can get these fields through [`alchemy_requestGasAndPaymasterAndData`](/wallets/api-reference/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-gas-and-paymaster-and-data) using your gas policy id, the API key of the app associated with the policy, and a userOp. The Gas Manager signature will be generated if and only if the userOp satisfies the rules defined in your gas policy.
 
 ### 3. Send the sponsored userOp
 
