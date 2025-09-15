@@ -94,7 +94,7 @@ This returns:
 }
 ```
 
-Note the `signatureRequest`! This is what you now have to sign, and the returned `data` field is what we'll need when we're ready to send the transaction!
+Note the `signatureRequest`! This is what you now have to sign, and the returned `data` field is what you will need to send the transaction!
 
 </Step>
 
@@ -142,7 +142,7 @@ This returns:
 }
 ```
 
-Note the `PREPARED_CALL_ID`! We'll use this to track call status in the next step.
+Note the `PREPARED_CALL_ID`! You need this to track call status in the next step.
 
 For other potential responses, [check out the API reference!](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls)
 
@@ -192,7 +192,7 @@ Note that the status codes match the following:
 | 500 | Onchain Failure |
 | 600 | Partial Onchain Failure |
 
-To get your transaction's mined transaction hash, you can access `result.receipts[0].transactionHash`.
+To get your transaction hash, you can access `result.receipts[0].transactionHash`.
 
 For more details, check out [the API reference!](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status)
 
