@@ -1,0 +1,94 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+Use the `useSendCalls` hook and the `nonceOverride` capability parameter to send parallel userops. You can also use the `usePrepareCalls` hook to only prepare the operation for signing.
+
+You'll need both `ALCHEMY_API_KEY` and `ALCHEMY_POLICY_ID` environment variables set to follow along!
+
+<CodeBlocks>
+
+```tsx twoslash title="sendParallelCalls.tsx" focus={5-7,14-27}
+import { config } from "@/app/config";
+import {
+  useSendCalls,
+  useSmartAccountClient,
+  useSmartWalletClient,
+} from "@account-kit/react";
+
+export default function SendParallelCalls() {
+  const { client } = useSmartAccountClient({});
+  const { sendCallsAsync } = useSendCalls({ client });
+  const walletClient = useSmartWalletClient({
+    account: client?.account.address,
+  });
+
+  const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+    if (!walletClient) {
+      throw new Error("Smart wallet client not connected");
+    }
+
+    try {
+      const [{ ids: idsOne }, { ids: idsTwo }] = await Promise.all([
+        sendCallsAsync({
+          capabilities: {
+            paymasterService: {
+              policyId: config.policyId,
+            },
+            nonceOverride: {
+              nonceKey: "0x01",
+            },
+          },
+          calls: [
+            {
+              to: "0x0000000000000000000000000000000000000000",
+              value: "0x00",
+              data: "0x",
+            },
+          ],
+        }),
+        sendCallsAsync({
+          capabilities: {
+            paymasterService: {
+              policyId: config.policyId,
+            },
+            nonceOverride: {
+              nonceKey: "0x02",
+            },
+          },
+          calls: [
+            {
+              to: "0x0000000000000000000000000000000000000000",
+              value: "0x00",
+              data: "0x",
+            },
+          ],
+        }),
+      ]);
+
+      console.log("id of sent call one: ", idsOne);
+      console.log("id of sent call two: ", idsTwo);
+
+      const result = await Promise.all([
+        walletClient.waitForCallsStatus({ id: idsOne[0]! }),
+        walletClient.waitForCallsStatus({ id: idsTwo[0]! }),
+      ]);
+
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  return <button onClick={handleSend}>Click to Send</button>;
+}
+```
+
+```ts twoslash title="config.ts"
+export const config = {
+  alchemyApiKey: process.env.ALCHEMY_API_KEY!,
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+};
+```
+
+</CodeBlocks>
