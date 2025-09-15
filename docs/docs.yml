@@ -220,7 +220,26 @@ navigation:
           - page: Overview
             path: wallets/pages/low-level-infra/overview.mdx
           - page: Quickstart
-            path: wallets/pages/low-level-infra/quickstart.mdx
+            path: wallets/pages/low-level-infra/quickstart/quickstart.mdx
+          - section: Gas Manager
+            contents:
+              - section: Policy Management
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
+              - section: Gas Sponsorship
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
+          - section: Bundler
+            path: wallets/pages/low-level-infra/bundler/overview.mdx
+            contents:
+              - page: API Endpoints
+                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
+              - page: Using SDK
+                path: wallets/pages/low-level-infra/bundler/sdk.mdx
+              - page: Bundler FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
 
       - section: PRE-BLITZ TO REMOVE Transactions
         contents:
