@@ -1,18 +1,21 @@
 ---
-title: Sponsor gas on Solana
-description: How to sponsor fees on Solana
+title: Sponsor fees & rent on Solana
+description: How to sponsor fees & rent on Solana
 slug: wallets/transactions/solana/sponsor-gas
 ---
 
-Let users send gasless transactions on Solana by sponsoring transaction fees and rent with Smart Wallets. This removes a major barrier to entry for new users of your app and the need for them to hold any SOL.
+Fees and rent are a significant barrier to entry for new users of your app. Sponsor fees and rent to enable users to transact without holding SOL.
+- Works with any Solana wallet. [Check out Solana Smart Wallets](/wallets/react/solana-wallets/get-started)
+- No need to manage SOL, we sponsor fees & rent and put it on your bill
+
 
 ## How it works
 
-Once you've [created](/wallets/react/solana-wallets/get-started) a smart wallet on Solana, you can define what transactions you would like to sponsor using a gas manager policy and start sponsoring Solana fees. When a transaction meets the policy, fees and rent are fronted in SOL by Alchemy's fee payer so the user doesn’t need SOL. The equivalent USD amount and the admin fee are then added to your monthly invoice.
+When you request gas sponsorship for a transaction using a configured policy, the policy engine will determine if that transaction is eligible for sponsorship. If eligible, when the user sends the transaction the Gas Manager will pay for the fees & rent upfront. The Gas Manager will make a note of the sponsored cost and add it to your monthly bill.
 
 - Fees: the cost of executing transactions
 - Rent: the minimum payment to store data onchain
-  - Rent sponsorship is supported for `createAccount` and `createAssociatedTokenAccount`. If you need support for custom programs, contact [wallets@alchemy.com](mailto:wallets@alchemy.com).
+  - Rent sponsorship is supported for `createAccount`, `createAssociatedTokenAccount`, and any other program that supports adding a `feePayer`. If you need support for custom programs, contact [wallets@alchemy.com](mailto:wallets@alchemy.com).
 
 ## Prerequisites
 
