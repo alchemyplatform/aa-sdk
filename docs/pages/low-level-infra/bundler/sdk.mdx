@@ -19,14 +19,10 @@ export const transport = alchemy({
 ```
 
 ```ts twoslash title="estimateAndSendUserOperation.ts"
-import {
-  alchemyFeeEstimator,
-  createAlchemySmartAccountClient,
-} from "@account-kit/infra";
-import { createModularAccountV2 } from "@account-kit/smart-contracts";
+import { alchemyFeeEstimator } from "@account-kit/infra";
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { entryPoint07Address } from "viem/account-abstraction";
-import type { Hex } from "viem";
 import {
   chain,
   transport
@@ -34,17 +30,13 @@ import {
 } from "./config.ts";
 
 export async function estimateAndSendUserOperation() {
-  const account = await createModularAccountV2({
+  const client = await createModularAccountV2Client({
     signer: LocalAccountSigner.privateKeyToAccountSigner(YOUR_PRIVATE_KEY),
-    chain,
-    transport,
-  });
-  const client = createAlchemySmartAccountClient({
-    account,
     chain,
     transport,
     feeEstimator: alchemyFeeEstimator(transport),
   });
+
   try {
     let uo = await client.buildUserOperation({
       uo: {
@@ -65,7 +57,7 @@ export async function estimateAndSendUserOperation() {
         multiplier: 0,
       },
     });
-    const receipt = await client.getUserOperationReceipt(sendResult as Hex);
+    const receipt = await client.getUserOperationReceipt(sendResult);
     console.log("UserOperation receipt:", receipt);
   } catch (error) {
     console.error("Error processing UserOperation:", error);
