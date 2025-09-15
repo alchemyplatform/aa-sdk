@@ -82,6 +82,9 @@ navigation:
               - page: Multi-chain setup
                 slug: recipes/multi-chain-setup
                 path: wallets/pages/recipes/multi-chain-setup.mdx
+              - page: Use Smart Wallet Session Keys
+                slug: recipes/use-session-keys
+                path: wallets/pages/recipes/use-session-keys.mdx
           - section: Concepts
             contents:
               - page: Intro to Smart Wallets
