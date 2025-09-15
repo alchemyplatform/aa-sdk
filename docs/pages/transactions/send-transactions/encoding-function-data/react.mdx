@@ -37,7 +37,7 @@ export default function SendCalls() {
   };
 
   return (
-    <button onClick={handleSend} disabled={!client || isSendingCalls}>
+    <button onClick={handleSend}>
       {isSendingCalls ? "Sending..." : "Send"}
     </button>
   );

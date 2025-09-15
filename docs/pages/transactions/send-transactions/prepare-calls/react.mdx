@@ -50,11 +50,7 @@ export default function SendCalls() {
     console.log({ sentCalls });
   };
 
-  return (
-    <button onClick={handleSend} disabled={!client || !smartWalletClient}>
-      Send
-    </button>
-  );
+  return <button onClick={handleSend}>Send</button>;
 }
 ```
 

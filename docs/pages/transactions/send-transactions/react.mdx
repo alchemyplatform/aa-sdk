@@ -51,10 +51,7 @@ export default function SendCalls() {
 
   return (
     <div>
-      <button
-        onClick={handleSend}
-        disabled={!client || isSendingCalls || isWaitingForConfirmation}
-      >
+      <button onClick={handleSend}>
         {isSendingCalls ? "Sending..." : "Send"}
       </button>
       {sendCallsResult && (
