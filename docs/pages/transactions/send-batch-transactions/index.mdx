@@ -8,7 +8,7 @@ Using Smart Wallets, you can batch multiple actions (such as token transfers, ap
 
 ## How it works
 
-Smart wallets support running a batch of actions, called "calls", in a single transaction. These actions are atomic, which means if any of them fail (revert), the entire batched transaction will revert. This protects users from ever accidentally having part of a batch, but not all, apply.
+Smart wallets support running a batch of actions, called "calls", in a single transaction. These actions are atomic, which means if any of them fail (revert), the entire batched transaction will revert. This protects users from accidentally having part of a batch apply, but not all.
 
 To use this feature, you just need to specify multiple calls to make. The parameter type accepts an array of calls, and each element should contain the action you want the wallet to take.
 
