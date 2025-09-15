@@ -1,0 +1,264 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+See the [`grantPermissions` SDK
+reference](/wallets/reference/account-kit/wallet-client/functions/grantPermissions)
+for full descriptions of the parameters used in the following example.
+
+You can create and use session keys using the smart wallet client `grantPermissions` and `sendCalls` actions.
+
+<CodeBlocks>
+
+```ts title="sessionKeyExample.ts"
+import { type Address, erc20Abi, encodeFunctionData, parseUnits } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { client } from "./client";
+
+const DEMO_USDC_ADDRESS: Address = "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443";
+
+const DEMO_RECIPIENT_ADDRESS: Address =
+  "0x1234567890123456789012345678901234567890";
+
+async function createSessionKey() {
+  try {
+    // Generate a new session key
+    const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
+
+    // Request account for the owner
+    const account = await client.requestAccount();
+
+    // Grant permissions to the session key
+    const permissions = await client.grantPermissions({
+      account: account.address,
+      expirySec: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
+      key: {
+        publicKey: await sessionKey.getAddress(),
+        type: "secp256k1",
+      },
+      permissions: [
+        {
+          type: "erc20-token-transfer",
+          data: {
+            address: DEMO_USDC_ADDRESS,
+            allowance: parseUnits("100", 6), // 100 USDC limit
+          },
+        },
+        {
+          type: "contract-access",
+          data: {
+            address: DEMO_USDC_ADDRESS,
+          },
+        },
+      ],
+    });
+
+    console.log("Session key created with permissions:", permissions);
+
+    // Store the session key for later use
+    return {
+      sessionKey,
+      permissions,
+    };
+  } catch (error) {
+    console.error("Error creating session key:", error);
+    throw error;
+  }
+}
+
+async function useSessionKey(sessionKey: LocalAccountSigner, permissions: any) {
+  try {
+    // Request account
+    const account = await client.requestAccount();
+
+    // Send a transaction using the session key
+    const { preparedCallIds } = await client.sendCalls({
+      calls: [
+        {
+          // Transfer 10 USDC using the session key
+          to: DEMO_USDC_ADDRESS,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: "transfer",
+            args: [DEMO_RECIPIENT_ADDRESS, parseUnits("10", 6)],
+          }),
+        },
+      ],
+      capabilities: {
+        permissions,
+      },
+      signer: sessionKey, // Use the session key to sign
+    });
+
+    console.log("Transaction sent with ID:", preparedCallIds[0]);
+    return preparedCallIds[0];
+  } catch (error) {
+    console.error("Error using session key:", error);
+    throw error;
+  }
+}
+
+// Example usage
+async function main() {
+  const { sessionKey, permissions } = await createSessionKey();
+  await useSessionKey(sessionKey, permissions);
+}
+```
+
+```ts title="advancedSessionKeyExample.ts"
+import { type Address, erc20Abi, encodeFunctionData, parseUnits } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { client } from "./client";
+
+const DEMO_USDC_ADDRESS: Address = "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443";
+
+const DEMO_SWAP_ADDRESS: Address = "0xB0AEC4c25E8332256A91bBaf169E3C32dfC3C33C";
+
+async function createAdvancedSessionKey() {
+  try {
+    // Generate a new session key
+    const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
+
+    // Request account for the owner
+    const account = await client.requestAccount();
+
+    // Grant multiple permissions to create a tightly scoped session key
+    const permissions = await client.grantPermissions({
+      account: account.address,
+      expirySec: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours from now
+      key: {
+        publicKey: await sessionKey.getAddress(),
+        type: "secp256k1",
+      },
+      permissions: [
+        // Allow spending up to 1000 USDC
+        {
+          type: "erc20-token-transfer",
+          data: {
+            address: DEMO_USDC_ADDRESS,
+            allowance: parseUnits("1000", 6),
+          },
+        },
+        // Allow spending up to 0.1 ETH for gas
+        {
+          type: "native-token-transfer",
+          data: {
+            allowance: parseUnits("0.1", 18),
+          },
+        },
+        // Allow gas spending up to 500,000 gas
+        {
+          type: "gas-limit",
+          data: {
+            limit: "0x7a120", // 500,000 gas in hex
+          },
+        },
+        // Allow specific functions on the swap contract
+        {
+          type: "functions-on-contract",
+          data: {
+            address: DEMO_SWAP_ADDRESS,
+            functions: [
+              "0x38ed1739", // swapExactTokensForTokens
+              "0x7ff36ab5", // swapExactETHForTokens
+            ],
+          },
+        },
+      ],
+    });
+
+    console.log("Advanced session key created:", permissions);
+
+    return {
+      sessionKey,
+      permissions,
+    };
+  } catch (error) {
+    console.error("Error creating advanced session key:", error);
+    throw error;
+  }
+}
+
+async function performAutomatedSwap(
+  sessionKey: LocalAccountSigner,
+  permissions: any,
+) {
+  try {
+    // Request account
+    const account = await client.requestAccount();
+
+    // Perform an automated swap using the session key
+    const { preparedCallIds } = await client.sendCalls({
+      calls: [
+        {
+          // Approve USDC for the swap
+          to: DEMO_USDC_ADDRESS,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [DEMO_SWAP_ADDRESS, parseUnits("100", 6)],
+          }),
+        },
+        {
+          // Execute the swap (this would need the actual swap contract ABI)
+          to: DEMO_SWAP_ADDRESS,
+          data: encodeFunctionData({
+            abi: [], // Replace with actual swap contract ABI
+            functionName: "swapExactTokensForTokens",
+            args: [
+              parseUnits("100", 6), // amountIn
+              parseUnits("0.05", 18), // amountOutMin
+              [DEMO_USDC_ADDRESS, "0x0000000000000000000000000000000000000000"], // path
+              account.address, // to
+              Math.floor(Date.now() / 1000) + 300, // deadline (5 minutes)
+            ],
+          }),
+        },
+      ],
+      capabilities: {
+        permissions,
+      },
+      signer: sessionKey, // Use the session key to sign
+    });
+
+    console.log("Automated swap completed with ID:", preparedCallIds[0]);
+    return preparedCallIds[0];
+  } catch (error) {
+    console.error("Error performing automated swap:", error);
+    throw error;
+  }
+}
+
+// Example usage
+async function main() {
+  const { sessionKey, permissions } = await createAdvancedSessionKey();
+  await performAutomatedSwap(sessionKey, permissions);
+}
+```
+
+```ts title="client.ts"
+import "dotenv/config";
+import type { Hex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>
