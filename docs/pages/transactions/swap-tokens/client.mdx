@@ -87,7 +87,7 @@ const sendResult = await walletClient.sendPreparedCalls(signedCalls);
 
 // Wait for the call to resolve
 const callStatusResults = await client.waitForCallsStatus({
-  id: preparedCallIdsOne[0]!,
+  id: sendResult.preparedCallIds[0]!,
 });
 
 // Filter through potential failure cases
