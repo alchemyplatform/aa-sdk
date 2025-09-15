@@ -47,7 +47,7 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
 const clearWalletConnectStore = () => {
   if (
     typeof window === "undefined" ||
-    // indexedDB is not available and wallet connect is not used in react native
+    // indexedDB is not available + wallet connect is not used in react native
     typeof window.indexedDB === "undefined"
   ) {
     return;
