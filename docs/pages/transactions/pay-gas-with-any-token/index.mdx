@@ -10,7 +10,7 @@ With Smart Wallets, you can allow users to pay for gas with any token, streamlin
 ## How it works
 
 When a user pays for gas with a token, the gas is fronted using the network's native gas token and the payment tokens are transferred from the user's wallet to a wallet you configure in the policy.
-The equivalent USD amount and the admin fee are then added to the developer's monthly invoice.
+The equivalent USD amount and the admin fee are then added to your's monthly invoice.
 
 Post-operation mode is recommended. This mode requires users to hold enough of the gas token in their wallet after their operation completes to pay the gas fee. If the balance is insufficient, the transaction reverts and you sponsor any gas used without token payment. If this doesn't work for your use case, see the [Token gas payment modes](#token-gas-payment-modes) section below for more options.
 
@@ -77,9 +77,9 @@ Post-operation mode is recommended for most use cases. This mode:
 - Works with all ERC-20 tokens.
 - Only ever requires a single signature from the user.
 
-However, because tokens are deducted after execution, the developer may be required to pay for gas without receiving sufficient token payment.
-The developer should ensure that users have enough token left over to pay for gas after the operation, otherwise they won't receive payment from users for gas and the operation will revert.
-If the operation results in a static amount of the user’s token balance after execution and the developer can account for this before submitting the operation, use PostOp mode.
+However, because tokens are deducted after execution, you may be required to pay for gas without receiving sufficient token payment.
+You should ensure that users have enough token left over to pay for gas after the operation, otherwise they won't receive payment from users for gas and the operation will revert.
+If the operation results in a static amount of the user’s token balance after execution and you can account for this before submitting the operation, use PostOp mode.
 
 Examples of static amounts:
 
