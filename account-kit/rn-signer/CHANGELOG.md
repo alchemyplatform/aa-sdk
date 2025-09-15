@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.63.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.0...v4.63.1) (2025-09-15)
+
+### Bug Fixes
+
+- fix addOauthProvider in react-native ([#2025](https://github.com/alchemyplatform/aa-sdk/issues/2025)) ([6921fe9](https://github.com/alchemyplatform/aa-sdk/commit/6921fe91f941381843c97fad7cf46fa5806d7d90))
+
 # [4.63.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.2...v4.63.0) (2025-09-15)
 
 **Note:** Version bump only for package @account-kit/react-native-signer
