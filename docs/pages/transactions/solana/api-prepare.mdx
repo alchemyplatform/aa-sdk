@@ -16,8 +16,9 @@ const { blockhash } = await connection.getLatestBlockhash();
 
 const message = new solanaWeb3.TransactionMessage({
   payerKey: new solanaWeb3.PublicKey(
+    // Placeholder: Set this to an address different than any other address included in the tx, will be replaced by alchemy's feePayer
     "Amh6quo1FcmL16Qmzdugzjq3Lv1zXzTW7ktswyLDzits",
-  ), // Placeholder: Set this to an address different than any other address included in the tx, will be replaced by alchemy's feePayer
+  ),
   recentBlockhash: blockhash,
   instructions,
 }).compileToV0Message();
