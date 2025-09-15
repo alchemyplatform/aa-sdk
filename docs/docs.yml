@@ -194,16 +194,12 @@ navigation:
             path: wallets/pages/transactions/overview.mdx
           - page: Send transactions
             path: wallets/pages/transactions/send-transactions/index.mdx
-          - page: Sign requests
-            path: wallets/pages/transactions/sign-requests.mdx
           - page: Using EIP-7702
             path: wallets/pages/transactions/using-eip-7702/index.mdx
           - page: Send batch transactions
             path: wallets/pages/transactions/send-batch-transactions/index.mdx
           - page: Sponsor gas
             path: wallets/pages/transactions/sponsor-gas/index.mdx
-          - page: Sponsor gas on Solana
-            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - page: "[NEW] Swap tokens"
@@ -212,8 +208,6 @@ navigation:
             path: wallets/pages/transactions/send-parallel-transactions.mdx
           - page: Retry transactions
             path: wallets/pages/transactions/retry-transactions.mdx
-          - page: Coming Soon
-            path: wallets/pages/transactions/coming-soon.mdx
 
       - section: Low-Level Infra
         contents:
