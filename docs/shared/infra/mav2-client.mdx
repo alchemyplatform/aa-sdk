@@ -19,12 +19,14 @@ import { chain, transport, policyId } from "./config";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { generatePrivateKey } from "viem/accounts";
 
-export const client = await createModularAccountV2Client({
-  chain,
-  transport,
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-  policyId,
-});
+export async function createClient() {
+  return createModularAccountV2Client({
+    chain,
+    transport,
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+    policyId,
+  });
+}
 ```
 
 </CodeBlocks>

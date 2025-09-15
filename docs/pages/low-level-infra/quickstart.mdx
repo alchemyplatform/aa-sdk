@@ -17,11 +17,11 @@ but you're free to use any smart contract you'd like.
 <CodeBlocks>
 
 ```bash yarn
-yarn add @account-kit/infra @account-kit/smart-contracts @aa-sdk/code viem
+yarn add @account-kit/infra @account-kit/smart-contracts @aa-sdk/core viem
 ```
 
 ```bash npm
-npm i -s @account-kit/infra @account-kit/smart-contracts @aa-sdk/code viem
+npm i -s @account-kit/infra @account-kit/smart-contracts @aa-sdk/core viem
 ```
 
 </CodeBlocks>
@@ -50,7 +50,9 @@ The last step is to send a user operation using the client you just created.
 <CodeBlocks>
 
 ```ts twoslash example.ts
-import { client } from "./client";
+import { getClient } from "./client";
+
+const client = await getClient();
 
 const { hash } = await client.sendUserOperation({
   uo: {
