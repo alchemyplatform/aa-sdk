@@ -45,6 +45,7 @@ export type UseSendUserOperationArgs<
 > = {
   client: UseSmartAccountClientResult["client"] | undefined;
   waitForTxn?: boolean;
+  waitForTxnTag?: "pending" | "latest";
 } & UseSendUserOperationMutationArgs<TEntryPointVersion, TAccount>;
 
 export type UseSendUserOperationResult<
@@ -129,7 +130,12 @@ export function useSendUserOperation<
 >(
   params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>,
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
-  const { client: _client, waitForTxn = false, ...mutationArgs } = params;
+  const {
+    client: _client,
+    waitForTxn = false,
+    waitForTxnTag = "latest",
+    ...mutationArgs
+  } = params;
 
   const { sendCallsAsync } = useSendCalls<TEntryPointVersion>({
     client: _client,
@@ -186,7 +192,7 @@ export function useSendUserOperation<
 
         // TODO: this should really use useCallsStatusHook instead (once it exists)
         const txnHash = await _client
-          .waitForUserOperationTransaction({ hash: uoHash })
+          .waitForUserOperationTransaction({ hash: uoHash, tag: waitForTxnTag })
           .catch((e) => {
             throw new WaitForUserOperationError(request!, e);
           });

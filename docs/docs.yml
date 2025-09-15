@@ -419,16 +419,30 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useAccount.mdx
                   - page: useSmartAccountClient
                     path: wallets/pages/reference/account-kit/react/hooks/useSmartAccountClient.mdx
+                  - page: useSmartWalletClient
+                    path: wallets/pages/reference/account-kit/react/hooks/useSmartWalletClient.mdx
               - section: Smart Account Actions
                 contents:
+                  - page: useSendCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendCalls.mdx
+                  - page: usePrepareCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/usePrepareCalls.mdx
+                  - page: useSendPreparedCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendPreparedCalls.mdx
+                  - page: useWaitForCallsStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useWaitForCallsStatus.mdx
+                  - page: useCallsStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useCallsStatus.mdx
+                  - page: useGrantPermissions
+                    path: wallets/pages/reference/account-kit/react/hooks/useGrantPermissions.mdx
                   - page: useChain
                     path: wallets/pages/reference/account-kit/react/hooks/useChain.mdx
                   - page: useClientActions
                     path: wallets/pages/reference/account-kit/react/hooks/useClientActions.mdx
-                  - page: useDropAndReplaceUserOperation
-                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
                   - page: useSendUserOperation
                     path: wallets/pages/reference/account-kit/react/hooks/useSendUserOperation.mdx
+                  - page: useDropAndReplaceUserOperation
+                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
                   - page: useSignMessage
                     path: wallets/pages/reference/account-kit/react/hooks/useSignMessage.mdx
                   - page: useSignTypedData
