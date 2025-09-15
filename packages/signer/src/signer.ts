@@ -2,6 +2,7 @@ import { TurnkeyClient } from "@turnkey/http";
 import {
   hashMessage,
   hashTypedData,
+  type Address,
   type HashTypedDataParameters,
   type Hex,
   type SignableMessage,
@@ -41,7 +42,7 @@ export class Signer {
     // TODO: replace apiKey with transport once it's ready.
     private readonly apiKey: string,
     private readonly turnkey: TurnkeyClient,
-    private readonly user: User,
+    public readonly user: User,
   ) {}
 
   public static async create({
@@ -67,12 +68,8 @@ export class Signer {
     return new Signer(apiKey, turnkey, user);
   }
 
-  public getAddress(): string {
+  public getAddress(): Address {
     return this.user.address;
-  }
-
-  public getUser(): User {
-    return this.user;
   }
 
   public signRawPayload = async ({

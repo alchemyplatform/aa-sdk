@@ -5,7 +5,7 @@ import type { AuthClient, Signer } from "@alchemy/signer";
  * Extended connector interface that includes Alchemy Auth-specific methods
  */
 export interface AlchemyAuthConnector extends Connector {
-  getAuthClient(): Promise<AuthClient>;
+  getAuthClient(): AuthClient;
   getSigner(): Promise<Signer>;
   setSigner(signer: Signer): void;
 }

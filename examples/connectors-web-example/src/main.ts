@@ -24,6 +24,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div id="connect">
       <h2>Connect</h2>
       ${config.connectors
+        .filter((connector) => connector.id !== 'alchemyAuth')
         .map(
           (connector) =>
             `<button class="connect" id="${connector.uid}" type="button">${connector.name}</button>`,
