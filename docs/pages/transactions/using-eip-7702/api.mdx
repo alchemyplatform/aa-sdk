@@ -1,0 +1,41 @@
+See the [`wallet_prepareCalls` API
+reference](/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
+for full descriptions of the parameters used in the following example.
+
+<Steps>
+  <Step title="Prepare Calls">
+    Prepare calls using the `eip7702Auth` capability.
+```bash
+curl --request POST \
+  --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+  --header 'accept: application/json' \
+  --data '
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "wallet_prepareCalls",
+  "params": [
+    {
+      "capabilities": {
+        "paymasterService": {
+          "policyId": "'$ALCHEMY_POLICY_ID'"
+        },
+        "eip7702Auth": true
+      },
+      "calls": [
+        {
+          "to": "0x0000000000000000000000000000000000000000"
+        }
+      ],
+      "from": "'$SIGNER_ADDRESS'",
+      "chainId": "'$CHAIN_ID_HEX'"
+    }
+  ]
+}'
+```
+  </Step>
+  <Step title="Sign & Send">
+    Sign the returned signature request and send using `wallet_sendPreparedCalls`.
+    See "Usage with prepare calls" for details on the authorization signature request.
+  </Step>
+</Steps>

@@ -197,13 +197,13 @@ navigation:
           - page: Sign requests
             path: wallets/pages/transactions/sign-requests.mdx
           - page: Using EIP-7702
-            path: wallets/pages/transactions/using-eip-7702.mdx
+            path: wallets/pages/transactions/using-eip-7702/index.mdx
           - page: Send batched transactions
             path: wallets/pages/transactions/send-batched-transactions.mdx
           - page: Sponsor gas
-            path: wallets/pages/transactions/sponsor-gas.mdx
+            path: wallets/pages/transactions/sponsor-gas/index.mdx
           - page: Pay gas with any token
-            path: wallets/pages/transactions/pay-gas-with-any-token.mdx
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - page: "[NEW] Swap tokens"
             path: wallets/pages/transactions/swap-tokens.mdx
           - page: Send parallel transactions
@@ -256,7 +256,7 @@ navigation:
                         path: wallets/pages/signer/as-an-eoa.mdx
                 path: wallets/pages/TO-REMOVE-transactions/sponsor-gas/sponsor-gas-solana.mdx
           - page: Pay gas with any token
-            path: wallets/pages/react/pay-gas-with-any-token.mdx
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
           - section: Using 7702
             contents:
               - page: Overview
@@ -415,16 +415,30 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/hooks/useAccount.mdx
                   - page: useSmartAccountClient
                     path: wallets/pages/reference/account-kit/react/hooks/useSmartAccountClient.mdx
+                  - page: useSmartWalletClient
+                    path: wallets/pages/reference/account-kit/react/hooks/useSmartWalletClient.mdx
               - section: Smart Account Actions
                 contents:
+                  - page: useSendCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendCalls.mdx
+                  - page: usePrepareCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/usePrepareCalls.mdx
+                  - page: useSendPreparedCalls
+                    path: wallets/pages/reference/account-kit/react/hooks/useSendPreparedCalls.mdx
+                  - page: useWaitForCallsStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useWaitForCallsStatus.mdx
+                  - page: useCallsStatus
+                    path: wallets/pages/reference/account-kit/react/hooks/useCallsStatus.mdx
+                  - page: useGrantPermissions
+                    path: wallets/pages/reference/account-kit/react/hooks/useGrantPermissions.mdx
                   - page: useChain
                     path: wallets/pages/reference/account-kit/react/hooks/useChain.mdx
                   - page: useClientActions
                     path: wallets/pages/reference/account-kit/react/hooks/useClientActions.mdx
-                  - page: useDropAndReplaceUserOperation
-                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
                   - page: useSendUserOperation
                     path: wallets/pages/reference/account-kit/react/hooks/useSendUserOperation.mdx
+                  - page: useDropAndReplaceUserOperation
+                    path: wallets/pages/reference/account-kit/react/hooks/useDropAndReplaceUserOperation.mdx
                   - page: useSignMessage
                     path: wallets/pages/reference/account-kit/react/hooks/useSignMessage.mdx
                   - page: useSignTypedData
