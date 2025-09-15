@@ -42,7 +42,7 @@ export class Signer {
     // TODO: replace apiKey with transport once it's ready.
     private readonly apiKey: string,
     private readonly turnkey: TurnkeyClient,
-    public readonly user: User,
+    private readonly user: User,
   ) {}
 
   public static async create({
@@ -70,6 +70,10 @@ export class Signer {
 
   public getAddress(): Address {
     return this.user.address;
+  }
+
+  public getUser(): User {
+    return this.user;
   }
 
   public signRawPayload = async ({
