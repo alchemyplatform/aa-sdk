@@ -164,7 +164,7 @@ When writing or editing documentation for Alchemy Smart Wallets, follow these co
 **Link Strategy**:
 
 - **Link to existing docs** instead of repeating content
-- **Use relative links**: `/wallets/...` not full URLs
+- **Use relative links**: All relative links should begin with `/wallets/...` instead of full URLs (`https://www.alchemy.com/docs/wallets/...`)
 - **Ensure no broken or circular references**
 
 ---

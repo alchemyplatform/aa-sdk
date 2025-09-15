@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.63.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.2...v4.63.0) (2025-09-15)
+
+### Bug Fixes
+
+- **react-native:** re-export hooks for auth update ([#2046](https://github.com/alchemyplatform/aa-sdk/issues/2046)) ([992fbcb](https://github.com/alchemyplatform/aa-sdk/commit/992fbcb451b354af32cc10065782e049779fb44b))
+- update broken links ([#2041](https://github.com/alchemyplatform/aa-sdk/issues/2041)) ([eafc0a0](https://github.com/alchemyplatform/aa-sdk/commit/eafc0a00a3aaa12e41b8e6359377e73e3f630f4e))
+
+### Features
+
+- add flashblocks support to react ([#2037](https://github.com/alchemyplatform/aa-sdk/issues/2037)) ([ac88279](https://github.com/alchemyplatform/aa-sdk/commit/ac88279e53a70be7e38e3fad364d741e3f7536fe))
+
 ## [4.62.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.1...v4.62.2) (2025-09-12)
 
 ### Bug Fixes
