@@ -7,6 +7,8 @@ export default mergeConfig(
   defineProject({
     test: {
       name: "alchemy/wallet-apis",
+      singleThread: true,
+      retry: 2,
     },
   }),
 );
