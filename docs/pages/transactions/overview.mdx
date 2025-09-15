@@ -4,7 +4,7 @@ description: A comprehensive guide to sending transactions with Smart Wallets
 slug: wallets/transactions/overview
 ---
 
-The Smart Wallets make it easy to send transactions across EVM and Solana. This section covers everything you need to know about preparing, signing, sending, and tracking transactions.
+Smart Wallets make it easy to send transactions across EVM and Solana. This section covers everything you need to know about preparing, signing, sending, and tracking transactions.
 
 # Transaction lifecycle
 
@@ -23,20 +23,19 @@ When a user sends a transaction, Smart Wallets handle every step. In this sectio
 
 # Everything you need for onchain applications
 
-| Capability                                                        | Description                                                                                           |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| [Send transactions](/docs/wallets/transactions/send-transactions) | Execute a single transaction                                                                          |
-| Sign requests                                                     | Sign a transaction before submitting onchain                                                          |
-| EIP-7702                                                          | Upgrade embedded EOA users to smart wallets                                                           |
-| Send batched transactions                                         | Execute multiple transactions atomically in a single step (ex: approve & swap)                        |
-| Sponsor gas                                                       | Make gas disappear and say goodbye to “insufficient gas”                                              |
-| Pay gas with any token                                            | Pay gas with stablecoins or the sell-side token                                                       |
-| Swap tokens                                                       | Low-latency gasless token swaps within your app                                                       |
-| Transact with any token                                           | User transacts with any token (ex: ETH, WLD), your contracts receives your preferred token (ex: USDC) |
-| Retry transactions                                                | Retry transactions stuck in mempool                                                                   |
-| Send parallel transactions                                        | Send multiple transactions in parallel                                                                |
-| Policies                                                          | Set rules and constraints on your smart wallets                                                       |
-| Sponsor gas on Solana                                             | Sponsor fees & rent                                                                                   |
+| Capability                                                            | Description                                                                                           |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [Send transactions](/wallets/transactions/send-transactions)          | Execute a single transaction                                                                          |
+| Sign requests                                                         | Sign a transaction before submitting onchain                                                          |
+| [EIP-7702](/wallets/transactions/using-eip-7702)                      | Upgrade embedded EOA users to smart wallets                                                           |
+| [Batch transactions](wallets/transactions/send-batch-transactions/)   | Execute multiple transactions atomically in a single step (ex: approve & swap)                        |
+| [Sponsor gas](/docs/wallets/transactions/sponsor-gas)                 | Make gas disappear and say goodbye to “insufficient gas”                                              |
+| [Pay gas with any token](/wallets/transactions/pay-gas-with-any-token)| Pay gas with stablecoins or the sell-side token                                                       |
+| [Swap tokens](/wallets/transactions/swap-tokens)                      | Swap across networks, seamlessly                                                                      |
+| Retry transactions                                                    | Retry transactions stuck in mempool                                                                   |
+| Send parallel transactions                                            | Send multiple transactions in parallel                                                                |
+| Policies                                                              | Set rules and constraints on your smart wallets                                                       |
+| [Sponsor gas on Solana](/wallets/transactions/solana/sponsor-gas)     | Sponsor fees & rent and say goodbye to “insufficient fees"                                            |
 
 # SDK vs. APIs
 
