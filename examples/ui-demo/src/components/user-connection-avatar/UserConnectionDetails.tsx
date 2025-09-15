@@ -132,7 +132,7 @@ export function UserConnectionDetails({
           <div className="flex flex-row justify-between items-center mt-[17px]">
             <a
               target="_blank"
-              href="https://www.alchemy.com/docs/wallets/concepts/smart-account-signer"
+              href="https://www.alchemy.com/docs/wallets/signer/what-is-a-signer"
               className="flex justify-center items-center"
             >
               <span className="text-md md:text-sm text-fg-secondary mr-1">
