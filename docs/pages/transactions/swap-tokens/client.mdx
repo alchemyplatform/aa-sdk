@@ -43,6 +43,13 @@ const quoteRequest = {
       fromToken: "FROM_TOKEN",
       toToken: "TO_TOKEN",
       fromAmount: "FROM_AMOUNT", // You can pass a `minimumToAmount` instead to ensure you get a minimum output from the swap
+      // postCalls: [ // You can uncomment this block to batch calls after the swap!
+      //   {
+      //     to: "0x...",
+      //     data: "0x...",
+      //     value: "0x...",
+      //   },
+      // ],
       capabilities: {
         paymasterService: {
           policyId: config.paymasterPolicyId,
