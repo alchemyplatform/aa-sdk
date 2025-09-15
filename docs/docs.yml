@@ -213,7 +213,7 @@ navigation:
           - page: Overview
             path: wallets/pages/low-level-infra/overview.mdx
           - page: Quickstart
-            path: wallets/pages/low-level-infra/quickstart/quickstart.mdx
+            path: wallets/pages/low-level-infra/quickstart.mdx
           - section: Gas Manager
             contents:
               - section: Policy Management
